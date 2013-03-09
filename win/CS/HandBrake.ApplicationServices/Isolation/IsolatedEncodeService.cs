@@ -82,6 +82,17 @@ namespace HandBrake.ApplicationServices.Isolation
         }
 
         /// <summary>
+        /// Gets the log index.
+        /// </summary>
+        public int LogIndex
+        {
+            get
+            {
+                return -1;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding

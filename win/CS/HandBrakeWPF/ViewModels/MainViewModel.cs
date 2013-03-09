@@ -95,6 +95,11 @@ namespace HandBrakeWPF.ViewModels
         private readonly IEncodeServiceWrapper encodeService;
 
         /// <summary>
+        /// Windows 7 API Pack wrapper
+        /// </summary>
+        private readonly Win7 windowsSeven = new Win7();
+
+        /// <summary>
         /// HandBrakes Main Window Title
         /// </summary>
         private string windowName;
@@ -173,6 +178,11 @@ namespace HandBrakeWPF.ViewModels
         /// The Source Menu Backing Field
         /// </summary>
         private IEnumerable<SourceMenuItem> sourceMenu;
+
+        /// <summary>
+        /// The last percentage complete value.
+        /// </summary>
+        private int lastEncodePercentage;
         #endregion
 
         /// <summary>
@@ -1002,11 +1012,15 @@ namespace HandBrakeWPF.ViewModels
 
             if (window != null)
             {
+                ILogViewModel logvm = (ILogViewModel)window.DataContext;
+                logvm.SelectedTab = this.IsEncoding ? 0 : 1;
                 window.Activate();
             }
             else
             {
-                this.WindowManager.ShowWindow(IoC.Get<ILogViewModel>());
+                ILogViewModel logvm = IoC.Get<ILogViewModel>();
+                logvm.SelectedTab = this.IsEncoding ? 0 : 1;
+                this.WindowManager.ShowWindow(logvm);
             }
         }
 
@@ -1749,8 +1763,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs e)
         {
-            this.SourceLabel = "Scanning Title " + e.CurrentTitle + " of " + e.Titles;
-            this.StatusLabel = "Scanning Title " + e.CurrentTitle + " of " + e.Titles;
+            this.SourceLabel = string.Format("Scanning Title {0} of {1} ({2}%)", e.CurrentTitle, e.Titles, e.Percentage);
+            this.StatusLabel = string.Format("Scanning Title {0} of {1} ({2}%)", e.CurrentTitle, e.Titles, e.Percentage);
         }
 
         /// <summary>
@@ -1847,6 +1861,12 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
         {
+            int percent;
+            int.TryParse(
+                Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture),
+                out percent);
+
+
             Execute.OnUIThread(
                 () =>
                 {
@@ -1861,6 +1881,13 @@ namespace HandBrakeWPF.ViewModels
                                 e.EstimatedTimeLeft,
                                 e.ElapsedTime,
                                 this.queueProcessor.Count);
+
+                        if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
+                        {
+                            this.windowsSeven.SetTaskBarProgress(percent);
+                        }
+
+                        lastEncodePercentage = percent;
                     }
                 });
         }
@@ -1902,6 +1929,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.ProgramStatusLabel = "Queue Finished";
                     this.IsEncoding = false;
+
+                    if (this.windowsSeven.IsWindowsSeven)
+                    {
+                        this.windowsSeven.SetTaskBarProgressToNoProgress();
+                    }
                 });
         }
 

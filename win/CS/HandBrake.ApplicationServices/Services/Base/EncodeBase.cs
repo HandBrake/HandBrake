@@ -15,8 +15,6 @@ namespace HandBrake.ApplicationServices.Services.Base
     using System.Text;
     using System.Text.RegularExpressions;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
@@ -39,11 +37,6 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// The User Setting Service
         /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// Windows 7 API Pack wrapper
-        /// </summary>
-        private readonly Win7 windowsSeven = new Win7();
 
         /// <summary>
         /// The Log File Header
@@ -76,6 +69,8 @@ namespace HandBrake.ApplicationServices.Services.Base
                 GeneralUtilities.CreateCliLogHeader(
                     userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
+
+            this.LogIndex = 0;
         }
 
         #region Events
@@ -119,6 +114,11 @@ namespace HandBrake.ApplicationServices.Services.Base
         }
 
         /// <summary>
+        /// Gets the log index.
+        /// </summary>
+        public int LogIndex { get; private set; }
+
+        /// <summary>
         /// Gets LogBuffer.
         /// </summary>
         public StringBuilder LogBuffer
@@ -126,17 +126,6 @@ namespace HandBrake.ApplicationServices.Services.Base
             get
             {
                 return this.logBuffer;
-            }
-        }
-
-        /// <summary>
-        /// Gets WindowsSeven.
-        /// </summary>
-        public Win7 WindowsSeven
-        {
-            get
-            {
-                return this.windowsSeven;
             }
         }
 
@@ -152,15 +141,11 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeStatusChanged(EncodeProgressEventArgs e)
         {
-            Execute.OnUIThread(
-                () =>
-                {
-                    EncodeProgessStatus handler = this.EncodeStatusChanged;
-                    if (handler != null)
-                    {
-                        handler(this, e);
-                    }
-                });
+            EncodeProgessStatus handler = this.EncodeStatusChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         /// <summary>
@@ -171,15 +156,13 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeCompleted(EncodeCompletedEventArgs e)
         {
-            Execute.OnUIThread(
-                () =>
-                {
-                    EncodeCompletedStatus handler = this.EncodeCompleted;
-                    if (handler != null)
-                    {
-                        handler(this, e);
-                    }
-                });
+            EncodeCompletedStatus handler = this.EncodeCompleted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+
+            this.LogIndex = 0; // Reset
         }
 
         /// <summary>
@@ -190,14 +173,11 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeStarted(EventArgs e)
         {
-            Execute.OnUIThread(() =>
-                {
-                    EventHandler handler = this.EncodeStarted;
-                    if (handler != null)
-                    {
-                        handler(this, e);
-                    }
-                });
+            EventHandler handler = this.EncodeStarted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         #endregion
@@ -260,7 +240,6 @@ namespace HandBrake.ApplicationServices.Services.Base
                 // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
         }
-
 
         /// <summary>
         /// Pase the CLI status output (from standard output)
@@ -393,6 +372,8 @@ namespace HandBrake.ApplicationServices.Services.Base
             {
                 try
                 {
+                    this.LogIndex = this.LogIndex + 1;
+
                     lock (this.LogBuffer)
                     {
                         this.LogBuffer.AppendLine(message);

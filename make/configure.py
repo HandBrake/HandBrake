@@ -1180,6 +1180,9 @@ def createCLI():
     h = IfHost( 'enable HWD features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-hwd', default=False, action='store_true', help=h )
     
+    h = IfHost( 'enable use of fdk-aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-fdk-aac', default=False, action='store_true', help=h )
+
     cli.add_option_group( grp )
 
     ## add launch options
@@ -1619,6 +1622,7 @@ int main ()
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.ff.mpeg2',   int( options.enable_ff_mpeg2 ))
+    doc.add( 'FEATURE.fdk_aac',   int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.opencl',   int( options.enable_opencl ))
     doc.add( 'FEATURE.hwd',   int( options.enable_hwd ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))

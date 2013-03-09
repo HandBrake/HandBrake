@@ -1,6 +1,6 @@
 /* encavcodecaudio.c
 
-   Copyright (c) 2003-2012 HandBrake Team
+   Copyright (c) 2003-2013 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -50,31 +50,104 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     pv->job               = job;
     pv->list              = hb_list_init();
 
-    codec = avcodec_find_encoder(w->codec_param);
-    if (codec == NULL)
-    {
-        hb_error("encavcodecaInit: avcodec_find_encoder() failed");
-        return 1;
-    }
-    context = avcodec_alloc_context3(codec);
-
-    int mode;
-    context->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown,
-                                                 &mode);
-    context->channels = pv->out_discrete_channels =
+    // channel count, layout and matrix encoding
+    int matrix_encoding;
+    uint64_t channel_layout   = hb_ff_mixdown_xlat(audio->config.out.mixdown,
+                                                   &matrix_encoding);
+    pv->out_discrete_channels =
         hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
-    context->sample_rate = audio->config.out.samplerate;
 
-    AVDictionary *av_opts = NULL;
-    if (w->codec_param == AV_CODEC_ID_AAC)
+    // default settings and options
+    AVDictionary *av_opts          = NULL;
+    const char *codec_name         = NULL;
+    enum AVCodecID codec_id        = AV_CODEC_ID_NONE;
+    enum AVSampleFormat sample_fmt = AV_SAMPLE_FMT_FLTP;
+    int bits_per_raw_sample        = 0;
+    int profile                    = FF_PROFILE_UNKNOWN;
+
+    // override with encoder-specific values
+    switch (audio->config.out.codec)
     {
-        av_dict_set(&av_opts, "stereo_mode", "ms_off", 0);
+        case HB_ACODEC_AC3:
+            codec_id = AV_CODEC_ID_AC3;
+            if (matrix_encoding != AV_MATRIX_ENCODING_NONE)
+                av_dict_set(&av_opts, "dsur_mode", "on", 0);
+            break;
+
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
+            codec_name          = "libfdk_aac";
+            sample_fmt          = AV_SAMPLE_FMT_S16;
+            bits_per_raw_sample = 16;
+            switch (audio->config.out.codec)
+            {
+                case HB_ACODEC_FDK_HAAC:
+                    profile = FF_PROFILE_AAC_HE;
+                    break;
+                default:
+                    profile = FF_PROFILE_AAC_LOW;
+                    break;
+            }
+            // Libav's libfdk-aac wrapper expects back channels for 5.1
+            // audio, and will error out unless we translate the layout
+            if (channel_layout == AV_CH_LAYOUT_5POINT1)
+                channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
+            break;
+
+        case HB_ACODEC_FFAAC:
+            codec_name = "aac";
+            av_dict_set(&av_opts, "stereo_mode", "ms_off", 0);
+            break;
+
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            codec_id = AV_CODEC_ID_FLAC;
+            switch (audio->config.out.codec)
+            {
+                case HB_ACODEC_FFFLAC24:
+                    sample_fmt          = AV_SAMPLE_FMT_S32;
+                    bits_per_raw_sample = 24;
+                    break;
+                default:
+                    sample_fmt          = AV_SAMPLE_FMT_S16;
+                    bits_per_raw_sample = 16;
+                    break;
+            }
+            break;
+
+        default:
+            hb_error("encavcodecaInit: unsupported codec (0x%x)",
+                     audio->config.out.codec);
+            return 1;
     }
-    else if (w->codec_param == AV_CODEC_ID_AC3 &&
-             mode != AV_MATRIX_ENCODING_NONE)
+    if (codec_name != NULL)
     {
-        av_dict_set(&av_opts, "dsur_mode", "on", 0);
+        codec = avcodec_find_encoder_by_name(codec_name);
+        if (codec == NULL)
+        {
+            hb_error("encavcodecaInit: avcodec_find_encoder_by_name(%s) failed",
+                     codec_name);
+            return 1;
+        }
     }
+    else
+    {
+        codec = avcodec_find_encoder(codec_id);
+        if (codec == NULL)
+        {
+            hb_error("encavcodecaInit: avcodec_find_encoder(%d) failed",
+                     codec_id);
+            return 1;
+        }
+    }
+    // allocate the context and apply the settings
+    context                      = avcodec_alloc_context3(codec);
+    hb_ff_set_sample_fmt(context, codec, sample_fmt);
+    context->bits_per_raw_sample = bits_per_raw_sample;
+    context->profile             = profile;
+    context->channel_layout      = channel_layout;
+    context->channels            = pv->out_discrete_channels;
+    context->sample_rate         = audio->config.out.samplerate;
 
     if (audio->config.out.bitrate > 0)
     {
@@ -91,23 +164,11 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         context->compression_level = audio->config.out.compression_level;
     }
 
-    // set the sample format and bit depth to something practical
-    switch (audio->config.out.codec)
-    {
-        case HB_ACODEC_FFFLAC:
-            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
-            context->bits_per_raw_sample = 16;
-            break;
-
-        case HB_ACODEC_FFFLAC24:
-            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S32);
-            context->bits_per_raw_sample = 24;
-            break;
-
-        default:
-            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_FLTP);
-            break;
-    }
+    // For some codecs, libav requires the following flag to be set
+    // so that it fills extradata with global header information.
+    // If this flag is not set, it inserts the data into each
+    // packet instead.
+    context->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
     if (hb_avcodec_open(context, codec, &av_opts, 0))
     {
@@ -124,6 +185,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     av_dict_free(&av_opts);
 
     pv->context           = context;
+    audio->config.out.samples_per_frame =
     pv->samples_per_frame = context->frame_size;
     pv->input_samples     = context->frame_size * context->channels;
     pv->input_buf         = malloc(pv->input_samples * sizeof(float));
@@ -170,8 +232,6 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         pv->avresample = NULL;
         pv->output_buf = pv->input_buf;
     }
-
-    audio->config.out.samples_per_frame = pv->samples_per_frame;
 
     if (context->extradata != NULL)
     {

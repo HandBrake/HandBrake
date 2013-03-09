@@ -12,6 +12,7 @@
             <Setter Property="Padding" Value="5,1" />
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />
         </Style>
 
         <Style TargetType="TextBlock">
@@ -20,6 +21,7 @@
 
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="5,2" />
+            <Setter Property="MinHeight" Value="22" />
         </Style>
 
         <Style TargetType="CheckBox">
@@ -154,7 +156,7 @@
                             </StackPanel>
                             <TextBlock Text="Available Options: {source_path} or {source_folder_name} (Not Both)" />
 
-                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
                                 <TextBlock VerticalAlignment="Center" Text="Format:" />
                                 <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="180" ToolTip=" {Source} = Source Name,  {Title} = Title Number,  {Chapters} = Selected Chapters, {Date} = Todays Date,"  />
                             </StackPanel>

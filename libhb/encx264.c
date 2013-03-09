@@ -1,6 +1,6 @@
 /* encx264.c
 
-   Copyright (c) 2003-2012 HandBrake Team
+   Copyright (c) 2003-2013 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -96,13 +96,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Enable metrics */
     param.analyse.b_psnr = 1;
     param.analyse.b_ssim = 1;
-
-    /*
-     * QuickTime has trouble with very low QPs (resulting in visual artifacts).
-     * Known to affect QuickTime 7, QuickTime X and iTunes.
-     * Testing shows that a qpmin of 4 usually works.
-     */
-    param.rc.i_qp_min = 4;
     
     if( job->pass == 2 && job->cfr != 1 )
     {

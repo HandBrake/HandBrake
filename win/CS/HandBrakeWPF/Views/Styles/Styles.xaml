@@ -16,7 +16,7 @@
     </Style>
 
     <Style TargetType="{x:Type ComboBox}">
-        <Setter Property="Height" Value="22"/>
+        <Setter Property="MinHeight" Value="22"/>
         <Setter Property="Margin" Value="0,2,0,2" />
     </Style>
 
@@ -25,7 +25,7 @@
     </Style>
 
     <Style TargetType="{x:Type Button}">
-        <Setter Property="Height" Value="22"/>
+        <Setter Property="MinHeight" Value="22"/>
     </Style>
 
     <Style TargetType="{x:Type RadioButton}">

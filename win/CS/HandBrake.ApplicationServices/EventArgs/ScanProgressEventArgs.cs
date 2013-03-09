@@ -29,5 +29,11 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// </summary>
         [DataMember]
         public int Titles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the percentage.
+        /// </summary>
+        [DataMember]
+        public decimal Percentage { get; set; }
     }
 }

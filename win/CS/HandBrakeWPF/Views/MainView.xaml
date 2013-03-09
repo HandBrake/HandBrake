@@ -28,6 +28,7 @@
             <Setter Property="Padding" Value="5,1" />
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />
         </Style>
 
         <Style x:Key="textBlockOrangeStyle" TargetType="TextBlock">

@@ -14,12 +14,9 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
@@ -52,13 +49,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.SubtitlesViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public SubtitlesViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public SubtitlesViewModel()
         {
             this.Task = new EncodeTask();
 

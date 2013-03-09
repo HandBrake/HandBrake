@@ -20,21 +20,7 @@
                      ToolBarTray.IsLocked="True"
                      Loaded="ToolBarLoaded"
                      >
-           
-
-                <TextBlock Margin="10,0,10,0"
-                           VerticalAlignment="Center"
-                           FontWeight="Bold"
-                           Text="Choose Log:" />
-                <ComboBox Width="120
-                          " Margin="0,0,10,0" Background="LightSteelBlue" Height="22" FontWeight="Black"
-                          HorizontalAlignment="Right" VerticalAlignment="Center"
-                          ItemsSource="{Binding LogModes}"
-                          SelectedIndex="{Binding SelectedMode}"
-                          />
-                
-                <Separator />
-                
+                          
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/copy.png" />
@@ -50,13 +36,26 @@
 
             </ToolBar>
 
-            <TextBox Grid.Row="1"
+            <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
+                <TabItem Header="Encode Log">
+                    <TextBox Grid.Row="1"
                      AcceptsReturn="True"
                      IsReadOnly="True"
                      ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     Text="{Binding Log,
-                                    Mode=OneWay}"
+                     Text="{Binding EncodeLog, Mode=OneWay,  UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap" />
+                </TabItem>
+                
+                <TabItem Header="Scan Log">
+                    <TextBox Grid.Row="1"
+                     AcceptsReturn="True"
+                     IsReadOnly="True"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     Text="{Binding ScanLog, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                     TextWrapping="Wrap" />
+                </TabItem>
+
+            </TabControl>
         </Grid>
 
     </Grid>

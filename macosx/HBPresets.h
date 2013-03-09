@@ -6,26 +6,28 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface HBPresets : NSObject {}
 
-/* Called by -addFactoryPresets in Controller.mm */
-- (NSMutableArray *) generateBuiltinPresets: (NSMutableArray *) UserPresets;
+/* Called by -addFactoryPresets in Controller.m */
+- (NSMutableArray *)generateBuiltinPresets:(NSMutableArray *)UserPresets;
 
-/* Built-In Preset Dictionaries (one for each built in preset) */
+/* Dictionaries for preset folders ("Devices, "Regular") */
 - (NSDictionary *)createDevicesPresetFolder;
 - (NSDictionary *)createRegularPresetFolder;
 
-- (NSDictionary *)createiPadPreset;
-- (NSDictionary *)createAppleTV2Preset;
-- (NSDictionary *)createAppleTVPreset;
-- (NSDictionary *)createAppleTV3Preset;
+/* Dictionaries for individual presets ("Devices" folder) */
 - (NSDictionary *)createUniversalPreset;
-- (NSDictionary *)createiPhoneiPodtouchPreset;
 - (NSDictionary *)createiPodPreset;
-- (NSDictionary *)createNormalPreset;
-- (NSDictionary *)createHighProfilePreset;
+- (NSDictionary *)createiPhoneiPodtouchPreset;
+- (NSDictionary *)createiPadPreset;
+- (NSDictionary *)createAppleTVPreset;
+- (NSDictionary *)createAppleTV2Preset;
+- (NSDictionary *)createAppleTV3Preset;
 - (NSDictionary *)createAndroidPreset;
 - (NSDictionary *)createAndroidTabletPreset;
+
+/* Dictionaries for individual presets ("Regular" folder) */
+- (NSDictionary *)createNormalPreset;
+- (NSDictionary *)createHighProfilePreset;
 
 @end

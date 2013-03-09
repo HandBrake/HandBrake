@@ -1,6 +1,6 @@
 /* common.c
 
-   Copyright (c) 2003-2012 HandBrake Team
+   Copyright (c) 2003-2013 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -127,6 +127,10 @@ hb_encoder_t hb_audio_encoders[] =
     { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MP4|HB_MUX_MKV },
 #endif
     { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MP4|HB_MUX_MKV },
+#ifdef USE_FDK_AAC
+    { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MP4|HB_MUX_MKV },
+    { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MP4|HB_MUX_MKV },
+#endif
     { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MP4|HB_MUX_MKV },
     { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MP4|HB_MUX_MKV },
     { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MP4|HB_MUX_MKV },
@@ -179,6 +183,8 @@ int hb_audio_dither_is_supported(uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
             return 1;
         default:
             return 0;
@@ -630,9 +636,36 @@ supported samplerates: 32 - 48 kHz
 Core Audio API provides a range of allowed bitrates:
 32 kHz         12 - 40         24 - 80        64 - 192          N/A           96 - 256
 48 kHz         16 - 40         32 - 80        80 - 192          N/A          112 - 256
-Limits: minimum of 12 (+ 4 if rate >= 44100) Kbps per full-bandwidth channel
+Limits: minimum of 12 Kbps per full-bandwidth channel (<= 32 kHz)
+        minimum of 16 Kbps per full-bandwidth channel ( > 32 kHz)
         maximum of 40 Kbps per full-bandwidth channel
 Note: encCoreAudioInit() will sanitize any mistake made here.
+
+fdk_aac
+-------
+supported samplerates: 8 - 48 kHz
+libfdk limits the bitrate to the following values:
+ 8 kHz              48              96             240
+12 kHz              72             144             360
+16 kHz              96             192             480
+24 kHz             144             288             720
+32 kHz             192             384             960
+48 kHz             288             576            1440
+Limits: minimum of samplerate * 2/3 Kbps per full-bandwidth channel (see ca_aac)
+        maximum of samplerate * 6.0 Kbps per full-bandwidth channel
+ 
+fdk_haac
+--------
+supported samplerates: 16 - 48 kHz
+libfdk limits the bitrate to the following values:
+16 kHz         8 -  48        16 -  96        45 - 199
+24 kHz         8 -  63        16 - 127        45 - 266
+32 kHz         8 -  63        16 - 127        45 - 266
+48 kHz        12 -  63        16 - 127        50 - 266
+Limits: minimum of 12 Kbps per full-bandwidth channel  (<= 32 kHz) (see ca_haac)
+        minimum of 16 Kbps per full-bandwidth channel  ( > 32 kHz) (see ca_haac)
+        maximum of 48,  96 or 192 Kbps (1.0, 2.0, 5.1) (<= 16 kHz)
+        maximum of 64, 128 or 256 Kbps (1.0, 2.0, 5.1) ( > 16 kHz)
 */
 
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
@@ -707,6 +740,18 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
         case HB_ACODEC_CA_HAAC:
             *low  = nchannels * (12 + (4 * (samplerate >= 44100)));
             *high = nchannels * 40;
+            break;
+
+        case HB_ACODEC_FDK_AAC:
+            *low  = nchannels * samplerate * 2 / 3000;
+            *high = nchannels * samplerate * 6 / 1000;
+            break;
+
+        case HB_ACODEC_FDK_HAAC:
+            *low  = (nchannels * (12 + (4 * (samplerate >= 44100))));
+            *high = (nchannels - (nchannels > 2)) * (48 +
+                                                     (16 *
+                                                      (samplerate >= 22050)));
             break;
 
         case HB_ACODEC_FAAC:
@@ -788,6 +833,7 @@ int hb_get_default_audio_bitrate(uint32_t codec, int samplerate, int mixdown)
             break;
 
         case HB_ACODEC_CA_HAAC:
+        case HB_ACODEC_FDK_HAAC:
             bitrate = nchannels * 32;
             break;
 
@@ -993,6 +1039,12 @@ int hb_get_best_samplerate(uint32_t codec, int samplerate, int *sr_shift)
         // AC-3 < 32 kHz suffers from poor hardware compatibility
         best_samplerate  = 32000;
         samplerate_shift = 0;
+    }
+    else if (samplerate < 16000 && codec == HB_ACODEC_FDK_HAAC)
+    {
+        // fdk_haac can't do samplerates < 16 kHz
+        best_samplerate  = 16000;
+        samplerate_shift = 1;
     }
     else
     {

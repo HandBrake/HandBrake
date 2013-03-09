@@ -349,18 +349,28 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
+        when "AAC (faac)"
+          audioEncoders << "faac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
-        when /AAC/
-          audioEncoders << "faac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
+        when "HE-AAC (FDK)"
+          audioEncoders << "fdk_haac"
+        when "HE-AAC (CoreAudio)"
+          audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
-        when /FLAC/
+        when "FLAC (ffmpeg)"
           audioEncoders << "ffflac"
+        when "FLAC (24-bit)"
+          audioEncoders << "ffflac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end
@@ -723,18 +733,28 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
+        when "AAC (faac)"
+          audioEncoders << "faac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
-        when /AAC/
-          audioEncoders << "faac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
+        when "HE-AAC (FDK)"
+          audioEncoders << "fdk_haac"
+        when "HE-AAC (CoreAudio)"
+          audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
-        when /FLAC/
+        when "FLAC (ffmpeg)"
           audioEncoders << "ffflac"
+        when "FLAC (24-bit)"
+          audioEncoders << "ffflac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end
@@ -998,7 +1018,7 @@ class Display
 
   def generateAPIcalls(hash) # Makes a C version of the preset ready for coding into the CLI
     
-    commandString = "if (!strcmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n    "
+    commandString = "if (!strcasecmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n    "
     
     #Filename suffix
     commandString << "if( !mux )\n    "
@@ -1099,18 +1119,28 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
+        when "AAC (faac)"
+          audioEncoders << "faac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
-        when /AAC/
-          audioEncoders << "faac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
+        when "HE-AAC (FDK)"
+          audioEncoders << "fdk_haac"
+        when "HE-AAC (CoreAudio)"
+          audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
-        when /FLAC/
+        when "FLAC (ffmpeg)"
           audioEncoders << "ffflac"
+        when "FLAC (24-bit)"
+          audioEncoders << "ffflac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end
@@ -1215,24 +1245,33 @@ class Display
     
     case hash["AudioEncoderFallback"]
       when /AC3/
-        audioEncoderFallback << "HB_ACODEC_AC3"
+        audioEncoderFallback << "ffac3"
+      when "AAC (FDK)"
+        audioEncoderFallback << "fdk_aac"
+      when "AAC (faac)"
+        audioEncoderFallback << "faac"
       when "AAC (ffmpeg)"
-        audioEncoderFallback << "HB_ACODEC_FFAAC"
-      when /AAC/
-        audioEncoderFallback << "HB_ACODEC_FAAC"
+        audioEncoderFallback << "ffaac"
+      when "AAC (CoreAudio)"
+        audioEncoderFallback << "ca_aac"
+      when "HE-AAC (FDK)"
+        audioEncoderFallback << "fdk_haac"
+      when "HE-AAC (CoreAudio)"
+        audioEncoderFallback << "ca_haac"
       when /Vorbis/
-        audioEncoderFallback << "HB_ACODEC_VORBIS"
+        audioEncoderFallback << "vorbis"
       when /MP3/
-        audioEncoderFallback << "HB_ACODEC_LAME"
-      when /FLAC/
-        audioEncoderFallback << "HB_ACODEC_FFFLAC"
+        audioEncoderFallback << "lame"
+      when "FLAC (ffmpeg)"
+        audioEncoderFallback << "ffflac"
+      when "FLAC (24-bit)"
+        audioEncoderFallback << "ffflac24"
     end
     
     if audioEncoderFallback.size > 0
-      commandString << "if( !acodec_fallback )\n    "
+      commandString << "if( acodec_fallback == NULL )\n    "
       commandString << "{\n    "
-      commandString << "    acodec_fallback = " << audioEncoderFallback
-      commandString << ";\n    "
+      commandString << "    acodec_fallback = \"" << audioEncoderFallback << "\";\n    "
       commandString << "}\n    "
     end
     
@@ -1526,18 +1565,28 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
+        when "AAC (faac)"
+          audioEncoders << "faac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
-        when /AAC/
-          audioEncoders << "faac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
+        when "HE-AAC (FDK)"
+          audioEncoders << "fdk_haac"
+        when "HE-AAC (CoreAudio)"
+          audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
-        when /FLAC/
+        when "FLAC (ffmpeg)"
           audioEncoders << "ffflac"
+        when "FLAC (24-bit)"
+          audioEncoders << "ffflac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end

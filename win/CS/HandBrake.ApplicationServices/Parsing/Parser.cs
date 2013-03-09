@@ -28,7 +28,8 @@ namespace HandBrake.ApplicationServices.Parsing
     /// <param name="sender">The object who's raising the event</param>
     /// <param name="currentTitle">The title number currently being processed</param>
     /// <param name="titleCount">The total number of titiles to be processed</param>
-    public delegate void ScanProgressEventHandler(object sender, int currentTitle, int titleCount);
+    /// <param name="percentage">Percentage complete.</param>
+    public delegate void ScanProgressEventHandler(object sender, int currentTitle, int titleCount, decimal percentage);
 
     /// <summary>
     /// A delegate to handle encode progress updates // EXPERIMENTAL
@@ -97,18 +98,18 @@ namespace HandBrake.ApplicationServices.Parsing
         {
             string tmp = base.ReadLine();
 
-            buffer.Append(tmp + Environment.NewLine);
-
             Match m = null;
-            if (tmp.Contains("Scanning title"))
-                m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
+            if (tmp != null && tmp.Contains("Scanning title"))
+                m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)([a-z0-9 ,]*), ([0-9.]*)");
+            else if (!string.IsNullOrEmpty(tmp))
+                buffer.Append(tmp + Environment.NewLine);
 
             if (OnReadLine != null)
                 OnReadLine(this, tmp);
 
             if (m != null)
                 if (m.Success && OnScanProgress != null)
-                    OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+                    OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), decimal.Parse(m.Groups[4].Value, CultureInfo.InvariantCulture));
 
             return tmp;
         }

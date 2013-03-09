@@ -1,13 +1,56 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+
+Changes betwen 0.9.8 and 0.9.9:
+
+General:
+- Improved HandBrake Pineapple Icon by Matt Johnson
+- Improved Retina Resolution Icons within the Application by Nik Pawlak ​​http://nikpawlak.com
+
+Core:
+- PGS Subtitle support. (Burn-in with MP4, passthru and burn-in for MKV)
+- Additional Framerates 30, 50, 59.94, 60
+- Bob mode for De-interlacing and Decomb.
+- Updated libraries (x264, libav)
+- Assorted bug fixes and improvements to the core libhb library.
+- Better Audio Mixdown support. (6.1, 7.1, 7.1 (5F/2R/LFE), Mono left only, Mono Right only). CLI users should note 6ch becomes 5point1
+- Allow the selection of higher audio bitrates where appropriate
+- Allow the selection of slower samplerates where appropriate.
+- Use libav for dts audio decoding instead of libdca
+- Addition of x264 Tune, Preset, Profile and Level options. Can be used instead of the Advanced Tab.
+
+Windows:
+- User Interface has been re-written in WPF. Includes many small UI enhancements
+- Switched to .NET 4 Client Profile. (Smaller download for those who don't have .NET 4 Full installed)
+
+Linux:
+- Moved to GTK 3
+- Assorted bug fixes and improvements.
+- Use some system libraries rather than bundling (libass-dev, libsamplerate-dev)
+
+Mac:
+- Drag/Drop? files onto the Main window or application icon to scan.
+- Nicer Progress indication on the dock icon.
+- Prevent sleep during encoding and scanning for Mountain Lion.
+- Assorted bug fixes including better support for retina displays 
+
+CLI:
+- Audio option (-a) will ignore invalid input tracks and encode with only the valid ones.
+- Allow use of hh:mm:ss format when specifying p-to-p start/stop time
+
+
+
 Changes betwen 0.9.7 and 0.9.8:
 
 -> Corrects a few crash bugs that showed up in 0.9.7
+
+
 
 Changes betwen 0.9.6 and 0.9.7:
 
 -> This is a bug fix release for 0.9.6.
 -> Includes an AppleTV3 Preset and updated iPad Preset
+
 
 
 Changes betwen 0.9.5 and 0.9.6:
@@ -239,6 +282,8 @@ Changes between 0.9.4 and 0.9.5:
   - Multiple instance support (run multiple copies of ghb at once)
   - Many Bug fixes and UI improvements. 
   
+
+
 Changes between 0.9.3 and 0.9.4:
 
 Core:

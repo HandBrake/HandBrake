@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 FAAC FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBMKV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
-    MP4V2 MPEG2DEC PTHREADW32 X264 ZLIB LIBBLURAY
+    MP4V2 MPEG2DEC PTHREADW32 X264 ZLIB LIBBLURAY FDKAAC
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -37,7 +37,9 @@ LIBHB.out += $(LIBHB.a)
 ifeq (1,$(FEATURE.ff.mpeg2))
 LIBHB.GCC.D += USE_FF_MPEG2
 endif
-
+ifeq (1,$(FEATURE.fdk_aac))
+LIBHB.GCC.D += USE_FDK_AAC
+endif
 ifeq (1,$(FEATURE.opencl))
 LIBHB.GCC.D += USE_OPENCL
 endif
@@ -106,9 +108,14 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac fontconfig freetype mkv mpeg2 mp3lame mp4v2 \
+        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
+        fontconfig freetype mkv mpeg2 mp3lame mp4v2 \
         ogg samplerate swscale theora vorbis vorbisenc x264 xml2 bluray, \
         $(CONTRIB.build/)lib/lib$(n).a )
+
+ifeq (1,$(FEATURE.fdk_aac))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
+endif
 
 ifneq ($(HAS.iconv),1)
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libiconv.a

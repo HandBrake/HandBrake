@@ -1,6 +1,6 @@
 /* common.h
 
-   Copyright (c) 2003-2012 HandBrake Team
+   Copyright (c) 2003-2013 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -483,7 +483,7 @@ struct hb_job_s
 
 /* Audio starts here */
 /* Audio Codecs */
-#define HB_ACODEC_MASK      0x003FFF00
+#define HB_ACODEC_MASK      0x00FFFF00
 #define HB_ACODEC_FAAC      0x00000100
 #define HB_ACODEC_LAME      0x00000200
 #define HB_ACODEC_VORBIS    0x00000400
@@ -498,7 +498,9 @@ struct hb_job_s
 #define HB_ACODEC_MP3       0x00080000
 #define HB_ACODEC_FFFLAC    0x00100000
 #define HB_ACODEC_FFFLAC24  0x00200000
-#define HB_ACODEC_FF_MASK   0x003F2000
+#define HB_ACODEC_FDK_AAC   0x00400000
+#define HB_ACODEC_FDK_HAAC  0x00800000
+#define HB_ACODEC_FF_MASK   0x00FF2000
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA)
 #define HB_ACODEC_AUTO_PASS (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG)

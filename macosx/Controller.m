@@ -5403,6 +5403,8 @@ the user is using "Custom" settings by determining the sender*/
     {
         // using advanced panel, enable if applicable
         [fAdvancedOptions enableUI:enable];
+        // TODO: set the advanced options string based on the previously
+        //       selected x264 system setting
         // reset x264 system widgets
         [fX264PresetsSlider setIntegerValue: fX264MediumPresetIndex];
         [fX264TunePopUp selectItemAtIndex:0];
@@ -6102,12 +6104,12 @@ return YES;
             
             
         }
-        /* We use Bold Text for the HB Default */
-        if ([[item objectForKey:@"Default"] intValue] == 1)// 1 is HB default
+        /* We use bold text for the default preset */
+        if (presetUserDefault == nil &&                    // no User default found
+            [[item objectForKey:@"Default"] intValue] == 1)// 1 is HB default
         {
             txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
         }
-        /* We use Bold Text for the User Specified Default */
         if ([[item objectForKey:@"Default"] intValue] == 2)// 2 is User default
         {
             txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];

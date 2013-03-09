@@ -27,7 +27,7 @@ dnl
                 url="http://handbrake.fr/rotation.php?file=__APPCAST_dmg" 
                 length="__APPCAST_dmg_size"
                 type="application/octet-stream"/>
-            <sparkle:minimumSystemVersion>10.5.0</sparkle:minimumSystemVersion>
+            <sparkle:minimumSystemVersion>10.6.0</sparkle:minimumSystemVersion>
         </item>
     </channel>
 </rss>

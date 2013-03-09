@@ -1,7 +1,7 @@
-$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB))
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v9.2.tar.bz2
+FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v9.3.tar.bz2
 
 FFMPEG.CONFIGURE.deps =
 FFMPEG.CONFIGURE.env  =
@@ -14,8 +14,9 @@ FFMPEG.CONFIGURE.extra = \
     --disable-avconv \
     --disable-avplay \
     --disable-avprobe \
-    --disable-avserver \
+    --disable-avdevice \
     --disable-avfilter \
+    --disable-avserver \
     --disable-muxers \
     --disable-network \
     --disable-hwaccels \
@@ -30,6 +31,13 @@ FFMPEG.CONFIGURE.extra = \
     --enable-bzlib \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
+
+ifeq (1,$(FEATURE.fdk_aac))
+FFMPEG.CONFIGURE.extra += \
+    --enable-nonfree \
+    --enable-libfdk-aac \
+    --enable-encoder=libfdk_aac
+endif
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag
 ifeq (0-cygwin,$(BUILD.cross)-$(BUILD.system))

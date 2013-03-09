@@ -1,0 +1,5 @@
+$(eval $(call import.MODULE.defs,FDKAAC,fdkaac))
+$(eval $(call import.CONTRIB.defs,FDKAAC))
+
+FDKAAC.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fdk-aac-v0.1.1-6-gbae4553.tar.bz2
+

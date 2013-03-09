@@ -1,6 +1,6 @@
 /* muxmp4.c
 
-   Copyright (c) 2003-2012 HandBrake Team
+   Copyright (c) 2003-2013 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -382,6 +382,8 @@ static int MP4Init( hb_mux_object_t * m )
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
             case HB_ACODEC_CA_HAAC:
+            case HB_ACODEC_FDK_AAC:
+            case HB_ACODEC_FDK_HAAC:
             case HB_ACODEC_LAME:
             case HB_ACODEC_MP3:
             case HB_ACODEC_DCA_HD:
@@ -397,6 +399,8 @@ static int MP4Init( hb_mux_object_t * m )
                     case HB_ACODEC_FFAAC:
                     case HB_ACODEC_CA_AAC:
                     case HB_ACODEC_CA_HAAC:
+                    case HB_ACODEC_FDK_AAC:
+                    case HB_ACODEC_FDK_HAAC:
                     {
                         audio_type = MP4_MPEG4_AUDIO_TYPE;
                         config_bytes = audio->priv.config.extradata.bytes;
