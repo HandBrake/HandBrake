@@ -4,7 +4,7 @@
         xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" Title="{Data:Binding Path=WindowTitle}"
         Width="1015"
-        Height="670"
+        Height="680"
         MinWidth="1015"
         MinHeight="670"
         AllowDrop="True"
