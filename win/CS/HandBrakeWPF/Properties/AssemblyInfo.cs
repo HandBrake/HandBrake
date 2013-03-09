@@ -13,7 +13,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HandBrake")]
-[assembly: AssemblyDescription("HandBrake is an open-source, GPL-licensed, multiplatform, multithreaded video transcoder.")]
+[assembly: AssemblyDescription("HandBrake is an open-source, GPL-licensed, multiplatform,video transcoder.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HandBrake Team")]
 [assembly: AssemblyProduct("HandBrake")]
@@ -56,5 +56,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.9.8.4532")]
+[assembly: AssemblyVersion("0.9.9.5314")]
 [assembly: NeutralResourcesLanguage("")]
