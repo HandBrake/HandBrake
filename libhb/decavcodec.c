@@ -593,16 +593,6 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     return buf;
 }
 
-static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
-{
-    return avcodec_default_get_buffer( context, frame );
-}
-
-static int reget_frame_buf( AVCodecContext *context, AVFrame *frame )
-{
-    return avcodec_default_reget_buffer( context, frame );
-}
-
 static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 {
     hb_chapter_t *c;
