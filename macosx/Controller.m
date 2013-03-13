@@ -3452,7 +3452,7 @@ bool one_burned = FALSE;
             else
             {
                 /* if we are getting the subtitles from an external srt file */
-                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
+                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] intValue] == SRTSUB)
                 {
                     hb_subtitle_config_t sub_config;
                     
@@ -4012,7 +4012,7 @@ bool one_burned = FALSE;
             else
             {
                 /* if we are getting the subtitles from an external srt file */
-                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
+                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] intValue] == SRTSUB)
                 {
                     hb_subtitle_config_t sub_config;
                     
