@@ -3,8 +3,9 @@ $(eval $(call import.MODULE.defs,PKG,pkg))
 PKG.in/  = $(SRC/)pkg/
 PKG.out/ = $(BUILD/)pkg/
 
-PKG.basename    = $(HB.name)-$(HB.version)
-PKG.src.tar.bz2 = $(PKG.out/)$(PKG.basename).tar.bz2
+PKG.basename            = $(HB.name)-$(HB.version)
+PKG.src.tar.bz2         = $(PKG.out/)$(PKG.basename).tar.bz2
+PKG.src-contrib.tar.bz2 = $(PKG.out/)$(PKG.basename)-contrib.tar.bz2
 
 STAGE.out/     = $(BUILD/)stage/
 STAGE.out.src/ = $(STAGE.out/)src/

@@ -189,8 +189,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     pv->samples_per_frame = context->frame_size;
     pv->input_samples     = context->frame_size * context->channels;
     pv->input_buf         = malloc(pv->input_samples * sizeof(float));
-    pv->max_output_bytes  = (pv->input_samples *
-                             av_get_bytes_per_sample(context->sample_fmt));
+    // Some encoders in libav (e.g. fdk-aac) fail if the output buffer
+    // size is not some minumum value.  8K seems to be enough :(
+    pv->max_output_bytes  = MAX(8192, (pv->input_samples *
+                             av_get_bytes_per_sample(context->sample_fmt)));
 
     // sample_fmt conversion
     if (context->sample_fmt != AV_SAMPLE_FMT_FLT)

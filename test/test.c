@@ -1,8 +1,11 @@
-/* $Id: test.c,v 1.82 2005/11/19 08:25:54 titer Exp $
+/* test.c
 
-   This file is part of the HandBrake source code.
+   Copyright (c) 2003-2013 HandBrake Team
+   This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License. */
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 #include <signal.h>
 #include <getopt.h>

@@ -15,6 +15,7 @@ hb_title_t                   *fTitle;
 
 NSMutableArray               *subtitleArray; // contains the output subtitle track info
 NSMutableArray               *subtitleSourceArray;// contains the source subtitle track info
+NSString                     *foreignAudioSearchTrackName;
 NSMutableArray               *languagesArray; // array of languages taken from lang.c
 int                           languagesArrayDefIndex;
 NSMutableArray               *charCodeArray; // array of character codes

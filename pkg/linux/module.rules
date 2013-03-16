@@ -1,6 +1,21 @@
 pkg.create.deb:: $(PKG.gui.deb) $(PKG.cli.deb)
 pkg.create.rpm:: $(PKG.gui.rpm)
 pkg.create.src.deb:: $(PKG.src.deb.stamp)
+pkg.create.tar:: pkg.create $(PKG.cli.tar)
+
+#
+# CLI Tar Package
+#
+
+$(PKG.cli.tar): | $(dir $(PKG.cli.tar))
+$(PKG.cli.tar): | $(STAGE.out.cli/)
+	cd $(STAGE.out.cli/) && $(TAR.exe) cjf $(call fn.ABSOLUTE,$(PKG.cli.tar)) .
+
+
+$(STAGE.out.cli/):
+	-$(MKDIR.exe) -p $@
+	$(CP.exe) HandBrakeCLI $(STAGE.out.cli/)
+	$(call STAGE.doc,$(STAGE.out.cli/))
 
 #
 # RPM binary package rules

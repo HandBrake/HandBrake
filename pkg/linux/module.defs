@@ -3,6 +3,15 @@ PKG.rpm.machine = `rpm -E "%_target_cpu"`
 PKG.release = 1
 PKG.rpm.dist = `rpm -E "%dist"`
 
+
+###############################################################################
+
+PKG.cli.tar = $(PKG.out/)$(HB.name)-$(HB.version)-$(BUILD.machine)_CLI.tar.gz
+
+STAGE.out.cli/ = $(STAGE.out/)cli/
+
+###############################################################################
+
 PKG.rpm.src.tar.bz2 = $(STAGE.out.src/)rpm/$(PKG.basename).tar.bz2
 STAGE.out.rpm.src/ = $(STAGE.out.src/)rpm/
 
@@ -36,3 +45,4 @@ BUILD.out += $(PKG.cli.deb)
 BUILD.out += $(PKG.gui.deb)
 BUILD.out += $(PKG.cli.rpm)
 BUILD.out += $(PKG.gui.rpm)
+BUILD.out += $(PKG.cli.tar)
