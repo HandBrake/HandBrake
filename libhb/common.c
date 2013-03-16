@@ -1791,6 +1791,42 @@ void hb_title_close( hb_title_t ** _t )
     *_t = NULL;
 }
 
+// The mac ui expects certain fields of the job struct to be cleaned up
+// and others to remain untouched.
+// e.g. picture settings like cropping, width, height, should remain untouched.
+//
+// So only initialize job elements that we know get set up by prepareJob and
+// prepareJobForPreview.
+//
+// This should all get resolved in some future mac ui refactoring.
+static void job_reset_for_mac_ui( hb_job_t * job, hb_title_t * title )
+{
+    if ( job == NULL || title == NULL )
+        return;
+
+    job->title = title;
+
+    /* Set defaults settings */
+    job->chapter_start = 1;
+    job->chapter_end   = hb_list_count( title->list_chapter );
+    job->list_chapter = hb_chapter_list_copy( title->list_chapter );
+
+    job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
+    job->vquality   = -1.0;
+    job->vbitrate   = 1000;
+    job->pass       = 0;
+    job->vrate      = title->rate;
+    job->vrate_base = title->rate_base;
+
+    job->list_audio = hb_list_init();
+    job->list_subtitle = hb_list_init();
+    job->list_filter = hb_list_init();
+
+    job->list_attachment = hb_attachment_list_copy( title->list_attachment );
+    job->metadata = hb_metadata_copy( title->metadata );
+}
+
+
 static void job_setup( hb_job_t * job, hb_title_t * title )
 {
     if ( job == NULL || title == NULL )
@@ -1955,7 +1991,7 @@ void hb_job_reset( hb_job_t * job )
     {
         hb_title_t * title = job->title;
         job_clean(job);
-        job_setup(job, title);
+        job_reset_for_mac_ui(job, title);
     }
 }
 

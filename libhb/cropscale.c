@@ -162,6 +162,7 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
     free( pv );
     filter->private_data = NULL;
 }
+
 #ifdef USE_OPENCL
 static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride, int h )
 {
@@ -180,6 +181,7 @@ static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride
     return dst;
 }
 #endif
+
 static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
 {
     AVPicture           pic_in;

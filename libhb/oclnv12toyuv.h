@@ -24,8 +24,6 @@
 #include "common.h"
 #include "openclwrapper.h"
 
-
-
 /**
  * nv12 to yuv interface
  * bufi is input frame of nv12, w is input frame width, h is input frame height
