@@ -21,7 +21,7 @@ $(STAGE.out.cli/):
 # RPM binary package rules
 #
 $(PKG.rpm.src.tar.bz2): $(STAGE.out.rpm.src/)
-	$(TAR.exe) cvzf $@ -C $(STAGE.out.rpm.src/) $(PKG.basename)
+	$(TAR.exe) cjf $@ -C $(STAGE.out.rpm.src/) $(PKG.basename)
 
 $(STAGE.out.rpm.src/): GNUmakefile
 #	-$(MKDIR.exe) -p $(STAGE.out.rpm.src/)$(PKG.basename)
