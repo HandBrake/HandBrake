@@ -675,9 +675,12 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
 #endif
 }
 
+#ifdef USE_HWD
+
+/* These methods are only used by HWD now. Can we remove this as per these changes: https://trac.handbrake.fr/changeset?reponame=&new=5323%40trunk%2Flibhb%2Fdecavcodec.c&old=5242%40trunk%2Flibhb%2Fdecavcodec.c */
 static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
 {
-#ifdef USE_HWD
+
     hb_work_private_t *pv = (hb_work_private_t*)context->opaque;
     if ( (pv != NULL) && pv->dxva2  )
     {
@@ -689,7 +692,6 @@ static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
         return 0;
     }
     else
-#endif
     return avcodec_default_get_buffer( context, frame );
 }
 
@@ -697,6 +699,7 @@ static int reget_frame_buf( AVCodecContext *context, AVFrame *frame )
 {
     return avcodec_default_reget_buffer( context, frame );
 }
+#endif
 
 static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 {
@@ -1116,19 +1119,20 @@ static void hb_ffmpeg_release_frame_buf( struct AVCodecContext *p_context, AVFra
     for( i = 0; i < 4; i++ )
         frame->data[i] = NULL;
 }
-#endif
 
+/* This is only used by HWD now. Can we remove this as per these changes: https://trac.handbrake.fr/changeset?reponame=&new=5323%40trunk%2Flibhb%2Fdecavcodec.c&old=5242%40trunk%2Flibhb%2Fdecavcodec.c */
 static void init_video_avcodec_context( hb_work_private_t *pv )
 {
     /* we have to wrap ffmpeg's get_buffer to be able to set the pts (?!) */
     pv->context->opaque = pv;
     pv->context->get_buffer = get_frame_buf;
     pv->context->reget_buffer = reget_frame_buf;
-#ifdef USE_HWD
+
     if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
         pv->context->release_buffer = hb_ffmpeg_release_frame_buf;
-#endif
 }
+#endif
+
 
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
