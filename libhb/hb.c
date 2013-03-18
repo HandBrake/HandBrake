@@ -1570,8 +1570,6 @@ void hb_pause( hb_handle_t * h )
         hb_lock( h->state_lock );
         h->state.state = HB_STATE_PAUSED;
         hb_unlock( h->state_lock );
-
-        hb_allow_sleep( h );
     }
 }
 
@@ -1583,8 +1581,6 @@ void hb_resume( hb_handle_t * h )
 {
     if( h->paused )
     {
-        hb_prevent_sleep( h );
-
 #define job hb_current_job( h )
         if( job->st_pause_date != -1 )
         {

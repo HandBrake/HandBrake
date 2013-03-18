@@ -13,10 +13,9 @@
 
 typedef struct
 {
-    hb_handle_t  * handle;
-    hb_list_t    * jobs;
-    hb_job_t    ** current_job;
-    int          * error;
+    hb_list_t * jobs;
+    hb_job_t  ** current_job;
+    int       * error;
     volatile int * die;
 
 } hb_work_t;
@@ -45,10 +44,10 @@ hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, int * error, h
 {
     hb_work_t * work = calloc( sizeof( hb_work_t ), 1 );
 
-    work->jobs        = jobs;
+    work->jobs      = jobs;
     work->current_job = job;
-    work->die         = die;
-    work->error       = error;
+    work->die       = die;
+    work->error     = error;
 
     return hb_thread_init( "work", work_func, work, HB_LOW_PRIORITY );
 }
