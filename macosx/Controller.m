@@ -1330,7 +1330,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Toggle Presets"];
         [item setPaletteLabel: @"Toggler Presets"];
         [item setToolTip: @"Open/Close Preset Drawer"];
-        [item setImage: [NSImage imageNamed: @"Drawer"]];
+        [item setImage: [NSImage imageNamed: @"presets"]];
         [item setTarget: self];
         [item setAction: @selector(toggleDrawer:)];
         [item setAutovalidates: NO];
@@ -1340,7 +1340,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Start"];
         [item setPaletteLabel: @"Start Encoding"];
         [item setToolTip: @"Start Encoding"];
-        [item setImage: [NSImage imageNamed: @"Play"]];
+        [item setImage: [NSImage imageNamed: @"encode"]];
         [item setTarget: self];
         [item setAction: @selector(Rip:)];
     }
@@ -1349,7 +1349,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Show Queue"];
         [item setPaletteLabel: @"Show Queue"];
         [item setToolTip: @"Show Queue"];
-        [item setImage: [NSImage imageNamed: @"Queue"]];
+        [item setImage: [NSImage imageNamed: @"showqueue"]];
         [item setTarget: self];
         [item setAction: @selector(showQueueWindow:)];
         [item setAutovalidates: NO];
@@ -1359,7 +1359,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Add to Queue"];
         [item setPaletteLabel: @"Add to Queue"];
         [item setToolTip: @"Add to Queue"];
-        [item setImage: [NSImage imageNamed: @"AddToQueue"]];
+        [item setImage: [NSImage imageNamed: @"addqueue"]];
         [item setTarget: self];
         [item setAction: @selector(addToQueue:)];
     }
@@ -1368,7 +1368,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Pause"];
         [item setPaletteLabel: @"Pause Encoding"];
         [item setToolTip: @"Pause Encoding"];
-        [item setImage: [NSImage imageNamed: @"Pause"]];
+        [item setImage: [NSImage imageNamed: @"pauseencode"]];
         [item setTarget: self];
         [item setAction: @selector(Pause:)];
     }
@@ -1377,7 +1377,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Picture Settings"];
         [item setPaletteLabel: @"Show Picture Settings"];
         [item setToolTip: @"Show Picture Settings"];
-        [item setImage: [NSImage imageNamed: @"pref-picture"]];
+        [item setImage: [NSImage imageNamed: @"picturesettings"]];
         [item setTarget: self];
         [item setAction: @selector(showPicturePanel:)];
     }
@@ -1387,7 +1387,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setPaletteLabel: @"Show Preview"];
         [item setToolTip: @"Show Preview"];
         //[item setImage: [NSImage imageNamed: @"pref-picture"]];
-        [item setImage: [NSImage imageNamed: @"Brushed_Window"]];
+        [item setImage: [NSImage imageNamed: @"preview"]];
         [item setTarget: self];
         [item setAction: @selector(showPreviewWindow:)];
     }
@@ -1396,7 +1396,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Activity Window"];
         [item setPaletteLabel: @"Show Activity Window"];
         [item setToolTip: @"Show Activity Window"];
-        [item setImage: [NSImage imageNamed: @"ActivityWindow"]];
+        [item setImage: [NSImage imageNamed: @"activity"]];
         [item setTarget: self];
         [item setAction: @selector(showDebugOutputPanel:)];
         [item setAutovalidates: NO];
@@ -1406,7 +1406,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Source"];
         [item setPaletteLabel: @"Source"];
         [item setToolTip: @"Choose Video Source"];
-        [item setImage: [NSImage imageNamed: @"Source"]];
+        [item setImage: [NSImage imageNamed: @"source"]];
         [item setTarget: self];
         [item setAction: @selector(browseSources:)];
     }
@@ -1447,7 +1447,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             if ([ident isEqualToString: ChooseSourceIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
                 [toolbarItem setLabel: @"Cancel Scan"];
                 [toolbarItem setPaletteLabel: @"Cancel Scanning"];
                 [toolbarItem setToolTip: @"Cancel Scanning Source"];
@@ -1461,7 +1461,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: ChooseSourceIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Source"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"source"]];
                 [toolbarItem setLabel: @"Source"];
                 [toolbarItem setPaletteLabel: @"Source"];
                 [toolbarItem setToolTip: @"Choose Video Source"];
@@ -1475,7 +1475,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
                 [toolbarItem setLabel: @"Stop"];
                 [toolbarItem setPaletteLabel: @"Stop"];
                 [toolbarItem setToolTip: @"Stop Encoding"];
@@ -1483,7 +1483,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             if ([ident isEqualToString: PauseEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
                 [toolbarItem setLabel: @"Pause"];
                 [toolbarItem setPaletteLabel: @"Pause Encoding"];
                 [toolbarItem setToolTip: @"Pause Encoding"];
@@ -1503,7 +1503,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: PauseEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
                 [toolbarItem setLabel: @"Resume"];
                 [toolbarItem setPaletteLabel: @"Resume Encoding"];
                 [toolbarItem setToolTip: @"Resume Encoding"];
@@ -1524,7 +1524,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
                 if (hb_count(fHandle) > 0)
                     [toolbarItem setLabel: @"Start Queue"];
                 else
