@@ -1067,4 +1067,7 @@ const char * const * hb_h264_levels();
 // x264 option name/synonym helper
 const char * hb_x264_encopt_name( const char * name );
 
+void hb_prevent_sleep( hb_handle_t * );
+void hb_allow_sleep( hb_handle_t * );
+
 #endif

@@ -2815,6 +2815,7 @@ fWorkingCount = 0;
     else
     {
         [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
+        hb_allow_sleep( fQueueEncodeLibhb );
         /*Since there are no more items to encode, go to queueCompletedAlerts for user specified alerts after queue completed*/
         [self queueCompletedAlerts];
     }
@@ -2863,6 +2864,8 @@ fWorkingCount = 0;
 /* This assumes that we have re-scanned and loaded up a new queue item to send to libhb as fQueueEncodeLibhb */
 - (void) processNewQueueEncode
 {
+    hb_prevent_sleep( fQueueEncodeLibhb );
+    
     hb_list_t  * list  = hb_get_titles( fQueueEncodeLibhb );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
