@@ -254,7 +254,9 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
-    hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
+    hb_prevent_sleep(h);
+    hb_scan(h, input, titleindex, preview_count, store_previews,
+            min_title_duration * 90000LL);
 
     /* Wait... */
     while( !die )
@@ -269,11 +271,14 @@ int main( int argc, char ** argv )
                     die = 1;
                     break;
                 case 'p':
-                    fprintf( stdout, "\nEncoding Paused by user command, 'r' to resume\n" );
-                    hb_pause( h );
+                    fprintf(stdout,
+                            "\nEncoding Paused by user command, 'r' to resume\n");
+                    hb_pause(h);
+                    hb_allow_sleep(h);
                     break;
                 case 'r':
-                    hb_resume( h );
+                    hb_prevent_sleep(h);
+                    hb_resume(h);
                     break;
                 case 'h':
                     ShowCommands();
@@ -317,11 +322,14 @@ int main( int argc, char ** argv )
                         die = 1;
                         break;
                     case 'p':
-                        fprintf( stdout, "\nEncoding Paused by user command, 'r' to resume\n" );
-                        hb_pause( h );
+                        fprintf(stdout,
+                                "\nEncoding Paused by user command, 'r' to resume\n");
+                        hb_pause(h);
+                        hb_allow_sleep(h);
                         break;
                     case 'r':
-                        hb_resume( h );
+                        hb_prevent_sleep(h);
+                        hb_resume(h);
                         break;
                     case 'h':
                         ShowCommands();
