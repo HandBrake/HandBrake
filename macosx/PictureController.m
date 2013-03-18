@@ -1073,12 +1073,7 @@
 
 - (void)reloadStillPreview
 {
-    /* XXX: make sure we actually have a title before de-referencing it */
-    if (fTitle != NULL)
-    {
-        hb_job_t *job = fTitle->job;
-        [fPreviewController SetTitle:fTitle];
-    }
+    [fPreviewController SetTitle:fTitle];
 }
 
 
