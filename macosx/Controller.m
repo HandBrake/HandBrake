@@ -2026,7 +2026,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
             [self writeToActivityLog: "scanning titles with a duration of %d seconds or more", min_title_duration_seconds];
         }
-        hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 , min_title_duration_ticks );
+        
+        hb_prevent_sleep(fHandle);
+        hb_scan(fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 ,
+                min_title_duration_ticks);
+        
         [fSrcDVD2Field setStringValue:@"Scanning new source…"];
 
         // After the scan process, we signal to enableUI loop that this scan process is now finished
@@ -2038,6 +2042,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) cancelScanning:(id)sender
 {
     hb_scan_stop(fHandle);
+    hb_allow_sleep(fHandle);
 }
 
 - (IBAction) showNewScan:(id)sender
@@ -2200,10 +2205,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [self applyQueueSettingsToMainWindow:nil];
                 
             }
-
-            
         }
-
+    
+    /* Done scanning, allow system sleep for the scan handle */
+    hb_allow_sleep(fHandle);
 }
 
 
@@ -2815,8 +2820,12 @@ fWorkingCount = 0;
     else
     {
         [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
-        hb_allow_sleep( fQueueEncodeLibhb );
-        /*Since there are no more items to encode, go to queueCompletedAlerts for user specified alerts after queue completed*/
+        /* Done encoding, allow system sleep for the encode handle */
+        hb_allow_sleep(fQueueEncodeLibhb);
+        /*
+         * Since there are no more items to encode, go to queueCompletedAlerts
+         * for user specified alerts after queue completed
+         */
         [self queueCompletedAlerts];
     }
 }
@@ -2855,17 +2864,19 @@ fWorkingCount = 0;
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
-        /* Only scan 10 previews before an encode - additional previews are only useful for autocrop and static previews,
-         * which are already taken care of at this point */
-        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0 );
+        /*
+         * Only scan 10 previews before an encode - additional previews are
+         * only useful for autocrop and static previews, which are already taken
+         * care of at this point
+         */
+        hb_prevent_sleep(fQueueEncodeLibhb);
+        hb_scan(fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0);
     }
 }
 
 /* This assumes that we have re-scanned and loaded up a new queue item to send to libhb as fQueueEncodeLibhb */
 - (void) processNewQueueEncode
 {
-    hb_prevent_sleep( fQueueEncodeLibhb );
-    
     hb_list_t  * list  = hb_get_titles( fQueueEncodeLibhb );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
@@ -4474,7 +4485,12 @@ bool one_burned = FALSE;
 {
     if (!fQueueController) return;
     
-  hb_pause( fQueueEncodeLibhb );
+    /*
+     * No need to allow system sleep here as we'll either call Cancel:
+     * (which will take care of it) or resume right away
+     */
+    hb_pause(fQueueEncodeLibhb);
+    
     NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"You are currently encoding. What would you like to do ?", nil)];
    
     // Which window to attach the sheet to?
@@ -4498,14 +4514,16 @@ bool one_burned = FALSE;
 
 - (void) didDimissCancel: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
-   hb_resume( fQueueEncodeLibhb );
-     if (returnCode == NSAlertOtherReturn)
+    /* No need to prevent system sleep here as we didn't allow it in Cancel: */
+    hb_resume(fQueueEncodeLibhb);
+    
+    if (returnCode == NSAlertOtherReturn)
     {
         [self doCancelCurrentJob];  // <- this also stops libhb
     }
-    if (returnCode == NSAlertAlternateReturn)
+    else if (returnCode == NSAlertAlternateReturn)
     {
-    [self doCancelCurrentJobAndStop];
+        [self doCancelCurrentJobAndStop];
     }
 }
 
@@ -4522,7 +4540,8 @@ bool one_burned = FALSE;
     // remaining jobs.
      
     
-    hb_stop( fQueueEncodeLibhb );
+    hb_stop(fQueueEncodeLibhb);
+    hb_allow_sleep(fQueueEncodeLibhb);
     
     // Delete all remaining jobs since libhb doesn't do this on its own.
             hb_job_t * job;
@@ -4563,7 +4582,8 @@ bool one_burned = FALSE;
 
 - (void) doCancelCurrentJobAndStop
 {
-    hb_stop( fQueueEncodeLibhb );
+    hb_stop(fQueueEncodeLibhb);
+    hb_allow_sleep(fQueueEncodeLibhb);
     
     // Delete all remaining jobs since libhb doesn't do this on its own.
             hb_job_t * job;
@@ -4585,15 +4605,17 @@ bool one_burned = FALSE;
 - (IBAction) Pause: (id) sender
 {
     hb_state_t s;
-    hb_get_state2( fQueueEncodeLibhb, &s );
+    hb_get_state2(fQueueEncodeLibhb, &s);
 
-    if( s.state == HB_STATE_PAUSED )
+    if (s.state == HB_STATE_PAUSED)
     {
-        hb_resume( fQueueEncodeLibhb );
+        hb_prevent_sleep(fQueueEncodeLibhb);
+        hb_resume(fQueueEncodeLibhb);
     }
     else
     {
-        hb_pause( fQueueEncodeLibhb );
+        hb_pause(fQueueEncodeLibhb);
+        hb_allow_sleep(fQueueEncodeLibhb);
     }
 }
 

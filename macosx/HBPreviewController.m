@@ -680,12 +680,14 @@
 - (IBAction) cancelCreateMoviePreview: (id) sender
 {
     hb_state_t s;
-    hb_get_state2( fPreviewLibhb, &s );
+    hb_get_state2(fPreviewLibhb, &s);
     
-    if(fEncodeState && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
+    if (fEncodeState && (s.state == HB_STATE_WORKING ||
+                         s.state == HB_STATE_PAUSED))
     {
         fEncodeState = 2;
-        hb_stop( fPreviewLibhb );
+        hb_stop(fPreviewLibhb);
+        hb_allow_sleep(fPreviewLibhb);
         [NSAnimationContext beginGrouping];
         [[NSAnimationContext currentContext] setDuration:0.2];
         [[fEncodingControlBox animator] setHidden:YES];
@@ -803,7 +805,8 @@
 
     /* Let fPreviewLibhb do the job */
     fEncodeState = 1;
-    hb_start( fPreviewLibhb );
+    hb_prevent_sleep(fPreviewLibhb);
+    hb_start(fPreviewLibhb);
 	
 }
 
@@ -896,6 +899,8 @@
             }
             
             fEncodeState = 0;
+            /* Done encoding, allow system sleep for the preview handle */
+            hb_allow_sleep(fPreviewLibhb);
             break;
         }
     }
