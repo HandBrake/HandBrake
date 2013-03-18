@@ -2027,7 +2027,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [self writeToActivityLog: "scanning titles with a duration of %d seconds or more", min_title_duration_seconds];
         }
         
-        hb_prevent_sleep(fHandle);
+        hb_system_sleep_prevent(fHandle);
         hb_scan(fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 ,
                 min_title_duration_ticks);
         
@@ -2042,7 +2042,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) cancelScanning:(id)sender
 {
     hb_scan_stop(fHandle);
-    hb_allow_sleep(fHandle);
+    hb_system_sleep_allow(fHandle);
 }
 
 - (IBAction) showNewScan:(id)sender
@@ -2208,7 +2208,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
     
     /* Done scanning, allow system sleep for the scan handle */
-    hb_allow_sleep(fHandle);
+    hb_system_sleep_allow(fHandle);
 }
 
 
@@ -2821,7 +2821,7 @@ fWorkingCount = 0;
     {
         [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
         /* Done encoding, allow system sleep for the encode handle */
-        hb_allow_sleep(fQueueEncodeLibhb);
+        hb_system_sleep_allow(fQueueEncodeLibhb);
         /*
          * Since there are no more items to encode, go to queueCompletedAlerts
          * for user specified alerts after queue completed
@@ -2869,7 +2869,7 @@ fWorkingCount = 0;
          * only useful for autocrop and static previews, which are already taken
          * care of at this point
          */
-        hb_prevent_sleep(fQueueEncodeLibhb);
+        hb_system_sleep_prevent(fQueueEncodeLibhb);
         hb_scan(fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0);
     }
 }
@@ -4541,7 +4541,7 @@ bool one_burned = FALSE;
      
     
     hb_stop(fQueueEncodeLibhb);
-    hb_allow_sleep(fQueueEncodeLibhb);
+    hb_system_sleep_allow(fQueueEncodeLibhb);
     
     // Delete all remaining jobs since libhb doesn't do this on its own.
             hb_job_t * job;
@@ -4583,7 +4583,7 @@ bool one_burned = FALSE;
 - (void) doCancelCurrentJobAndStop
 {
     hb_stop(fQueueEncodeLibhb);
-    hb_allow_sleep(fQueueEncodeLibhb);
+    hb_system_sleep_allow(fQueueEncodeLibhb);
     
     // Delete all remaining jobs since libhb doesn't do this on its own.
             hb_job_t * job;
@@ -4609,13 +4609,13 @@ bool one_burned = FALSE;
 
     if (s.state == HB_STATE_PAUSED)
     {
-        hb_prevent_sleep(fQueueEncodeLibhb);
+        hb_system_sleep_prevent(fQueueEncodeLibhb);
         hb_resume(fQueueEncodeLibhb);
     }
     else
     {
         hb_pause(fQueueEncodeLibhb);
-        hb_allow_sleep(fQueueEncodeLibhb);
+        hb_system_sleep_allow(fQueueEncodeLibhb);
     }
 }
 

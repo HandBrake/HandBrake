@@ -687,7 +687,7 @@
     {
         fEncodeState = 2;
         hb_stop(fPreviewLibhb);
-        hb_allow_sleep(fPreviewLibhb);
+        hb_system_sleep_allow(fPreviewLibhb);
         [NSAnimationContext beginGrouping];
         [[NSAnimationContext currentContext] setDuration:0.2];
         [[fEncodingControlBox animator] setHidden:YES];
@@ -805,7 +805,7 @@
 
     /* Let fPreviewLibhb do the job */
     fEncodeState = 1;
-    hb_prevent_sleep(fPreviewLibhb);
+    hb_system_sleep_prevent(fPreviewLibhb);
     hb_start(fPreviewLibhb);
 	
 }
@@ -900,7 +900,7 @@
             
             fEncodeState = 0;
             /* Done encoding, allow system sleep for the preview handle */
-            hb_allow_sleep(fPreviewLibhb);
+            hb_system_sleep_allow(fPreviewLibhb);
             break;
         }
     }

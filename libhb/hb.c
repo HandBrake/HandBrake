@@ -64,9 +64,8 @@ struct hb_handle_s
        on multi-pass encodes where frames get dropped.     */
     hb_interjob_t * interjob;
 
-    // Power Management opaque pointer
-    // For OSX, it's an IOPMAssertionID*
-    void          * hb_system_sleep_opaque;
+    // power management opaque pointer
+    void *system_sleep_opaque;
 } ;
 
 hb_work_object_t * hb_objects = NULL;
@@ -411,7 +410,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
     h->build = -1;
 
     /* Initialize opaque for PowerManagement purposes */
-    h->hb_system_sleep_opaque = hb_system_sleep_opaque_init();
+    h->system_sleep_opaque = hb_system_sleep_opaque_init();
 
     if( update_check )
     {
@@ -518,7 +517,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     h->build = -1;
 
     /* Initialize opaque for PowerManagement purposes */
-    h->hb_system_sleep_opaque = hb_system_sleep_opaque_init();
+    h->system_sleep_opaque = hb_system_sleep_opaque_init();
 
     if( update_check )
     {
@@ -1679,6 +1678,8 @@ void hb_close( hb_handle_t ** _h )
     hb_lock_close( &h->state_lock );
     hb_lock_close( &h->pause_lock );
 
+    hb_system_sleep_opaque_close(&h->system_sleep_opaque);
+
     free( h->interjob );
 
     free( h );
@@ -1886,14 +1887,14 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     hb_unlock( h->pause_lock );
 }
 
-void hb_prevent_sleep( hb_handle_t * h )
+void hb_system_sleep_allow(hb_handle_t *h)
 {
-    hb_system_sleep_prevent( h->hb_system_sleep_opaque );
+    hb_system_sleep_private_enable(h->system_sleep_opaque);
 }
 
-void hb_allow_sleep( hb_handle_t * h )
+void hb_system_sleep_prevent(hb_handle_t *h)
 {
-    hb_system_sleep_allow( h->hb_system_sleep_opaque );
+    hb_system_sleep_private_disable(h->system_sleep_opaque);
 }
 
 /* Passes a pointer to persistent data */

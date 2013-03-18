@@ -792,63 +792,101 @@ char *strtok_r(char *s, const char *delim, char **save_ptr)
 
 #ifdef __APPLE__
 // 128 chars limit for IOPMAssertionCreateWithName
-static CFStringRef reasonForActivity= CFSTR("HandBrake is currently scanning and/or encoding");
+static CFStringRef reasonForActivity =
+    CFSTR("HandBrake is currently scanning and/or encoding");
 #endif
 
 void* hb_system_sleep_opaque_init()
 {
-    void* opaque;
+    void *opaque = NULL;
 #ifdef __APPLE__
-    opaque = calloc( sizeof( IOPMAssertionID ), 1);
-    IOPMAssertionID * assertionID = (IOPMAssertionID *)opaque;
+    opaque = calloc(sizeof(IOPMAssertionID), 1);
+    if (opaque == NULL)
+    {
+        hb_error("hb_system_sleep: failed to allocate opaque");
+        return NULL;
+    }
+
+    IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
     *assertionID = -1;
 #endif
-
     return opaque;
 }
 
-void hb_system_sleep_opaque_close(void **_opaque)
+void hb_system_sleep_opaque_close(void **opaque)
 {
+    if (*opaque != NULL)
+    {
+        hb_system_sleep_private_enable(*opaque);
+    }
 #ifdef __APPLE__
-    IOPMAssertionID * assertionID = (IOPMAssertionID *) *_opaque;
-    free( assertionID );
+    if (*opaque != NULL)
+    {
+        IOPMAssertionID *assertionID = (IOPMAssertionID*)*opaque;
+        free(assertionID);
+    }
 #endif
-    *_opaque = NULL;
+    *opaque = NULL;
 }
 
-void hb_system_sleep_allow(void *opaque)
+void hb_system_sleep_private_enable(void *opaque)
 {
 #ifdef __APPLE__
-    IOPMAssertionID * assertionID = (IOPMAssertionID *)opaque;
+    if (opaque == NULL)
+    {
+        hb_error("hb_system_sleep: opaque is NULL");
+    }
 
+    IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
     if (*assertionID == -1)
+    {
+        // nothing to do
         return;
+    }
 
     IOReturn success = IOPMAssertionRelease(*assertionID);
-
-    if (success == kIOReturnSuccess) {
-        hb_deep_log( 3, "osxsleep: IOPM assertion %d successfully released, sleep allowed", *assertionID );
+    if (success == kIOReturnSuccess)
+    {
+        hb_deep_log(3,
+                    "hb_system_sleep: assertion %d released, sleep allowed",
+                    *assertionID);
         *assertionID = -1;
-    } else {
-        hb_log( "osxsleep: error while trying to unset power management assertion" );
+    }
+    else
+    {
+        hb_log("hb_system_sleep: failed to allow system sleep");
     }
 #endif
 }
 
-void hb_system_sleep_prevent(void *opaque)
+void hb_system_sleep_private_disable(void *opaque)
 {
 #ifdef __APPLE__
-    IOPMAssertionID * assertionID = (IOPMAssertionID *)opaque;
-
+    if (opaque == NULL)
+    {
+        hb_error("hb_system_sleep: opaque is NULL");
+    }
+    
+    IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
     if (*assertionID != -1)
+    {
+        // nothing to do
         return;
+    }
 
     IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertionTypeNoIdleSleep,
-                                                   kIOPMAssertionLevelOn, reasonForActivity, assertionID);
-    if (success == kIOReturnSuccess) {
-        hb_deep_log( 3, "IOPM assertion %d successfully created, prevent sleep", *assertionID);
-    } else {
-        hb_log( "osxsleep: error while trying to set power management assertion" );
+                                                   kIOPMAssertionLevelOn,
+                                                   reasonForActivity,
+                                                   assertionID);
+    if (success == kIOReturnSuccess)
+    {
+        hb_deep_log(3,
+                    "hb_system_sleep: assertion %d created, sleep prevented",
+                    *assertionID);
+    }
+    else
+    {
+        hb_log("hb_system_sleep: failed to prevent system sleep");
     }
 #endif
 }

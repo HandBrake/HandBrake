@@ -254,7 +254,7 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
-    hb_prevent_sleep(h);
+    hb_system_sleep_prevent(h);
     hb_scan(h, input, titleindex, preview_count, store_previews,
             min_title_duration * 90000LL);
 
@@ -274,10 +274,10 @@ int main( int argc, char ** argv )
                     fprintf(stdout,
                             "\nEncoding Paused by user command, 'r' to resume\n");
                     hb_pause(h);
-                    hb_allow_sleep(h);
+                    hb_system_sleep_allow(h);
                     break;
                 case 'r':
-                    hb_prevent_sleep(h);
+                    hb_system_sleep_prevent(h);
                     hb_resume(h);
                     break;
                 case 'h':
@@ -325,10 +325,10 @@ int main( int argc, char ** argv )
                         fprintf(stdout,
                                 "\nEncoding Paused by user command, 'r' to resume\n");
                         hb_pause(h);
-                        hb_allow_sleep(h);
+                        hb_system_sleep_allow(h);
                         break;
                     case 'r':
-                        hb_prevent_sleep(h);
+                        hb_system_sleep_prevent(h);
                         hb_resume(h);
                         break;
                     case 'h':

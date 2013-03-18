@@ -105,10 +105,10 @@ void       hb_net_close( hb_net_t ** );
 /************************************************************************
 * OS Sleep Allow / Prevent
 ***********************************************************************/
-void     * hb_system_sleep_opaque_init();
-void       hb_system_sleep_opaque_close( void ** opaque );
-void       hb_system_sleep_allow( void * opaque );
-void       hb_system_sleep_prevent( void * opaque );
+void* hb_system_sleep_opaque_init();
+void  hb_system_sleep_opaque_close(void **opaque);
+void  hb_system_sleep_private_enable(void *opaque);
+void  hb_system_sleep_private_disable(void *opaque);
 
 #endif /* __LIBHB__ */
 
