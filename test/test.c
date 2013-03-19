@@ -1836,7 +1836,9 @@ static int HandleEvents( hb_handle_t * h )
                         int i = atoi( token ) - 1;
                         if( hb_list_item( title->list_audio, i ) == NULL ) 
                         {
-                            fprintf( stderr, "Warning: could not find audio track %d, skipped\n", i + 1 );
+                            fprintf(stderr,
+                                    "Warning: Could not find audio track '%s', skipped\n",
+                                    token);
                             continue;
                         }
                         audio = calloc( 1, sizeof( *audio ) );
@@ -2496,7 +2498,9 @@ static int HandleEvents( hb_handle_t * h )
                         subtitle = hb_list_item(title->list_subtitle, track);
                         if( subtitle == NULL ) 
                         {
-                            fprintf( stderr, "Warning: Could not find subtitle track %d, skipped\n", track+1 );
+                            fprintf(stderr,
+                                    "Warning: Could not find subtitle track '%s', skipped\n",
+                                    token);
                             continue;
                         }
                         sub_config = subtitle->config;
