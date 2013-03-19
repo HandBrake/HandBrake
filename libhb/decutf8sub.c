@@ -45,7 +45,7 @@ static int decutf8Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if ( out->size > 0 && out->data[out->size - 1] != '\0' ) {
         // NOTE: out->size remains unchanged
         hb_buffer_realloc( out, out->size + 1 );
-        out->data[out->size] = '\0';
+        out->data[out->size++] = '\0';
     }
     
     *buf_in = NULL;
