@@ -869,6 +869,11 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                 *writer++ = *reader++;
                 break;
             }
+        } else if (*reader == '\r') {
+            // skip '\r' and replace with '\n' if necessary
+            if (*(++reader) != '\n') {
+                *writer++ = '\n';
+            }
         } else {
             *writer++ = *reader++;
         }
