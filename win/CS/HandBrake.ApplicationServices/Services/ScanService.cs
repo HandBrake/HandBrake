@@ -74,9 +74,7 @@ namespace HandBrake.ApplicationServices.Services
             this.userSettingService = userSettingService;
             this.logBuffer = new StringBuilder();
 
-            header = GeneralUtilities.CreateCliLogHeader(
-                userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
+            header = GeneralUtilities.CreateCliLogHeader();
         }
 
         #region Events
