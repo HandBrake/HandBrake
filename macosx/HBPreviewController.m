@@ -247,7 +247,8 @@
         // Scale factor changed, update the preview window
         // to the new situation
         backingScaleFactor = newBackingScaleFactor;
-        [self pictureSliderChanged:self];
+        if (fTitle)
+            [self pictureSliderChanged:self];
     }
 }
 
