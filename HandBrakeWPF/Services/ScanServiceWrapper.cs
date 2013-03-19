@@ -68,7 +68,7 @@ namespace HandBrakeWPF.Services
                     else
                     {
                         HandbrakeInstance = new HandBrakeInstance();
-                        this.scanService = new LibScan(userSettingService, HandbrakeInstance);
+                        this.scanService = new LibScan(HandbrakeInstance);
                     }
                 } 
                 catch(Exception exc)

@@ -50,11 +50,6 @@ namespace HandBrake.ApplicationServices
         public const string SaveLogCopyDirectory = "SaveLogCopyDirectory";
 
         /// <summary>
-        /// HandBrakes version
-        /// </summary>
-        public const string HandBrakeVersion = "HandBrakeVersion";
-
-        /// <summary>
         /// HandBrakes build
         /// </summary>
         public const string HandBrakeBuild = "HandBrakeBuild";

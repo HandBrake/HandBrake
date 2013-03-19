@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -33,12 +33,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                string nightly = UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion).Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
-                return string.Format(
-                    "{0} ({1}) {2}",
-                    UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                    UserSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
-                    nightly);
+                return string.Format("{0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion());
             }
         }
 

@@ -87,7 +87,6 @@ namespace HandBrakeWPF.Helpers
                         int.TryParse(build, out buildValue);
 
                         userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, buildValue);
-                        userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, version);
                         success = true;
                     }
 
@@ -119,7 +118,6 @@ namespace HandBrakeWPF.Helpers
             {
                 userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, 0);
                 userSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform, string.Empty);
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, string.Empty);
                 userSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, string.Empty);
 
                 errorService.ShowError(
