@@ -167,20 +167,17 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 nextLine = output.ReadLine();
             }
-       
-            // Multi-Angle Support if LibDvdNav is enabled
-            if (!isDvdNavDisabled)
-            {
-                m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9])");
-                if (m.Success)
-                {
-                    string angleList = m.Value.Replace("+ angle(s) ", string.Empty).Trim();
-                    int angleCount;
-                    int.TryParse(angleList, out angleCount);
 
-                    thisTitle.AngleCount = angleCount;
-                    nextLine = output.ReadLine();
-                }
+            // Multi-Angle Support if LibDvdNav is enabled
+            m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9]*)");
+            if (m.Success)
+            {
+                string angleList = m.Value.Replace("+ angle(s) ", string.Empty).Trim();
+                int angleCount;
+                int.TryParse(angleList, out angleCount);
+
+                thisTitle.AngleCount = angleCount;
+                nextLine = output.ReadLine();
             }
 
             // Get duration for this title
