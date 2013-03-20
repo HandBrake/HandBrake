@@ -380,7 +380,6 @@ namespace HandBrakeWPF.ViewModels
                     {
                         SubtitleType = SubtitleType.VobSub,
                         SourceTrack = source,
-                        Burned = true,
                     };
 
             if (source.SubtitleType == SubtitleType.PGS &&
