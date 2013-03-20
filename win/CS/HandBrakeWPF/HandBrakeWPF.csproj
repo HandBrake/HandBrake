@@ -130,6 +130,7 @@
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Controls\TimeSpanBox.xaml.cs">
       <DependentUpon>TimeSpanBox.xaml</DependentUpon>
     </Compile>

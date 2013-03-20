@@ -53,5 +53,16 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             return System.Environment.Is64BitProcess ? "64bit Version" : "32bit Version";
         }
+
+        /// <summary>
+        /// Is a 64 bit app.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static bool Is64Bit()
+        {
+            return System.Environment.Is64BitProcess;
+        }
     }
 }

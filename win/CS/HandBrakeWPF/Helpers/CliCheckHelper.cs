@@ -77,10 +77,8 @@ namespace HandBrakeWPF.Helpers
                 while ((line = stdOutput.ReadLine()) != null)
                 {
                     Match m = Regex.Match(line, @"HandBrake ([svnM0-9.]*) \(([0-9]*)\)");
-                    Match platform = Regex.Match(line, @"- ([A-Za-z0-9\s ]*) -");
                     if (m.Success)
                     {
-                        string version = m.Groups[1].Success ? m.Groups[1].Value : string.Empty;
                         string build = m.Groups[2].Success ? m.Groups[2].Value : string.Empty;
 
                         int buildValue;
@@ -88,12 +86,6 @@ namespace HandBrakeWPF.Helpers
 
                         userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, buildValue);
                         success = true;
-                    }
-
-                    if (platform.Success)
-                    {
-                        userSettingService.SetUserSetting(
-                            UserSettingConstants.HandBrakePlatform, platform.Value.Replace("-", string.Empty).Trim());
                     }
                 }
 
@@ -117,7 +109,6 @@ namespace HandBrakeWPF.Helpers
             catch (Exception e)
             {
                 userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, 0);
-                userSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform, string.Empty);
                 userSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, string.Empty);
 
                 errorService.ShowError(
