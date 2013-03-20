@@ -380,8 +380,16 @@ namespace HandBrakeWPF.ViewModels
                     {
                         SubtitleType = SubtitleType.VobSub,
                         SourceTrack = source,
+                        Burned = true,
                     };
 
+            if (source.SubtitleType == SubtitleType.PGS &&
+                this.Task != null &&
+                (this.Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.M4V))
+            {
+                this.SelectBurnedInTrack(track);
+            }
+            
             this.Task.SubtitleTracks.Add(track);
         }
 
