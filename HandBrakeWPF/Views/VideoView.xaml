@@ -93,7 +93,8 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <RadioButton Content="Avg Bitrate (kbps):" IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
-                    <TextBox Width="75" Text="{Binding Task.VideoBitrate}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
+                    <TextBox Width="75" Text="{Binding Task.VideoBitrate, UpdateSourceTrigger=PropertyChanged}" 
+                             IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="30,0,0,0">
