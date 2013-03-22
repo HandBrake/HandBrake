@@ -677,8 +677,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
 
 #ifdef USE_HWD
 
-/* These methods are only used by HWD now. Can we remove this as per these changes: https://trac.handbrake.fr/changeset?reponame=&new=5323%40trunk%2Flibhb%2Fdecavcodec.c&old=5242%40trunk%2Flibhb%2Fdecavcodec.c */
-static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
+static int get_frame_buf_hwd( AVCodecContext *context, AVFrame *frame )
 {
 
     hb_work_private_t *pv = (hb_work_private_t*)context->opaque;
@@ -692,12 +691,24 @@ static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
         return 0;
     }
     else
-    return avcodec_default_get_buffer( context, frame );
+        return avcodec_default_get_buffer( context, frame );
 }
 
-static int reget_frame_buf( AVCodecContext *context, AVFrame *frame )
+static void hb_ffmpeg_release_frame_buf( struct AVCodecContext *p_context, AVFrame *frame )
 {
-    return avcodec_default_reget_buffer( context, frame );
+    hb_work_private_t *p_dec = (hb_work_private_t*)p_context->opaque;
+    int i;
+    if( p_dec->dxva2 )
+    {
+        hb_va_release( p_dec->dxva2, frame );
+    }
+    else if( !frame->opaque )
+    {
+        if( frame->type == FF_BUFFER_TYPE_INTERNAL )
+            avcodec_default_release_buffer( p_context, frame );
+    }
+    for( i = 0; i < 4; i++ )
+        frame->data[i] = NULL;
 }
 #endif
 
@@ -900,6 +911,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         if ( !pv->frame_duration_set )
             compute_frame_duration( pv );
 
+        double pts;
         double frame_dur = pv->duration;
         if ( frame.repeat_pict )
         {
@@ -915,11 +927,11 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 else
                     frame.pkt_pts = pv->dxva2->input_pts[0]<pv->dxva2->input_pts[1] ? pv->dxva2->input_pts[0] : pv->dxva2->input_pts[1];
             }
+            pts = pv->pts_next;
         }
-#endif
+#else
         // If there was no pts for this frame, assume constant frame rate
         // video & estimate the next frame time from the last & duration.
-        double pts;
         if (frame.pkt_pts == AV_NOPTS_VALUE)
         {
             pts = pv->pts_next;
@@ -928,6 +940,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         {
             pts = frame.pkt_pts;
         }
+#endif
         pv->pts_next = pts + frame_dur;
 
         if ( frame.top_field_first )
@@ -1102,37 +1115,6 @@ static hb_buffer_t *link_buf_list( hb_work_private_t *pv )
     }
     return head;
 }
-#ifdef USE_HWD
-static void hb_ffmpeg_release_frame_buf( struct AVCodecContext *p_context, AVFrame *frame )
-{
-    hb_work_private_t *p_dec = (hb_work_private_t*)p_context->opaque;
-    int i;
-    if( p_dec->dxva2 )
-    {
-        hb_va_release( p_dec->dxva2, frame );
-    }
-    else if( !frame->opaque )
-    {
-        if( frame->type == FF_BUFFER_TYPE_INTERNAL )
-            avcodec_default_release_buffer( p_context, frame );
-    }
-    for( i = 0; i < 4; i++ )
-        frame->data[i] = NULL;
-}
-
-/* This is only used by HWD now. Can we remove this as per these changes: https://trac.handbrake.fr/changeset?reponame=&new=5323%40trunk%2Flibhb%2Fdecavcodec.c&old=5242%40trunk%2Flibhb%2Fdecavcodec.c */
-static void init_video_avcodec_context( hb_work_private_t *pv )
-{
-    /* we have to wrap ffmpeg's get_buffer to be able to set the pts (?!) */
-    pv->context->opaque = pv;
-    pv->context->get_buffer = get_frame_buf;
-    pv->context->reget_buffer = reget_frame_buf;
-
-    if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
-        pv->context->release_buffer = hb_ffmpeg_release_frame_buf;
-}
-#endif
-
 
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
@@ -1173,7 +1155,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
             {
                 hb_va_new_dxva2( pv->dxva2, pv->context );
-                init_video_avcodec_context( pv );
+                pv->context->opaque = pv;
+                pv->context->get_buffer = get_frame_buf_hwd;
+                pv->context->release_buffer = hb_ffmpeg_release_frame_buf;
                 pv->context->get_format = hb_ffmpeg_get_format;
                 pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
                 memset( pv->os, 0, sizeof( hb_oclscale_t ) );

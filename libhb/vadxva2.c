@@ -792,4 +792,46 @@ int hb_va_get_frame_buf( hb_va_dxva2_t *dxva2, AVCodecContext *p_context, AVFram
     return HB_WORK_OK;
 
 }
+
+int hb_check_hwd_fmt( int fmt )
+{
+    int result = 1;
+    switch ( fmt )
+    {
+        case AV_PIX_FMT_YUV420P16LE:
+        case AV_PIX_FMT_YUV420P16BE:
+        case AV_PIX_FMT_YUV422P16LE:
+        case AV_PIX_FMT_YUV422P16BE:
+        case AV_PIX_FMT_YUV444P16LE:
+        case AV_PIX_FMT_YUV444P16BE:
+        case AV_PIX_FMT_YUV420P9BE:
+        case AV_PIX_FMT_YUV420P9LE:
+        case AV_PIX_FMT_YUV420P10BE:
+        case AV_PIX_FMT_YUV420P10LE:
+        case AV_PIX_FMT_YUV422P10BE:
+        case AV_PIX_FMT_YUV422P10LE:
+        case AV_PIX_FMT_YUV444P9BE:
+        case AV_PIX_FMT_YUV444P9LE:
+        case AV_PIX_FMT_YUV444P10BE:
+        case AV_PIX_FMT_YUV444P10LE:
+        case AV_PIX_FMT_YUV422P9BE:
+        case AV_PIX_FMT_YUV422P9LE:
+        case AV_PIX_FMT_GBRP9BE:
+        case AV_PIX_FMT_GBRP9LE:
+        case AV_PIX_FMT_GBRP10BE:
+        case AV_PIX_FMT_GBRP10LE:
+        case AV_PIX_FMT_GBRP16BE:
+        case AV_PIX_FMT_GBRP16LE:
+        case AV_PIX_FMT_YUVA420P9BE:
+        case AV_PIX_FMT_YUVA420P9LE:
+        case AV_PIX_FMT_YUVA422P9BE:
+        case AV_PIX_FMT_YUVA422P9LE:
+        case AV_PIX_FMT_YUVA444P9BE:
+        case AV_PIX_FMT_YUVA444P9LE:
+        case AV_PIX_FMT_YUVA420P10BE:
+        case AV_PIX_FMT_YUVA420P10LE:
+             result = 0; 
+    }
+    return result;
+}
 #endif

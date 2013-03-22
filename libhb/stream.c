@@ -5561,6 +5561,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->demuxer = HB_NULL_DEMUXER;
     title->video_codec = 0;
     int i;
+    int pix_fmt = -1;
     for (i = 0; i < ic->nb_streams; ++i )
     {
         if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO &&
@@ -5568,6 +5569,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
              title->video_codec == 0 )
         {
             AVCodecContext *context = ic->streams[i]->codec;
+            pix_fmt = context->pix_fmt;
             if ( context->pix_fmt != AV_PIX_FMT_YUV420P &&
                  !sws_isSupportedInput( context->pix_fmt ) )
             {
@@ -5685,6 +5687,8 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     }
     else
         title->hwd_support = 0;
+   if ( hb_check_hwd_fmt(pix_fmt) == 0)
+       title->hwd_support = 0;
 #else
     title->hwd_support = 0;
 #endif

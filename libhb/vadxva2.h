@@ -208,6 +208,6 @@ hb_va_dxva2_t *hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id );
 void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context );
 void hb_va_release( hb_va_dxva2_t *dxva2, AVFrame *frame );
 void  hb_va_close( hb_va_dxva2_t *dxva2 );
-
+int hb_check_hwd_fmt( int fmt );
 #endif
 #endif
