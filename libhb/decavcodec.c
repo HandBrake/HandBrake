@@ -927,12 +927,11 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 else
                     frame.pkt_pts = pv->dxva2->input_pts[0]<pv->dxva2->input_pts[1] ? pv->dxva2->input_pts[0] : pv->dxva2->input_pts[1];
             }
-            pts = pv->pts_next;
         }
-#else
+#endif
         // If there was no pts for this frame, assume constant frame rate
         // video & estimate the next frame time from the last & duration.
-        if (frame.pkt_pts == AV_NOPTS_VALUE)
+        if (frame.pkt_pts == AV_NOPTS_VALUE || hb_gui_use_hwd_flag == 1)
         {
             pts = pv->pts_next;
         }
@@ -940,7 +939,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         {
             pts = frame.pkt_pts;
         }
-#endif
+
         pv->pts_next = pts + frame_dur;
 
         if ( frame.top_field_first )
