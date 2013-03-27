@@ -215,7 +215,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </returns>
         public bool CheckForDestinationPathDuplicates(string destination)
         {
-            return this.queue.Any(checkItem => checkItem.Task.Destination.Contains(destination.Replace("\\\\", "\\")));
+            return this.queue.Any(job => job.Task != null && job.Task.Destination.Contains(destination.Replace("\\\\", "\\")));
         }
 
         /// <summary>
