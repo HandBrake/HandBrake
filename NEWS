@@ -11,13 +11,14 @@ Core:
 - PGS Subtitle support. (Burn-in with MP4, passthru and burn-in for MKV)
 - Additional Framerates 30, 50, 59.94, 60
 - Bob mode for De-interlacing and Decomb.
-- Updated libraries (x264, libav)
+- Updated libraries (x264, libav, libbluray)
 - Assorted bug fixes and improvements to the core libhb library.
 - Better Audio Mixdown support. (6.1, 7.1, 7.1 (5F/2R/LFE), Mono left only, Mono Right only). CLI users should note 6ch becomes 5point1
 - Allow the selection of higher audio bitrates where appropriate
 - Allow the selection of slower samplerates where appropriate.
 - Use libav for dts audio decoding instead of libdca
 - Addition of x264 Tune, Preset, Profile and Level options. Can be used instead of the Advanced Tab.
+- FDK-AAC encoder. (Experimental. Stop-gap measure to replacing libfaac. Compile time option only currently)
 
 Windows:
 - User Interface has been re-written in WPF. Includes many small UI enhancements
