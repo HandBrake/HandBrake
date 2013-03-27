@@ -1076,6 +1076,11 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
+            if (this.CurrentTask != null && this.CurrentTask.SubtitleTracks != null && this.CurrentTask.SubtitleTracks.Count > 0)
+            {
+                this.errorService.ShowMessageBox("Warning: It is not currently possible to use this feature if you require specific subtitle or audio tracks that the automatic selection feature (see options) doesn't support! Tracks are reset with every new source / title selected.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             foreach (Title title in this.ScannedSource.Titles)
             {
                 this.SelectedTitle = title;
@@ -1500,7 +1505,15 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetExport()
         {
-            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog { Filter = "plist|*.plist", CheckPathExists = true, AddExtension = true };
+            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog
+                                                     {
+                                                         Filter = "plist|*.plist",
+                                                         CheckPathExists = true,
+                                                         AddExtension = true,
+                                                         DefaultExt = ".plist",
+                                                         OverwritePrompt = true,
+                                                         FilterIndex = 0
+                                                     };
             if (this.selectedPreset != null)
             {
                 savefiledialog.ShowDialog();
@@ -1508,7 +1521,11 @@ namespace HandBrakeWPF.ViewModels
 
                 if (filename != null)
                 {
-                    PlistUtility.Export(savefiledialog.FileName, this.selectedPreset, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString(CultureInfo.InvariantCulture));
+                    PlistUtility.Export(
+                        savefiledialog.FileName,
+                        this.selectedPreset,
+                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)
+                                          .ToString(CultureInfo.InvariantCulture));
                 }
             }
             else
