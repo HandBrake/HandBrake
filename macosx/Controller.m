@@ -1330,7 +1330,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Toggle Presets"];
         [item setPaletteLabel: @"Toggler Presets"];
         [item setToolTip: @"Open/Close Preset Drawer"];
-        [item setImage: [NSImage imageNamed: @"Drawer"]];
+        [item setImage: [NSImage imageNamed: @"presets"]];
         [item setTarget: self];
         [item setAction: @selector(toggleDrawer:)];
         [item setAutovalidates: NO];
@@ -1340,7 +1340,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Start"];
         [item setPaletteLabel: @"Start Encoding"];
         [item setToolTip: @"Start Encoding"];
-        [item setImage: [NSImage imageNamed: @"Play"]];
+        [item setImage: [NSImage imageNamed: @"encode"]];
         [item setTarget: self];
         [item setAction: @selector(Rip:)];
     }
@@ -1349,7 +1349,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Show Queue"];
         [item setPaletteLabel: @"Show Queue"];
         [item setToolTip: @"Show Queue"];
-        [item setImage: [NSImage imageNamed: @"Queue"]];
+        [item setImage: [NSImage imageNamed: @"showqueue"]];
         [item setTarget: self];
         [item setAction: @selector(showQueueWindow:)];
         [item setAutovalidates: NO];
@@ -1359,7 +1359,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Add to Queue"];
         [item setPaletteLabel: @"Add to Queue"];
         [item setToolTip: @"Add to Queue"];
-        [item setImage: [NSImage imageNamed: @"AddToQueue"]];
+        [item setImage: [NSImage imageNamed: @"addqueue"]];
         [item setTarget: self];
         [item setAction: @selector(addToQueue:)];
     }
@@ -1368,7 +1368,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Pause"];
         [item setPaletteLabel: @"Pause Encoding"];
         [item setToolTip: @"Pause Encoding"];
-        [item setImage: [NSImage imageNamed: @"Pause"]];
+        [item setImage: [NSImage imageNamed: @"pauseencode"]];
         [item setTarget: self];
         [item setAction: @selector(Pause:)];
     }
@@ -1377,7 +1377,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Picture Settings"];
         [item setPaletteLabel: @"Show Picture Settings"];
         [item setToolTip: @"Show Picture Settings"];
-        [item setImage: [NSImage imageNamed: @"pref-picture"]];
+        [item setImage: [NSImage imageNamed: @"picturesettings"]];
         [item setTarget: self];
         [item setAction: @selector(showPicturePanel:)];
     }
@@ -1387,7 +1387,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setPaletteLabel: @"Show Preview"];
         [item setToolTip: @"Show Preview"];
         //[item setImage: [NSImage imageNamed: @"pref-picture"]];
-        [item setImage: [NSImage imageNamed: @"Brushed_Window"]];
+        [item setImage: [NSImage imageNamed: @"preview"]];
         [item setTarget: self];
         [item setAction: @selector(showPreviewWindow:)];
     }
@@ -1396,7 +1396,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Activity Window"];
         [item setPaletteLabel: @"Show Activity Window"];
         [item setToolTip: @"Show Activity Window"];
-        [item setImage: [NSImage imageNamed: @"ActivityWindow"]];
+        [item setImage: [NSImage imageNamed: @"activity"]];
         [item setTarget: self];
         [item setAction: @selector(showDebugOutputPanel:)];
         [item setAutovalidates: NO];
@@ -1406,7 +1406,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Source"];
         [item setPaletteLabel: @"Source"];
         [item setToolTip: @"Choose Video Source"];
-        [item setImage: [NSImage imageNamed: @"Source"]];
+        [item setImage: [NSImage imageNamed: @"source"]];
         [item setTarget: self];
         [item setAction: @selector(browseSources:)];
     }
@@ -1447,7 +1447,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             if ([ident isEqualToString: ChooseSourceIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
                 [toolbarItem setLabel: @"Cancel Scan"];
                 [toolbarItem setPaletteLabel: @"Cancel Scanning"];
                 [toolbarItem setToolTip: @"Cancel Scanning Source"];
@@ -1461,7 +1461,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: ChooseSourceIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Source"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"source"]];
                 [toolbarItem setLabel: @"Source"];
                 [toolbarItem setPaletteLabel: @"Source"];
                 [toolbarItem setToolTip: @"Choose Video Source"];
@@ -1475,7 +1475,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
                 [toolbarItem setLabel: @"Stop"];
                 [toolbarItem setPaletteLabel: @"Stop"];
                 [toolbarItem setToolTip: @"Stop Encoding"];
@@ -1483,7 +1483,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             if ([ident isEqualToString: PauseEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
                 [toolbarItem setLabel: @"Pause"];
                 [toolbarItem setPaletteLabel: @"Pause Encoding"];
                 [toolbarItem setToolTip: @"Pause Encoding"];
@@ -1503,7 +1503,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: PauseEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
                 [toolbarItem setLabel: @"Resume"];
                 [toolbarItem setPaletteLabel: @"Resume Encoding"];
                 [toolbarItem setToolTip: @"Resume Encoding"];
@@ -1524,7 +1524,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
-                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
                 if (hb_count(fHandle) > 0)
                     [toolbarItem setLabel: @"Start Queue"];
                 else
@@ -2026,7 +2026,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
             [self writeToActivityLog: "scanning titles with a duration of %d seconds or more", min_title_duration_seconds];
         }
-        hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 , min_title_duration_ticks );
+        
+        hb_system_sleep_prevent(fHandle);
+        hb_scan(fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 ,
+                min_title_duration_ticks);
+        
         [fSrcDVD2Field setStringValue:@"Scanning new source…"];
 
         // After the scan process, we signal to enableUI loop that this scan process is now finished
@@ -2038,6 +2042,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) cancelScanning:(id)sender
 {
     hb_scan_stop(fHandle);
+    hb_system_sleep_allow(fHandle);
 }
 
 - (IBAction) showNewScan:(id)sender
@@ -2200,10 +2205,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [self applyQueueSettingsToMainWindow:nil];
                 
             }
-
-            
         }
-
+    
+    /* Done scanning, allow system sleep for the scan handle */
+    hb_system_sleep_allow(fHandle);
 }
 
 
@@ -2815,7 +2820,12 @@ fWorkingCount = 0;
     else
     {
         [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
-        /*Since there are no more items to encode, go to queueCompletedAlerts for user specified alerts after queue completed*/
+        /* Done encoding, allow system sleep for the encode handle */
+        hb_system_sleep_allow(fQueueEncodeLibhb);
+        /*
+         * Since there are no more items to encode, go to queueCompletedAlerts
+         * for user specified alerts after queue completed
+         */
         [self queueCompletedAlerts];
     }
 }
@@ -2854,9 +2864,13 @@ fWorkingCount = 0;
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
-        /* Only scan 10 previews before an encode - additional previews are only useful for autocrop and static previews,
-         * which are already taken care of at this point */
-        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0 );
+        /*
+         * Only scan 10 previews before an encode - additional previews are
+         * only useful for autocrop and static previews, which are already taken
+         * care of at this point
+         */
+        hb_system_sleep_prevent(fQueueEncodeLibhb);
+        hb_scan(fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0);
     }
 }
 
@@ -4471,7 +4485,12 @@ bool one_burned = FALSE;
 {
     if (!fQueueController) return;
     
-  hb_pause( fQueueEncodeLibhb );
+    /*
+     * No need to allow system sleep here as we'll either call Cancel:
+     * (which will take care of it) or resume right away
+     */
+    hb_pause(fQueueEncodeLibhb);
+    
     NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"You are currently encoding. What would you like to do ?", nil)];
    
     // Which window to attach the sheet to?
@@ -4495,14 +4514,16 @@ bool one_burned = FALSE;
 
 - (void) didDimissCancel: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
-   hb_resume( fQueueEncodeLibhb );
-     if (returnCode == NSAlertOtherReturn)
+    /* No need to prevent system sleep here as we didn't allow it in Cancel: */
+    hb_resume(fQueueEncodeLibhb);
+    
+    if (returnCode == NSAlertOtherReturn)
     {
         [self doCancelCurrentJob];  // <- this also stops libhb
     }
-    if (returnCode == NSAlertAlternateReturn)
+    else if (returnCode == NSAlertAlternateReturn)
     {
-    [self doCancelCurrentJobAndStop];
+        [self doCancelCurrentJobAndStop];
     }
 }
 
@@ -4519,7 +4540,8 @@ bool one_burned = FALSE;
     // remaining jobs.
      
     
-    hb_stop( fQueueEncodeLibhb );
+    hb_stop(fQueueEncodeLibhb);
+    hb_system_sleep_allow(fQueueEncodeLibhb);
     
     // Delete all remaining jobs since libhb doesn't do this on its own.
             hb_job_t * job;
@@ -4560,7 +4582,8 @@ bool one_burned = FALSE;
 
 - (void) doCancelCurrentJobAndStop
 {
-    hb_stop( fQueueEncodeLibhb );
+    hb_stop(fQueueEncodeLibhb);
+    hb_system_sleep_allow(fQueueEncodeLibhb);
     
     // Delete all remaining jobs since libhb doesn't do this on its own.
             hb_job_t * job;
@@ -4582,15 +4605,17 @@ bool one_burned = FALSE;
 - (IBAction) Pause: (id) sender
 {
     hb_state_t s;
-    hb_get_state2( fQueueEncodeLibhb, &s );
+    hb_get_state2(fQueueEncodeLibhb, &s);
 
-    if( s.state == HB_STATE_PAUSED )
+    if (s.state == HB_STATE_PAUSED)
     {
-        hb_resume( fQueueEncodeLibhb );
+        hb_system_sleep_prevent(fQueueEncodeLibhb);
+        hb_resume(fQueueEncodeLibhb);
     }
     else
     {
-        hb_pause( fQueueEncodeLibhb );
+        hb_pause(fQueueEncodeLibhb);
+        hb_system_sleep_allow(fQueueEncodeLibhb);
     }
 }
 

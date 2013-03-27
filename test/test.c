@@ -260,6 +260,8 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
+
+	hb_system_sleep_prevent(h);
 	hb_gui_use_hwd_flag = use_hwd;
     hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
@@ -276,11 +278,14 @@ int main( int argc, char ** argv )
                     die = 1;
                     break;
                 case 'p':
-                    fprintf( stdout, "\nEncoding Paused by user command, 'r' to resume\n" );
-                    hb_pause( h );
+                    fprintf(stdout,
+                            "\nEncoding Paused by user command, 'r' to resume\n");
+                    hb_pause(h);
+                    hb_system_sleep_allow(h);
                     break;
                 case 'r':
-                    hb_resume( h );
+                    hb_system_sleep_prevent(h);
+                    hb_resume(h);
                     break;
                 case 'h':
                     ShowCommands();
@@ -324,11 +329,14 @@ int main( int argc, char ** argv )
                         die = 1;
                         break;
                     case 'p':
-                        fprintf( stdout, "\nEncoding Paused by user command, 'r' to resume\n" );
-                        hb_pause( h );
+                        fprintf(stdout,
+                                "\nEncoding Paused by user command, 'r' to resume\n");
+                        hb_pause(h);
+                        hb_system_sleep_allow(h);
                         break;
                     case 'r':
-                        hb_resume( h );
+                        hb_system_sleep_prevent(h);
+                        hb_resume(h);
                         break;
                     case 'h':
                         ShowCommands();
@@ -1851,7 +1859,9 @@ static int HandleEvents( hb_handle_t * h )
                         int i = atoi( token ) - 1;
                         if( hb_list_item( title->list_audio, i ) == NULL ) 
                         {
-                            fprintf( stderr, "Warning: could not find audio track %d, skipped\n", i + 1 );
+                            fprintf(stderr,
+                                    "Warning: Could not find audio track '%s', skipped\n",
+                                    token);
                             continue;
                         }
                         audio = calloc( 1, sizeof( *audio ) );
@@ -2511,7 +2521,9 @@ static int HandleEvents( hb_handle_t * h )
                         subtitle = hb_list_item(title->list_subtitle, track);
                         if( subtitle == NULL ) 
                         {
-                            fprintf( stderr, "Warning: Could not find subtitle track %d, skipped\n", track+1 );
+                            fprintf(stderr,
+                                    "Warning: Could not find subtitle track '%s', skipped\n",
+                                    token);
                             continue;
                         }
                         sub_config = subtitle->config;

@@ -340,7 +340,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 
         // Set up a reasonable tooltip, and image
         [toolbarItem setToolTip: @"Start Encoding"];
-        [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+        [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
 
         // Tell the item what message to send when it is clicked
         [toolbarItem setTarget: self];
@@ -357,7 +357,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 
         // Set up a reasonable tooltip, and image
         [toolbarItem setToolTip: @"Pause Encoding"];
-        [toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+        [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
 
         // Tell the item what message to send when it is clicked
         [toolbarItem setTarget: self];
@@ -420,7 +420,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         if ((s.state == HB_STATE_PAUSED) || (s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
         {
             enable = YES;
-            [toolbarItem setImage:[NSImage imageNamed: @"Stop"]];
+            [toolbarItem setImage:[NSImage imageNamed: @"stopencode"]];
             [toolbarItem setLabel: @"Stop"];
             [toolbarItem setToolTip: @"Stop Encoding"];
         }
@@ -428,7 +428,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         else if (fPendingCount > 0)
         {
             enable = YES;
-            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
+            [toolbarItem setImage:[NSImage imageNamed: @"encode"]];
             [toolbarItem setLabel: @"Start"];
             [toolbarItem setToolTip: @"Start Encoding"];
         }
@@ -436,7 +436,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         else
         {
             enable = NO;
-            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
+            [toolbarItem setImage:[NSImage imageNamed: @"encode"]];
             [toolbarItem setLabel: @"Start"];
             [toolbarItem setToolTip: @"Start Encoding"];
         }
@@ -447,7 +447,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         if (s.state == HB_STATE_PAUSED)
         {
             enable = YES;
-            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
+            [toolbarItem setImage:[NSImage imageNamed: @"encode"]];
             [toolbarItem setLabel: @"Resume"];
             [toolbarItem setToolTip: @"Resume Encoding"];
        }
@@ -455,14 +455,14 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
         {
             enable = YES;
-            [toolbarItem setImage:[NSImage imageNamed: @"Pause"]];
+            [toolbarItem setImage:[NSImage imageNamed: @"pauseencode"]];
             [toolbarItem setLabel: @"Pause"];
             [toolbarItem setToolTip: @"Pause Encoding"];
         }
         else
         {
             enable = NO;
-            [toolbarItem setImage:[NSImage imageNamed: @"Pause"]];
+            [toolbarItem setImage:[NSImage imageNamed: @"pauseencode"]];
             [toolbarItem setLabel: @"Pause"];
             [toolbarItem setToolTip: @"Pause Encoding"];
         }

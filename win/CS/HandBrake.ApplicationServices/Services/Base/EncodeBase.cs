@@ -66,9 +66,7 @@ namespace HandBrake.ApplicationServices.Services.Base
             this.userSettingService = userSettingService;
             this.logBuffer = new StringBuilder();
             header =
-                GeneralUtilities.CreateCliLogHeader(
-                    userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
+                GeneralUtilities.CreateCliLogHeader();
 
             this.LogIndex = 0;
         }

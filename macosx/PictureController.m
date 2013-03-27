@@ -1041,12 +1041,11 @@
     [fCropRightStepper  setIntValue: job->crop[3]];
     [fCropRightField    setIntValue: job->crop[3]];
     
-    //[fPreviewController SetTitle:fTitle];
-    
-    /* Sanity Check Here for < 16 px preview to avoid
-     crashing hb_get_preview. In fact, just for kicks
-     lets getting previews at a min limit of 32, since
-     no human can see any meaningful detail below that */
+    /*
+     * Sanity-check here for previews < 16 pixels to avoid crashing
+     * hb_get_preview(). In fact, let's get previews at least 64 pixels in both
+     * dimensions; no human can see any meaningful detail below that.
+     */
     if (job->width >= 64 && job->height >= 64)
     {
         [self reloadStillPreview];
@@ -1073,11 +1072,8 @@
 }
 
 - (void)reloadStillPreview
-{ 
-   hb_job_t * job = fTitle->job; 
-   
-   [fPreviewController SetTitle:fTitle];
-    
+{
+    [fPreviewController SetTitle:fTitle];
 }
 
 
@@ -1229,6 +1225,12 @@ are maintained across different sources */
 
 - (void) decombDeinterlacePreviewImage
 {
+    /* XXX: make sure we actually have a title before de-referencing it */
+    if (fTitle == NULL)
+    {
+        return;
+    }
+    
     if ([fDecombDeinterlaceSlider floatValue] < 0.50)
     {
         /* Since Libhb only shows a deinterlaced preview image via deinterlace .. for decomb we
@@ -1259,8 +1261,6 @@ are maintained across different sources */
         fTitle->job->deinterlace  = [fDeinterlacePopUp indexOfSelectedItem];
         [self reloadStillPreview];
     }
-    
-    
 }
 #pragma mark -
 

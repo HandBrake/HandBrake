@@ -111,25 +111,25 @@
     {
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
-                                         image:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
+                                         image:[NSImage imageNamed:@"settings"]];
     }
     else if ( [ident isEqualToString:TOOLBAR_PICTURE] )
     {
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"Picture", @"Preferences Picture Toolbar Item")
-                                         image:[NSImage imageNamed:@"pref-picture"]];
+                                         image:[NSImage imageNamed:@"picturesettings"]];
     }
     else if ( [ident isEqualToString:TOOLBAR_AUDIO] )
     {
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"Audio", @"Preferences Audio Toolbar Item")
-                                         image:[NSImage imageNamed:@"pref-audio"]];
+                                         image:[NSImage imageNamed:@"audio"]];
     }
     else if ( [ident isEqualToString:TOOLBAR_ADVANCED] )
     {
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"Advanced", @"Preferences Advanced Toolbar Item")
-                                         image:[NSImage imageNamed:NSImageNameAdvanced]];
+                                         image:[NSImage imageNamed:@"advanced"]];
     }
 
     return nil;

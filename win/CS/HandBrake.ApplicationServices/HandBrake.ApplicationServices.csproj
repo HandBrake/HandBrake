@@ -107,6 +107,7 @@
     <Compile Include="Utilities\PList.cs" />
     <Compile Include="Utilities\PlistUtility.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
+    <Compile Include="Utilities\VersionHelper.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="Model\DriveInformation.cs" />
@@ -161,6 +162,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
   </ItemGroup>
   <ItemGroup>

@@ -173,8 +173,8 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Setup the services we are going to use.
                 IHandBrakeInstance instance = new HandBrakeInstance();
-                scanService = new LibScan(new UserSettingService(), instance); // TODO this needs wired up with castle
-                encodeService = new LibEncode(new UserSettingService(), instance);
+                scanService = new LibScan(instance);
+                encodeService = new LibEncode(new UserSettingService(), instance); // TODO this needs wired up with castle
 
                 shutdownFlag = new ManualResetEvent(false);
                 shutdownFlag.WaitOne();

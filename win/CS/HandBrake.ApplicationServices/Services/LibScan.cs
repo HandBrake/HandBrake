@@ -71,19 +71,14 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LibScan"/> class. 
         /// </summary>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
         /// <param name="handBrakeInstance">
         /// The hand Brake Instance.
         /// </param>
-        public LibScan(IUserSettingService userSettingService, IHandBrakeInstance handBrakeInstance)
+        public LibScan(IHandBrakeInstance handBrakeInstance)
         {
             logging = new StringBuilder();
 
-            header = GeneralUtilities.CreateCliLogHeader(
-                userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
+            header = GeneralUtilities.CreateCliLogHeader();
 
             instance = handBrakeInstance;
             instance.Initialize(1);

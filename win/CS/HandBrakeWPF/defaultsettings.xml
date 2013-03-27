@@ -114,14 +114,6 @@
   </item>
   <item>
     <key>
-      <string>HandBrakeVersion</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">NotSet</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>updateStatus</string>
     </key>
     <value>
@@ -158,22 +150,6 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>appcast_i686</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast.i386.xml</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>appcast_x64</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast.86_64.xml</anyType>
     </value>
   </item>
   <item>
@@ -410,21 +386,12 @@
   </item>
   <item>
     <key>
-      <string>HandBrakePlatform</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">MinGW i686</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>ClearCompletedFromQueue</string>
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
     </value>
   </item>
-
   <item>
     <key>
       <string>ServerPort</string>

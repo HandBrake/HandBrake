@@ -95,6 +95,9 @@ void          hb_pause( hb_handle_t * );
 void          hb_resume( hb_handle_t * );
 void          hb_stop( hb_handle_t * );
 
+void          hb_system_sleep_allow(hb_handle_t*);
+void          hb_system_sleep_prevent(hb_handle_t*);
+
 /* Persistent data between jobs. */
 typedef struct hb_interjob_s
 {

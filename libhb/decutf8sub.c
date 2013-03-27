@@ -20,40 +20,38 @@
 #include <stdio.h>
 #include "hb.h"
 
-static int decutf8Init( hb_work_object_t * w, hb_job_t * job )
+static int decutf8Init(hb_work_object_t *w, hb_job_t *job)
 {
     return 0;
 }
 
-static int decutf8Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                        hb_buffer_t ** buf_out )
+static int decutf8Work(hb_work_object_t * w,
+                       hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 {
-    hb_buffer_t * in = *buf_in;
-    hb_buffer_t * out = NULL;
-
     // Pass the packets through without modification
-    out = in;
+    hb_buffer_t *out = *buf_in;
 
-    // Warn if the subtitle's duration has not been passed through by the demuxer,
-    // which will prevent the subtitle from displaying at all
-    if ( out->s.stop == 0 ) {
-        hb_log( "decutf8sub: subtitle packet lacks duration" );
+    // Warn if the subtitle's duration has not been passed through by the
+    // demuxer, which will prevent the subtitle from displaying at all
+    if (out->s.stop == 0)
+    {
+        hb_log("decutf8sub: subtitle packet lacks duration");
     }
-    
+
     // We shouldn't be storing the extra NULL character,
     // but the MP4 muxer expects this, unfortunately.
-    if ( out->size > 0 && out->data[out->size - 1] != '\0' ) {
-        // NOTE: out->size remains unchanged
-        hb_buffer_realloc( out, out->size + 1 );
-        out->data[out->size] = '\0';
+    if (out->size > 0 && out->data[out->size - 1] != '\0')
+    {
+        hb_buffer_realloc(out, ++out->size);
+        out->data[out->size - 1] = '\0';
     }
-    
-    *buf_in = NULL;
+
+    *buf_in  = NULL;
     *buf_out = out;
     return HB_WORK_OK;
 }
 
-static void decutf8Close( hb_work_object_t * w )
+static void decutf8Close(hb_work_object_t *w)
 {
     // nothing
 }

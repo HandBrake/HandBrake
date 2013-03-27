@@ -130,6 +130,7 @@
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Controls\TimeSpanBox.xaml.cs">
       <DependentUpon>TimeSpanBox.xaml</DependentUpon>
     </Compile>
@@ -207,8 +208,6 @@
     <Compile Include="Model\AdvancedChoice.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
-    <Compile Include="Services\Interfaces\IUpdateVersionService.cs" />
-    <Compile Include="Services\UpdateVersionService.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
     <Compile Include="UserSettingConstants.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
@@ -317,6 +316,7 @@
     <None Include="Installer\Installer64.nsi" />
     <None Include="Installer\MakeNightly.nsi.tmpl" />
     <None Include="Installer\MakeNightly64.nsi.tmpl" />
+    <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

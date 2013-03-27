@@ -247,7 +247,8 @@
         // Scale factor changed, update the preview window
         // to the new situation
         backingScaleFactor = newBackingScaleFactor;
-        [self pictureSliderChanged:self];
+        if (fTitle)
+            [self pictureSliderChanged:self];
     }
 }
 
@@ -680,12 +681,14 @@
 - (IBAction) cancelCreateMoviePreview: (id) sender
 {
     hb_state_t s;
-    hb_get_state2( fPreviewLibhb, &s );
+    hb_get_state2(fPreviewLibhb, &s);
     
-    if(fEncodeState && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
+    if (fEncodeState && (s.state == HB_STATE_WORKING ||
+                         s.state == HB_STATE_PAUSED))
     {
         fEncodeState = 2;
-        hb_stop( fPreviewLibhb );
+        hb_stop(fPreviewLibhb);
+        hb_system_sleep_allow(fPreviewLibhb);
         [NSAnimationContext beginGrouping];
         [[NSAnimationContext currentContext] setDuration:0.2];
         [[fEncodingControlBox animator] setHidden:YES];
@@ -803,7 +806,8 @@
 
     /* Let fPreviewLibhb do the job */
     fEncodeState = 1;
-    hb_start( fPreviewLibhb );
+    hb_system_sleep_prevent(fPreviewLibhb);
+    hb_start(fPreviewLibhb);
 	
 }
 
@@ -896,6 +900,8 @@
             }
             
             fEncodeState = 0;
+            /* Done encoding, allow system sleep for the preview handle */
+            hb_system_sleep_allow(fPreviewLibhb);
             break;
         }
     }

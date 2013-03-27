@@ -72,9 +72,8 @@ namespace HandBrake.ApplicationServices.Parsing
         public static Chapter Parse(StringReader output)
         {
             // TODO add support for reading chapter names to the regex.
-            Match m = Regex.Match(
-                                  output.ReadLine(),
-                                  @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
+            string line = output.ReadLine();
+            Match m = Regex.Match(line, @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
             {
                 var thisChapter = new Chapter

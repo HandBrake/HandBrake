@@ -84,20 +84,14 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Add the CLI Query to the Log File.
         /// </summary>
-        /// <param name="version">
-        /// The version.
-        /// </param>
-        /// <param name="build">
-        /// The build.
-        /// </param>
         /// <returns>
         /// The create cli log header.
         /// </returns>
-        public static StringBuilder CreateCliLogHeader(string version, int build)
+        public static StringBuilder CreateCliLogHeader()
         {
             var logHeader = new StringBuilder();
 
-            logHeader.AppendLine(String.Format("HandBrake {0} {1}", version, build));
+            logHeader.AppendLine(String.Format("HandBrake {0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion()));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));

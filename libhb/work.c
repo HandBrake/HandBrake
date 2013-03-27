@@ -14,10 +14,9 @@
 
 typedef struct
 {
-    hb_handle_t  * handle;
-    hb_list_t    * jobs;
-    hb_job_t    ** current_job;
-    int          * error;
+    hb_list_t * jobs;
+    hb_job_t  ** current_job;
+    int       * error;
     volatile int * die;
 
 } hb_work_t;
@@ -42,15 +41,14 @@ static void filter_loop( void * );
  * @param die Handle to user inititated exit indicator.
  * @param error Handle to error indicator.
  */
-hb_thread_t * hb_work_init( hb_handle_t * handle, hb_list_t * jobs, volatile int * die, int * error, hb_job_t ** job )
+hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, int * error, hb_job_t ** job )
 {
     hb_work_t * work = calloc( sizeof( hb_work_t ), 1 );
 
-    work->handle      = handle;
-    work->jobs        = jobs;
+    work->jobs      = jobs;
     work->current_job = job;
-    work->die         = die;
-    work->error       = error;
+    work->die       = die;
+    work->error     = error;
 
     return hb_thread_init( "work", work_func, work, HB_LOW_PRIORITY );
 }
@@ -84,21 +82,15 @@ static void work_func( void * _work )
 
     hb_log( "%d job(s) to process", hb_list_count( work->jobs ) );
 
-    hb_prevent_sleep( work->handle );
-
     while( !*work->die && ( job = hb_list_item( work->jobs, 0 ) ) )
     {
         hb_list_rem( work->jobs, job );
         job->die = work->die;
         *(work->current_job) = job;
-
         InitWorkState( job->h );
         do_job( job );
-
         *(work->current_job) = NULL;
     }
-
-    hb_allow_sleep( work->handle );
 
     *(work->error) = HB_ERROR_NONE;
 
