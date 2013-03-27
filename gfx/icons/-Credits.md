@@ -4,5 +4,8 @@
 - holla@nikpawlak.com
 - http://nikpawlak.com
 
-# Lisecnce
-For use only with Handbrake software and directly related non commercial projects.
+# Licence
+Under the Project GPLv2 Licence.
+
+
+Note: The Green Encode / Pause Icons are remakes by jamiemlaw
