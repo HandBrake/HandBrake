@@ -336,7 +336,11 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
     }
 
     double frame_dur = (6. * 256. * 90000.) / pv->rate;
-    double pts       = (ipts != -1) ? (double)ipts : pv->next_expected_pts;
+    double pts;
+    if (hb_gui_use_hwd_flag == 1)
+        pts = ((double)ipts >= pv->next_expected_pts) ? (double)ipts : pv->next_expected_pts;
+    else
+        pts = (ipts != -1) ? (double)ipts : pv->next_expected_pts;
 
     /* AC3 passthrough: don't decode the AC3 frame */
     if (audio->config.out.codec == HB_ACODEC_AC3_PASS)
