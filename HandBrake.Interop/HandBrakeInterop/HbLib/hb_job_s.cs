@@ -92,13 +92,13 @@ namespace HandBrake.Interop.HbLib
 
 		public int fastfirstpass;
 
-		public IntPtr advanced_opts;
-
-		public IntPtr x264_profile;
-
 		public IntPtr x264_preset;
 
 		public IntPtr x264_tune;
+
+		public IntPtr advanced_opts;
+
+		public IntPtr h264_profile;
 
 		public IntPtr h264_level;
 

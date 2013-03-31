@@ -23,9 +23,14 @@ namespace HandBrake.Interop.SourceData
 		public int ChapterNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets the length in time this Chapter spans
+		/// Gets or sets the duration of this chapter.
 		/// </summary>
 		public TimeSpan Duration { get; set; }
+
+		/// <summary>
+		/// Gets or sets the duration of this chapter in PTS.
+		/// </summary>
+		public ulong DurationPts { get; set; }
 
 		/// <summary>
 		/// Override of the ToString method to make this object easier to use in the UI

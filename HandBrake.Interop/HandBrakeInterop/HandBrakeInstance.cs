@@ -110,6 +110,11 @@ namespace HandBrake.Interop
 		private List<IntPtr> encodeAllocatedMemory;
 
 		/// <summary>
+		/// A value indicating whether this object has been disposed or not.
+		/// </summary>
+		private bool disposed;
+
+		/// <summary>
 		/// Finalizes an instance of the HandBrakeInstance class.
 		/// </summary>
 		~HandBrakeInstance()
@@ -427,8 +432,8 @@ namespace HandBrake.Interop
 
 			if (!string.IsNullOrEmpty(profile.X264Profile))
 			{
-				nativeJob.x264_profile = Marshal.StringToHGlobalAnsi(profile.X264Profile);
-				this.encodeAllocatedMemory.Add(nativeJob.x264_profile);
+				nativeJob.h264_profile = Marshal.StringToHGlobalAnsi(profile.X264Profile);
+				this.encodeAllocatedMemory.Add(nativeJob.h264_profile);
 			}
 
 			if (!string.IsNullOrEmpty(profile.X264Preset))
@@ -600,6 +605,11 @@ namespace HandBrake.Interop
 		/// </summary>
 		public void Dispose()
 		{
+			if (this.disposed)
+			{
+				return;
+			}
+
 			this.Dispose(true);
 			GC.SuppressFinalize(this);
 		}
@@ -620,6 +630,8 @@ namespace HandBrake.Interop
 			Marshal.WriteIntPtr(handlePtr, this.hbHandle);
 			HBFunctions.hb_close(handlePtr);
 			Marshal.FreeHGlobal(handlePtr);
+
+			this.disposed = true;
 		}
 
 		/// <summary>
@@ -754,9 +766,16 @@ namespace HandBrake.Interop
 			{
 				if (this.ScanProgress != null)
 				{
-					int currentTitle = state.param.scanning.title_cur;
-					int totalTitles = state.param.scanning.title_count;
-					this.ScanProgress(this, new ScanProgressEventArgs { CurrentTitle = currentTitle, Titles = totalTitles });
+					hb_state_scanning_anon scanningState = state.param.scanning;
+
+					this.ScanProgress(this, new ScanProgressEventArgs
+						{
+							Progress = scanningState.progress,
+							CurrentPreview = scanningState.preview_cur,
+							Previews = scanningState.preview_count,
+							CurrentTitle = scanningState.title_cur,
+							Titles = scanningState.title_count
+						});
 				}
 			}
 			else if (state.state == NativeConstants.HB_STATE_SCANDONE)
@@ -930,8 +949,9 @@ namespace HandBrake.Interop
 			{
 				switch (job.RangeType)
 				{
+					case VideoRangeType.All:
+						break;
 					case VideoRangeType.Chapters:
-
 						if (job.ChapterStart > 0 && job.ChapterEnd > 0)
 						{
 							nativeJob.chapter_start = job.ChapterStart;
@@ -950,9 +970,13 @@ namespace HandBrake.Interop
 							throw new ArgumentException("Seconds range " + job.SecondsStart + "-" + job.SecondsEnd + " is invalid.", "job");
 						}
 
-						// For some reason "pts_to_stop" actually means the number of pts to stop AFTER the start point.
-						nativeJob.pts_to_start = (int)(job.SecondsStart * 90000);
-						nativeJob.pts_to_stop = (int)((job.SecondsEnd - job.SecondsStart) * 90000);
+						// If they've selected the "full" title duration, leave off the arguments to make it clean
+						if (job.SecondsStart > 0 || job.SecondsEnd < title.Duration.TotalSeconds)
+						{
+							// For some reason "pts_to_stop" actually means the number of pts to stop AFTER the start point.
+							nativeJob.pts_to_start = (int) (job.SecondsStart * 90000);
+							nativeJob.pts_to_stop = (int) ((job.SecondsEnd - job.SecondsStart) * 90000);
+						}
 						break;
 					case VideoRangeType.Frames:
 						if (job.FramesStart < 0 || job.FramesEnd < 0 || job.FramesStart >= job.FramesEnd)
@@ -1005,7 +1029,7 @@ namespace HandBrake.Interop
 			nativeJob.crop[2] = crop.Left;
 			nativeJob.crop[3] = crop.Right;
 
-			var filterList = new List<IntPtr>();
+			var filterList = new List<hb_filter_object_s>();
 
 			// FILTERS: These must be added in the correct order since we cannot depend on the automatic ordering in hb_add_filter . Ordering is determined
 			// by the order they show up in the filters enum.
@@ -1115,7 +1139,7 @@ namespace HandBrake.Interop
 			}
 
 			string vfrSettings = string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", nativeJob.cfr, nativeJob.vrate, nativeJob.vrate_base);
-			this.AddFilter(filterList, (int) hb_filter_ids.HB_FILTER_VFR, vfrSettings, allocatedMemory);
+			this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_VFR, vfrSettings, allocatedMemory);
 
 			// Deblock
 			if (profile.Deblock > 0)
@@ -1296,12 +1320,9 @@ namespace HandBrake.Interop
 				nativeJob.crop[1],
 				nativeJob.crop[2],
 				nativeJob.crop[3]);
-			this.AddFilter(filterList, (int) hb_filter_ids.HB_FILTER_CROP_SCALE, cropScaleSettings, allocatedMemory);
+			this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_CROP_SCALE, cropScaleSettings, allocatedMemory);
 
-			// Construct final filter list
-			NativeList filterListNative = InteropUtilities.CreateIntPtrList(filterList);
-			nativeJob.list_filter = filterListNative.ListPtr;
-			allocatedMemory.AddRange(filterListNative.AllocatedMemory);
+
 
 
 
@@ -1432,7 +1453,16 @@ namespace HandBrake.Interop
 						}
 					}
 				}
+
+				bool hasBurnedSubtitle = job.Subtitles.SourceSubtitles.Any(s => s.BurnedIn);
+				if (hasBurnedSubtitle)
+				{
+					this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_RENDER_SUB, string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}:{3}", crop.Top, crop.Bottom, crop.Left, crop.Right), allocatedMemory);
+				}
 			}
+
+			// Construct final filter list
+			nativeJob.list_filter = this.ConvertFilterListToNative(filterList, allocatedMemory).ListPtr;
 
 			if (profile.OutputFormat == Container.Mp4)
 			{
@@ -1526,18 +1556,42 @@ namespace HandBrake.Interop
 		/// <param name="filterType">The type of filter.</param>
 		/// <param name="settings">Settings for the filter.</param>
 		/// <param name="allocatedMemory">The list of allocated memory.</param>
-		private void AddFilter(List<IntPtr> filterList, int filterType, string settings, List<IntPtr> allocatedMemory)
+		private void AddFilter(List<hb_filter_object_s> filterList, int filterType, string settings, List<IntPtr> allocatedMemory)
 		{
 			IntPtr settingsNativeString = Marshal.StringToHGlobalAnsi(settings);
 			hb_filter_object_s filter = InteropUtilities.ReadStructure<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
 			filter.settings = settingsNativeString;
 
-			IntPtr filterPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_filter_object_s)));
-			Marshal.StructureToPtr(filter, filterPtr, false);
-
-			filterList.Add(filterPtr);
 			allocatedMemory.Add(settingsNativeString);
-			allocatedMemory.Add(filterPtr);
+			filterList.Add(filter);
+		}
+
+		/// <summary>
+		/// Converts the given filter list to a native list.
+		/// </summary>
+		/// <remarks>Sorts the list by filter ID before converting to a native list, as HB expects it that way.
+		/// The list memory itself will be added to the allocatedMemory list.</remarks>
+		/// <param name="filterList">The filter list to convert.</param>
+		/// <param name="allocatedMemory">The list of allocated memory to add to.</param>
+		/// <returns>The converted list.</returns>
+		private NativeList ConvertFilterListToNative(List<hb_filter_object_s> filterList, List<IntPtr> allocatedMemory)
+		{
+			var filterPtrList = new List<IntPtr>();
+
+			var sortedList = filterList.OrderBy(f => f.id);
+			foreach (var filter in sortedList)
+			{
+				IntPtr filterPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_filter_object_s)));
+				Marshal.StructureToPtr(filter, filterPtr, false);
+
+				allocatedMemory.Add(filterPtr);
+				filterPtrList.Add(filterPtr);
+			}
+
+			NativeList filterListNative = InteropUtilities.CreateIntPtrList(filterPtrList);
+			allocatedMemory.AddRange(filterListNative.AllocatedMemory);
+
+			return filterListNative;
 		}
 
 		/// <summary>
@@ -1682,7 +1736,8 @@ namespace HandBrake.Interop
 				Playlist = title.playlist,
 				Resolution = new Size(title.width, title.height),
 				ParVal = new Size(title.pixel_aspect_width, title.pixel_aspect_height),
-				Duration = TimeSpan.FromSeconds(title.duration / 90000),
+				Duration = Converters.PtsToTimeSpan(title.duration),
+				DurationPts = title.duration,
 				AutoCropDimensions = new Cropping
 				{
 					Top = title.crop[0],
@@ -1794,7 +1849,8 @@ namespace HandBrake.Interop
 				var newChapter = new Chapter
 				{
 					ChapterNumber = chapter.index,
-					Duration = TimeSpan.FromSeconds(((double)chapter.duration) / 90000)
+					Duration = Converters.PtsToTimeSpan(chapter.duration),
+					DurationPts = chapter.duration
 				};
 
 				newTitle.Chapters.Add(newChapter);

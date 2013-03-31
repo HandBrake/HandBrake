@@ -84,9 +84,14 @@ namespace HandBrake.Interop.SourceData
 		public int Playlist { get; set; }
 
 		/// <summary>
-		/// Gets or sets the length in time of this Title
+		/// Gets or sets the duration of this title.
 		/// </summary>
 		public TimeSpan Duration { get; set; }
+
+		/// <summary>
+		/// Gets or sets the duration of the title in PTS.
+		/// </summary>
+		public ulong DurationPts { get; set; }
 
 		/// <summary>
 		/// Gets or sets the resolution (width/height) of this Title

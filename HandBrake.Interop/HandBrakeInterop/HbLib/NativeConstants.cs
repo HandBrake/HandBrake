@@ -12,7 +12,7 @@ namespace HandBrake.Interop.HbLib
 {
 	public partial class NativeConstants
 	{
-		public const uint HB_ACODEC_MASK = 0x001FFF00;
+		public const uint HB_ACODEC_MASK = 0x00FFFF00;
 		public const uint HB_ACODEC_FAAC = 0x00000100;
 		public const uint HB_ACODEC_LAME = 0x00000200;
 		public const uint HB_ACODEC_VORBIS = 0x00000400;
@@ -26,7 +26,9 @@ namespace HandBrake.Interop.HbLib
 		public const uint HB_ACODEC_DCA_HD = 0x00040000;
 		public const uint HB_ACODEC_MP3 = 0x00080000;
 		public const uint HB_ACODEC_FFFLAC = 0x00100000;
-		public const uint HB_ACODEC_FF_MASK = 0x001f2000;
+		public const uint HB_ACODEC_FDK_AAC = 0x00400000;
+		public const uint HB_ACODEC_FDK_HAAC = 0x00800000;
+		public const uint HB_ACODEC_FF_MASK = 0x00FF2000;
 		public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
 		public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA);
 		public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG);
