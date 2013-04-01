@@ -345,10 +345,8 @@ struct hb_job_s
 
     /* Video settings:
          vcodec:            output codec
-         vquality:          output quality (0.0..1.0)
-                            if < 0.0 or > 1.0, bitrate is used instead,
-                            except with x264, to use its real QP/RF scale
-         vbitrate:          output bitrate (kbps)
+         vquality:          output quality (if < 0.0, bitrate is used instead)
+         vbitrate:          output bitrate (Kbps)
          vrate, vrate_base: output framerate is vrate / vrate_base
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
