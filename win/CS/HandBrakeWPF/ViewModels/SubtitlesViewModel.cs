@@ -382,7 +382,7 @@ namespace HandBrakeWPF.ViewModels
                         SourceTrack = source,
                     };
 
-            if (source.SubtitleType == SubtitleType.PGS &&
+            if ((source.SubtitleType == SubtitleType.PGS || source.SubtitleType == SubtitleType.VobSub) &&
                 this.Task != null &&
                 (this.Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.M4V))
             {
