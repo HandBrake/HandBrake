@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		226268E01572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
 		226268E11572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
+		22D1C457170B2EB0002A7BD4 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22D1C456170B2EB0002A7BD4 /* OpenCL.framework */; };
+		22D1C458170B2EBD002A7BD4 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22D1C456170B2EB0002A7BD4 /* OpenCL.framework */; };
 		273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
 		273F202614ADB8A40021BE6D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202514ADB8A40021BE6D /* libz.dylib */; };
 		273F202814ADB8BE0021BE6D /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202714ADB8BE0021BE6D /* libbz2.dylib */; };
@@ -201,6 +203,7 @@
 
 /* Begin PBXFileReference section */
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		22D1C456170B2EB0002A7BD4 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
 		273F1FFF14ADAE950021BE6D /* HandBrakeCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HandBrakeCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		273F202214ADB8650021BE6D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -352,6 +355,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D1C457170B2EB0002A7BD4 /* OpenCL.framework in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
@@ -391,6 +395,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D1C458170B2EBD002A7BD4 /* OpenCL.framework in Frameworks */,
 				A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */,
 				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
 				273F21C214ADE7BC0021BE6D /* Sparkle.framework in Frameworks */,
@@ -477,6 +482,7 @@
 		273F1FDE14AD9DA40021BE6D = {
 			isa = PBXGroup;
 			children = (
+				22D1C456170B2EB0002A7BD4 /* OpenCL.framework */,
 				273F204114ADBC210021BE6D /* HandBrake */,
 				273F200214ADAE950021BE6D /* HandBrakeCLI */,
 				273F200014ADAE950021BE6D /* Products */,
