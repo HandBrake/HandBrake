@@ -337,7 +337,7 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
 
     double frame_dur = (6. * 256. * 90000.) / pv->rate;
     double pts;
-    if (hb_gui_use_hwd_flag == 1)
+    if (hb_gui_use_hwd_flag == 1 && ipts != -1)
         pts = ((double)ipts >= pv->next_expected_pts) ? (double)ipts : pv->next_expected_pts;
     else
         pts = (ipts != -1) ? (double)ipts : pv->next_expected_pts;
