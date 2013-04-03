@@ -592,7 +592,7 @@ void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int 
 
     cl_mem cl_outbuf;
 
-    if( !hb_create_buffer( &(cl_outbuf), CL_MEM_WRITE_ONLY, STEP ) )
+    if( !hb_create_buffer( &(cl_outbuf), CL_MEM_WRITE_ONLY, OUTSTEP ) )
     {   
         hb_log("av_create_buffer cl_outbuf Error");
         return;

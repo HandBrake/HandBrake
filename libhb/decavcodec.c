@@ -622,57 +622,55 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         return buf;
     }
     else
-    {
 #endif
-    hb_buffer_t *buf = hb_video_buffer_init( w, h );
-    uint8_t *dst = buf->data;
-
-    if (context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
-        h != context->height)
     {
-        // have to convert to our internal color space and/or rescale
-        AVPicture dstpic;
-        hb_avpicture_fill(&dstpic, buf);
+        hb_buffer_t *buf = hb_video_buffer_init( w, h );
+        uint8_t *dst = buf->data;
 
-        if (pv->sws_context == NULL            ||
-            pv->sws_width   != context->width  ||
-            pv->sws_height  != context->height ||
-            pv->sws_pix_fmt != context->pix_fmt)
+        if (context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
+            h != context->height)
         {
-            if (pv->sws_context != NULL)
-                sws_freeContext(pv->sws_context);
-            pv->sws_context = hb_sws_get_context(context->width,
-                                                 context->height,
-                                                 context->pix_fmt,
-                                                 w, h, AV_PIX_FMT_YUV420P,
-                                                  SWS_LANCZOS|SWS_ACCURATE_RND);
-            pv->sws_width   = context->width;
-            pv->sws_height  = context->height;
-            pv->sws_pix_fmt = context->pix_fmt;
+            // have to convert to our internal color space and/or rescale
+            AVPicture dstpic;
+            hb_avpicture_fill(&dstpic, buf);
+
+            if (pv->sws_context == NULL            ||
+                pv->sws_width   != context->width  ||
+                pv->sws_height  != context->height ||
+                pv->sws_pix_fmt != context->pix_fmt)
+            {
+                if (pv->sws_context != NULL)
+                    sws_freeContext(pv->sws_context);
+                pv->sws_context = hb_sws_get_context(context->width,
+                                                     context->height,
+                                                     context->pix_fmt,
+                                                     w, h, AV_PIX_FMT_YUV420P,
+                                                     SWS_LANCZOS|SWS_ACCURATE_RND);
+                pv->sws_width   = context->width;
+                pv->sws_height  = context->height;
+                pv->sws_pix_fmt = context->pix_fmt;
+            }
+            sws_scale(pv->sws_context,
+                      (const uint8_t* const *)frame->data, frame->linesize,
+                      0, context->height, dstpic.data, dstpic.linesize);
         }
-        sws_scale(pv->sws_context,
-                  (const uint8_t* const *)frame->data, frame->linesize,
-                  0, context->height, dstpic.data, dstpic.linesize);
+        else
+        {
+            w = buf->plane[0].stride;
+            h = buf->plane[0].height;
+            dst = buf->plane[0].data;
+            copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
+            w = buf->plane[1].stride;
+            h = buf->plane[1].height;
+            dst = buf->plane[1].data;
+            copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
+            w = buf->plane[2].stride;
+            h = buf->plane[2].height;
+            dst = buf->plane[2].data;
+            copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
+        }
+        return buf;
     }
-    else
-    {
-        w = buf->plane[0].stride;
-        h = buf->plane[0].height;
-        dst = buf->plane[0].data;
-        copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
-        w = buf->plane[1].stride;
-        h = buf->plane[1].height;
-        dst = buf->plane[1].data;
-        copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
-        w = buf->plane[2].stride;
-        h = buf->plane[2].height;
-        dst = buf->plane[2].data;
-        copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
-    }
-    return buf;
-#ifdef USE_HWD
-}
-#endif
 }
 
 #ifdef USE_HWD

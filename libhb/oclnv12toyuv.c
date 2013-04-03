@@ -100,6 +100,24 @@ static int hb_init_nv12toyuv_ocl( KernelEnv *kenv, int w, int h, hb_va_dxva2_t *
     return 0;
 }
 
+static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride,
+                            int h )
+{
+    if ( dstride == sstride )
+    {
+        memcpy( dst, src, dstride * h );
+        return dst + dstride * h;
+    }
+    int lbytes = dstride <= sstride? dstride : sstride;
+    while ( --h >= 0 )
+    {
+        memcpy( dst, src, lbytes );
+        src += sstride;
+        dst += dstride;
+    }
+    return dst;
+}
+
 /**
  * Run nv12 to yuv kernel.
  */
@@ -158,9 +176,17 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
         AVPicture           pic_crop;
         clEnqueueReadBuffer( kenv->command_queue, dxva2->cl_mem_yuv, CL_TRUE, 0, in_bytes, dxva2->nv12toyuv_tmp_out, 0, NULL, NULL );
         hb_buffer_t *in = hb_video_buffer_init( w, h );
-        memcpy( in->plane[0].data, dxva2->nv12toyuv_tmp_out, w * h );
-        memcpy( in->plane[1].data, dxva2->nv12toyuv_tmp_out + w * h, ( w * h )>>2 );
-        memcpy( in->plane[2].data, dxva2->nv12toyuv_tmp_out + w * h + ( ( w * h )>>2 ), ( w * h )>>2 );
+		
+        int wmp = in->plane[0].stride;
+        int hmp = in->plane[0].height;
+        copy_plane( in->plane[0].data, dxva2->nv12toyuv_tmp_out, wmp, w, hmp );
+        wmp = in->plane[1].stride;
+        hmp = in->plane[1].height;
+        copy_plane( in->plane[1].data, dxva2->nv12toyuv_tmp_out + w * h, wmp, w>>1, hmp );
+        wmp = in->plane[2].stride;
+        hmp = in->plane[2].height;
+        copy_plane( in->plane[2].data, dxva2->nv12toyuv_tmp_out + w * h +( ( w * h )>>2 ), wmp, w>>1, hmp );
+
         hb_avpicture_fill( &pic_in, in );
         av_picture_crop( &pic_crop, &pic_in, in->f.fmt, crop[0], crop[2] );
         int i, ww = w - ( crop[2] + crop[3] ), hh = h - ( crop[0] + crop[1] );
