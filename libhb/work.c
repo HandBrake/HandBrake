@@ -332,11 +332,10 @@ void hb_display_job_info( hb_job_t * job )
         {
             hb_log( "     + x264 tune: %s", job->x264_tune );
         }
-        if( job->advanced_opts && *job->advanced_opts &&
-            ( ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) ||
-              ( job->vcodec == HB_VCODEC_X264 ) ) )
+        if (job->advanced_opts != NULL && *job->advanced_opts &&
+            (job->vcodec != HB_VCODEC_THEORA))
         {
-            hb_log( "     + options: %s", job->advanced_opts );
+            hb_log("     + options: %s", job->advanced_opts);
         }
         if( job->h264_profile && *job->h264_profile &&
             job->vcodec == HB_VCODEC_X264 )
