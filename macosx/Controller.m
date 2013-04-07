@@ -5438,7 +5438,10 @@ the user is using "Custom" settings by determining the sender*/
         [fX264ProfilePopUp selectItemAtIndex:0];
         [fX264LevelPopUp selectItemAtIndex:0];
     }
+
+    // update and/or populate the widgets
     [self x264PresetsSliderChanged:nil];
+    [fAdvancedOptions X264AdvancedOptionsSet:nil];
 }
 
 - (IBAction) updateX264Widgets: (id) sender
