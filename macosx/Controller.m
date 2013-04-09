@@ -7016,8 +7016,15 @@ return YES;
              * bonus: set the unparsed options to make the preset compatible
              * with old HB versions
              */
-            [preset setObject:[NSString stringWithUTF8String:fX264PresetsUnparsedUTF8String]
-                       forKey:@"x264Option"];
+            if (fX264PresetsUnparsedUTF8String != NULL)
+            {
+                [preset setObject:[NSString stringWithUTF8String:fX264PresetsUnparsedUTF8String]
+                           forKey:@"x264Option"];
+            }
+            else
+            {
+                [preset setObject:@"" forKey:@"x264Option"];
+            }
         }
 
         /* FFmpeg (lavc) Option String */
