@@ -1,4 +1,4 @@
-Build Guide for HandBrake 5375svn on Mac OS X
+Build Guide for HandBrake 5388svn on Mac OS X
 *********************************************
 
 Table of Contents
@@ -48,15 +48,28 @@ possible:
 
    * Mac Intel hardware
 
-   * Mac OS X 10.7.2
+   * Mac OS X 10.7.5 or Mac OS X 10.8.3
 
-   * Xcode 4.2.1 (Build version 4D502)
+   * Xcode 4.6.1 (4H512)
 
-   * llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)
+   * llvm-gcc-4.2 version 4.2.1 (Based on Apple Inc. build 5658) (LLVM
+     build 2336.11.00)
 
-   * yasm 1.2.x
+   * Xcode command-line tools (installed via Preferences > Downloads >
+     Components)
 
-   * xquartz (http://xquartz.macosforge.org/landing/)
+   * XQuartz (http://xquartz.macosforge.org/landing/)
+
+The following tools are compiled during the build process if necessary,
+but you can speed up your build by installing them:
+
+   * yasm 1.2.0 or later
+
+   * autoconf
+
+   * automake
+
+   * libtool
 
      Note: It is recommended to use the platform distribution's
      standard compiler for maximum C++ compatibility. If you build with
@@ -686,7 +699,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    5375
-     date:   2013-04-01 18:37:33 +0200
+     rev:    5388
+     date:   2013-04-09 14:21:38 +0200
      type:   developer
 
