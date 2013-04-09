@@ -1152,6 +1152,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
             {
                 hb_va_new_dxva2( pv->dxva2, pv->context );
+				pv->context->slice_flags |= SLICE_FLAG_ALLOW_FIELD;
                 pv->context->opaque = pv;
                 pv->context->get_buffer = get_frame_buf_hwd;
                 pv->context->release_buffer = hb_ffmpeg_release_frame_buf;
