@@ -5428,15 +5428,16 @@ the user is using "Custom" settings by determining the sender*/
     {
         // using advanced panel, enable if applicable
         [fAdvancedOptions enableUI:enable];
-        // TODO: set the advanced options string based on the previously
-        //       selected x264 system setting
-        // reset x264 system widgets
-        [fX264PresetsSlider setIntegerValue: fX264MediumPresetIndex];
-        [fX264TunePopUp selectItemAtIndex:0];
-        [fX264FastDecodeCheck setState:NSOffState];
-        [fDisplayX264PresetsAdditonalOptionsTextField setStringValue:@""];
-        [fX264ProfilePopUp selectItemAtIndex:0];
-        [fX264LevelPopUp selectItemAtIndex:0];
+        // set the advanced options string based on the previously selected
+        // x264 system setting
+        if (fX264PresetsUnparsedUTF8String != NULL)
+        {
+            [fAdvancedOptions setOptions:[NSString stringWithUTF8String:fX264PresetsUnparsedUTF8String]];
+        }
+        else
+        {
+            [fAdvancedOptions setOptions:@""];
+        }
     }
 
     // update and/or populate the widgets
@@ -6354,13 +6355,18 @@ return YES;
                 if ([chosenPreset objectForKey:@"x264Option"])
                 {
                     /* we set the advanced opt string here if applicable */
-                    [fAdvancedOptions setOptions:
-                     [chosenPreset objectForKey:@"x264Option"]];
+                    [fAdvancedOptions setOptions: [chosenPreset objectForKey:@"x264Option"]];
                 }
                 else
                 {
                     [fAdvancedOptions setOptions:@""];
                 }
+                /* preset does not use the x264 system, reset the widgets */
+                [self setX264Preset:      nil];
+                [self setX264Tune:        nil];
+                [self setX264OptionExtra: nil];
+                [self setH264Profile:     nil];
+                [self setH264Level:       nil];
                 /* we enable the advanced panel and update the widgets */
                 [fx264UseAdvancedOptionsCheck setState: NSOnState];
                 [self updateX264Widgets:nil];
