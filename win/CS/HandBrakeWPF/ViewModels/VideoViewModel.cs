@@ -28,6 +28,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Commands.Interfaces;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -497,6 +498,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.ExtraAdvancedArguments = value;
                     this.NotifyOfPropertyChange(() => this.ExtraArguments);
+                    this.NotifyOfPropertyChange(() => FullOptionsTooltip);
                 }
             }
         }
@@ -514,6 +516,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.displayX264Options = value;
                 this.NotifyOfPropertyChange(() => this.DisplayX264Options);
+                this.NotifyOfPropertyChange(() => FullOptionsTooltip);
             }
         }
 
@@ -533,6 +536,7 @@ namespace HandBrakeWPF.ViewModels
                     this.x264PresetValue = value;
                     this.X264Preset = this.X264Presets[value];
                     this.NotifyOfPropertyChange(() => this.x264PresetValue);
+                    this.NotifyOfPropertyChange(() => FullOptionsTooltip);
                 }
             }
         }
@@ -553,6 +557,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.X264Preset = value;
                     this.NotifyOfPropertyChange(() => this.X264Preset);
                     ResetAdvancedTab();
+                    this.NotifyOfPropertyChange(() => FullOptionsTooltip);
                 }
             }
         }
@@ -574,6 +579,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.H264Profile = value;
                     this.NotifyOfPropertyChange(() => this.H264Profile);
                     ResetAdvancedTab();
+                    this.NotifyOfPropertyChange(() => FullOptionsTooltip);
                 }
             }
         }
@@ -594,6 +600,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.H264Level = value;
                     this.NotifyOfPropertyChange(() => this.H264Level);
                     ResetAdvancedTab();
+                    this.NotifyOfPropertyChange(() => FullOptionsTooltip);
                 }
             }
         }
@@ -614,6 +621,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.X264Tune = value;
                     this.NotifyOfPropertyChange(() => this.X264Tune);
                     ResetAdvancedTab();
+                    this.NotifyOfPropertyChange(() => FullOptionsTooltip);
                 }
             }
         }
@@ -634,6 +642,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.FastDecode = value;
                     this.NotifyOfPropertyChange(() => this.FastDecode);
                     ResetAdvancedTab();
+                    this.NotifyOfPropertyChange(() => FullOptionsTooltip);
                 }
             }
         }
@@ -665,7 +674,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return "You can provide additional arguments using the standard x264 format"; // string.Format(Resources.Video_x264ExtraArgs, this.GetActualx264Query());
+                return string.Format(Resources.Video_x264ExtraArgs, this.GetActualx264Query()); // "You can provide additional arguments using the standard x264 format"; 
             }
         }
 
@@ -897,13 +906,18 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private string GetActualx264Query()
         {
-            string preset = EnumHelper<x264Preset>.GetDisplay(this.X264Preset);
-            string profile = EnumHelper<x264Profile>.GetDisplay(this.H264Profile);
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibHbFeatures))
+            {
+                return string.Empty; // Feature is disabled.
+            }
+
+            string preset = EnumHelper<x264Preset>.GetDisplay(this.X264Preset).ToLower().Replace(" ", string.Empty);
+            string profile = EnumHelper<x264Profile>.GetDisplay(this.H264Profile).ToLower();
 
             List<string> tunes = new List<string>();
             if (X264Tune != x264Tune.None)
             {
-                tunes.Add(EnumHelper<x264Tune>.GetDisplay(this.X264Tune));
+                tunes.Add(this.X264Tune.ToString().ToLower().Replace(" ", string.Empty)); // TODO tidy this sillyness up.
             }
             if (this.FastDecode)
             {
@@ -913,6 +927,16 @@ namespace HandBrakeWPF.ViewModels
             // Get the width or height, default if we don't have it yet so we don't crash.
             int width = this.Task.Width.HasValue ? this.Task.Width.Value : 720;
             int height = this.Task.Height.HasValue ? this.Task.Height.Value : 576;
+
+            if (height == 0)
+            {
+                height = 576;
+            }
+
+            if (width == 0)
+            {
+                width = 720;
+            }
 
             // TODO figure out what is wrong with this??
             return HandBrakeUtils.CreateX264OptionsString(preset, tunes, this.ExtraArguments, profile, this.H264Level, width, height);

@@ -238,7 +238,8 @@ may have problems with Weighted P-frame prediction: the Apple TV is completely i
     <value>..\Resources\logo64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Video_x264ExtraArgs" xml:space="preserve">
-    <value>The full x264 list of parameters: {0}</value>
+    <value>The full x264 list of parameters: 
+{0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
     <value>Reduce decoder CPU usage.

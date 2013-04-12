@@ -142,6 +142,11 @@ namespace HandBrakeWPF.ViewModels
         private bool disableLibdvdNav;
 
         /// <summary>
+        /// The disable libhb features
+        /// </summary>
+        private bool disableLibhbFeatures;
+
+        /// <summary>
         /// The disable p reset update check notification.
         /// </summary>
         private bool disablePresetUpdateCheckNotification;
@@ -1342,6 +1347,24 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether DisableLibdvdNav.
+        /// </summary>
+        public bool DisableLibHbFeatures
+        {
+            get
+            {
+                return this.disableLibhbFeatures;
+            }
+
+            set
+            {
+                this.disableLibhbFeatures = value;
+                this.NotifyOfPropertyChange("DisableLibHbFeatures");
+            }
+        }
+
+
         #endregion
 
         #endregion
@@ -1636,6 +1659,9 @@ namespace HandBrakeWPF.ViewModels
             this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
             this.EnableDebugFeatures = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
             this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
+
+            // LibHbFeatures
+            this.DisableLibHbFeatures = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibHbFeatures);
         }
 
         /// <summary>
@@ -1840,6 +1866,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
             userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
+            userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
@@ -1851,7 +1878,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
             userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString());
             userSettingService.SetUserSetting(UserSettingConstants.EnableDebugFeatures, this.EnableDebugFeatures);
-            userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, this.EnableLibHb);
+            userSettingService.SetUserSetting(UserSettingConstants.DisableLibHbFeatures, this.DisableLibHbFeatures);
         }
 
         /// <summary>

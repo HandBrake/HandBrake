@@ -33,7 +33,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// The preset.
         /// </param>
         /// <param name="build">
-        /// The build.
+        /// The build.PictureModulusPictureModulus
         /// </param>
         public static void Export(string path, Preset preset, string build)
         {

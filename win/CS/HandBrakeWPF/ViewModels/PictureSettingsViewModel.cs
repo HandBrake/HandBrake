@@ -33,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
          * - We are not handling cropping correctly within the UI.
          * - The Height is not correctly set when using no Anamorphic
          * - Maintain Aspect ratio needs corrected.
+         * - Custom Anamorphic.
          * 
          */
         #region Constants and Fields

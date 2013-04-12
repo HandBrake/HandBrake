@@ -17,6 +17,16 @@
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="20000" />
         </Style>
+
+        <Style TargetType="ToolTip">
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock TextWrapping="Wrap" Width="450" Text="{Binding}" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
    
     <Grid Margin="10,5,0,0">
@@ -177,7 +187,7 @@
                     <TextBlock Text="Extra Options:" Grid.Row="4" Grid.Column="0" Margin="0,10,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
                     <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Height="30" MaxLines="2" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5,10,0,0" VerticalAlignment="Center"
-                         ToolTip="{Binding FullOptionsTooltip}"/>
+                         ToolTip="{Binding FullOptionsTooltip}" Style="{StaticResource LongToolTipHolder}" />
 
 
                 </Grid>
