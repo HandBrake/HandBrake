@@ -755,8 +755,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
         fDstFormatField, fDstFormatPopUp, fDstFile1Field, fDstFile2Field,
         fDstBrowseButton, fVidRateField, fVidRatePopUp, fVidEncoderField,
-        fVidEncoderPopUp, fVidQualityField, fPictureSizeField,
-        fPictureCroppingField, fVideoFiltersField, fVidQualityMatrix,
+        fVidEncoderPopUp, fVidQualityField, fVidQualityMatrix,
+        fPictureSettingsField, fPictureFiltersField,
         fSubField, fSubPopUp, fPresetsAdd, fPresetsDelete, fSrcAngleLabel,
         fSrcAnglePopUp, fCreateChapterMarkers, fVidTurboPassCheck,
         fDstMp4LargeFileCheck, fSubForcedCheck, fPresetsOutlineView,
@@ -2664,9 +2664,18 @@ fWorkingCount = 0;
         [queueFileJob setObject:[NSNumber numberWithFloat:fTitle->job->anamorphic.dar_height] forKey:@"PicturePARDisplayHeight"];
 
     }
-    NSString * pictureSummary;
-    pictureSummary = [fPictureSizeField stringValue];
-    [queueFileJob setObject:pictureSummary forKey:@"PictureSizingSummary"];                 
+    
+    /* Summary for the queue display */
+    NSString *pictureSizingSummary = [NSString stringWithFormat:@"%@",
+                                      [fPictureController getPictureSizeInfoString]];
+    if (fTitle->job->anamorphic.mode != 1)
+    {
+        pictureSizingSummary = [pictureSizingSummary
+                                stringByAppendingFormat:@", Modulus: %d",
+                                fTitle->job->modulus];
+    }
+    [queueFileJob setObject:pictureSizingSummary forKey:@"PictureSizingSummary"];
+    
     /* Set crop settings here */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
     [queueFileJob setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
@@ -5714,129 +5723,16 @@ the user is using "Custom" settings by determining the sender*/
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) calculatePictureSizing: (id) sender
 {
-	if (fTitle->job->anamorphic.mode > 0)
-	{
+    if (fTitle->job->anamorphic.mode > 0)
+    {
         fTitle->job->keep_ratio = 0;
-	}
-    
-    if (fTitle->job->anamorphic.mode != 1) // we are not strict so show the modulus
-	{
-        [fPictureSizeField setStringValue: [NSString stringWithFormat:@"Picture Size: %@, Modulus: %d", [fPictureController getPictureSizeInfoString], fTitle->job->modulus]];
-    }
-    else
-    {
-        [fPictureSizeField setStringValue: [NSString stringWithFormat:@"Picture Size: %@", [fPictureController getPictureSizeInfoString]]];
-    }
-    NSString *picCropping;
-    /* Set the display field for crop as per boolean */
-	if (![fPictureController autoCrop])
-	{
-        picCropping =  @"Custom";
-	}
-	else
-	{
-		picCropping =  @"Auto";
-	}
-    picCropping = [picCropping stringByAppendingString:[NSString stringWithFormat:@" %d/%d/%d/%d",fTitle->job->crop[0],fTitle->job->crop[1],fTitle->job->crop[2],fTitle->job->crop[3]]];
-    
-    [fPictureCroppingField setStringValue: [NSString stringWithFormat:@"Picture Cropping: %@",picCropping]];
-    
-    NSString *videoFilters;
-    videoFilters = @"";
-    /* Detelecine */
-    if ([fPictureController detelecine] == 2) 
-    {
-        videoFilters = [videoFilters stringByAppendingString:@" - Detelecine (Default)"];
-    }
-    else if ([fPictureController detelecine] == 1) 
-    {
-        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[fPictureController detelecineCustomString]]];
     }
     
-    if ([fPictureController useDecomb] == 1)
-    {
-        /* Decomb */
-        if ([fPictureController decomb] == 4)
-        {
-            videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Bob)"];
-        }
-        else if ([fPictureController decomb] == 3)
-        {
-            videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Fast)"];
-        }
-        else if ([fPictureController decomb] == 2)
-        {
-            videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Default)"];
-        }
-        else if ([fPictureController decomb] == 1)
-        {
-            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[fPictureController decombCustomString]]];
-        }
-    }
-    else
-    {
-        /* Deinterlace */
-        if ([fPictureController deinterlace] == 5)
-        {
-            fTitle->job->deinterlace  = 1;
-            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Bob)"];
-        }
-        else if ([fPictureController deinterlace] == 4)
-        {
-            fTitle->job->deinterlace  = 1;
-            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slower)"];
-        }
-        else if ([fPictureController deinterlace] == 3)
-        {
-            fTitle->job->deinterlace  = 1;
-            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slow)"];
-        }
-        else if ([fPictureController deinterlace] == 2)
-        {
-            fTitle->job->deinterlace  = 1;
-            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Fast)"];
-        }
-        else if ([fPictureController deinterlace] == 1)
-        {
-            fTitle->job->deinterlace  = 1;
-            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[fPictureController deinterlaceCustomString]]];
-        }
-        else
-        {
-            fTitle->job->deinterlace  = 0;
-        }
-	}
-    
-    /* Denoise */
-	if ([fPictureController denoise] == 2)
-	{
-		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Weak)"];
-    }
-	else if ([fPictureController denoise] == 3)
-	{
-		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Medium)"];
-    }
-	else if ([fPictureController denoise] == 4)
-	{
-		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Strong)"];
-	}
-    else if ([fPictureController denoise] == 1)
-	{
-		videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[fPictureController denoiseCustomString]]];
-	}
-    
-    /* Deblock */
-    if ([fPictureController deblock] > 0) 
-    {
-        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deblock (%d)",[fPictureController deblock]]];
-    }
-	
-    /* Grayscale */
-    if ([fPictureController grayscale]) 
-    {
-        videoFilters = [videoFilters stringByAppendingString:@" - Grayscale"];
-    }
-    [fVideoFiltersField setStringValue: [NSString stringWithFormat:@"Video Filters: %@", videoFilters]];
+    // align picture settings and video filters in the UI using tabs
+    [fPictureSettingsField setStringValue:[NSString stringWithFormat:@"Picture Settings:  \t %@",
+                                           [self pictureSettingsSummary]]];
+    [fPictureFiltersField  setStringValue:[NSString stringWithFormat:@"Picture Filters: \t\t %@",
+                                           [self pictureFiltersSummary]]];
     
     /* Store storage resolution for unparse */
     fX264PresetsWidthForUnparse  = fTitle->job->width;
@@ -5844,9 +5740,154 @@ the user is using "Custom" settings by determining the sender*/
     // width or height may have changed, unparse
     [self x264PresetsChangedDisplayExpandedOptions:nil];
     
+    // reload still previews
+    // note: fTitle->job->deinterlace is set by fPictureController now
     [fPictureController decombDeinterlacePreviewImage];
 }
 
+#pragma mark -
+#pragma mark - Text Summaries
+
+- (NSString*) pictureSettingsSummary
+{
+    NSMutableString *summary = [NSMutableString stringWithString:@""];
+    if (fPictureController && fTitle && fTitle->job)
+    {
+        [summary appendString:[fPictureController getPictureSizeInfoString]];
+        if (fTitle->job->anamorphic.mode != 1)
+        {
+            // anamorphic is not Strict, show the modulus
+            [summary appendFormat:@", Modulus: %d", fTitle->job->modulus];
+        }
+        [summary appendFormat:@", Crop: %s %d/%d/%d/%d",
+         [fPictureController autoCrop] ? "Auto" : "Custom",
+         fTitle->job->crop[0], fTitle->job->crop[1],
+         fTitle->job->crop[2], fTitle->job->crop[3]];
+    }
+    return [NSString stringWithString:summary];
+}
+
+- (NSString*) pictureFiltersSummary
+{
+    NSMutableString *summary = [NSMutableString stringWithString:@""];
+    if (fPictureController)
+    {
+        /* Detelecine */
+        switch ([fPictureController detelecine])
+        {
+            case 1:
+                [summary appendFormat:@" - Detelecine (%@)",
+                 [fPictureController detelecineCustomString]];
+                break;
+                
+            case 2:
+                [summary appendString:@" - Detelecine (Default)"];
+                break;
+                
+            default:
+                break;
+        }
+        
+        if ([fPictureController useDecomb] == 1)
+        {
+            /* Decomb */
+            switch ([fPictureController decomb])
+            {
+                case 1:
+                    [summary appendFormat:@" - Decomb (%@)",
+                     [fPictureController decombCustomString]];
+                    break;
+                    
+                case 2:
+                    [summary appendString:@" - Decomb (Default)"];
+                    break;
+                    
+                case 3:
+                    [summary appendString:@" - Decomb (Fast)"];
+                    break;
+                    
+                case 4:
+                    [summary appendString:@" - Decomb (Bob)"];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            /* Deinterlace */
+            switch ([fPictureController deinterlace])
+            {
+                case 1:
+                    [summary appendFormat:@" - Deinterlace (%@)",
+                     [fPictureController deinterlaceCustomString]];
+                    break;
+                    
+                case 2:
+                    [summary appendString:@" - Deinterlace (Fast)"];
+                    break;
+                    
+                case 3:
+                    [summary appendString:@" - Deinterlace (Slow)"];
+                    break;
+                    
+                case 4:
+                    [summary appendString:@" - Deinterlace (Slower)"];
+                    break;
+                    
+                case 5:
+                    [summary appendString:@" - Deinterlace (Bob)"];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        /* Deblock */
+        if ([fPictureController deblock] > 0)
+        {
+            [summary appendFormat:@" - Deblock (%d)",
+             [fPictureController deblock]];
+        }
+        
+        /* Denoise */
+        switch ([fPictureController denoise])
+        {
+            case 1:
+                [summary appendFormat:@" - Denoise (%@)",
+                 [fPictureController denoiseCustomString]];
+                break;
+                
+            case 2:
+                [summary appendString:@" - Denoise (Weak)"];
+                break;
+                
+            case 3:
+                [summary appendString:@" - Denoise (Medium)"];
+                break;
+                
+            case 4:
+                [summary appendString:@" - Denoise (Strong)"];
+                break;
+                
+            default:
+                break;
+        }
+        
+        /* Grayscale */
+        if ([fPictureController grayscale]) 
+        {
+            [summary appendString:@" - Grayscale"];
+        }
+    }
+    if ([summary hasPrefix:@" - "])
+    {
+        [summary deleteCharactersInRange:NSMakeRange(0, 3)];
+    }
+    return [NSString stringWithString:summary];
+}
 
 #pragma mark -
 #pragma mark - Audio and Subtitles
