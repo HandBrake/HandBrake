@@ -138,6 +138,9 @@ namespace HandBrake.ApplicationServices.Factories
                 case "PicturePAR":
                     preset.Task.Anamorphic = (Anamorphic)kvp.Value;
                     break;
+                case "PictureModulus":
+                    preset.Task.Modulus = kvp.Value;
+                    break;
 
                 // Filters
                 case "PictureDeblock":
