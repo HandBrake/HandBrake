@@ -2592,7 +2592,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
 	
     /* x264 advanced options */
-    if ([fx264UseAdvancedOptionsCheck state])
+    if ([fX264UseAdvancedOptionsCheck state])
     {
         // we are using the advanced panel
         [queueFileJob setObject:[NSNumber numberWithInt:1]       forKey: @"x264UseAdvancedOptions"];
@@ -3024,7 +3024,7 @@ fWorkingCount = 0;
         [self setH264Profile:    nil];
         [self setH264Level:      nil];
         // enable the advanced panel and update the widgets
-        [fx264UseAdvancedOptionsCheck setState:NSOnState];
+        [fX264UseAdvancedOptionsCheck setState:NSOnState];
         [self updateX264Widgets:nil];
     }
     else
@@ -3038,7 +3038,7 @@ fWorkingCount = 0;
         // preset does not use the advanced panel, reset it
         [fAdvancedOptions setOptions:@""];
         // disable the advanced panel and update the widgets
-        [fx264UseAdvancedOptionsCheck setState:NSOffState];
+        [fX264UseAdvancedOptionsCheck setState:NSOffState];
         [self updateX264Widgets:nil];
     }
     
@@ -3326,7 +3326,7 @@ fWorkingCount = 0;
         const char *advanced_opts = NULL;
         const char *h264_profile  = NULL;
         const char *h264_level    = NULL;
-        if ([fx264UseAdvancedOptionsCheck state])
+        if ([fX264UseAdvancedOptionsCheck state])
         {
             // we are using the advanced panel
             if ([(tmpString = [fAdvancedOptions optionsString]) length])
@@ -5407,11 +5407,11 @@ the user is using "Custom" settings by determining the sender*/
     };
     
     // check whether the x264 preset system and the advanced panel should be enabled
-    BOOL enable_x264_controls  = (enable && [fx264UseAdvancedOptionsCheck state] == NSOffState);
-    BOOL enable_advanced_panel = (enable && [fx264UseAdvancedOptionsCheck state] == NSOnState);
+    BOOL enable_x264_controls  = (enable && [fX264UseAdvancedOptionsCheck state] == NSOffState);
+    BOOL enable_advanced_panel = (enable && [fX264UseAdvancedOptionsCheck state] == NSOnState);
     
     // enable/disable the checkbox and advanced panel
-    [fx264UseAdvancedOptionsCheck setEnabled:enable];
+    [fX264UseAdvancedOptionsCheck setEnabled:enable];
     [fAdvancedOptions enableUI:enable_advanced_panel];
     
     // enable/disable the x264 preset system controls
@@ -5434,7 +5434,7 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) updateX264Widgets: (id) sender
 {
-    if ([fx264UseAdvancedOptionsCheck state] == NSOnState)
+    if ([fX264UseAdvancedOptionsCheck state] == NSOnState)
     {
         /*
          * we are using or switching to the advanced panel
@@ -5445,7 +5445,7 @@ the user is using "Custom" settings by determining the sender*/
          * if triggered by the advanced panel on/off checkbox, set the options
          * string to the value of the unparsed x264 preset system string.
          */
-        if (fx264UseAdvancedOptionsCheck == sender)
+        if (sender == fX264UseAdvancedOptionsCheck)
         {
             if (fX264PresetsUnparsedUTF8String != NULL)
             {
@@ -5458,8 +5458,8 @@ the user is using "Custom" settings by determining the sender*/
             }
         }
     }
+    // enable/disable, populate and update the various widgets
     [self             enableX264Widgets:       YES];
-    // update and/or populate the various widgets
     [self             x264PresetsSliderChanged:nil];
     [fAdvancedOptions X264AdvancedOptionsSet:  nil];
 }
@@ -6383,7 +6383,7 @@ return YES;
                 [self setH264Profile:nil];
                 [self setH264Level:  nil];
                 /* we enable the advanced panel and update the widgets */
-                [fx264UseAdvancedOptionsCheck setState:NSOnState];
+                [fX264UseAdvancedOptionsCheck setState:NSOnState];
                 [self updateX264Widgets:nil];
             }
             else
@@ -6400,7 +6400,7 @@ return YES;
                 /* preset does not use the advanced panel, reset it */
                 [fAdvancedOptions setOptions:@""];
                 /* we disable the advanced panel and update the widgets */
-                [fx264UseAdvancedOptionsCheck setState:NSOffState];
+                [fX264UseAdvancedOptionsCheck setState:NSOffState];
                 [self updateX264Widgets:nil];
             }
         }
@@ -7020,7 +7020,7 @@ return YES;
         [preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
         /* x264 Options, this will either be advanced panel or the video tabs x264 presets panel with modded option string */
         
-        if ([fx264UseAdvancedOptionsCheck state] == NSOnState)
+        if ([fX264UseAdvancedOptionsCheck state] == NSOnState)
         {
             /* use the old advanced panel */
             [preset setObject:[NSNumber numberWithInt:1]       forKey:@"x264UseAdvancedOptions"];

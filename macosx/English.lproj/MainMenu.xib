@@ -7215,7 +7215,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fx264UseAdvancedOptionsCheck</string>
+						<string key="label">fX264UseAdvancedOptionsCheck</string>
 						<reference key="source" ref="2258723"/>
 						<reference key="destination" ref="902460295"/>
 					</object>
@@ -12729,7 +12729,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fX264ProfilePopUpLabel</string>
 							<string>fX264TunePopUp</string>
 							<string>fX264TunePopUpLabel</string>
-							<string>fx264UseAdvancedOptionsCheck</string>
+							<string>fX264UseAdvancedOptionsCheck</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -12948,7 +12948,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fX264ProfilePopUpLabel</string>
 							<string>fX264TunePopUp</string>
 							<string>fX264TunePopUpLabel</string>
-							<string>fx264UseAdvancedOptionsCheck</string>
+							<string>fX264UseAdvancedOptionsCheck</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -13369,7 +13369,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fx264UseAdvancedOptionsCheck</string>
+								<string key="name">fX264UseAdvancedOptionsCheck</string>
 								<string key="candidateClassName">NSButton</string>
 							</object>
 						</object>
