@@ -2600,7 +2600,7 @@ fWorkingCount = 0;
     }
     else
     {
-        // we are using the x264 system
+        // we are using the x264 preset system
         [queueFileJob setObject:[NSNumber numberWithInt:0] forKey: @"x264UseAdvancedOptions"];
         [queueFileJob setObject:[self x264Preset]          forKey: @"x264Preset"];
         [queueFileJob setObject:[self x264Tune]            forKey: @"x264Tune"];
@@ -3017,20 +3017,28 @@ fWorkingCount = 0;
     {
         // we are using the advanced panel
         [fAdvancedOptions setOptions:[queueToApply objectForKey:@"x264Option"]];
+        // preset does not use the x264 preset system, reset the widgets
+        [self setX264Preset:     nil];
+        [self setX264Tune:       nil];
+        [self setX264OptionExtra:[queueToApply objectForKey:@"x264Option"]];
+        [self setH264Profile:    nil];
+        [self setH264Level:      nil];
         // enable the advanced panel and update the widgets
-        [fx264UseAdvancedOptionsCheck setState: NSOnState];
+        [fx264UseAdvancedOptionsCheck setState:NSOnState];
         [self updateX264Widgets:nil];
     }
     else
     {
-        // we are using the x264 system
-        [self setX264Preset:      [queueToApply objectForKey:@"x264Preset"]];
-        [self setX264Tune:        [queueToApply objectForKey:@"x264Tune"]];
-        [self setX264OptionExtra: [queueToApply objectForKey:@"x264OptionExtra"]];
-        [self setH264Profile:     [queueToApply objectForKey:@"h264Profile"]];
-        [self setH264Level:       [queueToApply objectForKey:@"h264Level"]];
+        // we are using the x264 preset system
+        [self setX264Preset:     [queueToApply objectForKey:@"x264Preset"]];
+        [self setX264Tune:       [queueToApply objectForKey:@"x264Tune"]];
+        [self setX264OptionExtra:[queueToApply objectForKey:@"x264OptionExtra"]];
+        [self setH264Profile:    [queueToApply objectForKey:@"h264Profile"]];
+        [self setH264Level:      [queueToApply objectForKey:@"h264Level"]];
+        // preset does not use the advanced panel, reset it
+        [fAdvancedOptions setOptions:@""];
         // disable the advanced panel and update the widgets
-        [fx264UseAdvancedOptionsCheck setState: NSOffState];
+        [fx264UseAdvancedOptionsCheck setState:NSOffState];
         [self updateX264Widgets:nil];
     }
     
@@ -3328,8 +3336,7 @@ fWorkingCount = 0;
         }
         else
         {
-            // we are using the x264 system
-            x264_preset = [[self x264Preset] UTF8String];
+            // we are using the x264 preset system
             if ([(tmpString = [self x264Tune]) length])
             {
                 x264_tune = [tmpString UTF8String];
@@ -3346,6 +3353,7 @@ fWorkingCount = 0;
             {
                 h264_level = [tmpString UTF8String];
             }
+            x264_preset = [[self x264Preset] UTF8String];
         }
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
@@ -3853,8 +3861,7 @@ bool one_burned = FALSE;
         }
         else
         {
-            // we are using the x264 system
-            x264_preset = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
+            // we are using the x264 preset system
             if ([(tmpString = [queueToApply objectForKey:@"x264Tune"]) length])
             {
                 x264_tune = [tmpString UTF8String];
@@ -3871,6 +3878,7 @@ bool one_burned = FALSE;
             {
                 h264_level = [tmpString UTF8String];
             }
+            x264_preset = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
         }
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
@@ -5330,7 +5338,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSUInteger i;
     /*
-     * now we populate the x264 system widgets via hb_x264_presets(),
+     * now we populate the x264 preset system widgets via hb_x264_presets(),
      * hb_x264_tunes(), hb_h264_profiles(), hb_h264_levels()
      */
     // store x264 preset names
@@ -5388,7 +5396,7 @@ the user is using "Custom" settings by determining the sender*/
 
 - (void) enableX264Widgets: (bool) enable
 {
-    NSControl * controls[] =
+    NSControl *controls[] =
     {
         fX264PresetsSlider, fX264PresetSliderLabel, fX264PresetSelectedTextField,
         fX264TunePopUp, fX264TunePopUpLabel, fX264FastDecodeCheck,
@@ -5397,11 +5405,16 @@ the user is using "Custom" settings by determining the sender*/
         fX264LevelPopUp, fX264LevelPopUpLabel,
         fDisplayX264PresetsUnparseTextField,
     };
-    // check whether we're using the x264 system
-    bool x264_system = ([fx264UseAdvancedOptionsCheck state] == NSOffState);
-    // enable or disable the "Use x264 Advanced Options Panel" checkbox
-    [fx264UseAdvancedOptionsCheck setEnabled: enable];
-    // enable or disable the x264 system widgets
+    
+    // check whether the x264 preset system and the advanced panel should be enabled
+    BOOL enable_x264_controls  = (enable && [fx264UseAdvancedOptionsCheck state] == NSOffState);
+    BOOL enable_advanced_panel = (enable && [fx264UseAdvancedOptionsCheck state] == NSOnState);
+    
+    // enable/disable the checkbox and advanced panel
+    [fx264UseAdvancedOptionsCheck setEnabled:enable];
+    [fAdvancedOptions enableUI:enable_advanced_panel];
+    
+    // enable/disable the x264 preset system controls
     for (unsigned i = 0; i < (sizeof(controls) / sizeof(NSControl*)); i++)
     {
         if ([[controls[i] className] isEqualToString: @"NSTextField"])
@@ -5409,49 +5422,50 @@ the user is using "Custom" settings by determining the sender*/
             NSTextField *tf = (NSTextField*)controls[i];
             if (![tf isBezeled])
             {
-                [tf setTextColor: (x264_system ?
-                                   [NSColor controlTextColor] :
-                                   [NSColor disabledControlTextColor])];
+                [tf setTextColor:(enable_x264_controls       ?
+                                  [NSColor controlTextColor] :
+                                  [NSColor disabledControlTextColor])];
                 continue;
             }
         }
-        [controls[i] setEnabled: (enable && x264_system)];
+        [controls[i] setEnabled:enable_x264_controls];
     }
-    
-    if (x264_system)
-    {
-        // using x264 system, always disable advanced panel
-        [fAdvancedOptions enableUI:NO];
-        // don't reset x264 system widgets as they may have been set explicitly
-    }
-    else
-    {
-        // using advanced panel, enable if applicable
-        [fAdvancedOptions enableUI:enable];
-        // set the advanced options string based on the previously selected
-        // x264 system setting
-        if (fX264PresetsUnparsedUTF8String != NULL)
-        {
-            [fAdvancedOptions setOptions:[NSString stringWithUTF8String:fX264PresetsUnparsedUTF8String]];
-        }
-        else
-        {
-            [fAdvancedOptions setOptions:@""];
-        }
-    }
-
-    // update and/or populate the widgets
-    [self x264PresetsSliderChanged:nil];
-    [fAdvancedOptions X264AdvancedOptionsSet:nil];
 }
 
 - (IBAction) updateX264Widgets: (id) sender
 {
-    [self enableX264Widgets: YES];
+    if ([fx264UseAdvancedOptionsCheck state] == NSOnState)
+    {
+        /*
+         * we are using or switching to the advanced panel
+         *
+         * if triggered by selectPreset or applyQueueSettingToMainWindow,
+         * the options string will have been specified explicitly - leave it.
+         *
+         * if triggered by the advanced panel on/off checkbox, set the options
+         * string to the value of the unparsed x264 preset system string.
+         */
+        if (fx264UseAdvancedOptionsCheck == sender)
+        {
+            if (fX264PresetsUnparsedUTF8String != NULL)
+            {
+                [fAdvancedOptions setOptions:
+                 [NSString stringWithUTF8String:fX264PresetsUnparsedUTF8String]];
+            }
+            else
+            {
+                [fAdvancedOptions setOptions:@""];
+            }
+        }
+    }
+    [self             enableX264Widgets:       YES];
+    // update and/or populate the various widgets
+    [self             x264PresetsSliderChanged:nil];
+    [fAdvancedOptions X264AdvancedOptionsSet:  nil];
 }
 
 #pragma mark -
-#pragma mark x264 system
+#pragma mark x264 preset system
 
 - (NSString*) x264Preset
 {
@@ -6354,36 +6368,39 @@ return YES;
                  */
                 if ([chosenPreset objectForKey:@"x264Option"])
                 {
-                    /* we set the advanced opt string here if applicable */
-                    [fAdvancedOptions setOptions: [chosenPreset objectForKey:@"x264Option"]];
+                    /* we set the advanced options string here if applicable */
+                    [fAdvancedOptions setOptions:        [chosenPreset objectForKey:@"x264Option"]];
+                    [self             setX264OptionExtra:[chosenPreset objectForKey:@"x264Option"]];
                 }
                 else
                 {
-                    [fAdvancedOptions setOptions:@""];
+                    [fAdvancedOptions setOptions:        @""];
+                    [self             setX264OptionExtra:nil];
                 }
-                /* preset does not use the x264 system, reset the widgets */
-                [self setX264Preset:      nil];
-                [self setX264Tune:        nil];
-                [self setX264OptionExtra: nil];
-                [self setH264Profile:     nil];
-                [self setH264Level:       nil];
+                /* preset does not use the x264 preset system, reset the widgets */
+                [self setX264Preset: nil];
+                [self setX264Tune:   nil];
+                [self setH264Profile:nil];
+                [self setH264Level:  nil];
                 /* we enable the advanced panel and update the widgets */
-                [fx264UseAdvancedOptionsCheck setState: NSOnState];
+                [fx264UseAdvancedOptionsCheck setState:NSOnState];
                 [self updateX264Widgets:nil];
             }
             else
             {
                 /*
                  * x264UseAdvancedOptions is set to 0 (disabled),
-                 * so we use the x264 system
+                 * so we use the x264 preset system
                  */
-                [self setX264Preset:      [chosenPreset objectForKey:@"x264Preset"]];
-                [self setX264Tune:        [chosenPreset objectForKey:@"x264Tune"]];
-                [self setX264OptionExtra: [chosenPreset objectForKey:@"x264OptionExtra"]];
-                [self setH264Profile:     [chosenPreset objectForKey:@"h264Profile"]];
-                [self setH264Level:       [chosenPreset objectForKey:@"h264Level"]];
+                [self setX264Preset:     [chosenPreset objectForKey:@"x264Preset"]];
+                [self setX264Tune:       [chosenPreset objectForKey:@"x264Tune"]];
+                [self setX264OptionExtra:[chosenPreset objectForKey:@"x264OptionExtra"]];
+                [self setH264Profile:    [chosenPreset objectForKey:@"h264Profile"]];
+                [self setH264Level:      [chosenPreset objectForKey:@"h264Level"]];
+                /* preset does not use the advanced panel, reset it */
+                [fAdvancedOptions setOptions:@""];
                 /* we disable the advanced panel and update the widgets */
-                [fx264UseAdvancedOptionsCheck setState: NSOffState];
+                [fx264UseAdvancedOptionsCheck setState:NSOffState];
                 [self updateX264Widgets:nil];
             }
         }
@@ -7011,7 +7028,7 @@ return YES;
         }
         else
         {
-            /* use the x264 system */
+            /* use the x264 preset system */
             [preset setObject:[NSNumber numberWithInt:0] forKey:@"x264UseAdvancedOptions"];
             [preset setObject:[self x264Preset]          forKey:@"x264Preset"];
             [preset setObject:[self x264Tune]            forKey:@"x264Tune"];
