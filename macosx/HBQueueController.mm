@@ -1155,11 +1155,6 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
             pictureInfo = [pictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
         }
         
-        if ([[item objectForKey:@"VideoGrayScale"] intValue] == 1)
-        {
-            pictureInfo = [pictureInfo stringByAppendingString:@", Grayscale"];
-        }
-        
         [finalString appendString: @"Picture: " withAttributes:detailBoldAttr];
         [finalString appendString: pictureInfo withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
