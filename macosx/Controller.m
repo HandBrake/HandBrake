@@ -2664,17 +2664,14 @@ fWorkingCount = 0;
         [queueFileJob setObject:[NSNumber numberWithFloat:fTitle->job->anamorphic.dar_height] forKey:@"PicturePARDisplayHeight"];
 
     }
-    
-    /* Summary for the queue display */
-    NSString *pictureSizingSummary = [NSString stringWithFormat:@"%@",
-                                      [fPictureController getPictureSizeInfoString]];
-    if (fTitle->job->anamorphic.mode != 1)
-    {
-        pictureSizingSummary = [pictureSizingSummary
-                                stringByAppendingFormat:@", Modulus: %d",
-                                fTitle->job->modulus];
-    }
-    [queueFileJob setObject:pictureSizingSummary forKey:@"PictureSizingSummary"];
+
+    /* Text summaries of various settings */
+    [queueFileJob setObject:[NSString stringWithString:[self pictureSettingsSummary]]
+                     forKey:@"PictureSettingsSummary"];
+    [queueFileJob setObject:[NSString stringWithString:[self pictureFiltersSummary]]
+                     forKey:@"PictureFiltersSummary"];
+    [queueFileJob setObject:[NSString stringWithString:[self muxerOptionsSummary]]
+                     forKey:@"MuxerOptionsSummary"];
     
     /* Set crop settings here */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
@@ -5880,6 +5877,32 @@ the user is using "Custom" settings by determining the sender*/
         if ([fPictureController grayscale]) 
         {
             [summary appendString:@" - Grayscale"];
+        }
+    }
+    if ([summary hasPrefix:@" - "])
+    {
+        [summary deleteCharactersInRange:NSMakeRange(0, 3)];
+    }
+    return [NSString stringWithString:summary];
+}
+
+- (NSString*) muxerOptionsSummary
+{
+    NSMutableString *summary = [NSMutableString stringWithString:@""];
+    if (([fDstFormatPopUp selectedItem]) &&
+        [[fDstFormatPopUp selectedItem] tag] == HB_MUX_MP4)
+    {
+        if ([fDstMp4LargeFileCheck state])
+        {
+            [summary appendString:@" - Large file size"];
+        }
+        if ([fDstMp4HttpOptFileCheck state])
+        {
+            [summary appendString:@" - Web optimized"];
+        }
+        if ([fDstMp4iPodFileCheck state])
+        {
+            [summary appendString:@" - iPod 5G support"];
         }
     }
     if ([summary hasPrefix:@" - "])
