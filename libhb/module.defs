@@ -127,7 +127,7 @@ else
 endif
 
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
-LIBHB.GCC.l += iberty ws2_32
+LIBHB.GCC.l += ws2_32
 ifeq ($(HAS.dlfcn),1)
     LIBHB.GCC.l += dl
 endif
