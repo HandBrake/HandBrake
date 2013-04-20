@@ -7,10 +7,8 @@
 
 #ifdef __OBJC__
 #define XSTR(x) (@x)
-#define STRING_TYPE NSString *
 #else
 #define XSTR CFSTR
-#define STRING_TYPE CFStringRef
 #endif
 
 /*!	@header GrowlDefines.h
@@ -56,7 +54,7 @@
  *   This key is optional.
  */
 #define GROWL_APP_ID					XSTR("ApplicationId")
-/*!	@defined GROWL_APP_ICON
+/*!	@defined GROWL_APP_ICON_DATA
  *	@abstract The image data for your application's icon.
  *	@discussion Image data representing your application's icon. This may be
  *	 superimposed on a notification icon as a badge, used as the notification
@@ -66,7 +64,7 @@
  *
  *	 Optional. Not supported by all display plugins.
  */
-#define GROWL_APP_ICON					XSTR("ApplicationIcon")
+#define GROWL_APP_ICON_DATA				XSTR("ApplicationIcon")
 /*!	@defined GROWL_NOTIFICATIONS_DEFAULT
  *	@abstract The array of notifications to turn on by default.
  *	@discussion These are the names of the notifications that should be enabled
@@ -101,6 +99,14 @@
 *  This key is optional.
 */
 #define GROWL_NOTIFICATIONS_DESCRIPTIONS		XSTR("NotificationDescriptions")
+/*! @defined GROWL_NOTIFICATIONS_ICONS
+ *  @abstract A dictionary of icons for each notification
+ *  @discussion This is an NSDictionary whose keys are GROWL_NOTIFICATION_NAME strings and whose objects are
+ *  icons for each notification, for GNTP spec
+ *
+ *  This key is optional.
+ */
+#define GROWL_NOTIFICATIONS_ICONS XSTR("NotificationIcons")
 
 /*!	@defined	GROWL_TICKET_VERSION
  *	@abstract	The version of your registration ticket.
@@ -144,20 +150,20 @@
  */
 #define GROWL_NOTIFICATION_DESCRIPTION  	XSTR("NotificationDescription")
 /*!	@defined GROWL_NOTIFICATION_ICON
- *	@discussion Image data for the notification icon. Must be in a format
+ *	@discussion Image data for the notification icon. Image data must be in a format
  *	 supported by NSImage, such as TIFF, PNG, GIF, JPEG, BMP, PICT, or PDF.
  *
  *	 Optional. Not supported by all display plugins.
  */
-#define GROWL_NOTIFICATION_ICON			XSTR("NotificationIcon")
+#define GROWL_NOTIFICATION_ICON_DATA			XSTR("NotificationIcon")
 /*!	@defined GROWL_NOTIFICATION_APP_ICON
  *	@discussion Image data for the application icon, in case GROWL_APP_ICON does
- *	 not apply for some reason. Must be in a format supported by NSImage, such
+ *	 not apply for some reason. Image data be in a format supported by NSImage, such
  *	 as TIFF, PNG, GIF, JPEG, BMP, PICT, or PDF.
  *
  *	 Optional. Not supported by all display plugins.
  */
-#define GROWL_NOTIFICATION_APP_ICON		XSTR("NotificationAppIcon")
+#define GROWL_NOTIFICATION_APP_ICON_DATA		XSTR("NotificationAppIcon")
 /*!	@defined GROWL_NOTIFICATION_PRIORITY
  *	@discussion The priority of the notification as an integer number from
  *	 -2 to +2 (+2 being highest).
@@ -184,16 +190,6 @@
  *	 Optional. Not supported by all display plugins.
  */
 #define GROWL_NOTIFICATION_CLICK_CONTEXT			XSTR("NotificationClickContext")
-
-/*!	@defined GROWL_DISPLAY_PLUGIN
- *	@discussion The name of a display plugin which should be used for this notification.
- *    Optional. If this key is not set or the specified display plugin does not
- *    exist, the display plugin stored in the application ticket is used. This key
- *    allows applications to use different default display plugins for their
- *    notifications. The user can still override those settings in the preference
- *    pane.
- */
-#define GROWL_DISPLAY_PLUGIN				XSTR("NotificationDisplayPlugin")
 
 /*!	@defined GROWL_NOTIFICATION_IDENTIFIER
  *	@abstract An identifier for the notification for coalescing purposes.
@@ -224,6 +220,19 @@
 */
 #define GROWL_NOTIFICATION_PROGRESS		XSTR("NotificationProgress")
 
+/*!	@defined GROWL_NOTIFICATION_ALREADY_SHOWN
+ *	@abstract If this key is set, it should contain a bool value wrapped
+ *   in a NSNumber which describes whether the notification has
+ *   already been displayed, for instance by built in Notification
+ *   Center support.  This value can be used to allow display
+ *   plugins to skip a notification, while still allowing Growl
+ *   actions to run on them.
+ *
+ *	 Optional. Not supported by all display plugins.
+ */
+#define GROWL_NOTIFICATION_ALREADY_SHOWN		XSTR("AlreadyShown")
+
+
 // Notifications
 #pragma mark Notifications
 
@@ -245,7 +254,7 @@
  *	 The userInfo dictionary for this notification can contain these keys:
  *	 <ul>
  *	 	<li>GROWL_APP_NAME</li>
- *	 	<li>GROWL_APP_ICON</li>
+ *	 	<li>GROWL_APP_ICON_DATA</li>
  *	 	<li>GROWL_NOTIFICATIONS_ALL</li>
  *	 	<li>GROWL_NOTIFICATIONS_DEFAULT</li>
  *	 </ul>
@@ -288,12 +297,6 @@
  *	 Growl_PostNotification.
  */
 #define GROWL_NOTIFICATION				XSTR("GrowlNotification")
-/*!	@defined GROWL_SHUTDOWN
-*	@abstract The distributed notification name that tells Growl to shutdown.
-*	@discussion The Growl preference pane posts this notification when the
-*	 "Stop Growl" button is clicked.
-*/
-#define GROWL_SHUTDOWN					XSTR("GrowlShutdown")
 /*!	@defined GROWL_PING
  *	@abstract A distributed notification to check whether Growl is running.
  *	@discussion This is used by the Growl preference pane. If it receives a
@@ -313,15 +316,48 @@
  *	 registration dictionary supplied by its delegate.
  */
 #define GROWL_IS_READY					XSTR("Lend Me Some Sugar; I Am Your Neighbor!")
-/*!	@defined GROWL_NOTIFICATION_CLICKED
- *	@abstract The distributed notification sent when a supported notification is clicked.
+
+
+/*!	@defined GROWL_DISTRIBUTED_NOTIFICATION_CLICKED_SUFFIX
+ *	@abstract Part of the name of the distributed notification sent when a supported notification is clicked.
  *	@discussion When a Growl notification with a click context is clicked on by
- *	 the user, Growl posts this distributed notification.
- *	 The GrowlApplicationBridge responds to this notification by calling a
- *	 callback in its delegate.
+ *	 the user, Growl posts a distributed notification whose name is in the format:
+ *        [NSString stringWithFormat:@"%@-%d-%@", appName, pid, GROWL_DISTRIBUTED_NOTIFICATION_CLICKED_SUFFIX]
+ *	 The GrowlApplicationBridge responds to this notification by calling a callback in its delegate.
  */
-#define GROWL_NOTIFICATION_CLICKED		XSTR("GrowlClicked!")
-#define GROWL_NOTIFICATION_TIMED_OUT	XSTR("GrowlTimedOut!")
+#define GROWL_DISTRIBUTED_NOTIFICATION_CLICKED_SUFFIX		XSTR("GrowlClicked!")
+
+/*!	@defined GROWL_DISTRIBUTED_NOTIFICATION_TIMED_OUT_SUFFIX
+ *	@abstract Part of the name of the distributed notification sent when a supported notification times out without being clicked.
+ *	@discussion When a Growl notification with a click context times out, Growl posts a distributed notification
+ *	 whose name is in the format:
+ *		  [NSString stringWithFormat:@"%@-%d-%@", appName, pid, GROWL_DISTRIBUTED_NOTIFICATION_TIMED_OUT_SUFFIX]
+ *	 The GrowlApplicationBridge responds to this notification by calling a callback in its delegate.
+ *   NOTE: The user may have actually clicked the 'close' button; this triggers an *immediate* time-out of the notification.
+ */
+#define GROWL_DISTRIBUTED_NOTIFICATION_TIMED_OUT_SUFFIX		XSTR("GrowlTimedOut!")
+
+/*!	@defined GROWL_DISTRIBUTED_NOTIFICATION_NOTIFICATIONCENTER_ON
+ *	@abstract The distributed notification sent when the Notification Center support is toggled on in Growl 2.0
+ *	@discussion When the user enables Notification Center support in Growl 2.0, this notification is sent
+ *      to inform all running apps that they should now speak to Notification Center directly.
+ */
+#define GROWL_DISTRIBUTED_NOTIFICATION_NOTIFICATIONCENTER_ON		XSTR("GrowlNotificationCenterOn!")
+
+/*!	@defined GROWL_DISTRIBUTED_NOTIFICATION_NOTIFICATIONCENTER_OFF
+ *	@abstract The distributed notification sent when the Notification Center support is toggled off in Growl 2.0
+ *	@discussion When the user enables Notification Center support in Growl 2.0, this notification is sent
+ *      to inform all running apps that they should no longer speak to Notification Center directly.
+ */
+#define GROWL_DISTRIBUTED_NOTIFICATION_NOTIFICATIONCENTER_OFF		XSTR("GrowlNotificationCenterOff!")
+
+/*!	@defined GROWL_DISTRIBUTED_NOTIFICATION_NOTIFICATIONCENTER_QUERY
+ *	@abstract The distributed notification sent by an application to query Growl 2.0's notification center support.
+ *	@discussion When an app starts up, it will send this query to get Growl 2.0 to spit out whether notification
+ *      center support is on or off.
+ */
+#define GROWL_DISTRIBUTED_NOTIFICATION_NOTIFICATIONCENTER_QUERY		XSTR("GrowlNotificationCenterYN?")
+
 
 /*!	@group Other symbols */
 /* Symbols which don't fit into any of the other categories. */
@@ -344,5 +380,7 @@
 
 
 #define GROWL_POSITION_PREFERENCE_KEY			@"GrowlSelectedPosition"
+
+#define GROWL_PLUGIN_CONFIG_ID XSTR("GrowlPluginConfigurationID")
 
 #endif //ndef _GROWLDEFINES_H

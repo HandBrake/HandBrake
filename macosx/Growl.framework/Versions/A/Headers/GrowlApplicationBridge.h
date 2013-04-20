@@ -18,13 +18,10 @@
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#import "GrowlDefines.h"
+#import <Growl/GrowlDefines.h>
 
 //Forward declarations
 @protocol GrowlApplicationBridgeDelegate;
-
-//Internal notification when the user chooses not to install (to avoid continuing to cache notifications awaiting installation)
-#define GROWL_USER_CHOSE_NOT_TO_INSTALL_NOTIFICATION @"User chose not to install"
 
 //------------------------------------------------------------------------------
 #pragma mark -
@@ -45,9 +42,9 @@
  *	@method isGrowlInstalled
  *	@abstract Detects whether Growl is installed.
  *	@discussion Determines if the Growl prefpane and its helper app are installed.
- *	@result Returns YES if Growl is installed, NO otherwise.
+ *	@result this method will forever return YES.
  */
-+ (BOOL) isGrowlInstalled;
++ (BOOL) isGrowlInstalled __attribute__((deprecated));
 
 /*!
  *	@method isGrowlRunning
@@ -56,6 +53,34 @@
  *	@result Returns YES if GrowlHelperApp is running, NO otherwise.
  */
 + (BOOL) isGrowlRunning;
+
+
+/*!
+ *	@method isMistEnabled
+ *	@abstract Gives the caller a fairly good indication of whether or not built-in notifications(Mist) will be used.
+ *	@discussion since this call makes use of isGrowlRunning it is entirely possible for this value to change between call and
+ *    executing a notification dispatch
+ *	@result Returns YES if Growl isn't reachable and the developer has not opted-out of
+ *    Mist and the user hasn't set the global mist enable key to false.
+ */
++ (BOOL)isMistEnabled;
+
+/*!
+ *	@method setShouldUseBuiltInNotifications
+ *	@abstract opt-out mechanism for the mist notification style in the event growl can't be reached.
+ *	@discussion if growl is unavailable due to not being installed or as a result of being turned off then
+ *    this option can enable/disable a built-in fire and forget display style
+ *	@param should Specifies whether or not the developer wants to opt-in (default) or opt out
+ *    of the built-in Mist style in the event Growl is unreachable.
+ */
++ (void)setShouldUseBuiltInNotifications:(BOOL)should;
+
+/*!
+ *	@method shouldUseBuiltInNotifications
+ *	@abstract returns the current opt-in state of the framework's use of the Mist display style.
+ *	@result Returns NO if the developer opt-ed out of Mist, the default value is YES.
+ */
++ (BOOL)shouldUseBuiltInNotifications;
 
 #pragma mark -
 
@@ -87,7 +112,7 @@
  *
  *	@param inDelegate The delegate for the GrowlApplicationBridge. It must conform to the GrowlApplicationBridgeDelegate protocol.
  */
-+ (void) setGrowlDelegate:(NSObject<GrowlApplicationBridgeDelegate> *)inDelegate;
++ (void) setGrowlDelegate:(id<GrowlApplicationBridgeDelegate>)inDelegate;
 
 /*!
  *	@method growlDelegate
@@ -95,7 +120,7 @@
  *	@discussion See setGrowlDelegate: for details.
  *	@result The Growl delegate.
  */
-+ (NSObject<GrowlApplicationBridgeDelegate> *) growlDelegate;
++ (id<GrowlApplicationBridgeDelegate>) growlDelegate;
 
 #pragma mark -
 
@@ -235,6 +260,7 @@
  *	 Growl when next it is ready; <code>NO</code> if not.
  */
 + (void) setWillRegisterWhenGrowlIsReady:(BOOL)flag;
+
 /*!	@method	willRegisterWhenGrowlIsReady
  *	@abstract	Reports whether GrowlApplicationBridge will register with Growl
  *	 when Growl next launches.
@@ -323,7 +349,7 @@
  *	 Key							             Value
  *	 ---							             -----
  *	 <code>GROWL_APP_NAME</code>                 <code>CFBundleExecutableName</code>
- *	 <code>GROWL_APP_ICON</code>                 The icon of the application.
+ *	 <code>GROWL_APP_ICON_DATA</code>            The data of the icon of the application.
  *	 <code>GROWL_APP_LOCATION</code>             The location of the application.
  *	 <code>GROWL_NOTIFICATIONS_DEFAULT</code>    <code>GROWL_NOTIFICATIONS_ALL</code>
  *
@@ -336,6 +362,7 @@
  *	 copy of <code>regDict</code>.
  */
 + (NSDictionary *) registrationDictionaryByFillingInDictionary:(NSDictionary *)regDict;
+
 /*!	@method	registrationDictionaryByFillingInDictionary:restrictToKeys:
  *	@abstract	Tries to fill in missing keys in a registration dictionary.
  *	@discussion	This method examines the passed-in dictionary for missing keys,
@@ -344,7 +371,7 @@
  *	 Key							             Value
  *	 ---							             -----
  *	 <code>GROWL_APP_NAME</code>                 <code>CFBundleExecutableName</code>
- *	 <code>GROWL_APP_ICON</code>                 The icon of the application.
+ *	 <code>GROWL_APP_ICON_DATA</code>            The data of the icon of the application.
  *	 <code>GROWL_APP_LOCATION</code>             The location of the application.
  *	 <code>GROWL_NOTIFICATIONS_DEFAULT</code>    <code>GROWL_NOTIFICATIONS_ALL</code>
  *
@@ -368,13 +395,39 @@
  *	 the keys that it will look for are:
  *
  *	 \li <code>GROWL_APP_NAME</code>
- *	 \li <code>GROWL_APP_ICON</code>
+ *	 \li <code>GROWL_APP_ICON_DATA</code>
  *
  *	@since Growl.framework 1.1
  */
 + (NSDictionary *) notificationDictionaryByFillingInDictionary:(NSDictionary *)regDict;
 
 + (NSDictionary *) frameworkInfoDictionary;
+
+#pragma mark -
+
+/*!
+ *@method growlURLSchemeAvailable
+ *@abstract Lets the app know whether growl:// is registered on the system, used for certain methods below this
+ *@return Returns whether growl:// is registered on the system
+ *@discussion Methods such as openGrowlPreferences rely on the growl:// URL scheme to function
+ * Further, this method can provide a check on whether Growl is installed, 
+ * however, the framework will not be relying on this method for choosing when/how to notify, 
+ * and it is not recommended that the app rely on it for other than whether to use growl:// methods
+ *@since Growl.framework 1.4
+ */
++ (BOOL) isGrowlURLSchemeAvailable;
+
+/*!
+ * @method openGrowlPreferences:
+ * @abstract Open Growl preferences, optionally to this app's settings, growl:// method
+ * @param showApp Whether to show the application's settings, otherwise just opens to the last position
+ * @return Return's whether opening the URL was succesfull or not.  
+ * @discussion Will launch if Growl is installed, but not running, and open the preferences window
+ * Uses growl:// URL scheme
+ * @since Growl.framework 1.4
+ */
++ (BOOL) openGrowlPreferences:(BOOL)showApp;
+
 @end
 
 //------------------------------------------------------------------------------
@@ -383,27 +436,15 @@
 /*!
  *	@protocol GrowlApplicationBridgeDelegate
  *	@abstract Required protocol for the Growl delegate.
- *	@discussion The methods in this protocol are required and are called
+ *	@discussion The methods in this protocol are optional and are called
  *	 automatically as needed by GrowlApplicationBridge. See
  *	 <code>+[GrowlApplicationBridge setGrowlDelegate:]</code>.
  *	 See also <code>GrowlApplicationBridgeDelegate_InformalProtocol</code>.
  */
 
-@protocol GrowlApplicationBridgeDelegate
+@protocol GrowlApplicationBridgeDelegate <NSObject>
 
-// -registrationDictionaryForGrowl has moved to the informal protocol as of 0.7.
-
-@end
-
-//------------------------------------------------------------------------------
-#pragma mark -
-
-/*!
- *	@category NSObject(GrowlApplicationBridgeDelegate_InformalProtocol)
- *	@abstract Methods which may be optionally implemented by the GrowlDelegate.
- *	@discussion The methods in this informal protocol will only be called if implemented by the delegate.
- */
-@interface NSObject (GrowlApplicationBridgeDelegate_InformalProtocol)
+@optional
 
 /*!
  *	@method registrationDictionaryForGrowl
@@ -510,66 +551,17 @@
  */
 - (void) growlNotificationTimedOut:(id)clickContext;
 
+
+/*!
+ * @method hasNetworkClientEntitlement
+ * @abstract Used only in sandboxed situations since we don't know whether the app has com.apple.security.network.client entitlement
+ * @discussion GrowlDelegate calls to find out if we have the com.apple.security.network.client entitlement,
+ *  since we can't find this out without hitting the sandbox.  We only call it if we detect that the application is sandboxed.
+ */
+- (BOOL) hasNetworkClientEntitlement;
+
 @end
 
 #pragma mark -
-/*!
- *	@category NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)
- *	@abstract Methods which may be optionally implemented by the Growl delegate when used with Growl-WithInstaller.framework.
- *	@discussion The methods in this informal protocol will only be called if
- *	 implemented by the delegate.  They allow greater control of the information
- *	 presented to the user when installing or upgrading Growl from within your
- *	 application when using Growl-WithInstaller.framework.
- */
-@interface NSObject (GrowlApplicationBridgeDelegate_Installation_InformalProtocol)
-
-/*!
- *	@method growlInstallationWindowTitle
- *	@abstract Return the title of the installation window.
- *	@discussion If not implemented, Growl will use a default, localized title.
- *	@result An NSString object to use as the title.
- */
-- (NSString *)growlInstallationWindowTitle;
-
-/*!
- *	@method growlUpdateWindowTitle
- *	@abstract Return the title of the upgrade window.
- *	@discussion If not implemented, Growl will use a default, localized title.
- *	@result An NSString object to use as the title.
- */
-- (NSString *)growlUpdateWindowTitle;
-
-/*!
- *	@method growlInstallationInformation
- *	@abstract Return the information to display when installing.
- *	@discussion This information may be as long or short as desired (the window
- *	 will be sized to fit it).  It will be displayed to the user as an
- *	 explanation of what Growl is and what it can do in your application.  It
- *	 should probably note that no download is required to install.
- *
- *	 If this is not implemented, Growl will use a default, localized explanation.
- *	@result An NSAttributedString object to display.
- */
-- (NSAttributedString *)growlInstallationInformation;
-
-/*!
- *	@method growlUpdateInformation
- *	@abstract Return the information to display when upgrading.
- *	@discussion This information may be as long or short as desired (the window
- *	 will be sized to fit it).  It will be displayed to the user as an
- *	 explanation that an updated version of Growl is included in your
- *	 application and no download is required.
- *
- *	 If this is not implemented, Growl will use a default, localized explanation.
- *	@result An NSAttributedString object to display.
- */
-- (NSAttributedString *)growlUpdateInformation;
-
-@end
-
-//private
-@interface GrowlApplicationBridge (GrowlInstallationPrompt_private)
-+ (void) _userChoseNotToInstallGrowl;
-@end
 
 #endif /* __GrowlApplicationBridge_h__ */
