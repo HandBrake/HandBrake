@@ -12,8 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -27,6 +25,8 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class AddPresetViewModel : ViewModelBase, IAddPresetViewModel
     {
+        /* TODO this window is up for redesign. Quite a few nippy edge cases that can cause odd behaviour with importing presets. */
+
         /// <summary>
         /// Backing field for the Preset Service
         /// </summary>
@@ -50,16 +50,13 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="AddPresetViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="presetService">
         /// The Preset Service
         /// </param>
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        public AddPresetViewModel(IWindowManager windowManager, IPresetService presetService, IErrorService errorService)
+        public AddPresetViewModel(IPresetService presetService, IErrorService errorService)
         {
             this.presetService = presetService;
             this.errorService = errorService;
@@ -149,6 +146,12 @@ namespace HandBrakeWPF.ViewModels
                {
                    return;
                }
+            }
+
+            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && (this.Preset.Task.Width == null || this.Preset.Task.Width == 0))
+            {
+                this.errorService.ShowMessageBox("You must first scan a source to use the 'Source Maximum' Option.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             this.Preset.UsePictureFilters = this.Preset.UsePictureFilters;
