@@ -7,6 +7,7 @@
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:BooleanToHiddenVisibilityConverter x:Key="boolToVisHiddenConverter" />
         <Style TargetType="controls:NumberBox">
             <Setter Property="Height" Value="24" />
         </Style>
@@ -32,7 +33,9 @@
                 <Label Content="Height:" Grid.Row="1" Grid.Column="2" />
                 <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" Modulus="{Binding SelectedModulus, Mode=OneWay}" 
                                              Minimum="0" Grid.Row="1" Grid.Column="3" Width="60"  />
-                <CheckBox Content="Keep Aspect Ratio" IsChecked="{Binding MaintainAspectRatio}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                <CheckBox Content="Keep Aspect Ratio" IsChecked="{Binding MaintainAspectRatio}"
+                          Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" 
+                          VerticalAlignment="Center" Margin="5,0,0,0" />
             </StackPanel>
 
             <!-- Row 3-->
