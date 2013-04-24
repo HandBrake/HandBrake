@@ -665,17 +665,21 @@ static void do_job( hb_job_t * job )
              * Note: out.track starts at 1, i starts at 0 */
             subtitle->out_track = ++i;
         }
-        if ( one_burned )
+        if (one_burned)
         {
-            hb_filter_object_t * filter;
-
             // Add subtitle rendering filter
             // Note that if the filter is already in the filter chain, this
             // has no effect. Note also that this means the front-end is
             // not required to add the subtitle rendering filter since
             // we will always try to do it here.
-            filter = hb_filter_init(HB_FILTER_RENDER_SUB);
-            hb_add_filter( job, filter, NULL );
+            hb_filter_object_t *filter = hb_filter_init(HB_FILTER_RENDER_SUB);
+            char *filter_settings      = hb_strdup_printf("%d:%d:%d:%d",
+                                                          job->crop[0],
+                                                          job->crop[1],
+                                                          job->crop[2],
+                                                          job->crop[3]);
+            hb_add_filter(job, filter, filter_settings);
+            free(filter_settings);
         }
     }
 
