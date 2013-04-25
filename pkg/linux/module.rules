@@ -76,14 +76,26 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
+	(cd $(STAGE.out.src/)raring && dput handbrake-snapshots handbrake_$(HB.version)ppa1~raring1_source.changes )
 	(cd $(STAGE.out.src/)quantal && dput handbrake-snapshots handbrake_$(HB.version)ppa1~quantal1_source.changes )
 	(cd $(STAGE.out.src/)precise && dput handbrake-snapshots handbrake_$(HB.version)ppa1~precise1_source.changes )
 	(cd $(STAGE.out.src/)oneiric && dput handbrake-snapshots handbrake_$(HB.version)ppa1~oneiric1_source.changes )
-	(cd $(STAGE.out.src/)natty && dput handbrake-snapshots handbrake_$(HB.version)ppa1~natty1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
+	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)raring/$(PKG.deb.basename)
+	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)raring/$(PKG.deb.basename)
+	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)raring/$(PKG.deb.basename)
+	$(CP.exe) $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/control.raring $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/rules.raring $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/rules
+	echo "handbrake ($(HB.version)ppa1~raring1) raring; urgency=low" > $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
+	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
+	$(TAR.exe) czf $(STAGE.out.src/)raring/$(PKG.src.deb.tar) -C $(STAGE.out.src/)raring $(PKG.deb.basename)
+	(cd $(STAGE.out.src/)raring/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)quantal/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
@@ -120,15 +132,3 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)oneiric/$(PKG.src.deb.tar) -C $(STAGE.out.src/)oneiric $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)oneiric/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)natty/$(PKG.deb.basename)
-	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)natty/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)natty/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/control.natty $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/control
-	$(CP.exe) $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/rules.natty $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/rules
-	echo "handbrake ($(HB.version)ppa1~natty1) natty; urgency=low" > $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
-	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
-	$(TAR.exe) czf $(STAGE.out.src/)natty/$(PKG.src.deb.tar) -C $(STAGE.out.src/)natty $(PKG.deb.basename)
-	(cd $(STAGE.out.src/)natty/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
