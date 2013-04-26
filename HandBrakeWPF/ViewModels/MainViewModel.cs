@@ -1519,7 +1519,7 @@ namespace HandBrakeWPF.ViewModels
                 savefiledialog.ShowDialog();
                 string filename = savefiledialog.FileName;
 
-                if (filename != null)
+                if (!string.IsNullOrEmpty(filename))
                 {
                     PlistUtility.Export(
                         savefiledialog.FileName,
