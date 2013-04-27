@@ -431,7 +431,9 @@ static int MP4Init( hb_mux_object_t * m )
                 }
                 mux_data->track = MP4AddAudioTrack(m->file,
                                                    mux_data->sample_rate,
-                                                   mux_data->samples_per_frame,
+                                                   // fixed frame duration, if applicable
+                                                   mux_data->samples_per_frame > 0 ?
+                                                   mux_data->samples_per_frame : MP4_INVALID_DURATION,
                                                    audio_type);
 
                 /* Tune track chunk duration */
@@ -1037,7 +1039,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     else
     {
         /* Audio */
-        if (mux_data->samples_per_frame)
+        if (mux_data->samples_per_frame > 0)
             // frame size is fixed and known
             duration = MP4_INVALID_DURATION;
         else
