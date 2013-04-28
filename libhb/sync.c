@@ -979,9 +979,10 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             c->channel_layout = w->audio->config.in.channel_layout;
         }
 
-        if( hb_avcodec_open( c, codec, NULL, 0 ) < 0 )
+        if (hb_avcodec_open(c, codec, NULL, 0) < 0)
         {
-            hb_log( "sync: avcodec_open failed" );
+            hb_error("sync: avcodec_open failed");
+            *job->die = 1;
             return;
         }
 
