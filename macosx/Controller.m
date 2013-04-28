@@ -4155,27 +4155,31 @@ bool one_burned = FALSE;
     
     /* Audio tracks and mixdowns */
     /* Now lets add our new tracks to the audio list here */
-	for (unsigned int counter = 0; counter < maximumNumberOfAllowedAudioTracks; counter++) {
-		NSString *prefix = [NSString stringWithFormat: @"Audio%d", counter + 1];
-		if ([[queueToApply objectForKey: [prefix stringByAppendingString: @"Track"]] intValue] > 0) {
-			audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-			hb_audio_config_init(audio);
-			audio->in.track = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Track"]] intValue] - 1;
-			/* We go ahead and assign values to our audio->out.<properties> */
-			audio->out.track = audio->in.track;
-			audio->out.dynamic_range_compression = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackDRCSlider"]] floatValue];
-            audio->out.gain = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackGainSlider"]] floatValue];
-			prefix = [NSString stringWithFormat: @"JobAudio%d", counter + 1];
-			audio->out.codec = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Encoder"]] intValue];
-			audio->out.compression_level = hb_get_default_audio_compression(audio->out.codec);
-			audio->out.mixdown = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Mixdown"]] intValue];
-			audio->out.bitrate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Bitrate"]] intValue];
-			audio->out.samplerate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Samplerate"]] intValue];
-			
-			hb_audio_add( job, audio );
-			free(audio);
-		}
-	}
+    for (unsigned int counter = 0; counter < maximumNumberOfAllowedAudioTracks; counter++)
+    {
+        NSString *prefix    = [NSString stringWithFormat:@"Audio%d",    counter + 1];
+        NSString *jobPrefix = [NSString stringWithFormat:@"JobAudio%d", counter + 1];
+        if ([[queueToApply objectForKey:[prefix stringByAppendingString:@"Track"]] intValue] > 0)
+        {
+            audio           = (hb_audio_config_t*)calloc(1, sizeof(*audio));
+            hb_audio_config_init(audio);
+            audio->in.track = [[queueToApply objectForKey:[prefix stringByAppendingString:@"Track"]] intValue] - 1;
+            /* We go ahead and assign values to our audio->out.<properties> */
+            audio->out.track                     = audio->in.track;
+            audio->out.codec                     = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Encoder"]]           intValue];
+            audio->out.compression_level         = hb_get_default_audio_compression(audio->out.codec);
+            audio->out.mixdown                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Mixdown"]]           intValue];
+            audio->out.normalize_mix_level       = 0;
+            audio->out.bitrate                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Bitrate"]]           intValue];
+            audio->out.samplerate                = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Samplerate"]]        intValue];
+            audio->out.dynamic_range_compression = [[queueToApply objectForKey:[prefix    stringByAppendingString:@"TrackDRCSlider"]]  floatValue];
+            audio->out.gain                      = [[queueToApply objectForKey:[prefix    stringByAppendingString:@"TrackGainSlider"]] floatValue];
+            audio->out.dither_method             = hb_audio_dither_get_default();
+            
+            hb_audio_add(job, audio);
+            free(audio);
+        }
+    }
     
     /* Now lets call the filters if applicable.
      * The order of the filters is critical
