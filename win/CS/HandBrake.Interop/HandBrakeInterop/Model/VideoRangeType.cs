@@ -9,29 +9,35 @@
 
 namespace HandBrake.Interop.Model
 {
-    using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// The video range type.
-    /// </summary>
-    public enum VideoRangeType
-    {
-        /// <summary>
-        /// The chapters.
-        /// </summary>
-        [Display(Name = "Chapters")]
-        Chapters, 
+	/// <summary>
+	/// The video range type.
+	/// </summary>
+	public enum VideoRangeType
+	{
+		/// <summary>
+		/// The entire title.
+		/// </summary>
+		[Display(Name = "All")]
+		All,
 
-        /// <summary>
-        /// The seconds.
-        /// </summary>
-        [Display(Name = "Seconds")]
-        Seconds, 
+		/// <summary>
+		/// A chapter range.
+		/// </summary>
+		[Display(Name = "Chapters")]
+		Chapters, 
 
-        /// <summary>
-        /// The frames.
-        /// </summary>
-        [Display(Name = "Frames")]
-        Frames
-    }
+		/// <summary>
+		/// A timespan range in seconds.
+		/// </summary>
+		[Display(Name = "Seconds")]
+		Seconds, 
+
+		/// <summary>
+		/// A frame range.
+		/// </summary>
+		[Display(Name = "Frames")]
+		Frames
+	}
 }

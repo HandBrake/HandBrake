@@ -17,10 +17,10 @@ namespace HandBrake.Interop
 	using HandBrake.Interop.SourceData;
 	using HandBrake.Interop.Model;
 
-    /// <summary>
-    /// The converters.
-    /// </summary>
-    public static class Converters
+	/// <summary>
+	/// Converters for various encoding values.
+	/// </summary>
+	public static class Converters
 	{
 		/// <summary>
 		/// Video Frame Rates
@@ -35,7 +35,7 @@ namespace HandBrake.Interop
 			{24, 1125000},
 			{25, 1080000},
 			{29.97, 900900},
-            {30, 900000},
+			{30, 900000},
 			{50, 540000},
 			{59.94, 450450},
 			{60, 450000}
@@ -94,8 +94,8 @@ namespace HandBrake.Interop
 					return NativeConstants.HB_ACODEC_DCA_HD_PASS;
 				case AudioEncoder.Vorbis:
 					return NativeConstants.HB_ACODEC_VORBIS;
-                case AudioEncoder.ffflac:
-			        return NativeConstants.HB_ACODEC_FFFLAC;
+				case AudioEncoder.ffflac:
+					return NativeConstants.HB_ACODEC_FFFLAC;
 			}
 
 			return 0;
@@ -128,8 +128,8 @@ namespace HandBrake.Interop
 				case NativeConstants.HB_ACODEC_CA_AAC:
 				case NativeConstants.HB_ACODEC_CA_HAAC:
 					return AudioCodec.Aac;
-                case NativeConstants.HB_ACODEC_FFFLAC:
-			        return AudioCodec.Flac;
+				case NativeConstants.HB_ACODEC_FFFLAC:
+					return AudioCodec.Flac;
 				default:
 					return AudioCodec.Other;
 			}
@@ -204,11 +204,31 @@ namespace HandBrake.Interop
 		public static HBMixdown NativeToMixdown(hb_mixdown_s mixdown)
 		{
 			return new HBMixdown
-			    {
+				{
 					Id = mixdown.amixdown,
 					ShortName = mixdown.short_name,
 					DisplayName = mixdown.human_readable_name
-			    };
+				};
+		}
+
+		/// <summary>
+		/// Converts the PTS amount to a TimeSpan. There may be some accuracy loss here.
+		/// </summary>
+		/// <param name="pts">The PTS to convert.</param>
+		/// <returns>The timespan for it.</returns>
+		public static TimeSpan PtsToTimeSpan(ulong pts)
+		{
+			return TimeSpan.FromTicks((long)((pts * 10000000) / 90000));
+		}
+
+		/// <summary>
+		/// Converts the PTS amount to seconds.
+		/// </summary>
+		/// <param name="pts">The PTS to convert.</param>
+		/// <returns>The corresponding number of seconds.</returns>
+		public static double PtsToSeconds(ulong pts)
+		{
+			return (double)pts / 90000;
 		}
 	}
 }

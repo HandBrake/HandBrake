@@ -38,6 +38,10 @@ struct hb_mux_data_s
     int         sub_format;
 
     uint64_t    sum_dur; // sum of the frame durations so far
+
+    // audio frame duration info
+    int sample_rate;
+    int samples_per_frame;
 };
 
 /* Tune video track chunk duration.
@@ -272,29 +276,30 @@ static int MP4Init( hb_mux_object_t * m )
         {
             case HB_ACODEC_AC3:
             {
+                int ii, jj;
+                int bitrate;
+                int sr_shift, sr_code;
                 uint8_t bsid;
                 uint8_t bsmod;
                 uint8_t acmod;
                 uint8_t lfeon;
-                uint8_t bit_rate_code = 0;
-                int ii, jj;
-                int freq;
-                int bitrate;
-                int sr_shift, sr_code;
+                uint8_t br_code = 0;
 
                 if ( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
                 {
-                    bsmod = audio->config.in.mode;
-                    acmod = audio->config.in.flags & 0x7;
-                    lfeon = ( audio->config.in.flags & A52_LFE ) ? 1 : 0;
-                    freq = audio->config.in.samplerate;
-                    bitrate = audio->config.in.bitrate;
+                    bsmod                       = audio->config.in.mode;
+                    acmod                       = audio->config.in.flags & 0x7;
+                    lfeon                       = !!(audio->config.in.flags & A52_LFE);
+                    bitrate                     = audio->config.in.bitrate;
+                    mux_data->sample_rate       = audio->config.in.samplerate;
+                    mux_data->samples_per_frame = audio->config.in.samples_per_frame;
                 }
                 else
                 {
-                    bsmod = 0;
-                    freq = audio->config.out.samplerate;
-                    bitrate = audio->config.out.bitrate * 1000;
+                    bsmod                       = 0;
+                    bitrate                     = audio->config.out.bitrate * 1000;
+                    mux_data->sample_rate       = audio->config.out.samplerate;
+                    mux_data->samples_per_frame = audio->config.out.samples_per_frame;
                     switch (audio->config.out.mixdown)
                     {
                         case HB_AMIXDOWN_MONO:
@@ -326,7 +331,7 @@ static int MP4Init( hb_mux_object_t * m )
                 {
                     for (jj = 0; jj < 3; jj++)
                     {
-                        if ((ac3_sample_rate_tab[jj] >> ii) == freq)
+                        if ((ac3_sample_rate_tab[jj] >> ii) == mux_data->sample_rate)
                         {
                             goto rate_found1;
                         }
@@ -348,17 +353,12 @@ static int MP4Init( hb_mux_object_t * m )
                     hb_error("Unknown AC3 bitrate");
                     ii = 0;
                 }
-                bit_rate_code = ii;
+                br_code = ii;
 
-                mux_data->track = MP4AddAC3AudioTrack(
-                    m->file,
-                    freq,
-                    sr_code,
-                    bsid,
-                    bsmod,
-                    acmod,
-                    lfeon,
-                    bit_rate_code);
+                mux_data->track = MP4AddAC3AudioTrack(m->file,
+                                                      mux_data->sample_rate,
+                                                      sr_code, bsid, bsmod,
+                                                      acmod, lfeon, br_code);
 
                 /* Tune track chunk duration */
                 MP4TuneTrackDurationPerChunk( m, mux_data->track );
@@ -390,7 +390,7 @@ static int MP4Init( hb_mux_object_t * m )
             case HB_ACODEC_DCA:
             {
                 uint8_t audio_type = MP4_MPEG4_AUDIO_TYPE;
-                int samplerate, samples_per_frame, channels, config_len = 0;
+                int channels, config_len = 0;
                 uint8_t *config_bytes = NULL;
 
                 switch ( audio->config.out.codec & HB_ACODEC_MASK )
@@ -419,18 +419,22 @@ static int MP4Init( hb_mux_object_t * m )
                 }
                 if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
                 {
-                    samplerate = audio->config.in.samplerate;
-                    samples_per_frame = audio->config.in.samples_per_frame;
+                    mux_data->sample_rate       = audio->config.in.samplerate;
+                    mux_data->samples_per_frame = audio->config.in.samples_per_frame;
                     channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
                 }
                 else
                 {
-                    samplerate = audio->config.out.samplerate;
-                    samples_per_frame = audio->config.out.samples_per_frame;
+                    mux_data->sample_rate       = audio->config.out.samplerate;
+                    mux_data->samples_per_frame = audio->config.out.samples_per_frame;
                     channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
                 }
-                mux_data->track = MP4AddAudioTrack( m->file, samplerate, 
-                                                samples_per_frame, audio_type );
+                mux_data->track = MP4AddAudioTrack(m->file,
+                                                   mux_data->sample_rate,
+                                                   // fixed frame duration, if applicable
+                                                   mux_data->samples_per_frame > 0 ?
+                                                   mux_data->samples_per_frame : MP4_INVALID_DURATION,
+                                                   audio_type);
 
                 /* Tune track chunk duration */
                 MP4TuneTrackDurationPerChunk( m, mux_data->track );
@@ -1035,7 +1039,12 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     else
     {
         /* Audio */
-        duration = MP4_INVALID_DURATION;
+        if (mux_data->samples_per_frame > 0)
+            // frame size is fixed and known
+            duration = MP4_INVALID_DURATION;
+        else
+            // frame size has to be computed
+            duration = buf->s.duration * mux_data->sample_rate / 90000;
     }
 
     /* Here's where the sample actually gets muxed. */

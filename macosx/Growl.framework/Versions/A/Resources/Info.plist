@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>10J869</string>
+	<string>12C60</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
@@ -15,25 +15,25 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.2</string>
+	<string>2.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>GRRR</string>
 	<key>CFBundleVersion</key>
-	<string>1.2.2</string>
+	<string>2.0.1</string>
 	<key>DTCompiler</key>
-	<string>4.0</string>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>10M2518</string>
+	<string>4G2008a</string>
 	<key>DTPlatformVersion</key>
-	<string>PG</string>
+	<string>GM</string>
 	<key>DTSDKBuild</key>
-	<string>9L31a</string>
+	<string>12C37</string>
 	<key>DTSDKName</key>
-	<string>macosx10.5</string>
+	<string>macosx10.8</string>
 	<key>DTXcode</key>
-	<string>0400</string>
+	<string>0452</string>
 	<key>DTXcodeBuild</key>
-	<string>10M2518</string>
+	<string>4G2008a</string>
 	<key>NSPrincipalClass</key>
 	<string>GrowlApplicationBridge</string>
 </dict>

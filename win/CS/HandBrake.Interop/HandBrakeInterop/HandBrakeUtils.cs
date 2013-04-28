@@ -197,7 +197,8 @@ namespace HandBrake.Interop
 				throw new ArgumentException("height must be positive.");
 			}
 
-			return HBFunctions.hb_x264_param_unparse(
+		    HBFunctions.hb_init(0, 0);
+            IntPtr ptr = HBFunctions.hb_x264_param_unparse(
 				preset,
 				string.Join(",", tunes),
 				extraOptions,
@@ -205,6 +206,11 @@ namespace HandBrake.Interop
 				level,
 				width,
 				height);
+
+		    string x264Settings = Marshal.PtrToStringAnsi(ptr);
+
+
+            return x264Settings;
 		}
 
 		/// <summary>
@@ -217,6 +223,8 @@ namespace HandBrake.Interop
 		{
 			switch (job.RangeType)
 			{
+				case VideoRangeType.All:
+					return title.Duration.TotalSeconds;
 				case VideoRangeType.Chapters:
 					TimeSpan duration = TimeSpan.Zero;
 					for (int i = job.ChapterStart; i <= job.ChapterEnd; i++)

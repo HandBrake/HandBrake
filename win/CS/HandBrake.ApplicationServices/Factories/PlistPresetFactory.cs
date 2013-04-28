@@ -127,16 +127,19 @@ namespace HandBrake.ApplicationServices.Factories
                     preset.Task.Cropping.Right = kvp.Value;
                     break;
                 case "PictureHeight":
-                    preset.Task.Height = kvp.Value;
+                    preset.Task.Height = kvp.Value == null || kvp.Value == 0 ? null : kvp.Value;
                     break;
                 case "PictureWidth":
-                    preset.Task.Width = kvp.Value;
+                    preset.Task.Width = kvp.Value == null || kvp.Value == 0 ? null : kvp.Value;
                     break;
                 case "PictureKeepRatio":
                     preset.Task.KeepDisplayAspect = kvp.Value == 1;
                     break;
                 case "PicturePAR":
                     preset.Task.Anamorphic = (Anamorphic)kvp.Value;
+                    break;
+                case "PictureModulus":
+                    preset.Task.Modulus = kvp.Value;
                     break;
 
                 // Filters

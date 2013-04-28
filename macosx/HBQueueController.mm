@@ -839,66 +839,26 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         int itemRowNum = [outlineView rowForItem: item];
         NSMutableDictionary *queueItemToCheck = [outlineView itemAtRow: itemRowNum];
         
-        /* Check to see if we need to allow for mp4 opts */
-        BOOL mp4OptsPresent = NO;
-        if ([[queueItemToCheck objectForKey:@"FileFormat"] isEqualToString: @"MP4 file"])
+        /* Check to see if we need to allow for container options */
+        if ([[queueItemToCheck objectForKey:@"MuxerOptionsSummary"] length])
         {
-            
-            if( [[queueItemToCheck objectForKey:@"Mp4LargeFile"] intValue] == 1)
-            {
-                mp4OptsPresent = YES;
-            }
-            if( [[queueItemToCheck objectForKey:@"Mp4HttpOptimize"] intValue] == 1)
-            {
-                mp4OptsPresent = YES;
-            }
-            if( [[queueItemToCheck objectForKey:@"Mp4iPodCompatible"] intValue] == 1)
-            {
-                mp4OptsPresent = YES;
-            }
-        }
-        
-        if (mp4OptsPresent == YES)
-        {
-            itemHeightForDisplay +=  rowHeightNonTitle;   
+            itemHeightForDisplay += rowHeightNonTitle;
         }
         
         /* check to see if we need to allow for the Picture Filters row */
-        BOOL pictureFiltersPresent = NO;
-        if( [[queueItemToCheck objectForKey:@"PictureDetelecine"] intValue] > 0)
+        if ([[queueItemToCheck objectForKey:@"PictureFiltersSummary"] length])
         {
-            pictureFiltersPresent = YES;
-        }
-        if( [[queueItemToCheck objectForKey:@"PictureDecomb"] intValue] > 0)
-        {
-            pictureFiltersPresent = YES;
-        }
-        if( [[queueItemToCheck objectForKey:@"PictureDeinterlace"] intValue] > 0)
-        {
-            pictureFiltersPresent = YES;
-        }
-        if( [[queueItemToCheck objectForKey:@"PictureDenoise"] intValue] > 0)
-        {
-            pictureFiltersPresent = YES;
-        }
-        if( [[queueItemToCheck objectForKey:@"PictureDeblock"] intValue] > 0)
-        {
-            pictureFiltersPresent = YES;
-        }
-        if( [[queueItemToCheck objectForKey:@"VideoGrayScale"] intValue] > 0)
-        {
-            pictureFiltersPresent = YES;
+            itemHeightForDisplay += rowHeightNonTitle;
         }
         
-        if (pictureFiltersPresent == YES)
-        {
-            itemHeightForDisplay +=  rowHeightNonTitle;
-        }
-        
-        /* check to see if we need a line to display x264 options */
+        /* check to see if we need a line to display x264/lavc options */
         if ([[queueItemToCheck objectForKey:@"VideoEncoder"] isEqualToString: @"H.264 (x264)"])
         {
-            itemHeightForDisplay +=  rowHeightNonTitle;
+            itemHeightForDisplay += rowHeightNonTitle * 2;
+        }
+        else if (![[queueItemToCheck objectForKey:@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])
+        {
+            itemHeightForDisplay += rowHeightNonTitle;
         }
         
         /* check to see how many audio track lines to allow for */
@@ -915,7 +875,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                 autoPassthruPresent = YES;
             }
 		}
-		itemHeightForDisplay += (actualCountOfAudioTracks * rowHeightNonTitle);
+		itemHeightForDisplay += (actualCountOfAudioTracks * rowHeightNonTitle * 2);
         
         if (autoPassthruPresent == YES)
         {
@@ -1113,33 +1073,14 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         [finalString appendString: @"Format: " withAttributes:detailBoldAttr];
         [finalString appendString: jobFormatInfo withAttributes:detailAttr];
         
-        /* Optional String for mp4 options */
-        if ([[item objectForKey:@"FileFormat"] isEqualToString: @"MP4 file"])
+        /* Optional String for muxer options */
+        if ([[item objectForKey:@"MuxerOptionsSummary"] length])
         {
-            NSString * MP4Opts = @"";
-            BOOL mp4OptsPresent = NO;
-            if( [[item objectForKey:@"Mp4LargeFile"] intValue] == 1)
-            {
-                mp4OptsPresent = YES;
-                MP4Opts = [MP4Opts stringByAppendingString:@" - Large file size"];
-            }
-            if( [[item objectForKey:@"Mp4HttpOptimize"] intValue] == 1)
-            {
-                mp4OptsPresent = YES;
-                MP4Opts = [MP4Opts stringByAppendingString:@" - Web optimized"];
-            }
-            
-            if( [[item objectForKey:@"Mp4iPodCompatible"] intValue] == 1)
-            {
-                mp4OptsPresent = YES;
-                MP4Opts = [MP4Opts stringByAppendingString:@" - iPod 5G support "];
-            }
-            if (mp4OptsPresent == YES)
-            {
-                [finalString appendString: @"MP4 Options: " withAttributes:detailBoldAttr];
-                [finalString appendString: MP4Opts withAttributes:detailAttr];
-                [finalString appendString:@"\n" withAttributes:detailAttr];
-            }
+            NSString *containerOptions = [NSString stringWithFormat:@"%@",
+                                          [item objectForKey:@"MuxerOptionsSummary"]];
+            [finalString appendString:@"Container Options: " withAttributes:detailBoldAttr];
+            [finalString appendString:containerOptions       withAttributes:detailAttr];
+            [finalString appendString:@"\n"                  withAttributes:detailAttr];
         }
         
         /* Fourth Line (Destination Path)*/
@@ -1148,127 +1089,24 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         [finalString appendString:@"\n" withAttributes:detailAttr];
         
         /* Fifth Line Picture Details*/
-        NSString * pictureInfo;
-        pictureInfo = [NSString stringWithFormat:@"%@", [item objectForKey:@"PictureSizingSummary"]];
+        NSString *pictureInfo = [NSString stringWithFormat:@"%@",
+                                 [item objectForKey:@"PictureSettingsSummary"]];
         if ([[item objectForKey:@"PictureKeepRatio"] intValue] == 1)
         {
             pictureInfo = [pictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
         }
-        
-        if ([[item objectForKey:@"VideoGrayScale"] intValue] == 1)
-        {
-            pictureInfo = [pictureInfo stringByAppendingString:@", Grayscale"];
-        }
-        
-        [finalString appendString: @"Picture: " withAttributes:detailBoldAttr];
-        [finalString appendString: pictureInfo withAttributes:detailAttr];
-        [finalString appendString:@"\n" withAttributes:detailAttr];
+        [finalString appendString:@"Picture: " withAttributes:detailBoldAttr];
+        [finalString appendString:pictureInfo  withAttributes:detailAttr];
+        [finalString appendString:@"\n"        withAttributes:detailAttr];
         
         /* Optional String for Picture Filters */
-        NSString * pictureFilters = @"";
-        BOOL pictureFiltersPresent = NO;
-        
-        if( [[item objectForKey:@"PictureDetelecine"] intValue] == 1)
+        if ([[item objectForKey:@"PictureFiltersSummary"] length])
         {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[item objectForKey:@"PictureDetelecineCustom"]]];
-        }
-        else if( [[item objectForKey:@"PictureDetelecine"] intValue] == 2)
-        {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Detelecine (Default)"];
-        }
-        
-        if( [[item objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
-        {
-            if( [[item objectForKey:@"PictureDecomb"] intValue] == 1)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[item objectForKey:@"PictureDecombCustom"]]];
-            }
-            else if( [[item objectForKey:@"PictureDecomb"] intValue] == 2)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb (Default)"];
-            }
-            else if( [[item objectForKey:@"PictureDecomb"] intValue] == 3)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb (Fast)"];
-            }
-            else if( [[item objectForKey:@"PictureDecomb"] intValue] == 4)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb (Bob)"];
-            }
-        }
-        else
-        {
-            if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 1)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[item objectForKey:@"PictureDeinterlaceCustom"]]];            
-            }
-            else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 2)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Fast)"];
-            }
-            else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 3)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slow)"];           
-            }
-            else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 4)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slower)"];           
-            }
-            else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 5)
-            {
-                pictureFiltersPresent = YES;
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Bob)"];            
-            }
-        }
-        
-        if ([[item objectForKey:@"PictureDenoise"] intValue] == 1)
-        {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[item objectForKey:@"PictureDenoiseCustom"]]];            
-        }
-        else if ([[item objectForKey:@"PictureDenoise"] intValue] == 2)
-        {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Weak)"];
-        }
-        else if ([[item objectForKey:@"PictureDenoise"] intValue] == 3)
-        {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Medium)"];           
-        }
-        else if ([[item objectForKey:@"PictureDenoise"] intValue] == 4)
-        {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Strong)"];            
-        }
-        
-        if ([[item objectForKey:@"PictureDeblock"] intValue] != 0)
-        {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString: [NSString stringWithFormat:@" - Deblock (pp7) (%d)",[[item objectForKey:@"PictureDeblock"] intValue]]];
-        }
-        
-        if ([[item objectForKey:@"VideoGrayScale"] intValue] == 1)
-        {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Grayscale"];
-        }
-        
-        if (pictureFiltersPresent == YES)
-        {
-            [finalString appendString: @"Filters: " withAttributes:detailBoldAttr];
-            [finalString appendString: pictureFilters withAttributes:detailAttr];
-            [finalString appendString:@"\n" withAttributes:detailAttr];
+            NSString *pictureFilters = [NSString stringWithFormat:@"%@",
+                                        [item objectForKey:@"PictureFiltersSummary"]];
+            [finalString appendString:@"Filters: "   withAttributes:detailBoldAttr];
+            [finalString appendString:pictureFilters withAttributes:detailAttr];
+            [finalString appendString:@"\n"          withAttributes:detailAttr];
         }
         
         /* Sixth Line Video Details*/

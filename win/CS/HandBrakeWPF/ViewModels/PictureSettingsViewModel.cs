@@ -33,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
          * - We are not handling cropping correctly within the UI.
          * - The Height is not correctly set when using no Anamorphic
          * - Maintain Aspect ratio needs corrected.
+         * - Custom Anamorphic.
          * 
          */
         #region Constants and Fields
@@ -91,6 +92,11 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for max width
         /// </summary>
         private int maxWidth;
+
+        /// <summary>
+        /// The show keep ar backing field.
+        /// </summary>
+        private bool showKeepAr = true;
 
         #endregion
 
@@ -560,6 +566,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether show keep ar.
+        /// </summary>
+        public bool ShowKeepAR
+        {
+            get
+            {
+                return this.showKeepAr;
+            }
+            set
+            {
+                this.showKeepAr = value;
+                this.NotifyOfPropertyChange(() => this.ShowKeepAR);
+            }
+        }
+
         #endregion
 
         #region Implemented Interfaces
@@ -780,6 +802,7 @@ namespace HandBrakeWPF.ViewModels
                                        this.CalculateAnamorphicSizes().Height);
 
             this.ShowDisplaySize = true;
+            this.ShowKeepAR = true;
             switch (this.SelectedAnamorphicMode)
             {
                 case Anamorphic.None:
@@ -788,6 +811,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowCustomAnamorphicControls = false;
                     this.ShowModulus = true;
                     this.ShowDisplaySize = false;
+                    this.ShowKeepAR = true;
                     this.SelectedModulus = 16; // Reset
                     this.Width = this.sourceResolution.Width;
                     this.SetDisplaySize();
@@ -798,6 +822,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowCustomAnamorphicControls = false;
                     this.ShowModulus = false;
                     this.SelectedModulus = 16; // Reset
+                    this.ShowKeepAR = false;
 
                     this.Width = 0;
                     this.Height = 0;
@@ -811,6 +836,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowModulus = true;
                     this.Width = this.sourceResolution.Width;
                     this.Height = 0;
+                    this.ShowKeepAR = false;
 
                     this.SetDisplaySize();
                     break;
@@ -819,8 +845,10 @@ namespace HandBrakeWPF.ViewModels
                     this.WidthControlEnabled = true;
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = true;
-                    this.MaintainAspectRatio = true;
+                    this.MaintainAspectRatio = false;  // TODO Fix when implementing custom
                     this.ShowModulus = true;
+                    this.ShowDisplaySize = false; // Disabled for Custom until we implement it properly. TODO
+                    this.ShowKeepAR = false;
 
                     // Ignore any of the users current settings and reset to source to make things easier.
                     this.Width = this.sourceResolution.Width;
@@ -834,7 +862,7 @@ namespace HandBrakeWPF.ViewModels
                         this.DisplayWidth = (this.Width * this.ParWidth / this.ParHeight);
                     }
 
-                    this.SetDisplaySize();
+                    //this.SetDisplaySize();
                     break;
             }
         }

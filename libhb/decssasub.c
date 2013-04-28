@@ -126,8 +126,8 @@ static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *i
 static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
 {
     // Store NULL after the end of the buffer to make using string processing safe
-    hb_buffer_realloc( in, in->size + 1 );
-    in->data[in->size] = '\0';
+    hb_buffer_realloc(in, ++in->size);
+    in->data[in->size - 1] = '\0';
     
     hb_buffer_t *out_list = NULL;
     hb_buffer_t **nextPtr = &out_list;
@@ -151,10 +151,10 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
             
             // We shouldn't be storing the extra NULL character,
             // but the MP4 muxer expects this, unfortunately.
-            if ( out->size > 0 && out->data[out->size - 1] != '\0' ) {
-                // NOTE: out->size remains unchanged
-                hb_buffer_realloc( out, out->size + 1 );
-                out->data[out->size] = '\0';
+            if (out->size > 0 && out->data[out->size - 1] != '\0')
+            {
+                hb_buffer_realloc(out, ++out->size);
+                out->data[out->size - 1] = '\0';
             }
             
             // If the input packet was non-empty, do not pass through
@@ -352,8 +352,9 @@ static hb_buffer_t * ssa_to_mkv_ssa( hb_work_object_t * w,  hb_buffer_t * in )
     hb_buffer_t * out_last = NULL;
     hb_buffer_t * out_first = NULL;
 
-    hb_buffer_realloc( in, in->size + 1 );
-    in->data[in->size] = '\0';
+    // Store NULL after the end of the buffer to make using string processing safe
+    hb_buffer_realloc(in, ++in->size);
+    in->data[in->size - 1] = '\0';
 
     const char *EOL = "\r\n";
     char *curLine, *curLine_parserData;

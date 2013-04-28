@@ -20,11 +20,20 @@ Building on @value{OS.osx} is well supported. It is the reference platform for @
 
 @itemize @bullet
 @item Mac Intel hardware
-@item @value{OS.osx} 10.7.2
-@item Xcode 4.2.1 (Build version 4D502)
-@item llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)
-@item yasm 1.2.x
-@item xquartz (http://xquartz.macosforge.org/landing/)
+@item @value{OS.osx} 10.7.5 or @value{OS.osx} 10.8.3
+@item Xcode 4.6.1 (4H512)
+@item llvm-gcc-4.2 version 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
+@item Xcode command-line tools (installed via Preferences > Downloads > Components)
+@item XQuartz (http://xquartz.macosforge.org/landing/)
+@end itemize
+
+The following tools are compiled during the build process if necessary, but you can speed up your build by installing them:
+
+@itemize @bullet
+@item yasm 1.2.0 or later
+@item autoconf
+@item automake
+@item libtool
 @end itemize
 
 @include building/prerequisites.bundled.texi
@@ -71,6 +80,4 @@ make UB.xcconfigs="osx107.i386 osx107.x86_64" ub.combine
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.xcode.texi
 @include building/chapter.troubleshooting.texi
-
-A note about gdb: We perform an extra execv when starting the application.  This triggers a trap in gdb.  It is harmless.  You should just 'continue' from the trap.
 @include building/appendix.repo.texi

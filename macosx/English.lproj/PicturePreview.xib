@@ -61,7 +61,7 @@
 			<object class="NSWindowTemplate" id="616825745">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{142, 519}, {480, 360}}</string>
+				<string key="NSWindowRect">{{142, 519}, {490, 360}}</string>
 				<int key="NSWTFlags">1886913536</int>
 				<string key="NSWindowTitle">HandBrake Preview</string>
 				<string key="NSWindowClass">NSPanel</string>
@@ -87,7 +87,7 @@
 									<string>QTMoviePasteboardType</string>
 								</object>
 							</object>
-							<string key="NSFrameSize">{480, 360}</string>
+							<string key="NSFrameSize">{490, 360}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="768906858"/>
@@ -448,7 +448,7 @@
 									<reference key="NSNextKeyView" ref="245200984"/>
 								</object>
 							</object>
-							<string key="NSFrame">{{15, 132}, {450, 100}}</string>
+							<string key="NSFrame">{{15, 132}, {460, 100}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="385854969"/>
@@ -704,7 +704,7 @@
 									<reference key="NSNextKeyView" ref="897614796"/>
 								</object>
 							</object>
-							<string key="NSFrame">{{15, 30}, {450, 100}}</string>
+							<string key="NSFrame">{{15, 30}, {460, 100}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="1068222891"/>
@@ -838,7 +838,7 @@
 									<reference key="NSNextKeyView" ref="986015194"/>
 								</object>
 							</object>
-							<string key="NSFrame">{{15, 235}, {450, 100}}</string>
+							<string key="NSFrame">{{15, 235}, {460, 100}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="1067699710"/>
@@ -871,7 +871,7 @@
 							</object>
 						</object>
 					</object>
-					<string key="NSFrameSize">{480, 360}</string>
+					<string key="NSFrameSize">{490, 360}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="48693112"/>
@@ -1742,7 +1742,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{262, 474}, {480, 360}}</string>
+					<string>{{262, 474}, {490, 360}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="0.0"/>
 					<reference ref="864448722"/>

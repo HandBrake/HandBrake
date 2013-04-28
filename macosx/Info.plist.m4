@@ -50,7 +50,7 @@ dnl
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2003-2012 __HB_name Developers.
+	<string>Copyright © 2003-2013 __HB_name Developers.
 All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>

@@ -386,7 +386,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The full x264 list of parameters: {0}.
+        ///   Looks up a localized string similar to The full x264 list of parameters: 
+        ///{0}.
         /// </summary>
         public static string Video_x264ExtraArgs {
             get {

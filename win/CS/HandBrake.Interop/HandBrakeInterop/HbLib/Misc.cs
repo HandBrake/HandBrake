@@ -145,6 +145,12 @@ namespace HandBrake.Interop.HbLib
 	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_state_scanning_anon
 	{
+		public float progress;
+
+		public int preview_cur;
+
+		public int preview_count;
+
 		/// int
 		public int title_cur;
 

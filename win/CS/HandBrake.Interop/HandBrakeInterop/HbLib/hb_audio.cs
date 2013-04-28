@@ -69,6 +69,8 @@ namespace HandBrake.Interop.HbLib
 
 		public int normalize_mix_level;
 
+		public int dither_method;
+
 		public IntPtr name;
 	}
 

@@ -1,4 +1,4 @@
-Build Guide for HandBrake 5208svn on Mac OS X
+Build Guide for HandBrake 5388svn on Mac OS X
 *********************************************
 
 Table of Contents
@@ -23,11 +23,10 @@ Table of Contents
 6 Building via Xcode.app
   6.1 Checkout Sources
   6.2 Build
-  6.3 Note: Debugging
-  6.4 Note: Finding Built Products
-  6.5 Note: Workspace Log Behaviors
-  6.6 External Target
-  6.7 User-Defined Settings
+  6.3 Note: Finding Built Products
+  6.4 Note: Workspace Log Behaviors
+  6.5 External Target
+  6.6 User-Defined Settings
 7 Troubleshooting
 Appendix A Project Repository Details
 
@@ -49,15 +48,28 @@ possible:
 
    * Mac Intel hardware
 
-   * Mac OS X 10.7.2
+   * Mac OS X 10.7.5 or Mac OS X 10.8.3
 
-   * Xcode 4.2.1 (Build version 4D502)
+   * Xcode 4.6.1 (4H512)
 
-   * llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)
+   * llvm-gcc-4.2 version 4.2.1 (Based on Apple Inc. build 5658) (LLVM
+     build 2336.11.00)
 
-   * yasm 1.2.x
+   * Xcode command-line tools (installed via Preferences > Downloads >
+     Components)
 
-   * xquartz (http://xquartz.macosforge.org/landing/)
+   * XQuartz (http://xquartz.macosforge.org/landing/)
+
+The following tools are compiled during the build process if necessary,
+but you can speed up your build by installing them:
+
+   * yasm 1.2.0 or later
+
+   * autoconf
+
+   * automake
+
+   * libtool
 
      Note: It is recommended to use the platform distribution's
      standard compiler for maximum C++ compatibility. If you build with
@@ -519,17 +531,7 @@ Perform the following steps to build:
 
    * Xcode workspace Log navigator - select top Build item
 
-6.3 Note: Debugging
-===================
-
-When debugging, Xcode launches the application under the gdb debugger.
-gdb will encounter a trap when starting the program. This trap is
-harmless and you should just 'continue'. For the curious, the trap
-occurs because we add some values to the environment with setenv, then
-do a brain transplant with execv. Restarting the application with execv
-triggers the trap.
-
-6.4 Note: Finding Built Products
+6.3 Note: Finding Built Products
 ================================
 
 Under default Xcode.app options the products from a build are managed
@@ -552,7 +554,7 @@ top of build tree and navigate to release products:
      greyed-out. Workaround glitch by selecting any other tab and then
      reselecting Projects tab.
 
-6.5 Note: Workspace Log Behaviors
+6.4 Note: Workspace Log Behaviors
 =================================
 
 The default Workspace behavior does not display latest Build log in the
@@ -580,7 +582,7 @@ navigator and show current log:
      are ignored by the external build system. Ultimately, look to the
      workspace status indicator for Build Succeeded.
 
-6.6 External Target
+6.5 External Target
 ===================
 
 The external target mechanism is used to launch a full terminal-based
@@ -633,7 +635,7 @@ Example; something in a big module is failing; redo build sequentially:
      make ffmpeg.clean
      make BUILD.jobs=1 ffmpeg
 
-6.7 User-Defined Settings
+6.6 User-Defined Settings
 =========================
 
 The following user defined settings are visible in Xcode project and
@@ -690,10 +692,6 @@ When troubleshooting build issues, the following files relative to the
      Environment (variables) dump as seen when Xcode forks `make'.
      Mac OS X only.
 
-A note about gdb: We perform an extra execv when starting the
-application.  This triggers a trap in gdb.  It is harmless.  You should
-just 'continue' from the trap.
-
 Appendix A Project Repository Details
 *************************************
 
@@ -701,7 +699,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    5208
-     date:   2013-01-26 18:47:13 +0000
+     rev:    5388
+     date:   2013-04-09 14:21:38 +0200
      type:   developer
 

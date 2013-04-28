@@ -353,22 +353,19 @@ struct hb_job_s
 
     /* Video settings:
          vcodec:            output codec
-         vquality:          output quality (0.0..1.0)
-                            if < 0.0 or > 1.0, bitrate is used instead,
-                            except with x264, to use its real QP/RF scale
-         vbitrate:          output bitrate (kbps)
+         vquality:          output quality (if < 0.0, bitrate is used instead)
+         vbitrate:          output bitrate (Kbps)
          vrate, vrate_base: output framerate is vrate / vrate_base
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          advanced_opts:     string of extra advanced encoder options
          areBframes:        boolean to note if b-frames are included in advanced_opts */
-#define HB_VCODEC_MASK   0x0000FF
-#define HB_VCODEC_X264   0x000001
-#define HB_VCODEC_THEORA 0x000002
-#define HB_VCODEC_FFMPEG_MPEG4 0x000010
-#define HB_VCODEC_FFMPEG       HB_VCODEC_FFMPEG_MPEG4
-#define HB_VCODEC_FFMPEG_MPEG2 0x000020
-#define HB_VCODEC_FFMPEG_MASK  0x0000F0
+#define HB_VCODEC_MASK         0x00000FF
+#define HB_VCODEC_X264         0x0000001
+#define HB_VCODEC_THEORA       0x0000002
+#define HB_VCODEC_FFMPEG_MPEG4 0x0000010
+#define HB_VCODEC_FFMPEG_MPEG2 0x0000020
+#define HB_VCODEC_FFMPEG_MASK  0x00000F0
 
     int             vcodec;
     float           vquality;

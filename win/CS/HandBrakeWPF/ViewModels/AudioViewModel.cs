@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
@@ -36,6 +37,8 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the source tracks list.
         /// </summary>
         private IEnumerable<Audio> sourceTracks;
+
+        private Preset currentPreset;
 
         #region Constructors and Destructors
 
@@ -196,6 +199,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
+            this.currentPreset = preset;
 
             if (preset != null && preset.Task != null)
             {
@@ -357,7 +361,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            // Default all the language tracks to the preferred or first language of this source.
+            // We've changed source, so lets try reset the language, description and formats as close as possible to the previous track.
             foreach (AudioTrack track in this.Task.AudioTracks)
             {
                 track.ScannedTrack = this.GetPreferredAudioTrack();
@@ -365,6 +369,14 @@ namespace HandBrakeWPF.ViewModels
 
             // Handle the default selection behaviour.
             int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
+            if (mode == 1 || mode == 2)
+            {
+                // First, we'll clear out all current tracks and go back to what the current preset has.
+                // This will alteast provide a consistent behavior when switching tracks.
+                this.Task.AudioTracks.Clear();
+                this.AddTracksFromPreset(this.currentPreset);
+            }
+
             switch (mode)
             {
                 case 1: // Adding all remaining audio tracks

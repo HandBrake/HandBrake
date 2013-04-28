@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">12C60</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2844</string>
-		<string key="IBDocument.AppKitVersion">1187.34</string>
-		<string key="IBDocument.HIToolboxVersion">625.00</string>
+		<string key="IBDocument.SystemVersion">12D78</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
+		<string key="IBDocument.AppKitVersion">1187.37</string>
+		<string key="IBDocument.HIToolboxVersion">626.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2844</string>
+			<string key="NS.object.0">3084</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -233,15 +233,15 @@
 											<object class="NSTextField" id="987137669">
 												<reference key="NSNextResponder" ref="1053078401"/>
 												<int key="NSvFlags">256</int>
-												<string key="NSFrame">{{14, 30}, {892, 14}}</string>
+												<string key="NSFrame">{{16, 20}, {892, 14}}</string>
 												<reference key="NSSuperview" ref="1053078401"/>
 												<reference key="NSWindow"/>
-												<reference key="NSNextKeyView" ref="690364175"/>
+												<reference key="NSNextKeyView" ref="503933842"/>
 												<bool key="NSEnabled">YES</bool>
 												<object class="NSTextFieldCell" key="NSCell" id="537000521">
 													<int key="NSCellFlags">67108864</int>
 													<int key="NSCellFlags2">4194304</int>
-													<string key="NSContents">Picture Size: </string>
+													<string key="NSContents">Picture Settings:</string>
 													<reference key="NSSupport" ref="26"/>
 													<reference key="NSControlView" ref="987137669"/>
 													<reference key="NSBackgroundColor" ref="242973447"/>
@@ -354,37 +354,18 @@
 												</object>
 												<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 											</object>
-											<object class="NSTextField" id="690364175">
-												<reference key="NSNextResponder" ref="1053078401"/>
-												<int key="NSvFlags">256</int>
-												<string key="NSFrame">{{14, 17}, {892, 14}}</string>
-												<reference key="NSSuperview" ref="1053078401"/>
-												<reference key="NSWindow"/>
-												<reference key="NSNextKeyView" ref="503933842"/>
-												<bool key="NSEnabled">YES</bool>
-												<object class="NSTextFieldCell" key="NSCell" id="508148739">
-													<int key="NSCellFlags">67108864</int>
-													<int key="NSCellFlags2">4194304</int>
-													<string key="NSContents">Picture Cropping:</string>
-													<reference key="NSSupport" ref="26"/>
-													<reference key="NSControlView" ref="690364175"/>
-													<reference key="NSBackgroundColor" ref="242973447"/>
-													<reference key="NSTextColor" ref="701609070"/>
-												</object>
-												<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
-											</object>
 											<object class="NSTextField" id="503933842">
 												<reference key="NSNextResponder" ref="1053078401"/>
 												<int key="NSvFlags">256</int>
-												<string key="NSFrame">{{14, 3}, {892, 14}}</string>
+												<string key="NSFrame">{{16, 4}, {892, 14}}</string>
 												<reference key="NSSuperview" ref="1053078401"/>
 												<reference key="NSWindow"/>
-												<reference key="NSNextKeyView" ref="794651271"/>
+												<reference key="NSNextKeyView"/>
 												<bool key="NSEnabled">YES</bool>
 												<object class="NSTextFieldCell" key="NSCell" id="109092334">
 													<int key="NSCellFlags">67108864</int>
 													<int key="NSCellFlags2">4194304</int>
-													<string key="NSContents">Video Filters:</string>
+													<string key="NSContents">Picture Filters:</string>
 													<reference key="NSSupport" ref="26"/>
 													<reference key="NSControlView" ref="503933842"/>
 													<reference key="NSBackgroundColor" ref="242973447"/>
@@ -1076,7 +1057,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<object class="NSTextFieldCell" key="NSCell" id="858212432">
 																	<int key="NSCellFlags">67108864</int>
 																	<int key="NSCellFlags2">71303168</int>
-																	<string key="NSContents">h264 Profile:</string>
+																	<string key="NSContents">H.264 Profile:</string>
 																	<reference key="NSSupport" ref="26"/>
 																	<reference key="NSControlView" ref="102651997"/>
 																	<reference key="NSBackgroundColor" ref="242973447"/>
@@ -1095,7 +1076,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<object class="NSTextFieldCell" key="NSCell" id="248169798">
 																	<int key="NSCellFlags">67108864</int>
 																	<int key="NSCellFlags2">71303168</int>
-																	<string key="NSContents">h264 Level:</string>
+																	<string key="NSContents">H.264 Level:</string>
 																	<reference key="NSSupport" ref="26"/>
 																	<reference key="NSControlView" ref="8023338"/>
 																	<reference key="NSBackgroundColor" ref="242973447"/>
@@ -1437,7 +1418,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<string key="NSFrame">{{12, 6}, {863, 29}}</string>
 																<reference key="NSSuperview" ref="443817184"/>
 																<reference key="NSWindow"/>
-																<reference key="NSNextKeyView" ref="987137669"/>
+																<reference key="NSNextKeyView"/>
 																<bool key="NSEnabled">YES</bool>
 																<object class="NSTextFieldCell" key="NSCell" id="812860538">
 																	<int key="NSCellFlags">67108864</int>
@@ -6679,7 +6660,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fPictureSizeField</string>
+						<string key="label">fPictureSettingsField</string>
 						<reference key="source" ref="2258723"/>
 						<reference key="destination" ref="987137669"/>
 					</object>
@@ -6687,15 +6668,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fPictureCroppingField</string>
-						<reference key="source" ref="2258723"/>
-						<reference key="destination" ref="690364175"/>
-					</object>
-					<int key="connectionID">5170</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fVideoFiltersField</string>
+						<string key="label">fPictureFiltersField</string>
 						<reference key="source" ref="2258723"/>
 						<reference key="destination" ref="503933842"/>
 					</object>
@@ -7215,7 +7188,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fx264UseAdvancedOptionsCheck</string>
+						<string key="label">fX264UseAdvancedOptionsCheck</string>
 						<reference key="source" ref="2258723"/>
 						<reference key="destination" ref="902460295"/>
 					</object>
@@ -8033,7 +8006,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="222980245"/>
 							<reference ref="954159030"/>
 							<reference ref="888819828"/>
-							<reference ref="690364175"/>
 						</object>
 						<reference key="parent" ref="107038816"/>
 					</object>
@@ -8115,15 +8087,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="1070893195"/>
-						</object>
-						<reference key="parent" ref="1053078401"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">2375</int>
-						<reference key="object" ref="690364175"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="508148739"/>
 						</object>
 						<reference key="parent" ref="1053078401"/>
 					</object>
@@ -9347,11 +9310,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="objectID">4892</int>
 						<reference key="object" ref="1070893195"/>
 						<reference key="parent" ref="447003158"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">4893</int>
-						<reference key="object" ref="508148739"/>
-						<reference key="parent" ref="690364175"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">4904</int>
@@ -11341,7 +11299,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>2364.IBAttributePlaceholdersKey</string>
 					<string>2364.IBPluginDependency</string>
 					<string>2368.IBPluginDependency</string>
-					<string>2375.IBPluginDependency</string>
 					<string>240.IBPluginDependency</string>
 					<string>2421.IBPluginDependency</string>
 					<string>2443.IBPluginDependency</string>
@@ -11404,7 +11361,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>4879.IBPluginDependency</string>
 					<string>4880.IBPluginDependency</string>
 					<string>4892.IBPluginDependency</string>
-					<string>4893.IBPluginDependency</string>
 					<string>4904.IBPluginDependency</string>
 					<string>4905.IBPluginDependency</string>
 					<string>4906.IBPluginDependency</string>
@@ -11837,7 +11793,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{72, 712}, {392, 144}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -11878,7 +11833,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string key="toolTip">This rearranges the header of the MP4 file to optimize it for streaming across the web.</string>
 						</object>
 					</object>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12655,8 +12609,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fFramerateMatrix</string>
 							<string>fFramerateVfrPfrCell</string>
 							<string>fLoadChaptersButton</string>
-							<string>fPictureCroppingField</string>
-							<string>fPictureSizeField</string>
+							<string>fPictureSettingsField</string>
 							<string>fPresetDrawer</string>
 							<string>fPresetNewDesc</string>
 							<string>fPresetNewFolderCheck</string>
@@ -12716,7 +12669,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fVidRatePopUp</string>
 							<string>fVidTurboPassCheck</string>
 							<string>fVidTwoPassCheck</string>
-							<string>fVideoFiltersField</string>
+							<string>fPictureFiltersField</string>
 							<string>fWindow</string>
 							<string>fX264FastDecodeCheck</string>
 							<string>fX264LevelPopUp</string>
@@ -12729,7 +12682,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fX264ProfilePopUpLabel</string>
 							<string>fX264TunePopUp</string>
 							<string>fX264TunePopUpLabel</string>
-							<string>fx264UseAdvancedOptionsCheck</string>
+							<string>fX264UseAdvancedOptionsCheck</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -12763,7 +12716,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>NSMatrix</string>
 							<string>NSButtonCell</string>
 							<string>NSButton</string>
-							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSDrawer</string>
 							<string>NSTextField</string>
@@ -12874,8 +12826,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fFramerateMatrix</string>
 							<string>fFramerateVfrPfrCell</string>
 							<string>fLoadChaptersButton</string>
-							<string>fPictureCroppingField</string>
-							<string>fPictureSizeField</string>
+							<string>fPictureSettingsField</string>
 							<string>fPresetDrawer</string>
 							<string>fPresetNewDesc</string>
 							<string>fPresetNewFolderCheck</string>
@@ -12935,7 +12886,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fVidRatePopUp</string>
 							<string>fVidTurboPassCheck</string>
 							<string>fVidTwoPassCheck</string>
-							<string>fVideoFiltersField</string>
+							<string>fPictureFiltersField</string>
 							<string>fWindow</string>
 							<string>fX264FastDecodeCheck</string>
 							<string>fX264LevelPopUp</string>
@@ -12948,7 +12899,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fX264ProfilePopUpLabel</string>
 							<string>fX264TunePopUp</string>
 							<string>fX264TunePopUpLabel</string>
-							<string>fx264UseAdvancedOptionsCheck</string>
+							<string>fX264UseAdvancedOptionsCheck</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -13073,11 +13024,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="candidateClassName">NSButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fPictureCroppingField</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fPictureSizeField</string>
+								<string key="name">fPictureSettingsField</string>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -13317,7 +13264,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="candidateClassName">NSButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fVideoFiltersField</string>
+								<string key="name">fPictureFiltersField</string>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -13369,7 +13316,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fx264UseAdvancedOptionsCheck</string>
+								<string key="name">fX264UseAdvancedOptionsCheck</string>
 								<string key="candidateClassName">NSButton</string>
 							</object>
 						</object>

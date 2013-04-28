@@ -9,21 +9,36 @@
 
 namespace HandBrake.Interop.EventArgs
 {
-    using System;
+	using System;
 
-    /// <summary>
-    /// The Scan Progress Event Args
-    /// </summary>
-    public class ScanProgressEventArgs : EventArgs
+	/// <summary>
+	/// The Scan Progress Event Args
+	/// </summary>
+	public class ScanProgressEventArgs : EventArgs
 	{
-	    /// <summary>
-	    /// Gets or sets CurrentTitle.
-	    /// </summary>
-	    public int CurrentTitle { get; set; }
+		/// <summary>
+		/// Gets or sets the total progress fraction for the scan.
+		/// </summary>
+		public float Progress { get; set; }
 
-	    /// <summary>
-	    /// Gets or sets Titles.
-	    /// </summary>
-	    public int Titles { get; set; }
+		/// <summary>
+		/// Gets or sets the current preview being processed on the scan.
+		/// </summary>
+		public int CurrentPreview { get; set; }
+
+		/// <summary>
+		/// Gets or sets the total number of previews to process.
+		/// </summary>
+		public int Previews { get; set; }
+
+		/// <summary>
+		/// Gets or sets the current title being processed on the scan.
+		/// </summary>
+		public int CurrentTitle { get; set; }
+
+		/// <summary>
+		/// Gets or sets the total number of titles to process.
+		/// </summary>
+		public int Titles { get; set; }
 	}
 }

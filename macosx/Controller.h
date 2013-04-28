@@ -62,7 +62,7 @@ BOOL                        fIsDragging;
     /* x264 Presets Box */
     NSArray                      * fX264PresetNames;
     NSUInteger                     fX264MediumPresetIndex;
-    IBOutlet NSButton            * fx264UseAdvancedOptionsCheck;
+    IBOutlet NSButton            * fX264UseAdvancedOptionsCheck;
     IBOutlet NSBox               * fX264PresetsBox;
     IBOutlet NSSlider            * fX264PresetsSlider;
     IBOutlet NSTextField         * fX264PresetSliderLabel;
@@ -166,12 +166,9 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fVidTwoPassCheck;
     IBOutlet NSButton            * fVidTurboPassCheck;
 	
-	/* Status read out fileds for picture sizing */
-    IBOutlet NSTextField         * fPictureSizeField;
-    IBOutlet NSTextField         * fPictureCroppingField;
-	
-    /* Status read out fileds for video filters */
-    IBOutlet NSTextField         * fVideoFiltersField;
+    /* Status read out fields for picture settings and video filters */
+    IBOutlet NSTextField         * fPictureSettingsField;
+    IBOutlet NSTextField         * fPictureFiltersField;
 	
 	/* Picture variables */
 	int                        PicOrigOutputWidth;
@@ -346,6 +343,11 @@ BOOL                        fIsDragging;
 - (void)pictureSettingsDidChange;
 - (IBAction) calculatePictureSizing: (id) sender;
 - (IBAction) openMainWindow: (id) sender;
+
+/* Text summaries of various settings */
+- (NSString*) pictureSettingsSummary;
+- (NSString*) pictureFiltersSummary;
+- (NSString*) muxerOptionsSummary;
 
 /* Add All titles to the queue */
 - (IBAction) addAllTitlesToQueue: (id) sender;
