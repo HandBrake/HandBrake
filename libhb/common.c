@@ -994,12 +994,12 @@ int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown)
 
     // caller requested the best available mixdown
     if (mixdown == HB_INVALID_AMIXDOWN)
-        mixdown = hb_audio_mixdowns[hb_audio_mixdowns_count].amixdown;
+        mixdown  = hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown;
 
     int ii;
     // test all mixdowns until an authorized, supported mixdown is found
     // stop before we reach the "worst" non-None mixdown (index == 1)
-    for (ii = hb_audio_mixdowns_count; ii > 1; ii--)
+    for (ii = hb_audio_mixdowns_count - 1; ii > 1; ii--)
         if (hb_audio_mixdowns[ii].amixdown <= mixdown &&
             hb_mixdown_is_supported(hb_audio_mixdowns[ii].amixdown, codec, layout))
             break;
