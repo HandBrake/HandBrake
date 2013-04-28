@@ -2397,7 +2397,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.normalize_mix_level = 0;
         audio->config.out.compression_level = -1;
         audio->config.out.quality = HB_INVALID_AUDIO_QUALITY;
-        audio->config.out.dither_method = AV_RESAMPLE_DITHER_NONE;
+        audio->config.out.dither_method = hb_audio_dither_get_default();
     }
     else
     {
