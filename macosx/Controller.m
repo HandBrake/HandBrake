@@ -3073,16 +3073,32 @@ fWorkingCount = 0;
     [self videoMatrixChanged:nil];
         
     /* Video framerate */
-    /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
-     detected framerate in the fVidRatePopUp so we use index 0*/
     if ([[queueToApply objectForKey:@"VideoFramerate"] isEqualToString:@"Same as source"])
     {
-        [fVidRatePopUp selectItemAtIndex: 0];
+        /* Now set the Video Frame Rate Mode to either vfr or cfr according to the preset */
+        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"vfr"])
+        {
+            [fFramerateMatrix selectCellAtRow:0 column:0]; // we want vfr
+        }
+        else
+        {
+            [fFramerateMatrix selectCellAtRow:1 column:0]; // we want cfr
+        }
     }
     else
     {
-        [fVidRatePopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoFramerate"]];
+        /* Now set the Video Frame Rate Mode to either pfr or cfr according to the preset */
+        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"pfr"])
+        {
+            [fFramerateMatrix selectCellAtRow:0 column:0]; // we want pfr
+        }
+        else
+        {
+            [fFramerateMatrix selectCellAtRow:1 column:0]; // we want cfr
+        }
     }
+    [fVidRatePopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoFramerate"]];
+    [self videoFrameRateChanged:nil];
     
     /* 2 Pass Encoding */
     [fVidTwoPassCheck setState:[[queueToApply objectForKey:@"VideoTwoPass"] intValue]];
@@ -6514,35 +6530,33 @@ return YES;
         [self videoMatrixChanged:nil];
         
         /* Video framerate */
-        /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
-         detected framerate in the fVidRatePopUp so we use index 0*/
         if ([[chosenPreset objectForKey:@"VideoFramerate"] isEqualToString:@"Same as source"])
         {
-            [fVidRatePopUp selectItemAtIndex: 0];
             /* Now set the Video Frame Rate Mode to either vfr or cfr according to the preset */
-            if (![chosenPreset objectForKey:@"VideoFramerateMode"] || [[chosenPreset objectForKey:@"VideoFramerateMode"] isEqualToString:@"vfr"])
+            if (![chosenPreset objectForKey:@"VideoFramerateMode"] ||
+                [[chosenPreset objectForKey:@"VideoFramerateMode"] isEqualToString:@"vfr"])
             {
-                [fFramerateMatrix selectCellAtRow: 0 column: 0]; // we want vfr
+                [fFramerateMatrix selectCellAtRow:0 column:0]; // we want vfr
             }
             else
             {
-                [fFramerateMatrix selectCellAtRow: 1 column: 0]; // we want cfr
+                [fFramerateMatrix selectCellAtRow:1 column:0]; // we want cfr
             }
         }
         else
         {
-            [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
             /* Now set the Video Frame Rate Mode to either pfr or cfr according to the preset */
-            if ([[chosenPreset objectForKey:@"VideoFramerateMode"] isEqualToString:@"pfr"] || [[chosenPreset objectForKey:@"VideoFrameratePFR"] intValue] == 1)
+            if ([[chosenPreset objectForKey:@"VideoFramerateMode"] isEqualToString:@"pfr"] ||
+                [[chosenPreset objectForKey:@"VideoFrameratePFR"]  intValue] == 1)
             {
-                [fFramerateMatrix selectCellAtRow: 0 column: 0]; // we want pfr
+                [fFramerateMatrix selectCellAtRow:0 column:0]; // we want pfr
             }
             else
             {
-                [fFramerateMatrix selectCellAtRow: 1 column: 0]; // we want cfr
+                [fFramerateMatrix selectCellAtRow:1 column:0]; // we want cfr
             }
         }
-        
+        [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
         [self videoFrameRateChanged:nil];
         
         /* 2 Pass Encoding */
