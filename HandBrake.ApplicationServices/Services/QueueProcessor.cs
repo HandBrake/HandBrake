@@ -514,7 +514,7 @@ namespace HandBrake.ApplicationServices.Services
                     Win32.LockWorkStation();
                     break;
                 case "Quit HandBrake":
-                    Application.Exit();
+                    Execute.OnUIThread(() => { Application.Current.Shutdown(); });
                     break;
             }
         }
