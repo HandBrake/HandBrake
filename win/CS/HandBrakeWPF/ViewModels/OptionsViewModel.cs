@@ -1480,9 +1480,9 @@ namespace HandBrakeWPF.ViewModels
             this.whenDoneOptions.Add("Shutdown");
             this.whenDoneOptions.Add("Suspend");
             this.whenDoneOptions.Add("Hibernate");
-            this.whenDoneOptions.Add("Lock system");
+            this.whenDoneOptions.Add("Lock System");
             this.whenDoneOptions.Add("Log off");
-            this.whenDoneOptions.Add("Quit HandBrake");
+           // this.whenDoneOptions.Add("Quit HandBrake");
             this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
 
             this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode);
