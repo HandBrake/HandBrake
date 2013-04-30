@@ -368,6 +368,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              * Feed it downstream & signal that we're done. 
              */
             *buf_out = next;
+            sync->cur = NULL;
 
             pv->common->start_found = 1;
             pv->common->first_pts[0] = INT64_MAX - 1;
