@@ -2932,7 +2932,7 @@ static void ShowHelp()
     "                            autodetected from file name)\n"
     "    -m, --markers           Add chapter markers\n"
     "    -4, --large-file        Create 64-bit mp4 files that can hold more than 4 GB\n"
-    "                            of data. Note: break pre-iOS iPod compatibility.\n"
+    "                            of data. Note: breaks pre-iOS iPod compatibility.\n"
     "    -O, --optimize          Optimize mp4 files for HTTP streaming (\"fast start\")\n"
     "    -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them\n"
     "\n"
