@@ -67,33 +67,33 @@ typedef struct
 
 typedef struct
 {
-    LPDIRECT3DSURFACE9              d3d;
-    int                             refcount;
-    unsigned int                    order;
+    LPDIRECT3DSURFACE9 d3d;
+    int                refcount;
+    unsigned int       order;
 
 } hb_va_surface_t;
 
 typedef struct
 {
-    uint8_t                         *base;
-    uint8_t                         *buffer;
-    size_t                          size;
+    uint8_t *base;
+    uint8_t *buffer;
+    size_t  size;
 
 } hb_copy_cache_t;
 
 typedef struct
 {
-    const char                      *name;
-    D3DFORMAT                       format;
-    uint32_t                        codec;
+    const char *name;
+    D3DFORMAT  format;
+    uint32_t   codec;
 
 } hb_d3d_format_t;
 
 typedef struct
 {
-    const char   *name;
-    const GUID   *guid;
-    int          codec;
+    const char *name;
+    const GUID *guid;
+    int        codec;
 } hb_dx_mode_t;
 
 typedef struct

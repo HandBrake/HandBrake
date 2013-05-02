@@ -17,7 +17,7 @@
 #ifdef USE_HWD
 #define MINGW_DXVA2API_H_VERSION (2)
 
-#if __GNUC__ >=3
+#if __GNUC__ >= 3
 #pragma GCC system_header
 #endif
 
@@ -118,7 +118,7 @@ typedef struct _DXVA2_DecodeExecuteParams {
 
 enum {
     DXVA2_VideoDecoderRenderTarget  = 0,
-    DXVA2_VideoProcessorRenderTarget    = 1,
+    DXVA2_VideoProcessorRenderTarget= 1,
     DXVA2_VideoSoftwareRenderTarget = 2
 };
 
@@ -130,8 +130,8 @@ enum {
     DXVA2_InverseQuantizationMatrixBufferType   = 4,
     DXVA2_SliceControlBufferType    = 5,
     DXVA2_BitStreamDateBufferType   = 6,
-    DXVA2_MotionVectorBuffer    = 7,
-    DXVA2_FilmGrainBuffer   = 8
+    DXVA2_MotionVectorBuffer        = 7,
+    DXVA2_FilmGrainBuffer           = 8
 };
 
 /* DXVA MPEG-I/II and VC-1 */

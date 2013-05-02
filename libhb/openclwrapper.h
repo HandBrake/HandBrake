@@ -76,6 +76,6 @@ int hb_create_buffer(cl_mem *cl_Buf,int flags,int size);
 
 int hb_read_opencl_buffer(cl_mem cl_inBuf,unsigned char *outbuf,int size);
 
-int  hb_confirm_gpu_type();
+int hb_confirm_gpu_type();
 #endif
 #endif

@@ -543,13 +543,13 @@ static void do_job( hb_job_t * job )
     job->list_work = hb_list_init();
 
     hb_log( "starting job" );
-    if ( job->use_opencl || job->use_hwd)
+    if( job->use_opencl || job->use_hwd )
     {
         hb_log( "Using GPU : Yes." );
         /* init opencl environment */ 
 #ifdef USE_OPENCL
-        if ( job->use_opencl )
-            job->use_opencl =! hb_init_opencl_run_env(0, NULL, "-I.");
+        if( job->use_opencl )
+            job->use_opencl =! hb_init_opencl_run_env( 0, NULL, "-I." );
 #endif    
     }
     else

@@ -19,7 +19,7 @@
 #define MaxFilterLength 16
 #define FILTER_LEN 4
 
-inline double  hb_fit_gauss_kernel( double x )
+inline double hb_fit_gauss_kernel( double x )
 {
     double powNum = -1 * M_PI;
 
@@ -138,7 +138,7 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
     int in_frame_h = (int)data[3];
     int out_frame_w = (int)data[4];
     int out_frame_h = (int)data[5];
-    hb_oclscale_t  *os = data[6];
+    hb_oclscale_t *os = data[6];
 
     if( os->use_ocl_mem )
         os->h_in_buf = data[0];
@@ -268,7 +268,7 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
 {
     void *data[7];
     static int init_flag = 0;
-    if( init_flag==0 )
+    if( init_flag == 0 )
     {
         int st = hb_register_kernel_wrapper( "frame_h_scale", hb_ocl_scale_func );
         if( !st )
@@ -286,7 +286,7 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
     else
     {
         data[0] = in_data;
-        os->use_ocl_mem  = 0;
+        os->use_ocl_mem = 0;
     }
     data[1] = out_data;
     data[2] = (void*)in_w;

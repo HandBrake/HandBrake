@@ -1623,8 +1623,8 @@ int main ()
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.ff.mpeg2',   int( options.enable_ff_mpeg2 ))
     doc.add( 'FEATURE.fdk_aac',   int( options.enable_fdk_aac ))
-    doc.add( 'FEATURE.opencl',   int( options.enable_opencl ))
-    doc.add( 'FEATURE.hwd',   int( options.enable_hwd ))
+    doc.add( 'FEATURE.opencl',     int( options.enable_opencl ))
+    doc.add( 'FEATURE.hwd',        int( options.enable_hwd ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:

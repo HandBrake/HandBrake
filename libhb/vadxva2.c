@@ -133,9 +133,9 @@ void hb_va_close( hb_va_dxva2_t *dxva2 )
  */
 static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const  hb_title_t* fmt )
 {
-    dxva2->width  = fmt->width;
+    dxva2->width = fmt->width;
     dxva2->height = fmt->height;
-    dxva2->surface_width  = (fmt->width  + 15) & ~15;
+    dxva2->surface_width = (fmt->width  + 15) & ~15;
     dxva2->surface_height = (fmt->height + 15) & ~15;
     switch( codec_id )
     {
@@ -171,24 +171,21 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
         surface->order = 0;
     }
     hb_log( "dxva2:CreateSurface succeed with %d, fmt (%dx%d) surfaces (%dx%d)", dxva2->surface_count,
-            fmt->width,
-            fmt->height,
-            dxva2->surface_width,
-            dxva2->surface_height );
+            fmt->width, fmt->height, dxva2->surface_width, dxva2->surface_height );
     DXVA2_VideoDesc dsc;
     memset( &dsc, 0, sizeof(dsc));
-    dsc.SampleWidth     = fmt->width;
-    dsc.SampleHeight    = fmt->height;
-    dsc.Format          = dxva2->render;
+    dsc.SampleWidth = fmt->width;
+    dsc.SampleHeight = fmt->height;
+    dsc.Format = dxva2->render;
 
     if( fmt->rate> 0 && fmt->rate_base> 0 )
     {
-        dsc.InputSampleFreq.Numerator   = fmt->rate;
+        dsc.InputSampleFreq.Numerator = fmt->rate;
         dsc.InputSampleFreq.Denominator = fmt->rate_base;
     }
     else
     {
-        dsc.InputSampleFreq.Numerator   = 0;
+        dsc.InputSampleFreq.Numerator = 0;
         dsc.InputSampleFreq.Denominator = 0;
     }
 
@@ -207,7 +204,7 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
     ext->VideoTransferFunction = 0; //DXVA2_VideoTransFunc_Unknown;
 
     /* List all configurations available for the decoder */
-    UINT                      cfg_count = 0;
+    UINT cfg_count = 0;
     DXVA2_ConfigPictureDecode *cfg_list = NULL;
     if( FAILED( IDirectXVideoDecoderService_GetDecoderConfigurations( dxva2->vs, &dxva2->input, &dsc, NULL, &cfg_count, &cfg_list )))
     {
@@ -318,7 +315,6 @@ static int hb_d3d_create_device( hb_va_dxva2_t *dxva2 )
     }
     dxva2->d3ddev = d3ddev;
 
-
     return HB_WORK_OK;
 }
 /**
@@ -342,7 +338,7 @@ static int hb_d3d_create_device_manager( hb_va_dxva2_t *dxva2 )
         hb_log( "dxva2:OurDirect3DCreateDeviceManager9 failed" );
         return HB_WORK_ERROR;
     }
-    dxva2->token  = token;
+    dxva2->token = token;
     dxva2->devmng = devmng;
 
     long hr = IDirect3DDeviceManager9_ResetDevice( devmng, dxva2->d3ddev, token );
@@ -497,14 +493,15 @@ static int hb_va_setup( hb_va_dxva2_t *dxva2, void **hw, int width, int height )
     *hw = NULL;
     dxva2->i_chroma = 0;
 
-    if( width <= 0 || height <= 0 ) return HB_WORK_ERROR;
+    if( width <= 0 || height <= 0 ) 
+        return HB_WORK_ERROR;
 
     hb_title_t fmt;
     memset( &fmt, 0, sizeof(fmt));
     fmt.width = width;
     fmt.height = height;
 
-    if( hb_dx_create_video_decoder( dxva2, dxva2->codec_id, &fmt )==HB_WORK_ERROR )
+    if( hb_dx_create_video_decoder( dxva2, dxva2->codec_id, &fmt ) == HB_WORK_ERROR )
         return HB_WORK_ERROR;
     dxva2->hw.decoder = dxva2->decoder;
     dxva2->hw.cfg = &dxva2->cfg;
@@ -566,16 +563,16 @@ static void hb_copy_from_nv12( uint8_t *dst, uint8_t *src[2], size_t src_pitch[2
     heithtUV = height/2;
     widthUV = width/2;
 
-    for( i = 0; i<height; i++ ) //Y
+    for( i = 0; i < height; i++ ) //Y
     {
-        memcpy( dst+i*width, src[0]+i*src_pitch[0], width );
+        memcpy( dst + i * width, src[0] + i * src_pitch[0], width );
     }
-    for( i = 0; i<heithtUV; i++ )
+    for( i = 0; i < heithtUV; i++ )
     {
-        for( j = 0; j<widthUV; j++ )
+        for( j = 0; j < widthUV; j++ )
         {
-            dstU[i*widthUV+j] = *(src[1]+i*src_pitch[1]+2*j);
-            dstV[i*widthUV+j] = *(src[1]+i*src_pitch[1]+2*j+1);
+            dstU[i * widthUV + j] = *(src[1] + i * src_pitch[1] + 2 * j);
+            dstV[i  *widthUV + j] = *(src[1] + i * src_pitch[1] + 2 * j + 1);
         }
     }
 }
@@ -631,19 +628,19 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
             lock.pBits,
             (uint8_t*)lock.pBits + lock.Pitch * dxva2->surface_height
         };
-        size_t  pitch[2] =
+        size_t pitch[2] =
         {
             lock.Pitch,
             lock.Pitch,
         };
 #ifdef USE_OPENCL
-        if( ( dxva2->width > job_w || dxva2->height > job_h ) && (use_opencl))
+        if( ( dxva2->width > job_w || dxva2->height > job_h ) && (use_opencl) )
         {
             hb_ocl_nv12toyuv( plane, lock.Pitch,  dxva2->width, dxva2->height, crop, dxva2, use_decomb, use_detelecine );
             if ( use_decomb || use_detelecine )
-                hb_read_opencl_buffer( dxva2->cl_mem_yuv, dst, dxva2->width*dxva2->height*3/2 );
+                hb_read_opencl_buffer( dxva2->cl_mem_yuv, dst, dxva2->width * dxva2->height * 3 / 2 );
             else
-            {										
+            {
                 static int init_flag = 0;
                 if(init_flag == 0)
                 {
@@ -652,7 +649,7 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
                 }
 
                 hb_init_filter( dxva2->cl_mem_yuv, dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], dst, job_w, job_h, crop ); 
-            }				
+            }
         }
         else
 #endif
@@ -677,17 +674,17 @@ hb_va_dxva2_t * hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id )
         dxva2 = NULL;
     }
 
-    hb_va_dxva2_t *dxva = calloc( 1, sizeof(*dxva));
+    hb_va_dxva2_t *dxva = calloc( 1, sizeof(*dxva) );
     if( !dxva ) return NULL;
     dxva->codec_id = codec_id;
 
-    dxva->hd3d9_dll = LoadLibrary( TEXT( "D3D9.DLL" ));
+    dxva->hd3d9_dll = LoadLibrary( TEXT( "D3D9.DLL" ) );
     if( !dxva->hd3d9_dll )
     {
         hb_log( "dxva2:cannot load d3d9.dll" );
         goto error;
     }
-    dxva->hdxva2_dll = LoadLibrary( TEXT( "DXVA2.DLL" ));
+    dxva->hdxva2_dll = LoadLibrary( TEXT( "DXVA2.DLL" ) );
     if( !dxva->hdxva2_dll )
     {
         hb_log( "dxva2:cannot load DXVA2.dll" );
@@ -700,20 +697,20 @@ hb_va_dxva2_t * hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id )
         goto error;
     }
 
-    if( hb_d3d_create_device_manager( dxva )== HB_WORK_ERROR )
+    if( hb_d3d_create_device_manager( dxva ) == HB_WORK_ERROR )
     {
         hb_log( "dxva2:D3dCreateDeviceManager failed" );
         goto error;
     }
 
 
-    if( hb_dx_create_video_service( dxva )== HB_WORK_ERROR )
+    if( hb_dx_create_video_service( dxva ) == HB_WORK_ERROR )
     {
         hb_log( "dxva2:DxCreateVideoService failed" );
         goto error;
     }
 
-    if( hb_dx_find_video_service_conversion( dxva, &dxva->input, &dxva->render )== HB_WORK_ERROR )
+    if( hb_dx_find_video_service_conversion( dxva, &dxva->input, &dxva->render ) == HB_WORK_ERROR )
     {
         hb_log( "dxva2:DxFindVideoServiceConversion failed" );
         goto error;
@@ -733,7 +730,7 @@ void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context )
 {
     if( p_context->width > 0 && p_context->height > 0 )
     {
-        if( hb_va_setup( dxva2, &p_context->hwaccel_context, p_context->width, p_context->height )==HB_WORK_ERROR )
+        if( hb_va_setup( dxva2, &p_context->hwaccel_context, p_context->width, p_context->height ) == HB_WORK_ERROR )
         {
             hb_log( "dxva2:hb_va_Setup failed" );
             hb_va_close( dxva2 );
@@ -786,7 +783,7 @@ int hb_va_get_frame_buf( hb_va_dxva2_t *dxva2, AVCodecContext *p_context, AVFram
     frame->type = FF_BUFFER_TYPE_USER;
     if( hb_va_get( dxva2, frame ) == HB_WORK_ERROR )
     {
-        hb_log(  "VaGrabSurface failed" );
+        hb_log( "VaGrabSurface failed" );
         return HB_WORK_ERROR;
     }
     return HB_WORK_OK;

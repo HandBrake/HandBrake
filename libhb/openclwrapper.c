@@ -33,7 +33,7 @@
 #define strcasecmp strcmpi
 #endif
 
-#define MAX_KERNEL_STRING_LEN   64
+#define MAX_KERNEL_STRING_LEN 64
 #define MAX_CLFILE_NUM 50
 #define MAX_CLKERNEL_NUM 200
 #define MAX_CLFILE_PATH 255
@@ -46,7 +46,8 @@
 
 //#define THREAD_PRIORITY_TIME_CRITICAL 15
 
-enum VENDOR{
+enum VENDOR
+{
     AMD = 0,
     Intel,
     NVIDIA,
@@ -59,11 +60,11 @@ typedef struct _GPUEnv
     cl_device_type dType;
     cl_context context;
     cl_device_id * devices;
-    cl_device_id  dev;
+    cl_device_id dev;
     cl_command_queue command_queue;
     cl_kernel kernels[MAX_CLFILE_NUM];
     cl_program programs[MAX_CLFILE_NUM]; //one program object maps one kernel source file
-    char  kernelSrcFile[MAX_CLFILE_NUM][256];   //the max len of kernel file name is 256
+    char kernelSrcFile[MAX_CLFILE_NUM][256]; //the max len of kernel file name is 256
     int file_count; // only one kernel file
 
     char kernel_names[MAX_CLKERNEL_NUM][MAX_KERNEL_STRING_LEN+1];
@@ -102,29 +103,28 @@ int hb_confirm_gpu_type()
     } 
     if(numPlatforms > 0) 
     { 
-        cl_platform_id* platforms = (cl_platform_id* )malloc (numPlatforms* sizeof(cl_platform_id)); 
-        status = clGetPlatformIDs (numPlatforms, platforms,NULL); 
-        if(status != 0) 
+        cl_platform_id* platforms = (cl_platform_id* )malloc (numPlatforms * sizeof(cl_platform_id)); 
+        status = clGetPlatformIDs (numPlatforms, platforms, NULL); 
+        if (status != 0) 
         { 
             goto end; 
         } 
-        for (i=0; i < numPlatforms; i++) 
+        for (i=0; i < numPlatforms; i++)
         { 
-            char pbuff[100]; 
+            char pbuff[100];
             cl_uint numDevices;
-            status = clGetPlatformInfo( 
-                platforms[i], 
-                CL_PLATFORM_VENDOR, 
-                sizeof (pbuff), 
-                pbuff,
-                NULL); 
-            if (status) 
-                 continue; 
-            status = clGetDeviceIDs(platforms[i], 
-                                    CL_DEVICE_TYPE_GPU , 
-                                    0 , 
-                                    NULL , 
-                                    &numDevices); 
+            status = clGetPlatformInfo( platforms[i], 
+                                        CL_PLATFORM_VENDOR, 
+                                        sizeof (pbuff), 
+                                        pbuff,
+                                        NULL); 
+            if (status)
+                continue;
+            status = clGetDeviceIDs( platforms[i], 
+                                     CL_DEVICE_TYPE_GPU , 
+                                     0 , 
+                                     NULL , 
+                                     &numDevices); 
             
             cl_device_id *devices = (cl_device_id *)malloc(numDevices * sizeof(cl_device_id));
             status = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_GPU, numDevices, devices, NULL);
@@ -138,12 +138,12 @@ int hb_confirm_gpu_type()
                 }
             }
 
-            if (status != CL_SUCCESS)
+            if ( status != CL_SUCCESS )
                 continue;
-            if( numDevices) 
+            if( numDevices ) 
                 break; 
         } 
-        free(platforms); 
+        free( platforms ); 
     } 
     end:
     return -1;
@@ -152,7 +152,7 @@ int hb_confirm_gpu_type()
 int hb_regist_opencl_kernel()
 {
     if( !gpu_env.isUserCreated )
-        memset( &gpu_env, 0, sizeof(gpu_env));
+        memset( &gpu_env, 0, sizeof(gpu_env) );
 
     gpu_env.file_count = 0; //argc;
     gpu_env.kernel_count = 0UL;
@@ -165,11 +165,7 @@ int hb_regist_opencl_kernel()
     return 0;
 }
 
-int hb_convert_to_string(
-    const char *filename,
-    char **source,
-    GPUEnv *gpu_info,
-    int idx )
+int hb_convert_to_string( const char *filename, char **source, GPUEnv *gpu_info, int idx )
 {
     int file_size;
     size_t result;
@@ -551,19 +547,19 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         gpu_info->dType = CL_DEVICE_TYPE_GPU;
         gpu_info->context = clCreateContextFromType(
             cps, gpu_info->dType, NULL, NULL, &status );
-        if((gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS))
+        if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
             gpu_info->dType = CL_DEVICE_TYPE_CPU;
             gpu_info->context = clCreateContextFromType(
                 cps, gpu_info->dType, NULL, NULL, &status );
         }
-        if((gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS))
+        if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
             gpu_info->dType = CL_DEVICE_TYPE_DEFAULT;
             gpu_info->context = clCreateContextFromType(
                 cps, gpu_info->dType, NULL, NULL, &status );
         }
-        if((gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS))
+        if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
             hb_log( "Notice: Unable to create opencl context." );
             return(1);
@@ -651,7 +647,7 @@ int hb_register_kernel_wrapper( const char *kernel_name, cl_kernel_function func
     int i;
     for( i = 0; i < gpu_env.kernel_count; i++ )
     {
-        if( strcasecmp( kernel_name, gpu_env.kernel_names[i] )==0 )
+        if( strcasecmp( kernel_name, gpu_env.kernel_names[i] ) == 0 )
         {
             gpu_env.kernel_functions[i] = function;
             return(1);
@@ -665,7 +661,7 @@ int hb_cached_of_kerner_prg( const GPUEnv *gpu_env, const char * cl_file_name )
     int i;
     for( i = 0; i < gpu_env->file_count; i++ )
     {
-        if( strcasecmp( gpu_env->kernelSrcFile[i], cl_file_name )==0 )
+        if( strcasecmp( gpu_env->kernelSrcFile[i], cl_file_name ) == 0 )
         {
             if( gpu_env->programs[i] != NULL )
                 return(1);
@@ -702,7 +698,10 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     if( status == 0 )
         return(0);
 #else
-    int kernel_src_size = strlen( kernel_src_hscale ) + strlen( kernel_src_vscale ) + strlen( kernel_src_nvtoyuv ) + strlen( kernel_src_hscaleall ) + strlen( kernel_src_hscalefast ) + strlen( kernel_src_vscalealldither ) + strlen( kernel_src_vscaleallnodither ) + strlen( kernel_src_vscalefast );
+    int kernel_src_size = strlen( kernel_src_hscale ) + strlen( kernel_src_vscale ) 
+                                  + strlen( kernel_src_nvtoyuv ) + strlen( kernel_src_hscaleall ) 
+	                              + strlen( kernel_src_hscalefast ) + strlen( kernel_src_vscalealldither ) 
+	                              + strlen( kernel_src_vscaleallnodither ) + strlen( kernel_src_vscalefast );
     source_str = (char*)malloc( kernel_src_size + 2 );
     strcpy( source_str, kernel_src_hscale );
     strcat( source_str, kernel_src_vscale );
@@ -847,7 +846,7 @@ int hb_get_kernel_env_and_func( const char *kernel_name,
     int i;
     for( i = 0; i < gpu_env.kernel_count; i++ )
     {
-        if( strcasecmp( kernel_name, gpu_env.kernel_names[i] )==0 )
+        if( strcasecmp( kernel_name, gpu_env.kernel_names[i] ) == 0 )
         {
             env->context = gpu_env.context;
             env->command_queue = gpu_env.command_queue;
@@ -977,27 +976,27 @@ int hb_get_opencl_env()
 }
 
 
-int hb_create_buffer(cl_mem *cl_Buf,int flags,int size)
+int hb_create_buffer( cl_mem *cl_Buf, int flags, int size )
 {
     int status;
     *cl_Buf = clCreateBuffer( gpu_env.context, (flags), (size), NULL, &status );
     
     if( status != CL_SUCCESS )
     { 
-        hb_log("clCreateBuffer error '%d'",status);
+        hb_log( "clCreateBuffer error '%d'", status );
         return 0; 
     }
     return 1;
 }
 
-int hb_read_opencl_buffer(cl_mem cl_inBuf,unsigned char *outbuf,int size)
+int hb_read_opencl_buffer( cl_mem cl_inBuf, unsigned char *outbuf, int size )
 {
     int status;
 
-    status = clEnqueueReadBuffer(gpu_env.command_queue, cl_inBuf, CL_TRUE, 0, size, outbuf, 0, 0, 0);    
+    status = clEnqueueReadBuffer( gpu_env.command_queue, cl_inBuf, CL_TRUE, 0, size, outbuf, 0, 0, 0 );
     if( status != CL_SUCCESS )
     { 
-        hb_log("av_read_opencl_buffer error '%d'",status);
+        hb_log( "av_read_opencl_buffer error '%d'", status );
         return 0; 
     }
     return 1;

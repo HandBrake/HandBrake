@@ -16,9 +16,9 @@
 #define KERNEL( ... )# __VA_ARGS__
 
 
-char *kernel_src_hscale = KERNEL(
+char *kernel_src_hscale = KERNEL (
 
-    typedef unsigned char  fixed8;
+    typedef unsigned char fixed8;
 
 /*******************************************************************************************************
 dst:          Horizontal scale destination;
@@ -30,15 +30,15 @@ hi_UV:        Horizontal filter index for UV planes;
 stride:       Src width;
 filter_len:   Length of filter;
 ********************************************************************************************************/
-    kernel void frame_h_scale(
+    kernel void frame_h_scale (
         global fixed8 *src,
-        global float   *hf_Y,
-        global float   *hf_UV,
-        global int      *hi_Y,
-        global int      *hi_UV,
+        global float *hf_Y,
+        global float *hf_UV,
+        global int *hi_Y,
+        global int *hi_UV,
         global fixed8 *dst,
-        int                     stride, //src_width
-        int                     filter_len
+        int stride, //src_width
+        int filter_len
         )
     {
         int x = get_global_id( 0 );
@@ -49,30 +49,30 @@ filter_len:   Length of filter;
         int i = 0;
 
         global fixed8 *src_Y = src;
-        global fixed8 *src_U = src_Y+stride*height;
-        global fixed8 *src_V = src_U+(stride>>1)*(height>>1);
+        global fixed8 *src_U = src_Y + stride * height;
+        global fixed8 *src_V = src_U + (stride >> 1) * (height >> 1);
 
         global fixed8 *dst_Y = dst;
-        global fixed8 *dst_U = dst_Y+width*height;
-        global fixed8 *dst_V = dst_U+(width>>1)*(height>>1);
+        global fixed8 *dst_U = dst_Y + width * height;
+        global fixed8 *dst_V = dst_U + (width >> 1) * (height >> 1);
 
         int xy = y * width + x;
-        global fixed8 *rowdata_Y = src_Y+(y * stride);
-        for( int i = 0; i<filter_len; i++ )
+        global fixed8 *rowdata_Y = src_Y + (y * stride);
+        for( int i = 0; i < filter_len; i++ )
         {
-            result_Y += ( hf_Y[x+i*width] * rowdata_Y[hi_Y[x] + i]);
+            result_Y += ( hf_Y[x + i * width] * rowdata_Y[hi_Y[x] + i]);
         }
         dst_Y[xy] = result_Y;
 
-        if( y<(height>>1) && x<(width>>1) )
+        if( y < (height >> 1) && x < (width >> 1) )
         {
-            int xy = y * (width>>1) + x;
-            global fixed8 *rowdata_U = src_U+(y * (stride>>1));
-            global fixed8 *rowdata_V = src_V+(y * (stride>>1));
-            for( i = 0; i<filter_len; i++ )
+            int xy = y * (width >> 1) + x;
+            global fixed8 *rowdata_U = src_U + (y * (stride >> 1));
+            global fixed8 *rowdata_V = src_V + (y * (stride >> 1));
+            for( i = 0; i < filter_len; i++ )
             {
-                result_U += ( hf_UV[x+i*(width>>1)] * rowdata_U[hi_UV[x] + i]);
-                result_V += ( hf_UV[x+i*(width>>1)] * rowdata_V[hi_UV[x] + i]);
+                result_U += ( hf_UV[x + i * (width >> 1)] * rowdata_U[hi_UV[x] + i]);
+                result_V += ( hf_UV[x + i * (width >> 1)] * rowdata_V[hi_UV[x] + i]);
             }
             dst_U[xy] = result_U;
             dst_V[xy] = result_V;
@@ -90,17 +90,17 @@ hi_UV:        Vertical filter index for UV planes;
 stride:       Src height;
 filter_len:   Length of filter;
 ********************************************************************************************************/
-char *kernel_src_vscale = KERNEL(
+char *kernel_src_vscale = KERNEL (
 
-    kernel void frame_v_scale(
+    kernel void frame_v_scale (
         global fixed8 *src,
-        global float   *vf_Y,
-        global float   *vf_UV,
-        global int      *vi_Y,
-        global int      *vi_UV,
+        global float *vf_Y,
+        global float *vf_UV,
+        global int *vi_Y,
+        global int *vi_UV,
         global fixed8 *dst,
-        int                      src_height,
-        int                     filter_len
+        int src_height,
+        int filter_len
         )
     {
         int x = get_global_id( 0 );
@@ -111,27 +111,27 @@ char *kernel_src_vscale = KERNEL(
         int i = 0;
 
         global fixed8 *src_Y = src;
-        global fixed8 *src_U = src_Y+src_height*width;
-        global fixed8 *src_V = src_U+(src_height>>1)*(width>>1);
+        global fixed8 *src_U = src_Y + src_height * width;
+        global fixed8 *src_V = src_U + (src_height >> 1) * (width >> 1);
 
         global fixed8 *dst_Y = dst;
-        global fixed8 *dst_U = dst_Y+height*width;
-        global fixed8 *dst_V = dst_U+(height>>1)*(width>>1);
+        global fixed8 *dst_U = dst_Y + height * width;
+        global fixed8 *dst_V = dst_U + (height >> 1) * (width >> 1);
 
         int xy = y * width + x;
-        for( i = 0; i<filter_len; i++ )
+        for( i = 0; i < filter_len; i++ )
         {
-            result_Y += vf_Y[y+i*height] * src_Y[(vi_Y[y]+i)*width + x];
+            result_Y += vf_Y[y + i * height] * src_Y[(vi_Y[y] + i) * width + x];
         }
         dst_Y[xy] = result_Y;
 
-        if( y<(height>>1) && x<(width>>1) )
+        if( y < (height >> 1) && x < (width >> 1) )
         {
-            int xy = y * (width>>1) + x;
-            for( i = 0; i<filter_len; i++ )
+            int xy = y * (width >> 1) + x;
+            for( i = 0; i < filter_len; i++ )
             {
-                result_U += vf_UV[y+i*(height>>1)] * src_U[(vi_UV[y] + i) * (width>>1) + x];
-                result_V += vf_UV[y+i*(height>>1)] * src_V[(vi_UV[y] + i) * (width>>1) + x];
+                result_U += vf_UV[y + i * (height >> 1)] * src_U[(vi_UV[y] + i) * (width >> 1) + x];
+                result_V += vf_UV[y + i * (height >> 1)] * src_V[(vi_UV[y] + i) * (width >> 1) + x];
             }
             dst_U[xy] = result_U;
             dst_V[xy] = result_V;
@@ -145,17 +145,17 @@ output:   Output buffer;
 w:        Width of frame;
 h:        Height of frame;
 ********************************************************************************************************/
-char *kernel_src_nvtoyuv = KERNEL(
+char *kernel_src_nvtoyuv = KERNEL (
 
-    kernel void nv12toyuv( global char *input, global char* output, int w, int h )
+    kernel void nv12toyuv ( global char *input, global char* output, int w, int h )
     {
         int x = get_global_id( 0 );
         int y = get_global_id( 1 );
-        int idx = y * (w>>1) + x;
-        vstore4((vload4( 0, input+(idx<<2))), 0, output+(idx<<2)); //Y
-        char2 uv = vload2( 0, input+(idx<<1)+w*h );
-        output[idx+w*h] = uv.s0;
-        output[idx+w*h+((w*h)>>2)] = uv.s1;
+        int idx = y * (w >> 1) + x;
+        vstore4((vload4( 0, input + (idx << 2))), 0, output + (idx << 2)); //Y
+        char2 uv = vload2( 0, input + (idx << 1) + w * h );
+        output[idx + w * h] = uv.s0;
+        output[idx + w * h + ((w * h) >> 2)] = uv.s1;
     }
     );
 
@@ -172,9 +172,9 @@ dstStride:     Width of destination luma/alpha planes;
 dstChrStride:  Width of destination chroma planes;
 ********************************************************************************************************/
 
-char *kernel_src_hscaleall = KERNEL(
+char *kernel_src_hscaleall = KERNEL (
 
-    kernel void hscale_all_opencl(
+    kernel void hscale_all_opencl (
         global short *dst,
         const global unsigned char *src,
         const global short *yfilter,
@@ -199,11 +199,11 @@ char *kernel_src_hscaleall = KERNEL(
         int chrHeight = get_global_size(1);
 
         int srcPos1 = h * srcStride + yfilterPos[w];
-        int srcPos2 =  h * srcStride + yfilterPos[w + chrWidth];
-        int srcPos3 =  (h + (srcHeight >> 1)) * srcStride + yfilterPos[w];
-        int srcPos4 =  (h + (srcHeight >> 1)) * srcStride + yfilterPos[w + chrWidth];
-        int srcc1Pos =  srcStride * srcHeight + (h) * (srcChrStride) + cfilterPos[w];
-        int srcc2Pos =  srcc1Pos + ((srcChrStride)*(chrHeight));
+        int srcPos2 = h * srcStride + yfilterPos[w + chrWidth];
+        int srcPos3 = (h + (srcHeight >> 1)) * srcStride + yfilterPos[w];
+        int srcPos4 = (h + (srcHeight >> 1)) * srcStride + yfilterPos[w + chrWidth];
+        int srcc1Pos = srcStride * srcHeight + (h) * (srcChrStride) + cfilterPos[w];
+        int srcc2Pos = srcc1Pos + ((srcChrStride)*(chrHeight));
 
         int val1 = 0;
         int val2 = 0;
@@ -229,21 +229,21 @@ char *kernel_src_hscaleall = KERNEL(
         int dstPos1 = h *dstStride;
         int dstPos2 = (h + chrHeight) * dstStride;
 
-        dst[dstPos1  + w] = ((val1 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val1 >> 7));
-        dst[dstPos1  + w + chrWidth] = ((val2 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val2 >> 7));
+        dst[dstPos1 + w] = ((val1 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val1 >> 7));
+        dst[dstPos1 + w + chrWidth] = ((val2 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val2 >> 7));
         dst[dstPos2 + w] = ((val3 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val3 >> 7));
         dst[dstPos2 + w + chrWidth] = ((val4 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val4 >> 7));
 
-        int dstPos3 = h * (dstChrStride) + w + dstStride*dstHeight;
-        int dstPos4 = h * (dstChrStride) + w + dstStride*dstHeight + ((dstChrStride)*chrHeight);
+        int dstPos3 = h * (dstChrStride) + w + dstStride * dstHeight;
+        int dstPos4 = h * (dstChrStride) + w + dstStride * dstHeight + ((dstChrStride) * chrHeight);
         dst[dstPos3] = ((val5 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val5 >> 7));
         dst[dstPos4] = ((val6 >> 7) > ((1 << 15) - 1) ? ((1 << 15) - 1) : (val6 >> 7));
     }
     );
 
-char *kernel_src_hscalefast = KERNEL(
+char *kernel_src_hscalefast = KERNEL (
 
-    kernel void hscale_fast_opencl(
+    kernel void hscale_fast_opencl (
         global short *dst,
         const global unsigned char *src,
         int xInc,
@@ -286,8 +286,8 @@ char *kernel_src_hscalefast = KERNEL(
         inv_i = rightpart * xInc >> 16;
         if( inv_i >= srcWidth - 1)
         {
-            dst[h*dstStride + rightpart] = src[h*srcStride + srcWidth - 1] * 128;
-            dst[lowpart*dstStride + rightpart] = src[lowpart * srcStride + srcWidth - 1] * 128;
+            dst[h * dstStride + rightpart] = src[h * srcStride + srcWidth - 1] * 128;
+            dst[lowpart * dstStride + rightpart] = src[lowpart * srcStride + srcWidth - 1] * 128;
         }
 
         int xpos = 0;
@@ -296,32 +296,30 @@ char *kernel_src_hscalefast = KERNEL(
         xalpha = (xpos & 0xFFFF) >> 9;
         src += srcStride * srcHeight;
         dst += dstStride * dstHeight;
-        dst[h*(dstChrStride) + w] = (src[h * (srcChrStride) + xx] *(xalpha^127) + src[h * (srcChrStride) + xx + 1] * xalpha);
+        dst[h * (dstChrStride) + w] = (src[h * (srcChrStride) + xx] * (xalpha^127) + src[h * (srcChrStride) + xx + 1] * xalpha);
         inv_i = w * xInc >> 16;
         if( inv_i >= (srcWidth >> 1) - 1)
         {
-            dst[h*(dstChrStride) + w] = src[h*(srcChrStride) + (srcWidth >> 1) -1]*128;
+            dst[h * (dstChrStride) + w] = src[h * (srcChrStride) + (srcWidth >> 1) -1]*128;
         }
 
         xpos = chrXInc * (w);
         xx = xpos >> 16;
         src += srcChrStride * srcHeight >> 1;
         dst += (dstChrStride * chrHeight);
-        dst[h*(dstChrStride) + w] = (src[h * (srcChrStride) + xx]*(xalpha^127) + src[h * (srcChrStride) + xx + 1 ] * xalpha);
+        dst[h * (dstChrStride) + w] = (src[h * (srcChrStride) + xx] * (xalpha^127) + src[h * (srcChrStride) + xx + 1 ] * xalpha);
 
         if( inv_i >= (srcWidth >> 1) - 1)
         {
             //v channel:
-            dst[h*(dstChrStride) + w] = src[h*(srcChrStride)+ (srcWidth >> 1) -1]*128;
+            dst[h * (dstChrStride) + w] = src[h * (srcChrStride) + (srcWidth >> 1) -1] * 128;
         }
-
-
     }
     );
 
-char *kernel_src_vscalealldither = KERNEL(
+char *kernel_src_vscalealldither = KERNEL (
 
-    kernel void vscale_all_dither_opencl(
+    kernel void vscale_all_dither_opencl (
         global unsigned char *dst,
         const global short *src,
         const global short *yfilter,
@@ -407,9 +405,9 @@ char *kernel_src_vscalealldither = KERNEL(
     }
     );
 
-char *kernel_src_vscaleallnodither = KERNEL(
+char *kernel_src_vscaleallnodither = KERNEL (
 
-    kernel void vscale_all_nodither_opencl(
+    kernel void vscale_all_nodither_opencl (
         global unsigned char *dst,
         const global short *src,
         const global short *yfilter,
@@ -482,16 +480,16 @@ char *kernel_src_vscaleallnodither = KERNEL(
         dst[(h + chrHeight) * dstStride + w] = (((val3 >> 19)&(~0xFF)) ? ((-(val3 >> 19)) >> 31) : (val3 >> 19));
         dst[(h + chrHeight) * dstStride + w + chrWidth] = (((val4 >> 19)&(~0xFF)) ? ((-(val4 >> 19)) >> 31) : (val4 >> 19));;
 
-        int dst1Pos = dstStride * dstHeight + h*(dstChrStride)+(w);
+        int dst1Pos = dstStride * dstHeight + h * (dstChrStride) + (w);
         int dst2Pos = (dstChrStride * chrHeight) + dst1Pos;
         dst[dst1Pos] = (((val5 >> 19)&(~0xFF)) ? ((-(val5 >> 19)) >> 31) : (val5 >> 19));
         dst[dst2Pos] = (((val6 >> 19)&(~0xFF)) ? ((-(val6 >> 19)) >> 31) : (val6 >> 19));
     }
     );
 
-char *kernel_src_vscalefast = KERNEL(
+char *kernel_src_vscalefast = KERNEL (
 
-    kernel void vscale_fast_opencl(
+    kernel void vscale_fast_opencl (
         global unsigned char *dst,
         const global short *src,
         const global int *yfilterPos,

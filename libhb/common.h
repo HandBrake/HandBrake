@@ -987,7 +987,7 @@ typedef struct hb_oclscale_s
     cl_mem h_index_y;
     cl_mem h_index_uv;
     // vertical coefficent buffer for Y U and V plane, vertical source index for Y,U and V plane
-    cl_mem v_coeff_y; 
+    cl_mem v_coeff_y;
     cl_mem v_coeff_uv;
     cl_mem v_index_y;
     cl_mem v_index_uv;
@@ -995,11 +995,11 @@ typedef struct hb_oclscale_s
     cl_kernel h_kernel;
     cl_kernel v_kernel;
     int use_ocl_mem; // 0 use host memory. 1 use gpu oclmem
-#endif        
+#endif
 } hb_oclscale_t;
 
 #ifdef USE_OPENCL
-int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, int in_h, int out_w, int out_h, hb_oclscale_t  *os );
+int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, int in_h, int out_w, int out_h, hb_oclscale_t *os );
 #endif
 
 #ifdef USE_OPENCL
@@ -1042,8 +1042,8 @@ typedef struct hb_filter_init_s
     int           pfr_vrate;
     int           cfr;
 #ifdef USE_OPENCL
- 	int           use_dxva;
-#endif    
+    int           use_dxva;
+#endif
 
 } hb_filter_init_t;
 

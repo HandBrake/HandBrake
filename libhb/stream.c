@@ -1104,7 +1104,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
 #ifdef USE_HWD
     hb_va_dxva2_t * dxva2 = NULL;
     dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
-    if (dxva2)
+    if ( dxva2 )
     {
         title->hwd_support = 1;
         hb_va_close(dxva2);
@@ -1116,12 +1116,12 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     title->hwd_support = 0;
 #endif
 #ifdef USE_OPENCL
-    if (hb_confirm_gpu_type() == 0)
+    if ( hb_confirm_gpu_type() == 0 )
         title->opencl_support = 1;
     else
         title->opencl_support = 0;
 #else
-	title->opencl_support = 0;
+    title->opencl_support = 0;
 #endif
     // Height, width, rate and aspect ratio information is filled in
     // when the previews are built

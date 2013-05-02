@@ -217,7 +217,7 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
     hb_dvd_set_dvdnav( dvdnav );
 #ifdef USE_OPENCL
-    if ( use_opencl )
+    if( use_opencl )
         hb_get_opencl_env();
 #endif
     /* Show version */
@@ -261,8 +261,8 @@ int main( int argc, char ** argv )
     }
 
 
-	hb_system_sleep_prevent(h);
-	hb_gui_use_hwd_flag = use_hwd;
+    hb_system_sleep_prevent(h);
+    hb_gui_use_hwd_flag = use_hwd;
     hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
     /* Wait... */
@@ -434,11 +434,11 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
              (float) title->rate / title->rate_base );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
-    if (title->opencl_support)
+    if ( title->opencl_support )
         fprintf( stderr, "  + support opencl: yes\n");
     else
         fprintf( stderr, "  + support opencl: no\n");
-    if (title->hwd_support)
+    if ( title->hwd_support )
         fprintf( stderr, "  + support hwd: yes\n");
     else
         fprintf( stderr, "  + support hwd: no\n");
@@ -647,8 +647,8 @@ static int HandleEvents( hb_handle_t * h )
                 die = 1;
                 break;
             }
-	        if( main_feature )
-	        {
+            if( main_feature )
+            {
                 int i;
                 int main_feature_idx=0;
                 int main_feature_pos=-1;
@@ -1486,9 +1486,9 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
-			if ( chapter_markers )
-			{
-				job->chapter_markers = chapter_markers;
+            if ( chapter_markers )
+            {
+                job->chapter_markers = chapter_markers;
 
                 if( marker_file != NULL )
                 {
@@ -1534,7 +1534,7 @@ static int HandleEvents( hb_handle_t * h )
                         hb_close_csv_file( file );
                     }
                 }
-			}
+            }
 
             if( crop[0] >= 0 && crop[1] >= 0 &&
                 crop[2] >= 0 && crop[3] >= 0 )
@@ -3384,13 +3384,13 @@ static void ShowPresets()
 
 static char * hb_strndup( char * str, int len )
 {
-	char * res;
-	int str_len = strlen( str );
+    char * res;
+    int str_len = strlen( str );
 
-	res = malloc( len > str_len ? str_len + 1 : len + 1 );
-	strncpy( res, str, len );
-	res[len] = '\0';
-	return res;
+    res = malloc( len > str_len ? str_len + 1 : len + 1 );
+    strncpy( res, str, len );
+    res[len] = '\0';
+    return res;
 }
 
 static char** str_split( char *str, char delem )
@@ -3495,7 +3495,7 @@ static int ParseOptions( int argc, char ** argv )
     #define X264_TUNE           284
     #define H264_PROFILE        285
     #define H264_LEVEL          286
-	#define NO_OPENCL           287
+    #define NO_OPENCL           287
     #define NORMALIZE_MIX       288
     #define AUDIO_DITHER        289
     

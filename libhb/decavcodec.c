@@ -104,9 +104,9 @@ struct hb_work_private_s
     int cadence[12];
     int wait_for_keyframe;
 #ifdef USE_HWD
-    hb_va_dxva2_t * dxva2;
-    uint8_t *dst_frame;
-    hb_oclscale_t  *os;
+    hb_va_dxva2_t   *dxva2;
+    uint8_t         *dst_frame;
+    hb_oclscale_t   *os;
 #endif
     hb_audio_resample_t *resample;
 };
@@ -578,16 +578,17 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     }
     else
     {
-        w =  pv->job->title->width;
-        h =  pv->job->title->height;
+        w = pv->job->title->width;
+        h = pv->job->title->height;
     }
 #ifdef USE_HWD
-    if  (pv->dxva2 && pv->job)
+    if (pv->dxva2 && pv->job)
     {
         hb_buffer_t *buf;
         int ww, hh;
 
-        if( (w > pv->job->width || h > pv->job->height) && (pv->job->use_opencl) && (pv->job->use_decomb == 0) &&  (pv->job->use_detelecine == 0) )
+        if( (w > pv->job->width || h > pv->job->height) && (pv->job->use_opencl) 
+            && (pv->job->use_decomb == 0) && (pv->job->use_detelecine == 0) )
         {
             buf = hb_video_buffer_init( pv->job->width, pv->job->height );
             ww = pv->job->width;
@@ -614,11 +615,11 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         w = buf->plane[1].stride;
         h = buf->plane[1].height;
         dst = buf->plane[1].data;
-        copy_plane( dst, pv->dst_frame + ww * hh, w, ww>>1, h );
+        copy_plane( dst, pv->dst_frame + ww * hh, w, ww >> 1, h );
         w = buf->plane[2].stride;
         h = buf->plane[2].height;
         dst = buf->plane[2].data;
-        copy_plane( dst, pv->dst_frame + ww * hh +( ( ww * hh )>>2 ), w, ww>>1, h );
+        copy_plane( dst, pv->dst_frame + ww * hh +( ( ww * hh ) >> 2 ), w, ww >> 1, h );
         return buf;
     }
     else
@@ -684,7 +685,7 @@ static int get_frame_buf_hwd( AVCodecContext *context, AVFrame *frame )
         int result = HB_WORK_ERROR;
         hb_work_private_t *pv = (hb_work_private_t*)context->opaque;
         result = hb_va_get_frame_buf( pv->dxva2, context, frame );
-        if( result==HB_WORK_ERROR )
+        if( result == HB_WORK_ERROR )
             return avcodec_default_get_buffer( context, frame );
         return 0;
     }
@@ -916,11 +917,11 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
             frame_dur += frame.repeat_pict * pv->field_duration;
         }
 #ifdef USE_HWD
-        if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
+        if( pv->dxva2 && pv->dxva2->do_job == HB_WORK_OK )
         {
             if( avp.pts>0 )
             {
-                if( pv->dxva2->input_pts[0]!=0 && pv->dxva2->input_pts[1]==0 )
+                if( pv->dxva2->input_pts[0] != 0 && pv->dxva2->input_pts[1] == 0 )
                     frame.pkt_pts = pv->dxva2->input_pts[0];
                 else
                     frame.pkt_pts = pv->dxva2->input_pts[0]<pv->dxva2->input_pts[1] ? pv->dxva2->input_pts[0] : pv->dxva2->input_pts[1];
@@ -1149,10 +1150,10 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         if ( pv->job && job->use_hwd && hb_use_dxva( pv->title ) )
         {
             pv->dxva2 = hb_va_create_dxva2( pv->dxva2, w->codec_param );
-            if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
+            if( pv->dxva2 && pv->dxva2->do_job == HB_WORK_OK )
             {
                 hb_va_new_dxva2( pv->dxva2, pv->context );
-				pv->context->slice_flags |= SLICE_FLAG_ALLOW_FIELD;
+                pv->context->slice_flags |= SLICE_FLAG_ALLOW_FIELD;
                 pv->context->opaque = pv;
                 pv->context->get_buffer = get_frame_buf_hwd;
                 pv->context->release_buffer = hb_ffmpeg_release_frame_buf;
@@ -1352,11 +1353,11 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
 #ifdef USE_HWD
-    if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
+    if( pv->dxva2 && pv->dxva2->do_job == HB_WORK_OK )
     {
-        if( pv->dxva2->input_pts[0]<=pv->dxva2->input_pts[1] )
+        if( pv->dxva2->input_pts[0] <= pv->dxva2->input_pts[1] )
             pv->dxva2->input_pts[0] = pts;
-        else if( pv->dxva2->input_pts[0]>pv->dxva2->input_pts[1] )
+        else if( pv->dxva2->input_pts[0] > pv->dxva2->input_pts[1] )
             pv->dxva2->input_pts[1] = pts;
         pv->dxva2->input_dts = dts;
     }
