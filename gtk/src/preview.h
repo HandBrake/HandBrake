@@ -16,6 +16,8 @@
 #if !defined(_GHB_PREVIEW_H_)
 #define _GHB_PREVIEW_H_
 
+#define GHB_PREVIEW_MAX 60
+
 #define MOD_ROUND(v,m) ((m==1)?v:(m * ((v + (m>>1)) / m)))
 #define MOD_DOWN(v,m)  (m * (v / m))
 #define MOD_UP(v,m)    (m * ((v + m - 1) / m))
