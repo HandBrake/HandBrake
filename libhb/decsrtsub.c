@@ -346,7 +346,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 {
                     if (*p == '\n' || *p == '\r')
                     {
-                        if (*(p + 1) == '\n' || *(p + 1) == '\0')
+                        if (*(p + 1) == '\n' || *(p + 1) == '\r' ||
+                            *(p + 1) == '\0')
                         {
                             // followed by line break or last character, skip it
                             length--;
@@ -360,7 +361,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                         }
                         else
                         {
-                            // all subtitles on one line
+                            // all subtitles on two lines tops
                             // replace line breaks with spaces
                             *q = ' ';
                         }
@@ -420,7 +421,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
         {
             if (*p == '\n' || *p == '\r')
             {
-                if (*(p + 1) == '\n' || *(p + 1) == '\0')
+                if (*(p + 1) == '\n' || *(p + 1) == '\r' || *(p + 1) == '\0')
                 {
                     // followed by line break or last character, skip it
                     length--;
@@ -434,7 +435,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 }
                 else
                 {
-                    // all subtitles on one line
+                    // all subtitles on two lines tops
                     // replace line breaks with spaces
                     *q = ' ';
                 }
