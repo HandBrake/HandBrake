@@ -78,7 +78,6 @@ static char ** acompressions  = NULL;
 static char * acodec_fallback = NULL;
 static char * acodecs     = NULL;
 static char ** anames      = NULL;
-static int    default_acodec = 0;
 static int    audio_explicit = 0;
 static char ** subtracks   = NULL;
 static char ** subforce    = NULL;
@@ -1773,6 +1772,27 @@ static int HandleEvents( hb_handle_t * h )
             hb_add_filter( job, filter, filter_str );
             free( filter_str );
 
+            // hb_job_init() will set a default muxer for us
+            // only override it if a specific muxer has been set
+            // note: the muxer must be set after presets, but before encoders
+            if (mux)
+            {
+                job->mux = mux;
+            }
+            // then, muxer options
+            if (largeFileSize)
+            {
+                job->largeFileSize = 1;
+            }
+            if (mp4_optimize)
+            {
+                job->mp4_optimize = 1;
+            }
+            if (ipod_atom)
+            {
+                job->ipod_atom = 1;
+            }
+
             if( vquality >= 0.0 )
             {
                 job->vquality = vquality;
@@ -1945,7 +1965,7 @@ static int HandleEvents( hb_handle_t * h )
                     if ((acodec = get_acodec_for_string(token)) == -1)
                     {
                         fprintf(stderr, "Invalid codec %s, using default for container.\n", token);
-                        acodec = default_acodec;
+                        acodec = hb_get_default_audio_encoder(job->mux);
                     }
                     if( i < num_audio_tracks )
                     {
@@ -1983,7 +2003,7 @@ static int HandleEvents( hb_handle_t * h )
                  * then use that codec instead.
                  */
                 if (i != 1)
-                    acodec = default_acodec;
+                    acodec = hb_get_default_audio_encoder(job->mux);
                 for ( ; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
@@ -2660,24 +2680,6 @@ static int HandleEvents( hb_handle_t * h )
                         }
                     }
                 }
-            }
-
-            if( job->mux )
-            {
-                job->mux = mux;
-            }
-
-            if ( largeFileSize )
-            {
-                job->largeFileSize = 1;
-            }
-            if ( mp4_optimize )
-            {
-                job->mp4_optimize = 1;
-            }
-            if ( ipod_atom )
-            {
-                job->ipod_atom = 1;
             }
 
             hb_job_set_file( job, output );
@@ -4169,7 +4171,6 @@ static int CheckOptions( int argc, char ** argv )
                      "choices are mp4, m4v and mkv\n.", format );
             return 1;
         }
-        default_acodec = hb_get_default_audio_encoder(mux);
     }
 
     return 0;
