@@ -41,7 +41,7 @@
                     cal:Message.Attach="[Event Click] = [Action Add]"
                     Content="Add" />
             <Button Grid.Column="2"
-                    Width="85"
+                    MaxWidth="100"
                     cal:Message.Attach="[Event Click] = [Action Import]"
                     Content="Import SRT" />
         </Grid>
