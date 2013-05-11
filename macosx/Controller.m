@@ -2566,19 +2566,7 @@ fWorkingCount = 0;
      * in our queue, so they can be reapplied in prepareJob when this queue
      * item comes up if Chapter Markers is set to on.
      */
-     int i;
-     NSMutableArray *ChapterNamesArray = [[NSMutableArray alloc] init];
-     int chaptercount = hb_list_count( fTitle->job->list_chapter );
-     for( i = 0; i < chaptercount; i++ )
-    {
-        hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( fTitle->job->list_chapter, i );
-        if( chapter != NULL )
-        {
-          [ChapterNamesArray addObject:[NSString stringWithUTF8String:chapter->title]];
-        }
-    }
-    [queueFileJob setObject:[NSMutableArray arrayWithArray: ChapterNamesArray] forKey:@"ChapterNames"];
-    [ChapterNamesArray autorelease];
+    [queueFileJob setObject:[fChapterTitlesDelegate chapterTitlesArray] forKey:@"ChapterNames"];
     
     /* Allow Mpeg4 64 bit formatting +4GB file sizes */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
