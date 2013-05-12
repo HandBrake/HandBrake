@@ -1009,8 +1009,9 @@
         BOOL convertToBurnInUsed       = NO;
         NSMutableArray *tracksToDelete = [[NSMutableArray alloc] init];
         NSEnumerator *enumerator       = [subtitleArray objectEnumerator];
-        /* convert any incompatible tracks to burn-in or remove them */
-        while (tempObject = [enumerator nextObject])
+        /* convert any non-None incompatible tracks to burn-in or remove them */
+        while ((tempObject = [enumerator nextObject]) &&
+               [tempObject objectForKey:@"subtitleSourceTrackType"])
         {
             subtitleTrackType = [[tempObject objectForKey:@"subtitleSourceTrackType"] intValue];
             if (!hb_subtitle_can_pass(subtitleTrackType, container))
@@ -1032,7 +1033,8 @@
         if (convertToBurnInUsed == YES)
         {
             enumerator = [subtitleArray objectEnumerator];
-            while (tempObject = [enumerator nextObject])
+            while ((tempObject = [enumerator nextObject]) &&
+                   [tempObject objectForKey:@"subtitleSourceTrackType"])
             {
                 subtitleTrackType = [[tempObject objectForKey:@"subtitleSourceTrackType"] intValue];
                 if (hb_subtitle_can_pass(subtitleTrackType, container))
