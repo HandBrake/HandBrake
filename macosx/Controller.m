@@ -4946,14 +4946,17 @@ bool one_burned = FALSE;
         }
     }
     
-    /* if we have a previously selected vid encoder tag, then try to select it */
+    /*
+     * item 0 will be selected by default
+     * deselect it so that we can detect whether the video encoder has changed
+     */
+    [fVidEncoderPopUp selectItem:nil];
     if (selectedVidEncoderTag)
     {
-        [fVidEncoderPopUp selectItemWithTag: selectedVidEncoderTag];
-    }
-    else
-    {
-        [fVidEncoderPopUp selectItemAtIndex: 0];
+        // if we have a tag for previously selected encoder, try to select it
+        // if this fails, [fVidEncoderPopUp selectedItem] will be nil
+        // we'll handle that scenario further down
+        [fVidEncoderPopUp selectItemWithTag:selectedVidEncoderTag];
     }
     
     /* Update the Auto Passtgru Fallback Codec Popup */
@@ -5023,22 +5026,16 @@ bool one_burned = FALSE;
     else
         [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%s", [string stringByDeletingPathExtension], ext]];
 
-    if( SuccessfulScan )
+    if (SuccessfulScan)
     {
-        /* Add/replace to the correct extension */
-
-        if( [fVidEncoderPopUp selectedItem] == nil )
+        if ([fVidEncoderPopUp selectedItem] == nil)
         {
-
+            /* this means the above call to selectItemWithTag failed */
             [fVidEncoderPopUp selectItemAtIndex:0];
             [self videoEncoderPopUpChanged:nil];
-
-            /* We call the method to properly enable/disable turbo 2 pass */
-            [self twoPassCheckboxChanged: sender];
-            /* We call method method to change UI to reflect whether a preset is used or not*/
         }
     }
-	[self customSettingUsed: sender];
+	[self customSettingUsed:sender];
 }
 
 - (IBAction) autoSetM4vExtension: (id) sender
