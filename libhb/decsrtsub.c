@@ -166,6 +166,9 @@ static int get_line( hb_work_private_t * pv, char *buf, int size )
     int i;
     char c;
 
+    // clear remnants of the previous line before progessing a new one
+    memset(buf, '\0', size);
+
     /* Find newline in converted UTF-8 buffer */
     for( i = 0; i < size - 1; i++ )
     {
