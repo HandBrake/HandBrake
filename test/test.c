@@ -79,7 +79,6 @@ static char ** acompressions  = NULL;
 static char * acodec_fallback = NULL;
 static char * acodecs     = NULL;
 static char ** anames      = NULL;
-static int    default_acodec = 0;
 static int    audio_explicit = 0;
 static char ** subtracks   = NULL;
 static char ** subforce    = NULL;
@@ -1796,6 +1795,27 @@ static int HandleEvents( hb_handle_t * h )
             hb_add_filter( job, filter, filter_str );
             free( filter_str );
 
+            // hb_job_init() will set a default muxer for us
+            // only override it if a specific muxer has been set
+            // note: the muxer must be set after presets, but before encoders
+            if (mux)
+            {
+                job->mux = mux;
+            }
+            // then, muxer options
+            if (largeFileSize)
+            {
+                job->largeFileSize = 1;
+            }
+            if (mp4_optimize)
+            {
+                job->mp4_optimize = 1;
+            }
+            if (ipod_atom)
+            {
+                job->ipod_atom = 1;
+            }
+
             if( vquality >= 0.0 )
             {
                 job->vquality = vquality;
@@ -1968,7 +1988,7 @@ static int HandleEvents( hb_handle_t * h )
                     if ((acodec = get_acodec_for_string(token)) == -1)
                     {
                         fprintf(stderr, "Invalid codec %s, using default for container.\n", token);
-                        acodec = default_acodec;
+                        acodec = hb_get_default_audio_encoder(job->mux);
                     }
                     if( i < num_audio_tracks )
                     {
@@ -2006,7 +2026,7 @@ static int HandleEvents( hb_handle_t * h )
                  * then use that codec instead.
                  */
                 if (i != 1)
-                    acodec = default_acodec;
+                    acodec = hb_get_default_audio_encoder(job->mux);
                 for ( ; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
@@ -2685,24 +2705,6 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
-            if( job->mux )
-            {
-                job->mux = mux;
-            }
-
-            if ( largeFileSize )
-            {
-                job->largeFileSize = 1;
-            }
-            if ( mp4_optimize )
-            {
-                job->mp4_optimize = 1;
-            }
-            if ( ipod_atom )
-            {
-                job->ipod_atom = 1;
-            }
-
             hb_job_set_file( job, output );
 
             if( color_matrix_code )
@@ -2929,7 +2931,6 @@ static void ShowHelp()
     "                            double quotation marks\n"
     "    -z, --preset-list       See a list of available built-in presets\n"
     "        --no-dvdnav         Do not use dvdnav for reading DVDs\n"
-    "                            (experimental, enabled by default for testing)\n"
     "    --no-opencl             Disable use of OpenCL\n"
     "\n"
 
@@ -2944,8 +2945,8 @@ static void ShowHelp()
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
-    "        --angle <number>    Select the DVD angle\n"
-    "        --previews <#:B>    Select how many preview images are generated (max 30),\n"
+    "        --angle <number>    Select the video angle (DVD or Blu-ray only)\n"
+    "        --previews <#:B>    Select how many preview images are generated,\n"
     "                            and whether or not they're stored to disk (0 or 1).\n"
     "                            (default: 10:0)\n"
     "    --start-at-preview <#>  Start encoding at a given preview.\n"
@@ -2959,10 +2960,10 @@ static void ShowHelp()
     "    -o, --output <string>   Set output file name\n"
     "    -f, --format <string>   Set output format (mp4/mkv, default:\n"
     "                            autodetected from file name)\n"
-    "    -m, --markers           Add chapter markers (mp4 and mkv output formats only)\n"
-    "    -4, --large-file        Use 64-bit mp4 files that can hold more than\n"
-    "                            4 GB. Note: Breaks iPod, PS3 compatibility.\n"""
-    "    -O, --optimize          Optimize mp4 files for HTTP streaming\n"
+    "    -m, --markers           Add chapter markers\n"
+    "    -4, --large-file        Create 64-bit mp4 files that can hold more than 4 GB\n"
+    "                            of data. Note: breaks pre-iOS iPod compatibility.\n"
+    "    -O, --optimize          Optimize mp4 files for HTTP streaming (\"fast start\")\n"
     "    -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them\n"
     "    -P, --opencl-support    Use OpenCL\n"
     "    -U, --UVD-support       Use UVD hardware\n"
@@ -3082,10 +3083,8 @@ static void ShowHelp()
     "    -q, --quality <number>  Set video quality\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -2, --two-pass          Use two-pass mode\n"
-    "    -T, --turbo             When using 2-pass use the turbo options\n"
-    "                            on the first pass to improve speed\n"
-    "                            (only works with x264, affects PSNR by about 0.05dB,\n"
-    "                            and increases first pass speed two to four times)\n"
+    "    -T, --turbo             When using 2-pass use \"turbo\" options on the\n"
+    "                            1st pass to improve speed (only works with x264)\n"
     "    -r, --rate              Set video framerate (" );
     for( i = 0; i < hb_video_rates_count; i++ )
     {
@@ -3237,14 +3236,14 @@ static void ShowHelp()
     "\n"
 
     "### Picture Settings---------------------------------------------------------\n\n"
-    "    -w, --width <number>    Set picture width\n"
+    "    -w, --width  <number>   Set picture width\n"
     "    -l, --height <number>   Set picture height\n"
-    "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
-    "        --loose-crop        Always crop to a multiple of the modulus\n"
-    "          <#>               Specifies the maximum number of extra pixels\n"
+    "        --crop  <T:B:L:R>   Set cropping values (default: autocrop)\n"
+    "        --loose-crop  <#>   Always crop to a multiple of the modulus\n"
+    "                            Specifies the maximum number of extra pixels\n"
     "                            which may be cropped (default: 15)\n"
-    "    -Y, --maxHeight <#>     Set maximum height\n"
-    "    -X, --maxWidth <#>      Set maximum width\n"
+    "    -Y, --maxHeight   <#>   Set maximum height\n"
+    "    -X, --maxWidth    <#>   Set maximum width\n"
     "    --strict-anamorphic     Store pixel aspect ratio in video stream\n"
     "    --loose-anamorphic      Store pixel aspect ratio with specified width\n"
     "    --custom-anamorphic     Store pixel aspect ratio in video stream and\n"
@@ -3269,7 +3268,7 @@ static void ShowHelp()
 
     "### Filters---------------------------------------------------------\n\n"
 
-     "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
+     "    -d, --deinterlace       Deinterlace video with Libav, yadif or mcdeint\n"
      "          <fast/slow/slower/bob> or omitted (default settings)\n"
      "           or\n"
      "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
@@ -3282,7 +3281,7 @@ static void ShowHelp()
      "                            Note: this filter drops duplicate frames to\n"
      "                            restore the pre-telecine framerate, unless you\n"
      "                            specify a constant framerate (--rate 29.97)\n"
-     "          <L:R:T:B:SB:MP:FD>   (default 1:1:4:4:0:0:-1)\n"
+     "          <L:R:T:B:SB:MP:FD> (default 1:1:4:4:0:0:-1)\n"
      "    -8, --denoise           Denoise video with hqdn3d filter\n"
      "          <weak/medium/strong> or omitted (default settings)\n"
      "           or\n"
@@ -3338,14 +3337,14 @@ static void ShowHelp()
     "                            subtitle track is used instead.\n"
     "        --srt-file <string> SubRip SRT filename(s), separated by commas.\n"
     "        --srt-codeset       Character codeset(s) that the SRT file(s) are\n"
-    "          <string>          encoded in, separted by commas.\n"
+    "          <string>          encoded in, separated by commas.\n"
     "                            Use 'iconv -l' for a list of valid\n"
-    "                            codesets. If not specified latin1 is assumed\n"
-    "        --srt-offset        Offset in milli-seconds to apply to the SRT file(s)\n"
-    "          <string>          separted by commas. If not specified zero is assumed.\n"
+    "                            codesets. If not specified, 'latin1' is assumed\n"
+    "        --srt-offset        Offset (in milliseconds) to apply to the SRT file(s),\n"
+    "          <string>          separated by commas. If not specified, zero is assumed.\n"
     "                            Offsets may be negative.\n"
     "        --srt-lang <string> Language as an iso639-2 code fra, eng, spa et cetera)\n"
-    "                            for the SRT file(s) separated by commas. If not specified\n"
+    "                            for the SRT file(s), separated by commas. If not specified,\n"
     "                            then 'und' is used.\n"
     "        --srt-default       Flag the selected srt as the default subtitle\n"
     "          <number>          to be displayed upon playback.  Setting no default\n"
@@ -4215,7 +4214,6 @@ static int CheckOptions( int argc, char ** argv )
                      "choices are mp4, m4v and mkv\n.", format );
             return 1;
         }
-        default_acodec = hb_get_default_audio_encoder(mux);
     }
 
     return 0;

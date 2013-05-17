@@ -1084,6 +1084,8 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
         block_updates = FALSE;
         widget = GHB_WIDGET (ud->builder, "audio_remove");
         gtk_widget_set_sensitive(widget, TRUE);
+
+        ghb_adjust_audio_rate_combos(ud);
     }
     else
     {

@@ -652,6 +652,7 @@ static int MKVEnd(hb_mux_object_t *m)
         switch (audio->config.out.codec & HB_ACODEC_MASK)
         {
             case HB_ACODEC_FFFLAC:
+            case HB_ACODEC_FFFLAC24:
                 if( audio->priv.config.extradata.bytes )
                 {
                     uint8_t *header;

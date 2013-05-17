@@ -193,12 +193,21 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
-    codec = avcodec_find_decoder(w->codec_param);
+    codec       = avcodec_find_decoder(w->codec_param);
     pv->context = avcodec_alloc_context3(codec);
+
     if (pv->title->opaque_priv != NULL)
     {
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
         avcodec_copy_context(pv->context, ic->streams[w->audio->id]->codec);
+        // libav's eac3 parser toggles the codec_id in the context as
+        // it reads eac3 data between AV_CODEC_ID_AC3 and AV_CODEC_ID_EAC3.
+        // It detects an AC3 sync pattern sometimes in ac3_sync() which
+        // causes it to eventually set avctx->codec_id to AV_CODEC_ID_AC3
+        // in ff_aac_ac3_parse(). Since we are parsing some data before
+        // we get here, the codec_id may have flipped.  This will cause an
+        // error in hb_avcodec_open().  So flip it back!
+        pv->context->codec_id = w->codec_param;
     }
     else
     {
@@ -451,8 +460,27 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     static char codec_name[64];
     info->name =  strncpy( codec_name, codec->name, sizeof(codec_name)-1 );
 
-    AVCodecParserContext *parser = av_parser_init( codec->id );
-    AVCodecContext *context = avcodec_alloc_context3(codec);
+    AVCodecContext *context      = avcodec_alloc_context3(codec);
+    AVCodecParserContext *parser = NULL;
+
+    if (w->title->opaque_priv != NULL)
+    {
+        AVFormatContext *ic = (AVFormatContext*)w->title->opaque_priv;
+        avcodec_copy_context(context, ic->streams[w->audio->id]->codec);
+        // libav's eac3 parser toggles the codec_id in the context as
+        // it reads eac3 data between AV_CODEC_ID_AC3 and AV_CODEC_ID_EAC3.
+        // It detects an AC3 sync pattern sometimes in ac3_sync() which
+        // causes it to eventually set avctx->codec_id to AV_CODEC_ID_AC3
+        // in ff_aac_ac3_parse(). Since we are parsing some data before
+        // we get here, the codec_id may have flipped.  This will cause an
+        // error in hb_avcodec_open().  So flip it back!
+        context->codec_id = w->codec_param;
+    }
+    else
+    {
+        parser = av_parser_init(codec->id);
+    }
+
     hb_ff_set_sample_fmt( context, codec, AV_SAMPLE_FMT_FLT );
     if ( hb_avcodec_open( context, codec, NULL, 0 ) )
     {
@@ -473,20 +501,6 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 len = av_parser_parse2(parser, context, &pbuffer, &pbuffer_size,
                                        buf->data + pos, buf->size - pos,
                                        buf->s.start, buf->s.start, 0);
-                if (context->codec_id == AV_CODEC_ID_TRUEHD &&
-                    context->channel_layout == AV_CH_LAYOUT_MONO)
-                {
-                    // libavcodec can't decode TrueHD Mono (bug #356)
-                    // work around it by requesting Stereo before decoding
-                    truehd_mono                     = 1;
-                    context->request_channels       = 2;
-                    context->request_channel_layout = AV_CH_LAYOUT_STEREO;
-                }
-                else
-                {
-                    context->request_channels       = 0;
-                    context->request_channel_layout = 0;
-                }
             }
             else
             {
@@ -494,6 +508,22 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 len = pbuffer_size = buf->size;
             }
             pos += len;
+
+            // libavcodec can't decode TrueHD Mono (bug #356)
+            // work around it by requesting Stereo before decoding
+            if (context->codec_id == AV_CODEC_ID_TRUEHD &&
+                context->channel_layout == AV_CH_LAYOUT_MONO)
+            {
+                truehd_mono                     = 1;
+                context->request_channels       = 2;
+                context->request_channel_layout = AV_CH_LAYOUT_STEREO;
+            }
+            else
+            {
+                context->request_channels       = 0;
+                context->request_channel_layout = 0;
+            }
+
             if (pbuffer_size > 0)
             {
                 int got_frame;
@@ -508,8 +538,24 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 {
                     info->rate_base          = 1;
                     info->rate               = context->sample_rate;
-                    info->bitrate            = context->bit_rate;
                     info->samples_per_frame  = frame.nb_samples;
+
+                    int bps = av_get_bits_per_sample(context->codec_id);
+                    if (bps > 0 && context->channels > 0)
+                    {
+                        info->bitrate = (bps *
+                                         context->channels *
+                                         context->sample_rate);
+                    }
+                    else if (context->bit_rate > 0)
+                    {
+                        info->bitrate = context->bit_rate;
+                    }
+                    else
+                    {
+                        info->bitrate = 1;
+                    }
+
                     if (truehd_mono)
                     {
                         info->channel_layout = AV_CH_LAYOUT_MONO;
@@ -520,6 +566,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                             hb_ff_layout_xlat(context->channel_layout,
                                               context->channels);
                     }
+
                     ret = 1;
                     break;
                 }

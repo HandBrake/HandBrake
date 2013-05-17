@@ -2566,19 +2566,7 @@ fWorkingCount = 0;
      * in our queue, so they can be reapplied in prepareJob when this queue
      * item comes up if Chapter Markers is set to on.
      */
-     int i;
-     NSMutableArray *ChapterNamesArray = [[NSMutableArray alloc] init];
-     int chaptercount = hb_list_count( fTitle->job->list_chapter );
-     for( i = 0; i < chaptercount; i++ )
-    {
-        hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( fTitle->job->list_chapter, i );
-        if( chapter != NULL )
-        {
-          [ChapterNamesArray addObject:[NSString stringWithUTF8String:chapter->title]];
-        }
-    }
-    [queueFileJob setObject:[NSMutableArray arrayWithArray: ChapterNamesArray] forKey:@"ChapterNames"];
-    [ChapterNamesArray autorelease];
+    [queueFileJob setObject:[fChapterTitlesDelegate chapterTitlesArray] forKey:@"ChapterNames"];
     
     /* Allow Mpeg4 64 bit formatting +4GB file sizes */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
@@ -4155,27 +4143,31 @@ bool one_burned = FALSE;
     
     /* Audio tracks and mixdowns */
     /* Now lets add our new tracks to the audio list here */
-	for (unsigned int counter = 0; counter < maximumNumberOfAllowedAudioTracks; counter++) {
-		NSString *prefix = [NSString stringWithFormat: @"Audio%d", counter + 1];
-		if ([[queueToApply objectForKey: [prefix stringByAppendingString: @"Track"]] intValue] > 0) {
-			audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-			hb_audio_config_init(audio);
-			audio->in.track = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Track"]] intValue] - 1;
-			/* We go ahead and assign values to our audio->out.<properties> */
-			audio->out.track = audio->in.track;
-			audio->out.dynamic_range_compression = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackDRCSlider"]] floatValue];
-            audio->out.gain = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackGainSlider"]] floatValue];
-			prefix = [NSString stringWithFormat: @"JobAudio%d", counter + 1];
-			audio->out.codec = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Encoder"]] intValue];
-			audio->out.compression_level = hb_get_default_audio_compression(audio->out.codec);
-			audio->out.mixdown = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Mixdown"]] intValue];
-			audio->out.bitrate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Bitrate"]] intValue];
-			audio->out.samplerate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Samplerate"]] intValue];
-			
-			hb_audio_add( job, audio );
-			free(audio);
-		}
-	}
+    for (unsigned int counter = 0; counter < maximumNumberOfAllowedAudioTracks; counter++)
+    {
+        NSString *prefix    = [NSString stringWithFormat:@"Audio%d",    counter + 1];
+        NSString *jobPrefix = [NSString stringWithFormat:@"JobAudio%d", counter + 1];
+        if ([[queueToApply objectForKey:[prefix stringByAppendingString:@"Track"]] intValue] > 0)
+        {
+            audio           = (hb_audio_config_t*)calloc(1, sizeof(*audio));
+            hb_audio_config_init(audio);
+            audio->in.track = [[queueToApply objectForKey:[prefix stringByAppendingString:@"Track"]] intValue] - 1;
+            /* We go ahead and assign values to our audio->out.<properties> */
+            audio->out.track                     = audio->in.track;
+            audio->out.codec                     = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Encoder"]]           intValue];
+            audio->out.compression_level         = hb_get_default_audio_compression(audio->out.codec);
+            audio->out.mixdown                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Mixdown"]]           intValue];
+            audio->out.normalize_mix_level       = 0;
+            audio->out.bitrate                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Bitrate"]]           intValue];
+            audio->out.samplerate                = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Samplerate"]]        intValue];
+            audio->out.dynamic_range_compression = [[queueToApply objectForKey:[prefix    stringByAppendingString:@"TrackDRCSlider"]]  floatValue];
+            audio->out.gain                      = [[queueToApply objectForKey:[prefix    stringByAppendingString:@"TrackGainSlider"]] floatValue];
+            audio->out.dither_method             = hb_audio_dither_get_default();
+            
+            hb_audio_add(job, audio);
+            free(audio);
+        }
+    }
     
     /* Now lets call the filters if applicable.
      * The order of the filters is critical
@@ -4954,14 +4946,17 @@ bool one_burned = FALSE;
         }
     }
     
-    /* if we have a previously selected vid encoder tag, then try to select it */
+    /*
+     * item 0 will be selected by default
+     * deselect it so that we can detect whether the video encoder has changed
+     */
+    [fVidEncoderPopUp selectItem:nil];
     if (selectedVidEncoderTag)
     {
-        [fVidEncoderPopUp selectItemWithTag: selectedVidEncoderTag];
-    }
-    else
-    {
-        [fVidEncoderPopUp selectItemAtIndex: 0];
+        // if we have a tag for previously selected encoder, try to select it
+        // if this fails, [fVidEncoderPopUp selectedItem] will be nil
+        // we'll handle that scenario further down
+        [fVidEncoderPopUp selectItemWithTag:selectedVidEncoderTag];
     }
     
     /* Update the Auto Passtgru Fallback Codec Popup */
@@ -5031,22 +5026,16 @@ bool one_burned = FALSE;
     else
         [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%s", [string stringByDeletingPathExtension], ext]];
 
-    if( SuccessfulScan )
+    if (SuccessfulScan)
     {
-        /* Add/replace to the correct extension */
-
-        if( [fVidEncoderPopUp selectedItem] == nil )
+        if ([fVidEncoderPopUp selectedItem] == nil)
         {
-
+            /* this means the above call to selectItemWithTag failed */
             [fVidEncoderPopUp selectItemAtIndex:0];
             [self videoEncoderPopUpChanged:nil];
-
-            /* We call the method to properly enable/disable turbo 2 pass */
-            [self twoPassCheckboxChanged: sender];
-            /* We call method method to change UI to reflect whether a preset is used or not*/
         }
     }
-	[self customSettingUsed: sender];
+	[self customSettingUsed:sender];
 }
 
 - (IBAction) autoSetM4vExtension: (id) sender

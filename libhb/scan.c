@@ -1000,6 +1000,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     }
 
     hb_work_info_t info;
+    w->title = title;
     w->audio = audio;
     w->codec_param = audio->config.in.codec_param;
     b = hb_fifo_see( audio->priv.scan_cache );

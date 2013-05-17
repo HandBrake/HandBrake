@@ -150,27 +150,27 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     unsigned int audioArrayCount = [self countOfAudioArray];
     for (i = 0; i < audioArrayCount; i++)
     {
-        HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
+        HBAudio *anAudio = [self objectInAudioArrayAtIndex:i];
         if ([anAudio enabled])
         {
-            NSNumber *sampleRateToUse = (0 == [[[anAudio sampleRate] objectForKey: keyAudioSamplerate] intValue]) ?
-            [[anAudio track] objectForKey: keyAudioInputSampleRate] :
-            [[anAudio sampleRate] objectForKey: keyAudioSamplerate];
+            NSNumber *sampleRateToUse = ([[[anAudio sampleRate] objectForKey:keyAudioSamplerate] intValue] == 0 ?
+                                         [[anAudio track]       objectForKey:keyAudioInputSampleRate] :
+                                         [[anAudio sampleRate]  objectForKey:keyAudioSamplerate]);
 
-            hb_audio_config_t *audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+            hb_audio_config_t *audio = (hb_audio_config_t*)calloc(1, sizeof(*audio));
             hb_audio_config_init(audio);
-            audio->in.track = [[[anAudio track] objectForKey: keyAudioTrackIndex] intValue] - 1;
+            audio->in.track          = [[[anAudio track] objectForKey:keyAudioTrackIndex] intValue] - 1;
             /* We go ahead and assign values to our audio->out.<properties> */
-            audio->out.track = audio->in.track;
-            audio->out.codec = [[[anAudio codec] objectForKey: keyAudioCodec] intValue];
-            audio->out.compression_level = hb_get_default_audio_compression(audio->out.codec);
-            audio->out.mixdown = [[[anAudio mixdown] objectForKey: keyAudioMixdown] intValue];
-            audio->out.normalize_mix_level = 0;
-            audio->out.bitrate = [[[anAudio bitRate] objectForKey: keyAudioBitrate] intValue];
-            audio->out.samplerate = [sampleRateToUse intValue];
-            audio->out.dynamic_range_compression = [[anAudio drc] floatValue];
-            audio->out.gain = [[anAudio gain] floatValue];
-            audio->out.dither_method = hb_audio_dither_get_default();
+            audio->out.track                     = audio->in.track;
+            audio->out.codec                     = [[[anAudio codec]   objectForKey:keyAudioCodec]   intValue];
+            audio->out.compression_level         = hb_get_default_audio_compression(audio->out.codec);
+            audio->out.mixdown                   = [[[anAudio mixdown] objectForKey:keyAudioMixdown] intValue];
+            audio->out.normalize_mix_level       = 0;
+            audio->out.bitrate                   = [[[anAudio bitRate] objectForKey:keyAudioBitrate] intValue];
+            audio->out.samplerate                = [sampleRateToUse  intValue];
+            audio->out.dynamic_range_compression = [[anAudio drc]  floatValue];
+            audio->out.gain                      = [[anAudio gain] floatValue];
+            audio->out.dither_method             = hb_audio_dither_get_default();
 
             hb_audio_add(aJob, audio);
             free(audio);

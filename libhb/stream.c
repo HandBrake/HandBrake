@@ -5144,87 +5144,65 @@ static void ffmpeg_close( hb_stream_t *d )
 
 static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 {
-    AVStream *st = stream->ffmpeg_ic->streams[id];
-    AVCodecContext *codec = st->codec;
-    AVDictionaryEntry *tag;
+    AVStream *st           = stream->ffmpeg_ic->streams[id];
+    AVCodecContext *codec  = st->codec;
+    AVDictionaryEntry *tag = av_dict_get(st->metadata, "language", NULL, 0);
 
-    // scan will ignore any audio without a bitrate. Since we've already typed the
-    // audio in order to determine its codec we set up the audio parameters here.
-    if (codec->bit_rate || codec->sample_rate)
+    hb_audio_t *audio            = calloc(1, sizeof(*audio));
+    audio->id                    = id;
+    audio->config.in.track       = id;
+    audio->config.in.codec       = HB_ACODEC_FFMPEG;
+    audio->config.in.codec_param = codec->codec_id;
+    // set the bitrate to 0; decavcodecaBSInfo will be called and fill the rest
+    audio->config.in.bitrate     = 0;
+
+    // set the input codec and extradata for Passthru
+    switch (codec->codec_id)
     {
-        hb_audio_t *audio = calloc(1, sizeof(*audio));
-        audio->id = id;
+        case AV_CODEC_ID_AAC:
+        {
+            int len = MIN(codec->extradata_size, HB_CONFIG_MAX_SIZE);
+            memcpy(audio->priv.config.extradata.bytes, codec->extradata, len);
+            audio->priv.config.extradata.length = len;
+            audio->config.in.codec              = HB_ACODEC_FFAAC;
+        } break;
 
-        if (codec->codec_id == AV_CODEC_ID_AC3)
+        case AV_CODEC_ID_AC3:
+            audio->config.in.codec       = HB_ACODEC_AC3;
+            audio->config.in.codec_param = 0;
+            break;
+
+        case AV_CODEC_ID_DTS:
         {
-            audio->config.in.codec = HB_ACODEC_AC3;
-        }
-        else
-        {
-            if (codec->codec_id == AV_CODEC_ID_DTS)
+            switch (codec->profile)
             {
-                if (codec->profile == FF_PROFILE_DTS_HD_MA ||
-                    codec->profile == FF_PROFILE_DTS_HD_HRA)
-                {
-                    audio->config.in.codec = HB_ACODEC_DCA_HD;
-                }
-                else if (codec->profile == FF_PROFILE_DTS ||
-                         codec->profile == FF_PROFILE_DTS_ES ||
-                         codec->profile == FF_PROFILE_DTS_96_24)
-                {
+                case FF_PROFILE_DTS:
+                case FF_PROFILE_DTS_ES:
+                case FF_PROFILE_DTS_96_24:
                     audio->config.in.codec = HB_ACODEC_DCA;
-                }
-                else
-                {
-                    audio->config.in.codec = HB_ACODEC_FFMPEG;
-                }
-            }
-            else if (codec->codec_id == AV_CODEC_ID_AAC)
-            {
-                int len = MIN(codec->extradata_size, HB_CONFIG_MAX_SIZE);
-                memcpy(audio->priv.config.extradata.bytes, codec->extradata,
-                       len);
-                audio->priv.config.extradata.length = len;
-                audio->config.in.codec = HB_ACODEC_FFAAC;
-            }
-            else if (codec->codec_id == AV_CODEC_ID_MP3)
-            {
-                audio->config.in.codec = HB_ACODEC_MP3;
-            }
-            else
-            {
-                audio->config.in.codec = HB_ACODEC_FFMPEG;
-            }
-            audio->config.in.codec_param = codec->codec_id;
+                    break;
 
-            int bps = av_get_bits_per_sample(codec->codec_id);
-            if (bps && codec->sample_rate && codec->channels)
-            {
-                audio->config.in.bitrate = (codec->channels *
-                                            codec->sample_rate * bps);
-            }
-            else if (codec->bit_rate)
-            {
-                audio->config.in.bitrate = codec->bit_rate;
-            }
-            else
-            {
-                audio->config.in.bitrate = 1;
-            }
-            audio->config.in.samplerate = codec->sample_rate;
-            audio->config.in.samples_per_frame = codec->frame_size;
-            audio->config.in.channel_map = &hb_libav_chan_map;
-            audio->config.in.channel_layout =
-                hb_ff_layout_xlat(codec->channel_layout, codec->channels);
-        }
+                case FF_PROFILE_DTS_HD_MA:
+                case FF_PROFILE_DTS_HD_HRA:
+                    audio->config.in.codec = HB_ACODEC_DCA_HD;
+                    break;
 
-        tag = av_dict_get(st->metadata, "language", NULL, 0);
-        set_audio_description(stream, audio,
-                              lang_for_code2(tag ? tag->value : "und"));
+                default:
+                    break;
+            }
+        } break;
 
-        audio->config.in.track = id;
-        hb_list_add(title->list_audio, audio);
+        case AV_CODEC_ID_MP3:
+            audio->config.in.codec = HB_ACODEC_MP3;
+            break;
+
+        default:
+            break;
     }
+
+    set_audio_description(stream, audio,
+                          lang_for_code2(tag != NULL ? tag->value : "und"));
+    hb_list_add(title->list_audio, audio);
 }
 
 /*

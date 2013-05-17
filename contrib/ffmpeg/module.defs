@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v9.3.tar.bz2
+FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v9.6.tar.bz2
 
 FFMPEG.CONFIGURE.deps =
 FFMPEG.CONFIGURE.env  =

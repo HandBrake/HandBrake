@@ -166,6 +166,9 @@ static int get_line( hb_work_private_t * pv, char *buf, int size )
     int i;
     char c;
 
+    // clear remnants of the previous line before progessing a new one
+    memset(buf, '\0', size);
+
     /* Find newline in converted UTF-8 buffer */
     for( i = 0; i < size - 1; i++ )
     {
@@ -321,7 +324,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
              */
             pv->last_entry_number = entry_number;
             resync = 0;
-            if( *pv->current_entry.text )
+            if (*pv->current_entry.text != '\0')
             {
                 long length;
                 char *p, *q;
@@ -342,29 +345,35 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
                 length = strlen( pv->current_entry.text );
 
-                for( q = p = pv->current_entry.text; *p; p++)
+                for (q = p = pv->current_entry.text; *p != '\0'; p++)
                 {
-                    if( *p == '\n' )
+                    if (*p == '\n' || *p == '\r')
                     {
-                        if ( line == 1 )
+                        if (*(p + 1) == '\n' || *(p + 1) == '\r' ||
+                            *(p + 1) == '\0')
                         {
-                            *q = *p;
+                            // followed by line break or last character, skip it
+                            length--;
+                            continue;
+                        }
+                        else if (line == 1)
+                        {
+                            // replace '\r' with '\n'
+                            *q   = '\n';
                             line = 2;
                         }
                         else
                         {
+                            // all subtitles on two lines tops
+                            // replace line breaks with spaces
                             *q = ' ';
                         }
                         q++;
                     }
-                    else if( *p != '\r' )
+                    else
                     {
                         *q = *p;
                         q++;
-                    }
-                    else
-                    {
-                        length--;
                     }
                 }
                 *q = '\0';
@@ -392,7 +401,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
     }
 
     hb_buffer_t *buffer = NULL;
-    if( *pv->current_entry.text )
+    if (*pv->current_entry.text != '\0')
     {
         long length;
         char *p, *q;
@@ -411,29 +420,34 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
         length = strlen( pv->current_entry.text );
 
-        for( q = p = pv->current_entry.text; *p; p++)
+        for (q = p = pv->current_entry.text; *p != '\0'; p++)
         {
-            if( *p == '\n' )
+            if (*p == '\n' || *p == '\r')
             {
-                if ( line == 1 )
+                if (*(p + 1) == '\n' || *(p + 1) == '\r' || *(p + 1) == '\0')
                 {
-                    *q = *p;
+                    // followed by line break or last character, skip it
+                    length--;
+                    continue;
+                }
+                else if (line == 1)
+                {
+                    // replace '\r' with '\n'
+                    *q   = '\n';
                     line = 2;
                 }
                 else
                 {
+                    // all subtitles on two lines tops
+                    // replace line breaks with spaces
                     *q = ' ';
                 }
                 q++;
             }
-            else if( *p != '\r' )
+            else
             {
                 *q = *p;
                 q++;
-            }
-            else
-            {
-                length--;
             }
         }
         *q = '\0';

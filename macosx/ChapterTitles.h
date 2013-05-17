@@ -8,11 +8,15 @@
 #include "hb.h"
 
 @interface ChapterTitles : NSObject {
-    hb_title_t *fTitle;
+    hb_title_t     *fTitle;
+    NSMutableArray *fChapterTitlesArray;
 }
 
 // Trigger a refresh of data
 - (void)resetWithTitle:(hb_title_t *)title;
+
+// Get the list of chapter titles
+- (NSArray*)chapterTitlesArray;
 
 // Table View Delegates
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
