@@ -38,7 +38,11 @@ BUILD.out += $(TEST.install.exe)
 TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq (1,$(FEATURE.opencl))
+ifeq ($(BUILD.system),darwin)
+    TEST.GCC.f += OpenCL
+else
     TEST.GCC.l += OpenCL
+endif
     TEST.GCC.D += USE_OPENCL
 endif
 
@@ -53,11 +57,10 @@ else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
 ifeq ($(HAS.dlfcn),1)
     TEST.GCC.l += dl
 endif
-
 ifeq (1,$(FEATURE.hwd))
     TEST.GCC.D += USE_HWD
 endif
     TEST.GCC.l += pthreadGC2 iconv ws2_32
     TEST.GCC.D += PTW32_STATIC_LIB
-	TEST.GCC.args.extra.exe++ += -static
-endif
+    TEST.GCC.args.extra.exe++ += -static
+endif #   (1-mingw,$(BUILD.cross)-$(BUILD.system))
