@@ -982,51 +982,53 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 
         if (hb_avcodec_open(c, codec, NULL, 0) < 0)
         {
-            hb_error("sync: avcodec_open failed");
-            *job->die = 1;
-            return;
+            hb_log("sync: track %d, hb_avcodec_open() failed, dropping video to sync",
+                     w->audio->config.out.track);
+            sync->drop_video_to_sync = 1;
         }
-
-        // Prepare input frame
-        AVFrame frame = { .nb_samples = c->frame_size, .pts = 0, };
-        int input_size = av_samples_get_buffer_size(NULL, c->channels,
-                                                    frame.nb_samples,
-                                                    c->sample_fmt, 1);
-        uint8_t *zeros = calloc(1, input_size);
-        avcodec_fill_audio_frame(&frame, c->channels, c->sample_fmt, zeros,
-                                 input_size, 1);
-
-        // Allocate enough space for the encoded silence
-        // The output should be < the input
-        sync->silence_buf  = malloc( input_size );
-
-        // There is some delay in getting output from some audio encoders.
-        // So encode a few packets till we get output.
-        int ii;
-        for ( ii = 0; ii < 10; ii++ )
+        else
         {
-            // Prepare output packet
-            AVPacket pkt;
-            int got_packet;
-            av_init_packet(&pkt);
-            pkt.data = sync->silence_buf;
-            pkt.size = input_size;
+            // Prepare input frame
+            AVFrame frame = { .nb_samples = c->frame_size, .pts = 0, };
+            int input_size = av_samples_get_buffer_size(NULL, c->channels,
+                                                        frame.nb_samples,
+                                                        c->sample_fmt, 1);
+            uint8_t *zeros = calloc(1, input_size);
+            avcodec_fill_audio_frame(&frame, c->channels, c->sample_fmt, zeros,
+                                     input_size, 1);
 
-            int ret = avcodec_encode_audio2( c, &pkt, &frame, &got_packet);
-            if ( ret < 0 )
-            {
-                hb_log( "sync: avcodec_encode_audio failed" );
-                break;
-            }
+            // Allocate enough space for the encoded silence
+            // The output should be < the input
+            sync->silence_buf  = malloc( input_size );
 
-            if ( got_packet )
+            // There is some delay in getting output from some audio encoders.
+            // So encode a few packets till we get output.
+            int ii;
+            for ( ii = 0; ii < 10; ii++ )
             {
-                sync->silence_size = pkt.size;
-                break;
+                // Prepare output packet
+                AVPacket pkt;
+                int got_packet;
+                av_init_packet(&pkt);
+                pkt.data = sync->silence_buf;
+                pkt.size = input_size;
+
+                int ret = avcodec_encode_audio2( c, &pkt, &frame, &got_packet);
+                if ( ret < 0 )
+                {
+                    hb_log( "sync: avcodec_encode_audio failed" );
+                    break;
+                }
+
+                if ( got_packet )
+                {
+                    sync->silence_size = pkt.size;
+                    break;
+                }
             }
+            free( zeros );
+            hb_avcodec_close( c );
         }
-        free( zeros );
-        hb_avcodec_close( c );
         av_free( c );
     }
     else
