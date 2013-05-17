@@ -41,7 +41,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
-                    Width="75"
+                    MaxWidth="95"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Add]"
                     Content="Add Track" />

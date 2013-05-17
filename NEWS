@@ -36,7 +36,7 @@ Changes betwen 0.9.8 and 0.9.9:
      - Assorted bug fixes and improvements to the core library (libhb)
      - Updated libraries
         + x264 r2273-b3065e6
-        + Libav v9.3
+        + Libav v9.6
         + libbluray 0.2.3
     Windows
      - User Interface has been re-written in WPF

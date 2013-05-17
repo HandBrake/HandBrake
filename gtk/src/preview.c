@@ -62,7 +62,7 @@ struct preview_s
     gint frame;
     gint state;
     gboolean pause;
-    gboolean encoded[30];
+    gboolean encoded[GHB_PREVIEW_MAX];
     gint encode_frame;
     gint live_id;
     gchar *current;
@@ -733,7 +733,7 @@ ghb_live_reset(signal_user_data_t *ud)
         ud->preview->current = NULL;
     }
     encoded = ud->preview->encoded[ud->preview->frame];
-    memset(ud->preview->encoded, 0, sizeof(gboolean) * 10);
+    memset(ud->preview->encoded, 0, sizeof(gboolean) * GHB_PREVIEW_MAX);
     if (encoded)
         ghb_set_preview_image(ud);
 }

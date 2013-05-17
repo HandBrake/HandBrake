@@ -1563,6 +1563,11 @@ set_title_settings(GValue *settings, gint titleindex)
     hb_title_t * title = ghb_get_title_info(titleindex);
     if (title != NULL)
     {
+        gint num_chapters = hb_list_count(title->list_chapter);
+
+        ghb_settings_set_int(settings, "PtoPType", 0);
+        ghb_settings_set_int(settings, "start_point", 1);
+        ghb_settings_set_int(settings, "end_point", num_chapters);
         ghb_settings_set_int(settings, "source_width", title->width);
         ghb_settings_set_int(settings, "source_height", title->height);
         ghb_settings_set_string(settings, "source", title->path);

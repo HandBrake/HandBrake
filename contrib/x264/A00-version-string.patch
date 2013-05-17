@@ -1,0 +1,23 @@
+diff --git a/x264.h b/x264.h
+index e5a1600..f635d9e 100644
+--- a/x264.h
++++ b/x264.h
+@@ -41,7 +41,17 @@
+ 
+ #include "x264_config.h"
+ 
+-#define X264_BUILD 130
++/*
++ * Define the full version explicitly so that it survives a git --archive.
++ *
++ * Patch will break every time X264_BUILD changes, so that we don't forget to
++ * update it ;-)
++ */
++#ifdef  X264_VERSION
++#undef  X264_VERSION
++#endif
++#define X264_BUILD       130
++#define X264_VERSION " r2273 b3065e6"
+ 
+ /* Application developers planning to link against a shared library version of
+  * libx264 from a Microsoft Visual Studio or similar development environment

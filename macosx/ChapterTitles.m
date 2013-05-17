@@ -11,50 +11,62 @@
 - (id)init 
 {
     self = [super init];
-    if( self != nil )
+    if (self != nil)
     {
-        fTitle = NULL;
+        fTitle              = NULL;
+        fChapterTitlesArray = [[[NSMutableArray alloc] init] retain];
     }
-    
     return self;
+}
+
+- (void)dealloc
+{
+    [fChapterTitlesArray release];
+    [super               dealloc];
 }
 
 - (void)resetWithTitle:(hb_title_t *)title
 {
-    int i;
-    NSString *chapterString;
-    
     fTitle = title;
+    [fChapterTitlesArray removeAllObjects];
 
-    if (!title)
+    if (fTitle == NULL)
         return;
 
-    hb_job_t * job = title->job;
-    int count = hb_list_count( job->list_chapter );
-
-    for( i = 0; i < count; i++ )
+    for (int i = 0; i < hb_list_count(fTitle->job->list_chapter); i++)
     {
-        hb_chapter_t *chapter = hb_list_item( job->list_chapter, i );
-        
-        if( chapter != NULL && chapter->title == NULL )
+        hb_chapter_t *chapter = hb_list_item(fTitle->job->list_chapter, i);
+        if (chapter != NULL)
         {
-            chapterString = [NSString stringWithFormat:@"Chapter %2d",(i+1)];
-    
-            hb_chapter_set_title( chapter, [chapterString UTF8String]);
+            if (chapter->title != NULL)
+            {
+                [fChapterTitlesArray addObject:[NSString
+                                                stringWithUTF8String:chapter->title]];
+            }
+            else
+            {
+                [fChapterTitlesArray addObject:[NSString
+                                                stringWithFormat:@"Chapter %d",
+                                                i + 1]];
+            }
         }
     }
-    
+}
+
+- (NSArray*)chapterTitlesArray
+{
+    return [NSArray arrayWithArray:fChapterTitlesArray];
 }
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-    if( fTitle == NULL )
+    if (fTitle == NULL)
     {
         return 0;
     }
     else
     {
-        return hb_list_count( fTitle->list_chapter );
+        return [fChapterTitlesArray count];
     }
 }
 
@@ -63,17 +75,12 @@
         forTableColumn:(NSTableColumn *)aTableColumn
         row:(NSInteger)rowIndex
 {
-    if(aTableColumn != nil && [[aTableColumn identifier] intValue] == 2)
+    if (aTableColumn != nil && [[aTableColumn identifier] intValue] == 2 &&
+        fTitle       != NULL)
     {
-        if( fTitle )
-        {
-            hb_chapter_t *chapter = hb_list_item( fTitle->job->list_chapter, rowIndex );
-
-            if( chapter != NULL )
-            {
-                hb_chapter_set_title( chapter, [anObject UTF8String]);
-            }
-        }
+        [fChapterTitlesArray replaceObjectAtIndex:rowIndex
+                                       withObject:[NSString
+                                                   stringWithString:anObject]];
     }
 }
 
@@ -81,26 +88,16 @@
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
       row:(NSInteger)rowIndex
 {
-    NSString *cellEntry =  @"__DATA ERROR__";
-
-    if([[aTableColumn identifier] intValue] == 1)
+    if ([[aTableColumn identifier] intValue] == 1)
     {
-        cellEntry = [NSString stringWithFormat:@"%d",rowIndex+1];
+        return [NSString stringWithFormat:@"%d", rowIndex + 1];
     }
-    else
+    else if (fTitle != NULL)
     {
-        if( fTitle )
-        {
-            hb_chapter_t *chapter = hb_list_item( fTitle->job->list_chapter, rowIndex );
-
-            if( chapter != NULL )
-            {
-                cellEntry = [NSString stringWithUTF8String:chapter->title];
-            }
-        }
+        return [NSString stringWithString:[fChapterTitlesArray
+                                           objectAtIndex:rowIndex]];
     }
-
-    return cellEntry;
+    return @"__DATA ERROR__";
 }
 
 /* Method to edit the next chapter when the user presses Return. We have to use
