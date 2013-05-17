@@ -151,7 +151,6 @@ int hb_subtitle_can_burn( int source );
 int hb_subtitle_can_pass( int source, int mux );
 
 hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
-int hb_gui_use_hwd_flag;
 
 hb_list_t *hb_attachment_list_copy(const hb_list_t *src);
 void hb_attachment_close(hb_attachment_t **attachment);
@@ -295,6 +294,8 @@ struct hb_title_set_s
     hb_list_t   * list_title;
     int           feature;    // Detected DVD feature title
 };
+
+extern int hb_gui_use_hwd_flag;
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI

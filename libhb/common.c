@@ -3103,6 +3103,7 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
     }
 }
 
+int hb_gui_use_hwd_flag = 0;
 int hb_use_dxva( hb_title_t * title )
 {
     return ( (title->video_codec_param == AV_CODEC_ID_MPEG2VIDEO 
