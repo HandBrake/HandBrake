@@ -75,7 +75,7 @@
   <Target Name="ReleasePostBuild">
     <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x86'" />
     <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer64.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x64'" />
-    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\handbrakepineapple.ico $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
     <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)HandBrakeWPF\bin\Release\doc /I /Y" />
     <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\Installer.nsi" Condition="$(Platform) == 'x86'" />
     <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\Installer64.nsi" Condition="$(Platform) == 'x64'" />
