@@ -263,7 +263,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 MessageBoxResult result =
                     this.errorService.ShowMessageBox(
-                        "This encode is currently in progress. If you delete it, the encode will be stoped. Are you sure you wish to proceed?",
+                        "This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?",
                         "Warning",
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Question);
