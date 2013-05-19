@@ -132,7 +132,10 @@ int hb_confirm_gpu_type()
             {
                 char dbuff[100];
                 status = clGetDeviceInfo(devices[j], CL_DEVICE_VENDOR, sizeof(dbuff), dbuff, NULL); 
-                if(!strcmp(dbuff, "Advanced Micro Devices, Inc.") || !strcmp(dbuff, "NVIDIA Corporation"))
+                if(!strcmp(dbuff, "Advanced Micro Devices, Inc.") ||
+                   !strcmp(dbuff, "NVIDIA Corporation")           ||
+                   /* MacBook Pro, AMD Radeon HD 6750M, OS X 10.8 */
+                   !strcmp(dbuff, "AMD"))
                 {
                     return 0;
                 }
