@@ -91,6 +91,9 @@ static hb_kernel_node gKernels[MAX_KERNEL_NUM];
         gpu_env.kernel_count++; }
 
 
+/**
+ * hb_confirm_gpu_type
+ */
 int hb_confirm_gpu_type()
 {
     int status = 1;
@@ -152,6 +155,9 @@ int hb_confirm_gpu_type()
     return -1;
 }
 
+/**
+ * hb_regist_opencl_kernel
+ */
 int hb_regist_opencl_kernel()
 {
     if( !gpu_env.isUserCreated )
@@ -168,6 +174,13 @@ int hb_regist_opencl_kernel()
     return 0;
 }
 
+/**
+ * hb_regist_opencl_kernel
+ * @param filename -
+ * @param source -
+ * @param gpu_info -
+ * @param int idx -
+ */
 int hb_convert_to_string( const char *filename, char **source, GPUEnv *gpu_info, int idx )
 {
     int file_size;
@@ -202,6 +215,12 @@ int hb_convert_to_string( const char *filename, char **source, GPUEnv *gpu_info,
     return(0);
 }
 
+/**
+ * hb_binary_generated
+ * @param context -
+ * @param cl_file_name -
+ * @param fhandle -
+ */
 int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** fhandle )
 {
     int i = 0;
@@ -218,14 +237,14 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
                                NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "Notice: Get context info failed" );
+        hb_log( "OpenCL: Get context info failed" );
         return 0;
     }
 
     devices = (cl_device_id*)malloc( sizeof(cl_device_id) * numDevices );
     if( devices == NULL )
     {
-        hb_log( "Notice: No device found" );
+        hb_log( "OpenCL: No device found" );
         return 0;
     }
 
@@ -271,6 +290,12 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
     return status;
 }
 
+/**
+ * hb_write_binary_to_file
+ * @param fileName -
+ * @param birary -
+ * @param numBytes -
+ */
 int hb_write_binary_to_file( const char* fileName, const char* birary, size_t numBytes )
 {
     FILE *output = NULL;
@@ -284,6 +309,11 @@ int hb_write_binary_to_file( const char* fileName, const char* birary, size_t nu
     return 1;
 }
 
+/**
+ * hb_generat_bin_from_kernel_source
+ * @param program -
+ * @param cl_file_name -
+ */
 int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_name )
 {
     int i = 0;
@@ -300,15 +330,17 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "Notice: Get program info failed, when generate binary file from kernel source" );
+        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
         return 0;
     }
+
     devices = (cl_device_id*)malloc( sizeof(cl_device_id) * numDevices );
     if( devices == NULL )
     {
-        hb_log( "Notice: No device found, when generate binary file from kernel source" );
+        hb_log( "OpenCL: No device found, when generate binary file from kernel source" );
         return 0;
     }
+
     /* grab the handles to all of the devices in the program. */
     status = clGetProgramInfo( program,
                                CL_PROGRAM_DEVICES,
@@ -317,9 +349,10 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "Notice: Get program info failed, when generate binary file from kernel source" );
+        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
         return 0;
     }
+
     /* figure out the sizes of each of the binaries. */
     binarySizes = (size_t*)malloc( sizeof(size_t) * numDevices );
 
@@ -329,14 +362,15 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                binarySizes, NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "Notice: Get program info failed, when generate binary file from kernel source" );
+        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
         return 0;
     }
+
     /* copy over all of the generated binaries. */
     binaries = (char**)malloc( sizeof(char *) * numDevices );
     if( binaries == NULL )
     {
-        hb_log( "Notice: malloc for binaries failed, when generate binary file from kernel source" );
+        hb_log( "OpenCL: malloc for binaries failed, when generate binary file from kernel source" );
         return 0;
     }
 
@@ -347,7 +381,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
             binaries[i] = (char*)malloc( sizeof(char) * binarySizes[i] );
             if( binaries[i] == NULL )
             {
-                hb_log( "Notice: malloc for binary[%d] failed, when generate binary file from kernel source", i );
+                hb_log( "OpenCL: malloc for binary[%d] failed, when generate binary file from kernel source", i );
                 return 0;
             }
         }
@@ -364,9 +398,10 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "Notice: Get program info failed, when generate binary file from kernel source" );
+        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
         return 0;
     }
+
     /* dump out each binary into its own separate file. */
     for( i = 0; i < numDevices; i++ )
     {
@@ -388,7 +423,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
 
             if( !hb_write_binary_to_file( fileName, binaries[i], binarySizes[i] ))
             {
-                hb_log( "Notice: Unable to write opencl kernel, writing to temporary directory instead." );
+                hb_log( "OpenCL: Unable to write opencl kernel, writing to temporary directory instead." );
                 return 0;
             }
         }
@@ -424,6 +459,11 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     return 1;
 }
 
+
+/**
+ * hb_init_opencl_attr
+ * @param env -
+ */
 int hb_init_opencl_attr( OpenCLEnv * env )
 {
     if( gpu_env.isUserCreated )
@@ -439,6 +479,11 @@ int hb_init_opencl_attr( OpenCLEnv * env )
     return 0;
 }
 
+/**
+ * hb_create_kernel
+ * @param kernelname -
+ * @param env -
+ */
 int hb_create_kernel( char * kernelname, KernelEnv * env )
 {
     int status;
@@ -448,12 +493,20 @@ int hb_create_kernel( char * kernelname, KernelEnv * env )
     return status != CL_SUCCESS ? 1 : 0;
 }
 
+/**
+ * hb_release_kernel
+ * @param env -
+ */
 int hb_release_kernel( KernelEnv * env )
 {
     int status = clReleaseKernel( env->kernel );
     return status != CL_SUCCESS ? 1 : 0;
 }
 
+/**
+ * hb_init_opencl_env
+ * @param gpu_info -
+ */
 int hb_init_opencl_env( GPUEnv *gpu_info )
 {
     size_t length;
@@ -473,9 +526,10 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         status = clGetPlatformIDs( 0, NULL, &numPlatforms );
         if( status != CL_SUCCESS )
         {
-            hb_log( "Notice: OpenCL device platform not found." );
+            hb_log( "OpenCL: OpenCL device platform not found." );
             return(1);
         }
+
         gpu_info->platform = NULL;
         if( 0 < numPlatforms )
         {
@@ -489,7 +543,7 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
 
             if( status != CL_SUCCESS )
             {
-                hb_log( "Notice: Specific opencl platform not found." );
+                hb_log( "OpenCL: Specific opencl platform not found." );
                 return(1);
             }
 
@@ -529,14 +583,16 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
             }
             free( platforms );
         }
+
         if( NULL == gpu_info->platform )
         {
-            hb_log( "Notice: No OpenCL-compatible GPU found." );
+            hb_log( "OpenCL: No OpenCL-compatible GPU found." );
             return(1);
         }
+
         if( status != CL_SUCCESS )
         {
-            hb_log( "Notice: No OpenCL-compatible GPU found." );
+            hb_log( "OpenCL: No OpenCL-compatible GPU found." );
             return(1);
         }
 
@@ -550,44 +606,50 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         gpu_info->dType = CL_DEVICE_TYPE_GPU;
         gpu_info->context = clCreateContextFromType(
             cps, gpu_info->dType, NULL, NULL, &status );
+
         if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
             gpu_info->dType = CL_DEVICE_TYPE_CPU;
             gpu_info->context = clCreateContextFromType(
                 cps, gpu_info->dType, NULL, NULL, &status );
         }
+
         if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
             gpu_info->dType = CL_DEVICE_TYPE_DEFAULT;
             gpu_info->context = clCreateContextFromType(
                 cps, gpu_info->dType, NULL, NULL, &status );
         }
+
         if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
-            hb_log( "Notice: Unable to create opencl context." );
+            hb_log( "OpenCL: Unable to create opencl context." );
             return(1);
         }
+
         /* Detect OpenCL devices. */
         /* First, get the size of device list data */
         status = clGetContextInfo( gpu_info->context, CL_CONTEXT_DEVICES,
                                    0, NULL, &length );
         if((status != CL_SUCCESS) || (length == 0))
         {
-            hb_log( "Notice: Unable to get the list of devices in context." );
+            hb_log( "OpenCL: Unable to get the list of devices in context." );
             return(1);
         }
+
         /* Now allocate memory for device list based on the size we got earlier */
         gpu_info->devices = (cl_device_id*)malloc( length );
         if( gpu_info->devices == (cl_device_id*)NULL )
         {
             return(1);
         }
+
         /* Now, get the device list data */
         status = clGetContextInfo( gpu_info->context, CL_CONTEXT_DEVICES, length,
                                    gpu_info->devices, NULL );
         if( status != CL_SUCCESS )
         {
-            hb_log( "Notice: Unable to get the device list data in context." );
+            hb_log( "OpenCL: Unable to get the device list data in context." );
             return(1);
         }
 
@@ -597,7 +659,7 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
                                                         0, &status );
         if( status != CL_SUCCESS )
         {
-            hb_log( "Notice: Unable to create opencl command queue." );
+            hb_log( "OpenCL: Unable to create opencl command queue." );
             return(1);
         }
     }
@@ -615,6 +677,10 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
 }
 
 
+/**
+ * hb_release_opencl_env
+ * @param gpu_info -
+ */
 int hb_release_opencl_env( GPUEnv *gpu_info )
 {
     if( !isInited )
@@ -629,22 +695,30 @@ int hb_release_opencl_env( GPUEnv *gpu_info )
             gpu_env.programs[i] = NULL;
         }
     }
+
     if( gpu_env.command_queue )
     {
         clReleaseCommandQueue( gpu_env.command_queue );
         gpu_env.command_queue = NULL;
     }
+
     if( gpu_env.context )
     {
         clReleaseContext( gpu_env.context );
         gpu_env.context = NULL;
     }
+
     isInited = 0;
     gpu_info->isUserCreated = 0;
     return 1;
 }
 
 
+/**
+ * hb_register_kernel_wrapper
+ * @param kernel_name -
+ * @param function -
+ */
 int hb_register_kernel_wrapper( const char *kernel_name, cl_kernel_function function )
 {
     int i;
@@ -659,6 +733,11 @@ int hb_register_kernel_wrapper( const char *kernel_name, cl_kernel_function func
     return(0);
 }
 
+/**
+ * hb_cached_of_kerner_prg
+ * @param gpu_env -
+ * @param cl_file_name -
+ */
 int hb_cached_of_kerner_prg( const GPUEnv *gpu_env, const char * cl_file_name )
 {
     int i;
@@ -674,6 +753,13 @@ int hb_cached_of_kerner_prg( const GPUEnv *gpu_env, const char * cl_file_name )
     return(0);
 }
 
+/**
+ * hb_compile_kernel_file
+ * @param filename -
+ * @param gpu_info -
+ * @param indx -
+ * @param build_option -
+ */
 int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                             int indx, const char *build_option )
 {
@@ -729,7 +815,7 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                                    NULL );
         if( status != CL_SUCCESS )
         {
-            hb_log( "Notice: Unable to get the number of devices in context." );
+            hb_log( "OpenCL: Unable to get the number of devices in context." );
             return 0;
         }
 
@@ -780,46 +866,61 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
         gpu_info->programs[idx] = clCreateProgramWithSource(
             gpu_info->context, 1, &source, source_size, &status );
     }
+
     if((gpu_info->programs[idx] == (cl_program)NULL) || (status != CL_SUCCESS)){
-        hb_log( "Notice: Unable to get list of devices in context." );
+        hb_log( "OpenCL: Unable to get list of devices in context." );
         return(0);
     }
 
     /* create a cl program executable for all the devices specified */
-    if( !gpu_info->isUserCreated )
+    if( !gpu_info->isUserCreated ) 
+	{
         status = clBuildProgram( gpu_info->programs[idx], 1, gpu_info->devices,
                                  build_option, NULL, NULL );
+	}
     else
+	{
         status = clBuildProgram( gpu_info->programs[idx], 1, &(gpu_info->dev),
                                  build_option, NULL, NULL );
+	}
 
     if( status != CL_SUCCESS )
     {
-        if( !gpu_info->isUserCreated )
+        if( !gpu_info->isUserCreated ) 
+		{
             status = clGetProgramBuildInfo( gpu_info->programs[idx],
                                             gpu_info->devices[0],
                                             CL_PROGRAM_BUILD_LOG, 0, NULL, &length );
-        else
-            status = clGetProgramBuildInfo( gpu_info->programs[idx],
+		}
+		else
+		{
+			status = clGetProgramBuildInfo( gpu_info->programs[idx],
                                             gpu_info->dev,
                                             CL_PROGRAM_BUILD_LOG, 0, NULL, &length );
+		}
 
         if( status != CL_SUCCESS )
         {
-            hb_log( "Notice: Unable to get GPU build information." );
+            hb_log( "OpenCL: Unable to get GPU build information." );
             return(0);
         }
+
         buildLog = (char*)malloc( length );
         if( buildLog == (char*)NULL )
         {
             return(0);
         }
+
         if( !gpu_info->isUserCreated )
+		{
             status = clGetProgramBuildInfo( gpu_info->programs[idx], gpu_info->devices[0],
                                             CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
+		}
         else
+		{
             status = clGetProgramBuildInfo( gpu_info->programs[idx], gpu_info->dev,
                                             CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
+		}
 
         fd1 = fopen( "kernel-build.log", "w+" );
         if( fd1 != NULL ) {
@@ -833,8 +934,10 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
     strcpy( gpu_env.kernelSrcFile[idx], filename );
 
-    if( binaryExisted == 0 )
+    if( binaryExisted == 0 ) 
+	{
         hb_generat_bin_from_kernel_source( gpu_env.programs[idx], filename );
+	}
 
     gpu_info->file_count += 1;
 
@@ -842,6 +945,12 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 }
 
 
+/**
+ * hb_get_kernel_env_and_func
+ * @param kernel_name -
+ * @param env -
+ * @param function -
+ */
 int hb_get_kernel_env_and_func( const char *kernel_name,
                                 KernelEnv *env,
                                 cl_kernel_function *function )
@@ -863,7 +972,11 @@ int hb_get_kernel_env_and_func( const char *kernel_name,
     return(0);
 }
 
-
+/**
+ * hb_get_kernel_env_and_func
+ * @param kernel_name -
+ * @param userdata -
+ */
 int hb_run_kernel( const char *kernel_name, void **userdata )
 {
     KernelEnv env;
@@ -872,19 +985,32 @@ int hb_run_kernel( const char *kernel_name, void **userdata )
     memset( &env, 0, sizeof(KernelEnv));
     status = hb_get_kernel_env_and_func( kernel_name, &env, &function );
     strcpy( env.kernel_name, kernel_name );
-    if( status == 1 )
+    if( status == 1 ) 
+	{
         return(function( userdata, &env ));
+	}
+
     return(0);
 }
 
-
+/**
+ * hb_init_opencl_run_env
+ * @param argc -
+ * @param argv -
+ * @param build_option -
+ */
 int hb_init_opencl_run_env( int argc, char **argv, const char *build_option )
 {
     int status = 0;
     if( MAX_CLKERNEL_NUM <= 0 )
+	{
         return 1;
+	}
+
     if((argc > MAX_CLFILE_NUM) || (argc<0))
+	{
         return 1;
+	}
 
     if( !isInited )
     {
@@ -910,24 +1036,32 @@ int hb_init_opencl_run_env( int argc, char **argv, const char *build_option )
     return(0);
 }
 
-
+/**
+ * hb_release_opencl_run_env
+ */
 int hb_release_opencl_run_env()
 {
     return hb_release_opencl_env( &gpu_env );
 }
 
-
+/**
+ * hb_opencl_stats
+ */
 int hb_opencl_stats()
 {
     return isInited;
 }
 
+/**
+ * hb_get_opencl_env
+ */
 int hb_get_opencl_env()
 {
     int i = 0;
     cl_int status;
     size_t numDevices;
     cl_device_id *devices;
+
     /*initialize devices, context, comand_queue*/
     status = hb_init_opencl_env( &gpu_env );
     if( status )
@@ -939,9 +1073,11 @@ int hb_get_opencl_env()
                                NULL );
     if( status != CL_SUCCESS )
         return 0;
+
     devices = (cl_device_id*)malloc( sizeof(cl_device_id) * numDevices );
     if( devices == NULL )
         return 0;
+
     /* grab the handles to all of the devices in the context. */
     status = clGetContextInfo( gpu_env.context,
                                CL_CONTEXT_DEVICES,
@@ -949,6 +1085,7 @@ int hb_get_opencl_env()
                                devices,
                                NULL );
     status = 0;
+
     /* dump out each binary into its own separate file. */
     for( i = 0; i < numDevices; i++ )
     {
@@ -970,15 +1107,22 @@ int hb_get_opencl_env()
             hb_log( "GPU Driver Version: %s", driverVersion );
         }
     }
+
     if( devices != NULL )
     {
         free( devices );
         devices = NULL;
     }
+
     return status;
 }
 
-
+/**
+ * hb_create_buffer
+ * @param cl_inBuf -
+ * @param flags -
+ * @param size -
+ */
 int hb_create_buffer( cl_mem *cl_Buf, int flags, int size )
 {
     int status;
@@ -986,12 +1130,20 @@ int hb_create_buffer( cl_mem *cl_Buf, int flags, int size )
     
     if( status != CL_SUCCESS )
     { 
-        hb_log( "clCreateBuffer error '%d'", status );
+        hb_log( "OpenCL: clCreateBuffer error '%d'", status );
         return 0; 
     }
+
     return 1;
 }
 
+
+/**
+ * hb_read_opencl_buffer
+ * @param cl_inBuf -
+ * @param outbuf -
+ * @param size -
+ */
 int hb_read_opencl_buffer( cl_mem cl_inBuf, unsigned char *outbuf, int size )
 {
     int status;
@@ -999,9 +1151,10 @@ int hb_read_opencl_buffer( cl_mem cl_inBuf, unsigned char *outbuf, int size )
     status = clEnqueueReadBuffer( gpu_env.command_queue, cl_inBuf, CL_TRUE, 0, size, outbuf, 0, 0, 0 );
     if( status != CL_SUCCESS )
     { 
-        hb_log( "av_read_opencl_buffer error '%d'", status );
+        hb_log( "OpenCL: av_read_opencl_buffer error '%d'", status );
         return 0; 
     }
+
     return 1;
 }
 #endif

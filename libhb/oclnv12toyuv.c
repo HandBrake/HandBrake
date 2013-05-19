@@ -45,7 +45,6 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv );
  */
 static int hb_nv12toyuv_reg_kernel( void );
 
-
 /**
  * It creates are opencl bufs w is input frame width, h is input frame height
  */
@@ -57,6 +56,7 @@ static int hb_nv12toyuv_create_cl_buf( KernelEnv *kenv, int w, int h, hb_va_dxva
     CREATEBUF( dxva2->cl_mem_yuv, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, in_bytes );
     return 0;
 }
+
 /**
  * It creates are opencl kernel. kernel name is nv12toyuv
  */
@@ -66,6 +66,7 @@ static int hb_nv12toyuv_create_cl_kernel( KernelEnv *kenv, hb_va_dxva2_t *dxva2 
     dxva2->nv12toyuv = clCreateKernel( kenv->program, "nv12toyuv", &ret );
     return ret;
 }
+
 /**
  * It set opencl arg, input data,output data, input width, output height
  */
@@ -79,6 +80,7 @@ static int hb_nv12toyuv_setkernelarg( KernelEnv *kenv, int w, int h, hb_va_dxva2
     OCLCHECK( clSetKernelArg, kenv->kernel, arg++, sizeof(int), &h );
     return 0;
 }
+
 /**
  * It initialize nv12 to yuv kernel.
  */
@@ -88,18 +90,32 @@ static int hb_init_nv12toyuv_ocl( KernelEnv *kenv, int w, int h, hb_va_dxva2_t *
     {
         if( hb_nv12toyuv_create_cl_buf( kenv, w, h, dxva2 ) )
         {
-            hb_log( "nv12toyuv_create_cl_buf fail" );
+            hb_log( "OpenCL: nv12toyuv_create_cl_buf fail" );
             return -1;
         }
         if (!dxva2->nv12toyuv_tmp_in) 
+		{
             dxva2->nv12toyuv_tmp_in = malloc (w*h*3/2);
+		}
+
         if (!dxva2->nv12toyuv_tmp_out) 
+		{
             dxva2->nv12toyuv_tmp_out = malloc (w*h*3/2);
+		}
+
         hb_nv12toyuv_create_cl_kernel( kenv, dxva2 );
     }
     return 0;
 }
 
+/**
+ * copy_plane
+ * @param dst -
+ * @param src -
+ * @param dstride -
+ * @param sstride -
+ * @param h -
+ */
 static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride,
                             int h )
 {
@@ -108,6 +124,7 @@ static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride
         memcpy( dst, src, dstride * h );
         return dst + dstride * h;
     }
+
     int lbytes = dstride <= sstride? dstride : sstride;
     while ( --h >= 0 )
     {
@@ -115,6 +132,7 @@ static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride
         src += sstride;
         dst += dstride;
     }
+
     return dst;
 }
 
@@ -136,10 +154,14 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
     int detelecine = (int)userdata[8];
     int i;
     if( hb_init_nv12toyuv_ocl( kenv, w, h, dxva2 ) )
+	{
         return -1;
+	}
 
     if( hb_nv12toyuv_setkernelarg( kenv, w, h, dxva2 ) )
+	{
         return -1;
+	}
 
     int in_bytes = w*h*3/2;
     if( kenv->isAMD )
@@ -150,8 +172,10 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
         {
             memcpy( data + i * dxva2->width, bufi1 + i * p, dxva2->width );
             if ( i < dxva2->height >> 1 )
+			{
                 memcpy( data + ( dxva2->width * dxva2->height ) + i * dxva2->width, bufi2 + i * p, dxva2->width );
-        }
+			}		
+		}
         clEnqueueUnmapMemObject( kenv->command_queue, dxva2->cl_mem_nv12, data, 0, NULL, NULL );
     }
     else
@@ -161,7 +185,9 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
         {
             memcpy( tmp + i * dxva2->width, bufi1 + i * p, dxva2->width );
             if( i < dxva2->height >> 1 )
+			{
                 memcpy( tmp + (dxva2->width * dxva2->height) + i * dxva2->width, bufi2 + i * p, dxva2->width );
+			}
         }
         OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, dxva2->cl_mem_nv12, CL_TRUE, 0, in_bytes, tmp, 0, NULL, NULL );
         free( tmp );
@@ -197,6 +223,7 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
             memcpy( dxva2->nv12toyuv_tmp_in + ( ww * hh ) + i * ( ww >> 1 ), pic_crop.data[1] + i * pic_crop.linesize[1], ww >> 1 );
             memcpy( dxva2->nv12toyuv_tmp_in + ( ww * hh ) + ( ( ww * hh )>>2 ) + i * ( ww >> 1 ), pic_crop.data[2] + i * pic_crop.linesize[2], ww >> 1 );
         }
+
         if( kenv->isAMD )
         {
             void *data = clEnqueueMapBuffer( kenv->command_queue, dxva2->cl_mem_yuv, CL_MAP_WRITE_INVALIDATE_REGION, CL_TRUE, 0, ww * hh * 3 / 2, 0, NULL, NULL, NULL );
@@ -207,6 +234,7 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
         {
             OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, dxva2->cl_mem_yuv, CL_TRUE, 0, in_bytes, dxva2->nv12toyuv_tmp_in, 0, NULL, NULL );
         }
+
         hb_buffer_close( &in );
     }
     return 0;
@@ -219,7 +247,7 @@ static int hb_nv12toyuv_reg_kernel( void )
     int st = hb_register_kernel_wrapper( "nv12toyuv", hb_nv12toyuv );
     if( !st )
     {
-        hb_log( "register kernel[%s] failed", "nv12toyuv" );
+        hb_log( "OpenCL: register kernel[%s] failed", "nv12toyuv" );
         return -1;
     }
     return 0;
@@ -240,11 +268,15 @@ int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxv
     userdata[6] = (void*)p;
     userdata[7] = decomb;
     userdata[8] = detelecine;
+
     if( hb_nv12toyuv_reg_kernel() )
+	{
         return -1;
+	}
+
     if( hb_run_kernel( "nv12toyuv", userdata ) )
     {
-        hb_log( "run kernel[nv12toyuv] failed" );
+        hb_log( "OpenCL: run kernel[nv12toyuv] failed" );
         return -1;
     }
     return 0;

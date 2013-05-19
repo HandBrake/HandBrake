@@ -29,6 +29,7 @@ inline double hb_fit_gauss_kernel( double x )
 
     return exp( powNum );
 }
+
 /**
  * Using gaussian algorithm to calculate the scale filter
  */
@@ -120,6 +121,7 @@ static void hb_set_gauss_interpolation( float *pcoeff, int *pmappedindex, int ta
         }
     }
 }
+
 /**
 * executive scale using opencl
 * get filter args
@@ -152,7 +154,7 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
     }
     if( !os->h_out_buf )
     {
-        hb_log( "Scaling With OpenCL" );
+        hb_log( "OpenCL: Scaling With OpenCL" );
         //malloc filter args
         float *hf_y, *hf_uv, *vf_y, *vf_uv;
         int   *hi_y, *hi_uv, *vi_y, *vi_uv;
@@ -254,6 +256,7 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
 
     return 1;
 }
+
 /**
 * function describe: this function is used to scaling video frame. it uses the gausi scaling algorithm
 *  parameter:
@@ -273,11 +276,12 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
         int st = hb_register_kernel_wrapper( "frame_h_scale", hb_ocl_scale_func );
         if( !st )
         {
-            hb_log( "register kernel[%s] failed", "frame_h_scale" );
+            hb_log( "OpenCL: Register kernel[%s] failed", "frame_h_scale" );
             return 0;
         }
         init_flag++;
     }
+
     if( in_data==NULL )
     {
         data[0] = in_buf;
@@ -288,14 +292,19 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
         data[0] = in_data;
         os->use_ocl_mem = 0;
     }
+
     data[1] = out_data;
     data[2] = (void*)in_w;
     data[3] = (void*)in_h;
     data[4] = (void*)out_w;
     data[5] = (void*)out_h;
     data[6] = os;
+
     if( !hb_run_kernel( "frame_h_scale", data ) )
-        hb_log( "run kernel[%s] failed", "frame_scale" );
+	{
+        hb_log( "OpenCL: Run kernel[%s] failed", "frame_scale" );
+	}
+
     return 0;
 }
 #endif
