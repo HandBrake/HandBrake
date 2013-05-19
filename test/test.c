@@ -2965,8 +2965,8 @@ static void ShowHelp()
     "                            of data. Note: breaks pre-iOS iPod compatibility.\n"
     "    -O, --optimize          Optimize mp4 files for HTTP streaming (\"fast start\")\n"
     "    -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them\n"
-    "    -P, --opencl-support    Use OpenCL\n"
-    "    -U, --UVD-support       Use UVD hardware\n"
+    "    -P, --use-opencl        Use OpenCL where applicable\n"
+    "    -U, --use-hwd           Use DXVA2 hardware decoding\n"
     "\n"
 
 
