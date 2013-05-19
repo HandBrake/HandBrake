@@ -10,13 +10,11 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Windows;
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -31,13 +29,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class QueueViewModel : ViewModelBase, IQueueViewModel
     {
-        /*
-         
-         * TODO FIX THE DRAP/DROP ADORNER!
-         */
-
-
-
         #region Constants and Fields
 
         /// <summary>
@@ -82,9 +73,6 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
@@ -94,7 +82,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The Error Service 
         /// </param>
-        public QueueViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IQueueProcessor queueProcessor, IErrorService errorService)
+        public QueueViewModel(IUserSettingService userSettingService, IQueueProcessor queueProcessor, IErrorService errorService)
         {
             this.userSettingService = userSettingService;
             this.queueProcessor = queueProcessor;
@@ -199,7 +187,7 @@ namespace HandBrakeWPF.ViewModels
         public void WhenDone(string action)
         {
             this.WhenDoneAction = action;
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, action);
+            this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, action);
         }
 
         /// <summary>
@@ -374,7 +362,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Load();
 
-            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction);
+            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
 
             this.queueProcessor.JobProcessingStarted += this.queueProcessor_JobProcessingStarted;
             this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
@@ -429,7 +417,6 @@ namespace HandBrakeWPF.ViewModels
                             e.EstimatedTimeLeft,
                             e.ElapsedTime);
                 }
-
             });
         }
 

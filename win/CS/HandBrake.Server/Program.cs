@@ -1,6 +1,5 @@
 ﻿namespace HandBrake.Server
 {
-    using System;
     using System.Linq;
 
     using HandBrake.ApplicationServices.Services;
@@ -21,9 +20,6 @@
         {
             if (args.Count() != 1)
             {
-                //Console.WriteLine("Invalid Arguments");
-                //Console.ReadLine();
-
                 IServerService server = new ServerService();
                 server.Start("8001");
             }

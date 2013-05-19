@@ -11,7 +11,6 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
-    using System.Globalization;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
@@ -57,6 +56,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private bool loggingEnabled;
 
+        /// <summary>
+        /// The Current Task
+        /// </summary>
+        private QueueTask currentTask;
+
         #endregion
 
         /// <summary>
@@ -95,6 +99,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.startTime = DateTime.Now;
             this.loggingEnabled = enableLogging;
+            this.currentTask = job;
 
             try
             {
@@ -121,12 +126,6 @@ namespace HandBrake.ApplicationServices.Services
                         this.IsEncoding = false;
                         throw;
                     }
-                }
-
-                // Prvent the system from sleeping if the user asks
-                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep) )
-                {
-                    Win32.PreventSleep();
                 }
 
                 // Verify the Destination Path Exists, and if not, create it.
@@ -163,7 +162,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error has occured."));
+                this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error has occured.", this.currentTask.Task.Destination));
             }
         }
 
@@ -271,13 +270,8 @@ namespace HandBrake.ApplicationServices.Services
 
             this.InvokeEncodeCompleted(
                 e.Error
-                    ? new EncodeCompletedEventArgs(false, null, string.Empty)
-                    : new EncodeCompletedEventArgs(true, null, string.Empty));
-
-            if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
-            {
-                Win32.AllowSleep();
-            }
+                    ? new EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Task.Destination)
+                    : new EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Task.Destination));
 
             this.ShutdownFileWriter();
         }

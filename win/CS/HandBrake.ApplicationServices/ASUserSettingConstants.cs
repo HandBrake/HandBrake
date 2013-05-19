@@ -20,19 +20,9 @@ namespace HandBrake.ApplicationServices
         public const string Verbosity = "Verbosity";
 
         /// <summary>
-        /// When Complete Action
-        /// </summary>
-        public const string WhenCompleteAction = "WhenCompleteAction";
-
-        /// <summary>
         /// Process Priority
         /// </summary>
         public const string ProcessPriority = "ProcessPriority";
-
-        /// <summary>
-        /// Prevent Sleep
-        /// </summary>
-        public const string PreventSleep = "PreventSleep";
 
         /// <summary>
         /// Save Log Directory
@@ -58,21 +48,6 @@ namespace HandBrake.ApplicationServices
         /// Disable Libdvdnav
         /// </summary>
         public const string DisableLibDvdNav = "DisableLibDvdNav";
-
-        /// <summary>
-        /// Send file enabled.
-        /// </summary>
-        public const string SendFile = "SendFile";
-
-        /// <summary>
-        /// Send file to application path
-        /// </summary>
-        public const string SendFileTo = "SendFileTo";
-
-        /// <summary>
-        /// Send file to arguments
-        /// </summary>
-        public const string SendFileToArgs = "SendFileToArgs";
 
         /// <summary>
         /// Min Title Scan Duration
