@@ -558,7 +558,7 @@ static void do_job( hb_job_t * job )
     }
     else
     {
-        hb_log("Using GPU: NO.");
+        hb_log("Using GPU: No.");
     }
     /* Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan. */
