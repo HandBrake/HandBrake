@@ -23,5 +23,10 @@ namespace HandBrakeWPF
         /// The appcast 32.
         /// </summary>
         public const string Appcast32 = "http://handbrake.fr/appcast.i386.xml";
+
+        /// <summary>
+        /// The any.
+        /// </summary>
+        public const string Any = "(Any)";
     }
 }
