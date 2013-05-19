@@ -803,7 +803,7 @@ namespace HandBrakeWPF.ViewModels
 
                     this.SelectedStartPoint = 1;
                     this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
-                } 
+                }
                 else if (value == PointToPointMode.Seconds)
                 {
                     if (this.selectedTitle == null)
@@ -1113,7 +1113,14 @@ namespace HandBrakeWPF.ViewModels
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
             IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
 
-            viewModel.Setup(this.ScannedSource, this.SourceName);
+            viewModel.Setup(this.ScannedSource, this.SourceName, (tasks) =>
+                {
+                    foreach (SelectionTitle title in tasks)
+                    {
+                        this.SelectedTitle = title.Title;
+                        this.AddToQueue();
+                    }
+                });
 
             if (window != null)
             {
@@ -1783,7 +1790,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        this.SourceLabel = "Scan Failed... See Activity Log for details.";                        this.StatusLabel = "Scan Failed... See Activity Log for details.";
+                        this.SourceLabel = "Scan Failed... See Activity Log for details."; this.StatusLabel = "Scan Failed... See Activity Log for details.";
                     }
                 });
         }
@@ -2022,10 +2029,10 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void CurrentTask_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-           if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
-           {
-               this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
-           }
+            if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
+            {
+                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+            }
         }
 
         #endregion

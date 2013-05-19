@@ -329,4 +329,10 @@ To enable this tab, check the "Use Advanced Tab instead" option on the Video Tab
 
 If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; Advanced.</value>
   </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>WARNING: You do not have automatic file naming turned on. Please enable this in options.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>WARNING: You do not currently have automatic audio and subtitle track selection setup. You can setup the default track selection behaviour in options.</value>
+  </data>
 </root>

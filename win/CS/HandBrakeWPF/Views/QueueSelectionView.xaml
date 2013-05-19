@@ -4,6 +4,8 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="{Binding Title}"
         Width="450"
         MaxHeight="450"
@@ -18,6 +20,8 @@
             <Setter Property="ToolTipService.ShowDuration" Value="20000" />
             <Setter Property="Margin" Value="0,2,0,2" />
         </Style>
+        
+        <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -33,17 +37,18 @@
 
         <!--  Header  -->
         <StackPanel Grid.Row="0"
-                    Height="30"
+                    Height="36"
                     Margin="0,0,0,10"
                     Background="White"
                     Orientation="Horizontal">
-            <Image Width="24"
-                   Height="24"
+            <Image Width="32"
+                   Height="32"
                    Margin="10,0,5,0"
                    VerticalAlignment="Center"
                    Source="Images/AddToQueue_small.png" />
             <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                <TextBlock FontWeight="Bold" Text="Queue Multiple Items" />
+                <TextBlock FontWeight="Bold" Text="Add to Queue" />
+                <TextBlock Text="*** Experimental ***" />
             </StackPanel>
         </StackPanel>
 
@@ -70,7 +75,7 @@
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Select All" cal:Message.Attach="[Event Click] = [Action SelectAll]" />
-                    <MenuItem Header="Select All" cal:Message.Attach="[Event Click] = [Action UnSelectAll]" />
+                    <MenuItem Header="Deselect All" cal:Message.Attach="[Event Click] = [Action UnSelectAll]" />
                     <Separator />
                     <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" cal:Message.Attach="[Event Click] = [Action OrderByTitle]" />
                     <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" cal:Message.Attach="[Event Click] = [Action OrderByDuration]" />
@@ -109,7 +114,12 @@
 
         <!-- Checlist -->
         <StackPanel Orientation="Vertical" Grid.Row="3" Margin="10,10,10,0">
-            <TextBlock Text="Checklist " />
+            <TextBlock Text="{x:Static Properties:Resources.QueueSelection_AutoTrackSelectionWarning}"
+                       TextWrapping="Wrap" Visibility="{Binding IsAutomaticTrackSelectionEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" 
+                       Margin="0,0,0,10"/>
+
+            <TextBlock Text="{x:Static Properties:Resources.QueueSelection_AutoNameWarning}"
+                       TextWrapping="Wrap" Visibility="{Binding IsAutoNamingEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
         </StackPanel>
 
         <!--  Controls  -->
