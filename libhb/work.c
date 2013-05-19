@@ -542,18 +542,24 @@ static void do_job( hb_job_t * job )
 
     job->list_work = hb_list_init();
 
-    hb_log( "starting job" );
-    if( job->use_opencl || job->use_hwd )
-    {
-        hb_log( "Using GPU : Yes." );
-        /* init opencl environment */ 
 #ifdef USE_OPENCL
-        if( job->use_opencl )
-            job->use_opencl =! hb_init_opencl_run_env( 0, NULL, "-I." );
-#endif    
+    /* init opencl environment */
+    if (job->use_opencl)
+        job->use_opencl = !hb_init_opencl_run_env(0, NULL, "-I.");
+#else
+    job->use_opencl = 0;
+#endif
+
+    hb_log( "starting job" );
+
+    if (job->use_opencl || job->use_hwd)
+    {
+        hb_log("Using GPU: Yes.");
     }
     else
-        hb_log( "Using GPU : NO." );
+    {
+        hb_log("Using GPU: NO.");
+    }
     /* Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan. */
     if( !job->indepth_scan && interjob->select_subtitle )
