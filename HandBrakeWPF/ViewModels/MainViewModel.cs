@@ -205,10 +205,15 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         /// <param name="notificationService">
         /// The notification Service.
-        /// *** Leave in Constructor. ***  TODO find out why?
+        /// *** Leave in Constructor. *** 
+        /// </param>
+        /// <param name="whenDoneService">
+        /// The when Done Service.
+        /// *** Leave in Constructor. *** 
         /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
-            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService, INotificationService notificationService)
+            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService, INotificationService notificationService,
+            IPrePostActionService whenDoneService)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;

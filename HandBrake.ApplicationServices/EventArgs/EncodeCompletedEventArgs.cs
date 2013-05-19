@@ -12,6 +12,8 @@ namespace HandBrake.ApplicationServices.EventArgs
     using System;
     using System.Runtime.Serialization;
 
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// Encode Progress Event Args
     /// </summary>
@@ -30,12 +32,22 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// <param name="errorInformation">
         /// The error information.
         /// </param>
-        public EncodeCompletedEventArgs(bool sucessful, Exception exception, string errorInformation)
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        public EncodeCompletedEventArgs(bool sucessful, Exception exception, string errorInformation, string filename)
         {
             this.Successful = sucessful;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
+            this.FileName = filename;
         }
+
+        /// <summary>
+        /// Gets or sets the file name.
+        /// </summary>
+        [DataMember]
+        public string FileName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Successful.
