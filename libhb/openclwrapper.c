@@ -136,9 +136,11 @@ int hb_confirm_gpu_type()
                 char dbuff[100];
                 status = clGetDeviceInfo(devices[j], CL_DEVICE_VENDOR, sizeof(dbuff), dbuff, NULL); 
                 if(!strcmp(dbuff, "Advanced Micro Devices, Inc.") ||
-                   !strcmp(dbuff, "NVIDIA Corporation")           ||
+#ifdef __APPLE__
+                   !strcmp(dbuff, "AMD")                          ||
                    /* MacBook Pro, AMD Radeon HD 6750M, OS X 10.8 */
-                   !strcmp(dbuff, "AMD"))
+#endif
+                   !strcmp(dbuff, "NVIDIA Corporation"))
                 {
                     return 0;
                 }
@@ -559,7 +561,8 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
                 }
                 gpu_info->platform = platforms[i];
 
-                if( !strcmp( platformName, "Advanced Micro Devices, Inc." ))
+                if (!strcmp(platformName, "Advanced Micro Devices, Inc.") ||
+                    !strcmp(platformName, "AMD"))
                     gpu_info->vendor = AMD;
                 else 
                     gpu_info->vendor = others;
