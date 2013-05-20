@@ -25,6 +25,10 @@ MACOSX.map.g.min  = debug
 MACOSX.map.g.std  = debug
 MACOSX.map.g.max  = debug
 
+ifeq (1,$(FEATURE.opencl))
+MACOSX.extra_cflags = OTHER_CFLAGS='-DUSE_OPENCL'
+endif
+
 ifeq (1,$(FEATURE.fdk_aac))
 MACOSX.extra_ldflags = OTHER_LDFLAGS='$(abspath $(BUILD))/contrib/lib/libfdk-aac.a'
 endif
@@ -58,6 +62,7 @@ MACOSX.XCODE = $(strip \
         EXTERNAL_JOBS='$(BUILD.jobs)' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         \
+        $(MACOSX.extra_cflags) \
         $(MACOSX.extra_ldflags) \
         \
         $(2) )
