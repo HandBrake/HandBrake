@@ -227,7 +227,7 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
 {
     int i = 0;
     cl_int status;
-    size_t numDevices;
+    cl_uint numDevices;
     cl_device_id *devices;
     char * str = NULL;
     FILE * fd = NULL;
@@ -320,7 +320,8 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
 {
     int i = 0;
     cl_int status;
-    size_t *binarySizes, numDevices;
+    cl_uint numDevices;
+    size_t *binarySizes;
     cl_device_id *devices;
     char **binaries;
     char *str = NULL;
@@ -774,7 +775,7 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     char *buildLog = NULL;
     int b_error, binary_status, binaryExisted;
     char * binary;
-    size_t numDevices;
+    cl_uint numDevices;
     cl_device_id *devices;
     FILE * fd;
     FILE * fd1;
@@ -1062,7 +1063,7 @@ int hb_get_opencl_env()
 {
     int i = 0;
     cl_int status;
-    size_t numDevices;
+    cl_uint numDevices;
     cl_device_id *devices;
 
     /*initialize devices, context, comand_queue*/
