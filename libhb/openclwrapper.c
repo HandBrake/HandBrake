@@ -332,14 +332,14 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
+        hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_NUM_DEVICES failed");
         return 0;
     }
 
     devices = (cl_device_id*)malloc( sizeof(cl_device_id) * numDevices );
     if( devices == NULL )
     {
-        hb_log( "OpenCL: No device found, when generate binary file from kernel source" );
+        hb_log("OpenCL: hb_generat_bin_from_kernel_source: no device found");
         return 0;
     }
 
@@ -351,7 +351,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
+        hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_DEVICES failed");
         return 0;
     }
 
@@ -364,7 +364,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                binarySizes, NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
+        hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_BINARY_SIZES failed");
         return 0;
     }
 
@@ -372,7 +372,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     binaries = (char**)malloc( sizeof(char *) * numDevices );
     if( binaries == NULL )
     {
-        hb_log( "OpenCL: malloc for binaries failed, when generate binary file from kernel source" );
+        hb_log("OpenCL: hb_generat_bin_from_kernel_source: malloc for binaries failed");
         return 0;
     }
 
@@ -383,7 +383,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
             binaries[i] = (char*)malloc( sizeof(char) * binarySizes[i] );
             if( binaries[i] == NULL )
             {
-                hb_log( "OpenCL: malloc for binary[%d] failed, when generate binary file from kernel source", i );
+                hb_log("OpenCL: hb_generat_bin_from_kernel_source: malloc for binaries[%d] failed", i);
                 return 0;
             }
         }
@@ -400,7 +400,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                NULL );
     if( status != CL_SUCCESS )
     {
-        hb_log( "OpenCL: Get program info failed, when generate binary file from kernel source" );
+        hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_BINARIES failed");
         return 0;
     }
 
@@ -425,7 +425,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
 
             if( !hb_write_binary_to_file( fileName, binaries[i], binarySizes[i] ))
             {
-                hb_log( "OpenCL: Unable to write opencl kernel, writing to temporary directory instead." );
+                hb_log("OpenCL: hb_generat_bin_from_kernel_source: unable to write kernel, writing to temporary directory instead.");
                 return 0;
             }
         }
