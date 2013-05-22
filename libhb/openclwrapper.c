@@ -811,8 +811,12 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     source = source_str;
     source_size[0] = strlen( source );
 
+#ifdef __APPLE__
     binaryExisted = 0;
-    if((binaryExisted = hb_binary_generated( gpu_info->context, filename, &fd )) == 1 )
+#else
+    binaryExisted = hb_binary_generated(gpu_info->context, filename, &fd);
+#endif
+    if (binaryExisted == 1)
     {
         status = clGetContextInfo( gpu_info->context,
                                    CL_CONTEXT_NUM_DEVICES,
@@ -940,10 +944,12 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
     strcpy( gpu_env.kernelSrcFile[idx], filename );
 
-    if( binaryExisted == 0 ) 
-	{
-        hb_generat_bin_from_kernel_source( gpu_env.programs[idx], filename );
-	}
+#ifndef __APPLE__
+    if (!binaryExisted)
+    {
+        hb_generat_bin_from_kernel_source(gpu_env.programs[idx], filename);
+    }
+#endif
 
     gpu_info->file_count += 1;
 
