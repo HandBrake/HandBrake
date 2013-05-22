@@ -14,7 +14,6 @@
         Height="400"
         MinWidth="600"
         MinHeight="400"
-        MaxWidth="600"
         Background="#FFF0F0F0"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -115,7 +114,7 @@
                                   YourNamespace:MenuItemExtensions.GroupName="whenDone" />
                         <MenuItem x:Name="lock"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
-                                  Header="Lock system"
+                                  Header="Lock System"
                                   IsCheckable="True"
                                   YourNamespace:MenuItemExtensions.GroupName="whenDone" />
                         <MenuItem x:Name="logoff"
