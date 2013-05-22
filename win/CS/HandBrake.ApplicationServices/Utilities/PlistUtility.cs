@@ -279,6 +279,8 @@ namespace HandBrake.ApplicationServices.Utilities
                 tune = tune == "none" ? "fastdecode" : tune + ",fastdecode";
             }
             AddEncodeElement(xmlWriter, "x264Tune", "string", tune);
+            AddEncodeElement(xmlWriter, "x264UseAdvancedOptions", "integer", parsed.ShowAdvancedTab ? "1" : "0");
+            
 
             int videoQualityType = 0;
             if (parsed.VideoBitrate != null) videoQualityType = 1;
