@@ -28,5 +28,15 @@ namespace HandBrakeWPF
         /// The any.
         /// </summary>
         public const string Any = "(Any)";
+
+        /// <summary>
+        /// The chapters.
+        /// </summary>
+        public const string Chapters = "{chapters}";
+
+        /// <summary>
+        /// The title.
+        /// </summary>
+        public const string Title = "{title}";
     }
 }
