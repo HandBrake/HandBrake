@@ -700,7 +700,11 @@ namespace HandBrakeWPF.ViewModels
 
                     if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
                     {
-                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                        if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
+                            this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Title))
+                        {
+                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                        }
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
@@ -751,7 +755,11 @@ namespace HandBrakeWPF.ViewModels
 
                 if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
                 {
-                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                    if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
+                        this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
+                    {
+                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                    }
                 }
             }
         }
@@ -771,7 +779,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
                 this.Duration = this.DurationCalculation();
 
-                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
+                if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
+                    this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                 {
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                 }

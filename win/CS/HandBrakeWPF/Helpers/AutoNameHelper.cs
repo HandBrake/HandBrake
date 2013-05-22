@@ -79,8 +79,8 @@ namespace HandBrakeWPF.Helpers
                 {
                     destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
                     destinationFilename = destinationFilename.Replace("{source}", sourceName)
-                                                             .Replace("{title}", dvdTitle)
-                                                             .Replace("{chapters}", combinedChapterTag)
+                                                             .Replace(Constants.Title, dvdTitle)
+                                                             .Replace(Constants.Chapters, combinedChapterTag)
                                                              .Replace("{date}", DateTime.Now.Date.ToShortDateString().Replace('/', '-'));
                 }
                 else
