@@ -362,8 +362,6 @@ struct hb_job_s
     int             vcodec;
     float           vquality;
     int             vbitrate;
-    int             pfr_vrate;
-    int             pfr_vrate_base;
     int             vrate;
     int             vrate_base;
     int             cfr;
@@ -971,8 +969,8 @@ typedef struct hb_filter_init_s
     int           crop[4];
     int           vrate_base;
     int           vrate;
-    int           pfr_vrate_base;
-    int           pfr_vrate;
+    int           title_rate_base;
+    int           title_rate;
     int           cfr;
 } hb_filter_init_t;
 
