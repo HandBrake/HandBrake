@@ -138,7 +138,9 @@ int hb_confirm_gpu_type()
                 if(!strcmp(dbuff, "Advanced Micro Devices, Inc.") ||
 #ifdef __APPLE__
                    !strcmp(dbuff, "AMD")                          ||
-                   /* MacBook Pro, AMD Radeon HD 6750M, OS X 10.8 */
+                   /* MacBook Pro, AMD ATI Radeon HD 6750M, OS X 10.8.3 */
+                   !strcmp(dbuff, "NVIDIA")                       ||
+                   /* MacBook Pro, NVIDIA GeForce GT 330M,  OS X 10.7.4 */
 #endif
                    !strcmp(dbuff, "NVIDIA Corporation"))
                 {
@@ -1088,27 +1090,21 @@ int hb_get_opencl_env()
                                sizeof(cl_device_id) * numDevices,
                                devices,
                                NULL );
-    status = 0;
 
-    /* dump out each binary into its own separate file. */
-    for( i = 0; i < numDevices; i++ )
+    for (i = 0; i < numDevices; i++)
     {
-        if( devices[i] != 0 )
+        if (devices[i] != NULL)
         {
-            char deviceName[1024];
-            status = clGetDeviceInfo( devices[i],
-                                      CL_DEVICE_NAME,
-                                      sizeof(deviceName),
-                                      deviceName,
-                                      NULL );
-            hb_log( "GPU Device Name: %s", deviceName );
-            char driverVersion[1024];
-            status = clGetDeviceInfo( devices[i],
-                                      CL_DRIVER_VERSION,
-                                      sizeof(deviceName),
-                                      driverVersion,
-                                      NULL );
-            hb_log( "GPU Driver Version: %s", driverVersion );
+            char deviceVendor[100], deviceName[1024], driverVersion[1024];
+            clGetDeviceInfo(devices[i], CL_DEVICE_VENDOR, sizeof(deviceVendor),
+                            deviceVendor, NULL);
+            clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(deviceName),
+                            deviceName, NULL);
+            clGetDeviceInfo(devices[i], CL_DRIVER_VERSION, sizeof(driverVersion),
+                            driverVersion, NULL);
+            hb_log("hb_get_opencl_env: GPU #%d, Device Vendor:  %s", i + 1, deviceVendor);
+            hb_log("hb_get_opencl_env: GPU #%d, Device Name:    %s", i + 1, deviceName);
+            hb_log("hb_get_opencl_env: GPU #%d, Driver Version: %s", i + 1, driverVersion);
         }
     }
 
