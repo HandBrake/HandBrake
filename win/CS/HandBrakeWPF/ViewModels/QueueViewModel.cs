@@ -370,6 +370,8 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueChanged += this.QueueManager_QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeService_EncodeStatusChanged;
 
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+
             base.OnActivate();
         }
 
