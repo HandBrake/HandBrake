@@ -51,6 +51,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private string queueFile;
 
+        /// <summary>
+        /// The is paused.
+        /// </summary>
+        private bool isPaused;
+
         #endregion
 
         #region Constructors and Destructors
@@ -236,15 +241,15 @@ namespace HandBrake.ApplicationServices.Services
         {
             Execute.OnUIThread(
                 () =>
+                {
+                    List<QueueTask> deleteList =
+                        this.queue.Where(task => task.Status == QueueItemStatus.Completed).ToList();
+                    foreach (QueueTask item in deleteList)
                     {
-                        List<QueueTask> deleteList =
-                            this.queue.Where(task => task.Status == QueueItemStatus.Completed).ToList();
-                        foreach (QueueTask item in deleteList)
-                        {
-                            this.queue.Remove(item);
-                        }
-                        this.InvokeQueueChanged(EventArgs.Empty);
-                    });
+                        this.queue.Remove(item);
+                    }
+                    this.InvokeQueueChanged(EventArgs.Empty);
+                });
         }
 
         /// <summary>
@@ -379,8 +384,8 @@ namespace HandBrake.ApplicationServices.Services
                         catch (Exception exc)
                         {
                             throw new GeneralApplicationException(
-                                "Unable to restore queue file.", 
-                                "The file may be corrupted or from an older incompatible version of HandBrake", 
+                                "Unable to restore queue file.",
+                                "The file may be corrupted or from an older incompatible version of HandBrake",
                                 exc);
                         }
 
@@ -419,6 +424,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.InvokeQueuePaused(EventArgs.Empty);
             this.IsProcessing = false;
+            this.isPaused = true;
         }
 
         /// <summary>
@@ -432,9 +438,16 @@ namespace HandBrake.ApplicationServices.Services
                 throw new Exception("Already Processing the Queue");
             }
 
-            this.IsProcessing = true;
+            this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
-            this.ProcessNextJob();
+
+            if (!this.EncodeService.IsEncoding)
+            {
+                this.ProcessNextJob();
+            }
+
+            this.IsProcessing = true;
+            this.isPaused = false;
         }
 
         #endregion

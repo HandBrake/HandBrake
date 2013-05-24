@@ -1843,7 +1843,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    if (this.IsEncoding)
+                    if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         this.ProgramStatusLabel =
                             string.Format(
@@ -1861,6 +1861,16 @@ namespace HandBrakeWPF.ViewModels
                         }
 
                         lastEncodePercentage = percent;
+                    }
+                    else
+                    {
+                        this.ProgramStatusLabel = "Queue Finished";
+                        this.IsEncoding = false;
+
+                        if (this.windowsSeven.IsWindowsSeven)
+                        {
+                            this.windowsSeven.SetTaskBarProgressToNoProgress();
+                        }
                     }
                 });
         }
