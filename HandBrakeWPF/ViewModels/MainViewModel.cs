@@ -905,7 +905,8 @@ namespace HandBrakeWPF.ViewModels
             // Setup the presets.
             if (this.presetService.CheckIfPresetsAreOutOfDate())
                 if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
-                    this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
+                    this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated." + Environment.NewLine +
+             "Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them.",
                                     "Preset Update", MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Queue Recovery
