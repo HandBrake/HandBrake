@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
     /// The Add Preset View Model
@@ -22,6 +23,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="task">
         /// The Encode Task.
         /// </param>
-        void Setup(EncodeTask task);
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        void Setup(EncodeTask task, Title title);
     }
 }

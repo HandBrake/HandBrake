@@ -18,9 +18,11 @@ namespace HandBrake.ApplicationServices.Model
     {
         [Display(Name = "None")]
         None = 0,
-        [Display(Name = "Custom")]
+        [Display(Name = "Custom (Keep AR)")]
         Custom = 1,
-        [Display(Name = "Source Maximum")]
+        [Display(Name = "Current Source Max Size (Keep AR)")]
         SourceMaximum = 2,
+        [Display(Name = "No Limit (Keep AR)")]
+        NoLimit = 3,
     }
 }
