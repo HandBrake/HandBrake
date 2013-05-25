@@ -760,6 +760,11 @@ namespace HandBrakeWPF.ViewModels
                         this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                     }
                 }
+
+                if (this.SelectedStartPoint > this.SelectedEndPoint)
+                {
+                    this.SelectedEndPoint = this.SelectedStartPoint;
+                }
             }
         }
 
@@ -782,6 +787,11 @@ namespace HandBrakeWPF.ViewModels
                     this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                 {
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                }
+
+                if (this.SelectedStartPoint > this.SelectedEndPoint)
+                {
+                    this.SelectedStartPoint = this.SelectedEndPoint;
                 }
             }
         }
