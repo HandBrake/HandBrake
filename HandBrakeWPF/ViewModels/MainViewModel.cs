@@ -1420,7 +1420,7 @@ namespace HandBrakeWPF.ViewModels
         public void PresetAdd()
         {
             IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
-            presetViewModel.Setup(this.CurrentTask);
+            presetViewModel.Setup(this.CurrentTask, this.SelectedTitle);
             this.WindowManager.ShowWindow(presetViewModel);
         }
 
