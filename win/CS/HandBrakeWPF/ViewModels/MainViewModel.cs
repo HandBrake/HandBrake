@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -73,11 +74,6 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the update serivce.
         /// </summary>
         private readonly IUpdateService updateService;
-
-        /// <summary>
-        /// The drive detect service.
-        /// </summary>
-        private readonly IDriveDetectService driveDetectService;
 
         /// <summary>
         /// Backing field for the user setting service.
@@ -167,7 +163,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The Source Menu Backing Field
         /// </summary>
-        private IEnumerable<SourceMenuItem> sourceMenu;
+        private BindingList<SourceMenuItem> sourceMenu;
 
         /// <summary>
         /// The last percentage complete value.
@@ -200,9 +196,6 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="updateService">
         /// The update Service.
         /// </param>
-        /// <param name="driveDetectService">
-        /// The drive Detect Service.
-        /// </param>
         /// <param name="notificationService">
         /// The notification Service.
         /// *** Leave in Constructor. *** 
@@ -212,7 +205,7 @@ namespace HandBrakeWPF.ViewModels
         /// *** Leave in Constructor. *** 
         /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
-            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService, INotificationService notificationService,
+            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, INotificationService notificationService,
             IPrePostActionService whenDoneService)
         {
             this.scanService = scanService;
@@ -221,7 +214,6 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.shellViewModel = shellViewModel;
             this.updateService = updateService;
-            this.driveDetectService = driveDetectService;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
 
@@ -348,7 +340,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets the source menu.
         /// </summary>
-        public IEnumerable<SourceMenuItem> SourceMenu
+        public BindingList<SourceMenuItem> SourceMenu
         {
             get
             {
@@ -925,9 +917,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Populate the Source menu with drives.
-            this.SourceMenu = this.GenerateSourceMenu();
-
-            this.driveDetectService.StartDetection(this.DriveTrayChanged);
+            this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
 
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
@@ -943,8 +933,6 @@ namespace HandBrakeWPF.ViewModels
         public void Shutdown()
         {
             // Shutdown Service
-            this.driveDetectService.Close();
-
             this.scanService.Shutdown();
             this.encodeService.Shutdown();
 
@@ -1954,7 +1942,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="item">
         /// The item.
         /// </param>
-        private void ProcessDrive(object item)
+        public void ProcessDrive(object item)
         {
             if (item != null)
             {
@@ -1968,7 +1956,7 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; HandBrakeWPF.Model.SourceMenuItem].
         /// </returns>
-        private IEnumerable<SourceMenuItem> GenerateSourceMenu()
+        private IList<SourceMenuItem> GenerateSourceMenu()
         {
             List<SourceMenuItem> menuItems = new List<SourceMenuItem>();
 
@@ -1976,13 +1964,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
                 Text = "Open Folder",
-                Command = new SourceMenuCommand(this.FolderScan)
+                Command = new SourceMenuCommand(this.FolderScan),
+                IsDrive = false
             };
             SourceMenuItem fileScan = new SourceMenuItem
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
                 Text = "Open File",
-                Command = new SourceMenuCommand(this.FileScan)
+                Command = new SourceMenuCommand(this.FileScan),
+                IsDrive = false
             };
 
             SourceMenuItem titleSpecific = new SourceMenuItem { Text = "Title Specific Scan" };
@@ -1990,13 +1980,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
                 Text = "Open Folder",
-                Command = new SourceMenuCommand(this.FolderScanTitleSpecific)
+                Command = new SourceMenuCommand(this.FolderScanTitleSpecific),
+                IsDrive = false
             };
             SourceMenuItem fileScanTitle = new SourceMenuItem
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
                 Text = "Open File",
-                Command = new SourceMenuCommand(this.FileScanTitleSpecific)
+                Command = new SourceMenuCommand(this.FileScanTitleSpecific),
+                IsDrive = false
             };
             titleSpecific.Children.Add(folderScanTitle);
             titleSpecific.Children.Add(fileScanTitle);
@@ -2015,18 +2007,11 @@ namespace HandBrakeWPF.ViewModels
                             Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
                             Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
                             Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
-                            Tag = item
+                            Tag = item,
+                            IsDrive = true
                         });
 
             return menuItems;
-        }
-
-        /// <summary>
-        /// The drive tray changed.
-        /// </summary>
-        private void DriveTrayChanged()
-        {
-            Caliburn.Micro.Execute.OnUIThread(() => this.SourceMenu = this.GenerateSourceMenu());
         }
 
         /// <summary>

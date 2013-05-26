@@ -47,6 +47,11 @@ namespace HandBrakeWPF.Model
         public ObservableCollection<SourceMenuItem> Children { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is drive.
+        /// </summary>
+        public bool IsDrive { get; set; }
+
+        /// <summary>
         /// Gets or sets the tag.
         /// </summary>
         public object Tag { get; set; }
