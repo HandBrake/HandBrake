@@ -123,6 +123,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\DriveMenu.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
     <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />
@@ -157,9 +158,7 @@
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Model\SelectionTitle.cs" />
-    <Compile Include="Services\DriveDetectService.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />
-    <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
     <Compile Include="Model\ShellWindow.cs" />
     <Compile Include="Model\SourceMenuItem.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
