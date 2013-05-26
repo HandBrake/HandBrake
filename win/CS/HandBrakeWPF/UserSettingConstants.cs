@@ -200,6 +200,31 @@ namespace HandBrakeWPF
         /// Disable LibHb Features
         /// </summary>
         public const string DisableLibHbFeatures = "DisableLibHbFeatures";
+    
+        /// <summary>
+        /// When Complete Action
+        /// </summary>
+        public const string WhenCompleteAction = "WhenCompleteAction";
+
+        /// <summary>
+        /// Send file enabled.
+        /// </summary>
+        public const string SendFile = "SendFile";
+
+        /// <summary>
+        /// Send file to application path
+        /// </summary>
+        public const string SendFileTo = "SendFileTo";
+
+        /// <summary>
+        /// Send file to arguments
+        /// </summary>
+        public const string SendFileToArgs = "SendFileToArgs";
+
+        /// <summary>
+        /// Prevent Sleep
+        /// </summary>
+        public const string PreventSleep = "PreventSleep";
 
         #endregion
     }

@@ -292,13 +292,15 @@ So small increases in value will result in progressively larger increases in the
 Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>You can optionally store a maximum resolution for encodes that use this preset. There are 3 modes:
+    <value>You can optionally store a maximum resolution for encodes that use this preset. There are 4 modes:
 
-None:  There is no maximum resolution for encodes using this preset. They will always use the source resolution minus any cropping that may be applied.
+None:  There is no maximum resolution for encodes using this preset. When the preset is loaded, the current width, height and aspect ratio that you currently have set will be reloaded.
 
-Custom: You can optionally set a Maximum width and height. When doing this an encode will be less than or equal to these values.
+Custom: You can optionally set a Maximum width and Height. When doing this an encode will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
 
-Source Maximum:  Similar to custom, but the resolution of your current source is used as the Max width and Height values instead.</value>
+Source Maximum:  Similar to custom, but the resolution of your current source is used as the Max width and Height values instead. Keep Aspect Ratio will be automatically turned on.
+
+No Limit: Always use the full source resolution for all sources keeping aspect ratio. This is the default behaviour.</value>
   </data>
   <data name="Advanced_EncoderOptions" xml:space="preserve">
     <value>The options passed to the x264 encoder. 
@@ -328,5 +330,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
 To enable this tab, check the "Use Advanced Tab instead" option on the Video Tab.
 
 If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; Advanced.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>WARNING: You do not have automatic file naming turned on. Please enable this in options.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>WARNING: You do not currently have automatic audio and subtitle track selection setup. You can setup the default track selection behaviour in options.</value>
   </data>
 </root>

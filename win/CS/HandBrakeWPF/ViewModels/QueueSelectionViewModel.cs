@@ -41,6 +41,11 @@ namespace HandBrakeWPF.ViewModels
         private bool orderedByTitle;
 
         /// <summary>
+        /// The add to queue.
+        /// </summary>
+        private Action<IEnumerable<SelectionTitle>> addToQueue;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="QueueSelectionViewModel"/> class. 
         /// </summary>
         /// <param name="errorService">
@@ -99,6 +104,36 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets a value indicating whether is auto naming enabled.
+        /// </summary>
+        public bool IsAutoNamingEnabled
+        {
+            get
+            {
+                return this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is automatic track selection enabled.
+        /// </summary>
+        public bool IsAutomaticTrackSelectionEnabled
+        {
+            get
+            {
+                // TODO decide what is the minimal requirement to hide the warning message.
+                if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) != Constants.Any ||
+                    this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) !=
+                    Constants.Any)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// The order by title.
         /// </summary>
         public void OrderByTitle()
@@ -147,6 +182,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Add()
         {
+            this.addToQueue(this.TitleList.Where(c => c.IsSelected));
             this.Close();
         }
 
@@ -176,23 +212,29 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="srcName">
         /// The src Name.
         /// </param>
-        public void Setup(Source scannedSource, string srcName)
+        /// <param name="addAction">
+        /// The add Action.
+        /// </param>
+        public void Setup(Source scannedSource, string srcName, Action<IEnumerable<SelectionTitle>> addAction)
         {
             this.TitleList.Clear();
+            this.addToQueue = addAction;
 
             if (scannedSource != null)
             {
-
                 IEnumerable<Title> titles = orderedByTitle
                                          ? scannedSource.Titles
                                          : scannedSource.Titles.OrderByDescending(o => o.Duration).ToList();
 
                 foreach (Title item in titles)
                 {
-                    SelectionTitle title = new SelectionTitle(item, srcName);
+                    SelectionTitle title = new SelectionTitle(item, srcName) { IsSelected = true };
                     TitleList.Add(title);
                 }
             }
+
+            this.NotifyOfPropertyChange(() => this.IsAutoNamingEnabled);
+            this.NotifyOfPropertyChange(() => this.IsAutomaticTrackSelectionEnabled);
         }
     }
 }

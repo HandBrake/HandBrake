@@ -14,9 +14,8 @@ namespace HandBrake.ApplicationServices.Services
     using System.IO;
     using System.Windows.Forms;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -95,11 +94,10 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (this.IsEncoding)
                 {
-                    throw new Exception("HandBrake is already encodeing.");
+                    throw new GeneralApplicationException("HandBrake is already encodeing.", "Please try again in a minute", null);
                 }
 
                 this.IsEncoding = true;
-
                 this.currentTask = encodeQueueTask;
 
                 if (enableLogging)
@@ -113,11 +111,6 @@ namespace HandBrake.ApplicationServices.Services
                         this.IsEncoding = false;
                         throw;
                     }
-                }
-
-                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
-                {
-                    Win32.PreventSleep();
                 }
 
                 // Make sure the path exists, attempt to create it if it doesn't
@@ -200,9 +193,10 @@ namespace HandBrake.ApplicationServices.Services
             catch (Exception exc)
             {
                 encodeQueueTask.Status = QueueItemStatus.Error;
+                this.IsEncoding = false;
                 this.InvokeEncodeCompleted(
                     new EncodeCompletedEventArgs(
-                        false, null, "An Error occured when trying to encode this source. "));
+                        false, exc, "An Error occured when trying to encode this source. ", this.currentTask.Task.Destination));
                 throw;
             }
         }
@@ -261,17 +255,9 @@ namespace HandBrake.ApplicationServices.Services
                 // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
 
-            Execute.OnUIThread(() =>
-            {
-                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
-                {
-                    Win32.AllowSleep();
-                }
-            });
-
             this.currentTask.Status = QueueItemStatus.Completed;
             this.IsEncoding = false;
-            this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
+            this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Task.Destination));
         }
 
         /// <summary>

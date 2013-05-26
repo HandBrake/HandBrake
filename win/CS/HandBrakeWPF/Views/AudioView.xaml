@@ -40,11 +40,18 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
-                    Width="75"
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Button MinWidth="65"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Add]"
                     Content="Add Track" />
+
+                <Button MinWidth="65"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action Clear]"
+                    Content="Clear" />
+            </StackPanel>
 
             <StackPanel Grid.Column="2"
                         Orientation="Horizontal"

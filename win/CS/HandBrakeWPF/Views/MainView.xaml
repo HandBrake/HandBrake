@@ -5,7 +5,8 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        AllowDrop="True"
+             xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
+             AllowDrop="True"
         Background="#FFF0F0F0"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -146,7 +147,7 @@
                      ToolBar.OverflowMode="Never"
                      ToolBarTray.IsLocked="True"
                      >
-                <Menu Background="Transparent">
+                <Menu Background="Transparent" attachedProperties:DriveMenu.ShowAvailableDrives="true">
                     <MenuItem ItemsSource="{Binding SourceMenu}">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
@@ -270,7 +271,7 @@
                             </StackPanel>
                         </MenuItem.Header>
                         <MenuItem Header="Add All" Micro:Message.Attach="[Event Click] = [Action AddAllToQueue]" />
-                        <!--<MenuItem Header="Add Selection" Micro:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />-->
+                        <MenuItem Header="Add Selection" Micro:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />
                     </MenuItem>
                 </Menu>
 

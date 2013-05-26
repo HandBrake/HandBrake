@@ -133,9 +133,12 @@ namespace HandBrake.ApplicationServices.Model
             this.H264Level = task.H264Level;
             this.FastDecode = task.FastDecode;
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
+            
 
             this.PreviewStartAt = task.PreviewStartAt;
             this.PreviewDuration = task.PreviewDuration;
+
+            this.ShowAdvancedTab = task.ShowAdvancedTab;
         }
 
         #region Source

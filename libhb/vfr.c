@@ -301,20 +301,21 @@ static void adjust_frame_rate( hb_filter_private_t *pv, hb_buffer_t **buf_out )
     }
 }
 
-static int hb_vfr_init( hb_filter_object_t * filter,
-                        hb_filter_init_t * init )
+static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 {
-    filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
-    hb_filter_private_t * pv = filter->private_data;
+    filter->private_data    = calloc(1, sizeof(struct hb_filter_private_s));
+    hb_filter_private_t *pv = filter->private_data;
+    build_gamma_lut(pv);
 
-    build_gamma_lut( pv );
-    pv->cfr = init->cfr;
-    pv->input_vrate = pv->vrate = init->vrate;
-    pv->input_vrate_base = pv->vrate_base = init->vrate_base;
-    if( filter->settings )
+    pv->cfr              = init->cfr;
+    pv->vrate            = init->vrate;
+    pv->vrate_base       = init->vrate_base;
+    pv->input_vrate      = init->title_rate;
+    pv->input_vrate_base = init->title_rate_base;
+    if (filter->settings != NULL)
     {
-        sscanf( filter->settings, "%d:%d:%d",
-                &pv->cfr, &pv->vrate, &pv->vrate_base );
+        sscanf(filter->settings, "%d:%d:%d",
+               &pv->cfr, &pv->vrate, &pv->vrate_base);
     }
 
     pv->job = init->job;
@@ -336,36 +337,18 @@ static int hb_vfr_init( hb_filter_object_t * filter,
     pv->lost_time[0] = 0; pv->lost_time[1] = 0; pv->lost_time[2] = 0; pv->lost_time[3] = 0;
     pv->frame_metric = 1000; // Force first frame
 
-    if ( pv->cfr == 0 )
+    if (!pv->cfr)
     {
         /* Ensure we're using "Same as source" FPS */
-        pv->vrate_base = init->vrate_base;
-        pv->vrate = init->vrate;
+        pv->vrate_base = pv->input_vrate_base;
+        pv->vrate      = pv->input_vrate;
     }
-    else if ( pv->cfr == 2 )
-    {
-        // For PFR, we want the framerate based on the source's actual 
-        // framerate, unless it's higher than the specified peak framerate. 
-        double source_fps = (double)init->vrate / init->vrate_base;
-        double peak_fps = (double)pv->vrate / pv->vrate_base;
-        if ( source_fps > peak_fps )
-        {
-            // peak framerate is lower than source framerate. so signal
-            // that the nominal framerate will be changed.
-            init->vrate = pv->vrate;
-            init->vrate_base = pv->vrate_base;
-        }
-        init->pfr_vrate = pv->vrate;
-        init->pfr_vrate_base = pv->vrate_base;
-    }
-    else
-    {
-        // Constant framerate. Signal the framerate we are using.
-        init->vrate = pv->vrate;
-        init->vrate_base = pv->vrate_base;
-    }
-    init->cfr = pv->cfr;
-    pv->frame_rate = (double)pv->vrate_base * 90000. / pv->vrate;
+    pv->frame_rate        = (double)pv->vrate_base * 90000. / pv->vrate;
+    init->cfr             = pv->cfr;
+    init->vrate           = pv->vrate;
+    init->vrate_base      = pv->vrate_base;
+    init->title_rate      = pv->input_vrate;
+    init->title_rate_base = pv->input_vrate_base;
 
     return 0;
 }

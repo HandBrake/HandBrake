@@ -123,6 +123,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\DriveMenu.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
     <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />
@@ -157,18 +158,18 @@
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Model\SelectionTitle.cs" />
-    <Compile Include="Services\DriveDetectService.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />
-    <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
     <Compile Include="Model\ShellWindow.cs" />
     <Compile Include="Model\SourceMenuItem.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
     <Compile Include="Model\DownloadStatus.cs" />
     <Compile Include="Services\Interfaces\INotificationService.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\Interfaces\IPrePostActionService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ScanServiceWrapper.cs" />
     <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="Services\PrePostActionService.cs" />
     <Compile Include="ViewModels\AdvancedViewModel.cs" />
     <Compile Include="ViewModels\EncoderOptionsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEncoderOptionsViewModel.cs" />
@@ -310,6 +311,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Installer\Installer.nsi" />

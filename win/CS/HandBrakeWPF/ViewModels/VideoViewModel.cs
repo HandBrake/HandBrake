@@ -292,7 +292,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return 51.Equals(this.RF);
+                return 0.0.Equals(this.DisplayRF);
             }
         }
 

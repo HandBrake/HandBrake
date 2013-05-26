@@ -259,7 +259,7 @@ void hb_display_job_info( hb_job_t * job )
     {
         hb_log( "   + frame rate: %.3f fps -> peak rate limited to %.3f fps",
             (float) title->rate / (float) title->rate_base,
-            (float) job->pfr_vrate / (float) job->pfr_vrate_base );
+            (float) job->vrate / (float) job->vrate_base );
     }
 
     // Filters can modify dimensions.  So show them first.
@@ -718,8 +718,8 @@ static void do_job( hb_job_t * job )
         memcpy(init.crop, job->crop, sizeof(int[4]));
         init.vrate_base = job->vrate_base;
         init.vrate = job->vrate;
-        init.pfr_vrate_base = job->pfr_vrate_base;
-        init.pfr_vrate = job->pfr_vrate;
+        init.title_rate_base = title->rate_base;
+        init.title_rate = title->rate;
         init.cfr = 0;
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
@@ -741,8 +741,8 @@ static void do_job( hb_job_t * job )
         memcpy(job->crop, init.crop, sizeof(int[4]));
         job->vrate_base = init.vrate_base;
         job->vrate = init.vrate;
-        job->pfr_vrate_base = init.pfr_vrate_base;
-        job->pfr_vrate = init.pfr_vrate;
+        title->rate_base = init.title_rate_base;
+        title->rate = init.title_rate;
         job->cfr = init.cfr;
     }
 

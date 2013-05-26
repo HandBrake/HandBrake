@@ -12,10 +12,8 @@ namespace HandBrake.ApplicationServices.Services
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Windows.Forms;
     using System.Xml.Serialization;
 
     using Caliburn.Micro;
@@ -52,6 +50,11 @@ namespace HandBrake.ApplicationServices.Services
         /// HandBrakes Queue file with a place holder for an extra string.
         /// </summary>
         private string queueFile;
+
+        /// <summary>
+        /// The is paused.
+        /// </summary>
+        private bool isPaused;
 
         #endregion
 
@@ -238,15 +241,15 @@ namespace HandBrake.ApplicationServices.Services
         {
             Execute.OnUIThread(
                 () =>
+                {
+                    List<QueueTask> deleteList =
+                        this.queue.Where(task => task.Status == QueueItemStatus.Completed).ToList();
+                    foreach (QueueTask item in deleteList)
                     {
-                        List<QueueTask> deleteList =
-                            this.queue.Where(task => task.Status == QueueItemStatus.Completed).ToList();
-                        foreach (QueueTask item in deleteList)
-                        {
-                            this.queue.Remove(item);
-                        }
-                        this.InvokeQueueChanged(EventArgs.Empty);
-                    });
+                        this.queue.Remove(item);
+                    }
+                    this.InvokeQueueChanged(EventArgs.Empty);
+                });
         }
 
         /// <summary>
@@ -381,8 +384,8 @@ namespace HandBrake.ApplicationServices.Services
                         catch (Exception exc)
                         {
                             throw new GeneralApplicationException(
-                                "Unable to restore queue file.", 
-                                "The file may be corrupted or from an older incompatible version of HandBrake", 
+                                "Unable to restore queue file.",
+                                "The file may be corrupted or from an older incompatible version of HandBrake",
                                 exc);
                         }
 
@@ -421,6 +424,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.InvokeQueuePaused(EventArgs.Empty);
             this.IsProcessing = false;
+            this.isPaused = true;
         }
 
         /// <summary>
@@ -434,9 +438,16 @@ namespace HandBrake.ApplicationServices.Services
                 throw new Exception("Already Processing the Queue");
             }
 
-            this.IsProcessing = true;
+            this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
-            this.ProcessNextJob();
+
+            if (!this.EncodeService.IsEncoding)
+            {
+                this.ProcessNextJob();
+            }
+
+            this.IsProcessing = true;
+            this.isPaused = false;
         }
 
         #endregion
@@ -471,12 +482,6 @@ namespace HandBrake.ApplicationServices.Services
             // Handling Log Data 
             this.EncodeService.ProcessLogs(this.LastProcessedJob.Task.Destination);
 
-            // Post-Processing
-            if (e.Successful)
-            {
-                this.SendToApplication(this.LastProcessedJob.Task.Destination);
-            }
-
             // Move onto the next job.
             if (this.IsProcessing)
             {
@@ -487,35 +492,6 @@ namespace HandBrake.ApplicationServices.Services
                 this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
                 this.InvokeQueueCompleted(EventArgs.Empty);
                 this.BackupQueue(string.Empty);
-            }
-        }
-
-        /// <summary>
-        /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
-        /// </summary>
-        private void Finish()
-        {
-            // Do something whent he encode ends.
-            switch (this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction))
-            {
-                case "Shutdown":
-                    Process.Start("Shutdown", "-s -t 60");
-                    break;
-                case "Log off":
-                    Win32.ExitWindowsEx(0, 0);
-                    break;
-                case "Suspend":
-                    Application.SetSuspendState(PowerState.Suspend, true, true);
-                    break;
-                case "Hibernate":
-                    Application.SetSuspendState(PowerState.Hibernate, true, true);
-                    break;
-                case "Lock System":
-                    Win32.LockWorkStation();
-                    break;
-                case "Quit HandBrake":
-                    Application.Exit();
-                    break;
             }
         }
 
@@ -608,31 +584,6 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Fire the event to tell connected services.
                 this.InvokeQueueCompleted(EventArgs.Empty);
-
-                // Run the After encode completeion work
-                this.Finish();
-            }
-        }
-
-        /// <summary>
-        /// Send a file to a 3rd party application after encoding has completed.
-        /// </summary>
-        /// <param name="file">
-        /// The file path
-        /// </param>
-        private void SendToApplication(string file)
-        {
-            if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile) &&
-                !string.IsNullOrEmpty(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo)))
-            {
-                string args = string.Format(
-                    "{0} \"{1}\"", 
-                    this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileToArgs), 
-                    file);
-                var vlc =
-                    new ProcessStartInfo(
-                        this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo), args);
-                Process.Start(vlc);
             }
         }
 

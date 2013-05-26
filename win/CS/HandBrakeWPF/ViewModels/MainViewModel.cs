@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -73,11 +74,6 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the update serivce.
         /// </summary>
         private readonly IUpdateService updateService;
-
-        /// <summary>
-        /// The drive detect service.
-        /// </summary>
-        private readonly IDriveDetectService driveDetectService;
 
         /// <summary>
         /// Backing field for the user setting service.
@@ -177,7 +173,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The Source Menu Backing Field
         /// </summary>
-        private IEnumerable<SourceMenuItem> sourceMenu;
+        private BindingList<SourceMenuItem> sourceMenu;
 
         /// <summary>
         /// The last percentage complete value.
@@ -210,15 +206,17 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="updateService">
         /// The update Service.
         /// </param>
-        /// <param name="driveDetectService">
-        /// The drive Detect Service.
-        /// </param>
         /// <param name="notificationService">
         /// The notification Service.
-        /// *** Leave in Constructor. ***  TODO find out why?
+        /// *** Leave in Constructor. *** 
+        /// </param>
+        /// <param name="whenDoneService">
+        /// The when Done Service.
+        /// *** Leave in Constructor. *** 
         /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
-            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService, INotificationService notificationService)
+            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, INotificationService notificationService,
+            IPrePostActionService whenDoneService)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -226,7 +224,6 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.shellViewModel = shellViewModel;
             this.updateService = updateService;
-            this.driveDetectService = driveDetectService;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
 
@@ -353,7 +350,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets the source menu.
         /// </summary>
-        public IEnumerable<SourceMenuItem> SourceMenu
+        public BindingList<SourceMenuItem> SourceMenu
         {
             get
             {
@@ -739,7 +736,10 @@ namespace HandBrakeWPF.ViewModels
 
                     if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
                     {
-                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                        if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null )
+                        {
+                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                        }
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
@@ -790,7 +790,16 @@ namespace HandBrakeWPF.ViewModels
 
                 if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
                 {
-                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                    if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
+                        this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
+                    {
+                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                    }
+                }
+
+                if (this.SelectedStartPoint > this.SelectedEndPoint)
+                {
+                    this.SelectedEndPoint = this.SelectedStartPoint;
                 }
             }
         }
@@ -810,9 +819,15 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
                 this.Duration = this.DurationCalculation();
 
-                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
+                if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
+                    this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                 {
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                }
+
+                if (this.SelectedStartPoint > this.SelectedEndPoint && this.SelectedPointToPoint == PointToPointMode.Chapters)
+                {
+                    this.SelectedStartPoint = this.SelectedEndPoint;
                 }
             }
         }
@@ -842,7 +857,7 @@ namespace HandBrakeWPF.ViewModels
 
                     this.SelectedStartPoint = 1;
                     this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
-                } 
+                }
                 else if (value == PointToPointMode.Seconds)
                 {
                     if (this.selectedTitle == null)
@@ -938,7 +953,8 @@ namespace HandBrakeWPF.ViewModels
             // Setup the presets.
             if (this.presetService.CheckIfPresetsAreOutOfDate())
                 if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
-                    this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
+                    this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated." + Environment.NewLine +
+             "Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them.",
                                     "Preset Update", MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Queue Recovery
@@ -947,9 +963,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Populate the Source menu with drives.
-            this.SourceMenu = this.GenerateSourceMenu();
-
-            this.driveDetectService.StartDetection(this.DriveTrayChanged);
+            this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
 
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
@@ -965,8 +979,6 @@ namespace HandBrakeWPF.ViewModels
         public void Shutdown()
         {
             // Shutdown Service
-            this.driveDetectService.Close();
-
             this.scanService.Shutdown();
             this.encodeService.Shutdown();
 
@@ -1154,7 +1166,14 @@ namespace HandBrakeWPF.ViewModels
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
             IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
 
-            viewModel.Setup(this.ScannedSource, this.SourceName);
+            viewModel.Setup(this.ScannedSource, this.SourceName, (tasks) =>
+                {
+                    foreach (SelectionTitle title in tasks)
+                    {
+                        this.SelectedTitle = title.Title;
+                        this.AddToQueue();
+                    }
+                });
 
             if (window != null)
             {
@@ -1435,7 +1454,7 @@ namespace HandBrakeWPF.ViewModels
         public void PresetAdd()
         {
             IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
-            presetViewModel.Setup(this.CurrentTask);
+            presetViewModel.Setup(this.CurrentTask, this.SelectedTitle);
             this.WindowManager.ShowWindow(presetViewModel);
         }
 
@@ -1843,7 +1862,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        this.SourceLabel = "Scan Failed... See Activity Log for details.";                        this.StatusLabel = "Scan Failed... See Activity Log for details.";
+                        this.SourceLabel = "Scan Failed... See Activity Log for details."; this.StatusLabel = "Scan Failed... See Activity Log for details.";
                     }
                 });
         }
@@ -1887,7 +1906,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    if (this.IsEncoding)
+                    if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         this.ProgramStatusLabel =
                             string.Format(
@@ -1905,6 +1924,16 @@ namespace HandBrakeWPF.ViewModels
                         }
 
                         lastEncodePercentage = percent;
+                    }
+                    else
+                    {
+                        this.ProgramStatusLabel = "Queue Finished";
+                        this.IsEncoding = false;
+
+                        if (this.windowsSeven.IsWindowsSeven)
+                        {
+                            this.windowsSeven.SetTaskBarProgressToNoProgress();
+                        }
                     }
                 });
         }
@@ -1978,7 +2007,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="item">
         /// The item.
         /// </param>
-        private void ProcessDrive(object item)
+        public void ProcessDrive(object item)
         {
             if (item != null)
             {
@@ -1992,7 +2021,7 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; HandBrakeWPF.Model.SourceMenuItem].
         /// </returns>
-        private IEnumerable<SourceMenuItem> GenerateSourceMenu()
+        private IList<SourceMenuItem> GenerateSourceMenu()
         {
             List<SourceMenuItem> menuItems = new List<SourceMenuItem>();
 
@@ -2000,13 +2029,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
                 Text = "Open Folder",
-                Command = new SourceMenuCommand(this.FolderScan)
+                Command = new SourceMenuCommand(this.FolderScan),
+                IsDrive = false
             };
             SourceMenuItem fileScan = new SourceMenuItem
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
                 Text = "Open File",
-                Command = new SourceMenuCommand(this.FileScan)
+                Command = new SourceMenuCommand(this.FileScan),
+                IsDrive = false
             };
 
             SourceMenuItem titleSpecific = new SourceMenuItem { Text = "Title Specific Scan" };
@@ -2014,13 +2045,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
                 Text = "Open Folder",
-                Command = new SourceMenuCommand(this.FolderScanTitleSpecific)
+                Command = new SourceMenuCommand(this.FolderScanTitleSpecific),
+                IsDrive = false
             };
             SourceMenuItem fileScanTitle = new SourceMenuItem
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
                 Text = "Open File",
-                Command = new SourceMenuCommand(this.FileScanTitleSpecific)
+                Command = new SourceMenuCommand(this.FileScanTitleSpecific),
+                IsDrive = false
             };
             titleSpecific.Children.Add(folderScanTitle);
             titleSpecific.Children.Add(fileScanTitle);
@@ -2039,18 +2072,11 @@ namespace HandBrakeWPF.ViewModels
                             Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
                             Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
                             Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
-                            Tag = item
+                            Tag = item,
+                            IsDrive = true
                         });
 
             return menuItems;
-        }
-
-        /// <summary>
-        /// The drive tray changed.
-        /// </summary>
-        private void DriveTrayChanged()
-        {
-            Caliburn.Micro.Execute.OnUIThread(() => this.SourceMenu = this.GenerateSourceMenu());
         }
 
         /// <summary>
@@ -2082,10 +2108,10 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void CurrentTask_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-           if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
-           {
-               this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
-           }
+            if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
+            {
+                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+            }
         }
 
         #endregion

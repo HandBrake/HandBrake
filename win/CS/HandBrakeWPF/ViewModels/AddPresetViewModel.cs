@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
@@ -25,8 +26,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class AddPresetViewModel : ViewModelBase, IAddPresetViewModel
     {
-        /* TODO this window is up for redesign. Quite a few nippy edge cases that can cause odd behaviour with importing presets. */
-
         /// <summary>
         /// Backing field for the Preset Service
         /// </summary>
@@ -46,6 +45,11 @@ namespace HandBrakeWPF.ViewModels
         /// Backging field for show custom inputs
         /// </summary>
         private bool showCustomInputs;
+
+        /// <summary>
+        /// The source.
+        /// </summary>
+        private Title selectedTitle;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddPresetViewModel"/> class.
@@ -123,9 +127,10 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="task">
         /// The Encode Task.
         /// </param>
-        public void Setup(EncodeTask task)
+        public void Setup(EncodeTask task, Title title)
         {
             this.Preset.Task = new EncodeTask(task);
+            this.selectedTitle = title;
         }
 
         /// <summary>
@@ -148,7 +153,7 @@ namespace HandBrakeWPF.ViewModels
                }
             }
 
-            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && (this.Preset.Task.Width == null || this.Preset.Task.Width == 0))
+            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && this.selectedTitle == null)
             {
                 this.errorService.ShowMessageBox("You must first scan a source to use the 'Source Maximum' Option.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -174,8 +179,8 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum)
             {
-                this.Preset.Task.MaxWidth = this.Preset.Task.Width;
-                this.Preset.Task.MaxHeight = this.Preset.Task.Height;
+                this.Preset.Task.MaxWidth = selectedTitle.Resolution.Width;
+                this.Preset.Task.MaxHeight = selectedTitle.Resolution.Height;
             }
 
             // Add the Preset

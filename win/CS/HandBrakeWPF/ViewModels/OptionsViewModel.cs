@@ -19,6 +19,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
@@ -1487,10 +1489,10 @@ namespace HandBrakeWPF.ViewModels
 
             this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode);
             this.GrowlAfterQueue = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue);
-            this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile);
-            this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo)) ?? string.Empty;
-            this.SendFileToPath = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo) ?? string.Empty;
-            this.Arguments = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileToArgs) ?? string.Empty;
+            this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
+            this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)) ?? string.Empty;
+            this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
+            this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
 
             // #############################
             // Output Settings
@@ -1554,7 +1556,7 @@ namespace HandBrakeWPF.ViewModels
                 this.preferredLanguages.Add(item);
 
                 // In the available languages should be no "Any" and no selected language.
-                if ((item != "(Any)") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
+                if ((item != Constants.Any) && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
                 {
                     this.availableLanguages.Add(item);
                 }
@@ -1597,7 +1599,7 @@ namespace HandBrakeWPF.ViewModels
             this.priorityLevelOptions.Add("Low");
             this.SelectedPriority = userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority);
 
-            this.PreventSleep = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep);
+            this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
 
             // Log Verbosity Level
             this.logVerbosityOptions.Clear();
@@ -1820,12 +1822,12 @@ namespace HandBrakeWPF.ViewModels
             /* General */
             this.userSettingService.SetUserSetting(UserSettingConstants.UpdateStatus, this.CheckForUpdates);
             this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, this.CheckForUpdatesFrequency);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, this.WhenDone);
+            this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, this.WhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.GrowlQueue, this.GrowlAfterQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.GrowlEncode, this.GrowlAfterEncode);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileTo, this.SendFileToPath);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFile, this.SendFileAfterEncode);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileToArgs, this.Arguments);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, this.SendFileToPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
@@ -1852,7 +1854,7 @@ namespace HandBrakeWPF.ViewModels
 
             /* System and Logging */
             userSettingService.SetUserSetting(ASUserSettingConstants.ProcessPriority, this.SelectedPriority);
-            userSettingService.SetUserSetting(ASUserSettingConstants.PreventSleep, this.PreventSleep);
+            userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
             userSettingService.SetUserSetting(ASUserSettingConstants.Verbosity, this.SelectedVerbosity);
             userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
             userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
@@ -1935,7 +1937,7 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateMessage = info.WasSuccessful ? "Update Downloaded" : "Update Failed. You can try downloading the update from http://handbrake.fr";
 
             Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
-            Application.Current.Shutdown();
+            Execute.OnUIThread(() => Application.Current.Shutdown());
         }
 
         /// <summary>

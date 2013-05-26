@@ -28,23 +28,22 @@
                    FontWeight="Bold"
                    Text="Subtitles" />
 
-        <Grid Grid.Row="1" Margin="10,5,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Margin="10,5,10,0" Orientation="Horizontal">
             <Button Name="AddTrack"
-                    Grid.Column="0"
-                    Width="75"
+                    MinWidth="75"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Add]"
                     Content="Add" />
-            <Button Grid.Column="2"
-                    Width="85"
+            <Button MinWidth="75"
                     cal:Message.Attach="[Event Click] = [Action Import]"
-                    Content="Import SRT" />
-        </Grid>
+                    Content="Import SRT"
+                    Margin="0,0,10,0"/>
+            <Button MinWidth="65"
+                    Grid.Column="3"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action Clear]"
+                    Content="Clear" />
+        </StackPanel>
 
         <ListBox Grid.Row="2"
                  Margin="10,10,10,10"

@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
 
@@ -35,6 +36,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="sourceName">
         /// The source Name.
         /// </param>
-        void Setup(Source scannedSource, string sourceName);
+        /// <param name="addAction">
+        /// The add To Queue action
+        /// </param>
+        void Setup(Source scannedSource, string sourceName, Action<IEnumerable<SelectionTitle>> addAction);
     }
 }

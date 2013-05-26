@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Helpers
     using System.IO;
     using System.Security.Cryptography;
     using System.Text.RegularExpressions;
+    using System.Windows.Forms;
 
     using Caliburn.Micro;
 
@@ -43,7 +44,7 @@ namespace HandBrakeWPF.Helpers
 
             // Get the SHA1 Hash of HandBrakeCLI
             byte[] hash;
-            using (Stream stream = File.OpenRead("HandBrakeCLI.exe"))
+            using (Stream stream = File.OpenRead(Path.Combine(Application.StartupPath, "HandBrakeCLI.exe")))
             {
                 hash = SHA1.Create().ComputeHash(stream);
             }
@@ -58,7 +59,7 @@ namespace HandBrakeWPF.Helpers
 
             // It's not the same, so start the CLI to get it's version data.
             Process cliProcess = new Process();
-            ProcessStartInfo handBrakeCli = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
+            ProcessStartInfo handBrakeCli = new ProcessStartInfo(Path.Combine(Application.StartupPath, "HandBrakeCLI.exe"), " -u -v0")
                 {
                     UseShellExecute = false,
                     RedirectStandardError = true,

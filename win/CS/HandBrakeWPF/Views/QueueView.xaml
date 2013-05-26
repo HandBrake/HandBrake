@@ -10,11 +10,10 @@
         xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties"
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
         xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles" Title="{Binding Title}"
-        Width="600"
-        Height="400"
-        MinWidth="600"
-        MinHeight="400"
-        MaxWidth="600"
+        Width="700"
+        Height="500"
+        MinWidth="200"
+        MinHeight="200"
         Background="#FFF0F0F0"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -27,6 +26,12 @@
         <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
         <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
+
+
+        <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
+            <Setter Property="ToolTipService.ShowDuration" Value="10000" />
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -115,7 +120,7 @@
                                   YourNamespace:MenuItemExtensions.GroupName="whenDone" />
                         <MenuItem x:Name="lock"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
-                                  Header="Lock system"
+                                  Header="Lock System"
                                   IsCheckable="True"
                                   YourNamespace:MenuItemExtensions.GroupName="whenDone" />
                         <MenuItem x:Name="logoff"
@@ -137,7 +142,7 @@
             <TextBlock Text="{Binding JobsPending}" />
             <TextBlock Text="{Binding JobStatus}" />
         </StackPanel>
-        
+
         <ListBox Grid.Row="2"
                  Margin="10,0,10,10"
                  Background="LightGray"
@@ -164,28 +169,50 @@
                     <Setter Property="Margin" Value="0,0,0,1" />
                     <Setter Property="ToolTip">
                         <Setter.Value>
-                            <StackPanel Grid.Column="1"
-                                    Margin="0,5,0,5"
-                                    HorizontalAlignment="Stretch">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="Video" />
-                                    <TextBlock Text=": " />
-                                    <TextBlock Text="{Binding Task.VideoEncoder, Converter={StaticResource enumComboConverter}}" />
-                                    <TextBlock Margin="10,0,0,0" FontWeight="Bold" Text="Audio: " />
-                                    <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}" />
-                                </StackPanel>
+                            <Grid MaxWidth="650" Margin="0,5,0,5" Style="{StaticResource LongToolTipHolder}">
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Margin" Value="0,5,0,5" />
+                                    </Style>
+                                </Grid.Resources>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="Subtitles: " />
-                                    <TextBlock Text="{Binding Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}" />
-                                </StackPanel>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="Advanced: " />
-                                    <TextBlock Text="{Binding Task.AdvancedEncoderOptions}" />
-                                </StackPanel>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                            </StackPanel>
+                                <TextBlock FontWeight="Bold" Text="Source:" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task.Source}" TextWrapping="Wrap" Grid.Row="0" Grid.Column="1" />
+
+                                <TextBlock FontWeight="Bold" Text="Destination:" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task.Destination}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
+
+                                <TextBlock FontWeight="Bold" Text="Video:" Grid.Row="2" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task.VideoEncoder, Converter={StaticResource enumComboConverter}}"
+                                           Grid.Row="2" Grid.Column="1" />
+
+                                <TextBlock FontWeight="Bold" Text="Audio: "  Grid.Row="3" Grid.Column="0"/>
+                                <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"
+                                           Grid.Row="3" Grid.Column="1"/>
+
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="Subtitles: " Grid.Row="4" Grid.Column="0"  />
+                                <TextBlock Text="{Binding Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
+                                           Grid.Row="4" Grid.Column="1" />
+
+
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0"  Text="Advanced: " />
+                                <TextBlock Text="{Binding Task.AdvancedEncoderOptions}" Grid.Row="5" Grid.Column="1"  />
+                            </Grid>
+
                         </Setter.Value>
                     </Setter>
                 </Style>
