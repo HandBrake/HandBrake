@@ -1466,13 +1466,13 @@ namespace HandBrakeWPF.ViewModels
             switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck))
             {
                 case 1:
-                    this.CheckForUpdatesFrequency = 1;
+                    this.CheckForUpdatesFrequency = 0;
                     break;
                 case 7:
-                    this.CheckForUpdatesFrequency = 2;
+                    this.CheckForUpdatesFrequency = 1;
                     break;
                 case 30:
-                    this.CheckForUpdatesFrequency = 3;
+                    this.CheckForUpdatesFrequency = 2;
                     break;
             }
 
@@ -1482,7 +1482,7 @@ namespace HandBrakeWPF.ViewModels
             this.whenDoneOptions.Add("Shutdown");
             this.whenDoneOptions.Add("Suspend");
             this.whenDoneOptions.Add("Hibernate");
-            this.whenDoneOptions.Add("Lock system");
+            this.whenDoneOptions.Add("Lock System");
             this.whenDoneOptions.Add("Log off");
             this.whenDoneOptions.Add("Quit HandBrake");
             this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");

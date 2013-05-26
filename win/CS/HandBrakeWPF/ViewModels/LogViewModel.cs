@@ -228,6 +228,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void encodeService_EncodeStarted(object sender, EventArgs e)
         {
+            this.encodeLogIndex = -1; // Reset the log index.
             this.SelectedTab = 0;
         }
 
