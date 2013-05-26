@@ -789,7 +789,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                 }
 
-                if (this.SelectedStartPoint > this.SelectedEndPoint)
+                if (this.SelectedStartPoint > this.SelectedEndPoint && this.SelectedPointToPoint == PointToPointMode.Chapters)
                 {
                     this.SelectedStartPoint = this.SelectedEndPoint;
                 }
