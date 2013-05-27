@@ -379,6 +379,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueChanged += this.QueueManager_QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeService_EncodeStatusChanged;
             this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
+            this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
 
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
             this.JobStatus = "Queue Ready";
@@ -398,6 +399,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueChanged -= this.QueueManager_QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeService_EncodeStatusChanged;
             this.queueProcessor.EncodeService.EncodeCompleted -= EncodeService_EncodeCompleted;
+            this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
 
             base.OnDeactivate(close);
         }
@@ -416,6 +418,8 @@ namespace HandBrakeWPF.ViewModels
         {
             Caliburn.Micro.Execute.OnUIThread(() =>
             {
+
+
                 this.JobStatus =
                     string.Format(
                         "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
@@ -479,6 +483,22 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.JobStatus = "Last Queued Job Finished";
             }
+        }
+
+        /// <summary>
+        /// The queue processor job processing started.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The QueueProgressEventArgs.
+        /// </param>
+        private void QueueProcessorJobProcessingStarted(object sender, QueueProgressEventArgs e)
+        {
+            this.JobStatus = "Queue Started";
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.IsEncoding = true;
         }
 
         #endregion
