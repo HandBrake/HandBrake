@@ -578,6 +578,7 @@ static int HandleEvents( hb_handle_t * h )
 {
     hb_state_t s;
     int tmp_num_audio_tracks;
+    int filter_vrate, filter_vrate_base, filter_cfr;
 
     hb_get_state( h, &s );
     switch( s.state )
@@ -688,6 +689,9 @@ static int HandleEvents( hb_handle_t * h )
 
             /* Set job settings */
             job = hb_job_init( title );
+            filter_vrate = job->vrate;
+            filter_vrate_base = job->vrate_base;
+            filter_cfr = job->cfr;
 
 
             if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview && !stop_at_frame && !start_at_pts && !start_at_frame )
@@ -717,8 +721,8 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -787,8 +791,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -853,8 +857,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -923,8 +927,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -993,8 +997,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -1067,8 +1071,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -1137,8 +1141,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -1208,8 +1212,8 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -1276,8 +1280,8 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -1754,20 +1758,20 @@ static int HandleEvents( hb_handle_t * h )
             // Add framerate shaping filter
             if( vrate )
             {
-                job->cfr = cfr;
-                job->vrate = 27000000;
-                job->vrate_base = vrate;
+                filter_cfr = cfr;
+                filter_vrate = 27000000;
+                filter_vrate_base = vrate;
             }
             else if ( cfr )
             {
                 // cfr or pfr flag with no rate specified implies
                 // use the title rate.
-                job->cfr = cfr;
-                job->vrate = title->rate;
-                job->vrate_base = title->rate_base;
+                filter_cfr = cfr;
+                filter_vrate = title->rate;
+                filter_vrate_base = title->rate_base;
             }
             filter_str = hb_strdup_printf("%d:%d:%d",
-                job->cfr, job->vrate, job->vrate_base );
+                filter_cfr, filter_vrate, filter_vrate_base );
             filter = hb_filter_init( HB_FILTER_VFR );
             hb_add_filter( job, filter, filter_str );
             free( filter_str );

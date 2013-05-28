@@ -969,8 +969,6 @@ typedef struct hb_filter_init_s
     int           crop[4];
     int           vrate_base;
     int           vrate;
-    int           title_rate_base;
-    int           title_rate;
     int           cfr;
 } hb_filter_init_t;
 

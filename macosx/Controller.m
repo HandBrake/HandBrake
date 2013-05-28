@@ -3313,6 +3313,8 @@ fWorkingCount = 0;
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
     hb_filter_object_t * filter;
+    int vrate, vrate_base;
+
     /* set job->angle for libdvdnav */
     job->angle = [fSrcAnglePopUp indexOfSelectedItem] + 1;
     /* Chapter selection */
@@ -3383,8 +3385,8 @@ fWorkingCount = 0;
     if( [fVidRatePopUp indexOfSelectedItem] > 0 )
     {
         /* a specific framerate has been chosen */
-        job->vrate      = 27000000;
-        job->vrate_base = hb_video_rates[[fVidRatePopUp indexOfSelectedItem]-1].rate;
+        vrate      = 27000000;
+        vrate_base = hb_video_rates[[fVidRatePopUp indexOfSelectedItem]-1].rate;
         if ([fFramerateMatrix selectedRow] == 1)
         {
             // CFR
@@ -3399,8 +3401,8 @@ fWorkingCount = 0;
     else
     {
         /* same as source */
-        job->vrate      = title->rate;
-        job->vrate_base = title->rate_base;
+        vrate      = title->rate;
+        vrate_base = title->rate_base;
         if ([fFramerateMatrix selectedRow] == 1)
         {
             // CFR
@@ -3723,7 +3725,7 @@ bool one_burned = FALSE;
     /* Add framerate shaping filter */
     filter = hb_filter_init( HB_FILTER_VFR );
     hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
-                                  job->cfr, job->vrate, job->vrate_base] UTF8String] );
+                                  job->cfr, vrate, vrate_base] UTF8String] );
 }
 
 
@@ -3740,6 +3742,8 @@ bool one_burned = FALSE;
     hb_job_t * job = title->job;
     hb_audio_config_t * audio;
     hb_filter_object_t * filter;
+    int vrate, vrate_base;
+
     /* Title Angle for dvdnav */
     job->angle = [[queueToApply objectForKey:@"TitleAngle"] intValue];
     
@@ -3938,8 +3942,8 @@ bool one_burned = FALSE;
     if( [[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0 )
     {
         /* a specific framerate has been chosen */
-        job->vrate      = 27000000;
-        job->vrate_base = hb_video_rates[[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]-1].rate;
+        vrate      = 27000000;
+        vrate_base = hb_video_rates[[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]-1].rate;
         if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
         {
             // CFR
@@ -3954,8 +3958,8 @@ bool one_burned = FALSE;
     else
     {
         /* same as source */
-        job->vrate      = [[queueToApply objectForKey:@"JobVrate"] intValue];
-        job->vrate_base = [[queueToApply objectForKey:@"JobVrateBase"] intValue];
+        vrate      = [[queueToApply objectForKey:@"JobVrate"] intValue];
+        vrate_base = [[queueToApply objectForKey:@"JobVrateBase"] intValue];
         if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
         {
             // CFR
@@ -4282,7 +4286,7 @@ bool one_burned = FALSE;
     /* Add framerate shaping filter */
     filter = hb_filter_init( HB_FILTER_VFR );
     hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
-                                  job->cfr, job->vrate, job->vrate_base] UTF8String] );
+                                  job->cfr, vrate, vrate_base] UTF8String] );
 
 [self writeToActivityLog: "prepareJob exiting"];    
 }

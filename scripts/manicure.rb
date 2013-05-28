@@ -1073,23 +1073,23 @@ class Display
     #FPS
     if hash["VideoFramerate"] != "Same as source"
       if hash["VideoFramerate"] == "23.976 (NTSC Film)"
-        commandString << "job->vrate_base = " << "1126125;\n    "
+        commandString << "filter_vrate_base = " << "1126125;\n    "
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
-        commandString << "job->vrate_base = " << "900900;\n    "
+        commandString << "filter_vrate_base = " << "900900;\n    "
       elsif hash["VideoFramerate"] == "25 (PAL Film/Video)"
-        commandString << "job->vrate_base = " << "1080000;\n    "
+        commandString << "filter_vrate_base = " << "1080000;\n    "
       else
-        commandString << "job->vrate_base = " << (27000000 / hash["VideoFramerate"].to_i).to_s << ";\n    "
+        commandString << "filter_vrate_base = " << (27000000 / hash["VideoFramerate"].to_i).to_s << ";\n    "
       end
       # not same as source: pfr, else default (cfr)
       if hash["VideoFramerateMode"] == "pfr"
-        commandString << "job->cfr = 2;\n    "
+        commandString << "filter_cfr = 2;\n    "
       else
-        commandString << "job->cfr = 1;\n    "
+        commandString << "filter_cfr = 1;\n    "
       end
     # same as source: cfr, else default (vfr)
     elsif hash["VideoFramerateMode"] == "cfr"
-      commandString << "job->cfr = 1;\n    "
+      commandString << "filter_cfr = 1;\n    "
     end
     
     #Audio tracks

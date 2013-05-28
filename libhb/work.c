@@ -243,24 +243,6 @@ void hb_display_job_info( hb_job_t * job )
         hb_log( "     + bitrate %d kbps", title->video_bitrate / 1000 );
     }
     
-    if( job->cfr == 0 )
-    {
-        hb_log( "   + frame rate: same as source (around %.3f fps)",
-            (float) title->rate / (float) title->rate_base );
-    }
-    else if( job->cfr == 1 )
-    {
-        hb_log( "   + frame rate: %.3f fps -> constant %.3f fps",
-            (float) title->rate / (float) title->rate_base,
-            (float) job->vrate / (float) job->vrate_base );
-    }
-    else if( job->cfr == 2 )
-    {
-        hb_log( "   + frame rate: %.3f fps -> peak rate limited to %.3f fps",
-            (float) title->rate / (float) title->rate_base,
-            (float) job->vrate / (float) job->vrate_base );
-    }
-
     // Filters can modify dimensions.  So show them first.
     if( hb_list_count( job->list_filter ) )
     {
@@ -691,15 +673,13 @@ static void do_job( hb_job_t * job )
 
         init.job = job;
         init.pix_fmt = AV_PIX_FMT_YUV420P;
-        init.width = title->width;
-        init.height = title->height;
+        init.width = title->width - (title->crop[2] + title->crop[3]);
+        init.height = title->height - (title->crop[0] + title->crop[1]);
         init.par_width = job->anamorphic.par_width;
         init.par_height = job->anamorphic.par_height;
-        memcpy(init.crop, job->crop, sizeof(int[4]));
-        init.vrate_base = job->vrate_base;
-        init.vrate = job->vrate;
-        init.title_rate_base = title->rate_base;
-        init.title_rate = title->rate;
+        memcpy(init.crop, title->crop, sizeof(int[4]));
+        init.vrate_base = title->rate_base;
+        init.vrate = title->rate;
         init.cfr = 0;
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
@@ -721,8 +701,6 @@ static void do_job( hb_job_t * job )
         memcpy(job->crop, init.crop, sizeof(int[4]));
         job->vrate_base = init.vrate_base;
         job->vrate = init.vrate;
-        title->rate_base = init.title_rate_base;
-        title->rate = init.title_rate;
         job->cfr = init.cfr;
     }
 
