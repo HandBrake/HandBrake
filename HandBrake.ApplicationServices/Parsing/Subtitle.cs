@@ -69,6 +69,22 @@ namespace HandBrake.ApplicationServices.Parsing
         public string LanguageCode { get; set; }
 
         /// <summary>
+        /// Gets the language code clean.
+        /// TODO Remove this after fixing language code.
+        /// </summary>
+        public string LanguageCodeClean
+        {
+            get
+            {
+                if (this.LanguageCode != null)
+                {
+                    return this.LanguageCode.Replace("iso639-2: ", string.Empty).Trim();
+                }
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the Subtitle Type
         /// </summary>
         public SubtitleType SubtitleType { get; set; }
