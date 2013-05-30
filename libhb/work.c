@@ -179,9 +179,10 @@ void hb_display_job_info(hb_job_t *job)
         sec_stop = (float)stop / 90000.0 - min_stop * 60;
         min_stop %= 60;
 
-        hb_log( "   + title %d, start %d:%d:%.2f stop %d:%d:%.2f", title->index,
-                hr_start, min_start, sec_start,
-                hr_stop, min_stop, sec_stop);
+        hb_log("   + title %d, start %02d:%02d:%02.2f stop %02d:%02d:%02.2f",
+               title->index,
+               hr_start, min_start, sec_start,
+               hr_stop,  min_stop,  sec_stop);
     }
     else if( job->frame_to_start || job->frame_to_stop )
     {
