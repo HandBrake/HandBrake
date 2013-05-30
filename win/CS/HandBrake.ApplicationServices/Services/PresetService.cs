@@ -313,6 +313,11 @@ namespace HandBrake.ApplicationServices.Services
                                     Task = QueryParserUtility.Parse(presetName[2])
                                 };
 
+                            if (newPreset.Name == "iPod")
+                            {
+                                newPreset.Task.KeepDisplayAspect = true;
+                            }
+
                             newPreset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
                             
                             if (newPreset.Name == "Normal")
