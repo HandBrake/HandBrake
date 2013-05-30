@@ -173,17 +173,6 @@ combo_opts_t vqual_granularity_opts =
     d_vqual_granularity_opts
 };
 
-static options_map_t d_container_opts[] =
-{
-    {"MKV", "mkv", HB_MUX_MKV, "mkv"},
-    {"MP4", "mp4", HB_MUX_MP4, "mp4"},
-};
-combo_opts_t container_opts =
-{
-    sizeof(d_container_opts)/sizeof(options_map_t),
-    d_container_opts
-};
-
 static options_map_t d_detel_opts[] =
 {
     {"Off",    "off",   0, ""},
@@ -383,7 +372,6 @@ combo_name_map_t combo_name_map[] =
     {"LogLongevity", &log_longevity_opts},
     {"check_updates", &appcast_update_opts},
     {"VideoQualityGranularity", &vqual_granularity_opts},
-    {"FileFormat", &container_opts},
     {"PictureDeinterlace", &deint_opts},
     {"PictureDecomb", &decomb_opts},
     {"PictureDetelecine", &detel_opts},
@@ -842,338 +830,238 @@ lookup_generic_option(combo_opts_t *opts, const GValue *gval)
     return result;
 }
 
-static gint
-lookup_mix_int(const GValue *mix)
+static const hb_mixdown_t *
+lookup_mixdown_by_int(int imix)
 {
-    gint ii;
-    gint result = 0;
-
-
-    if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
+    const hb_mixdown_t *mix;
+    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
+         mix = hb_mixdown_get_next(mix))
     {
-        gchar * str = ghb_value_string(mix);
-        for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+        if (mix->amixdown == imix)
         {
-            if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
-            {
-                result = hb_audio_mixdowns[ii].amixdown;
-                break;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(mix) == G_TYPE_INT ||
-             G_VALUE_TYPE(mix) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(mix) == G_TYPE_DOUBLE)
-    {
-        gint val = ghb_value_int(mix);
-        for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
-        {
-            if (hb_audio_mixdowns[ii].amixdown == val)
-            {
-                result = hb_audio_mixdowns[ii].amixdown;
-                break;
-            }
+            return mix;
         }
     }
-    return result;
+    return NULL;
 }
 
-static const gchar*
-lookup_mix_option(const GValue *mix)
+static const hb_mixdown_t *
+lookup_mixdown(const GValue *gmix)
 {
-    gint ii;
-    const gchar *result = "None";
+    const hb_mixdown_t *mix;
 
-
-    if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
+    if (G_VALUE_TYPE(gmix) == G_TYPE_STRING)
     {
-        gchar *str = ghb_value_string(mix);
-        for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+        gchar * str = ghb_value_string(gmix);
+        for (mix = hb_mixdown_get_next(NULL); mix != NULL;
+             mix = hb_mixdown_get_next(mix))
         {
-            if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+            if (strcmp(mix->short_name, str) == 0)
             {
-                result = hb_audio_mixdowns[ii].human_readable_name;
-                break;
+                g_free(str);
+                return mix;
             }
         }
         g_free(str);
     }
-    else if (G_VALUE_TYPE(mix) == G_TYPE_INT ||
-             G_VALUE_TYPE(mix) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(mix) == G_TYPE_DOUBLE)
+    else if (G_VALUE_TYPE(gmix) == G_TYPE_INT ||
+             G_VALUE_TYPE(gmix) == G_TYPE_INT64 ||
+             G_VALUE_TYPE(gmix) == G_TYPE_DOUBLE)
     {
-        gint val = ghb_value_int(mix);
-        for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
-        {
-            if (hb_audio_mixdowns[ii].amixdown == val)
-            {
-                result = hb_audio_mixdowns[ii].human_readable_name;
-                break;
-            }
-        }
+        return lookup_mixdown_by_int(ghb_value_int(gmix));
     }
-    return result;
-}
-
-static const gchar*
-lookup_mix_string(const GValue *mix)
-{
-    gint ii;
-    const gchar *result = "none";
-
-
-    if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
-    {
-        gchar *str = ghb_value_string(mix);
-        for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
-        {
-            if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
-            {
-                result = hb_audio_mixdowns[ii].short_name;
-                break;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(mix) == G_TYPE_INT ||
-             G_VALUE_TYPE(mix) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(mix) == G_TYPE_DOUBLE)
-    {
-        gint val = ghb_value_int(mix);
-        for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
-        {
-            if (hb_audio_mixdowns[ii].amixdown == val)
-            {
-                result = hb_audio_mixdowns[ii].short_name;
-                break;
-            }
-        }
-    }
-    return result;
+    return NULL;
 }
 
 static gint
-lookup_video_rate_int(const GValue *vrate)
+lookup_mixdown_int(const GValue *gmix)
 {
-    gint ii;
+    const hb_mixdown_t *mix = lookup_mixdown(gmix);
+    if (mix != NULL)
+        return mix->amixdown;
+    return 0;
+}
+
+static const gchar*
+lookup_mixdown_option(const GValue *gmix)
+{
+    const hb_mixdown_t *mix = lookup_mixdown(gmix);
+    if (mix != NULL)
+        return mix->name;
+    return "None";
+}
+
+static const gchar*
+lookup_mixdown_string(const GValue *gmix)
+{
+    const hb_mixdown_t *mix = lookup_mixdown(gmix);
+    if (mix != NULL)
+        return mix->short_name;
+    return "none";
+}
+
+static const hb_rate_t *
+lookup_video_framerate(const GValue *grate)
+{
     gchar *str;
-    gint result = 0;
+    const hb_rate_t *rate;
 
-    str = ghb_value_string(vrate);
-    for (ii = 0; ii < hb_video_rates_count; ii++)
+    str = ghb_value_string(grate);
+    for (rate = hb_video_framerate_get_next(NULL); rate != NULL;
+         rate = hb_video_framerate_get_next(rate))
     {
-        if (strcmp(hb_video_rates[ii].string, str) == 0)
+        if (strcmp(rate->name, str) == 0)
         {
-            result = hb_video_rates[ii].rate;
-            break;
+            g_free(str);
+            return rate;
         }
     }
     g_free(str);
     // Default to "same as source"
-    return result;
-}
-
-static const gchar*
-lookup_video_rate_option(const GValue *vrate)
-{
-    gint ii;
-    gchar *str;
-    const gchar *result = "Same as source";
-
-    str = ghb_value_string(vrate);
-    for (ii = 0; ii < hb_video_rates_count; ii++)
-    {
-        if (strcmp(hb_video_rates[ii].string, str) == 0)
-        {
-            result = hb_video_rates[ii].string;
-            break;
-        }
-    }
-    g_free(str);
-    // Default to "same as source"
-    return result;
+    return NULL;
 }
 
 static gint
-lookup_audio_rate_int(const GValue *rate)
+lookup_video_framerate_int(const GValue *grate)
 {
-    gint ii;
-    gint result = 0;
+    const hb_rate_t *rate = lookup_video_framerate(grate);
+    if (rate != NULL)
+        return rate->rate;
+    return 0;
+}
 
-    if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
+static const gchar*
+lookup_video_framerate_option(const GValue *grate)
+{
+    const hb_rate_t *rate = lookup_video_framerate(grate);
+    if (rate != NULL)
+        return rate->name;
+    return "Same as source";
+}
+
+static const hb_rate_t *
+lookup_audio_samplerate(const GValue *grate)
+{
+    const hb_rate_t *rate;
+
+    if (G_VALUE_TYPE(grate) == G_TYPE_STRING)
     {
         // Coincidentally, the string "source" will return 0
         // which is our flag to use "same as source"
-        gchar * str = ghb_value_string(rate);
-        for (ii = 0; ii < hb_audio_rates_count; ii++)
+        gchar * str = ghb_value_string(grate);
+        for (rate = hb_audio_samplerate_get_next(NULL); rate != NULL;
+             rate = hb_audio_samplerate_get_next(rate))
         {
-            if (strcmp(hb_audio_rates[ii].string, str) == 0)
+            if (strcmp(rate->name, str) == 0)
             {
-                result = hb_audio_rates[ii].rate;
-                break;
+                g_free(str);
+                return rate;
             }
         }
         g_free(str);
     }
-    else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
-             G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
+    else if (G_VALUE_TYPE(grate) == G_TYPE_INT ||
+             G_VALUE_TYPE(grate) == G_TYPE_INT64 ||
+             G_VALUE_TYPE(grate) == G_TYPE_DOUBLE)
     {
-        for (ii = 0; ii < hb_audio_rates_count; ii++)
+        gint val = ghb_value_int(grate);
+        for (rate = hb_audio_samplerate_get_next(NULL); rate != NULL;
+             rate = hb_audio_samplerate_get_next(rate))
         {
-            gint val = ghb_value_int(rate);
-            if (val == hb_audio_rates[ii].rate)
+            if (val == rate->rate)
             {
-                result = hb_audio_rates[ii].rate;
-                break;
+                return rate;
             }
         }
     }
-    return result;
+    return NULL;
+}
+
+static gint
+lookup_audio_samplerate_int(const GValue *grate)
+{
+    const hb_rate_t *rate = lookup_audio_samplerate(grate);
+    if (rate != NULL)
+        return rate->rate;
+    return 0;
 }
 
 static const gchar*
-lookup_audio_rate(const GValue *rate, const char *def)
+lookup_audio_samplerate_def(const GValue *grate, const char *def)
 {
-    gint ii;
     const gchar *result = def;
-
-    if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
-    {
-        // Coincidentally, the string "source" will return 0
-        // which is our flag to use "same as source"
-        gchar *str = ghb_value_string(rate);
-        for (ii = 0; ii < hb_audio_rates_count; ii++)
-        {
-            if (strcmp(hb_audio_rates[ii].string, str) == 0)
-            {
-                result = hb_audio_rates[ii].string;
-                break;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
-             G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
-    {
-        for (ii = 0; ii < hb_audio_rates_count; ii++)
-        {
-            gint val = ghb_value_int(rate);
-            if (val == hb_audio_rates[ii].rate)
-            {
-                result = hb_audio_rates[ii].string;
-                break;
-            }
-        }
-    }
+    const hb_rate_t *rate = lookup_audio_samplerate(grate);
+    if (rate != NULL)
+        return rate->name;
     return result;
 }
 
 static const gchar*
-lookup_audio_rate_option(const GValue *rate)
+lookup_audio_samplerate_option(const GValue *grate)
 {
-    return lookup_audio_rate(rate, "Same as Source");
+    return lookup_audio_samplerate_def(grate, "Same as Source");
 }
 
 static const gchar*
-lookup_audio_rate_string(const GValue *rate)
+lookup_audio_samplerate_string(const GValue *grate)
 {
-    return lookup_audio_rate(rate, "source");
+    return lookup_audio_samplerate_def(grate, "source");
 }
 
 gint
-ghb_find_closest_audio_rate(gint rate)
+ghb_find_closest_audio_samplerate(gint irate)
 {
-    gint ii;
     gint result;
+    const hb_rate_t *rate;
 
     result = 0;
-    for (ii = 0; ii < hb_audio_rates_count; ii++)
+    for (rate = hb_audio_samplerate_get_next(NULL); rate != NULL;
+         rate = hb_audio_samplerate_get_next(rate))
     {
-        if (rate <= hb_audio_rates[ii].rate)
+        if (irate <= rate->rate)
         {
-            result = hb_audio_rates[ii].rate;
+            result = rate->rate;
             break;
         }
     }
     return result;
 }
 
-hb_rate_t *ghb_audio_bitrates;
-int ghb_audio_bitrates_count;
+hb_rate_t *ghb_audio_bitrates = NULL;
+int ghb_audio_bitrates_count = 0;
+int ghb_abr_count = 0;
 
-static gint
-lookup_audio_bitrate_int(const GValue *rate)
+static const hb_rate_t *
+lookup_audio_bitrate(const GValue *grate)
 {
     gint ii;
-    gint result = 160;
+    const hb_rate_t *result = NULL;
 
-    if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
+    if (G_VALUE_TYPE(grate) == G_TYPE_STRING)
     {
         // Coincidentally, the string "source" will return 0
         // which is our flag to use "same as source"
-        gchar *str = ghb_value_string(rate);
+        gchar *str = ghb_value_string(grate);
         for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
         {
-            if (strcmp(ghb_audio_bitrates[ii].string, str) == 0)
+            if (strcmp(ghb_audio_bitrates[ii].name, str) == 0)
             {
-                result = ghb_audio_bitrates[ii].rate;
-                break;
+                g_free(str);
+                return &ghb_audio_bitrates[ii];
             }
         }
         g_free(str);
     }
-    else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
-             G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
+    else if (G_VALUE_TYPE(grate) == G_TYPE_INT ||
+             G_VALUE_TYPE(grate) == G_TYPE_INT64 ||
+             G_VALUE_TYPE(grate) == G_TYPE_DOUBLE)
     {
-        gint val = ghb_value_int(rate);
+        gint val = ghb_value_int(grate);
         for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
         {
             if (ghb_audio_bitrates[ii].rate == val)
             {
-                result = ghb_audio_bitrates[ii].rate;
-                break;
-            }
-        }
-    }
-    return result;
-}
-
-static const gchar*
-lookup_audio_bitrate_option(const GValue *rate)
-{
-    gint ii;
-    const gchar *result = "160";
-
-    if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
-    {
-        // Coincidentally, the string "source" will return 0
-        // which is our flag to use "same as source"
-        gchar *str = ghb_value_string(rate);
-        for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
-        {
-            if (strcmp(ghb_audio_bitrates[ii].string, str) == 0)
-            {
-                result = ghb_audio_bitrates[ii].string;
-                break;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
-             G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
-    {
-        gint val = ghb_value_int(rate);
-        for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
-        {
-            if (ghb_audio_bitrates[ii].rate == val)
-            {
-                result = ghb_audio_bitrates[ii].string;
-                break;
+                return &ghb_audio_bitrates[ii];
             }
         }
     }
@@ -1181,190 +1069,293 @@ lookup_audio_bitrate_option(const GValue *rate)
 }
 
 static gint
-lookup_hb_encoder_int(const GValue *enc, hb_encoder_t *encoders, int len)
+lookup_audio_bitrate_int(const GValue *grate)
 {
-    gint ii;
-
-    if (G_VALUE_TYPE(enc) == G_TYPE_STRING)
-    {
-        gchar *str = ghb_value_string(enc);
-        for (ii = 0; ii < len; ii++)
-        {
-            if (strcmp(encoders[ii].human_readable_name, str) == 0 ||
-                strcmp(encoders[ii].short_name, str) == 0)
-            {
-                g_free(str);
-                return encoders[ii].encoder;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(enc) == G_TYPE_INT ||
-             G_VALUE_TYPE(enc) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(enc) == G_TYPE_DOUBLE)
-    {
-        int val = ghb_value_int(enc);
-        for (ii = 0; ii < len; ii++)
-        {
-            if (encoders[ii].encoder == val)
-            {
-                return encoders[ii].encoder;
-            }
-        }
-    }
-    return 0;
+    const hb_rate_t *rate = lookup_audio_bitrate(grate);
+    if (rate != NULL)
+        return rate->rate;
+    return 160;
 }
 
 static const gchar*
-lookup_hb_encoder_option(const GValue *enc, hb_encoder_t *encoders, int len)
+lookup_audio_bitrate_option(const GValue *grate)
 {
-    gint ii;
-
-    if (G_VALUE_TYPE(enc) == G_TYPE_STRING)
-    {
-        gchar *str = ghb_value_string(enc);
-        for (ii = 0; ii < len; ii++)
-        {
-            if (strcmp(encoders[ii].human_readable_name, str) == 0 ||
-                strcmp(encoders[ii].short_name, str) == 0)
-            {
-                g_free(str);
-                return encoders[ii].human_readable_name;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(enc) == G_TYPE_INT ||
-             G_VALUE_TYPE(enc) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(enc) == G_TYPE_DOUBLE)
-    {
-        int val = ghb_value_int(enc);
-        for (ii = 0; ii < len; ii++)
-        {
-            if (encoders[ii].encoder == val)
-            {
-                return encoders[ii].human_readable_name;
-            }
-        }
-    }
-    return 0;
+    const hb_rate_t *rate = lookup_audio_bitrate(grate);
+    if (rate != NULL)
+        return rate->name;
+    return "160";
 }
 
-static const gchar*
-lookup_hb_encoder_string(const GValue *enc, hb_encoder_t *encoders, int len)
+static const hb_encoder_t *
+lookup_audio_encoder_by_int(int ienc)
 {
-    gint ii;
-
-    if (G_VALUE_TYPE(enc) == G_TYPE_STRING)
+    const hb_encoder_t *enc;
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
     {
-        gchar *str = ghb_value_string(enc);
-        for (ii = 0; ii < len; ii++)
+        if (enc->codec == ienc)
         {
-            if (strcmp(encoders[ii].human_readable_name, str) == 0 ||
-                strcmp(encoders[ii].short_name, str) == 0)
+            return enc;
+        }
+    }
+    return NULL;
+}
+
+static const hb_encoder_t *
+lookup_audio_encoder(const GValue *genc)
+{
+    const hb_encoder_t *enc;
+
+    if (G_VALUE_TYPE(genc) == G_TYPE_STRING)
+    {
+        gchar *str = ghb_value_string(genc);
+        for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+             enc = hb_audio_encoder_get_next(enc))
+        {
+            if (strcmp(enc->name, str) == 0 ||
+                strcmp(enc->short_name, str) == 0)
             {
                 g_free(str);
-                return encoders[ii].short_name;
+                return enc;
             }
         }
         g_free(str);
     }
-    else if (G_VALUE_TYPE(enc) == G_TYPE_INT ||
-             G_VALUE_TYPE(enc) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(enc) == G_TYPE_DOUBLE)
+    else if (G_VALUE_TYPE(genc) == G_TYPE_INT ||
+             G_VALUE_TYPE(genc) == G_TYPE_INT64 ||
+             G_VALUE_TYPE(genc) == G_TYPE_DOUBLE)
     {
-        int val = ghb_value_int(enc);
-        for (ii = 0; ii < len; ii++)
+        return lookup_audio_encoder_by_int(ghb_value_int(genc));
+    }
+    return NULL;
+}
+
+static const hb_encoder_t *
+lookup_video_encoder_by_int(int ienc)
+{
+    const hb_encoder_t *enc;
+    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
+         enc = hb_video_encoder_get_next(enc))
+    {
+        if (enc->codec == ienc)
         {
-            if (encoders[ii].encoder == val)
-            {
-                return encoders[ii].short_name;
-            }
+            return enc;
         }
     }
+    return NULL;
+}
+
+static const hb_encoder_t *
+lookup_video_encoder(const GValue *genc)
+{
+    const hb_encoder_t *enc;
+
+    if (G_VALUE_TYPE(genc) == G_TYPE_STRING)
+    {
+        gchar *str = ghb_value_string(genc);
+        for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
+             enc = hb_video_encoder_get_next(enc))
+        {
+            if (strcmp(enc->name, str) == 0 ||
+                strcmp(enc->short_name, str) == 0)
+            {
+                g_free(str);
+                return enc;
+            }
+        }
+        g_free(str);
+    }
+    else if (G_VALUE_TYPE(genc) == G_TYPE_INT ||
+             G_VALUE_TYPE(genc) == G_TYPE_INT64 ||
+             G_VALUE_TYPE(genc) == G_TYPE_DOUBLE)
+    {
+        return lookup_video_encoder_by_int(ghb_value_int(genc));
+    }
+    return NULL;
+}
+
+static gint
+lookup_audio_encoder_int(const GValue *genc)
+{
+    const hb_encoder_t *enc = lookup_audio_encoder(genc);
+    if (enc != NULL)
+        return enc->codec;
     return 0;
 }
 
 static gint
-lookup_audio_lang_int(const GValue *rate)
+lookup_video_encoder_int(const GValue *genc)
 {
-    gint ii;
-    gchar *str;
-    gint result = 0;
-
-    // Coincidentally, the string "source" will return 0
-    // which is our flag to use "same as source"
-    str = ghb_value_string(rate);
-    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
-    {
-        if (strcmp(ghb_language_table[ii].iso639_2, str) == 0)
-        {
-            result = ii;
-            break;
-        }
-    }
-    g_free(str);
-    return result;
+    const hb_encoder_t *enc = lookup_video_encoder(genc);
+    if (enc != NULL)
+        return enc->codec;
+    return 0;
 }
 
 static const gchar*
-lookup_audio_lang_option(const GValue *rate)
+lookup_audio_encoder_option(const GValue *genc)
+{
+    const hb_encoder_t *enc = lookup_audio_encoder(genc);
+    if (enc != NULL)
+        return enc->name;
+    return NULL;
+}
+
+static const gchar*
+lookup_video_encoder_option(const GValue *genc)
+{
+    const hb_encoder_t *enc = lookup_video_encoder(genc);
+    if (enc != NULL)
+        return enc->name;
+    return NULL;
+}
+
+static const gchar*
+lookup_audio_encoder_string(const GValue *genc)
+{
+    const hb_encoder_t *enc = lookup_audio_encoder(genc);
+    if (enc != NULL)
+        return enc->short_name;
+    return NULL;
+}
+
+static const gchar*
+lookup_video_encoder_string(const GValue *genc)
+{
+    const hb_encoder_t *enc = lookup_video_encoder(genc);
+    if (enc != NULL)
+        return enc->short_name;
+    return NULL;
+}
+
+static int
+lookup_audio_lang(const GValue *glang)
 {
     gint ii;
     gchar *str;
-    const gchar *result = "Same as source";
 
-    // Coincidentally, the string "source" will return 0
-    // which is our flag to use "same as source"
-    str = ghb_value_string(rate);
+    str = ghb_value_string(glang);
     for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
     {
         if (strcmp(ghb_language_table[ii].iso639_2, str) == 0)
         {
-            if (ghb_language_table[ii].native_name[0] != 0)
-                result = ghb_language_table[ii].native_name;
-            else
-                result = ghb_language_table[ii].eng_name;
-            break;
+            g_free(str);
+            return ii;
         }
     }
     g_free(str);
-    return result;
+    return -1;
+}
+
+static int
+lookup_audio_lang_int(const GValue *glang)
+{
+    gint ii = lookup_audio_lang(glang);
+    if (ii >= 0)
+        return ii;
+    return 0;
+}
+
+static const gchar*
+lookup_audio_lang_option(const GValue *glang)
+{
+    gint ii = lookup_audio_lang(glang);
+    if (ii >= 0)
+    {
+        if (ghb_language_table[ii].native_name[0] != 0)
+            return ghb_language_table[ii].native_name;
+        else
+            return ghb_language_table[ii].eng_name;
+    }
+    return "Same as source";
 }
 
 GValue*
-ghb_lookup_acodec_value(gint val)
+ghb_lookup_audio_encoder_value(gint ienc)
 {
-    GValue *value = NULL;
-    gint ii;
-
-    for (ii = 0; ii < hb_audio_encoders_count; ii++)
-    {
-        if ((int)hb_audio_encoders[ii].encoder == val)
-        {
-            value = ghb_string_value_new(hb_audio_encoders[ii].short_name);
-            return value;
-        }
-    }
-    value = ghb_string_value_new("copy");
-    return value;
+    const hb_encoder_t *enc = lookup_audio_encoder_by_int(ienc);
+    if (enc != NULL)
+        return ghb_string_value_new(enc->short_name);
+    return ghb_string_value_new("copy");
 }
 
 static GValue*
-get_amix_value(gint val)
+lookup_mixdown_value(gint imix)
 {
-    GValue *value = NULL;
-    gint ii;
-
-    for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+    const hb_mixdown_t *mix = lookup_mixdown_by_int(imix);
+    if (mix != NULL)
+        return ghb_string_value_new(mix->short_name);
+    return NULL;
+}
+static const hb_container_t *
+lookup_container_by_int(int imux)
+{
+    const hb_container_t *mux;
+    for (mux = hb_container_get_next(NULL); mux != NULL;
+         mux = hb_container_get_next(mux))
     {
-        if (hb_audio_mixdowns[ii].amixdown == val)
+        if (mux->format == imux)
         {
-            value = ghb_string_value_new(hb_audio_mixdowns[ii].short_name);
-            break;
+            return mux;
         }
     }
-    return value;
+    return NULL;
+}
+
+static const hb_container_t *
+lookup_container(const GValue *gmux)
+{
+    const hb_container_t *mux;
+
+    if (G_VALUE_TYPE(gmux) == G_TYPE_STRING)
+    {
+        gchar *str = ghb_value_string(gmux);
+        for (mux = hb_container_get_next(NULL); mux != NULL;
+             mux = hb_container_get_next(mux))
+        {
+            if (strcmp(mux->name, str) == 0 ||
+                strcmp(mux->short_name, str) == 0)
+            {
+                g_free(str);
+                return mux;
+            }
+        }
+        g_free(str);
+    }
+    else if (G_VALUE_TYPE(gmux) == G_TYPE_INT ||
+             G_VALUE_TYPE(gmux) == G_TYPE_INT64 ||
+             G_VALUE_TYPE(gmux) == G_TYPE_DOUBLE)
+    {
+        return lookup_container_by_int(ghb_value_int(gmux));
+    }
+    return NULL;
+}
+
+static gint
+lookup_container_int(const GValue *gmux)
+{
+    const hb_container_t *mux = lookup_container(gmux);
+    if (mux != NULL)
+        return mux->format;
+    return 0;
+}
+
+static const gchar*
+lookup_container_option(const GValue *gmux)
+{
+    const hb_container_t *mux = lookup_container(gmux);
+    if (mux != NULL)
+        return mux->name;
+    return 0;
+}
+
+static const gchar*
+lookup_container_string(const GValue *gmux)
+{
+    const hb_container_t *mux = lookup_container(gmux);
+    if (mux != NULL)
+        return mux->short_name;
+    return 0;
 }
 
 // Handle for libhb.  Gets set by ghb_backend_init()
@@ -1561,15 +1552,14 @@ grey_combo_box_item(GtkBuilder *builder, const gchar *name, gint value, gboolean
 static void
 grey_mix_opts(signal_user_data_t *ud, gint acodec, gint64 layout)
 {
-    gint ii;
-    
     g_debug("grey_mix_opts()\n");
-    for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+
+    const hb_mixdown_t *mix;
+    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
+         mix = hb_mixdown_get_next(mix))
     {
-        grey_combo_box_item(ud->builder, "AudioMixdown",
-                hb_audio_mixdowns[ii].amixdown,
-                !hb_mixdown_is_supported(hb_audio_mixdowns[ii].amixdown,
-                                        acodec, layout));
+        grey_combo_box_item(ud->builder, "AudioMixdown", mix->amixdown,
+                !hb_mixdown_is_supported(mix->amixdown, acodec, layout));
     }
 }
 
@@ -1580,7 +1570,6 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     gint mux, track, titleindex, acodec, fallback;
     hb_audio_config_t *aconfig = NULL;
     GValue *gval;
-    int ii;
 
     widget = GHB_WIDGET (ud->builder, "title");
     gval = ghb_widget_value(widget);
@@ -1597,34 +1586,38 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     ghb_value_free(gval);
 
     grey_combo_box_item(ud->builder, "x264_analyse", 4, TRUE);
-    for (ii = 0; ii < hb_audio_encoders_count; ii++)
+
+    const hb_encoder_t *enc;
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
     {
-        if (!(mux & hb_audio_encoders[ii].muxers))
+        if (!(mux & enc->muxers))
         {
             grey_combo_box_item(ud->builder, "AudioEncoder", 
-                hb_audio_encoders[ii].encoder, TRUE);
+                enc->codec, TRUE);
             grey_combo_box_item(ud->builder, "AudioEncoderFallback",
-                hb_audio_encoders[ii].encoder, TRUE);
+                enc->codec, TRUE);
         }
         else
         {
             grey_combo_box_item(ud->builder, "AudioEncoder", 
-                hb_audio_encoders[ii].encoder, FALSE);
+                enc->codec, FALSE);
             grey_combo_box_item(ud->builder, "AudioEncoderFallback",
-                hb_audio_encoders[ii].encoder, FALSE);
+                enc->codec, FALSE);
         }
     }
-    for (ii = 0; ii < hb_video_encoders_count; ii++)
+    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
+         enc = hb_video_encoder_get_next(enc))
     {
-        if (!(mux & hb_video_encoders[ii].muxers))
+        if (!(mux & enc->muxers))
         {
             grey_combo_box_item(ud->builder, "VideoEncoder", 
-                hb_video_encoders[ii].encoder, TRUE);
+                enc->codec, TRUE);
         }
         else
         {
             grey_combo_box_item(ud->builder, "VideoEncoder", 
-                hb_video_encoders[ii].encoder, FALSE);
+                enc->codec, FALSE);
         }
     }
 
@@ -1668,9 +1661,9 @@ ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
     layout = aconfig ? aconfig->in.channel_layout : AV_CH_LAYOUT_5POINT1;
 
     if (mix == HB_AMIXDOWN_NONE)
-        mix = hb_audio_mixdowns[hb_audio_mixdowns_count-1].amixdown;
+        mix = HB_INVALID_AMIXDOWN;
     
-    return hb_get_best_mixdown( acodec, layout, mix );
+    return hb_mixdown_get_best( acodec, layout, mix );
 }
 
 // Set up the model for the combo box
@@ -1711,11 +1704,10 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
 }   
 
 static void
-audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates, gint count)
+audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    gint ii;
     gchar *str;
     
     g_debug("audio_samplerate_opts_set ()\n");
@@ -1730,29 +1722,31 @@ audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rat
                        3, 0.0, 
                        4, "source", 
                        -1);
-    for (ii = 0; ii < count; ii++)
+
+    const hb_rate_t *rate;
+    for (rate = hb_audio_samplerate_get_next(NULL); rate != NULL;
+         rate = hb_audio_samplerate_get_next(rate))
     {
         gtk_list_store_append(store, &iter);
-        str = g_strdup_printf("<small>%s</small>", rates[ii].string);
+        str = g_strdup_printf("<small>%s</small>", rate->name);
         gtk_list_store_set(store, &iter, 
                            0, str,
                            1, TRUE, 
-                           2, rates[ii].string, 
-                           3, (gdouble)rates[ii].rate, 
-                           4, rates[ii].string, 
+                           2, rate->name, 
+                           3, (gdouble)rate->rate, 
+                           4, rate->name,
                            -1);
         g_free(str);
     }
 }
 
 static void
-video_rate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates, gint count)
+video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    gint ii;
     
-    g_debug("video_rate_opts_set ()\n");
+    g_debug("video_framerate_opts_set ()\n");
     store = get_combo_box_store(builder, name);
     gtk_list_store_clear(store);
     // Add an item for "Same As Source"
@@ -1764,66 +1758,97 @@ video_rate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates, gi
                        3, 0.0, 
                        4, "source", 
                        -1);
-    for (ii = 0; ii < count; ii++)
+
+    const hb_rate_t *rate;
+    for (rate = hb_video_framerate_get_next(NULL); rate != NULL;
+         rate = hb_video_framerate_get_next(rate))
     {
         gchar *desc = "";
         gchar *option;
-        if (strcmp(rates[ii].string, "23.976") == 0)
+        if (strcmp(rate->name, "23.976") == 0)
         {
             desc = "(NTSC Film)";
         }
-        else if (strcmp(rates[ii].string, "25") == 0)
+        else if (strcmp(rate->name, "25") == 0)
         {
             desc = "(PAL Film/Video)";
         }
-        else if (strcmp(rates[ii].string, "29.97") == 0)
+        else if (strcmp(rate->name, "29.97") == 0)
         {
             desc = "(NTSC Video)";
         }
-        option = g_strdup_printf ("%s %s", rates[ii].string, desc);
+        option = g_strdup_printf ("%s %s", rate->name, desc);
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
                            0, option, 
                            1, TRUE, 
-                           2, rates[ii].string, 
-                           3, (gdouble)rates[ii].rate, 
-                           4, rates[ii].string, 
+                           2, rate->name, 
+                           3, (gdouble)rate->rate, 
+                           4, rate->name, 
                            -1);
         g_free(option);
     }
 }
 
 static void
-hb_encoder_opts_set_with_mask(
+video_encoder_opts_set(
+    GtkBuilder *builder,
+    const gchar *name)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gchar *str;
+    
+    g_debug("video_encoder_opts_set ()\n");
+    store = get_combo_box_store(builder, name);
+    gtk_list_store_clear(store);
+
+    const hb_encoder_t *enc;
+    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
+         enc = hb_video_encoder_get_next(enc))
+    {
+        gtk_list_store_append(store, &iter);
+        str = g_strdup_printf("<small>%s</small>", enc->name);
+        gtk_list_store_set(store, &iter, 
+                           0, str,
+                           1, TRUE, 
+                           2, enc->short_name, 
+                           3, (gdouble)enc->codec,
+                           4, enc->short_name, 
+                           -1);
+        g_free(str);
+    }
+}
+
+static void
+audio_encoder_opts_set_with_mask(
     GtkBuilder *builder,
     const gchar *name,
-    hb_encoder_t *encoders,
-    int len,
     int mask,
     int neg_mask)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    gint ii;
     gchar *str;
     
-    g_debug("hb_encoder_opts_set ()\n");
+    g_debug("audio_encoder_opts_set ()\n");
     store = get_combo_box_store(builder, name);
     gtk_list_store_clear(store);
-    for (ii = 0; ii < len; ii++)
+
+    const hb_encoder_t *enc;
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
     {
-        if ((mask & encoders[ii].encoder) &&
-            !(neg_mask & encoders[ii].encoder))
+        if ((mask & enc->codec) && !(neg_mask & enc->codec))
         {
             gtk_list_store_append(store, &iter);
-            str = g_strdup_printf("<small>%s</small>",
-                encoders[ii].human_readable_name);
+            str = g_strdup_printf("<small>%s</small>", enc->name);
             gtk_list_store_set(store, &iter, 
                                0, str,
                                1, TRUE, 
-                               2, encoders[ii].short_name, 
-                               3, (gdouble)encoders[ii].encoder, 
-                               4, encoders[ii].short_name, 
+                               2, enc->short_name, 
+                               3, (gdouble)enc->codec,
+                               4, enc->short_name, 
                                -1);
             g_free(str);
         }
@@ -1831,20 +1856,17 @@ hb_encoder_opts_set_with_mask(
 }
 
 static void
-hb_encoder_opts_set(
+audio_encoder_opts_set(
     GtkBuilder *builder,
-    const gchar *name,
-    hb_encoder_t *encoders,
-    int len)
+    const gchar *name)
 {
-    hb_encoder_opts_set_with_mask(builder, name, encoders, len, ~0, 0);
+    audio_encoder_opts_set_with_mask(builder, name, ~0, 0);
 }
 
 static void
 acodec_fallback_opts_set(GtkBuilder *builder, const gchar *name)
 {
-    hb_encoder_opts_set_with_mask(builder, name, hb_audio_encoders, 
-                            hb_audio_encoders_count, ~0, HB_ACODEC_PASS_FLAG);
+    audio_encoder_opts_set_with_mask(builder, name, ~0, HB_ACODEC_PASS_FLAG);
 }
 
 static void
@@ -1852,23 +1874,54 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    gint ii;
     gchar *str;
     
     g_debug("mix_opts_set ()\n");
     store = get_combo_box_store(builder, name);
     gtk_list_store_clear(store);
-    for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+
+    const hb_mixdown_t *mix;
+    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
+         mix = hb_mixdown_get_next(mix))
     {
         gtk_list_store_append(store, &iter);
-        str = g_strdup_printf("<small>%s</small>",
-            hb_audio_mixdowns[ii].human_readable_name);
+        str = g_strdup_printf("<small>%s</small>", mix->name);
         gtk_list_store_set(store, &iter, 
                            0, str,
                            1, TRUE, 
-                           2, hb_audio_mixdowns[ii].short_name, 
-                           3, (gdouble)hb_audio_mixdowns[ii].amixdown, 
-                           4, hb_audio_mixdowns[ii].internal_name, 
+                           2, mix->short_name, 
+                           3, (gdouble)mix->amixdown, 
+                           4, mix->internal_name, 
+                           -1);
+        g_free(str);
+    }
+}
+
+static void
+container_opts_set(
+    GtkBuilder *builder,
+    const gchar *name)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gchar *str;
+    
+    g_debug("hb_container_opts_set ()\n");
+    store = get_combo_box_store(builder, name);
+    gtk_list_store_clear(store);
+
+    const hb_container_t *mux;
+    for (mux = hb_container_get_next(NULL); mux != NULL;
+         mux = hb_container_get_next(mux))
+    {
+        gtk_list_store_append(store, &iter);
+        str = g_strdup_printf("<small>%s</small>", mux->name);
+        gtk_list_store_set(store, &iter, 
+                           0, str,
+                           1, TRUE, 
+                           2, mux->short_name, 
+                           3, (gdouble)mux->format,
+                           4, mux->short_name, 
                            -1);
         g_free(str);
     }
@@ -2821,23 +2874,25 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
     if (strcmp(name, "AudioBitrate") == 0)
         return lookup_audio_bitrate_int(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
-        return lookup_audio_rate_int(gval);
+        return lookup_audio_samplerate_int(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_rate_int(gval);
+        return lookup_video_framerate_int(gval);
     else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mix_int(gval);
+        return lookup_mixdown_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else if (strcmp(name, "PreferredLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_hb_encoder_int(gval, hb_video_encoders, hb_video_encoders_count);
+        return lookup_video_encoder_int(gval);
     else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_int(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_int(gval);
     else if (strcmp(name, "AudioEncoderActual") == 0)
-        return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_int(gval);
+    else if (strcmp(name, "FileFormat") == 0)
+        return lookup_container_int(gval);
     else
     {
         return lookup_generic_int(find_combo_table(name), gval);
@@ -2854,23 +2909,25 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
     if (strcmp(name, "AudioBitrate") == 0)
         return lookup_audio_bitrate_int(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
-        return lookup_audio_rate_int(gval);
+        return lookup_audio_samplerate_int(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_rate_int(gval);
+        return lookup_video_framerate_int(gval);
     else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mix_int(gval);
+        return lookup_mixdown_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else if (strcmp(name, "PreferredLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_hb_encoder_int(gval, hb_video_encoders, hb_video_encoders_count);
+        return lookup_video_encoder_int(gval);
     else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_int(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_int(gval);
     else if (strcmp(name, "AudioEncoderActual") == 0)
-        return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_int(gval);
+    else if (strcmp(name, "FileFormat") == 0)
+        return lookup_container_int(gval);
     else
     {
         return lookup_generic_double(find_combo_table(name), gval);
@@ -2887,23 +2944,25 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
     if (strcmp(name, "AudioBitrate") == 0)
         return lookup_audio_bitrate_option(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
-        return lookup_audio_rate_option(gval);
+        return lookup_audio_samplerate_option(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_rate_option(gval);
+        return lookup_video_framerate_option(gval);
     else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mix_option(gval);
+        return lookup_mixdown_option(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else if (strcmp(name, "PreferredLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_hb_encoder_option(gval, hb_video_encoders, hb_video_encoders_count);
+        return lookup_video_encoder_option(gval);
     else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_hb_encoder_option(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_option(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_hb_encoder_option(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_option(gval);
     else if (strcmp(name, "AudioEncoderActual") == 0)
-        return lookup_hb_encoder_option(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_option(gval);
+    else if (strcmp(name, "FileFormat") == 0)
+        return lookup_container_option(gval);
     else
     {
         return lookup_generic_option(find_combo_table(name), gval);
@@ -2920,23 +2979,25 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
     if (strcmp(name, "AudioBitrate") == 0)
         return lookup_audio_bitrate_option(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
-        return lookup_audio_rate_string(gval);
+        return lookup_audio_samplerate_string(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_rate_option(gval);
+        return lookup_video_framerate_option(gval);
     else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mix_string(gval);
+        return lookup_mixdown_string(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else if (strcmp(name, "PreferredLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_hb_encoder_string(gval, hb_video_encoders, hb_video_encoders_count);
+        return lookup_video_encoder_string(gval);
     else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_hb_encoder_string(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_string(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_hb_encoder_string(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_string(gval);
     else if (strcmp(name, "AudioEncoderActual") == 0)
-        return lookup_hb_encoder_string(gval, hb_audio_encoders, hb_audio_encoders_count);
+        return lookup_audio_encoder_string(gval);
+    else if (strcmp(name, "FileFormat") == 0)
+        return lookup_container_string(gval);
     else
     {
         return lookup_generic_string(find_combo_table(name), gval);
@@ -2979,11 +3040,11 @@ ghb_update_ui_combo_box(
     if (all)
     {
         audio_bitrate_opts_set(ud->builder, "AudioBitrate");
-        audio_samplerate_opts_set(ud->builder, "AudioSamplerate", hb_audio_rates, hb_audio_rates_count);
-        video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
+        audio_samplerate_opts_set(ud->builder, "AudioSamplerate");
+        video_framerate_opts_set(ud->builder, "VideoFramerate");
         mix_opts_set(ud->builder, "AudioMixdown");
-        hb_encoder_opts_set(ud->builder, "VideoEncoder", hb_video_encoders, hb_video_encoders_count);
-        hb_encoder_opts_set(ud->builder, "AudioEncoder", hb_audio_encoders, hb_audio_encoders_count);
+        video_encoder_opts_set(ud->builder, "VideoEncoder");
+        audio_encoder_opts_set(ud->builder, "AudioEncoder");
         acodec_fallback_opts_set(ud->builder, "AudioEncoderFallback");
         language_opts_set(ud->builder, "SrtLanguage");
         language_opts_set(ud->builder, "PreferredLanguage");
@@ -2999,7 +3060,6 @@ ghb_update_ui_combo_box(
         generic_opts_set(ud->builder, "LoggingLevel", &logging_opts);
         generic_opts_set(ud->builder, "LogLongevity", &log_longevity_opts);
         generic_opts_set(ud->builder, "check_updates", &appcast_update_opts);
-        generic_opts_set(ud->builder, "FileFormat", &container_opts);
         generic_opts_set(ud->builder, "PictureDeinterlace", &deint_opts);
         generic_opts_set(ud->builder, "PictureDetelecine", &detel_opts);
         generic_opts_set(ud->builder, "PictureDecomb", &decomb_opts);
@@ -3015,21 +3075,22 @@ ghb_update_ui_combo_box(
         x264_tune_opts_set(ud->builder, "x264Tune");
         h264_profile_opts_set(ud->builder, "h264Profile");
         h264_level_opts_set(ud->builder, "h264Level");
+        container_opts_set(ud->builder, "FileFormat");
     }
     else
     {
         if (strcmp(name, "AudioBitrate") == 0)
             audio_bitrate_opts_set(ud->builder, "AudioBitrate");
         else if (strcmp(name, "AudioSamplerate") == 0)
-            audio_samplerate_opts_set(ud->builder, "AudioSamplerate", hb_audio_rates, hb_audio_rates_count);
+            audio_samplerate_opts_set(ud->builder, "AudioSamplerate");
         else if (strcmp(name, "VideoFramerate") == 0)
-            video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
+            video_framerate_opts_set(ud->builder, "VideoFramerate");
         else if (strcmp(name, "AudioMixdown") == 0)
             mix_opts_set(ud->builder, "AudioMixdown");
         else if (strcmp(name, "VideoEncoder") == 0)
-            hb_encoder_opts_set(ud->builder, "VideoEncoder", hb_video_encoders, hb_video_encoders_count);
+            video_encoder_opts_set(ud->builder, "VideoEncoder");
         else if (strcmp(name, "AudioEncoder") == 0)
-            hb_encoder_opts_set(ud->builder, "AudioEncoder", hb_audio_encoders, hb_audio_encoders_count);
+            audio_encoder_opts_set(ud->builder, "AudioEncoder");
         else if (strcmp(name, "AudioEncoderFallback") == 0)
             acodec_fallback_opts_set(ud->builder, "AudioEncoderFallback");
         else if (strcmp(name, "SrtLanguage") == 0)
@@ -3050,6 +3111,8 @@ ghb_update_ui_combo_box(
             h264_profile_opts_set(ud->builder, "h264Profile");
         else if (strcmp(name, "h264Level") == 0)
             h264_level_opts_set(ud->builder, "h264Level");
+        else if (strcmp(name, "FileFormat") == 0)
+            container_opts_set(ud->builder, "FileFormat");
         else
             generic_opts_set(ud->builder, name, find_combo_table(name));
     }
@@ -3079,6 +3142,7 @@ init_ui_combo_boxes(GtkBuilder *builder)
     init_combo_box(builder, "x264Tune");
     init_combo_box(builder, "h264Profile");
     init_combo_box(builder, "h264Level");
+    init_combo_box(builder, "FileFormat");
     for (ii = 0; combo_name_map[ii].name != NULL; ii++)
     {
         init_combo_box(builder, combo_name_map[ii].name);
@@ -3325,35 +3389,33 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 
     if (rate >= 0 && rate < 8) return;
 
-    if (ghb_audio_bitrates[hb_audio_bitrates_count].string)
+    if (ghb_audio_bitrates[ghb_abr_count].name)
     {
-        g_free((char*)ghb_audio_bitrates[hb_audio_bitrates_count].string);
+        g_free((char*)ghb_audio_bitrates[ghb_abr_count].name);
     }
-    ghb_audio_bitrates[hb_audio_bitrates_count].rate = rate;
+    ghb_audio_bitrates[ghb_abr_count].rate = rate;
     if (rate < 0)
     {
-        ghb_audio_bitrates[hb_audio_bitrates_count].string = 
-            g_strdup_printf("N/A");
+        ghb_audio_bitrates[ghb_abr_count].name = g_strdup_printf("N/A");
     }
     else
     {
-        ghb_audio_bitrates[hb_audio_bitrates_count].string = 
-            g_strdup_printf("%d", rate);
+        ghb_audio_bitrates[ghb_abr_count].name = g_strdup_printf("%d", rate);
     }
-    ghb_audio_bitrates_count = hb_audio_bitrates_count + 1;
+    ghb_audio_bitrates_count = ghb_abr_count + 1;
 
     store = get_combo_box_store(builder, name);
     if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
     {
         str = g_strdup_printf ("<small>%s</small>",
-                        ghb_audio_bitrates[hb_audio_bitrates_count].string);
+                        ghb_audio_bitrates[ghb_abr_count].name);
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
                            0, str, 
                            1, TRUE, 
-                           2, ghb_audio_bitrates[hb_audio_bitrates_count].string, 
+                           2, ghb_audio_bitrates[ghb_abr_count].name, 
                            3, (gdouble)rate, 
-                           4, ghb_audio_bitrates[hb_audio_bitrates_count].string, 
+                           4, ghb_audio_bitrates[ghb_abr_count].name, 
                            -1);
         g_free(str);
     }
@@ -3375,7 +3437,7 @@ audio_bitrate_opts_update(
     guint last = (guint)last_rate;
     guint first = (guint)first_rate;
     
-    ghb_audio_bitrates_count = hb_audio_bitrates_count;
+    ghb_audio_bitrates_count = ghb_abr_count;
 
     g_debug("audio_bitrate_opts_clean ()\n");
     store = get_combo_box_store(builder, name);
@@ -3414,15 +3476,29 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    gint ii;
+    gint count = 0;
     gchar *str;
+    int ii;
     
-    ghb_audio_bitrates_count = hb_audio_bitrates_count;
-    ghb_audio_bitrates = calloc(hb_audio_bitrates_count+1, sizeof(hb_rate_t));
+    const hb_rate_t *rate;
 
-    for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+    if (ghb_audio_bitrates == NULL)
     {
-        ghb_audio_bitrates[ii] = hb_audio_bitrates[ii];
+        // Count rates
+        for (rate = hb_audio_bitrate_get_next(NULL); rate != NULL;
+             rate = hb_audio_bitrate_get_next(rate))
+        {
+            count++;
+        }
+
+        ghb_audio_bitrates_count = ghb_abr_count = count;
+        ghb_audio_bitrates = calloc(count+1, sizeof(hb_rate_t));
+
+        for (ii = 0, rate = hb_audio_bitrate_get_next(NULL); rate != NULL;
+             ii++, rate = hb_audio_bitrate_get_next(rate))
+        {
+            ghb_audio_bitrates[ii] = *rate;
+        }
     }
 
     g_debug("audio_bitrate_opts_set ()\n");
@@ -3432,13 +3508,13 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
     {
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf ("<small>%s</small>", 
-            ghb_audio_bitrates[ii].string);
+            ghb_audio_bitrates[ii].name);
         gtk_list_store_set(store, &iter, 
                            0, str,
                            1, TRUE, 
-                           2, ghb_audio_bitrates[ii].string, 
+                           2, ghb_audio_bitrates[ii].name, 
                            3, (gdouble)ghb_audio_bitrates[ii].rate, 
-                           4, ghb_audio_bitrates[ii].string, 
+                           4, ghb_audio_bitrates[ii].name, 
                            -1);
         g_free(str);
     }
@@ -4513,7 +4589,7 @@ ghb_validate_audio(GValue *settings)
             {
                 codec = HB_ACODEC_FAAC;
             }
-            value = ghb_lookup_acodec_value(codec);
+            value = ghb_lookup_audio_encoder_value(codec);
             ghb_settings_take_value(asettings, "AudioEncoder", value);
         }
         gchar *a_unsup = NULL;
@@ -4540,25 +4616,18 @@ ghb_validate_audio(GValue *settings)
                 return FALSE;
             }
             g_free(message);
-            value = ghb_lookup_acodec_value(codec);
+            value = ghb_lookup_audio_encoder_value(codec);
             ghb_settings_take_value(asettings, "AudioEncoder", value);
         }
 
         gint mix = ghb_settings_combo_int (asettings, "AudioMixdown");
 
-        gint jj;
         const gchar *mix_unsup = NULL;
         if (!hb_mixdown_is_supported(mix, codec, aconfig->in.channel_layout))
         {
-            for (jj = 0; jj < hb_audio_mixdowns_count; jj++)
-            {
-                if (mix == hb_audio_mixdowns[jj].amixdown)
-                {
-                    {
-                        mix_unsup = hb_audio_mixdowns[jj].human_readable_name;
-                    }
-                }
-            }
+            const hb_mixdown_t *hb_mix = lookup_mixdown_by_int(mix);
+            if (hb_mix != NULL)
+                mix_unsup = hb_mix->name;
         }
         if (mix_unsup)
         {
@@ -4573,7 +4642,7 @@ ghb_validate_audio(GValue *settings)
             }
             g_free(message);
             mix = ghb_get_best_mix(aconfig, codec, mix);
-            value = get_amix_value(mix);
+            value = lookup_mixdown_value(mix);
             ghb_settings_take_value(asettings, "AudioMixdown", value);
         }
     }
@@ -5017,7 +5086,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
                 audio.out.bitrate = 
                     ghb_settings_combo_int(asettings, "AudioBitrate");
 
-                audio.out.bitrate = hb_get_best_audio_bitrate(
+                audio.out.bitrate = hb_audio_bitrate_get_best(
                     audio.out.codec, audio.out.bitrate, 
                     audio.out.samplerate, audio.out.mixdown);
             }

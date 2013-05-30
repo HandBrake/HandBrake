@@ -801,7 +801,7 @@
          * by default to avoid massive confusion and anarchy. However we also want to guard against multiple burned in subtitle tracks
          * as libhb would ignore all but the first one anyway. Plus it would probably be stupid. 
          */
-        if (container == HB_MUX_MP4 && [anObject intValue] != 0)
+        if ((container & HB_MUX_MASK_MP4) && ([anObject intValue] != 0))
         {
             if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue] == VOBSUB)
             {

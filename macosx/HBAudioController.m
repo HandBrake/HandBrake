@@ -163,7 +163,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             /* We go ahead and assign values to our audio->out.<properties> */
             audio->out.track                     = audio->in.track;
             audio->out.codec                     = [[[anAudio codec]   objectForKey:keyAudioCodec]   intValue];
-            audio->out.compression_level         = hb_get_default_audio_compression(audio->out.codec);
+            audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
             audio->out.mixdown                   = [[[anAudio mixdown] objectForKey:keyAudioMixdown] intValue];
             audio->out.normalize_mix_level       = 0;
             audio->out.bitrate                   = [[[anAudio bitRate] objectForKey:keyAudioBitrate] intValue];
@@ -295,46 +295,38 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [newAudio setVideoContainerTag: [self videoContainerTag]];
             [newAudio setTrackFromIndex: trackIndex];
 
-            key = [dict objectForKey: @"AudioEncoder"];
-
             // map faac to ca_aac for built-in presets (can be disabled in preferences)
             if (0 == aType &&
-                [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] &&
-                [key isEqualToString: @"AAC (faac)"])
+                [[NSUserDefaults standardUserDefaults] boolForKey:@"UseCoreAudio"] &&
+                [[dict objectForKey:@"AudioEncoder"] isEqualToString:@"AAC (faac)"])
             {
-                [dict setObject: @"AAC (CoreAudio)" forKey: @"AudioEncoder"];
+                key = @"AAC (CoreAudio)";
+            }
+            else
+            {
+                key = [dict objectForKey:@"AudioEncoder"];
             }
 
-            // passthru fallbacks
-            if ([key isEqualToString: @"AAC Passthru"])
+            // map legacy encoder names via libhb
+            if (key != nil)
             {
-                if (![newAudio setCodecFromName: key])
+                const char *name;
+                // passthru fallbacks
+                if ([key hasSuffix:@"Passthru"] &&
+                    ![newAudio setCodecFromName:key])
                 {
-                    [dict setObject: @"AAC (CoreAudio)" forKey: @"AudioEncoder"];
+                    int passthru, fallback;
                     fallenBack = YES;
+                    passthru   = hb_audio_encoder_get_from_name([key UTF8String]);
+                    fallback   = hb_audio_encoder_get_fallback_for_passthru(passthru);
+                    name       = hb_audio_encoder_get_name(fallback);
                 }
-            }
-            else if ([key isEqualToString: @"AC3 Passthru"])
-            {
-                if (![newAudio setCodecFromName: key])
+                else
                 {
-                    [dict setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoder"];
-                    fallenBack = YES;
+                    name = hb_audio_encoder_sanitize_name([key UTF8String]);
                 }
-            }
-            else if ([key isEqualToString: @"MP3 Passthru"])
-            {
-                if (![newAudio setCodecFromName: key])
-                {
-                    [dict setObject: @"MP3 (lame)" forKey: @"AudioEncoder"];
-                    fallenBack = YES;
-                }
-            }
-
-            // map legacy encoder names
-            if ([key isEqualToString: @"AC3"])
-            {
-                [dict setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoder"];
+                [dict setObject:[NSString stringWithFormat:@"%s", name]
+                         forKey:@"AudioEncoder"];
             }
 
             // If our preset does not contain a drc or gain value set it to a default of 0.0
@@ -347,17 +339,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                 [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackGainSlider"];
             }
 
-            // map legacy mixdowns
+            // map legacy mixdowns via libhb
             key = [dict objectForKey: @"AudioMixdown"];
-            if ([key isEqualToString: @"AC3 Passthru"] ||
-                [key isEqualToString: @"DTS Passthru"] ||
-                [key isEqualToString: @"DTS-HD Passthru"])
+            if (key != nil)
             {
-                [dict setObject: @"None" forKey: @"AudioMixdown"];
-            }
-            else if ([key isEqualToString: @"6-channel discrete"])
-            {
-                [dict setObject: @"5.1 Channels" forKey: @"AudioMixdown"];
+                [dict setObject:[NSString stringWithFormat:@"%s",
+                                 hb_mixdown_sanitize_name([key UTF8String])]
+                         forKey:@"AudioMixdown"];
             }
 
             // If our preset wants us to support a codec that the track does not support, instead

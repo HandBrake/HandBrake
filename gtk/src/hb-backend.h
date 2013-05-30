@@ -156,7 +156,7 @@ gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
-gint ghb_find_closest_audio_rate(gint rate);
-GValue* ghb_lookup_acodec_value(gint val);
+gint ghb_find_closest_audio_samplerate(gint rate);
+GValue* ghb_lookup_audio_encoder_value(gint val);
 
 #endif // _HBBACKEND_H_

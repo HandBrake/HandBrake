@@ -729,12 +729,12 @@
     }
     /* Destination file. We set this to our preview directory
      * changing the extension appropriately.*/
-    if (fTitle->job->mux == HB_MUX_MP4) // MP4 file
+    if (fTitle->job->mux & HB_MUX_MASK_MP4) // MP4 file
     {
         /* we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly */
         fPreviewMoviePath = [PreviewDirectory stringByAppendingString:@"/preview_temp.m4v"];
     }
-    else if (fTitle->job->mux == HB_MUX_MKV) // MKV file
+    else if (fTitle->job->mux & HB_MUX_MASK_MKV) // MKV file
     {
         fPreviewMoviePath = [PreviewDirectory stringByAppendingString:@"/preview_temp.mkv"];
     }

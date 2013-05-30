@@ -2044,19 +2044,26 @@ static value_map_t acodec_xlat_compat[] =
 
 static value_map_t *acodec_xlat;
 
-static value_map_t * create_encoder_xlat_tbl(value_map_t *compat, hb_encoder_t *enc, int size)
+static value_map_t * create_video_encoder_xlat_tbl(value_map_t *compat)
 {
     value_map_t *out;
-    int cc, ii;
+    int cc, ii, size = 0;
 
     for (cc = 0; compat[cc].mac_val != NULL; cc++);
     
+    const hb_encoder_t *enc;
+    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
+         enc = hb_video_encoder_get_next(enc))
+    {
+        size++;
+    }
     out = calloc(cc + size + 1, sizeof(value_map_t));
 
-    for (ii = 0; ii < size; ii++)
+    for (ii = 0, enc = hb_video_encoder_get_next(NULL); enc != NULL;
+         ii++, enc = hb_video_encoder_get_next(enc))
     {
-        out[ii].mac_val = enc[ii].human_readable_name;
-        out[ii].lin_val = enc[ii].short_name;
+        out[ii].mac_val = enc->name;
+        out[ii].lin_val = enc->short_name;
     }
 
     for (ii = 0; ii < cc; ii++)
@@ -2065,19 +2072,54 @@ static value_map_t * create_encoder_xlat_tbl(value_map_t *compat, hb_encoder_t *
     return out;
 }
 
-static value_map_t * create_mix_xlat_tbl(value_map_t *compat, hb_mixdown_t * mix, int size)
+static value_map_t * create_audio_encoder_xlat_tbl(value_map_t *compat)
 {
     value_map_t *out;
-    int cc, ii;
+    int cc, ii, size = 0;
+
+    for (cc = 0; compat[cc].mac_val != NULL; cc++);
+    
+    const hb_encoder_t *enc;
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
+    {
+        size++;
+    }
+    out = calloc(cc + size + 1, sizeof(value_map_t));
+
+    for (ii = 0, enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         ii++, enc = hb_audio_encoder_get_next(enc))
+    {
+        out[ii].mac_val = enc->name;
+        out[ii].lin_val = enc->short_name;
+    }
+
+    for (ii = 0; ii < cc; ii++)
+        out[ii+size] = compat[ii];
+
+    return out;
+}
+
+static value_map_t * create_mix_xlat_tbl(value_map_t *compat)
+{
+    value_map_t *out;
+    int cc, ii, size = 0;;
 
     for (cc = 0; compat[cc].mac_val != NULL; cc++);
 
+    const hb_mixdown_t *mix;
+    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
+         mix = hb_mixdown_get_next(mix))
+    {
+        size++;
+    }
     out = calloc(cc + size + 1, sizeof(value_map_t));
 
-    for (ii = 0; ii < size; ii++)
+    for (ii = 0, mix = hb_mixdown_get_next(NULL); mix != NULL;
+         ii++, mix = hb_mixdown_get_next(mix))
     {
-        out[ii].mac_val = mix[ii].human_readable_name;
-        out[ii].lin_val = mix[ii].short_name;
+        out[ii].mac_val = mix->name;
+        out[ii].lin_val = mix->short_name;
     }
 
     for (ii = 0; ii < cc; ii++)
@@ -2085,16 +2127,6 @@ static value_map_t * create_mix_xlat_tbl(value_map_t *compat, hb_mixdown_t * mix
 
     return out;
 }
-
-value_map_t container_xlat[] =
-{
-    {"MP4 file", "mp4"},
-    {"M4V file", "mp4"},
-    {"MKV file", "mkv"},
-    {"AVI file", "mkv"},
-    {"OGM file", "mkv"},
-    {NULL, NULL}
-};
 
 value_map_t framerate_xlat[] =
 {
@@ -2361,6 +2393,24 @@ export_value_xlat2(value_map_t *value_map, GValue *lin_val, GType mac_type)
     return NULL;
 }
 
+static GValue*
+export_value_xlat_container(GValue *lin_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *mux;
+    int imux;
+
+    str = ghb_value_string(lin_val);
+    imux = hb_container_get_from_name(str);
+    g_free(str);
+    mux = hb_container_get_name(imux);
+    if (mux != NULL)
+        sval = ghb_string_value_new(mux);
+
+    return sval;
+}
+
 static void
 export_value_xlat(GValue *dict)
 {
@@ -2374,7 +2424,7 @@ export_value_xlat(GValue *dict)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "FileFormat";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(container_xlat, lin_val, G_TYPE_STRING);
+    gval = export_value_xlat_container(lin_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "VideoFramerate";
@@ -2528,6 +2578,34 @@ import_value_xlat2(
     return NULL;
 }
 
+static GValue*
+import_value_xlat_container(GValue *mac_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *mux;
+    int imux;
+
+    str = ghb_value_string(mac_val);
+    mux = hb_container_sanitize_name(str);
+    g_free(str);
+
+    if (mux == NULL)
+    {
+        imux = hb_container_get_from_extension("mp4");
+    }
+    else
+    {
+        imux = hb_container_get_from_name(mux);
+    }
+    mux = hb_container_get_short_name(imux);
+
+    if (mux != NULL)
+        sval = ghb_string_value_new(mux);
+
+    return sval;
+}
+
 static void
 import_value_xlat(GValue *dict)
 {
@@ -2542,7 +2620,7 @@ import_value_xlat(GValue *dict)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "FileFormat";
     mac_val = ghb_dict_lookup(dict, key);
-    gval = import_value_xlat2(defaults, container_xlat, key, mac_val);
+    gval = import_value_xlat_container(mac_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "VideoFramerate";
@@ -3304,9 +3382,9 @@ void
 ghb_presets_load(signal_user_data_t *ud)
 {
     // Create translation tables from libhb tables
-    mix_xlat = create_mix_xlat_tbl(mix_xlat_compat, hb_audio_mixdowns, hb_audio_mixdowns_count);
-    acodec_xlat = create_encoder_xlat_tbl(acodec_xlat_compat, hb_audio_encoders, hb_audio_encoders_count);
-    vcodec_xlat = create_encoder_xlat_tbl(vcodec_xlat_compat, hb_video_encoders, hb_video_encoders_count);
+    mix_xlat = create_mix_xlat_tbl(mix_xlat_compat);
+    acodec_xlat = create_audio_encoder_xlat_tbl(acodec_xlat_compat);
+    vcodec_xlat = create_video_encoder_xlat_tbl(vcodec_xlat_compat);
 
     presetsPlist = load_plist("presets");
     if (presetsPlist == NULL)

@@ -820,11 +820,12 @@ skip_preview:
             // if the frame rate is very close to one of our "common" framerates,
             // assume it actually is said frame rate; e.g. some 24000/1001 sources
             // may have a rate_base of 1126124 (instead of 1126125)
-            for( i = 0; i < hb_video_rates_count; i++ )
+            const hb_rate_t *video_framerate = NULL;
+            while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)
             {
-                if( is_close_to( vid_info.rate_base, hb_video_rates[i].rate, 100 ) )
+                if (is_close_to(vid_info.rate_base, video_framerate->rate, 100))
                 {
-                    vid_info.rate_base = hb_video_rates[i].rate;
+                    vid_info.rate_base = video_framerate->rate;
                     break;
                 }
             }
