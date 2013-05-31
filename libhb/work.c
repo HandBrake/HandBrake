@@ -665,8 +665,8 @@ static void do_job(hb_job_t *job)
 
         init.job = job;
         init.pix_fmt = AV_PIX_FMT_YUV420P;
-        init.width = title->width - (title->crop[2] + title->crop[3]);
-        init.height = title->height - (title->crop[0] + title->crop[1]);
+        init.width = title->width;
+        init.height = title->height;
         init.par_width = job->anamorphic.par_width;
         init.par_height = job->anamorphic.par_height;
         memcpy(init.crop, title->crop, sizeof(int[4]));
