@@ -49,7 +49,10 @@ namespace HandBrake.Interop.Model.Encoding
         [Display(Name = "Vorbis (vorbis)")]
         Vorbis,
 
-        [Display(Name = "Flac (ffmpeg)")]
+        [Display(Name = "FLAC (ffmpeg)")]
         ffflac,
+
+        [Display(Name = "FLAC (24-bit)")]
+        ffflac24,
     }
 }

@@ -656,29 +656,33 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Destination box*/
     NSMenuItem *menuItem;
     [fDstFormatPopUp removeAllItems];
-    // MP4 file
-    menuItem = [[fDstFormatPopUp menu] addItemWithTitle:@"MP4 file" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_MUX_MP4];
-	// MKV file
-    menuItem = [[fDstFormatPopUp menu] addItemWithTitle:@"MKV file" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_MUX_MKV];
-    
-    [fDstFormatPopUp selectItemAtIndex: 0];
-    
+    for (const hb_container_t *container = hb_container_get_next(NULL);
+         container != NULL;
+         container  = hb_container_get_next(container))
+    {
+        menuItem = [[fDstFormatPopUp menu] addItemWithTitle:[NSString stringWithUTF8String:container->name]
+                                                     action:nil
+                                              keyEquivalent:@""];
+        [menuItem setTag:container->format];
+    }
+    // select the first container
+    [fDstFormatPopUp selectItemAtIndex:0];
     [self formatPopUpChanged:nil];
+
+    // enable/disable chapter markers as necessary
+    if ([fCreateChapterMarkers isEnabled] &&
+        [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"])
+    {
+        [fCreateChapterMarkers setState:NSOnState];
+    }
+    else
+    {
+        [fCreateChapterMarkers setState:NSOffState];
+    }
     
-	/* We enable the create chapters checkbox here since we are .mp4 */
-	[fCreateChapterMarkers setEnabled: YES];
-	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"] > 0)
-	{
-		[fCreateChapterMarkers setState: NSOnState];
-	}
-    
-    
-    
-    
-    [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                     @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
+    [fDstFile2Field setStringValue:[NSString
+                                    stringWithFormat:@"%@/Desktop/Movie.mp4",
+                                    NSHomeDirectory()]];
     
     /* Video encoder */
     [fVidEncoderPopUp removeAllItems];
@@ -694,31 +698,37 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* Video framerate */
     [fVidRatePopUp removeAllItems];
-	[fVidRatePopUp addItemWithTitle: NSLocalizedString( @"Same as source", @"" )];
-    for( int i = 0; i < hb_video_rates_count; i++ )
+    menuItem = [[fVidRatePopUp menu] addItemWithTitle:@"Same as source"
+                                               action:nil
+                                        keyEquivalent:@""];
+    [menuItem setTag:-1]; // hb_video_framerate_get_from_name(NULL)
+    for (const hb_rate_t *video_framerate = hb_video_framerate_get_next(NULL);
+         video_framerate != NULL;
+         video_framerate  = hb_video_framerate_get_next(video_framerate))
     {
-        if ([[NSString stringWithUTF8String: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
-		{
-			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-                                             [NSString stringWithUTF8String: hb_video_rates[i].string], @" (NTSC Film)"]];
-		}
-		else if ([[NSString stringWithUTF8String: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%d",25]])
-		{
-			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-                                             [NSString stringWithUTF8String: hb_video_rates[i].string], @" (PAL Film/Video)"]];
-		}
-		else if ([[NSString stringWithUTF8String: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.2f",29.97]])
-		{
-			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-                                             [NSString stringWithUTF8String: hb_video_rates[i].string], @" (NTSC Video)"]];
-		}
-		else
-		{
-			[fVidRatePopUp addItemWithTitle:
-             [NSString stringWithUTF8String: hb_video_rates[i].string]];
-		}
+        NSString *itemTitle;
+        if (!strcmp(video_framerate->name, "23.976"))
+        {
+            itemTitle = @"23.976 (NTSC Film)";
+        }
+        else if (!strcmp(video_framerate->name, "25"))
+        {
+            itemTitle = @"25 (PAL Film/Video)";
+        }
+        else if (!strcmp(video_framerate->name, "29.97"))
+        {
+            itemTitle = @"29.97 (NTSC Video)";
+        }
+        else
+        {
+            itemTitle = [NSString stringWithUTF8String:video_framerate->name];
+        }
+        menuItem = [[fVidRatePopUp menu] addItemWithTitle:itemTitle
+                                                   action:nil
+                                            keyEquivalent:@""];
+        [menuItem setTag:video_framerate->rate];
     }
-    [fVidRatePopUp selectItemAtIndex: 0];
+    [fVidRatePopUp selectItemAtIndex:0];
 	
 	/* Set Auto Crop to On at launch */
     [fPictureController setAutoCrop:YES];
@@ -2114,12 +2124,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [fSrcDVD2Field setStringValue:browsedSourceDisplayName];
                 
                 // use the correct extension based on the container
-                int format = [fDstFormatPopUp indexOfSelectedItem];
-                char *ext = "mp4";
-                if (format == 1)
-                {
-                    ext = "mkv";
-                }
+                int videoContainer = [[fDstFormatPopUp selectedItem] tag];
+                const char *ext    = hb_container_get_default_extension(videoContainer);
                 
                 /* If its a queue rescan for edit, get the queue item output path */
                 /* if not, its a new source scan. */
@@ -2140,9 +2146,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 }
                 
                 // set m4v extension if necessary - do not override user-specified .mp4 extension
-                if (format == 0 && applyQueueToScan != YES)
+                if ((videoContainer & HB_MUX_MASK_MP4) && (applyQueueToScan != YES))
                 {
-                    [self autoSetM4vExtension: sender];
+                    [self autoSetM4vExtension:sender];
                 }
                 
                 /* See if this is the main feature according to libhb */
@@ -2720,8 +2726,8 @@ fWorkingCount = 0;
 	
     /* Framerate */
     [queueFileJob setObject:[NSNumber numberWithInt:[fVidRatePopUp indexOfSelectedItem]] forKey:@"JobIndexVideoFramerate"];
-    [queueFileJob setObject:[NSNumber numberWithInt:title->rate] forKey:@"JobVrate"];
-    [queueFileJob setObject:[NSNumber numberWithInt:title->rate_base] forKey:@"JobVrateBase"];
+    [queueFileJob setObject:[NSNumber numberWithInt:title->rate]                         forKey:@"JobVrate"];
+    [queueFileJob setObject:[NSNumber numberWithInt:title->rate_base]                    forKey:@"JobVrateBase"];
 	
     /* Picture Sizing */
 	/* Use Max Picture settings for whatever the dvd is.*/
@@ -3379,37 +3385,37 @@ fWorkingCount = 0;
     }
 
     /* Video settings */
-    
+    int fps_mode, fps_num, fps_den;
     if( [fVidRatePopUp indexOfSelectedItem] > 0 )
     {
         /* a specific framerate has been chosen */
-        job->vrate      = 27000000;
-        job->vrate_base = hb_video_rates[[fVidRatePopUp indexOfSelectedItem]-1].rate;
+        fps_num = 27000000;
+        fps_den = [[fVidRatePopUp selectedItem] tag];
         if ([fFramerateMatrix selectedRow] == 1)
         {
             // CFR
-            job->cfr = 1;
+            fps_mode = 1;
         }
         else
         {
             // PFR
-            job->cfr = 2;
+            fps_mode = 2;
         }
     }
     else
     {
         /* same as source */
-        job->vrate      = title->rate;
-        job->vrate_base = title->rate_base;
+        fps_num = title->rate;
+        fps_den = title->rate_base;
         if ([fFramerateMatrix selectedRow] == 1)
         {
             // CFR
-            job->cfr = 1;
+            fps_mode = 1;
         }
         else
         {
             // VFR
-            job->cfr = 0;
+            fps_mode = 0;
         }
     }
 
@@ -3721,9 +3727,9 @@ bool one_burned = FALSE;
                                   job->crop[2], job->crop[3]] UTF8String] );
 
     /* Add framerate shaping filter */
-    filter = hb_filter_init( HB_FILTER_VFR );
-    hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
-                                  job->cfr, job->vrate, job->vrate_base] UTF8String] );
+    filter = hb_filter_init(HB_FILTER_VFR);
+    hb_add_filter(job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
+                                 fps_mode, fps_num, fps_den] UTF8String]);
 }
 
 
@@ -3934,37 +3940,37 @@ bool one_burned = FALSE;
     
     /* Video settings */
     /* Framerate */
-    
-    if( [[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0 )
+    int fps_mode, fps_num, fps_den;
+    if ([[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0)
     {
         /* a specific framerate has been chosen */
-        job->vrate      = 27000000;
-        job->vrate_base = hb_video_rates[[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]-1].rate;
+        fps_num = 27000000;
+        fps_den = [[fVidRatePopUp itemAtIndex:[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]] tag];
         if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
         {
             // CFR
-            job->cfr = 1;
+            fps_mode = 1;
         }
         else
         {
             // PFR
-            job->cfr = 2;
+            fps_mode = 2;
         }
     }
     else
     {
         /* same as source */
-        job->vrate      = [[queueToApply objectForKey:@"JobVrate"] intValue];
-        job->vrate_base = [[queueToApply objectForKey:@"JobVrateBase"] intValue];
+        fps_num = [[queueToApply objectForKey:@"JobVrate"]     intValue];
+        fps_den = [[queueToApply objectForKey:@"JobVrateBase"] intValue];
         if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
         {
             // CFR
-            job->cfr = 1;
+            fps_mode = 1;
         }
         else
         {
             // VFR
-            job->cfr = 0;
+            fps_mode = 0;
         }
     }
     
@@ -4155,7 +4161,7 @@ bool one_burned = FALSE;
             /* We go ahead and assign values to our audio->out.<properties> */
             audio->out.track                     = audio->in.track;
             audio->out.codec                     = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Encoder"]]           intValue];
-            audio->out.compression_level         = hb_get_default_audio_compression(audio->out.codec);
+            audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
             audio->out.mixdown                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Mixdown"]]           intValue];
             audio->out.normalize_mix_level       = 0;
             audio->out.bitrate                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Bitrate"]]           intValue];
@@ -4280,9 +4286,9 @@ bool one_burned = FALSE;
                                   job->crop[2], job->crop[3]] UTF8String] );
 
     /* Add framerate shaping filter */
-    filter = hb_filter_init( HB_FILTER_VFR );
-    hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
-                                  job->cfr, job->vrate, job->vrate_base] UTF8String] );
+    filter = hb_filter_init(HB_FILTER_VFR);
+    hb_add_filter(job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
+                                 fps_mode, fps_num, fps_den] UTF8String]);
 
 [self writeToActivityLog: "prepareJob exiting"];    
 }
@@ -4918,31 +4924,31 @@ bool one_burned = FALSE;
 
 - (IBAction) formatPopUpChanged: (id) sender
 {
-    NSString * string = [fDstFile2Field stringValue];
-    int format = [fDstFormatPopUp indexOfSelectedItem];
-    char * ext = NULL;
+    NSString *string   = [fDstFile2Field stringValue];
+    int videoContainer = [[fDstFormatPopUp selectedItem] tag];
+    const char *ext    = NULL;
     NSMenuItem *menuItem;
-    int i;
-	/* Initially set the large file (64 bit formatting) output checkbox to hidden */
-    [fDstMp4LargeFileCheck setHidden: YES];
-    [fDstMp4HttpOptFileCheck setHidden: YES];
-    [fDstMp4iPodFileCheck setHidden: YES];
+    /* Initially set the large file (64 bit formatting) output checkbox to hidden */
+    [fDstMp4LargeFileCheck   setHidden:YES];
+    [fDstMp4HttpOptFileCheck setHidden:YES];
+    [fDstMp4iPodFileCheck    setHidden:YES];
     
     /* Update the Video Codec Popup */
     /* lets get the tag of the currently selected item first so we might reset it later */
-    int selectedVidEncoderTag;
-    selectedVidEncoderTag = [[fVidEncoderPopUp selectedItem] tag];
+    int selectedVidEncoderTag = [[fVidEncoderPopUp selectedItem] tag];
     
     /* Note: we now store the video encoder int values from common.c in the tags of each popup for easy retrieval later */
     [fVidEncoderPopUp removeAllItems];
-    for( i = 0; i < hb_video_encoders_count; i++ )
+    for (const hb_encoder_t *video_encoder = hb_video_encoder_get_next(NULL);
+         video_encoder != NULL;
+         video_encoder  = hb_video_encoder_get_next(video_encoder))
     {
-        if( ( ( format == 0 ) && ( hb_video_encoders[i].muxers & HB_MUX_MP4 ) ) ||
-            ( ( format == 1 ) && ( hb_video_encoders[i].muxers & HB_MUX_MKV ) ) )
+        if (video_encoder->muxers & videoContainer)
         {
-            menuItem = [[fVidEncoderPopUp menu] addItemWithTitle: [NSString stringWithUTF8String: hb_video_encoders[i].human_readable_name]
-                                                          action: NULL keyEquivalent: @""];
-            [menuItem setTag: hb_video_encoders[i].encoder];
+             menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:[NSString stringWithUTF8String:video_encoder->name]
+                                                           action:nil
+                                                    keyEquivalent:@""];
+            [menuItem setTag:video_encoder->codec];
         }
     }
     
@@ -4961,70 +4967,72 @@ bool one_burned = FALSE;
     
     /* Update the Auto Passtgru Fallback Codec Popup */
     /* lets get the tag of the currently selected item first so we might reset it later */
-    int selectedAutoPassthruFallbackEncoderTag;
-    selectedAutoPassthruFallbackEncoderTag = [[fAudioFallbackPopUp selectedItem] tag];
+    int selectedAutoPassthruFallbackEncoderTag = [[fAudioFallbackPopUp selectedItem] tag];
     
     [fAudioFallbackPopUp removeAllItems];
-    for( i = 0; i < hb_audio_encoders_count; i++ )
+    for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
+         audio_encoder != NULL;
+         audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
     {
-        if( !( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
-             ( ( ( format == 0 ) && ( hb_audio_encoders[i].muxers & HB_MUX_MP4 ) ) ||
-               ( ( format == 1 ) && ( hb_audio_encoders[i].muxers & HB_MUX_MKV ) ) ) )
+        if ((audio_encoder->codec  & HB_ACODEC_PASS_FLAG) == 0 &&
+            (audio_encoder->muxers & videoContainer))
         {
-            menuItem = [[fAudioFallbackPopUp menu] addItemWithTitle: [NSString stringWithUTF8String: hb_audio_encoders[i].human_readable_name]
-                                                             action: NULL keyEquivalent: @""];
-            [menuItem setTag: hb_audio_encoders[i].encoder];
+            menuItem = [[fAudioFallbackPopUp menu] addItemWithTitle:[NSString stringWithUTF8String:audio_encoder->name]
+                                                             action:nil
+                                                      keyEquivalent:@""];
+            [menuItem setTag:audio_encoder->codec];
         }
     }
     
     /* if we have a previously selected auto passthru fallback encoder tag, then try to select it */
     if (selectedAutoPassthruFallbackEncoderTag)
     {
-        selectedAutoPassthruFallbackEncoderTag = [fAudioFallbackPopUp selectItemWithTag: selectedAutoPassthruFallbackEncoderTag];
+        selectedAutoPassthruFallbackEncoderTag = [fAudioFallbackPopUp selectItemWithTag:selectedAutoPassthruFallbackEncoderTag];
     }
     /* if we had no previous fallback selected OR if selection failed
      * select the default fallback encoder (AC3) */
     if (!selectedAutoPassthruFallbackEncoderTag)
     {
-        [fAudioFallbackPopUp selectItemWithTag: HB_ACODEC_AC3];
+        [fAudioFallbackPopUp selectItemWithTag:HB_ACODEC_AC3];
     }
     
-    switch( format )
+    // enable chapter markers and hide muxer-specific options
+    [fCreateChapterMarkers  setEnabled:YES];
+    [fDstMp4LargeFileCheck   setHidden:YES];
+    [fDstMp4HttpOptFileCheck setHidden:YES];
+    [fDstMp4iPodFileCheck    setHidden:YES];
+    switch (videoContainer)
     {
-        case 0:
-			[self autoSetM4vExtension: nil];
-            /* We show the mp4 option checkboxes here since we are mp4 */
-            [fCreateChapterMarkers setEnabled: YES];
-			[fDstMp4LargeFileCheck setHidden: NO];
-			[fDstMp4HttpOptFileCheck setHidden: NO];
-            [fDstMp4iPodFileCheck setHidden: NO];
+        case HB_MUX_MP4V2:
+            [fDstMp4LargeFileCheck   setHidden:NO];
+            [fDstMp4HttpOptFileCheck setHidden:NO];
+            [fDstMp4iPodFileCheck    setHidden:NO];
             break;
-            
-        case 1:
-            ext = "mkv";
-            /* We enable the create chapters checkbox here */
-			[fCreateChapterMarkers setEnabled: YES];
-			break;
-            
 
+        default:
+            break;
     }
-    /* tell fSubtitlesDelegate we have a new video container */
+    // set the file extension
+    ext = hb_container_get_default_extension(videoContainer);
+    [fDstFile2Field setStringValue:[NSString stringWithFormat:@"%@.%s",
+                                    [string stringByDeletingPathExtension],
+                                    ext]];
+    if (videoContainer & HB_MUX_MASK_MP4)
+    {
+        [self autoSetM4vExtension:sender];
+    }
     
-    [fSubtitlesDelegate containerChanged:[[fDstFormatPopUp selectedItem] tag]];
+    /* tell fSubtitlesDelegate we have a new video container */
+    [fSubtitlesDelegate containerChanged:videoContainer];
     [fSubtitlesTable reloadData];
 	
-	/* post a notification for any interested observers to indicate that our video container has changed */
-	[[NSNotificationCenter defaultCenter] postNotification:
-	 [NSNotification notificationWithName: HBContainerChangedNotification
-								   object: self
-								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-											[NSNumber numberWithInt: [[fDstFormatPopUp selectedItem] tag]], keyContainerTag,
-											nil]]];
-
-    if( format == 0 )
-        [self autoSetM4vExtension: sender];
-    else
-        [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%s", [string stringByDeletingPathExtension], ext]];
+    /* post a notification for any interested observers to indicate that our video container has changed */
+    [[NSNotificationCenter defaultCenter] postNotification:
+     [NSNotification notificationWithName:HBContainerChangedNotification
+                                   object:self
+                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithInt:videoContainer], keyContainerTag,
+                                           nil]]];
 
     if (SuccessfulScan)
     {
@@ -5086,6 +5094,12 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) videoEncoderPopUpChanged: (id) sender
 {
+    /* if no valid encoder is selected, use the first one */
+    if ([fVidEncoderPopUp selectedItem] == nil)
+    {
+        [fVidEncoderPopUp selectItemAtIndex:0];
+    }
+    
     int videoEncoder = [[fVidEncoderPopUp selectedItem] tag];
     
     [fAdvancedOptions setHidden:YES];
@@ -5166,6 +5180,12 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction ) videoFrameRateChanged: (id) sender
 {
+    /* if no valid framerate is selected, use "Same as source" */
+    if ([fVidRatePopUp selectedItem] == nil)
+    {
+        [fVidRatePopUp selectItemAtIndex:0];
+    }
+    
     /* Hide and set the PFR Checkbox to OFF if we are set to Same as Source */
     /* Depending on whether or not Same as source is selected modify the title for
      * fFramerateVfrPfrCell*/
@@ -5894,21 +5914,23 @@ the user is using "Custom" settings by determining the sender*/
 - (NSString*) muxerOptionsSummary
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
-    if (([fDstFormatPopUp selectedItem]) &&
-        [[fDstFormatPopUp selectedItem] tag] == HB_MUX_MP4)
+    if ([fDstMp4LargeFileCheck  isHidden] == NO  &&
+        [fDstMp4LargeFileCheck isEnabled] == YES &&
+        [fDstMp4LargeFileCheck     state] == NSOnState)
     {
-        if ([fDstMp4LargeFileCheck state])
-        {
-            [summary appendString:@" - Large file size"];
-        }
-        if ([fDstMp4HttpOptFileCheck state])
-        {
-            [summary appendString:@" - Web optimized"];
-        }
-        if ([fDstMp4iPodFileCheck state])
-        {
-            [summary appendString:@" - iPod 5G support"];
-        }
+        [summary appendString:@" - Large file size"];
+    }
+    if ([fDstMp4HttpOptFileCheck  isHidden] == NO  &&
+        [fDstMp4HttpOptFileCheck isEnabled] == YES &&
+        [fDstMp4HttpOptFileCheck     state] == NSOnState)
+    {
+        [summary appendString:@" - Web optimized"];
+    }
+    if ([fDstMp4iPodFileCheck  isHidden] == NO  &&
+        [fDstMp4iPodFileCheck isEnabled] == YES &&
+        [fDstMp4iPodFileCheck     state] == NSOnState)
+    {
+        [summary appendString:@" - iPod 5G support"];
     }
     if ([summary hasPrefix:@" - "])
     {
@@ -6393,9 +6415,11 @@ return YES;
 
 - (IBAction)selectPreset:(id)sender
 {
-
     if (YES == [self hasValidPresetSelected])
     {
+        // for mapping names via libhb
+        int         intValue;
+        const char *strValue;
         chosenPreset = [self selectedPreset];
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
 
@@ -6409,7 +6433,9 @@ return YES;
         }
         
         /* File Format */
-        [fDstFormatPopUp selectItemWithTitle:[chosenPreset objectForKey:@"FileFormat"]];
+        /* map legacy container names via libhb */
+        strValue = hb_container_sanitize_name([[chosenPreset objectForKey:@"FileFormat"] UTF8String]);
+        [fDstFormatPopUp selectItemWithTitle:[NSString stringWithFormat:@"%s", strValue]];
         [self formatPopUpChanged:nil];
         
         /* Chapter Markers*/
@@ -6423,10 +6449,12 @@ return YES;
         [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
         
         /* Video encoder */
-        [fVidEncoderPopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoEncoder"]];
+        /* map legacy encoder names via libhb */
+        strValue = hb_video_encoder_sanitize_name([[chosenPreset objectForKey:@"VideoEncoder"] UTF8String]);
+        [fVidEncoderPopUp selectItemWithTitle:[NSString stringWithFormat:@"%s", strValue]];
         [self videoEncoderPopUpChanged:nil];
         
-        if ([[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"H.264 (x264)"])
+        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
         {
             if (![chosenPreset objectForKey:@"x264UseAdvancedOptions"] ||
                 [[chosenPreset objectForKey:@"x264UseAdvancedOptions"] intValue])
@@ -6545,7 +6573,9 @@ return YES;
                 [fFramerateMatrix selectCellAtRow:1 column:0]; // we want cfr
             }
         }
-        [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
+        /* map legacy names via libhb */
+        intValue = hb_video_framerate_get_from_name([[chosenPreset objectForKey:@"VideoFramerate"] UTF8String]);
+        [fVidRatePopUp selectItemWithTag:intValue];
         [self videoFrameRateChanged:nil];
         
         /* 2 Pass Encoding */
@@ -6600,11 +6630,13 @@ return YES;
         }
         if ((tempObject = [chosenPreset objectForKey:@"AudioEncoderFallback"]) != nil)
         {
-            [fAudioFallbackPopUp selectItemWithTitle:tempObject];
+            /* map legacy encoder names via libhb */
+            strValue = hb_audio_encoder_sanitize_name([tempObject UTF8String]);
+            [fAudioFallbackPopUp selectItemWithTitle:[NSString stringWithFormat:@"%s", strValue]];
         }
         else
         {
-            [fAudioFallbackPopUp selectItemWithTitle:@"AC3 (ffmpeg)"];
+            [fAudioFallbackPopUp selectItemWithTag:HB_ACODEC_AC3];
         }
         
         /* Audio */
@@ -7127,13 +7159,11 @@ return YES;
         [preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
         [preset setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
         
-        /* Video framerate */
-        /* Set the Video Frame Rate Mode */
+        /* Video framerate and framerate mode */
         if ([fFramerateMatrix selectedRow] == 1)
         {
             [preset setObject:@"cfr" forKey:@"VideoFramerateMode"];
         }
-        /* Set the actual framerate from popup overriding the cfr setting as needed */
         if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected
         {
             [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
@@ -7143,9 +7173,11 @@ return YES;
                 [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
             }
         }
-        else // we can record the actual titleOfSelectedItem
+        else // translate the rate (selected item's tag) to the official libhb name
         {
-            [preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+            [preset setObject:[NSString stringWithFormat:@"%s",
+                               hb_video_framerate_get_name([[fVidRatePopUp selectedItem] tag])]
+                       forKey:@"VideoFramerate"];
             
             if ([fFramerateMatrix selectedRow] == 0)
             {

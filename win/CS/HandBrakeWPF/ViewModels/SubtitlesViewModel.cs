@@ -113,7 +113,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void AddAllClosedCaptions()
         {
-
             foreach (Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
             {
                 this.Add(subtitle);
@@ -137,12 +136,14 @@ namespace HandBrakeWPF.ViewModels
         public void AddAllRemainingForSelectedLanguages()
         {
             // Get a list of subtitle tracks that match the users lanaguages
-            StringCollection userSelectedLanguages =
-                this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
-            userSelectedLanguages.Add(
-                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
+            StringCollection userSelectedLanguages = this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+            userSelectedLanguages.Add(this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
+
+            // Translate to Iso Codes
+            List<string> iso6392Codes = LanguageUtilities.GetLanguageCodes(userSelectedLanguages);
+
             List<Subtitle> availableTracks =
-                this.SourceTracks.Where(subtitle => userSelectedLanguages.Contains(subtitle.Language)).ToList();
+                this.SourceTracks.Where(subtitle => iso6392Codes.Contains(subtitle.LanguageCodeClean)).ToList();
 
             foreach (Subtitle subtitle in this.SourceTitlesSubset(availableTracks))
             {

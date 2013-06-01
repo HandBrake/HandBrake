@@ -19,6 +19,8 @@
 /**********************************************************************
  * Global variables
  *********************************************************************/
+static hb_error_handler_t *error_handler = NULL;
+
 hb_rate_t hb_video_rates[] =
 {
     {  "5",     5400000 },
@@ -81,8 +83,6 @@ hb_rate_t hb_audio_bitrates[] =
 };
 int hb_audio_bitrates_count = sizeof(hb_audio_bitrates) / sizeof(hb_rate_t);
 
-static hb_error_handler_t *error_handler = NULL;
-
 hb_dither_t hb_audio_dithers[] =
 {
     { "default",                       "auto",          AV_RESAMPLE_DITHER_NONE - 1,      },
@@ -112,10 +112,10 @@ int hb_audio_mixdowns_count = sizeof(hb_audio_mixdowns) / sizeof(hb_mixdown_t);
 
 hb_encoder_t hb_video_encoders[] =
 {
-    { "H.264 (x264)",    "x264",    HB_VCODEC_X264,         HB_MUX_MP4|HB_MUX_MKV },
-    { "MPEG-4 (FFmpeg)", "ffmpeg4", HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MP4|HB_MUX_MKV },
-    { "MPEG-2 (FFmpeg)", "ffmpeg2", HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MP4|HB_MUX_MKV },
-    { "VP3 (Theora)",    "theora",  HB_VCODEC_THEORA,                  HB_MUX_MKV },
+    { "H.264 (x264)",    "x264",    HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "MPEG-4 (FFmpeg)", "ffmpeg4", HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "MPEG-2 (FFmpeg)", "ffmpeg2", HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "VP3 (Theora)",    "theora",  HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_encoder_t);
 
@@ -123,44 +123,685 @@ int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_encoder_t);
 hb_encoder_t hb_audio_encoders[] =
 {
 #ifdef __APPLE__
-    { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MP4|HB_MUX_MKV },
-    { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MP4|HB_MUX_MKV },
+    { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
 #endif
-    { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MP4|HB_MUX_MKV },
+    { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
 #ifdef USE_FDK_AAC
-    { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MP4|HB_MUX_MKV },
-    { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MP4|HB_MUX_MKV },
+    { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
 #endif
-    { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MP4|HB_MUX_MKV },
-    { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-    { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MP4|HB_MUX_MKV },
-    { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-    { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-    { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MP4|HB_MUX_MKV },
-    { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MP4|HB_MUX_MKV },
-    { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-    { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                  HB_MUX_MKV },
-    { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                  HB_MUX_MKV },
-    { "FLAC (24-bit)",      "ffflac24",   HB_ACODEC_FFFLAC24,                HB_MUX_MKV },
-    { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MP4|HB_MUX_MKV },
+    { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+    { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                       HB_MUX_MASK_MKV },
+    { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                       HB_MUX_MASK_MKV },
+    { "FLAC (24-bit)",      "ffflac24",   HB_ACODEC_FFFLAC24,                     HB_MUX_MASK_MKV },
+    { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_encoder_t);
 
-/* Expose values for PInvoke */
-hb_rate_t*    hb_get_video_rates()          { return hb_video_rates;          }
-int           hb_get_video_rates_count()    { return hb_video_rates_count;    }
-hb_rate_t*    hb_get_audio_rates()          { return hb_audio_rates;          }
-int           hb_get_audio_rates_count()    { return hb_audio_rates_count;    }
-hb_rate_t*    hb_get_audio_bitrates()       { return hb_audio_bitrates;       }
-int           hb_get_audio_bitrates_count() { return hb_audio_bitrates_count; }
-hb_dither_t*  hb_get_audio_dithers()        { return hb_audio_dithers;        }
-int           hb_get_audio_dithers_count()  { return hb_audio_dithers_count;  }
-hb_mixdown_t* hb_get_audio_mixdowns()       { return hb_audio_mixdowns;       }
-int           hb_get_audio_mixdowns_count() { return hb_audio_mixdowns_count; }
-hb_encoder_t* hb_get_video_encoders()       { return hb_video_encoders;       }
-int           hb_get_video_encoders_count() { return hb_video_encoders_count; }
-hb_encoder_t* hb_get_audio_encoders()       { return hb_audio_encoders;       }
-int           hb_get_audio_encoders_count() { return hb_audio_encoders_count; }
+// note: for each container, the muxer nearer the top is the default
+hb_container_t hb_containers[] =
+{
+    { "MPEG-4 (mp4v2)",    "mp4v2",  "mp4", HB_MUX_MP4V2,  },
+    { "Matroska (libmkv)", "libmkv", "mkv", HB_MUX_LIBMKV, },
+};
+int hb_containers_count = sizeof(hb_containers) / sizeof(hb_container_t);
+
+int hb_video_framerate_get_from_name(const char *name)
+{
+    if (name == NULL || *name == '\0')
+        goto fail;
+
+    // TODO: implement something more flexible
+    if (!strcasecmp(name, "23.976 (NTSC Film)"))
+    {
+        return 1126125;
+    }
+    if (!strcasecmp(name, "25 (PAL Film/Video)"))
+    {
+        return 1080000;
+    }
+    if (!strcasecmp(name, "29.97 (NTSC Video)"))
+    {
+        return 900900;
+    }
+
+    int i;
+    for (i = 0; i < hb_video_rates_count; i++)
+    {
+        if (!strcasecmp(hb_video_rates[i].name, name))
+        {
+            return hb_video_rates[i].rate;
+        }
+    }
+
+fail:
+    return -1;
+}
+
+const char* hb_video_framerate_get_name(int framerate)
+{
+    if (framerate > hb_video_rates[0].rate ||
+        framerate < hb_video_rates[hb_video_rates_count - 1].rate)
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_video_rates_count; i++)
+    {
+        if (hb_video_rates[i].rate == framerate)
+        {
+            return hb_video_rates[i].name;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const char* hb_video_framerate_sanitize_name(const char *name)
+{
+    return hb_video_framerate_get_name(hb_video_framerate_get_from_name(name));
+}
+
+const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last)
+{
+    if (last == NULL)
+    {
+        return  &hb_video_rates[0];
+    }
+    if (last <  &hb_video_rates[0] ||
+        last >= &hb_video_rates[hb_video_rates_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
+}
+
+int hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift)
+{
+    int ii, best_samplerate, samplerate_shift;
+    if ((samplerate < 32000) &&
+        (codec == HB_ACODEC_CA_HAAC || codec == HB_ACODEC_AC3))
+    {
+        // ca_haac can't do samplerates < 32 kHz
+        // AC-3 < 32 kHz suffers from poor hardware compatibility
+        best_samplerate  = 32000;
+        samplerate_shift = 0;
+    }
+    else if (samplerate < 16000 && codec == HB_ACODEC_FDK_HAAC)
+    {
+        // fdk_haac can't do samplerates < 16 kHz
+        best_samplerate  = 16000;
+        samplerate_shift = 1;
+    }
+    else
+    {
+        best_samplerate = samplerate;
+        for (ii = hb_audio_rates_count - 1; ii >= 0; ii--)
+        {
+            // valid samplerate
+            if (best_samplerate == hb_audio_rates[ii].rate)
+                break;
+
+            // samplerate is higher than the next valid samplerate,
+            // or lower than the lowest valid samplerate
+            if (best_samplerate > hb_audio_rates[ii].rate || ii == 0)
+            {
+                best_samplerate = hb_audio_rates[ii].rate;
+                break;
+            }
+        }
+        /* sr_shift: 0 -> 48000, 44100, 32000 Hz
+         *           1 -> 24000, 22050, 16000 Hz
+         *           2 -> 12000, 11025,  8000 Hz
+         *
+         * also, since samplerates are sanitized downwards:
+         *
+         * (samplerate < 32000) implies (samplerate <= 24000)
+         */
+        samplerate_shift = ((best_samplerate < 16000) ? 2 :
+                            (best_samplerate < 32000) ? 1 : 0);
+    }
+    if (sr_shift != NULL)
+    {
+        *sr_shift = samplerate_shift;
+    }
+    return best_samplerate;
+}
+
+int hb_audio_samplerate_get_from_name(const char *name)
+{
+    if (name == NULL || *name == '\0')
+        goto fail;
+
+    // TODO: implement something more flexible
+    int i = atoi(name);
+    if (i >= hb_audio_rates[0].rate &&
+        i <= hb_audio_rates[hb_audio_rates_count - 1].rate)
+    {
+        return i;
+    }
+
+    for (i = 0; i < hb_audio_rates_count; i++)
+    {
+        if (!strcasecmp(hb_audio_rates[i].name, name))
+        {
+            return hb_audio_rates[i].rate;
+        }
+    }
+
+fail:
+    return -1;
+}
+
+const char* hb_audio_samplerate_get_name(int samplerate)
+{
+    if (samplerate < hb_audio_rates[0].rate ||
+        samplerate > hb_audio_rates[hb_audio_rates_count - 1].rate)
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_audio_rates_count; i++)
+    {
+        if (hb_audio_rates[i].rate == samplerate)
+        {
+            return hb_audio_rates[i].name;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const hb_rate_t* hb_audio_samplerate_get_next(const hb_rate_t *last)
+{
+    if (last == NULL)
+    {
+        return  &hb_audio_rates[0];
+    }
+    if (last <  &hb_audio_rates[0] ||
+        last >= &hb_audio_rates[hb_audio_rates_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
+}
+
+// Given an input bitrate, find closest match in the set of allowed bitrates
+static int hb_audio_bitrate_find_closest(int bitrate)
+{
+    // Check if bitrate mode was disabled
+    if (bitrate <= 0)
+        return bitrate;
+
+    // result is highest rate if none found during search.
+    // rate returned will always be <= rate asked for.
+    int i, result = hb_audio_bitrates[0].rate;
+    for (i = hb_audio_bitrates_count - 1; i > 0; i--)
+    {
+        if (bitrate >= hb_audio_bitrates[i].rate)
+        {
+            result = hb_audio_bitrates[i].rate;
+            break;
+        }
+    }
+    return result;
+}
+
+// Given an input bitrate, sanitize it.
+// Check low and high limits and make sure it is in the set of allowed bitrates.
+int hb_audio_bitrate_get_best(uint32_t codec, int bitrate, int samplerate,
+                              int mixdown)
+{
+    int low, high;
+    hb_audio_bitrate_get_limits(codec, samplerate, mixdown, &low, &high);
+    if (bitrate > high)
+        bitrate = high;
+    if (bitrate < low)
+        bitrate = low;
+    return hb_audio_bitrate_find_closest(bitrate);
+}
+
+// Get the default bitrate for a given codec/samplerate/mixdown triplet.
+int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
+{
+    if ((codec & HB_ACODEC_PASS_FLAG) || !(codec & HB_ACODEC_MASK))
+        goto fail;
+
+    int bitrate, nchannels, sr_shift;
+    /* full-bandwidth channels, sr_shift */
+    nchannels = (hb_mixdown_get_discrete_channel_count(mixdown) -
+                 hb_mixdown_get_low_freq_channel_count(mixdown));
+    hb_audio_samplerate_get_best(codec, samplerate, &sr_shift);
+
+    switch (codec)
+    {
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            goto fail;
+    
+        // 96, 224, 640 Kbps
+        case HB_ACODEC_AC3:
+            bitrate = (nchannels * 128) - (32 * (nchannels < 5));
+            break;
+
+        case HB_ACODEC_CA_HAAC:
+        case HB_ACODEC_FDK_HAAC:
+            bitrate = nchannels * 32;
+            break;
+
+        default:
+            bitrate = nchannels * 80;
+            break;
+    }
+    // sample_rate adjustment
+    bitrate >>= sr_shift;
+    return hb_audio_bitrate_get_best(codec, bitrate, samplerate, mixdown);
+
+fail:
+    return -1;
+}
+
+/* Get the bitrate low and high limits for a codec/samplerate/mixdown triplet.
+ *
+ * Encoder    1.0 channel    2.0 channels    5.1 channels    6.1 channels    7.1 channels
+ * --------------------------------------------------------------------------------------
+ *
+ * faac
+ * ----
+ * supported samplerates: 8 - 48 kHz
+ * libfaac/util.c defines the bitrate limits:
+ * MinBitrate() -> 8000 bps (per channel, incl. LFE).
+ * MaxBitrate() -> (6144 * samplerate / 1024) bps (per channel, incl. LFE).
+ * But output bitrates don't go as high as the theoretical maximums:
+ * 12 kHz        43  (72)        87 (144)      260  (432)      303  (504)      342  (576)
+ * 24 kHz        87 (144)       174 (288)      514  (864)      595 (1008)      669 (1152)
+ * 48 kHz       174 (288)       347 (576)      970 (1728)     1138 (2016)     1287 (2304)
+ * Also, faac isn't a great encoder, so you don't want to allow too low a bitrate.
+ * Limits: minimum of  32 Kbps per channel
+ *         maximum of 192 Kbps per channel at 32-48 kHz, adjusted for sr_shift
+ *
+ *
+ * ffaac
+ * -----
+ * supported samplerates: 8 - 48 kHz
+ * libavcodec/aacenc.c defines a maximum bitrate:
+ * -> 6144 * samplerate / 1024 bps (per channel, incl. LFE).
+ * But output bitrates don't go as high as the theoretical maximums:
+ * 12 kHz        61  (72)       123 (144)
+ * 24 kHz       121 (144)       242 (288)
+ * 48 kHz       236 (288)       472 (576)
+ * Also, ffaac isn't a great encoder, so you don't want to allow too low a bitrate.
+ * Limits: minimum of  32 Kbps per channel
+ *         maximum of 192 Kbps per channel at 32 kHz, adjusted for sr_shift
+ *         maximum of 256 Kbps per channel at 44.1-48 kHz, adjusted for sr_shift
+ *
+ * vorbis
+ * ------
+ * supported samplerates: 8 - 48 kHz
+ * lib/modes/setup_*.h provides a range of allowed bitrates for various configurations.
+ * for each samplerate, the highest minimums and lowest maximums are:
+ *  8 kHz        Minimum  8 Kbps, maximum  32 Kbps (per channel, incl. LFE).
+ * 12 kHz        Minimum 14 Kbps, maximum  44 Kbps (per channel, incl. LFE).
+ * 16 kHz        Minimum 16 Kbps, maximum  86 Kbps (per channel, incl. LFE).
+ * 24 kHz        Minimum 22 Kbps, maximum  86 Kbps (per channel, incl. LFE).
+ * 32 kHz        Minimum 26 Kbps, maximum 190 Kbps (per channel, incl. LFE).
+ * 48 kHz        Minimum 28 Kbps, maximum 240 Kbps (per channel, incl. LFE).
+ * Limits: minimum of 14/22/28 Kbps per channel (8-12, 16-24, 32-48 kHz)
+ *         maximum of 32/86/190/240 Kbps per channel (8-12, 16-24, 32, 44.1-48 kHz)
+ *
+ * lame
+ * ----
+ * supported samplerates: 8 - 48 kHz
+ * lame_init_params() allows the following bitrates:
+ * 12 kHz        Minimum  8 Kbps, maximum  64 Kbps
+ * 24 kHz        Minimum  8 Kbps, maximum 160 Kbps
+ * 48 kHz        Minimum 32 Kbps, maximum 320 Kbps
+ * Limits: minimum of 8/8/32 Kbps (8-12, 16-24, 32-48 kHz)
+ *         maximum of 64/160/320 Kbps (8-12, 16-24, 32-48 kHz)
+ *
+ * ffac3
+ * -----
+ * supported samplerates: 32 - 48 kHz (< 32 kHz disabled for compatibility reasons)
+ * Dolby's encoder has a min. of 224 Kbps for 5 full-bandwidth channels (5.0, 5.1)
+ * The maximum AC3 bitrate is 640 Kbps
+ * Limits: minimum of 224/5 Kbps per full-bandwidth channel, maximum of 640 Kbps
+ *
+ * ca_aac
+ * ------
+ * supported samplerates: 8 - 48 kHz
+ * Core Audio API provides a range of allowed bitrates:
+ *  8 kHz         8 -  24        16 -  48        40 - 112        48 - 144        56 - 160
+ * 12 kHz        12 -  32        24 -  64        64 - 160        72 - 192        96 - 224
+ * 16 kHz        12 -  48        24 -  96        64 - 224        72 - 288        96 - 320
+ * 24 kHz        16 -  64        32 - 128        80 - 320        96 - 384       112 - 448
+ * 32 kHz        24 -  96        48 - 192       128 - 448       144 - 576       192 - 640
+ * 48 kHz        32 - 256        64 - 320       160 - 768       192 - 960       224 - 960
+ * Limits:
+ *  8 kHz -> minimum of  8 Kbps and maximum of  24 Kbps per full-bandwidth channel
+ * 12 kHz -> minimum of 12 Kbps and maximum of  32 Kbps per full-bandwidth channel
+ * 16 kHz -> minimum of 12 Kbps and maximum of  48 Kbps per full-bandwidth channel
+ * 24 kHz -> minimum of 16 Kbps and maximum of  64 Kbps per full-bandwidth channel
+ * 32 kHz -> minimum of 24 Kbps and maximum of  96 Kbps per full-bandwidth channel
+ * 48 kHz -> minimum of 32 Kbps and maximum of 160 Kbps per full-bandwidth channel
+ * 48 kHz ->                        maximum of +96 Kbps for Mono
+ * Note: encCoreAudioInit() will sanitize any mistake made here.
+ *
+ * ca_haac
+ * -------
+ * supported samplerates: 32 - 48 kHz
+ * Core Audio API provides a range of allowed bitrates:
+ * 32 kHz         12 - 40         24 - 80        64 - 192          N/A           96 - 256
+ * 48 kHz         16 - 40         32 - 80        80 - 192          N/A          112 - 256
+ * Limits: minimum of 12 Kbps per full-bandwidth channel (<= 32 kHz)
+ *         minimum of 16 Kbps per full-bandwidth channel ( > 32 kHz)
+ *         maximum of 40 Kbps per full-bandwidth channel
+ * Note: encCoreAudioInit() will sanitize any mistake made here.
+ *
+ * fdk_aac
+ * -------
+ * supported samplerates: 8 - 48 kHz
+ * libfdk limits the bitrate to the following values:
+ *  8 kHz              48              96             240
+ * 12 kHz              72             144             360
+ * 16 kHz              96             192             480
+ * 24 kHz             144             288             720
+ * 32 kHz             192             384             960
+ * 48 kHz             288             576            1440
+ * Limits: minimum of samplerate * 2/3 Kbps per full-bandwidth channel (see ca_aac)
+ *         maximum of samplerate * 6.0 Kbps per full-bandwidth channel
+ *
+ * fdk_haac
+ * --------
+ * supported samplerates: 16 - 48 kHz
+ * libfdk limits the bitrate to the following values:
+ * 16 kHz         8 -  48        16 -  96        45 - 199
+ * 24 kHz         8 -  63        16 - 127        45 - 266
+ * 32 kHz         8 -  63        16 - 127        45 - 266
+ * 48 kHz        12 -  63        16 - 127        50 - 266
+ * Limits: minimum of 12 Kbps per full-bandwidth channel  (<= 32 kHz) (see ca_haac)
+ *         minimum of 16 Kbps per full-bandwidth channel  ( > 32 kHz) (see ca_haac)
+ *         maximum of 48,  96 or 192 Kbps (1.0, 2.0, 5.1) (<= 16 kHz)
+ *         maximum of 64, 128 or 256 Kbps (1.0, 2.0, 5.1) ( > 16 kHz)
+ */
+void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
+                                 int *low, int *high)
+{
+    /* samplerate, sr_shift */
+    int sr_shift;
+    samplerate = hb_audio_samplerate_get_best(codec, samplerate, &sr_shift);
+
+    /* LFE, full-bandwidth channels */
+    int lfe_count, nchannels;
+    lfe_count = hb_mixdown_get_low_freq_channel_count(mixdown);
+    nchannels = hb_mixdown_get_discrete_channel_count(mixdown) - lfe_count;
+
+    switch (codec)
+    {
+        // Bitrates don't apply to "lossless" audio
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            *low = *high = -1;
+            return;
+
+        case HB_ACODEC_AC3:
+            *low  = 224 * nchannels / 5;
+            *high = 640;
+            break;
+
+        case HB_ACODEC_CA_AAC:
+        {
+            switch (samplerate)
+            {
+                case 8000:
+                    *low  = nchannels *  8;
+                    *high = nchannels * 24;
+                    break;
+
+                case 11025:
+                case 12000:
+                    *low  = nchannels * 12;
+                    *high = nchannels * 32;
+                    break;
+
+                case 16000:
+                    *low  = nchannels * 12;
+                    *high = nchannels * 48;
+                    break;
+
+                case 22050:
+                case 24000:
+                    *low  = nchannels * 16;
+                    *high = nchannels * 64;
+                    break;
+
+                case 32000:
+                    *low  = nchannels * 24;
+                    *high = nchannels * 96;
+                    break;
+
+                case 44100:
+                case 48000:
+                default:
+                    *low  = nchannels * 32;
+                    *high = nchannels * (160 + (96 * (nchannels == 1)));
+                    break;
+            } break;
+        }
+
+        case HB_ACODEC_CA_HAAC:
+            *low  = nchannels * (12 + (4 * (samplerate >= 44100)));
+            *high = nchannels * 40;
+            break;
+
+        case HB_ACODEC_FDK_AAC:
+            *low  = nchannels * samplerate * 2 / 3000;
+            *high = nchannels * samplerate * 6 / 1000;
+            break;
+
+        case HB_ACODEC_FDK_HAAC:
+            *low  = (nchannels * (12 + (4 * (samplerate >= 44100))));
+            *high = (nchannels - (nchannels > 2)) * (48 +
+                                                     (16 *
+                                                      (samplerate >= 22050)));
+            break;
+
+        case HB_ACODEC_FAAC:
+            *low  = (nchannels + lfe_count) * 32;
+            *high = (nchannels + lfe_count) * (192 >> sr_shift);
+            break;
+
+        case HB_ACODEC_FFAAC:
+            *low  = ((nchannels + lfe_count) * 32);
+            *high = ((nchannels + lfe_count) *
+                     ((192 + (64 * ((samplerate << sr_shift) >= 44100)))
+                      >> sr_shift));
+            break;
+
+        case HB_ACODEC_LAME:
+            *low  =  8 + (24 * (sr_shift < 1));
+            *high = 64 + (96 * (sr_shift < 2)) + (160 * (sr_shift < 1));
+            break;
+
+        case HB_ACODEC_VORBIS:
+            *low  = (nchannels + lfe_count) * (14 +
+                                               (8 * (sr_shift < 2)) +
+                                               (6 * (sr_shift < 1)));
+            *high = (nchannels + lfe_count) * (32 +
+                                               ( 54 * (sr_shift < 2)) +
+                                               (104 * (sr_shift < 1)) +
+                                               ( 50 * (samplerate >= 44100)));
+            break;
+
+        // Bitrates don't apply to passthrough audio, but may apply if we
+        // fall back to an encoder when the source can't be passed through.
+        default:
+            *low  = hb_audio_bitrates[0].rate;
+            *high = hb_audio_bitrates[hb_audio_bitrates_count - 1].rate;
+            break;
+    }
+
+    // sanitize max. bitrate
+    if (*high < hb_audio_bitrates[0].rate)
+        *high = hb_audio_bitrates[0].rate;
+    if (*high > hb_audio_bitrates[hb_audio_bitrates_count - 1].rate)
+        *high = hb_audio_bitrates[hb_audio_bitrates_count - 1].rate;
+}
+
+const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
+{
+    if (last == NULL)
+    {
+        return  &hb_audio_bitrates[0];
+    }
+    if (last <  &hb_audio_bitrates[0] ||
+        last >= &hb_audio_bitrates[hb_audio_bitrates_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
+}
+
+// Get limits and hints for the UIs.
+//
+// granularity sets the minimum step increments that should be used
+// (it's ok to round up to some nice multiple if you like)
+//
+// direction says whether 'low' limit is highest or lowest
+// quality (direction 0 == lowest value is worst quality)
+void hb_audio_quality_get_limits(uint32_t codec, float *low, float *high,
+                                 float *granularity, int *direction)
+{
+    switch (codec)
+    {
+        case HB_ACODEC_LAME:
+            *direction   = 1;
+            *granularity = 0.5;
+            *low         = 0.;
+            *high        = 10.;
+            break;
+
+        case HB_ACODEC_VORBIS:
+            *direction   = 0;
+            *granularity = 0.5;
+            *low         = -2.;
+            *high        = 10.;
+            break;
+
+        case HB_ACODEC_CA_AAC:
+            *direction   = 0;
+            *granularity = 9.;
+            *low         = 1.;
+            *high        = 127.;
+            break;
+
+        default:
+            *direction   = 0;
+            *granularity = 1.;
+            *low = *high = HB_INVALID_AUDIO_QUALITY;
+            break;
+    }
+}
+
+float hb_audio_quality_get_best(uint32_t codec, float quality)
+{
+    int direction;
+    float low, high, granularity;
+    hb_audio_quality_get_limits(codec, &low, &high, &granularity, &direction);
+    if (quality > high)
+        quality = high;
+    if (quality < low)
+        quality = low;
+    return quality;
+}
+
+float hb_audio_quality_get_default(uint32_t codec)
+{
+    switch (codec)
+    {
+        case HB_ACODEC_LAME:
+            return 2.;
+
+        case HB_ACODEC_VORBIS:
+            return 5.;
+
+        case HB_ACODEC_CA_AAC:
+            return 91.;
+
+        default:
+            return HB_INVALID_AUDIO_QUALITY;
+    }
+}
+
+// Get limits and hints for the UIs.
+//
+// granularity sets the minimum step increments that should be used
+// (it's ok to round up to some nice multiple if you like)
+//
+// direction says whether 'low' limit is highest or lowest
+// compression level (direction 0 == lowest value is worst compression level)
+void hb_audio_compression_get_limits(uint32_t codec, float *low, float *high,
+                                     float *granularity, int *direction)
+{
+    switch (codec)
+    {
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            *direction   = 0;
+            *granularity = 1.;
+            *high        = 12.;
+            *low         = 0.;
+            break;
+            
+        case HB_ACODEC_LAME:
+            *direction   = 1;
+            *granularity = 1.;
+            *high        = 9.;
+            *low         = 0.;
+            break;
+            
+        default:
+            *direction   = 0;
+            *granularity = 1.;
+            *low = *high = -1.;
+            break;
+    }
+}
+
+float hb_audio_compression_get_best(uint32_t codec, float compression)
+{
+    int direction;
+    float low, high, granularity;
+    hb_audio_compression_get_limits(codec, &low, &high, &granularity, &direction);
+    if( compression > high )
+        compression = high;
+    if( compression < low )
+        compression = low;
+    return compression;
+}
+
+float hb_audio_compression_get_default(uint32_t codec)
+{
+    switch (codec)
+    {
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            return 5.;
+
+        case HB_ACODEC_LAME:
+            return 2.;
+
+        default:
+            return -1.;
+    }
+}
 
 int hb_audio_dither_get_default()
 {
@@ -186,13 +827,36 @@ int hb_audio_dither_is_supported(uint32_t codec)
         case HB_ACODEC_FDK_AAC:
         case HB_ACODEC_FDK_HAAC:
             return 1;
+
         default:
             return 0;
     }
 }
 
+int hb_audio_dither_get_from_name(const char *name)
+{
+    if (name == NULL || *name == '\0')
+        goto fail;
+
+    int i;
+    for ( i = 0; i < hb_audio_dithers_count; i++)
+    {
+        if (!strcasecmp(hb_audio_dithers[i].short_name, name))
+        {
+            return hb_audio_dithers[i].method;
+        }
+    }
+
+fail:
+    return hb_audio_dither_get_default();
+}
+
 const char* hb_audio_dither_get_description(int method)
 {
+    if (method < hb_audio_dithers[0].method ||
+        method > hb_audio_dithers[hb_audio_dithers_count - 1].method)
+        goto fail;
+
     int i;
     for (i = 0; i < hb_audio_dithers_count; i++)
     {
@@ -201,9 +865,24 @@ const char* hb_audio_dither_get_description(int method)
             return hb_audio_dithers[i].description;
         }
     }
-    return "";
+
+fail:
+    return NULL;
 }
 
+const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last)
+{
+    if (last == NULL)
+    {
+        return  &hb_audio_dithers[0];
+    }
+    if (last <  &hb_audio_dithers[0] ||
+        last >= &hb_audio_dithers[hb_audio_dithers_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
+}
 
 int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout)
 {
@@ -343,86 +1022,453 @@ int hb_mixdown_get_low_freq_channel_count(int amixdown)
     }
 }
 
-int hb_mixdown_get_mixdown_from_short_name(const char *short_name)
+int hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown)
 {
+    // Passthru, only "None" mixdown is supported
+    if (codec & HB_ACODEC_PASS_FLAG)
+        return HB_AMIXDOWN_NONE;
+
+    // caller requested the best available mixdown
+    if (mixdown == HB_INVALID_AMIXDOWN)
+        mixdown  = hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown;
+
+    // test all mixdowns until an authorized, supported mixdown is found
+    // stop before we reach the "worst" non-None mixdown (index == 1)
+    int i;
+    for (i = hb_audio_mixdowns_count - 1; i > 1; i--)
+        if (hb_audio_mixdowns[i].amixdown <= mixdown &&
+            hb_mixdown_is_supported(hb_audio_mixdowns[i].amixdown, codec, layout))
+            break;
+    return hb_audio_mixdowns[i].amixdown;
+}
+
+int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
+{
+    int mixdown;
+    switch (codec)
+    {
+        // the FLAC encoder defaults to the best mixdown up to 7.1
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            mixdown = HB_AMIXDOWN_7POINT1;
+            break;
+
+        // the AC3 encoder defaults to the best mixdown up to 5.1
+        case HB_ACODEC_AC3:
+            mixdown = HB_AMIXDOWN_5POINT1;
+            break;
+
+        // other encoders default to the best mixdown up to DPLII
+        default:
+            mixdown = HB_AMIXDOWN_DOLBYPLII;
+            break;
+    }
+
+    // return the best available mixdown up to the selected default
+    return hb_mixdown_get_best(codec, layout, mixdown);
+}
+
+int hb_mixdown_get_from_name(const char *name)
+{
+    if (name == NULL || *name == '\0')
+        goto fail;
+
+    // TODO: implement something more flexible
+    if (!strcasecmp(name, "AC3 Passthru") ||
+        !strcasecmp(name, "DTS Passthru") ||
+        !strcasecmp(name, "DTS-HD Passthru"))
+    {
+        return HB_AMIXDOWN_NONE;
+    }
+    if (!strcasecmp(name, "6-channel discrete"))
+    {
+        return HB_AMIXDOWN_5POINT1;
+    }
+
     int i;
     for (i = 0; i < hb_audio_mixdowns_count; i++)
     {
-        if (!strcmp(hb_audio_mixdowns[i].short_name, short_name))
+        if (!strcasecmp(hb_audio_mixdowns[i].name,       name) ||
+            !strcasecmp(hb_audio_mixdowns[i].short_name, name))
         {
             return hb_audio_mixdowns[i].amixdown;
         }
     }
-    return 0;
+
+fail:
+    return -1;
 }
 
-const char* hb_mixdown_get_short_name_from_mixdown(int amixdown)
+const char* hb_mixdown_get_name(int mixdown)
 {
+    if (mixdown < hb_audio_mixdowns[0].amixdown ||
+        mixdown > hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown)
+        goto fail;
+
     int i;
     for (i = 0; i < hb_audio_mixdowns_count; i++)
     {
-        if (hb_audio_mixdowns[i].amixdown == amixdown)
+        if (hb_audio_mixdowns[i].amixdown == mixdown)
+        {
+            return hb_audio_mixdowns[i].name;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const char* hb_mixdown_get_short_name(int mixdown)
+{
+    if (mixdown < hb_audio_mixdowns[0].amixdown ||
+        mixdown > hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown)
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    {
+        if (hb_audio_mixdowns[i].amixdown == mixdown)
         {
             return hb_audio_mixdowns[i].short_name;
         }
     }
-    return "";
+
+fail:
+    return NULL;
 }
 
-void hb_autopassthru_apply_settings( hb_job_t * job )
+const char* hb_mixdown_sanitize_name(const char *name)
 {
-    int i, j, already_printed;
-    hb_audio_t * audio;
-    for( i = 0, already_printed = 0; i < hb_list_count( job->list_audio ); )
+    return hb_mixdown_get_name(hb_mixdown_get_from_name(name));
+}
+
+const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last)
+{
+    if (last == NULL)
     {
-        audio = hb_list_item( job->list_audio, i );
-        if( audio->config.out.codec == HB_ACODEC_AUTO_PASS )
+        return  &hb_audio_mixdowns[0];
+    }
+    if (last <  &hb_audio_mixdowns[0] ||
+        last >= &hb_audio_mixdowns[hb_audio_mixdowns_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
+}
+
+int hb_video_encoder_get_default(int muxer)
+{
+    if (!(muxer & HB_MUX_MASK))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
+    {
+        if (hb_video_encoders[i].muxers & muxer)
         {
-            if( !already_printed )
-                hb_autopassthru_print_settings( job );
+            return hb_video_encoders[i].codec;
+        }
+    }
+
+fail:
+    return -1;
+}
+
+int hb_video_encoder_get_from_name(const char *name)
+{
+    if (name == NULL || *name == '\0')
+        goto fail;
+
+    // TODO: implement something more flexible
+    if (!strcasecmp(name, "XviD") ||
+        !strcasecmp(name, "FFmpeg"))
+    {
+        return HB_VCODEC_FFMPEG_MPEG4;
+    }
+
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
+    {
+        if (!strcasecmp(hb_video_encoders[i].name,       name) ||
+            !strcasecmp(hb_video_encoders[i].short_name, name))
+        {
+            return hb_video_encoders[i].codec;
+        }
+    }
+
+fail:
+    return -1;
+}
+
+const char* hb_video_encoder_get_name(int encoder)
+{
+    if (!(encoder & HB_VCODEC_MASK))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
+    {
+        if (hb_video_encoders[i].codec == encoder)
+        {
+            return hb_video_encoders[i].name;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const char* hb_video_encoder_get_short_name(int encoder)
+{
+    if (!(encoder & HB_VCODEC_MASK))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
+    {
+        if (hb_video_encoders[i].codec == encoder)
+        {
+            return hb_video_encoders[i].short_name;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const char* hb_video_encoder_sanitize_name(const char *name)
+{
+    return hb_video_encoder_get_name(hb_video_encoder_get_from_name(name));
+}
+
+const hb_encoder_t* hb_video_encoder_get_next(const hb_encoder_t *last)
+{
+    if (last == NULL)
+    {
+        return  &hb_video_encoders[0];
+    }
+    if (last <  &hb_video_encoders[0] ||
+        last >= &hb_video_encoders[hb_video_encoders_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
+}
+
+// for a valid passthru, return the matching encoder for that codec (if any),
+// else return -1 (i.e. drop the track)
+int hb_audio_encoder_get_fallback_for_passthru(int passthru)
+{
+    // TODO: implement something more flexible
+    switch (passthru)
+    {
+        case HB_ACODEC_AAC_PASS:
+#ifdef __APPLE__
+            return HB_ACODEC_CA_AAC;
+#else
+            return HB_ACODEC_FAAC;
+#endif
+
+        case HB_ACODEC_AC3_PASS:
+            return HB_ACODEC_AC3;
+
+        case HB_ACODEC_MP3_PASS:
+            return HB_ACODEC_LAME;
+
+            // passthru tracks are often the second audio from the same source track
+            // if we don't have an encoder matching the passthru codec, return -1
+            // dropping the track, as well as ensuring that there is at least one
+            // audio track in the output is then up to the UIs
+        default:
+            return -1;
+    }
+}
+
+int hb_audio_encoder_get_default(int muxer)
+{
+    if (!(muxer & HB_MUX_MASK))
+        goto fail;
+
+#ifndef __APPLE__
+    if (muxer == HB_MUX_MKV)
+    {
+        return HB_ACODEC_LAME;
+    }
+#endif
+
+    int i;
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        // default encoder should not be passthru
+        if ((hb_audio_encoders[i].muxers & muxer) &&
+            (hb_audio_encoders[i].codec  & HB_ACODEC_PASS_FLAG) == 0)
+        {
+            return hb_audio_encoders[i].codec;
+        }
+    }
+
+fail:
+    return -1;
+}
+
+int hb_audio_encoder_get_from_name(const char *name)
+{
+    if (name == NULL || *name == '\0')
+        goto fail;
+
+    // TODO: implement something more flexible
+    if (!strcasecmp(name, "AC3"))
+    {
+        return HB_ACODEC_AC3;
+    }
+    // libfdk fallback, use Core Audio if available, else FAAC
+#ifndef USE_FDK_AAC
+#ifdef __APPLE__
+#define  AAC_ENC HB_ACODEC_CA_AAC
+#define HAAC_ENC HB_ACODEC_CA_HAAC
+#else
+#define  AAC_ENC HB_ACODEC_FAAC
+#define HAAC_ENC HB_ACODEC_FAAC
+#endif
+    if (!strcasecmp(name, "AAC (FDK)")    || !strcasecmp(name, "fdk_aac"))
+    {
+        return AAC_ENC;
+    }
+    if (!strcasecmp(name, "HE-AAC (FDK)") || !strcasecmp(name, "fdk_haac"))
+    {
+        return HAAC_ENC;
+    }
+#undef  AAC_ENC
+#undef HAAC_ENC
+#endif
+
+    int i;
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (!strcasecmp(hb_audio_encoders[i].name,       name) ||
+            !strcasecmp(hb_audio_encoders[i].short_name, name))
+        {
+            return hb_audio_encoders[i].codec;
+        }
+    }
+
+fail:
+    return -1;
+}
+
+const char* hb_audio_encoder_get_name(int encoder)
+{
+    if (!(encoder & HB_ACODEC_ANY))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (hb_audio_encoders[i].codec == encoder)
+        {
+            return hb_audio_encoders[i].name;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const char* hb_audio_encoder_get_short_name(int encoder)
+{
+    if (!(encoder & HB_ACODEC_ANY))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (hb_audio_encoders[i].codec == encoder)
+        {
+            return hb_audio_encoders[i].short_name;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const char* hb_audio_encoder_sanitize_name(const char *name)
+{
+    return hb_audio_encoder_get_name(hb_audio_encoder_get_from_name(name));
+}
+
+const hb_encoder_t* hb_audio_encoder_get_next(const hb_encoder_t *last)
+{
+    if (last == NULL)
+    {
+        return  &hb_audio_encoders[0];
+    }
+    if (last <  &hb_audio_encoders[0] ||
+        last >= &hb_audio_encoders[hb_audio_encoders_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
+}
+
+void hb_autopassthru_apply_settings(hb_job_t *job)
+{
+    hb_audio_t *audio;
+    int i, already_printed;
+    for (i = already_printed = 0; i < hb_list_count(job->list_audio);)
+    {
+        audio = hb_list_item(job->list_audio, i);
+        if (audio->config.out.codec == HB_ACODEC_AUTO_PASS)
+        {
+            if (!already_printed)
+                hb_autopassthru_print_settings(job);
             already_printed = 1;
-            audio->config.out.codec = hb_autopassthru_get_encoder( audio->config.in.codec,
-                                                                   job->acodec_copy_mask,
-                                                                   job->acodec_fallback,
-                                                                   job->mux );
-            if( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) &&
-                !( audio->config.out.codec & HB_ACODEC_MASK ) )
+            audio->config.out.codec = hb_autopassthru_get_encoder(audio->config.in.codec,
+                                                                  job->acodec_copy_mask,
+                                                                  job->acodec_fallback,
+                                                                  job->mux);
+            if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG) &&
+                !(audio->config.out.codec & HB_ACODEC_MASK))
             {
-                hb_log( "Auto Passthru: passthru not possible and no valid fallback specified, dropping track %d",
-                        audio->config.out.track );
-                hb_list_rem( job->list_audio, audio );
-                hb_audio_close( &audio );
+                hb_log("Auto Passthru: passthru not possible and no valid fallback specified, dropping track %d",
+                       audio->config.out.track );
+                hb_list_rem(job->list_audio, audio);
+                hb_audio_close(&audio);
                 continue;
             }
             audio->config.out.samplerate = audio->config.in.samplerate;
-            if( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+            if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
             {
-                if( audio->config.out.codec == job->acodec_fallback )
+                if (audio->config.out.codec == job->acodec_fallback)
                 {
-                    hb_log( "Auto Passthru: passthru not possible for track %d, using fallback",
-                            audio->config.out.track );
+                    hb_log("Auto Passthru: passthru not possible for track %d, using fallback",
+                           audio->config.out.track);
                 }
                 else
                 {
-                    hb_log( "Auto Passthru: passthru and fallback not possible for track %d, using default encoder",
-                            audio->config.out.track );
+                    hb_log("Auto Passthru: passthru and fallback not possible for track %d, using default encoder",
+                           audio->config.out.track);
                 }
-                audio->config.out.mixdown = hb_get_default_mixdown( audio->config.out.codec,
-                                                                    audio->config.in.channel_layout );
-                audio->config.out.bitrate = hb_get_default_audio_bitrate( audio->config.out.codec,
-                                                                          audio->config.out.samplerate,
-                                                                          audio->config.out.mixdown );
-                audio->config.out.compression_level = hb_get_default_audio_compression( audio->config.out.codec );
+                audio->config.out.mixdown =
+                    hb_mixdown_get_default(audio->config.out.codec,
+                                           audio->config.in.channel_layout);
+                audio->config.out.bitrate =
+                    hb_audio_bitrate_get_default(audio->config.out.codec,
+                                                 audio->config.out.samplerate,
+                                                 audio->config.out.mixdown );
+                audio->config.out.compression_level =
+                    hb_audio_compression_get_default(audio->config.out.codec);
             }
             else
             {
-                for( j = 0; j < hb_audio_encoders_count; j++ )
+                const hb_encoder_t *audio_encoder = NULL;
+                while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
                 {
-                    if( hb_audio_encoders[j].encoder == audio->config.out.codec )
+                    if (audio_encoder->codec == audio->config.out.codec)
                     {
-                        hb_log( "Auto Passthru: using %s for track %d",
-                                hb_audio_encoders[j].human_readable_name,
-                                audio->config.out.track );
+                        hb_log("Auto Passthru: using %s for track %d",
+                               audio_encoder->name,
+                               audio->config.out.track);
                         break;
                     }
                 }
@@ -435,650 +1481,212 @@ void hb_autopassthru_apply_settings( hb_job_t * job )
     }
 }
 
-void hb_autopassthru_print_settings( hb_job_t * job )
+void hb_autopassthru_print_settings(hb_job_t *job)
 {
-    int i, codec_len;
     char *mask = NULL, *tmp;
     const char *fallback = NULL;
-    for( i = 0; i < hb_audio_encoders_count; i++ )
+    const hb_encoder_t *audio_encoder = NULL;
+    while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
     {
-        if( ( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
-            ( hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS ) &&
-            ( hb_audio_encoders[i].encoder & job->acodec_copy_mask ) )
+        if ((audio_encoder->codec &  HB_ACODEC_PASS_FLAG) &&
+            (audio_encoder->codec != HB_ACODEC_AUTO_PASS) &&
+            (audio_encoder->codec & job->acodec_copy_mask))
         {
-            if( mask )
+            if (mask != NULL)
             {
-                tmp = hb_strncat_dup( mask, ", ", 2 );
-                if( tmp )
+                tmp = hb_strncat_dup(mask, ", ", 2);
+                if (tmp != NULL)
                 {
-                    free( mask );
+                    free(mask);
                     mask = tmp;
                 }
             }
             // passthru name without " Passthru"
-            codec_len = strlen( hb_audio_encoders[i].human_readable_name ) - 9;
-            tmp = hb_strncat_dup( mask, hb_audio_encoders[i].human_readable_name, codec_len );
-            if( tmp )
+            tmp = hb_strncat_dup(mask,  audio_encoder->name,
+                                 strlen(audio_encoder->name) - 9);
+            if (tmp != NULL)
             {
-                free( mask );
+                free(mask);
                 mask = tmp;
             }
         }
-        else if( !( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
-                  ( hb_audio_encoders[i].encoder == job->acodec_fallback ) )
+        else if ((audio_encoder->codec & HB_ACODEC_PASS_FLAG) == 0 &&
+                 (audio_encoder->codec == job->acodec_fallback))
         {
-            fallback = hb_audio_encoders[i].human_readable_name;
+            fallback = audio_encoder->name;
         }
     }
-    if( !mask )
-        hb_log( "Auto Passthru: no codecs allowed" );
+    if (mask == NULL)
+        hb_log("Auto Passthru: no codecs allowed");
     else
-        hb_log( "Auto Passthru: allowed codecs are %s", mask );
-    if( !fallback )
-        hb_log( "Auto Passthru: no valid fallback specified" );
+        hb_log("Auto Passthru: allowed codecs are %s", mask);
+    if (fallback == NULL)
+        hb_log("Auto Passthru: no valid fallback specified");
     else
-        hb_log( "Auto Passthru: fallback is %s", fallback );
+        hb_log("Auto Passthru: fallback is %s", fallback);
 }
 
-int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer )
+int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback,
+                                int muxer)
 {
-    int i;
-    int out_codec = ( copy_mask & in_codec ) | HB_ACODEC_PASS_FLAG;
+    int i = 0;
+    const hb_encoder_t *audio_encoder = NULL;
+    int out_codec = (copy_mask & in_codec) | HB_ACODEC_PASS_FLAG;
     // sanitize fallback encoder and selected passthru
     // note: invalid fallbacks are caught in hb_autopassthru_apply_settings
-    for( i = 0; i < hb_audio_encoders_count; i++ )
+    while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
     {
-        if( ( hb_audio_encoders[i].encoder == fallback ) &&
-           !( hb_audio_encoders[i].muxers & muxer ) )
+        if (audio_encoder->codec == out_codec)
         {
-            // fallback not possible with current muxer
-            // use the default audio encoder instead
-            fallback = hb_get_default_audio_encoder(muxer);
+            i++;
+            if (!(audio_encoder->muxers & muxer))
+                out_codec = 0;
+        }
+        else if (audio_encoder->codec == fallback)
+        {
+            i++;
+            if (!(audio_encoder->muxers & muxer))
+                fallback = hb_audio_encoder_get_default(muxer);
+        }
+        if (i > 1)
+        {
             break;
         }
     }
-    for( i = 0; i < hb_audio_encoders_count; i++ )
+    return (out_codec & HB_ACODEC_PASS_MASK) ? out_codec : fallback;
+}
+
+int hb_container_get_from_name(const char *name)
+{
+    if (name == NULL || *name == '\0')
+        goto fail;
+
+    // TODO: implement something more flexible
+    if (!strcasecmp(name, "m4v"))
     {
-        if( ( hb_audio_encoders[i].encoder == out_codec ) &&
-           !( hb_audio_encoders[i].muxers & muxer ) )
+        // old CLI alternate short name for "mp4"
+        return HB_MUX_MP4;
+    }
+    if (!strcasecmp(name, "MP4 file"))
+    {
+        return HB_MUX_MP4;
+    }
+    if (!strcasecmp(name, "MKV file"))
+    {
+        return HB_MUX_MKV;
+    }
+
+    int i;
+    for (i = 0; i < hb_containers_count; i++)
+    {
+        if (!strcasecmp(hb_containers[i].name,              name) ||
+            !strcasecmp(hb_containers[i].short_name,        name) ||
+            !strcasecmp(hb_containers[i].default_extension, name))
         {
-            // selected passthru not possible with current muxer
-            out_codec = fallback;
-            break;
+            return hb_containers[i].format;
         }
     }
-    if( !( out_codec & HB_ACODEC_PASS_MASK ) )
-        return fallback;
-    return out_codec;
+
+fail:
+    return -1;
 }
 
-int hb_get_default_audio_encoder(int muxer)
+int hb_container_get_from_extension(const char *extension)
 {
-#ifndef __APPLE__
-    if (muxer == HB_MUX_MKV)
+    if (extension == NULL || *extension == '\0')
+        goto fail;
+
+    // TODO: implement something more flexible
+    if (!strcasecmp(extension, "m4v"))
     {
-        return HB_ACODEC_LAME;
+        return HB_MUX_MP4;
     }
-#endif
-    return hb_audio_encoders[0].encoder;
-}
 
-// Given an input bitrate, find closest match in the set of allowed bitrates
-int hb_find_closest_audio_bitrate(int bitrate)
-{
-    // Check if bitrate mode was disabled
-    if (bitrate <= 0)
-        return bitrate;
-
-    int ii, result;
-    // result is highest rate if none found during search.
-    // rate returned will always be <= rate asked for.
-    result = hb_audio_bitrates[0].rate;
-    for (ii = hb_audio_bitrates_count - 1; ii > 0; ii--)
+    int i;
+    for (i = 0; i < hb_containers_count; i++)
     {
-        if (bitrate >= hb_audio_bitrates[ii].rate)
+        if (!strcasecmp(hb_containers[i].default_extension, extension))
         {
-            result = hb_audio_bitrates[ii].rate;
-            break;
+            return hb_containers[i].format;
         }
     }
-    return result;
+
+fail:
+    return -1;
 }
 
-/* Get the bitrate low and high limits for a codec/samplerate/mixdown triplet.
-
-Encoder    1.0 channel    2.0 channels    5.1 channels    6.1 channels    7.1 channels
---------------------------------------------------------------------------------------
-
-faac
-----
-supported samplerates: 8 - 48 kHz
-libfaac/util.c defines the bitrate limits:
-MinBitrate() -> 8000 bps (per channel, incl. LFE).
-MaxBitrate() -> (6144 * samplerate / 1024) bps (per channel, incl. LFE).
-But output bitrates don't go as high as the theoretical maximums:
-12 kHz        43  (72)        87 (144)      260  (432)      303  (504)      342  (576)
-24 kHz        87 (144)       174 (288)      514  (864)      595 (1008)      669 (1152)
-48 kHz       174 (288)       347 (576)      970 (1728)     1138 (2016)     1287 (2304)
-Also, faac isn't a great encoder, so you don't want to allow too low a bitrate.
-Limits: minimum of  32 Kbps per channel
-        maximum of 192 Kbps per channel at 32-48 kHz, adjusted for sr_shift
-
-
-ffaac
------
-supported samplerates: 8 - 48 kHz
-libavcodec/aacenc.c defines a maximum bitrate:
--> 6144 * samplerate / 1024 bps (per channel, incl. LFE).
-But output bitrates don't go as high as the theoretical maximums:
-12 kHz        61  (72)       123 (144)
-24 kHz       121 (144)       242 (288)
-48 kHz       236 (288)       472 (576)
-Also, ffaac isn't a great encoder, so you don't want to allow too low a bitrate.
-Limits: minimum of  32 Kbps per channel
-        maximum of 192 Kbps per channel at 32 kHz, adjusted for sr_shift
-        maximum of 256 Kbps per channel at 44.1-48 kHz, adjusted for sr_shift
-
-vorbis
-------
-supported samplerates: 8 - 48 kHz
-lib/modes/setup_*.h provides a range of allowed bitrates for various configurations.
-for each samplerate, the highest minimums and lowest maximums are:
- 8 kHz        Minimum  8 Kbps, maximum  32 Kbps (per channel, incl. LFE).
-12 kHz        Minimum 14 Kbps, maximum  44 Kbps (per channel, incl. LFE).
-16 kHz        Minimum 16 Kbps, maximum  86 Kbps (per channel, incl. LFE).
-24 kHz        Minimum 22 Kbps, maximum  86 Kbps (per channel, incl. LFE).
-32 kHz        Minimum 26 Kbps, maximum 190 Kbps (per channel, incl. LFE).
-48 kHz        Minimum 28 Kbps, maximum 240 Kbps (per channel, incl. LFE).
-Limits: minimum of 14/22/28 Kbps per channel (8-12, 16-24, 32-48 kHz)
-        maximum of 32/86/190/240 Kbps per channel (8-12, 16-24, 32, 44.1-48 kHz)
-
-lame
-----
-supported samplerates: 8 - 48 kHz
-lame_init_params() allows the following bitrates:
-12 kHz        Minimum  8 Kbps, maximum  64 Kbps
-24 kHz        Minimum  8 Kbps, maximum 160 Kbps
-48 kHz        Minimum 32 Kbps, maximum 320 Kbps
-Limits: minimum of 8/8/32 Kbps (8-12, 16-24, 32-48 kHz)
-        maximum of 64/160/320 Kbps (8-12, 16-24, 32-48 kHz)
-
-ffac3
------
-supported samplerates: 32 - 48 kHz (< 32 kHz disabled for compatibility reasons)
-Dolby's encoder has a min. of 224 Kbps for 5 full-bandwidth channels (5.0, 5.1)
-The maximum AC3 bitrate is 640 Kbps
-Limits: minimum of 224/5 Kbps per full-bandwidth channel, maximum of 640 Kbps
-
-ca_aac
-------
-supported samplerates: 8 - 48 kHz
-Core Audio API provides a range of allowed bitrates:
- 8 kHz         8 -  24        16 -  48        40 - 112        48 - 144        56 - 160
-12 kHz        12 -  32        24 -  64        64 - 160        72 - 192        96 - 224
-16 kHz        12 -  48        24 -  96        64 - 224        72 - 288        96 - 320
-24 kHz        16 -  64        32 - 128        80 - 320        96 - 384       112 - 448
-32 kHz        24 -  96        48 - 192       128 - 448       144 - 576       192 - 640
-48 kHz        32 - 256        64 - 320       160 - 768       192 - 960       224 - 960
-Limits:
- 8 kHz -> minimum of  8 Kbps and maximum of  24 Kbps per full-bandwidth channel
-12 kHz -> minimum of 12 Kbps and maximum of  32 Kbps per full-bandwidth channel
-16 kHz -> minimum of 12 Kbps and maximum of  48 Kbps per full-bandwidth channel
-24 kHz -> minimum of 16 Kbps and maximum of  64 Kbps per full-bandwidth channel
-32 kHz -> minimum of 24 Kbps and maximum of  96 Kbps per full-bandwidth channel
-48 kHz -> minimum of 32 Kbps and maximum of 160 Kbps per full-bandwidth channel
-48 kHz ->                        maximum of +96 Kbps for Mono
-Note: encCoreAudioInit() will sanitize any mistake made here.
-
-ca_haac
--------
-supported samplerates: 32 - 48 kHz
-Core Audio API provides a range of allowed bitrates:
-32 kHz         12 - 40         24 - 80        64 - 192          N/A           96 - 256
-48 kHz         16 - 40         32 - 80        80 - 192          N/A          112 - 256
-Limits: minimum of 12 Kbps per full-bandwidth channel (<= 32 kHz)
-        minimum of 16 Kbps per full-bandwidth channel ( > 32 kHz)
-        maximum of 40 Kbps per full-bandwidth channel
-Note: encCoreAudioInit() will sanitize any mistake made here.
-
-fdk_aac
--------
-supported samplerates: 8 - 48 kHz
-libfdk limits the bitrate to the following values:
- 8 kHz              48              96             240
-12 kHz              72             144             360
-16 kHz              96             192             480
-24 kHz             144             288             720
-32 kHz             192             384             960
-48 kHz             288             576            1440
-Limits: minimum of samplerate * 2/3 Kbps per full-bandwidth channel (see ca_aac)
-        maximum of samplerate * 6.0 Kbps per full-bandwidth channel
- 
-fdk_haac
---------
-supported samplerates: 16 - 48 kHz
-libfdk limits the bitrate to the following values:
-16 kHz         8 -  48        16 -  96        45 - 199
-24 kHz         8 -  63        16 - 127        45 - 266
-32 kHz         8 -  63        16 - 127        45 - 266
-48 kHz        12 -  63        16 - 127        50 - 266
-Limits: minimum of 12 Kbps per full-bandwidth channel  (<= 32 kHz) (see ca_haac)
-        minimum of 16 Kbps per full-bandwidth channel  ( > 32 kHz) (see ca_haac)
-        maximum of 48,  96 or 192 Kbps (1.0, 2.0, 5.1) (<= 16 kHz)
-        maximum of 64, 128 or 256 Kbps (1.0, 2.0, 5.1) ( > 16 kHz)
-*/
-
-void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
-                                 int *low, int *high)
+const char* hb_container_get_name(int format)
 {
-    if (codec & HB_ACODEC_PASS_FLAG)
+    if (!(format & HB_MUX_MASK))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_containers_count; i++)
     {
-        // Bitrates don't apply to passthrough audio, but may apply if we
-        // fallback to an encoder when the source can't be passed through.
-        *low = hb_audio_bitrates[0].rate;
-        *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
-        return;
-    }
-
-    /* samplerate, sr_shift */
-    int sr_shift;
-    samplerate = hb_get_best_samplerate(codec, samplerate, &sr_shift);
-
-    /* LFE, full-bandwidth channels */
-    int lfe_count, nchannels;
-    lfe_count = hb_mixdown_get_low_freq_channel_count(mixdown);
-    nchannels = hb_mixdown_get_discrete_channel_count(mixdown) - lfe_count;
-
-    switch (codec)
-    {
-        // Bitrates don't apply to "lossless" audio
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FFFLAC24:
-            *low = *high = -1;
-            return;
-
-        case HB_ACODEC_AC3:
-            *low  = 224 * nchannels / 5;
-            *high = 640;
-            break;
-
-        case HB_ACODEC_CA_AAC:
+        if (hb_containers[i].format == format)
         {
-            switch (samplerate)
-            {
-                case 8000:
-                    *low  = nchannels *  8;
-                    *high = nchannels * 24;
-                    break;
-                case 11025:
-                case 12000:
-                    *low  = nchannels * 12;
-                    *high = nchannels * 32;
-                    break;
-                case 16000:
-                    *low  = nchannels * 12;
-                    *high = nchannels * 48;
-                    break;
-                case 22050:
-                case 24000:
-                    *low  = nchannels * 16;
-                    *high = nchannels * 64;
-                    break;
-                case 32000:
-                    *low  = nchannels * 24;
-                    *high = nchannels * 96;
-                    break;
-                case 44100:
-                case 48000:
-                default:
-                    *low  = nchannels * 32;
-                    *high = nchannels * (160 + (96 * (nchannels == 1)));
-                    break;
-            }
-        } break;
-
-        case HB_ACODEC_CA_HAAC:
-            *low  = nchannels * (12 + (4 * (samplerate >= 44100)));
-            *high = nchannels * 40;
-            break;
-
-        case HB_ACODEC_FDK_AAC:
-            *low  = nchannels * samplerate * 2 / 3000;
-            *high = nchannels * samplerate * 6 / 1000;
-            break;
-
-        case HB_ACODEC_FDK_HAAC:
-            *low  = (nchannels * (12 + (4 * (samplerate >= 44100))));
-            *high = (nchannels - (nchannels > 2)) * (48 +
-                                                     (16 *
-                                                      (samplerate >= 22050)));
-            break;
-
-        case HB_ACODEC_FAAC:
-            *low  = (nchannels + lfe_count) * 32;
-            *high = (nchannels + lfe_count) * (192 >> sr_shift);
-            break;
-
-        case HB_ACODEC_FFAAC:
-            *low  = ((nchannels + lfe_count) * 32);
-            *high = ((nchannels + lfe_count) *
-                     ((192 + (64 * ((samplerate << sr_shift) >= 44100)))
-                      >> sr_shift));
-            break;
-
-        case HB_ACODEC_LAME:
-            *low  =  8 + (24 * (sr_shift < 1));
-            *high = 64 + (96 * (sr_shift < 2)) + (160 * (sr_shift < 1));
-            break;
-
-        case HB_ACODEC_VORBIS:
-            *low  = (nchannels + lfe_count) * (14 +
-                                               (8 * (sr_shift < 2)) +
-                                               (6 * (sr_shift < 1)));
-            *high = (nchannels + lfe_count) * (32 +
-                                               ( 54 * (sr_shift < 2)) +
-                                               (104 * (sr_shift < 1)) +
-                                               ( 50 * (samplerate >= 44100)));
-            break;
-
-        default:
-            *low  = hb_audio_bitrates[0].rate;
-            *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
-            break;
-    }
-    // sanitize max. bitrate
-    if (*high < hb_audio_bitrates[0].rate)
-        *high = hb_audio_bitrates[0].rate;
-    if (*high > hb_audio_bitrates[hb_audio_bitrates_count-1].rate)
-        *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
-}
-
-// Given an input bitrate, sanitize it.
-// Check low and high limits and make sure it is in the set of allowed bitrates.
-int hb_get_best_audio_bitrate(uint32_t codec, int bitrate, int samplerate,
-                              int mixdown)
-{
-    int low, high;
-    hb_get_audio_bitrate_limits(codec, samplerate, mixdown, &low, &high);
-    if (bitrate > high)
-        bitrate = high;
-    if (bitrate < low)
-        bitrate = low;
-    return hb_find_closest_audio_bitrate(bitrate);
-}
-
-// Get the default bitrate for a given codec/samplerate/mixdown triplet.
-int hb_get_default_audio_bitrate(uint32_t codec, int samplerate, int mixdown)
-{
-    if (codec & HB_ACODEC_PASS_FLAG)
-    {
-        return -1;
-    }
-
-    int bitrate, nchannels, sr_shift;
-    /* full-bandwidth channels, sr_shift */
-    nchannels = (hb_mixdown_get_discrete_channel_count(mixdown) -
-                 hb_mixdown_get_low_freq_channel_count(mixdown));
-    hb_get_best_samplerate(codec, samplerate, &sr_shift);
-
-    switch (codec)
-    {
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FFFLAC24:
-            return -1;
-
-        // 96, 224, 640 Kbps
-        case HB_ACODEC_AC3:
-            bitrate = (nchannels * 128) - (32 * (nchannels < 5));
-            break;
-
-        case HB_ACODEC_CA_HAAC:
-        case HB_ACODEC_FDK_HAAC:
-            bitrate = nchannels * 32;
-            break;
-
-        default:
-            bitrate = nchannels * 80;
-            break;
-    }
-    // sample_rate adjustment
-    bitrate >>= sr_shift;
-    return hb_get_best_audio_bitrate(codec, bitrate, samplerate, mixdown);
-}
-
-// Get limits and hints for the UIs.
-//
-// granularity sets the minimum step increments that should be used
-// (it's ok to round up to some nice multiple if you like)
-//
-// direction says whether 'low' limit is highest or lowest 
-// quality (direction 0 == lowest value is worst quality)
-void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high,
-                                 float *granularity, int *direction)
-{
-    switch (codec)
-    {
-        case HB_ACODEC_LAME:
-            *direction = 1;
-            *granularity = 0.5;
-            *low = 0.;
-            *high = 10.0;
-            break;
-
-        case HB_ACODEC_VORBIS:
-            *direction = 0;
-            *granularity = 0.5;
-            *low = -2.0;
-            *high = 10.0;
-            break;
-
-        case HB_ACODEC_CA_AAC:
-            *direction = 0;
-            *granularity = 9;
-            *low = 1.;
-            *high = 127.0;
-            break;
-
-        default:
-            *direction = 0;
-            *granularity = 1;
-            *low = *high = HB_INVALID_AUDIO_QUALITY;
-            break;
-    }
-}
-
-float hb_get_best_audio_quality(uint32_t codec, float quality)
-{
-    float low, high, granularity;
-    int direction;
-    hb_get_audio_quality_limits(codec, &low, &high, &granularity, &direction);
-    if (quality > high)
-        quality = high;
-    if (quality < low)
-        quality = low;
-    return quality;
-}
-
-float hb_get_default_audio_quality( uint32_t codec )
-{
-    float quality;
-    switch( codec )
-    {
-        case HB_ACODEC_LAME:
-            quality = 2.;
-            break;
-
-        case HB_ACODEC_VORBIS:
-            quality = 5.;
-            break;
-
-        case HB_ACODEC_CA_AAC:
-            quality = 91.;
-            break;
-
-        default:
-            quality = HB_INVALID_AUDIO_QUALITY;
-            break;
-    }
-    return quality;
-}
-
-// Get limits and hints for the UIs.
-//
-// granularity sets the minimum step increments that should be used
-// (it's ok to round up to some nice multiple if you like)
-//
-// direction says whether 'low' limit is highest or lowest 
-// compression level (direction 0 == lowest value is worst compression level)
-void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high,
-                                     float *granularity, int *direction)
-{
-    switch (codec)
-    {
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FFFLAC24:
-            *direction = 0;
-            *granularity = 1;
-            *high = 12;
-            *low = 0;
-            break;
-
-        case HB_ACODEC_LAME:
-            *direction = 1;
-            *granularity = 1;
-            *high = 9;
-            *low = 0;
-            break;
-
-        default:
-            *direction = 0;
-            *granularity = 1;
-            *low = *high = -1;
-            break;
-    }
-}
-
-float hb_get_best_audio_compression(uint32_t codec, float compression)
-{
-    float low, high, granularity;
-    int direction;
-    hb_get_audio_compression_limits(codec, &low, &high, &granularity, &direction);
-    if( compression > high )
-        compression = high;
-    if( compression < low )
-        compression = low;
-    return compression;
-}
-
-float hb_get_default_audio_compression(uint32_t codec)
-{
-    switch (codec)
-    {
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FFFLAC24:
-            return 5.;
-
-        case HB_ACODEC_LAME:
-            return 2.;
-
-        default:
-            return -1.;
-    }
-}
-
-int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown)
-{
-    // Passthru, only "None" mixdown is supported
-    if (codec & HB_ACODEC_PASS_FLAG)
-        return HB_AMIXDOWN_NONE;
-
-    // caller requested the best available mixdown
-    if (mixdown == HB_INVALID_AMIXDOWN)
-        mixdown  = hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown;
-
-    int ii;
-    // test all mixdowns until an authorized, supported mixdown is found
-    // stop before we reach the "worst" non-None mixdown (index == 1)
-    for (ii = hb_audio_mixdowns_count - 1; ii > 1; ii--)
-        if (hb_audio_mixdowns[ii].amixdown <= mixdown &&
-            hb_mixdown_is_supported(hb_audio_mixdowns[ii].amixdown, codec, layout))
-            break;
-    return hb_audio_mixdowns[ii].amixdown;
-}
-
-int hb_get_default_mixdown(uint32_t codec, uint64_t layout)
-{
-    int mixdown;
-    switch (codec)
-    {
-        // the FLAC encoder defaults to the best mixdown up to 7.1
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FFFLAC24:
-            mixdown = HB_AMIXDOWN_7POINT1;
-            break;
-        // the AC3 encoder defaults to the best mixdown up to 5.1
-        case HB_ACODEC_AC3:
-            mixdown = HB_AMIXDOWN_5POINT1;
-            break;
-        // other encoders default to the best mixdown up to DPLII
-        default:
-            mixdown = HB_AMIXDOWN_DOLBYPLII;
-            break;
-    }
-    // return the best available mixdown up to the selected default
-    return hb_get_best_mixdown(codec, layout, mixdown);
-}
-
-int hb_get_best_samplerate(uint32_t codec, int samplerate, int *sr_shift)
-{
-    int ii, best_samplerate, samplerate_shift;
-    if ((samplerate < 32000) &&
-        (codec == HB_ACODEC_CA_HAAC || codec == HB_ACODEC_AC3))
-    {
-        // ca_haac can't do samplerates < 32 kHz
-        // AC-3 < 32 kHz suffers from poor hardware compatibility
-        best_samplerate  = 32000;
-        samplerate_shift = 0;
-    }
-    else if (samplerate < 16000 && codec == HB_ACODEC_FDK_HAAC)
-    {
-        // fdk_haac can't do samplerates < 16 kHz
-        best_samplerate  = 16000;
-        samplerate_shift = 1;
-    }
-    else
-    {
-        best_samplerate = samplerate;
-        for (ii = hb_audio_rates_count - 1; ii >= 0; ii--)
-        {
-            // valid samplerate
-            if (best_samplerate == hb_audio_rates[ii].rate)
-                break;
-
-            // samplerate is higher than the next valid samplerate,
-            // or lower than the lowest valid samplerate
-            if (best_samplerate > hb_audio_rates[ii].rate || ii == 0)
-            {
-                best_samplerate = hb_audio_rates[ii].rate;
-                break;
-            }
+            return hb_containers[i].name;
         }
-        /* sr_shift: 0 -> 48000, 44100, 32000 Hz
-         *           1 -> 24000, 22050, 16000 Hz
-         *           2 -> 12000, 11025,  8000 Hz
-         *
-         * also, since samplerates are sanitized downwards:
-         *
-         * (samplerate < 32000) implies (samplerate <= 24000)
-         */
-        samplerate_shift = ((best_samplerate < 16000) ? 2 :
-                            (best_samplerate < 32000) ? 1 : 0);
+
     }
-    if (sr_shift != NULL)
+
+fail:
+    return NULL;
+}
+
+const char* hb_container_get_short_name(int format)
+{
+    if (!(format & HB_MUX_MASK))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_containers_count; i++)
     {
-        *sr_shift = samplerate_shift;
+        if (hb_containers[i].format == format)
+        {
+            return hb_containers[i].short_name;
+        }
     }
-    return best_samplerate;
+
+fail:
+    return NULL;
+}
+
+const char* hb_container_get_default_extension(int format)
+{
+    if (!(format & HB_MUX_MASK))
+        goto fail;
+
+    int i;
+    for (i = 0; i < hb_containers_count; i++)
+    {
+        if (hb_containers[i].format == format)
+        {
+            return hb_containers[i].default_extension;
+        }
+    }
+
+fail:
+    return NULL;
+}
+
+const char* hb_container_sanitize_name(const char *name)
+{
+    return hb_container_get_name(hb_container_get_from_name(name));
+}
+
+const hb_container_t* hb_container_get_next(const hb_container_t *last)
+{
+    if (last == NULL)
+    {
+        return  &hb_containers[0];
+    }
+    if (last <  &hb_containers[0] ||
+        last >= &hb_containers[hb_containers_count - 1])
+    {
+        return NULL;
+    }
+    return last + 1;
 }
 
 /**********************************************************************
@@ -2337,7 +2945,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
 
     /* Initalize some sensible defaults */
     audiocfg->in.track = audiocfg->out.track = 0;
-    audiocfg->out.codec = hb_audio_encoders[0].encoder;
+    audiocfg->out.codec = hb_audio_encoders[0].codec;
     audiocfg->out.samplerate = -1;
     audiocfg->out.samples_per_frame = -1;
     audiocfg->out.bitrate = -1;
@@ -2971,9 +3579,9 @@ void hb_attachment_close( hb_attachment_t **attachment )
  * hb_yuv2rgb
  **********************************************************************
  * Converts a YCrCb pixel to an RGB pixel.
- * 
+ *
  * This conversion is lossy (due to rounding and clamping).
- * 
+ *
  * Algorithm:
  *   http://en.wikipedia.org/w/index.php?title=YCbCr&oldid=361987695#Technical_details
  *********************************************************************/
@@ -3005,9 +3613,9 @@ int hb_yuv2rgb(int yuv)
  * hb_rgb2yuv
  **********************************************************************
  * Converts an RGB pixel to a YCrCb pixel.
- * 
+ *
  * This conversion is lossy (due to rounding and clamping).
- * 
+ *
  * Algorithm:
  *   http://en.wikipedia.org/w/index.php?title=YCbCr&oldid=361987695#Technical_details
  *********************************************************************/

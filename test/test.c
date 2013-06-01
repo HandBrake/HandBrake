@@ -156,11 +156,6 @@ static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
 static int  HandleEvents( hb_handle_t * h );
 
-static       int   get_dither_for_string(const char *dither);
-static       int   get_acodec_for_string(const char *codec);
-static const char* get_string_for_acodec(int acodec);
-
-static int is_sample_rate_valid(int rate);
 static void str_vfree( char **strv );
 static char** str_split( char *str, char delem );
 
@@ -593,6 +588,7 @@ static int HandleEvents( hb_handle_t * h )
 {
     hb_state_t s;
     int tmp_num_audio_tracks;
+    int filter_cfr, filter_vrate, filter_vrate_base;
 
     hb_get_state( h, &s );
     switch( s.state )
@@ -702,7 +698,10 @@ static int HandleEvents( hb_handle_t * h )
             PrintTitleInfo( title, title_set->feature );
 
             /* Set job settings */
-            job = hb_job_init( title );
+            job = hb_job_init(title);
+            filter_cfr        = job->cfr;
+            filter_vrate      = job->vrate;
+            filter_vrate_base = job->vrate_base;
 
 
             if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview && !stop_at_frame && !start_at_pts && !start_at_frame )
@@ -732,8 +731,8 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -802,8 +801,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -868,8 +867,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -938,8 +937,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -1008,8 +1007,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -1082,8 +1081,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -1152,8 +1151,8 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -1223,8 +1222,8 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -1291,8 +1290,8 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    job->vrate_base = 900000;
-                    job->cfr = 2;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -1775,25 +1774,25 @@ static int HandleEvents( hb_handle_t * h )
             free( filter_str );
 
             // Add framerate shaping filter
-            if( vrate )
+            if (vrate)
             {
-                job->cfr = cfr;
-                job->vrate = 27000000;
-                job->vrate_base = vrate;
+                filter_cfr        = cfr;
+                filter_vrate      = 27000000;
+                filter_vrate_base = vrate;
             }
-            else if ( cfr )
+            else if (cfr)
             {
                 // cfr or pfr flag with no rate specified implies
                 // use the title rate.
-                job->cfr = cfr;
-                job->vrate = title->rate;
-                job->vrate_base = title->rate_base;
+                filter_cfr        = cfr;
+                filter_vrate      = title->rate;
+                filter_vrate_base = title->rate_base;
             }
-            filter_str = hb_strdup_printf("%d:%d:%d",
-                job->cfr, job->vrate, job->vrate_base );
-            filter = hb_filter_init( HB_FILTER_VFR );
-            hb_add_filter( job, filter, filter_str );
-            free( filter_str );
+            filter     = hb_filter_init(HB_FILTER_VFR);
+            filter_str = hb_strdup_printf("%d:%d:%d", filter_cfr, filter_vrate,
+                                          filter_vrate_base);
+            hb_add_filter(job, filter, filter_str);
+            free(filter_str);
 
             // hb_job_init() will set a default muxer for us
             // only override it if a specific muxer has been set
@@ -1985,10 +1984,10 @@ static int HandleEvents( hb_handle_t * h )
                     token = acodecs;
                 while ( token != NULL )
                 {
-                    if ((acodec = get_acodec_for_string(token)) == -1)
+                    if ((acodec = hb_audio_encoder_get_from_name(token)) == -1)
                     {
                         fprintf(stderr, "Invalid codec %s, using default for container.\n", token);
-                        acodec = hb_get_default_audio_encoder(job->mux);
+                        acodec = hb_audio_encoder_get_default(job->mux);
                     }
                     if( i < num_audio_tracks )
                     {
@@ -2026,7 +2025,7 @@ static int HandleEvents( hb_handle_t * h )
                  * then use that codec instead.
                  */
                 if (i != 1)
-                    acodec = hb_get_default_audio_encoder(job->mux);
+                    acodec = hb_audio_encoder_get_default(job->mux);
                 for ( ; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
@@ -2045,18 +2044,7 @@ static int HandleEvents( hb_handle_t * h )
                     token = arates;
                 while ( token != NULL )
                 {
-                    arate = atoi(token);
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    int j;
-
-                    for( j = 0; j < hb_audio_rates_count; j++ )
-                    {
-                        if( !strcmp( token, hb_audio_rates[j].string ) )
-                        {
-                            arate = hb_audio_rates[j].rate;
-                            break;
-                        }
-                    }
 
                     if( audio != NULL )
                     {
@@ -2065,9 +2053,15 @@ static int HandleEvents( hb_handle_t * h )
                             arate = audio->in.samplerate;
                             auto_sample_rate = 1;
                         }
-                        if (!is_sample_rate_valid(arate))
+                        else
                         {
-                            fprintf(stderr, "Invalid sample rate %d, using input rate %d\n", arate, audio->in.samplerate);
+                            arate = hb_audio_samplerate_get_from_name(token);
+                        }
+                        if (arate == -1)
+                        {
+                            fprintf(stderr,
+                                    "Invalid sample rate %s, using input rate %d\n",
+                                    token, audio->in.samplerate);
                             arate = audio->in.samplerate;
                         }
                         
@@ -2110,8 +2104,8 @@ static int HandleEvents( hb_handle_t * h )
                     token = mixdowns;
                 while ( token != NULL )
                 {
-                    mixdown = hb_mixdown_get_mixdown_from_short_name(token);
-                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    mixdown = hb_mixdown_get_from_name(token);
+                    audio   = hb_list_audio_config_item(job->list_audio, i);
                     if( audio != NULL )
                     {
                         audio->out.mixdown = mixdown;
@@ -2318,8 +2312,8 @@ static int HandleEvents( hb_handle_t * h )
                 int dither_method = hb_audio_dither_get_default();
                 for (i = 0; audio_dither[i] != NULL; i++)
                 {
-                    dither_method = get_dither_for_string(audio_dither[i]);
-                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    dither_method = hb_audio_dither_get_from_name(audio_dither[i]);
+                    audio         = hb_list_audio_config_item(job->list_audio, i);
                     if (audio != NULL)
                     {
                         if (hb_audio_dither_is_supported(audio->out.codec))
@@ -2441,45 +2435,41 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     // Auto Passthru
                     job->acodec_copy_mask = allowed_audio_copy == -1 ? HB_ACODEC_PASS_MASK : allowed_audio_copy;
-                    job->acodec_fallback = acodec_fallback ? get_acodec_for_string( acodec_fallback ) : 0;
+                    job->acodec_fallback  = hb_audio_encoder_get_from_name(acodec_fallback);
                     // sanitize the fallback; -1 isn't a valid HB_ACODEC_* value
-                    if( job->acodec_fallback == -1 )
-                        job->acodec_fallback = 0;
+                    if (job->acodec_fallback == -1)
+                        job->acodec_fallback  =  0;
                 }
                 else if( ( audio->out.codec & HB_ACODEC_PASS_FLAG ) &&
                         !( audio->out.codec & audio->in.codec & HB_ACODEC_PASS_MASK ) )
                 {
-                    if( audio->out.codec == HB_ACODEC_AAC_PASS )
-                    {
-                        fprintf( stderr, "AAC Passthru requested and input codec is not AAC for track %d, using AAC encoder\n",
-                                 audio->out.track );
-                        audio->out.codec = hb_audio_encoders[0].encoder;
-                    }
-                    else if( audio->out.codec == HB_ACODEC_AC3_PASS )
-                    {
-                        fprintf( stderr, "AC3 Passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
-                                 audio->out.track );
-                        audio->out.codec = HB_ACODEC_AC3;
-                    }
-                    else if( audio->out.codec == HB_ACODEC_MP3_PASS )
-                    {
-                        fprintf( stderr, "MP3 Passthru requested and input codec is not MP3 for track %d, using MP3 encoder\n",
-                                 audio->out.track );
-                        audio->out.codec = HB_ACODEC_LAME;
-                    }
-                    else
+                    // passthru fallbacks
+                    int requested_passthru = audio->out.codec;
+                    audio->out.codec       =
+                        hb_audio_encoder_get_fallback_for_passthru(requested_passthru);
+                    if (!(audio->out.codec & HB_ACODEC_MASK))
                     {
                         // Passthru not possible, drop audio.
-                        fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
-                                 audio->out.track );
-                        hb_audio_t * item = hb_list_item( job->list_audio, i );
-                        hb_list_rem( job->list_audio, item );
+                        fprintf(stderr,
+                                "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
+                                audio->out.track);
+                        hb_audio_t *item = hb_list_item(job->list_audio, i);
+                        hb_list_rem(job->list_audio, item);
+                        hb_audio_close(&item);
                         continue;
                     }
+                    fprintf(stderr,
+                            "%s requested and input codec is not compatible for track %d, using %s encoder\n",
+                            hb_audio_encoder_get_name(requested_passthru), audio->out.track,
+                            hb_audio_encoder_get_name(audio->out.codec));
                     // we didn't drop the track, set the mixdown and bitrate from libhb defaults
-                    audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
-                    audio->out.bitrate = hb_get_default_audio_bitrate( audio->out.codec, audio->out.samplerate,
-                                                                       audio->out.mixdown );
+                    audio->out.mixdown =
+                        hb_mixdown_get_default(audio->out.codec,
+                                               audio->in.channel_layout);
+                    audio->out.bitrate =
+                        hb_audio_bitrate_get_default(audio->out.codec,
+                                                     audio->out.samplerate,
+                                                     audio->out.mixdown);
                 }
                 // we didn't drop the track
                 i++;
@@ -2914,7 +2904,13 @@ void SigHandler( int i_signal )
  ****************************************************************************/
 static void ShowHelp()
 {
-    int i, j, len;
+    int i, len;
+    const char *name;
+    const hb_rate_t *rate;
+    const hb_dither_t *dither;
+    const hb_mixdown_t *mixdown;
+    const hb_encoder_t *encoder;
+    const hb_container_t *container;
     FILE* const out = stdout;
     const char * const *x264_opts;
     char tmp[80];
@@ -2958,8 +2954,22 @@ static void ShowHelp()
 
     "### Destination Options------------------------------------------------------\n\n"
     "    -o, --output <string>   Set output file name\n"
-    "    -f, --format <string>   Set output format (mp4/mkv, default:\n"
-    "                            autodetected from file name)\n"
+    "    -f, --format <string>   Set output container format (");
+    container = NULL;
+    while ((container = hb_container_get_next(container)) != NULL)
+    {
+        fprintf(out, "%s", container->short_name);
+        if (hb_container_get_next(container) != NULL)
+        {
+            fprintf(out, "/");
+        }
+        else
+        {
+            fprintf(out, ")\n");
+        }
+    }
+    fprintf(out,
+    "                            (default: autodetected from file name)\n"
     "    -m, --markers           Add chapter markers\n"
     "    -4, --large-file        Create 64-bit mp4 files that can hold more than 4 GB\n"
     "                            of data. Note: breaks pre-iOS iPod compatibility.\n"
@@ -2973,23 +2983,24 @@ static void ShowHelp()
     "### Video Options------------------------------------------------------------\n\n"
     "    -e, --encoder <string>  Set video library encoder\n"
     "                            Options: " );
-    for( i = 0; i < hb_video_encoders_count; i++ )
+    encoder = NULL;
+    while ((encoder = hb_video_encoder_get_next(encoder)) != NULL)
     {
-        fprintf( out, "%s", hb_video_encoders[i].short_name );
-        if( i != hb_video_encoders_count - 1 )
-            fprintf( out, "/" );
-        else
-            fprintf( out, "\n" );
-    }
-    for( i = 0; i < hb_video_encoders_count; i++ )
-    {
-        if( hb_video_encoders[i].encoder == vcodec )
+        fprintf(out, "%s", encoder->short_name);
+        if (hb_video_encoder_get_next(encoder) != NULL)
         {
-            fprintf( out, "                            (default: %s)\n",
-                     hb_video_encoders[i].short_name );
-            break;
+            fprintf(out, "/");
+        }
+        else
+        {
+            fprintf(out, "\n");
+        }
+        if (encoder->codec == vcodec)
+        {
+            name = encoder->short_name;
         }
     }
+    fprintf(out, "                            (default: %s)\n", name);
     fprintf( out,
     "        --x264-preset       When using x264, selects the x264 preset:\n"
     "          <string>          ");
@@ -3086,11 +3097,14 @@ static void ShowHelp()
     "    -T, --turbo             When using 2-pass use \"turbo\" options on the\n"
     "                            1st pass to improve speed (only works with x264)\n"
     "    -r, --rate              Set video framerate (" );
-    for( i = 0; i < hb_video_rates_count; i++ )
+    rate = NULL;
+    while ((rate = hb_video_framerate_get_next(rate)) != NULL)
     {
-        fprintf( out, "%s", hb_video_rates[i].string );
-        if( i != hb_video_rates_count - 1 )
-            fprintf( out, "/" );
+        fprintf(out, "%s", rate->name);
+        if (hb_video_framerate_get_next(rate) != NULL)
+        {
+            fprintf(out, "/");
+        }
     }
     fprintf( out, ")\n"
     "                            Be aware that not specifying a framerate lets\n"
@@ -3114,33 +3128,44 @@ static void ShowHelp()
     "                             tracks, default: first one).\n"
     "                            Multiple output tracks can be used for one input.\n"
     "    -E, --aencoder <string> Audio encoder(s):\n" );
-    for (i = 0; i < hb_audio_encoders_count; i++)
+    encoder = NULL;
+    while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
         fprintf(out, "                               %s\n",
-                hb_audio_encoders[i].short_name);
+                encoder->short_name);
     }
     fprintf(out,
     "                            copy:* will passthrough the corresponding\n"
     "                            audio unmodified to the muxer if it is a\n"
     "                            supported passthrough audio type.\n"
     "                            Separated by commas for more than one audio track.\n"
-    "                            (default: %s for mp4, %s for mkv)\n",
-            get_string_for_acodec(hb_get_default_audio_encoder(HB_MUX_MP4)),
-            get_string_for_acodec(hb_get_default_audio_encoder(HB_MUX_MKV)));
+    "                            Defaults:\n");
+    container = NULL;
+    while ((container = hb_container_get_next(container)) != NULL)
+    {
+        int audio_encoder = hb_audio_encoder_get_default(container->format);
+        fprintf(out, "                               %-8s %s\n",
+                container->short_name,
+                hb_audio_encoder_get_short_name(audio_encoder));
+    }
     fprintf(out,
     "        --audio-copy-mask   Set audio codecs that are permitted when the\n"
     "                <string>    \"copy\" audio encoder option is specified\n"
     "                            (" );
-    for (i = j = 0; i < hb_audio_encoders_count; i++)
+    i       = 0;
+    encoder = NULL;
+    while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
-        if ((hb_audio_encoders[i].encoder &  HB_ACODEC_PASS_FLAG) &&
-            (hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS))
+        if ((encoder->codec &  HB_ACODEC_PASS_FLAG) &&
+            (encoder->codec != HB_ACODEC_AUTO_PASS))
         {
-            if (j)
+            if (i)
+            {
                 fprintf(out, "/");
+            }
+            i = 1;
             // skip "copy:"
-            fprintf(out, "%s", hb_audio_encoders[i].short_name + 5);
-            j = 1;
+            fprintf(out, "%s", encoder->short_name + 5);
         }
     }
     fprintf(out, ", default: all).\n"
@@ -3158,25 +3183,25 @@ static void ShowHelp()
     "                            Separated by commas for more than one audio track.\n"
     "    -6, --mixdown <string>  Format(s) for audio downmixing/upmixing:\n");
     // skip HB_AMIXDOWN_NONE
-    for (i = 1; i < hb_audio_mixdowns_count; i++)
+    mixdown = hb_mixdown_get_next(NULL);
+    while((mixdown = hb_mixdown_get_next(mixdown)) != NULL)
     {
         fprintf(out, "                               %s\n",
-                hb_audio_mixdowns[i].short_name);
+                mixdown->short_name);
     }
     fprintf(out,
     "                            Separated by commas for more than one audio track.\n"
     "                            Defaults:\n");
-    for (i = 0; i < hb_audio_encoders_count; i++)
+    encoder = NULL;
+    while((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
-        if (!(hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG))
+        if (!(encoder->codec & HB_ACODEC_PASS_FLAG))
         {
             // layout: UINT64_MAX (all channels) should work with any mixdown
-            int mixdown = hb_get_default_mixdown(hb_audio_encoders[i].encoder,
-                                                 UINT64_MAX);
+            int mixdown = hb_mixdown_get_default(encoder->codec, UINT64_MAX);
             // assumes that the encoder short name is <= 16 characters long
             fprintf(out, "                               %-16s up to %s\n",
-                    hb_audio_encoders[i].short_name,
-                    hb_mixdown_get_short_name_from_mixdown(mixdown));
+                    encoder->short_name, hb_mixdown_get_short_name(mixdown));
         }
     }
     fprintf(out,
@@ -3185,11 +3210,14 @@ static void ShowHelp()
     "                            0 = Disable Normalization (default)\n"
     "                            1 = Enable Normalization\n"
     "    -R, --arate             Set audio samplerate(s) (" );
-    for( i = 0; i < hb_audio_rates_count; i++ )
+    rate = NULL;
+    while ((rate = hb_audio_samplerate_get_next(rate)) != NULL)
     {
-        fprintf( out, "%s", hb_audio_rates[i].string );
-        if( i != hb_audio_rates_count - 1 )
-            fprintf( out, "/" );
+        fprintf(out, "%s", rate->name);
+        if (hb_audio_samplerate_get_next(rate) != NULL)
+        {
+            fprintf(out, "/");
+        }
     }
     fprintf( out, " kHz)\n"
     "                            Separated by commas for more than one audio track.\n"
@@ -3204,30 +3232,35 @@ static void ShowHelp()
     "        --adither <string>  Apply dithering to the audio before encoding.\n"
     "                            Separated by commas for more than one audio track.\n"
     "                            Only supported by some encoders (");
-    for (i = j = 0; i < hb_audio_encoders_count; i++)
+    i       = 0;
+    encoder = NULL;
+    while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
-        if (hb_audio_dither_is_supported(hb_audio_encoders[i].encoder))
+        if (hb_audio_dither_is_supported(encoder->codec))
         {
-            if (j)
+            if (i)
+            {
                 fprintf(out, "/");
-            fprintf(out, "%s", hb_audio_encoders[i].short_name);
-            j = 1;
+            }
+            i = 1;
+            fprintf(out, "%s", encoder->short_name);
         }
     }
     fprintf(out, ").\n");
     fprintf(out,
     "                            Options:\n");
-    for (i = 0; i < hb_audio_dithers_count; i++)
+    dither = NULL;
+    while ((dither = hb_audio_dither_get_next(dither)) != NULL)
     {
-        if (hb_audio_dithers[i].method == hb_audio_dither_get_default())
+        if (dither->method == hb_audio_dither_get_default())
         {
             fprintf(out, "                               %s (default)\n",
-                    hb_audio_dithers[i].short_name);
+                    dither->short_name);
         }
         else
         {
             fprintf(out, "                               %s\n",
-                    hb_audio_dithers[i].short_name);
+                    dither->short_name);
         }
     }
     fprintf(out,
@@ -3933,18 +3966,10 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'e':
             {
-                int i;
-                for( i = 0, vcodec = 0; i < hb_video_encoders_count; i++ )
+                vcodec = hb_video_encoder_get_from_name(optarg);
+                if (vcodec <= 0)
                 {
-                    if( !strcasecmp( hb_video_encoders[i].short_name, optarg ) )
-                    {
-                        vcodec = hb_video_encoders[i].encoder;
-                        break;
-                    }
-                }
-                if( !vcodec )
-                {
-                    fprintf( stderr, "invalid codec (%s)\n", optarg );
+                    fprintf(stderr, "invalid codec (%s)\n", optarg);
                     return -1;
                 }
                 break;
@@ -3979,21 +4004,13 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'r':
             {
-                int i;
-                vrate = 0;
-                for( i = 0; i < hb_video_rates_count; i++ )
+                vrate = hb_video_framerate_get_from_name(optarg);
+                if (vrate <= 0)
                 {
-                    if( !strcmp( optarg, hb_video_rates[i].string ) )
-                    {
-                        vrate = hb_video_rates[i].rate;
-                        break;
-                    }
+                    vrate = 0;
+                    fprintf(stderr, "invalid framerate %s\n", optarg);
                 }
-                if( !vrate )
-                {
-                    fprintf( stderr, "invalid framerate %s\n", optarg );
-                }
-                else if ( cfr == 0 )
+                else if (!cfr)
                 {
                     cfr = 1;
                 }
@@ -4106,28 +4123,33 @@ static int ParseOptions( int argc, char ** argv )
             }
             case ALLOWED_AUDIO_COPY:
             {
-                int i, j;
-                char **allowed = str_split( optarg, ',' );
+                allowed_audio_copy                = 0;
+                const hb_encoder_t *audio_encoder = NULL;
+                char **allowed                    = str_split(optarg, ',');
 
-                allowed_audio_copy = 0;
-                for( i = 0; allowed[i]; i++ )
+                while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
                 {
-                    for( j = 0; j < hb_audio_encoders_count; j++ )
+                    if ((audio_encoder->codec &  HB_ACODEC_PASS_FLAG) &&
+                        (audio_encoder->codec != HB_ACODEC_AUTO_PASS))
                     {
-                        const char *encoder = hb_audio_encoders[j].short_name;
-                        // skip "copy:"
-                        if( strlen( encoder ) > 5 )
-                            encoder += 5;
-                        if( !strcmp( allowed[i], encoder ) )
+                        int i = -1;
+                        while(allowed[++i] != NULL)
                         {
-                            allowed_audio_copy |= hb_audio_encoders[j].encoder;
-                            break;
+                            // skip "copy:"
+                            if (!strcasecmp(allowed[i],
+                                            audio_encoder->short_name + 5))
+                            {
+                                allowed_audio_copy |= audio_encoder->codec;
+                                break;
+                            }
                         }
                     }
                 }
+
                 allowed_audio_copy &= HB_ACODEC_PASS_MASK;
-                str_vfree( allowed );
-            } break;
+                str_vfree(allowed);
+                break;
+            }
             case AUDIO_FALLBACK:
                 acodec_fallback = strdup( optarg );
                 break;
@@ -4178,94 +4200,50 @@ static int CheckOptions( int argc, char ** argv )
             return 1;
         }
 
-        if( !format )
+        if (format == NULL)
         {
-            char * p = strrchr( output, '.' );
-
             /* autodetect */
-            if( p && ( !strcasecmp( p, ".mp4" )  ||
-                       !strcasecmp( p, ".m4v" ) ) )
+            const char *extension = strrchr(output, '.');
+            if (extension != NULL)
             {
-                mux = HB_MUX_MP4;
+                // skip '.'
+                mux = hb_container_get_from_extension(extension + 1);
             }
-            else if( p && !strcasecmp(p, ".mkv" ) )
+            if (mux <= 0)
             {
-                mux = HB_MUX_MKV;
-            }
-            else
-            {
-                fprintf( stderr, "Output format couldn't be guessed "
-                         "from file name, using default.\n" );
+                fprintf(stderr,
+                        "Output format can't be guessed from file name (%s), "
+                        "using default.\n", output);
+                // reset the muxer (use default)
+                mux  = 0;
                 return 0;
             }
         }
-        else if( !strcasecmp( format, "mp4" ) ||
-                 !strcasecmp( format, "m4v" ) )
-        {
-            mux = HB_MUX_MP4;
-        }
-        else if( !strcasecmp( format, "mkv" ) )
-        {
-            mux = HB_MUX_MKV;
-        }
         else
         {
-            fprintf( stderr, "Invalid output format (%s). Possible "
-                     "choices are mp4, m4v and mkv\n.", format );
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
-static int get_dither_for_string(const char *dither)
-{
-    int i;
-    for (i = 0; i < hb_audio_dithers_count; i++)
-    {
-        if (!strcasecmp(hb_audio_dithers[i].short_name, dither))
-        {
-            return hb_audio_dithers[i].method;
-        }
-    }
-    return hb_audio_dither_get_default();
-}
-
-static int get_acodec_for_string(const char *codec)
-{
-    int i;
-    for (i = 0; i < hb_audio_encoders_count; i++)
-    {
-        if (!strcasecmp(hb_audio_encoders[i].short_name, codec))
-        {
-            return hb_audio_encoders[i].encoder;
-        }
-    }
-    return -1;
-}
-
-static const char* get_string_for_acodec(int acodec)
-{
-    int i;
-    for (i = 0; i < hb_audio_encoders_count; i++)
-    {
-        if (hb_audio_encoders[i].encoder == acodec)
-        {
-            return hb_audio_encoders[i].short_name;
-        }
-    }
-    return NULL;
-}
-
-static int is_sample_rate_valid(int rate)
-{
-    int i;
-    for( i = 0; i < hb_audio_rates_count; i++ )
-    {
-            if (rate == hb_audio_rates[i].rate)
+            mux = hb_container_get_from_name(format);
+            if (mux <= 0)
+            {
+                fprintf(stderr, "Invalid output format (%s).", format);
+                fprintf(stderr, "Possible choices are: ");
+                const hb_container_t *container = NULL;
+                while ((container = hb_container_get_next(container)) != NULL)
+                {
+                    fprintf(stderr, "%s", container->short_name);
+                    if (hb_container_get_next(container) != NULL)
+                    {
+                        fprintf(stderr, ", ");
+                    }
+                    else
+                    {
+                        fprintf(stderr, "\n");
+                    }
+                }
                 return 1;
+            }
+        }
     }
+
     return 0;
 }
 

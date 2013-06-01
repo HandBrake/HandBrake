@@ -3,7 +3,6 @@
 
     <Style x:Key="{x:Type StatusBar}" TargetType="{x:Type StatusBar}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type StatusBar}">
@@ -33,5 +32,28 @@
     </Style>
 
     <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
+
+    <Style x:Key="DropButtonStyle" TargetType="ToggleButton" >
+        <Setter Property="Padding" Value="2,2" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{TemplateBinding Content}" Margin="4,0,0,0" Grid.Column="0" />
+
+                        <!--<Rectangle Grid.Column="1" Width="1" Fill="Black" Opacity="0.4" Margin="6,2,0,2"/>-->
+
+                        <Path Data="M 0,0 L 8,0 L 4,4 Z" Fill="Black" Grid.Column="2" Margin="4,0,4,0" VerticalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

@@ -69,13 +69,20 @@ namespace HandBrake.ApplicationServices.Utilities
                 // Delete old and excessivly large files (> ~50MB).
                 foreach (FileInfo file in logFiles)
                 {
-                    if (file.LastWriteTime < DateTime.Now.AddDays(-daysToKeep))
+                    try
                     {
-                        File.Delete(file.FullName);
+                        if (file.LastWriteTime < DateTime.Now.AddDays(-daysToKeep))
+                        {
+                            File.Delete(file.FullName);
+                        }
+                        else if (file.Length > 50000000)
+                        {
+                            File.Delete(file.FullName);
+                        }
                     }
-                    else if (file.Length > 50000000)
+                    catch (Exception)
                     {
-                        File.Delete(file.FullName);
+                        // Silently ignore files we can't delete. They are probably being used by the app right now.
                     }
                 }
             }

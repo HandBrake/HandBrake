@@ -369,7 +369,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="updateService">
         /// The update Service.
         /// </param>
-        public OptionsViewModel(IUserSettingService userSettingService, IShellViewModel shellViewModel, IUpdateService updateService )
+        public OptionsViewModel(IUserSettingService userSettingService, IShellViewModel shellViewModel, IUpdateService updateService)
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
@@ -1881,6 +1881,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString());
             userSettingService.SetUserSetting(UserSettingConstants.EnableDebugFeatures, this.EnableDebugFeatures);
             userSettingService.SetUserSetting(UserSettingConstants.DisableLibHbFeatures, this.DisableLibHbFeatures);
+            userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, this.EnableLibHb);
         }
 
         /// <summary>
@@ -1896,7 +1897,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.UpdateMessage = "A New Update is Available!";
                 this.UpdateAvailable = true;
-            } 
+            }
             else
             {
                 this.UpdateMessage = "There are no new updates at this time.";

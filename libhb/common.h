@@ -79,6 +79,7 @@ typedef struct hb_rate_s hb_rate_t;
 typedef struct hb_dither_s hb_dither_t;
 typedef struct hb_mixdown_s hb_mixdown_t;
 typedef struct hb_encoder_s hb_encoder_t;
+typedef struct hb_container_s hb_container_t;
 typedef struct hb_job_s  hb_job_t;
 typedef struct hb_title_set_s hb_title_set_t;
 typedef struct hb_title_s hb_title_t;
@@ -178,7 +179,7 @@ void hb_chapter_set_title(hb_chapter_t *chapter, const char *title);
 
 struct hb_rate_s
 {
-    const char *string;
+    const char *name;
     int         rate;
 };
 
@@ -191,7 +192,7 @@ struct hb_dither_s
 
 struct hb_mixdown_s
 {
-    const char *human_readable_name;
+    const char *name;
     const char *internal_name;
     const char *short_name;
     int         amixdown;
@@ -199,10 +200,18 @@ struct hb_mixdown_s
 
 struct hb_encoder_s
 {
-    const char *human_readable_name; // note: used in presets
-    const char *short_name;          // note: used in CLI
-    int         encoder;             // HB_*CODEC_* define
-    int         muxers;              // supported muxers
+    const char *name;       // note: used in presets
+    const char *short_name; // note: used in CLI
+    int         codec;      // HB_*CODEC_* define
+    int         muxers;     // supported muxers
+};
+
+struct hb_container_s
+{
+    const char *name;
+    const char *short_name;
+    const char *default_extension;
+    int         format;
 };
 
 struct hb_subtitle_config_s
@@ -217,77 +226,115 @@ struct hb_subtitle_config_s
     int64_t offset;
 };
 
-#define HB_VIDEO_RATE_BASE   27000000
+/*******************************************************************************
+ * Lists of rates, mixdowns, encoders etc.
+ *******************************************************************************
+ *
+ * Use hb_*_get_next() to get the next list item (use NULL to get the first).
+ *
+ * Use hb_*_get_from_name() to get the value corresponding to a name.
+ * The name can be either the short or full name.
+ * Legacy names are sanitized to currently-supported values whenever possible.
+ * Returns -1 if no value could be found.
+ *
+ * Use hb_*_get_name() and hb_*_get_short_name() to get the corresponding value.
+ * Returns NULL if the value is invalid.
+ *
+ * hb_*_sanitize_name() are convenience functions for use when dealing
+ * with full names (e.g. to translate legacy values while loading a preset).
+ *
+ * Names are case-insensitive; libhb will ensure that the lists do not contain
+ * more than one entry with the same name.
+ *
+ * Use hb_*_get_limits() to get the minimum/maximum for lists with numerically
+ * ordered values.
+ *
+ * Use hb_*_get_best() to sanitize a value based on other relevant parameters.
+ *
+ * Use hb_*_get_default() to get the default based on other relevant parameters.
+ *
+ */
 
-extern hb_rate_t    hb_video_rates[];
-extern int          hb_video_rates_count;
-extern hb_rate_t    hb_audio_rates[];
-extern int          hb_audio_rates_count;
-extern int          hb_audio_rates_default;
-extern hb_rate_t    hb_audio_bitrates[];
-extern int          hb_audio_bitrates_count;
-extern hb_dither_t  hb_audio_dithers[];
-extern int          hb_audio_dithers_count;
-extern hb_mixdown_t hb_audio_mixdowns[];
-extern int          hb_audio_mixdowns_count;
-extern hb_encoder_t hb_video_encoders[];
-extern int          hb_video_encoders_count;
-extern hb_encoder_t hb_audio_encoders[];
-extern int          hb_audio_encoders_count;
+int              hb_video_framerate_get_from_name(const char *name);
+const char*      hb_video_framerate_get_name(int framerate);
+const char*      hb_video_framerate_sanitize_name(const char *name);
+const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last);
 
-/* Expose values for PInvoke */
-hb_rate_t*    hb_get_video_rates();
-int           hb_get_video_rates_count();
-hb_rate_t*    hb_get_audio_rates();
-int           hb_get_audio_rates_count();
-int           hb_get_audio_rates_default();
-hb_rate_t*    hb_get_audio_bitrates();
-int           hb_get_audio_bitrates_count();
-hb_dither_t*  hb_get_audio_dithers();
-int           hb_get_audio_dithers_count();
-hb_mixdown_t* hb_get_audio_mixdowns();
-int           hb_get_audio_mixdowns_count();
-hb_encoder_t* hb_get_video_encoders();
-int           hb_get_video_encoders_count();
-hb_encoder_t* hb_get_audio_encoders();
-int           hb_get_audio_encoders_count();
+int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);
+int              hb_audio_samplerate_get_from_name(const char *name);
+const char*      hb_audio_samplerate_get_name(int samplerate);
+const hb_rate_t* hb_audio_samplerate_get_next(const hb_rate_t *last);
 
-int         hb_audio_dither_get_default();
-int         hb_audio_dither_get_default_method();
-int         hb_audio_dither_is_supported(uint32_t codec);
-const char* hb_audio_dither_get_description(int method);
+int              hb_audio_bitrate_get_best(uint32_t codec, int bitrate, int samplerate, int mixdown);
+int              hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown);
+void             hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
+const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
-int         hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout);
-int         hb_mixdown_has_codec_support(int mixdown, uint32_t codec);
-int         hb_mixdown_has_remix_support(int mixdown, uint64_t layout);
-int         hb_mixdown_get_discrete_channel_count(int amixdown);
-int         hb_mixdown_get_low_freq_channel_count(int amixdown);
-int         hb_mixdown_get_mixdown_from_short_name(const char *short_name);
-const char* hb_mixdown_get_short_name_from_mixdown(int amixdown);
+void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
+float hb_audio_quality_get_best(uint32_t codec, float quality);
+float hb_audio_quality_get_default(uint32_t codec);
 
+void  hb_audio_compression_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
+float hb_audio_compression_get_best(uint32_t codec, float compression);
+float hb_audio_compression_get_default(uint32_t codec);
+
+int                hb_audio_dither_get_default();
+int                hb_audio_dither_get_default_method(); // default method, if enabled && supported
+int                hb_audio_dither_is_supported(uint32_t codec);
+int                hb_audio_dither_get_from_name(const char *name);
+const char*        hb_audio_dither_get_description(int method);
+const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last);
+
+int                 hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout);
+int                 hb_mixdown_has_codec_support(int mixdown, uint32_t codec);
+int                 hb_mixdown_has_remix_support(int mixdown, uint64_t layout);
+int                 hb_mixdown_get_discrete_channel_count(int mixdown);
+int                 hb_mixdown_get_low_freq_channel_count(int mixdown);
+int                 hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown);
+int                 hb_mixdown_get_default(uint32_t codec, uint64_t layout);
+int                 hb_mixdown_get_from_name(const char *name);
+const char*         hb_mixdown_get_name(int mixdown);
+const char*         hb_mixdown_get_short_name(int mixdown);
+const char*         hb_mixdown_sanitize_name(const char *name);
+const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last);
+
+int                 hb_video_encoder_get_default(int muxer);
+int                 hb_video_encoder_get_from_name(const char *name);
+const char*         hb_video_encoder_get_name(int encoder);
+const char*         hb_video_encoder_get_short_name(int encoder);
+const char*         hb_video_encoder_sanitize_name(const char *name);
+const hb_encoder_t* hb_video_encoder_get_next(const hb_encoder_t *last);
+
+/*
+ * hb_audio_encoder_get_fallback_for_passthru() will sanitize a passthru codec
+ * to the matching audio encoder (if any is available).
+ *
+ * hb_audio_encoder_get_from_name(), hb_audio_encoder_sanitize_name() will
+ * sanitize legacy encoder names, but won't convert passthru to an encoder.
+ */
+int                 hb_audio_encoder_get_fallback_for_passthru(int passthru);
+int                 hb_audio_encoder_get_default(int muxer);
+int                 hb_audio_encoder_get_from_name(const char *name);
+const char*         hb_audio_encoder_get_name(int encoder);
+const char*         hb_audio_encoder_get_short_name(int encoder);
+const char*         hb_audio_encoder_sanitize_name(const char *name);
+const hb_encoder_t* hb_audio_encoder_get_next(const hb_encoder_t *last);
+
+/*
+ * Not typically used by the UIs
+ * (set hb_job_t.acodec_copy_mask, hb_job_t.acodec_fallback instead).
+ */
 void hb_autopassthru_apply_settings(hb_job_t *job);
 void hb_autopassthru_print_settings(hb_job_t *job);
 int  hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback, int muxer);
 
-int hb_get_default_audio_encoder(int muxer);
-
-int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown);
-int hb_get_default_mixdown(uint32_t codec, uint64_t layout);
-
-int hb_get_best_samplerate(uint32_t codec, int samplerate, int *sr_shift);
-
-int  hb_find_closest_audio_bitrate(int bitrate);
-void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
-int  hb_get_best_audio_bitrate(uint32_t codec, int bitrate, int samplerate, int mixdown);
-int  hb_get_default_audio_bitrate(uint32_t codec, int samplerate, int mixdown);
-
-void  hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
-float hb_get_best_audio_quality(uint32_t codec, float quality);
-float hb_get_default_audio_quality(uint32_t codec);
-
-void  hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
-float hb_get_best_audio_compression(uint32_t codec, float compression);
-float hb_get_default_audio_compression(uint32_t codec);
+int                   hb_container_get_from_name(const char *name);
+int                   hb_container_get_from_extension(const char *extension); // not really a container name
+const char*           hb_container_get_name(int format);
+const char*           hb_container_get_short_name(int format);
+const char*           hb_container_get_default_extension(int format);
+const char*           hb_container_sanitize_name(const char *name);
+const hb_container_t* hb_container_get_next(const hb_container_t *last);
 
 struct hb_title_set_s
 {
@@ -417,12 +464,19 @@ struct hb_job_s
 
     hb_metadata_t * metadata;
 
-    /* Muxer settings
-         mux:  output file format
-         file: file path */
-#define HB_MUX_MASK 0xFF0000
-#define HB_MUX_MP4  0x010000
-#define HB_MUX_MKV  0x200000
+    /*
+     * Muxer settings
+     *     mux:  output file format
+     *     file: file path
+     */
+#define HB_MUX_MASK     0xFF0000
+#define HB_MUX_MP4V2    0x010000
+#define HB_MUX_MASK_MP4 0x0F0000
+#define HB_MUX_LIBMKV   0x100000
+#define HB_MUX_MASK_MKV 0xF00000
+// default MP4 and MKV muxers
+#define HB_MUX_MP4      HB_MUX_MP4V2
+#define HB_MUX_MKV      HB_MUX_LIBMKV
 
     int             mux;
     char          * file;
@@ -1037,8 +1091,6 @@ typedef struct hb_filter_init_s
     int           crop[4];
     int           vrate_base;
     int           vrate;
-    int           title_rate_base;
-    int           title_rate;
     int           cfr;
 #ifdef USE_OPENCL
     int           use_dxva;

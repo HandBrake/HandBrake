@@ -38,6 +38,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private IEnumerable<Audio> sourceTracks;
 
+        /// <summary>
+        /// The current preset.
+        /// </summary>
         private Preset currentPreset;
 
         #region Constructors and Destructors
@@ -414,9 +417,15 @@ namespace HandBrakeWPF.ViewModels
         private IEnumerable<Audio> GetSelectedLanguagesTracks()
         {
             List<Audio> trackList = new List<Audio>();
-            foreach (string language in this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
+
+
+            List<string> isoCodes =
+                LanguageUtilities.GetLanguageCodes(
+                    this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages));
+
+            foreach (string code in isoCodes)
             {
-                trackList.AddRange(this.SourceTracks.Where(source => source.Language.Trim() == language));
+                trackList.AddRange(this.SourceTracks.Where(source => source.LanguageCode.Trim() == code));
             }
 
             return trackList;

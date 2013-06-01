@@ -273,9 +273,9 @@ class Display
     
     #Filename suffix
     case hash["FileFormat"]
-    when /MP4/
+    when /MPEG-4/, /MP4/
       commandString << "mp4 "
-    when /MKV/
+    when /Matroska/, /MKV/
       commandString << "mkv "
     end
     
@@ -477,8 +477,12 @@ class Display
     #Container
     commandString << " -f "
     case hash["FileFormat"]
+    when "MPEG-4 (mp4v2)"
+      commandString << "mp4v2"
     when /MP4/
       commandString << "mp4"
+    when "Matroska (libmkv)"
+      commandString << "libmkv"
     when /MKV/
       commandString << "mkv"
     end
@@ -861,8 +865,12 @@ class Display
     #Container
     commandString << " -f "
     case hash["FileFormat"]
+    when "MPEG-4 (mp4v2)"
+      commandString << "mp4v2"
     when /MP4/
       commandString << "mp4"
+    when "Matroska (libmkv)"
+      commandString << "libmkv"
     when /MKV/
       commandString << "mkv"
     end
@@ -1020,13 +1028,17 @@ class Display
     
     commandString = "if (!strcasecmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n    "
     
-    #Filename suffix
+    #Container
     commandString << "if( !mux )\n    "
     commandString << "{\n    "
 
     case hash["FileFormat"]
+    when "MPEG-4 (mp4v2)"
+      commandString << "    mux = " << "HB_MUX_MP4V2;\n    "
     when /MP4/
       commandString << "    mux = " << "HB_MUX_MP4;\n    "
+    when "Matroska (libmkv)"
+      commandString << "    mux = " << "HB_MUX_LIBMKV;\n    "
     when /MKV/
       commandString << "    mux = " << "HB_MUX_MKV;\n    "
     end
@@ -1073,23 +1085,23 @@ class Display
     #FPS
     if hash["VideoFramerate"] != "Same as source"
       if hash["VideoFramerate"] == "23.976 (NTSC Film)"
-        commandString << "job->vrate_base = " << "1126125;\n    "
+        commandString << "filter_vrate_base = " << "1126125;\n    "
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
-        commandString << "job->vrate_base = " << "900900;\n    "
+        commandString << "filter_vrate_base = " << "900900;\n    "
       elsif hash["VideoFramerate"] == "25 (PAL Film/Video)"
-        commandString << "job->vrate_base = " << "1080000;\n    "
+        commandString << "filter_vrate_base = " << "1080000;\n    "
       else
-        commandString << "job->vrate_base = " << (27000000 / hash["VideoFramerate"].to_i).to_s << ";\n    "
+        commandString << "filter_vrate_base = " << (27000000 / hash["VideoFramerate"].to_i).to_s << ";\n    "
       end
       # not same as source: pfr, else default (cfr)
       if hash["VideoFramerateMode"] == "pfr"
-        commandString << "job->cfr = 2;\n    "
+        commandString << "filter_cfr = 2;\n    "
       else
-        commandString << "job->cfr = 1;\n    "
+        commandString << "filter_cfr = 1;\n    "
       end
     # same as source: cfr, else default (vfr)
     elsif hash["VideoFramerateMode"] == "cfr"
-      commandString << "job->cfr = 1;\n    "
+      commandString << "filter_cfr = 1;\n    "
     end
     
     #Audio tracks
@@ -1693,8 +1705,12 @@ class Display
     #Container
     commandString << " -f "
     case hash["FileFormat"]
+    when "MPEG-4 (mp4v2)"
+      commandString << "mp4v2"
     when /MP4/
       commandString << "mp4"
+    when "Matroska (libmkv)"
+      commandString << "libmkv"
     when /MKV/
       commandString << "mkv"
     end

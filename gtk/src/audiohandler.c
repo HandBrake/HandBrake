@@ -63,12 +63,13 @@ ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint f
         return hb_autopassthru_get_encoder(in_codec, copy_mask, fallback, mux);
     }
 
-    gint ii;
     // Sanitize fallback
-    for (ii = 0; ii < hb_audio_encoders_count; ii++)
+    const hb_encoder_t *enc;
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
     {
-        if (hb_audio_encoders[ii].encoder == fallback &&
-            !(hb_audio_encoders[ii].muxers & mux))
+        if (enc->codec == fallback &&
+            !(enc->muxers & mux))
         {
             if ( mux == HB_MUX_MKV )
                 fallback = HB_ACODEC_LAME;
@@ -82,10 +83,11 @@ ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint f
     {
         return fallback;
     }
-    for (ii = 0; ii < hb_audio_encoders_count; ii++)
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
     {
-        if (hb_audio_encoders[ii].encoder == acodec &&
-            !(hb_audio_encoders[ii].muxers & mux))
+        if (enc->codec == acodec &&
+            !(enc->muxers & mux))
         {
             return fallback;
         }
@@ -198,7 +200,7 @@ ghb_sanitize_audio(GValue *settings, GValue *asettings)
     {
         if (mix == 0)
             mix = ghb_get_best_mix( aconfig, select_acodec, 0);
-        bitrate = hb_get_best_audio_bitrate(select_acodec, bitrate, sr, mix);
+        bitrate = hb_audio_bitrate_get_best(select_acodec, bitrate, sr, mix);
         ghb_settings_set_string(asettings, "AudioMixdown",
             ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
     }
@@ -206,7 +208,7 @@ ghb_sanitize_audio(GValue *settings, GValue *asettings)
         ghb_lookup_combo_string("AudioBitrate", ghb_int_value(bitrate)));
 
     ghb_settings_take_value(asettings, "AudioEncoderActual", 
-                            ghb_lookup_acodec_value(select_acodec));
+                            ghb_lookup_audio_encoder_value(select_acodec));
 }
 
 void
@@ -283,25 +285,25 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     {
         if (mix == 0)
             mix = ghb_get_best_mix( aconfig, select_acodec, 0);
-        bitrate = hb_get_best_audio_bitrate(select_acodec, bitrate, sr, mix);
+        bitrate = hb_audio_bitrate_get_best(select_acodec, bitrate, sr, mix);
         ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
     }
     if (!codec_defined_bitrate)
     {
         int low, high;
         mix = ghb_get_best_mix( aconfig, select_acodec, mix);
-        hb_get_audio_bitrate_limits(select_acodec, sr, mix, &low, &high);
+        hb_audio_bitrate_get_limits(select_acodec, sr, mix, &low, &high);
         ghb_set_bitrate_opts (ud->builder, low, high, -1);
     }
     ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(bitrate));
 
     ghb_settings_take_value(ud->settings, "AudioEncoderActual", 
-                            ghb_lookup_acodec_value(select_acodec));
+                            ghb_lookup_audio_encoder_value(select_acodec));
     GValue *asettings = get_selected_asettings(ud);
     if (asettings)
     {
         ghb_settings_take_value(asettings, "AudioEncoderActual", 
-                            ghb_lookup_acodec_value(select_acodec));
+                            ghb_lookup_audio_encoder_value(select_acodec));
     }
     ghb_audio_list_refresh_selected(ud);
     ghb_check_dependency(ud, NULL, "AudioEncoderActual");
@@ -423,7 +425,7 @@ ghb_set_pref_audio_settings(gint titleindex, GValue *settings)
             ghb_settings_set_string(asettings, "AudioEncoder", 
                 ghb_lookup_combo_string("AudioEncoder", ghb_int_value(acodec)));
             ghb_settings_set_value(asettings, "AudioEncoderActual", 
-                                    ghb_lookup_acodec_value(select_acodec));
+                                    ghb_lookup_audio_encoder_value(select_acodec));
             ghb_settings_set_value(asettings, "AudioTrackQualityEnable", enable_qual);
             ghb_settings_set_double(asettings, "AudioTrackQuality", quality);
 
@@ -687,7 +689,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         track = ghb_settings_combo_int(ud->settings, "AudioTrack");
         if (sr)
         {
-            sr = ghb_find_closest_audio_rate(sr);
+            sr = ghb_find_closest_audio_samplerate(sr);
         }
         ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(sr));
 
@@ -698,7 +700,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             sr = aconfig ? aconfig->in.samplerate : 48000;
         }
         mix_code = ghb_get_best_mix( aconfig, acodec_code, mix_code);
-        br = hb_get_best_audio_bitrate(acodec_code, br, sr, mix_code);
+        br = hb_audio_bitrate_get_best(acodec_code, br, sr, mix_code);
         ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
 
         ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
@@ -717,8 +719,8 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     float low, high, gran, defval;
     int dir;
-    hb_get_audio_quality_limits(acodec_code, &low, &high, &gran, &dir);
-    defval = hb_get_default_audio_quality(acodec_code);
+    hb_audio_quality_get_limits(acodec_code, &low, &high, &gran, &dir);
+    defval = hb_audio_quality_get_default(acodec_code);
     GtkScaleButton *sb;
     GtkAdjustment *adj;
     sb = GTK_SCALE_BUTTON(GHB_WIDGET(ud->builder, "AudioTrackQuality"));
@@ -843,7 +845,7 @@ char * ghb_format_quality( const char *prefix, int codec, double quality )
 {
     float low, high, gran;
     int dir;
-    hb_get_audio_quality_limits(codec, &low, &high, &gran, &dir);
+    hb_audio_quality_get_limits(codec, &low, &high, &gran, &dir);
 
     int digits = 0;
     float tmp = gran;
@@ -868,7 +870,7 @@ quality_widget_changed_cb(GtkWidget *widget, gdouble quality, signal_user_data_t
     float low, high, gran;
     int dir;
     int codec = ghb_settings_combo_int(ud->settings, "AudioEncoderActual");
-    hb_get_audio_quality_limits(codec, &low, &high, &gran, &dir);
+    hb_audio_quality_get_limits(codec, &low, &high, &gran, &dir);
     if (dir)
     {
         // Quality values are inverted

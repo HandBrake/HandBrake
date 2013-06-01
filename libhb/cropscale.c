@@ -67,8 +67,8 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->pix_fmt_out = init->pix_fmt;
     pv->width_in = init->width;
     pv->height_in = init->height;
-    pv->width_out = init->width;
-    pv->height_out = init->height;
+    pv->width_out = init->width - (init->crop[2] + init->crop[3]);
+    pv->height_out = init->height - (init->crop[0] + init->crop[1]);
 #ifdef USE_OPENCL
     pv->use_dxva = init->use_dxva;
     pv->use_decomb = init->job->use_decomb;

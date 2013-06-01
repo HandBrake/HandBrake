@@ -10,6 +10,7 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
 
     /// <summary>
     /// Language Utilities
@@ -17,12 +18,22 @@ namespace HandBrake.ApplicationServices.Utilities
     public class LanguageUtilities
     {
         /// <summary>
+        /// The language map.
+        /// </summary>
+        private static IDictionary<string, string> languageMap;
+
+        /// <summary>
         /// Map languages and their iso639_2 value into a IDictionary
         /// </summary>
         /// <returns>A Dictionary containing the language and iso code</returns>
         public static IDictionary<string, string> MapLanguages()
         {
-            IDictionary<string, string> languageMap = new Dictionary<string, string>
+            if (languageMap != null)
+            {
+                return languageMap;
+            }
+
+            languageMap = new Dictionary<string, string>
                                                           {
                                                               {"(Any)", "und"}, 
                                                               {"Afar", "aar"}, 
@@ -213,5 +224,30 @@ namespace HandBrake.ApplicationServices.Utilities
                                                           };
             return languageMap;
         }
+
+        /// <summary>
+        /// The get language codes.
+        /// </summary>
+        /// <param name="userLanguages">
+        /// The user languages.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
+        public static List<string> GetLanguageCodes(StringCollection userLanguages)
+        {
+            // Translate to Iso Codes
+            List<string> iso6392Codes = new List<string>();
+            foreach (var item in userLanguages)
+            {
+                string isoCode;
+                if (LanguageUtilities.MapLanguages().TryGetValue(item, out isoCode))
+                {
+                    iso6392Codes.Add(isoCode);
+                }
+            }
+
+            return iso6392Codes;
+        } 
     }
 }

@@ -117,12 +117,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     // to fps.den.
     if (fps.num == 27000000)
     {
-        int ii;
-        for (ii = 0; ii < hb_video_rates_count; ii++)
+        const hb_rate_t *video_framerate = NULL;
+        while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)
         {
-            if (abs(fps.den - hb_video_rates[ii].rate) < 10)
+            if (abs(fps.den - video_framerate->rate) < 10)
             {
-                fps.den = hb_video_rates[ii].rate;
+                fps.den = video_framerate->rate;
                 break;
             }
         }

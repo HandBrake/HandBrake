@@ -308,10 +308,8 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     build_gamma_lut(pv);
 
     pv->cfr              = init->cfr;
-    pv->vrate            = init->vrate;
-    pv->vrate_base       = init->vrate_base;
-    pv->input_vrate      = init->title_rate;
-    pv->input_vrate_base = init->title_rate_base;
+    pv->input_vrate = pv->vrate = init->vrate;
+    pv->input_vrate_base = pv->vrate_base = init->vrate_base;
     if (filter->settings != NULL)
     {
         sscanf(filter->settings, "%d:%d:%d",
@@ -337,18 +335,27 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     pv->lost_time[0] = 0; pv->lost_time[1] = 0; pv->lost_time[2] = 0; pv->lost_time[3] = 0;
     pv->frame_metric = 1000; // Force first frame
 
-    if (!pv->cfr)
+    if (pv->cfr == 2)
     {
-        /* Ensure we're using "Same as source" FPS */
-        pv->vrate_base = pv->input_vrate_base;
-        pv->vrate      = pv->input_vrate;
+        // For PFR, we want the framerate based on the source's actual
+        // framerate, unless it's higher than the specified peak framerate.
+        double source_fps = (double)init->vrate / init->vrate_base;
+        double peak_fps = (double)pv->vrate / pv->vrate_base;
+        if (source_fps > peak_fps)
+        {
+            // peak framerate is lower than the source framerate.
+            // so signal that the framerate will be the peak fps.
+            init->vrate = pv->vrate;
+            init->vrate_base = pv->vrate_base;
+        }
+    }
+    else
+    {
+        init->vrate = pv->vrate;
+        init->vrate_base = pv->vrate_base;
     }
     pv->frame_rate        = (double)pv->vrate_base * 90000. / pv->vrate;
     init->cfr             = pv->cfr;
-    init->vrate           = pv->vrate;
-    init->vrate_base      = pv->vrate_base;
-    init->title_rate      = pv->input_vrate;
-    init->title_rate_base = pv->input_vrate_base;
 
     return 0;
 }
@@ -362,8 +369,27 @@ static int hb_vfr_info( hb_filter_object_t * filter,
         return 1;
 
     memset( info, 0, sizeof( hb_filter_info_t ) );
-    info->out.vrate_base = pv->vrate_base;
-    info->out.vrate = pv->vrate;
+    info->out.vrate_base = pv->input_vrate_base;
+    info->out.vrate      = pv->input_vrate;
+    if (pv->cfr == 2)
+    {
+        // For PFR, we want the framerate based on the source's actual
+        // framerate, unless it's higher than the specified peak framerate.
+        double source_fps = (double)pv->input_vrate / pv->input_vrate_base;
+        double peak_fps = (double)pv->vrate / pv->vrate_base;
+        if (source_fps > peak_fps)
+        {
+            // peak framerate is lower than the source framerate.
+            // so signal that the framerate will be the peak fps.
+            info->out.vrate = pv->vrate;
+            info->out.vrate_base = pv->vrate_base;
+        }
+    }
+    else
+    {
+        info->out.vrate = pv->vrate;
+        info->out.vrate_base = pv->vrate_base;
+    }
     info->out.cfr = pv->cfr;
     if ( pv->cfr == 0 )
     {
