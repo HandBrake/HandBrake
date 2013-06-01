@@ -185,7 +185,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 case "ffaac":
                     return "AAC (ffmpeg)";
                 case "ffflac":
-                    return "Flac (ffmpeg)";
+                    return "FLAC (ffmpeg)";
+                case "ffflac24":
+                    return "FLAC (24-bit)";
                 case "copy":
                     return "Auto Passthru";
                 default:
@@ -214,6 +216,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return AudioEncoder.Ac3;
                 case "ffflac":
                     return AudioEncoder.ffflac;
+                case "ffflac24":
+                    return AudioEncoder.ffflac24;
                 case "copy:ac3":
                     return AudioEncoder.Ac3Passthrough;
                 case "copy:dts":
@@ -262,8 +266,10 @@ namespace HandBrake.ApplicationServices.Utilities
                     return AudioEncoder.AacPassthru;
                 case "MP3 Passthru":
                     return AudioEncoder.Mp3Passthru;
-                case "Flac (ffmpeg)":
+                case "FLAC (ffmpeg)":
                     return AudioEncoder.ffflac;
+                case "FLAC (24-bit)":
+                    return AudioEncoder.ffflac24;
                 case "Auto Passthru":
                     return AudioEncoder.Passthrough;
                 default:
@@ -288,6 +294,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "faac";
                 case AudioEncoder.ffaac:
                     return "ffaac";
+
                 case AudioEncoder.Lame:
                     return "lame";
                 case AudioEncoder.Vorbis:
@@ -308,6 +315,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "copy";
                 case AudioEncoder.ffflac:
                     return "ffflac";
+                case AudioEncoder.ffflac24:
+                    return "ffflac24";
                 default:
                     return "faac";
             }

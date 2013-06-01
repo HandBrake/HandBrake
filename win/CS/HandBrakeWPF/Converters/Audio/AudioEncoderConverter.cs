@@ -55,6 +55,7 @@ namespace HandBrakeWPF.Converters.Audio
                 {
                     encoders.Remove(AudioEncoder.Vorbis);
                     encoders.Remove(AudioEncoder.ffflac);
+                    encoders.Remove(AudioEncoder.ffflac24);
                 }
 
                 if (parameter != null && parameter.ToString() == "True")
