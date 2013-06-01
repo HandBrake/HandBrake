@@ -132,6 +132,7 @@
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\DropButton\DropButton.cs" />
     <Compile Include="Controls\TimeSpanBox.xaml.cs">
       <DependentUpon>TimeSpanBox.xaml</DependentUpon>
     </Compile>

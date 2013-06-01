@@ -9,6 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
+             xmlns:dropButton="clr-namespace:HandBrakeWPF.Controls.DropButton"
              d:DesignHeight="153"
              d:DesignWidth="319"
              mc:Ignorable="d">
@@ -29,11 +30,17 @@
                    Text="Subtitles" />
 
         <StackPanel Grid.Row="1" Margin="10,5,10,0" Orientation="Horizontal">
-            <Button Name="AddTrack"
-                    MinWidth="75"
-                    Margin="0,0,10,0"
-                    cal:Message.Attach="[Event Click] = [Action Add]"
-                    Content="Add" />
+            <dropButton:DropButton Content="Add Track" FontWeight="Bold" Margin="0,0,10,0" Style="{StaticResource DropButtonStyle}">
+                <dropButton:DropButton.DropDown>
+                    <ContextMenu>
+                        <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
+                        <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
+                        <MenuItem Header="Add All Remaining Closed Captions" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
+                        <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
+                    </ContextMenu>
+                </dropButton:DropButton.DropDown>
+            </dropButton:DropButton>
+
             <Button MinWidth="75"
                     cal:Message.Attach="[Event Click] = [Action Import]"
                     Content="Import SRT"
