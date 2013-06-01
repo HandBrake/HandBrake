@@ -47,7 +47,7 @@ namespace HandBrakeWPF.Helpers
             }
 
             string autoNamePath = string.Empty;
-            if (task.Title != 0) // TODO check.
+            if (task.Title != 0)
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
@@ -56,6 +56,13 @@ namespace HandBrakeWPF.Helpers
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
                     sourceName = sourceName.Replace("_", " ");
 
+                if (userSettingService.GetUserSetting<bool>(UserSettingConstants.RemovePunctuation))
+                {
+                    sourceName = sourceName.Replace("-", string.Empty);
+                    sourceName = sourceName.Replace(",", string.Empty);
+                    sourceName = sourceName.Replace(".", string.Empty); 
+                }
+                  
                 // Switch to "Title Case"
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase))
                     sourceName = sourceName.ToTitleCase();
@@ -170,21 +177,16 @@ namespace HandBrakeWPF.Helpers
         public static bool IsAutonamingEnabled()
         {
             IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+
+            if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+            {
+                return false;
+            }
+
             // If there is an auto name path, use it...
-            if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}"))
-            {
-                return true;
-            }
-            else if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}"))
-            {
-                return true;
-            }
-            else
-            {
-                return
-                    Directory.Exists(
-                        userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim());
-            }
+            return userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}") ||
+                (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") ||
+                 Directory.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()));
         }
     }
 }

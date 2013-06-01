@@ -163,7 +163,8 @@
                             <TextBlock Text="Available Options: {source} {title} {chapters} {date}" />
 
                             <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                                <CheckBox Content="Remove underscores from name" IsChecked="{Binding RemoveUnderscores}"/>
+                                <CheckBox Content="Replace underscores with a space" IsChecked="{Binding RemoveUnderscores}"/>
+                                <CheckBox Content="Remove common punctuation" ToolTip="Dash (-), Period (.) and Comma (,) " IsChecked="{Binding RemovePunctuation}"  Margin="5,0,0,0"/>
                                 <CheckBox Content="Change case to Title Case" IsChecked="{Binding ChangeToTitleCase}" Margin="5,0,0,0" />
                             </StackPanel>
 

@@ -226,6 +226,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string PreventSleep = "PreventSleep";
 
+        /// <summary>
+        /// The remove punctuation.
+        /// </summary>
+        public const string RemovePunctuation = "RemovePunctuation";
+
         #endregion
     }
 }
