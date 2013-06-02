@@ -343,4 +343,13 @@ If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; 
   <data name="Presets_ResetHeader" xml:space="preserve">
     <value>Reset Complete</value>
   </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>Higher Quality |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| Lower Quality</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Placebo Quality |</value>
+  </data>
 </root>

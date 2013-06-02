@@ -384,6 +384,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Higher Quality |.
+        /// </summary>
+        public static string Video_HigherQuality {
+            get {
+                return ResourceManager.GetString("Video_HigherQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Warning: RF 0 is Lossless!.
         /// </summary>
         public static string Video_LosslessWarning {
@@ -405,6 +414,24 @@ namespace HandBrakeWPF.Properties {
         public static string Video_LosslessWarningTooltip {
             get {
                 return ResourceManager.GetString("Video_LosslessWarningTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to | Lower Quality.
+        /// </summary>
+        public static string Video_LowQuality {
+            get {
+                return ResourceManager.GetString("Video_LowQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Placebo Quality |.
+        /// </summary>
+        public static string Video_PlaceboQuality {
+            get {
+                return ResourceManager.GetString("Video_PlaceboQuality", resourceCulture);
             }
         }
         

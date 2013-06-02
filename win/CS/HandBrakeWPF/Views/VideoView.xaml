@@ -13,7 +13,7 @@
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <Converters:InverseBooleanConverter x:Key="inverseConverter" />
         <Video:VideoEncoderConverter x:Key="videoEncoderConverter" />
-        
+
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="20000" />
         </Style>
@@ -28,7 +28,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-   
+
     <Grid Margin="10,5,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -41,7 +41,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -67,7 +67,7 @@
                             </MultiBinding>
                         </ComboBox.ItemsSource>
                     </ComboBox>
-                    
+
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
@@ -84,7 +84,7 @@
             </StackPanel>
 
 
-            <StackPanel Orientation="Vertical" Grid.Column="1" >
+            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2">
                 <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
@@ -97,9 +97,18 @@
                 </StackPanel>
 
                 <Slider Width="280" Value="{Binding RF}" HorizontalAlignment="Left"  Maximum="{Binding QualityMax}" Minimum="{Binding QualityMin}"
-                        IsEnabled="{Binding IsConstantQuantity}" Margin="20,0,0,20"
+                        IsEnabled="{Binding IsConstantQuantity}" Margin="20,0,0,10"
                         ToolTip="{x:Static Properties:Resources.Video_QualitySlider}" Style="{StaticResource LongToolTipHolder}" 
                         IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" />
+
+                <Grid Margin="20,0,0,20" Width="280" HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Static Properties:Resources.Video_LowQuality}" />
+                    <TextBlock Text="{Binding HighQualityLabel}" HorizontalAlignment="Right" Grid.Column="1" />
+                </Grid>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <RadioButton Content="Avg Bitrate (kbps):" IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
@@ -192,8 +201,8 @@
 
                 </Grid>
             </Grid>
-            
-         
+
+
         </Grid>
 
     </Grid>
