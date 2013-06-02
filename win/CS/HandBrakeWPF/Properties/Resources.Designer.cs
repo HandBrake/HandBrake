@@ -348,6 +348,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Built-in presets have been reset..
+        /// </summary>
+        public static string Presets_ResetComplete {
+            get {
+                return ResourceManager.GetString("Presets_ResetComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Complete.
+        /// </summary>
+        public static string Presets_ResetHeader {
+            get {
+                return ResourceManager.GetString("Presets_ResetHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WARNING: You do not have automatic file naming turned on. Please enable this in options..
         /// </summary>
         public static string QueueSelection_AutoNameWarning {

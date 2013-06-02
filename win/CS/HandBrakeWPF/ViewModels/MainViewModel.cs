@@ -33,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
@@ -169,6 +170,12 @@ namespace HandBrakeWPF.ViewModels
         /// The last percentage complete value.
         /// </summary>
         private int lastEncodePercentage;
+
+        /// <summary>
+        /// The is preset panel showing.
+        /// </summary>
+        private bool isPresetPanelShowing;
+
         #endregion
 
         /// <summary>
@@ -692,7 +699,7 @@ namespace HandBrakeWPF.ViewModels
 
                     if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
                     {
-                        if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null )
+                        if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null)
                         {
                             this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                         }
@@ -890,6 +897,31 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether is preset panel showing.
+        /// </summary>
+        public bool IsPresetPanelShowing
+        {
+            get
+            {
+                return this.isPresetPanelShowing;
+            }
+            set
+            {
+                if (!object.Equals(this.isPresetPanelShowing, value))
+                {
+                    this.isPresetPanelShowing = value;
+                    this.NotifyOfPropertyChange(() => this.IsPresetPanelShowing);
+
+                    // Save the setting if it has changed.
+                    if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel) != value)
+                    {
+                        this.userSettingService.SetUserSetting(UserSettingConstants.ShowPresetPanel, value);
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Load and Shutdown Handling
@@ -918,6 +950,9 @@ namespace HandBrakeWPF.ViewModels
 
             // Populate the Source menu with drives.
             this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
+
+            // Show or Hide the Preset Panel.
+            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
 
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
@@ -1561,6 +1596,22 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.UpdateBuiltInPresets();
             this.NotifyOfPropertyChange("Presets");
             this.SelectedPreset = this.presetService.DefaultPreset;
+            this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        /// <summary>
+        /// The preset select.
+        /// </summary>
+        /// <param name="tag">
+        /// The tag.
+        /// </param>
+        public void PresetSelect(object tag)
+        {
+            Preset preset = tag as Preset;
+            if (preset != null)
+            {
+                this.SelectedPreset = preset;
+            }
         }
 
         /// <summary>

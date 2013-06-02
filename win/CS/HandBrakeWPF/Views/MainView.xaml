@@ -121,6 +121,45 @@
                     </MenuItem>
                 </MenuItem>
 
+
+                <MenuItem Header="Presets" x:Name="presetMenu">
+                    <MenuItem Header="Presets" ItemsSource="{Binding Presets}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Tag" Value="{Binding}" />
+                                <Setter Property="Micro:Action.TargetWithoutContext" Value="{Binding DataContext, ElementName=presetMenu}"/>
+                                <Setter Property="Micro:Message.Attach" Value="[Event Click] = [Action PresetSelect($this.Tag)]"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                        <Setter Property="FontStyle" Value="Italic" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Import" Micro:Message.Attach="[Event Click] = [Action PresetImport]" />
+                    <MenuItem Header="Export" Micro:Message.Attach="[Event Click] = [Action PresetExport]" />
+                    <Separator />
+                    <MenuItem Header="Set Current as Default" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                    <MenuItem Header="Reset Built-In Presets" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
+                    <Separator />
+                    <MenuItem IsCheckable="True" x:Name="showPresetPanelMenuItem" IsChecked="{Binding IsPresetPanelShowing}">
+                        <MenuItem.Style>
+                            <Style TargetType="MenuItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=showPresetPanelMenuItem}" Value="True">
+                                        <Setter Property="Header" Value="Hide Preset Panel"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=showPresetPanelMenuItem}" Value="False">
+                                        <Setter Property="Header" Value="Show Preset Panel"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </MenuItem.Style>
+                    </MenuItem>
+                </MenuItem>
+
                 <MenuItem Header="Help">
                     <MenuItem Header="HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]">
                         <MenuItem.Icon>
@@ -323,8 +362,8 @@
         <!--  Main Body  -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="270" />
+                <ColumnDefinition Width="*" MinWidth="700"/>
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -379,7 +418,7 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}"
                                                 />
-                        
+
                         <Label Margin="8,0,0,0" Content="through" />
                         <ComboBox Name="EndPoint"
                                   MinWidth="60"
@@ -396,7 +435,7 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}"
                                                 />
-  
+
                         <Label Margin="8,0,0,0" Content="Duration" />
                         <Label Margin="8,0,0,0" Content="{Binding Duration}" />
                     </StackPanel>
@@ -515,6 +554,7 @@
                       Header="Presets"
                       Margin="0,0,0,5"
                       Background="White"
+                      Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}"
                       >
                 <Grid>
                     <Grid.RowDefinitions>
