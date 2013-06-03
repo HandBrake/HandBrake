@@ -185,14 +185,10 @@ hb_encoder_t *hb_video_encoders_last_item  = NULL;
 hb_encoder_internal_t hb_video_encoders[]  =
 {
     // legacy encoders, all the way back to HB 0.7.1 (disabled)
-    { { "x264 (Main profile)", "",
-                                        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "x264 (Baseline profile)", "",
-                                        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "x264 (h.264 Main)", "",
-                                        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "x264 (h.264 iPod)", "",
-                                        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "x264 (Main profile)", "",      HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "x264 (Baseline profile)", "",  HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "x264 (h.264 Main)", "",        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "x264 (h.264 iPod)", "",        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
     { { "",                  "x264b13", HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
     { { "",                  "x264b30", HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
     { { "XviD",              "xvid",    HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
