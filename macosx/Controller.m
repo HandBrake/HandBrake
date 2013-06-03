@@ -701,7 +701,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     menuItem = [[fVidRatePopUp menu] addItemWithTitle:@"Same as source"
                                                action:nil
                                         keyEquivalent:@""];
-    [menuItem setTag:-1]; // hb_video_framerate_get_from_name(NULL)
+    [menuItem setTag:hb_video_framerate_get_from_name("Same as source")];
     for (const hb_rate_t *video_framerate = hb_video_framerate_get_next(NULL);
          video_framerate != NULL;
          video_framerate  = hb_video_framerate_get_next(video_framerate))

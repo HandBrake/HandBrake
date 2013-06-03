@@ -849,6 +849,8 @@ main(int argc, char *argv[])
     GError *error = NULL;
     GOptionContext *context;
 
+    hb_global_init();
+
 #ifdef ENABLE_NLS
     bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");

@@ -184,13 +184,7 @@ int main( int argc, char ** argv )
     int           build;
     char        * version;
 
-/* win32 _IOLBF (line-buffering) is the same as _IOFBF (full-buffering).
- * force it to unbuffered otherwise informative output is not easily parsed.
- */
-#if defined( _WIN32 ) || defined( __MINGW32__ )
-    setvbuf( stdout, NULL, _IONBF, 0 );
-    setvbuf( stderr, NULL, _IONBF, 0 );
-#endif
+    hb_global_init();
 
     audios = hb_list_init();
 
@@ -1961,7 +1955,7 @@ static int HandleEvents( hb_handle_t * h )
                     token = acodecs;
                 while ( token != NULL )
                 {
-                    if ((acodec = hb_audio_encoder_get_from_name(token)) == -1)
+                    if ((acodec = hb_audio_encoder_get_from_name(token)) <= 0)
                     {
                         fprintf(stderr, "Invalid codec %s, using default for container.\n", token);
                         acodec = hb_audio_encoder_get_default(job->mux);
@@ -2034,7 +2028,7 @@ static int HandleEvents( hb_handle_t * h )
                         {
                             arate = hb_audio_samplerate_get_from_name(token);
                         }
-                        if (arate == -1)
+                        if (arate <= 0)
                         {
                             fprintf(stderr,
                                     "Invalid sample rate %s, using input rate %d\n",
@@ -2413,9 +2407,6 @@ static int HandleEvents( hb_handle_t * h )
                     // Auto Passthru
                     job->acodec_copy_mask = allowed_audio_copy == -1 ? HB_ACODEC_PASS_MASK : allowed_audio_copy;
                     job->acodec_fallback  = hb_audio_encoder_get_from_name(acodec_fallback);
-                    // sanitize the fallback; -1 isn't a valid HB_ACODEC_* value
-                    if (job->acodec_fallback == -1)
-                        job->acodec_fallback  =  0;
                 }
                 else if( ( audio->out.codec & HB_ACODEC_PASS_FLAG ) &&
                         !( audio->out.codec & audio->in.codec & HB_ACODEC_PASS_MASK ) )

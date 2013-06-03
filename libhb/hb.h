@@ -126,6 +126,9 @@ int hb_get_scancount( hb_handle_t * );
    Aborts all current jobs if any, frees memory. */
 void          hb_close( hb_handle_t ** );
 
+/* hb_global_init()
+   Performs process initialization. */
+int           hb_global_init();
 /* hb_global_close()
    Performs final cleanup for the process. */
 void          hb_global_close();

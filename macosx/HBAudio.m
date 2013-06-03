@@ -64,7 +64,7 @@ static NSMutableArray *masterBitRateArray = nil;
 #pragma mark -
 #pragma mark Object Setup
 
-+ (void) load
++ (void) initialize
 
 {
     if ([HBAudio class] == self)
