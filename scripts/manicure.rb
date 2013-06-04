@@ -377,6 +377,10 @@ class Display
       
       #Mixdowns
       case audioTrack["AudioMixdown"]
+        when "Mono (Left Only)"
+          audioMixdowns << "left_only"
+        when "Mono (Right Only)"
+          audioMixdowns << "right_only"
         when /Mono/
           audioMixdowns << "mono"
         when /Stereo/
@@ -385,10 +389,16 @@ class Display
           audioMixdowns << "dpl1"
         when /Dolby Pro Logic II/
           audioMixdowns << "dpl2"
-        when /discrete/
-          audioMixdowns << "6ch"
+        when /5.1/, /discrete/
+          audioMixdowns << "5point1"
+        when /6.1/
+          audioMixdowns << "6point1"
+        when "7.1 (5F/2R/LFE)"
+          audioMixdowns << "5_2_lfe"
+        when /7.1/
+          audioMixdowns << "7point1"
         when /None/
-          audioMixdowns << "auto"
+          audioMixdowns << "none"
       end
       
       #Samplerates
@@ -765,6 +775,10 @@ class Display
       
       #Mixdowns
       case audioTrack["AudioMixdown"]
+        when "Mono (Left Only)"
+          audioMixdowns << "left_only"
+        when "Mono (Right Only)"
+          audioMixdowns << "right_only"
         when /Mono/
           audioMixdowns << "mono"
         when /Stereo/
@@ -773,10 +787,16 @@ class Display
           audioMixdowns << "dpl1"
         when /Dolby Pro Logic II/
           audioMixdowns << "dpl2"
-        when /discrete/
-          audioMixdowns << "6ch"
+        when /5.1/, /discrete/
+          audioMixdowns << "5point1"
+        when /6.1/
+          audioMixdowns << "6point1"
+        when "7.1 (5F/2R/LFE)"
+          audioMixdowns << "5_2_lfe"
+        when /7.1/
+          audioMixdowns << "7point1"
         when /None/
-          audioMixdowns << "auto"
+          audioMixdowns << "none"
       end
       
       #Samplerates
@@ -1159,6 +1179,10 @@ class Display
 
       #Mixdowns
       case audioTrack["AudioMixdown"]
+        when "Mono (Left Only)"
+          audioMixdowns << "left_only"
+        when "Mono (Right Only)"
+          audioMixdowns << "right_only"
         when /Mono/
           audioMixdowns << "mono"
         when /Stereo/
@@ -1167,10 +1191,16 @@ class Display
           audioMixdowns << "dpl1"
         when /Dolby Pro Logic II/
           audioMixdowns << "dpl2"
-        when /discrete/
-          audioMixdowns << "6ch"
+        when /5.1/, /discrete/
+          audioMixdowns << "5point1"
+        when /6.1/
+          audioMixdowns << "6point1"
+        when "7.1 (5F/2R/LFE)"
+          audioMixdowns << "5_2_lfe"
+        when /7.1/
+          audioMixdowns << "7point1"
         when /None/
-          audioMixdowns << "auto"
+          audioMixdowns << "none"
       end
 
       #Samplerates
@@ -1605,6 +1635,10 @@ class Display
       
       #Mixdowns
       case audioTrack["AudioMixdown"]
+        when "Mono (Left Only)"
+          audioMixdowns << "left_only"
+        when "Mono (Right Only)"
+          audioMixdowns << "right_only"
         when /Mono/
           audioMixdowns << "mono"
         when /Stereo/
@@ -1613,10 +1647,16 @@ class Display
           audioMixdowns << "dpl1"
         when /Dolby Pro Logic II/
           audioMixdowns << "dpl2"
-        when /discrete/
-          audioMixdowns << "6ch"
+        when /5.1/, /discrete/
+          audioMixdowns << "5point1"
+        when /6.1/
+          audioMixdowns << "6point1"
+        when "7.1 (5F/2R/LFE)"
+          audioMixdowns << "5_2_lfe"
+        when /7.1/
+          audioMixdowns << "7point1"
         when /None/
-          audioMixdowns << "auto"
+          audioMixdowns << "none"
       end
       
       #Samplerates
