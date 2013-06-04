@@ -1434,7 +1434,7 @@ int hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown)
     if (codec & HB_ACODEC_PASS_FLAG)
         return HB_AMIXDOWN_NONE;
 
-    int best_mixdown                  = -1;
+    int best_mixdown                  = HB_INVALID_AMIXDOWN;
     const hb_mixdown_t *audio_mixdown = hb_mixdown_get_next(NULL);
     // test all non-None mixdowns while the value is <= the requested mixdown
     // HB_INVALID_AMIXDOWN means the highest supported mixdown was requested
@@ -1491,7 +1491,7 @@ int hb_mixdown_get_from_name(const char *name)
     }
 
 fail:
-    return -1;
+    return HB_INVALID_AMIXDOWN;
 }
 
 const char* hb_mixdown_get_name(int mixdown)
@@ -1820,7 +1820,7 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
                 audio->config.out.bitrate =
                     hb_audio_bitrate_get_default(audio->config.out.codec,
                                                  audio->config.out.samplerate,
-                                                 audio->config.out.mixdown );
+                                                 audio->config.out.mixdown);
                 audio->config.out.compression_level =
                     hb_audio_compression_get_default(audio->config.out.codec);
             }
