@@ -736,24 +736,6 @@ namespace HandBrakeWPF.ViewModels
                         this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
                     }
 
-                    // Update the cropping values, preffering those in the presets.
-                    if (!preset.Task.HasCropping)
-                    {
-                        this.CropTop = title.AutoCropDimensions.Top;
-                        this.CropBottom = title.AutoCropDimensions.Bottom;
-                        this.CropLeft = title.AutoCropDimensions.Left;
-                        this.CropRight = title.AutoCropDimensions.Right;
-                        this.IsCustomCrop = false;
-                    }
-                    else
-                    {
-                        this.CropLeft = preset.Task.Cropping.Left;
-                        this.CropRight = preset.Task.Cropping.Right;
-                        this.CropTop = preset.Task.Cropping.Top;
-                        this.CropBottom = preset.Task.Cropping.Bottom;
-                        this.IsCustomCrop = true;
-                    }
-
                     // Set the Width, and Maintain Aspect ratio. That should calc the Height for us.
                     this.Width = preset.Task.Width ?? this.MaxWidth;  // Note: This will be auto-corrected in the property if it's too large.
 
@@ -767,6 +749,24 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.AnamorphicAdjust(); // Refresh the values
                     }
+                }
+
+                // Update the cropping values, preffering those in the presets.
+                if (!preset.Task.HasCropping)
+                {
+                    this.CropTop = title.AutoCropDimensions.Top;
+                    this.CropBottom = title.AutoCropDimensions.Bottom;
+                    this.CropLeft = title.AutoCropDimensions.Left;
+                    this.CropRight = title.AutoCropDimensions.Right;
+                    this.IsCustomCrop = false;
+                }
+                else
+                {
+                    this.CropLeft = preset.Task.Cropping.Left;
+                    this.CropRight = preset.Task.Cropping.Right;
+                    this.CropTop = preset.Task.Cropping.Top;
+                    this.CropBottom = preset.Task.Cropping.Bottom;
+                    this.IsCustomCrop = true;
                 }
 
                 // Set Screen Controls
