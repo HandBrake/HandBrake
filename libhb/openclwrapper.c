@@ -135,14 +135,15 @@ int hb_confirm_gpu_type()
             {
                 char dbuff[100];
                 status = clGetDeviceInfo(devices[j], CL_DEVICE_VENDOR, sizeof(dbuff), dbuff, NULL); 
-                if(!strcmp(dbuff, "Advanced Micro Devices, Inc.") ||
+                if (!strcmp(dbuff, "Advanced Micro Devices, Inc.") ||
+                    !strcmp(dbuff, "Intel(R) Corporation")         ||
 #ifdef __APPLE__
-                   !strcmp(dbuff, "AMD")                          ||
-                   /* MacBook Pro, AMD ATI Radeon HD 6750M, OS X 10.8.3 */
-                   !strcmp(dbuff, "NVIDIA")                       ||
-                   /* MacBook Pro, NVIDIA GeForce GT 330M,  OS X 10.7.4 */
+                    !strcmp(dbuff, "AMD")                          ||
+                    /* MacBook Pro, AMD ATI Radeon HD 6750M, OS X 10.8.3 */
+                    !strcmp(dbuff, "NVIDIA")                       ||
+                    /* MacBook Pro, NVIDIA GeForce GT 330M,  OS X 10.7.4 */
 #endif
-                   !strcmp(dbuff, "NVIDIA Corporation"))
+                    !strcmp(dbuff, "NVIDIA Corporation"))
                 {
                     return 0;
                 }
