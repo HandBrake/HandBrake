@@ -745,10 +745,10 @@ namespace HandBrakeWPF.ViewModels
                         this.Height = this.MaxHeight;
                     }
 
-                    if (this.SelectedAnamorphicMode == Anamorphic.Custom)
-                    {
-                        this.AnamorphicAdjust(); // Refresh the values
-                    }
+                    //if (this.SelectedAnamorphicMode == Anamorphic.Custom)
+                    //{
+                    //    this.AnamorphicAdjust(); // Refresh the values
+                    //}
                 }
 
                 // Update the cropping values, preffering those in the presets.
