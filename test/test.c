@@ -2944,8 +2944,8 @@ static void ShowHelp()
     "### Video Options------------------------------------------------------------\n\n"
     "    -e, --encoder <string>  Set video library encoder\n"
     "                            Options: " );
+    name    = NULL;
     encoder = NULL;
-    name = NULL;
     while ((encoder = hb_video_encoder_get_next(encoder)) != NULL)
     {
         fprintf(out, "%s", encoder->short_name);
