@@ -922,6 +922,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public int ProgressPercentage { get; set; }
+
         #endregion
 
         #region Load and Shutdown Handling
@@ -1910,6 +1912,8 @@ namespace HandBrakeWPF.ViewModels
                         }
 
                         lastEncodePercentage = percent;
+                        this.ProgressPercentage = percent;
+                        this.NotifyOfPropertyChange(() => ProgressPercentage);
                     }
                     else
                     {
@@ -2016,14 +2020,16 @@ namespace HandBrakeWPF.ViewModels
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
                 Text = "Open Folder",
                 Command = new SourceMenuCommand(this.FolderScan),
-                IsDrive = false
+                IsDrive = false,
+                InputGestureText = "Ctrl + R"
             };
             SourceMenuItem fileScan = new SourceMenuItem
             {
                 Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
                 Text = "Open File",
                 Command = new SourceMenuCommand(this.FileScan),
-                IsDrive = false
+                IsDrive = false,
+                InputGestureText = "Ctrl + F"
             };
 
             SourceMenuItem titleSpecific = new SourceMenuItem { Text = "Title Specific Scan" };

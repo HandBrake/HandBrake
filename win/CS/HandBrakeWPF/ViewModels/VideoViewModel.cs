@@ -951,7 +951,6 @@ namespace HandBrakeWPF.ViewModels
                 width = 720;
             }
 
-            // TODO figure out what is wrong with this??
             return HandBrakeUtils.CreateX264OptionsString(preset, tunes, this.ExtraArguments, profile, this.H264Level, width, height);
         }
 
