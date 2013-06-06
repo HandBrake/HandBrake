@@ -812,63 +812,62 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     source = source_str;
     source_size[0] = strlen( source );
 
-#ifdef __APPLE__
-    binaryExisted = 0;
-#else
-    binaryExisted = hb_binary_generated(gpu_info->context, filename, &fd);
-#endif
-    if (binaryExisted == 1)
+    if ((binaryExisted = hb_binary_generated(gpu_info->context, filename, &fd)) == 1)
     {
-        status = clGetContextInfo( gpu_info->context,
-                                   CL_CONTEXT_NUM_DEVICES,
-                                   sizeof(numDevices),
-                                   &numDevices,
-                                   NULL );
-        if( status != CL_SUCCESS )
+        status = clGetContextInfo(gpu_info->context,
+                                  CL_CONTEXT_NUM_DEVICES,
+                                  sizeof(numDevices),
+                                  &numDevices,
+                                  NULL);
+        if (status != CL_SUCCESS)
         {
-            hb_log( "OpenCL: Unable to get the number of devices in context." );
+            hb_log("OpenCL: Unable to get the number of devices in context.");
             return 0;
         }
 
-        devices = (cl_device_id*)malloc( sizeof(cl_device_id) * numDevices );
-        if( devices == NULL )
+        devices = (cl_device_id*)malloc(sizeof(cl_device_id) * numDevices);
+        if (devices == NULL)
             return 0;
 
-        b_error = 0;
-        length = 0;
-        b_error |= fseek( fd, 0, SEEK_END ) < 0;
-        b_error |= ( length = ftell( fd ) ) <= 0;
-        b_error |= fseek( fd, 0, SEEK_SET ) < 0;
-        if( b_error )
+        length   = 0;
+        b_error  = 0;
+        b_error |= fseek(fd, 0, SEEK_END) <  0;
+        b_error |= (length = ftell(fd))   <= 0;
+        b_error |= fseek(fd, 0, SEEK_SET) <  0;
+        if (b_error)
             return 0;
 
-        binary = (char*)malloc( length+2 );
-        if( !binary )
+        binary = (char*)calloc(length + 2, sizeof(char));
+        if (binary == NULL)
             return 0;
 
-        memset( binary, 0, length+2 );
-        b_error |= fread( binary, 1, length, fd ) != length;
-        if( binary[length-1] != '\n' )
-            binary[length++] = '\n';
+        b_error |= fread(binary, 1, length, fd) != length;
+#if 0   // this doesn't work under OS X and/or with some non-AMD GPUs
+        if (binary[length-1] != '\n')
+            binary[length++]  = '\n;
+#endif
 
-        fclose( fd );
-        fd = NULL;
+        if (b_error)
+            return 0;
+
         /* grab the handles to all of the devices in the context. */
-        status = clGetContextInfo( gpu_info->context,
-                                   CL_CONTEXT_DEVICES,
-                                   sizeof(cl_device_id) * numDevices,
-                                   devices,
-                                   NULL );
+        status = clGetContextInfo(gpu_info->context,
+                                  CL_CONTEXT_DEVICES,
+                                  sizeof(cl_device_id) * numDevices,
+                                  devices,
+                                  NULL);
 
-        gpu_info->programs[idx] = clCreateProgramWithBinary( gpu_info->context,
-                                                             numDevices,
-                                                             devices,
-                                                             &length,
-                                                             (const unsigned char**)&binary,
-                                                             &binary_status,
-                                                             &status );
+        gpu_info->programs[idx] = clCreateProgramWithBinary(gpu_info->context,
+                                                            numDevices,
+                                                            devices,
+                                                            &length,
+                                                            (const unsigned char**)&binary,
+                                                            &binary_status,
+                                                            &status);
 
-        free( devices );
+        fclose(fd);
+        free(devices);
+        fd      = NULL;
         devices = NULL;
     }
     else
@@ -945,12 +944,10 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
     strcpy( gpu_env.kernelSrcFile[idx], filename );
 
-#ifndef __APPLE__
-    if (!binaryExisted)
+    if (binaryExisted != 1)
     {
         hb_generat_bin_from_kernel_source(gpu_env.programs[idx], filename);
     }
-#endif
 
     gpu_info->file_count += 1;
 
