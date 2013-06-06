@@ -436,42 +436,11 @@ hb_handle_t * hb_init( int verbose, int update_check )
 
     h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
 
-    /* libavcodec */
-    hb_avcodec_init();
-
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
     h->die         = 0;
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
-    hb_register( &hb_sync_video );
-    hb_register( &hb_sync_audio );
-	hb_register( &hb_decmpeg2 );
-	hb_register( &hb_decvobsub );
-    hb_register( &hb_encvobsub );
-    hb_register( &hb_deccc608 );
-    hb_register( &hb_decsrtsub );
-    hb_register( &hb_decutf8sub );
-    hb_register( &hb_dectx3gsub );
-    hb_register( &hb_decssasub );
-    hb_register( &hb_decpgssub );
-	hb_register( &hb_encavcodec );
-	hb_register( &hb_encx264 );
-    hb_register( &hb_enctheora );
-	hb_register( &hb_deca52 );
-	hb_register( &hb_decavcodeca );
-	hb_register( &hb_decavcodecv );
-	hb_register( &hb_declpcm );
-	hb_register( &hb_encfaac );
-	hb_register( &hb_enclame );
-	hb_register( &hb_encvorbis );
-	hb_register( &hb_muxer );
-#ifdef __APPLE__
-	hb_register( &hb_encca_aac );
-	hb_register( &hb_encca_haac );
-#endif
-	hb_register( &hb_encavcodeca );
-	hb_register( &hb_reader );
     
     return h;
 }
@@ -537,42 +506,11 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 
     h->pause_lock = hb_lock_init();
 
-    /* libavcodec */
-    hb_avcodec_init();
-
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
     h->die         = 0;
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
-
-    hb_register( &hb_sync_video );
-    hb_register( &hb_sync_audio );
-	hb_register( &hb_decmpeg2 );
-	hb_register( &hb_decvobsub );
-    hb_register( &hb_encvobsub );
-    hb_register( &hb_deccc608 );
-    hb_register( &hb_decsrtsub );
-    hb_register( &hb_decutf8sub );
-    hb_register( &hb_dectx3gsub );
-    hb_register( &hb_decssasub );
-	hb_register( &hb_encavcodec );
-	hb_register( &hb_encx264 );
-    hb_register( &hb_enctheora );
-	hb_register( &hb_deca52 );
-	hb_register( &hb_decavcodeca );
-	hb_register( &hb_decavcodecv );
-	hb_register( &hb_declpcm );
-	hb_register( &hb_encfaac );
-	hb_register( &hb_enclame );
-	hb_register( &hb_encvorbis );
-	hb_register( &hb_muxer );
-#ifdef __APPLE__
-	hb_register( &hb_encca_aac );
-	hb_register( &hb_encca_haac );
-#endif
-	hb_register( &hb_encavcodeca );
-	hb_register( &hb_reader );
 
 	return h;
 }
@@ -1679,6 +1617,39 @@ int hb_global_init()
         hb_error("Platform specific initialization failed!");
         return -1;
     }
+
+    /* libavcodec */
+    hb_avcodec_init();
+
+    /* HB work objects */
+    hb_register(&hb_muxer);
+    hb_register(&hb_reader);
+    hb_register(&hb_sync_video);
+    hb_register(&hb_sync_audio);
+    hb_register(&hb_deca52);
+    hb_register(&hb_decavcodecv);
+    hb_register(&hb_decavcodeca);
+    hb_register(&hb_declpcm);
+    hb_register(&hb_deccc608);
+    hb_register(&hb_decmpeg2);
+    hb_register(&hb_decpgssub);
+    hb_register(&hb_decsrtsub);
+    hb_register(&hb_decssasub);
+    hb_register(&hb_dectx3gsub);
+    hb_register(&hb_decutf8sub);
+    hb_register(&hb_decvobsub);
+    hb_register(&hb_encvobsub);
+    hb_register(&hb_encavcodec);
+    hb_register(&hb_encavcodeca);
+#ifdef __APPLE__
+    hb_register(&hb_encca_aac);
+    hb_register(&hb_encca_haac);
+#endif
+    hb_register(&hb_encfaac);
+    hb_register(&hb_enclame);
+    hb_register(&hb_enctheora);
+    hb_register(&hb_encvorbis);
+    hb_register(&hb_encx264);
     
     hb_common_global_init();
 
