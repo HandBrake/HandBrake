@@ -262,24 +262,25 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
 
     status = 0;
     /* dump out each binary into its own separate file. */
-    for( i = 0; i < numDevices; i++ )
+    for (i = 0; i < numDevices; i++)
     {
-        char fileName[256] = {0};
-        char cl_name[128] = {0};
-        if( devices[i] != 0 )
+        char fileName[256] = { 0 };
+        char  cl_name[128] = { 0 };
+        if (devices[i])
         {
             char deviceName[1024];
-            status = clGetDeviceInfo( devices[i],
-                                      CL_DEVICE_NAME,
-                                      sizeof(deviceName),
-                                      deviceName,
-                                      NULL );
-            str = (char*)strstr( cl_file_name, (char*)".cl" );
-            memcpy( cl_name, cl_file_name, str - cl_file_name );
+            status = clGetDeviceInfo(devices[i],
+                                     CL_DEVICE_NAME,
+                                     sizeof(deviceName),
+                                     deviceName,
+                                     NULL);
+
+            str = (char*)strstr(cl_file_name, ".cl");
+            memcpy(cl_name, cl_file_name, str - cl_file_name);
             cl_name[str - cl_file_name] = '\0';
-            sprintf( fileName, "./%s-%s.bin", cl_name, deviceName );
-            fd = fopen( fileName, "rb" );
-            status = (fd != NULL) ? 1 : 0;
+            sprintf(fileName, "./%s - %s.bin", cl_name, deviceName);
+            fd = fopen(fileName, "rb");
+            status = fd != NULL;
         }
     }
 
@@ -409,25 +410,25 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     }
 
     /* dump out each binary into its own separate file. */
-    for( i = 0; i < numDevices; i++ )
+    for (i = 0; i < numDevices; i++)
     {
         char fileName[256] = {0};
-        char cl_name[128] = {0};
-        if( binarySizes[i] != 0 )
+        char  cl_name[128] = {0};
+        if (binarySizes[i])
         {
             char deviceName[1024];
-            status = clGetDeviceInfo( devices[i],
-                                      CL_DEVICE_NAME,
-                                      sizeof(deviceName),
-                                      deviceName,
-                                      NULL );
+            status = clGetDeviceInfo(devices[i],
+                                     CL_DEVICE_NAME,
+                                     sizeof(deviceName),
+                                     deviceName,
+                                     NULL);
 
-            str = (char*)strstr( cl_file_name, (char*)".cl" );
-            memcpy( cl_name, cl_file_name, str - cl_file_name );
+            str = (char*)strstr(cl_file_name, ".cl");
+            memcpy(cl_name, cl_file_name, str - cl_file_name);
             cl_name[str - cl_file_name] = '\0';
-            sprintf( fileName, "./%s-%s.bin", cl_name, deviceName );
+            sprintf(fileName, "./%s - %s.bin", cl_name, deviceName);
 
-            if( !hb_write_binary_to_file( fileName, binaries[i], binarySizes[i] ))
+            if (!hb_write_binary_to_file(fileName, binaries[i], binarySizes[i]))
             {
                 hb_log("OpenCL: hb_generat_bin_from_kernel_source: unable to write kernel, writing to temporary directory instead.");
                 return 0;
@@ -1032,7 +1033,8 @@ int hb_init_opencl_run_env( int argc, char **argv, const char *build_option )
             return(1);
 
         /*initialize program, kernel_name, kernel_count*/
-        status = hb_compile_kernel_file( "hb-kernels.cl", &gpu_env, 0, build_option );
+        status = hb_compile_kernel_file("hb-opencl-kernels.cl",
+                                        &gpu_env, 0, build_option);
 
         if( status == 0 || gpu_env.kernel_count == 0 )
         {
