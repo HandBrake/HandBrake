@@ -1329,6 +1329,74 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     modulus = 2;
                 }
+                if (!strcasecmp(preset_name, "Windows Phone 8"))
+                {
+                    if( !mux )
+                    {
+                        mux = HB_MUX_MP4;
+                    }
+                    vcodec = HB_VCODEC_X264;
+                    job->vquality = 22.0;
+                    filter_vrate_base = 900000;
+                    filter_cfr = 2;
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = str_split("128", ',');
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !dynamic_range_compression )
+                    {
+                        dynamic_range_compression = strdup("0.0");
+                    }
+                    if( allowed_audio_copy == -1 )
+                    {
+                        allowed_audio_copy = 0;
+                        allowed_audio_copy |= HB_ACODEC_AAC_PASS;
+                        allowed_audio_copy |= HB_ACODEC_AC3_PASS;
+                        allowed_audio_copy |= HB_ACODEC_DCA_HD_PASS;
+                        allowed_audio_copy |= HB_ACODEC_DCA_PASS;
+                        allowed_audio_copy |= HB_ACODEC_MP3_PASS;
+                        allowed_audio_copy &= HB_ACODEC_PASS_MASK;
+                    }
+                    if( acodec_fallback == NULL )
+                    {
+                        acodec_fallback = "ffac3";
+                    }
+                    maxWidth = 1280;
+                    maxHeight = 720;
+                    if (x264_preset == NULL)
+                    {
+                        x264_preset = strdup("medium");
+                    }
+                    if (h264_profile == NULL)
+                    {
+                        h264_profile = strdup("main");
+                    }
+                    if (h264_level == NULL)
+                    {
+                        h264_level = strdup("3.1");
+                    }
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 2;
+                    }
+                    modulus = 2;
+                }
                 if (!strcasecmp(preset_name, "Normal"))
                 {
                     if( !mux )
@@ -3369,7 +3437,8 @@ static void ShowPresets()
     printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1920 -Y 1080 --decomb=fast --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.0\n");
     printf("\n   + Android:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 720 -Y 576 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.0\n");
     printf("\n   + Android Tablet:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
-    printf("\n>\n");
+    printf("\n   + Windows Phone 8:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
+	printf("\n>\n");
     printf("\n< Regular\n");
     printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 --loose-anamorphic --modulus 2 -m --x264-preset veryfast --h264-profile main --h264-level 4.0\n");
     printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 --decomb --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.1\n");
