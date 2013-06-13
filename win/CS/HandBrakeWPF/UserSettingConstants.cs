@@ -236,6 +236,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ShowPresetPanel = "ShowPresetPanel";
 
+        /// <summary>
+        /// The use system colours.
+        /// </summary>
+        public const string UseSystemColours = "UseSystemColours";
+
         #endregion
     }
 }

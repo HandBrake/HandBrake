@@ -2,17 +2,18 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
-        xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" Title="{Data:Binding Path=WindowTitle}"
+        xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
+        Title="{Data:Binding Path=WindowTitle}"
         Width="1015"
         Height="670"
         MinWidth="750"
         MinHeight="670"
         AllowDrop="True"
-        Background="#FFF0F0F0"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
+        Style="{StaticResource mainWindowStyle}"
         >
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />

@@ -4,7 +4,7 @@
               xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options"
               xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
               xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" xmlns:local="clr-namespace:HandBrakeWPF.Model"
-              Background="White">
+              Style="{StaticResource whiteUserControlStyle}">
 
     <UserControl.Resources>
         <Style TargetType="Button">
@@ -130,6 +130,19 @@
                                 <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" />
                             </StackPanel>
                             <TextBlock Margin="30,0,0,0" Text="This path is used for the video preview feature only." />
+
+                        </StackPanel>
+                    </StackPanel>
+
+
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+
+                        <TextBlock Text="User Interface" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
+
+                            <CheckBox Content="Always use System Colours (Requires Restart)"
+                                      ToolTip="Note: This option will always be on for systems with a High Contrast Theme selected." IsChecked="{Binding UseSystemColoursForStylesForStyles}" />
 
                         </StackPanel>
                     </StackPanel>

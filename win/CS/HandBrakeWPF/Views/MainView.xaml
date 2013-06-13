@@ -7,7 +7,6 @@
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
              AllowDrop="True"
-        Background="#FFF0F0F0"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         SnapsToDevicePixels="True"
@@ -22,8 +21,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <UserControl.Resources>
-
+    <UserControl.Resources>       
         <Style TargetType="Button">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,1" />
@@ -46,9 +44,16 @@
         <Style TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0,2,0,2" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsBuildIn}" Value="True">
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsBuildIn}" Value="True" />
+                        <Condition Binding="{Binding DataContext.UseSystemColours, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="False" />
+                    </MultiDataTrigger.Conditions>
                     <Setter Property="Foreground" Value="DarkBlue" />
-                </DataTrigger>
+                </MultiDataTrigger>
+                <!--<DataTrigger Binding="{Binding IsBuildIn}" Value="True">
+                    <Setter Property="Foreground" Value="DarkBlue" />
+                </DataTrigger>-->
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="Background" Value="Transparent"/>
@@ -554,9 +559,8 @@
                       VerticalAlignment="Stretch"
                       Header="Presets"
                       Margin="0,0,0,5"
-                      Background="White"
-                      Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}"
-                      >
+                      Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
+                      
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
