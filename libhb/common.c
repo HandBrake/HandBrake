@@ -153,10 +153,10 @@ hb_mixdown_t *hb_audio_mixdowns_first_item = NULL;
 hb_mixdown_t *hb_audio_mixdowns_last_item  = NULL;
 hb_mixdown_internal_t hb_audio_mixdowns[]  =
 {
-    // legacy mixdowns (disabled)
-    { { "AC3 Passthru",       "ac3pass",    HB_AMIXDOWN_NONE,      }, NULL, 0, },
-    { { "DTS Passthru",       "dtspass",    HB_AMIXDOWN_NONE,      }, NULL, 0, },
-    { { "DTS-HD Passthru",    "dtshdpass",  HB_AMIXDOWN_NONE,      }, NULL, 0, },
+    // legacy mixdowns, back to HB 0.9.4 whenever possible (disabled)
+    { { "AC3 Passthru",       "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
+    { { "DTS Passthru",       "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
+    { { "DTS-HD Passthru",    "",           HB_AMIXDOWN_NONE,      }, NULL, 0, },
     { { "6-channel discrete", "6ch",        HB_AMIXDOWN_5POINT1,   }, NULL, 0, },
     // actual mixdowns
     { { "None",               "none",       HB_AMIXDOWN_NONE,      }, NULL, 1, },
@@ -184,21 +184,16 @@ hb_encoder_t *hb_video_encoders_first_item = NULL;
 hb_encoder_t *hb_video_encoders_last_item  = NULL;
 hb_encoder_internal_t hb_video_encoders[]  =
 {
-    // legacy encoders, all the way back to HB 0.7.1 (disabled)
-    { { "x264 (Main profile)", "",      HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "x264 (Baseline profile)", "",  HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "x264 (h.264 Main)", "",        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "x264 (h.264 iPod)", "",        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "",                  "x264b13", HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "",                  "x264b30", HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
-    { { "XviD",              "xvid",    HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
-    { { "MPEG-4 (XviD)",     "",        HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
+    // legacy encoders, back to HB 0.9.4 whenever possible (disabled)
     { { "FFmpeg",            "ffmpeg",  HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-4 (FFmpeg)",   "ffmpeg4", HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-2 (FFmpeg)",   "ffmpeg2", HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG2,  },
+    { { "VP3 (Theora)",    "libtheora", HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_THEORA, },
     // actual encoders
     { { "H.264 (x264)",      "x264",    HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264,   },
-    { { "MPEG-4 (FFmpeg)",   "ffmpeg4", HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
-    { { "MPEG-2 (FFmpeg)",   "ffmpeg2", HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
-    { { "VP3 (Theora)",      "theora",  HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
+    { { "MPEG-4",            "mpeg4",   HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-2",            "mpeg2",   HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
+    { { "Theora",            "theora",  HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
 static int hb_video_encoder_is_enabled(int encoder)
@@ -221,28 +216,31 @@ hb_encoder_t *hb_audio_encoders_first_item = NULL;
 hb_encoder_t *hb_audio_encoders_last_item  = NULL;
 hb_encoder_internal_t hb_audio_encoders[]  =
 {
-    // legacy encoders (disabled)
-    { { "AC3",                "ac3",        HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AC3,        },
-    { { "AC3 (pass-thru)",    "ac3pass",    HB_ACODEC_AC3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AC3_PASS,   },
-    { { "DTS (pass-thru)",    "dtspass",    HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_DTS_PASS,   },
+    // legacy encoders, back to HB 0.9.4 whenever possible (disabled)
     { { "",                   "dts",        HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_DTS_PASS,   },
+    { { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC,        },
+    { { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AC3,        },
+    { { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_MP3,        },
+    { { "Vorbis (vorbis)",    "libvorbis",  HB_ACODEC_VORBIS,                       HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_VORBIS,     },
+    { { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                       HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_FLAC,       },
+    { { "FLAC (24-bit)",      "ffflac24",   HB_ACODEC_FFFLAC24,                     HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_FLAC,       },
     // actual encoders
     { { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
     { { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
-    { { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
+    { { "AAC (avcodec)",      "av_aac",     HB_ACODEC_FFAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
     { { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_PASS,   },
-    { { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AC3,        },
+    { { "AC3",                "ac3",        HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AC3,        },
     { { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AC3_PASS,   },
     { { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_DTS_PASS,   },
     { { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_DTSHD_PASS, },
-    { { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3,        },
+    { { "MP3",                "mp3",        HB_ACODEC_LAME,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3,        },
     { { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3_PASS,   },
-    { { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_VORBIS,     },
-    { { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
-    { { "FLAC (24-bit)",      "ffflac24",   HB_ACODEC_FFFLAC24,                     HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
+    { { "Vorbis",             "vorbis",     HB_ACODEC_VORBIS,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_VORBIS,     },
+    { { "FLAC 16-bit",        "flac16",     HB_ACODEC_FFFLAC,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
+    { { "FLAC 24-bit",        "flac24",     HB_ACODEC_FFFLAC24,                     HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
     { { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AUTO_PASS,  },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_audio_encoders[0]);
@@ -301,11 +299,9 @@ hb_container_t *hb_containers_first_item = NULL;
 hb_container_t *hb_containers_last_item  = NULL;
 hb_container_internal_t hb_containers[]  =
 {
-    // legacy muxers (disabled)
-    { { "AVI file",          "avi",    "avi",             0, }, NULL, 0, HB_GID_MUX_MP4, },
+    // legacy muxers, back to HB 0.9.4 whenever possible (disabled)
     { { "M4V file",          "m4v",    "m4v",             0, }, NULL, 0, HB_GID_MUX_MP4, },
     { { "MP4 file",          "mp4",    "mp4",             0, }, NULL, 0, HB_GID_MUX_MP4, },
-    { { "OGM file",          "ogm",    "ogm",             0, }, NULL, 0, HB_GID_MUX_MKV, },
     { { "MKV file",          "mkv",    "mkv",             0, }, NULL, 0, HB_GID_MUX_MKV, },
     // actual muxers
     { { "MPEG-4 (mp4v2)",    "mp4v2",  "mp4", HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
