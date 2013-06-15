@@ -14,13 +14,17 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
-        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
+        a52 ass avcodec avformat avutil avresample dvdnav dvdread \
         fontconfig freetype fribidi mkv mpeg2 mp3lame mp4v2 ogg \
         samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
         bluray xml2 bz2 z
 
 ifeq (1,$(FEATURE.fdk_aac))
 TEST.GCC.l += fdk-aac
+endif
+
+ifeq (1,$(FEATURE.faac))
+TEST.GCC.l += faac
 endif
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))

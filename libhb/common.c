@@ -229,10 +229,10 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     // actual encoders
     { { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
-    { { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
-    { { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
     { { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
+    { { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
+    { { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
     { { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_PASS,   },
     { { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AC3,        },
     { { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AC3_PASS,   },
@@ -261,12 +261,12 @@ static int hb_audio_encoder_is_enabled(int encoder)
             return 1;
 #endif
 
-#if 1 //#ifdef USE_FAAC
+#ifdef USE_FAAC
         case HB_ACODEC_FAAC:
             return 1;
 #endif
 
-#if 1 //#ifdef USE_LIBAV_AAC
+#ifdef USE_LIBAV_AAC
         case HB_ACODEC_FFAAC:
             return 1;
 #endif
@@ -1314,7 +1314,6 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
             return (mixdown <= HB_AMIXDOWN_7POINT1);
 
         case HB_ACODEC_LAME:
-        case HB_ACODEC_FFAAC:
             return (mixdown <= HB_AMIXDOWN_DOLBYPLII);
 
         case HB_ACODEC_FAAC:

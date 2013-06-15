@@ -43,8 +43,11 @@ ifeq (1,$(FEATURE.fdk_aac))
     MODULES += contrib/fdk-aac
 endif
 
+ifeq (1,$(FEATURE.faac))
+    MODULES += contrib/faac
+endif
+
 MODULES += contrib/lame
-MODULES += contrib/faac
 MODULES += contrib/ffmpeg
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav

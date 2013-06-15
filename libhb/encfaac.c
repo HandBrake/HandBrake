@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifdef USE_FAAC
 #include "hb.h"
 #include "audio_remap.h"
 
@@ -286,4 +287,4 @@ int encfaacWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     return HB_WORK_OK;
 }
-
+#endif // USE_FAAC

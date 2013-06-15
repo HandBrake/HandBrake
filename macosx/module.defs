@@ -26,8 +26,13 @@ MACOSX.map.g.std  = debug
 MACOSX.map.g.max  = debug
 
 ifeq (1,$(FEATURE.fdk_aac))
-MACOSX.extra_ldflags = OTHER_LDFLAGS='$(abspath $(BUILD))/contrib/lib/libfdk-aac.a'
+    extra_libs += $(abspath $(BUILD))/contrib/lib/libfdk-aac.a
 endif
+
+ifeq (1,$(FEATURE.faac))
+    extra_libs += $(abspath $(BUILD))/contrib/lib/libfaac.a
+endif
+MACOSX.extra_ldflags = OTHER_LDFLAGS='$(extra_libs)'
 
 ## xcconfig: must be one of macosx/xcconfig/*.xcconfig
 MACOSX.xcconfig = $(foreach x,$(XCODE.xcconfig),-xcconfig $(MACOSX.src/)xcconfig/$(x))

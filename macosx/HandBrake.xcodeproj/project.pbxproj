@@ -92,8 +92,6 @@
 		27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72E14B102DA00B785E4 /* libdvdnav.a */; };
 		27D6C75114B102DA00B785E4 /* libdvdread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72F14B102DA00B785E4 /* libdvdread.a */; };
 		27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72F14B102DA00B785E4 /* libdvdread.a */; };
-		27D6C75314B102DA00B785E4 /* libfaac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73014B102DA00B785E4 /* libfaac.a */; };
-		27D6C75414B102DA00B785E4 /* libfaac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73014B102DA00B785E4 /* libfaac.a */; };
 		27D6C75514B102DA00B785E4 /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73114B102DA00B785E4 /* libfontconfig.a */; };
 		27D6C75614B102DA00B785E4 /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73114B102DA00B785E4 /* libfontconfig.a */; };
 		27D6C75714B102DA00B785E4 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73214B102DA00B785E4 /* libfreetype.a */; };
@@ -294,7 +292,6 @@
 		27D6C72C14B102DA00B785E4 /* libbluray.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbluray.a; path = external/contrib/lib/libbluray.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72E14B102DA00B785E4 /* libdvdnav.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdvdnav.a; path = external/contrib/lib/libdvdnav.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72F14B102DA00B785E4 /* libdvdread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdvdread.a; path = external/contrib/lib/libdvdread.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		27D6C73014B102DA00B785E4 /* libfaac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfaac.a; path = external/contrib/lib/libfaac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73114B102DA00B785E4 /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = external/contrib/lib/libfontconfig.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73214B102DA00B785E4 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = external/contrib/lib/libfreetype.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73314B102DA00B785E4 /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = external/contrib/lib/libfribidi.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -368,7 +365,6 @@
 				27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */,
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */,
-				27D6C75414B102DA00B785E4 /* libfaac.a in Frameworks */,
 				27D6C75614B102DA00B785E4 /* libfontconfig.a in Frameworks */,
 				27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
@@ -411,7 +407,6 @@
 				27D6C74B14B102DA00B785E4 /* libbluray.a in Frameworks */,
 				27D6C74F14B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75114B102DA00B785E4 /* libdvdread.a in Frameworks */,
-				27D6C75314B102DA00B785E4 /* libfaac.a in Frameworks */,
 				27D6C75514B102DA00B785E4 /* libfontconfig.a in Frameworks */,
 				27D6C75714B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75914B102DA00B785E4 /* libfribidi.a in Frameworks */,
@@ -446,7 +441,6 @@
 				27D6C72C14B102DA00B785E4 /* libbluray.a */,
 				27D6C72E14B102DA00B785E4 /* libdvdnav.a */,
 				27D6C72F14B102DA00B785E4 /* libdvdread.a */,
-				27D6C73014B102DA00B785E4 /* libfaac.a */,
 				27D6C73114B102DA00B785E4 /* libfontconfig.a */,
 				27D6C73214B102DA00B785E4 /* libfreetype.a */,
 				27D6C73314B102DA00B785E4 /* libfribidi.a */,
