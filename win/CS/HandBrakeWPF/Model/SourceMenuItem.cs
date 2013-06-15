@@ -55,5 +55,10 @@ namespace HandBrakeWPF.Model
         /// Gets or sets the tag.
         /// </summary>
         public object Tag { get; set; }
+
+        /// <summary>
+        /// Gets or sets the input gesture text.
+        /// </summary>
+        public string InputGestureText { get; set; }
     }
 }

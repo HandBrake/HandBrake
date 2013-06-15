@@ -1266,13 +1266,146 @@
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
 			</dict>
+			<dict>
+				<key>AudioAllowAACPass</key>
+				<integer>1</integer>
+				<key>AudioAllowAC3Pass</key>
+				<integer>1</integer>
+				<key>AudioAllowDTSHDPass</key>
+				<integer>1</integer>
+				<key>AudioAllowDTSPass</key>
+				<integer>1</integer>
+				<key>AudioAllowMP3Pass</key>
+				<integer>1</integer>
+				<key>AudioEncoderFallback</key>
+				<string>AC3 (ffmpeg)</string>
+				<key>AudioList</key>
+				<array>
+					<dict>
+						<key>AudioBitrate</key>
+						<string>128</string>
+						<key>AudioEncoder</key>
+						<string>AAC (faac)</string>
+						<key>AudioMixdown</key>
+						<string>Dolby Pro Logic II</string>
+						<key>AudioSamplerate</key>
+						<string>Auto</string>
+						<key>AudioTrack</key>
+						<integer>1</integer>
+						<key>AudioTrackDRCSlider</key>
+						<real>0.0</real>
+						<key>AudioTrackGainSlider</key>
+						<real>0.0</real>
+					</dict>
+				</array>
+				<key>ChapterMarkers</key>
+				<integer>0</integer>
+				<key>Default</key>
+				<integer>0</integer>
+				<key>FileFormat</key>
+				<string>MP4 file</string>
+				<key>Folder</key>
+				<false/>
+				<key>Mp4HttpOptimize</key>
+				<integer>0</integer>
+				<key>Mp4LargeFile</key>
+				<integer>0</integer>
+				<key>Mp4iPodCompatible</key>
+				<integer>0</integer>
+				<key>PictureAutoCrop</key>
+				<integer>1</integer>
+				<key>PictureBottomCrop</key>
+				<integer>0</integer>
+				<key>PictureDeblock</key>
+				<integer>0</integer>
+				<key>PictureDecomb</key>
+				<integer>0</integer>
+				<key>PictureDecombCustom</key>
+				<string></string>
+				<key>PictureDecombDeinterlace</key>
+				<integer>1</integer>
+				<key>PictureDeinterlace</key>
+				<integer>0</integer>
+				<key>PictureDeinterlaceCustom</key>
+				<string></string>
+				<key>PictureDenoise</key>
+				<integer>0</integer>
+				<key>PictureDenoiseCustom</key>
+				<string></string>
+				<key>PictureDetelecine</key>
+				<integer>0</integer>
+				<key>PictureDetelecineCustom</key>
+				<string></string>
+				<key>PictureHeight</key>
+				<integer>720</integer>
+				<key>PictureKeepRatio</key>
+				<integer>0</integer>
+				<key>PictureLeftCrop</key>
+				<integer>0</integer>
+				<key>PictureModulus</key>
+				<integer>2</integer>
+				<key>PicturePAR</key>
+				<integer>2</integer>
+				<key>PictureRightCrop</key>
+				<integer>0</integer>
+				<key>PictureTopCrop</key>
+				<integer>0</integer>
+				<key>PictureWidth</key>
+				<integer>1280</integer>
+				<key>PresetDescription</key>
+				<string>HandBrake's preset for Windows Phone 8 devices</string>
+				<key>PresetName</key>
+				<string>Windows Phone 8</string>
+				<key>Subtitles</key>
+				<string>None</string>
+				<key>Type</key>
+				<integer>0</integer>
+				<key>UsesPictureFilters</key>
+				<integer>1</integer>
+				<key>UsesPictureSettings</key>
+				<integer>1</integer>
+				<key>VideoAvgBitrate</key>
+				<string>2500</string>
+				<key>VideoEncoder</key>
+				<string>H.264 (x264)</string>
+				<key>VideoFramerate</key>
+				<string>30</string>
+				<key>VideoFramerateMode</key>
+				<string>pfr</string>
+				<key>VideoGrayScale</key>
+				<integer>0</integer>
+				<key>VideoQualitySlider</key>
+				<real>22</real>
+				<key>VideoQualityType</key>
+				<integer>2</integer>
+				<key>VideoTurboTwoPass</key>
+				<integer>0</integer>
+				<key>VideoTwoPass</key>
+				<integer>0</integer>
+				<key>h264Level</key>
+				<string>3.1</string>
+				<key>h264Profile</key>
+				<string>main</string>
+				<key>lavcOption</key>
+				<string></string>
+				<key>x264Option</key>
+				<string></string>
+				<key>x264OptionExtra</key>
+				<string></string>
+				<key>x264Preset</key>
+				<string>medium</string>
+				<key>x264Tune</key>
+				<string></string>
+				<key>x264UseAdvancedOptions</key>
+				<integer>0</integer>
+			</dict>
 		</array>
 		<key>Default</key>
 		<integer>0</integer>
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2013030401</integer>
+		<integer>2013061301</integer>
 		<key>PresetName</key>
 		<string>Devices</string>
 		<key>Type</key>
@@ -1569,7 +1702,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2013030401</integer>
+		<integer>2013061301</integer>
 		<key>PresetName</key>
 		<string>Regular</string>
 		<key>Type</key>

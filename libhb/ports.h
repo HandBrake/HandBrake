@@ -22,6 +22,7 @@
 uint64_t hb_get_date();
 void     hb_snooze( int delay );
 int      hb_get_cpu_count();
+int      hb_platform_init();
 #ifdef SYS_MINGW
 char *strtok_r(char *s, const char *delim, char **save_ptr);
 #endif

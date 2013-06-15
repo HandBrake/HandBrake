@@ -64,9 +64,10 @@ char * str_printf(const char *fmt, ...)
     }
 }
 
-int main( int argc, const char ** argv )
+int main(int argc, const char **argv)
 {
-    signal( SIGINT, SigHandler );
+    signal(SIGINT, SigHandler);
+    hb_global_init();
     hb_register_error_handler(&hb_error_handler);
-    return NSApplicationMain( argc, argv );
+    return NSApplicationMain(argc, argv);
 }

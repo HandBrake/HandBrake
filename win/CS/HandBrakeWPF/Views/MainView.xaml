@@ -7,7 +7,6 @@
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
              AllowDrop="True"
-        Background="#FFF0F0F0"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         SnapsToDevicePixels="True"
@@ -22,8 +21,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <UserControl.Resources>
-
+    <UserControl.Resources>       
         <Style TargetType="Button">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,1" />
@@ -46,9 +44,16 @@
         <Style TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0,2,0,2" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsBuildIn}" Value="True">
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsBuildIn}" Value="True" />
+                        <Condition Binding="{Binding DataContext.UseSystemColours, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="False" />
+                    </MultiDataTrigger.Conditions>
                     <Setter Property="Foreground" Value="DarkBlue" />
-                </DataTrigger>
+                </MultiDataTrigger>
+                <!--<DataTrigger Binding="{Binding IsBuildIn}" Value="True">
+                    <Setter Property="Foreground" Value="DarkBlue" />
+                </DataTrigger>-->
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="Background" Value="Transparent"/>
@@ -96,46 +101,85 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top"
                   >
-                <MenuItem Header="File">
-                    <MenuItem Header="Cancel Scan" Command="{Binding CancelScanCommand}" />
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Cancel Scan" Command="{Binding CancelScanCommand}" />
                     <Separator />
-                    <MenuItem Header="Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                    <MenuItem Header="_Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
                 </MenuItem>
 
-                <MenuItem Header="Tools">
-                    <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="_Show Queue" Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]" InputGestureText="Ctrl + Q">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Queue_Small.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Activity Log" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]">
+                    <MenuItem Header="_Activity Log" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]"  InputGestureText="Ctrl + L">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Output_Small.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
+                    <MenuItem Header="_Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Pref_Small.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
 
-                <MenuItem Header="Help">
-                    <MenuItem Header="HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]">
+
+                <MenuItem Header="_Presets" x:Name="presetMenu">
+                    <MenuItem Header="_Presets" ItemsSource="{Binding Presets}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Tag" Value="{Binding}" />
+                                <Setter Property="Micro:Action.TargetWithoutContext" Value="{Binding DataContext, ElementName=presetMenu}"/>
+                                <Setter Property="Micro:Message.Attach" Value="[Event Click] = [Action PresetSelect($this.Tag)]"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                        <Setter Property="FontStyle" Value="Italic" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="_Import" Micro:Message.Attach="[Event Click] = [Action PresetImport]" />
+                    <MenuItem Header="_Export" Micro:Message.Attach="[Event Click] = [Action PresetExport]" />
+                    <Separator />
+                    <MenuItem Header="_Set Current as Default" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                    <MenuItem Header="_Reset Built-In Presets" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
+                    <Separator />
+                    <MenuItem IsCheckable="True" x:Name="showPresetPanelMenuItem" IsChecked="{Binding IsPresetPanelShowing}">
+                        <MenuItem.Style>
+                            <Style TargetType="MenuItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=showPresetPanelMenuItem}" Value="True">
+                                        <Setter Property="Header" Value="_Hide Preset Panel"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=showPresetPanelMenuItem}" Value="False">
+                                        <Setter Property="Header" Value="S_how Preset Panel"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </MenuItem.Style>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="Check for Updates" Micro:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
+                    <MenuItem Header="_Check for Updates" Micro:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
                     <Separator />
-                    <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
+                    <MenuItem Header="_About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                 </MenuItem>
 
-                <MenuItem Header="Debug" Visibility="{Binding ShowDebugMenu, Converter={StaticResource boolToVisConverter}}" >
-                    <MenuItem Header="Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
-                    <MenuItem Header="Debug Scan Log" Micro:Message.Attach="[Event Click] = [Action DebugScanLog]" />
+                <MenuItem Header="_Debug" Visibility="{Binding ShowDebugMenu, Converter={StaticResource boolToVisConverter}}" >
+                    <MenuItem Header="_Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
+                    <MenuItem Header="_Debug Scan Log" Micro:Message.Attach="[Event Click] = [Action DebugScanLog]" />
                 </MenuItem>
             </Menu>
 
@@ -168,6 +212,7 @@
                                 <Setter Property="MenuItem.CommandParameter" Value="123"/>
                                 <Setter Property="ItemsSource" Value="{Binding Children}" />
                                 <Setter Property="Icon" Value="{Binding Image}" />
+                                <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
@@ -323,8 +368,8 @@
         <!--  Main Body  -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="270" />
+                <ColumnDefinition Width="*" MinWidth="700"/>
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -379,7 +424,7 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}"
                                                 />
-                        
+
                         <Label Margin="8,0,0,0" Content="through" />
                         <ComboBox Name="EndPoint"
                                   MinWidth="60"
@@ -396,7 +441,7 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}"
                                                 />
-  
+
                         <Label Margin="8,0,0,0" Content="Duration" />
                         <Label Margin="8,0,0,0" Content="{Binding Duration}" />
                     </StackPanel>
@@ -532,8 +577,8 @@
                       VerticalAlignment="Stretch"
                       Header="Presets"
                       Margin="0,0,0,5"
-                      Background="White"
-                      >
+                      Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
+                      
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -642,18 +687,12 @@
                               />
 
         <!--  Status Bar  -->
-        <StatusBar Grid.Row="2"
-                   Grid.ColumnSpan="2"
-                   Height="32"
-                   Margin="0"
-                   VerticalAlignment="Bottom"
-                   Padding="0"
-                   >
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" MinHeight="32" >
+
+            <ProgressBar Value="{Binding ProgressPercentage}" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
+                         Width="100" Height="18" VerticalAlignment="Center"/>
             <Label VerticalAlignment="Center"
-                   Content="{Binding Path=ProgramStatusLabel}"
-                   FontSize="11"
-                   Padding="0,0,0,5"
-                   />
+                   Content="{Binding Path=ProgramStatusLabel}" />
 
         </StatusBar>
     </Grid>

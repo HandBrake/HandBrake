@@ -157,6 +157,7 @@
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
+    <Compile Include="Helpers\AppStyleHelper.cs" />
     <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Model\SelectionTitle.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />
@@ -432,6 +433,7 @@
   <ItemGroup>
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Resource Include="Views\Images\add40.png" />
     <Resource Include="Views\Images\add.png" />

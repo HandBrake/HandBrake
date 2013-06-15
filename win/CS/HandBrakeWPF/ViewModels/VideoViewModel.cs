@@ -394,6 +394,18 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets the high quality label.
+        /// </summary>
+        public string HighQualityLabel
+        {
+            get
+            {
+                return this.SelectedVideoEncoder == VideoEncoder.X264 ? Resources.Video_PlaceboQuality : Resources.Video_HigherQuality;
+            }
+        }
+
+
+        /// <summary>
         /// Gets or sets SelectedFramerate.
         /// </summary>
         public string SelectedFramerate
@@ -459,6 +471,7 @@ namespace HandBrakeWPF.ViewModels
                 this.DisplayX264Options = value == VideoEncoder.X264;
 
                 this.NotifyOfPropertyChange(() => this.Rfqp);
+                this.NotifyOfPropertyChange(() => this.HighQualityLabel);
             }
         }
 
@@ -938,7 +951,6 @@ namespace HandBrakeWPF.ViewModels
                 width = 720;
             }
 
-            // TODO figure out what is wrong with this??
             return HandBrakeUtils.CreateX264OptionsString(preset, tunes, this.ExtraArguments, profile, this.H264Level, width, height);
         }
 

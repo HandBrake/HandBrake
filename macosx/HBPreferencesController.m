@@ -170,10 +170,10 @@
 	{
 		sendToAppDirectory = @"/Applications";
 	}
-    [panel beginSheetForDirectory: sendToAppDirectory file: nil types: nil
-                   modalForWindow: [self window] modalDelegate: self
-                   didEndSelector: @selector( browseSendToAppDone:returnCode:contextInfo: )
-                      contextInfo: sender]; 
+    [panel setDirectoryURL:[NSURL fileURLWithPath:sendToAppDirectory]];
+    [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+        [self browseSendToAppDone:panel returnCode:(int)result contextInfo:sender];
+    }];
 }
 
 - (void) browseSendToAppDone: (NSOpenPanel *) sheet

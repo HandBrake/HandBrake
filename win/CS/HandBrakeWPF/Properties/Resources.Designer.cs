@@ -348,6 +348,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Built-in presets have been reset..
+        /// </summary>
+        public static string Presets_ResetComplete {
+            get {
+                return ResourceManager.GetString("Presets_ResetComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Complete.
+        /// </summary>
+        public static string Presets_ResetHeader {
+            get {
+                return ResourceManager.GetString("Presets_ResetHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WARNING: You do not have automatic file naming turned on. Please enable this in options..
         /// </summary>
         public static string QueueSelection_AutoNameWarning {
@@ -362,6 +380,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueSelection_AutoTrackSelectionWarning {
             get {
                 return ResourceManager.GetString("QueueSelection_AutoTrackSelectionWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Higher Quality |.
+        /// </summary>
+        public static string Video_HigherQuality {
+            get {
+                return ResourceManager.GetString("Video_HigherQuality", resourceCulture);
             }
         }
         
@@ -387,6 +414,24 @@ namespace HandBrakeWPF.Properties {
         public static string Video_LosslessWarningTooltip {
             get {
                 return ResourceManager.GetString("Video_LosslessWarningTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to | Lower Quality.
+        /// </summary>
+        public static string Video_LowQuality {
+            get {
+                return ResourceManager.GetString("Video_LowQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Placebo Quality |.
+        /// </summary>
+        public static string Video_PlaceboQuality {
+            get {
+                return ResourceManager.GetString("Video_PlaceboQuality", resourceCulture);
             }
         }
         

@@ -60,6 +60,7 @@
     [childrenArray addObject:[self createAppleTV3Preset]];
     [childrenArray addObject:[self createAndroidPreset]];
     [childrenArray addObject:[self createAndroidTabletPreset]];
+    [childrenArray addObject:[self createW8PhonePreset]];
     
     /* Add the individual presets to the folder */
     [preset setObject:[NSMutableArray arrayWithArray:childrenArray]
@@ -987,6 +988,110 @@
     [preset setObject:[NSNumber numberWithInt:0]   forKey:@"Default"];
     [preset setObject:[NSNumber numberWithBool:NO] forKey:@"Folder"];
     [preset setObject:@"HandBrake's preset for tablets running Android 2.3 or later."
+               forKey:@"PresetDescription"];
+    
+    /* Container format and related settings */
+    [preset setObject:@"MP4 file"                forKey:@"FileFormat"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"Mp4LargeFile"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"Mp4HttpOptimize"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"Mp4iPodCompatible"];
+    
+    /* Chapter markers */
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
+    
+    /* Video encoder and advanced options */
+    [preset setObject:@"H.264 (x264)"            forKey:@"VideoEncoder"];
+    [preset setObject:@""                        forKey:@"lavcOption"];
+    [preset setObject:@""                        forKey:@"x264Option"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"x264UseAdvancedOptions"];
+    [preset setObject:@"medium"                  forKey:@"x264Preset"];
+    [preset setObject:@""                        forKey:@"x264Tune"];
+    [preset setObject:@""                        forKey:@"x264OptionExtra"];
+    [preset setObject:@"main"                    forKey:@"h264Profile"];
+    [preset setObject:@"3.1"                     forKey:@"h264Level"];
+    
+    /* Video rate control */
+    [preset setObject:@"2500"                         forKey:@"VideoAvgBitrate"];
+    [preset setObject:[NSNumber numberWithInt:0]      forKey:@"VideoTwoPass"];
+    [preset setObject:[NSNumber numberWithInt:0]      forKey:@"VideoTurboTwoPass"];
+    [preset setObject:[NSNumber numberWithInt:2]      forKey:@"VideoQualityType"]; //cq
+    [preset setObject:[NSNumber numberWithFloat:22.0] forKey:@"VideoQualitySlider"];
+    
+    /* Video frame rate */
+    [preset setObject:@"30"  forKey:@"VideoFramerate"];
+    [preset setObject:@"pfr" forKey:@"VideoFramerateMode"];
+    
+    /* Picture size */
+    [preset setObject:[NSNumber numberWithInt:1]    forKey:@"UsesPictureSettings"];
+    [preset setObject:[NSNumber numberWithInt:1280] forKey:@"PictureWidth"];
+    [preset setObject:[NSNumber numberWithInt:720]  forKey:@"PictureHeight"];
+    [preset setObject:[NSNumber numberWithInt:2]    forKey:@"PicturePAR"]; //loose
+    [preset setObject:[NSNumber numberWithInt:2]    forKey:@"PictureModulus"];
+    [preset setObject:[NSNumber numberWithInt:0]    forKey:@"PictureKeepRatio"]; //set to 0 for Loose (FIXME: why?)
+    
+    /* Picture filters */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDecomb"]; //off
+    [preset setObject:@""                        forKey:@"PictureDecombCustom"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDecombDeinterlace"]; //decomb
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+    [preset setObject:@""                        forKey:@"PictureDeinterlaceCustom"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+    [preset setObject:@""                        forKey:@"PictureDetelecineCustom"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+    [preset setObject:@""                        forKey:@"PictureDenoiseCustom"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+    
+    /* Picture crop */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
+    
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
+    
+    /* Audio track list - no need to add "None" at the end */
+    NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
+    /* Track 1 */
+    NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
+    [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
+    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
+    [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"128"                         forKey:@"AudioBitrate"];
+    [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackGainSlider"];
+    [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
+    [audioTrack1Array autorelease];
+    [audioListArray addObject:audioTrack1Array];
+    /* Add the audio track(s) to the preset's audio list */
+    [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
+    
+    /* Subtitles (note: currently ignored) */
+    [preset setObject:@"None" forKey:@"Subtitles"];
+    
+    /* Clean up and return the preset */
+    [preset autorelease];
+    return preset;
+}
+
+- (NSDictionary *)createW8PhonePreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+    
+    /* Preset properties (name, type: factory/user, default, folder, tooltip) */
+    [preset setObject:@"Windows Phone 8"            forKey:@"PresetName"];
+    [preset setObject:[NSNumber numberWithInt:0]   forKey:@"Type"]; //factory
+    [preset setObject:[NSNumber numberWithInt:0]   forKey:@"Default"];
+    [preset setObject:[NSNumber numberWithBool:NO] forKey:@"Folder"];
+    [preset setObject:@"HandBrake's preset for Windows Phone 8 devices"
                forKey:@"PresetDescription"];
     
     /* Container format and related settings */

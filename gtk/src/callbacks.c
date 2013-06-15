@@ -1600,6 +1600,35 @@ set_title_settings(GValue *settings, gint titleindex)
 
         ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
         ghb_settings_set_int(settings, "angle_count", title->angle_count);
+
+        ghb_settings_set_string(settings, "MetaName", title->name);
+        if (title->metadata)
+        {
+            if (title->metadata->name)
+            {
+                ghb_settings_set_string(settings, "MetaName",
+                    title->metadata->name);
+            }
+            ghb_settings_set_string(settings, "MetaArtist",
+                    title->metadata->artist);
+            ghb_settings_set_string(settings, "MetaReleaseDate",
+                    title->metadata->release_date);
+            ghb_settings_set_string(settings, "MetaComment",
+                    title->metadata->comment);
+            if (!title->metadata->name && title->metadata->album)
+            {
+                ghb_settings_set_string(settings, "MetaName",
+                    title->metadata->album);
+            }
+            ghb_settings_set_string(settings, "MetaAlbumArtist",
+                    title->metadata->album_artist);
+            ghb_settings_set_string(settings, "MetaGenre",
+                    title->metadata->genre);
+            ghb_settings_set_string(settings, "MetaDescription",
+                    title->metadata->description);
+            ghb_settings_set_string(settings, "MetaLongDescription",
+                    title->metadata->long_description);
+        }
     }
     update_chapter_list_settings(settings);
     ghb_set_pref_audio_settings(titleindex, settings);

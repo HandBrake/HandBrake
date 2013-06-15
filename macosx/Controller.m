@@ -701,7 +701,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     menuItem = [[fVidRatePopUp menu] addItemWithTitle:@"Same as source"
                                                action:nil
                                         keyEquivalent:@""];
-    [menuItem setTag:-1]; // hb_video_framerate_get_from_name(NULL)
+    [menuItem setTag:hb_video_framerate_get_from_name("Same as source")];
     for (const hb_rate_t *video_framerate = hb_video_framerate_get_next(NULL);
          video_framerate != NULL;
          video_framerate  = hb_video_framerate_get_next(video_framerate))
@@ -1757,10 +1757,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* we open up the browse sources sheet here and call for browseSourcesDone after the sheet is closed
         * to evaluate whether we want to specify a title, we pass the sender in the contextInfo variable
         */
-    [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
-                   modalForWindow: fWindow modalDelegate: self
-                   didEndSelector: @selector( browseSourcesDone:returnCode:contextInfo: )
-                      contextInfo: sender]; 
+    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel beginSheetModalForWindow:fWindow completionHandler:
+     ^(NSInteger result) {
+         [self browseSourcesDone:panel returnCode:(int)result contextInfo:sender];
+     }];
 }
 
 - (void) browseSourcesDone: (NSOpenPanel *) sheet
@@ -2226,10 +2227,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Open a panel to let the user choose and update the text field */
     NSSavePanel * panel = [NSSavePanel savePanel];
 	/* We get the current file name and path from the destination field here */
-	[panel beginSheetForDirectory: [[fDstFile2Field stringValue] stringByDeletingLastPathComponent] file: [[fDstFile2Field stringValue] lastPathComponent]
-				   modalForWindow: fWindow modalDelegate: self
-				   didEndSelector: @selector( browseFileDone:returnCode:contextInfo: )
-					  contextInfo: NULL];
+    NSString* destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:destinationDirectory]];
+    [panel setNameFieldStringValue:[[fDstFile2Field stringValue] lastPathComponent]];
+    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
+        [self browseFileDone:panel returnCode:(int)result contextInfo:sender];
+    }];
 }
 
 - (void) browseFileDone: (NSSavePanel *) sheet
@@ -5972,13 +5975,14 @@ the user is using "Custom" settings by determining the sender*/
 	}
     /* we open up the browse srt sheet here and call for browseImportSrtFileDone after the sheet is closed */
     NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"srt", nil];
-    [panel beginSheetForDirectory: sourceDirectory file: nil types: fileTypes
-                   modalForWindow: fWindow modalDelegate: self
-                   didEndSelector: @selector( browseImportSrtFileDone:returnCode:contextInfo: )
-                      contextInfo: sender];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel setAllowedFileTypes:fileTypes];
+    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
+        [self browseImportSrtFileDone:panel returnCode:(int)result contextInfo:sender];
+    }];
 }
 
-- (void) browseImportSrtFileDone: (NSSavePanel *) sheet
+- (void) browseImportSrtFileDone: (NSOpenPanel *) sheet
                      returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
     if( returnCode == NSOKButton )
@@ -7318,11 +7322,11 @@ return YES;
     NSSavePanel * panel = [NSSavePanel savePanel];
 	/* We get the current file name and path from the destination field here */
     NSString *defaultExportDirectory = [NSString stringWithFormat: @"%@/Desktop/", NSHomeDirectory()];
-
-	[panel beginSheetForDirectory: defaultExportDirectory file: @"HB_Export.plist"
-				   modalForWindow: fWindow modalDelegate: self
-				   didEndSelector: @selector( browseExportPresetFileDone:returnCode:contextInfo: )
-					  contextInfo: NULL];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:defaultExportDirectory]];
+    [panel setNameFieldStringValue:@"HB_Export.plist"];
+    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
+        [self browseExportPresetFileDone:panel returnCode: (int)result contextInfo:sender];
+    }];
 }
 
 - (void) browseExportPresetFileDone: (NSSavePanel *) sheet
@@ -7381,10 +7385,11 @@ return YES;
         */
     /* set this for allowed file types, not sure if we should allow xml or not */
     NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"xml", nil];
-    [panel beginSheetForDirectory: sourceDirectory file: nil types: fileTypes
-                   modalForWindow: fWindow modalDelegate: self
-                   didEndSelector: @selector( browseImportPresetDone:returnCode:contextInfo: )
-                      contextInfo: sender];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel setAllowedFileTypes:fileTypes];
+    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
+        [self browseImportPresetDone:panel returnCode:(int)result contextInfo:sender];
+    }];
 }
 
 - (void) browseImportPresetDone: (NSSavePanel *) sheet
@@ -7719,13 +7724,13 @@ return YES;
 	/* Open a panel to let the user choose the file */
 	NSOpenPanel * panel = [NSOpenPanel openPanel];
 	/* We get the current file name and path from the destination field here */
-	[panel beginSheetForDirectory: [NSString stringWithFormat:@"%@/",
-                                    [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"]]
-                             file: NULL
-                            types: [NSArray arrayWithObjects:@"csv",nil]
-                   modalForWindow: fWindow modalDelegate: self
-                   didEndSelector: @selector( browseForChapterFileDone:returnCode:contextInfo: )
-                      contextInfo: NULL];
+    NSString* sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"];
+    NSArray* fileTypes = [NSArray arrayWithObjects:@"csv",nil];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel setAllowedFileTypes:fileTypes];
+    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
+        [self browseForChapterFileDone:panel returnCode:(int)result contextInfo:sender];
+    }];
 }
 
 - (void) browseForChapterFileDone: (NSOpenPanel *) sheet
@@ -7800,13 +7805,12 @@ return YES;
     NSSavePanel *panel = [NSSavePanel savePanel];
     /* Open a panel to let the user save to a file */
     [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"csv",nil]];
-    [panel beginSheetForDirectory: [[fDstFile2Field stringValue] stringByDeletingLastPathComponent] 
-                             file: [[[[fDstFile2Field stringValue] lastPathComponent] stringByDeletingPathExtension] 
-                                     stringByAppendingString:@"-chapters.csv"]
-                   modalForWindow: fWindow 
-                    modalDelegate: self
-                   didEndSelector: @selector( browseForChapterFileSaveDone:returnCode:contextInfo: )
-                      contextInfo: NULL];
+    NSString* destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:destinationDirectory]];
+    [panel setNameFieldStringValue:[[[fDstFile2Field stringValue] lastPathComponent] stringByDeletingPathExtension]];
+    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
+        [self browseForChapterFileSaveDone:panel returnCode:(int)result contextInfo:sender];
+    }];
 }
 
 - (void) browseForChapterFileSaveDone: (NSSavePanel *) sheet

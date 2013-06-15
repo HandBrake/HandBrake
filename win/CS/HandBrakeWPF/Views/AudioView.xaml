@@ -105,17 +105,30 @@
 
         <ListBox Grid.Row="2"
                  Margin="10,10,10,10"
-                 Background="LightGray"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True"
                  ItemsSource="{Binding Task.AudioTracks}"
                  SelectionMode="Extended">
+            <ListBox.Style>
+                <Style TargetType="ListBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                            <Setter Property="Background" Value="LightGray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+            
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Background" Value="WhiteSmoke" />
                     <Setter Property="Margin" Value="0,0,0,1" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </ListBox.ItemContainerStyle>
 

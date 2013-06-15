@@ -2018,158 +2018,6 @@ typedef struct
     const gchar *lin_val;
 } value_map_t;
 
-static value_map_t vcodec_xlat_compat[] =
-{
-    {"MPEG-4 (FFmpeg)", "ffmpeg"},
-    {"MPEG-4 (XviD)", "ffmpeg4"},
-    {NULL,NULL}
-};
-
-static value_map_t *vcodec_xlat;
-
-static value_map_t acodec_xlat_compat[] =
-{
-    {"AAC (CoreAudio)", "faac"},
-    {"HE-AAC (CoreAudio)", "faac"},
-    {"AC3 (ffmpeg)", "ac3"},
-    {"AC3", "ac3"},
-    {"MP3 Passthru", "mp3pass"},
-    {"AAC Passthru", "aacpass"},
-    {"AC3 Passthru", "ac3pass"},
-    {"DTS Passthru", "dtspass"},
-    {"DTS-HD Passthru", "dtshdpass"},
-    {"Auto Passthru", "auto"},
-    {NULL,NULL}
-};
-
-static value_map_t *acodec_xlat;
-
-static value_map_t * create_video_encoder_xlat_tbl(value_map_t *compat)
-{
-    value_map_t *out;
-    int cc, ii, size = 0;
-
-    for (cc = 0; compat[cc].mac_val != NULL; cc++);
-    
-    const hb_encoder_t *enc;
-    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
-         enc = hb_video_encoder_get_next(enc))
-    {
-        size++;
-    }
-    out = calloc(cc + size + 1, sizeof(value_map_t));
-
-    for (ii = 0, enc = hb_video_encoder_get_next(NULL); enc != NULL;
-         ii++, enc = hb_video_encoder_get_next(enc))
-    {
-        out[ii].mac_val = enc->name;
-        out[ii].lin_val = enc->short_name;
-    }
-
-    for (ii = 0; ii < cc; ii++)
-        out[ii+size] = compat[ii];
-
-    return out;
-}
-
-static value_map_t * create_audio_encoder_xlat_tbl(value_map_t *compat)
-{
-    value_map_t *out;
-    int cc, ii, size = 0;
-
-    for (cc = 0; compat[cc].mac_val != NULL; cc++);
-    
-    const hb_encoder_t *enc;
-    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
-         enc = hb_audio_encoder_get_next(enc))
-    {
-        size++;
-    }
-    out = calloc(cc + size + 1, sizeof(value_map_t));
-
-    for (ii = 0, enc = hb_audio_encoder_get_next(NULL); enc != NULL;
-         ii++, enc = hb_audio_encoder_get_next(enc))
-    {
-        out[ii].mac_val = enc->name;
-        out[ii].lin_val = enc->short_name;
-    }
-
-    for (ii = 0; ii < cc; ii++)
-        out[ii+size] = compat[ii];
-
-    return out;
-}
-
-static value_map_t * create_mix_xlat_tbl(value_map_t *compat)
-{
-    value_map_t *out;
-    int cc, ii, size = 0;;
-
-    for (cc = 0; compat[cc].mac_val != NULL; cc++);
-
-    const hb_mixdown_t *mix;
-    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
-         mix = hb_mixdown_get_next(mix))
-    {
-        size++;
-    }
-    out = calloc(cc + size + 1, sizeof(value_map_t));
-
-    for (ii = 0, mix = hb_mixdown_get_next(NULL); mix != NULL;
-         ii++, mix = hb_mixdown_get_next(mix))
-    {
-        out[ii].mac_val = mix->name;
-        out[ii].lin_val = mix->short_name;
-    }
-
-    for (ii = 0; ii < cc; ii++)
-        out[ii+size] = compat[ii];
-
-    return out;
-}
-
-value_map_t framerate_xlat[] =
-{
-    {"Same as source", "source"},
-    {"5", "5"},
-    {"10", "10"},
-    {"12", "12"},
-    {"15", "15"},
-    {"23.976 (NTSC Film)", "23.976"},
-    {"24", "24"},
-    {"25 (PAL Film/Video)", "25"},
-    {"29.97 (NTSC Video)", "29.97"},
-    {"30", "30"},
-    {"50", "50"},
-    {"59.94", "59.94"},
-    {"60", "60"},
-    {NULL, NULL}
-};
-
-value_map_t samplerate_xlat[] =
-{
-    {"Auto", "source"},
-    {"22.05", "22.05"},
-    {"24", "24"},
-    {"32", "32"},
-    {"44.1", "44.1"},
-    {"48", "48"},
-    {NULL, NULL}
-};
-
-// mix translation table filed in with hb_audio_mixdowns table contents
-value_map_t *mix_xlat;
-
-// Backwards compatibility mappings for audio mix
-value_map_t mix_xlat_compat[] =
-{
-    {"6-channel discrete", "5point1"},
-    {"AC3 Passthru", "none"},
-    {"DTS Passthru", "none"},
-    {"DTS-HD Passthru", "none"},
-    {NULL, NULL}
-};
-
 value_map_t deint_xlat[] =
 {
     {"0", "off"},
@@ -2394,17 +2242,95 @@ export_value_xlat2(value_map_t *value_map, GValue *lin_val, GType mac_type)
 }
 
 static GValue*
-export_value_xlat_container(GValue *lin_val)
+export_value_video_framerate(GValue *lin_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *fr;
+
+    str = ghb_value_string(lin_val);
+    fr = hb_video_framerate_get_name(hb_video_framerate_get_from_name(str));
+    g_free(str);
+    if (fr != NULL)
+        sval = ghb_string_value_new(fr);
+
+    return sval;
+}
+
+static GValue*
+export_value_audio_samplerate(GValue *lin_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *sr;
+
+    str = ghb_value_string(lin_val);
+    sr = hb_audio_samplerate_get_name(hb_audio_samplerate_get_from_name(str));
+    g_free(str);
+    if (sr != NULL)
+        sval = ghb_string_value_new(sr);
+
+    return sval;
+}
+
+static GValue*
+export_value_mixdown(GValue *lin_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *mix;
+
+    str = ghb_value_string(lin_val);
+    mix = hb_mixdown_get_name(hb_mixdown_get_from_name(str));
+    g_free(str);
+    if (mix != NULL)
+        sval = ghb_string_value_new(mix);
+
+    return sval;
+}
+
+static GValue*
+export_value_video_encoder(GValue *lin_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *enc;
+
+    str = ghb_value_string(lin_val);
+    enc = hb_video_encoder_get_name(hb_video_encoder_get_from_name(str));
+    g_free(str);
+    if (enc != NULL)
+        sval = ghb_string_value_new(enc);
+
+    return sval;
+}
+
+static GValue*
+export_value_audio_encoder(GValue *lin_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *enc;
+
+    str = ghb_value_string(lin_val);
+    enc = hb_audio_encoder_get_name(hb_audio_encoder_get_from_name(str));
+    g_free(str);
+    if (enc != NULL)
+        sval = ghb_string_value_new(enc);
+
+    return sval;
+}
+
+static GValue*
+export_value_container(GValue *lin_val)
 {
     GValue *sval = NULL;
     gchar *str;
     const gchar *mux;
-    int imux;
 
     str = ghb_value_string(lin_val);
-    imux = hb_container_get_from_name(str);
+    mux = hb_container_get_name(hb_container_get_from_name(str));
     g_free(str);
-    mux = hb_container_get_name(imux);
     if (mux != NULL)
         sval = ghb_string_value_new(mux);
 
@@ -2419,17 +2345,17 @@ export_value_xlat(GValue *dict)
 
     key = "VideoEncoder";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(vcodec_xlat, lin_val, G_TYPE_STRING);
+    gval = export_value_video_encoder(lin_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "FileFormat";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat_container(lin_val);
+    gval = export_value_container(lin_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "VideoFramerate";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(framerate_xlat, lin_val, G_TYPE_STRING);
+    gval = export_value_video_framerate(lin_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "PictureDetelecine";
@@ -2474,7 +2400,7 @@ export_value_xlat(GValue *dict)
 
     key = "AudioEncoderFallback";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(acodec_xlat, lin_val, G_TYPE_STRING);
+    gval = export_value_audio_encoder(lin_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
 
@@ -2490,17 +2416,17 @@ export_value_xlat(GValue *dict)
             ghb_dict_insert(adict, g_strdup(key), gval);
         key = "AudioEncoder";
         lin_val = ghb_dict_lookup(adict, key);
-        gval = export_value_xlat2(acodec_xlat, lin_val, G_TYPE_STRING);
+        gval = export_value_audio_encoder(lin_val);
         if (gval)
             ghb_dict_insert(adict, g_strdup(key), gval);
         key = "AudioSamplerate";
         lin_val = ghb_dict_lookup(adict, key);
-        gval = export_value_xlat2(samplerate_xlat, lin_val, G_TYPE_STRING);
+        gval = export_value_audio_samplerate(lin_val);
         if (gval)
             ghb_dict_insert(adict, g_strdup(key), gval);
         key = "AudioMixdown";
         lin_val = ghb_dict_lookup(adict, key);
-        gval = export_value_xlat2(mix_xlat, lin_val, G_TYPE_STRING);
+        gval = export_value_mixdown(lin_val);
         if (gval)
             ghb_dict_insert(adict, g_strdup(key), gval);
     }
@@ -2579,26 +2505,100 @@ import_value_xlat2(
 }
 
 static GValue*
-import_value_xlat_container(GValue *mac_val)
+import_value_video_framerate(GValue *mac_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *fr;
+
+    str = ghb_value_string(mac_val);
+    fr = hb_video_framerate_get_name(hb_video_framerate_get_from_name(str));
+    g_free(str);
+
+    if (fr != NULL)
+        sval = ghb_string_value_new(fr);
+
+    return sval;
+}
+
+static GValue*
+import_value_audio_samplerate(GValue *mac_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *sr;
+
+    str = ghb_value_string(mac_val);
+    sr = hb_audio_samplerate_get_name(hb_audio_samplerate_get_from_name(str));
+    g_free(str);
+
+    if (sr != NULL)
+        sval = ghb_string_value_new(sr);
+
+    return sval;
+}
+
+static GValue*
+import_value_mixdown(GValue *mac_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *mix;
+
+    str = ghb_value_string(mac_val);
+    mix = hb_mixdown_get_short_name(hb_mixdown_get_from_name(str));
+    g_free(str);
+
+    if (mix != NULL)
+        sval = ghb_string_value_new(mix);
+
+    return sval;
+}
+
+static GValue*
+import_value_video_encoder(GValue *mac_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *enc;
+
+    str = ghb_value_string(mac_val);
+    enc = hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(str));
+    g_free(str);
+
+    if (enc != NULL)
+        sval = ghb_string_value_new(enc);
+
+    return sval;
+}
+
+static GValue*
+import_value_audio_encoder(GValue *mac_val)
+{
+    GValue *sval = NULL;
+    gchar *str;
+    const gchar *enc;
+
+    str = ghb_value_string(mac_val);
+    enc = hb_audio_encoder_get_short_name(hb_audio_encoder_get_from_name(str));
+    g_free(str);
+
+    if (enc != NULL)
+        sval = ghb_string_value_new(enc);
+
+    return sval;
+}
+
+static GValue*
+import_value_container(GValue *mac_val)
 {
     GValue *sval = NULL;
     gchar *str;
     const gchar *mux;
-    int imux;
 
     str = ghb_value_string(mac_val);
-    mux = hb_container_sanitize_name(str);
+    mux = hb_container_get_short_name(hb_container_get_from_name(str));
     g_free(str);
-
-    if (mux == NULL)
-    {
-        imux = hb_container_get_from_extension("mp4");
-    }
-    else
-    {
-        imux = hb_container_get_from_name(mux);
-    }
-    mux = hb_container_get_short_name(imux);
 
     if (mux != NULL)
         sval = ghb_string_value_new(mux);
@@ -2615,17 +2615,17 @@ import_value_xlat(GValue *dict)
     defaults = plist_get_dict(internalPlist, "Presets");
     key = "VideoEncoder";
     mac_val = ghb_dict_lookup(dict, key);
-    gval = import_value_xlat2(defaults, vcodec_xlat, key, mac_val);
+    gval = import_value_video_encoder(mac_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "FileFormat";
     mac_val = ghb_dict_lookup(dict, key);
-    gval = import_value_xlat_container(mac_val);
+    gval = import_value_container(mac_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "VideoFramerate";
     mac_val = ghb_dict_lookup(dict, key);
-    gval = import_value_xlat2(defaults, framerate_xlat, key, mac_val);
+    gval = import_value_video_framerate(mac_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
     key = "PictureDetelecine";
@@ -2725,7 +2725,7 @@ import_value_xlat(GValue *dict)
 
     key = "AudioEncoderFallback";
     mac_val = ghb_dict_lookup(dict, key);
-    gval = import_value_xlat2(defaults, acodec_xlat, key, mac_val);
+    gval = import_value_audio_encoder(mac_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
 
@@ -2745,17 +2745,23 @@ import_value_xlat(GValue *dict)
                 ghb_dict_insert(adict, g_strdup(key), gval);
             key = "AudioEncoder";
             mac_val = ghb_dict_lookup(adict, key);
-            gval = import_value_xlat2(adefaults, acodec_xlat, key, mac_val);
+            gval = import_value_audio_encoder(mac_val);
+            if (gval == NULL)
+                gval = ghb_value_dup(ghb_dict_lookup(adefaults, key));
             if (gval)
                 ghb_dict_insert(adict, g_strdup(key), gval);
             key = "AudioSamplerate";
             mac_val = ghb_dict_lookup(adict, key);
-            gval = import_value_xlat2(adefaults, samplerate_xlat, key, mac_val);
+            gval = import_value_audio_samplerate(mac_val);
+            if (gval == NULL)
+                gval = ghb_value_dup(ghb_dict_lookup(adefaults, key));
             if (gval)
                 ghb_dict_insert(adict, g_strdup(key), gval);
             key = "AudioMixdown";
             mac_val = ghb_dict_lookup(adict, key);
-            gval = import_value_xlat2(adefaults, mix_xlat, key, mac_val);
+            gval = import_value_mixdown(mac_val);
+            if (gval == NULL)
+                gval = ghb_value_dup(ghb_dict_lookup(adefaults, key));
             if (gval)
                 ghb_dict_insert(adict, g_strdup(key), gval);
 
@@ -3381,11 +3387,6 @@ update_standard_presets(signal_user_data_t *ud)
 void
 ghb_presets_load(signal_user_data_t *ud)
 {
-    // Create translation tables from libhb tables
-    mix_xlat = create_mix_xlat_tbl(mix_xlat_compat);
-    acodec_xlat = create_audio_encoder_xlat_tbl(acodec_xlat_compat);
-    vcodec_xlat = create_video_encoder_xlat_tbl(vcodec_xlat_compat);
-
     presetsPlist = load_plist("presets");
     if (presetsPlist == NULL)
     {

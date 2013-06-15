@@ -21,164 +21,585 @@
  *********************************************************************/
 static hb_error_handler_t *error_handler = NULL;
 
-hb_rate_t hb_video_rates[] =
+/* Generic IDs for encoders, containers, etc. */
+enum
 {
-    {  "5",     5400000 },
-    { "10",     2700000 },
-    { "12",     2250000 },
-    { "15",     1800000 },
-    { "23.976", 1126125 },
-    { "24",     1125000 },
-    { "25",     1080000 },
-    { "29.97",   900900 },
-    { "30",      900000 },
-    { "50",      540000 },
-    { "59.94",   450450 },
-    { "60",      450000 },
+    HB_GID_NONE = -1, // encoders must NEVER use it
+    HB_GID_VCODEC_H264,
+    HB_GID_VCODEC_MPEG2,
+    HB_GID_VCODEC_MPEG4,
+    HB_GID_VCODEC_THEORA,
+    HB_GID_ACODEC_AAC,
+    HB_GID_ACODEC_AAC_HE,
+    HB_GID_ACODEC_AAC_PASS,
+    HB_GID_ACODEC_AC3,
+    HB_GID_ACODEC_AC3_PASS,
+    HB_GID_ACODEC_AUTO_PASS,
+    HB_GID_ACODEC_DTS_PASS,
+    HB_GID_ACODEC_DTSHD_PASS,
+    HB_GID_ACODEC_FLAC,
+    HB_GID_ACODEC_MP3,
+    HB_GID_ACODEC_MP3_PASS,
+    HB_GID_ACODEC_VORBIS,
+    HB_GID_MUX_MKV,
+    HB_GID_MUX_MP4,
 };
-int hb_video_rates_count = sizeof(hb_video_rates) / sizeof(hb_rate_t);
 
-hb_rate_t hb_audio_rates[] =
+typedef struct
 {
-    {  "8",      8000 },
-    { "11.025", 11025 },
-    { "12",     12000 },
-    { "16",     16000 },
-    { "22.05",  22050 },
-    { "24",     24000 },
-    { "32",     32000 },
-    { "44.1",   44100 },
-    { "48",     48000 },
+    hb_rate_t  item;
+    hb_rate_t *next;
+    int enabled;
+} hb_rate_internal_t;
+hb_rate_t *hb_video_rates_first_item = NULL;
+hb_rate_t *hb_video_rates_last_item  = NULL;
+hb_rate_internal_t hb_video_rates[]  =
+{
+    // legacy framerates (disabled)
+    { { "23.976 (NTSC Film)",  1126125, }, NULL, 0, },
+    { { "25 (PAL Film/Video)", 1080000, }, NULL, 0, },
+    { { "29.97 (NTSC Video)",   900900, }, NULL, 0, },
+    // actual framerates
+    { {  "5",                  5400000, }, NULL, 1, },
+    { { "10",                  2700000, }, NULL, 1, },
+    { { "12",                  2250000, }, NULL, 1, },
+    { { "15",                  1800000, }, NULL, 1, },
+    { { "23.976",              1126125, }, NULL, 1, },
+    { { "24",                  1125000, }, NULL, 1, },
+    { { "25",                  1080000, }, NULL, 1, },
+    { { "29.97",                900900, }, NULL, 1, },
+    { { "30",                   900000, }, NULL, 1, },
+    { { "50",                   540000, }, NULL, 1, },
+    { { "59.94",                450450, }, NULL, 1, },
+    { { "60",                   450000, }, NULL, 1, },
 };
-int hb_audio_rates_count = sizeof(hb_audio_rates) / sizeof(hb_rate_t);
+int hb_video_rates_count = sizeof(hb_video_rates) / sizeof(hb_video_rates[0]);
 
-hb_rate_t hb_audio_bitrates[] =
+hb_rate_t *hb_audio_rates_first_item = NULL;
+hb_rate_t *hb_audio_rates_last_item  = NULL;
+hb_rate_internal_t hb_audio_rates[]  =
+{
+    { {  "8",      8000, }, NULL, 1, },
+    { { "11.025", 11025, }, NULL, 1, },
+    { { "12",     12000, }, NULL, 1, },
+    { { "16",     16000, }, NULL, 1, },
+    { { "22.05",  22050, }, NULL, 1, },
+    { { "24",     24000, }, NULL, 1, },
+    { { "32",     32000, }, NULL, 1, },
+    { { "44.1",   44100, }, NULL, 1, },
+    { { "48",     48000, }, NULL, 1, },
+};
+int hb_audio_rates_count = sizeof(hb_audio_rates) / sizeof(hb_audio_rates[0]);
+
+hb_rate_t *hb_audio_bitrates_first_item = NULL;
+hb_rate_t *hb_audio_bitrates_last_item  = NULL;
+hb_rate_internal_t hb_audio_bitrates[]  =
 {
     // AC3-compatible bitrates
-    {   "32",   32 },
-    {   "40",   40 },
-    {   "48",   48 },
-    {   "56",   56 },
-    {   "64",   64 },
-    {   "80",   80 },
-    {   "96",   96 },
-    {  "112",  112 },
-    {  "128",  128 },
-    {  "160",  160 },
-    {  "192",  192 },
-    {  "224",  224 },
-    {  "256",  256 },
-    {  "320",  320 },
-    {  "384",  384 },
-    {  "448",  448 },
-    {  "512",  512 },
-    {  "576",  576 },
-    {  "640",  640 },
+    { {   "32",   32, }, NULL, 1, },
+    { {   "40",   40, }, NULL, 1, },
+    { {   "48",   48, }, NULL, 1, },
+    { {   "56",   56, }, NULL, 1, },
+    { {   "64",   64, }, NULL, 1, },
+    { {   "80",   80, }, NULL, 1, },
+    { {   "96",   96, }, NULL, 1, },
+    { {  "112",  112, }, NULL, 1, },
+    { {  "128",  128, }, NULL, 1, },
+    { {  "160",  160, }, NULL, 1, },
+    { {  "192",  192, }, NULL, 1, },
+    { {  "224",  224, }, NULL, 1, },
+    { {  "256",  256, }, NULL, 1, },
+    { {  "320",  320, }, NULL, 1, },
+    { {  "384",  384, }, NULL, 1, },
+    { {  "448",  448, }, NULL, 1, },
+    { {  "512",  512, }, NULL, 1, },
+    { {  "576",  576, }, NULL, 1, },
+    { {  "640",  640, }, NULL, 1, },
     // additional bitrates
-    {  "768",  768 },
-    {  "960",  960 },
-    { "1152", 1152 },
-    { "1344", 1344 },
-    { "1536", 1536 },
+    { {  "768",  768, }, NULL, 1, },
+    { {  "960",  960, }, NULL, 1, },
+    { { "1152", 1152, }, NULL, 1, },
+    { { "1344", 1344, }, NULL, 1, },
+    { { "1536", 1536, }, NULL, 1, },
 };
-int hb_audio_bitrates_count = sizeof(hb_audio_bitrates) / sizeof(hb_rate_t);
+int hb_audio_bitrates_count = sizeof(hb_audio_bitrates) / sizeof(hb_audio_bitrates[0]);
 
-hb_dither_t hb_audio_dithers[] =
+typedef struct
 {
-    { "default",                       "auto",          AV_RESAMPLE_DITHER_NONE - 1,      },
-    { "none",                          "none",          AV_RESAMPLE_DITHER_NONE,          },
-    { "rectangular",                   "rectangular",   AV_RESAMPLE_DITHER_RECTANGULAR,   },
-    { "triangular",                    "triangular",    AV_RESAMPLE_DITHER_TRIANGULAR,    },
-    { "triangular with high pass",     "triangular_hp", AV_RESAMPLE_DITHER_TRIANGULAR_HP, },
-    { "triangular with noise shaping", "triangular_ns", AV_RESAMPLE_DITHER_TRIANGULAR_NS, },
+    hb_dither_t  item;
+    hb_dither_t *next;
+    int enabled;
+} hb_dither_internal_t;
+hb_dither_t *hb_audio_dithers_first_item = NULL;
+hb_dither_t *hb_audio_dithers_last_item  = NULL;
+hb_dither_internal_t hb_audio_dithers[]  =
+{
+    { { "default",                       "auto",          AV_RESAMPLE_DITHER_NONE - 1,      }, NULL, 1, },
+    { { "none",                          "none",          AV_RESAMPLE_DITHER_NONE,          }, NULL, 1, },
+    { { "rectangular",                   "rectangular",   AV_RESAMPLE_DITHER_RECTANGULAR,   }, NULL, 1, },
+    { { "triangular",                    "triangular",    AV_RESAMPLE_DITHER_TRIANGULAR,    }, NULL, 1, },
+    { { "triangular with high pass",     "triangular_hp", AV_RESAMPLE_DITHER_TRIANGULAR_HP, }, NULL, 1, },
+    { { "triangular with noise shaping", "triangular_ns", AV_RESAMPLE_DITHER_TRIANGULAR_NS, }, NULL, 1, },
 };
-int hb_audio_dithers_count = sizeof(hb_audio_dithers) / sizeof(hb_dither_t);
+int hb_audio_dithers_count = sizeof(hb_audio_dithers) / sizeof(hb_audio_dithers[0]);
 
-hb_mixdown_t hb_audio_mixdowns[] =
+typedef struct
 {
-    { "None",               "HB_AMIXDOWN_NONE",      "none",       HB_AMIXDOWN_NONE      },
-    { "Mono",               "HB_AMIXDOWN_MONO",      "mono",       HB_AMIXDOWN_MONO      },
-    { "Mono (Left Only)",   "HB_AMIXDOWN_LEFT",      "left_only",  HB_AMIXDOWN_LEFT      },
-    { "Mono (Right Only)",  "HB_AMIXDOWN_RIGHT",     "right_only", HB_AMIXDOWN_RIGHT     },
-    { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo",     HB_AMIXDOWN_STEREO    },
-    { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     "dpl1",       HB_AMIXDOWN_DOLBY     },
-    { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",       HB_AMIXDOWN_DOLBYPLII },
-    { "5.1 Channels",       "HB_AMIXDOWN_5POINT1",   "5point1",    HB_AMIXDOWN_5POINT1   },
-    { "6.1 Channels",       "HB_AMIXDOWN_6POINT1",   "6point1",    HB_AMIXDOWN_6POINT1   },
-    { "7.1 Channels",       "HB_AMIXDOWN_7POINT1",   "7point1",    HB_AMIXDOWN_7POINT1   },
-    { "7.1 (5F/2R/LFE)",    "HB_AMIXDOWN_5_2_LFE",   "5_2_lfe",    HB_AMIXDOWN_5_2_LFE   },
+    hb_mixdown_t  item;
+    hb_mixdown_t *next;
+    int enabled;
+} hb_mixdown_internal_t;
+hb_mixdown_t *hb_audio_mixdowns_first_item = NULL;
+hb_mixdown_t *hb_audio_mixdowns_last_item  = NULL;
+hb_mixdown_internal_t hb_audio_mixdowns[]  =
+{
+    // legacy mixdowns (disabled)
+    { { "AC3 Passthru",       "ac3pass",    HB_AMIXDOWN_NONE,      }, NULL, 0, },
+    { { "DTS Passthru",       "dtspass",    HB_AMIXDOWN_NONE,      }, NULL, 0, },
+    { { "DTS-HD Passthru",    "dtshdpass",  HB_AMIXDOWN_NONE,      }, NULL, 0, },
+    { { "6-channel discrete", "6ch",        HB_AMIXDOWN_5POINT1,   }, NULL, 0, },
+    // actual mixdowns
+    { { "None",               "none",       HB_AMIXDOWN_NONE,      }, NULL, 1, },
+    { { "Mono",               "mono",       HB_AMIXDOWN_MONO,      }, NULL, 1, },
+    { { "Mono (Left Only)",   "left_only",  HB_AMIXDOWN_LEFT,      }, NULL, 1, },
+    { { "Mono (Right Only)",  "right_only", HB_AMIXDOWN_RIGHT,     }, NULL, 1, },
+    { { "Stereo",             "stereo",     HB_AMIXDOWN_STEREO,    }, NULL, 1, },
+    { { "Dolby Surround",     "dpl1",       HB_AMIXDOWN_DOLBY,     }, NULL, 1, },
+    { { "Dolby Pro Logic II", "dpl2",       HB_AMIXDOWN_DOLBYPLII, }, NULL, 1, },
+    { { "5.1 Channels",       "5point1",    HB_AMIXDOWN_5POINT1,   }, NULL, 1, },
+    { { "6.1 Channels",       "6point1",    HB_AMIXDOWN_6POINT1,   }, NULL, 1, },
+    { { "7.1 Channels",       "7point1",    HB_AMIXDOWN_7POINT1,   }, NULL, 1, },
+    { { "7.1 (5F/2R/LFE)",    "5_2_lfe",    HB_AMIXDOWN_5_2_LFE,   }, NULL, 1, },
 };
-int hb_audio_mixdowns_count = sizeof(hb_audio_mixdowns) / sizeof(hb_mixdown_t);
+int hb_audio_mixdowns_count = sizeof(hb_audio_mixdowns) / sizeof(hb_audio_mixdowns[0]);
 
-hb_encoder_t hb_video_encoders[] =
+typedef struct
 {
-    { "H.264 (x264)",    "x264",    HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "MPEG-4 (FFmpeg)", "ffmpeg4", HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "MPEG-2 (FFmpeg)", "ffmpeg2", HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "VP3 (Theora)",    "theora",  HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV },
+    hb_encoder_t  item;
+    hb_encoder_t *next;
+    int enabled;
+    int gid;
+} hb_encoder_internal_t;
+hb_encoder_t *hb_video_encoders_first_item = NULL;
+hb_encoder_t *hb_video_encoders_last_item  = NULL;
+hb_encoder_internal_t hb_video_encoders[]  =
+{
+    // legacy encoders, all the way back to HB 0.7.1 (disabled)
+    { { "x264 (Main profile)", "",      HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "x264 (Baseline profile)", "",  HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "x264 (h.264 Main)", "",        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "x264 (h.264 iPod)", "",        HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "",                  "x264b13", HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "",                  "x264b30", HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_H264,   },
+    { { "XviD",              "xvid",    HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-4 (XviD)",     "",        HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
+    { { "FFmpeg",            "ffmpeg",  HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
+    // actual encoders
+    { { "H.264 (x264)",      "x264",    HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264,   },
+    { { "MPEG-4 (FFmpeg)",   "ffmpeg4", HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-2 (FFmpeg)",   "ffmpeg2", HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
+    { { "VP3 (Theora)",      "theora",  HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
 };
-int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_encoder_t);
-
-// note: the first encoder in the list must be AAC
-hb_encoder_t hb_audio_encoders[] =
+int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
+static int hb_video_encoder_is_enabled(int encoder)
 {
+    switch (encoder)
+    {
+        // the following encoders are always enabled
+        case HB_VCODEC_X264:
+        case HB_VCODEC_THEORA:
+        case HB_VCODEC_FFMPEG_MPEG4:
+        case HB_VCODEC_FFMPEG_MPEG2:
+            return 1;
+
+        default:
+            return 0;
+    }
+}
+
+hb_encoder_t *hb_audio_encoders_first_item = NULL;
+hb_encoder_t *hb_audio_encoders_last_item  = NULL;
+hb_encoder_internal_t hb_audio_encoders[]  =
+{
+    // legacy encoders (disabled)
+    { { "AC3",                "ac3",        HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AC3,        },
+    { { "AC3 (pass-thru)",    "ac3pass",    HB_ACODEC_AC3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AC3_PASS,   },
+    { { "DTS (pass-thru)",    "dtspass",    HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_DTS_PASS,   },
+    { { "",                   "dts",        HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_DTS_PASS,   },
+    // actual encoders
+    { { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
+    { { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
+    { { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
+    { { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
+    { { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
+    { { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
+    { { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_PASS,   },
+    { { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AC3,        },
+    { { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AC3_PASS,   },
+    { { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_DTS_PASS,   },
+    { { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_DTSHD_PASS, },
+    { { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3,        },
+    { { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3_PASS,   },
+    { { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_VORBIS,     },
+    { { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
+    { { "FLAC (24-bit)",      "ffflac24",   HB_ACODEC_FFFLAC24,                     HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
+    { { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AUTO_PASS,  },
+};
+int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_audio_encoders[0]);
+static int hb_audio_encoder_is_enabled(int encoder)
+{
+    if (encoder & HB_ACODEC_PASS_FLAG)
+    {
+        // Passthru encoders are always enabled
+        return 1;
+    }
+    switch (encoder)
+    {
 #ifdef __APPLE__
-    { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
+        case HB_ACODEC_CA_AAC:
+        case HB_ACODEC_CA_HAAC:
+            return 1;
 #endif
-    { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-#ifdef USE_FDK_AAC
-    { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-#endif
-    { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-    { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                       HB_MUX_MASK_MKV },
-    { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                       HB_MUX_MASK_MKV },
-    { "FLAC (24-bit)",      "ffflac24",   HB_ACODEC_FFFLAC24,                     HB_MUX_MASK_MKV },
-    { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV },
-};
-int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_encoder_t);
 
-// note: for each container, the muxer nearer the top is the default
-hb_container_t hb_containers[] =
+#if 1 //#ifdef USE_FAAC
+        case HB_ACODEC_FAAC:
+            return 1;
+#endif
+
+#if 1 //#ifdef USE_LIBAV_AAC
+        case HB_ACODEC_FFAAC:
+            return 1;
+#endif
+
+#ifdef USE_FDK_AAC
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
+            return 1;
+#endif
+
+        // the following encoders are always enabled
+        case HB_ACODEC_LAME:
+        case HB_ACODEC_VORBIS:
+        case HB_ACODEC_AC3:
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            return 1;
+
+        default:
+            return 0;
+    }
+}
+
+typedef struct
 {
-    { "MPEG-4 (mp4v2)",    "mp4v2",  "mp4", HB_MUX_MP4V2,  },
-    { "Matroska (libmkv)", "libmkv", "mkv", HB_MUX_LIBMKV, },
+    hb_container_t  item;
+    hb_container_t *next;
+    int enabled;
+    int gid;
+} hb_container_internal_t;
+hb_container_t *hb_containers_first_item = NULL;
+hb_container_t *hb_containers_last_item  = NULL;
+hb_container_internal_t hb_containers[]  =
+{
+    // legacy muxers (disabled)
+    { { "AVI file",          "avi",    "avi",             0, }, NULL, 0, HB_GID_MUX_MP4, },
+    { { "M4V file",          "m4v",    "m4v",             0, }, NULL, 0, HB_GID_MUX_MP4, },
+    { { "MP4 file",          "mp4",    "mp4",             0, }, NULL, 0, HB_GID_MUX_MP4, },
+    { { "OGM file",          "ogm",    "ogm",             0, }, NULL, 0, HB_GID_MUX_MKV, },
+    { { "MKV file",          "mkv",    "mkv",             0, }, NULL, 0, HB_GID_MUX_MKV, },
+    // actual muxers
+    { { "MPEG-4 (mp4v2)",    "mp4v2",  "mp4", HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
+    { { "Matroska (libmkv)", "libmkv", "mkv", HB_MUX_LIBMKV, }, NULL, 1, HB_GID_MUX_MKV, },
 };
-int hb_containers_count = sizeof(hb_containers) / sizeof(hb_container_t);
+int hb_containers_count = sizeof(hb_containers) / sizeof(hb_containers[0]);
+static int hb_container_is_enabled(int format)
+{
+    switch (format)
+    {
+#if 1 //#ifdef USE_MP4V2
+        case HB_MUX_MP4V2:
+            return 1;
+#endif
+
+        // the following muxers are always enabled
+        case HB_MUX_LIBMKV:
+            return 1;
+
+        default:
+            return 0;
+    }
+}
+
+void hb_common_global_init()
+{
+    static int common_init_done = 0;
+    if (common_init_done)
+        return;
+
+    int i, j;
+
+    // video framerates
+    for (i = 0; i < hb_video_rates_count; i++)
+    {
+        if (hb_video_rates[i].enabled)
+        {
+            if (hb_video_rates_first_item == NULL)
+            {
+                hb_video_rates_first_item = &hb_video_rates[i].item;
+            }
+            else
+            {
+                ((hb_rate_internal_t*)hb_video_rates_last_item)->next =
+                    &hb_video_rates[i].item;
+            }
+            hb_video_rates_last_item = &hb_video_rates[i].item;
+        }
+    }
+    // fallbacks are static for now (no setup required)
+
+    // audio samplerates
+    for (i = 0; i < hb_audio_rates_count; i++)
+    {
+        if (hb_audio_rates[i].enabled)
+        {
+            if (hb_audio_rates_first_item == NULL)
+            {
+                hb_audio_rates_first_item = &hb_audio_rates[i].item;
+            }
+            else
+            {
+                ((hb_rate_internal_t*)hb_audio_rates_last_item)->next =
+                    &hb_audio_rates[i].item;
+            }
+            hb_audio_rates_last_item = &hb_audio_rates[i].item;
+        }
+    }
+    // fallbacks are static for now (no setup required)
+
+    // audio bitrates
+    for (i = 0; i < hb_audio_bitrates_count; i++)
+    {
+        if (hb_audio_bitrates[i].enabled)
+        {
+            if (hb_audio_bitrates_first_item == NULL)
+            {
+                hb_audio_bitrates_first_item = &hb_audio_bitrates[i].item;
+            }
+            else
+            {
+                ((hb_rate_internal_t*)hb_audio_bitrates_last_item)->next =
+                    &hb_audio_bitrates[i].item;
+            }
+            hb_audio_bitrates_last_item = &hb_audio_bitrates[i].item;
+        }
+    }
+    // fallbacks are static for now (no setup required)
+
+    // audio dithers
+    for (i = 0; i < hb_audio_dithers_count; i++)
+    {
+        if (hb_audio_dithers[i].enabled)
+        {
+            if (hb_audio_dithers_first_item == NULL)
+            {
+                hb_audio_dithers_first_item = &hb_audio_dithers[i].item;
+            }
+            else
+            {
+                ((hb_dither_internal_t*)hb_audio_dithers_last_item)->next =
+                    &hb_audio_dithers[i].item;
+            }
+            hb_audio_dithers_last_item = &hb_audio_dithers[i].item;
+        }
+    }
+    // fallbacks are static for now (no setup required)
+
+    // audio mixdowns
+    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    {
+        if (hb_audio_mixdowns[i].enabled)
+        {
+            if (hb_audio_mixdowns_first_item == NULL)
+            {
+                hb_audio_mixdowns_first_item = &hb_audio_mixdowns[i].item;
+            }
+            else
+            {
+                ((hb_mixdown_internal_t*)hb_audio_mixdowns_last_item)->next =
+                    &hb_audio_mixdowns[i].item;
+            }
+            hb_audio_mixdowns_last_item = &hb_audio_mixdowns[i].item;
+        }
+    }
+    // fallbacks are static for now (no setup required)
+
+    // video encoders
+    for (i = 0; i < hb_video_encoders_count; i++)
+    {
+        if (hb_video_encoders[i].enabled)
+        {
+            // we still need to check
+            hb_video_encoders[i].enabled =
+                hb_video_encoder_is_enabled(hb_video_encoders[i].item.codec);
+        }
+        if (hb_video_encoders[i].enabled)
+        {
+            if (hb_video_encoders_first_item == NULL)
+            {
+                hb_video_encoders_first_item = &hb_video_encoders[i].item;
+            }
+            else
+            {
+                ((hb_encoder_internal_t*)hb_video_encoders_last_item)->next =
+                    &hb_video_encoders[i].item;
+            }
+            hb_video_encoders_last_item = &hb_video_encoders[i].item;
+        }
+    }
+    // setup fallbacks
+    for (i = 0; i < hb_video_encoders_count; i++)
+    {
+        if (!hb_video_encoders[i].enabled)
+        {
+            if ((hb_video_encoders[i].item.codec & HB_VCODEC_MASK) &&
+                (hb_video_encoder_is_enabled(hb_video_encoders[i].item.codec)))
+            {
+                // we have a specific fallback and it's enabled
+                continue;
+            }
+            for (j = 0; j < hb_video_encoders_count; j++)
+            {
+                if (hb_video_encoders[j].enabled &&
+                    hb_video_encoders[j].gid == hb_video_encoders[i].gid)
+                {
+                    hb_video_encoders[i].item.codec = hb_video_encoders[j].item.codec;
+                    break;
+                }
+            }
+        }
+    }
+
+    // audio encoders
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (hb_audio_encoders[i].enabled)
+        {
+            // we still need to check
+            hb_audio_encoders[i].enabled =
+                hb_audio_encoder_is_enabled(hb_audio_encoders[i].item.codec);
+        }
+        if (hb_audio_encoders[i].enabled)
+        {
+            if (hb_audio_encoders_first_item == NULL)
+            {
+                hb_audio_encoders_first_item = &hb_audio_encoders[i].item;
+            }
+            else
+            {
+                ((hb_encoder_internal_t*)hb_audio_encoders_last_item)->next =
+                    &hb_audio_encoders[i].item;
+            }
+            hb_audio_encoders_last_item = &hb_audio_encoders[i].item;
+        }
+    }
+    // setup fallbacks
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (!hb_audio_encoders[i].enabled)
+        {
+            if ((hb_audio_encoders[i].item.codec & HB_ACODEC_MASK) &&
+                (hb_audio_encoder_is_enabled(hb_audio_encoders[i].item.codec)))
+            {
+                // we have a specific fallback and it's enabled
+                continue;
+            }
+            for (j = 0; j < hb_audio_encoders_count; j++)
+            {
+                if (hb_audio_encoders[j].enabled &&
+                    hb_audio_encoders[j].gid == hb_audio_encoders[i].gid)
+                {
+                    hb_audio_encoders[i].item.codec = hb_audio_encoders[j].item.codec;
+                    break;
+                }
+            }
+            if ((hb_audio_encoders[i].item.codec & HB_ACODEC_MASK) == 0 &&
+                (hb_audio_encoders[i].gid == HB_GID_ACODEC_AAC_HE))
+            {
+                // try to find an AAC fallback if no HE-AAC encoder is available
+                for (j = 0; j < hb_audio_encoders_count; j++)
+                {
+                    if (hb_audio_encoders[j].enabled &&
+                        hb_audio_encoders[j].gid == HB_GID_ACODEC_AAC)
+                    {
+                        hb_audio_encoders[i].item.codec = hb_audio_encoders[j].item.codec;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // video containers
+    for (i = 0; i < hb_containers_count; i++)
+    {
+        if (hb_containers[i].enabled)
+        {
+            // we still need to check
+            hb_containers[i].enabled =
+                hb_container_is_enabled(hb_containers[i].item.format);
+        }
+        if (hb_containers[i].enabled)
+        {
+            if (hb_containers_first_item == NULL)
+            {
+                hb_containers_first_item = &hb_containers[i].item;
+            }
+            else
+            {
+                ((hb_container_internal_t*)hb_containers_last_item)->next =
+                    &hb_containers[i].item;
+            }
+            hb_containers_last_item = &hb_containers[i].item;
+        }
+    }
+    // setup fallbacks
+    for (i = 0; i < hb_containers_count; i++)
+    {
+        if (!hb_containers[i].enabled)
+        {
+            if ((hb_containers[i].item.format & HB_MUX_MASK) &&
+                (hb_container_is_enabled(hb_containers[i].item.format)))
+            {
+                // we have a specific fallback and it's enabled
+                continue;
+            }
+            for (j = 0; j < hb_containers_count; j++)
+            {
+                if (hb_containers[j].enabled &&
+                    hb_containers[j].gid == hb_containers[i].gid)
+                {
+                    hb_containers[i].item.format = hb_containers[j].item.format;
+                    break;
+                }
+            }
+        }
+    }
+
+    // we're done, yay!
+    common_init_done = 1;
+}
 
 int hb_video_framerate_get_from_name(const char *name)
 {
     if (name == NULL || *name == '\0')
         goto fail;
 
-    // TODO: implement something more flexible
-    if (!strcasecmp(name, "23.976 (NTSC Film)"))
-    {
-        return 1126125;
-    }
-    if (!strcasecmp(name, "25 (PAL Film/Video)"))
-    {
-        return 1080000;
-    }
-    if (!strcasecmp(name, "29.97 (NTSC Video)"))
-    {
-        return 900900;
-    }
-
     int i;
     for (i = 0; i < hb_video_rates_count; i++)
     {
-        if (!strcasecmp(hb_video_rates[i].name, name))
+        if (!strcasecmp(hb_video_rates[i].item.name, name))
         {
-            return hb_video_rates[i].rate;
+            return hb_video_rates[i].item.rate;
         }
     }
 
@@ -188,16 +609,16 @@ fail:
 
 const char* hb_video_framerate_get_name(int framerate)
 {
-    if (framerate > hb_video_rates[0].rate ||
-        framerate < hb_video_rates[hb_video_rates_count - 1].rate)
+    if (framerate > hb_video_rates_first_item->rate ||
+        framerate < hb_video_rates_last_item ->rate)
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_video_rates_count; i++)
+    const hb_rate_t *video_framerate = NULL;
+    while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)
     {
-        if (hb_video_rates[i].rate == framerate)
+        if (video_framerate->rate == framerate)
         {
-            return hb_video_rates[i].name;
+            return video_framerate->name;
         }
     }
 
@@ -214,50 +635,47 @@ const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_video_rates[0];
+        return hb_video_rates_first_item;
     }
-    if (last <  &hb_video_rates[0] ||
-        last >= &hb_video_rates[hb_video_rates_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_rate_internal_t*)last)->next;
 }
 
 int hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift)
 {
-    int ii, best_samplerate, samplerate_shift;
-    if ((samplerate < 32000) &&
-        (codec == HB_ACODEC_CA_HAAC || codec == HB_ACODEC_AC3))
+    int best_samplerate;
+    if (samplerate < 32000 && (codec == HB_ACODEC_AC3 ||
+                               codec == HB_ACODEC_CA_HAAC))
     {
         // ca_haac can't do samplerates < 32 kHz
         // AC-3 < 32 kHz suffers from poor hardware compatibility
-        best_samplerate  = 32000;
-        samplerate_shift = 0;
+        best_samplerate = 32000;
     }
     else if (samplerate < 16000 && codec == HB_ACODEC_FDK_HAAC)
     {
         // fdk_haac can't do samplerates < 16 kHz
-        best_samplerate  = 16000;
-        samplerate_shift = 1;
+        best_samplerate = 16000;
     }
     else
     {
-        best_samplerate = samplerate;
-        for (ii = hb_audio_rates_count - 1; ii >= 0; ii--)
+        best_samplerate                   = hb_audio_rates_first_item->rate;
+        const hb_rate_t *audio_samplerate = NULL;
+        while ((audio_samplerate = hb_audio_samplerate_get_next(audio_samplerate)) != NULL)
         {
-            // valid samplerate
-            if (best_samplerate == hb_audio_rates[ii].rate)
-                break;
-
-            // samplerate is higher than the next valid samplerate,
-            // or lower than the lowest valid samplerate
-            if (best_samplerate > hb_audio_rates[ii].rate || ii == 0)
+            if (samplerate == audio_samplerate->rate)
             {
-                best_samplerate = hb_audio_rates[ii].rate;
+                // valid samplerate
+                best_samplerate = audio_samplerate->rate;
                 break;
             }
+            if (samplerate > audio_samplerate->rate)
+            {
+                // samplerates are sanitized downwards
+                best_samplerate = audio_samplerate->rate;
+            }
         }
+    }
+    if (sr_shift != NULL)
+    {
         /* sr_shift: 0 -> 48000, 44100, 32000 Hz
          *           1 -> 24000, 22050, 16000 Hz
          *           2 -> 12000, 11025,  8000 Hz
@@ -266,12 +684,8 @@ int hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift)
          *
          * (samplerate < 32000) implies (samplerate <= 24000)
          */
-        samplerate_shift = ((best_samplerate < 16000) ? 2 :
-                            (best_samplerate < 32000) ? 1 : 0);
-    }
-    if (sr_shift != NULL)
-    {
-        *sr_shift = samplerate_shift;
+        *sr_shift = ((best_samplerate < 16000) ? 2 :
+                     (best_samplerate < 32000) ? 1 : 0);
     }
     return best_samplerate;
 }
@@ -281,20 +695,21 @@ int hb_audio_samplerate_get_from_name(const char *name)
     if (name == NULL || *name == '\0')
         goto fail;
 
-    // TODO: implement something more flexible
-    int i = atoi(name);
-    if (i >= hb_audio_rates[0].rate &&
-        i <= hb_audio_rates[hb_audio_rates_count - 1].rate)
-    {
-        return i;
-    }
-
+    int i;
     for (i = 0; i < hb_audio_rates_count; i++)
     {
-        if (!strcasecmp(hb_audio_rates[i].name, name))
+        if (!strcasecmp(hb_audio_rates[i].item.name, name))
         {
-            return hb_audio_rates[i].rate;
+            return hb_audio_rates[i].item.rate;
         }
+    }
+
+    // maybe the samplerate was specified in Hz
+    i = atoi(name);
+    if (i >= hb_audio_rates_first_item->rate &&
+        i <= hb_audio_rates_last_item ->rate)
+    {
+        return hb_audio_samplerate_get_best(0, i, NULL);
     }
 
 fail:
@@ -303,16 +718,16 @@ fail:
 
 const char* hb_audio_samplerate_get_name(int samplerate)
 {
-    if (samplerate < hb_audio_rates[0].rate ||
-        samplerate > hb_audio_rates[hb_audio_rates_count - 1].rate)
+    if (samplerate < hb_audio_rates_first_item->rate ||
+        samplerate > hb_audio_rates_last_item ->rate)
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_audio_rates_count; i++)
+    const hb_rate_t *audio_samplerate = NULL;
+    while ((audio_samplerate = hb_audio_samplerate_get_next(audio_samplerate)) != NULL)
     {
-        if (hb_audio_rates[i].rate == samplerate)
+        if (audio_samplerate->rate == samplerate)
         {
-            return hb_audio_rates[i].name;
+            return audio_samplerate->name;
         }
     }
 
@@ -324,14 +739,9 @@ const hb_rate_t* hb_audio_samplerate_get_next(const hb_rate_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_audio_rates[0];
+        return hb_audio_rates_first_item;
     }
-    if (last <  &hb_audio_rates[0] ||
-        last >= &hb_audio_rates[hb_audio_rates_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_rate_internal_t*)last)->next;
 }
 
 // Given an input bitrate, find closest match in the set of allowed bitrates
@@ -341,18 +751,23 @@ static int hb_audio_bitrate_find_closest(int bitrate)
     if (bitrate <= 0)
         return bitrate;
 
-    // result is highest rate if none found during search.
-    // rate returned will always be <= rate asked for.
-    int i, result = hb_audio_bitrates[0].rate;
-    for (i = hb_audio_bitrates_count - 1; i > 0; i--)
+    int closest_bitrate            = hb_audio_bitrates_first_item->rate;
+    const hb_rate_t *audio_bitrate = NULL;
+    while ((audio_bitrate = hb_audio_bitrate_get_next(audio_bitrate)) != NULL)
     {
-        if (bitrate >= hb_audio_bitrates[i].rate)
+        if (bitrate == audio_bitrate->rate)
         {
-            result = hb_audio_bitrates[i].rate;
+            // valid bitrate
+            closest_bitrate = audio_bitrate->rate;
             break;
         }
+        if (bitrate > audio_bitrate->rate)
+        {
+            // bitrates are sanitized downwards
+            closest_bitrate = audio_bitrate->rate;
+        }
     }
-    return result;
+    return closest_bitrate;
 }
 
 // Given an input bitrate, sanitize it.
@@ -643,30 +1058,25 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
         // Bitrates don't apply to passthrough audio, but may apply if we
         // fall back to an encoder when the source can't be passed through.
         default:
-            *low  = hb_audio_bitrates[0].rate;
-            *high = hb_audio_bitrates[hb_audio_bitrates_count - 1].rate;
+            *low  = hb_audio_bitrates_first_item->rate;
+            *high = hb_audio_bitrates_last_item ->rate;
             break;
     }
 
     // sanitize max. bitrate
-    if (*high < hb_audio_bitrates[0].rate)
-        *high = hb_audio_bitrates[0].rate;
-    if (*high > hb_audio_bitrates[hb_audio_bitrates_count - 1].rate)
-        *high = hb_audio_bitrates[hb_audio_bitrates_count - 1].rate;
+    if (*high < hb_audio_bitrates_first_item->rate)
+        *high = hb_audio_bitrates_first_item->rate;
+    if (*high > hb_audio_bitrates_last_item ->rate)
+        *high = hb_audio_bitrates_last_item ->rate;
 }
 
 const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_audio_bitrates[0];
+        return hb_audio_bitrates_first_item;
     }
-    if (last <  &hb_audio_bitrates[0] ||
-        last >= &hb_audio_bitrates[hb_audio_bitrates_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_rate_internal_t*)last)->next;
 }
 
 // Get limits and hints for the UIs.
@@ -806,7 +1216,7 @@ float hb_audio_compression_get_default(uint32_t codec)
 int hb_audio_dither_get_default()
 {
     // "auto"
-    return hb_audio_dithers[0].method;
+    return hb_audio_dithers_first_item->method;
 }
 
 int hb_audio_dither_get_default_method()
@@ -841,9 +1251,10 @@ int hb_audio_dither_get_from_name(const char *name)
     int i;
     for ( i = 0; i < hb_audio_dithers_count; i++)
     {
-        if (!strcasecmp(hb_audio_dithers[i].short_name, name))
+        if (!strcasecmp(hb_audio_dithers[i].item.short_name,  name) ||
+            !strcasecmp(hb_audio_dithers[i].item.description, name))
         {
-            return hb_audio_dithers[i].method;
+            return hb_audio_dithers[i].item.method;
         }
     }
 
@@ -853,16 +1264,16 @@ fail:
 
 const char* hb_audio_dither_get_description(int method)
 {
-    if (method < hb_audio_dithers[0].method ||
-        method > hb_audio_dithers[hb_audio_dithers_count - 1].method)
+    if (method < hb_audio_dithers_first_item->method ||
+        method > hb_audio_dithers_last_item ->method)
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_audio_dithers_count; i++)
+    const hb_dither_t *audio_dither = NULL;
+    while ((audio_dither = hb_audio_dither_get_next(audio_dither)) != NULL)
     {
-        if (hb_audio_dithers[i].method == method)
+        if (audio_dither->method == method)
         {
-            return hb_audio_dithers[i].description;
+            return audio_dither->description;
         }
     }
 
@@ -874,14 +1285,9 @@ const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_audio_dithers[0];
+        return hb_audio_dithers_first_item;
     }
-    if (last <  &hb_audio_dithers[0] ||
-        last >= &hb_audio_dithers[hb_audio_dithers_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_dither_internal_t*)last)->next;
 }
 
 int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout)
@@ -1028,18 +1434,19 @@ int hb_mixdown_get_best(uint32_t codec, uint64_t layout, int mixdown)
     if (codec & HB_ACODEC_PASS_FLAG)
         return HB_AMIXDOWN_NONE;
 
-    // caller requested the best available mixdown
-    if (mixdown == HB_INVALID_AMIXDOWN)
-        mixdown  = hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown;
-
-    // test all mixdowns until an authorized, supported mixdown is found
-    // stop before we reach the "worst" non-None mixdown (index == 1)
-    int i;
-    for (i = hb_audio_mixdowns_count - 1; i > 1; i--)
-        if (hb_audio_mixdowns[i].amixdown <= mixdown &&
-            hb_mixdown_is_supported(hb_audio_mixdowns[i].amixdown, codec, layout))
-            break;
-    return hb_audio_mixdowns[i].amixdown;
+    int best_mixdown                  = HB_INVALID_AMIXDOWN;
+    const hb_mixdown_t *audio_mixdown = hb_mixdown_get_next(NULL);
+    // test all non-None mixdowns while the value is <= the requested mixdown
+    // HB_INVALID_AMIXDOWN means the highest supported mixdown was requested
+    while ((audio_mixdown = hb_mixdown_get_next(audio_mixdown)) != NULL)
+    {
+        if ((mixdown == HB_INVALID_AMIXDOWN || audio_mixdown->amixdown <= mixdown) &&
+            (hb_mixdown_is_supported(audio_mixdown->amixdown, codec, layout)))
+        {
+            best_mixdown = audio_mixdown->amixdown;
+        }
+    }
+    return best_mixdown;
 }
 
 int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
@@ -1073,44 +1480,32 @@ int hb_mixdown_get_from_name(const char *name)
     if (name == NULL || *name == '\0')
         goto fail;
 
-    // TODO: implement something more flexible
-    if (!strcasecmp(name, "AC3 Passthru") ||
-        !strcasecmp(name, "DTS Passthru") ||
-        !strcasecmp(name, "DTS-HD Passthru"))
-    {
-        return HB_AMIXDOWN_NONE;
-    }
-    if (!strcasecmp(name, "6-channel discrete"))
-    {
-        return HB_AMIXDOWN_5POINT1;
-    }
-
     int i;
     for (i = 0; i < hb_audio_mixdowns_count; i++)
     {
-        if (!strcasecmp(hb_audio_mixdowns[i].name,       name) ||
-            !strcasecmp(hb_audio_mixdowns[i].short_name, name))
+        if (!strcasecmp(hb_audio_mixdowns[i].item.name,       name) ||
+            !strcasecmp(hb_audio_mixdowns[i].item.short_name, name))
         {
-            return hb_audio_mixdowns[i].amixdown;
+            return hb_audio_mixdowns[i].item.amixdown;
         }
     }
 
 fail:
-    return -1;
+    return HB_INVALID_AMIXDOWN;
 }
 
 const char* hb_mixdown_get_name(int mixdown)
 {
-    if (mixdown < hb_audio_mixdowns[0].amixdown ||
-        mixdown > hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown)
+    if (mixdown < hb_audio_mixdowns_first_item->amixdown ||
+        mixdown > hb_audio_mixdowns_last_item ->amixdown)
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    const hb_mixdown_t *audio_mixdown = NULL;
+    while ((audio_mixdown = hb_mixdown_get_next(audio_mixdown)) != NULL)
     {
-        if (hb_audio_mixdowns[i].amixdown == mixdown)
+        if (audio_mixdown->amixdown == mixdown)
         {
-            return hb_audio_mixdowns[i].name;
+            return audio_mixdown->name;
         }
     }
 
@@ -1120,16 +1515,16 @@ fail:
 
 const char* hb_mixdown_get_short_name(int mixdown)
 {
-    if (mixdown < hb_audio_mixdowns[0].amixdown ||
-        mixdown > hb_audio_mixdowns[hb_audio_mixdowns_count - 1].amixdown)
+    if (mixdown < hb_audio_mixdowns_first_item->amixdown ||
+        mixdown > hb_audio_mixdowns_last_item ->amixdown)
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    const hb_mixdown_t *audio_mixdown = NULL;
+    while ((audio_mixdown = hb_mixdown_get_next(audio_mixdown)) != NULL)
     {
-        if (hb_audio_mixdowns[i].amixdown == mixdown)
+        if (audio_mixdown->amixdown == mixdown)
         {
-            return hb_audio_mixdowns[i].short_name;
+            return audio_mixdown->short_name;
         }
     }
 
@@ -1146,14 +1541,9 @@ const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_audio_mixdowns[0];
+        return hb_audio_mixdowns_first_item;
     }
-    if (last <  &hb_audio_mixdowns[0] ||
-        last >= &hb_audio_mixdowns[hb_audio_mixdowns_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_mixdown_internal_t*)last)->next;
 }
 
 int hb_video_encoder_get_default(int muxer)
@@ -1161,17 +1551,17 @@ int hb_video_encoder_get_default(int muxer)
     if (!(muxer & HB_MUX_MASK))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_video_encoders_count; i++)
+    const hb_encoder_t *video_encoder = NULL;
+    while ((video_encoder = hb_video_encoder_get_next(video_encoder)) != NULL)
     {
-        if (hb_video_encoders[i].muxers & muxer)
+        if (video_encoder->muxers & muxer)
         {
-            return hb_video_encoders[i].codec;
+            return video_encoder->codec;
         }
     }
 
 fail:
-    return -1;
+    return 0;
 }
 
 int hb_video_encoder_get_from_name(const char *name)
@@ -1179,25 +1569,18 @@ int hb_video_encoder_get_from_name(const char *name)
     if (name == NULL || *name == '\0')
         goto fail;
 
-    // TODO: implement something more flexible
-    if (!strcasecmp(name, "XviD") ||
-        !strcasecmp(name, "FFmpeg"))
-    {
-        return HB_VCODEC_FFMPEG_MPEG4;
-    }
-
     int i;
     for (i = 0; i < hb_video_encoders_count; i++)
     {
-        if (!strcasecmp(hb_video_encoders[i].name,       name) ||
-            !strcasecmp(hb_video_encoders[i].short_name, name))
+        if (!strcasecmp(hb_video_encoders[i].item.name,       name) ||
+            !strcasecmp(hb_video_encoders[i].item.short_name, name))
         {
-            return hb_video_encoders[i].codec;
+            return hb_video_encoders[i].item.codec;
         }
     }
 
 fail:
-    return -1;
+    return 0;
 }
 
 const char* hb_video_encoder_get_name(int encoder)
@@ -1205,12 +1588,12 @@ const char* hb_video_encoder_get_name(int encoder)
     if (!(encoder & HB_VCODEC_MASK))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_video_encoders_count; i++)
+    const hb_encoder_t *video_encoder = NULL;
+    while ((video_encoder = hb_video_encoder_get_next(video_encoder)) != NULL)
     {
-        if (hb_video_encoders[i].codec == encoder)
+        if (video_encoder->codec == encoder)
         {
-            return hb_video_encoders[i].name;
+            return video_encoder->name;
         }
     }
 
@@ -1223,12 +1606,12 @@ const char* hb_video_encoder_get_short_name(int encoder)
     if (!(encoder & HB_VCODEC_MASK))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_video_encoders_count; i++)
+    const hb_encoder_t *video_encoder = NULL;
+    while ((video_encoder = hb_video_encoder_get_next(video_encoder)) != NULL)
     {
-        if (hb_video_encoders[i].codec == encoder)
+        if (video_encoder->codec == encoder)
         {
-            return hb_video_encoders[i].short_name;
+            return video_encoder->short_name;
         }
     }
 
@@ -1245,43 +1628,48 @@ const hb_encoder_t* hb_video_encoder_get_next(const hb_encoder_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_video_encoders[0];
+        return hb_video_encoders_first_item;
     }
-    if (last <  &hb_video_encoders[0] ||
-        last >= &hb_video_encoders[hb_video_encoders_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_encoder_internal_t*)last)->next;
 }
 
 // for a valid passthru, return the matching encoder for that codec (if any),
 // else return -1 (i.e. drop the track)
 int hb_audio_encoder_get_fallback_for_passthru(int passthru)
 {
-    // TODO: implement something more flexible
+    int gid;
+    const hb_encoder_t *audio_encoder = NULL;
     switch (passthru)
     {
         case HB_ACODEC_AAC_PASS:
-#ifdef __APPLE__
-            return HB_ACODEC_CA_AAC;
-#else
-            return HB_ACODEC_FAAC;
-#endif
+            gid = HB_GID_ACODEC_AAC;
+            break;
 
         case HB_ACODEC_AC3_PASS:
-            return HB_ACODEC_AC3;
+            gid = HB_GID_ACODEC_AC3;
+            break;
 
         case HB_ACODEC_MP3_PASS:
-            return HB_ACODEC_LAME;
+            gid = HB_GID_ACODEC_MP3;
+            break;
 
-            // passthru tracks are often the second audio from the same source track
-            // if we don't have an encoder matching the passthru codec, return -1
-            // dropping the track, as well as ensuring that there is at least one
-            // audio track in the output is then up to the UIs
         default:
-            return -1;
+            gid = HB_GID_NONE; // will never match an enabled encoder
+            break;
     }
+    while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
+    {
+        if (((hb_encoder_internal_t*)audio_encoder)->gid == gid)
+        {
+            return audio_encoder->codec;
+        }
+    }
+
+    // passthru tracks are often the second audio from the same source track
+    // if we don't have an encoder matching the passthru codec, return 0
+    // dropping the track, as well as ensuring that there is at least one
+    // audio track in the output is then up to the UIs
+    return 0;
 }
 
 int hb_audio_encoder_get_default(int muxer)
@@ -1289,26 +1677,34 @@ int hb_audio_encoder_get_default(int muxer)
     if (!(muxer & HB_MUX_MASK))
         goto fail;
 
-#ifndef __APPLE__
-    if (muxer == HB_MUX_MKV)
-    {
-        return HB_ACODEC_LAME;
-    }
-#endif
-
-    int i;
-    for (i = 0; i < hb_audio_encoders_count; i++)
+    int codec                         = 0;
+    const hb_encoder_t *audio_encoder = NULL;
+    while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
     {
         // default encoder should not be passthru
-        if ((hb_audio_encoders[i].muxers & muxer) &&
-            (hb_audio_encoders[i].codec  & HB_ACODEC_PASS_FLAG) == 0)
+        if ((audio_encoder->muxers & muxer) &&
+            (audio_encoder->codec  & HB_ACODEC_PASS_FLAG) == 0)
         {
-            return hb_audio_encoders[i].codec;
+            codec = audio_encoder->codec;
+            break;
         }
     }
 
+    // Lame is better than our low-end AAC encoders
+    // if the container is MKV, use the former
+    // AAC is still used when the container is MP4 (for better compatibility)
+    if ((codec == HB_ACODEC_FAAC ||
+         codec == HB_ACODEC_FFAAC) && (muxer & HB_MUX_MASK_MKV) == muxer)
+    {
+        return HB_ACODEC_LAME;
+    }
+    else
+    {
+        return codec;
+    }
+
 fail:
-    return -1;
+    return 0;
 }
 
 int hb_audio_encoder_get_from_name(const char *name)
@@ -1316,44 +1712,18 @@ int hb_audio_encoder_get_from_name(const char *name)
     if (name == NULL || *name == '\0')
         goto fail;
 
-    // TODO: implement something more flexible
-    if (!strcasecmp(name, "AC3"))
-    {
-        return HB_ACODEC_AC3;
-    }
-    // libfdk fallback, use Core Audio if available, else FAAC
-#ifndef USE_FDK_AAC
-#ifdef __APPLE__
-#define  AAC_ENC HB_ACODEC_CA_AAC
-#define HAAC_ENC HB_ACODEC_CA_HAAC
-#else
-#define  AAC_ENC HB_ACODEC_FAAC
-#define HAAC_ENC HB_ACODEC_FAAC
-#endif
-    if (!strcasecmp(name, "AAC (FDK)")    || !strcasecmp(name, "fdk_aac"))
-    {
-        return AAC_ENC;
-    }
-    if (!strcasecmp(name, "HE-AAC (FDK)") || !strcasecmp(name, "fdk_haac"))
-    {
-        return HAAC_ENC;
-    }
-#undef  AAC_ENC
-#undef HAAC_ENC
-#endif
-
     int i;
     for (i = 0; i < hb_audio_encoders_count; i++)
     {
-        if (!strcasecmp(hb_audio_encoders[i].name,       name) ||
-            !strcasecmp(hb_audio_encoders[i].short_name, name))
+        if (!strcasecmp(hb_audio_encoders[i].item.name,       name) ||
+            !strcasecmp(hb_audio_encoders[i].item.short_name, name))
         {
-            return hb_audio_encoders[i].codec;
+            return hb_audio_encoders[i].item.codec;
         }
     }
 
 fail:
-    return -1;
+    return 0;
 }
 
 const char* hb_audio_encoder_get_name(int encoder)
@@ -1361,12 +1731,12 @@ const char* hb_audio_encoder_get_name(int encoder)
     if (!(encoder & HB_ACODEC_ANY))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_audio_encoders_count; i++)
+    const hb_encoder_t *audio_encoder = NULL;
+    while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
     {
-        if (hb_audio_encoders[i].codec == encoder)
+        if (audio_encoder->codec == encoder)
         {
-            return hb_audio_encoders[i].name;
+            return audio_encoder->name;
         }
     }
 
@@ -1379,12 +1749,12 @@ const char* hb_audio_encoder_get_short_name(int encoder)
     if (!(encoder & HB_ACODEC_ANY))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_audio_encoders_count; i++)
+    const hb_encoder_t *audio_encoder = NULL;
+    while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
     {
-        if (hb_audio_encoders[i].codec == encoder)
+        if (audio_encoder->codec == encoder)
         {
-            return hb_audio_encoders[i].short_name;
+            return audio_encoder->short_name;
         }
     }
 
@@ -1401,14 +1771,9 @@ const hb_encoder_t* hb_audio_encoder_get_next(const hb_encoder_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_audio_encoders[0];
+        return  hb_audio_encoders_first_item;
     }
-    if (last <  &hb_audio_encoders[0] ||
-        last >= &hb_audio_encoders[hb_audio_encoders_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_encoder_internal_t*)last)->next;
 }
 
 void hb_autopassthru_apply_settings(hb_job_t *job)
@@ -1455,7 +1820,7 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
                 audio->config.out.bitrate =
                     hb_audio_bitrate_get_default(audio->config.out.codec,
                                                  audio->config.out.samplerate,
-                                                 audio->config.out.mixdown );
+                                                 audio->config.out.mixdown);
                 audio->config.out.compression_level =
                     hb_audio_compression_get_default(audio->config.out.codec);
             }
@@ -1561,34 +1926,18 @@ int hb_container_get_from_name(const char *name)
     if (name == NULL || *name == '\0')
         goto fail;
 
-    // TODO: implement something more flexible
-    if (!strcasecmp(name, "m4v"))
-    {
-        // old CLI alternate short name for "mp4"
-        return HB_MUX_MP4;
-    }
-    if (!strcasecmp(name, "MP4 file"))
-    {
-        return HB_MUX_MP4;
-    }
-    if (!strcasecmp(name, "MKV file"))
-    {
-        return HB_MUX_MKV;
-    }
-
     int i;
     for (i = 0; i < hb_containers_count; i++)
     {
-        if (!strcasecmp(hb_containers[i].name,              name) ||
-            !strcasecmp(hb_containers[i].short_name,        name) ||
-            !strcasecmp(hb_containers[i].default_extension, name))
+        if (!strcasecmp(hb_containers[i].item.name,       name) ||
+            !strcasecmp(hb_containers[i].item.short_name, name))
         {
-            return hb_containers[i].format;
+            return hb_containers[i].item.format;
         }
     }
 
 fail:
-    return -1;
+    return 0;
 }
 
 int hb_container_get_from_extension(const char *extension)
@@ -1596,23 +1945,17 @@ int hb_container_get_from_extension(const char *extension)
     if (extension == NULL || *extension == '\0')
         goto fail;
 
-    // TODO: implement something more flexible
-    if (!strcasecmp(extension, "m4v"))
-    {
-        return HB_MUX_MP4;
-    }
-
     int i;
     for (i = 0; i < hb_containers_count; i++)
     {
-        if (!strcasecmp(hb_containers[i].default_extension, extension))
+        if (!strcasecmp(hb_containers[i].item.default_extension, extension))
         {
-            return hb_containers[i].format;
+            return hb_containers[i].item.format;
         }
     }
 
 fail:
-    return -1;
+    return 0;
 }
 
 const char* hb_container_get_name(int format)
@@ -1620,14 +1963,13 @@ const char* hb_container_get_name(int format)
     if (!(format & HB_MUX_MASK))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_containers_count; i++)
+    const hb_container_t *container = NULL;
+    while ((container = hb_container_get_next(container)) != NULL)
     {
-        if (hb_containers[i].format == format)
+        if (container->format == format)
         {
-            return hb_containers[i].name;
+            return container->name;
         }
-
     }
 
 fail:
@@ -1639,12 +1981,12 @@ const char* hb_container_get_short_name(int format)
     if (!(format & HB_MUX_MASK))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_containers_count; i++)
+    const hb_container_t *container = NULL;
+    while ((container = hb_container_get_next(container)) != NULL)
     {
-        if (hb_containers[i].format == format)
+        if (container->format == format)
         {
-            return hb_containers[i].short_name;
+            return container->short_name;
         }
     }
 
@@ -1657,12 +1999,12 @@ const char* hb_container_get_default_extension(int format)
     if (!(format & HB_MUX_MASK))
         goto fail;
 
-    int i;
-    for (i = 0; i < hb_containers_count; i++)
+    const hb_container_t *container = NULL;
+    while ((container = hb_container_get_next(container)) != NULL)
     {
-        if (hb_containers[i].format == format)
+        if (container->format == format)
         {
-            return hb_containers[i].default_extension;
+            return container->default_extension;
         }
     }
 
@@ -1679,14 +2021,9 @@ const hb_container_t* hb_container_get_next(const hb_container_t *last)
 {
     if (last == NULL)
     {
-        return  &hb_containers[0];
+        return  hb_containers_first_item;
     }
-    if (last <  &hb_containers[0] ||
-        last >= &hb_containers[hb_containers_count - 1])
-    {
-        return NULL;
-    }
-    return last + 1;
+    return ((hb_container_internal_t*)last)->next;
 }
 
 /**********************************************************************
@@ -2945,7 +3282,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
 
     /* Initalize some sensible defaults */
     audiocfg->in.track = audiocfg->out.track = 0;
-    audiocfg->out.codec = hb_audio_encoders[0].codec;
+    audiocfg->out.codec = hb_audio_encoder_get_default(HB_MUX_MP4); // default container
     audiocfg->out.samplerate = -1;
     audiocfg->out.samples_per_frame = -1;
     audiocfg->out.bitrate = -1;

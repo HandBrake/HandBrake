@@ -353,6 +353,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool showAdvancedTab;
 
+        /// <summary>
+        /// The remove punctuation.
+        /// </summary>
+        private bool removePunctuation;
+
+        /// <summary>
+        /// The use system colours for styles.
+        /// </summary>
+        private bool useSystemColoursForStyles;
+
         #endregion
 
         #region Constructors and Destructors
@@ -599,6 +609,23 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("WhenDoneOptions");
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether use system colours.
+        /// </summary>
+        public bool UseSystemColoursForStylesForStyles
+        {
+            get
+            {
+                return this.useSystemColoursForStyles;
+            }
+            set
+            {
+                this.useSystemColoursForStyles = value;
+                this.NotifyOfPropertyChange(() => UseSystemColoursForStylesForStyles);
+            }
+        }
+
         #endregion
 
         #region Output Files
@@ -719,6 +746,22 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.selectedMp4Extension = value;
                 this.NotifyOfPropertyChange("SelectedMp4Extension");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether remove punctuation.
+        /// </summary>
+        public bool RemovePunctuation
+        {
+            get
+            {
+                return this.removePunctuation;
+            }
+            set
+            {
+                this.removePunctuation = value;
+                this.NotifyOfPropertyChange(() => RemovePunctuation);
             }
         }
 
@@ -1493,6 +1536,7 @@ namespace HandBrakeWPF.ViewModels
             this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)) ?? string.Empty;
             this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
             this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
+            this.UseSystemColoursForStylesForStyles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseSystemColours);
 
             // #############################
             // Output Settings
@@ -1521,6 +1565,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Title case
             this.ChangeToTitleCase = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase);
+            this.RemovePunctuation = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RemovePunctuation);
 
             // #############################
             // Picture Tab
@@ -1828,6 +1873,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, this.SendFileToPath);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseSystemColours, this.UseSystemColoursForStylesForStyles);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
@@ -1836,6 +1882,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.UseM4v, this.SelectedMp4Extension);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameRemoveUnderscore, this.RemoveUnderscores);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameTitleCase, this.ChangeToTitleCase);
+            this.userSettingService.SetUserSetting(UserSettingConstants.RemovePunctuation, this.RemovePunctuation);
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.VLC_Path, this.VLCPath);

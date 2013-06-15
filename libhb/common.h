@@ -193,7 +193,6 @@ struct hb_dither_s
 struct hb_mixdown_s
 {
     const char *name;
-    const char *internal_name;
     const char *short_name;
     int         amixdown;
 };
@@ -235,7 +234,7 @@ struct hb_subtitle_config_s
  * Use hb_*_get_from_name() to get the value corresponding to a name.
  * The name can be either the short or full name.
  * Legacy names are sanitized to currently-supported values whenever possible.
- * Returns -1 if no value could be found.
+ * Returns 0 or -1 if no value could be found.
  *
  * Use hb_*_get_name() and hb_*_get_short_name() to get the corresponding value.
  * Returns NULL if the value is invalid.
@@ -254,6 +253,8 @@ struct hb_subtitle_config_s
  * Use hb_*_get_default() to get the default based on other relevant parameters.
  *
  */
+
+void hb_common_global_init();
 
 int              hb_video_framerate_get_from_name(const char *name);
 const char*      hb_video_framerate_get_name(int framerate);
@@ -474,7 +475,7 @@ struct hb_job_s
 #define HB_MUX_MASK_MP4 0x0F0000
 #define HB_MUX_LIBMKV   0x100000
 #define HB_MUX_MASK_MKV 0xF00000
-// default MP4 and MKV muxers
+/* default muxer for each container */
 #define HB_MUX_MP4      HB_MUX_MP4V2
 #define HB_MUX_MKV      HB_MUX_LIBMKV
 

@@ -1,17 +1,50 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <Style x:Key="mainWindowStyle" TargetType="Window">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                <Setter Property="Background" Value="#FFF0F0F0" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="whiteUserControlStyle" TargetType="UserControl">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                <Setter Property="Background" Value="White" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="{x:Type StatusBar}" TargetType="{x:Type StatusBar}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type StatusBar}">
-                    <Border Background="#FAFAFA" Padding="1">
+                    <Border Padding="1">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                                        <Setter Property="Background" Value="#FAFAFA" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <ItemsPresenter Margin="0" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type GroupBox}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                <Setter Property="Background" Value="White" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type ComboBox}">

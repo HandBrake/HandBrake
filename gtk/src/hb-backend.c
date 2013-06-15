@@ -1891,7 +1891,7 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
                            1, TRUE, 
                            2, mix->short_name, 
                            3, (gdouble)mix->amixdown, 
-                           4, mix->internal_name, 
+                           4, mix->short_name, 
                            -1);
         g_free(str);
     }
