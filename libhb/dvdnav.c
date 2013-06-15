@@ -1979,7 +1979,7 @@ static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[MAX_PGCN/32]
  **********************************************************************/
 static void PgcWalkInit( uint32_t pgcn_map[MAX_PGCN/32] )
 {
-    memset(pgcn_map, 0, sizeof(pgcn_map) );
+    memset(pgcn_map, 0, sizeof(uint32_t) * MAX_PGCN/32);
 }
 
 /***********************************************************************
