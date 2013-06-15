@@ -642,6 +642,27 @@ ghb_audio_list_refresh(signal_user_data_t *ud)
     }
 }
 
+static void enable_quality_widget(signal_user_data_t *ud, int acodec)
+{
+    GtkWidget *widget1, *widget2, *widget3;
+
+    widget1 = GHB_WIDGET(ud->builder, "AudioTrackQualityEnable");
+    widget2 = GHB_WIDGET(ud->builder, "AudioTrackQualityValue");
+    widget3 = GHB_WIDGET(ud->builder, "AudioTrackQuality");
+    if (hb_audio_quality_get_default(acodec) == HB_INVALID_AUDIO_QUALITY)
+    {
+        gtk_widget_hide(widget1);
+        gtk_widget_hide(widget2);
+        gtk_widget_hide(widget3);
+    }
+    else
+    {
+        gtk_widget_show(widget1);
+        gtk_widget_show(widget2);
+        gtk_widget_show(widget3);
+    }
+}
+
 G_MODULE_EXPORT void
 audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
@@ -654,6 +675,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     acodec_code = ghb_lookup_combo_int("AudioEncoder", gval);
     ghb_value_free(gval);
 
+    enable_quality_widget(ud, acodec_code);
     if (block_updates)
     {
         prev_acodec = acodec_code;
