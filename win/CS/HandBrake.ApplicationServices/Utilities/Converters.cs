@@ -25,7 +25,7 @@ namespace HandBrake.ApplicationServices.Utilities
          * TODO:
          * - Many of these converters can be ditched at a later point. Should be able to model all this within the enums themsevles.
          * 
-         **/ 
+         **/
 
         /// <summary>
         /// Convert HandBrakes time remaining into a TimeSpan
@@ -160,62 +160,29 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         /// <param name="audioEnc">The Audio Encoder</param>
         /// <returns>The GUI representation of that audio encoder</returns>
-        public static string GetGUIAudioEncoder(string audioEnc)
-        {
-            switch (audioEnc)
-            {
-                case "faac":
-                    return "AAC (faac)";
-                case "lame":
-                    return "MP3 (lame)";
-                case "vorbis":
-                    return "Vorbis (vorbis)";
-                case "ffac3":
-                    return "AC3 (ffmpeg)";
-                case "copy:ac3":
-                    return "AC3 Passthru";
-                case "copy:dts":
-                    return "DTS Passthru";
-                case "copy:dtshd":
-                    return "MP3 Passthru";
-                case "copy:mp3":
-                    return "AAC Passthru";
-                case "copy:aac":
-                    return "DTS-HD Passthru";
-                case "ffaac":
-                    return "AAC (ffmpeg)";
-                case "ffflac":
-                    return "FLAC (ffmpeg)";
-                case "ffflac24":
-                    return "FLAC (24-bit)";
-                case "copy":
-                    return "Auto Passthru";
-                default:
-                    return "AAC (faac)";
-            }
-        }
-
-        /// <summary>
-        /// Get the GUI equiv to a CLI audio encoder
-        /// </summary>
-        /// <param name="audioEnc">The Audio Encoder</param>
-        /// <returns>The GUI representation of that audio encoder</returns>
         public static AudioEncoder GetAudioEncoderFromCliString(string audioEnc)
         {
             switch (audioEnc)
             {
                 case "faac":
-                    return AudioEncoder.Faac;
                 case "ffaac":
                     return AudioEncoder.ffaac;
+                case "fdk_aac":
+                    return AudioEncoder.fdkaac;
+                case "fdk_haac":
+                    return AudioEncoder.fdkheaac;
+                case "mp3":
                 case "lame":
                     return AudioEncoder.Lame;
                 case "vorbis":
                     return AudioEncoder.Vorbis;
+                case "ac3":
                 case "ffac3":
                     return AudioEncoder.Ac3;
+                case "flac16":
                 case "ffflac":
                     return AudioEncoder.ffflac;
+                case "flac24":
                 case "ffflac24":
                     return AudioEncoder.ffflac24;
                 case "copy:ac3":
@@ -231,7 +198,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 case "copy":
                     return AudioEncoder.Passthrough;
                 default:
-                    return AudioEncoder.Faac;
+                    return AudioEncoder.ffaac;
             }
         }
 
@@ -245,16 +212,22 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (audioEnc)
             {
                 case "AAC (faac)":
-                    return AudioEncoder.Faac;
-                case "AAC (ffmpeg)":
-                    return AudioEncoder.ffaac;
                 case "AAC (CoreAudio)":
-                    return AudioEncoder.Faac;
+                case "AAC (ffmpeg)":
+                case "AAC (avcodec)":
+                    return AudioEncoder.ffaac;
+                case "AAC (FDK)":
+                    return AudioEncoder.fdkaac;
+                case "HE-AAC (FDK)":
+                    return AudioEncoder.fdkheaac;
                 case "MP3 (lame)":
+                case "MP3":
                     return AudioEncoder.Lame;
                 case "Vorbis (vorbis)":
+                case "Vorbis":
                     return AudioEncoder.Vorbis;
                 case "AC3 (ffmpeg)":
+                case "AC3":
                     return AudioEncoder.Ac3;
                 case "AC3 Passthru":
                     return AudioEncoder.Ac3Passthrough;
@@ -267,13 +240,15 @@ namespace HandBrake.ApplicationServices.Utilities
                 case "MP3 Passthru":
                     return AudioEncoder.Mp3Passthru;
                 case "FLAC (ffmpeg)":
+                case "FLAC 16-bit":
                     return AudioEncoder.ffflac;
                 case "FLAC (24-bit)":
+                case "FLAC 24-bit":
                     return AudioEncoder.ffflac24;
                 case "Auto Passthru":
                     return AudioEncoder.Passthrough;
                 default:
-                    return AudioEncoder.Faac;
+                    return AudioEncoder.ffaac;
             }
         }
 
@@ -288,43 +263,12 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         public static string GetCliAudioEncoder(AudioEncoder selectedEncoder)
         {
-            switch (selectedEncoder)
-            {
-                case AudioEncoder.Faac:
-                    return "faac";
-                case AudioEncoder.ffaac:
-                    return "ffaac";
-
-                case AudioEncoder.Lame:
-                    return "lame";
-                case AudioEncoder.Vorbis:
-                    return "vorbis";
-                case AudioEncoder.Ac3Passthrough:
-                    return "copy:ac3";
-                case AudioEncoder.DtsPassthrough:
-                    return "copy:dts";
-                case AudioEncoder.DtsHDPassthrough:
-                    return "copy:dtshd";
-                case AudioEncoder.Ac3:
-                    return "ffac3";
-                case AudioEncoder.AacPassthru:
-                    return "copy:aac";
-                case AudioEncoder.Mp3Passthru:
-                    return "copy:mp3";
-                case AudioEncoder.Passthrough:
-                    return "copy";
-                case AudioEncoder.ffflac:
-                    return "ffflac";
-                case AudioEncoder.ffflac24:
-                    return "ffflac24";
-                default:
-                    return "faac";
-            }
+            return EnumHelper<AudioEncoder>.GetShortName(selectedEncoder);
         }
 
         #endregion
 
-        #region Video 
+        #region Video
 
         /// <summary>
         /// Get the Video Encoder for a given string
@@ -339,11 +283,12 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             switch (encoder)
             {
-                case "":
                 case "ffmpeg":
                 case "ffmpeg4":
+                case "mpeg4":
                     return VideoEncoder.FFMpeg;
                 case "ffmpeg2":
+                case "mpeg2":
                     return VideoEncoder.FFMpeg2;
                 case "x264":
                     return VideoEncoder.X264;
@@ -368,9 +313,9 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (encoder)
             {
                 case VideoEncoder.FFMpeg:
-                    return "ffmpeg4";
+                    return "mpeg4";
                 case VideoEncoder.FFMpeg2:
-                    return "ffmpeg2";
+                    return "mpeg2";
                 case VideoEncoder.X264:
                     return "x264";
                 case VideoEncoder.Theora:

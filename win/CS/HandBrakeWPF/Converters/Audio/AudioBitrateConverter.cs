@@ -70,14 +70,10 @@ namespace HandBrakeWPF.Converters.Audio
                 int samplerate = this.GetBestSampleRate(track);
                 int srShift = this.GetSamplerateShift(samplerate);
                 int lfeCount = this.GetLowFreqChannelCount(track.MixDown);
-                int channels = this.GetChannelCount(track.MixDown) - lfeCount;
+                int channels = this.GetDiscreteChannelCount(track.MixDown) - lfeCount;
 
                 switch (track.Encoder)
                 {
-                    case AudioEncoder.Faac:
-                        low = (channels + lfeCount) * 32;
-                        max = (channels + lfeCount) * (192 >> srShift);
-                        break;
                     case AudioEncoder.ffaac:
                         low = ((channels + lfeCount) * 32);
                         max = ((channels + lfeCount) * ((192 + (64 * ((samplerate << srShift) >= 44100 ? 1 : 0))) >> srShift));
@@ -101,7 +97,16 @@ namespace HandBrakeWPF.Converters.Audio
                     case AudioEncoder.Mp3Passthru:
                     case AudioEncoder.Passthrough:
                     case AudioEncoder.ffflac:
+                    case AudioEncoder.ffflac24:
                         max = 1536; // Since we don't care, just set it to the max.
+                        break;
+                    case AudioEncoder.fdkaac:
+                        low = channels * samplerate * 2 / 3000;
+                        max = channels * samplerate * 6 / 1000;
+                        break;
+                    case AudioEncoder.fdkheaac:
+                        low = (channels * (12 + (4 * (samplerate >= 44100 ? 1 : 0))));
+                        max = (channels - (channels > 2 ? 1 : 0)) * (48 + (16 * (samplerate >= 22050 ? 1 : 0)));
                         break;
                     default:
                         max = 768;
@@ -132,7 +137,7 @@ namespace HandBrakeWPF.Converters.Audio
         /// <returns>
         /// The System.Int32.
         /// </returns>
-        private int GetChannelCount(Mixdown mixdown)
+        private int GetDiscreteChannelCount(Mixdown mixdown)
         {
             switch (mixdown)
             {
@@ -228,6 +233,10 @@ namespace HandBrakeWPF.Converters.Audio
             {
                 // AC-3 < 32 kHz suffers from poor hardware compatibility
                 bestSamplerate = 32000;
+            } 
+            else if ((samplerate < 16000) && (track.Encoder == AudioEncoder.fdkheaac))
+            {
+                bestSamplerate = 16000;
             }
             else
             {

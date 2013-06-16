@@ -17,6 +17,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Linq;
     using System.Reflection;
 
+    using HandBrake.Interop.Attributes;
+
     /// <summary>
     /// Enum Helpers
     /// </summary>
@@ -91,6 +93,23 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             throw new ArgumentOutOfRangeException("The Description for the enum was not recognized.");
+        }
+
+        /// <summary>
+        /// The get short name.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetShortName(T value)
+        {
+            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
+            ShortName[] attributes = (ShortName[])fieldInfo.GetCustomAttributes(typeof(ShortName), false);
+
+            return (attributes.Length > 0) ? attributes[0].Name : value.ToString(); 
         }
 
         /// <summary>

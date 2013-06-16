@@ -124,6 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ShortName.cs" />
     <Compile Include="Converters.cs" />
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />

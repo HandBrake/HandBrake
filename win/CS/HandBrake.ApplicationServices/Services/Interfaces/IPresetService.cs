@@ -29,6 +29,11 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         Preset DefaultPreset { get; }
 
         /// <summary>
+        /// The load.
+        /// </summary>
+        void Load();
+
+        /// <summary>
         /// Add a new preset to the system
         /// </summary>
         /// <param name="preset">

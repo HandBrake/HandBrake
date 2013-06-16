@@ -938,7 +938,11 @@ namespace HandBrakeWPF.ViewModels
             // Perform an update check if required
             this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
 
+            // Show or Hide the Preset Panel.
+            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
+
             // Setup the presets.
+            this.presetService.Load();
             if (this.presetService.CheckIfPresetsAreOutOfDate())
                 if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
                     this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated." + Environment.NewLine +
@@ -952,9 +956,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Populate the Source menu with drives.
             this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
-
-            // Show or Hide the Preset Panel.
-            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
 
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))

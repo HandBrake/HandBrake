@@ -95,6 +95,7 @@
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
     <Compile Include="Isolation\IsolatedScanService.cs" />
+    <Compile Include="LibHb\AudioVideoHelpers.cs" />
     <Compile Include="Services\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
     <Compile Include="Services\Interfaces\IScanServiceWrapper.cs" />

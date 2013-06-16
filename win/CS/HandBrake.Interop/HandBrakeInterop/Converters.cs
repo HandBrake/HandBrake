@@ -78,10 +78,12 @@ namespace HandBrake.Interop
 					return NativeConstants.HB_ACODEC_AC3_PASS;
 				case AudioEncoder.Ac3:
 					return NativeConstants.HB_ACODEC_AC3;
-				case AudioEncoder.Faac:
-					return NativeConstants.HB_ACODEC_FAAC;
 				case AudioEncoder.ffaac:
 					return NativeConstants.HB_ACODEC_FFAAC;
+                case AudioEncoder.fdkaac:
+			        return NativeConstants.HB_ACODEC_FDK_AAC;
+                case AudioEncoder.fdkheaac:
+                    return NativeConstants.HB_ACODEC_FDK_HAAC;
 				case AudioEncoder.AacPassthru:
 					return NativeConstants.HB_ACODEC_AAC_PASS;
 				case AudioEncoder.Lame:
@@ -127,9 +129,12 @@ namespace HandBrake.Interop
 				case NativeConstants.HB_ACODEC_FFAAC:
 				case NativeConstants.HB_ACODEC_CA_AAC:
 				case NativeConstants.HB_ACODEC_CA_HAAC:
+                case NativeConstants.HB_ACODEC_FDK_HAAC: // TODO Check this is correct
+                case NativeConstants.HB_ACODEC_FDK_AAC: // TODO Check this is correct
 					return AudioCodec.Aac;
 				case NativeConstants.HB_ACODEC_FFFLAC:
 					return AudioCodec.Flac;
+
 				default:
 					return AudioCodec.Other;
 			}

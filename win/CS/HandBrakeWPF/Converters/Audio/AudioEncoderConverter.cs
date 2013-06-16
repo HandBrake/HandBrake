@@ -51,6 +51,8 @@ namespace HandBrakeWPF.Converters.Audio
                 List<AudioEncoder> encoders = EnumHelper<AudioEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
 
+                encoders.Remove(AudioEncoder.faac);
+
                 if (task != null && task.OutputFormat != OutputFormat.Mkv)
                 {
                     encoders.Remove(AudioEncoder.Vorbis);
