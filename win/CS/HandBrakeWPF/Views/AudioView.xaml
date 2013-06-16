@@ -12,7 +12,8 @@
              xmlns:dropButton="clr-namespace:HandBrakeWPF.Controls.DropButton"
              d:DesignHeight="170"
              d:DesignWidth="616"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             x:Name="audioTab">
 
     <UserControl.Resources>
         <Conveters:EnumComboConverter x:Key="enumComboConverter" />
@@ -125,7 +126,7 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="0,0,0,1" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                        <DataTrigger Binding="{Binding DataContext.UseSystemColours, ElementName=audioTab}" Value="False">
                             <Setter Property="Background" Value="WhiteSmoke" />
                         </DataTrigger>
                     </Style.Triggers>

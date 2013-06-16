@@ -7,12 +7,12 @@
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:dropButton="clr-namespace:HandBrakeWPF.Controls.DropButton"
              d:DesignHeight="153"
              d:DesignWidth="319"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             x:Name="subTab">
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
     </UserControl.Resources>
@@ -74,7 +74,7 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="0,0,0,1" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                        <DataTrigger Binding="{Binding DataContext.UseSystemColours, ElementName=subTab}" Value="False">
                             <Setter Property="Background" Value="WhiteSmoke" />
                         </DataTrigger>
                     </Style.Triggers>
