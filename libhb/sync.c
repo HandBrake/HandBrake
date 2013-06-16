@@ -273,7 +273,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         pv->common->first_pts[0] = next->s.start;
         hb_lock( pv->common->mutex );
-        while( pv->common->pts_offset == INT64_MIN )
+        while( pv->common->pts_offset == INT64_MIN && !*w->done )
         {
             // Full fifos will make us wait forever, so get the
             // pts offset from the available streams if full
@@ -741,7 +741,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         pv->common->first_pts[sync->index+1] = buf->s.start;
         hb_lock( pv->common->mutex );
-        while( pv->common->pts_offset == INT64_MIN )
+        while( pv->common->pts_offset == INT64_MIN && !*w->done)
         {
             // Full fifos will make us wait forever, so get the
             // pts offset from the available streams if full
@@ -761,7 +761,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* Wait for start frame if doing point-to-point */
     hb_lock( pv->common->mutex );
     start = buf->s.start - pv->common->audio_pts_slip;
-    while ( !pv->common->start_found )
+    while ( !pv->common->start_found && !*w->done )
     {
         if ( pv->common->audio_pts_thresh < 0 )
         {
@@ -777,7 +777,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_OK;
         }
         while ( !pv->common->start_found && 
-                buf->s.start >= pv->common->audio_pts_thresh )
+                buf->s.start >= pv->common->audio_pts_thresh && !*w->done )
         {
             hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 10 );
             // There is an unfortunate unavoidable deadlock that can occur.
