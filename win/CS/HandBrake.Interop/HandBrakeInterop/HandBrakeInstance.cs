@@ -50,16 +50,6 @@ namespace HandBrake.Interop
 		private const string TurboX264Opts = "ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 
 		/// <summary>
-		/// Lock for creation of handbrake instances;
-		/// </summary>
-		private static object instanceCreationLock = new object();
-
-		/// <summary>
-		/// True if a handbrake instance has been created.
-		/// </summary>
-		private static bool globalInitialized;
-
-		/// <summary>
 		/// The native handle to the HandBrake instance.
 		/// </summary>
 		private IntPtr hbHandle;
@@ -181,13 +171,7 @@ namespace HandBrake.Interop
 		/// <param name="verbosity">The code for the logging verbosity to use.</param>
 		public void Initialize(int verbosity)
 		{
-			lock (instanceCreationLock)
-			{
-				if (!globalInitialized)
-				{
-					globalInitialized = true;
-				}
-			}
+			HandBrakeUtils.EnsureGlobalInit();
 
 			HandBrakeUtils.RegisterLogger();
 			this.hbHandle = HBFunctions.hb_init(verbosity, update_check: 0);
@@ -406,6 +390,11 @@ namespace HandBrake.Interop
 		public void StartEncode(EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds)
 		{
 			EncodingProfile profile = job.EncodingProfile;
+			if (job.ChosenAudioTracks == null)
+			{
+				throw new ArgumentException("job.ChosenAudioTracks cannot be null.");
+			}
+
 			this.currentJob = job;
 
 			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
@@ -414,7 +403,7 @@ namespace HandBrake.Interop
 			this.encodeAllocatedMemory = this.ApplyJob(ref nativeJob, job, preview, previewNumber, previewSeconds, overallSelectedLengthSeconds);
 
 			this.subtitleScan = false;
-			if (job.Subtitles.SourceSubtitles != null)
+			if (job.Subtitles != null && job.Subtitles.SourceSubtitles != null)
 			{
 				foreach (SourceSubtitle subtitle in job.Subtitles.SourceSubtitles)
 				{
@@ -1267,7 +1256,7 @@ namespace HandBrake.Interop
 							}
 							else
 							{
-								displayWidth = (int)((double)cropHeight * displayAspect);
+								displayWidth = (int)((double)height * displayAspect);
 							}
 
 							nativeJob.anamorphic.dar_width = displayWidth;
@@ -1454,7 +1443,7 @@ namespace HandBrake.Interop
 					}
 				}
 
-				bool hasBurnedSubtitle = job.Subtitles.SourceSubtitles.Any(s => s.BurnedIn);
+				bool hasBurnedSubtitle = job.Subtitles.SourceSubtitles != null && job.Subtitles.SourceSubtitles.Any(s => s.BurnedIn);
 				if (hasBurnedSubtitle)
 				{
 					this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_RENDER_SUB, string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}:{3}", crop.Top, crop.Bottom, crop.Left, crop.Right), allocatedMemory);
@@ -1684,7 +1673,7 @@ namespace HandBrake.Interop
 					if (encoding.Bitrate == 0)
 					{
 						// Bitrate of 0 means auto: choose the default for this codec, sample rate and mixdown.
-						nativeAudio.config.output.bitrate = HBFunctions.hb_get_default_audio_bitrate(
+						nativeAudio.config.output.bitrate = HBFunctions.hb_audio_bitrate_get_default(
 							nativeAudio.config.output.codec,
 							nativeAudio.config.output.samplerate,
 							nativeAudio.config.output.mixdown);

@@ -161,6 +161,7 @@
     <Compile Include="Model\Encoding\Detelecine.cs" />
     <Compile Include="Model\Encoding\EncodingProfile.cs" />
     <Compile Include="Model\Encoding\HBMixdown.cs" />
+    <Compile Include="Model\Encoding\HBRate.cs" />
     <Compile Include="Model\Encoding\HBVideoEncoder.cs" />
     <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\OutputExtension.cs" />

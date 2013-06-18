@@ -59,7 +59,7 @@ namespace HandBrake.Interop.HbLib
         // Muxers
 		public const int HB_MUX_MASK = 0xFF0000;
 		public const int HB_MUX_MP4 = 0x010000;
-		public const int HB_MUX_MKV = 0x200000;
+		public const int HB_MUX_MKV = 0x100000;
 
 		public const int HBTF_NO_IDR = 1 << 0;
 

@@ -17,30 +17,48 @@ namespace HandBrake.Interop.Model
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
 
-    /// <summary>
-    /// The encoders.
-    /// </summary>
-    public static class Encoders
+	/// <summary>
+	/// The encoders.
+	/// </summary>
+	public static class Encoders
 	{
-	    /// <summary>
-	    /// The audio encoders.
-	    /// </summary>
-	    private static List<HBAudioEncoder> audioEncoders;
+		/// <summary>
+		/// The audio encoders.
+		/// </summary>
+		private static List<HBAudioEncoder> audioEncoders;
 
-	    /// <summary>
-	    /// The video encoders.
-	    /// </summary>
-	    private static List<HBVideoEncoder> videoEncoders;
+		/// <summary>
+		/// The video encoders.
+		/// </summary>
+		private static List<HBVideoEncoder> videoEncoders;
 
-	    /// <summary>
-	    /// The mixdowns.
-	    /// </summary>
-	    private static List<HBMixdown> mixdowns;
+		/// <summary>
+		/// Video framerates in pts.
+		/// </summary>
+		private static List<HBRate> videoFramerates; 
 
-	    /// <summary>
-	    /// The audio bitrates.
-	    /// </summary>
-	    private static List<int> audioBitrates; 
+		/// <summary>
+		/// The mixdowns.
+		/// </summary>
+		private static List<HBMixdown> mixdowns;
+
+		/// <summary>
+		/// The audio bitrates.
+		/// </summary>
+		private static List<int> audioBitrates;
+
+		/// <summary>
+		/// Audio sample rates in Hz.
+		/// </summary>
+		private static List<HBRate> audioSampleRates; 
+
+		/// <summary>
+		/// Initializes static members of the Encoders class.
+		/// </summary>
+		static Encoders()
+		{
+			HandBrakeUtils.EnsureGlobalInit();
+		}
 
 		/// <summary>
 		/// Gets a list of supported audio encoders.
@@ -51,12 +69,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (audioEncoders == null)
 				{
-					IntPtr encodersPtr = HBFunctions.hb_get_audio_encoders();
-					int encoderCount = HBFunctions.hb_get_audio_encoders_count();
-
-					audioEncoders = InteropUtilities.ConvertArray<hb_encoder_s>(encodersPtr, encoderCount)
-						.Select(Converters.NativeToAudioEncoder)
-						.ToList();
+					audioEncoders = InteropUtilities.GetListFromIterator<hb_encoder_s, HBAudioEncoder>(HBFunctions.hb_audio_encoder_get_next, Converters.NativeToAudioEncoder);
 				}
 
 				return audioEncoders;
@@ -72,17 +85,28 @@ namespace HandBrake.Interop.Model
 			{
 				if (videoEncoders == null)
 				{
-					IntPtr encodersPtr = HBFunctions.hb_get_video_encoders();
-					int encoderCount = HBFunctions.hb_get_video_encoders_count();
-
-					videoEncoders = InteropUtilities.ConvertArray<hb_encoder_s>(encodersPtr, encoderCount)
-						.Select(Converters.NativeToVideoEncoder)
-						.ToList();
+					videoEncoders = InteropUtilities.GetListFromIterator<hb_encoder_s, HBVideoEncoder>(HBFunctions.hb_video_encoder_get_next, Converters.NativeToVideoEncoder);
 				}
 
 				return videoEncoders;
 			}
 		}
+
+		/// <summary>
+		/// Gets a list of supported video framerates (in pts).
+		/// </summary>
+		public static List<HBRate> VideoFramerates
+		{
+			get
+			{
+				if (videoFramerates == null)
+				{
+					videoFramerates = InteropUtilities.GetListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_video_framerate_get_next, Converters.NativeToRate);
+				}
+
+				return videoFramerates;
+			}
+		} 
 
 		/// <summary>
 		/// Gets a list of supported mixdowns.
@@ -93,12 +117,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (mixdowns == null)
 				{
-					IntPtr mixdownsPtr = HBFunctions.hb_get_audio_mixdowns();
-					int mixdownsCount = HBFunctions.hb_get_audio_mixdowns_count();
-
-					mixdowns = InteropUtilities.ConvertArray<hb_mixdown_s>(mixdownsPtr, mixdownsCount)
-						.Select(Converters.NativeToMixdown)
-						.ToList();
+					mixdowns = InteropUtilities.GetListFromIterator<hb_mixdown_s, HBMixdown>(HBFunctions.hb_mixdown_get_next, Converters.NativeToMixdown);
 				}
 
 				return mixdowns;
@@ -114,17 +133,28 @@ namespace HandBrake.Interop.Model
 			{
 				if (audioBitrates == null)
 				{
-					IntPtr audioBitratesPtr = HBFunctions.hb_get_audio_bitrates();
-					int audioBitratesCount = HBFunctions.hb_get_audio_bitrates_count();
-
-					audioBitrates = InteropUtilities.ConvertArray<hb_rate_s>(audioBitratesPtr, audioBitratesCount)
-						.Select(b => b.rate)
-						.ToList();
+					audioBitrates = InteropUtilities.GetListFromIterator<hb_rate_s, int>(HBFunctions.hb_audio_bitrate_get_next, b => b.rate);
 				}
 
 				return audioBitrates;
 			}
 		}
+
+		/// <summary>
+		/// Gets a list of supported audio sample rates (in Hz).
+		/// </summary>
+		public static List<HBRate> AudioSampleRates
+		{
+			get
+			{
+				if (audioSampleRates == null)
+				{
+					audioSampleRates = InteropUtilities.GetListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_audio_samplerate_get_next, Converters.NativeToRate);
+				}
+
+				return audioSampleRates;
+			}
+		} 
 
 		/// <summary>
 		/// Gets the audio encoder with the specified short name.
@@ -199,7 +229,7 @@ namespace HandBrake.Interop.Model
 		/// <returns>A sanitized mixdown value.</returns>
 		public static HBMixdown SanitizeMixdown(HBMixdown mixdown, HBAudioEncoder encoder, ulong layout)
 		{
-			int sanitizedMixdown = HBFunctions.hb_get_best_mixdown((uint)encoder.Id, layout, mixdown.Id);
+			int sanitizedMixdown = HBFunctions.hb_mixdown_get_best((uint)encoder.Id, layout, mixdown.Id);
 			return Mixdowns.Single(m => m.Id == sanitizedMixdown);
 		}
 
@@ -211,7 +241,7 @@ namespace HandBrake.Interop.Model
 		/// <returns>The default mixdown for the given codec and channel layout.</returns>
 		public static HBMixdown GetDefaultMixdown(HBAudioEncoder encoder, ulong layout)
 		{
-			int defaultMixdown = HBFunctions.hb_get_default_mixdown((uint)encoder.Id, layout);
+			int defaultMixdown = HBFunctions.hb_mixdown_get_default((uint)encoder.Id, layout);
 			return Mixdowns.Single(m => m.Id == defaultMixdown);
 		}
 
@@ -227,7 +257,7 @@ namespace HandBrake.Interop.Model
 			int low = 0;
 			int high = 0;
 
-			HBFunctions.hb_get_audio_bitrate_limits((uint)encoder.Id, sampleRate, mixdown.Id, ref low, ref high);
+			HBFunctions.hb_audio_bitrate_get_limits((uint)encoder.Id, sampleRate, mixdown.Id, ref low, ref high);
 
 			return new BitrateLimits { Low = low, High = high };
 		}
@@ -242,7 +272,7 @@ namespace HandBrake.Interop.Model
 		/// <returns>A sanitized audio bitrate.</returns>
 		public static int SanitizeAudioBitrate(int audioBitrate, HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
 		{
-			return HBFunctions.hb_get_best_audio_bitrate((uint)encoder.Id, audioBitrate, sampleRate, mixdown.Id);
+			return HBFunctions.hb_audio_bitrate_get_best((uint)encoder.Id, audioBitrate, sampleRate, mixdown.Id);
 		}
 
 		/// <summary>
@@ -254,7 +284,7 @@ namespace HandBrake.Interop.Model
 		/// <returns>The default bitrate for these parameters.</returns>
 		public static int GetDefaultBitrate(HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
 		{
-			return HBFunctions.hb_get_default_audio_bitrate((uint) encoder.Id, sampleRate, mixdown.Id);
+			return HBFunctions.hb_audio_bitrate_get_default((uint) encoder.Id, sampleRate, mixdown.Id);
 		}
 
 		/// <summary>
@@ -266,7 +296,7 @@ namespace HandBrake.Interop.Model
 		{
 			float low = 0, high = 0, granularity = 0;
 			int direction = 0;
-			HBFunctions.hb_get_audio_quality_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
+			HBFunctions.hb_audio_quality_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
 			return new RangeLimits
 			{
@@ -286,7 +316,7 @@ namespace HandBrake.Interop.Model
 		{
 			float low = 0, high = 0, granularity = 0;
 			int direction = 0;
-			HBFunctions.hb_get_audio_compression_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
+			HBFunctions.hb_audio_compression_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
 			return new RangeLimits
 			{

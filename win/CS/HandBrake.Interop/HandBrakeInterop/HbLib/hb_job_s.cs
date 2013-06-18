@@ -74,10 +74,6 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int vbitrate;
 
-		public int pfr_vrate;
-
-		public int pfr_vrate_base;
-
 		/// int
 		public int vrate;
 
