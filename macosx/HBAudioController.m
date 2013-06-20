@@ -295,19 +295,8 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [newAudio setVideoContainerTag: [self videoContainerTag]];
             [newAudio setTrackFromIndex: trackIndex];
 
-            // map faac to ca_aac for built-in presets (can be disabled in preferences)
-            if (0 == aType &&
-                [[NSUserDefaults standardUserDefaults] boolForKey:@"UseCoreAudio"] &&
-                [[dict objectForKey:@"AudioEncoder"] isEqualToString:@"AAC (faac)"])
-            {
-                key = @"AAC (CoreAudio)";
-            }
-            else
-            {
-                key = [dict objectForKey:@"AudioEncoder"];
-            }
-
             // map legacy encoder names via libhb
+            key = [dict objectForKey:@"AudioEncoder"];
             if (key != nil)
             {
                 const char *name;
