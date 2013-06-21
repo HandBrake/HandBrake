@@ -208,8 +208,7 @@
                         <MenuItem.ItemContainerStyle>
                             <Style TargetType="{x:Type MenuItem}">
                                 <Setter Property="Header" Value="{Binding Text}" />
-                                <Setter Property="MenuItem.Command" Value="{Binding Command}"/>
-                                <Setter Property="MenuItem.CommandParameter" Value="123"/>
+                                <Setter Property="Command" Value="{Binding Command}"/>
                                 <Setter Property="ItemsSource" Value="{Binding Children}" />
                                 <Setter Property="Icon" Value="{Binding Image}" />
                                 <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
