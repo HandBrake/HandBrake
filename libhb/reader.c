@@ -535,8 +535,8 @@ void ReadLoop( void * _w )
             else if ( buf->s.start >= r->job->pts_to_start )
             {
                 r->job->pts_to_start = 0;
-                r->start_found = 1;
             }
+            r->start_found = 1;
           }
         }
 
