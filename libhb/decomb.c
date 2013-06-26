@@ -138,6 +138,7 @@ struct hb_filter_private_s
 {
     // Decomb parameters
     int              mode;
+    int              use_opencl;
     int              filter_mode;
     int              spatial_metric;
     int              motion_threshold;
@@ -206,6 +207,11 @@ struct hb_filter_private_s
     taskset_t        mask_dilate_taskset; // Threads for decomb mask dilate
 
     taskset_t        eedi2_taskset;       // Threads for eedi2 - one per plane
+
+    void* cl_mem_dst;
+    void* cl_mem_prev;
+    void* cl_mem_cur;
+    void* cl_mem_next;
 };
 
 static int hb_decomb_init( hb_filter_object_t * filter,
@@ -1986,6 +1992,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
     build_gamma_lut( pv );
 
+    pv->use_opencl = init->job->use_opencl;
+
     pv->deinterlaced_frames = 0;
     pv->blended_frames = 0;
     pv->unfiltered_frames = 0;
@@ -2058,6 +2066,32 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     memset(pv->mask->data, 0, pv->mask->size);
     memset(pv->mask_filtered->data, 0, pv->mask_filtered->size);
     memset(pv->mask_temp->data, 0, pv->mask_temp->size);
+
+#ifdef USE_OPENCL
+    if(pv->use_opencl){
+        hb_log("decomb with OpenCL");
+        if( !hb_create_buffer( &(pv->cl_mem_dst), CL_MEM_READ_WRITE, 3133440 ) )
+        {
+            hb_log("hb_create_buffer cl_outbuf Error\n");
+            return -1;
+        }
+        if( !hb_create_buffer( &(pv->cl_mem_prev), CL_MEM_READ_WRITE, 3133440 ) )
+        {
+            hb_log("hb_create_buffer cl_outbuf Error\n");
+            return -1;
+        }
+        if( !hb_create_buffer( &(pv->cl_mem_cur), CL_MEM_READ_WRITE, 3133440 ) )
+        {
+            hb_log("hb_create_buffer cl_outbuf Error\n");
+            return -1;
+        }
+        if( !hb_create_buffer( &(pv->cl_mem_next), CL_MEM_READ_WRITE, 3133440 ) )
+        {
+            hb_log("hb_create_buffer cl_outbuf Error\n");
+            return -1;
+        }
+    }
+#endif
 
     int ii;
     if( pv->mode & MODE_EEDI2 )
@@ -2499,6 +2533,11 @@ static void hb_decomb_close( hb_filter_object_t * filter )
     hb_buffer_close(&pv->mask_filtered);
     hb_buffer_close(&pv->mask_temp);
 
+    clReleaseMemObject( pv->cl_mem_dst );
+    clReleaseMemObject( pv->cl_mem_prev );
+    clReleaseMemObject( pv->cl_mem_cur );
+    clReleaseMemObject( pv->cl_mem_next );
+
     if( pv->mode & MODE_EEDI2 )
     {
         /* Cleanup eedi-half  buffers */
@@ -2580,16 +2619,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 
     /* deinterlace both fields if mcdeint is enabled without bob */
     int frame, num_frames = 1;
-    if (pv->mode & (MODE_MCDEINT | MODE_BOB))
-    {
-        num_frames = 2;
-    }
     
-    // Will need up to 2 buffers simultaneously
-    int idx = 0;
-    hb_buffer_t * o_buf[2] = {NULL,};
-
-    /* Perform yadif filtering */        
     for( frame = 0; frame < num_frames; frame++ )
     {
         int parity = frame ^ tff ^ 1;
@@ -2603,9 +2633,8 @@ static int hb_decomb_work( hb_filter_object_t * filter,
         // tff for eedi2
         pv->tff = !parity;
 
-        if (o_buf[idx] == NULL)
-        {
-            o_buf[idx] = hb_video_buffer_init(in->f.width, in->f.height);
+        if(out == NULL){
+            out = hb_video_buffer_init(in->f.width, in->f.height);
         }
 
         if (frame)
@@ -2613,73 +2642,95 @@ static int hb_decomb_work( hb_filter_object_t * filter,
         else
             pv->skip_comb_check = 0;
 
-        yadif_filter(pv, o_buf[idx], parity, tff);
-
-        // Unfortunately, all frames must be fed to mcdeint combed or
-        // not since it maintains state that is updated by each frame.
-        if (pv->mcdeint_mode >= 0)
-        {
-            if (o_buf[idx^1] == NULL)
+#ifdef USE_OPENCL
+        if(pv->use_opencl){
+            int is_combed;
+            if (!pv->skip_comb_check)
             {
-                o_buf[idx^1] = hb_video_buffer_init(in->f.width, in->f.height);
-            }
-            /* Perform mcdeint filtering */
-            mcdeint_filter(o_buf[idx^1], o_buf[idx], parity, &pv->mcdeint);
-
-            // If frame was combed, we will use results from mcdeint
-            // else we will use yadif result
-            if (pv->is_combed)
-                idx ^= 1;
-        }
-
-        // Add to list of output buffers (should be at most 2)
-        if ((pv->mode & MODE_BOB) ||
-            pv->is_combed == 0 ||
-            frame == num_frames - 1)
-        {
-            if ( out == NULL )
-            {
-                last = out = o_buf[idx];
+                is_combed = pv->spatial_metric >= 0 ? comb_segmenter( pv ) : 1;
             }
             else
             {
-                last->next = o_buf[idx];
-                last = last->next;
+                is_combed = pv->is_combed;
             }
-            last->next = NULL;
 
-            // Indicate that buffer was consumed
-            o_buf[idx] = NULL;
-
-            /* Copy buffered settings to output buffer settings */
-            last->s = pv->ref[1]->s;
-            idx ^= 1;
-
-            if ((pv->mode & MODE_MASK) && pv->spatial_metric >= 0 )
+            if( is_combed == 1 )
             {
-                if (pv->mode == MODE_MASK ||
-                    ((pv->mode & MODE_MASK) && (pv->mode & MODE_FILTER)) ||
-                    ((pv->mode & MODE_MASK) && (pv->mode & MODE_GAMMA)) ||
-                    pv->is_combed)
-                {
-                    apply_mask(pv, last);
-                }
+                pv->deinterlaced_frames++;
+            }
+            else if( is_combed == 2 )
+            {
+                pv->blended_frames++;
+            }
+            else
+            {
+                pv->unfiltered_frames++;
+            }
+
+            pv->is_combed = is_combed;
+            out->s = in->s;
+            out->f = in->f;
+
+            if(is_combed){
+                hb_write_opencl_frame_buffer(pv->cl_mem_prev, pv->ref[0]->plane[0].data, pv->ref[0]->plane[1].data, pv->ref[0]->plane[2].data, pv->ref[0]->plane[0].stride, pv->ref[0]->plane[1].stride, pv->ref[0]->plane[2].stride, in->f.height, 0);
+
+                hb_write_opencl_frame_buffer(pv->cl_mem_cur, pv->ref[1]->plane[0].data, pv->ref[1]->plane[1].data, pv->ref[1]->plane[2].data, pv->ref[1]->plane[0].stride, pv->ref[1]->plane[1].stride, pv->ref[1]->plane[2].stride, in->f.height, 0);
+
+                hb_write_opencl_frame_buffer(pv->cl_mem_next, pv->ref[2]->plane[0].data, pv->ref[2]->plane[1].data, pv->ref[2]->plane[2].data, pv->ref[2]->plane[0].stride, pv->ref[2]->plane[1].stride, pv->ref[2]->plane[2].stride, in->f.height, 0);
+
+                cl_yadif_filter(pv->cl_mem_dst, 
+                            pv->cl_mem_prev, 
+                            pv->cl_mem_cur, 
+                            pv->cl_mem_next, 
+                            parity, 
+                            tff, 
+                            pv->ref[1]->plane[0].stride, 
+                            pv->ref[1]->plane[1].stride, 
+                            pv->ref[1]->plane[0].stride, 
+                            pv->ref[1]->plane[1].stride, 
+                            pv->mode, 
+                            in->f.width, 
+                            in->f.height);
+
+                hb_read_opencl_frame_buffer(pv->cl_mem_dst, out->plane[0].data, out->plane[1].data, out->plane[2].data, pv->ref[1]->plane[0].stride, pv->ref[1]->plane[1].stride, pv->ref[1]->plane[2].stride, in->f.height);
+
+                hb_buffer_move_subs( out, pv->ref[1] );
+            }
+            else
+            {
+                hb_buffer_copy(out, pv->ref[1]); 
+            }
+        }else{
+            yadif_filter(pv, out, parity, tff);
+        }
+#else
+        yadif_filter(pv, out, parity, tff);
+#endif
+
+        hb_buffer_t* mcdeint_out = NULL;
+        if (pv->mcdeint_mode >= 0)
+        {    
+            mcdeint_out = hb_video_buffer_init(in->f.width, in->f.height);
+            mcdeint_filter(mcdeint_out, out, parity, &pv->mcdeint);
+        }
+
+        if(mcdeint_out != NULL){
+            last = mcdeint_out;
+        }else{
+            last = out;
+        }
+
+        last->s = pv->ref[1]->s;
+        if ((pv->mode & MODE_MASK) && pv->spatial_metric >= 0 )
+        {
+            if (pv->mode == MODE_MASK ||
+                ((pv->mode & MODE_MASK) && (pv->mode & MODE_FILTER)) ||
+                ((pv->mode & MODE_MASK) && (pv->mode & MODE_GAMMA)) ||
+                pv->is_combed)
+            {
+                apply_mask(pv, last);
             }
         }
-    }
-    // Copy subs only to first output buffer
-    hb_buffer_move_subs( out, pv->ref[1] );
-
-    hb_buffer_close(&o_buf[0]);
-    hb_buffer_close(&o_buf[1]);
-
-    /* if this frame was deinterlaced and bob mode is engaged, halve
-       the duration of the saved timestamps. */
-    if ((pv->mode & MODE_BOB) && pv->is_combed)
-    {
-        out->s.stop -= (out->s.stop - out->s.start) / 2LL;
-        last->s.start = out->s.stop;
-        last->s.new_chap = 0;
     }
 
     *buf_out = out;

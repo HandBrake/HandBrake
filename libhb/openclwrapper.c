@@ -175,6 +175,7 @@ int hb_regist_opencl_kernel()
     ADD_KERNEL_CFG( 1, "frame_v_scale", NULL )
     ADD_KERNEL_CFG( 2, "nv12toyuv", NULL )
     ADD_KERNEL_CFG( 3, "scale_opencl", NULL )
+    ADD_KERNEL_CFG( 4, "yadif_filter", NULL )
 
     return 0;
 }
@@ -423,7 +424,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
                                      deviceName,
                                      NULL);
 
-            str = (char*)strstr(cl_file_name, ".cl");
+            str = (char*)strstr( cl_file_name, (char*)".cl" );
             memcpy(cl_name, cl_file_name, str - cl_file_name);
             cl_name[str - cl_file_name] = '\0';
             sprintf(fileName, "./%s - %s.bin", cl_name, deviceName);
@@ -797,8 +798,9 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 #else
     int kernel_src_size = strlen( kernel_src_hscale ) + strlen( kernel_src_vscale ) 
                                   + strlen( kernel_src_nvtoyuv ) + strlen( kernel_src_hscaleall ) 
-	                              + strlen( kernel_src_hscalefast ) + strlen( kernel_src_vscalealldither ) 
-	                              + strlen( kernel_src_vscaleallnodither ) + strlen( kernel_src_vscalefast );
+                                  + strlen( kernel_src_hscalefast ) + strlen( kernel_src_vscalealldither ) 
+                                  + strlen( kernel_src_vscaleallnodither ) + strlen( kernel_src_vscalefast )
+                                  + strlen( kernel_src_yadif_filter );
     source_str = (char*)malloc( kernel_src_size + 2 );
     strcpy( source_str, kernel_src_hscale );
     strcat( source_str, kernel_src_vscale );
@@ -808,6 +810,7 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     strcat( source_str, kernel_src_vscalealldither );
     strcat( source_str, kernel_src_vscaleallnodither );
     strcat( source_str, kernel_src_vscalefast );
+    strcat( source_str, kernel_src_yadif_filter );
 #endif
 
     source = source_str;
@@ -885,30 +888,30 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
     /* create a cl program executable for all the devices specified */
     if( !gpu_info->isUserCreated ) 
-	{
+    {
         status = clBuildProgram( gpu_info->programs[idx], 1, gpu_info->devices,
                                  build_option, NULL, NULL );
-	}
+    }
     else
-	{
+    {
         status = clBuildProgram( gpu_info->programs[idx], 1, &(gpu_info->dev),
                                  build_option, NULL, NULL );
-	}
+    }
 
     if( status != CL_SUCCESS )
     {
         if( !gpu_info->isUserCreated ) 
-		{
+        {
             status = clGetProgramBuildInfo( gpu_info->programs[idx],
                                             gpu_info->devices[0],
                                             CL_PROGRAM_BUILD_LOG, 0, NULL, &length );
-		}
-		else
-		{
-			status = clGetProgramBuildInfo( gpu_info->programs[idx],
+        }
+        else
+        {
+            status = clGetProgramBuildInfo( gpu_info->programs[idx],
                                             gpu_info->dev,
                                             CL_PROGRAM_BUILD_LOG, 0, NULL, &length );
-		}
+        }
 
         if( status != CL_SUCCESS )
         {
@@ -923,15 +926,15 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
         }
 
         if( !gpu_info->isUserCreated )
-		{
+        {
             status = clGetProgramBuildInfo( gpu_info->programs[idx], gpu_info->devices[0],
                                             CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
-		}
+        }
         else
-		{
+        {
             status = clGetProgramBuildInfo( gpu_info->programs[idx], gpu_info->dev,
                                             CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
-		}
+        }
 
         fd1 = fopen( "kernel-build.log", "w+" );
         if( fd1 != NULL ) {
@@ -997,9 +1000,9 @@ int hb_run_kernel( const char *kernel_name, void **userdata )
     status = hb_get_kernel_env_and_func( kernel_name, &env, &function );
     strcpy( env.kernel_name, kernel_name );
     if( status == 1 ) 
-	{
+    {
         return(function( userdata, &env ));
-	}
+    }
 
     return(0);
 }
@@ -1014,14 +1017,14 @@ int hb_init_opencl_run_env( int argc, char **argv, const char *build_option )
 {
     int status = 0;
     if( MAX_CLKERNEL_NUM <= 0 )
-	{
+    {
         return 1;
-	}
+    }
 
     if((argc > MAX_CLFILE_NUM) || (argc<0))
-	{
+    {
         return 1;
-	}
+    }
 
     if( !isInited )
     {
@@ -1162,5 +1165,60 @@ int hb_read_opencl_buffer( cl_mem cl_inBuf, unsigned char *outbuf, int size )
     }
 
     return 1;
+}
+
+int hb_copy_buffer(cl_mem src_buffer,cl_mem dst_buffer,size_t src_offset,size_t dst_offset,size_t cb)
+{
+    int status = clEnqueueCopyBuffer(gpu_env.command_queue,
+        src_buffer,
+        dst_buffer,
+        src_offset, dst_offset, cb,
+        0, 0, 0);
+    if( status != CL_SUCCESS )
+    { 
+        av_log(NULL,AV_LOG_ERROR, "hb_read_opencl_buffer error '%d'\n", status ); 
+        return 0; 
+    }
+    return 1;
+}
+
+int hb_read_opencl_frame_buffer(cl_mem cl_inBuf,unsigned char *Ybuf,unsigned char *Ubuf,unsigned char *Vbuf,int linesize0,int linesize1,int linesize2,int height)
+{
+
+    int chrH = -(-height >> 1);
+        unsigned char *temp = (unsigned char *)av_malloc(sizeof(uint8_t) * (linesize0 * height + linesize1 * chrH * 2));
+    if(hb_read_opencl_buffer(cl_inBuf,temp,sizeof(uint8_t)*(linesize0 + linesize1)*height))
+    {
+        memcpy(Ybuf,temp,linesize0 * height);
+        memcpy(Ubuf,temp + linesize0 * height,linesize1 *chrH);
+        memcpy(Vbuf,temp + linesize0 * height + linesize1 * chrH,linesize2 * chrH);
+        
+    }
+    av_free(temp);
+
+    return 1;
+}
+
+int hb_write_opencl_frame_buffer(cl_mem cl_inBuf,unsigned char *Ybuf,unsigned char *Ubuf,unsigned char *Vbuf,int linesize0,int linesize1,int linesize2,int height,int offset)
+{
+    int status;
+    void *mapped = clEnqueueMapBuffer( gpu_env.command_queue, cl_inBuf,  CL_TRUE,CL_MAP_WRITE, 0, sizeof(uint8_t) * (linesize0  + linesize1)*height + offset, 0, NULL, NULL, NULL );
+    uint8_t *temp = (uint8_t *)mapped;
+    temp += offset;
+    memcpy(temp,Ybuf,sizeof(uint8_t) * linesize0 * height);
+    memcpy(temp + sizeof(uint8_t) * linesize0 * height,Ubuf,sizeof(uint8_t) * linesize1 * height/2);
+    memcpy(temp + sizeof(uint8_t) * (linesize0 * height + linesize1 * height/2),Vbuf,sizeof(uint8_t) * linesize2 * height/2);
+    clEnqueueUnmapMemObject(gpu_env.command_queue, cl_inBuf, mapped, 0, NULL, NULL );
+    return 1;
+}
+
+cl_command_queue hb_get_command_queue()
+{
+    return gpu_env.command_queue;
+}
+
+cl_context hb_get_context()
+{
+    return gpu_env.context;
 }
 #endif
