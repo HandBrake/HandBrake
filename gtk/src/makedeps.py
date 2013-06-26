@@ -2,6 +2,7 @@
 
 import collections
 import plistlib
+import sys
 
 DepEntry = collections.namedtuple('DepEntry', 'widget dep enable die hide')
 dep_map = (
