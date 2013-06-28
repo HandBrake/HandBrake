@@ -143,7 +143,10 @@
 
                             <CheckBox Content="Always use System Colours (Requires Restart)"
                                       ToolTip="Note: This option will always be on for systems with a High Contrast Theme selected." IsChecked="{Binding UseSystemColoursForStylesForStyles}" />
-
+                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
+                            <CheckBox Content="Disable preset update notification on startup" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
+                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
+                            <CheckBox Content="Show Advanced Encoder Options Tab" IsChecked="{Binding ShowAdvancedTab}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -304,10 +307,6 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
-                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
-                            <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
-                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
-                            <CheckBox Content="Show Advanced Tab" IsChecked="{Binding ShowAdvancedTab}" />
                             <CheckBox Content="Disable LibHB Features" IsChecked="{Binding DisableLibHbFeatures}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />
