@@ -563,21 +563,17 @@ static const gchar*
 get_extension(GValue *settings)
 {
     int container;
-    const gchar *extension = "error";
+    const gchar *extension;
 
     container = ghb_settings_combo_int(settings, "FileFormat");
-    if (container == HB_MUX_MP4)
+    if ((container & HB_MUX_MASK_MP4) &&
+        ghb_settings_get_boolean(settings, "UseM4v"))
     {
-        extension = "mp4";
-        if (ghb_settings_get_boolean(settings, "UseM4v"))
-        {
-            extension = "m4v";
-        }
+        return "m4v";
     }
-    else if (container == HB_MUX_MKV)
-    {
-        extension = "mkv";
-    }
+    extension = hb_container_get_default_extension(container);
+    if (extension == NULL)
+        extension = "error";
     return extension;
 }
 
@@ -1082,7 +1078,7 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 void
 ghb_update_destination_extension(signal_user_data_t *ud)
 {
-    static gchar *containers[] = {".mkv", ".mp4", ".m4v", NULL};
+    static gchar *containers[] = {".mkv", ".mp4", ".m4v", ".error", NULL};
     gchar *filename;
     const gchar *extension;
     gint ii;
