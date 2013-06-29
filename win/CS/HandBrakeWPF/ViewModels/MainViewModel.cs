@@ -927,11 +927,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public int ProgressPercentage { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the app is in "instant" mode
-        /// </summary>
-        public bool IsInstandHandBrake { get; set; }
-
         #endregion
 
         #region Load and Shutdown Handling
@@ -1912,7 +1907,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         string josPending = string.Empty;
-                        if (this.IsInstandHandBrake)
+                        if (!AppArguments.IsInstantHandBrake)
                         {
                             josPending = ",  Pending Jobs {5}";
                         }

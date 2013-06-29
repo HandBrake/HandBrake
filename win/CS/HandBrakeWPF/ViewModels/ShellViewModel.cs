@@ -88,28 +88,24 @@ namespace HandBrakeWPF.ViewModels
                 this.ShowMainWindow = true;
                 this.ShowOptions = false;
                 this.ShowInstant = false;
-                this.MainViewModel.IsInstandHandBrake = false;
             }
             else if (window == ShellWindow.OptionsWindow)
             {
                 this.ShowOptions = true;
                 this.ShowMainWindow = false;
                 this.ShowInstant = false;
-                this.MainViewModel.IsInstandHandBrake = false;
             }
             else if (window == ShellWindow.InstantMainWindow)
             {
                 this.ShowInstant = true;
                 this.ShowOptions = false;
                 this.ShowMainWindow = false;
-                this.MainViewModel.IsInstandHandBrake = true;
             }
             else
             {
                 this.ShowMainWindow = true;
                 this.ShowOptions = false;
                 this.ShowInstant = false;
-                this.MainViewModel.IsInstandHandBrake = false;
             }
         }
 
