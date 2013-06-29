@@ -527,6 +527,7 @@
                         Margin="10,10,5,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
+                        MinHeight="350" MinWidth="720"
                         >
                 <TabItem Name="pictureTab" Header="Picture">
                     <ContentControl x:Name="PictureSettingsViewModel" />

@@ -922,7 +922,15 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating progress percentage.
+        /// </summary>
         public int ProgressPercentage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the app is in "instant" mode
+        /// </summary>
+        public bool IsInstandHandBrake { get; set; }
 
         #endregion
 
@@ -950,12 +958,18 @@ namespace HandBrakeWPF.ViewModels
                                     "Preset Update", MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Queue Recovery
-            QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+            if (!AppArguments.IsInstantHandBrake)
+            {
+                QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+            }
 
             this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Populate the Source menu with drives.
-            this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
+            if (!AppArguments.IsInstantHandBrake)
+            {
+                this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
+            }
 
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
@@ -1897,9 +1911,15 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
+                        string josPending = string.Empty;
+                        if (this.IsInstandHandBrake)
+                        {
+                            josPending = ",  Pending Jobs {5}";
+                        }
+
                         this.ProgramStatusLabel =
                             string.Format(
-                                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss},  Pending Jobs {5}",
+                                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}" + josPending,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,

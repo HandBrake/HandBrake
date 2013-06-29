@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
+        xmlns:views="clr-namespace:HandBrakeWPF.Views"
         Title="{Data:Binding Path=WindowTitle}"
         Width="1015"
         Height="670"
@@ -14,6 +15,7 @@
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         Style="{StaticResource mainWindowStyle}"
+        x:Name="shellView"
         >
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -22,5 +24,8 @@
     <Grid>
         <ContentControl x:Name="MainViewModel"  Visibility="{Binding ShowMainWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
         <ContentControl x:Name="OptionsViewModel"  Visibility="{Binding ShowOptions, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+
+        <views:InstantMainView DataContext="{Binding MainViewModel}" 
+                               Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ShowInstant, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
     </Grid>
 </Window>

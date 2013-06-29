@@ -44,14 +44,20 @@ namespace HandBrakeWPF
         /// </param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            if (e.Args.Any(f => f.Equals("--instant")))
+            {
+                AppArguments.IsInstantHandBrake = true;
+                MessageBox.Show("Instant HandBrake is just a prototype for toying with ideas. It may or may not work, or even be included in future builds.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
             base.OnStartup(e);
 
             // If we have a file dropped on the icon, try scanning it.
-            string[] fileNames = e.Args;
-            if (fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
+            string[] args = e.Args;
+            if (args.Any() && (File.Exists(args[0]) || Directory.Exists(args[0])))
             {
                 IMainViewModel mvm = IoC.Get<IMainViewModel>();
-                mvm.StartScan(fileNames[0], 0);
+                mvm.StartScan(args[0], 0);
             }
         }
 

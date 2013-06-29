@@ -123,6 +123,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppArguments.cs" />
     <Compile Include="AttachedProperties\DriveMenu.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
@@ -183,6 +184,9 @@
     </Compile>
     <Compile Include="Views\EncoderOptionsView.xaml.cs">
       <DependentUpon>EncoderOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstantMainView.xaml.cs">
+      <DependentUpon>InstantMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
@@ -352,6 +356,10 @@
     <Page Include="Views\EncoderOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\InstantMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\QueueSelectionView.xaml">
       <Generator>MSBuild:Compile</Generator>

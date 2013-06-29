@@ -22,6 +22,11 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         Preset SelectedPreset { set; }
 
         /// <summary>
+        /// Gets or Sets IsInstandHandBrake.
+        /// </summary>
+        bool IsInstandHandBrake { get; set; }
+
+        /// <summary>
         /// Shutdown the Application
         /// </summary>
         void ExitApplication();

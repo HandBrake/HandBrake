@@ -1,21 +1,22 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ShellWindow.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="AppArguments.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The Window that the shell view can display
+//   Defines the AppArguments type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model
+namespace HandBrakeWPF
 {
     /// <summary>
-    /// The Window that the shell view can display
+    /// The app arguments.
     /// </summary>
-    public enum ShellWindow
+    public class AppArguments
     {
-        MainWindow,
-        OptionsWindow,
-        InstantMainWindow
+        /// <summary>
+        /// Gets or sets a value indicating whether is instant hand brake.
+        /// </summary>
+        public static bool IsInstantHandBrake { get; set; }
     }
 }

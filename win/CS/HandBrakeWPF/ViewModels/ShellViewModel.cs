@@ -13,6 +13,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using Castle.Facilities.FactorySupport;
+
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Helpers;
@@ -42,6 +44,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool showOptions;
 
+        /// <summary>
+        /// The show instant.
+        /// </summary>
+        private bool showInstant;
+
         #endregion
 
         /// <summary>
@@ -53,8 +60,19 @@ namespace HandBrakeWPF.ViewModels
         public ShellViewModel(IErrorService errorService)
         {
             this.errorService = errorService;
-            this.showMainWindow = true;
-            this.showOptions = false;
+
+            if (!AppArguments.IsInstantHandBrake)
+            {
+                this.showMainWindow = true;
+                this.showOptions = false;
+                this.showInstant = false;
+            }
+            else
+            {
+                this.showMainWindow = false;
+                this.showOptions = false;
+                this.showInstant = true;
+            }
         }
 
         /// <summary>
@@ -69,16 +87,29 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.ShowMainWindow = true;
                 this.ShowOptions = false;
+                this.ShowInstant = false;
+                this.MainViewModel.IsInstandHandBrake = false;
             }
             else if (window == ShellWindow.OptionsWindow)
             {
                 this.ShowOptions = true;
                 this.ShowMainWindow = false;
+                this.ShowInstant = false;
+                this.MainViewModel.IsInstandHandBrake = false;
+            }
+            else if (window == ShellWindow.InstantMainWindow)
+            {
+                this.ShowInstant = true;
+                this.ShowOptions = false;
+                this.ShowMainWindow = false;
+                this.MainViewModel.IsInstandHandBrake = true;
             }
             else
             {
                 this.ShowMainWindow = true;
                 this.ShowOptions = false;
+                this.ShowInstant = false;
+                this.MainViewModel.IsInstandHandBrake = false;
             }
         }
 
@@ -127,13 +158,29 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether ShowInstant.
+        /// </summary>
+        public bool ShowInstant
+        {
+            get
+            {
+                return this.showInstant;
+            }
+            set
+            {
+                this.showInstant = value;
+                this.NotifyOfPropertyChange(() => this.ShowInstant);
+            }
+        }
+
+        /// <summary>
         /// Gets WindowTitle.
         /// </summary>
         public string WindowTitle
         {
             get
             {
-                return "HandBrake";
+                return AppArguments.IsInstantHandBrake ? "Instant HandBrake" : "HandBrake";
             }
         }
 
