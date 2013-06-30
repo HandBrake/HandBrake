@@ -243,6 +243,9 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         w->config->extradata.length = context->extradata_size;
     }
 
+    audio->config.out.delay = av_rescale_q(context->delay, context->time_base,
+                                           (AVRational){1, 90000});
+
     return 0;
 }
 
@@ -388,21 +391,14 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     if (got_packet && pkt.size)
     {
         out->size = pkt.size;
-
         // The output pts from libav is in context->time_base. Convert it back
         // to our timebase.
-        //
-        // Also account for the "delay" factor that libav seems to arbitrarily
-        // subtract from the packet.  Not sure WTH they think they are doing by
-        // offsetting the value in a negative direction.
-        out->s.start = av_rescale_q(pv->context->delay + pkt.pts,
-                                    pv->context->time_base,
-                                    (AVRational){1, 90000});
-
-        out->s.stop  = out->s.start + (90000 * pv->samples_per_frame /
-                                       audio->config.out.samplerate);
-
-        out->s.type = AUDIO_BUF;
+        out->s.start     = av_rescale_q(pkt.pts, pv->context->time_base,
+                                        (AVRational){1, 90000});
+        out->s.duration  = (double)90000 * pv->samples_per_frame /
+                                           audio->config.out.samplerate;
+        out->s.stop      = out->s.start + out->s.duration;
+        out->s.type      = AUDIO_BUF;
         out->s.frametype = HB_FRAME_AUDIO;
     }
     else

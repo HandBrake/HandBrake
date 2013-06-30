@@ -71,7 +71,7 @@ ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint f
         if (enc->codec == fallback &&
             !(enc->muxers & mux))
         {
-            if ( mux == HB_MUX_MKV )
+            if ( mux & HB_MUX_MASK_MKV )
                 fallback = HB_ACODEC_LAME;
             else
                 fallback = HB_ACODEC_FAAC;

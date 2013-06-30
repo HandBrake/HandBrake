@@ -168,6 +168,7 @@ static hb_buffer_t *tx3g_decode_to_utf8( hb_buffer_t *in )
     out->size = dst - out->data;
     
     // Copy metadata from the input packet to the output packet
+    out->s.frametype = HB_FRAME_SUBTITLE;
     out->s.start = in->s.start;
     out->s.stop = in->s.stop;
     

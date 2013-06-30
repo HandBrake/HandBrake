@@ -15,7 +15,7 @@ TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
         a52 ass avcodec avformat avutil avresample dvdnav dvdread \
-        fontconfig freetype fribidi mkv mpeg2 mp3lame mp4v2 ogg \
+        fontconfig freetype fribidi mpeg2 mp3lame ogg \
         samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
         bluray xml2 bz2 z
 
@@ -25,6 +25,14 @@ endif
 
 ifeq (1,$(FEATURE.faac))
 TEST.GCC.l += faac
+endif
+
+ifeq (1,$(FEATURE.mp4v2))
+TEST.GCC.l += mp4v2
+endif
+
+ifeq (1,$(FEATURE.libmkv))
+TEST.GCC.l += mkv
 endif
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))

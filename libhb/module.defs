@@ -46,6 +46,15 @@ endif
 ifeq (1,$(FEATURE.faac))
 LIBHB.GCC.D += USE_FAAC
 endif
+ifeq (1,$(FEATURE.mp4v2))
+LIBHB.GCC.D += USE_MP4V2
+endif
+ifeq (1,$(FEATURE.libmkv))
+LIBHB.GCC.D += USE_LIBMKV
+endif
+ifeq (1,$(FEATURE.avformat))
+LIBHB.GCC.D += USE_AVFORMAT
+endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
@@ -102,7 +111,7 @@ LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
         a52 ass avcodec avformat avutil avresample dvdnav dvdread \
-        fontconfig freetype mkv mpeg2 mp3lame mp4v2 \
+        fontconfig freetype mpeg2 mp3lame \
         ogg samplerate swscale theora vorbis vorbisenc x264 xml2 bluray, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
@@ -112,6 +121,14 @@ endif
 
 ifeq (1,$(FEATURE.faac))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libfaac.a
+endif
+
+ifeq (1,$(FEATURE.mp4v2))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libmp4v2.a
+endif
+
+ifeq (1,$(FEATURE.libmkv))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libmkv.a
 endif
 
 ifneq ($(HAS.iconv),1)

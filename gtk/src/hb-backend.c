@@ -4433,7 +4433,7 @@ ghb_validate_video(GValue *settings)
 
     mux = ghb_settings_combo_int(settings, "FileFormat");
     vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
-    if ((mux == HB_MUX_MP4) && (vcodec == HB_VCODEC_THEORA))
+    if ((mux & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
         message = g_strdup_printf(
@@ -4581,7 +4581,7 @@ ghb_validate_audio(GValue *settings)
             {
                 codec = HB_ACODEC_AC3;
             }
-            else if (mux == HB_MUX_MKV)
+            else if (mux & HB_MUX_MASK_MKV)
             {
                 codec = HB_ACODEC_LAME;
             }
@@ -4594,7 +4594,7 @@ ghb_validate_audio(GValue *settings)
         }
         gchar *a_unsup = NULL;
         gchar *mux_s = NULL;
-        if (mux == HB_MUX_MP4)
+        if (mux & HB_MUX_MASK_MP4)
         { 
             mux_s = "MP4";
             // mp4/vorbis|DTS combination is not supported.
@@ -4761,7 +4761,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     }
 
     job->mux = ghb_settings_combo_int(js, "FileFormat");
-    if (job->mux == HB_MUX_MP4)
+    if (job->mux & HB_MUX_MASK_MP4)
     {
         job->largeFileSize = ghb_settings_get_boolean(js, "Mp4LargeFile");
         job->mp4_optimize = ghb_settings_get_boolean(js, "Mp4HttpOptimize");
@@ -4957,12 +4957,12 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     }
 
     job->vcodec = ghb_settings_combo_int(js, "VideoEncoder");
-    if ((job->mux == HB_MUX_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
+    if ((job->mux & HB_MUX_MASK_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
         job->vcodec = HB_VCODEC_FFMPEG_MPEG4;
     }
-    if ((job->vcodec == HB_VCODEC_X264) && (job->mux == HB_MUX_MP4))
+    if ((job->vcodec == HB_VCODEC_X264) && (job->mux & HB_MUX_MASK_MP4))
     {
         job->ipod_atom = ghb_settings_get_boolean(js, "Mp4iPodCompatible");
     }

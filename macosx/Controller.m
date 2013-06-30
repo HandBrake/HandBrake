@@ -4894,8 +4894,8 @@ bool one_burned = FALSE;
     //[self calculateBitrate: sender];
     
     /* We're changing the chapter range - we may need to flip the m4v/mp4 extension */
-    if ([fDstFormatPopUp indexOfSelectedItem] == 0)
-        [self autoSetM4vExtension: sender];
+    if ([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4)
+        [self autoSetM4vExtension:sender];
 }
 
 - (IBAction) startEndSecValueChanged: (id) sender
@@ -5008,6 +5008,7 @@ bool one_burned = FALSE;
     {
         case HB_MUX_MP4V2:
             [fDstMp4LargeFileCheck   setHidden:NO];
+        case HB_MUX_AV_MP4:
             [fDstMp4HttpOptFileCheck setHidden:NO];
             [fDstMp4iPodFileCheck    setHidden:NO];
             break;
@@ -5051,7 +5052,7 @@ bool one_burned = FALSE;
 
 - (IBAction) autoSetM4vExtension: (id) sender
 {
-    if ( [fDstFormatPopUp indexOfSelectedItem] )
+    if (!([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4))
         return;
     
     NSString * extension = @"mp4";

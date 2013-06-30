@@ -178,17 +178,17 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
 
     th_comment_init( &tc );
 
-    th_encode_flushheader( pv->ctx, &tc, &op );
-    memcpy(w->config->theora.headers[0], &op, sizeof(op));
-    memcpy(w->config->theora.headers[0] + sizeof(op), op.packet, op.bytes );
+    ogg_packet *header;
 
-    th_encode_flushheader( pv->ctx, &tc, &op );
-    memcpy(w->config->theora.headers[1], &op, sizeof(op));
-    memcpy(w->config->theora.headers[1] + sizeof(op), op.packet, op.bytes );
-
-    th_encode_flushheader( pv->ctx, &tc, &op );
-    memcpy(w->config->theora.headers[2], &op, sizeof(op));
-    memcpy(w->config->theora.headers[2] + sizeof(op), op.packet, op.bytes );
+    int ii;
+    for (ii = 0; ii < 3; ii++)
+    {
+        th_encode_flushheader( pv->ctx, &tc, &op );
+        header = (ogg_packet*)w->config->theora.headers[ii];
+        memcpy(header, &op, sizeof(op));
+        header->packet = w->config->theora.headers[ii] + sizeof(ogg_packet);
+        memcpy(header->packet, op.packet, op.bytes );
+    }
 
     th_comment_clear( &tc );
 
@@ -362,15 +362,15 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     th_encode_packetout( pv->ctx, 0, &op );
 
-    buf = hb_buffer_init( op.bytes + sizeof(op) );
-    memcpy(buf->data, &op, sizeof(op));
-    memcpy(buf->data + sizeof(op), op.packet, op.bytes);
+    buf = hb_buffer_init(op.bytes);
+    memcpy(buf->data, op.packet, op.bytes);
     buf->f.fmt = AV_PIX_FMT_YUV420P;
     buf->f.width = frame_width;
     buf->f.height = frame_height;
     buf->s.frametype = ( th_packet_iskeyframe(&op) ) ? HB_FRAME_KEY : HB_FRAME_REF;
-    buf->s.start = in->s.start;
-    buf->s.stop  = in->s.stop;
+    buf->s.start    = in->s.start;
+    buf->s.stop     = in->s.stop;
+    buf->s.duration = in->s.stop - in->s.start;
 
     *buf_out = buf;
 

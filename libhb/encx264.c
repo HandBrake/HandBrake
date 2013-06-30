@@ -389,9 +389,9 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     buf->s.frametype = 0;
 
     // use the pts to get the original frame's duration.
-    int64_t duration  = get_frame_duration( pv, pic_out->i_pts );
-    buf->s.start = pic_out->i_pts;
-    buf->s.stop  = pic_out->i_pts + duration;
+    buf->s.duration     = get_frame_duration( pv, pic_out->i_pts );
+    buf->s.start        = pic_out->i_pts;
+    buf->s.stop         = buf->s.start + buf->s.duration;
     buf->s.renderOffset = pic_out->i_dts;
     if ( !w->config->h264.init_delay && pic_out->i_dts < 0 )
     {

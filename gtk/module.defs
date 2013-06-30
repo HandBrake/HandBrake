@@ -36,3 +36,11 @@ endif
 ifeq (1,$(FEATURE.faac))
 	GTK.CONFIGURE.extra += --enable-faac
 endif
+
+ifeq (1,$(FEATURE.mp4v2))
+	GTK.CONFIGURE.extra += --enable-mp4v2
+endif
+
+ifeq (1,$(FEATURE.libmkv))
+	GTK.CONFIGURE.extra += --enable-libmkv
+endif

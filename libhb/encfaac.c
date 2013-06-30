@@ -201,12 +201,13 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     {
         hb_buffer_t * buf = hb_buffer_init( size );
         memcpy( buf->data, pv->obuf, size );
-        buf->size = size;
-        buf->s.start = pv->pts;
-        pv->pts += pv->framedur;
-        buf->s.stop = pv->pts;
-        buf->s.type = AUDIO_BUF;
+        buf->size        = size;
+        buf->s.start     = pv->pts;
+        buf->s.duration  = pv->framedur;
+        buf->s.stop      = buf->s.start + buf->s.duration;
+        buf->s.type      = AUDIO_BUF;
         buf->s.frametype = HB_FRAME_AUDIO;
+        pv->pts += pv->framedur;
         return buf;
     }
     return NULL;

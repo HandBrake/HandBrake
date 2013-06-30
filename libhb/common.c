@@ -300,25 +300,30 @@ hb_container_t *hb_containers_last_item  = NULL;
 hb_container_internal_t hb_containers[]  =
 {
     // legacy muxers, back to HB 0.9.4 whenever possible (disabled)
-    { { "M4V file",          "m4v",    "m4v",             0, }, NULL, 0, HB_GID_MUX_MP4, },
-    { { "MP4 file",          "mp4",    "mp4",             0, }, NULL, 0, HB_GID_MUX_MP4, },
-    { { "MKV file",          "mkv",    "mkv",             0, }, NULL, 0, HB_GID_MUX_MKV, },
+    { { "M4V file",            "m4v",    "m4v",             0, }, NULL, 0, HB_GID_MUX_MP4, },
+    { { "MP4 file",            "mp4",    "mp4",             0, }, NULL, 0, HB_GID_MUX_MP4, },
+    { { "MKV file",            "mkv",    "mkv",             0, }, NULL, 0, HB_GID_MUX_MKV, },
     // actual muxers
-    { { "MPEG-4 (mp4v2)",    "mp4v2",  "mp4", HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
-    { { "Matroska (libmkv)", "libmkv", "mkv", HB_MUX_LIBMKV, }, NULL, 1, HB_GID_MUX_MKV, },
+    { { "MPEG-4 (mp4v2)",      "mp4v2",  "mp4", HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
+    { { "Matroska (libmkv)",   "libmkv", "mkv", HB_MUX_LIBMKV, }, NULL, 1, HB_GID_MUX_MKV, },
+    { { "MPEG-4 (avformat)",   "av_mp4", "mp4", HB_MUX_AV_MP4, }, NULL, 1, HB_GID_MUX_MP4, },
+    { { "Matroska (avformat)", "av_mkv", "mkv", HB_MUX_AV_MKV, }, NULL, 1, HB_GID_MUX_MKV, },
 };
 int hb_containers_count = sizeof(hb_containers) / sizeof(hb_containers[0]);
 static int hb_container_is_enabled(int format)
 {
     switch (format)
     {
-#if 1 //#ifdef USE_MP4V2
+#ifdef USE_MP4V2
         case HB_MUX_MP4V2:
-            return 1;
 #endif
-
-        // the following muxers are always enabled
+#ifdef USE_LIBMKV
         case HB_MUX_LIBMKV:
+#endif
+#ifdef USE_AVFORMAT
+        case HB_MUX_AV_MP4:
+        case HB_MUX_AV_MKV:
+#endif
             return 1;
 
         default:
@@ -3499,46 +3504,50 @@ int hb_subtitle_can_burn( int source )
 
 int hb_subtitle_can_pass( int source, int mux )
 {
-    if ( mux == HB_MUX_MKV )
+    switch (mux)
     {
-        switch( source )
-        {
-            case PGSSUB:
-            case VOBSUB:
-            case SSASUB:
-            case SRTSUB:
-            case UTF8SUB:
-            case TX3GSUB:
-            case CC608SUB:
-            case CC708SUB:
-                return 1;
+        case HB_MUX_AV_MKV:
+        case HB_MUX_LIBMKV:
+            switch( source )
+            {
+                case PGSSUB:
+                case VOBSUB:
+                case SSASUB:
+                case SRTSUB:
+                case UTF8SUB:
+                case TX3GSUB:
+                case CC608SUB:
+                case CC708SUB:
+                    return 1;
 
-            default:
-                return 0;
-        }
-    }
-    else if ( mux == HB_MUX_MP4 )
-    {
-        switch( source )
-        {
-            case VOBSUB:
-            case SSASUB:
-            case SRTSUB:
-            case UTF8SUB:
-            case TX3GSUB:
-            case CC608SUB:
-            case CC708SUB:
-                return 1;
+                default:
+                    return 0;
+            } break;
 
-            default:
-                return 0;
-        }
-    }
-    else
-    {
-        // Internal error. Should never get here.
-        hb_error("internel error.  Bad mux %d\n", mux);
-        return 0;
+        case HB_MUX_MP4V2:
+            if (source == VOBSUB)
+            {
+                return 1;
+            } // fall through to next case...
+        case HB_MUX_AV_MP4:
+            switch( source )
+            {
+                case SSASUB:
+                case SRTSUB:
+                case UTF8SUB:
+                case TX3GSUB:
+                case CC608SUB:
+                case CC708SUB:
+                    return 1;
+
+                default:
+                    return 0;
+            } break;
+
+        default:
+            // Internal error. Should never get here.
+            hb_error("internel error.  Bad mux %d\n", mux);
+            return 0;
     }
 }
 

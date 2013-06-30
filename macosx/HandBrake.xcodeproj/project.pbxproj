@@ -98,12 +98,8 @@
 		27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73214B102DA00B785E4 /* libfreetype.a */; };
 		27D6C75914B102DA00B785E4 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73314B102DA00B785E4 /* libfribidi.a */; };
 		27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73314B102DA00B785E4 /* libfribidi.a */; };
-		27D6C75B14B102DA00B785E4 /* libmkv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73414B102DA00B785E4 /* libmkv.a */; };
-		27D6C75C14B102DA00B785E4 /* libmkv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73414B102DA00B785E4 /* libmkv.a */; };
 		27D6C75E14B102DA00B785E4 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73614B102DA00B785E4 /* libmp3lame.a */; };
 		27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73614B102DA00B785E4 /* libmp3lame.a */; };
-		27D6C76014B102DA00B785E4 /* libmp4v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73714B102DA00B785E4 /* libmp4v2.a */; };
-		27D6C76114B102DA00B785E4 /* libmp4v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73714B102DA00B785E4 /* libmp4v2.a */; };
 		27D6C76214B102DA00B785E4 /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73814B102DA00B785E4 /* libmpeg2.a */; };
 		27D6C76314B102DA00B785E4 /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73814B102DA00B785E4 /* libmpeg2.a */; };
 		27D6C76414B102DA00B785E4 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73914B102DA00B785E4 /* libogg.a */; };
@@ -295,9 +291,7 @@
 		27D6C73114B102DA00B785E4 /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = external/contrib/lib/libfontconfig.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73214B102DA00B785E4 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = external/contrib/lib/libfreetype.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73314B102DA00B785E4 /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = external/contrib/lib/libfribidi.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		27D6C73414B102DA00B785E4 /* libmkv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmkv.a; path = external/contrib/lib/libmkv.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73614B102DA00B785E4 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = external/contrib/lib/libmp3lame.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		27D6C73714B102DA00B785E4 /* libmp4v2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp4v2.a; path = external/contrib/lib/libmp4v2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73814B102DA00B785E4 /* libmpeg2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpeg2.a; path = external/contrib/lib/libmpeg2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73914B102DA00B785E4 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = external/contrib/lib/libogg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73A14B102DA00B785E4 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = external/contrib/lib/libsamplerate.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -368,9 +362,7 @@
 				27D6C75614B102DA00B785E4 /* libfontconfig.a in Frameworks */,
 				27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
-				27D6C75C14B102DA00B785E4 /* libmkv.a in Frameworks */,
 				27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
-				27D6C76114B102DA00B785E4 /* libmp4v2.a in Frameworks */,
 				27D6C76314B102DA00B785E4 /* libmpeg2.a in Frameworks */,
 				27D6C76514B102DA00B785E4 /* libogg.a in Frameworks */,
 				27D6C76714B102DA00B785E4 /* libsamplerate.a in Frameworks */,
@@ -410,9 +402,7 @@
 				27D6C75514B102DA00B785E4 /* libfontconfig.a in Frameworks */,
 				27D6C75714B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75914B102DA00B785E4 /* libfribidi.a in Frameworks */,
-				27D6C75B14B102DA00B785E4 /* libmkv.a in Frameworks */,
 				27D6C75E14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
-				27D6C76014B102DA00B785E4 /* libmp4v2.a in Frameworks */,
 				27D6C76214B102DA00B785E4 /* libmpeg2.a in Frameworks */,
 				27D6C76414B102DA00B785E4 /* libogg.a in Frameworks */,
 				27D6C76614B102DA00B785E4 /* libsamplerate.a in Frameworks */,
@@ -444,9 +434,7 @@
 				27D6C73114B102DA00B785E4 /* libfontconfig.a */,
 				27D6C73214B102DA00B785E4 /* libfreetype.a */,
 				27D6C73314B102DA00B785E4 /* libfribidi.a */,
-				27D6C73414B102DA00B785E4 /* libmkv.a */,
 				27D6C73614B102DA00B785E4 /* libmp3lame.a */,
-				27D6C73714B102DA00B785E4 /* libmp4v2.a */,
 				27D6C73814B102DA00B785E4 /* libmpeg2.a */,
 				27D6C73914B102DA00B785E4 /* libogg.a */,
 				27D6C73A14B102DA00B785E4 /* libsamplerate.a */,

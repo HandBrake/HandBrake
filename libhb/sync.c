@@ -337,8 +337,14 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 }
             }
             hb_lock( pv->common->mutex );
-            // Tell the audio threads what must be dropped
-            pv->common->audio_pts_thresh = next_start + pv->common->video_pts_slip;
+            if (job->frame_to_start > 0)
+            {
+                // When doing frame based p-to-p we must update the audio
+                // start point with each frame skipped.
+                //
+                // Tell the audio threads what must be dropped
+                pv->common->audio_pts_thresh = next->s.start;
+            }
             hb_cond_broadcast( pv->common->next_frame );
             hb_unlock( pv->common->mutex );
 
@@ -553,7 +559,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
-        int64_t sub_start, sub_stop, duration;
+        int64_t sub_start, sub_stop, sub_dts, duration;
 
         subtitle = hb_list_item( job->list_subtitle, i );
         
@@ -563,6 +569,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             hb_lock( pv->common->mutex );
             sub_start = sub->s.start - pv->common->video_pts_slip;
+            if (sub->s.renderOffset != -1)
+                sub_dts = sub->s.renderOffset - pv->common->video_pts_slip;
+            else
+                sub_dts = -1;
             hb_unlock( pv->common->mutex );
 
             if (sub->s.stop == -1)
@@ -595,6 +605,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // Need to re-write subtitle timestamps to account
             // for any slippage.
             sub_stop = -1;
+            duration = -1;
             if ( sub->s.stop != -1 )
             {
                 duration = sub->s.stop - sub->s.start;
@@ -602,7 +613,9 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
 
             sub->s.start = sub_start;
+            sub->s.renderOffset = sub_dts;
             sub->s.stop = sub_stop;
+            sub->s.duration = duration;
 
             hb_fifo_push( subtitle->fifo_out, sub );
         }
@@ -626,6 +639,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     sync->cur = cur = next;
     cur->sub = NULL;
     cur->s.start -= pv->common->video_pts_slip;
+    if (cur->s.renderOffset != -1)
+        cur->s.renderOffset -= pv->common->video_pts_slip;
     cur->s.stop -= pv->common->video_pts_slip;
     sync->pts_skip = 0;
     if ( duration <= 0 )
@@ -758,9 +773,15 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_unlock( pv->common->mutex );
     }
 
-    /* Wait for start frame if doing point-to-point */
+    // Wait for start frame if doing point-to-point
+    //
+    // When doing p-to-p, video leads the way. The video thead will set
+    // start_found when we have reached the start point.
+    //
+    // When doing frame based p-to-p, as each video frame is processed
+    // it advances audio_pts_thresh which informs us how much audio must
+    // be dropped.
     hb_lock( pv->common->mutex );
-    start = buf->s.start - pv->common->audio_pts_slip;
     while ( !pv->common->start_found && !*w->done )
     {
         if ( pv->common->audio_pts_thresh < 0 )
@@ -776,6 +797,12 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_unlock( pv->common->mutex );
             return HB_WORK_OK;
         }
+
+        // We should only get here when doing frame based p-to-p.
+        // In frame based p-to-p, the video sync thread updates
+        // audio_pts_thresh as it discards frames.  So wait here
+        // until the current audio frame needs to be discarded
+        // or start point is found.
         while ( !pv->common->start_found && 
                 buf->s.start >= pv->common->audio_pts_thresh && !*w->done )
         {
@@ -804,15 +831,20 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 }
             }
         }
-        start = buf->s.start - pv->common->audio_pts_slip;
     }
-    if ( start < 0 )
+    start = buf->s.start - pv->common->audio_pts_slip;
+    hb_unlock( pv->common->mutex );
+
+    // When doing p-to-p, video determines when the start point has been
+    // found.  Since audio and video are processed asynchronously, there
+    // may yet be audio packets in the pipe that are before the start point.
+    // These packets will have negative start times after applying
+    // audio_pts_slip.
+    if (start < 0)
     {
-        hb_buffer_close( &buf );
-        hb_unlock( pv->common->mutex );
+        hb_buffer_close(&buf);
         return HB_WORK_OK;
     }
-    hb_unlock( pv->common->mutex );
 
     if( job->frame_to_stop && pv->common->count_frames >= job->frame_to_stop )
     {

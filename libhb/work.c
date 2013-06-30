@@ -210,6 +210,7 @@ void hb_display_job_info(hb_job_t *job)
     hb_log("   + container: %s", hb_container_get_name(job->mux));
     switch (job->mux)
     {
+        case HB_MUX_AV_MP4:
         case HB_MUX_MP4V2:
             if (job->largeFileSize)
                 hb_log("     + 64-bit chunk offsets");

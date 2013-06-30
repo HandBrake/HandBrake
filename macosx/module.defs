@@ -32,6 +32,14 @@ endif
 ifeq (1,$(FEATURE.faac))
     extra_libs += $(abspath $(BUILD))/contrib/lib/libfaac.a
 endif
+
+ifeq (1,$(FEATURE.mp4v2))
+    extra_libs += $(abspath $(BUILD))/contrib/lib/libmp4v2.a
+endif
+
+ifeq (1,$(FEATURE.libmkv))
+    extra_libs += $(abspath $(BUILD))/contrib/lib/libmkv.a
+endif
 MACOSX.extra_ldflags = OTHER_LDFLAGS='$(extra_libs)'
 
 ## xcconfig: must be one of macosx/xcconfig/*.xcconfig

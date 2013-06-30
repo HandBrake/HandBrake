@@ -299,6 +299,9 @@ hb_buffer_t * hb_buffer_init( int size )
             b->alloc = buffer_pool->buffer_size;
             b->size = size;
             b->data = data;
+            b->s.start = -1;
+            b->s.stop = -1;
+            b->s.renderOffset = -1;
             return( b );
         }
     }
@@ -335,6 +338,9 @@ hb_buffer_t * hb_buffer_init( int size )
         buffers.allocated += b->alloc;
         hb_unlock(buffers.lock);
     }
+    b->s.start = -1;
+    b->s.stop = -1;
+    b->s.renderOffset = -1;
     return b;
 }
 

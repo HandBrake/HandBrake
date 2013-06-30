@@ -64,6 +64,14 @@ AC_ARG_ENABLE(faac,
 	AS_HELP_STRING([--enable-faac], [enable faac encoder]),
 	use_faac=yes, use_faac=no)
 
+AC_ARG_ENABLE(mp4v2,
+	AS_HELP_STRING([--enable-mp4v2], [enable mp4v2 muxer]),
+	use_mp4v2=yes, use_mp4v2=no)
+
+AC_ARG_ENABLE(libmkv,
+	AS_HELP_STRING([--enable-libmkv], [enable libmkv muxer]),
+	use_libmkv=yes, use_libmkv=no)
+
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
 	gst_disable=yes, gst_disable=no)
@@ -207,7 +215,7 @@ case $host in
     ;;
 esac
 
-HB_LIBS="-lhb -la52 -lmkv -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lmp4v2 -lswscale -ltheoraenc -ltheoradec -lz -lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2"
+HB_LIBS="-lhb -la52 -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lz -lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2"
 
 if test "x$use_fdk_aac" = "xyes" ; then
     HB_LIBS+=" -lfdk-aac"
@@ -215,6 +223,14 @@ fi
 
 if test "x$use_faac" = "xyes" ; then
     HB_LIBS+=" -lfaac"
+fi
+
+if test "x$use_mp4v2" = "xyes" ; then
+    HB_LIBS+=" -lmp4v2"
+fi
+
+if test "x$use_libmkv" = "xyes" ; then
+    HB_LIBS+=" -lmkv"
 fi
 
 AC_SUBST(HB_LIBS)

@@ -1280,12 +1280,41 @@ update_acodec_combo(signal_user_data_t *ud)
     ghb_grey_combo_options (ud);
 }
 
+static void
+set_visible(GtkWidget *widget, gboolean visible)
+{
+    if (visible)
+    {
+        gtk_widget_show_now(widget);
+    }
+    else
+    {
+        gtk_widget_hide(widget);
+    }
+}
+
+static void show_container_options(signal_user_data_t *ud)
+{
+    GtkWidget *w1, *w2, *w3;
+    w1 = GHB_WIDGET(ud->builder, "Mp4LargeFile");
+    w2 = GHB_WIDGET(ud->builder, "Mp4HttpOptimize");
+    w3 = GHB_WIDGET(ud->builder, "Mp4iPodCompatible");
+
+    gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+    gint enc = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+
+    set_visible(w1, (mux == HB_MUX_MP4V2));
+    set_visible(w2, (mux & HB_MUX_MASK_MP4));
+    set_visible(w3, (mux & HB_MUX_MASK_MP4) && (enc == HB_VCODEC_X264));
+}
+
 G_MODULE_EXPORT void
 container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("container_changed_cb ()");
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
+    show_container_options(ud);
     update_acodec_combo(ud);
     ghb_update_destination_extension(ud);
     ghb_clear_presets_selection(ud);
@@ -1879,6 +1908,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
+    show_container_options(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
@@ -3359,19 +3389,6 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
     if (gerror != NULL)
         g_error_free (gerror);
     return TRUE;
-}
-
-static void
-set_visible(GtkWidget *widget, gboolean visible)
-{
-    if (visible)
-    {
-        gtk_widget_show_now(widget);
-    }
-    else
-    {
-        gtk_widget_hide(widget);
-    }
 }
 
 G_MODULE_EXPORT void

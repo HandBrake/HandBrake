@@ -47,13 +47,19 @@ ifeq (1,$(FEATURE.faac))
     MODULES += contrib/faac
 endif
 
+ifeq (1,$(FEATURE.mp4v2))
+    MODULES += contrib/mp4v2
+endif
+
+ifeq (1,$(FEATURE.libmkv))
+    MODULES += contrib/libmkv
+endif
+
 MODULES += contrib/lame
 MODULES += contrib/ffmpeg
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
-MODULES += contrib/libmkv
-MODULES += contrib/mp4v2
 MODULES += contrib/mpeg2dec
 
 ifneq (,$(filter $(BUILD.system),mingw))

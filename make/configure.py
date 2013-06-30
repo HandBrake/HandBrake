@@ -1188,6 +1188,18 @@ def createCLI():
     grp.add_option( '--enable-faac', dest="enable_faac", default=False, action='store_true', help=h )
     grp.add_option( '--disable-faac', dest="enable_faac", action='store_false' )
 
+    h = IfHost( 'enable use of mp4v2 muxer', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-mp4v2', dest="enable_mp4v2", default=True, action='store_true', help=h )
+    grp.add_option( '--disable-mp4v2', dest="enable_mp4v2", action='store_false' )
+
+    h = IfHost( 'enable use of libmkv muxer', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-libmkv', dest="enable_libmkv", default=True, action='store_true', help=h )
+    grp.add_option( '--disable-libmkv', dest="enable_libmkv", action='store_false' )
+
+    h = IfHost( 'enable use of avformat muxer', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-avformat', dest="enable_avformat", default=True, action='store_true', help=h )
+    grp.add_option( '--disable-avformat', dest="enable_avformat", action='store_false' )
+
     cli.add_option_group( grp )
 
     ## add launch options
@@ -1630,6 +1642,9 @@ int main ()
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.libav_aac',  int( options.enable_libav_aac ))
     doc.add( 'FEATURE.faac',       int( options.enable_faac ))
+    doc.add( 'FEATURE.mp4v2',      int( options.enable_mp4v2 ))
+    doc.add( 'FEATURE.libmkv',     int( options.enable_libmkv ))
+    doc.add( 'FEATURE.avformat',   int( options.enable_avformat ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:

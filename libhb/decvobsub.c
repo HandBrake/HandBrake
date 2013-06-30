@@ -123,6 +123,7 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->buf      = hb_buffer_init( 0xFFFF );
             memcpy( pv->buf->data, in->data, in->size );
             pv->buf->s.id = in->s.id;
+            pv->buf->s.frametype = HB_FRAME_SUBTITLE;
             pv->buf->sequence = in->sequence;
             pv->size_got = in->size;
             if( in->s.start >= 0 )
@@ -537,6 +538,7 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     realheight = crop[1] - crop[0] + 1;
 
     buf = hb_frame_buffer_init( AV_PIX_FMT_YUVA420P, realwidth, realheight );
+    buf->s.frametype = HB_FRAME_SUBTITLE;
     buf->s.start  = pv->pts_start;
     buf->s.stop   = pv->pts_stop;
     buf->s.type   = SUBTITLE_BUF;

@@ -172,7 +172,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         g_string_append_printf(str, 
             "<b>Format:</b> <small>%s Container</small>\n", container);
     }
-    if (mux == HB_MUX_MP4)
+    if (mux & HB_MUX_MASK_MP4)
     {
         gboolean ipod, http, large;
 

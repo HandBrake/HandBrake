@@ -463,9 +463,12 @@ struct hb_job_s
      */
 #define HB_MUX_MASK     0xFF0000
 #define HB_MUX_MP4V2    0x010000
-#define HB_MUX_MASK_MP4 0x0F0000
+#define HB_MUX_AV_MP4   0x020000
+#define HB_MUX_MASK_MP4 0x030000
 #define HB_MUX_LIBMKV   0x100000
-#define HB_MUX_MASK_MKV 0xF00000
+#define HB_MUX_AV_MKV   0x200000
+#define HB_MUX_MASK_MKV 0x300000
+#define HB_MUX_MASK_AV  0x220000
 /* default muxer for each container */
 #define HB_MUX_MP4      HB_MUX_MP4V2
 #define HB_MUX_MKV      HB_MUX_LIBMKV
@@ -590,6 +593,7 @@ struct hb_audio_config_s
         int      normalize_mix_level; /* mix level normalization (boolean) */
         int      dither_method; /* dither algorithm */
         char *   name; /* Output track name */
+        int      delay;
     } out;
 
     /* Input */
