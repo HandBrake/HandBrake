@@ -668,14 +668,17 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     int64_t offset = 0;
     hb_buffer_t *tmp;
 
-    if (buf->s.duration >= 0)
+    if (buf != NULL)
     {
-        stop = buf->s.start + buf->s.duration;
-    }
-    else if (mux_data->subtitle)
-    {
-        buf->s.duration = 10 * 90000;
-        stop = buf->s.start + buf->s.duration;
+        if (buf->s.duration >= 0)
+        {
+            stop = buf->s.start + buf->s.duration;
+        }
+        else if (mux_data->subtitle)
+        {
+            buf->s.duration = 10 * 90000;
+            stop = buf->s.start + buf->s.duration;
+        }
     }
 
     if( mux_data == job->mux_data )
@@ -700,6 +703,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
         if ( !buf )
             return 0;
+
+        stop = buf->s.start + buf->s.duration;
 
         if( job->vcodec == HB_VCODEC_X264 ||
             ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
