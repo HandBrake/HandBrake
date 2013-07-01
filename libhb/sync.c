@@ -55,6 +55,14 @@ typedef struct
 
 typedef struct
 {
+    int             link;
+    int             merge;
+    hb_buffer_t   * list_current;
+    hb_buffer_t   * last;
+} subtitle_sanitizer_t;
+
+typedef struct
+{
     /* Video */
     int        first_frame;
     int64_t    pts_skip;
@@ -67,6 +75,8 @@ typedef struct
     int        count_frames_max;
     int        chap_mark;     /* to propagate chapter mark across a drop */
     hb_buffer_t * cur;        /* The next picture to process */
+
+    subtitle_sanitizer_t *subtitle_sanitizer;
 
     /* Statistics */
     uint64_t   st_counts[4];
@@ -91,6 +101,7 @@ struct hb_work_private_s
 static void getPtsOffset( hb_work_object_t * w );
 static int  checkPtsOffset( hb_work_object_t * w );
 static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i );
+static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i );
 static void InsertSilence( hb_work_object_t * w, int64_t d );
 static void UpdateState( hb_work_object_t * w );
 static void UpdateSearchState( hb_work_object_t * w, int64_t start );
@@ -188,7 +199,32 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     for ( i = 0; i < pv->common->pts_count; i++ )
         pv->common->first_pts[i] = INT64_MAX;
 
+    int count = hb_list_count(job->list_subtitle);
+    sync->subtitle_sanitizer = calloc(count, sizeof(subtitle_sanitizer_t));
+    for( i = 0; i < count; i++ )
+    {
+        InitSubtitle(job, sync, i);
+    }
     return ret;
+}
+
+static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i )
+{
+    hb_subtitle_t * subtitle;
+
+    subtitle = hb_list_item( job->list_subtitle, i );
+    if (subtitle->format == TEXTSUB &&
+        subtitle->config.dest == PASSTHRUSUB &&
+        (job->mux & HB_MUX_MASK_MP4))
+    {
+        // Merge overlapping subtitles since mpv tx3g does not support them
+        sync->subtitle_sanitizer[i].merge = 1;
+    }
+    if (subtitle->config.dest == PASSTHRUSUB)
+    {
+        // Fill in stop time when it is missing
+        sync->subtitle_sanitizer[i].link = 1;
+    }
 }
 
 /***********************************************************************
@@ -246,6 +282,137 @@ void syncVideoClose( hb_work_object_t * w )
 
     free( pv );
     w->private_data = NULL;
+}
+
+#define ABS(a)  ((a) < 0 ? -(a) : (a))
+
+static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer)
+{
+    hb_buffer_t *a, *b, *buf, *out = NULL, *last = NULL;
+
+    do
+    {
+        a = sanitizer->list_current;
+
+        buf = NULL;
+        if (a != NULL && a->s.stop != -1)
+        {
+            b = a->next;
+
+            if (!sanitizer->merge)
+            {
+                sanitizer->list_current = a->next;
+                if (sanitizer->list_current == NULL)
+                    sanitizer->last = NULL;
+                a->next = NULL;
+                buf = a;
+            }
+            else if (b != NULL && a->s.stop > b->s.start)
+            {
+                // Overlap
+                if (ABS(a->s.start - b->s.start) <= 18000)
+                {
+                    // subtitles start within 1/5 second of eachother, merge
+                    sanitizer->list_current = a->next;
+                    if (sanitizer->list_current == NULL)
+                        sanitizer->last = NULL;
+                    a->next = NULL;
+                    b->s.start = a->s.stop;
+
+                    buf = hb_buffer_init(a->size + b->size);
+                    buf->s = a->s;
+                    sprintf((char*)buf->data, "%s\n%s", a->data, b->data);
+                    hb_buffer_close(&a);
+
+                    if (b->s.stop != -1 && ABS(b->s.stop - b->s.start) <= 18000)
+                    {
+                        // b and a completely overlap, remove b
+                        sanitizer->list_current = b->next;
+                        if (sanitizer->list_current == NULL)
+                            sanitizer->last = NULL;
+                        hb_buffer_close(&b);
+                    }
+                }
+                else
+                {
+                    // a starts before b, output copy of a and
+                    buf = hb_buffer_dup(a);
+                    buf->s.stop = b->s.start;
+                    a->s.start = b->s.start;
+                }
+            }
+            else if (b != NULL && a->s.stop <= b->s.start)
+            {
+                sanitizer->list_current = a->next;
+                if (sanitizer->list_current == NULL)
+                    sanitizer->last = NULL;
+                a->next = NULL;
+                buf = a;
+            }
+        }
+
+        if (buf != NULL)
+        {
+            buf->s.duration = buf->s.stop - buf->s.start;
+            if (last == NULL)
+            {
+                out = last = buf;
+            }
+            else
+            {
+                last->next = buf;
+                last = buf;
+            }
+        }
+    } while (buf != NULL);
+
+    return out;
+}
+
+static hb_buffer_t * sanitizeSubtitle(
+    hb_work_private_t * pv,
+    int                 i,
+    hb_buffer_t       * sub)
+{
+    hb_sync_video_t       * sync;
+    subtitle_sanitizer_t  * sanitizer;
+
+    sync = &pv->type.video;
+    sanitizer = &sync->subtitle_sanitizer[i];
+
+    if (!sanitizer->link && !sanitizer->merge)
+    {
+        return sub;
+    }
+
+    if (sub == NULL)
+    {
+        return mergeSubtitles(sanitizer);
+    }
+
+    hb_lock( pv->common->mutex );
+    sub->s.start -= pv->common->video_pts_slip;
+    if (sub->s.stop != -1)
+        sub->s.stop -= pv->common->video_pts_slip;
+    if (sub->s.renderOffset != -1)
+        sub->s.renderOffset -= pv->common->video_pts_slip;
+    hb_unlock( pv->common->mutex );
+
+    if (sanitizer->last != NULL && sanitizer->last->s.stop == -1)
+    {
+        sanitizer->last->s.stop = sub->s.start;
+    }
+
+    if (sanitizer->last == NULL)
+    {
+        sanitizer->list_current = sanitizer->last = sub;
+    }
+    else
+    {
+        sanitizer->last->next = sub;
+        sanitizer->last = sub;
+    }
+    return mergeSubtitles(sanitizer);
 }
 
 /***********************************************************************
@@ -559,66 +726,23 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
-        int64_t sub_start, sub_stop, sub_dts, duration;
+        hb_buffer_t *out;
 
         subtitle = hb_list_item( job->list_subtitle, i );
         
         // Sanitize subtitle start and stop times, then pass to 
         // muxer or renderer filter.
-        while ( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) != NULL )
+        while ( ( sub = hb_fifo_get( subtitle->fifo_raw ) ) != NULL )
         {
-            hb_lock( pv->common->mutex );
-            sub_start = sub->s.start - pv->common->video_pts_slip;
-            if (sub->s.renderOffset != -1)
-                sub_dts = sub->s.renderOffset - pv->common->video_pts_slip;
-            else
-                sub_dts = -1;
-            hb_unlock( pv->common->mutex );
-
-            if (sub->s.stop == -1)
-            {
-                if (subtitle->config.dest != RENDERSUB &&
-                    hb_fifo_size( subtitle->fifo_raw ) < 2)
-                {
-                    // For passthru subs, we want to wait for the
-                    // next subtitle so that we can fill in the stop time.
-                    // This way the muxer can compute the duration of
-                    // the subtitle.
-                    //
-                    // For render subs, we need to ensure that they
-                    // get to the renderer before the associated video
-                    // that they are to be applied to.  It is the 
-                    // responsibility of the renderer to handle
-                    // stop == -1.
-                    break;
-                }
-            }
-
-            sub = hb_fifo_get( subtitle->fifo_raw );
-            if ( sub->s.stop == -1 )
-            {
-                hb_buffer_t *next;
-                next = hb_fifo_see( subtitle->fifo_raw );
-                if (next != NULL)
-                    sub->s.stop = next->s.start;
-            }
-            // Need to re-write subtitle timestamps to account
-            // for any slippage.
-            sub_stop = -1;
-            duration = -1;
-            if ( sub->s.stop != -1 )
-            {
-                duration = sub->s.stop - sub->s.start;
-                sub_stop = sub_start + duration;
-            }
-
-            sub->s.start = sub_start;
-            sub->s.renderOffset = sub_dts;
-            sub->s.stop = sub_stop;
-            sub->s.duration = duration;
-
-            hb_fifo_push( subtitle->fifo_out, sub );
+            out = sanitizeSubtitle(pv, i, sub);
+            if (out != NULL)
+                hb_fifo_push( subtitle->fifo_out, out );
         }
+        // fifo empty, flush out any pending subtitle buffers in
+        // the sanitizer
+        out = sanitizeSubtitle(pv, i, NULL);
+        if (out != NULL)
+            hb_fifo_push( subtitle->fifo_out, out );
     }
 
     /*
