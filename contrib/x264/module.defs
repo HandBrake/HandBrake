@@ -6,10 +6,9 @@ X264.EXTRACT.tarbase = x264
 
 X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
-X264.CONFIGURE.static =
 
-X264.CONFIGURE.extra = --disable-cli --enable-static --enable-strip
-X264.CONFIGURE.extra += --disable-gpac --disable-avs --disable-lavf --disable-ffms --disable-swscale --disable-opencl
+X264.CONFIGURE.extra  = --enable-strip --bit-depth=8 --chroma-format=420
+X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-swscale --disable-gpac --disable-cli
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     X264.CONFIGURE.extra += --cross-prefix=$(BUILD.spec)-
