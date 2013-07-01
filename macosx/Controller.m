@@ -1999,11 +1999,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             {
                 /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
                 cancelScanDecrypt = 0;
-                [self writeToActivityLog: "User overrode copy-proteciton warning - trying to open physical dvd without decryption"];
+                [self writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
             }
             
         }
-        dlclose(dvdcss);
+        else if (dvdcss != NULL)
+        {
+            /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
+            [self writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
+            dlclose(dvdcss);
+        }
+        else
+        {
+            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
+            cancelScanDecrypt = 0;
+            [self writeToActivityLog:"Copy-protection warning disabled in preferences - trying to open physical dvd without decryption"];
+        }
     }
     
     if (cancelScanDecrypt == 0)
