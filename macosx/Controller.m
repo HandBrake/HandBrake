@@ -2003,12 +2003,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             
         }
-        else
-        {
-            /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
-            [self writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
-            dlclose(dvdcss);
-        }
+        dlclose(dvdcss);
     }
     
     if (cancelScanDecrypt == 0)
