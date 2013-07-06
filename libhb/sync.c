@@ -757,9 +757,12 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // muxer or renderer filter.
         while ( ( sub = hb_fifo_get( subtitle->fifo_raw ) ) != NULL )
         {
-            out = sanitizeSubtitle(pv, i, sub);
-            if (out != NULL)
-                hb_fifo_push( subtitle->fifo_out, out );
+            if (sub->size > 0)
+            {
+                out = sanitizeSubtitle(pv, i, sub);
+                if (out != NULL)
+                    hb_fifo_push( subtitle->fifo_out, out );
+            }
         }
     }
 
