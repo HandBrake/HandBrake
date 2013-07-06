@@ -286,7 +286,7 @@ void syncVideoClose( hb_work_object_t * w )
 
 #define ABS(a)  ((a) < 0 ? -(a) : (a))
 
-static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer)
+static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
 {
     hb_buffer_t *a, *b, *buf, *out = NULL, *last = NULL;
 
@@ -295,11 +295,19 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer)
         a = sanitizer->list_current;
 
         buf = NULL;
-        if (a != NULL && a->s.stop != -1)
+        if (a != NULL && end)
+        {
+            sanitizer->list_current = a->next;
+            if (sanitizer->list_current == NULL)
+                sanitizer->last = NULL;
+            a->next = NULL;
+            buf = a;
+        }
+        else if (a != NULL && a->s.stop != -1)
         {
             b = a->next;
 
-            if (!sanitizer->merge)
+            if (b != NULL && !sanitizer->merge)
             {
                 sanitizer->list_current = a->next;
                 if (sanitizer->list_current == NULL)
@@ -353,7 +361,10 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer)
 
         if (buf != NULL)
         {
-            buf->s.duration = buf->s.stop - buf->s.start;
+            if (buf->s.stop != -1)
+                buf->s.duration = buf->s.stop - buf->s.start;
+            else
+                buf->s.duration = -1;
             if (last == NULL)
             {
                 out = last = buf;
@@ -387,7 +398,7 @@ static hb_buffer_t * sanitizeSubtitle(
 
     if (sub == NULL)
     {
-        return mergeSubtitles(sanitizer);
+        return mergeSubtitles(sanitizer, 1);
     }
 
     hb_lock( pv->common->mutex );
@@ -412,7 +423,7 @@ static hb_buffer_t * sanitizeSubtitle(
         sanitizer->last->next = sub;
         sanitizer->last = sub;
     }
-    return mergeSubtitles(sanitizer);
+    return mergeSubtitles(sanitizer, 0);
 }
 
 /***********************************************************************
@@ -596,6 +607,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
         {
             subtitle = hb_list_item( job->list_subtitle, i );
+            // flush out any pending subtitle buffers in the sanitizer
+            hb_buffer_t *out = sanitizeSubtitle(pv, i, NULL);
+            if (out != NULL)
+                hb_fifo_push( subtitle->fifo_out, out );
             if( subtitle->config.dest == PASSTHRUSUB )
             {
                 hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
@@ -623,6 +638,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
         {
             subtitle = hb_list_item( job->list_subtitle, i );
+            // flush out any pending subtitle buffers in the sanitizer
+            hb_buffer_t *out = sanitizeSubtitle(pv, i, NULL);
+            if (out != NULL)
+                hb_fifo_push( subtitle->fifo_out, out );
             if( subtitle->config.dest == PASSTHRUSUB )
             {
                 hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
@@ -647,6 +666,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
         {
             subtitle = hb_list_item( job->list_subtitle, i );
+            // flush out any pending subtitle buffers in the sanitizer
+            hb_buffer_t *out = sanitizeSubtitle(pv, i, NULL);
+            if (out != NULL)
+                hb_fifo_push( subtitle->fifo_out, out );
             if( subtitle->config.dest == PASSTHRUSUB )
             {
                 hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
@@ -738,11 +761,6 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if (out != NULL)
                 hb_fifo_push( subtitle->fifo_out, out );
         }
-        // fifo empty, flush out any pending subtitle buffers in
-        // the sanitizer
-        out = sanitizeSubtitle(pv, i, NULL);
-        if (out != NULL)
-            hb_fifo_push( subtitle->fifo_out, out );
     }
 
     /*
