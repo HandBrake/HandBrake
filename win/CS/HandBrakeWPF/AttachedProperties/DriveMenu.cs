@@ -126,7 +126,7 @@ namespace HandBrakeWPF.AttachedProperties
                                                                        IsDrive = true
                                                                    })
                     {
-                        Console.WriteLine("test");
+                       mvm.SourceMenu.Add(menuItem);
                     }
                 }
                 else
