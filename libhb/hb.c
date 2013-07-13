@@ -512,7 +512,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
 
-	return h;
+    return h;
 }
 
 
@@ -609,6 +609,17 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     {
         hb_list_rem( h->title_set.list_title, title );
         hb_title_close( &title );
+    }
+
+    /* Print CPU info here so that it's in all scan and encode logs */
+    hb_log("hb_scan: CPU count: %i", hb_get_cpu_count());
+    if (hb_get_cpu_name() != NULL)
+    {
+        hb_log("hb_scan: CPU name:  %s", hb_get_cpu_name());
+    }
+    if (hb_get_cpu_platform_name() != NULL)
+    {
+        hb_log("hb_scan: CPU type:  %s", hb_get_cpu_platform_name());
     }
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );

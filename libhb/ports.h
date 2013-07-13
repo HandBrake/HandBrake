@@ -17,11 +17,27 @@
 #endif
 
 /************************************************************************
+ * CPU info utilities
+ ***********************************************************************/
+enum hb_cpu_platform
+{
+    // list of microarchitecture codenames
+    HB_CPU_PLATFORM_UNSPECIFIED = 0,
+    HB_CPU_PLATFORM_INTEL_SNB,
+    HB_CPU_PLATFORM_INTEL_IVB,
+    HB_CPU_PLATFORM_INTEL_HSW,
+};
+int         hb_get_cpu_count();
+int         hb_get_cpu_platform();
+const char* hb_get_cpu_name();
+const char* hb_get_cpu_platform_name();
+extern void ff_cpu_cpuid(int index, int *eax, int *ebx, int *ecx, int *edx);
+
+/************************************************************************
  * Utils
  ***********************************************************************/
 uint64_t hb_get_date();
 void     hb_snooze( int delay );
-int      hb_get_cpu_count();
 int      hb_platform_init();
 #ifdef SYS_MINGW
 char *strtok_r(char *s, const char *delim, char **save_ptr);

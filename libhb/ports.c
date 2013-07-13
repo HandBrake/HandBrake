@@ -74,6 +74,7 @@
 #include <unistd.h>
 
 #include "hb.h"
+#include "libavutil/cpu.h"
 
 /************************************************************************
  * hb_get_date()
@@ -161,21 +162,136 @@ void hb_snooze( int delay )
 }
 
 /************************************************************************
- * hb_get_cpu_count()
- ************************************************************************
- * Whenever possible, returns the number of CPUs on the current
- * computer. Returns 1 otherwise.
- * The detection is actually only performed on the first call.
+ * Get information about the CPU (number of cores, name, platform name)
  ************************************************************************/
+static void init_cpu_info();
+static int  init_cpu_count();
+struct
+{
+    enum hb_cpu_platform platform;
+    const char *name;
+    char buf[48];
+    int count;
+} hb_cpu_info;
+
 int hb_get_cpu_count()
 {
-    static int cpu_count = 0;
+    return hb_cpu_info.count;
+}
 
-    if( cpu_count )
+int hb_get_cpu_platform()
+{
+    return hb_cpu_info.platform;
+}
+
+const char* hb_get_cpu_name()
+{
+    return hb_cpu_info.name;
+}
+
+const char* hb_get_cpu_platform_name()
+{
+    switch (hb_cpu_info.platform)
     {
-        return cpu_count;
+        // Intel 64 and IA-32 Architectures Software Developer's Manual, Vol. 3C
+        // Table 35-1: CPUID Signature Values of DisplayFamily_DisplayModel
+        case HB_CPU_PLATFORM_INTEL_SNB:
+            return "Intel microarchitecture Sandy Bridge";
+        case HB_CPU_PLATFORM_INTEL_IVB:
+            return "Intel microarchitecture Ivy Bridge";
+        case HB_CPU_PLATFORM_INTEL_HSW:
+            return "Intel microarchitecture Haswell";
+
+        default:
+            return NULL;
     }
-    cpu_count = 1;
+}
+
+static void init_cpu_info()
+{
+    hb_cpu_info.name     = NULL;
+    hb_cpu_info.count    = init_cpu_count();
+    hb_cpu_info.platform = HB_CPU_PLATFORM_UNSPECIFIED;
+
+    if (av_get_cpu_flags() & AV_CPU_FLAG_SSE)
+    {
+        int eax, ebx, ecx, edx, family, model;
+
+        ff_cpu_cpuid(1, &eax, &ebx, &ecx, &edx);
+        family = ((eax >> 8) & 0xf) + ((eax >> 20) & 0xff);
+        model  = ((eax >> 4) & 0xf) + ((eax >> 12) & 0xf0);
+
+        // Intel 64 and IA-32 Architectures Software Developer's Manual, Vol. 3C
+        // Table 35-1: CPUID Signature Values of DisplayFamily_DisplayModel
+        switch (family)
+        {
+            case 0x06:
+            {
+                switch (model)
+                {
+                    case 0x2A:
+                    case 0x2D:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_SNB;
+                        break;
+                    case 0x3A:
+                    case 0x3E:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_IVB;
+                        break;
+                    case 0x3C:
+                    case 0x45:
+                    case 0x46:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_HSW;
+                        break;
+                    default:
+                        break;
+                }
+            } break;
+
+            default:
+                break;
+        }
+
+        // Intel 64 and IA-32 Architectures Software Developer's Manual, Vol. 2A
+        // Figure 3-8: Determination of Support for the Processor Brand String
+        // Table 3-17: Information Returned by CPUID Instruction
+        ff_cpu_cpuid(0x80000000, &eax, &ebx, &ecx, &edx);
+        if ((eax & 0x80000004) < 0x80000004)
+        {
+            ff_cpu_cpuid(0x80000002,
+                         (int*)&hb_cpu_info.buf[ 0],
+                         (int*)&hb_cpu_info.buf[ 4],
+                         (int*)&hb_cpu_info.buf[ 8],
+                         (int*)&hb_cpu_info.buf[12]);
+            ff_cpu_cpuid(0x80000003,
+                         (int*)&hb_cpu_info.buf[16],
+                         (int*)&hb_cpu_info.buf[20],
+                         (int*)&hb_cpu_info.buf[24],
+                         (int*)&hb_cpu_info.buf[28]);
+            ff_cpu_cpuid(0x80000004,
+                         (int*)&hb_cpu_info.buf[32],
+                         (int*)&hb_cpu_info.buf[36],
+                         (int*)&hb_cpu_info.buf[40],
+                         (int*)&hb_cpu_info.buf[44]);
+
+            hb_cpu_info.name    = hb_cpu_info.buf;
+            hb_cpu_info.buf[47] = '\0'; // just in case
+
+            while (isspace(*hb_cpu_info.name))
+            {
+                // skip leading whitespace to prettify
+                hb_cpu_info.name++;
+            }
+        }
+    }
+}
+
+/*
+ * Whenever possible, returns the number of CPUs on the current computer.
+ * Returns 1 otherwise.
+ */
+static int init_cpu_count()
+{
+    int cpu_count = 1;
 
 #if defined(SYS_CYGWIN) || defined(SYS_MINGW)
     SYSTEM_INFO cpuinfo;
@@ -262,6 +378,8 @@ int hb_platform_init()
         return -1;
     }
 #endif
+
+    init_cpu_info();
 
     return result;
 }
