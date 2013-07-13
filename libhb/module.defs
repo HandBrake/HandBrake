@@ -69,7 +69,7 @@ else ifeq ($(BUILD.system),mingw)
     LIBHB.GCC.D += SYS_MINGW PTW32_STATIC_LIB
 	LIBHB.GCC.args.extra.dylib++ += -Wl,--enable-auto-import -static
 else ifeq ($(BUILD.system),solaris)
-    LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+    LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64 _POSIX_C_SOURCE=200112L __EXTENSIONS__
 else
     LIBHB.platform.D = SYS_UNKNOWN
 endif
