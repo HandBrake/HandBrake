@@ -200,6 +200,8 @@ static const iso639_lang_t languages[] =
   { "Zulu", "", "zu", "zul" },
   { NULL, NULL, NULL } };
 
+static const int lang_count = sizeof(languages) / sizeof(languages[0]);
+
 iso639_lang_t * lang_for_code( int code )
 {
     char code_string[2];
@@ -268,4 +270,19 @@ iso639_lang_t * lang_for_english( const char * english )
 
     return (iso639_lang_t*) languages;
 }
+
+const iso639_lang_t* lang_get_next(const iso639_lang_t *last)
+{
+    if (last == NULL)
+    {
+        return (const iso639_lang_t*)languages;
+    }
+    if (last <  languages ||                // out of bounds
+        last >= languages + lang_count - 2) // last valid language
+    {
+        return NULL;
+    }
+    return ++last;
+}
+
 

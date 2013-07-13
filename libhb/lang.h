@@ -33,6 +33,14 @@ iso639_lang_t * lang_for_code2( const char *code2 );
 int lang_to_code(const iso639_lang_t *lang);
 
 iso639_lang_t * lang_for_english( const char * english );
+
+/*
+ * Get the next language in the list.
+ * Returns NULL if there are no more languages.
+ * Pass NULL to get the first language in the list.
+ */
+const iso639_lang_t* lang_get_next(const iso639_lang_t *last);
+
 #ifdef __cplusplus
 }
 #endif
