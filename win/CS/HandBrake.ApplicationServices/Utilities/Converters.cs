@@ -447,11 +447,11 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (format.ToLower())
             {
                 default:
-                    return OutputFormat.Mp4;
+                    return OutputFormat.av_mp4;
                 case "m4v":
-                    return OutputFormat.M4V;
+                    return OutputFormat.av_mp4;
                 case "mkv":
-                    return OutputFormat.Mkv;
+                    return OutputFormat.av_mkv;
             }
         }
 
@@ -470,9 +470,9 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 default:
                     return "mp4";
-                case OutputFormat.M4V:
+                case OutputFormat.av_mp4:
                     return "m4v";
-                case OutputFormat.Mkv:
+                case OutputFormat.av_mkv:
                     return "mkv";
             }
         }

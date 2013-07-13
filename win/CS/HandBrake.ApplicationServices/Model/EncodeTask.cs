@@ -467,7 +467,7 @@ namespace HandBrake.ApplicationServices.Model
         {
             get
             {
-                if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4)
+                if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4 || this.OutputFormat == OutputFormat.av_mp4)
                 {
                     bool audio = this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || 
                         item.Encoder == AudioEncoder.Ac3 || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);

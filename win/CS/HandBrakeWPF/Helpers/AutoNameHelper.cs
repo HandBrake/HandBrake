@@ -96,7 +96,7 @@ namespace HandBrakeWPF.Helpers
                 /*
                  * File Extension
                  */
-                if (task.OutputFormat == OutputFormat.Mp4 || task.OutputFormat == OutputFormat.M4V)
+                if (task.OutputFormat == OutputFormat.Mp4 || task.OutputFormat == OutputFormat.M4V || task.OutputFormat == OutputFormat.av_mp4)
                 {
                     switch (userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                     {

@@ -385,7 +385,7 @@ namespace HandBrakeWPF.ViewModels
 
             if ((source.SubtitleType == SubtitleType.PGS || source.SubtitleType == SubtitleType.VobSub) &&
                 this.Task != null &&
-                (this.Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.M4V))
+                (this.Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.M4V || this.Task.OutputFormat == OutputFormat.av_mp4))
             {
                 this.SelectBurnedInTrack(track);
             }
