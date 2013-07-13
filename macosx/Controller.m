@@ -3062,15 +3062,23 @@ fWorkingCount = 0;
     
     [fVidBitrateField setStringValue:[queueToApply objectForKey:@"VideoAvgBitrate"]];
     
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+    int direction;
+    float minValue, maxValue, granularity;
+    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                &minValue, &maxValue, &granularity, &direction);
+    if (!direction)
     {
-        /* Since theora's qp value goes up from left to right, we can just set the slider float value */
         [fVidQualitySlider setFloatValue:[[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
     }
     else
     {
-        /* Since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
-        [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
+        /*
+         * Since ffmpeg and x264 use an "inverted" slider (lower values
+         * indicate a higher quality) we invert the value on the slider
+         */
+        [fVidQualitySlider setFloatValue:([fVidQualitySlider minValue] +
+                                          [fVidQualitySlider maxValue] -
+                                          [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue])];
     }
     
     [self videoMatrixChanged:nil];
@@ -5260,43 +5268,44 @@ the user is using "Custom" settings by determining the sender*/
  */
 - (void) setupQualitySlider
 {
-    /* Get the current slider maxValue to check for a change in slider scale later
-     * so that we can choose a new similar value on the new slider scale */
-    float previousMaxValue = [fVidQualitySlider maxValue];
-    float previousPercentOfSliderScale = [fVidQualitySlider floatValue] / ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1);
-    NSString * qpRFLabelString = @"QP:";
-    /* x264 0-51 */
+    /*
+     * Get the current slider maxValue to check for a change in slider scale
+     * later so that we can choose a new similar value on the new slider scale
+     */
+    float previousMaxValue             = [fVidQualitySlider maxValue];
+    float previousPercentOfSliderScale = ([fVidQualitySlider floatValue] /
+                                          ([fVidQualitySlider maxValue] -
+                                           [fVidQualitySlider minValue] + 1));
+    [fVidQualityRFLabel setStringValue:[NSString stringWithFormat:@"%s",
+                                        hb_video_quality_get_name([[fVidEncoderPopUp
+                                                                    selectedItem] tag])]];
+    int direction;
+    float minValue, maxValue, granularity;
+    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                &minValue, &maxValue, &granularity, &direction);
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
     {
-        [fVidQualitySlider setMinValue:0.0];
-        [fVidQualitySlider setMaxValue:51.0];
-        /* As x264 allows for qp/rf values that are fractional, we get the value from the preferences */
-        int fractionalGranularity = 1 / [[NSUserDefaults standardUserDefaults] floatForKey:@"x264CqSliderFractional"];
-        [fVidQualitySlider setNumberOfTickMarks:(([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * fractionalGranularity) + 1];
-        qpRFLabelString = @"RF:";
+        /*
+         * As x264 allows for qp/rf values that are fractional,
+         * we get the value from the preferences
+         */
+        granularity = [[NSUserDefaults standardUserDefaults]
+                       floatForKey:@"x264CqSliderFractional"];
     }
-    /* FFmpeg MPEG-2/4 1-31 */
-    if ([[fVidEncoderPopUp selectedItem] tag] & HB_VCODEC_FFMPEG_MASK )
-    {
-        [fVidQualitySlider setMinValue:1.0];
-        [fVidQualitySlider setMaxValue:31.0];
-        [fVidQualitySlider setNumberOfTickMarks:31];
-    }
-    /* Theora 0-63 */
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
-    {
-        [fVidQualitySlider setMinValue:0.0];
-        [fVidQualitySlider setMaxValue:63.0];
-        [fVidQualitySlider setNumberOfTickMarks:64];
-    }
-    [fVidQualityRFLabel setStringValue:qpRFLabelString];
+    [fVidQualitySlider setMinValue:minValue];
+    [fVidQualitySlider setMaxValue:maxValue];
+    [fVidQualitySlider setNumberOfTickMarks:((maxValue - minValue) *
+                                             (1. / granularity)) + 1];
     
     /* check to see if we have changed slider scales */
-    if (previousMaxValue != [fVidQualitySlider maxValue])
+    if (previousMaxValue != maxValue)
     {
-        /* if so, convert the old setting to the new scale as close as possible based on percentages */
-        float rf =  ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1) * previousPercentOfSliderScale;
-        [fVidQualitySlider setFloatValue:rf];
+        /*
+         * if so, convert the old setting to the new scale as close as possible
+         * based on percentages
+         */
+        [fVidQualitySlider setFloatValue:((maxValue - minValue + 1.) *
+                                          (previousPercentOfSliderScale))];
     }
     
     [self qualitySliderChanged:nil];
@@ -5304,8 +5313,8 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) qualitySliderChanged: (id) sender
 {
-    
-    /* Our constant quality slider is in a range based
+    /*
+     * Our constant quality slider is in a range based
      * on each encoders qp/rf values. The range depends
      * on the encoder. Also, the range is inverse of quality
      * for all of the encoders *except* for theora
@@ -5317,22 +5326,28 @@ the user is using "Custom" settings by determining the sender*/
      * so, the floatValue at the right for x264 would be 51
      * and our rf field needs to show 0 and vice versa.
      */
-    
-    float sliderRfInverse = ([fVidQualitySlider maxValue] - [fVidQualitySlider floatValue]) + [fVidQualitySlider minValue];
-    /* If the encoder is theora, use the float, otherwise use the inverse float*/
-    //float sliderRfToPercent;
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+    int direction;
+    float minValue, maxValue, granularity;
+    float inverseValue = ([fVidQualitySlider minValue] +
+                          [fVidQualitySlider maxValue] -
+                          [fVidQualitySlider floatValue]);
+    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                &minValue, &maxValue, &granularity, &direction);
+    if (!direction)
     {
-        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", [fVidQualitySlider floatValue]]];   
+        [fVidQualityRFField setStringValue:[NSString stringWithFormat:@"%.2f",
+                                            [fVidQualitySlider floatValue]]];
     }
     else
     {
-        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", sliderRfInverse]];
+        [fVidQualityRFField setStringValue:[NSString stringWithFormat:@"%.2f",
+                                            inverseValue]];
     }
     /* Show a warning if x264 and rf 0 which is lossless */
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264 && sliderRfInverse == 0.0)
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264 && inverseValue == 0.0)
     {
-        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f (Warning: Lossless)", sliderRfInverse]];
+        [fVidQualityRFField setStringValue:[NSString stringWithFormat:@"%.2f (Warning: Lossless)",
+                                            inverseValue]];
     }
     
     [self customSettingUsed: sender];
@@ -6544,15 +6559,23 @@ return YES;
 
         [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
         
-        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+        int direction;
+        float minValue, maxValue, granularity;
+        hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                    &minValue, &maxValue, &granularity, &direction);
+        if (!direction)
         {
-            /* Since theora's qp value goes up from left to right, we can just set the slider float value */
             [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
         }
         else
         {
-            /* Since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
-            [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
+            /*
+             * Since ffmpeg and x264 use an "inverted" slider (lower values
+             * indicate a higher quality) we invert the value on the slider
+             */
+            [fVidQualitySlider setFloatValue:([fVidQualitySlider minValue] +
+                                              [fVidQualitySlider maxValue] -
+                                              [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue])];
         }
         
         [self videoMatrixChanged:nil];

@@ -1087,6 +1087,55 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
 //
 // direction says whether 'low' limit is highest or lowest
 // quality (direction 0 == lowest value is worst quality)
+void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
+                                 float *granularity, int *direction)
+{
+    switch (codec)
+    {
+        case HB_VCODEC_X264:
+            *direction   = 1;
+            *granularity = 0.1;
+            *low         = 0.;
+            *high        = 51.;
+            break;
+
+        case HB_VCODEC_THEORA:
+            *direction   = 0;
+            *granularity = 1.;
+            *low         = 0.;
+            *high        = 63.;
+            break;
+
+        case HB_VCODEC_FFMPEG_MPEG2:
+        case HB_VCODEC_FFMPEG_MPEG4:
+        default:
+            *direction   = 1;
+            *granularity = 1.;
+            *low         = 1.;
+            *high        = 31.;
+            break;
+    }
+}
+
+const char* hb_video_quality_get_name(uint32_t codec)
+{
+    switch (codec)
+    {
+        case HB_VCODEC_X264:
+            return "RF";
+
+        default:
+            return "QP";
+    }
+}
+
+// Get limits and hints for the UIs.
+//
+// granularity sets the minimum step increments that should be used
+// (it's ok to round up to some nice multiple if you like)
+//
+// direction says whether 'low' limit is highest or lowest
+// quality (direction 0 == lowest value is worst quality)
 void hb_audio_quality_get_limits(uint32_t codec, float *low, float *high,
                                  float *granularity, int *direction)
 {
