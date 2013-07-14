@@ -159,6 +159,8 @@
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Helpers\AppStyleHelper.cs" />
+    <Compile Include="Helpers\Macros.cs" />
+    <Compile Include="Helpers\PictureSize.cs" />
     <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Model\SelectionTitle.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />

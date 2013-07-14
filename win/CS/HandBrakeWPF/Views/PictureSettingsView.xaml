@@ -93,11 +93,8 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Content="Display Size:" Grid.Row="0" Grid.Column="0"
-                       Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
 
                 <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
                        Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
