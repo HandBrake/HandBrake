@@ -1,3 +1,4 @@
+#ifdef USE_OPENCL
 #include "openclwrapper.h"
 
 static int hb_yadif_filter( void **userdata, KernelEnv *kenv )
@@ -90,3 +91,4 @@ int cl_yadif_filter(
     return 0;
 }
 
+#endif

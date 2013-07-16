@@ -221,6 +221,10 @@ static int hb_decomb_work( hb_filter_object_t * filter,
                            hb_buffer_t ** buf_in,
                            hb_buffer_t ** buf_out );
 
+static int hb_decomb_work_opencl( hb_filter_object_t * filter,
+                                  hb_buffer_t ** buf_in,
+                                  hb_buffer_t ** buf_out );
+
 static void hb_decomb_close( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_decomb =
@@ -2069,7 +2073,6 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
 #ifdef USE_OPENCL
     if(pv->use_opencl){
-        hb_log("decomb with OpenCL");
         if( !hb_create_buffer( &(pv->cl_mem_dst), CL_MEM_READ_WRITE, 3133440 ) )
         {
             hb_log("hb_create_buffer cl_outbuf Error\n");
@@ -2532,12 +2535,12 @@ static void hb_decomb_close( hb_filter_object_t * filter )
     hb_buffer_close(&pv->mask);
     hb_buffer_close(&pv->mask_filtered);
     hb_buffer_close(&pv->mask_temp);
-
+#ifdef USE_OPENCL
     clReleaseMemObject( pv->cl_mem_dst );
     clReleaseMemObject( pv->cl_mem_prev );
     clReleaseMemObject( pv->cl_mem_cur );
     clReleaseMemObject( pv->cl_mem_next );
-
+#endif
     if( pv->mode & MODE_EEDI2 )
     {
         /* Cleanup eedi-half  buffers */
@@ -2583,6 +2586,161 @@ static int hb_decomb_work( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * last = NULL, * out = NULL;
+#ifdef USE_OPENCL
+    if (pv->use_opencl && !(pv->mode & (MODE_MCDEINT | MODE_BOB)))
+        return hb_decomb_work_opencl(filter, buf_in, buf_out);
+#endif
+    if ( in->size <= 0 )
+    {
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
+    }
+
+    /* Store current frame in yadif cache */
+    *buf_in = NULL;
+    store_ref(pv, in);
+
+    // yadif requires 3 buffers, prev, cur, and next.  For the first
+    // frame, there can be no prev, so we duplicate the first frame.
+    if (!pv->yadif_ready)
+    {
+        // If yadif is not ready, store another ref and return HB_FILTER_DELAY
+        store_ref(pv, hb_buffer_dup(in));
+        pv->yadif_ready = 1;
+        // Wait for next
+        return HB_FILTER_DELAY;
+    }
+
+    /* Determine if top-field first layout */
+    int tff;
+    if( pv->parity < 0 )
+    {
+        tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
+    }
+    else
+    {
+        tff = (pv->parity & 1) ^ 1;
+    }
+
+    /* deinterlace both fields if mcdeint is enabled without bob */
+    int frame, num_frames = 1;
+    if (pv->mode & (MODE_MCDEINT | MODE_BOB))
+    {
+        num_frames = 2;
+    }
+    
+    // Will need up to 2 buffers simultaneously
+    int idx = 0;
+    hb_buffer_t * o_buf[2] = {NULL,};
+
+    /* Perform yadif filtering */        
+    for( frame = 0; frame < num_frames; frame++ )
+    {
+        int parity = frame ^ tff ^ 1;
+
+        /* Skip the second run if the frame is uncombed */
+        if (frame && pv->is_combed == 0)
+        {
+            break;
+        }
+
+        // tff for eedi2
+        pv->tff = !parity;
+
+        if (o_buf[idx] == NULL)
+        {
+            o_buf[idx] = hb_video_buffer_init(in->f.width, in->f.height);
+        }
+
+        if (frame)
+            pv->skip_comb_check = 1;
+        else
+            pv->skip_comb_check = 0;
+
+        yadif_filter(pv, o_buf[idx], parity, tff);
+
+        // Unfortunately, all frames must be fed to mcdeint combed or
+        // not since it maintains state that is updated by each frame.
+        if (pv->mcdeint_mode >= 0)
+        {
+            if (o_buf[idx^1] == NULL)
+            {
+                o_buf[idx^1] = hb_video_buffer_init(in->f.width, in->f.height);
+            }
+            /* Perform mcdeint filtering */
+            mcdeint_filter(o_buf[idx^1], o_buf[idx], parity, &pv->mcdeint);
+
+            // If frame was combed, we will use results from mcdeint
+            // else we will use yadif result
+            if (pv->is_combed)
+                idx ^= 1;
+        }
+
+        // Add to list of output buffers (should be at most 2)
+        if ((pv->mode & MODE_BOB) ||
+            pv->is_combed == 0 ||
+            frame == num_frames - 1)
+        {
+            if ( out == NULL )
+            {
+                last = out = o_buf[idx];
+            }
+            else
+            {
+                last->next = o_buf[idx];
+                last = last->next;
+            }
+            last->next = NULL;
+
+            // Indicate that buffer was consumed
+            o_buf[idx] = NULL;
+
+            /* Copy buffered settings to output buffer settings */
+            last->s = pv->ref[1]->s;
+            idx ^= 1;
+
+            if ((pv->mode & MODE_MASK) && pv->spatial_metric >= 0 )
+            {
+                if (pv->mode == MODE_MASK ||
+                    ((pv->mode & MODE_MASK) && (pv->mode & MODE_FILTER)) ||
+                    ((pv->mode & MODE_MASK) && (pv->mode & MODE_GAMMA)) ||
+                    pv->is_combed)
+                {
+                    apply_mask(pv, last);
+                }
+            }
+        }
+    }
+    // Copy subs only to first output buffer
+    hb_buffer_move_subs( out, pv->ref[1] );
+
+    hb_buffer_close(&o_buf[0]);
+    hb_buffer_close(&o_buf[1]);
+
+    /* if this frame was deinterlaced and bob mode is engaged, halve
+       the duration of the saved timestamps. */
+    if ((pv->mode & MODE_BOB) && pv->is_combed)
+    {
+        out->s.stop -= (out->s.stop - out->s.start) / 2LL;
+        last->s.start = out->s.stop;
+        last->s.new_chap = 0;
+    }
+
+    *buf_out = out;
+
+    return HB_FILTER_OK;
+}
+
+static int hb_decomb_work_opencl( hb_filter_object_t * filter,
+                                  hb_buffer_t ** buf_in,
+                                  hb_buffer_t ** buf_out )
+{
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in;
+    hb_buffer_t * last = NULL, * out = NULL;
+
+    //hb_log("decomb with OpenCL");
 
     if ( in->size <= 0 )
     {
@@ -2642,7 +2800,6 @@ static int hb_decomb_work( hb_filter_object_t * filter,
         else
             pv->skip_comb_check = 0;
 
-#ifdef USE_OPENCL
         if(pv->use_opencl){
             int is_combed;
             if (!pv->skip_comb_check)
@@ -2700,12 +2857,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
             {
                 hb_buffer_copy(out, pv->ref[1]); 
             }
-        }else{
-            yadif_filter(pv, out, parity, tff);
         }
-#else
-        yadif_filter(pv, out, parity, tff);
-#endif
 
         hb_buffer_t* mcdeint_out = NULL;
         if (pv->mcdeint_mode >= 0)
