@@ -108,6 +108,20 @@ namespace HandBrakeWPF
             {
                 this.ShowError(e.Exception.InnerException);
             }
+            else if (e.Exception.InnerException != null && e.Exception.InnerException.GetType() == typeof(Castle.MicroKernel.ComponentActivator.ComponentActivatorException))
+            {
+                // Handle Component Activation Exceptions. Can happen when one of the services throws an execption when being constructed.
+                Exception innerException = e.Exception.InnerException.InnerException;
+                if (innerException != null && innerException.InnerException != null &&
+                    innerException.InnerException.GetType() == typeof(GeneralApplicationException))
+                {
+                    this.ShowError(innerException.InnerException);
+                }
+                else
+                {
+                    this.ShowError(innerException);
+                }
+            }
             else
             {
                 this.ShowError(e.Exception);
@@ -130,10 +144,10 @@ namespace HandBrakeWPF
                 if (windowManager != null)
                 {
                     ErrorViewModel errorView = new ErrorViewModel();
-
+                    GeneralApplicationException applicationException = null;
                     if (exception.GetType() == typeof(GeneralApplicationException))
                     {
-                        GeneralApplicationException applicationException = exception as GeneralApplicationException;
+                        applicationException = exception as GeneralApplicationException;
                         if (applicationException != null)
                         {
                             string details = string.Format(
@@ -142,9 +156,7 @@ namespace HandBrakeWPF
                                 Environment.NewLine,
                                 applicationException.Solution,
                                 Environment.NewLine,
-                                applicationException.ActualException != null
-                                    ? applicationException.ActualException.ToString()
-                                    : "No additional exception information available.");
+                                applicationException.ActualException != null ? applicationException.ActualException.ToString() : "No additional exception information available.");
 
                             errorView.ErrorMessage = applicationException.Error;
                             errorView.Solution = applicationException.Solution;
@@ -156,7 +168,17 @@ namespace HandBrakeWPF
                         errorView.Details = exception.ToString();
                     }
 
-                    windowManager.ShowDialog(errorView);
+                    try
+                    {
+                        windowManager.ShowDialog(errorView);
+                    }
+                    catch (Exception)
+                    {
+                        if (applicationException != null)
+                        {
+                            MessageBox.Show(applicationException.Error + Environment.NewLine + Environment.NewLine + applicationException.Solution, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        } 
+                    } 
                 }
             }
             catch (Exception)

@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Collections;
@@ -67,7 +68,7 @@ namespace HandBrake.ApplicationServices.Services
             this.userSettings[name] = value;
             this.Save();
 
-            this.OnSettingChanged(new SettingChangedEventArgs {Key = name, Value = value});
+            this.OnSettingChanged(new SettingChangedEventArgs { Key = name, Value = value });
         }
 
         /// <summary>
@@ -163,7 +164,7 @@ namespace HandBrake.ApplicationServices.Services
                         SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
                         this.userSettings = data;
                     }
-                } 
+                }
                 else
                 {
                     this.userSettings = new SerializableDictionary<string, object>();
@@ -192,7 +193,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception)
                 {
-                    throw new GeneralApplicationException("Unable to load user settings.", "Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.", exc);
+                    throw new GeneralApplicationException("Unable to load user settings file: " + this.settingsFile, "Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.", exc);
                 }
             }
         }
@@ -205,13 +206,20 @@ namespace HandBrake.ApplicationServices.Services
         /// </returns>
         private SerializableDictionary<string, object> GetDefaults()
         {
-            if (File.Exists("defaultsettings.xml"))
+            try
             {
-                using (StreamReader reader = new StreamReader("defaultsettings.xml"))
+                Assembly assembly = Assembly.GetEntryAssembly();
+                Stream stream = assembly.GetManifestResourceStream("HandBrakeWPF.defaultsettings.xml");
+                if (stream != null)
                 {
-                    return (SerializableDictionary<string, object>)serializer.Deserialize(reader);
+                    return (SerializableDictionary<string, object>)this.serializer.Deserialize(stream);
                 }
             }
+            catch (Exception exc)
+            {
+                return new SerializableDictionary<string, object>();
+            }
+
             return new SerializableDictionary<string, object>();
         }
     }

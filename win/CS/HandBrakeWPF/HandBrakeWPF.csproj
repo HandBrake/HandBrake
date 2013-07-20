@@ -441,10 +441,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="defaultsettings.xml">
+    <EmbeddedResource Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Resource Include="Views\Images\add40.png" />
     <Resource Include="Views\Images\add.png" />
     <Resource Include="Views\Images\remove.png" />
