@@ -879,7 +879,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => SelectedOutputFormat);
                 this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
                 this.NotifyOfPropertyChange(() => IsMkv);
-                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower())); // TODO, tidy up
+                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().Replace("av_", string.Empty).ToLower())); // TODO, tidy up
 
                 this.VideoViewModel.RefreshTask();
                 this.AudioViewModel.RefreshTask();
@@ -1446,6 +1446,25 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
+            }
+        }
+
+        /// <summary>
+        /// The open destination directory.
+        /// </summary>
+        public void OpenDestinationDirectory()
+        {
+            if (!string.IsNullOrEmpty(this.Destination))
+            {
+                string directory = Path.GetDirectoryName(this.Destination);
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Process.Start(directory);
+                }
+                else
+                {
+                    Process.Start(AppDomain.CurrentDomain.BaseDirectory);
+                }
             }
         }
 

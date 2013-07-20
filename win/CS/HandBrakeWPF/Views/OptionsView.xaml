@@ -176,7 +176,7 @@
                                 <TextBlock VerticalAlignment="Center" Text="Format:" />
                                 <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="180" ToolTip=" {Source} = Source Name,  {Title} = Title Number,  {Chapters} = Selected Chapters, {Date} = Todays Date,"  />
                             </StackPanel>
-                            <TextBlock Text="Available Options: {source} {title} {chapters} {date}" />
+                            <TextBlock Text="Available Options: {source} {title} {chapters} {date} {time} {quality} {bitrate}" />
 
                             <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
                                 <CheckBox Content="Replace underscores with a space" IsChecked="{Binding RemoveUnderscores}"/>

@@ -19,6 +19,7 @@ namespace HandBrakeWPF.Helpers
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
     /// The Destination AutoName Helper
@@ -88,7 +89,17 @@ namespace HandBrakeWPF.Helpers
                     destinationFilename = destinationFilename.Replace("{source}", sourceName)
                                                              .Replace(Constants.Title, dvdTitle)
                                                              .Replace(Constants.Chapters, combinedChapterTag)
-                                                             .Replace("{date}", DateTime.Now.Date.ToShortDateString().Replace('/', '-'));
+                                                             .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
+                                                             .Replace(Constants.Time, DateTime.Now.ToString("HH:mm"));
+
+                    if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
+                    {
+                        destinationFilename = destinationFilename.Replace(Constants.Quality, task.Quality.ToString());
+                    }
+                    else
+                    {
+                        destinationFilename = destinationFilename.Replace(Constants.Bitrate, task.VideoBitrate.ToString());
+                    }
                 }
                 else
                     destinationFilename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;

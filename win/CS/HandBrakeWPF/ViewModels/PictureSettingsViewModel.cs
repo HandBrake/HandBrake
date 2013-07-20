@@ -823,7 +823,7 @@ namespace HandBrakeWPF.ViewModels
                 case Anamorphic.Custom:
                     double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
                     this.DisplaySize = this.sourceResolution.IsEmpty
-                                   ? "No Title Selected"
+                                   ? string.Empty
                                    : string.Format("Storage: {0}x{1}, Display: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
                     break;
             }
@@ -1023,14 +1023,14 @@ namespace HandBrakeWPF.ViewModels
                 double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
 
                 this.DisplaySize = this.sourceResolution.IsEmpty
-                                     ? "No Title Selected"
+                                     ? string.Empty
                                      : string.Format("Output: {0}x{1}, Anamorphic: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
             }
             else
             {
                 this.DisplaySize = this.sourceResolution.IsEmpty
-                     ? "No Title Selected"
-                     : string.Format("Output: {0}x{1}, Anamorphic: {2}x{3}", this.Width, this.Height, this.Width, this.Height);
+                     ? string.Empty
+                     : string.Format("Output: {0}x{1}", this.Width, this.Height);
             }
         }
 

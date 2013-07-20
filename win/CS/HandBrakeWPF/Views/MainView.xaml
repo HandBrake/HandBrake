@@ -467,7 +467,13 @@
                              Margin="8,0,0,0"
                              Text="{Binding Destination,
                                             UpdateSourceTrigger=PropertyChanged}"
-                             />
+                             >
+                        <TextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Open this Directory" Micro:Message.Attach="[Event Click] = [Action OpenDestinationDirectory]" />
+                            </ContextMenu>
+                        </TextBox.ContextMenu>
+                        </TextBox>
                     <Button Name="DestinationBrowser"
                             Grid.Column="2"
                             Margin="8,0,0,0"
