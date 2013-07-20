@@ -1201,7 +1201,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void FileScan()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
             dialog.ShowDialog();
             this.StartScan(dialog.FileName, 0);
         }
@@ -1233,7 +1233,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void FileScanTitleSpecific()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
             dialog.ShowDialog();
 
             if (string.IsNullOrEmpty(dialog.FileName))
@@ -1367,7 +1367,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void DebugScanLog()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog();
+            OpenFileDialog dialog = new OpenFileDialog();
 
             dialog.ShowDialog();
 
@@ -1544,7 +1544,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetImport()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "Plist (*.plist)|*.plist", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = "Plist (*.plist)|*.plist", CheckFileExists = true };
             dialog.ShowDialog();
             string filename = dialog.FileName;
 
@@ -1590,7 +1590,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetExport()
         {
-            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog
+            SaveFileDialog savefiledialog = new SaveFileDialog
                                                      {
                                                          Filter = "plist|*.plist",
                                                          CheckPathExists = true,
