@@ -41,7 +41,8 @@
             if (chapter->title != NULL)
             {
                 [fChapterTitlesArray addObject:[NSString
-                                                stringWithUTF8String:chapter->title]];
+                                                stringWithFormat:@"%s",
+                                                chapter->title]];
             }
             else
             {
