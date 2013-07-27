@@ -654,6 +654,7 @@ namespace HandBrakeWPF.ViewModels
                     // Do Nothing except reset the Max Width/Height
                     this.MaxWidth = this.sourceResolution.Width;
                     this.MaxHeight = this.sourceResolution.Height;
+                    this.SelectedAnamorphicMode = preset.Task.Anamorphic;
                     break;
             }
 
