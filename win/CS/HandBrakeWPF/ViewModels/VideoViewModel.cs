@@ -179,6 +179,11 @@ namespace HandBrakeWPF.ViewModels
                         this.Task.AdvancedEncoderOptions = this.GetActualx264Query();
                     }
 
+                    if (!value)
+                    {
+                        this.Task.AdvancedEncoderOptions = string.Empty;
+                    }
+
                     this.useAdvancedTab = value;
                     this.Task.ShowAdvancedTab = value;
                     this.NotifyOfPropertyChange(() => this.UseAdvancedTab);
@@ -513,7 +518,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (!object.Equals(this.Task.AdvancedEncoderOptions, value))
+                if (!object.Equals(this.Task.ExtraAdvancedArguments, value))
                 {
                     this.Task.ExtraAdvancedArguments = value;
                     this.NotifyOfPropertyChange(() => this.ExtraArguments);
