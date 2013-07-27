@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+    using System.Windows;
 
     using Caliburn.Micro;
 
@@ -27,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Model.Encoding.x264;
 
     using HandBrakeWPF.Commands.Interfaces;
-    using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -173,6 +173,12 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!object.Equals(value, this.useAdvancedTab))
                 {
+                    // Set the Advanced Tab up with the current settings, if we can.
+                    if (value && !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibHbFeatures))
+                    {
+                        this.Task.AdvancedEncoderOptions = this.GetActualx264Query();
+                    }
+
                     this.useAdvancedTab = value;
                     this.Task.ShowAdvancedTab = value;
                     this.NotifyOfPropertyChange(() => this.UseAdvancedTab);
@@ -871,6 +877,14 @@ namespace HandBrakeWPF.ViewModels
             this.H264Level = "Auto";
             this.ExtraArguments = string.Empty;
             this.canClear = true;
+        }
+
+        /// <summary>
+        /// The copy query.
+        /// </summary>
+        public void CopyQuery()
+        {
+            Clipboard.SetDataObject(this.SelectedVideoEncoder == VideoEncoder.X264 ? this.GetActualx264Query() : this.ExtraArguments);
         }
 
         #endregion

@@ -187,6 +187,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 ShowX264AdvancedOptions = this.Task.ShowAdvancedTab;
                 this.NotifyOfPropertyChange(() => ShowX264AdvancedOptions);
+                this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
             }
         }
 
