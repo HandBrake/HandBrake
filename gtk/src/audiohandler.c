@@ -11,6 +11,7 @@
  * any later version.
  */
 
+#include <glib/gi18n.h>
 #include "ghbcompat.h"
 #include "hb.h"
 #include "settings.h"
@@ -553,7 +554,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 
         drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
         if (drc < 1.0)
-            s_drc = g_strdup("Off");
+            s_drc = g_strdup(_("Off"));
         else
             s_drc = g_strdup_printf("%.1f", drc);
 
@@ -620,7 +621,7 @@ ghb_audio_list_refresh(signal_user_data_t *ud)
 
             drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
             if (drc < 1.0)
-                s_drc = g_strdup("Off");
+                s_drc = g_strdup(_("Off"));
             else
                 s_drc = g_strdup_printf("%.1f", drc);
 
@@ -851,7 +852,7 @@ G_MODULE_EXPORT gchar*
 format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
     if (val < 1.0)
-        return g_strdup_printf("%-7s", "Off");
+        return g_strdup_printf("%-7s", _("Off"));
     else
         return g_strdup_printf("%-7.1f", val);
 }
@@ -925,7 +926,7 @@ drc_widget_changed_cb(GtkWidget *widget, gdouble drc, signal_user_data_t *ud)
 
     char *s_drc;
     if (drc < 0.99)
-        s_drc = g_strdup("Off");
+        s_drc = g_strdup(_("Off"));
     else
         s_drc = g_strdup_printf("%.1f", drc);
     ghb_ui_update( ud, "AudioTrackDRCValue", ghb_string_value(s_drc));
@@ -1040,7 +1041,7 @@ ghb_add_audio_to_ui(GtkBuilder *builder, const GValue *settings)
 
     drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
     if (drc < 1.0)
-        s_drc = g_strdup("Off");
+        s_drc = g_strdup(_("Off"));
     else
         s_drc = g_strdup_printf("%.1f", drc);
 
