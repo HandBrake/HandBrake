@@ -319,9 +319,10 @@ namespace HandBrakeWPF.ViewModels
                     DefaultExt = ".hbq",
                     AddExtension = true
                 };
-            dialog.ShowDialog();
-
-            this.queueProcessor.BackupQueue(dialog.FileName);
+            if (dialog.ShowDialog() == true)
+            {
+                this.queueProcessor.BackupQueue(dialog.FileName);
+            }
         }
 
         /// <summary>
@@ -330,9 +331,10 @@ namespace HandBrakeWPF.ViewModels
         public void Import()
         {
             VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
-            dialog.ShowDialog();
-
-            this.queueProcessor.RestoreQueue(dialog.FileName);
+            if (dialog.ShowDialog() == true)
+            {
+                this.queueProcessor.RestoreQueue(dialog.FileName);
+            }
         }
 
         /// <summary>
