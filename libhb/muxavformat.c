@@ -181,7 +181,7 @@ static int avformatInit( hb_mux_object_t * m )
                      &m->oc->interrupt_callback, NULL);
     if( ret < 0 )
     {
-        hb_error( "avio_open2 failed!");
+        hb_error( "avio_open2 failed, errno %d", ret);
         goto error;
     }
 
