@@ -90,6 +90,28 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
+    /* If the PSNR or SSIM tunes are in use, enable the relevant metric */
+    if (job->x264_tune != NULL && job->x264_tune[0] != '\0')
+    {
+        char *tmp = strdup(job->x264_tune);
+        char *tok = strtok(tmp,   ",./-+");
+        do
+        {
+            if (!strncasecmp(tok, "psnr", 4))
+            {
+                param.analyse.b_psnr = 1;
+                break;
+            }
+            if (!strncasecmp(tok, "ssim", 4))
+            {
+                param.analyse.b_ssim = 1;
+                break;
+            }
+        }
+        while ((tok = strtok(NULL, ",./-+")) != NULL);
+        free(tmp);
+    }
+
     /* Some HandBrake-specific defaults; users can override them
      * using the advanced_opts string. */
     if( job->pass == 2 && job->cfr != 1 )
