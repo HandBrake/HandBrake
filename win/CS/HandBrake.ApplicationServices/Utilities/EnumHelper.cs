@@ -129,9 +129,6 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="enumType">
         /// The enum type.
         /// </param>
-        /// <typeparam name="T">
-        /// The type of the enum
-        /// </typeparam>
         /// <returns>
         /// A collection of strings that represent all the enum values
         /// </returns>
@@ -149,9 +146,6 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="items">
         /// The items.
         /// </param>
-        /// <typeparam name="T">
-        /// The type of the enum
-        /// </typeparam>
         /// <returns>
         /// A collection of strings that represent all the enum values
         /// </returns>

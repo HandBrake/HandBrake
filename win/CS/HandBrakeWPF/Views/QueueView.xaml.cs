@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Views
     using System.Windows;
 
     /// <summary>
-    /// Interaction logic for VideoView.xaml
+    /// Interaction logic for VideoView
     /// </summary>
     public partial class QueueView : Window
     {

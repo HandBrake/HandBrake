@@ -1608,7 +1608,7 @@ namespace HandBrakeWPF.ViewModels
                     PlistUtility.Export(
                         savefiledialog.FileName,
                         this.selectedPreset,
-                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)
+                        this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)
                                           .ToString(CultureInfo.InvariantCulture));
                 }
             }

@@ -386,12 +386,6 @@ namespace HandBrake.ApplicationServices.Utilities
                     return x264Profile.Main;
                 case "high":
                     return x264Profile.High;
-                //case "high10":
-                //    return x264Profile.High10;
-                //case "high422":
-                //    return x264Profile.High422;
-                //case "high444":
-                //    return x264Profile.High444;
                 default:
                     return x264Profile.Main;
             }

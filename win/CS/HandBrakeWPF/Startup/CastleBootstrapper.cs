@@ -79,7 +79,6 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<ITitleSpecificViewModel>().ImplementedBy<TitleSpecificViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IQueueSelectionViewModel>().ImplementedBy<QueueSelectionViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             
-
             // Tab Components
             this.windsorContainer.Register(Component.For<IAudioViewModel>().ImplementedBy<AudioViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IX264ViewModel>().ImplementedBy<X264ViewModel>().LifeStyle.Is(LifestyleType.Singleton));

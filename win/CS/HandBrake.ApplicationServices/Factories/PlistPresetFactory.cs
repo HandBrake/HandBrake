@@ -347,7 +347,7 @@ namespace HandBrake.ApplicationServices.Factories
                         track.SampleRate = item.Value == "Auto" ? 0 : double.Parse(item.Value, CultureInfo.InvariantCulture);
                         break;
                     case "AudioTrack":
-                        //track.SourceTrack = value; We don't do anything with this one.
+                        // track.SourceTrack = value; We don't do anything with this one.
                         break;
                     case "AudioTrackDRCSlider":
                         track.DRC = double.Parse(item.Value.ToString(), CultureInfo.InvariantCulture);

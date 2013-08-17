@@ -207,7 +207,7 @@ namespace HandBrake.ApplicationServices.Services
             if (host != null)
             {
                 host.BeginClose(null, null);
-                //host.Abort();            
+                // host.Abort();            
                 shutdownFlag.Set();
             }
         }

@@ -816,8 +816,8 @@ namespace HandBrakeWPF.ViewModels
             switch (this.SelectedAnamorphicMode)
             {
                 case Anamorphic.None:
-                    //this.Width = result.OutputWidth;
-                    //this.Height = result.OutputHeight;
+                    // this.Width = result.OutputWidth;
+                    // this.Height = result.OutputHeight;
                     break;
                 case Anamorphic.Strict:
                 case Anamorphic.Loose:
@@ -869,8 +869,6 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedModulus = 16; // Reset
                     this.ShowKeepAR = false;
 
-
-
                     this.Width = 0;
                     this.Height = 0;
                     this.SetDisplaySize();
@@ -884,7 +882,7 @@ namespace HandBrakeWPF.ViewModels
 
                     // Reset to the source size.
                     this.Width = this.sourceResolution.Width;
-                    this.Height = 0; //this.sourceResolution.Height - this.CropTop - this.CropBottom;
+                    this.Height = 0; // this.sourceResolution.Height - this.CropTop - this.CropBottom;
                     this.ShowKeepAR = false;
 
                     this.SetDisplaySize();
@@ -911,7 +909,7 @@ namespace HandBrakeWPF.ViewModels
                         this.DisplayWidth = (this.Width * this.ParWidth / this.ParHeight);
                     }
 
-                    //this.SetDisplaySize();
+                    // this.SetDisplaySize();
                     break;
             }
         }
