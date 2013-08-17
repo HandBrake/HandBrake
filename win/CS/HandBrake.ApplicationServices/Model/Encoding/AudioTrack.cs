@@ -63,8 +63,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
 
-        private string trackName;
-
         #endregion
 
         #region Constructors and Destructors
@@ -367,17 +365,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets or sets the track name.
         /// </summary>
-        public string TrackName
-        {
-            get
-            {
-                return this.trackName;
-            }
-            set
-            {
-                this.trackName = value;
-            }
-        }
+        public string TrackName { get; set; }
 
         #endregion
     }

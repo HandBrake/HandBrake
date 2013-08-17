@@ -156,6 +156,7 @@
     <Compile Include="Converters\Options\OptionsTabNameConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
+    <Compile Include="Converters\Video\EncoderOptionsTooltipConverter.cs" />
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Helpers\AppStyleHelper.cs" />

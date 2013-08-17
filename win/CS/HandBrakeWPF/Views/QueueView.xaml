@@ -9,7 +9,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties"
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
-        xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles" Title="{Binding Title}"
+        xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
+        xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
+        Title="{Binding Title}"
         Width="700"
         Height="500"
         MinWidth="200"
@@ -26,6 +28,7 @@
         <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
         <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
+        <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
 
 
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
@@ -210,7 +213,7 @@
 
 
                                 <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0"  Text="Advanced: " />
-                                <TextBlock Text="{Binding Task.AdvancedEncoderOptions}" Grid.Row="5" Grid.Column="1"  />
+                                <TextBlock Text="{Binding Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"  />
                             </Grid>
 
                         </Setter.Value>
