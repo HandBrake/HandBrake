@@ -92,11 +92,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* Some HandBrake-specific defaults; users can override them
      * using the advanced_opts string. */
-    
-    /* Enable metrics */
-    param.analyse.b_psnr = 1;
-    param.analyse.b_ssim = 1;
-    
     if( job->pass == 2 && job->cfr != 1 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
