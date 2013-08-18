@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -108,8 +109,13 @@ namespace HandBrakeWPF.Services
         /// <param name="e">
         /// The e.
         /// </param>
-        private void QueueProcessorQueueCompleted(object sender, System.EventArgs e)
+        private void QueueProcessorQueueCompleted(object sender, QueueCompletedEventArgs e)
         {
+            if (e.WasManuallyStopped)
+            {
+                return;
+            }
+
             // Do something whent he encode ends.
             switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
             {

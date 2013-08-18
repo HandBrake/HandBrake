@@ -35,7 +35,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Fires when the entire encode queue has completed.
         /// </summary>
-        event EventHandler QueueCompleted;
+        event QueueProcessor.QueueCompletedEventDelegate QueueCompleted;
 
         /// <summary>
         /// Fires when a pause to the encode queue has been requested.
