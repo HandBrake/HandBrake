@@ -214,6 +214,7 @@ BOOL                        fIsDragging;
 	BOOL                           fRipIndicatorShown;
     
     /* Queue File variables */
+    FSEventStreamRef               QueueStream;
     NSString                     * QueueFile;
 	NSMutableArray               * QueueFileArray;
     int                            currentQueueEncodeIndex; // Used to track the currently encoding queueu item
@@ -356,7 +357,10 @@ BOOL                        fIsDragging;
 - (void) doAddAllTitlesToQueue;
 
 /* Queue File Stuff */
+- (void) initQueueFSEvent;
+- (void) closeQueueFSEvent;
 - (void) loadQueueFile;
+- (void) reloadQueue;
 - (NSDictionary *)createQueueFileItem;
 - (void)saveQueueFileItem;
 - (void) incrementQueueItemDone:(int) queueItemDoneIndexNum;

@@ -46,6 +46,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 + (unsigned int) maximumNumberOfAllowedAudioTracks	{	return maximumNumberOfAllowedAudioTracks;	}
 
+- (NSString *)appSupportPath
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *appSupportPath = nil;
+
+    NSArray *allPaths = NSSearchPathForDirectoriesInDomains( NSApplicationSupportDirectory,
+                                                             NSUserDomainMask,
+                                                             YES );
+    if( [allPaths count] )
+        appSupportPath = [[allPaths objectAtIndex:0] stringByAppendingPathComponent:@"HandBrake"];
+
+    if( ![fileManager fileExistsAtPath:appSupportPath] )
+        [fileManager createDirectoryAtPath:appSupportPath withIntermediateDirectories:YES attributes:nil error:NULL];
+
+    return appSupportPath;
+}
+
 - (id)init
 {
     self = [super init];
@@ -65,16 +82,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Check for check for the app support directory here as
      * outputPanel needs it right away, as may other future methods
      */
-    NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
-                                                                NSUserDomainMask,
-                                                                YES ) objectAtIndex:0];
-    AppSupportDirectory = [[libraryDir stringByAppendingPathComponent:@"Application Support"]
-                           stringByAppendingPathComponent:@"HandBrake"];
-    if( ![[NSFileManager defaultManager] fileExistsAtPath:AppSupportDirectory] )
-    {
-        [[NSFileManager defaultManager] createDirectoryAtPath:AppSupportDirectory
-                                                   attributes:nil];
-    }
+    AppSupportDirectory = [self appSupportPath];
     /* Check for and create the App Support Preview directory if necessary */
     NSString *PreviewDirectory = [AppSupportDirectory stringByAppendingPathComponent:@"Previews"];
     if( ![[NSFileManager defaultManager] fileExistsAtPath:PreviewDirectory] )
@@ -225,6 +233,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* Init QueueFile .plist */
     [self loadQueueFile];
+    [self initQueueFSEvent];
     /* Run hbInstances to get any info on other instances as well as set the
      * pid number for this instance in the case of multi-instance encoding. */ 
     hbInstanceNum = [self hbInstances];
@@ -523,6 +532,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             [self setQueueEncodingItemsAsPending];
         }
+        [self reloadQueue];
         [self showQueueWindow:NULL];
     }
 }
@@ -572,6 +582,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // it's highly probable that the user throw a lot of files and just want to reset this
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
     
+    [self closeQueueFSEvent];
     [currentQueueEncodeNameString release];
     [browsedSourceDisplayName release];
     [outputPanel release];
@@ -1231,17 +1242,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             break;
         }
     }
-    
-    /* Since we can use multiple instance off of the same queue file it is imperative that we keep the QueueFileArray updated off of the QueueFile.plist
-     * so we go ahead and do it in this existing timer as opposed to using a new one */
-    
-    NSMutableArray * tempQueueArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
-    [QueueFileArray setArray:tempQueueArray];
-    [tempQueueArray release]; 
-    /* Send Fresh QueueFileArray to fQueueController to update queue window */
-    [fQueueController setQueueArray: QueueFileArray];
+
     [self getQueueStats];
-    
+
     /* Update the visibility of the Auto Passthru advanced options box */
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"ShowAdvancedOptsForAutoPassthru"] == YES)
     {
@@ -2283,21 +2286,80 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #pragma mark -
 #pragma mark Queue File
 
-- (void) loadQueueFile {
+static void queueFSEventStreamCallback(
+                                ConstFSEventStreamRef streamRef,
+                                void *clientCallBackInfo,
+                                size_t numEvents,
+                                void *eventPaths,
+                                const FSEventStreamEventFlags eventFlags[],
+                                const FSEventStreamEventId eventIds[])
+{
+    HBController *hb = (HBController *)clientCallBackInfo;
+    [hb reloadQueue];
+}
+
+- (void)initQueueFSEvent
+{
+    /* Define variables and create a CFArray object containing
+     CFString objects containing paths to watch.
+    */
+    CFStringRef mypath = (CFStringRef) [[self appSupportPath] stringByAppendingPathComponent:@"Queue"];
+    CFArrayRef pathsToWatch = CFArrayCreate(NULL, (const void **)&mypath, 1, NULL);
+
+    FSEventStreamContext callbackCtx;
+    callbackCtx.version			= 0;
+    callbackCtx.info			= self;
+    callbackCtx.retain			= NULL;
+    callbackCtx.release			= NULL;
+    callbackCtx.copyDescription	= NULL;
+
+    CFAbsoluteTime latency = 0.5; /* Latency in seconds */
+
+    /* Create the stream, passing in a callback */
+    QueueStream = FSEventStreamCreate(NULL,
+                                 &queueFSEventStreamCallback,
+                                 &callbackCtx,
+                                 pathsToWatch,
+                                 kFSEventStreamEventIdSinceNow,
+                                 latency,
+                                 kFSEventStreamCreateFlagIgnoreSelf
+                                 );
+
+    /* Create the stream before calling this. */
+    FSEventStreamScheduleWithRunLoop(QueueStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    FSEventStreamStart(QueueStream);
+}
+
+- (void)closeQueueFSEvent
+{
+    FSEventStreamStop(QueueStream);
+    FSEventStreamInvalidate(QueueStream);
+    FSEventStreamRelease(QueueStream);
+}
+
+- (void)loadQueueFile
+{
 	/* We declare the default NSFileManager into fileManager */
-	NSFileManager * fileManager = [NSFileManager defaultManager];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *appSupportPath = [self appSupportPath];
+
 	/* We define the location of the user presets file */
-    QueueFile = @"~/Library/Application Support/HandBrake/Queue.plist";
-	QueueFile = [[QueueFile stringByExpandingTildeInPath]retain];
+    QueueFile = [[appSupportPath stringByAppendingPathComponent:@"Queue/Queue.plist"] retain];
+
     /* We check for the Queue.plist */
-	if ([fileManager fileExistsAtPath:QueueFile] == 0)
+	if( ![fileManager fileExistsAtPath:QueueFile] )
 	{
+        if( ![fileManager fileExistsAtPath:[appSupportPath stringByAppendingPathComponent:@"Queue"]] )
+        {
+            [fileManager createDirectoryAtPath:[appSupportPath stringByAppendingPathComponent:@"Queue"] withIntermediateDirectories:YES attributes:nil error:NULL];
+        }
+
 		[fileManager createFileAtPath:QueueFile contents:nil attributes:nil];
 	}
-    
+
 	QueueFileArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
 	/* lets check to see if there is anything in the queue file .plist */
-    if (nil == QueueFileArray)
+    if( QueueFileArray == nil )
 	{
         /* if not, then lets initialize an empty array */
 		QueueFileArray = [[NSMutableArray alloc] init];
@@ -2305,11 +2367,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     else
     {
         /* ONLY clear out encoded items if we are single instance */
-        if (hbInstanceNum == 1)
+        if( hbInstanceNum == 1 )
         {
             [self clearQueueEncodedItems];
         }
     }
+}
+
+- (void)reloadQueue
+{
+    [self writeToActivityLog:"Queue reloaded"];
+
+    NSMutableArray * tempQueueArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
+    [QueueFileArray setArray:tempQueueArray];
+    [tempQueueArray release];
+    /* Send Fresh QueueFileArray to fQueueController to update queue window */
+    [fQueueController setQueueArray: QueueFileArray];
 }
 
 - (void)addQueueFileItem
