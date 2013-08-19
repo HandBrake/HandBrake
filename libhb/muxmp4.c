@@ -96,7 +96,14 @@ static int MP4Init( hb_mux_object_t * m )
     int subtitle_default;
 
     /* Flags for enabling/disabling tracks in an MP4. */
-    typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
+    enum
+    {
+        TRACK_DISABLED   = 0x0,
+        TRACK_ENABLED    = 0x1,
+        TRACK_IN_MOVIE   = 0x2,
+        TRACK_IN_PREVIEW = 0x4,
+        TRACK_IN_POSTER  = 0x8
+    };
 
     /* Create an empty mp4 file */
     if (job->largeFileSize)
