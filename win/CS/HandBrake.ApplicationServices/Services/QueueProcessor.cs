@@ -546,6 +546,8 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void InvokeQueuePaused(EventArgs e)
         {
+            this.IsProcessing = false;
+
             EventHandler handler = this.QueuePaused;
             if (handler != null)
             {
@@ -566,6 +568,8 @@ namespace HandBrake.ApplicationServices.Services
             {
                 handler(this, e);
             }
+
+            this.IsProcessing = false;
         }
 
         /// <summary>

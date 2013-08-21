@@ -133,6 +133,11 @@
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
+    <Compile Include="Views\CountdownAlertView.xaml.cs">
+      <DependentUpon>CountdownAlertView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DropButton\DropButton.cs" />
     <Compile Include="Controls\TimeSpanBox.xaml.cs">
       <DependentUpon>TimeSpanBox.xaml</DependentUpon>
@@ -335,6 +340,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\CountdownAlertView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\TimeSpanBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -500,7 +509,9 @@
       <Name>HandBrake.Server</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Views\Images\Advanced.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

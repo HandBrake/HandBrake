@@ -817,7 +817,6 @@ namespace HandBrakeWPF.ViewModels
                         return;
                     }
 
-
                     this.SelectedStartPoint = 1;
                     this.SelectedEndPoint = selectedTitle.Chapters != null && selectedTitle.Chapters.Count > 0 ? selectedTitle.Chapters.Last().ChapterNumber : 1;
                 }
@@ -827,7 +826,6 @@ namespace HandBrakeWPF.ViewModels
                     {
                         return;
                     }
-
 
                     this.SelectedStartPoint = 0;
 

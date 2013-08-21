@@ -3,6 +3,7 @@
 	<s:Boolean x:Key="/Default/CodeEditing/Intellisense/CodeCompletion/IntelliSenseCompletingCharacters/IntelliSenseCompletingCharactersSettingCSharp/UpgradedFromVSSettings/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeEditing/Intellisense/LookupWindow/ShowSummary/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeEditing/Localization/CSharpLocalizationOptions/DontAnalyseVerbatimStrings/@EntryValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=HandBrakeWPF_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=CompareOfFloatsByEqualityOperator/@EntryIndexedValue">HINT</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=InconsistentNaming/@EntryIndexedValue">HINT</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=LocalizableElement/@EntryIndexedValue">DO_NOT_SHOW</s:String>
