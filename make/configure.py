@@ -1175,6 +1175,8 @@ def createCLI():
     grp.add_option( '--disable-gst', default=False, action='store_true', help=h )
     h = IfHost( 'enable use of ffmpeg mpeg2 decoding', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-ff-mpeg2', default=False, action='store_true', help=h )
+    h = IfHost( 'enable use of Intel Quick Sync Video hardware acceleration', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
 
     h = IfHost( 'enable use of fdk-aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
@@ -1645,6 +1647,7 @@ int main ()
     doc.add( 'FEATURE.mp4v2',      int( options.enable_mp4v2 ))
     doc.add( 'FEATURE.libmkv',     int( options.enable_libmkv ))
     doc.add( 'FEATURE.avformat',   int( options.enable_avformat ))
+    doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:

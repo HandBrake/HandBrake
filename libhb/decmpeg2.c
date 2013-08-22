@@ -911,6 +911,10 @@ static int decmpeg2Info( hb_work_object_t *w, hb_work_info_t *info )
         info->level = m->info->sequence->profile_level_id & 0xf;
         info->name = "mpeg2";
 
+#ifdef USE_QSV
+        info->qsv_decode_support = 0;
+#endif
+
         if( pv->libmpeg2->info->sequence->flags & SEQ_FLAG_COLOUR_DESCRIPTION )
         {
             switch( pv->libmpeg2->info->sequence->colour_primaries )

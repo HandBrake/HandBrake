@@ -55,6 +55,49 @@ static uint8_t * create_flac_header( uint8_t *data, int size )
     return out;
 }
 
+static uint8_t* create_h264_header(hb_job_t *job, int *size)
+{
+    /* Taken from x264's muxers.c */
+    int avcC_len  = (5 +
+                     1 + 2 + job->config.h264.sps_length +
+                     1 + 2 + job->config.h264.pps_length);
+#define MAX_AVCC_LEN 5 + 1 + 2 + 1024 + 1 + 2 + 1024 // FIXME
+    if (avcC_len > MAX_AVCC_LEN)
+    {
+        hb_log("create_h264_header: H.264 header too long (%d, max: %d)",
+               avcC_len, MAX_AVCC_LEN);
+        return NULL;
+    }
+    uint8_t *avcC = malloc(avcC_len);
+    if (avcC == NULL)
+    {
+        return NULL;
+    }
+
+    avcC[0] = 1;
+    avcC[1] = job->config.h264.sps[1]; /* AVCProfileIndication */
+    avcC[2] = job->config.h264.sps[2]; /* profile_compat */
+    avcC[3] = job->config.h264.sps[3]; /* AVCLevelIndication */
+    avcC[4] = 0xff; // nalu size length is four bytes
+    avcC[5] = 0xe1; // one sps
+
+    avcC[6] = job->config.h264.sps_length >> 8;
+    avcC[7] = job->config.h264.sps_length;
+    memcpy(avcC + 8, job->config.h264.sps, job->config.h264.sps_length);
+
+    avcC[8  + job->config.h264.sps_length] = 1; // one pps
+    avcC[9  + job->config.h264.sps_length] = job->config.h264.pps_length >> 8;
+    avcC[10 + job->config.h264.sps_length] = job->config.h264.pps_length;
+    memcpy(avcC + 11 + job->config.h264.sps_length,
+           job->config.h264.pps, job->config.h264.pps_length);
+
+    if (size != NULL)
+    {
+        *size = avcC_len;
+    }
+    return avcC;
+}
+
 /**********************************************************************
  * MKVInit
  **********************************************************************
@@ -97,33 +140,15 @@ static int MKVInit( hb_mux_object_t * m )
     switch (job->vcodec)
     {
         case HB_VCODEC_X264:
-            track->codecID = MK_VCODEC_MP4AVC;
-            /* Taken from x264 muxers.c */
-            avcC_len = 5 + 1 + 2 + job->config.h264.sps_length + 1 + 2 + job->config.h264.pps_length;
-            avcC = malloc(avcC_len);
-            if (avcC == NULL) {
+        case HB_VCODEC_QSV_H264:
+            avcC = create_h264_header(job, &avcC_len);
+            if (avcC == NULL)
+            {
                 free(track);
                 return -1;
             }
-
-            avcC[0] = 1;
-            avcC[1] = job->config.h264.sps[1];      /* AVCProfileIndication */
-            avcC[2] = job->config.h264.sps[2];      /* profile_compat */
-            avcC[3] = job->config.h264.sps[3];      /* AVCLevelIndication */
-            avcC[4] = 0xff; // nalu size length is four bytes
-            avcC[5] = 0xe1; // one sps
-
-            avcC[6] = job->config.h264.sps_length >> 8;
-            avcC[7] = job->config.h264.sps_length;
-
-            memcpy(avcC+8, job->config.h264.sps, job->config.h264.sps_length);
-
-            avcC[8+job->config.h264.sps_length] = 1; // one pps
-            avcC[9+job->config.h264.sps_length] = job->config.h264.pps_length >> 8;
-            avcC[10+job->config.h264.sps_length] = job->config.h264.pps_length;
-
-            memcpy( avcC+11+job->config.h264.sps_length, job->config.h264.pps, job->config.h264.pps_length );
-            track->codecPrivate = avcC;
+            track->codecID          = MK_VCODEC_MP4AVC;
+            track->codecPrivate     = avcC;
             track->codecPrivateSize = avcC_len;
             if (job->areBframes)
                 track->minCache = 1;
@@ -516,12 +541,12 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
     }
     mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
     mk_setFrameFlags(m->file, mux_data->track, timecode,
-                     (((job->vcodec == HB_VCODEC_X264 || 
-                        (job->vcodec & HB_VCODEC_FFMPEG_MASK)) && 
-                       mux_data == job->mux_data) ? 
-                            (buf->s.frametype == HB_FRAME_IDR) : 
-                            ((buf->s.frametype & HB_FRAME_KEY) != 0)), 0 );
-    hb_buffer_close( &buf );
+                     ((mux_data == job->mux_data &&
+                       ((job->vcodec & HB_VCODEC_H264_MASK) ||
+                        (job->vcodec & HB_VCODEC_FFMPEG_MASK))) ?
+                      (buf->s.frametype == HB_FRAME_IDR)        :
+                      (buf->s.frametype  & HB_FRAME_KEY) != 0), 0);
+    hb_buffer_close(&buf);
     return 0;
 }
 

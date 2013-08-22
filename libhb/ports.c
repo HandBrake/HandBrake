@@ -141,6 +141,27 @@ uint64_t hb_get_date()
     return( (uint64_t) tv.tv_sec * 1000 + (uint64_t) tv.tv_usec / 1000 );
 }
 
+uint64_t hb_get_time_us()
+{
+#ifdef SYS_MINGW
+    static LARGE_INTEGER frequency;
+    LARGE_INTEGER cur_time;
+
+    if (frequency.QuadPart == 0)
+    {
+          QueryPerformanceFrequency(&frequency);
+    }
+
+    QueryPerformanceCounter(&cur_time);
+
+    return (uint64_t)(1000000 * cur_time.QuadPart / frequency.QuadPart);
+#else
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return ((uint64_t)tv.tv_sec * 1000000 + (uint64_t)tv.tv_usec);
+#endif
+}
+
 /************************************************************************
  * hb_snooze()
  ************************************************************************

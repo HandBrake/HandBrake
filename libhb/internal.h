@@ -115,6 +115,12 @@ struct hb_buffer_s
         int           size;
     } plane[4]; // 3 Color components + alpha
 
+    struct qsv
+    {
+        void *qsv_atom;
+        void *filter_details;
+    } qsv_details;
+
     // PICTURESUB subtitle packets:
 
     // Video packets (after processing by the hb_sync_video work-object):
@@ -404,6 +410,7 @@ enum
     WORK_ENCVOBSUB,
     WORK_RENDER,
     WORK_ENCAVCODEC,
+    WORK_ENCQSV,
     WORK_ENCX264,
     WORK_ENCTHEORA,
     WORK_DECA52,
@@ -430,6 +437,12 @@ extern hb_filter_object_t hb_filter_rotate;
 extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_render_sub;
 extern hb_filter_object_t hb_filter_vfr;
+
+#ifdef USE_QSV
+extern hb_filter_object_t hb_filter_qsv;
+extern hb_filter_object_t hb_filter_qsv_pre;
+extern hb_filter_object_t hb_filter_qsv_post;
+#endif
 
 // Picture flags used by filters
 #ifndef PIC_FLAG_REPEAT_FIRST_FIELD

@@ -1,4 +1,8 @@
+ifeq (1,$(FEATURE.qsv))
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC PTHREADW32 LIBMFX))
+else
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC))
+endif
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
 FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v9.6.tar.bz2
@@ -84,6 +88,10 @@ endif
 
 ifeq (none,$(FFMPEG.GCC.O))
 	FFMPEG.CONFIGURE.extra += --disable-optimizations
+endif
+
+ifeq (1,$(FEATURE.qsv))
+   FFMPEG.CONFIGURE.extra += --enable-qsv
 endif
 
 ## enable compile verbosity

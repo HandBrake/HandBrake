@@ -13,6 +13,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#ifdef USE_QSV
+#include "qsv_common.h"
+#endif
+
 #if defined( SYS_MINGW )
 #include <io.h>
 #if defined( PTW32_STATIC_LIB )
@@ -435,6 +439,11 @@ hb_handle_t * hb_init( int verbose, int update_check )
     h->pause_lock = hb_lock_init();
 
     h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
+
+#ifdef USE_QSV
+    /* Intel Quick Sync Video */
+    hb_qsv_info_print();
+#endif
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
@@ -1629,6 +1638,15 @@ int hb_global_init()
         return -1;
     }
 
+#ifdef USE_QSV
+    result = hb_qsv_info_init();
+    if (result < 0)
+    {
+        hb_error("hb_qsv_info_init failed!");
+        return -1;
+    }
+#endif
+
     /* libavcodec */
     hb_avcodec_init();
 
@@ -1663,6 +1681,9 @@ int hb_global_init()
     hb_register(&hb_enctheora);
     hb_register(&hb_encvorbis);
     hb_register(&hb_encx264);
+#ifdef USE_QSV
+    hb_register(&hb_encqsv);
+#endif
     
     hb_common_global_init();
 

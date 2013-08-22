@@ -11,6 +11,11 @@
 #include "a52dec/a52.h"
 #include "libavformat/avformat.h"
 
+#ifdef USE_QSV
+#include "qsv_common.h"
+#include "qsv_filter_pp.h"
+#endif
+
 typedef struct
 {
     hb_list_t * jobs;
@@ -231,8 +236,18 @@ void hb_display_job_info(hb_job_t *job)
     
     hb_log(" * video track");
     
-    hb_log("   + decoder: %s", title->video_codec_name );
-    
+#ifdef USE_QSV
+    if (hb_qsv_decode_is_enabled(job))
+    {
+        hb_log("   + decoder: %s",
+               hb_qsv_decode_get_codec_name(title->video_codec_param));
+    }
+    else
+#endif
+    {
+        hb_log("   + decoder: %s", title->video_codec_name);
+    }
+
     if( title->video_bitrate )
     {
         hb_log( "     + bitrate %d kbps", title->video_bitrate / 1000 );
@@ -307,15 +322,15 @@ void hb_display_job_info(hb_job_t *job)
         {
             hb_log("     + options: %s", job->advanced_opts);
         }
-        if( job->h264_profile && *job->h264_profile &&
-            job->vcodec == HB_VCODEC_X264 )
+        if (job->h264_profile != NULL && *job->h264_profile &&
+            (job->vcodec & HB_VCODEC_H264_MASK))
         {
-            hb_log( "     + h264 profile: %s", job->h264_profile );
+            hb_log("     + h264 profile: %s", job->h264_profile);
         }
-        if( job->h264_level && *job->h264_level &&
-            job->vcodec == HB_VCODEC_X264 )
+        if (job->h264_level != NULL && *job->h264_level &&
+            (job->vcodec & HB_VCODEC_H264_MASK))
         {
-            hb_log( "     + h264 level: %s", job->h264_level );
+            hb_log("     + h264 level: %s", job->h264_level);
         }
 
         if (job->vquality >= 0)
@@ -659,6 +674,114 @@ static void do_job(hb_job_t *job)
         }
     }
 
+#ifdef USE_QSV
+    /*
+     * When QSV is used for decoding, not all CPU-based filters are supported,
+     * so we need to do a little extra setup here.
+     */
+    if (hb_qsv_decode_is_enabled(job))
+    {
+        int vpp_settings[7];
+        int num_cpu_filters = 0;
+        hb_filter_object_t *filter;
+        // default values for VPP filter
+        vpp_settings[0] = job->title->width;
+        vpp_settings[1] = job->title->height;
+        vpp_settings[2] = job->title->crop[0];
+        vpp_settings[3] = job->title->crop[1];
+        vpp_settings[4] = job->title->crop[2];
+        vpp_settings[5] = job->title->crop[3];
+        vpp_settings[6] = 0; // deinterlace: off
+        if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
+        {
+            while (hb_list_count(job->list_filter) > num_cpu_filters)
+            {
+                filter = hb_list_item(job->list_filter, num_cpu_filters);
+                switch (filter->id)
+                {
+                    // cropping and scaling always done via VPP filter
+                    case HB_FILTER_CROP_SCALE:
+                        if (filter->settings == NULL || *filter->settings == '\0')
+                        {
+                            // VPP defaults were set above, so not a problem
+                            // however, this should never happen, print an error
+                            hb_error("do_job: '%s': no settings!", filter->name);
+                        }
+                        else
+                        {
+                            sscanf(filter->settings, "%d:%d:%d:%d:%d:%d",
+                                   &vpp_settings[0], &vpp_settings[1],
+                                   &vpp_settings[2], &vpp_settings[3],
+                                   &vpp_settings[4], &vpp_settings[5]);
+                        }
+                        hb_list_rem(job->list_filter, filter);
+                        hb_filter_close(&filter);
+                        break;
+
+                    // pick VPP or CPU deinterlace depending on settings
+                    case HB_FILTER_DEINTERLACE:
+                        if (filter->settings == NULL || !strcmp(filter->settings, "qsv"))
+                        {
+                            // deinterlacing via VPP filter
+                            vpp_settings[6] = 1;
+                            hb_list_rem(job->list_filter, filter);
+                            hb_filter_close(&filter);
+                        }
+                        else
+                        {
+                            // validated
+                            num_cpu_filters++;
+                        }
+                        break;
+
+                    // then, validated filters
+                    case HB_FILTER_ROTATE: // TODO: use Media SDK for this
+                    case HB_FILTER_RENDER_SUB:
+                        num_cpu_filters++;
+                        break;
+
+                    // finally, drop all unsupported filters
+                    default:
+                        hb_log("do_job: full QSV path, removing unsupported filter '%s'",
+                               filter->name);
+                        hb_list_rem(job->list_filter, filter);
+                        hb_filter_close(&filter);
+                        break;
+                }
+            }
+            if (num_cpu_filters > 0)
+            {
+                // we need filters to copy to system memory and back
+                filter = hb_filter_init(HB_FILTER_QSV_PRE);
+                hb_add_filter(job, filter, NULL);
+                filter = hb_filter_init(HB_FILTER_QSV_POST);
+                hb_add_filter(job, filter, NULL);
+            }
+            if (vpp_settings[0] != job->title->width  ||
+                vpp_settings[1] != job->title->height ||
+                vpp_settings[2] >= 1 /* crop */       ||
+                vpp_settings[3] >= 1 /* crop */       ||
+                vpp_settings[4] >= 1 /* crop */       ||
+                vpp_settings[5] >= 1 /* crop */       ||
+                vpp_settings[6] >= 1 /* deinterlace */)
+            {
+                // we need the VPP filter
+                char *settings = hb_strdup_printf("%d:%d:%d:%d:%d:%d_dei:%d",
+                                                  vpp_settings[0],
+                                                  vpp_settings[1],
+                                                  vpp_settings[2],
+                                                  vpp_settings[3],
+                                                  vpp_settings[4],
+                                                  vpp_settings[5],
+                                                  vpp_settings[6]);
+                filter = hb_filter_init(HB_FILTER_QSV);
+                hb_add_filter(job, filter, settings);
+                free(settings);
+            }
+        }
+    }
+#endif
+
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if( job->list_filter && hb_list_count( job->list_filter ) )
@@ -720,12 +843,25 @@ static void do_job(hb_job_t *job)
             }
         }
     }
-    
-    job->fifo_mpeg2  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
-    job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
-    job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
-    job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
-    job->fifo_render = NULL; // Attached to filter chain
+
+#ifdef USE_QSV
+    if (hb_qsv_decode_is_enabled(job))
+    {
+        job->fifo_mpeg2  = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
+        job->fifo_raw    = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
+        job->fifo_sync   = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
+        job->fifo_render = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
+        job->fifo_mpeg4  = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
+    }
+    else
+#endif
+    {
+        job->fifo_mpeg2  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+        job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+        job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+        job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+        job->fifo_render = NULL; // Attached to filter chain
+    }
 
     /* Audio fifos must be initialized before sync */
     if (!job->indepth_scan)
@@ -1027,6 +1163,9 @@ static void do_job(hb_job_t *job)
             break;
         case HB_VCODEC_X264:
             w = hb_get_work( WORK_ENCX264 );
+            break;
+        case HB_VCODEC_QSV_H264:
+            w = hb_get_work( WORK_ENCQSV );
             break;
         case HB_VCODEC_THEORA:
             w = hb_get_work( WORK_ENCTHEORA );
@@ -1524,8 +1663,27 @@ static void filter_loop( void * _f )
         }
 
         buf_out = NULL;
+
+#ifdef USE_QSV
+        hb_buffer_t *last_buf_in = buf_in;
+#endif
+
         f->status = f->work( f, &buf_in, &buf_out );
 
+#ifdef USE_QSV
+        if (f->status == HB_FILTER_DELAY &&
+            last_buf_in->qsv_details.filter_details != NULL && buf_out == NULL)
+        {
+            hb_filter_private_t_qsv *qsv_user = buf_in ? buf_in->qsv_details.filter_details : last_buf_in->qsv_details.filter_details ;
+            qsv_user->post.status = f->status;
+
+            hb_lock(qsv_user->post.frame_completed_lock);
+            qsv_user->post.frame_go = 1;
+            hb_cond_broadcast(qsv_user->post.frame_completed);
+            hb_unlock(qsv_user->post.frame_completed_lock);
+
+        }
+#endif
         if ( buf_out && f->chapter_val && f->chapter_time <= buf_out->s.start )
         {
             buf_out->s.new_chap = f->chapter_val;

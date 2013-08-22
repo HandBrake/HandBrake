@@ -19,6 +19,11 @@ TEST.GCC.l = \
         samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
         bluray xml2 bz2 z
 
+ifeq (1,$(FEATURE.qsv))
+    TEST.GCC.l += mfx
+    TEST.GCC.D += USE_QSV HAVE_THREADS=1
+endif
+
 ifeq (1,$(FEATURE.fdk_aac))
 TEST.GCC.l += fdk-aac
 endif

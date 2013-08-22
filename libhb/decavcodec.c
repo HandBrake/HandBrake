@@ -42,6 +42,11 @@
 #include "hbffmpeg.h"
 #include "audio_resample.h"
 
+#ifdef USE_QSV
+#include "enc_qsv.h"
+#include "qsv_common.h"
+#endif
+
 static void compute_frame_duration( hb_work_private_t *pv );
 static void flushDelayQueue( hb_work_private_t *pv );
 static int  decavcodecaInit( hb_work_object_t *, hb_job_t * );
@@ -101,7 +106,68 @@ struct hb_work_private_s
     int wait_for_keyframe;
 
     hb_audio_resample_t *resample;
+#ifdef USE_QSV
+    av_qsv_config   qsv_config;
+    int             qsv_decode;
+    const char     *qsv_codec_name;
+#define USE_QSV_PTS_WORKAROUND // work around out-of-order output timestamps
+#ifdef  USE_QSV_PTS_WORKAROUND
+    hb_list_t      *qsv_pts_list;
+#endif
+#endif
 };
+
+#ifdef USE_QSV_PTS_WORKAROUND
+// save/restore PTS if the decoder may not attach the right PTS to the frame
+static void hb_av_add_new_pts(hb_list_t *list, int64_t new_pts)
+{
+    int index = 0;
+    int64_t *cur_item, *new_item;
+    if (list != NULL && new_pts != AV_NOPTS_VALUE)
+    {
+        new_item = malloc(sizeof(int64_t));
+        if (new_item != NULL)
+        {
+            *new_item = new_pts;
+            // sort chronologically
+            for (index = 0; index < hb_list_count(list); index++)
+            {
+                cur_item = hb_list_item(list, index);
+                if (cur_item != NULL)
+                {
+                    if (*cur_item == *new_item)
+                    {
+                        // no duplicates
+                        free(new_item);
+                        return;
+                    }
+                    if (*cur_item > *new_item)
+                    {
+                        // insert here
+                        break;
+                    }
+                }
+            }
+            hb_list_insert(list, index, new_item);
+        }
+    }
+}
+static int64_t hb_av_pop_next_pts(hb_list_t *list)
+{
+    int64_t *item, next_pts = AV_NOPTS_VALUE;
+    if (list != NULL && hb_list_count(list) > 0)
+    {
+        item = hb_list_item(list, 0);
+        if (item != NULL)
+        {
+            next_pts = *item;
+            hb_list_rem(list, item);
+            free(item);
+        }
+    }
+    return next_pts;
+}
+#endif
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts );
 static hb_buffer_t *link_buf_list( hb_work_private_t *pv );
@@ -285,7 +351,12 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         if ( pv->context && pv->context->codec )
         {
-            hb_avcodec_close( pv->context );
+#ifdef USE_QSV
+            if (!pv->qsv_decode)
+#endif
+            {
+                hb_avcodec_close(pv->context);
+            }
         }
         if ( pv->context )
         {
@@ -297,6 +368,19 @@ static void closePrivData( hb_work_private_t ** ppv )
             hb_list_empty( &pv->list );
         }
         hb_audio_resample_free(pv->resample);
+#ifdef USE_QSV_PTS_WORKAROUND
+        if (pv->qsv_decode && pv->qsv_pts_list != NULL)
+
+        {
+            while (hb_list_count(pv->qsv_pts_list) > 0)
+            {
+                int64_t *item = hb_list_item(pv->qsv_pts_list, 0);
+                hb_list_rem(pv->qsv_pts_list, item);
+                free(item);
+            }
+            hb_list_close(&pv->qsv_pts_list);
+        }
+#endif
         free( pv );
     }
     *ppv = NULL;
@@ -593,6 +677,17 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         h =  pv->job->title->height;
     }
     hb_buffer_t *buf = hb_video_buffer_init( w, h );
+
+#ifdef USE_QSV
+    // no need to copy the frame data when decoding with QSV to opaque memory
+    if (pv->qsv_decode &&
+        pv->qsv_config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+    {
+        buf->qsv_details.qsv_atom = frame->data[2];
+        return buf;
+    }
+#endif
+
     uint8_t *dst = buf->data;
 
     if (context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
@@ -795,10 +890,42 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         avp.flags |= AV_PKT_FLAG_KEY;
     }
 
+#ifdef USE_QSV_PTS_WORKAROUND
+    /*
+     * The MediaSDK decoder will return decoded frames in the correct order,
+     * but *sometimes* with the incorrect timestamp assigned to them.
+     *
+     * We work around it by saving the input timestamps (in chronological order)
+     * and restoring them after decoding.
+     */
+    if (pv->qsv_decode && avp.data != NULL)
+    {
+        hb_av_add_new_pts(pv->qsv_pts_list, avp.pts);
+    }
+#endif
+
     if ( avcodec_decode_video2( pv->context, &frame, &got_picture, &avp ) < 0 )
     {
         ++pv->decode_errors;
     }
+
+#ifdef USE_QSV
+    if (pv->qsv_decode && pv->job->qsv == NULL && pv->video_codec_opened > 0)
+    {
+        // this is quite late, but we can't be certain that the QSV context is
+        // available until after we call avcodec_decode_video2() at least once
+        pv->job->qsv = pv->context->priv_data;
+    }
+#endif
+
+#ifdef USE_QSV_PTS_WORKAROUND
+    if (pv->qsv_decode && got_picture)
+    {
+        // we got a decoded frame, restore the lowest available PTS
+        frame.pkt_pts = hb_av_pop_next_pts(pv->qsv_pts_list);
+    }
+#endif
+
     if ( global_verbosity_level <= 1 )
     {
         av_log_set_level( oldlevel );
@@ -998,12 +1125,23 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
     } while ( pos < size );
 
     /* the stuff above flushed the parser, now flush the decoder */
-    if ( size <= 0 )
+    if (size <= 0)
     {
-        while ( decodeFrame( w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0 ) )
+        while (decodeFrame(w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0))
         {
+            continue;
         }
-        flushDelayQueue( pv );
+#ifdef USE_QSV
+        if (pv->qsv_decode)
+        {
+            // flush a second time
+            while (decodeFrame(w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0))
+            {
+                continue;
+            }
+        }
+#endif
+        flushDelayQueue(pv);
     }
 }
 
@@ -1045,14 +1183,52 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
+#ifdef USE_QSV
+    if (hb_qsv_decode_is_enabled(job))
+    {
+        // setup the QSV configuration
+        pv->qsv_config.impl_requested     = MFX_IMPL_AUTO_ANY|MFX_IMPL_VIA_ANY;
+        pv->qsv_config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
+        pv->qsv_config.async_depth        = job->qsv_async_depth;
+        pv->qsv_config.sync_need          =  0;
+        pv->qsv_config.usage_threaded     =  1;
+        pv->qsv_config.additional_buffers = 64; // FIFO_LARGE
+        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_LOOKAHEAD)
+        {
+            // more surfaces may be needed for the lookahead
+            pv->qsv_config.additional_buffers = 160;
+        }
+        pv->qsv_codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
+        pv->qsv_decode     = 1;
+    }
+    else
+    {
+        pv->qsv_decode = 0;
+    }
+#endif
+
     if( pv->job && pv->job->title && !pv->job->title->has_resolution_change )
     {
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
+
     if ( pv->title->opaque_priv )
     {
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
-        AVCodec *codec = avcodec_find_decoder( w->codec_param );
+
+        AVCodec *codec = NULL;
+
+#ifdef USE_QSV
+        if (pv->qsv_decode)
+        {
+            codec = avcodec_find_decoder_by_name(pv->qsv_codec_name);
+        }
+        else
+#endif
+        {
+            codec = avcodec_find_decoder(w->codec_param);
+        }
+
         if ( codec == NULL )
         {
             hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
@@ -1063,6 +1239,17 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+
+#ifdef USE_QSV
+        if (pv->qsv_decode)
+        {
+#ifdef USE_QSV_PTS_WORKAROUND
+            pv->qsv_pts_list = hb_list_init();
+#endif
+            // set the QSV configuration before opening the decoder
+            pv->context->hwaccel_context = &pv->qsv_config;
+        }
+#endif
 
         if ( hb_avcodec_open( pv->context, codec, NULL, pv->threads ) )
         {
@@ -1080,7 +1267,20 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     }
     else
     {
-        AVCodec *codec = avcodec_find_decoder( w->codec_param );
+        AVCodec *codec = NULL;
+
+#ifdef USE_QSV
+        if (pv->qsv_decode)
+        {
+            codec = avcodec_find_decoder_by_name(pv->qsv_codec_name);
+        }
+        else
+#endif
+        {
+            codec = avcodec_find_decoder(w->codec_param);
+        }
+
+
         pv->parser = av_parser_init( w->codec_param );
         pv->context = avcodec_alloc_context3( codec );
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
@@ -1207,7 +1407,19 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // first frame because of M$ VC1 braindamage).
     if ( !pv->video_codec_opened )
     {
-        AVCodec *codec = avcodec_find_decoder( w->codec_param );
+
+        AVCodec *codec = NULL;
+#ifdef USE_QSV
+        if (pv->qsv_decode)
+        {
+            codec = avcodec_find_decoder_by_name(pv->qsv_codec_name);
+        }
+        else
+#endif
+        {
+            codec = avcodec_find_decoder(w->codec_param);
+        }
+
         if ( codec == NULL )
         {
             hb_log( "decavcodecvWork: failed to find codec for id (%d)", w->codec_param );
@@ -1231,6 +1443,18 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_buffer_close( &in );
             return HB_WORK_OK;
         }
+
+#ifdef USE_QSV
+        if (pv->qsv_decode)
+        {
+#ifdef USE_QSV_PTS_WORKAROUND
+            pv->qsv_pts_list = hb_list_init();
+#endif
+            // set the QSV configuration before opening the decoder
+            pv->context->hwaccel_context = &pv->qsv_config;
+        }
+#endif
+
         // disable threaded decoding for scan, can cause crashes
         if ( hb_avcodec_open( pv->context, codec, NULL, pv->threads ) )
         {
@@ -1443,6 +1667,11 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
             break;
         }
     }
+
+#ifdef USE_QSV
+    info->qsv_decode_support = hb_qsv_decode_is_supported(pv->context->codec_id,
+                                                          pv->context->pix_fmt);
+#endif
 
     return 1;
 }

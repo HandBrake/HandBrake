@@ -136,7 +136,7 @@ static int MP4Init( hb_mux_object_t * m )
         return 0;
     }
 
-    if( job->vcodec == HB_VCODEC_X264 )
+    if (job->vcodec & HB_VCODEC_H264_MASK)
     {
         /* Stolen from mp4creator */
         MP4SetVideoProfileLevel( m->file, 0x7F );
@@ -691,8 +691,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     if( mux_data == job->mux_data )
     {
         /* Video */
-        if( job->vcodec == HB_VCODEC_X264 ||
-            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
+        if ((job->vcodec & HB_VCODEC_H264_MASK) ||
+            (job->vcodec & HB_VCODEC_FFMPEG_MASK))
         {
             if ( buf && buf->s.start < buf->s.renderOffset )
             {
@@ -713,8 +713,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
         stop = buf->s.start + buf->s.duration;
 
-        if( job->vcodec == HB_VCODEC_X264 ||
-            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
+        if ((job->vcodec & HB_VCODEC_H264_MASK) ||
+            (job->vcodec & HB_VCODEC_FFMPEG_MASK))
         {
             // x264 supplies us with DTS, so offset is PTS - DTS
             offset = buf->s.start - buf->s.renderOffset;
@@ -751,8 +751,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
         }
 
-        if( job->vcodec == HB_VCODEC_X264 ||
-            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
+        if ((job->vcodec & HB_VCODEC_H264_MASK) ||
+            (job->vcodec & HB_VCODEC_FFMPEG_MASK))
         {
             // x264 supplies us with DTS
             if ( m->delay_buf )
@@ -829,9 +829,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     }
 
     /* Here's where the sample actually gets muxed. */
-    if( ( job->vcodec == HB_VCODEC_X264 ||
-        ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
-        && mux_data == job->mux_data )
+    if (mux_data == job->mux_data && ((job->vcodec & HB_VCODEC_H264_MASK) ||
+                                      (job->vcodec & HB_VCODEC_FFMPEG_MASK)))
     {
         /* Compute dependency flags.
          *

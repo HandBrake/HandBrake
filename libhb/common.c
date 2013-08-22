@@ -12,9 +12,12 @@
 #include <ctype.h>
 #include <sys/time.h>
 
-#include "common.h"
-#include "lang.h"
 #include "hb.h"
+#include "lang.h"
+#include "common.h"
+#ifdef USE_QSV
+#include "qsv_common.h"
+#endif
 
 /**********************************************************************
  * Global variables
@@ -191,6 +194,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "VP3 (Theora)",      "libtheora", HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_THEORA, },
     // actual encoders
     { { "H.264 (x264)",      "x264",      HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264,   },
+    { { "H.264 (Intel QSV)", "qsv_h264",  HB_VCODEC_QSV_H264,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264,   },
     { { "MPEG-4",            "mpeg4",     HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
     { { "MPEG-2",            "mpeg2",     HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
     { { "Theora",            "theora",    HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
@@ -200,6 +204,11 @@ static int hb_video_encoder_is_enabled(int encoder)
 {
     switch (encoder)
     {
+#ifdef USE_QSV
+        case HB_VCODEC_QSV_H264:
+            return hb_qsv_available();
+#endif
+
         // the following encoders are always enabled
         case HB_VCODEC_X264:
         case HB_VCODEC_THEORA:
@@ -2874,6 +2883,12 @@ static void job_setup( hb_job_t * job, hb_title_t * title )
 
     job->list_attachment = hb_attachment_list_copy( title->list_attachment );
     job->metadata = hb_metadata_copy( title->metadata );
+
+#ifdef USE_QSV
+    job->qsv_enc_info.is_init_done = 0;
+    job->qsv_decode                = title->qsv_decode_support;
+    job->qsv_async_depth           = AV_QSV_ASYNC_DEPTH_DEFAULT;
+#endif
 }
 
 static void job_clean( hb_job_t * job )
@@ -3132,6 +3147,20 @@ hb_filter_object_t * hb_filter_init( int filter_id )
         case HB_FILTER_ROTATE:
             filter = &hb_filter_rotate;
             break;
+
+#ifdef USE_QSV
+        case HB_FILTER_QSV:
+            filter = &hb_filter_qsv;
+            break;
+
+        case HB_FILTER_QSV_PRE:
+            filter = &hb_filter_qsv_pre;
+            break;
+
+        case HB_FILTER_QSV_POST:
+            filter = &hb_filter_qsv_post;
+            break;
+#endif
 
         default:
             filter = NULL;

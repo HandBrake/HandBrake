@@ -68,6 +68,10 @@ ifneq ($(HAS.pthread),1)
 endif
 endif
 
+ifeq (1,$(FEATURE.qsv))
+    MODULES += contrib/libmfx
+endif
+
 MODULES += contrib/x264
 
 ifneq (,$(filter $(BUILD.system),cygwin mingw))

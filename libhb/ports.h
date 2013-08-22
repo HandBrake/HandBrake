@@ -36,7 +36,11 @@ extern void ff_cpu_cpuid(int index, int *eax, int *ebx, int *ecx, int *edx);
 /************************************************************************
  * Utils
  ***********************************************************************/
+// provide time in ms
 uint64_t hb_get_date();
+// provide time in us
+uint64_t hb_get_time_us();
+
 void     hb_snooze( int delay );
 int      hb_platform_init();
 #ifdef SYS_MINGW

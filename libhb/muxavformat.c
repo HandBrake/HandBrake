@@ -207,6 +207,7 @@ static int avformatInit( hb_mux_object_t * m )
     switch (job->vcodec)
     {
         case HB_VCODEC_X264:
+        case HB_VCODEC_QSV_H264:
             track->st->codec->codec_id = AV_CODEC_ID_H264;
 
             /* Taken from x264 muxers.c */
@@ -1015,8 +1016,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     pkt.pts = pts;
     pkt.duration = duration;
 
-    if (track->type == MUX_TYPE_VIDEO &&
-        (job->vcodec == HB_VCODEC_X264 || job->vcodec & HB_VCODEC_FFMPEG_MASK))
+    if (track->type == MUX_TYPE_VIDEO && ((job->vcodec & HB_VCODEC_H264_MASK) ||
+                                          (job->vcodec & HB_VCODEC_FFMPEG_MASK)))
     {
         if (buf->s.frametype == HB_FRAME_IDR)
             pkt.flags |= AV_PKT_FLAG_KEY;
