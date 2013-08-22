@@ -20,30 +20,6 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
     public interface IHbServiceCallback
     {
         /// <summary>
-        /// The scan progress.
-        /// </summary>
-        /// <param name="eventArgs">
-        /// The event args.
-        /// </param>
-        [OperationContract(IsOneWay = true)]
-        void ScanProgressCallback(ScanProgressEventArgs eventArgs);
-
-        /// <summary>
-        /// The scan completed.
-        /// </summary>
-        /// <param name="eventArgs">
-        /// The event args.
-        /// </param>
-        [OperationContract(IsOneWay = true)]
-        void ScanCompletedCallback(ScanCompletedEventArgs eventArgs);
-
-        /// <summary>
-        /// The scan started callback.
-        /// </summary>
-        [OperationContract(IsOneWay = true)]
-        void ScanStartedCallback();
-
-        /// <summary>
         /// The encode progress callback.
         /// </summary>
         /// <param name="eventArgs">

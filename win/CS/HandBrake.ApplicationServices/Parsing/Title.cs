@@ -11,10 +11,7 @@ namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using HandBrake.Interop.Model;
 
@@ -113,138 +110,6 @@ namespace HandBrake.ApplicationServices.Parsing
         public string SourceName { get; set; }
 
         #endregion
-
-        /// <summary>
-        /// Parse the Title Information
-        /// </summary>
-        /// <param name="output">
-        /// A StringReader of output data
-        /// </param>
-        /// <param name="isDvdNavDisabled">
-        /// The is Dvd Nav Disabled.
-        /// </param>
-        /// <returns>
-        /// A Title Object
-        /// </returns>
-        public static Title Parse(StringReader output, bool isDvdNavDisabled)
-        {
-            var thisTitle = new Title();
-            string nextLine = output.ReadLine();
-
-            // Get the Title Number
-            Match m = Regex.Match(nextLine, @"^\+ title ([0-9]*):");
-            if (m.Success)
-                thisTitle.TitleNumber = int.Parse(m.Groups[1].Value.Trim());
-            nextLine = output.ReadLine();
-
-            // Detect if this is the main feature
-            m = Regex.Match(nextLine, @"  \+ Main Feature");
-            if (m.Success)
-            {
-                thisTitle.MainTitle = true;
-                nextLine = output.ReadLine();
-            }
-
-            // Get the stream name for file import
-            m = Regex.Match(nextLine, @"^  \+ stream:");
-            if (m.Success)
-            {
-                thisTitle.SourceName = nextLine.Replace("+ stream:", string.Empty).Trim();
-                nextLine = output.ReadLine();
-            }
-
-            // Playlist
-            m = Regex.Match(nextLine, @"^  \+ playlist:");
-            if (m.Success)
-            {
-                thisTitle.Playlist = nextLine.Replace("+ playlist:", string.Empty).Trim();
-                nextLine = output.ReadLine();
-            }
-
-            // Jump over the VTS and blocks line
-            m = Regex.Match(nextLine, @"^  \+ vts:");
-            if (nextLine.Contains("blocks") || nextLine.Contains("+ vts "))
-            {
-                nextLine = output.ReadLine();
-            }
-
-            // Multi-Angle Support if LibDvdNav is enabled
-            m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9]*)");
-            if (m.Success)
-            {
-                string angleList = m.Value.Replace("+ angle(s) ", string.Empty).Trim();
-                int angleCount;
-                int.TryParse(angleList, out angleCount);
-
-                thisTitle.AngleCount = angleCount;
-                nextLine = output.ReadLine();
-            }
-
-            // Get duration for this title
-            m = Regex.Match(nextLine, @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
-            if (m.Success)
-                thisTitle.Duration = TimeSpan.Parse(m.Groups[1].Value);
-
-            // Get resolution, aspect ratio and FPS for this title
-            m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), pixel aspect: ([0-9]*)/([0-9]*), display aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
-            if (m.Success)
-            {
-                thisTitle.Resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                thisTitle.ParVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
-                thisTitle.AspectRatio = Math.Round(float.Parse(m.Groups[5].Value, CultureInfo.InvariantCulture), 2);
-                thisTitle.Fps = float.Parse(m.Groups[6].Value, CultureInfo.InvariantCulture);
-            }
-
-            // Get autocrop region for this title
-            m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
-            if (m.Success)
-            {
-                thisTitle.AutoCropDimensions = new Cropping
-                    {
-                        Top = int.Parse(m.Groups[1].Value),
-                        Bottom = int.Parse(m.Groups[2].Value),
-                        Left = int.Parse(m.Groups[3].Value),
-                        Right = int.Parse(m.Groups[4].Value)
-                    };
-            }
-
-            thisTitle.Chapters.AddRange(Chapter.ParseList(output));
-
-            thisTitle.AudioTracks.AddRange(AudioHelper.ParseList(output));
-
-            thisTitle.Subtitles.AddRange(Subtitle.ParseList(output));
-
-            return thisTitle;
-        }
-
-        /// <summary>
-        /// Return a list of parsed titles
-        /// </summary>
-        /// <param name="output">
-        /// The Output
-        /// </param>
-        /// <param name="isDvdNavDisabled">
-        /// The is Dvd Nav Disabled.
-        /// </param>
-        /// <returns>
-        /// A List of titles
-        /// </returns>
-        public static Title[] ParseList(string output, bool isDvdNavDisabled)
-        {
-            var titles = new List<Title>();
-            var sr = new StringReader(output);
-
-            while (sr.Peek() == '+' || sr.Peek() == ' ')
-            {
-                // If the the character is a space, then chances are the line
-                if (sr.Peek() == ' ') // If the character is a space, then chances are it's the combing detected line.
-                    sr.ReadLine(); // Skip over it
-                else
-                    titles.Add(Parse(sr, isDvdNavDisabled));
-            }
-
-            return titles.ToArray();
-        }
 
         /// <summary>
         /// Calcuate the Duration

@@ -128,10 +128,12 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 return false;
             }
+
             if (ReferenceEquals(this, other))
             {
                 return true;
             }
+
             return other.TrackNumber == this.TrackNumber && object.Equals(other.Language, this.Language) && object.Equals(other.LanguageCode, this.LanguageCode) && object.Equals(other.Format, this.Format);
         }
 
@@ -148,14 +150,17 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 return false;
             }
+
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
+
             if (obj.GetType() != typeof(Audio))
             {
                 return false;
             }
+
             return Equals((Audio)obj);
         }
 
