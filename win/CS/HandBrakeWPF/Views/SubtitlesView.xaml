@@ -109,11 +109,12 @@
                                Margin="10,0,10,0"
                                Source="Images/Movies.png" />
 
-                        <!--  Settings  -->
-                        <Grid Grid.Column="1" HorizontalAlignment="Stretch">
+                        <!--  Standard Subtitle Settings  -->
+                        <Grid Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,8,0,8"
+                              Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" MaxWidth="300" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
@@ -126,65 +127,20 @@
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="28" />
-                                <RowDefinition Height="28" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <!--  Row 1  -->
+  
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Text="Source" />
+                            <ComboBox Grid.Column="1" Height="22" Width="200" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      SelectedItem="{Binding SourceTrack}" />
 
-                            <TextBlock Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Source" />
-                            <ComboBox Grid.Column="1"
-                                      Height="22"
-                                      MaxWidth="300"
-                                      Margin="5,0,5,0"
-                                      HorizontalAlignment="Stretch"
-                                      ItemsSource="{Binding DataContext.SourceTracks,
-                                                            RelativeSource={RelativeSource FindAncestor,
-                                                                                           AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding SourceTrack}"
-                                      Visibility="{Binding IsSrtSubtitle,
-                                                           Converter={StaticResource booleanToVisConverter},
-                                                           ConverterParameter=true}" />
-                            <TextBlock Grid.Column="1"
-                                       VerticalAlignment="Center"
-                                       Text="{Binding SrtFileName}"
-                                       Visibility="{Binding IsSrtSubtitle,
-                                                            Converter={StaticResource booleanToVisConverter},
-                                                            ConverterParameter=false}" />
-
-                            <TextBlock Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Forced Only"
-                                       Visibility="{Binding IsSrtSubtitle,
-                                                            Converter={StaticResource booleanToVisConverter},
-                                                            ConverterParameter=true}" />
-                            <CheckBox Grid.Column="3"
-                                      Margin="5,0,5,0"
-                                      VerticalAlignment="Center"
-                                      IsEnabled="{Binding CanBeForced}"
-                                      IsChecked="{Binding Forced}"
-                                      Visibility="{Binding IsSrtSubtitle,
-                                                           Converter={StaticResource booleanToVisConverter},
-                                                           ConverterParameter=true}" />
-                            <TextBlock Grid.Column="4"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Burn In"
-                                       Visibility="{Binding IsSrtSubtitle,
-                                                            Converter={StaticResource booleanToVisConverter},
-                                                            ConverterParameter=true}" />
-                            <CheckBox Grid.Column="5"
-                                      Margin="5,0,5,0"
-                                      VerticalAlignment="Center"
-                                      IsChecked="{Binding Burned}"
-                                      IsEnabled="{Binding CanBeBurned}"
-                                      Visibility="{Binding IsSrtSubtitle,
-                                                           Converter={StaticResource booleanToVisConverter},
-                                                           ConverterParameter=true}">
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Forced Only" Margin="5,0,0,0" />
+                            <CheckBox Grid.Column="3" Margin="5,0,5,0" VerticalAlignment="Center" IsEnabled="{Binding CanBeForced}" IsChecked="{Binding Forced}" />
+                            
+                            <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Burn In" />
+                            <CheckBox Grid.Column="5" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SelectBurnedInTrack">
@@ -193,14 +149,62 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
-                            <TextBlock Grid.Column="6"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Default" />
-                            <CheckBox Grid.Column="7"
-                                      Margin="5,0,5,0"
-                                      VerticalAlignment="Center"
-                                      IsChecked="{Binding Default}">
+                            
+                            <TextBlock Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="Default" />
+                            <CheckBox Grid.Column="7" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <cal:ActionMessage MethodName="SelectDefaultTrack">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>        
+                        </Grid>
+
+
+                        <!--  SRT Subtitle Settings  -->
+                        <Grid Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,8,0,8"
+                              Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--  Row 1  -->
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Text="Source" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SrtFileName}" Margin="5,0,5,0" Width="80" TextWrapping="NoWrap" TextTrimming="WordEllipsis"
+                                       Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" />
+
+                            <TextBlock  Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Lang" />
+                            <ComboBox  Grid.Column="3" Height="22" Width="100" Margin="5,0,5,0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSrtSubtitle}"
+                                      ItemsSource="{Binding DataContext.Langauges, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      SelectedItem="{Binding SrtLang}" />
+                            
+                            <TextBlock  Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Char Code" />
+                            <ComboBox Grid.Column="5" Width="75" Height="22" Margin="5,0,5,0" IsEnabled="{Binding IsSrtSubtitle}"
+                                      ItemsSource="{Binding DataContext.CharacterCodes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      SelectedItem="{Binding SrtCharCode}" />
+                            
+                            <TextBlock Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="Offset (ms)" />
+                            <controls:NumberBox Grid.Column="7" Width="65" Height="24" Margin="5,0,5,0" Minimum="-900000" Maximum="900000" 
+                                                IsEnabled="{Binding IsSrtSubtitle}" Number="{Binding SrtOffset, Mode=TwoWay}" />
+
+                            <TextBlock Grid.Column="8" VerticalAlignment="Center" FontWeight="Bold" Text="Default" />
+                            <CheckBox Grid.Column="9" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SelectDefaultTrack">
@@ -210,48 +214,6 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <!--  Row 2  -->
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Language" />
-                            <ComboBox Grid.Row="1"
-                                      Grid.Column="1"
-                                      Height="22"
-                                      MaxWidth="300"
-                                      Margin="5,0,5,0"
-                                      HorizontalAlignment="Stretch"
-                                      IsEnabled="{Binding IsSrtSubtitle}"
-                                      ItemsSource="{Binding DataContext.Langauges,
-                                                            RelativeSource={RelativeSource FindAncestor,
-                                                                                           AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding SrtLang}" />
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Char Code" />
-                            <ComboBox Grid.Row="1"
-                                      Grid.Column="3"
-                                      Width="100"
-                                      Height="22"
-                                      Margin="5,0,5,0"
-                                      IsEnabled="{Binding IsSrtSubtitle}"
-                                      ItemsSource="{Binding DataContext.CharacterCodes,
-                                                            RelativeSource={RelativeSource FindAncestor,
-                                                                                           AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding SrtCharCode}" />
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="4"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Offset (ms)" />
-
-                            <controls:NumberBox Grid.Row="1" Grid.Column="5" Width="65" Height="24" Margin="5,0,5,0"
-                                            Minimum="-900000" Maximum="900000" IsEnabled="{Binding IsSrtSubtitle}"
-                                            Number="{Binding SrtOffset, Mode=TwoWay}" />
-                            
                         </Grid>
 
                         <!--  Delete  -->
