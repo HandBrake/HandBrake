@@ -11,6 +11,7 @@
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
              xmlns:dropButton="clr-namespace:HandBrakeWPF.Controls.DropButton"
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
+             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              d:DesignHeight="170"
              d:DesignWidth="616"
              mc:Ignorable="d"
@@ -82,7 +83,7 @@
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSHDPass}" />
                 <TextBlock Margin="5,0,5,0" Text="Fallback:" />
 
-                <ComboBox Grid.Column="3" VerticalAlignment="Center"
+                <ComboBox VerticalAlignment="Center"
                                       Width="100"
                                       Height="22"
                                       Margin="10,0,5,0">
@@ -166,10 +167,10 @@
                                Source="Images/Movies.png" />
 
                         <!--  Settings  -->
-                        <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch">
+                        <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,5,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" MaxWidth="160" />
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
@@ -183,33 +184,16 @@
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="28" />
-                                <RowDefinition Height="28" />
                             </Grid.RowDefinitions>
 
                             <!--  Row 1  -->
-
-                            <TextBlock Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Source" />
-                            <ComboBox Grid.Column="1"
-                                      Height="22"
-                                      MaxWidth="150"
-                                      Margin="5,0,5,0"
-                                      HorizontalAlignment="Stretch"
-                                      ItemsSource="{Binding DataContext.SourceTracks,
-                                                            RelativeSource={RelativeSource FindAncestor,
-                                                                                           AncestorType={x:Type UserControl}}}"
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Text="Source" />
+                            <ComboBox Grid.Column="1" Height="22" Width="100" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding ScannedTrack}" />
-
-                            <TextBlock Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Codec" />
-                            <ComboBox Grid.Column="3"
-                                      Width="100"
-                                      Height="22"
-                                      Margin="5,0,5,0">
+                            
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Codec" />
+                            <ComboBox Grid.Column="3" Width="100" Height="22" Margin="5,0,5,0">
                                 <ComboBox.SelectedItem>
                                     <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                         <Binding Path="Encoder" />
@@ -223,130 +207,34 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                            <TextBlock Grid.Column="4"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Bitrate"
-                                       Visibility="{Binding CannotSetBitrate,
-                                                            Converter={StaticResource boolToVisConverter},
-                                                            ConverterParameter=true}" />
-                            <ComboBox Grid.Column="5"
-                                      Width="70"
-                                      Height="22"
-                                      Margin="5,0,5,0"
-                                      ItemsSource="{Binding TrackReference,
-                                                            Converter={StaticResource audioBitrateConverter}}"
+                            <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Bitrate"
+                                       Visibility="{Binding CannotSetBitrate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding TrackReference, Converter={StaticResource audioBitrateConverter}}"
                                       SelectedItem="{Binding Bitrate}"
-                                      Visibility="{Binding CannotSetBitrate,
-                                                           Converter={StaticResource boolToVisConverter},
-                                                           ConverterParameter=true}" />
+                                      Visibility="{Binding CannotSetBitrate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                            <TextBlock Grid.Column="6"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Samplerate"
-                                       Visibility="{Binding IsPassthru,
-                                                            Converter={StaticResource boolToVisConverter},
-                                                            ConverterParameter=true}" />
-                            <ComboBox Grid.Column="7"
-                                      Width="70"
-                                      Height="22"
-                                      Margin="5,0,5,0"
-                                      ItemsSource="{Binding DataContext.SampleRates,
-                                                            RelativeSource={RelativeSource FindAncestor,
-                                                                                           AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding SampleRateDisplayValue}"
-                                      Visibility="{Binding IsPassthru,
-                                                           Converter={StaticResource boolToVisConverter},
-                                                           ConverterParameter=true}" />
-
+      
                             <!--  Row 2  -->
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Mixdown"
-                                       Visibility="{Binding IsPassthru,
-                                                            Converter={StaticResource boolToVisConverter},
-                                                            ConverterParameter=true}" />
-                            <ComboBox Grid.Row="1"
-                                      Grid.Column="1"
-                                      Height="22"
-                                      MaxWidth="300"
-                                      Margin="5,0,5,0"
-                                      HorizontalAlignment="Stretch"
-                                      ItemsSource="{Binding DataContext.AudioMixdowns,
-                                                            Converter={StaticResource enumComboConverter},
-                                                            RelativeSource={RelativeSource FindAncestor,
-                                                                                           AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding MixDown,
-                                                             Converter={StaticResource enumComboConverter}}"
-                                      Visibility="{Binding IsPassthru,
-                                                           Converter={StaticResource boolToVisConverter},
-                                                           ConverterParameter=true}" />
+                            <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="Mixdown"
+                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding DataContext.AudioMixdowns, Converter={StaticResource enumComboConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      SelectedItem="{Binding MixDown, Converter={StaticResource enumComboConverter}}"
+                                      Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="DRC"
-                                       Visibility="{Binding IsPassthru,
-                                                            Converter={StaticResource boolToVisConverter},
-                                                            ConverterParameter=true}" />
+             
 
-                            <NumericUpDown:NumericUpDown Name="drcNumericCtl"
-                                                         Grid.Row="1"
-                                                         Grid.Column="3"
-                                                         Width="45"
-                                                         Margin="5,0,5,0"
-                                                         HorizontalAlignment="Left"
-                                                         DecimalPlace="1"
-                                                         LargeChange="0.1"
-                                                         Maximum="4"
-                                                         Minimum="0"
-                                                         SmallChange="0.1"
-                                                         Visibility="{Binding IsPassthru,
-                                                                              Converter={StaticResource boolToHiddenVisConverter},
-                                                                              ConverterParameter=true}"
-                                                         Value="{Binding DRC,
-                                                                         Mode=TwoWay}" />
-
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="4"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Text="Gain"
-                                       Visibility="{Binding IsPassthru,
-                                                            Converter={StaticResource boolToVisConverter},
-                                                            ConverterParameter=true}" />
-                            <NumericUpDown:NumericUpDown Name="gainNumericCtl"
-                                                         Grid.Row="1"
-                                                         Grid.Column="5"
-                                                         Width="45"
-                                                         Margin="5,0,5,0"
-                                                         HorizontalAlignment="Left"
-                                                         DecimalPlace="0"
-                                                         LargeChange="1"
-                                                         Maximum="20"
-                                                         Minimum="-20"
-                                                         SmallChange="1"
-                                                         Visibility="{Binding IsPassthru,
-                                                                              Converter={StaticResource boolToHiddenVisConverter},
-                                                                              ConverterParameter=true}"
-                                                         Value="{Binding Gain,
-                                                                         Mode=TwoWay}" />
-
-                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2"
-                                          FontWeight="Bold" Height="22" Padding="4,0" HorizontalAlignment="Left" >
+                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="2"
+                                           Padding="3,0" Height="22" HorizontalAlignment="Left" >
                                 <ToggleButton.Style>
                                     <Style TargetType="{x:Type ToggleButton}">
-                                        <Setter Property="Content" Value="Show Advanced"/>
+                                        <Setter Property="Content" Value="Show"/>
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
-                                                <Setter Property="Content" Value="Hide Advanced"/>
+                                                <Setter Property="Content" Value="Hide"/>
                                             </Trigger>
                                             <Trigger Property="IsChecked" Value="False">
-                                                <Setter Property="Content" Value="Show Advanced"/>
+                                                <Setter Property="Content" Value="Show"/>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -371,10 +259,32 @@
                         <!-- Hidden Row -->
                         <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsChecked, ElementName=advancedOptionsToggle, Converter={StaticResource boolToVisConverter}}">
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,5" >
-                                <TextBlock Text="Track Name:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,5,0" />
+
+                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="Samplerate"
+                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                                <ComboBox Width="70" Height="22" Margin="5,0,5,0"
+                                      ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      SelectedItem="{Binding SampleRateDisplayValue}"
+                                      Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+
+                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="DRC"
+                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+
+                                <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left"
+                                                    Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                                    Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
+
+                                <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="Gain"
+                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+
+                                <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left"
+                                                    Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                                    Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
+
+                                <TextBlock Text="Track Name:" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,5,0" />
                                 <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="138" Height="22" />
-                            </StackPanel>
-                                
+
+                            </StackPanel>       
                         </Grid>
                     </Grid>
 

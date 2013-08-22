@@ -162,7 +162,6 @@
                             </CheckBox>        
                         </Grid>
 
-
                         <!--  SRT Subtitle Settings  -->
                         <Grid Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,8,0,8"
                               Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" >

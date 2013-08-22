@@ -105,7 +105,7 @@
         <StackPanel Name="CropPanel" Margin="50,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Label Content="Cropping" FontWeight="Bold" />
             <RadioButton Content="Automatic" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"/>
-            <RadioButton Content="Custom" IsChecked="{Binding IsCustomCrop}" Margin="10,0,0,0" />
+            <RadioButton Content="Custom" IsChecked="{Binding IsCustomCrop}" Margin="10,5,0,0" />
 
             <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
