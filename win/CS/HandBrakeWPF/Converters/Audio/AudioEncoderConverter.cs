@@ -73,7 +73,12 @@ namespace HandBrakeWPF.Converters.Audio
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValuesSubset(encoders);
             }
 
-            return EnumHelper<AudioEncoder>.GetDisplay((AudioEncoder)values[0]);
+            if (values.Any())
+            {
+                return EnumHelper<AudioEncoder>.GetDisplay((AudioEncoder)values[0]);
+            }
+
+            return EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffaac);           
         }
 
         /// <summary>
