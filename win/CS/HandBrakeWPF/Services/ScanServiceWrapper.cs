@@ -13,8 +13,6 @@ namespace HandBrakeWPF.Services
 {
     using System;
 
-    using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Isolation;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -47,42 +45,10 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanServiceWrapper"/> class.
         /// </summary>
-        /// <param name="userSettingService">
-        /// The user setting service.
-        /// </param>
-        public ScanServiceWrapper(IUserSettingService userSettingService)
+        public ScanServiceWrapper()
         {
-            var useLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
-            var useProcessIsolation =
-                userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
-            string port = userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);
-
-            if (useLibHb)
-            {
-                try
-                {
-                    if (useProcessIsolation)
-                    {
-                        this.scanService = new IsolatedScanService(port);
-                    }
-                    else
-                    {
-                        HandbrakeInstance = new HandBrakeInstance();
-                        this.scanService = new LibScan(HandbrakeInstance);
-                    }
-                } 
-                catch(Exception exc)
-                {
-                    // Try to recover from errors.
-                    userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, false);
-                    throw new GeneralApplicationException("Unable to initialise LibHB or Background worker service", "Falling back to using HandBrakeCLI.exe. Setting has been reset", exc);
-                }
-            }
-            else
-            {
-                this.scanService = new ScanService(userSettingService);
-            }
-
+            HandbrakeInstance = new HandBrakeInstance();
+            this.scanService = new LibScan(HandbrakeInstance);
             this.scanService.ScanCompleted += this.ScanServiceScanCompleted;
             this.scanService.ScanStared += this.ScanServiceScanStared;
             this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
