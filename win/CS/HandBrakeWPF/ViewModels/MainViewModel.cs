@@ -1360,21 +1360,6 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxImage.Information);
         }
 
-        /// <summary>
-        /// The debug scan log.
-        /// </summary>
-        public void DebugScanLog()
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-
-            dialog.ShowDialog();
-
-            if (File.Exists(dialog.FileName))
-            {
-                this.scanService.DebugScanLog(dialog.FileName);
-            }
-        }
-
         #endregion
 
         #region Main Window Public Methods
@@ -1915,7 +1900,6 @@ namespace HandBrakeWPF.ViewModels
             int.TryParse(
                 Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture),
                 out percent);
-
 
             Execute.OnUIThread(
                 () =>

@@ -105,12 +105,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 return this.Description;
             }
 
-            if (this.Description == null)
-            {
-                return string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.Format);
-            }
-
-            return string.Format("{0} {1} ({2}) ({3})", this.TrackNumber, this.Language, this.Format, this.Description);
+            return string.Format("{0} {1}", this.TrackNumber, this.Description);
         }
 
         /// <summary>
