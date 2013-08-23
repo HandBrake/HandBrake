@@ -19,10 +19,6 @@ namespace HandBrakeWPF.Converters
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter
     {
-        #region Implemented Interfaces
-
-        #region IValueConverter
-
         /// <summary>
         /// The convert.
         /// </summary>
@@ -73,9 +69,5 @@ namespace HandBrakeWPF.Converters
         {
             throw new NotSupportedException();
         }
-
-        #endregion
-
-        #endregion
     }
 }

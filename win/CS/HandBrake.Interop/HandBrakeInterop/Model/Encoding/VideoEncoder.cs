@@ -22,6 +22,9 @@ namespace HandBrake.Interop.Model.Encoding
         [ShortName("x264")]
 		X264 = 0,
 
+        [Display(Name = "H.264 (Intel QSV)")]
+        QuickSync,
+
 		[Display(Name = "MPEG-4 (FFmpeg)")]
         [ShortName("mpeg4")]
 		FFMpeg,

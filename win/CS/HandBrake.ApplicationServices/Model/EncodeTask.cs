@@ -46,6 +46,7 @@ namespace HandBrake.ApplicationServices.Model
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             this.AllowedPassthruOptions = new AllowedPassthru();
             this.X264Preset = x264Preset.Medium;
+            this.QsvPreset = QsvPreset.Quality;
             this.H264Profile = x264Profile.None;
             this.X264Tune = x264Tune.None;
             this.Modulus = 16;
@@ -126,6 +127,7 @@ namespace HandBrake.ApplicationServices.Model
             this.VideoEncodeRateType = task.VideoEncodeRateType;
             this.Width = task.Width;
             this.X264Preset = task.X264Preset;
+            this.QsvPreset = task.QsvPreset;
             this.H264Profile = task.H264Profile;
             this.X264Tune = task.X264Tune;
             this.H264Level = task.H264Level;
@@ -416,6 +418,11 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets x264Preset.
         /// </summary>
         public x264Preset X264Preset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the qsv preset.
+        /// </summary>
+        public QsvPreset QsvPreset { get; set; }
 
         /// <summary>
         /// Gets or sets x264Profile.

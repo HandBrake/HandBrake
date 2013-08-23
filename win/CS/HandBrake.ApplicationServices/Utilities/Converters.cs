@@ -292,6 +292,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return VideoEncoder.FFMpeg2;
                 case "x264":
                     return VideoEncoder.X264;
+                case "qsv_h264":
+                    return VideoEncoder.QuickSync;
                 case "theora":
                     return VideoEncoder.Theora;
                 default:
@@ -318,6 +320,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "mpeg2";
                 case VideoEncoder.X264:
                     return "x264";
+                case VideoEncoder.QuickSync:
+                    return "qsv_h264";
                 case VideoEncoder.Theora:
                     return "theora";
                 default:

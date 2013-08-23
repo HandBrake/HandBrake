@@ -166,6 +166,7 @@
     <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\OutputExtension.cs" />
     <Compile Include="Model\Encoding\Container.cs" />
+    <Compile Include="Model\Encoding\QsvPreset.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\Encoding\VideoEncodeRateType.cs" />
     <Compile Include="Model\Encoding\x264\x264Preset.cs" />

@@ -427,6 +427,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 case VideoEncoder.X264:
                     query += " -e x264";
                     break;
+                case VideoEncoder.QuickSync:
+                    query += " -e qsv_h264";
+                    break;
                 case VideoEncoder.Theora:
                     query += " -e theora";
                     break;
@@ -575,7 +578,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     firstLoop = false;
                 }
                 else
-                    audioItems += "," +  Converters.GetCliAudioEncoder(item);
+                    audioItems += "," + Converters.GetCliAudioEncoder(item);
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -E " + audioItems;
@@ -724,10 +727,10 @@ namespace HandBrake.ApplicationServices.Utilities
                     {
                         query += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
                     }
-                } 
+                }
                 else
                 {
-                    query += string.Format(" --audio-copy-mask none");  
+                    query += string.Format(" --audio-copy-mask none");
                 }
 
                 query += string.Format(" --audio-fallback {0}", Converters.GetCliAudioEncoder(task.AllowedPassthruOptions.AudioEncoderFallback));
@@ -897,22 +900,17 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         private static string AdvancedQuery(EncodeTask task)
         {
+            string query = string.Empty;
+
+            // X264 Only
             if (task.VideoEncoder == VideoEncoder.X264)
             {
-                string query = string.Empty; 
-                
                 if (!task.ShowAdvancedTab)
                 {
                     if (task.X264Preset != x264Preset.Medium)
                     {
                         query += string.Format(
                             " --x264-preset={0} ", task.X264Preset.ToString().ToLower().Replace(" ", string.Empty));
-                    }
-
-                    if (task.H264Profile != x264Profile.None)
-                    {
-                        query += string.Format(
-                            " --x264-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
                     }
 
                     if (task.X264Tune != x264Tune.None)
@@ -933,23 +931,69 @@ namespace HandBrake.ApplicationServices.Utilities
                         query += string.Format(" --x264-tune=\"{0}\" ", tune);
                     }
 
-                    if (task.H264Level != "Auto")
-                    {
-                        query += string.Format(" --h264-level=\"{0}\" ", task.H264Level);
-                    }
-
                     if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
                     {
                         query += string.Format(" -x {0}", task.ExtraAdvancedArguments);
                     }
-
                 }
-                else
+            }
+
+            // Options that apply to both x264 and QuickSync
+            if (task.VideoEncoder == VideoEncoder.QuickSync || task.VideoEncoder == VideoEncoder.X264)
+            {
+                if (task.H264Level != "Auto")
                 {
-                    if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))
+                    query += string.Format(" --h264-level=\"{0}\" ", task.H264Level);
+                }
+
+                if (task.H264Profile != x264Profile.None)
+                {
+                    query += string.Format(
+                        " --h264-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
+                }
+
+                if (task.VideoEncoder == VideoEncoder.QuickSync)
+                {
+                    string qsvPreset;
+
+                    if (SystemInfo.IsHswOrNewer)
                     {
-                        query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
+                        switch (task.QsvPreset)
+                        {
+                            case QsvPreset.Speed:
+                                qsvPreset = "6";
+                                break;
+                            case QsvPreset.Balanced:
+                                qsvPreset = "4";
+                                break;
+                            default:
+                                qsvPreset = "2";
+                                break;
+                        }
                     }
+                    else
+                    {
+                        switch (task.QsvPreset)
+                        {
+                            case QsvPreset.Speed:
+                                qsvPreset = "4";
+                                break;
+                            case QsvPreset.Balanced:
+                                qsvPreset = "2";
+                                break;
+                            default:
+                                qsvPreset = "2";
+                                break;
+                        }
+                    }
+
+                    query += string.IsNullOrEmpty(task.AdvancedEncoderOptions)
+                                 ? string.Format(" -x target-usage={0}", qsvPreset)
+                                 : string.Format(" -x target-usage={0}:{1}", qsvPreset, task.AdvancedEncoderOptions);
+                }
+                else if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))  // Not a H.264 encode
+                {
+                    query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
                 }
 
                 return query;

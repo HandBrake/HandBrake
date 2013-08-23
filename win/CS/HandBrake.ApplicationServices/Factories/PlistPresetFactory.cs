@@ -238,6 +238,9 @@ namespace HandBrake.ApplicationServices.Factories
                 case "h264Level":
                     preset.Task.H264Level = kvp.Value;
                     break;
+                case "QsvPreset":
+                    preset.Task.QsvPreset = EnumHelper<QsvPreset>.GetValue(kvp.Value, true);
+                    break;
 
                 // Chapter Markers Tab
                 case "ChapterMarkers":
