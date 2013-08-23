@@ -396,5 +396,9 @@ namespace HandBrake.Interop.HbLib
 			[In] [MarshalAs(UnmanagedType.LPStr)] string h264_level,
 			int width,
 			int height);
+
+
+        [DllImport("hb.dll", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_qsv_available();
 	}
 }

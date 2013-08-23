@@ -9,8 +9,11 @@
 
 namespace HandBrake.ApplicationServices.Utilities
 {
+    using System;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
+
+    using HandBrake.Interop.HbLib;
 
     using Microsoft.Win32;
 
@@ -56,6 +59,25 @@ namespace HandBrake.ApplicationServices.Utilities
         public static Screen ScreenBounds
         {
             get { return Screen.PrimaryScreen; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is qsv available.
+        /// </summary>
+        public static bool IsQsvAvailable
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_qsv_available() == 1;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
         }
 
         /// <summary>
