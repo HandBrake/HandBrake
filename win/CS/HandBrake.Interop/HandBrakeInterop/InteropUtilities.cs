@@ -13,7 +13,7 @@ namespace HandBrake.Interop
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.InteropServices;
-
+	using System.Text;
 	using HandBrake.Interop.HbLib;
 	using Model.Encoding;
 
@@ -31,6 +31,30 @@ namespace HandBrake.Interop
 		public static T ReadStructure<T>(IntPtr structPtr)
 		{
 			return (T)Marshal.PtrToStructure(structPtr, typeof(T));
+		}
+
+		/// <summary>
+		/// Reads the given native UTF-8 string.
+		/// </summary>
+		/// <param name="stringPtr">The pointer to the string.</param>
+		/// <returns>The resulting string.</returns>
+		public static string ReadUtf8Ptr(IntPtr stringPtr)
+		{
+			var data = new List<byte>();
+			var ptr = stringPtr;
+			var offset = 0;
+			while (true)
+			{
+				byte ch = Marshal.ReadByte(ptr, offset++);
+				if (ch == 0)
+				{
+					break;
+				}
+
+				data.Add(ch);
+			}
+
+			return Encoding.UTF8.GetString(data.ToArray());
 		}
 
 		/// <summary>

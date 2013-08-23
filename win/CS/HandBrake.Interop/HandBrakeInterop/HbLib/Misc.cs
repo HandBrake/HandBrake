@@ -77,6 +77,23 @@ namespace HandBrake.Interop.HbLib
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
+	public struct iso639_lang_t
+	{
+		public IntPtr eng_name;
+
+		public IntPtr native_name;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string iso639_1;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string iso639_2;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string iso639_2b;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_encoder_s
 	{
 		[MarshalAs(UnmanagedType.LPStr)]

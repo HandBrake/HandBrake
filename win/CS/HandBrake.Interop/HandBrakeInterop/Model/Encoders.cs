@@ -263,6 +263,29 @@ namespace HandBrake.Interop.Model
 		}
 
 		/// <summary>
+		/// Gets the video quality limits for the given video codec.
+		/// </summary>
+		/// <param name="encoder">The video encoder to check.</param>
+		/// <returns>Limits on the video quality for the encoder.</returns>
+		public static VideoQualityLimits GetVideoQualityLimits(HBVideoEncoder encoder)
+		{
+			float low = 0;
+			float high = 0;
+			float granularity = 0;
+			int direction = 0;
+
+			HBFunctions.hb_video_quality_get_limits((uint)encoder.Id, ref low, ref high, ref granularity, ref direction);
+
+			return new VideoQualityLimits
+				{
+					Low = low,
+					High = high,
+					Granularity = granularity,
+					Ascending = direction == 0
+				};
+		}
+
+		/// <summary>
 		/// Sanitizes an audio bitrate given the output codec, sample rate and mixdown.
 		/// </summary>
 		/// <param name="audioBitrate">The desired audio bitrate.</param>

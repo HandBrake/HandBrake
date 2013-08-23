@@ -123,7 +123,8 @@ namespace HandBrake.Interop.Model.Encoding
 				Framerate = this.Framerate,
 				ConstantFramerate = this.ConstantFramerate,
 
-				AudioEncodings = new List<AudioEncoding>(this.AudioEncodings)
+				AudioEncodings = new List<AudioEncoding>(this.AudioEncodings),
+				AudioEncoderFallback = this.AudioEncoderFallback
 			};
 
 			return profile;

@@ -146,8 +146,8 @@ namespace HandBrake.Interop
 		{
 			if (!string.IsNullOrEmpty(message))
 			{
-				// This error happens in normal operations. Log it as a message.
-				if (message == "dvd: ifoOpen failed")
+				// These errors happen in normal operations. Log them as messages.
+				if (message == "dvd: ifoOpen failed" || message.Contains("avformat_seek_file failed"))
 				{
 					SendMessageEvent(message);
 					return;
@@ -222,7 +222,6 @@ namespace HandBrake.Interop
 				throw new ArgumentException("height must be positive.");
 			}
 
-			HBFunctions.hb_init(0, 0);
 			IntPtr ptr = HBFunctions.hb_x264_param_unparse(
 				preset,
 				string.Join(",", tunes),

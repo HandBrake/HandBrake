@@ -9,34 +9,40 @@
 
 namespace HandBrake.Interop
 {
-    /// <summary>
+	/// <summary>
 	/// Represents a language.
 	/// </summary>
 	public class Language
 	{
 		/// <summary>
-		/// Initializes a new instance of the Language class.
+		/// Gets or sets the english name of the language.
 		/// </summary>
-		/// <param name="code">The code for the langauge.</param>
-		public Language(string code)
-		{
-			this.Code = code;
-		}
+		public string EnglishName { get; set; }
 
 		/// <summary>
-		/// Gets the friendly name of the language.
+		/// Gets or sets the native name of the language.
 		/// </summary>
-		public string Name
-		{
-			get
-			{
-				return LanguageCodes.Decode(this.Code);
-			}
-		}
+		public string NativeName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the language code.
 		/// </summary>
 		public string Code { get; set; }
+
+		/// <summary>
+		/// Gets the display string for the language.
+		/// </summary>
+		public string Display
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(this.NativeName) && this.NativeName != this.EnglishName)
+				{
+					return this.EnglishName + " (" + this.NativeName + ")";
+				}
+
+				return this.EnglishName;
+			}
+		}
 	}
 }

@@ -1650,14 +1650,12 @@ namespace HandBrake.Interop
 
 			nativeAudio.config.output.track = outputTrack;
 			nativeAudio.config.output.codec = (uint)encoder.Id;
+			nativeAudio.config.output.compression_level = -1;
+			nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
 
 			if (!encoder.IsPassthrough)
 			{
-				if (encoding.SampleRateRaw == 0)
-				{
-					nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
-				}
-				else
+				if (encoding.SampleRateRaw != 0)
 				{
 					nativeAudio.config.output.samplerate = encoding.SampleRateRaw;
 				}
@@ -1668,7 +1666,7 @@ namespace HandBrake.Interop
 				if (encoding.EncodeRateType == AudioEncodeRateType.Bitrate)
 				{
 					// Disable quality targeting.
-					nativeAudio.config.output.quality = -1;
+					nativeAudio.config.output.quality = -3;
 
 					if (encoding.Bitrate == 0)
 					{

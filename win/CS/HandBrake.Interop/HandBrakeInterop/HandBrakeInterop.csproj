@@ -143,7 +143,7 @@
     <Compile Include="Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="InteropUtilities.cs" />
     <Compile Include="Language.cs" />
-    <Compile Include="LanguageCodes.cs" />
+    <Compile Include="Languages.cs" />
     <Compile Include="MarshalingConstants.cs" />
     <Compile Include="EventArgs\MessageLoggedEventArgs.cs" />
     <Compile Include="Model\Cropping.cs" />
@@ -178,6 +178,7 @@
     <Compile Include="Model\SourceType.cs" />
     <Compile Include="Model\SrtSubtitle.cs" />
     <Compile Include="Model\Subtitles.cs" />
+    <Compile Include="Model\VideoQualityLimits.cs" />
     <Compile Include="Model\VideoRangeType.cs" />
     <Compile Include="NativeList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

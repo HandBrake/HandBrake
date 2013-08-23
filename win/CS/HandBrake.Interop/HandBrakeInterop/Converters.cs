@@ -11,7 +11,8 @@ namespace HandBrake.Interop
 {
 	using System;
 	using System.Collections.Generic;
-
+	using System.Globalization;
+	using System.Runtime.InteropServices;
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
@@ -37,7 +38,7 @@ namespace HandBrake.Interop
 			VideoRates = new Dictionary<double, int>();
 			foreach (var framerate in Encoders.VideoFramerates)
 			{
-				VideoRates.Add(double.Parse(framerate.Name), framerate.Rate);
+				VideoRates.Add(double.Parse(framerate.Name, CultureInfo.InvariantCulture), framerate.Rate);
 			}
 		}
 
@@ -227,6 +228,23 @@ namespace HandBrake.Interop
 					Id = mixdown.amixdown,
 					ShortName = mixdown.short_name,
 					DisplayName = mixdown.name
+				};
+		}
+
+		/// <summary>
+		/// Converts a native language structure to a Language object.
+		/// </summary>
+		/// <param name="language">The structure to convert.</param>
+		/// <returns>The converted structure.</returns>
+		public static Language NativeToLanguage(iso639_lang_t language)
+		{
+			string englishName = InteropUtilities.ReadUtf8Ptr(language.eng_name);
+			string nativeName = InteropUtilities.ReadUtf8Ptr(language.native_name);
+			return new Language
+				{
+					Code = language.iso639_2,
+					EnglishName = englishName,
+					NativeName = nativeName
 				};
 		}
 

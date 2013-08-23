@@ -244,6 +244,11 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_audio_bitrate_get_next", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_audio_bitrate_get_next(IntPtr last);
 
+		[DllImport("hb.dll", EntryPoint = "hb_video_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_video_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
+
+		[DllImport("hb.dll", EntryPoint = "hb_video_quality_get_name", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_quality_get_name(uint codec);
 
 		[DllImport("hb.dll", EntryPoint = "hb_audio_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void hb_audio_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
@@ -322,7 +327,11 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_audio_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_audio_encoder_get_next(IntPtr last);
 
+		[DllImport("hb.dll", EntryPoint = "lang_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr lang_get_next(IntPtr last);
 
+		[DllImport("hb.dll", EntryPoint = "lang_for_code2", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr lang_for_code2([In] [MarshalAs(UnmanagedType.LPStr)] string code2);
 
 
 
@@ -379,7 +388,7 @@ namespace HandBrake.Interop.HbLib
 		public static extern int hb_check_h264_level([In] [MarshalAs(UnmanagedType.LPStr)] string level, int width, int height, int fps_num, int fps_den, int interlaced, int fake_interlaced);
 
 		[DllImport("hb.dll", EntryPoint = "hb_x264_param_unparse", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hb_x264_param_unparse(
+		public static extern IntPtr hb_x264_param_unparse(
 			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_preset,
 			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_tune,
 			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_encopts,
