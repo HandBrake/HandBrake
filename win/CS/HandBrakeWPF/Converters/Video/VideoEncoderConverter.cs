@@ -50,7 +50,7 @@ namespace HandBrakeWPF.Converters.Video
                 List<VideoEncoder> encoders = EnumHelper<VideoEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
 
-                if (task != null && (task.OutputFormat != OutputFormat.Mkv || task.OutputFormat != OutputFormat.av_mkv))
+                if (task != null && task.OutputFormat != OutputFormat.Mkv && task.OutputFormat != OutputFormat.av_mkv)
                 {
                     encoders.Remove(VideoEncoder.Theora);
                 }
