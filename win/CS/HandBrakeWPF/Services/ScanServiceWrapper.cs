@@ -159,25 +159,6 @@ namespace HandBrakeWPF.Services
         #region IScan
 
         /// <summary>
-        /// Take a Scan Log file, and process it as if it were from the CLI.
-        /// </summary>
-        /// <param name="path">
-        /// The path to the log file.
-        /// </param>
-        public void DebugScanLog(string path)
-        {
-            this.scanService.DebugScanLog(path);
-        }
-
-        /// <summary>
-        /// Shutdown the service.
-        /// </summary>
-        public void Shutdown()
-        {
-            this.scanService.Shutdown();
-        }
-
-        /// <summary>
         /// Scan a Source Path.
         /// Title 0: scan all
         /// </summary>

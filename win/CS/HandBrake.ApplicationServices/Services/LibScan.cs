@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Text;
     using System.Threading;
 
@@ -65,6 +66,21 @@ namespace HandBrake.ApplicationServices.Services
         /// The Current source scan path.
         /// </summary>
         private string currentSourceScanPath;
+
+        /// <summary>
+        /// The log dir.
+        /// </summary>
+        private static string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+
+        /// <summary>
+        /// The dvd info path.
+        /// </summary>
+        private string dvdInfoPath = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", GeneralUtilities.ProcessId));
+
+        /// <summary>
+        /// The scan log.
+        /// </summary>
+        private StreamWriter scanLog;
 
         #endregion
 
@@ -154,6 +170,9 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
         {
+            this.logging.Clear();
+            scanLog = new StreamWriter(dvdInfoPath);
+
             Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
             t.Start();
         }
@@ -163,21 +182,20 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public void Stop()
         {
-            instance.StopScan();
-        }
+            try
+            {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.Close();
+                    this.scanLog.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+                // Do Nothing.
+            }
 
-        /// <summary>
-        /// Debug a Scan Log (Only Available for CLI Mode, not LIBHB)
-        /// </summary>
-        /// <param name="path">
-        /// The path.
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// (Only Available for CLI Mode, not LIBHB)
-        /// </exception>
-        public void DebugScanLog(string path)
-        {
-            throw new NotImplementedException("Only Available when using the CLI mode. Not LibHB");
+            instance.StopScan();
         }
 
         /// <summary>
@@ -246,6 +264,20 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void InstanceScanCompleted(object sender, EventArgs e)
         {
+            // Write the log file out before we start processing incase we crash.
+            try
+            {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.Close();
+                    this.scanLog.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+                // Do Nothing.
+            }
+
             // TODO -> Might be a better place to fix this.
             string path = currentSourceScanPath;
             if (currentSourceScanPath.Contains("\""))
@@ -253,6 +285,7 @@ namespace HandBrake.ApplicationServices.Services
                 path = currentSourceScanPath.Trim('\"');
             }
 
+            // Process into internal structures.
             this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
 
             IsScanning = false;
@@ -278,7 +311,8 @@ namespace HandBrake.ApplicationServices.Services
                     new ApplicationServices.EventArgs.ScanProgressEventArgs
                         {
                             CurrentTitle = e.CurrentTitle,
-                            Titles = e.Titles
+                            Titles = e.Titles,
+                            Percentage = Math.Round((decimal)e.Progress * 100, 0)
                         };
 
                 this.ScanStatusChanged(this, eventArgs);
@@ -298,6 +332,11 @@ namespace HandBrake.ApplicationServices.Services
         {
             lock (LogLock)
             {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.WriteLine(e.Message);
+                }
+
                 this.logging.AppendLine(e.Message);
             }
         }
@@ -315,6 +354,11 @@ namespace HandBrake.ApplicationServices.Services
         {
             lock (LogLock)
             {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.WriteLine(e.Message);
+                }
+
                 this.logging.AppendLine(e.Message);
             }
         }
@@ -335,12 +379,12 @@ namespace HandBrake.ApplicationServices.Services
             {
                 Title converted = new Title
                     {
-                        TitleNumber = title.TitleNumber, 
-                        Duration = title.Duration, 
-                        Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
-                        AspectRatio = title.AspectRatio, 
-                        AngleCount = title.AngleCount, 
-                        ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
+                        TitleNumber = title.TitleNumber,
+                        Duration = title.Duration,
+                        Resolution = new Size(title.Resolution.Width, title.Resolution.Height),
+                        AspectRatio = title.AspectRatio,
+                        AngleCount = title.AngleCount,
+                        ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
                         AutoCropDimensions = title.AutoCropDimensions,
                         Fps = title.Framerate
                     };

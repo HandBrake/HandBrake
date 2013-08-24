@@ -978,7 +978,6 @@ namespace HandBrakeWPF.ViewModels
         public void Shutdown()
         {
             // Shutdown Service
-            this.scanService.Shutdown();
             this.encodeService.Shutdown();
 
             // Unsubscribe from Events.
