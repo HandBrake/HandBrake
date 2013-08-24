@@ -53,6 +53,11 @@ namespace HandBrake.ApplicationServices.Services
         private readonly IHandBrakeInstance instance;
 
         /// <summary>
+        /// The user setting service.
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
+
+        /// <summary>
         /// Log data from HandBrakeInstance
         /// </summary>
         private readonly StringBuilder logging;
@@ -90,13 +95,17 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="handBrakeInstance">
         /// The hand Brake Instance.
         /// </param>
-        public LibScan(IHandBrakeInstance handBrakeInstance)
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public LibScan(IHandBrakeInstance handBrakeInstance, IUserSettingService userSettingService)
         {
             logging = new StringBuilder();
 
             header = GeneralUtilities.CreateCliLogHeader();
 
             instance = handBrakeInstance;
+            this.userSettingService = userSettingService;
             instance.Initialize(1);
             instance.ScanProgress += this.InstanceScanProgress;
             instance.ScanCompleted += this.InstanceScanCompleted;
@@ -170,7 +179,28 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
         {
+            // Clear down the logging
             this.logging.Clear();
+
+
+            try
+            {
+                // Make we don't pick up a stale last_scan_log_xyz.txt (and that we have rights to the file)
+                if (File.Exists(dvdInfoPath))
+                {
+                    File.Delete(dvdInfoPath);
+                }
+            }
+            catch (Exception)
+            {
+                // Do nothing.
+            }
+
+            if (!Directory.Exists(Path.GetDirectoryName(dvdInfoPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(dvdInfoPath));
+            }
+
             scanLog = new StreamWriter(dvdInfoPath);
 
             Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
@@ -236,10 +266,13 @@ namespace HandBrake.ApplicationServices.Services
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());
 
-                if (title != 0)
-                    instance.StartScan(sourcePath.ToString(), previewCount, title);
-                else
-                    instance.StartScan(sourcePath.ToString(), previewCount);
+                TimeSpan minDuration =
+                    TimeSpan.FromSeconds(
+                        this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration));
+
+                HandBrakeUtils.SetDvdNav(this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
+
+                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
             }
             catch (Exception exc)
             {

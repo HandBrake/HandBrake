@@ -400,5 +400,8 @@ namespace HandBrake.Interop.HbLib
 
         [DllImport("hb.dll", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_qsv_available();
+        
+        [DllImport("hb.dll", EntryPoint = "hb_qsv_info_init", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_qsv_info_init();
 	}
 }

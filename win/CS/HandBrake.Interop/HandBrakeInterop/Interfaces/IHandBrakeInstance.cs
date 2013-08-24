@@ -212,6 +212,24 @@ namespace HandBrake.Interop.Interfaces
         /// </param>
         void StartScan(string path, int previewCount, int titleIndex);
 
+
+        /// <summary>
+        /// Starts a scan of the given path.
+        /// </summary>
+        /// <param name="path">
+        /// The path of the video to scan.
+        /// </param>
+        /// <param name="previewCount">
+        /// The number of previews to make on each title.
+        /// </param>
+        /// <param name="minDuration">
+        /// The min Duration.
+        /// </param>
+        /// <param name="titleIndex">
+        /// The title index to scan (1-based, 0 for all titles).
+        /// </param>
+        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
+
         /// <summary>
         /// Stops the current encode.
         /// </summary>

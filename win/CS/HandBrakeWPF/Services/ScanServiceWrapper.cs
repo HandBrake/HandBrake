@@ -45,10 +45,13 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanServiceWrapper"/> class.
         /// </summary>
-        public ScanServiceWrapper()
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public ScanServiceWrapper(IUserSettingService userSettingService)
         {
             HandbrakeInstance = new HandBrakeInstance();
-            this.scanService = new LibScan(HandbrakeInstance);
+            this.scanService = new LibScan(HandbrakeInstance, userSettingService);
             this.scanService.ScanCompleted += this.ScanServiceScanCompleted;
             this.scanService.ScanStared += this.ScanServiceScanStared;
             this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
