@@ -48,13 +48,16 @@ namespace HandBrake.Interop.HbLib
 		public const int HB_SUBSTREAM_BD_DTS = 0x71;
 
         // Video Encoders
-		public const int HB_VCODEC_MASK = 0x0000FF;
+        public const int HB_VCODEC_MASK = 0x0000FFF;
 		public const int HB_VCODEC_X264 = 0x000001;
 		public const int HB_VCODEC_THEORA = 0x000002;
 		public const int HB_VCODEC_FFMPEG_MPEG4 = 0x000010;
 		public const int HB_VCODEC_FFMPEG = HB_VCODEC_FFMPEG_MPEG4;
 		public const int HB_VCODEC_FFMPEG_MPEG2 = 0x000020;
 		public const int HB_VCODEC_FFMPEG_MASK = 0x0000F0;
+	    public const int HB_VCODEC_QSV_H264 = 0x0000100;
+	    public const int HB_VCODEC_QSV_MASK = 0x0000F00;
+	    public const int HB_VCODEC_H264_MASK = (HB_VCODEC_X264 | HB_VCODEC_QSV_H264);
 
         // Muxers
 		public const int HB_MUX_MASK = 0xFF0000;

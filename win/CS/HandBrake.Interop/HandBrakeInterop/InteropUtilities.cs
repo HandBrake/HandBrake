@@ -15,9 +15,8 @@ namespace HandBrake.Interop
 	using System.Runtime.InteropServices;
 	using System.Text;
 	using HandBrake.Interop.HbLib;
-	using Model.Encoding;
 
-	/// <summary>
+    /// <summary>
 	/// Helper utilities for native interop.
 	/// </summary>
 	public static class InteropUtilities

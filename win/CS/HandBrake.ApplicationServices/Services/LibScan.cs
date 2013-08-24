@@ -36,7 +36,7 @@ namespace HandBrake.ApplicationServices.Services
         /*
          * TODO
          * 1. Expose the Previews code.
-         * 2. Expose the Logging.
+         * 2. Cleanup old instances.
          * 
          */
 
@@ -46,11 +46,6 @@ namespace HandBrake.ApplicationServices.Services
         /// Lock for the log file
         /// </summary>
         static readonly object LogLock = new object();
-
-        /// <summary>
-        /// LibHB Instance
-        /// </summary>
-        private readonly IHandBrakeInstance instance;
 
         /// <summary>
         /// The user setting service.
@@ -87,28 +82,25 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private StreamWriter scanLog;
 
+        /// <summary>
+        /// LibHB Instance
+        /// </summary>
+        private IHandBrakeInstance instance;
+
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LibScan"/> class. 
         /// </summary>
-        /// <param name="handBrakeInstance">
-        /// The hand Brake Instance.
-        /// </param>
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public LibScan(IHandBrakeInstance handBrakeInstance, IUserSettingService userSettingService)
+        public LibScan(IUserSettingService userSettingService)
         {
             logging = new StringBuilder();
 
             header = GeneralUtilities.CreateCliLogHeader();
-
-            instance = handBrakeInstance;
             this.userSettingService = userSettingService;
-            instance.Initialize(1);
-            instance.ScanProgress += this.InstanceScanProgress;
-            instance.ScanCompleted += this.InstanceScanCompleted;
 
             HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
             HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
@@ -182,7 +174,6 @@ namespace HandBrake.ApplicationServices.Services
             // Clear down the logging
             this.logging.Clear();
 
-
             try
             {
                 // Make we don't pick up a stale last_scan_log_xyz.txt (and that we have rights to the file)
@@ -201,10 +192,17 @@ namespace HandBrake.ApplicationServices.Services
                 Directory.CreateDirectory(Path.GetDirectoryName(dvdInfoPath));
             }
 
+            // Create a new scan log.
             scanLog = new StreamWriter(dvdInfoPath);
 
-            Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
-            t.Start();
+            // Create a new HandBrake Instance.
+            instance = new HandBrakeInstance();
+            instance.Initialize(1);
+            instance.ScanProgress += this.InstanceScanProgress;
+            instance.ScanCompleted += this.InstanceScanCompleted;
+
+            // Start the scan on a back
+            this.ScanSource(sourcePath, title, previewCount);
         }
 
         /// <summary>
@@ -212,6 +210,8 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public void Stop()
         {
+            instance.StopScan();
+
             try
             {
                 if (this.scanLog != null)
@@ -224,16 +224,6 @@ namespace HandBrake.ApplicationServices.Services
             {
                 // Do Nothing.
             }
-
-            instance.StopScan();
-        }
-
-        /// <summary>
-        /// Shutdown the service.
-        /// </summary>
-        public void Shutdown()
-        {
-            // Nothing to do for this implementation.
         }
 
         #endregion

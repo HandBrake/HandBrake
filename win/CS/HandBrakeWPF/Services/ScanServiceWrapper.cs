@@ -16,7 +16,6 @@ namespace HandBrakeWPF.Services
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.Interop;
     using HandBrake.Interop.Interfaces;
 
     /// <summary>
@@ -50,8 +49,7 @@ namespace HandBrakeWPF.Services
         /// </param>
         public ScanServiceWrapper(IUserSettingService userSettingService)
         {
-            HandbrakeInstance = new HandBrakeInstance();
-            this.scanService = new LibScan(HandbrakeInstance, userSettingService);
+            this.scanService = new LibScan(userSettingService);
             this.scanService.ScanCompleted += this.ScanServiceScanCompleted;
             this.scanService.ScanStared += this.ScanServiceScanStared;
             this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
