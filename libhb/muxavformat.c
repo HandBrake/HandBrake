@@ -314,12 +314,22 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->codec->extradata = priv_data;
     track->st->codec->extradata_size = priv_size;
 
+    if (job->anamorphic.mode > 0)
+    {
+        track->st->sample_aspect_ratio.num        = job->anamorphic.par_width;
+        track->st->sample_aspect_ratio.den        = job->anamorphic.par_height;
+        track->st->codec->sample_aspect_ratio.num = job->anamorphic.par_width;
+        track->st->codec->sample_aspect_ratio.den = job->anamorphic.par_height;
+    }
+    else
+    {
+        track->st->sample_aspect_ratio.num        = 1;
+        track->st->sample_aspect_ratio.den        = 1;
+        track->st->codec->sample_aspect_ratio.num = 1;
+        track->st->codec->sample_aspect_ratio.den = 1;
+    }
     track->st->codec->width = job->width;
     track->st->codec->height = job->height;
-    track->st->sample_aspect_ratio.num = job->anamorphic.par_width;
-    track->st->sample_aspect_ratio.den = job->anamorphic.par_height;
-    track->st->codec->sample_aspect_ratio.num = job->anamorphic.par_width;
-    track->st->codec->sample_aspect_ratio.den = job->anamorphic.par_height;
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
 
     int vrate_base, vrate;
