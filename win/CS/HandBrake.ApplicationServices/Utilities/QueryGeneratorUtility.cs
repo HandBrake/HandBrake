@@ -453,6 +453,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.X264:
+                        case VideoEncoder.QuickSync:
                             query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.Theora:
