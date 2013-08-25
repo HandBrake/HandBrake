@@ -734,9 +734,9 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->rc.cqp_offsets[0]      =  0;
         param->rc.cqp_offsets[1]      =  2;
         param->rc.cqp_offsets[2]      =  4;
-        param->rc.vbv_max_bitrate     =  0;
-        param->rc.vbv_buffer_size     =  0;
-        param->rc.vbv_buffer_init     = .5;
+        param->rc.vbv_max_bitrate     =  0; // set automatically
+        param->rc.vbv_buffer_size     =  0; // set automatically
+        param->rc.vbv_buffer_init     = .0; // set automatically
 
         // introduced in API 1.0
         memset(videoParam, 0, sizeof(mfxVideoParam));

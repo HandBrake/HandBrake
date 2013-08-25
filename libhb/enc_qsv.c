@@ -600,6 +600,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         else if (pv->param.rc.lookahead < 0)
         {
             if (pv->param.rc.vbv_max_bitrate > 0 ||
+                pv->param.rc.vbv_buffer_size > 0 ||
                 pv->param.videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE)
             {
                 // lookahead doesn't support VBV or interlaced encoding
@@ -621,62 +622,43 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             // introduced in API 1.7
             pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_LA;
             pv->param.videoParam->mfx.TargetKbps        = job->vbitrate;
-            if (pv->param.rc.vbv_max_bitrate > 0)
+            if (pv->param.rc.vbv_max_bitrate > 0 ||
+                pv->param.rc.vbv_buffer_size > 0)
             {
                 hb_log("encqsvInit: MFX_RATECONTROL_LA, ignoring VBV");
             }
         }
-        else if (job->vbitrate == pv->param.rc.vbv_max_bitrate)
-        {
-            // introduced in API 1.0
-            pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CBR;
-            pv->param.videoParam->mfx.MaxKbps           = job->vbitrate;
-            pv->param.videoParam->mfx.TargetKbps        = job->vbitrate;
-            pv->param.videoParam->mfx.BufferSizeInKB    = (pv->param.rc.vbv_buffer_size / 8);
-            // only set BufferSizeInKB and InitialDelayInKB is bufsize is set
-            // else Media SDK will pick some good values for us automatically
-            if (pv->param.rc.vbv_buffer_size > 0)
-            {
-                if (pv->param.rc.vbv_buffer_init > 1.0)
-                {
-                    pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_init / 8);
-                }
-                else
-                {
-                    pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_size *
-                                                                  pv->param.rc.vbv_buffer_init / 8);
-                }
-                pv->param.videoParam->mfx.BufferSizeInKB = (pv->param.rc.vbv_buffer_size / 8);
-            }
-        }
-        else if (pv->param.rc.vbv_max_bitrate > 0)
-        {
-            // introduced in API 1.0
-            pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_VBR;
-            pv->param.videoParam->mfx.MaxKbps           = pv->param.rc.vbv_max_bitrate;
-            pv->param.videoParam->mfx.TargetKbps        = job->vbitrate;
-            // only set BufferSizeInKB and InitialDelayInKB is bufsize is set
-            // else Media SDK will pick some good values for us automatically
-            if (pv->param.rc.vbv_buffer_size > 0)
-            {
-                if (pv->param.rc.vbv_buffer_init > 1.0)
-                {
-                    pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_init / 8);
-                }
-                else
-                {
-                    pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_size *
-                                                                  pv->param.rc.vbv_buffer_init / 8);
-                }
-                pv->param.videoParam->mfx.BufferSizeInKB = (pv->param.rc.vbv_buffer_size / 8);
-            }
-        }
         else
         {
-            // introduced in API 1.3
-            // Media SDK will set Accuracy and Convergence for us automatically
-            pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_AVBR;
-            pv->param.videoParam->mfx.TargetKbps        = job->vbitrate;
+            // introduced in API 1.0
+            if (job->vbitrate == pv->param.rc.vbv_max_bitrate)
+            {
+                pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CBR;
+            }
+            else
+            {
+                pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_VBR;
+            }
+            // only set BufferSizeInKB, InitialDelayInKB and MaxKbps if we have
+            // them - otheriwse Media SDK will pick values for us automatically
+            if (pv->param.rc.vbv_buffer_size > 0)
+            {
+                if (pv->param.rc.vbv_buffer_init > 1.0)
+                {
+                    pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_init / 8);
+                }
+                else if (pv->param.rc.vbv_buffer_init > 0.0)
+                {
+                    pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_size *
+                                                                  pv->param.rc.vbv_buffer_init / 8);
+                }
+                pv->param.videoParam->mfx.BufferSizeInKB = (pv->param.rc.vbv_buffer_size / 8);
+            }
+            if (pv->param.rc.vbv_max_bitrate > 0)
+            {
+                pv->param.videoParam->mfx.MaxKbps = pv->param.rc.vbv_max_bitrate;
+            }
+            pv->param.videoParam->mfx.TargetKbps = job->vbitrate;
         }
     }
     else
@@ -832,10 +814,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         switch (videoParam.mfx.RateControlMethod)
         {
-            case MFX_RATECONTROL_AVBR:
-                hb_log("encqsvInit: RateControlMethod AVBR TargetKbps %"PRIu16"",
-                       videoParam.mfx.TargetKbps);
-                break;
             case MFX_RATECONTROL_LA:
                 hb_log("encqsvInit: RateControlMethod LA TargetKbps %"PRIu16" LookAheadDepth %"PRIu16"",
                        videoParam.mfx.TargetKbps, option2->LookAheadDepth);
