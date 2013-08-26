@@ -127,7 +127,9 @@ int hb_qsv_info_init()
 void hb_qsv_info_print()
 {
     if (hb_qsv_info == NULL)
-        return;
+    {
+        hb_error("hb_qsv_info_print: QSV info not initialized!");
+    }
 
     // is QSV available?
     hb_log("Intel Quick Sync Video support: %s",

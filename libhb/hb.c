@@ -440,11 +440,6 @@ hb_handle_t * hb_init( int verbose, int update_check )
 
     h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
 
-#ifdef USE_QSV
-    /* Intel Quick Sync Video */
-    hb_qsv_info_print();
-#endif
-
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
     h->die         = 0;
@@ -619,6 +614,11 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
         hb_list_rem( h->title_set.list_title, title );
         hb_title_close( &title );
     }
+
+#ifdef USE_QSV
+    /* Print QSV info here so that it's in all scan and encode logs */
+    hb_qsv_info_print();
+#endif
 
     /* Print CPU info here so that it's in all scan and encode logs */
     hb_log("hb_scan: CPU count: %i", hb_get_cpu_count());
