@@ -1092,6 +1092,12 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     *buf_out = NULL;
 
+    if (*job->die)
+    {
+        // unrecoverable error in qsv_enc_init
+        return HB_WORK_DONE;
+    }
+
     if( in->size <= 0 )
     {
         // do delayed frames yet
