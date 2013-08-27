@@ -184,7 +184,9 @@
     <Compile Include="Services\PrePostActionService.cs" />
     <Compile Include="ViewModels\AdvancedViewModel.cs" />
     <Compile Include="ViewModels\EncoderOptionsViewModel.cs" />
+    <Compile Include="ViewModels\InstantViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEncoderOptionsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IInstantViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IX264ViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
     <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
@@ -194,8 +196,8 @@
     <Compile Include="Views\EncoderOptionsView.xaml.cs">
       <DependentUpon>EncoderOptionsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\InstantMainView.xaml.cs">
-      <DependentUpon>InstantMainView.xaml</DependentUpon>
+    <Compile Include="Views\InstantView.xaml.cs">
+      <DependentUpon>InstantView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
@@ -374,7 +376,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\InstantMainView.xaml">
+    <Page Include="Views\InstantView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

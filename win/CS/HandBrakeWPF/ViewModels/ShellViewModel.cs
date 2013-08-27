@@ -13,11 +13,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using Castle.Facilities.FactorySupport;
-
     using HandBrake.ApplicationServices.Services.Interfaces;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -120,6 +117,11 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets OptionsViewModel.
         /// </summary>
         public IOptionsViewModel OptionsViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the instant view model.
+        /// </summary>
+        public IInstantViewModel InstantViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowMainWindow.
