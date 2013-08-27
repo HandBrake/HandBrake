@@ -7,17 +7,24 @@
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="boolComboConverter" />
+        <Converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
         <TextBlock Text="Filters" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
 
-        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,10,0,0">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -29,43 +36,56 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition MinWidth="75" />
+                    <ColumnDefinition MinWidth="160" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Detelecine:" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" />
                 <ComboBox Width="120" Grid.Row="0" ItemsSource="{Binding DetelecineOptions, Converter={StaticResource boolComboConverter}}" 
-                          SelectedItem="{Binding SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"/>
+                          SelectedItem="{Binding SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
+                          HorizontalAlignment="Left"/>
                 <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDetelecine}"
                          Visibility="{Binding ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
 
-                <TextBlock Text="Decomb:" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10"/>
-                <ComboBox Width="120" Grid.Row="1" ItemsSource="{Binding DecombOptions, Converter={StaticResource boolComboConverter}}" 
-                          SelectedItem="{Binding SelectedDecomb, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"/>
-                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDecomb}"
+                <TextBlock Text="{Binding DeinterlaceControlText}" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" VerticalAlignment="Top"/>
+                <StackPanel Grid.Row="1" Grid.Column="1" >
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton GroupName="Interlace" Content="Deinterlace" IsChecked="{Binding IsDeinterlaceMode}" />
+                        <RadioButton GroupName="Interlace" Content="Decomb" Margin="10,0,0,0" IsChecked="{Binding IsDeinterlaceMode, Converter={StaticResource inverseBooleanConverter}}" />
+                    </StackPanel> 
+
+                    <ComboBox Width="120" ItemsSource="{Binding DecombOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left"
+                          SelectedItem="{Binding SelectedDecomb, Converter={StaticResource boolComboConverter}}" Margin="0,0,0,10"
+                          Visibility="{Binding IsDeinterlaceMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=True}"    />
+
+                    <ComboBox Width="120" ItemsSource="{Binding DeInterlaceOptions, Converter={StaticResource boolComboConverter}}"  HorizontalAlignment="Left"
+                          SelectedItem="{Binding SelectedDeInterlace, Converter={StaticResource boolComboConverter}}" Margin="0,0,0,10"
+                              Visibility="{Binding IsDeinterlaceMode, Converter={StaticResource boolToVisConverter}}" />
+                </StackPanel>
+
+                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Text="{Binding CustomDecomb}" VerticalAlignment="Top"
                          Visibility="{Binding ShowDecombCustom, Converter={StaticResource boolToVisConverter}}" />
 
-                <TextBlock Text="Deinterlace:" Grid.Row="2" Grid.Column="0" Margin="0,0,0,10"/>
-                <ComboBox Width="120" Grid.Row="2" ItemsSource="{Binding DeInterlaceOptions, Converter={StaticResource boolComboConverter}}"
-                          SelectedItem="{Binding SelectedDeInterlace, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"/>
-                <TextBox Width="120" Grid.Row="2" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDeinterlace}"
+                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Text="{Binding CustomDeinterlace}" VerticalAlignment="Top"
                          Visibility="{Binding ShowDeinterlaceCustom, Converter={StaticResource boolToVisConverter}}" />
 
                 <TextBlock Text="Denoise:" Grid.Row="3" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="3" ItemsSource="{Binding DenoiseOptions, Converter={StaticResource boolComboConverter}}" 
-                          SelectedItem="{Binding SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"/>
+                          SelectedItem="{Binding SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
+                          HorizontalAlignment="Left"/>
                 <TextBox Width="120" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDenoise}"
                          Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}" />
 
                 <TextBlock Text="Deblock:" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
-                <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"/>
+                <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"
+                        HorizontalAlignment="Left" />
                 <TextBlock Text="{Binding DeblockText}" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10"/>
 
                 <CheckBox Content="Grayscale" IsChecked="{Binding Grayscale}" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"/>
             </Grid>
 
         </StackPanel>
-
+        
     </Grid>
 </UserControl>
