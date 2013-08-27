@@ -26,6 +26,9 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
+        /// <summary>
+        /// The is deinterlace mode.
+        /// </summary>
         private bool isDeinterlaceMode;
 
         #region Constructors and Destructors
@@ -236,6 +239,11 @@ namespace HandBrakeWPF.ViewModels
                 // Show / Hide the Custom Control
                 this.ShowDeinterlaceCustom = this.CurrentTask.Deinterlace == Deinterlace.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
+
+                if (value != Deinterlace.Off)
+                {
+                    this.IsDeinterlaceMode = true;
+                }
             }
         }
 
@@ -262,6 +270,11 @@ namespace HandBrakeWPF.ViewModels
                 // Show / Hide the Custom Control
                 this.ShowDecombCustom = this.CurrentTask.Decomb == Decomb.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
+
+                if (value != Decomb.Off)
+                {
+                    this.IsDeinterlaceMode = false;
+                }
             }
         }
 
