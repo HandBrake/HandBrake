@@ -1747,7 +1747,8 @@ namespace HandBrake.Interop
 				VideoCodecName = title.video_codec_name,
 				Framerate = ((double)title.rate) / title.rate_base,
 				FramerateNumerator = title.rate,
-				FramerateDenominator = title.rate_base
+				FramerateDenominator = title.rate_base,
+                Path = title.path
 			};
 
 			switch (title.type)

@@ -409,7 +409,8 @@ namespace HandBrake.ApplicationServices.Services
                         AngleCount = title.AngleCount,
                         ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
                         AutoCropDimensions = title.AutoCropDimensions,
-                        Fps = title.Framerate
+                        Fps = title.Framerate,
+                        SourceName = title.Path,
                     };
 
                 foreach (Interop.SourceData.Chapter chapter in title.Chapters)
