@@ -309,7 +309,7 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             // Process into internal structures.
-            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
+            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles, this.instance.FeatureTitle), ScanPath = path };
 
             IsScanning = false;
 
@@ -392,10 +392,13 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="titles">
         /// The titles.
         /// </param>
+        /// <param name="featureTitle">
+        /// The feature Title.
+        /// </param>
         /// <returns>
         /// The convert titles.
         /// </returns>
-        private static List<Title> ConvertTitles(IEnumerable<Interop.SourceData.Title> titles)
+        private static List<Title> ConvertTitles(IEnumerable<Interop.SourceData.Title> titles, int featureTitle)
         {
             List<Title> titleList = new List<Title>();
             foreach (Interop.SourceData.Title title in titles)
@@ -411,6 +414,7 @@ namespace HandBrake.ApplicationServices.Services
                         AutoCropDimensions = title.AutoCropDimensions,
                         Fps = title.Framerate,
                         SourceName = title.Path,
+                        MainTitle = title.TitleNumber == featureTitle
                     };
 
                 foreach (Interop.SourceData.Chapter chapter in title.Chapters)
