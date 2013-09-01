@@ -706,7 +706,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
-                    this.Duration = this.selectedTitle.Duration.ToString();
+                    this.Duration = this.selectedTitle.Duration.ToString("g");
 
                     // Setup the tab controls
                     this.SetupTabs();
@@ -830,7 +830,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedStartPoint = 0;
 
                     int timeInSeconds;
-                    if (int.TryParse(selectedTitle.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture), out timeInSeconds))
+                    if (int.TryParse(Math.Round(selectedTitle.Duration.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture), out timeInSeconds))
                     {
                         this.SelectedEndPoint = timeInSeconds;
                     }
@@ -1777,12 +1777,12 @@ namespace HandBrakeWPF.ViewModels
             switch (this.SelectedPointToPoint)
             {
                 case PointToPointMode.Chapters:
-                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString();
+                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString("g");
                 case PointToPointMode.Seconds:
-                    return TimeSpan.FromSeconds(startEndDuration).ToString();
+                    return TimeSpan.FromSeconds(startEndDuration).ToString("g");
                 case PointToPointMode.Frames:
                     startEndDuration = startEndDuration / selectedTitle.Fps;
-                    return TimeSpan.FromSeconds(startEndDuration).ToString();
+                    return TimeSpan.FromSeconds(Math.Round(startEndDuration, 2)).ToString("g");
             }
 
             return "--:--:--";
