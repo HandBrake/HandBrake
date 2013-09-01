@@ -846,76 +846,14 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                      videoParam.mfx.FrameInfo.PicStruct);
             return -1;
     }
-    const char *cavlc, *rdopt;
-    switch (option1->CAVLC)
-    {
-        case MFX_CODINGOPTION_ON:
-            cavlc = "on";
-            break;
-        case MFX_CODINGOPTION_OFF:
-            cavlc = "off";
-            break;
-        default:
-            hb_error("encqsvInit: invalid CAVLC value %"PRIu16"",
-                     option1->CAVLC);
-            return -1;
-    }
-    switch (option1->RateDistortionOpt)
-    {
-        case MFX_CODINGOPTION_ON:
-            rdopt = "on";
-            break;
-        case MFX_CODINGOPTION_OFF:
-            rdopt = "off";
-            break;
-        default:
-            hb_error("encqsvInit: invalid RateDistortionOpt value %"PRIu16"",
-                     option1->RateDistortionOpt);
-            return -1;
-    }
-    hb_log("encqsvInit: CAVLC %s RateDistortionOpt %s", cavlc, rdopt);
+    hb_log("encqsvInit: CAVLC %-3s RateDistortionOpt %-3s",
+           hb_qsv_codingoption_get_name(option1->CAVLC),
+           hb_qsv_codingoption_get_name(option1->RateDistortionOpt));
     if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_BRC)
     {
-        const char *mbbrc, *extbrc;
-        switch (option2->MBBRC)
-        {
-            case MFX_CODINGOPTION_ON:
-                mbbrc = "on";
-                break;
-            case MFX_CODINGOPTION_OFF:
-                mbbrc = "off";
-                break;
-            case MFX_CODINGOPTION_ADAPTIVE:
-                mbbrc = "adaptive";
-                break;
-            case MFX_CODINGOPTION_UNKNOWN:
-                mbbrc = "unknown (auto)";
-                break;
-            default:
-                hb_error("encqsvInit: invalid MBBRC value %"PRIu16"",
-                         option2->MBBRC);
-                return -1;
-        }
-        switch (option2->ExtBRC)
-        {
-            case MFX_CODINGOPTION_ON:
-                extbrc = "on";
-                break;
-            case MFX_CODINGOPTION_OFF:
-                extbrc = "off";
-                break;
-            case MFX_CODINGOPTION_ADAPTIVE:
-                extbrc = "adaptive";
-                break;
-            case MFX_CODINGOPTION_UNKNOWN:
-                extbrc = "unknown (auto)";
-                break;
-            default:
-                hb_error("encqsvInit: invalid ExtBRC value %"PRIu16"",
-                         option2->ExtBRC);
-                return -1;
-        }
-        hb_log("encqsvInit: MBBRC %s ExtBRC %s", mbbrc, extbrc);
+        hb_log("encqsvInit: MBBRC %-3s ExtBRC %-3s",
+               hb_qsv_codingoption_get_name(option2->MBBRC),
+               hb_qsv_codingoption_get_name(option2->ExtBRC));
     }
     if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_TRELLIS)
     {

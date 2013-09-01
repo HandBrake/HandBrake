@@ -227,6 +227,23 @@ int hb_qsv_trellisvalue_xlat(int val)
     }
 }
 
+const char* hb_qsv_codingoption_get_name(int val)
+{
+    switch (val)
+    {
+        case MFX_CODINGOPTION_ON:
+            return "on";
+        case MFX_CODINGOPTION_OFF:
+            return "off";
+        case MFX_CODINGOPTION_ADAPTIVE:
+            return "adaptive";
+        case MFX_CODINGOPTION_UNKNOWN:
+            return "unknown (auto)";
+        default:
+            return NULL;
+    }
+}
+
 int hb_qsv_atoindex(const char* const *arr, const char *str, int *err)
 {
     int i;

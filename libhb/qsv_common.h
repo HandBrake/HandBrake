@@ -106,7 +106,9 @@ typedef struct
 } hb_qsv_param_t;
 
 #define HB_QSV_CLIP3(min, max, val) ((val < min) ? min : (val > max) ? max : val)
-int   hb_qsv_codingoption_xlat(int val);
+int         hb_qsv_codingoption_xlat    (int val);
+const char* hb_qsv_codingoption_get_name(int val);
+
 int   hb_qsv_trellisvalue_xlat(int val);
 int   hb_qsv_atoindex(const char* const *arr, const char *str, int *err);
 int   hb_qsv_atobool (const char *str, int *err);
