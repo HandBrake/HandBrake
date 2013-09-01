@@ -171,6 +171,21 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
         {
+            // Try to cleanup any previous scan instances.
+            if (instance != null)
+            {
+                try
+                {
+                    this.scanLog.Close();
+                    this.scanLog.Dispose();
+                    instance.Dispose();
+                }
+                catch (Exception exc)
+                {
+                    // Do Nothing
+                }
+            }
+
             // Clear down the logging
             this.logging.Clear();
 
@@ -292,8 +307,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (this.scanLog != null)
                 {
-                    this.scanLog.Close();
-                    this.scanLog.Dispose();
+                    this.scanLog.Flush();
                 }
             }
             catch (Exception)

@@ -119,21 +119,12 @@ namespace HandBrake.Interop
 		{
 			if (!string.IsNullOrEmpty(message))
 			{
-				string[] messageParts = message.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+				string[] messageParts = message.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
 				if (messageParts.Length > 0)
 				{
 					message = messageParts[0];
-
-					// When MP4 muxing fails (for example when the file is too big without Large File Size)
-					// a message is logged but it isn't marked as an error.
-					if (message.StartsWith("MP4ERROR", StringComparison.Ordinal))
-					{
-						SendErrorEvent(message);
-						return;
-					}
-
-					SendMessageEvent(message);
+				    SendMessageEvent(message);
 				}
 			}
 		}
