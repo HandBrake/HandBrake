@@ -461,7 +461,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 // The title that is selected has a source name. This means it's part of a batch scan.
-                if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
+                if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName) && !selectedTitle.SourceName.EndsWith("\\"))
                 {
                     return Path.GetFileNameWithoutExtension(selectedTitle.SourceName);
                 }
@@ -471,7 +471,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     foreach (DriveInformation item in GeneralUtilities.GetDrives())
                     {
-                        if (item.RootDirectory.Contains(this.ScannedSource.ScanPath))
+                        if (item.RootDirectory.Contains(this.ScannedSource.ScanPath.Replace("\\\\", "\\")))
                         {
                             return item.VolumeLabel;
                         }
