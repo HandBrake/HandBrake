@@ -1187,8 +1187,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     if (hb_qsv_decode_is_enabled(job))
     {
         // setup the QSV configuration
-        pv->qsv_config.impl_requested     = MFX_IMPL_AUTO_ANY|MFX_IMPL_VIA_ANY;
         pv->qsv_config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
+        pv->qsv_config.impl_requested     = hb_qsv_impl_get_preferred();
         pv->qsv_config.async_depth        = job->qsv_async_depth;
         pv->qsv_config.sync_need          =  0;
         pv->qsv_config.usage_threaded     =  1;

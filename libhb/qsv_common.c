@@ -25,6 +25,7 @@ extern void ff_cpu_cpuid(int index, int *eax, int *ebx, int *ecx, int *edx);
 hb_qsv_info_t *hb_qsv_info = NULL;
 
 // availability and versions
+static mfxIMPL preferred_implementation;
 static mfxVersion qsv_hardware_version;
 static mfxVersion qsv_software_version;
 static mfxVersion qsv_minimum_version;
@@ -63,7 +64,8 @@ int hb_qsv_info_init()
     if (MFXInit(MFX_IMPL_SOFTWARE,
                 &qsv_minimum_version, &session) == MFX_ERR_NONE)
     {
-        qsv_software_available = 1;
+        qsv_software_available   = 1;
+        preferred_implementation = MFX_IMPL_SOFTWARE;
         // our minimum is supported, but query the actual version
         MFXQueryVersion(session, &qsv_software_version);
         MFXClose(session);
@@ -73,7 +75,8 @@ int hb_qsv_info_init()
     if (MFXInit(MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY,
                 &qsv_minimum_version, &session) == MFX_ERR_NONE)
     {
-        qsv_hardware_available = 1;
+        qsv_hardware_available   = 1;
+        preferred_implementation = MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY;
         // our minimum is supported, but query the actual version
         MFXQueryVersion(session, &qsv_hardware_version);
         MFXClose(session);
@@ -154,6 +157,8 @@ void hb_qsv_info_print()
                    qsv_minimum_version.Major,
                    qsv_minimum_version.Minor);
         }
+        hb_log(" - Preferred implementation: %s",
+               hb_qsv_impl_get_name(preferred_implementation));
     }
 }
 
@@ -779,4 +784,37 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         return -1;
     }
     return 0;
+}
+
+mfxIMPL hb_qsv_impl_get_preferred()
+{
+    return preferred_implementation;
+}
+
+const char* hb_qsv_impl_get_name(int impl)
+{
+    switch (MFX_IMPL_BASETYPE(impl))
+    {
+        case MFX_IMPL_SOFTWARE:
+            return "software";
+
+        case MFX_IMPL_HARDWARE:
+            return "hardware (1)";
+        case MFX_IMPL_HARDWARE2:
+            return "hardware (2)";
+        case MFX_IMPL_HARDWARE3:
+            return "hardware (3)";
+        case MFX_IMPL_HARDWARE4:
+            return "hardware (4)";
+        case MFX_IMPL_HARDWARE_ANY:
+            return "hardware (any)";
+
+        case MFX_IMPL_AUTO:
+            return "automatic";
+        case MFX_IMPL_AUTO_ANY:
+            return "automatic (any)";
+
+        default:
+            return NULL;
+    }
 }

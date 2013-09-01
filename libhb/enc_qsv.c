@@ -183,9 +183,9 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
             av_qsv_add_context_usage(qsv, 0);
 
             // initialize the session
-            qsv->impl      = MFX_IMPL_AUTO_ANY;
             qsv->ver.Major = AV_QSV_MSDK_VERSION_MAJOR;
             qsv->ver.Minor = AV_QSV_MSDK_VERSION_MINOR;
+            qsv->impl      = hb_qsv_impl_get_preferred();
             sts = MFXInit(qsv->impl, &qsv->ver, &qsv->mfx_session);
             if (sts != MFX_ERR_NONE)
             {
@@ -331,6 +331,20 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
         return -1;
     }
     qsv_encode->is_init_done = 1;
+
+    mfxIMPL impl;
+    mfxVersion version;
+    // log actual implementation details now that we know them
+    if ((MFXQueryIMPL   (qsv->mfx_session, &impl)    == MFX_ERR_NONE) &&
+        (MFXQueryVersion(qsv->mfx_session, &version) == MFX_ERR_NONE))
+    {
+        hb_log("qsv_enc_init: using '%s' implementation, API: %"PRIu16".%"PRIu16"",
+               hb_qsv_impl_get_name(impl), version.Major, version.Minor);
+    }
+    else
+    {
+        hb_log("qsv_enc_init: MFXQueryIMPL/MFXQueryVersion failure");
+    }
 
     pv->init_done = 1;
     return 0;
@@ -708,7 +722,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
      * this is fine since the actual encode will use the same
      * values for all parameters relevant to the H.264 bitstream
      */
-    mfxIMPL impl;
     mfxStatus err;
     mfxVersion version;
     mfxVideoParam videoParam;
@@ -717,10 +730,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxExtCodingOption  option1_buf, *option1 = &option1_buf;
     mfxExtCodingOption2 option2_buf, *option2 = &option2_buf;
     mfxExtCodingOptionSPSPPS sps_pps_buf, *sps_pps = &sps_pps_buf;
-    impl          = MFX_IMPL_AUTO_ANY|MFX_IMPL_VIA_ANY;
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
-    err = MFXInit(impl, &version, &session);
+    err = MFXInit(hb_qsv_impl_get_preferred(), &version, &session);
     if (err != MFX_ERR_NONE)
     {
         hb_error("encqsvInit: MFXInit failed (%d)", err);
@@ -762,6 +774,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)option2;
     }
     err = MFXVideoENCODE_GetVideoParam(session, &videoParam);
+    MFXVideoENCODE_Close(session);
+    MFXClose(session);
     if (err == MFX_ERR_NONE)
     {
         // remove 32-bit NAL prefix (0x00 0x00 0x00 0x01)
@@ -775,27 +789,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     else
     {
         hb_error("encqsvInit: MFXVideoENCODE_GetVideoParam failed (%d)", err);
-        MFXVideoENCODE_Close(session);
-        MFXClose            (session);
         return -1;
     }
 
-    // log implementation details before closing this session
-    if (pv->is_sys_mem)
-    {
-        hb_log("encqsvInit: using encode-only path");
-    }
-    if ((MFXQueryIMPL   (session, &impl)    == MFX_ERR_NONE) &&
-        (MFXQueryVersion(session, &version) == MFX_ERR_NONE))
-    {
-        hb_log("encqsvInit: using %s implementation (%"PRIu16".%"PRIu16")",
-               impl == MFX_IMPL_SOFTWARE ? "software" : "hardware",
-               version.Major, version.Minor);
-    }
-    MFXVideoENCODE_Close(session);
-    MFXClose            (session);
-
-    // log main output settings
+    // log code path and main output settings
+    hb_log("encqsvInit: using %s path",
+           pv->is_sys_mem ? "encode-only" : "full QSV");
     hb_log("encqsvInit: TargetUsage %"PRIu16" AsyncDepth %"PRIu16"",
            videoParam.mfx.TargetUsage, videoParam.AsyncDepth);
     hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",

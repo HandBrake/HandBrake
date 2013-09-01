@@ -116,4 +116,7 @@ float hb_qsv_atof    (const char *str, int *err);
 int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam);
 int hb_qsv_param_parse  (hb_qsv_param_t *param, const char *key, const char *value, int vcodec);
 
+mfxIMPL     hb_qsv_impl_get_preferred();
+const char* hb_qsv_impl_get_name(int impl);
+
 #endif
