@@ -850,7 +850,7 @@ namespace HandBrakeWPF.ViewModels
 
                     this.SelectedStartPoint = 0;
                     int totalFrames;
-                    if (int.TryParse(estimatedTotalFrames.ToString(CultureInfo.InvariantCulture), out totalFrames))
+                    if (int.TryParse(Math.Round(estimatedTotalFrames, 0).ToString(CultureInfo.InvariantCulture), out totalFrames))
                     {
                         this.SelectedEndPoint = totalFrames;
                     }
