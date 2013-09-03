@@ -2032,7 +2032,7 @@ namespace HandBrakeWPF.ViewModels
 
             SourceMenuItem folderScan = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                IsOpenFolder = true,
                 Text = "Open Folder",
                 Command = new SourceMenuCommand(this.FolderScan),
                 IsDrive = false,
@@ -2040,7 +2040,7 @@ namespace HandBrakeWPF.ViewModels
             };
             SourceMenuItem fileScan = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                IsOpenFolder = false,
                 Text = "Open File",
                 Command = new SourceMenuCommand(this.FileScan),
                 IsDrive = false,
@@ -2050,14 +2050,14 @@ namespace HandBrakeWPF.ViewModels
             SourceMenuItem titleSpecific = new SourceMenuItem { Text = "Title Specific Scan" };
             SourceMenuItem folderScanTitle = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                IsOpenFolder = true,
                 Text = "Open Folder",
                 Command = new SourceMenuCommand(this.FolderScanTitleSpecific),
                 IsDrive = false
             };
             SourceMenuItem fileScanTitle = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                IsOpenFolder = false,
                 Text = "Open File",
                 Command = new SourceMenuCommand(this.FileScanTitleSpecific),
                 IsDrive = false
@@ -2076,7 +2076,6 @@ namespace HandBrakeWPF.ViewModels
                 select
                     new SourceMenuItem
                         {
-                            Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
                             Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
                             Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
                             Tag = item,

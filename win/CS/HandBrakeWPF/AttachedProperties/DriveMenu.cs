@@ -12,10 +12,8 @@ namespace HandBrakeWPF.AttachedProperties
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Utilities;
@@ -119,7 +117,6 @@ namespace HandBrakeWPF.AttachedProperties
                                                         let driveInformation = item
                                                         select new SourceMenuItem
                                                                    {
-                                                                       Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
                                                                        Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
                                                                        Command = new SourceMenuCommand(() => mvm.ProcessDrive(driveInformation)),
                                                                        Tag = item,

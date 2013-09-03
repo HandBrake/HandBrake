@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.Model
 {
     using System.Collections.ObjectModel;
-    using System.Windows.Controls;
     using System.Windows.Input;
 
     /// <summary>
@@ -37,11 +36,6 @@ namespace HandBrakeWPF.Model
         public ICommand Command { get; set; }
 
         /// <summary>
-        /// Gets or sets the image.
-        /// </summary>
-        public Image Image { get; set; }
-
-        /// <summary>
         /// Gets or sets the children.
         /// </summary>
         public ObservableCollection<SourceMenuItem> Children { get; set; }
@@ -50,6 +44,22 @@ namespace HandBrakeWPF.Model
         /// Gets or sets a value indicating whether is drive.
         /// </summary>
         public bool IsDrive { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is open folder.
+        /// </summary>
+        public bool IsOpenFolder { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether is open file.
+        /// </summary>
+        public bool IsOpenFile
+        {
+            get
+            {
+                return !this.IsOpenFolder && (this.Children == null || this.Children.Count == 0);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tag.
