@@ -368,6 +368,28 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
             param->gop.gop_pic_size = HB_QSV_CLIP3(-1, UINT16_MAX, ivalue);
         }
     }
+    else if (!strcasecmp(key, "b-pyramid"))
+    {
+        if (hb_qsv_info->capabilities & HB_QSV_CAP_H264_BPYRAMID)
+        {
+            switch (vcodec)
+            {
+                case HB_VCODEC_QSV_H264:
+                    ivalue = hb_qsv_atobool(value, &error);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
+            if (!error)
+            {
+                param->gop.b_pyramid = ivalue;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
     else if (!strcasecmp(key, "scenecut"))
     {
         ivalue = hb_qsv_atobool(value, &error);
@@ -752,6 +774,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->codingOption2.Trellis         = MFX_TRELLIS_UNKNOWN;
 
         // GOP & rate control
+        param->gop.b_pyramid          =  0;
         param->gop.gop_pic_size       = -1; // set automatically
         param->gop.int_ref_cycle_size = -1; // set automatically
         param->rc.lookahead           = -1; // set automatically
@@ -776,7 +799,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->videoParam->mfx.NumSlice     = 0; // use Media SDK default
         param->videoParam->mfx.NumRefFrame  = 0; // use Media SDK default
         param->videoParam->mfx.GopPicSize   = 0; // use Media SDK default
-        param->videoParam->mfx.GopRefDist   = 4; // power of 2, >= 4: B-pyramid
+        param->videoParam->mfx.GopRefDist   = 0; // use Media SDK default
         // introduced in API 1.1
         param->videoParam->AsyncDepth = AV_QSV_ASYNC_DEPTH_DEFAULT;
         // introduced in API 1.3

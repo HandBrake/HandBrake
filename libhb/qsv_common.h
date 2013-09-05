@@ -89,6 +89,7 @@ typedef struct
     mfxExtVideoSignalInfo videoSignalInfo;
     struct
     {
+        int b_pyramid;
         int gop_pic_size;
         int int_ref_cycle_size;
     } gop;

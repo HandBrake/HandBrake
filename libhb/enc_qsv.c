@@ -716,6 +716,95 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                                                        pv->param.rc.lookahead ? 60 : 0);
     }
 
+    if ((hb_qsv_info->capabilities & HB_QSV_CAP_H264_BPYRAMID) &&
+        (pv->param.videoParam->mfx.CodecProfile != MFX_PROFILE_AVC_BASELINE         &&
+         pv->param.videoParam->mfx.CodecProfile != MFX_PROFILE_AVC_CONSTRAINED_HIGH &&
+         pv->param.videoParam->mfx.CodecProfile != MFX_PROFILE_AVC_CONSTRAINED_BASELINE))
+    {
+        int gop_ref_dist = 4;
+        /*
+         * B-pyramid is supported.
+         *
+         * Set gop_ref_dist to a power of two, >= 4 and <= GopRefDist to ensure
+         * Media SDK will not disable B-pyramid if we end up using it below.
+         */
+        while (pv->param.videoParam->mfx.GopRefDist >= gop_ref_dist * 2)
+        {
+            gop_ref_dist *= 2;
+        }
+        if ((pv->param.gop.b_pyramid) &&
+            (pv->param.videoParam->mfx.GopPicSize == 0 ||
+             pv->param.videoParam->mfx.GopPicSize > gop_ref_dist))
+        {
+            /*
+             * B-pyramid enabled and GopPicSize is long enough for gop_ref_dist.
+             *
+             * Use gop_ref_dist. GopPicSize must be a multiple of GopRefDist.
+             * NumRefFrame should be >= (GopRefDist / 2) and >= 3, otherwise
+             * Media SDK may sometimes decide to disable B-pyramid too (whereas
+             * sometimes it will just sanitize NumrefFrame instead).
+             *
+             * Notes: Media SDK handles the NumRefFrame == 0 case for us.
+             *        Also, GopPicSize == 0 should always result in a value that
+             *        does NOT cause Media SDK to disable B-pyramid, so it's OK.
+             */
+            pv->param.videoParam->mfx.GopRefDist = gop_ref_dist;
+            pv->param.videoParam->mfx.GopPicSize = (pv->param.videoParam->mfx.GopPicSize /
+                                                    pv->param.videoParam->mfx.GopRefDist *
+                                                    pv->param.videoParam->mfx.GopRefDist);
+            if (pv->param.videoParam->mfx.NumRefFrame != 0)
+            {
+                pv->param.videoParam->mfx.NumRefFrame = FFMAX(pv->param.videoParam->mfx.NumRefFrame,
+                                                              pv->param.videoParam->mfx.GopRefDist / 2);
+                pv->param.videoParam->mfx.NumRefFrame = FFMAX(pv->param.videoParam->mfx.NumRefFrame, 3);
+            }
+        }
+        else
+        {
+            /*
+             * B-pyramid disabled or not possible (GopPicSize too short).
+             * Sanitize gop.b_pyramid to 0 (off/disabled).
+             */
+            pv->param.gop.b_pyramid = 0;
+            /* Then, adjust settings to actually disable it. */
+            if (pv->param.videoParam->mfx.GopRefDist == 0)
+            {
+                /*
+                 * GopRefDist == 0 means the value will be set by Media SDK.
+                 * Since we can't be sure what the actual value would be, we
+                 * have to make sure that GopRefDist is set explicitly.
+                 */
+                pv->param.videoParam->mfx.GopRefDist = gop_ref_dist - 1;
+            }
+            else if (pv->param.videoParam->mfx.GopRefDist == gop_ref_dist)
+            {
+                /* GopRefDist is compatible with Media SDK's B-pyramid. */
+                if (pv->param.videoParam->mfx.GopPicSize == 0)
+                {
+                    /*
+                     * GopPicSize is unknown and could be a multiple of
+                     * GopRefDist. Decrement the latter to disable B-pyramid.
+                     */
+                    pv->param.videoParam->mfx.GopRefDist--;
+                }
+                else if (pv->param.videoParam->mfx.GopPicSize %
+                         pv->param.videoParam->mfx.GopRefDist == 0)
+                {
+                    /*
+                     * GopPicSize is a multiple of GopRefDist.
+                     * Increment the former to disable B-pyramid.
+                     */
+                    pv->param.videoParam->mfx.GopPicSize++;
+                }
+            }
+        }
+    }
+    else
+    {
+        /* B-pyramid not supported. */
+        pv->param.gop.b_pyramid = 0;
+    }
+
     /*
      * init a dummy encode-only session to get the SPS/PPS
      * and the final output settings sanitized by Media SDK
@@ -792,6 +881,38 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 
+    // check whether B-frames are used
+    switch (videoParam.mfx.CodecProfile)
+    {
+        case MFX_PROFILE_AVC_BASELINE:
+        case MFX_PROFILE_AVC_CONSTRAINED_HIGH:
+        case MFX_PROFILE_AVC_CONSTRAINED_BASELINE:
+            pv->bfrm_delay = 0;
+            break;
+        default:
+            pv->bfrm_delay = 1;
+            break;
+    }
+    // sanitize
+    pv->bfrm_delay = FFMIN(pv->bfrm_delay, videoParam.mfx.GopRefDist - 1);
+    pv->bfrm_delay = FFMIN(pv->bfrm_delay, videoParam.mfx.GopPicSize - 2);
+    pv->bfrm_delay = FFMAX(pv->bfrm_delay, 0);
+    // let the muxer know whether to expect B-frames or not
+    job->areBframes = !!pv->bfrm_delay;
+    // check whether we need to generate DTS ourselves (MSDK API < 1.6 or VFR)
+    pv->bfrm_workaround = job->cfr != 1 || !(hb_qsv_info->capabilities &
+                                             HB_QSV_CAP_MSDK_API_1_6);
+    if (pv->bfrm_delay && pv->bfrm_workaround)
+    {
+        pv->bfrm_workaround = 1;
+        pv->list_dts        = hb_list_init();
+    }
+    else
+    {
+        pv->bfrm_workaround = 0;
+        pv->list_dts        = NULL;
+    }
+
     // log code path and main output settings
     hb_log("encqsvInit: using %s path",
            pv->is_sys_mem ? "encode-only" : "full QSV");
@@ -799,6 +920,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
            videoParam.mfx.TargetUsage, videoParam.AsyncDepth);
     hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",
            videoParam.mfx.GopRefDist, videoParam.mfx.GopPicSize, videoParam.mfx.NumRefFrame);
+    hb_log("encqsvInit: BFrames %s BPyramid %s",
+           pv->bfrm_delay                            ? "on" : "off",
+           pv->bfrm_delay && pv->param.gop.b_pyramid ? "on" : "off");
     if (videoParam.mfx.RateControlMethod == MFX_RATECONTROL_CQP)
     {
         char qpi[7], qpp[9], qpb[9];
@@ -880,38 +1004,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // AsyncDepth has now been set and/or modified by Media SDK
     pv->max_async_depth = videoParam.AsyncDepth;
     pv->async_depth     = 0;
-
-    // check whether B-frames are used
-    switch (videoParam.mfx.CodecProfile)
-    {
-        case MFX_PROFILE_AVC_BASELINE:
-        case MFX_PROFILE_AVC_CONSTRAINED_HIGH:
-        case MFX_PROFILE_AVC_CONSTRAINED_BASELINE:
-            pv->bfrm_delay = 0;
-            break;
-        default:
-            pv->bfrm_delay = 1;
-            break;
-    }
-    // sanitize
-    pv->bfrm_delay = FFMIN(pv->bfrm_delay, videoParam.mfx.GopRefDist - 1);
-    pv->bfrm_delay = FFMIN(pv->bfrm_delay, videoParam.mfx.GopPicSize - 2);
-    pv->bfrm_delay = FFMAX(pv->bfrm_delay, 0);
-    // let the muxer know whether to expect B-frames or not
-    job->areBframes = !!pv->bfrm_delay;
-    // check whether we need to generate DTS ourselves (MSDK API < 1.6 or VFR)
-    pv->bfrm_workaround = job->cfr != 1 || !(hb_qsv_info->capabilities &
-                                             HB_QSV_CAP_MSDK_API_1_6);
-    if (pv->bfrm_delay && pv->bfrm_workaround)
-    {
-        pv->bfrm_workaround = 1;
-        pv->list_dts        = hb_list_init();
-    }
-    else
-    {
-        pv->bfrm_workaround = 0;
-        pv->list_dts        = NULL;
-    }
 
     return 0;
 }
@@ -1302,6 +1394,13 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                            (duration / 2)) / duration);
                         pv->bfrm_delay = FFMAX(pv->bfrm_delay, 1);
                         pv->bfrm_delay = FFMIN(pv->bfrm_delay, BFRM_DELAY_MAX);
+                        // check whether b_pyramid is respected, log if needed
+                        if ((pv->param.gop.b_pyramid != 0 && pv->bfrm_delay <= 1) ||
+                            (pv->param.gop.b_pyramid == 0 && pv->bfrm_delay >= 2))
+                        {
+                            hb_log("encqsvWork: b_pyramid %d not respected (delay: %d)",
+                                   pv->param.gop.b_pyramid, pv->bfrm_delay);
+                        }
                     }
                     /*
                      * Generate VFR-compatible output DTS based on input PTS.
