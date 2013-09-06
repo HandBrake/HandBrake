@@ -139,45 +139,12 @@ namespace HandBrake.ApplicationServices.Isolation
 
         #region Implemented Interfaces
 
-        #region IDisposable
-
         /// <summary>
         /// The dispose.
         /// </summary>
         public void Dispose()
         {
             this.Service.Unsubscribe();
-        }
-
-        #endregion
-
-        #region IHbServiceCallback
-
-        /// <summary>
-        /// The scan completed.
-        /// </summary>
-        /// <param name="eventArgs">
-        /// The event args.
-        /// </param>
-        public virtual void ScanCompletedCallback(ScanCompletedEventArgs eventArgs)
-        {
-        }
-
-        /// <summary>
-        /// The scan progress.
-        /// </summary>
-        /// <param name="eventArgs">
-        /// The event args.
-        /// </param>
-        public virtual void ScanProgressCallback(ScanProgressEventArgs eventArgs)
-        {
-        }
-
-        /// <summary>
-        /// The scan started callback.
-        /// </summary>
-        public virtual void ScanStartedCallback()
-        {
         }
 
         /// <summary>
@@ -206,8 +173,6 @@ namespace HandBrake.ApplicationServices.Isolation
         public virtual void EncodeStartedCallback()
         {
         }
-
-        #endregion
 
         #endregion
     }

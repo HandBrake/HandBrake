@@ -13,12 +13,9 @@ namespace HandBrakeWPF.Services
 {
     using System;
 
-    using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Isolation;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.Interop;
     using HandBrake.Interop.Interfaces;
 
     /// <summary>
@@ -48,41 +45,11 @@ namespace HandBrakeWPF.Services
         /// Initializes a new instance of the <see cref="ScanServiceWrapper"/> class.
         /// </summary>
         /// <param name="userSettingService">
-        /// The user setting service.
+        /// The user Setting Service.
         /// </param>
         public ScanServiceWrapper(IUserSettingService userSettingService)
         {
-            var useLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
-            var useProcessIsolation =
-                userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
-            string port = userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);
-
-            if (useLibHb)
-            {
-                try
-                {
-                    if (useProcessIsolation)
-                    {
-                        this.scanService = new IsolatedScanService(port);
-                    }
-                    else
-                    {
-                        HandbrakeInstance = new HandBrakeInstance();
-                        this.scanService = new LibScan(HandbrakeInstance);
-                    }
-                } 
-                catch(Exception exc)
-                {
-                    // Try to recover from errors.
-                    userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, false);
-                    throw new GeneralApplicationException("Unable to initialise LibHB or Background worker service", "Falling back to using HandBrakeCLI.exe. Setting has been reset", exc);
-                }
-            }
-            else
-            {
-                this.scanService = new ScanService(userSettingService);
-            }
-
+            this.scanService = new LibScan(userSettingService);
             this.scanService.ScanCompleted += this.ScanServiceScanCompleted;
             this.scanService.ScanStared += this.ScanServiceScanStared;
             this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
@@ -191,25 +158,6 @@ namespace HandBrakeWPF.Services
         #region Implemented Interfaces
 
         #region IScan
-
-        /// <summary>
-        /// Take a Scan Log file, and process it as if it were from the CLI.
-        /// </summary>
-        /// <param name="path">
-        /// The path to the log file.
-        /// </param>
-        public void DebugScanLog(string path)
-        {
-            this.scanService.DebugScanLog(path);
-        }
-
-        /// <summary>
-        /// Shutdown the service.
-        /// </summary>
-        public void Shutdown()
-        {
-            this.scanService.Shutdown();
-        }
 
         /// <summary>
         /// Scan a Source Path.

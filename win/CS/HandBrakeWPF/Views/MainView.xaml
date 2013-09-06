@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
+             xmlns:handBrakeWpf="clr-namespace:HandBrakeWPF"
              AllowDrop="True"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -21,7 +22,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <UserControl.Resources>       
+    <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,1" />
@@ -179,7 +180,6 @@
 
                 <MenuItem Header="_Debug" Visibility="{Binding ShowDebugMenu, Converter={StaticResource boolToVisConverter}}" >
                     <MenuItem Header="_Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
-                    <MenuItem Header="_Debug Scan Log" Micro:Message.Attach="[Event Click] = [Action DebugScanLog]" />
                 </MenuItem>
             </Menu>
 
@@ -191,8 +191,8 @@
                      ToolBar.OverflowMode="Never"
                      ToolBarTray.IsLocked="True"
                      >
-                <Menu Background="Transparent" attachedProperties:DriveMenu.ShowAvailableDrives="true">
-                    <MenuItem ItemsSource="{Binding SourceMenu}">
+                <Menu Background="Transparent">
+                    <MenuItem ItemsSource="{Binding SourceMenu}" attachedProperties:DriveMenu.ShowAvailableDrives="true">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="32"
@@ -205,14 +205,30 @@
                                        />
                             </StackPanel>
                         </MenuItem.Header>
+                        <MenuItem.Resources>
+                            <Image x:Key="Movie" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/Movies.png" />
+                            <Image x:Key="Folder" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/folder.png" />
+                            <Image x:Key="Disc" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/disc_small.png" />
+                        </MenuItem.Resources>
                         <MenuItem.ItemContainerStyle>
-                            <Style TargetType="{x:Type MenuItem}">
+                            <Style TargetType="{x:Type MenuItem}" x:Shared="True">
                                 <Setter Property="Header" Value="{Binding Text}" />
-                                <Setter Property="MenuItem.Command" Value="{Binding Command}"/>
-                                <Setter Property="MenuItem.CommandParameter" Value="123"/>
+                                <Setter Property="Command" Value="{Binding Command}"/>
                                 <Setter Property="ItemsSource" Value="{Binding Children}" />
-                                <Setter Property="Icon" Value="{Binding Image}" />
                                 <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
+                                <Setter Property="Tag" Value="{Binding}" />
+                                
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsDisc}" Value="true">
+                                        <Setter Property="Icon" Value="{StaticResource Disc}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsOpenFolder}" Value="true">
+                                        <Setter Property="Icon" Value="{StaticResource Folder}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsOpenFile}" Value="true">
+                                        <Setter Property="Icon" Value="{StaticResource Movie}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
@@ -467,7 +483,13 @@
                              Margin="8,0,0,0"
                              Text="{Binding Destination,
                                             UpdateSourceTrigger=PropertyChanged}"
-                             />
+                             >
+                        <TextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Open this Directory" Micro:Message.Attach="[Event Click] = [Action OpenDestinationDirectory]" />
+                            </ContextMenu>
+                        </TextBox.ContextMenu>
+                    </TextBox>
                     <Button Name="DestinationBrowser"
                             Grid.Column="2"
                             Margin="8,0,0,0"
@@ -546,6 +568,7 @@
                         Margin="10,10,5,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
+                        MinHeight="350" MinWidth="720"
                         >
                 <TabItem Name="pictureTab" Header="Picture">
                     <ContentControl x:Name="PictureSettingsViewModel" />
@@ -578,7 +601,7 @@
                       Header="Presets"
                       Margin="0,0,0,5"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
-                      
+
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />

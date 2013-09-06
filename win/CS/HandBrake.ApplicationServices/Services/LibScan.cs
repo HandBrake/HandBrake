@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Text;
     using System.Threading;
 
@@ -35,7 +36,7 @@ namespace HandBrake.ApplicationServices.Services
         /*
          * TODO
          * 1. Expose the Previews code.
-         * 2. Expose the Logging.
+         * 2. Cleanup old instances.
          * 
          */
 
@@ -47,9 +48,9 @@ namespace HandBrake.ApplicationServices.Services
         static readonly object LogLock = new object();
 
         /// <summary>
-        /// LibHB Instance
+        /// The user setting service.
         /// </summary>
-        private readonly IHandBrakeInstance instance;
+        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         /// Log data from HandBrakeInstance
@@ -66,24 +67,40 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private string currentSourceScanPath;
 
+        /// <summary>
+        /// The log dir.
+        /// </summary>
+        private static string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+
+        /// <summary>
+        /// The dvd info path.
+        /// </summary>
+        private string dvdInfoPath = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", GeneralUtilities.ProcessId));
+
+        /// <summary>
+        /// The scan log.
+        /// </summary>
+        private StreamWriter scanLog;
+
+        /// <summary>
+        /// LibHB Instance
+        /// </summary>
+        private IHandBrakeInstance instance;
+
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LibScan"/> class. 
         /// </summary>
-        /// <param name="handBrakeInstance">
-        /// The hand Brake Instance.
+        /// <param name="userSettingService">
+        /// The user Setting Service.
         /// </param>
-        public LibScan(IHandBrakeInstance handBrakeInstance)
+        public LibScan(IUserSettingService userSettingService)
         {
             logging = new StringBuilder();
 
             header = GeneralUtilities.CreateCliLogHeader();
-
-            instance = handBrakeInstance;
-            instance.Initialize(1);
-            instance.ScanProgress += this.InstanceScanProgress;
-            instance.ScanCompleted += this.InstanceScanCompleted;
+            this.userSettingService = userSettingService;
 
             HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
             HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
@@ -127,7 +144,8 @@ namespace HandBrake.ApplicationServices.Services
         {
             get
             {
-                return string.IsNullOrEmpty(this.logging.ToString()) ? this.header + "No log data available..." : this.header + this.logging.ToString();
+                string noLog = "No log data available... Log data will show here after you scan a source. \n\nOpen the log file directory to get previous log files.";
+                return string.IsNullOrEmpty(this.logging.ToString()) ? this.header + noLog : this.header + this.logging.ToString();
             }
         }
 
@@ -153,8 +171,53 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
         {
-            Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
-            t.Start();
+            // Try to cleanup any previous scan instances.
+            if (instance != null)
+            {
+                try
+                {
+                    this.scanLog.Close();
+                    this.scanLog.Dispose();
+                    instance.Dispose();
+                }
+                catch (Exception exc)
+                {
+                    // Do Nothing
+                }
+            }
+
+            // Clear down the logging
+            this.logging.Clear();
+
+            try
+            {
+                // Make we don't pick up a stale last_scan_log_xyz.txt (and that we have rights to the file)
+                if (File.Exists(dvdInfoPath))
+                {
+                    File.Delete(dvdInfoPath);
+                }
+            }
+            catch (Exception)
+            {
+                // Do nothing.
+            }
+
+            if (!Directory.Exists(Path.GetDirectoryName(dvdInfoPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(dvdInfoPath));
+            }
+
+            // Create a new scan log.
+            scanLog = new StreamWriter(dvdInfoPath);
+
+            // Create a new HandBrake Instance.
+            instance = new HandBrakeInstance();
+            instance.Initialize(1);
+            instance.ScanProgress += this.InstanceScanProgress;
+            instance.ScanCompleted += this.InstanceScanCompleted;
+
+            // Start the scan on a back
+            this.ScanSource(sourcePath, title, previewCount);
         }
 
         /// <summary>
@@ -163,28 +226,19 @@ namespace HandBrake.ApplicationServices.Services
         public void Stop()
         {
             instance.StopScan();
-        }
 
-        /// <summary>
-        /// Debug a Scan Log (Only Available for CLI Mode, not LIBHB)
-        /// </summary>
-        /// <param name="path">
-        /// The path.
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// (Only Available for CLI Mode, not LIBHB)
-        /// </exception>
-        public void DebugScanLog(string path)
-        {
-            throw new NotImplementedException("Only Available when using the CLI mode. Not LibHB");
-        }
-
-        /// <summary>
-        /// Shutdown the service.
-        /// </summary>
-        public void Shutdown()
-        {
-            // Nothing to do for this implementation.
+            try
+            {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.Close();
+                    this.scanLog.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+                // Do Nothing.
+            }
         }
 
         #endregion
@@ -217,10 +271,13 @@ namespace HandBrake.ApplicationServices.Services
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());
 
-                if (title != 0)
-                    instance.StartScan(sourcePath.ToString(), previewCount, title);
-                else
-                    instance.StartScan(sourcePath.ToString(), previewCount);
+                TimeSpan minDuration =
+                    TimeSpan.FromSeconds(
+                        this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration));
+
+                HandBrakeUtils.SetDvdNav(this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
+
+                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
             }
             catch (Exception exc)
             {
@@ -245,6 +302,19 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void InstanceScanCompleted(object sender, EventArgs e)
         {
+            // Write the log file out before we start processing incase we crash.
+            try
+            {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.Flush();
+                }
+            }
+            catch (Exception)
+            {
+                // Do Nothing.
+            }
+
             // TODO -> Might be a better place to fix this.
             string path = currentSourceScanPath;
             if (currentSourceScanPath.Contains("\""))
@@ -252,7 +322,8 @@ namespace HandBrake.ApplicationServices.Services
                 path = currentSourceScanPath.Trim('\"');
             }
 
-            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
+            // Process into internal structures.
+            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles, this.instance.FeatureTitle), ScanPath = path };
 
             IsScanning = false;
 
@@ -277,7 +348,8 @@ namespace HandBrake.ApplicationServices.Services
                     new ApplicationServices.EventArgs.ScanProgressEventArgs
                         {
                             CurrentTitle = e.CurrentTitle,
-                            Titles = e.Titles
+                            Titles = e.Titles,
+                            Percentage = Math.Round((decimal)e.Progress * 100, 0)
                         };
 
                 this.ScanStatusChanged(this, eventArgs);
@@ -297,6 +369,11 @@ namespace HandBrake.ApplicationServices.Services
         {
             lock (LogLock)
             {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.WriteLine(e.Message);
+                }
+
                 this.logging.AppendLine(e.Message);
             }
         }
@@ -314,6 +391,11 @@ namespace HandBrake.ApplicationServices.Services
         {
             lock (LogLock)
             {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.WriteLine(e.Message);
+                }
+
                 this.logging.AppendLine(e.Message);
             }
         }
@@ -324,24 +406,29 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="titles">
         /// The titles.
         /// </param>
+        /// <param name="featureTitle">
+        /// The feature Title.
+        /// </param>
         /// <returns>
         /// The convert titles.
         /// </returns>
-        private static List<Title> ConvertTitles(IEnumerable<Interop.SourceData.Title> titles)
+        private static List<Title> ConvertTitles(IEnumerable<Interop.SourceData.Title> titles, int featureTitle)
         {
             List<Title> titleList = new List<Title>();
             foreach (Interop.SourceData.Title title in titles)
             {
                 Title converted = new Title
                     {
-                        TitleNumber = title.TitleNumber, 
-                        Duration = title.Duration, 
-                        Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
-                        AspectRatio = title.AspectRatio, 
-                        AngleCount = title.AngleCount, 
-                        ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
+                        TitleNumber = title.TitleNumber,
+                        Duration = title.Duration,
+                        Resolution = new Size(title.Resolution.Width, title.Resolution.Height),
+                        AspectRatio = title.AspectRatio,
+                        AngleCount = title.AngleCount,
+                        ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
                         AutoCropDimensions = title.AutoCropDimensions,
-                        Fps = title.Framerate
+                        Fps = title.Framerate,
+                        SourceName = title.Path,
+                        MainTitle = title.TitleNumber == featureTitle
                     };
 
                 foreach (Interop.SourceData.Chapter chapter in title.Chapters)

@@ -64,9 +64,6 @@ namespace HandBrake.Interop.HbLib
 		/// hb_thread_t*
 		public IntPtr work_thread;
 
-		// This is REMOVED in the latest HB SVN
-		public int cpu_count;
-
 		/// hb_lock_t*
 		public IntPtr state_lock;
 
@@ -82,7 +79,11 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int scanCount;
 
+        // volatile int   scan_die; missing
+
 		/// hb_interjob_t*
 		public IntPtr interjob;
+
+        // void *system_sleep_opaque; missing
 	}
 }

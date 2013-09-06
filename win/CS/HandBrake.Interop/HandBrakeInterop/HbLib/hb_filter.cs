@@ -36,8 +36,9 @@ namespace HandBrake.Interop.HbLib
 
 	public enum hb_filter_ids
 	{
+        HB_FILTER_QSV_PRE = 1, // for QSV - important to have before other filters 
 		// First, filters that may change the framerate (drop or dup frames)
-		HB_FILTER_DETELECINE = 1,
+		HB_FILTER_DETELECINE,
 		HB_FILTER_DECOMB,
 		HB_FILTER_DEINTERLACE,
 		HB_FILTER_VFR,
@@ -49,5 +50,7 @@ namespace HandBrake.Interop.HbLib
 		// Finally filters that don't care what order they are in,
 		// except that they must be after the above filters
 		HB_FILTER_ROTATE,
+        HB_FILTER_QSV_POST, // for QSV - important to have as a last one 
+        HB_FILTER_QSV,  // default MSDK VPP filter 
 	}
 }

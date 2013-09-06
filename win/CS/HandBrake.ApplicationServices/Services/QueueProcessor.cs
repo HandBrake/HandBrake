@@ -49,12 +49,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// HandBrakes Queue file with a place holder for an extra string.
         /// </summary>
-        private string queueFile;
-
-        /// <summary>
-        /// The is paused.
-        /// </summary>
-        private bool isPaused;
+        private readonly string queueFile;
 
         #endregion
 
@@ -96,6 +91,17 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public delegate void QueueProgressStatus(object sender, QueueProgressEventArgs e);
 
+        /// <summary>
+        /// The queue completed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public delegate void QueueCompletedEventDelegate(object sender, QueueCompletedEventArgs e);
+
         #endregion
 
         #region Events
@@ -114,7 +120,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Fires when the entire encode queue has completed.
         /// </summary>
-        public event EventHandler QueueCompleted;
+        public event QueueCompletedEventDelegate QueueCompleted;
 
         /// <summary>
         /// Fires when a pause to the encode queue has been requested.
@@ -424,7 +430,6 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.InvokeQueuePaused(EventArgs.Empty);
             this.IsProcessing = false;
-            this.isPaused = true;
         }
 
         /// <summary>
@@ -447,7 +452,6 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             this.IsProcessing = true;
-            this.isPaused = false;
         }
 
         #endregion
@@ -490,7 +494,7 @@ namespace HandBrake.ApplicationServices.Services
             else
             {
                 this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
-                this.InvokeQueueCompleted(EventArgs.Empty);
+                this.OnQueueCompleted(new QueueCompletedEventArgs(true));
                 this.BackupQueue(string.Empty);
             }
         }
@@ -535,23 +539,6 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// Invoke the QueueCompleted event.
-        /// </summary>
-        /// <param name="e">
-        /// The EventArgs.
-        /// </param>
-        private void InvokeQueueCompleted(EventArgs e)
-        {
-            this.IsProcessing = false;
-
-            EventHandler handler = this.QueueCompleted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        /// <summary>
         /// Invoke the QueuePaused event
         /// </summary>
         /// <param name="e">
@@ -559,11 +546,30 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void InvokeQueuePaused(EventArgs e)
         {
+            this.IsProcessing = false;
+
             EventHandler handler = this.QueuePaused;
             if (handler != null)
             {
                 handler(this, e);
             }
+        }
+
+        /// <summary>
+        /// The on queue completed.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected virtual void OnQueueCompleted(QueueCompletedEventArgs e)
+        {
+            QueueCompletedEventDelegate handler = this.QueueCompleted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+
+            this.IsProcessing = false;
         }
 
         /// <summary>
@@ -583,7 +589,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
 
                 // Fire the event to tell connected services.
-                this.InvokeQueueCompleted(EventArgs.Empty);
+                this.OnQueueCompleted(new QueueCompletedEventArgs(false));
             }
         }
 

@@ -49,7 +49,7 @@ namespace HandBrakeWPF.Commands
         /// </param>
         private void ScanServiceWrapperScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
         {
-            Caliburn.Micro.Execute.OnUIThread(() => this.CanExecuteChanged(sender, EventArgs.Empty));    
+            Caliburn.Micro.Execute.OnUIThread(this.OnCanExecuteChanged);    
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace HandBrakeWPF.Commands
         /// </param>
         private void ScanServiceWrapperScanStared(object sender, EventArgs e)
         {
-            Caliburn.Micro.Execute.OnUIThread(() => this.CanExecuteChanged(sender, EventArgs.Empty));    
+            Caliburn.Micro.Execute.OnUIThread(this.OnCanExecuteChanged);    
         }
 
         #region Implementation of ICommand
@@ -99,6 +99,18 @@ namespace HandBrakeWPF.Commands
         /// The can execute changed.
         /// </summary>
         public event EventHandler CanExecuteChanged;
+
+        /// <summary>
+        /// The on can execute changed.
+        /// </summary>
+        protected virtual void OnCanExecuteChanged()
+        {
+            EventHandler handler = this.CanExecuteChanged;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
 
         #endregion
     }

@@ -267,17 +267,15 @@ namespace HandBrake.ApplicationServices.Utilities
 
             if (task.Anamorphic != Anamorphic.Strict)
             {
-                //if (task.MaxWidth.HasValue) query += string.Format(" -X {0}", task.MaxWidth);
                 if (task.Width.HasValue && task.Width != 0) query += string.Format(" -w {0}", task.Width);
 
-                //if (task.MaxHeight.HasValue) query += string.Format(" -Y {0}", task.MaxHeight);
                 if (task.Height.HasValue && task.Height != 0) query += string.Format(" -l {0}", task.Height);
             }
 
-            if (task.HasCropping)
-            {
+            //if (task.HasCropping)
+            //{
                 query += string.Format(" --crop {0}:{1}:{2}:{3}", task.Cropping.Top, task.Cropping.Bottom, task.Cropping.Left, task.Cropping.Right);
-            }
+            //}
 
             switch (task.Anamorphic)
             {
@@ -435,6 +433,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 case VideoEncoder.X264:
                     query += " -e x264";
                     break;
+                case VideoEncoder.QuickSync:
+                    query += " -e qsv_h264";
+                    break;
                 case VideoEncoder.Theora:
                     query += " -e theora";
                     break;
@@ -458,6 +459,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.X264:
+                        case VideoEncoder.QuickSync:
                             query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.Theora:
@@ -583,7 +585,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     firstLoop = false;
                 }
                 else
-                    audioItems += "," +  Converters.GetCliAudioEncoder(item);
+                    audioItems += "," + Converters.GetCliAudioEncoder(item);
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -E " + audioItems;
@@ -732,10 +734,10 @@ namespace HandBrake.ApplicationServices.Utilities
                     {
                         query += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
                     }
-                } 
+                }
                 else
                 {
-                    query += string.Format(" --audio-copy-mask none");  
+                    query += string.Format(" --audio-copy-mask none");
                 }
 
                 query += string.Format(" --audio-fallback {0}", Converters.GetCliAudioEncoder(task.AllowedPassthruOptions.AudioEncoderFallback));
@@ -905,51 +907,100 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         private static string AdvancedQuery(EncodeTask task)
         {
+            string query = string.Empty;
+
+            // X264 Only
             if (task.VideoEncoder == VideoEncoder.X264)
             {
-                string query = string.Empty; 
-
-                if (task.X264Preset != x264Preset.Medium)
+                if (!task.ShowAdvancedTab)
                 {
-                    query += string.Format(" --x264-preset={0} ", task.X264Preset.ToString().ToLower().Replace(" ", string.Empty));
-                }
-
-                if (task.H264Profile != x264Profile.None)
-                {
-                    query += string.Format(" --x264-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
-                }
-
-                if (task.X264Tune != x264Tune.None)
-                {
-                    string tune = string.Empty;
-
-                    if (task.FastDecode)
+                    if (task.X264Preset != x264Preset.Medium)
                     {
-                        tune = "fastdecode";
+                        query += string.Format(
+                            " --x264-preset={0} ", task.X264Preset.ToString().ToLower().Replace(" ", string.Empty));
                     }
 
-                    string tuneDropdown = task.X264Tune.ToString().ToLower().Replace(" ", string.Empty);
-                    if (task.X264Tune != x264Tune.None && !string.IsNullOrEmpty(tuneDropdown))
+                    if (task.X264Tune != x264Tune.None)
                     {
-                        tune = string.IsNullOrEmpty(tune) ? tuneDropdown : string.Format(",{0}", tuneDropdown);  
+                        string tune = string.Empty;
+
+                        if (task.FastDecode)
+                        {
+                            tune = "fastdecode";
+                        }
+
+                        string tuneDropdown = task.X264Tune.ToString().ToLower().Replace(" ", string.Empty);
+                        if (task.X264Tune != x264Tune.None && !string.IsNullOrEmpty(tuneDropdown))
+                        {
+                            tune = string.IsNullOrEmpty(tune) ? tuneDropdown : string.Format(",{0}", tuneDropdown);
+                        }
+
+                        query += string.Format(" --x264-tune=\"{0}\" ", tune);
                     }
 
-                    query += string.Format(" --x264-tune=\"{0}\" ", tune);
+                    if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
+                    {
+                        query += string.Format(" -x {0}", task.ExtraAdvancedArguments);
+                    }
                 }
+            }
 
+            // Options that apply to both x264 and QuickSync
+            if (task.VideoEncoder == VideoEncoder.QuickSync || task.VideoEncoder == VideoEncoder.X264)
+            {
                 if (task.H264Level != "Auto")
                 {
                     query += string.Format(" --h264-level=\"{0}\" ", task.H264Level);
                 }
 
-                if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))
+                if (task.H264Profile != x264Profile.None)
                 {
-                    query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
+                    query += string.Format(
+                        " --h264-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
                 }
 
-                if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
+                if (task.VideoEncoder == VideoEncoder.QuickSync)
                 {
-                    query += string.Format(" -x {0}", task.ExtraAdvancedArguments);
+                    string qsvPreset;
+
+                    if (SystemInfo.IsHswOrNewer)
+                    {
+                        switch (task.QsvPreset)
+                        {
+                            case QsvPreset.Speed:
+                                qsvPreset = "6";
+                                break;
+                            case QsvPreset.Balanced:
+                                qsvPreset = "4";
+                                break;
+                            default:
+                                qsvPreset = "2";
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (task.QsvPreset)
+                        {
+                            case QsvPreset.Speed:
+                                qsvPreset = "4";
+                                break;
+                            case QsvPreset.Balanced:
+                                qsvPreset = "2";
+                                break;
+                            default:
+                                qsvPreset = "2";
+                                break;
+                        }
+                    }
+
+                    query += string.IsNullOrEmpty(task.AdvancedEncoderOptions)
+                                 ? string.Format(" -x target-usage={0}", qsvPreset)
+                                 : string.Format(" -x target-usage={0}:{1}", qsvPreset, task.AdvancedEncoderOptions);
+                }
+                else if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))  // Not a H.264 encode
+                {
+                    query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
                 }
 
                 return query;

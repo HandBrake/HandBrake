@@ -40,6 +40,11 @@ namespace HandBrake.Interop
 		private static LoggingCallback errorCallback;
 
 		/// <summary>
+		/// True if the global initialize function has been called.
+		/// </summary>
+		private static bool globalInitialized;
+
+		/// <summary>
 		/// Fires when HandBrake has logged a message.
 		/// </summary>
 		public static event EventHandler<MessageLoggedEventArgs> MessageLogged;
@@ -48,6 +53,30 @@ namespace HandBrake.Interop
 		/// Fires when HandBrake has logged an error.
 		/// </summary>
 		public static event EventHandler<MessageLoggedEventArgs> ErrorLogged;
+
+		/// <summary>
+		/// Initializes static members of the HandBrakeUtils class.
+		/// </summary>
+		static HandBrakeUtils()
+		{
+			if (!globalInitialized)
+			{
+				if (HBFunctions.hb_global_init() == -1)
+				{
+					throw new InvalidOperationException("HB global init failed.");
+				}
+
+				globalInitialized = true;
+			}
+		}
+
+		/// <summary>
+		/// Ensures the HB global initialize method has been called.
+		/// </summary>
+		public static void EnsureGlobalInit()
+		{
+			// Does nothing, but invokes static ctor.
+		}
 
 		/// <summary>
 		/// Enables or disables LibDVDNav. If disabled libdvdread will be used instead.
@@ -90,16 +119,12 @@ namespace HandBrake.Interop
 		{
 			if (!string.IsNullOrEmpty(message))
 			{
-				string[] messageParts = message.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+				string[] messageParts = message.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
 				if (messageParts.Length > 0)
 				{
-					if (MessageLogged != null)
-					{
-						MessageLogged(null, new MessageLoggedEventArgs { Message = messageParts[0] });
-					}
-
-					System.Diagnostics.Debug.WriteLine(messageParts[0]);
+					message = messageParts[0];
+				    SendMessageEvent(message);
 				}
 			}
 		}
@@ -112,23 +137,14 @@ namespace HandBrake.Interop
 		{
 			if (!string.IsNullOrEmpty(message))
 			{
-				// This error happens in normal operations. Log it as a message.
-				if (message == "dvd: ifoOpen failed")
+				// These errors happen in normal operations. Log them as messages.
+				if (message == "dvd: ifoOpen failed" || message.Contains("avformat_seek_file failed"))
 				{
-					if (MessageLogged != null)
-					{
-						MessageLogged(null, new MessageLoggedEventArgs { Message = message });
-					}
-
+					SendMessageEvent(message);
 					return;
 				}
 
-				if (ErrorLogged != null)
-				{
-					ErrorLogged(null, new MessageLoggedEventArgs { Message = message });
-				}
-
-				System.Diagnostics.Debug.WriteLine("ERROR: " + message);
+				SendErrorEvent(message);
 			}
 		}
 
@@ -197,8 +213,7 @@ namespace HandBrake.Interop
 				throw new ArgumentException("height must be positive.");
 			}
 
-		    HBFunctions.hb_init(0, 0);
-            IntPtr ptr = HBFunctions.hb_x264_param_unparse(
+			IntPtr ptr = HBFunctions.hb_x264_param_unparse(
 				preset,
 				string.Join(",", tunes),
 				extraOptions,
@@ -207,10 +222,10 @@ namespace HandBrake.Interop
 				width,
 				height);
 
-		    string x264Settings = Marshal.PtrToStringAnsi(ptr);
+			string x264Settings = Marshal.PtrToStringAnsi(ptr);
 
 
-            return x264Settings;
+			return x264Settings;
 		}
 
 		/// <summary>
@@ -330,6 +345,34 @@ namespace HandBrake.Interop
 			}
 
 			return audioBytes;
+		}
+
+		/// <summary>
+		/// Sends the message logged event to any registered listeners.
+		/// </summary>
+		/// <param name="message">The message to send.</param>
+		private static void SendMessageEvent(string message)
+		{
+			if (MessageLogged != null)
+			{
+				MessageLogged(null, new MessageLoggedEventArgs { Message = message });
+			}
+
+			System.Diagnostics.Debug.WriteLine(message);
+		}
+
+		/// <summary>
+		/// Sends the error logged event to any registered listeners.
+		/// </summary>
+		/// <param name="message">The message to send</param>
+		private static void SendErrorEvent(string message)
+		{
+			if (ErrorLogged != null)
+			{
+				ErrorLogged(null, new MessageLoggedEventArgs { Message = message });
+			}
+
+			System.Diagnostics.Debug.WriteLine("ERROR: " + message);
 		}
 	}
 }

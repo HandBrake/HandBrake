@@ -10,9 +10,6 @@
 namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Utilities;
@@ -51,7 +48,6 @@ namespace HandBrake.ApplicationServices.Parsing
             this.LanguageCode = languageCode;
             this.SubtitleType = subtitleType;
         }
-
 
         /// <summary>
         /// Gets or sets the track number of this Subtitle
@@ -101,89 +97,6 @@ namespace HandBrake.ApplicationServices.Parsing
         }
 
         /// <summary>
-        /// Parse the input strings related to subtitles
-        /// </summary>
-        /// <param name="output">
-        /// The output.
-        /// </param>
-        /// <returns>
-        /// A Subitle object
-        /// </returns>
-        public static Subtitle Parse(StringReader output)
-        {
-            string curLine = output.ReadLine();
-
-            // + 1, English (iso639-2: eng) (Text)(SSA)
-            // + 1, English (iso639-2: eng) (Text)(UTF-8)
-            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\) \(([a-zA-Z]*)\)\(([a-zA-Z0-9\-]*)\)");
-
-            if (m.Success && !curLine.Contains("HandBrake has exited."))
-            {
-                var thisSubtitle = new Subtitle
-                                       {
-                                           TrackNumber = int.Parse(m.Groups[1].Value.Trim()),
-                                           Language = m.Groups[2].Value,
-                                           LanguageCode = m.Groups[3].Value,
-                                       };
-
-                switch (m.Groups[5].Value)
-                {
-                    case "VOBSUB":
-                        thisSubtitle.SubtitleType = SubtitleType.VobSub;
-                        break;
-                    case "SRT":
-                        thisSubtitle.SubtitleType = SubtitleType.SRT;
-                        break;
-                    case "CC":
-                        thisSubtitle.SubtitleType = SubtitleType.CC;
-                        break;
-                    case "UTF-8":
-                        thisSubtitle.SubtitleType = SubtitleType.UTF8Sub;
-                        break;
-                    case "TX3G":
-                        thisSubtitle.SubtitleType = SubtitleType.TX3G;
-                        break;
-                    case "SSA":
-                        thisSubtitle.SubtitleType = SubtitleType.SSA;
-                        break;
-                    case "PGS":
-                        thisSubtitle.SubtitleType = SubtitleType.PGS;
-                        break;
-                    default:
-                        thisSubtitle.SubtitleType = SubtitleType.Unknown;
-                        break;
-                }
-
-                return thisSubtitle;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Parse a list of Subtitle tracks from an input string.
-        /// </summary>
-        /// <param name="output">
-        /// The output.
-        /// </param>
-        /// <returns>
-        /// An array of Subtitle objects
-        /// </returns>
-        public static IEnumerable<Subtitle> ParseList(StringReader output)
-        {
-            var subtitles = new List<Subtitle>();
-            while ((char)output.Peek() != '+')
-            {
-                Subtitle thisSubtitle = Parse(output);
-
-                if (thisSubtitle != null)
-                    subtitles.Add(thisSubtitle);
-                else
-                    break;
-            }
-            return subtitles.ToArray();
-        }
-
-        /// <summary>
         /// Override of the ToString method to make this object easier to use in the UI
         /// </summary>
         /// <returns>A string formatted as: {track #} {language}</returns>
@@ -227,14 +140,17 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 return false;
             }
+            
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
+            
             if (obj.GetType() != typeof(Subtitle))
             {
                 return false;
             }
+
             return Equals((Subtitle)obj);
         }
 

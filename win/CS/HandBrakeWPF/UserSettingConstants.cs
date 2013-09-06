@@ -241,6 +241,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string UseSystemColours = "UseSystemColours";
 
+        /// <summary>
+        /// The reset when done action.
+        /// </summary>
+        public const string ResetWhenDoneAction = "ResetWhenDoneAction";
+
         #endregion
     }
 }

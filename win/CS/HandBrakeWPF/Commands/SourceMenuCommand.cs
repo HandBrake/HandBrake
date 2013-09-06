@@ -52,8 +52,6 @@ namespace HandBrakeWPF.Commands
 
         #region Implemented Interfaces
 
-        #region ICommand
-
         /// <summary>
         /// The can execute.
         /// </summary>
@@ -78,8 +76,6 @@ namespace HandBrakeWPF.Commands
         {
             this.executeAction();
         }
-
-        #endregion
 
         #endregion
     }

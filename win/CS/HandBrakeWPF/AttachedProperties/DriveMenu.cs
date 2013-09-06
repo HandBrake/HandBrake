@@ -14,8 +14,8 @@ namespace HandBrakeWPF.AttachedProperties
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Media.Imaging;
 
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
@@ -32,7 +32,7 @@ namespace HandBrakeWPF.AttachedProperties
         /// </summary>
         public static readonly DependencyProperty ShowAvailableDrivesProperty = DependencyProperty.RegisterAttached(
             "ShowAvailableDrives",
-            typeof(Boolean),
+            typeof(bool),
             typeof(DriveMenu),
             new PropertyMetadata(false, OnShowAvailableDrivesChanged));
 
@@ -76,11 +76,11 @@ namespace HandBrakeWPF.AttachedProperties
         /// </param>
         private static void OnShowAvailableDrivesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Menu menu = d as Menu;
+            MenuItem menu = d as MenuItem;
             if (menu != null)
             {
-                menu.PreviewMouseDown -= MenuMouseDown;
-                menu.PreviewMouseDown += MenuMouseDown;
+                menu.SubmenuOpened -= MenuMouseDown;
+                menu.SubmenuOpened += MenuMouseDown;
             }
         }
 
@@ -93,9 +93,15 @@ namespace HandBrakeWPF.AttachedProperties
         /// <param name="e">
         /// The e.
         /// </param>
-        private static void MenuMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void MenuMouseDown(object sender, RoutedEventArgs e)
         {
-            Menu menu = sender as Menu;
+            MenuItem menu = sender as MenuItem;
+            MenuItem childMenuItem = e.OriginalSource as MenuItem;
+            if (childMenuItem != null && "Title Specific Scan".Equals(childMenuItem.Header))
+            {
+                return; // Skip, it's just a child menu.
+            }
+
             if (menu != null)
             {
                 MainViewModel mvm = menu.DataContext as MainViewModel;
@@ -111,16 +117,25 @@ namespace HandBrakeWPF.AttachedProperties
                                                         let driveInformation = item
                                                         select new SourceMenuItem
                                                                    {
-                                                                       Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
                                                                        Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
                                                                        Command = new SourceMenuCommand(() => mvm.ProcessDrive(driveInformation)),
                                                                        Tag = item,
                                                                        IsDrive = true
                                                                    })
                     {
-                        mvm.SourceMenu.Add(menuItem);
+                       mvm.SourceMenu.Add(menuItem);
                     }
                 }
+                else
+                {
+                    throw new GeneralApplicationException(
+                        "DEBUG - Datacontext wasn't set!", "Please report this on the forum.", null);
+                }
+            }
+            else
+            {
+                throw new GeneralApplicationException(
+                    "DEBUG - Source Menu wasn't set!", "Please report this on the forum.", null);
             }
         }
     }

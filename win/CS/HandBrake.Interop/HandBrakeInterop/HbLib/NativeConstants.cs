@@ -12,49 +12,57 @@ namespace HandBrake.Interop.HbLib
 {
 	public partial class NativeConstants
 	{
-		public const uint HB_ACODEC_MASK = 0x00FFFF00;
-		public const uint HB_ACODEC_FAAC = 0x00000100;
-		public const uint HB_ACODEC_LAME = 0x00000200;
-		public const uint HB_ACODEC_VORBIS = 0x00000400;
-		public const uint HB_ACODEC_AC3 = 0x00000800;
-		public const uint HB_ACODEC_LPCM = 0x00001000;
-		public const uint HB_ACODEC_DCA = 0x00002000;
-		public const uint HB_ACODEC_CA_AAC = 0x00004000;
-		public const uint HB_ACODEC_CA_HAAC = 0x00008000;
-		public const uint HB_ACODEC_FFAAC = 0x00010000;
-		public const uint HB_ACODEC_FFMPEG = 0x00020000;
-		public const uint HB_ACODEC_DCA_HD = 0x00040000;
-		public const uint HB_ACODEC_MP3 = 0x00080000;
-		public const uint HB_ACODEC_FFFLAC = 0x00100000;
-		public const uint HB_ACODEC_FDK_AAC = 0x00400000;
-		public const uint HB_ACODEC_FDK_HAAC = 0x00800000;
-		public const uint HB_ACODEC_FF_MASK = 0x00FF2000;
-		public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
-		public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA);
-		public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG);
-		public const uint HB_ACODEC_MP3_PASS = (HB_ACODEC_MP3 | HB_ACODEC_PASS_FLAG);
-		public const uint HB_ACODEC_AAC_PASS = (HB_ACODEC_FFAAC | HB_ACODEC_PASS_FLAG);
-		public const uint HB_ACODEC_AC3_PASS = (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG);
-		public const uint HB_ACODEC_DCA_PASS = (HB_ACODEC_DCA | HB_ACODEC_PASS_FLAG);
-		public const uint HB_ACODEC_DCA_HD_PASS = (HB_ACODEC_DCA_HD | HB_ACODEC_PASS_FLAG);
-		public const uint HB_ACODEC_ANY = (HB_ACODEC_MASK | HB_ACODEC_PASS_FLAG);
+        // Audio Encoders
+        public const uint  HB_ACODEC_MASK   =   0x00FFFF00;
+	    public const uint HB_ACODEC_FAAC = 0x00000100;
+	    public const uint HB_ACODEC_LAME = 0x00000200;
+	    public const uint HB_ACODEC_VORBIS = 0x00000400;
+	    public const uint HB_ACODEC_AC3 = 0x00000800;
+	    public const uint HB_ACODEC_LPCM = 0x00001000;
+	    public const uint HB_ACODEC_DCA = 0x00002000;
+	    public const uint HB_ACODEC_CA_AAC = 0x00004000;
+	    public const uint HB_ACODEC_CA_HAAC = 0x00008000;
+	    public const uint HB_ACODEC_FFAAC = 0x00010000;
+	    public const uint HB_ACODEC_FFMPEG = 0x00020000;
+	    public const uint HB_ACODEC_DCA_HD = 0x00040000;
+	    public const uint HB_ACODEC_MP3 = 0x00080000;
+	    public const uint HB_ACODEC_FFFLAC = 0x00100000;
+	    public const uint HB_ACODEC_FFFLAC24 = 0x00200000;
+	    public const uint HB_ACODEC_FDK_AAC = 0x00400000;
+	    public const uint HB_ACODEC_FDK_HAAC = 0x00800000;
+	    public const uint HB_ACODEC_FF_MASK = 0x00FF2000;
+	    public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
+	    public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA);
+	    public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG);
+	    public const uint HB_ACODEC_MP3_PASS = (HB_ACODEC_MP3 | HB_ACODEC_PASS_FLAG);
+	    public const uint HB_ACODEC_AAC_PASS = (HB_ACODEC_FFAAC | HB_ACODEC_PASS_FLAG);
+	    public const uint HB_ACODEC_AC3_PASS = (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG);
+	    public const uint HB_ACODEC_DCA_PASS = (HB_ACODEC_DCA | HB_ACODEC_PASS_FLAG);
+	    public const uint HB_ACODEC_DCA_HD_PASS = (HB_ACODEC_DCA_HD | HB_ACODEC_PASS_FLAG);
+	    public const uint HB_ACODEC_ANY = (HB_ACODEC_MASK | HB_ACODEC_PASS_FLAG);
 
+        // Subtitle Types
 		public const int HB_SUBSTREAM_BD_TRUEHD = 0x72;
 		public const int HB_SUBSTREAM_BD_AC3 = 0x76;
 		public const int HB_SUBSTREAM_BD_DTSHD = 0x72;
 		public const int HB_SUBSTREAM_BD_DTS = 0x71;
 
-		public const int HB_VCODEC_MASK = 0x0000FF;
+        // Video Encoders
+        public const int HB_VCODEC_MASK = 0x0000FFF;
 		public const int HB_VCODEC_X264 = 0x000001;
 		public const int HB_VCODEC_THEORA = 0x000002;
 		public const int HB_VCODEC_FFMPEG_MPEG4 = 0x000010;
 		public const int HB_VCODEC_FFMPEG = HB_VCODEC_FFMPEG_MPEG4;
 		public const int HB_VCODEC_FFMPEG_MPEG2 = 0x000020;
 		public const int HB_VCODEC_FFMPEG_MASK = 0x0000F0;
+	    public const int HB_VCODEC_QSV_H264 = 0x0000100;
+	    public const int HB_VCODEC_QSV_MASK = 0x0000F00;
+	    public const int HB_VCODEC_H264_MASK = (HB_VCODEC_X264 | HB_VCODEC_QSV_H264);
 
+        // Muxers
 		public const int HB_MUX_MASK = 0xFF0000;
 		public const int HB_MUX_MP4 = 0x010000;
-		public const int HB_MUX_MKV = 0x200000;
+		public const int HB_MUX_MKV = 0x100000;
 
 		public const int HBTF_NO_IDR = 1 << 0;
 

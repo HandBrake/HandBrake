@@ -87,7 +87,7 @@ namespace HandBrakeWPF.Helpers
 
                 return queueFiles;
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 return new List<string>(); // Keep quiet about the error.
             }
@@ -132,7 +132,7 @@ namespace HandBrakeWPF.Helpers
                             // Once we load it in, remove it as we no longer need it.
                             File.Delete(Path.Combine(appDataPath, file));
                         }
-                        catch (Exception exc)
+                        catch (Exception)
                         {
                             // Keep quite, nothing much we can do if there are problems.
                             // We will continue processing files.

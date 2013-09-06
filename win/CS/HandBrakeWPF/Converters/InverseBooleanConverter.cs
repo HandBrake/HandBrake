@@ -16,13 +16,9 @@ namespace HandBrakeWPF.Converters
     /// <summary>
     /// The inverse boolean converter.
     /// </summary>
-    [ValueConversion(typeof(bool), typeof(bool))]
+    [ValueConversion(typeof(bool?), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter
     {
-        #region Implemented Interfaces
-
-        #region IValueConverter
-
         /// <summary>
         /// The convert.
         /// </summary>
@@ -43,12 +39,14 @@ namespace HandBrakeWPF.Converters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (targetType != typeof(bool))
+            if (targetType != typeof(bool?) && targetType != typeof(bool))
             {
                 throw new InvalidOperationException("The target must be a boolean");
             }
 
-            return !(bool)value;
+            bool result;
+            bool.TryParse(value.ToString(), out result);
+            return !result;
         }
 
         /// <summary>
@@ -71,11 +69,7 @@ namespace HandBrakeWPF.Converters
         /// </returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            return null;
         }
-
-        #endregion
-
-        #endregion
     }
 }

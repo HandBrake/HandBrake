@@ -149,6 +149,11 @@ namespace HandBrake.Interop.SourceData
 			}
 		}
 
+	    /// <summary>
+	    /// Gets or sets the path.
+	    /// </summary>
+	    public string Path { get; set; }
+
 		/// <summary>
 		/// Override of the ToString method to provide an easy way to use this object in the UI
 		/// </summary>

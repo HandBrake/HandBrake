@@ -11,27 +11,21 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
     using System.ServiceModel;
     using System.Threading;
-    using System.Windows;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop;
     using HandBrake.Interop.Interfaces;
 
     using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
-    using ScanProgressEventArgs = HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs;
 
     /// <summary>
     /// HandBrake WCF Service
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, IncludeExceptionDetailInFaults = true, 
-        ConcurrencyMode = ConcurrencyMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, IncludeExceptionDetailInFaults = true, ConcurrencyMode = ConcurrencyMode.Single)]
     public class ServerService : IServerService
     {
         #region Constants and Fields
@@ -45,11 +39,6 @@ namespace HandBrake.ApplicationServices.Services
         /// The encode service.
         /// </summary>
         private static IEncode encodeService;
-
-        /// <summary>
-        /// The scan service.
-        /// </summary>
-        private static IScan scanService;
 
         /// <summary>
         /// The host.
@@ -68,18 +57,6 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets the activity log.
         /// </summary>
-        [DataMember]
-        public string ActivityLog
-        {
-            get
-            {
-                return scanService.ActivityLog;
-            }
-        }
-
-        /// <summary>
-        /// Gets the activity log.
-        /// </summary>
         public string EncodeActivityLog { get; private set; }
 
         /// <summary>
@@ -88,33 +65,9 @@ namespace HandBrake.ApplicationServices.Services
         public bool IsEncoding { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether is scanning.
-        /// </summary>
-        [DataMember]
-        public bool IsScanning
-        {
-            get
-            {
-                return scanService.IsScanning;
-            }
-        }
-
-        /// <summary>
         /// Gets the activity log.
         /// </summary>
         public string ScanActivityLog { get; private set; }
-
-        /// <summary>
-        /// Gets the souce data.
-        /// </summary>
-        [DataMember]
-        public Source SouceData
-        {
-            get
-            {
-                return scanService.SouceData;
-            }
-        }
 
         #endregion
 
@@ -133,27 +86,6 @@ namespace HandBrake.ApplicationServices.Services
             encodeService.ProcessLogs(destination);
         }
 
-        /// <summary>
-        /// The scan source.
-        /// </summary>
-        /// <param name="path">
-        /// The path.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="previewCount">
-        /// The preview Count.
-        /// </param>
-        public void ScanSource(string path, int title, int previewCount)
-        {
-            Console.WriteLine("Starting Source Scan for: " + path);
-            scanService.ScanStared += this.ScanStaredHandler;
-            scanService.ScanStatusChanged += this.ScanStatusChangedHandler;
-            scanService.ScanCompleted += this.ScanCompletedHandler;
-
-            scanService.Scan(path, title, previewCount, null);
-        }
 
         /// <summary>
         /// Start the service
@@ -173,7 +105,6 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Setup the services we are going to use.
                 IHandBrakeInstance instance = new HandBrakeInstance();
-                scanService = new LibScan(instance);
                 encodeService = new LibEncode(new UserSettingService(), instance); // TODO this needs wired up with castle
 
                 shutdownFlag = new ManualResetEvent(false);
@@ -207,7 +138,7 @@ namespace HandBrake.ApplicationServices.Services
             if (host != null)
             {
                 host.BeginClose(null, null);
-                //host.Abort();            
+                // host.Abort();            
                 shutdownFlag.Set();
             }
         }
@@ -218,14 +149,6 @@ namespace HandBrake.ApplicationServices.Services
         public void StopEncode()
         {
             encodeService.Stop();
-        }
-
-        /// <summary>
-        /// Stop the scan.
-        /// </summary>
-        public void StopScan()
-        {
-            scanService.Stop();
         }
 
         /// <summary>
@@ -290,88 +213,6 @@ namespace HandBrake.ApplicationServices.Services
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// The scan service scan completed event handler
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void ScanCompletedHandler(object sender, ScanCompletedEventArgs e)
-        {
-            Subscribers.ForEach(
-                delegate(IHbServiceCallback callback)
-                    {
-                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
-                        {
-                            Console.WriteLine("Scan Completed Callback");
-                            callback.ScanCompletedCallback(e);
-                        }
-                        else
-                        {
-                            Subscribers.Remove(callback);
-                        }
-                    });
-
-            scanService.ScanStared -= this.ScanStaredHandler;
-            scanService.ScanStatusChanged -= this.ScanStatusChangedHandler;
-            scanService.ScanCompleted -= this.ScanCompletedHandler;
-        }
-
-        /// <summary>
-        /// The scan service scan stared.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void ScanStaredHandler(object sender, EventArgs e)
-        {
-            Subscribers.ForEach(
-                delegate(IHbServiceCallback callback)
-                    {
-                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
-                        {
-                            Console.WriteLine("Scan Started Callback");
-                            callback.ScanStartedCallback();
-                        }
-                        else
-                        {
-                            Subscribers.Remove(callback);
-                        }
-                    });
-        }
-
-        /// <summary>
-        /// The scan service scan status changed event handler
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void ScanStatusChangedHandler(object sender, ScanProgressEventArgs e)
-        {
-            Subscribers.ForEach(
-                delegate(IHbServiceCallback callback)
-                    {
-                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
-                        {
-                            Console.WriteLine("Scan Changed Callback");
-                            callback.ScanProgressCallback(e);
-                        }
-                        else
-                        {
-                            Subscribers.Remove(callback);
-                        }
-                    });
-        }
 
         /// <summary>
         /// The encode service_ encode completed.

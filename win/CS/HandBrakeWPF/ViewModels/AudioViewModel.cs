@@ -166,7 +166,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.NotifyOfPropertyChange(() => this.Task);
 
-            if (Task.OutputFormat == OutputFormat.Mp4)
+            if (Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.av_mp4)
             {
                 foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.Vorbis))
                 {

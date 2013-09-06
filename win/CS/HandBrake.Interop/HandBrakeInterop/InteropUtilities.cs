@@ -11,11 +11,12 @@ namespace HandBrake.Interop
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Runtime.InteropServices;
-
+	using System.Text;
 	using HandBrake.Interop.HbLib;
 
-	/// <summary>
+    /// <summary>
 	/// Helper utilities for native interop.
 	/// </summary>
 	public static class InteropUtilities
@@ -29,6 +30,30 @@ namespace HandBrake.Interop
 		public static T ReadStructure<T>(IntPtr structPtr)
 		{
 			return (T)Marshal.PtrToStructure(structPtr, typeof(T));
+		}
+
+		/// <summary>
+		/// Reads the given native UTF-8 string.
+		/// </summary>
+		/// <param name="stringPtr">The pointer to the string.</param>
+		/// <returns>The resulting string.</returns>
+		public static string ReadUtf8Ptr(IntPtr stringPtr)
+		{
+			var data = new List<byte>();
+			var ptr = stringPtr;
+			var offset = 0;
+			while (true)
+			{
+				byte ch = Marshal.ReadByte(ptr, offset++);
+				if (ch == 0)
+				{
+					break;
+				}
+
+				data.Add(ch);
+			}
+
+			return Encoding.UTF8.GetString(data.ToArray());
 		}
 
 		/// <summary>
@@ -91,7 +116,7 @@ namespace HandBrake.Interop
 			}
 
 			return result;
-		} 
+		}
 
 		/// <summary>
 		/// Creats a new, empty native HandBrake list.
@@ -180,6 +205,42 @@ namespace HandBrake.Interop
 
 			returnList.ListPtr = nativeListStructPtr;
 			return returnList;
+		}
+
+		/// <summary>
+		/// Reads in a list of objects given an interator and a conversion function.
+		/// </summary>
+		/// <typeparam name="T1">The type of the struct given by the iterator.</typeparam>
+		/// <typeparam name="T2">The object type to convert to.</typeparam>
+		/// <param name="iterator">The iterator to use to build the list.</param>
+		/// <param name="converter">The converter to convert from the struct to the object.</param>
+		/// <returns>The list of objects.</returns>
+		public static List<T2> GetListFromIterator<T1, T2>(Func<IntPtr, IntPtr> iterator, Func<T1, T2> converter)
+		{
+			return ReadStructureListFromIterator<T1>(iterator).Select(converter).ToList();
+		} 
+
+		/// <summary>
+		/// Reads in a list of structs given an iterator.
+		/// </summary>
+		/// <typeparam name="T">The type of the struct.</typeparam>
+		/// <param name="iterator">The iterator to use to build the list.</param>
+		/// <returns>The list of structs.</returns>
+		public static List<T> ReadStructureListFromIterator<T>(Func<IntPtr, IntPtr> iterator)
+		{
+			var structureList = new List<T>();
+			IntPtr current = IntPtr.Zero;
+
+			current = iterator(current);
+			while (current != IntPtr.Zero)
+			{
+				T encoder = ReadStructure<T>(current);
+				structureList.Add(encoder);
+
+				current = iterator(current);
+			}
+
+			return structureList;
 		}
 
 		/// <summary>

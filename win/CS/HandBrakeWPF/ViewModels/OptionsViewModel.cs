@@ -363,6 +363,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool useSystemColoursForStyles;
 
+        /// <summary>
+        /// The reset when done action.
+        /// </summary>
+        private bool resetWhenDoneAction;
+
         #endregion
 
         #region Constructors and Destructors
@@ -437,6 +442,23 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.checkForUpdates = value;
                 this.NotifyOfPropertyChange("CheckForUpdates");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether reset when done action.
+        /// </summary>
+        public bool ResetWhenDoneAction
+        {
+            get
+            {
+                return this.resetWhenDoneAction;
+            }
+
+            set
+            {
+                this.resetWhenDoneAction = value;
+                this.NotifyOfPropertyChange("ResetWhenDoneAction");
             }
         }
 
@@ -1529,6 +1551,11 @@ namespace HandBrakeWPF.ViewModels
             this.whenDoneOptions.Add("Log off");
             this.whenDoneOptions.Add("Quit HandBrake");
             this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
+            {
+                this.WhenDone = "Do nothing";
+                this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, "Do nothing");
+            }
 
             this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode);
             this.GrowlAfterQueue = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue);
@@ -1537,6 +1564,7 @@ namespace HandBrakeWPF.ViewModels
             this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
             this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
             this.UseSystemColoursForStylesForStyles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseSystemColours);
+            this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
 
             // #############################
             // Output Settings
@@ -1874,6 +1902,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
             this.userSettingService.SetUserSetting(UserSettingConstants.UseSystemColours, this.UseSystemColoursForStylesForStyles);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);

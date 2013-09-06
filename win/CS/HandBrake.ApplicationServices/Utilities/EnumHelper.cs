@@ -17,6 +17,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Linq;
     using System.Reflection;
 
+    using HandBrake.Interop.Attributes;
+
     /// <summary>
     /// Enum Helpers
     /// </summary>
@@ -94,6 +96,23 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
+        /// The get short name.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetShortName(T value)
+        {
+            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
+            ShortName[] attributes = (ShortName[])fieldInfo.GetCustomAttributes(typeof(ShortName), false);
+
+            return (attributes.Length > 0) ? attributes[0].Name : value.ToString(); 
+        }
+
+        /// <summary>
         /// Return a list of all the enum values.
         /// </summary>
         /// <returns>
@@ -110,9 +129,6 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="enumType">
         /// The enum type.
         /// </param>
-        /// <typeparam name="T">
-        /// The type of the enum
-        /// </typeparam>
         /// <returns>
         /// A collection of strings that represent all the enum values
         /// </returns>
@@ -130,9 +146,6 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="items">
         /// The items.
         /// </param>
-        /// <typeparam name="T">
-        /// The type of the enum
-        /// </typeparam>
         /// <returns>
         /// A collection of strings that represent all the enum values
         /// </returns>

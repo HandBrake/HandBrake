@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Converters\EnumToDescConverter.cs" />
+    <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="Factories\PlistPresetFactory.cs" />
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
-    <Compile Include="Isolation\IsolatedScanService.cs" />
+    <Compile Include="LibHb\AudioVideoHelpers.cs" />
     <Compile Include="Services\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
     <Compile Include="Services\Interfaces\IScanServiceWrapper.cs" />
@@ -125,10 +126,8 @@
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />
     <Compile Include="Parsing\Audio.cs" />
-    <Compile Include="Parsing\AudioHelper.cs" />
     <Compile Include="Parsing\Chapter.cs" />
     <Compile Include="Parsing\Source.cs" />
-    <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\Subtitle.cs" />
     <Compile Include="Parsing\Title.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -148,7 +147,6 @@
     <Compile Include="Services\LibScan.cs" />
     <Compile Include="Services\PresetService.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
-    <Compile Include="Services\ScanService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="ASUserSettingConstants.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />

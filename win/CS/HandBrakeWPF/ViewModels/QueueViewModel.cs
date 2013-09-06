@@ -242,7 +242,7 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
             this.IsEncoding = false;
 
-            MessageBox.Show("The Queue has been pasued. The currently running job will run to completion and no further jobs will start.", "Queue",
+            MessageBox.Show("The Queue has been paused. The currently running job will run to completion and no further jobs will start.", "Queue",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -319,9 +319,10 @@ namespace HandBrakeWPF.ViewModels
                     DefaultExt = ".hbq",
                     AddExtension = true
                 };
-            dialog.ShowDialog();
-
-            this.queueProcessor.BackupQueue(dialog.FileName);
+            if (dialog.ShowDialog() == true)
+            {
+                this.queueProcessor.BackupQueue(dialog.FileName);
+            }
         }
 
         /// <summary>
@@ -330,9 +331,10 @@ namespace HandBrakeWPF.ViewModels
         public void Import()
         {
             VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
-            dialog.ShowDialog();
-
-            this.queueProcessor.RestoreQueue(dialog.FileName);
+            if (dialog.ShowDialog() == true)
+            {
+                this.queueProcessor.RestoreQueue(dialog.FileName);
+            }
         }
 
         /// <summary>

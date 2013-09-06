@@ -11,7 +11,8 @@ namespace HandBrake.Interop
 {
 	using System;
 	using System.Collections.Generic;
-
+	using System.Globalization;
+	using System.Runtime.InteropServices;
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
@@ -25,21 +26,21 @@ namespace HandBrake.Interop
 		/// <summary>
 		/// Video Frame Rates
 		/// </summary>
-		private static readonly Dictionary<double, int> VideoRates = new Dictionary<double, int>
+		private static readonly Dictionary<double, int> VideoRates;
+
+		/// <summary>
+		/// Initializes static members of the Converters class.
+		/// </summary>
+		static Converters()
 		{
-			{5, 5400000},
-			{10, 2700000},
-			{12, 2250000},
-			{15, 1800000},
-			{23.976, 1126125},
-			{24, 1125000},
-			{25, 1080000},
-			{29.97, 900900},
-			{30, 900000},
-			{50, 540000},
-			{59.94, 450450},
-			{60, 450000}
-		};
+			HandBrakeUtils.EnsureGlobalInit();
+
+			VideoRates = new Dictionary<double, int>();
+			foreach (var framerate in Encoders.VideoFramerates)
+			{
+				VideoRates.Add(double.Parse(framerate.Name, CultureInfo.InvariantCulture), framerate.Rate);
+			}
+		}
 
 		/// <summary>
 		/// Convert Framerate to Video Rates
@@ -78,10 +79,12 @@ namespace HandBrake.Interop
 					return NativeConstants.HB_ACODEC_AC3_PASS;
 				case AudioEncoder.Ac3:
 					return NativeConstants.HB_ACODEC_AC3;
-				case AudioEncoder.Faac:
-					return NativeConstants.HB_ACODEC_FAAC;
 				case AudioEncoder.ffaac:
 					return NativeConstants.HB_ACODEC_FFAAC;
+				case AudioEncoder.fdkaac:
+					return NativeConstants.HB_ACODEC_FDK_AAC;
+				case AudioEncoder.fdkheaac:
+					return NativeConstants.HB_ACODEC_FDK_HAAC;
 				case AudioEncoder.AacPassthru:
 					return NativeConstants.HB_ACODEC_AAC_PASS;
 				case AudioEncoder.Lame:
@@ -127,9 +130,12 @@ namespace HandBrake.Interop
 				case NativeConstants.HB_ACODEC_FFAAC:
 				case NativeConstants.HB_ACODEC_CA_AAC:
 				case NativeConstants.HB_ACODEC_CA_HAAC:
+				case NativeConstants.HB_ACODEC_FDK_HAAC: // TODO Check this is correct
+				case NativeConstants.HB_ACODEC_FDK_AAC: // TODO Check this is correct
 					return AudioCodec.Aac;
 				case NativeConstants.HB_ACODEC_FFFLAC:
 					return AudioCodec.Flac;
+
 				default:
 					return AudioCodec.Other;
 			}
@@ -144,9 +150,9 @@ namespace HandBrake.Interop
 		{
 			var result = new HBVideoEncoder
 			{
-				Id = encoder.encoder,
+				Id = encoder.codec,
 				ShortName = encoder.short_name,
-				DisplayName = encoder.human_readable_name,
+				DisplayName = encoder.name,
 				CompatibleContainers = Container.None
 			};
 
@@ -172,9 +178,9 @@ namespace HandBrake.Interop
 		{
 			var result = new HBAudioEncoder
 				{
-					Id = encoder.encoder,
+					Id = encoder.codec,
 					ShortName = encoder.short_name,
-					DisplayName = encoder.human_readable_name,
+					DisplayName = encoder.name,
 					CompatibleContainers = Container.None
 				};
 
@@ -188,12 +194,26 @@ namespace HandBrake.Interop
 				result.CompatibleContainers = result.CompatibleContainers | Container.Mp4;
 			}
 
-			result.QualityLimits = Encoders.GetAudioQualityLimits(encoder.encoder);
-			result.DefaultQuality = HBFunctions.hb_get_default_audio_quality((uint)encoder.encoder);
-			result.CompressionLimits = Encoders.GetAudioCompressionLimits(encoder.encoder);
-			result.DefaultCompression = HBFunctions.hb_get_default_audio_compression((uint) encoder.encoder);
+			result.QualityLimits = Encoders.GetAudioQualityLimits(encoder.codec);
+			result.DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec);
+			result.CompressionLimits = Encoders.GetAudioCompressionLimits(encoder.codec);
+			result.DefaultCompression = HBFunctions.hb_audio_compression_get_default((uint)encoder.codec);
 
 			return result;
+		}
+
+		/// <summary>
+		/// Converts a native HB rate structure to an HBRate object.
+		/// </summary>
+		/// <param name="rate">The structure to convert.</param>
+		/// <returns>The converted rate object.</returns>
+		public static HBRate NativeToRate(hb_rate_s rate)
+		{
+			return new HBRate
+				{
+					Name = rate.name,
+					Rate = rate.rate
+				};
 		}
 
 		/// <summary>
@@ -207,7 +227,24 @@ namespace HandBrake.Interop
 				{
 					Id = mixdown.amixdown,
 					ShortName = mixdown.short_name,
-					DisplayName = mixdown.human_readable_name
+					DisplayName = mixdown.name
+				};
+		}
+
+		/// <summary>
+		/// Converts a native language structure to a Language object.
+		/// </summary>
+		/// <param name="language">The structure to convert.</param>
+		/// <returns>The converted structure.</returns>
+		public static Language NativeToLanguage(iso639_lang_t language)
+		{
+			string englishName = InteropUtilities.ReadUtf8Ptr(language.eng_name);
+			string nativeName = InteropUtilities.ReadUtf8Ptr(language.native_name);
+			return new Language
+				{
+					Code = language.iso639_2,
+					EnglishName = englishName,
+					NativeName = nativeName
 				};
 		}
 

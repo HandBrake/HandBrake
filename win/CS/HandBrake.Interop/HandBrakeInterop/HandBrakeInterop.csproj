@@ -124,6 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ShortName.cs" />
     <Compile Include="Converters.cs" />
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />
@@ -142,7 +143,7 @@
     <Compile Include="Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="InteropUtilities.cs" />
     <Compile Include="Language.cs" />
-    <Compile Include="LanguageCodes.cs" />
+    <Compile Include="Languages.cs" />
     <Compile Include="MarshalingConstants.cs" />
     <Compile Include="EventArgs\MessageLoggedEventArgs.cs" />
     <Compile Include="Model\Cropping.cs" />
@@ -160,10 +161,12 @@
     <Compile Include="Model\Encoding\Detelecine.cs" />
     <Compile Include="Model\Encoding\EncodingProfile.cs" />
     <Compile Include="Model\Encoding\HBMixdown.cs" />
+    <Compile Include="Model\Encoding\HBRate.cs" />
     <Compile Include="Model\Encoding\HBVideoEncoder.cs" />
     <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\OutputExtension.cs" />
     <Compile Include="Model\Encoding\Container.cs" />
+    <Compile Include="Model\Encoding\QsvPreset.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\Encoding\VideoEncodeRateType.cs" />
     <Compile Include="Model\Encoding\x264\x264Preset.cs" />
@@ -176,6 +179,7 @@
     <Compile Include="Model\SourceType.cs" />
     <Compile Include="Model\SrtSubtitle.cs" />
     <Compile Include="Model\Subtitles.cs" />
+    <Compile Include="Model\VideoQualityLimits.cs" />
     <Compile Include="Model\VideoRangeType.cs" />
     <Compile Include="NativeList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

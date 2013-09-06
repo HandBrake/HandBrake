@@ -32,24 +32,20 @@ namespace HandBrakeWPF.Converters.Subtitles
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             ObservableCollection<SubtitleTrack> tracks = value as ObservableCollection<SubtitleTrack>;
-            StringBuilder audioTracks = new StringBuilder();
+            StringBuilder sutitleTracks = new StringBuilder();
             if (tracks != null)
             {
                 foreach (SubtitleTrack track in tracks)
                 {
-                    string text = track.SourceTrack != null ? track.SourceTrack.ToString() : (track.SrtFileName + ".srt");
-                    if (string.IsNullOrEmpty(audioTracks.ToString()))
-                    {
-                        audioTracks.Append(text);
-                    }
-                    else
-                    {
-                        audioTracks.Append(", " + text);
-                    }
+                    string text = track.SourceTrack != null
+                                      ? track.SourceTrack.ToString()
+                                      : (track.SrtFileName + ".srt");
+
+                    sutitleTracks.AppendLine(text);
                 }
             }
 
-            return string.IsNullOrEmpty(audioTracks.ToString()) ? "None" : audioTracks.ToString();
+            return string.IsNullOrEmpty(sutitleTracks.ToString()) ? "None" : sutitleTracks.ToString().Trim();
         }
 
         /// <summary>

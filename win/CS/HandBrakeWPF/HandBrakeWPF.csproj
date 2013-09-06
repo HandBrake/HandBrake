@@ -100,6 +100,7 @@
       <HintPath>..\libraries\OokiiDialogs\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
@@ -123,6 +124,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppArguments.cs" />
     <Compile Include="AttachedProperties\DriveMenu.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
@@ -132,6 +134,12 @@
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
+    <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
+    <Compile Include="Views\CountdownAlertView.xaml.cs">
+      <DependentUpon>CountdownAlertView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DropButton\DropButton.cs" />
     <Compile Include="Controls\TimeSpanBox.xaml.cs">
       <DependentUpon>TimeSpanBox.xaml</DependentUpon>
@@ -155,9 +163,11 @@
     <Compile Include="Converters\Options\OptionsTabNameConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
+    <Compile Include="Converters\Video\EncoderOptionsTooltipConverter.cs" />
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Helpers\AppStyleHelper.cs" />
+    <Compile Include="Helpers\PictureSize.cs" />
     <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Model\SelectionTitle.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />
@@ -174,7 +184,9 @@
     <Compile Include="Services\PrePostActionService.cs" />
     <Compile Include="ViewModels\AdvancedViewModel.cs" />
     <Compile Include="ViewModels\EncoderOptionsViewModel.cs" />
+    <Compile Include="ViewModels\InstantViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEncoderOptionsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IInstantViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IX264ViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
     <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
@@ -183,6 +195,9 @@
     </Compile>
     <Compile Include="Views\EncoderOptionsView.xaml.cs">
       <DependentUpon>EncoderOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstantView.xaml.cs">
+      <DependentUpon>InstantView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
@@ -329,6 +344,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CountdownAlertView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\TimeSpanBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -352,6 +375,10 @@
     <Page Include="Views\EncoderOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\InstantView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\QueueSelectionView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -431,10 +458,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="defaultsettings.xml">
+    <EmbeddedResource Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Resource Include="Views\Images\add40.png" />
     <Resource Include="Views\Images\add.png" />
     <Resource Include="Views\Images\remove.png" />
@@ -489,6 +516,9 @@
       <Project>{36847BA0-6814-41E1-B1C3-1D9D874418E9}</Project>
       <Name>HandBrake.Server</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Advanced.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

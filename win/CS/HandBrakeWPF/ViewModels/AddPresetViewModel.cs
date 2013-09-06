@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -65,7 +66,7 @@ namespace HandBrakeWPF.ViewModels
             this.presetService = presetService;
             this.errorService = errorService;
             this.Title = "Add Preset";
-            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName, UsePictureFilters = true};
+            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName, UsePictureFilters = true };
             this.PictureSettingsModes = EnumHelper<PresetPictureSettingsMode>.GetEnumList();
         }
 
@@ -127,10 +128,23 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="task">
         /// The Encode Task.
         /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         public void Setup(EncodeTask task, Title title)
         {
             this.Preset.Task = new EncodeTask(task);
             this.selectedTitle = title;
+
+            switch (task.Anamorphic)
+            {
+                default:
+                    this.SelectedPictureSettingMode = PresetPictureSettingsMode.Custom;
+                    break;
+                case Anamorphic.Strict:
+                    this.SelectedPictureSettingMode = PresetPictureSettingsMode.SourceMaximum;
+                    break;
+            }
         }
 
         /// <summary>
@@ -146,11 +160,11 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.presetService.CheckIfPresetExists(this.Preset.Name))
             {
-               MessageBoxResult result = this.errorService.ShowMessageBox("A Preset with this name already exists. Would you like to overwrite it?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
-               if (result == MessageBoxResult.No)
-               {
-                   return;
-               }
+                MessageBoxResult result = this.errorService.ShowMessageBox("A Preset with this name already exists. Would you like to overwrite it?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
             }
 
             if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && this.selectedTitle == null)

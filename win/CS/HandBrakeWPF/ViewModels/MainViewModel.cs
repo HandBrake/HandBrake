@@ -473,7 +473,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 // The title that is selected has a source name. This means it's part of a batch scan.
-                if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
+                if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName) && !selectedTitle.SourceName.EndsWith("\\"))
                 {
                     return Path.GetFileNameWithoutExtension(selectedTitle.SourceName);
                 }
@@ -483,7 +483,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     foreach (DriveInformation item in GeneralUtilities.GetDrives())
                     {
-                        if (item.RootDirectory.Contains(this.ScannedSource.ScanPath))
+                        if (item.RootDirectory.Contains(this.ScannedSource.ScanPath.Replace("\\\\", "\\")))
                         {
                             return item.VolumeLabel;
                         }
@@ -666,7 +666,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new List<OutputFormat>
                     {
-                        OutputFormat.Mp4, OutputFormat.Mkv
+                         OutputFormat.av_mp4, OutputFormat.av_mkv, OutputFormat.Mp4, OutputFormat.Mkv
                     };
             }
         }
@@ -750,7 +750,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
-                    this.Duration = this.selectedTitle.Duration.ToString();
+                    this.Duration = this.selectedTitle.Duration.ToString("g");
 
                     // Setup the tab controls
                     this.SetupTabs();
@@ -861,7 +861,6 @@ namespace HandBrakeWPF.ViewModels
                         return;
                     }
 
-
                     this.SelectedStartPoint = 1;
                     this.SelectedEndPoint = selectedTitle.Chapters != null && selectedTitle.Chapters.Count > 0 ? selectedTitle.Chapters.Last().ChapterNumber : 1;
                 }
@@ -872,11 +871,10 @@ namespace HandBrakeWPF.ViewModels
                         return;
                     }
 
-
                     this.SelectedStartPoint = 0;
 
                     int timeInSeconds;
-                    if (int.TryParse(selectedTitle.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture), out timeInSeconds))
+                    if (int.TryParse(Math.Round(selectedTitle.Duration.TotalSeconds, 0).ToString(CultureInfo.InvariantCulture), out timeInSeconds))
                     {
                         this.SelectedEndPoint = timeInSeconds;
                     }
@@ -896,7 +894,7 @@ namespace HandBrakeWPF.ViewModels
 
                     this.SelectedStartPoint = 0;
                     int totalFrames;
-                    if (int.TryParse(estimatedTotalFrames.ToString(CultureInfo.InvariantCulture), out totalFrames))
+                    if (int.TryParse(Math.Round(estimatedTotalFrames, 0).ToString(CultureInfo.InvariantCulture), out totalFrames))
                     {
                         this.SelectedEndPoint = totalFrames;
                     }
@@ -925,7 +923,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => IsMkv);
                 this.NotifyOfPropertyChange(() => SupportHardwareDecoding);
                 this.NotifyOfPropertyChange(() => SupportOpenCL);
-                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower())); // TODO, tidy up
+                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().Replace("av_", string.Empty).ToLower())); // TODO, tidy up
 
                 this.VideoViewModel.RefreshTask();
                 this.AudioViewModel.RefreshTask();
@@ -968,6 +966,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating progress percentage.
+        /// </summary>
         public int ProgressPercentage { get; set; }
 
         #endregion
@@ -984,7 +985,11 @@ namespace HandBrakeWPF.ViewModels
             // Perform an update check if required
             this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
 
+            // Show or Hide the Preset Panel.
+            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
+
             // Setup the presets.
+            this.presetService.Load();
             if (this.presetService.CheckIfPresetsAreOutOfDate())
                 if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
                     this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated." + Environment.NewLine +
@@ -992,15 +997,18 @@ namespace HandBrakeWPF.ViewModels
                                     "Preset Update", MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Queue Recovery
-            QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+            if (!AppArguments.IsInstantHandBrake)
+            {
+                QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+            }
 
             this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Populate the Source menu with drives.
-            this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
-
-            // Show or Hide the Preset Panel.
-            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
+            if (!AppArguments.IsInstantHandBrake)
+            {
+                this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
+            }
 
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
@@ -1016,7 +1024,6 @@ namespace HandBrakeWPF.ViewModels
         public void Shutdown()
         {
             // Shutdown Service
-            this.scanService.Shutdown();
             this.encodeService.Shutdown();
 
             // Unsubscribe from Events.
@@ -1237,7 +1244,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void FileScan()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
             dialog.ShowDialog();
             this.StartScan(dialog.FileName, 0);
         }
@@ -1269,7 +1276,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void FileScanTitleSpecific()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
             dialog.ShowDialog();
 
             if (string.IsNullOrEmpty(dialog.FileName))
@@ -1398,21 +1405,6 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxImage.Information);
         }
 
-        /// <summary>
-        /// The debug scan log.
-        /// </summary>
-        public void DebugScanLog()
-        {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog();
-
-            dialog.ShowDialog();
-
-            if (File.Exists(dialog.FileName))
-            {
-                this.scanService.DebugScanLog(dialog.FileName);
-            }
-        }
-
         #endregion
 
         #region Main Window Public Methods
@@ -1454,10 +1446,9 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.CurrentTask != null && !string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
-                if (Directory.Exists(Path.GetDirectoryName(this.CurrentTask.Destination)))
-                {
-                    saveFileDialog.InitialDirectory = Path.GetDirectoryName(this.CurrentTask.Destination) + "\\";
-                }
+                saveFileDialog.InitialDirectory = Directory.Exists(Path.GetDirectoryName(this.CurrentTask.Destination))
+                                                      ? Path.GetDirectoryName(this.CurrentTask.Destination) + "\\"
+                                                      : null;
 
                 saveFileDialog.FileName = Path.GetFileName(this.CurrentTask.Destination);
             }
@@ -1471,17 +1462,36 @@ namespace HandBrakeWPF.ViewModels
                 switch (Path.GetExtension(saveFileDialog.FileName))
                 {
                     case ".mkv":
-                        this.SelectedOutputFormat = OutputFormat.Mkv;
+                        this.SelectedOutputFormat = OutputFormat.av_mkv;
                         break;
                     case ".mp4":
-                        this.SelectedOutputFormat = OutputFormat.Mp4;
+                        this.SelectedOutputFormat = OutputFormat.av_mp4;
                         break;
                     case ".m4v":
-                        this.SelectedOutputFormat = OutputFormat.M4V;
+                        this.SelectedOutputFormat = OutputFormat.av_mp4;
                         break;
                 }
 
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
+            }
+        }
+
+        /// <summary>
+        /// The open destination directory.
+        /// </summary>
+        public void OpenDestinationDirectory()
+        {
+            if (!string.IsNullOrEmpty(this.Destination))
+            {
+                string directory = Path.GetDirectoryName(this.Destination);
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Process.Start(directory);
+                }
+                else
+                {
+                    Process.Start(AppDomain.CurrentDomain.BaseDirectory);
+                }
             }
         }
 
@@ -1561,7 +1571,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetImport()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "Plist (*.plist)|*.plist", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = "Plist (*.plist)|*.plist", CheckFileExists = true };
             dialog.ShowDialog();
             string filename = dialog.FileName;
 
@@ -1607,7 +1617,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetExport()
         {
-            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog
+            SaveFileDialog savefiledialog = new SaveFileDialog
                                                      {
                                                          Filter = "plist|*.plist",
                                                          CheckPathExists = true,
@@ -1626,7 +1636,7 @@ namespace HandBrakeWPF.ViewModels
                     PlistUtility.Export(
                         savefiledialog.FileName,
                         this.selectedPreset,
-                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)
+                        this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)
                                           .ToString(CultureInfo.InvariantCulture));
                 }
             }
@@ -1813,12 +1823,12 @@ namespace HandBrakeWPF.ViewModels
             switch (this.SelectedPointToPoint)
             {
                 case PointToPointMode.Chapters:
-                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString();
+                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString("g");
                 case PointToPointMode.Seconds:
-                    return TimeSpan.FromSeconds(startEndDuration).ToString();
+                    return TimeSpan.FromSeconds(startEndDuration).ToString("g");
                 case PointToPointMode.Frames:
                     startEndDuration = startEndDuration / selectedTitle.Fps;
-                    return TimeSpan.FromSeconds(startEndDuration).ToString();
+                    return TimeSpan.FromSeconds(Math.Round(startEndDuration, 2)).ToString("g");
             }
 
             return "--:--:--";
@@ -1955,15 +1965,20 @@ namespace HandBrakeWPF.ViewModels
                 Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture),
                 out percent);
 
-
             Execute.OnUIThread(
                 () =>
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
+                        string josPending = string.Empty;
+                        if (!AppArguments.IsInstantHandBrake)
+                        {
+                            josPending = ",  Pending Jobs {5}";
+                        }
+
                         this.ProgramStatusLabel =
                             string.Format(
-                                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss},  Pending Jobs {5}",
+                                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}" + josPending,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,
@@ -2082,7 +2097,7 @@ namespace HandBrakeWPF.ViewModels
 
             SourceMenuItem folderScan = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                IsOpenFolder = true,
                 Text = "Open Folder",
                 Command = new SourceMenuCommand(this.FolderScan),
                 IsDrive = false,
@@ -2090,7 +2105,7 @@ namespace HandBrakeWPF.ViewModels
             };
             SourceMenuItem fileScan = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                IsOpenFolder = false,
                 Text = "Open File",
                 Command = new SourceMenuCommand(this.FileScan),
                 IsDrive = false,
@@ -2100,14 +2115,14 @@ namespace HandBrakeWPF.ViewModels
             SourceMenuItem titleSpecific = new SourceMenuItem { Text = "Title Specific Scan" };
             SourceMenuItem folderScanTitle = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                IsOpenFolder = true,
                 Text = "Open Folder",
                 Command = new SourceMenuCommand(this.FolderScanTitleSpecific),
                 IsDrive = false
             };
             SourceMenuItem fileScanTitle = new SourceMenuItem
             {
-                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                IsOpenFolder = false,
                 Text = "Open File",
                 Command = new SourceMenuCommand(this.FileScanTitleSpecific),
                 IsDrive = false
@@ -2126,7 +2141,6 @@ namespace HandBrakeWPF.ViewModels
                 select
                     new SourceMenuItem
                         {
-                            Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
                             Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
                             Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
                             Tag = item,

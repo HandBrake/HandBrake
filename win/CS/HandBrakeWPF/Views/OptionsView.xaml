@@ -97,7 +97,11 @@
                         <TextBlock Text="When Done" Grid.Column="0" FontSize="14" Margin="0,0,0,10" />
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
-                            <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left"></ComboBox>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left" />
+                                <CheckBox Content="Reset to 'Do nothing' when the app is launched." VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding ResetWhenDoneAction}" />
+                            </StackPanel>
+                         
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <CheckBox Content="Growl after Queue Completes" IsChecked="{Binding GrowlAfterEncode}" Margin="0,0,5,0"/>
@@ -143,7 +147,10 @@
 
                             <CheckBox Content="Always use System Colours (Requires Restart)"
                                       ToolTip="Note: This option will always be on for systems with a High Contrast Theme selected." IsChecked="{Binding UseSystemColoursForStylesForStyles}" />
-
+                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
+                            <CheckBox Content="Disable preset update notification on startup" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
+                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
+                            <CheckBox Content="Show Advanced Encoder Options Tab" IsChecked="{Binding ShowAdvancedTab}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -173,7 +180,7 @@
                                 <TextBlock VerticalAlignment="Center" Text="Format:" />
                                 <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="180" ToolTip=" {Source} = Source Name,  {Title} = Title Number,  {Chapters} = Selected Chapters, {Date} = Todays Date,"  />
                             </StackPanel>
-                            <TextBlock Text="Available Options: {source} {title} {chapters} {date}" />
+                            <TextBlock Text="Available Options: {source} {title} {chapters} {date} {time} {quality} {bitrate}" />
 
                             <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
                                 <CheckBox Content="Replace underscores with a space" IsChecked="{Binding RemoveUnderscores}"/>
@@ -304,10 +311,6 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
-                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
-                            <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
-                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
-                            <CheckBox Content="Show Advanced Tab" IsChecked="{Binding ShowAdvancedTab}" />
                             <CheckBox Content="Disable LibHB Features" IsChecked="{Binding DisableLibHbFeatures}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />
@@ -380,8 +383,8 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             
-                            <CheckBox Content="Enable LibHB Scanning and Encoding (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" />
-                            <CheckBox Content="Enable Process Isolation (Run Scans and Encodes via an intermediate service)" Margin="20,10,0,0" IsChecked="{Binding EnableProcessIsolation}" />
+                            <CheckBox Content="Enable LibHB based Encoding (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" />
+                            <CheckBox Content="Enable Process Isolation (Run Encodes via an intermediate service)" Margin="20,10,0,0" IsChecked="{Binding EnableProcessIsolation}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Column="1">
                                 <TextBlock Text="Server Port:" VerticalAlignment="Center" />
                                 <TextBox Width="50" MaxLength="5" Text="{Binding ServerPort}" />

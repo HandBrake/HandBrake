@@ -23,6 +23,12 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         M4V,
 
         [Description("MKV")]
-        Mkv
+        Mkv,
+
+        [Description("av_mkv")]
+        av_mkv,
+
+        [Description("av_mp4")]
+        av_mp4,
     }
 }

@@ -26,6 +26,11 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
+        /// <summary>
+        /// The is deinterlace mode.
+        /// </summary>
+        private bool isDeinterlaceMode;
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -41,6 +46,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.CurrentTask = new EncodeTask();
             this.DeblockValue = 4; // OFF
+            this.IsDeinterlaceMode = true;
         }
 
         #endregion
@@ -233,6 +239,11 @@ namespace HandBrakeWPF.ViewModels
                 // Show / Hide the Custom Control
                 this.ShowDeinterlaceCustom = this.CurrentTask.Deinterlace == Deinterlace.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
+
+                if (value != Deinterlace.Off)
+                {
+                    this.IsDeinterlaceMode = true;
+                }
             }
         }
 
@@ -259,6 +270,11 @@ namespace HandBrakeWPF.ViewModels
                 // Show / Hide the Custom Control
                 this.ShowDecombCustom = this.CurrentTask.Decomb == Decomb.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
+
+                if (value != Decomb.Off)
+                {
+                    this.IsDeinterlaceMode = false;
+                }
             }
         }
 
@@ -323,6 +339,43 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets a value indicating whether ShowDetelecineCustom.
         /// </summary>
         public bool ShowDetelecineCustom { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is deinterlace mode.
+        /// </summary>
+        public bool IsDeinterlaceMode
+        {
+            get
+            {
+                return this.isDeinterlaceMode;
+            }
+            set
+            {
+                if (!object.Equals(this.isDeinterlaceMode, value))
+                {
+                    this.isDeinterlaceMode = value;
+                    this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
+
+                    this.DeinterlaceControlText = value ? "Deinterlace:" : "Decomb:";
+
+                    if (value)
+                    {
+                        this.SelectedDecomb = Decomb.Off;
+                    }
+                    else
+                    {
+                        this.SelectedDeInterlace = Deinterlace.Off;
+                    }
+
+                    this.NotifyOfPropertyChange(() => this.DeinterlaceControlText);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the deinterlace control text.
+        /// </summary>
+        public string DeinterlaceControlText { get; set; }
 
         #endregion
 

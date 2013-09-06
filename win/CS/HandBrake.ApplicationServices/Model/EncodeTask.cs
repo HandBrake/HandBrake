@@ -46,6 +46,7 @@ namespace HandBrake.ApplicationServices.Model
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             this.AllowedPassthruOptions = new AllowedPassthru();
             this.X264Preset = x264Preset.Medium;
+            this.QsvPreset = QsvPreset.Quality;
             this.H264Profile = x264Profile.None;
             this.X264Tune = x264Tune.None;
             this.Modulus = 16;
@@ -128,6 +129,7 @@ namespace HandBrake.ApplicationServices.Model
             this.VideoEncodeRateType = task.VideoEncodeRateType;
             this.Width = task.Width;
             this.X264Preset = task.X264Preset;
+            this.QsvPreset = task.QsvPreset;
             this.H264Profile = task.H264Profile;
             this.X264Tune = task.X264Tune;
             this.H264Level = task.H264Level;
@@ -430,6 +432,11 @@ namespace HandBrake.ApplicationServices.Model
         public x264Preset X264Preset { get; set; }
 
         /// <summary>
+        /// Gets or sets the qsv preset.
+        /// </summary>
+        public QsvPreset QsvPreset { get; set; }
+
+        /// <summary>
         /// Gets or sets x264Profile.
         /// </summary>
         public x264Profile H264Profile { get; set; }
@@ -479,7 +486,7 @@ namespace HandBrake.ApplicationServices.Model
         {
             get
             {
-                if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4)
+                if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4 || this.OutputFormat == OutputFormat.av_mp4)
                 {
                     bool audio = this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || 
                         item.Encoder == AudioEncoder.Ac3 || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);

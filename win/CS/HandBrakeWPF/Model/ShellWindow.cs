@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Model
     public enum ShellWindow
     {
         MainWindow,
-        OptionsWindow
+        OptionsWindow,
+        InstantMainWindow
     }
 }

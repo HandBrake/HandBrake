@@ -38,5 +38,25 @@ namespace HandBrakeWPF
         /// The title.
         /// </summary>
         public const string Title = "{title}";
+
+        /// <summary>
+        /// The quality.
+        /// </summary>
+        public const string Quality = "{quality}";
+
+        /// <summary>
+        /// The quality.
+        /// </summary>
+        public const string Date = "{date}";
+
+        /// <summary>
+        /// The quality.
+        /// </summary>
+        public const string Time = "{time}";
+
+        /// <summary>
+        /// The bitrate.
+        /// </summary>
+        public const string Bitrate = "{bitrate}";
     }
 }

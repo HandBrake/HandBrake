@@ -9,7 +9,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties"
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
-        xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles" Title="{Binding Title}"
+        xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
+        xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
+        Title="{Binding Title}"
         Width="700"
         Height="500"
         MinWidth="200"
@@ -26,6 +28,7 @@
         <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
         <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
+        <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
 
 
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
@@ -210,7 +213,7 @@
 
 
                                 <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0"  Text="Advanced: " />
-                                <TextBlock Text="{Binding Task.AdvancedEncoderOptions}" Grid.Row="5" Grid.Column="1"  />
+                                <TextBlock Text="{Binding Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"  />
                             </Grid>
 
                         </Setter.Value>
@@ -297,48 +300,63 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Image Width="20"  Grid.Row="0" Grid.Column="0"
-                                       Height="20" VerticalAlignment="Center" Margin="0,5,0,0"
-                                       Source="Images/Refresh.ico"
-                                       ToolTip="Reset job status to Waiting."
-                                       Visibility="{Binding Status,
-                                                            Converter={StaticResource queueStatusVisConverter}}">
+                            <Button Visibility="{Binding Status, Converter={StaticResource queueStatusVisConverter}}"
+                                    Grid.Row="0" Grid.Column="0" Margin="0,5,0,0">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="20"  
+                                               Height="20" VerticalAlignment="Center"
+                                               Source="Images/Refresh.ico"
+                                               ToolTip="Reset job status to Waiting.">
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDown">
+                                    <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="RetryJob">
                                             <cal:Parameter Value="{Binding}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </Image>
+                            </Button>
 
-                            <Image Width="20" Grid.Row="0" Grid.Column="1"
-                                       Height="20"
-                                       Margin="10,5,0,0"
-                                       Source="Images/Options24.png"
-                                       ToolTip="Edit this Job">
+                            <Button Grid.Row="0" Grid.Column="1" Margin="10,5,0,0">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="20" 
+                                               Height="20" VerticalAlignment="Center"
+                                               Source="Images/Options24.png"
+                                               ToolTip="Reset job status to Waiting.">
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDown">
+                                    <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="EditJob">
                                             <cal:Parameter Value="{Binding}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </Image>
+                            </Button>
 
-                            <Image Width="20"  Grid.Row="0" Grid.Column="2"
-                                       Height="20"
-                                       Margin="10,5,0,0"
-                                       Source="Images/delete.png"
-                                       ToolTip="Remove this Job">
+                            <Button Grid.Row="0" Grid.Column="2" Margin="10,5,0,0">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="20" 
+                                               Height="20" VerticalAlignment="Center" 
+                                               Source="Images/delete.png"
+                                               ToolTip="Reset job status to Waiting.">
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDown">
+                                    <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="RemoveJob">
                                             <cal:Parameter Value="{Binding}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </Image>
+                            </Button>
 
 
                         </Grid>

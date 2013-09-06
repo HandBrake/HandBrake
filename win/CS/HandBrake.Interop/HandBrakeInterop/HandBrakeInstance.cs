@@ -50,16 +50,6 @@ namespace HandBrake.Interop
 		private const string TurboX264Opts = "ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 
 		/// <summary>
-		/// Lock for creation of handbrake instances;
-		/// </summary>
-		private static object instanceCreationLock = new object();
-
-		/// <summary>
-		/// True if a handbrake instance has been created.
-		/// </summary>
-		private static bool globalInitialized;
-
-		/// <summary>
 		/// The native handle to the HandBrake instance.
 		/// </summary>
 		private IntPtr hbHandle;
@@ -181,13 +171,7 @@ namespace HandBrake.Interop
 		/// <param name="verbosity">The code for the logging verbosity to use.</param>
 		public void Initialize(int verbosity)
 		{
-			lock (instanceCreationLock)
-			{
-				if (!globalInitialized)
-				{
-					globalInitialized = true;
-				}
-			}
+			HandBrakeUtils.EnsureGlobalInit();
 
 			HandBrakeUtils.RegisterLogger();
 			this.hbHandle = HBFunctions.hb_init(verbosity, update_check: 0);
@@ -204,7 +188,16 @@ namespace HandBrake.Interop
 			this.StartScan(path, previewCount, minDuration, 0);
 		}
 
-		public void StartScan(string path, int previewCount)
+	    /// <summary>
+	    /// The start scan.
+	    /// </summary>
+	    /// <param name="path">
+	    /// The path.
+	    /// </param>
+	    /// <param name="previewCount">
+	    /// The preview count.
+	    /// </param>
+	    public void StartScan(string path, int previewCount)
 		{
 			this.StartScan(path, previewCount, TimeSpan.FromSeconds(10), 0);
 		}
@@ -219,6 +212,29 @@ namespace HandBrake.Interop
 		{
 			this.StartScan(path, previewCount, TimeSpan.Zero, titleIndex);
 		}
+
+        /// <summary>
+        /// Starts a scan of the given path.
+        /// </summary>
+        /// <param name="path">The path of the video to scan.</param>
+        /// <param name="previewCount">The number of previews to make on each title.</param>
+        /// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
+        /// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
+        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        {
+            this.previewCount = previewCount;
+            HBFunctions.hb_scan(this.hbHandle, path, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+            this.scanPollTimer = new System.Timers.Timer();
+            this.scanPollTimer.Interval = ScanPollIntervalMs;
+
+            // Lambda notation used to make sure we can view any JIT exceptions the method throws
+            this.scanPollTimer.Elapsed += (o, e) =>
+            {
+                this.PollScanProgress();
+            };
+            this.scanPollTimer.Start();
+        }
+
 
 		/// <summary>
 		/// Stops an ongoing scan.
@@ -406,6 +422,11 @@ namespace HandBrake.Interop
 		public void StartEncode(EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds)
 		{
 			EncodingProfile profile = job.EncodingProfile;
+			if (job.ChosenAudioTracks == null)
+			{
+				throw new ArgumentException("job.ChosenAudioTracks cannot be null.");
+			}
+
 			this.currentJob = job;
 
 			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
@@ -414,7 +435,7 @@ namespace HandBrake.Interop
 			this.encodeAllocatedMemory = this.ApplyJob(ref nativeJob, job, preview, previewNumber, previewSeconds, overallSelectedLengthSeconds);
 
 			this.subtitleScan = false;
-			if (job.Subtitles.SourceSubtitles != null)
+			if (job.Subtitles != null && job.Subtitles.SourceSubtitles != null)
 			{
 				foreach (SourceSubtitle subtitle in job.Subtitles.SourceSubtitles)
 				{
@@ -730,28 +751,6 @@ namespace HandBrake.Interop
 		private static int GetNearestValue(int number, int modulus)
 		{
 			return modulus * ((number + modulus / 2) / modulus);
-		}
-
-		/// <summary>
-		/// Starts a scan of the given path.
-		/// </summary>
-		/// <param name="path">The path of the video to scan.</param>
-		/// <param name="previewCount">The number of previews to make on each title.</param>
-		/// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
-		/// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
-		private void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
-		{
-			this.previewCount = previewCount;
-			HBFunctions.hb_scan(this.hbHandle, path, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
-			this.scanPollTimer = new System.Timers.Timer();
-			this.scanPollTimer.Interval = ScanPollIntervalMs;
-
-			// Lambda notation used to make sure we can view any JIT exceptions the method throws
-			this.scanPollTimer.Elapsed += (o, e) =>
-			{
-				this.PollScanProgress();
-			};
-			this.scanPollTimer.Start();
 		}
 
 		/// <summary>
@@ -1267,7 +1266,7 @@ namespace HandBrake.Interop
 							}
 							else
 							{
-								displayWidth = (int)((double)cropHeight * displayAspect);
+								displayWidth = (int)((double)height * displayAspect);
 							}
 
 							nativeJob.anamorphic.dar_width = displayWidth;
@@ -1454,7 +1453,7 @@ namespace HandBrake.Interop
 					}
 				}
 
-				bool hasBurnedSubtitle = job.Subtitles.SourceSubtitles.Any(s => s.BurnedIn);
+				bool hasBurnedSubtitle = job.Subtitles.SourceSubtitles != null && job.Subtitles.SourceSubtitles.Any(s => s.BurnedIn);
 				if (hasBurnedSubtitle)
 				{
 					this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_RENDER_SUB, string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}:{3}", crop.Top, crop.Bottom, crop.Left, crop.Right), allocatedMemory);
@@ -1663,14 +1662,12 @@ namespace HandBrake.Interop
 
 			nativeAudio.config.output.track = outputTrack;
 			nativeAudio.config.output.codec = (uint)encoder.Id;
+			nativeAudio.config.output.compression_level = -1;
+			nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
 
 			if (!encoder.IsPassthrough)
 			{
-				if (encoding.SampleRateRaw == 0)
-				{
-					nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
-				}
-				else
+				if (encoding.SampleRateRaw != 0)
 				{
 					nativeAudio.config.output.samplerate = encoding.SampleRateRaw;
 				}
@@ -1681,12 +1678,12 @@ namespace HandBrake.Interop
 				if (encoding.EncodeRateType == AudioEncodeRateType.Bitrate)
 				{
 					// Disable quality targeting.
-					nativeAudio.config.output.quality = -1;
+					nativeAudio.config.output.quality = -3;
 
 					if (encoding.Bitrate == 0)
 					{
 						// Bitrate of 0 means auto: choose the default for this codec, sample rate and mixdown.
-						nativeAudio.config.output.bitrate = HBFunctions.hb_get_default_audio_bitrate(
+						nativeAudio.config.output.bitrate = HBFunctions.hb_audio_bitrate_get_default(
 							nativeAudio.config.output.codec,
 							nativeAudio.config.output.samplerate,
 							nativeAudio.config.output.mixdown);
@@ -1752,7 +1749,8 @@ namespace HandBrake.Interop
 				VideoCodecName = title.video_codec_name,
 				Framerate = ((double)title.rate) / title.rate_base,
 				FramerateNumerator = title.rate,
-				FramerateDenominator = title.rate_base
+				FramerateDenominator = title.rate_base,
+                Path = title.path
 			};
 
 			switch (title.type)

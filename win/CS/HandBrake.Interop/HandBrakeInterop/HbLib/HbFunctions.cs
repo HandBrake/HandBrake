@@ -21,6 +21,9 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_register_error_handler", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void hb_register_error_handler(LoggingCallback callback);
 
+		[DllImport("hb.dll", EntryPoint = "hb_global_init", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_global_init();
+
 		/// Return Type: hb_handle_t*
 		///verbose: int
 		///update_check: int
@@ -210,81 +213,128 @@ namespace HandBrake.Interop.HbLib
 		public static extern int hb_srt_add(ref hb_job_s job, ref hb_subtitle_config_s subtitleConfig, string lang);
 
 
+
+//int              hb_video_framerate_get_from_name(const char *name);
+//const char*      hb_video_framerate_get_name(int framerate);
+//const char*      hb_video_framerate_sanitize_name(const char *name);
+
+		// returns hb_rate_s
+		[DllImport("hb.dll", EntryPoint = "hb_video_framerate_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_framerate_get_next(IntPtr last);
+
+
+//int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);
+//int              hb_audio_samplerate_get_from_name(const char *name);
+//const char*      hb_audio_samplerate_get_name(int samplerate);
+
+		// returns hb_rate_s
+		[DllImport("hb.dll", EntryPoint = "hb_audio_samplerate_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_audio_samplerate_get_next(IntPtr last);
+
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_bitrate_get_best", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_audio_bitrate_get_best(uint codec, int bitrate, int samplerate, int mixdown);
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_bitrate_get_default", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_audio_bitrate_get_default(uint codec, int samplerate, int mixdown);
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_bitrate_get_limits", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_audio_bitrate_get_limits(uint codec, int samplerate, int mixdown, ref int low, ref int high);
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_bitrate_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_audio_bitrate_get_next(IntPtr last);
+
+		[DllImport("hb.dll", EntryPoint = "hb_video_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_video_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
+
+		[DllImport("hb.dll", EntryPoint = "hb_video_quality_get_name", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_quality_get_name(uint codec);
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_audio_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
+
+//float hb_audio_quality_get_best(uint32_t codec, float quality);
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_quality_get_default", CallingConvention = CallingConvention.Cdecl)]
+		public static extern float hb_audio_quality_get_default(uint codec);
+
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_compression_get_limits", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_audio_compression_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
+
+//float hb_audio_compression_get_best(uint32_t codec, float compression);
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_compression_get_default", CallingConvention = CallingConvention.Cdecl)]
+		public static extern float hb_audio_compression_get_default(uint codec);
+
+
+//int                hb_audio_dither_get_default();
+//int                hb_audio_dither_get_default_method(); // default method, if enabled && supported
+//int                hb_audio_dither_is_supported(uint32_t codec);
+//int                hb_audio_dither_get_from_name(const char *name);
+//const char*        hb_audio_dither_get_description(int method);
+//const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last);
+
 		[DllImport("hb.dll", EntryPoint = "hb_mixdown_is_supported", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_mixdown_is_supported(int mixdown, uint codec, ulong layout);
-
-		[DllImport("hb.dll", EntryPoint = "hb_mixdown_has_remix_support", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_mixdown_has_remix_support(int mixdown, ulong layout);
 
 		[DllImport("hb.dll", EntryPoint = "hb_mixdown_has_codec_support", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_mixdown_has_codec_support(int mixdown, uint codec);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_default_mixdown", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_default_mixdown(uint codec, ulong layout);
+		[DllImport("hb.dll", EntryPoint = "hb_mixdown_has_remix_support", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_mixdown_has_remix_support(int mixdown, ulong layout);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_best_mixdown", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_best_mixdown(uint codec, ulong layout, int mixdown);
+//int                 hb_mixdown_get_discrete_channel_count(int mixdown);
+//int                 hb_mixdown_get_low_freq_channel_count(int mixdown);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_best_audio_bitrate", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_best_audio_bitrate(uint codec, int bitrate, int samplerate, int mixdown);
+		[DllImport("hb.dll", EntryPoint = "hb_mixdown_get_best", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_mixdown_get_best(uint codec, ulong layout, int mixdown);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_default_audio_bitrate", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_default_audio_bitrate(uint codec, int samplerate, int mixdown);
+		[DllImport("hb.dll", EntryPoint = "hb_mixdown_get_default", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_mixdown_get_default(uint codec, ulong layout);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_bitrate_limits", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_audio_bitrate_limits(uint codec, int samplerate, int mixdown, ref int low, ref int high);
+//int                 hb_mixdown_get_from_name(const char *name);
+//const char*         hb_mixdown_get_name(int mixdown);
+//const char*         hb_mixdown_get_short_name(int mixdown);
+//const char*         hb_mixdown_sanitize_name(const char *name);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_quality_limits", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_get_audio_quality_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
+		[DllImport("hb.dll", EntryPoint = "hb_mixdown_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_mixdown_get_next(IntPtr last);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_default_audio_quality", CallingConvention = CallingConvention.Cdecl)]
-		public static extern float hb_get_default_audio_quality(uint codec);
+//int                 hb_video_encoder_get_default(int muxer);
+//int                 hb_video_encoder_get_from_name(const char *name);
+//const char*         hb_video_encoder_get_name(int encoder);
+//const char*         hb_video_encoder_get_short_name(int encoder);
+//const char*         hb_video_encoder_sanitize_name(const char *name);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_compression_limits", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_get_audio_compression_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
+		[DllImport("hb.dll", EntryPoint = "hb_video_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_encoder_get_next(IntPtr last);
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_default_audio_compression", CallingConvention = CallingConvention.Cdecl)]
-		public static extern float hb_get_default_audio_compression(uint codec);
+/*
+ * hb_audio_encoder_get_fallback_for_passthru() will sanitize a passthru codec
+ * to the matching audio encoder (if any is available).
+ *
+ * hb_audio_encoder_get_from_name(), hb_audio_encoder_sanitize_name() will
+ * sanitize legacy encoder names, but won't convert passthru to an encoder.
+ */
+//int                 hb_audio_encoder_get_fallback_for_passthru(int passthru);
+//int                 hb_audio_encoder_get_default(int muxer);
+//int                 hb_audio_encoder_get_from_name(const char *name);
+//const char*         hb_audio_encoder_get_name(int encoder);
+//const char*         hb_audio_encoder_get_short_name(int encoder);
+//const char*         hb_audio_encoder_sanitize_name(const char *name);
+
+		[DllImport("hb.dll", EntryPoint = "hb_audio_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_audio_encoder_get_next(IntPtr last);
+
+		[DllImport("hb.dll", EntryPoint = "lang_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr lang_get_next(IntPtr last);
+
+		[DllImport("hb.dll", EntryPoint = "lang_for_code2", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr lang_for_code2([In] [MarshalAs(UnmanagedType.LPStr)] string code2);
 
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_video_rates", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr hb_get_video_rates();
 
-		[DllImport("hb.dll", EntryPoint = "hb_get_video_rates_count", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_video_rates_count();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_rates", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr hb_get_audio_rates();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_rates_count", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_audio_rates_count();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_rates_default", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_audio_rates_default();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_bitrates", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr hb_get_audio_bitrates();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_bitrates_count", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_audio_bitrates_count();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_mixdowns", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr hb_get_audio_mixdowns();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_mixdowns_count", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_audio_mixdowns_count();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_video_encoders", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr hb_get_video_encoders();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_video_encoders_count", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_video_encoders_count();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_encoders", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr hb_get_audio_encoders();
-
-		[DllImport("hb.dll", EntryPoint = "hb_get_audio_encoders_count", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_audio_encoders_count();
 
 
 		/// void hb_autopassthru_apply_settings( hb_job_t * job )
@@ -338,7 +388,7 @@ namespace HandBrake.Interop.HbLib
 		public static extern int hb_check_h264_level([In] [MarshalAs(UnmanagedType.LPStr)] string level, int width, int height, int fps_num, int fps_den, int interlaced, int fake_interlaced);
 
 		[DllImport("hb.dll", EntryPoint = "hb_x264_param_unparse", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hb_x264_param_unparse(
+		public static extern IntPtr hb_x264_param_unparse(
 			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_preset,
 			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_tune,
 			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_encopts,
@@ -346,5 +396,12 @@ namespace HandBrake.Interop.HbLib
 			[In] [MarshalAs(UnmanagedType.LPStr)] string h264_level,
 			int width,
 			int height);
+
+
+        [DllImport("hb.dll", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_qsv_available();
+        
+        [DllImport("hb.dll", EntryPoint = "hb_qsv_info_init", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_qsv_info_init();
 	}
 }

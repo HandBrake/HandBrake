@@ -82,6 +82,14 @@ namespace HandBrakeWPF.Views
             {
                 this.TaskbarItemInfo = Win7.WindowsTaskbar;
             }
+
+            // Window Sizing
+            if (AppArguments.IsInstantHandBrake)
+            {
+                this.SizeToContent = SizeToContent.WidthAndHeight;
+                this.MinHeight = 380;
+                this.MinWidth = 600;
+            }
         }
 
         /// <summary>

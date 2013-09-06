@@ -56,7 +56,7 @@ namespace HandBrake.Interop.HbLib
 	{
 		/// char*
 		[MarshalAs(UnmanagedType.LPStr)]
-		public string @string;
+		public string name;
 
 		/// int
 		public int rate;
@@ -65,13 +65,8 @@ namespace HandBrake.Interop.HbLib
 	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_mixdown_s
 	{
-		/// char*
 		[MarshalAs(UnmanagedType.LPStr)]
-		public string human_readable_name;
-
-		/// char*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string internal_name;
+		public string name;
 
 		/// char*
 		[MarshalAs(UnmanagedType.LPStr)]
@@ -82,15 +77,32 @@ namespace HandBrake.Interop.HbLib
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
+	public struct iso639_lang_t
+	{
+		public IntPtr eng_name;
+
+		public IntPtr native_name;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string iso639_1;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string iso639_2;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string iso639_2b;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_encoder_s
 	{
 		[MarshalAs(UnmanagedType.LPStr)]
-		public string human_readable_name;
+		public string name;
 
 		[MarshalAs(UnmanagedType.LPStr)]
 		public string short_name;
 
-		public int encoder;
+		public int codec;
 
 		public int muxers;
 	}

@@ -63,8 +63,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
 
-        private string trackName;
-
         #endregion
 
         #region Constructors and Destructors
@@ -75,7 +73,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         public AudioTrack()
         {
             // Default Values
-            this.Encoder = AudioEncoder.Faac;
+            this.Encoder = AudioEncoder.ffaac;
             this.MixDown = Mixdown.DolbyProLogicII;
             this.SampleRate = 48;
             this.Bitrate = 160;
@@ -341,7 +339,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return this.IsPassthru || this.Encoder == AudioEncoder.ffflac;
+                return this.IsPassthru || this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24;
             }
         }
 
@@ -352,7 +350,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return this.IsPassthru || this.Encoder == AudioEncoder.ffflac;
+                return this.IsPassthru || this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24;
             }
         }
 
@@ -367,17 +365,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets or sets the track name.
         /// </summary>
-        public string TrackName
-        {
-            get
-            {
-                return this.trackName;
-            }
-            set
-            {
-                this.trackName = value;
-            }
-        }
+        public string TrackName { get; set; }
 
         #endregion
     }

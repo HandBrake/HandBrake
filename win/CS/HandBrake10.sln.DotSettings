@@ -3,6 +3,7 @@
 	<s:Boolean x:Key="/Default/CodeEditing/Intellisense/CodeCompletion/IntelliSenseCompletingCharacters/IntelliSenseCompletingCharactersSettingCSharp/UpgradedFromVSSettings/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeEditing/Intellisense/LookupWindow/ShowSummary/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeEditing/Localization/CSharpLocalizationOptions/DontAnalyseVerbatimStrings/@EntryValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=HandBrakeWPF_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=CompareOfFloatsByEqualityOperator/@EntryIndexedValue">HINT</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=InconsistentNaming/@EntryIndexedValue">HINT</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=LocalizableElement/@EntryIndexedValue">DO_NOT_SHOW</s:String>
@@ -1013,4 +1014,5 @@
 	<s:String x:Key="/Default/Housekeeping/VsSavedAutocompletionValue/OverrideParameterInfo/=JavaScript/@EntryIndexedValue">NotOverridden</s:String>
 	<s:String x:Key="/Default/Housekeeping/VsSavedAutocompletionValue/OverrideParameterInfo/=MsBuild/@EntryIndexedValue">NotOverridden</s:String>
 	<s:String x:Key="/Default/Housekeeping/VsSavedAutocompletionValue/OverrideParameterInfo/=VB/@EntryIndexedValue">NotOverridden</s:String>
-	<s:String x:Key="/Default/Housekeeping/VsSavedAutocompletionValue/OverrideParameterInfo/=Xaml/@EntryIndexedValue">NotOverridden</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/Housekeeping/VsSavedAutocompletionValue/OverrideParameterInfo/=Xaml/@EntryIndexedValue">NotOverridden</s:String>
+	<s:Int64 x:Key="/Default/StyleCopOptions/ParsingPerformance/@EntryValue">8</s:Int64></wpf:ResourceDictionary>

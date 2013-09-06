@@ -366,6 +366,11 @@
             Gets a flag enumeration indicating the current state of the SHIFT, CTRL, and ALT keys, as well as the state of the mouse buttons.
             </summary>
         </member>
+        <member name="P:GongSolutions.Wpf.DragDrop.IDropInfo.NotHandled">
+            <summary>
+            Indicates if the drop info should be handled by itself (useful for child elements)
+            </summary>
+        </member>
         <member name="T:GongSolutions.Wpf.DragDrop.DropInfo">
             <summary>
             Holds information about a the target of a drag drop operation.

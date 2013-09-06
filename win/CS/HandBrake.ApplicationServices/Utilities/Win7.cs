@@ -11,7 +11,6 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System.Windows.Shell;
 
-
     /// <summary>
     /// A class implementing Windows 7 Specific features
     /// </summary>

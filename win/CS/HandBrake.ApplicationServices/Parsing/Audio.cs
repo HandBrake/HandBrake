@@ -105,12 +105,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 return this.Description;
             }
 
-            if (this.Description == null)
-            {
-                return string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.Format);
-            }
-
-            return string.Format("{0} {1} ({2}) ({3})", this.TrackNumber, this.Language, this.Format, this.Description);
+            return string.Format("{0} {1}", this.TrackNumber, this.Description);
         }
 
         /// <summary>
@@ -128,10 +123,12 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 return false;
             }
+
             if (ReferenceEquals(this, other))
             {
                 return true;
             }
+
             return other.TrackNumber == this.TrackNumber && object.Equals(other.Language, this.Language) && object.Equals(other.LanguageCode, this.LanguageCode) && object.Equals(other.Format, this.Format);
         }
 
@@ -148,14 +145,17 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 return false;
             }
+
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
+
             if (obj.GetType() != typeof(Audio))
             {
                 return false;
             }
+
             return Equals((Audio)obj);
         }
 

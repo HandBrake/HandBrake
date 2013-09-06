@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WhenDoneService.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PrePostActionService.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -14,10 +14,12 @@ namespace HandBrakeWPF.Services
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     using Application = System.Windows.Application;
 
@@ -37,6 +39,11 @@ namespace HandBrakeWPF.Services
         private readonly IUserSettingService userSettingService;
 
         /// <summary>
+        /// The window manager.
+        /// </summary>
+        private readonly IWindowManager windowManager;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PrePostActionService"/> class.
         /// </summary>
         /// <param name="queueProcessor">
@@ -45,10 +52,14 @@ namespace HandBrakeWPF.Services
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService)
+        /// <param name="windowManager">
+        /// The window Manager.
+        /// </param>
+        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager)
         {
             this.queueProcessor = queueProcessor;
             this.userSettingService = userSettingService;
+            this.windowManager = windowManager;
 
             this.queueProcessor.QueueCompleted += QueueProcessorQueueCompleted;
             this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
@@ -108,29 +119,53 @@ namespace HandBrakeWPF.Services
         /// <param name="e">
         /// The e.
         /// </param>
-        private void QueueProcessorQueueCompleted(object sender, System.EventArgs e)
+        private void QueueProcessorQueueCompleted(object sender, QueueCompletedEventArgs e)
         {
-            // Do something whent he encode ends.
-            switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
+            if (e.WasManuallyStopped)
             {
-                case "Shutdown":
-                    Process.Start("Shutdown", "-s -t 60");
-                    break;
-                case "Log off":
-                    Win32.ExitWindowsEx(0, 0);
-                    break;
-                case "Suspend":
-                    System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
-                    break;
-                case "Hibernate":
-                    System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, true);
-                    break;
-                case "Lock System":
-                    Win32.LockWorkStation();
-                    break;
-                case "Quit HandBrake":
-                    Execute.OnUIThread(() => Application.Current.Shutdown());
-                    break;
+                return;
+            }
+
+
+            if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction) == "Do nothing")
+            {
+                return;
+            }
+
+            // Give the user the ability to cancel the shutdown. Default 60 second timer.
+            ICountdownAlertViewModel titleSpecificView = IoC.Get<ICountdownAlertViewModel>();
+            Caliburn.Micro.Execute.OnUIThread(
+                () =>
+                    {
+                        titleSpecificView.SetAction(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction));
+                        this.windowManager.ShowDialog(titleSpecificView);
+                    });
+
+
+            if (!titleSpecificView.IsCancelled)
+            {
+                // Do something whent he encode ends.
+                switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
+                {
+                    case "Shutdown":
+                        Process.Start("Shutdown", "-s -t 60");
+                        break;
+                    case "Log off":
+                        Win32.ExitWindowsEx(0, 0);
+                        break;
+                    case "Suspend":
+                        System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
+                        break;
+                    case "Hibernate":
+                        System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, true);
+                        break;
+                    case "Lock System":
+                        Win32.LockWorkStation();
+                        break;
+                    case "Quit HandBrake":
+                        Execute.OnUIThread(() => Application.Current.Shutdown());
+                        break;
+                }
             }
         }
 

@@ -48,6 +48,6 @@ namespace HandBrake.Interop.SourceData
         /// <summary>
         /// The flac.
         /// </summary>
-        Flac
+        Flac,       
     }
 }

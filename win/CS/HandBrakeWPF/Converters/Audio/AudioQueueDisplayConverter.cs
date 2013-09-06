@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Windows.Data;
 
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -39,18 +40,16 @@ namespace HandBrakeWPF.Converters.Audio
             {
                 foreach (AudioTrack track in tracks)
                 {
-                    if (string.IsNullOrEmpty(audioTracks.ToString()))
-                    {
-                        audioTracks.Append(EnumHelper<AudioEncoder>.GetDisplay(track.Encoder));
-                    }
-                    else
-                    {
-                        audioTracks.Append(", " + EnumHelper<AudioEncoder>.GetDisplay(track.Encoder));
-                    }
+                    string trackName = string.Format(
+                        "{0} {1}",
+                        track.ScannedTrack.TrackNumber,
+                        track.ScannedTrack.Language);
+
+                    audioTracks.Append(string.Format("{0} - {1} To {2}{3}", trackName, track.TrackName, EnumHelper<AudioEncoder>.GetDisplay(track.Encoder), Environment.NewLine)); 
                 }
             }
 
-            return audioTracks.ToString();
+            return audioTracks.ToString().Trim();
         }
 
         /// <summary>

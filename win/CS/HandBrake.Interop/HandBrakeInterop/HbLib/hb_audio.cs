@@ -72,6 +72,8 @@ namespace HandBrake.Interop.HbLib
 		public int dither_method;
 
 		public IntPtr name;
+
+		public int delay;
 	}
 
 	public enum hb_mixdown

@@ -10,10 +10,7 @@
 namespace HandBrake.ApplicationServices.Parsing
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Runtime.Serialization;
-
-    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// An object representing a scanned DVD
@@ -42,33 +39,6 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </summary>
         [DataMember]
         public List<Title> Titles { get; set; }
-
-        /// <summary>
-        /// Parse the StreamReader output into a List of Titles
-        /// </summary>
-        /// <param name="output">
-        /// The output.
-        /// </param>
-        /// <param name="isDvdNavDisabled">
-        /// The is Dvd Nav Disabled.
-        /// </param>
-        /// <returns>
-        /// A DVD object which contains a list of title inforamtion
-        /// </returns>
-        public static Source Parse(StreamReader output, bool isDvdNavDisabled)
-        {
-            var thisDVD = new Source();
-
-            while (!output.EndOfStream)
-            {
-                if ((char) output.Peek() == '+')
-                    thisDVD.Titles.AddRange(Title.ParseList(output.ReadToEnd(), isDvdNavDisabled));
-                else
-                    output.ReadLine();
-            }
-
-            return thisDVD;
-        }
 
         /// <summary>
         /// Copy this Source to another Source Model
