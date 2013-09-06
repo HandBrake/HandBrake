@@ -2552,7 +2552,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * last = NULL, * out = NULL;
 #ifdef USE_OPENCL
-    if (pv->use_opencl && !(pv->mode & (MODE_MCDEINT | MODE_BOB)))
+    if (pv->use_opencl && !(pv->mode & (MODE_BOB)))
         return hb_decomb_work_opencl(filter, buf_in, buf_out);
 #endif
     if ( in->size <= 0 )
@@ -2809,7 +2809,7 @@ static int hb_decomb_work_opencl( hb_filter_object_t * filter,
             }
         }
 
-        hb_buffer_t* mcdeint_out = NULL;
+      /*  hb_buffer_t* mcdeint_out = NULL;
         if (pv->mcdeint_mode >= 0)
         {    
             mcdeint_out = hb_video_buffer_init(in->f.width, in->f.height);
@@ -2820,7 +2820,7 @@ static int hb_decomb_work_opencl( hb_filter_object_t * filter,
             last = mcdeint_out;
         }else{
             last = out;
-        }
+        }*/
 
         last->s = pv->ref[1]->s;
         if ((pv->mode & MODE_MASK) && pv->spatial_metric >= 0 )
