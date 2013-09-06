@@ -7,9 +7,11 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include <mp4v2/mp4v2.h>
 
 #include "common.h"
+
+#if defined(USE_MP4V2)
+#include <mp4v2/mp4v2.h>
 
 static int decmp4metadata( hb_title_t *title )
 {
@@ -172,6 +174,7 @@ static int decmp4metadata( hb_title_t *title )
     }
     return result;
 }
+#endif // USE_MP4V2
 
 /*
  * decmetadata()
@@ -190,6 +193,7 @@ int decmetadata( hb_title_t *title )
         return 0;
     }
 
+#if defined(USE_MP4V2)
     /*
      * Hacky way of figuring out if this is an MP4, in which case read the data using libmp4v2
      */
@@ -197,5 +201,6 @@ int decmetadata( hb_title_t *title )
     {
         return decmp4metadata( title );
     }
+#endif
     return 0;
 }

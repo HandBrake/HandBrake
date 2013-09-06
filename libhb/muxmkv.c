@@ -8,6 +8,9 @@
  */
 
 /* libmkv header */
+
+#if defined(USE_LIBMKV)
+
 #include "libmkv.h"
 
 #include <ogg/ogg.h>
@@ -17,15 +20,16 @@
 
 /* Scale factor to apply to timecodes to convert from HandBrake's
  * 1/90000s to nanoseconds as expected by libmkv */
-#define TIMECODE_SCALE 1000000000 / 90000
+#define NANOSECOND_SCALE 1000000000L
+#define TIMECODE_SCALE 1000000000L / 90000
 
 struct hb_mux_object_s
 {
     HB_MUX_COMMON;
 
-    hb_job_t * job;
-
+    hb_job_t  * job;
     mk_Writer * file;
+    int         delay;
 };
 
 struct hb_mux_data_s
@@ -49,6 +53,49 @@ static uint8_t * create_flac_header( uint8_t *data, int size )
     memcpy( out, header, 8 );
     memcpy( out + 8, data, size );
     return out;
+}
+
+static uint8_t* create_h264_header(hb_job_t *job, int *size)
+{
+    /* Taken from x264's muxers.c */
+    int avcC_len  = (5 +
+                     1 + 2 + job->config.h264.sps_length +
+                     1 + 2 + job->config.h264.pps_length);
+#define MAX_AVCC_LEN 5 + 1 + 2 + 1024 + 1 + 2 + 1024 // FIXME
+    if (avcC_len > MAX_AVCC_LEN)
+    {
+        hb_log("create_h264_header: H.264 header too long (%d, max: %d)",
+               avcC_len, MAX_AVCC_LEN);
+        return NULL;
+    }
+    uint8_t *avcC = malloc(avcC_len);
+    if (avcC == NULL)
+    {
+        return NULL;
+    }
+
+    avcC[0] = 1;
+    avcC[1] = job->config.h264.sps[1]; /* AVCProfileIndication */
+    avcC[2] = job->config.h264.sps[2]; /* profile_compat */
+    avcC[3] = job->config.h264.sps[3]; /* AVCLevelIndication */
+    avcC[4] = 0xff; // nalu size length is four bytes
+    avcC[5] = 0xe1; // one sps
+
+    avcC[6] = job->config.h264.sps_length >> 8;
+    avcC[7] = job->config.h264.sps_length;
+    memcpy(avcC + 8, job->config.h264.sps, job->config.h264.sps_length);
+
+    avcC[8  + job->config.h264.sps_length] = 1; // one pps
+    avcC[9  + job->config.h264.sps_length] = job->config.h264.pps_length >> 8;
+    avcC[10 + job->config.h264.sps_length] = job->config.h264.pps_length;
+    memcpy(avcC + 11 + job->config.h264.sps_length,
+           job->config.h264.pps, job->config.h264.pps_length);
+
+    if (size != NULL)
+    {
+        *size = avcC_len;
+    }
+    return avcC;
 }
 
 /**********************************************************************
@@ -93,33 +140,15 @@ static int MKVInit( hb_mux_object_t * m )
     switch (job->vcodec)
     {
         case HB_VCODEC_X264:
-            track->codecID = MK_VCODEC_MP4AVC;
-            /* Taken from x264 muxers.c */
-            avcC_len = 5 + 1 + 2 + job->config.h264.sps_length + 1 + 2 + job->config.h264.pps_length;
-            avcC = malloc(avcC_len);
-            if (avcC == NULL) {
+        case HB_VCODEC_QSV_H264:
+            avcC = create_h264_header(job, &avcC_len);
+            if (avcC == NULL)
+            {
                 free(track);
                 return -1;
             }
-
-            avcC[0] = 1;
-            avcC[1] = job->config.h264.sps[1];      /* AVCProfileIndication */
-            avcC[2] = job->config.h264.sps[2];      /* profile_compat */
-            avcC[3] = job->config.h264.sps[3];      /* AVCLevelIndication */
-            avcC[4] = 0xff; // nalu size length is four bytes
-            avcC[5] = 0xe1; // one sps
-
-            avcC[6] = job->config.h264.sps_length >> 8;
-            avcC[7] = job->config.h264.sps_length;
-
-            memcpy(avcC+8, job->config.h264.sps, job->config.h264.sps_length);
-
-            avcC[8+job->config.h264.sps_length] = 1; // one pps
-            avcC[9+job->config.h264.sps_length] = job->config.h264.pps_length >> 8;
-            avcC[10+job->config.h264.sps_length] = job->config.h264.pps_length;
-
-            memcpy( avcC+11+job->config.h264.sps_length, job->config.h264.pps, job->config.h264.pps_length );
-            track->codecPrivate = avcC;
+            track->codecID          = MK_VCODEC_MP4AVC;
+            track->codecPrivate     = avcC;
             track->codecPrivateSize = avcC_len;
             if (job->areBframes)
                 track->minCache = 1;
@@ -201,6 +230,9 @@ static int MKVInit( hb_mux_object_t * m )
         audio = hb_list_item( job->list_audio, i );
         mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
+
+        if (audio->config.out.delay > m->delay)
+            m->delay = audio->config.out.delay;
 
         mux_data->codec = audio->config.out.codec;
 
@@ -440,14 +472,13 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
     char chapter_name[1024];
     hb_chapter_t *chapter_data;
     uint64_t timecode = 0;
-    ogg_packet *op    = NULL;
     hb_job_t *job     = m->job;
 
+    // Adjust for audio preroll and scale units
+    timecode = (buf->s.start + m->delay) * TIMECODE_SCALE;
     if (mux_data == job->mux_data)
     {
         /* Video */
-        timecode = buf->s.start * TIMECODE_SCALE;
-
         if (job->chapter_markers && buf->s.new_chap)
         {
             // reached chapter N, write marker for chapter N-1
@@ -475,22 +506,6 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
             }
             mux_data->prev_chapter_tc = timecode;
         }
-
-        if (job->vcodec == HB_VCODEC_THEORA)
-        {
-            /* ughhh, theora is a pain :( */
-            op = (ogg_packet *)buf->data;
-            op->packet = buf->data + sizeof( ogg_packet );
-            if (mk_startFrame(m->file, mux_data->track) < 0)
-            {
-                hb_error( "Failed to write frame to output file, Disk Full?" );
-                *job->die = 1;
-            }
-            mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
-            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
-            hb_buffer_close( &buf );
-            return 0;
-        }
     }
     else if (mux_data->subtitle)
     {
@@ -500,14 +515,13 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
             *job->die = 1;
         }
         uint64_t duration;
-        timecode = buf->s.start * TIMECODE_SCALE;
-        if (buf->s.stop <= buf->s.start)
+        if (buf->s.duration < 0)
         {
-            duration = 0;
+            duration = 10 * NANOSECOND_SCALE;
         }
         else
         {
-            duration = buf->s.stop * TIMECODE_SCALE - timecode;
+            duration = buf->s.duration * TIMECODE_SCALE;
         }
         mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
         mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
@@ -518,22 +532,6 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
     else
     {
         /* Audio */
-        timecode = buf->s.start * TIMECODE_SCALE;
-        if (mux_data->codec == HB_ACODEC_VORBIS)
-        {
-            /* ughhh, vorbis is a pain :( */
-            op = (ogg_packet *)buf->data;
-            op->packet = buf->data + sizeof( ogg_packet );
-            if (mk_startFrame(m->file, mux_data->track))
-            {
-                hb_error( "Failed to write frame to output file, Disk Full?" );
-                *job->die = 1;
-            }
-            mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
-            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
-            hb_buffer_close( &buf );
-            return 0;
-        }
     }
 
     if( mk_startFrame(m->file, mux_data->track) < 0)
@@ -543,12 +541,12 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
     }
     mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
     mk_setFrameFlags(m->file, mux_data->track, timecode,
-                     (((job->vcodec == HB_VCODEC_X264 || 
-                        (job->vcodec & HB_VCODEC_FFMPEG_MASK)) && 
-                       mux_data == job->mux_data) ? 
-                            (buf->s.frametype == HB_FRAME_IDR) : 
-                            ((buf->s.frametype & HB_FRAME_KEY) != 0)), 0 );
-    hb_buffer_close( &buf );
+                     ((mux_data == job->mux_data &&
+                       ((job->vcodec & HB_VCODEC_H264_MASK) ||
+                        (job->vcodec & HB_VCODEC_FFMPEG_MASK))) ?
+                      (buf->s.frametype == HB_FRAME_IDR)        :
+                      (buf->s.frametype  & HB_FRAME_KEY) != 0), 0);
+    hb_buffer_close(&buf);
     return 0;
 }
 
@@ -690,3 +688,4 @@ hb_mux_object_t * hb_mux_mkv_init( hb_job_t * job )
     m->job       = job;
     return m;
 }
+#endif // USE_LIBMKV

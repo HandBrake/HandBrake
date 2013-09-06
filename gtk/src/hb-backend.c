@@ -27,6 +27,7 @@
 #include "hb.h"
 #include "ghbcompat.h"
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 #include "hb-backend.h"
 #include "settings.h"
 #include "callbacks.h"
@@ -72,9 +73,9 @@ index_str_init(gint max_index)
 
 static options_map_t d_point_to_point_opts[] =
 {
-    {"Chapters:",       "chapter", 0, "0"},
-    {"Seconds:", "time",    1, "1"},
-    {"Frames:",   "frame",   2, "2"},
+    {N_("Chapters:"), "chapter", 0, "0"},
+    {N_("Seconds:"),  "time",    1, "1"},
+    {N_("Frames:"),   "frame",   2, "2"},
 };
 combo_opts_t point_to_point_opts =
 {
@@ -84,11 +85,11 @@ combo_opts_t point_to_point_opts =
 
 static options_map_t d_when_complete_opts[] =
 {
-    {"Do Nothing",            "nothing",  0, "0"},
-    {"Show Notification",     "notify",   1, "1"},
-    {"Quit Handbrake",        "quit",     4, "4"},
-    {"Put Computer To Sleep", "sleep",    2, "2"},
-    {"Shutdown Computer",     "shutdown", 3, "3"},
+    {N_("Do Nothing"),            "nothing",  0, "0"},
+    {N_("Show Notification"),     "notify",   1, "1"},
+    {N_("Quit Handbrake"),        "quit",     4, "4"},
+    {N_("Put Computer To Sleep"), "sleep",    2, "2"},
+    {N_("Shutdown Computer"),     "shutdown", 3, "3"},
 };
 combo_opts_t when_complete_opts =
 {
@@ -98,10 +99,10 @@ combo_opts_t when_complete_opts =
 
 static options_map_t d_par_opts[] =
 {
-    {"Off", "0", 0, "0"},
-    {"Strict", "1", 1, "1"},
-    {"Loose", "2", 2, "2"},
-    {"Custom", "3", 3, "3"},
+    {N_("Off"),    "0", 0, "0"},
+    {N_("Strict"), "1", 1, "1"},
+    {N_("Loose"),  "2", 2, "2"},
+    {N_("Custom"), "3", 3, "3"},
 };
 combo_opts_t par_opts =
 {
@@ -136,10 +137,10 @@ combo_opts_t logging_opts =
 
 static options_map_t d_log_longevity_opts[] =
 {
-    {"Week",     "week",     7, "7"},
-    {"Month",    "month",    30, "30"},
-    {"Year",     "year",     365, "365"},
-    {"Immortal", "immortal", 366, "366"},
+    {N_("Week"),     "week",     7, "7"},
+    {N_("Month"),    "month",    30, "30"},
+    {N_("Year"),     "year",     365, "365"},
+    {N_("Immortal"), "immortal", 366, "366"},
 };
 combo_opts_t log_longevity_opts =
 {
@@ -149,10 +150,10 @@ combo_opts_t log_longevity_opts =
 
 static options_map_t d_appcast_update_opts[] =
 {
-    {"Never", "never", 0, "never"},
-    {"Daily", "daily", 1, "daily"},
-    {"Weekly", "weekly", 2, "weekly"},
-    {"Monthly", "monthly", 3, "monthly"},
+    {N_("Never"),   "never", 0, "never"},
+    {N_("Daily"),   "daily", 1, "daily"},
+    {N_("Weekly"),  "weekly", 2, "weekly"},
+    {N_("Monthly"), "monthly", 3, "monthly"},
 };
 combo_opts_t appcast_update_opts =
 {
@@ -175,9 +176,9 @@ combo_opts_t vqual_granularity_opts =
 
 static options_map_t d_detel_opts[] =
 {
-    {"Off",    "off",   0, ""},
-    {"Custom", "custom", 1, ""},
-    {"Default","default",2, NULL},
+    {N_("Off"),    "off",   0, ""},
+    {N_("Custom"), "custom", 1, ""},
+    {N_("Default"),"default",2, NULL},
 };
 combo_opts_t detel_opts =
 {
@@ -187,11 +188,11 @@ combo_opts_t detel_opts =
 
 static options_map_t d_decomb_opts[] =
 {
-    {"Off",    "off",   0, ""},
-    {"Custom", "custom", 1, ""},
-    {"Default","default",2, NULL},
-    {"Fast",   "fast",   3, "7:2:6:9:1:80"},
-    {"Bob",    "bob",    4, "455"},
+    {N_("Off"),    "off",   0, ""},
+    {N_("Custom"), "custom", 1, ""},
+    {N_("Default"),"default",2, NULL},
+    {N_("Fast"),   "fast",   3, "7:2:6:9:1:80"},
+    {N_("Bob"),    "bob",    4, "455"},
 };
 combo_opts_t decomb_opts =
 {
@@ -201,12 +202,12 @@ combo_opts_t decomb_opts =
 
 static options_map_t d_deint_opts[] =
 {
-    {"Off",    "off",    0,  ""},
-    {"Custom", "custom", 1,  ""},
-    {"Fast",   "fast",   2,  "0:-1:-1:0:1"},
-    {"Slow",   "slow",   3,  "1:-1:-1:0:1"},
-    {"Slower", "slower", 4,  "3:-1:-1:0:1"},
-    {"Bob",    "bob",    5, "15:-1:-1:0:1"},
+    {N_("Off"),    "off",    0,  ""},
+    {N_("Custom"), "custom", 1,  ""},
+    {N_("Fast"),   "fast",   2,  "0:-1:-1:0:1"},
+    {N_("Slow"),   "slow",   3,  "1:-1:-1:0:1"},
+    {N_("Slower"), "slower", 4,  "3:-1:-1:0:1"},
+    {N_("Bob"),    "bob",    5, "15:-1:-1:0:1"},
 };
 combo_opts_t deint_opts =
 {
@@ -216,11 +217,11 @@ combo_opts_t deint_opts =
 
 static options_map_t d_denoise_opts[] =
 {
-    {"Off",    "off",   0, ""},
-    {"Custom", "custom", 1, ""},
-    {"Weak",   "weak",   2, "2:1:2:3"},
-    {"Medium", "medium", 3, "3:2:2:3"},
-    {"Strong", "strong", 4, "7:7:5:5"},
+    {N_("Off"),    "off",   0, ""},
+    {N_("Custom"), "custom", 1, ""},
+    {N_("Weak"),   "weak",   2, "2:1:2:3"},
+    {N_("Medium"), "medium", 3, "3:2:2:3"},
+    {N_("Strong"), "strong", 4, "7:7:5:5"},
 };
 combo_opts_t denoise_opts =
 {
@@ -230,10 +231,10 @@ combo_opts_t denoise_opts =
 
 static options_map_t d_direct_opts[] =
 {
-    {"None",      "none",     0, "none"},
-    {"Spatial",   "spatial",  1, "spatial"},
-    {"Temporal",  "temporal", 2, "temporal"},
-    {"Automatic", "auto",     3, "auto"},
+    {N_("None"),      "none",     0, "none"},
+    {N_("Spatial"),   "spatial",  1, "spatial"},
+    {N_("Temporal"),  "temporal", 2, "temporal"},
+    {N_("Automatic"), "auto",     3, "auto"},
 };
 combo_opts_t direct_opts =
 {
@@ -243,9 +244,9 @@ combo_opts_t direct_opts =
 
 static options_map_t d_badapt_opts[] =
 {
-    {"Off",             "0", 0, "0"},
-    {"Fast",            "1", 1, "1"},
-    {"Optimal",         "2", 2, "2"},
+    {N_("Off"),             "0", 0, "0"},
+    {N_("Fast"),            "1", 1, "1"},
+    {N_("Optimal"),         "2", 2, "2"},
 };
 combo_opts_t badapt_opts =
 {
@@ -255,9 +256,9 @@ combo_opts_t badapt_opts =
 
 static options_map_t d_bpyramid_opts[] =
 {
-    {"Off",    "none",   0, "none"},
-    {"Strict", "strict", 1, "strict"},
-    {"Normal", "normal", 2, "normal"},
+    {N_("Off"),    "none",   0, "none"},
+    {N_("Strict"), "strict", 1, "strict"},
+    {N_("Normal"), "normal", 2, "normal"},
 };
 combo_opts_t bpyramid_opts =
 {
@@ -267,9 +268,9 @@ combo_opts_t bpyramid_opts =
 
 static options_map_t d_weightp_opts[] =
 {
-    {"Off",    "0", 0, "0"},
-    {"Simple", "1", 1, "1"},
-    {"Smart",  "2", 2, "2"},
+    {N_("Off"),    "0", 0, "0"},
+    {N_("Simple"), "1", 1, "1"},
+    {N_("Smart"),  "2", 2, "2"},
 };
 combo_opts_t weightp_opts =
 {
@@ -279,11 +280,11 @@ combo_opts_t weightp_opts =
 
 static options_map_t d_me_opts[] =
 {
-    {"Diamond",              "dia",  0, "dia"},
-    {"Hexagon",              "hex",  1, "hex"},
-    {"Uneven Multi-Hexagon", "umh",  2, "umh"},
-    {"Exhaustive",           "esa",  3, "esa"},
-    {"Hadamard Exhaustive",  "tesa", 4, "tesa"},
+    {N_("Diamond"),              "dia",  0, "dia"},
+    {N_("Hexagon"),              "hex",  1, "hex"},
+    {N_("Uneven Multi-Hexagon"), "umh",  2, "umh"},
+    {N_("Exhaustive"),           "esa",  3, "esa"},
+    {N_("Hadamard Exhaustive"),  "tesa", 4, "tesa"},
 };
 combo_opts_t me_opts =
 {
@@ -293,18 +294,18 @@ combo_opts_t me_opts =
 
 static options_map_t d_subme_opts[] =
 {
-    {"0: SAD, no subpel",          "0", 0, "0"},
-    {"1: SAD, qpel",               "1", 1, "1"},
-    {"2: SATD, qpel",              "2", 2, "2"},
-    {"3: SATD: multi-qpel",        "3", 3, "3"},
-    {"4: SATD, qpel on all",       "4", 4, "4"},
-    {"5: SATD, multi-qpel on all", "5", 5, "5"},
-    {"6: RD in I/P-frames",        "6", 6, "6"},
-    {"7: RD in all frames",        "7", 7, "7"},
-    {"8: RD refine in I/P-frames", "8", 8, "8"},
-    {"9: RD refine in all frames", "9", 9, "9"},
-    {"10: QPRD in all frames",     "10", 10, "10"},
-    {"11: No early terminations in analysis", "11", 11, "11"},
+    {N_("0: SAD, no subpel"),          "0", 0, "0"},
+    {N_("1: SAD, qpel"),               "1", 1, "1"},
+    {N_("2: SATD, qpel"),              "2", 2, "2"},
+    {N_("3: SATD: multi-qpel"),        "3", 3, "3"},
+    {N_("4: SATD, qpel on all"),       "4", 4, "4"},
+    {N_("5: SATD, multi-qpel on all"), "5", 5, "5"},
+    {N_("6: RD in I/P-frames"),        "6", 6, "6"},
+    {N_("7: RD in all frames"),        "7", 7, "7"},
+    {N_("8: RD refine in I/P-frames"), "8", 8, "8"},
+    {N_("9: RD refine in all frames"), "9", 9, "9"},
+    {N_("10: QPRD in all frames"),     "10", 10, "10"},
+    {N_("11: No early terminations in analysis"), "11", 11, "11"},
 };
 combo_opts_t subme_opts =
 {
@@ -314,11 +315,11 @@ combo_opts_t subme_opts =
 
 static options_map_t d_analyse_opts[] =
 {
-    {"Most", "p8x8,b8x8,i8x8,i4x4", 0, "p8x8,b8x8,i8x8,i4x4"},
-    {"None", "none", 1, "none"},
-    {"Some", "i4x4,i8x8", 2, "i4x4,i8x8"},
-    {"All",  "all",  3, "all"},
-    {"Custom",  "custom",  4, "all"},
+    {N_("Most"), "p8x8,b8x8,i8x8,i4x4", 0, "p8x8,b8x8,i8x8,i4x4"},
+    {N_("None"), "none", 1, "none"},
+    {N_("Some"), "i4x4,i8x8", 2, "i4x4,i8x8"},
+    {N_("All"),  "all",  3, "all"},
+    {N_("Custom"),  "custom",  4, "all"},
 };
 combo_opts_t analyse_opts =
 {
@@ -328,9 +329,9 @@ combo_opts_t analyse_opts =
 
 static options_map_t d_trellis_opts[] =
 {
-    {"Off",         "0", 0, "0"},
-    {"Encode only", "1", 1, "1"},
-    {"Always",      "2", 2, "2"},
+    {N_("Off"),         "0", 0, "0"},
+    {N_("Encode only"), "1", 1, "1"},
+    {N_("Always"),      "2", 2, "2"},
 };
 combo_opts_t trellis_opts =
 {
@@ -1408,44 +1409,6 @@ ghb_subtitle_track_source(GValue *settings, gint track)
         return VOBSUB;
 }
 
-const char*
-ghb_subtitle_track_source_name(GValue *settings, gint track)
-{
-    gint titleindex;
-    const gchar * name = "Unknown";
-
-    if (track == -2)
-    {
-        name = "SRT";
-        goto done;
-    }
-    if (track == -1)
-    {
-        name = "Bitmap";
-        goto done;
-    }
-
-    titleindex = ghb_settings_combo_int(settings, "title");
-    if (titleindex < 0)
-        goto done;
-
-    hb_title_t * title;
-    hb_subtitle_t * sub;
-    
-    title = ghb_get_title_info( titleindex );
-    if (title == NULL)
-        goto done;
-
-    sub = hb_list_item( title->list_subtitle, track);
-    if (sub != NULL)
-    {
-        name = hb_subsource_name(sub->source);
-    }
-
-done:
-    return name;
-}
-
 const gchar*
 ghb_subtitle_track_lang(GValue *settings, gint track)
 {
@@ -1715,13 +1678,15 @@ audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name)
     gtk_list_store_clear(store);
     // Add an item for "Same As Source"
     gtk_list_store_append(store, &iter);
+    str = g_strdup_printf("<small>%s</small>", _("Same as source"));
     gtk_list_store_set(store, &iter, 
-                       0, "<small>Same as source</small>", 
+                       0, str,
                        1, TRUE, 
                        2, "source", 
                        3, 0.0, 
                        4, "source", 
                        -1);
+    g_free(str);
 
     const hb_rate_t *rate;
     for (rate = hb_audio_samplerate_get_next(NULL); rate != NULL;
@@ -1752,7 +1717,7 @@ video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
     // Add an item for "Same As Source"
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter, 
-                       0, "Same as source", 
+                       0, _("Same as source"), 
                        1, TRUE, 
                        2, "source", 
                        3, 0.0, 
@@ -1767,15 +1732,15 @@ video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
         gchar *option;
         if (strcmp(rate->name, "23.976") == 0)
         {
-            desc = "(NTSC Film)";
+            desc = _("(NTSC Film)");
         }
         else if (strcmp(rate->name, "25") == 0)
         {
-            desc = "(PAL Film/Video)";
+            desc = _("(PAL Film/Video)");
         }
         else if (strcmp(rate->name, "29.97") == 0)
         {
-            desc = "(NTSC Video)";
+            desc = _("(NTSC Video)");
         }
         option = g_strdup_printf ("%s %s", rate->name, desc);
         gtk_list_store_append(store, &iter);
@@ -2019,7 +1984,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
         // No titles.  Fill in a default.
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
-                           0, "No Titles", 
+                           0, _("No Titles"), 
                            1, TRUE, 
                            2, "none", 
                            3, -1.0, 
@@ -2114,7 +2079,7 @@ x264_tune_opts_set(GtkBuilder *builder, const gchar *name)
 
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter, 
-                       0, "None",
+                       0, _("None"),
                        1, TRUE, 
                        2, "none",
                        3, (gdouble)0, 
@@ -2263,13 +2228,15 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     {
         // No audio. set some default
         gtk_list_store_append(store, &iter);
+        str = g_strdup_printf("<small>%s</small>", _("No Audio"));
         gtk_list_store_set(store, &iter, 
-                           0, "<small>No Audio</small>", 
+                           0, str,
                            1, TRUE, 
                            2, "none", 
                            3, -1.0, 
                            4, "none", 
                            -1);
+        g_free(str);
         audio_track_opts.map[0].option = g_strdup("No Audio");
         audio_track_opts.map[0].shortOpt = "none";
         audio_track_opts.map[0].ivalue = -1;
@@ -2351,7 +2318,7 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     }
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter, 
-                       0, "Foreign Audio Search", 
+                       0, _("Foreign Audio Search"), 
                        1, TRUE, 
                        2, "-1", 
                        3, -1.0, 
@@ -2815,7 +2782,7 @@ generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
     {
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
-                           0, opts->map[ii].option, 
+                           0, _(opts->map[ii].option), 
                            1, TRUE, 
                            2, opts->map[ii].shortOpt, 
                            3, opts->map[ii].ivalue, 
@@ -2839,7 +2806,7 @@ small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
     for (ii = 0; ii < opts->count; ii++)
     {
         gtk_list_store_append(store, &iter);
-        str = g_strdup_printf("<small>%s</small>", opts->map[ii].option);
+        str = g_strdup_printf("<small>%s</small>", _(opts->map[ii].option));
         gtk_list_store_set(store, &iter, 
                            0, str,
                            1, TRUE, 
@@ -4362,9 +4329,9 @@ ghb_validate_filters(GValue *settings)
         if (!ghb_validate_filter_string(str, -1))
         {
             message = g_strdup_printf(
-                        "Invalid Deinterlace Settings:\n\n%s\n",
+                        _("Invalid Deinterlace Settings:\n\n%s\n"),
                         str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
             g_free(message);
             g_free(str);
             return FALSE;
@@ -4379,9 +4346,9 @@ ghb_validate_filters(GValue *settings)
         if (!ghb_validate_filter_string(str, -1))
         {
             message = g_strdup_printf(
-                        "Invalid Detelecine Settings:\n\n%s\n",
+                        _("Invalid Detelecine Settings:\n\n%s\n"),
                         str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
             g_free(message);
             g_free(str);
             return FALSE;
@@ -4396,9 +4363,9 @@ ghb_validate_filters(GValue *settings)
         if (!ghb_validate_filter_string(str, -1))
         {
             message = g_strdup_printf(
-                        "Invalid Decomb Settings:\n\n%s\n",
+                        N_("Invalid Decomb Settings:\n\n%s\n"),
                         str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
             g_free(message);
             g_free(str);
             return FALSE;
@@ -4413,9 +4380,9 @@ ghb_validate_filters(GValue *settings)
         if (!ghb_validate_filter_string(str, -1))
         {
             message = g_strdup_printf(
-                        "Invalid Denoise Settings:\n\n%s\n",
+                        _("Invalid Denoise Settings:\n\n%s\n"),
                         str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
             g_free(str);
             g_free(message);
             return FALSE;
@@ -4433,14 +4400,14 @@ ghb_validate_video(GValue *settings)
 
     mux = ghb_settings_combo_int(settings, "FileFormat");
     vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
-    if ((mux == HB_MUX_MP4) && (vcodec == HB_VCODEC_THEORA))
+    if ((mux & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
         message = g_strdup_printf(
-                    "Theora is not supported in the MP4 container.\n\n"
+                    _("Theora is not supported in the MP4 container.\n\n"
                     "You should choose a different video codec or container.\n"
-                    "If you continue, FFMPEG will be chosen for you.");
-        if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+                    "If you continue, FFMPEG will be chosen for you."));
+        if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
         {
             g_free(message);
             return FALSE;
@@ -4484,10 +4451,10 @@ ghb_validate_subtitles(GValue *settings)
             // MP4 can only handle burned vobsubs.  make sure there isn't
             // already something burned in the list
             message = g_strdup_printf(
-            "Only one subtitle may be burned into the video.\n\n"
+            _("Only one subtitle may be burned into the video.\n\n"
                 "You should change your subtitle selections.\n"
-                "If you continue, some subtitles will be lost.");
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+                "If you continue, some subtitles will be lost."));
+            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4507,11 +4474,11 @@ ghb_validate_subtitles(GValue *settings)
             if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
             {
                 message = g_strdup_printf(
-                "Srt file does not exist or not a regular file.\n\n"
+                _("Srt file does not exist or not a regular file.\n\n"
                     "You should choose a valid file.\n"
-                    "If you continue, this subtitle will be ignored.");
+                    "If you continue, this subtitle will be ignored."));
                 if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, 
-                    "Cancel", "Continue"))
+                    _("Cancel"), _("Continue")))
                 {
                     g_free(message);
                     return FALSE;
@@ -4567,10 +4534,10 @@ ghb_validate_audio(GValue *settings)
         {
             // Not supported.  AC3 is passthrough only, so input must be AC3
             message = g_strdup_printf(
-                        "The source does not support Pass-Thru.\n\n"
+                        _("The source does not support Pass-Thru.\n\n"
                         "You should choose a different audio codec.\n"
-                        "If you continue, one will be chosen for you.");
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+                        "If you continue, one will be chosen for you."));
+            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4581,7 +4548,7 @@ ghb_validate_audio(GValue *settings)
             {
                 codec = HB_ACODEC_AC3;
             }
-            else if (mux == HB_MUX_MKV)
+            else if (mux & HB_MUX_MASK_MKV)
             {
                 codec = HB_ACODEC_LAME;
             }
@@ -4594,7 +4561,7 @@ ghb_validate_audio(GValue *settings)
         }
         gchar *a_unsup = NULL;
         gchar *mux_s = NULL;
-        if (mux == HB_MUX_MP4)
+        if (mux & HB_MUX_MASK_MP4)
         { 
             mux_s = "MP4";
             // mp4/vorbis|DTS combination is not supported.
@@ -4607,10 +4574,10 @@ ghb_validate_audio(GValue *settings)
         if (a_unsup)
         {
             message = g_strdup_printf(
-                        "%s is not supported in the %s container.\n\n"
+                        _("%s is not supported in the %s container.\n\n"
                         "You should choose a different audio codec.\n"
-                        "If you continue, one will be chosen for you.", a_unsup, mux_s);
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+                        "If you continue, one will be chosen for you."), a_unsup, mux_s);
+            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4632,10 +4599,10 @@ ghb_validate_audio(GValue *settings)
         if (mix_unsup)
         {
             message = g_strdup_printf(
-                        "The source audio does not support %s mixdown.\n\n"
+                        _("The source audio does not support %s mixdown.\n\n"
                         "You should choose a different mixdown.\n"
-                        "If you continue, one will be chosen for you.", mix_unsup);
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+                        "If you continue, one will be chosen for you."), mix_unsup);
+            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4692,13 +4659,13 @@ ghb_validate_vquality(GValue *settings)
         if (vcodec == HB_VCODEC_X264 && vquality == 0.0)
         {
             message = g_strdup_printf(
-                        "Warning: lossless h.264 selected\n\n"
+                        _("Warning: lossless h.264 selected\n\n"
                         "Lossless h.264 is not well supported by\n"
                         "many players and editors.\n\n"
                         "It will produce enormous output files.\n\n"
-                        "Are you sure you wish to use this setting?");
+                        "Are you sure you wish to use this setting?"));
             if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
-                                    "Cancel", "Continue"))
+                                    _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4709,12 +4676,12 @@ ghb_validate_vquality(GValue *settings)
         else if (vquality < min || vquality > max)
         {
             message = g_strdup_printf(
-                        "Interesting video quality choice: %d\n\n"
+                        _("Interesting video quality choice: %d\n\n"
                         "Typical values range from %d to %d.\n\n"
-                        "Are you sure you wish to use this setting?",
+                        "Are you sure you wish to use this setting?"),
                         (gint)vquality, min, max);
             if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
-                                    "Cancel", "Continue"))
+                                    _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4761,7 +4728,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     }
 
     job->mux = ghb_settings_combo_int(js, "FileFormat");
-    if (job->mux == HB_MUX_MP4)
+    if (job->mux & HB_MUX_MASK_MP4)
     {
         job->largeFileSize = ghb_settings_get_boolean(js, "Mp4LargeFile");
         job->mp4_optimize = ghb_settings_get_boolean(js, "Mp4HttpOptimize");
@@ -4957,12 +4924,12 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     }
 
     job->vcodec = ghb_settings_combo_int(js, "VideoEncoder");
-    if ((job->mux == HB_MUX_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
+    if ((job->mux & HB_MUX_MASK_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
         job->vcodec = HB_VCODEC_FFMPEG_MPEG4;
     }
-    if ((job->vcodec == HB_VCODEC_X264) && (job->mux == HB_MUX_MP4))
+    if ((job->vcodec == HB_VCODEC_X264) && (job->mux & HB_MUX_MASK_MP4))
     {
         job->ipod_atom = ghb_settings_get_boolean(js, "Mp4iPodCompatible");
     }

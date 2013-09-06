@@ -46,6 +46,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 + (unsigned int) maximumNumberOfAllowedAudioTracks	{	return maximumNumberOfAllowedAudioTracks;	}
 
+- (NSString *)appSupportPath
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *appSupportPath = nil;
+
+    NSArray *allPaths = NSSearchPathForDirectoriesInDomains( NSApplicationSupportDirectory,
+                                                             NSUserDomainMask,
+                                                             YES );
+    if( [allPaths count] )
+        appSupportPath = [[allPaths objectAtIndex:0] stringByAppendingPathComponent:@"HandBrake"];
+
+    if( ![fileManager fileExistsAtPath:appSupportPath] )
+        [fileManager createDirectoryAtPath:appSupportPath withIntermediateDirectories:YES attributes:nil error:NULL];
+
+    return appSupportPath;
+}
+
 - (id)init
 {
     self = [super init];
@@ -65,16 +82,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Check for check for the app support directory here as
      * outputPanel needs it right away, as may other future methods
      */
-    NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
-                                                                NSUserDomainMask,
-                                                                YES ) objectAtIndex:0];
-    AppSupportDirectory = [[libraryDir stringByAppendingPathComponent:@"Application Support"]
-                           stringByAppendingPathComponent:@"HandBrake"];
-    if( ![[NSFileManager defaultManager] fileExistsAtPath:AppSupportDirectory] )
-    {
-        [[NSFileManager defaultManager] createDirectoryAtPath:AppSupportDirectory
-                                                   attributes:nil];
-    }
+    AppSupportDirectory = [self appSupportPath];
     /* Check for and create the App Support Preview directory if necessary */
     NSString *PreviewDirectory = [AppSupportDirectory stringByAppendingPathComponent:@"Previews"];
     if( ![[NSFileManager defaultManager] fileExistsAtPath:PreviewDirectory] )
@@ -225,6 +233,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* Init QueueFile .plist */
     [self loadQueueFile];
+    [self initQueueFSEvent];
     /* Run hbInstances to get any info on other instances as well as set the
      * pid number for this instance in the case of multi-instance encoding. */ 
     hbInstanceNum = [self hbInstances];
@@ -523,6 +532,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             [self setQueueEncodingItemsAsPending];
         }
+        [self reloadQueue];
         [self showQueueWindow:NULL];
     }
 }
@@ -572,6 +582,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // it's highly probable that the user throw a lot of files and just want to reset this
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
     
+    [self closeQueueFSEvent];
     [currentQueueEncodeNameString release];
     [browsedSourceDisplayName release];
     [outputPanel release];
@@ -1231,17 +1242,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             break;
         }
     }
-    
-    /* Since we can use multiple instance off of the same queue file it is imperative that we keep the QueueFileArray updated off of the QueueFile.plist
-     * so we go ahead and do it in this existing timer as opposed to using a new one */
-    
-    NSMutableArray * tempQueueArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
-    [QueueFileArray setArray:tempQueueArray];
-    [tempQueueArray release]; 
-    /* Send Fresh QueueFileArray to fQueueController to update queue window */
-    [fQueueController setQueueArray: QueueFileArray];
+
     [self getQueueStats];
-    
+
     /* Update the visibility of the Auto Passthru advanced options box */
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"ShowAdvancedOptsForAutoPassthru"] == YES)
     {
@@ -1999,15 +2002,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             {
                 /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
                 cancelScanDecrypt = 0;
-                [self writeToActivityLog: "User overrode copy-proteciton warning - trying to open physical dvd without decryption"];
+                [self writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
             }
             
         }
-        else
+        else if (dvdcss != NULL)
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
             dlclose(dvdcss);
+        }
+        else
+        {
+            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
+            cancelScanDecrypt = 0;
+            [self writeToActivityLog:"Copy-protection warning disabled in preferences - trying to open physical dvd without decryption"];
         }
     }
     
@@ -2277,21 +2286,80 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #pragma mark -
 #pragma mark Queue File
 
-- (void) loadQueueFile {
+static void queueFSEventStreamCallback(
+                                ConstFSEventStreamRef streamRef,
+                                void *clientCallBackInfo,
+                                size_t numEvents,
+                                void *eventPaths,
+                                const FSEventStreamEventFlags eventFlags[],
+                                const FSEventStreamEventId eventIds[])
+{
+    HBController *hb = (HBController *)clientCallBackInfo;
+    [hb reloadQueue];
+}
+
+- (void)initQueueFSEvent
+{
+    /* Define variables and create a CFArray object containing
+     CFString objects containing paths to watch.
+    */
+    CFStringRef mypath = (CFStringRef) [[self appSupportPath] stringByAppendingPathComponent:@"Queue"];
+    CFArrayRef pathsToWatch = CFArrayCreate(NULL, (const void **)&mypath, 1, NULL);
+
+    FSEventStreamContext callbackCtx;
+    callbackCtx.version			= 0;
+    callbackCtx.info			= self;
+    callbackCtx.retain			= NULL;
+    callbackCtx.release			= NULL;
+    callbackCtx.copyDescription	= NULL;
+
+    CFAbsoluteTime latency = 0.5; /* Latency in seconds */
+
+    /* Create the stream, passing in a callback */
+    QueueStream = FSEventStreamCreate(NULL,
+                                 &queueFSEventStreamCallback,
+                                 &callbackCtx,
+                                 pathsToWatch,
+                                 kFSEventStreamEventIdSinceNow,
+                                 latency,
+                                 kFSEventStreamCreateFlagIgnoreSelf
+                                 );
+
+    /* Create the stream before calling this. */
+    FSEventStreamScheduleWithRunLoop(QueueStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    FSEventStreamStart(QueueStream);
+}
+
+- (void)closeQueueFSEvent
+{
+    FSEventStreamStop(QueueStream);
+    FSEventStreamInvalidate(QueueStream);
+    FSEventStreamRelease(QueueStream);
+}
+
+- (void)loadQueueFile
+{
 	/* We declare the default NSFileManager into fileManager */
-	NSFileManager * fileManager = [NSFileManager defaultManager];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *appSupportPath = [self appSupportPath];
+
 	/* We define the location of the user presets file */
-    QueueFile = @"~/Library/Application Support/HandBrake/Queue.plist";
-	QueueFile = [[QueueFile stringByExpandingTildeInPath]retain];
+    QueueFile = [[appSupportPath stringByAppendingPathComponent:@"Queue/Queue.plist"] retain];
+
     /* We check for the Queue.plist */
-	if ([fileManager fileExistsAtPath:QueueFile] == 0)
+	if( ![fileManager fileExistsAtPath:QueueFile] )
 	{
+        if( ![fileManager fileExistsAtPath:[appSupportPath stringByAppendingPathComponent:@"Queue"]] )
+        {
+            [fileManager createDirectoryAtPath:[appSupportPath stringByAppendingPathComponent:@"Queue"] withIntermediateDirectories:YES attributes:nil error:NULL];
+        }
+
 		[fileManager createFileAtPath:QueueFile contents:nil attributes:nil];
 	}
-    
+
 	QueueFileArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
 	/* lets check to see if there is anything in the queue file .plist */
-    if (nil == QueueFileArray)
+    if( QueueFileArray == nil )
 	{
         /* if not, then lets initialize an empty array */
 		QueueFileArray = [[NSMutableArray alloc] init];
@@ -2299,11 +2367,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     else
     {
         /* ONLY clear out encoded items if we are single instance */
-        if (hbInstanceNum == 1)
+        if( hbInstanceNum == 1 )
         {
             [self clearQueueEncodedItems];
         }
     }
+}
+
+- (void)reloadQueue
+{
+    [self writeToActivityLog:"Queue reloaded"];
+
+    NSMutableArray * tempQueueArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
+    [QueueFileArray setArray:tempQueueArray];
+    [tempQueueArray release];
+    /* Send Fresh QueueFileArray to fQueueController to update queue window */
+    [fQueueController setQueueArray: QueueFileArray];
 }
 
 - (void)addQueueFileItem
@@ -3056,15 +3135,23 @@ fWorkingCount = 0;
     
     [fVidBitrateField setStringValue:[queueToApply objectForKey:@"VideoAvgBitrate"]];
     
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+    int direction;
+    float minValue, maxValue, granularity;
+    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                &minValue, &maxValue, &granularity, &direction);
+    if (!direction)
     {
-        /* Since theora's qp value goes up from left to right, we can just set the slider float value */
         [fVidQualitySlider setFloatValue:[[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
     }
     else
     {
-        /* Since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
-        [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
+        /*
+         * Since ffmpeg and x264 use an "inverted" slider (lower values
+         * indicate a higher quality) we invert the value on the slider
+         */
+        [fVidQualitySlider setFloatValue:([fVidQualitySlider minValue] +
+                                          [fVidQualitySlider maxValue] -
+                                          [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue])];
     }
     
     [self videoMatrixChanged:nil];
@@ -4894,8 +4981,8 @@ bool one_burned = FALSE;
     //[self calculateBitrate: sender];
     
     /* We're changing the chapter range - we may need to flip the m4v/mp4 extension */
-    if ([fDstFormatPopUp indexOfSelectedItem] == 0)
-        [self autoSetM4vExtension: sender];
+    if ([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4)
+        [self autoSetM4vExtension:sender];
 }
 
 - (IBAction) startEndSecValueChanged: (id) sender
@@ -5008,6 +5095,7 @@ bool one_burned = FALSE;
     {
         case HB_MUX_MP4V2:
             [fDstMp4LargeFileCheck   setHidden:NO];
+        case HB_MUX_AV_MP4:
             [fDstMp4HttpOptFileCheck setHidden:NO];
             [fDstMp4iPodFileCheck    setHidden:NO];
             break;
@@ -5051,7 +5139,7 @@ bool one_burned = FALSE;
 
 - (IBAction) autoSetM4vExtension: (id) sender
 {
-    if ( [fDstFormatPopUp indexOfSelectedItem] )
+    if (!([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4))
         return;
     
     NSString * extension = @"mp4";
@@ -5253,43 +5341,44 @@ the user is using "Custom" settings by determining the sender*/
  */
 - (void) setupQualitySlider
 {
-    /* Get the current slider maxValue to check for a change in slider scale later
-     * so that we can choose a new similar value on the new slider scale */
-    float previousMaxValue = [fVidQualitySlider maxValue];
-    float previousPercentOfSliderScale = [fVidQualitySlider floatValue] / ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1);
-    NSString * qpRFLabelString = @"QP:";
-    /* x264 0-51 */
+    /*
+     * Get the current slider maxValue to check for a change in slider scale
+     * later so that we can choose a new similar value on the new slider scale
+     */
+    float previousMaxValue             = [fVidQualitySlider maxValue];
+    float previousPercentOfSliderScale = ([fVidQualitySlider floatValue] /
+                                          ([fVidQualitySlider maxValue] -
+                                           [fVidQualitySlider minValue] + 1));
+    [fVidQualityRFLabel setStringValue:[NSString stringWithFormat:@"%s",
+                                        hb_video_quality_get_name([[fVidEncoderPopUp
+                                                                    selectedItem] tag])]];
+    int direction;
+    float minValue, maxValue, granularity;
+    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                &minValue, &maxValue, &granularity, &direction);
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
     {
-        [fVidQualitySlider setMinValue:0.0];
-        [fVidQualitySlider setMaxValue:51.0];
-        /* As x264 allows for qp/rf values that are fractional, we get the value from the preferences */
-        int fractionalGranularity = 1 / [[NSUserDefaults standardUserDefaults] floatForKey:@"x264CqSliderFractional"];
-        [fVidQualitySlider setNumberOfTickMarks:(([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * fractionalGranularity) + 1];
-        qpRFLabelString = @"RF:";
+        /*
+         * As x264 allows for qp/rf values that are fractional,
+         * we get the value from the preferences
+         */
+        granularity = [[NSUserDefaults standardUserDefaults]
+                       floatForKey:@"x264CqSliderFractional"];
     }
-    /* FFmpeg MPEG-2/4 1-31 */
-    if ([[fVidEncoderPopUp selectedItem] tag] & HB_VCODEC_FFMPEG_MASK )
-    {
-        [fVidQualitySlider setMinValue:1.0];
-        [fVidQualitySlider setMaxValue:31.0];
-        [fVidQualitySlider setNumberOfTickMarks:31];
-    }
-    /* Theora 0-63 */
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
-    {
-        [fVidQualitySlider setMinValue:0.0];
-        [fVidQualitySlider setMaxValue:63.0];
-        [fVidQualitySlider setNumberOfTickMarks:64];
-    }
-    [fVidQualityRFLabel setStringValue:qpRFLabelString];
+    [fVidQualitySlider setMinValue:minValue];
+    [fVidQualitySlider setMaxValue:maxValue];
+    [fVidQualitySlider setNumberOfTickMarks:((maxValue - minValue) *
+                                             (1. / granularity)) + 1];
     
     /* check to see if we have changed slider scales */
-    if (previousMaxValue != [fVidQualitySlider maxValue])
+    if (previousMaxValue != maxValue)
     {
-        /* if so, convert the old setting to the new scale as close as possible based on percentages */
-        float rf =  ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1) * previousPercentOfSliderScale;
-        [fVidQualitySlider setFloatValue:rf];
+        /*
+         * if so, convert the old setting to the new scale as close as possible
+         * based on percentages
+         */
+        [fVidQualitySlider setFloatValue:((maxValue - minValue + 1.) *
+                                          (previousPercentOfSliderScale))];
     }
     
     [self qualitySliderChanged:nil];
@@ -5297,8 +5386,8 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) qualitySliderChanged: (id) sender
 {
-    
-    /* Our constant quality slider is in a range based
+    /*
+     * Our constant quality slider is in a range based
      * on each encoders qp/rf values. The range depends
      * on the encoder. Also, the range is inverse of quality
      * for all of the encoders *except* for theora
@@ -5310,22 +5399,28 @@ the user is using "Custom" settings by determining the sender*/
      * so, the floatValue at the right for x264 would be 51
      * and our rf field needs to show 0 and vice versa.
      */
-    
-    float sliderRfInverse = ([fVidQualitySlider maxValue] - [fVidQualitySlider floatValue]) + [fVidQualitySlider minValue];
-    /* If the encoder is theora, use the float, otherwise use the inverse float*/
-    //float sliderRfToPercent;
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+    int direction;
+    float minValue, maxValue, granularity;
+    float inverseValue = ([fVidQualitySlider minValue] +
+                          [fVidQualitySlider maxValue] -
+                          [fVidQualitySlider floatValue]);
+    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                &minValue, &maxValue, &granularity, &direction);
+    if (!direction)
     {
-        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", [fVidQualitySlider floatValue]]];   
+        [fVidQualityRFField setStringValue:[NSString stringWithFormat:@"%.2f",
+                                            [fVidQualitySlider floatValue]]];
     }
     else
     {
-        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", sliderRfInverse]];
+        [fVidQualityRFField setStringValue:[NSString stringWithFormat:@"%.2f",
+                                            inverseValue]];
     }
     /* Show a warning if x264 and rf 0 which is lossless */
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264 && sliderRfInverse == 0.0)
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264 && inverseValue == 0.0)
     {
-        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f (Warning: Lossless)", sliderRfInverse]];
+        [fVidQualityRFField setStringValue:[NSString stringWithFormat:@"%.2f (Warning: Lossless)",
+                                            inverseValue]];
     }
     
     [self customSettingUsed: sender];
@@ -6537,15 +6632,23 @@ return YES;
 
         [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
         
-        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+        int direction;
+        float minValue, maxValue, granularity;
+        hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+                                    &minValue, &maxValue, &granularity, &direction);
+        if (!direction)
         {
-            /* Since theora's qp value goes up from left to right, we can just set the slider float value */
             [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
         }
         else
         {
-            /* Since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
-            [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
+            /*
+             * Since ffmpeg and x264 use an "inverted" slider (lower values
+             * indicate a higher quality) we invert the value on the slider
+             */
+            [fVidQualitySlider setFloatValue:([fVidQualitySlider minValue] +
+                                              [fVidQualitySlider maxValue] -
+                                              [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue])];
         }
         
         [self videoMatrixChanged:nil];

@@ -13,6 +13,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#ifdef USE_QSV
+#include "qsv_common.h"
+#endif
+
 #if defined( SYS_MINGW )
 #include <io.h>
 #if defined( PTW32_STATIC_LIB )
@@ -517,7 +521,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
 
-	return h;
+    return h;
 }
 
 
@@ -614,6 +618,22 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     {
         hb_list_rem( h->title_set.list_title, title );
         hb_title_close( &title );
+    }
+
+#ifdef USE_QSV
+    /* Print QSV info here so that it's in all scan and encode logs */
+    hb_qsv_info_print();
+#endif
+
+    /* Print CPU info here so that it's in all scan and encode logs */
+    hb_log("hb_scan: CPU count: %i", hb_get_cpu_count());
+    if (hb_get_cpu_name() != NULL)
+    {
+        hb_log("hb_scan: CPU name:  %s", hb_get_cpu_name());
+    }
+    if (hb_get_cpu_platform_name() != NULL)
+    {
+        hb_log("hb_scan: CPU type:  %s", hb_get_cpu_platform_name());
     }
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
@@ -1623,6 +1643,15 @@ int hb_global_init()
         return -1;
     }
 
+#ifdef USE_QSV
+    result = hb_qsv_info_init();
+    if (result < 0)
+    {
+        hb_error("hb_qsv_info_init failed!");
+        return -1;
+    }
+#endif
+
     /* libavcodec */
     hb_avcodec_init();
 
@@ -1650,11 +1679,16 @@ int hb_global_init()
     hb_register(&hb_encca_aac);
     hb_register(&hb_encca_haac);
 #endif
+#ifdef USE_FAAC
     hb_register(&hb_encfaac);
+#endif
     hb_register(&hb_enclame);
     hb_register(&hb_enctheora);
     hb_register(&hb_encvorbis);
     hb_register(&hb_encx264);
+#ifdef USE_QSV
+    hb_register(&hb_encqsv);
+#endif
     
     hb_common_global_init();
 

@@ -83,14 +83,15 @@ struct hb_buffer_s
         uint8_t       discontinuity;
         int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 
-    #define HB_FRAME_IDR    0x01
-    #define HB_FRAME_I      0x02
-    #define HB_FRAME_AUDIO  0x04
-    #define HB_FRAME_P      0x10
-    #define HB_FRAME_B      0x20
-    #define HB_FRAME_BREF   0x40
-    #define HB_FRAME_KEY    0x0F
-    #define HB_FRAME_REF    0xF0
+    #define HB_FRAME_IDR      0x01
+    #define HB_FRAME_I        0x02
+    #define HB_FRAME_AUDIO    0x04
+    #define HB_FRAME_SUBTITLE 0x08
+    #define HB_FRAME_P        0x10
+    #define HB_FRAME_B        0x20
+    #define HB_FRAME_BREF     0x40
+    #define HB_FRAME_KEY      0x0F
+    #define HB_FRAME_REF      0xF0
         uint8_t       frametype;
         uint16_t      flags;
     } s;
@@ -113,6 +114,12 @@ struct hb_buffer_s
         int           height_stride;
         int           size;
     } plane[4]; // 3 Color components + alpha
+
+    struct qsv
+    {
+        void *qsv_atom;
+        void *filter_details;
+    } qsv_details;
 
 #ifdef USE_OPENCL
     struct cl_data
@@ -412,6 +419,7 @@ enum
     WORK_ENCVOBSUB,
     WORK_RENDER,
     WORK_ENCAVCODEC,
+    WORK_ENCQSV,
     WORK_ENCX264,
     WORK_ENCTHEORA,
     WORK_DECA52,
@@ -438,6 +446,12 @@ extern hb_filter_object_t hb_filter_rotate;
 extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_render_sub;
 extern hb_filter_object_t hb_filter_vfr;
+
+#ifdef USE_QSV
+extern hb_filter_object_t hb_filter_qsv;
+extern hb_filter_object_t hb_filter_qsv_pre;
+extern hb_filter_object_t hb_filter_qsv_post;
+#endif
 
 // Picture flags used by filters
 #ifndef PIC_FLAG_REPEAT_FIRST_FIELD
@@ -475,7 +489,9 @@ typedef struct hb_mux_data_s   hb_mux_data_t;
     hb_mux_object_t  * hb_mux_##a##_init( hb_job_t * );
 
 DECLARE_MUX( mp4 );
-DECLARE_MUX( avi );
-DECLARE_MUX( ogm );
 DECLARE_MUX( mkv );
+DECLARE_MUX( avformat );
 
+void hb_muxmp4_process_subtitle_style( uint8_t *input,
+                                       uint8_t *output,
+                                       uint8_t *style, uint16_t *stylesize );

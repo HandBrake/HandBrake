@@ -1175,13 +1175,37 @@ def createCLI():
     grp.add_option( '--disable-gst', default=False, action='store_true', help=h )
     h = IfHost( 'enable use of ffmpeg mpeg2 decoding', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-ff-mpeg2', default=False, action='store_true', help=h )
+    h = IfHost( 'enable use of Intel Quick Sync Video hardware acceleration', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
+
     h = IfHost( 'enable OpenCL features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-opencl', default=False, action='store_true', help=h )
     h = IfHost( 'enable HWD features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-hwd', default=False, action='store_true', help=h )
     
     h = IfHost( 'enable use of fdk-aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-fdk-aac', default=False, action='store_true', help=h )
+    grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
+    grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false' )
+
+    h = IfHost( 'enable use of libav aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-libav-aac', dest="enable_libav_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
+    grp.add_option( '--disable-libav-aac', dest="enable_libav_aac", action='store_false' )
+
+    h = IfHost( 'enable use of faac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-faac', dest="enable_faac", default=False, action='store_true', help=h )
+    grp.add_option( '--disable-faac', dest="enable_faac", action='store_false' )
+
+    h = IfHost( 'enable use of mp4v2 muxer', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-mp4v2', dest="enable_mp4v2", default=True, action='store_true', help=h )
+    grp.add_option( '--disable-mp4v2', dest="enable_mp4v2", action='store_false' )
+
+    h = IfHost( 'enable use of libmkv muxer', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-libmkv', dest="enable_libmkv", default=True, action='store_true', help=h )
+    grp.add_option( '--disable-libmkv', dest="enable_libmkv", action='store_false' )
+
+    h = IfHost( 'enable use of avformat muxer', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-avformat', dest="enable_avformat", default=True, action='store_true', help=h )
+    grp.add_option( '--disable-avformat', dest="enable_avformat", action='store_false' )
 
     cli.add_option_group( grp )
 
@@ -1622,7 +1646,13 @@ int main ()
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.ff.mpeg2',   int( options.enable_ff_mpeg2 ))
-    doc.add( 'FEATURE.fdk_aac',   int( options.enable_fdk_aac ))
+    doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
+    doc.add( 'FEATURE.libav_aac',  int( options.enable_libav_aac ))
+    doc.add( 'FEATURE.faac',       int( options.enable_faac ))
+    doc.add( 'FEATURE.mp4v2',      int( options.enable_mp4v2 ))
+    doc.add( 'FEATURE.libmkv',     int( options.enable_libmkv ))
+    doc.add( 'FEATURE.avformat',   int( options.enable_avformat ))
+    doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
     doc.add( 'FEATURE.opencl',     int( options.enable_opencl ))
     doc.add( 'FEATURE.hwd',        int( options.enable_hwd ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))

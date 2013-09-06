@@ -45,7 +45,6 @@
         @"YES",             @"CheckForUpdates",
         @"Open Source",     @"LaunchSourceBehavior",
         @"English",         @"DefaultLanguage",
-        @"YES",             @"UseCoreAudio",
         @"Auto",            @"DefaultMpegExtension",
         @"YES",             @"UseDvdNav",
         @"",                @"DefAdvancedx264Flags",

@@ -1,0 +1,6 @@
+$(eval $(call import.MODULE.defs,LIBMFX,libmfx))
+$(eval $(call import.CONTRIB.defs,LIBMFX))
+
+LIBMFX.FETCH.url = http://download.handbrake.fr/contrib/libmfx_intel_msdk_2013r2.tar.bz2
+
+LIBMFX.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;

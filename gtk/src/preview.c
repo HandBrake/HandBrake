@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 #include <glib-object.h>
 #include "ghbcompat.h"
 
@@ -558,8 +559,8 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
             gchar *message, *desc;
             desc = gst_missing_plugin_message_get_description(msg);
             message = g_strdup_printf(
-                        "Missing GStreamer plugin\n"
-                        "Audio or Video may not play as expected\n\n%s",
+                        _("Missing GStreamer plugin\n"
+                        "Audio or Video may not play as expected\n\n%s"),
                         desc);
             ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Ok", NULL);
             g_free(message);
@@ -1286,16 +1287,16 @@ picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     window = GHB_WIDGET(ud->builder, "settings_window");
     if (!active)
     {
-        gtk_button_set_label(GTK_BUTTON(toggle), "Hide Settings");
+        gtk_button_set_label(GTK_BUTTON(toggle), _("Hide Settings"));
         gtk_widget_set_tooltip_text(toggle, 
-            "Hide the picture settings window while "
-            "leaving the preview visible.");
+            _("Hide the picture settings window while "
+            "leaving the preview visible."));
         gtk_widget_show(window);
     }
     else
     {
-        gtk_button_set_label(GTK_BUTTON(toggle), "Show Settings");
-        gtk_widget_set_tooltip_text(toggle, "Show picture settings.");
+        gtk_button_set_label(GTK_BUTTON(toggle), _("Show Settings"));
+        gtk_widget_set_tooltip_text(toggle, _("Show picture settings."));
         gtk_widget_hide(window);
     }
 }

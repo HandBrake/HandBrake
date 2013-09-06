@@ -1497,6 +1497,7 @@ void write_cc_line_as_transcript (struct eia608_screen *data, struct s_write *wb
          * Put this subtitle in a hb_buffer_t and shove it into the subtitle fifo
          */
         buffer = hb_buffer_init( length + 1 );
+        buffer->s.frametype = HB_FRAME_SUBTITLE;
         buffer->s.start = wb->data608->current_visible_start_ms;
         buffer->s.stop = get_fts(wb);
         memcpy( buffer->data, wb->subline, length + 1 );
@@ -1650,6 +1651,7 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     if (wb->enc_buffer_used)
     {
         hb_buffer_t *buffer = hb_buffer_init( wb->enc_buffer_used + 1 );
+        buffer->s.frametype = HB_FRAME_SUBTITLE;
         buffer->s.start = ms_start;
         buffer->s.stop = ms_end;
         memcpy( buffer->data, wb->enc_buffer, wb->enc_buffer_used + 1 );

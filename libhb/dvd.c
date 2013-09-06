@@ -173,8 +173,6 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     ifo_handle_t * vts = NULL;
     int            pgc_id, pgn, i;
     hb_chapter_t * chapter;
-    uint64_t       duration;
-    float          duration_correction;
     unsigned char  unused[1024];
     const char   * codec_name;
 
@@ -609,19 +607,9 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
         hb_list_add( title->list_chapter, chapter );
     }
 
-    /* The durations we get for chapters aren't precise. Scale them so
-       the total matches the title duration */
-    duration = 0;
-    for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
-    {
-        chapter = hb_list_item( title->list_chapter, i );
-        duration += chapter->duration;
-    }
-    duration_correction = (float) title->duration / (float) duration;
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
         chapter           = hb_list_item( title->list_chapter, i );
-        chapter->duration = duration_correction * chapter->duration;
 
         int seconds       = ( chapter->duration + 45000 ) / 90000;
         chapter->hours    = ( seconds / 3600 );
@@ -1270,8 +1258,8 @@ static int dvdtime2msec(dvd_time_t * dt)
 
     if( fps > 0 )
     {
-        ms += ((dt->frame_u & 0x30) >> 3) * 5 +
-              (dt->frame_u & 0x0f) * 1000.0 / fps;
+        ms += (((dt->frame_u & 0x30) >> 3) * 5 +
+                (dt->frame_u & 0x0f)) * 1000.0 / fps;
     }
 
     return ms;

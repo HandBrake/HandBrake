@@ -14,13 +14,30 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
-        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
-        fontconfig freetype fribidi mkv mpeg2 mp3lame mp4v2 ogg \
+        a52 ass avcodec avformat avutil avresample dvdnav dvdread \
+        fontconfig freetype fribidi mpeg2 mp3lame ogg \
         samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
         bluray xml2 bz2 z
 
+ifeq (1,$(FEATURE.qsv))
+    TEST.GCC.l += mfx
+    TEST.GCC.D += USE_QSV HAVE_THREADS=1
+endif
+
 ifeq (1,$(FEATURE.fdk_aac))
 TEST.GCC.l += fdk-aac
+endif
+
+ifeq (1,$(FEATURE.faac))
+TEST.GCC.l += faac
+endif
+
+ifeq (1,$(FEATURE.mp4v2))
+TEST.GCC.l += mp4v2
+endif
+
+ifeq (1,$(FEATURE.libmkv))
+TEST.GCC.l += mkv
 endif
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
@@ -53,6 +70,7 @@ else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),solaris)
     TEST.GCC.l += pthread nsl socket iconv
+    TEST.GCC.D += _POSIX_C_SOURCE=200112L __EXTENSIONS__
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
 ifeq ($(HAS.dlfcn),1)
     TEST.GCC.l += dl

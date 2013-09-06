@@ -111,6 +111,15 @@ typedef struct hb_lock_s hb_lock_t;
 #include "audio_remap.h"
 #include "libavutil/channel_layout.h"
 
+#ifdef USE_QSV
+
+#ifndef DEBUG_ASSERT
+#define DEBUG_ASSERT(x,y) { if ((x)) { hb_error("ASSERT: %s", y); exit(1); } }
+#endif
+
+#include "libavcodec/qsv.h"
+#endif
+
 hb_list_t * hb_list_init();
 int         hb_list_count( const hb_list_t * );
 void        hb_list_add( hb_list_t *, void * );
@@ -271,6 +280,9 @@ int              hb_audio_bitrate_get_default(uint32_t codec, int samplerate, in
 void             hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
 const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 
+void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
+const char* hb_video_quality_get_name(uint32_t codec);
+
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
 float hb_audio_quality_get_default(uint32_t codec);
@@ -409,12 +421,15 @@ struct hb_job_s
          pass:              0, 1 or 2 (or -1 for scan)
          advanced_opts:     string of extra advanced encoder options
          areBframes:        boolean to note if b-frames are included in advanced_opts */
-#define HB_VCODEC_MASK         0x00000FF
+#define HB_VCODEC_MASK         0x0000FFF
 #define HB_VCODEC_X264         0x0000001
 #define HB_VCODEC_THEORA       0x0000002
 #define HB_VCODEC_FFMPEG_MPEG4 0x0000010
 #define HB_VCODEC_FFMPEG_MPEG2 0x0000020
 #define HB_VCODEC_FFMPEG_MASK  0x00000F0
+#define HB_VCODEC_QSV_H264     0x0000100
+#define HB_VCODEC_QSV_MASK     0x0000F00
+#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264|HB_VCODEC_QSV_H264)
 
     int             vcodec;
     float           vquality;
@@ -472,9 +487,12 @@ struct hb_job_s
      */
 #define HB_MUX_MASK     0xFF0000
 #define HB_MUX_MP4V2    0x010000
-#define HB_MUX_MASK_MP4 0x0F0000
+#define HB_MUX_AV_MP4   0x020000
+#define HB_MUX_MASK_MP4 0x030000
 #define HB_MUX_LIBMKV   0x100000
-#define HB_MUX_MASK_MKV 0xF00000
+#define HB_MUX_AV_MKV   0x200000
+#define HB_MUX_MASK_MKV 0x300000
+#define HB_MUX_MASK_AV  0x220000
 /* default muxer for each container */
 #define HB_MUX_MP4      HB_MUX_MP4V2
 #define HB_MUX_MKV      HB_MUX_LIBMKV
@@ -507,6 +525,21 @@ struct hb_job_s
     int use_hwd;
     int use_decomb;
     int use_detelecine;
+#ifdef USE_QSV
+    av_qsv_context   *qsv;
+    int               qsv_decode;
+    int               qsv_async_depth;
+    // shared encoding parameters
+    // initialized by the QSV encoder, then used upstream (e.g. by filters) to
+    // configure their output so that it corresponds to what the encoder expects
+    struct
+    {
+        int pic_struct;
+        int align_width;
+        int align_height;
+        int is_init_done;
+    } qsv_enc_info;
+#endif
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -603,6 +636,7 @@ struct hb_audio_config_s
         int      normalize_mix_level; /* mix level normalization (boolean) */
         int      dither_method; /* dither algorithm */
         char *   name; /* Output track name */
+        int      delay;
     } out;
 
     /* Input */
@@ -839,6 +873,10 @@ struct hb_title_s
     char        *container_name;
     int         data_rate;
 
+#ifdef USE_QSV
+    int qsv_decode_support;
+#endif
+
     hb_metadata_t *metadata;
 
     hb_list_t * list_chapter;
@@ -937,6 +975,9 @@ typedef struct hb_work_info_s
             int color_prim;
             int color_transfer;
             int color_matrix;
+#ifdef USE_QSV
+            int qsv_decode_support;
+#endif
         };
         struct
         {    // info only valid for audio decoders
@@ -1006,6 +1047,7 @@ extern hb_work_object_t hb_dectx3gsub;
 extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_decpgssub;
 extern hb_work_object_t hb_encavcodec;
+extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_deca52;
@@ -1134,8 +1176,11 @@ struct hb_filter_object_s
 
 enum
 {
+    // for QSV - important to have before other filters
+    HB_FILTER_QSV_PRE = 1,
+
     // First, filters that may change the framerate (drop or dup frames)
-    HB_FILTER_DETELECINE = 1,
+    HB_FILTER_DETELECINE,
     HB_FILTER_DECOMB,
     HB_FILTER_DEINTERLACE,
     HB_FILTER_VFR,
@@ -1148,6 +1193,11 @@ enum
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
     HB_FILTER_ROTATE,
+
+    // for QSV - important to have as a last one
+    HB_FILTER_QSV_POST,
+    // default MSDK VPP filter
+    HB_FILTER_QSV,
 };
 
 hb_filter_object_t * hb_filter_init( int filter_id );

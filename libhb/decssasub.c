@@ -33,6 +33,7 @@ struct hb_work_private_s
 {
     // If decoding to PICTURESUB format:
     int readOrder;
+    int raw;
 
     hb_job_t *job;
 };
@@ -336,6 +337,7 @@ static hb_buffer_t *ssa_decode_line_to_utf8( uint8_t *in_data, int in_size, int 
     out->size = dst - out->data;
     
     // Copy metadata from the input packet to the output packet
+    out->s.frametype = HB_FRAME_SUBTITLE;
     out->s.start = in_start;
     out->s.stop = in_stop;
     out->sequence = in_sequence;
@@ -401,6 +403,17 @@ static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *i
     if ( parse_timing_from_ssa_packet( (char *) in_data, &in_start, &in_stop ) )
         goto fail;
     
+    if (pv->raw)
+    {
+        out = hb_buffer_init(in_size + 3);
+        snprintf((char*)out->data, in_size + 3, "%s\r\n", in_data);
+        out->s.frametype = HB_FRAME_SUBTITLE;
+        out->s.start = in_start;
+        out->s.stop = in_stop;
+        out->sequence = in_sequence;
+        return out;
+    }
+
     // Convert the SSA packet to MKV-SSA format, which is what libass expects
     char *mkvIn;
     int numPartsRead;
@@ -439,6 +452,7 @@ static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *i
     strcat( mkvIn, (char *) styleToTextFields );
     
     out->size = strlen(mkvIn);
+    out->s.frametype = HB_FRAME_SUBTITLE;
     out->s.start = in_start;
     out->s.stop = in_stop;
     out->sequence = in_sequence;
@@ -464,6 +478,11 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     pv              = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
     pv->job = job;
+
+    if (job->mux & HB_MUX_MASK_AV)
+    {
+        pv->raw = 1;
+    }
     
     return 0;
 }
@@ -485,7 +504,8 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if ( w->subtitle->config.dest == PASSTHRUSUB && pv->job->mux == HB_MUX_MKV )
+    if (w->subtitle->config.dest == PASSTHRUSUB &&
+        (pv->job->mux & HB_MUX_MASK_MKV))
     {
         *buf_out = ssa_to_mkv_ssa(w, in);
     }

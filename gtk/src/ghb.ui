@@ -411,7 +411,7 @@ This setting allows you to synchronize the files.</property>
           <object class="GtkAction" id="source_action">
             <property name="stock_id">gtk-open</property>
             <property name="name">source_action</property>
-            <property name="label">_Source</property>
+            <property name="label" translatable="yes">_Source</property>
             <signal handler="source_button_clicked_cb" name="activate"/>
           </object>
         </child>
@@ -419,7 +419,7 @@ This setting allows you to synchronize the files.</property>
           <object class="GtkAction" id="source_single_action">
             <property name="stock_id">gtk-open</property>
             <property name="name">source_single_action</property>
-            <property name="label">Single _Title</property>
+            <property name="label" translatable="yes">Single _Title</property>
             <signal handler="single_title_source_cb" name="activate"/>
           </object>
         </child>
@@ -427,7 +427,7 @@ This setting allows you to synchronize the files.</property>
           <object class="GtkAction" id="destination1">
             <property name="stock_id">gtk-save-as</property>
             <property name="name">destination1</property>
-            <property name="label">_Destination</property>
+            <property name="label" translatable="yes">_Destination</property>
             <signal handler="destination_browse_clicked_cb" name="activate"/>
           </object>
         </child>
@@ -456,7 +456,7 @@ This setting allows you to synchronize the files.</property>
             <property name="sensitive">False</property>
             <property name="icon-name">hb-add-queue</property>
             <property name="name">queue_add_menu</property>
-            <property name="label">_Add Queue</property>
+            <property name="label" translatable="yes">_Add Queue</property>
             <signal handler="queue_add_clicked_cb" name="activate"/>
           </object>
         </child>
@@ -465,7 +465,7 @@ This setting allows you to synchronize the files.</property>
             <property name="sensitive">False</property>
             <property name="icon-name">hb-add-queue</property>
             <property name="name">queue_add_all_menu</property>
-            <property name="label">Add A_ll Queue</property>
+            <property name="label" translatable="yes">Add A_ll Queue</property>
             <signal handler="queue_add_all_clicked_cb" name="activate"/>
           </object>
         </child>
@@ -474,7 +474,7 @@ This setting allows you to synchronize the files.</property>
             <property name="sensitive">False</property>
             <property name="icon-name">hb-start</property>
             <property name="name">queue_start_menu</property>
-            <property name="label">_Start Queue</property>
+            <property name="label" translatable="yes">_Start Queue</property>
             <signal handler="queue_start_clicked_cb" name="activate"/>
           </object>
         </child>
@@ -604,7 +604,7 @@ This setting allows you to synchronize the files.</property>
   <object class="GtkMenu" id="presets_menu">
     <child>
       <object class="GtkImageMenuItem" id="presets_default">
-        <property name="label">_Make Default</property>
+        <property name="label" translatable="yes">_Make Default</property>
         <property name="image">image12</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
@@ -1192,7 +1192,7 @@ This setting allows you to synchronize the files.</property>
                                       </object>
                                       <packing>
                                         <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options">GTK_FILL</property>
+                                        <property name="y_options"></property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2551,7 +2551,7 @@ This setting allows you to synchronize the files.</property>
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="expanded">False</property>
-                                        <property name="label">Advanced</property>
+                                        <property name="label" translatable="yes">Advanced</property>
                                         <child>
                                           <object class="GtkVBox" id="vbox44">
                                             <property name="visible">True</property>
@@ -3274,7 +3274,7 @@ This setting allows you to synchronize the files.</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip-text" translatable="yes">Add new subtitle to the list</property>
                                             <property name="relief">GTK_RELIEF_NONE</property>
-                                            <property name="label">Subtitle</property>
+                                            <property name="label" translatable="yes">Subtitle</property>
                                             <property name="image">subtitle_add_image</property>
                                             <signal handler="subtitle_add_clicked_cb" name="clicked"/>
                                           </object>
@@ -3290,7 +3290,7 @@ This setting allows you to synchronize the files.</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip-text" translatable="yes">Add new SRT subtitle to the list</property>
                                             <property name="relief">GTK_RELIEF_NONE</property>
-                                            <property name="label">Import SRT</property>
+                                            <property name="label" translatable="yes">Import SRT</property>
                                             <property name="image">srt_add_image</property>
                                             <signal handler="srt_add_clicked_cb" name="clicked"/>
                                           </object>

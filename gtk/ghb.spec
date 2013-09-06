@@ -49,6 +49,7 @@ make %{?_smp_mflags} -C build
 
 %install
 make -C build DESTDIR=$RPM_BUILD_ROOT install-strip
+%find_lang ghb
 
 ## blow away stuff we don't want
 /bin/rm -f $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
@@ -68,7 +69,7 @@ if [ -x /usr/bin/gtk-update-icon-cache ]; then
   gtk-update-icon-cache -q %{_datadir}/icons/hicolor
 fi
 
-%files gui
+%files gui -f ghb.lang
 %defattr(-,root,root,-)
 %doc NEWS AUTHORS CREDITS THANKS COPYING
 %{_datadir}/icons/hicolor

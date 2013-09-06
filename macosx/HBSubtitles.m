@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import "HBSubtitles.h"
+#include "lang.h"
 #include "hb.h"
 
 @implementation HBSubtitles
@@ -17,194 +18,19 @@
     }
     
     /* setup our array of languages */
+    const iso639_lang_t *lang;
     languagesArray = [[NSMutableArray alloc] init];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Any",@"und",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Afar",@"aar",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Abkhazian",@"abk",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Afrikaans",@"afr",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Akan",@"ak",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Albanian",@"sqi",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Amharic",@"amh",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Arabic",@"ara",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Aragonese",@"arg",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Armenian",@"hye",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Assamese",@"asm",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Avaric",@"ava",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Avestan",@"ave",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Aymara",@"aym",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Azerbaijani",@"aze",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Bashkir",@"bak",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Bambara",@"bam",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Basque",@"eus",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Belarusian",@"bel",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Bengali",@"ben",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Bihari",@"bih",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Bislama",@"bis",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Bosnian",@"bos",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Breton",@"bre",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Bulgarian",@"bul",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Burmese",@"mya",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Catalan",@"cat",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Chamorro",@"cha",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Chechen",@"che",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Chinese",@"zho",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Church Slavic",@"chu",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Chuvash",@"chv",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Cornish",@"cor",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Corsican",@"cos",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Cree",@"cre",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Czech",@"ces",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Danish",@"dan",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Divehi",@"div",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Dutch",@"nld",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Dzongkha",@"dzo",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"English",@"eng",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Esperanto",@"epo",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Estonian",@"est",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ewe",@"ewe",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Faroese",@"fao",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Fijian",@"fij",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Finnish",@"fin",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"French",@"fra",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Western Frisian",@"fry",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Fulah",@"ful",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Georgian",@"kat",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"German",@"deu",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Gaelic (Scots)",@"gla",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Irish",@"gle",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Galician",@"glg",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Manx",@"glv",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Greek, Modern",@"ell",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Guarani",@"grn",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Gujarati",@"guj",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Haitian",@"hat",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Hausa",@"hau",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Hebrew",@"heb",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Herero",@"her",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Hindi",@"hin",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Hiri Motu",@"hmo",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Hungarian",@"hun",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Igbo",@"ibo",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Icelandic",@"isl",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ido",@"ido",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sichuan Yi",@"iii",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Inuktitut",@"iku",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Interlingue",@"ile",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Interlingua",@"ina",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Indonesian",@"ind",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Inupiaq",@"ipk",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Italian",@"ita",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Javanese",@"jav",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Japanese",@"jpn",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kalaallisut (Greenlandic)",@"kal",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kannada",@"kan",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kashmiri",@"kas",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kanuri",@"kau",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kazakh",@"kaz",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Central Khmer",@"khm",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kikuyu",@"kik",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kinyarwanda",@"kin",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kirghiz",@"kir",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Komi",@"kom",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kongo",@"kon",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Korean",@"kor",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kuanyama",@"kua",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Kurdish",@"kur",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Lao",@"lao",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Latin",@"lat",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Latvian",@"lav",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Limburgan",@"lim",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Lingala",@"lin",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Lithuanian",@"lit",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Luxembourgish",@"ltz",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Luba-Katanga",@"lub",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ganda",@"lug",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Macedonian",@"mkd",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Marshallese",@"mah",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Malayalam",@"mal",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Maori",@"mri",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Marathi",@"mar",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Malay",@"msa",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Malagasy",@"mlg",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Maltese",@"mlt",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Moldavian",@"mol",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Mongolian",@"mon",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Nauru",@"nau",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Navajo",@"nav",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ndebele, South",@"nbl",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ndebele, North",@"nde",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ndonga",@"ndo",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Nepali",@"nep",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Norwegian Nynorsk",@"nno",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Norwegian Bokmål",@"nob",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Norwegian",@"nor",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Chichewa; Nyanja",@"nya",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Occitan (post 1500); Provençal",@"oci",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ojibwa",@"oji",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Oriya",@"ori",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Oromo",@"orm",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ossetian; Ossetic",@"und",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Panjabi",@"pan",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Persian",@"fas",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Pali",@"pli",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Portuguese",@"por",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Pushto",@"pus",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Quechua",@"que",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Romansh",@"roh",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Romanian",@"ron",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Rundi",@"run",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Russian",@"rus",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sango",@"sag",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sanskrit",@"san",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Serbian",@"srp",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Croatian",@"hrv",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sinhala",@"sin",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Slovak",@"slk",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Slovenian",@"slv",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Northern Sami",@"sme",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Samoan",@"smo",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Shona",@"sna",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sindhi",@"snd",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Somali",@"som",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sotho, Southern",@"sot",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Spanish",@"spa",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sardinian",@"srd",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Swati",@"ssw",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Sundanese",@"sun",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Swahili",@"swa",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Swedish",@"swe",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tahitian",@"tah",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tamil",@"tam",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tatar",@"tat",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Telugu",@"tel",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tajik",@"tgk",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tagalog",@"tgl",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Thai",@"tha",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tibetan",@"bod",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tigrinya",@"tir",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tonga (Tonga Islands)",@"ton",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tswana",@"tsn",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Tsonga",@"tso",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Turkmen",@"tuk",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Turkish",@"tur",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Twi",@"twi",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Uighur",@"uig",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Ukrainian",@"ukr",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Urdu",@"urd",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Uzbek",@"uzb",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Venda",@"ven",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Vietnamese",@"vie",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Volapük",@"vol",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Welsh",@"cym",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Walloon",@"wln",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Wolof",@"wol",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Xhosa",@"xho",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Yiddish",@"yid",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Yoruba",@"yor",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"ZhuangZhuang",@"zha",nil]];
-    [languagesArray addObject:[NSArray arrayWithObjects:@"Zulu",@"zul",nil]];
-   
-    languagesArrayDefIndex = 40;
+    for (lang = lang_get_next(NULL); lang != NULL; lang = lang_get_next(lang))
+    {
+        [languagesArray addObject:[NSArray arrayWithObjects:
+                                   [NSString stringWithUTF8String:lang->eng_name],
+                                   [NSString stringWithUTF8String:lang->iso639_2],
+                                   nil]];
+        if (!strcasecmp(lang->eng_name, "English"))
+        {
+            languagesArrayDefIndex = [languagesArray count] - 1;
+        }
+    }
    
     /* populate the charCodeArray */
     charCodeArray = [[NSMutableArray alloc] init];

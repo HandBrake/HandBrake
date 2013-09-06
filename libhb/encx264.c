@@ -90,13 +90,30 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
+    /* If the PSNR or SSIM tunes are in use, enable the relevant metric */
+    if (job->x264_tune != NULL && job->x264_tune[0] != '\0')
+    {
+        char *tmp = strdup(job->x264_tune);
+        char *tok = strtok(tmp,   ",./-+");
+        do
+        {
+            if (!strncasecmp(tok, "psnr", 4))
+            {
+                param.analyse.b_psnr = 1;
+                break;
+            }
+            if (!strncasecmp(tok, "ssim", 4))
+            {
+                param.analyse.b_ssim = 1;
+                break;
+            }
+        }
+        while ((tok = strtok(NULL, ",./-+")) != NULL);
+        free(tmp);
+    }
+
     /* Some HandBrake-specific defaults; users can override them
      * using the advanced_opts string. */
-    
-    /* Enable metrics */
-    param.analyse.b_psnr = 1;
-    param.analyse.b_ssim = 1;
-    
     if( job->pass == 2 && job->cfr != 1 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
@@ -389,9 +406,9 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     buf->s.frametype = 0;
 
     // use the pts to get the original frame's duration.
-    int64_t duration  = get_frame_duration( pv, pic_out->i_pts );
-    buf->s.start = pic_out->i_pts;
-    buf->s.stop  = pic_out->i_pts + duration;
+    buf->s.duration     = get_frame_duration( pv, pic_out->i_pts );
+    buf->s.start        = pic_out->i_pts;
+    buf->s.stop         = buf->s.start + buf->s.duration;
     buf->s.renderOffset = pic_out->i_dts;
     if ( !w->config->h264.init_delay && pic_out->i_dts < 0 )
     {

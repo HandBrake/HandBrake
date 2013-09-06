@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 FAAC FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBMKV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
-    MP4V2 MPEG2DEC PTHREADW32 X264 ZLIB LIBBLURAY FDKAAC
+    MP4V2 MPEG2DEC PTHREADW32 X264 ZLIB LIBBLURAY FDKAAC LIBMFX
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -13,7 +13,12 @@ LIBHB.build/ = $(BUILD/)libhb/
 LIBHB.m4.in  = $(wildcard $(LIBHB.src/)*.m4)
 LIBHB.m4.out = $(patsubst $(LIBHB.src/)%.m4,$(LIBHB.build/)%,$(LIBHB.m4.in))
 
+ifeq (1,$(FEATURE.qsv))
 LIBHB.c   = $(wildcard $(LIBHB.src/)*.c)
+else
+LIBHB.c   = $(filter-out $(wildcard $(LIBHB.src/)*qsv*.c), $(wildcard $(LIBHB.src/)*.c))
+endif
+
 LIBHB.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(LIBHB.c))
 LIBHB.d   = $(LIBHB.m4.out) $(LIBHB.h.out) \
     $(foreach n,$(LIBHB.prerequisites),$($n.INSTALL.target) )
@@ -48,6 +53,21 @@ ifeq (1,$(FEATURE.hwd))
 LIBHB.GCC.D += USE_HWD
 endif
 
+ifeq (1,$(FEATURE.libav_aac))
+LIBHB.GCC.D += USE_LIBAV_AAC
+endif
+ifeq (1,$(FEATURE.faac))
+LIBHB.GCC.D += USE_FAAC
+endif
+ifeq (1,$(FEATURE.mp4v2))
+LIBHB.GCC.D += USE_MP4V2
+endif
+ifeq (1,$(FEATURE.libmkv))
+LIBHB.GCC.D += USE_LIBMKV
+endif
+ifeq (1,$(FEATURE.avformat))
+LIBHB.GCC.D += USE_AVFORMAT
+endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
@@ -67,10 +87,14 @@ else ifeq ($(BUILD.system),mingw)
     LIBHB.GCC.D += SYS_MINGW PTW32_STATIC_LIB
 	LIBHB.GCC.args.extra.dylib++ += -Wl,--enable-auto-import -static
 else ifeq ($(BUILD.system),solaris)
-    LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+    LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64 _POSIX_C_SOURCE=200112L __EXTENSIONS__
 else
     LIBHB.platform.D = SYS_UNKNOWN
 endif
+
+ifeq (1,$(FEATURE.qsv))    
+    LIBHB.GCC.D += USE_QSV HAVE_THREADS=1
+endif  
 
 ## required for <libdvdread/*.h>
 ifneq (,$(filter $(BUILD.arch),ppc ppc64))
@@ -108,13 +132,29 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
-        fontconfig freetype mkv mpeg2 mp3lame mp4v2 \
+        a52 ass avcodec avformat avutil avresample dvdnav dvdread \
+        fontconfig freetype mpeg2 mp3lame \
         ogg samplerate swscale theora vorbis vorbisenc x264 xml2 bluray, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
 ifeq (1,$(FEATURE.fdk_aac))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
+endif
+
+ifeq (1,$(FEATURE.faac))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libfaac.a
+endif
+
+ifeq (1,$(FEATURE.qsv))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libmfx.a
+endif
+
+ifeq (1,$(FEATURE.mp4v2))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libmp4v2.a
+endif
+
+ifeq (1,$(FEATURE.libmkv))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libmkv.a
 endif
 
 ifneq ($(HAS.iconv),1)

@@ -1,4 +1,8 @@
+ifeq (1,$(FEATURE.qsv))
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC PTHREADW32 LIBMFX))
+else
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC))
+endif
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
 FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v9.6.tar.bz2
@@ -26,7 +30,6 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=flac \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
-    --enable-encoder=snow \
     --enable-zlib \
     --enable-bzlib \
     --cc="$(FFMPEG.GCC.gcc)" \
@@ -37,6 +40,16 @@ FFMPEG.CONFIGURE.extra += \
     --enable-nonfree \
     --enable-libfdk-aac \
     --enable-encoder=libfdk_aac
+endif
+
+ifeq (1,$(FEATURE.avformat))
+FFMPEG.CONFIGURE.extra += \
+    --enable-muxer=matroska \
+    --enable-muxer=webm \
+    --enable-muxer=mov \
+    --enable-muxer=mp4 \
+    --enable-muxer=psp \
+    --enable-muxer=ipod
 endif
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag
@@ -79,6 +92,10 @@ endif
 
 ifeq (none,$(FFMPEG.GCC.O))
 	FFMPEG.CONFIGURE.extra += --disable-optimizations
+endif
+
+ifeq (1,$(FEATURE.qsv))
+   FFMPEG.CONFIGURE.extra += --enable-qsv
 endif
 
 ## enable compile verbosity

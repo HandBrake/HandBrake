@@ -19,11 +19,9 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
-#include "mcdeint.h"
 #include "taskset.h"
 
 // yadif_mode is a bit vector with the following flags
-// Note that 2PASS should be enabled when using MCDEINT
 #define MODE_YADIF_ENABLE       1
 #define MODE_YADIF_SPATIAL      2
 #define MODE_YADIF_2PASS        4
@@ -31,9 +29,6 @@
 
 #define YADIF_MODE_DEFAULT      0
 #define YADIF_PARITY_DEFAULT   -1
-
-#define MCDEINT_MODE_DEFAULT   -1
-#define MCDEINT_QP_DEFAULT      1
 
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
 #define MIN3(a,b,c) MIN(MIN(a,b),c)
@@ -61,11 +56,6 @@ struct hb_filter_private_s
     taskset_t        yadif_taskset;         // Threads for Yadif - one per CPU
 
     yadif_arguments_t *yadif_arguments;     // Arguments to thread for work
-
-    int              mcdeint_mode;
-    mcdeint_private_t mcdeint;
-
-    //hb_buffer_t *    buf_out[2];
 };
 
 static int hb_deinterlace_init( hb_filter_object_t * filter,
@@ -81,7 +71,7 @@ hb_filter_object_t hb_filter_deinterlace =
 {
     .id            = HB_FILTER_DEINTERLACE,
     .enforce_order = 1,
-    .name          = "Deinterlace (ffmpeg or yadif/mcdeint)",
+    .name          = "Deinterlace",
     .settings      = NULL,
     .init          = hb_deinterlace_init,
     .work          = hb_deinterlace_work,
@@ -336,16 +326,11 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
     pv->yadif_mode     = YADIF_MODE_DEFAULT;
     pv->yadif_parity   = YADIF_PARITY_DEFAULT;
 
-    pv->mcdeint_mode   = MCDEINT_MODE_DEFAULT;
-    int mcdeint_qp     = MCDEINT_QP_DEFAULT;
-
     if( filter->settings )
     {
-        sscanf( filter->settings, "%d:%d:%d:%d",
+        sscanf( filter->settings, "%d:%d",
                 &pv->yadif_mode,
-                &pv->yadif_parity,
-                &pv->mcdeint_mode,
-                &mcdeint_qp );
+                &pv->yadif_parity);
     }
 
     pv->cpu_count = hb_get_cpu_count();
@@ -384,9 +369,6 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
             }
         }
     }
-
-    mcdeint_init( &pv->mcdeint, pv->mcdeint_mode, mcdeint_qp, 
-                  init->pix_fmt, init->width, init->height );
     
     return 0;
 }
@@ -413,8 +395,6 @@ static void hb_deinterlace_close( hb_filter_object_t * filter )
 
         free( pv->yadif_arguments );
     }
-
-    mcdeint_close( &pv->mcdeint );
     
     free( pv );
     filter->private_data = NULL;
@@ -494,7 +474,7 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
         tff = (pv->yadif_parity & 1) ^ 1;
     }
 
-    /* deinterlace both fields if mcdeint is enabled without bob */
+    /* deinterlace both fields if yadif 2 pass or bob */
     int frame, num_frames = 1;
     if ((pv->yadif_mode & MODE_YADIF_2PASS) ||
         (pv->yadif_mode & MODE_YADIF_BOB))
@@ -506,7 +486,7 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
     int idx = 0;
     hb_buffer_t * o_buf[2] = {NULL,};
 
-    /* Perform yadif and mcdeint filtering */
+    /* Perform yadif filtering */
     for( frame = 0; frame < num_frames; frame++ )
     {
         int parity = frame ^ tff ^ 1;
@@ -517,18 +497,8 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
         }
         yadif_filter(pv, o_buf[idx], parity, tff);
 
-        if (pv->mcdeint_mode >= 0)
-        {
-            if (o_buf[idx^1] == NULL)
-            {
-                o_buf[idx^1] = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
-            }
-            mcdeint_filter( o_buf[idx^1], o_buf[idx], parity, &pv->mcdeint );
-            idx ^= 1;
-        }
-
         // If bob, add both frames
-        // else, add only second frame
+        // else, add only final frame
         if (( pv->yadif_mode & MODE_YADIF_BOB ) || frame == num_frames - 1)
         {
             if ( out == NULL )
@@ -550,6 +520,7 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
             idx ^= 1;
         }
     }
+
     // Copy subs only to first output buffer
     hb_buffer_move_subs( out, pv->yadif_ref[1] );
 

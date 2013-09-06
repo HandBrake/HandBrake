@@ -39,8 +39,7 @@ struct hb_work_private_s
 
     struct {
         int64_t start;
-        int64_t stop;
-        int64_t renderOffset;
+        int64_t duration;
     } frame_info[FRAME_INFO_SIZE];
 };
 
@@ -209,7 +208,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 job->anamorphic.par_width, job->anamorphic.par_height );
     }
 
-    if( job->mux & HB_MUX_MP4 )
+    if( job->mux & HB_MUX_MASK_MP4 )
     {
         context->flags |= CODEC_FLAG_GLOBAL_HEADER;
     }
@@ -268,7 +267,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         job->areBframes = 1;
     }
-    if( ( job->mux & HB_MUX_MP4 ) && job->pass != 1 )
+    if( ( job->mux & HB_MUX_MASK_MP4 ) && job->pass != 1 )
     {
         w->config->mpeg4.length = context->extradata_size;
         memcpy( w->config->mpeg4.bytes, context->extradata,
@@ -309,7 +308,7 @@ static void save_frame_info( hb_work_private_t * pv, hb_buffer_t * in )
 {
     int i = pv->frameno_in & FRAME_INFO_MASK;
     pv->frame_info[i].start = in->s.start;
-    pv->frame_info[i].stop = in->s.stop;
+    pv->frame_info[i].duration = in->s.stop - in->s.start;
 }
 
 static int64_t get_frame_start( hb_work_private_t * pv, int64_t frameno )
@@ -318,10 +317,10 @@ static int64_t get_frame_start( hb_work_private_t * pv, int64_t frameno )
     return pv->frame_info[i].start;
 }
 
-static int64_t get_frame_stop( hb_work_private_t * pv, int64_t frameno )
+static int64_t get_frame_duration( hb_work_private_t * pv, int64_t frameno )
 {
     int i = frameno & FRAME_INFO_MASK;
-    return pv->frame_info[i].stop;
+    return pv->frame_info[i].duration;
 }
 
 static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
@@ -469,10 +468,11 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         else
         {
             int64_t frameno = pkt.pts;
-            buf->size = pkt.size;
-            buf->s.start  = get_frame_start( pv, frameno );
-            buf->s.stop  = get_frame_stop( pv, frameno );
-            buf->s.flags &= ~HB_FRAME_REF;
+            buf->size       = pkt.size;
+            buf->s.start    = get_frame_start( pv, frameno );
+            buf->s.duration = get_frame_duration( pv, frameno );
+            buf->s.stop     = buf->s.stop + buf->s.duration;
+            buf->s.flags   &= ~HB_FRAME_REF;
             switch ( pv->context->coded_frame->pict_type )
             {
                 case AV_PICTURE_TYPE_P:

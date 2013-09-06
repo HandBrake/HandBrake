@@ -33,7 +33,6 @@ Original "Faster" settings:
 #define MODE_BLEND       2 // Use blending interpolation
 #define MODE_CUBIC       4 // Use cubic interpolation
 #define MODE_EEDI2       8 // Use EEDI2 interpolation
-#define MODE_MCDEINT    16 // Post-process with mcdeint
 #define MODE_MASK       32 // Output combing masks instead of pictures
 #define MODE_BOB        64 // Deinterlace each field to a separate frame
 
@@ -60,35 +59,20 @@ which will feed EEDI2 interpolations to yadif.
  9: EEDI2->yadif
 10: Switch between EEDI2 and blend
 11: Switch between EEDI2->yadif and blend
-17: Yadif->mcdeint
-18: Blend->mcdeint
-19: Switch between blending and yadif -> mcdeint
-20: Cubic->mdeint
-21: Cubic->yadif->mcdeint
-22: Cubic or blend -> mcdeint
-23: Cubic->yadif or blend -> mcdeint
-24: EEDI2->mcdeint
-25: EEDI2->yadif->mcdeint
 ...okay I'm getting bored now listing all these different modes
 32: Passes through the combing mask for every combed frame (white for combed pixels, otherwise black)
 33+: Overlay the combing mask for every combed frame on top of the filtered output (white for combed pixels)
 
 12-15: EEDI2 will override cubic interpolation
-16: DOES NOT WORK BY ITSELF-- mcdeint needs to be fed by another deinterlacer
 *****/
 
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
 #include "eedi2.h"
-#include "mcdeint.h"
 #include "taskset.h"
 
 #define PARITY_DEFAULT   -1
-
-#define MCDEINT_MODE_DEFAULT   -1
-#define MCDEINT_MODE_ENABLED    2
-#define MCDEINT_QP_DEFAULT      1
 
 #define ABS(a) ((a) > 0 ? (a) : (-(a)))
 #define MIN3(a,b,c) MIN(MIN(a,b),c)
@@ -168,9 +152,6 @@ struct hb_filter_private_s
     int              tff;
 
     int              yadif_ready;
-
-    int              mcdeint_mode;
-    mcdeint_private_t mcdeint;
 
     int              deinterlaced_frames;
     int              blended_frames;
@@ -1981,8 +1962,6 @@ static void yadif_filter( hb_filter_private_t * pv,
     else
     {
         /*  Just passing through... */
-
-        /* For mcdeint's benefit... */
         pv->yadif_arguments[0].is_combed = is_combed; // 0
         hb_buffer_copy(dst, pv->ref[1]);
     }
@@ -2025,9 +2004,6 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
     pv->parity   = PARITY_DEFAULT;
 
-    pv->mcdeint_mode   = MCDEINT_MODE_DEFAULT;
-    int mcdeint_qp     = MCDEINT_QP_DEFAULT;
-
     if( filter->settings )
     {
         sscanf( filter->settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
@@ -2057,11 +2033,6 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     pv->segment_height[0] = (height / pv->cpu_count) & ~1;
     pv->segment_height[1] = hb_image_height(init->pix_fmt, pv->segment_height[0], 1);
     pv->segment_height[2] = hb_image_height(init->pix_fmt, pv->segment_height[0], 2);
-
-    if( pv->mode & MODE_MCDEINT )
-    {
-        pv->mcdeint_mode = MCDEINT_MODE_ENABLED;
-    }
 
     /* Allocate buffers to store comb masks. */
     pv->mask = hb_frame_buffer_init(init->pix_fmt, init->width, init->height);
@@ -2487,9 +2458,6 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         }
     }
     
-    mcdeint_init( &pv->mcdeint, pv->mcdeint_mode, mcdeint_qp, 
-                  init->pix_fmt, init->width, init->height );
-
     return 0;
 }
 
@@ -2572,9 +2540,6 @@ static void hb_decomb_close( hb_filter_object_t * filter )
      */
     free( pv->yadif_arguments );
     
-    /* Cleanup mcdeint specific buffers */
-    mcdeint_close( &pv->mcdeint );
-
     free( pv );
     filter->private_data = NULL;
 }
@@ -2623,9 +2588,9 @@ static int hb_decomb_work( hb_filter_object_t * filter,
         tff = (pv->parity & 1) ^ 1;
     }
 
-    /* deinterlace both fields if mcdeint is enabled without bob */
+    /* deinterlace both fields if bob */
     int frame, num_frames = 1;
-    if (pv->mode & (MODE_MCDEINT | MODE_BOB))
+    if (pv->mode & MODE_BOB)
     {
         num_frames = 2;
     }
@@ -2660,24 +2625,9 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 
         yadif_filter(pv, o_buf[idx], parity, tff);
 
-        // Unfortunately, all frames must be fed to mcdeint combed or
-        // not since it maintains state that is updated by each frame.
-        if (pv->mcdeint_mode >= 0)
-        {
-            if (o_buf[idx^1] == NULL)
-            {
-                o_buf[idx^1] = hb_video_buffer_init(in->f.width, in->f.height);
-            }
-            /* Perform mcdeint filtering */
-            mcdeint_filter(o_buf[idx^1], o_buf[idx], parity, &pv->mcdeint);
-
-            // If frame was combed, we will use results from mcdeint
-            // else we will use yadif result
-            if (pv->is_combed)
-                idx ^= 1;
-        }
-
-        // Add to list of output buffers (should be at most 2)
+        // If bob, add all frames to output
+        // else, if not combed, add frame to output
+        // else if final iteration, add frame to output
         if ((pv->mode & MODE_BOB) ||
             pv->is_combed == 0 ||
             frame == num_frames - 1)

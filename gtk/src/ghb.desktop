@@ -2,7 +2,7 @@
 Name=HandBrake
 GenericName=Media Transcoder
 Comment=Transcodes DVD, Bluray, and other media
-Exec=ghb
+Exec=ghb %f
 Icon=hb-icon
 Terminal=false
 Type=Application

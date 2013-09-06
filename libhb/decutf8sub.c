@@ -31,6 +31,8 @@ static int decutf8Work(hb_work_object_t * w,
     // Pass the packets through without modification
     hb_buffer_t *out = *buf_in;
 
+    out->s.frametype = HB_FRAME_SUBTITLE;
+
     // Warn if the subtitle's duration has not been passed through by the
     // demuxer, which will prevent the subtitle from displaying at all
     if (out->s.stop == 0)

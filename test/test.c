@@ -27,6 +27,10 @@
 #include "parsecsv.h"
 #include "openclwrapper.h"
 
+#ifdef USE_QSV
+#include "qsv_common.h"
+#endif
+
 #if defined( __APPLE_CC__ )
 #import <CoreServices/CoreServices.h>
 #include <IOKit/IOKitLib.h>
@@ -135,6 +139,10 @@ static int    stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
 static int use_opencl = 0;
 static int use_hwd = 0;
+#ifdef USE_QSV
+static int qsv_decode      =  1;
+static int qsv_async_depth = -1;
+#endif
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -1892,6 +1900,14 @@ static int HandleEvents( hb_handle_t * h )
                 job->vcodec = vcodec;
             }
 
+#ifdef USE_QSV
+            if (qsv_async_depth >= 0)
+            {
+                job->qsv_async_depth = qsv_async_depth;
+            }
+            job->qsv_decode = qsv_decode;
+#endif
+
             /* Grab audio tracks */
             if( atracks )
             {
@@ -2735,7 +2751,7 @@ static int HandleEvents( hb_handle_t * h )
                                     }
                                     sub_config = subtitle->config;
 
-                                    if( mux == HB_MUX_MKV || subtitle->format == TEXTSUB)
+                                    if ((mux & HB_MUX_MASK_MKV) || subtitle->format == TEXTSUB)
                                     {
                                         sub_config.dest = PASSTHRUSUB;
                                     }
@@ -3103,9 +3119,22 @@ static void ShowHelp()
     }
     if( len )
         fprintf( out, "%s\n", tmp );
-    fprintf( out,
-    "    -x, --encopts <string>  Specify advanced encoder options in the\n"
-    "                            same style as mencoder (x264 and ffmpeg only):\n"
+    fprintf(out,
+    "    -x, --encopts <string>  Specify advanced encoder options in the\n");
+#ifdef USE_QSV
+if (hb_qsv_available())
+{
+    fprintf(out,
+    "                            same style as mencoder (x264/qsv/ffmpeg only):\n");
+}
+else
+#endif
+{
+    fprintf(out,
+    "                            same style as mencoder (x264 and ffmpeg only):\n");
+}
+    
+    fprintf(out,
     "                            option1=value1:option2=value2\n"
     "        --h264-profile      When using x264, ensures compliance with the\n"
     "          <string>          specified H.264 profile:\n"
@@ -3362,7 +3391,14 @@ static void ShowHelp()
     "### Filters---------------------------------------------------------\n\n"
 
      "    -d, --deinterlace       Deinterlace video with Libav, yadif or mcdeint\n"
-     "          <fast/slow/slower/bob> or omitted (default settings)\n"
+     "          <fast/slow/slower/bob");
+#ifdef USE_QSV
+if (hb_qsv_available())
+{
+    fprintf(out, "/qsv");
+}
+#endif
+     fprintf( out, "> or omitted (default settings)\n"
      "           or\n"
      "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
      "    -5, --decomb            Selectively deinterlaces when it detects combing\n"
@@ -3445,9 +3481,21 @@ static void ShowHelp()
     "                            If \"number\" is omitted, the first srt is default.\n"
     "                            \"number\" is an 1 based index into the srt-file list\n"
     "\n"
-
-
     );
+
+#ifdef USE_QSV
+if (hb_qsv_available())
+{
+    fprintf( out,
+    "### Intel Quick Sync Video------------------------------------------------------\n\n"
+    "    --disable-qsv-decoding  Force software decoding of the video track.\n"
+    "    --qsv-async-depth       Specifies how many asynchronous operations should be\n"
+    "                            performed before the result is explicitly synchronized.\n"
+    "                            Default: 4. If zero, the value is not specified.\n"
+    "\n"
+    );
+}
+#endif
 }
 
 /****************************************************************************
@@ -3591,7 +3639,9 @@ static int ParseOptions( int argc, char ** argv )
     #define NO_OPENCL           287
     #define NORMALIZE_MIX       288
     #define AUDIO_DITHER        289
-    
+    #define QSV_BASELINE        289
+    #define QSV_ASYNC_DEPTH     290
+
     for( ;; )
     {
         static struct option long_options[] =
@@ -3601,7 +3651,13 @@ static int ParseOptions( int argc, char ** argv )
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
             { "no-opencl",   no_argument,       NULL,    NO_OPENCL },
-            
+           
+#ifdef USE_QSV
+            { "qsv-baseline", no_argument,      NULL,    QSV_BASELINE },
+            { "qsv-async-depth", required_argument, NULL, QSV_ASYNC_DEPTH },
+            { "disable-qsv-decoding", no_argument, &qsv_decode, 0 },
+#endif
+
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
             { "output",      required_argument, NULL,    'o' },
@@ -4228,6 +4284,21 @@ static int ParseOptions( int argc, char ** argv )
             case MIN_DURATION:
                 min_title_duration = strtol( optarg, NULL, 0 );
                 break;
+#ifdef USE_QSV
+            case QSV_BASELINE:
+                if (hb_qsv_available())
+                {
+                    /* XXX: for testing workarounds */
+                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_MSDK_API_1_6;
+                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_BRC;
+                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_TRELLIS;
+                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_LOOKAHEAD;
+                }
+                break;
+            case QSV_ASYNC_DEPTH:
+                qsv_async_depth = atoi(optarg);
+                break;
+#endif
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[cur_optind] );
                 return -1;

@@ -799,133 +799,27 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 {
     if ([outlineView isItemExpanded: item])
     {
-        /* Below is the original code to accommodate a live resize,
-         * however as stated in travistex's comments it's very buggy.
-         * For now I will leave it here ... commented out and use
-         * the code below to determine the row height based on each
-         * encodes optional parameters and how they are displayed. */
+        // It is important to use a constant value when calculating the height. Querying the tableColumn width will not work, since it dynamically changes as the user resizes -- however, we don't get a notification that the user "did resize" it until after the mouse is let go. We use the latter as a hook for telling the table that the heights changed. We must return the same height from this method every time, until we tell the table the heights have changed. Not doing so will quicly cause drawing problems.
+        NSTableColumn *tableColumnToWrap = (NSTableColumn *) [[outlineView tableColumns] objectAtIndex:1];
+        NSInteger columnToWrap = [outlineView.tableColumns indexOfObject:tableColumnToWrap];
         
-        // Short-circuit here if in a live resize primarily to fix a bug but also to
-        // increase resposivness during a resize. There's a bug in NSTableView that
-        // causes row heights to get messed up if you try to change them during a live
-        // resize. So if in a live resize, simply return the previously calculated
-        // height. The row heights will get fixed up after the resize because we have
-        // implemented viewDidEndLiveResize to force all of them to be recalculated.
-        // if ([outlineView inLiveResize] && [item lastDescriptionHeight] > 0)
-        //   return [item lastDescriptionHeight];
+        // Grab the fully prepared cell with our content filled in. Note that in IB the cell's Layout is set to Wraps.
+        NSCell *cell = [outlineView preparedCellAtColumn:columnToWrap row:[outlineView rowForItem:item]];
         
-        // CGFloat width = [[outlineView tableColumnWithIdentifier: @"desc"] width];
-        // Column width is NOT what is ultimately used. I can't quite figure out what
-        // width to use for calculating text metrics. No matter how I tweak this value,
-        // there are a few conditions in which the drawn text extends below the bounds
-        // of the row cell. In previous versions, which ran under Tiger, I was
-        // reducing width by 47 pixles.
-        // width -= 2;     // (?) for intercell spacing
+        // See how tall it naturally would want to be if given a restricted with, but unbound height
+        NSRect constrainedBounds = NSMakeRect(0, 0, [tableColumnToWrap width], CGFLOAT_MAX);
+        NSSize naturalSize = [cell cellSizeForBounds:constrainedBounds];
         
-        // CGFloat height = [item heightOfDescriptionForWidth: width];
-        // return height;
-        
-        /* So, we know several rows of text that are in all queue items for display.
-         * These are the title line, Preset, Format, Destination, Picture, and Video Lines
-         */
-        CGFloat rowHeightNonTitle = 15.0;
-        /* Add the title line height, then the non title line height for Preset, Format, Destination
-         * Picture and Video
-         */
-        CGFloat itemHeightForDisplay = HB_ROW_HEIGHT_TITLE_ONLY + (rowHeightNonTitle * 5);
-        
-        /* get our item row number so we an use it to calc how many lines we have to display based
-         * on MP4 Options, Filter Options, X264 Options, Audio Tracks and Subtitles from our queue array */
-        int itemRowNum = [outlineView rowForItem: item];
-        NSMutableDictionary *queueItemToCheck = [outlineView itemAtRow: itemRowNum];
-        
-        /* Check to see if we need to allow for container options */
-        if ([[queueItemToCheck objectForKey:@"MuxerOptionsSummary"] length])
-        {
-            itemHeightForDisplay += rowHeightNonTitle;
-        }
-        
-        /* check to see if we need to allow for the Picture Filters row */
-        if ([[queueItemToCheck objectForKey:@"PictureFiltersSummary"] length])
-        {
-            itemHeightForDisplay += rowHeightNonTitle;
-        }
-        
-        /* check to see if we need a line to display x264/lavc options */
-        if ([[queueItemToCheck objectForKey:@"VideoEncoder"] isEqualToString: @"H.264 (x264)"])
-        {
-            itemHeightForDisplay += rowHeightNonTitle * 2;
-        }
-        else if (![[queueItemToCheck objectForKey:@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])
-        {
-            itemHeightForDisplay += rowHeightNonTitle;
-        }
-        
-        /* check to see how many audio track lines to allow for */
-		unsigned int ourMaximumNumberOfAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
-		int actualCountOfAudioTracks = 0;
-        BOOL autoPassthruPresent = NO;
-		for (unsigned int i = 1; i <= ourMaximumNumberOfAudioTracks; i++) {
-			if (0 < [[queueItemToCheck objectForKey: [NSString stringWithFormat: @"Audio%dTrack", i]] intValue])
-            {
-				actualCountOfAudioTracks++;
-			}
-            if (HB_ACODEC_AUTO_PASS == [[queueItemToCheck objectForKey: [NSString stringWithFormat: @"JobAudio%dEncoder", i]] intValue])
-            {
-                autoPassthruPresent = YES;
-            }
-		}
-		itemHeightForDisplay += (actualCountOfAudioTracks * rowHeightNonTitle * 2);
-        
-        if (autoPassthruPresent == YES)
-        {
-            itemHeightForDisplay += rowHeightNonTitle * 2;
-        }
-        
-        /* add in subtitle lines for each subtitle in the SubtitleList array */
-        itemHeightForDisplay +=  rowHeightNonTitle * [[queueItemToCheck objectForKey:@"SubtitleList"] count];
-        
-        return itemHeightForDisplay;
-        
+        // Make sure we have a minimum height -- use the table's set height as the minimum.
+        if (naturalSize.height > [outlineView rowHeight])
+            return naturalSize.height;
+        else
+            return [outlineView rowHeight];
     }
     else
     {
         return HB_ROW_HEIGHT_TITLE_ONLY;
     }
-}
-
-- (CGFloat) heightOfDescriptionForWidth:(CGFloat)width
-{
-    // Try to return the cached value if no changes have happened since the last time
-    //if ((width == fLastDescriptionWidth) && (fLastDescriptionHeight != 0) && !fNeedsDescription)
-       // return fLastDescriptionHeight;
-
-    //if (fNeedsDescription)
-    //    [self updateDescription];
-
-    // Calculate the height
-    //NSRect bounds = [fDescription boundingRectWithSize:NSMakeSize(width, 10000) options:NSStringDrawingUsesLineFragmentOrigin];
-    //fLastDescriptionHeight = bounds.size.height + 6.0; // add some border to bottom
-    //fLastDescriptionWidth = width;
-    return HB_ROW_HEIGHT_FULL_DESCRIPTION;
-
-/* supposedly another way to do this, in case boundingRectWithSize isn't working
-    NSTextView* tmpView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0, width, 1)];
-    [[tmpView textStorage] setAttributedString:aString];
-    [tmpView setHorizontallyResizable:NO];
-    [tmpView setVerticallyResizable:YES];
-//    [[tmpView textContainer] setHeightTracksTextView: YES];
-//    [[tmpView textContainer] setContainerSize: NSMakeSize(width, 10000)];
-    [tmpView sizeToFit];
-    float height = [tmpView frame].size.height;
-    [tmpView release];
-    return height;
-*/
-}
-
-- (CGFloat) lastDescriptionHeight
-{
-    return HB_ROW_HEIGHT_FULL_DESCRIPTION;
 }
 
 - (id)outlineView:(NSOutlineView *)fOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item

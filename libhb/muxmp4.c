@@ -7,10 +7,12 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include "hb.h"
+
+#if defined(USE_MP4V2)
+
 #include "mp4v2/mp4v2.h"
 #include "a52dec/a52.h"
-
-#include "hb.h"
 
 struct hb_mux_object_s
 {
@@ -94,7 +96,14 @@ static int MP4Init( hb_mux_object_t * m )
     int subtitle_default;
 
     /* Flags for enabling/disabling tracks in an MP4. */
-    typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
+    enum
+    {
+        TRACK_DISABLED   = 0x0,
+        TRACK_ENABLED    = 0x1,
+        TRACK_IN_MOVIE   = 0x2,
+        TRACK_IN_PREVIEW = 0x4,
+        TRACK_IN_POSTER  = 0x8
+    };
 
     /* Create an empty mp4 file */
     if (job->largeFileSize)
@@ -127,7 +136,7 @@ static int MP4Init( hb_mux_object_t * m )
         return 0;
     }
 
-    if( job->vcodec == HB_VCODEC_X264 )
+    if (job->vcodec & HB_VCODEC_H264_MASK)
     {
         /* Stolen from mp4creator */
         MP4SetVideoProfileLevel( m->file, 0x7F );
@@ -658,262 +667,32 @@ static int MP4Init( hb_mux_object_t * m )
     return 0;
 }
 
-typedef struct stylerecord_s {
-    enum style_s {ITALIC, BOLD, UNDERLINE} style;
-    uint16_t start;
-    uint16_t stop;
-    struct stylerecord_s *next;
-} stylerecord;
-
-static void hb_makestylerecord( stylerecord **stack, 
-                                enum style_s style, int start )
-{
-    stylerecord *record = calloc( sizeof( stylerecord ), 1 );
-
-    if( record ) 
-    {
-        record->style = style;
-        record->start = start;
-        record->next = *stack;
-        *stack = record;
-    }
-}
-
-static void hb_makestyleatom( stylerecord *record, uint8_t *style)
-{
-    uint8_t face = 1;
-    hb_deep_log(3, "Made style '%s' from %d to %d", 
-           record->style == ITALIC ? "Italic" : record->style == BOLD ? "Bold" : "Underline", record->start, record->stop);
-    
-    switch( record->style )
-    {
-    case ITALIC:
-        face = 2;
-        break;
-    case BOLD:
-        face = 1;
-        break;
-    case UNDERLINE:
-        face = 4;
-        break;
-    default:
-        face = 2;
-        break;
-    }
-
-    style[0] = (record->start >> 8) & 0xff; // startChar
-    style[1] = record->start & 0xff;
-    style[2] = (record->stop >> 8) & 0xff;   // endChar
-    style[3] = record->stop & 0xff;
-    style[4] = (1 >> 8) & 0xff;    // font-ID
-    style[5] = 1 & 0xff;
-    style[6] = face;   // face-style-flags: 1 bold; 2 italic; 4 underline
-    style[7] = 24;      // font-size
-    style[8] = 255;     // r
-    style[9] = 255;     // g
-    style[10] = 255;    // b
-    style[11] = 255;    // a
- 
-}
-
-/*
- * Copy the input to output removing markup and adding markup to the style
- * atom where appropriate.
- */
-static void hb_muxmp4_process_subtitle_style( uint8_t *input,
-                                              uint8_t *output,
-                                              uint8_t *style, uint16_t *stylesize )
-{
-    uint8_t *reader = input;
-    uint8_t *writer = output;
-    uint8_t stylecount = 0;
-    uint16_t utf8_count = 0;         // utf8 count from start of subtitle
-    stylerecord *stylestack = NULL;
-    stylerecord *oldrecord = NULL;
-    
-    while(*reader != '\0') {
-        if( ( *reader & 0xc0 ) == 0x80 ) 
-        {
-            /*
-             * Track the utf8_count when doing markup so that we get the tx3g stops
-             * based on UTF8 chr counts rather than bytes.
-             */
-            utf8_count++;
-            hb_deep_log( 3, "MuxMP4: Counted %d UTF-8 chrs within subtitle so far", 
-                             utf8_count);
-        }
-        if (*reader == '<') {
-            /*
-             * possible markup, peek at the next chr
-             */
-            switch(*(reader+1)) {
-            case 'i':
-                if (*(reader+2) == '>') {
-                    reader += 3;
-                    hb_makestylerecord(&stylestack, ITALIC, (writer - output - utf8_count));
-                } else {
-                    *writer++ = *reader++;
-                }
-                break;
-            case 'b':
-                if (*(reader+2) == '>') {
-                    reader += 3; 
-                    hb_makestylerecord(&stylestack, BOLD, (writer - output - utf8_count));
-                } else {
-                    *writer++ = *reader++;  
-                }
-                break;
-            case 'u': 
-                if (*(reader+2) == '>') {
-                    reader += 3;
-                    hb_makestylerecord(&stylestack, UNDERLINE, (writer - output - utf8_count));
-                } else {
-                    *writer++ = *reader++;
-                }
-                break;
-            case '/':
-                switch(*(reader+2)) {
-                case 'i':
-                    if (*(reader+3) == '>') {
-                        /*
-                         * Check whether we then immediately start more markup of the same type, if so then
-                         * lets not close it now and instead continue this markup.
-                         */
-                        if ((*(reader+4) && *(reader+4) == '<') &&
-                            (*(reader+5) && *(reader+5) == 'i') &&
-                            (*(reader+6) && *(reader+6) == '>')) {
-                            /*
-                             * Opening italics right after, so don't close off these italics.
-                             */
-                            hb_deep_log(3, "Joining two sets of italics");
-                            reader += (4 + 3);
-                            continue;
-                        }
-
-
-                        if ((*(reader+4) && *(reader+4) == ' ') && 
-                            (*(reader+5) && *(reader+5) == '<') &&
-                            (*(reader+6) && *(reader+6) == 'i') &&
-                            (*(reader+7) && *(reader+7) == '>')) {
-                            /*
-                             * Opening italics right after, so don't close off these italics.
-                             */
-                            hb_deep_log(3, "Joining two sets of italics (plus space)");
-                            reader += (4 + 4);
-                            *writer++ = ' ';
-                            continue;
-                        }
-                        if (stylestack && stylestack->style == ITALIC) {
-                            uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count;
-                            hb_makestyleatom(stylestack, style_record);
-
-                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
-                            stylecount++;
-
-                            oldrecord = stylestack;
-                            stylestack = stylestack->next;
-                            free(oldrecord);
-                        } else {
-                            hb_error("Mismatched Subtitle markup '%s'", input);
-                        }
-                        reader += 4;
-                    } else {
-                        *writer++ = *reader++;
-                    }
-                    break;
-                case 'b':
-                    if (*(reader+3) == '>') {
-                        if (stylestack && stylestack->style == BOLD) {
-                            uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count;
-                            hb_makestyleatom(stylestack, style_record);
-
-                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
-                            stylecount++;
-                            oldrecord = stylestack;
-                            stylestack = stylestack->next;
-                            free(oldrecord);
-                        } else {
-                            hb_error("Mismatched Subtitle markup '%s'", input);
-                        }
-
-                        reader += 4;
-                    } else {
-                        *writer++ = *reader++;
-                    }
-                    break;
-                case 'u': 
-                    if (*(reader+3) == '>') {
-                        if (stylestack && stylestack->style == UNDERLINE) {
-                            uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count;
-                            hb_makestyleatom(stylestack, style_record);
-
-                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
-                            stylecount++;
-
-                            oldrecord = stylestack;
-                            stylestack = stylestack->next;
-                            free(oldrecord);
-                        } else {
-                            hb_error("Mismatched Subtitle markup '%s'", input);
-                        }
-                        reader += 4;
-                    } else {
-                        *writer++ = *reader++;
-                    }
-                    break;
-                default:
-                    *writer++ = *reader++;
-                    break;
-                }
-                break;
-            default:
-                *writer++ = *reader++;
-                break;
-            }
-        } else if (*reader == '\r') {
-            // skip '\r' and replace with '\n' if necessary
-            if (*(++reader) != '\n') {
-                *writer++ = '\n';
-            }
-        } else {
-            *writer++ = *reader++;
-        }
-    }
-    *writer = '\0';
-
-    if( stylecount )
-    {
-        *stylesize = 10 + ( stylecount * 12 );
-
-        memcpy( style + 4, "styl", 4);
-
-        style[0] = 0;
-        style[1] = 0;
-        style[2] = (*stylesize >> 8) & 0xff;
-        style[3] = *stylesize & 0xff;
-        style[8] = (stylecount >> 8) & 0xff;
-        style[9] = stylecount & 0xff;
-
-    }
-
-}
-
 static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                    hb_buffer_t * buf )
 {
     hb_job_t * job = m->job;
-    int64_t duration;
+    int64_t duration, stop = -1;
     int64_t offset = 0;
     hb_buffer_t *tmp;
+
+    if (buf != NULL)
+    {
+        if (buf->s.duration >= 0)
+        {
+            stop = buf->s.start + buf->s.duration;
+        }
+        else if (mux_data->subtitle)
+        {
+            buf->s.duration = 10 * 90000;
+            stop = buf->s.start + buf->s.duration;
+        }
+    }
 
     if( mux_data == job->mux_data )
     {
         /* Video */
-        if( job->vcodec == HB_VCODEC_X264 ||
-            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
+        if ((job->vcodec & HB_VCODEC_H264_MASK) ||
+            (job->vcodec & HB_VCODEC_FFMPEG_MASK))
         {
             if ( buf && buf->s.start < buf->s.renderOffset )
             {
@@ -932,8 +711,10 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         if ( !buf )
             return 0;
 
-        if( job->vcodec == HB_VCODEC_X264 ||
-            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
+        stop = buf->s.start + buf->s.duration;
+
+        if ((job->vcodec & HB_VCODEC_H264_MASK) ||
+            (job->vcodec & HB_VCODEC_FFMPEG_MASK))
         {
             // x264 supplies us with DTS, so offset is PTS - DTS
             offset = buf->s.start - buf->s.renderOffset;
@@ -970,8 +751,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
         }
 
-        if( job->vcodec == HB_VCODEC_X264 ||
-            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
+        if ((job->vcodec & HB_VCODEC_H264_MASK) ||
+            (job->vcodec & HB_VCODEC_FFMPEG_MASK))
         {
             // x264 supplies us with DTS
             if ( m->delay_buf )
@@ -980,7 +761,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             else
             {
-                duration = buf->s.stop - m->sum_dur;
+                duration = stop - m->sum_dur;
                 // Due to how libx264 generates DTS, it's possible for the
                 // above calculation to be negative. 
                 //
@@ -1016,7 +797,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             // We're getting the frames in decode order but the timestamps are
             // for presentation so we have to use durations and effectively
             // compute a DTS.
-            duration = buf->s.stop - buf->s.start;
+            duration = buf->s.duration;
         }
 
         if ( duration <= 0 )
@@ -1027,7 +808,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                try to fix the error so that the file will still be playable. */
             hb_log("MP4Mux: illegal duration %"PRId64", start %"PRId64","
                    "stop %"PRId64", sum_dur %"PRId64,
-                   duration, buf->s.start, buf->s.stop, m->sum_dur );
+                   duration, buf->s.start, stop, m->sum_dur );
             /* we don't know when the next frame starts so we can't pick a
                valid duration for this one. we pick something "short"
                (roughly 1/3 of an NTSC frame time) to take time from
@@ -1048,9 +829,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     }
 
     /* Here's where the sample actually gets muxed. */
-    if( ( job->vcodec == HB_VCODEC_X264 ||
-        ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
-        && mux_data == job->mux_data )
+    if (mux_data == job->mux_data && ((job->vcodec & HB_VCODEC_H264_MASK) ||
+                                      (job->vcodec & HB_VCODEC_FFMPEG_MASK)))
     {
         /* Compute dependency flags.
          *
@@ -1111,11 +891,11 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                code should coalesce overlapping subtitle lines. */
             if( buf->s.start < mux_data->sum_dur )
             {
-                if ( buf->s.stop - mux_data->sum_dur > 90*500 )
+                if ( stop - mux_data->sum_dur > 90*500 )
                 {
                     hb_log("MP4Mux: shortening overlapping subtitle, "
                            "start %"PRId64", stop %"PRId64", sum_dur %"PRId64,
-                           buf->s.start, buf->s.stop, m->sum_dur);
+                           buf->s.start, stop, m->sum_dur);
                     buf->s.start = mux_data->sum_dur;
                 }
             }
@@ -1123,20 +903,10 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             {
                 hb_log("MP4Mux: skipping overlapping subtitle, "
                        "start %"PRId64", stop %"PRId64", sum_dur %"PRId64,
-                       buf->s.start, buf->s.stop, m->sum_dur);
+                       buf->s.start, stop, m->sum_dur);
             }
             else
             {
-                int64_t duration;
-
-                if( buf->s.start < 0 )
-                    buf->s.start = mux_data->sum_dur;
-
-                if( buf->s.stop < 0 )
-                    duration = 90000L * 10;
-                else
-                    duration = buf->s.stop - buf->s.start;
-
                 /* Write an empty sample */
                 if ( mux_data->sum_dur < buf->s.start )
                 {
@@ -1172,9 +942,9 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
                 buffersize = strlen((char*)buffer);
 
-                hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s",
-                            (float)buf->s.start / 90000, buf->s.start, buf->s.stop,
-                            duration, buffer);
+                hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%f: %s",
+                            (float)buf->s.start / 90000, buf->s.start, stop,
+                            buf->s.duration, buffer);
 
                 /* Write the subtitle sample */
                 memcpy( output + 2, buffer, buffersize );
@@ -1186,7 +956,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                      mux_data->track,
                                      output,
                                      buffersize + stylesize + 2,
-                                     duration,
+                                     buf->s.duration,
                                      0,
                                      1 ))
                 {
@@ -1194,21 +964,11 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                     *job->die = 1;
                 }
 
-                mux_data->sum_dur += duration;
+                mux_data->sum_dur += buf->s.duration;
             }
         }
         else if( mux_data->sub_format == PICTURESUB )
         {
-            int64_t duration;
-
-            if( buf->s.start < 0 )
-                buf->s.start = mux_data->sum_dur;
-
-            if( buf->s.stop < 0 )
-                duration = 90000L * 10;
-            else
-                duration = buf->s.stop - buf->s.start;
-
             /* Write an empty sample */
             if ( mux_data->sum_dur < buf->s.start )
             {
@@ -1230,7 +990,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                  mux_data->track,
                                  buf->data,
                                  buf->size,
-                                 duration,
+                                 buf->s.duration,
                                  0,
                                  1 ))
             {
@@ -1238,7 +998,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 *job->die = 1;
             }
 
-            mux_data->sum_dur += duration;
+            mux_data->sum_dur += buf->s.duration;
         }
     }
     else
@@ -1266,6 +1026,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 static int MP4End( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
+    int i;
 
     if (m->file != MP4_INVALID_FILE_HANDLE)
     {
@@ -1295,19 +1056,32 @@ static int MP4End( hb_mux_object_t * m )
 
         if ( job->config.h264.init_delay )
         {
-               // Insert track edit to get A/V back in sync.  The edit amount is
-               // the init_delay.
-               int64_t edit_amt = job->config.h264.init_delay;
-               MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, edit_amt,
-                               MP4GetTrackDuration(m->file, 1), 0);
-                if ( m->job->chapter_markers )
-                {
-                    // apply same edit to chapter track to keep it in sync with video
-                    MP4AddTrackEdit(m->file, m->chapter_track, MP4_INVALID_EDIT_ID,
-                                    edit_amt,
-                                    MP4GetTrackDuration(m->file, m->chapter_track), 0);
-                }
-         }
+            // Insert track edit to get A/V back in sync.  The edit amount is
+            // the init_delay.
+            int64_t edit_amt = job->config.h264.init_delay;
+            MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, edit_amt,
+                            MP4GetTrackDuration(m->file, 1), 0);
+            if ( m->job->chapter_markers )
+            {
+                // apply same edit to chapter track to keep it in sync with video
+                MP4AddTrackEdit(m->file, m->chapter_track, MP4_INVALID_EDIT_ID,
+                                edit_amt,
+                                MP4GetTrackDuration(m->file, m->chapter_track), 0);
+            }
+        }
+
+        // Check for audio preroll and add edit entries for audio
+        for( i = 0; i < hb_list_count( job->list_audio ); i++ )
+        {
+            hb_audio_t *audio = hb_list_item( job->list_audio, i );
+            hb_mux_data_t *mux_data = audio->priv.mux_data;
+            if (audio->config.out.delay > 0)
+            {
+                int64_t edit_amt = audio->config.out.delay;
+                MP4AddTrackEdit(m->file, mux_data->track, MP4_INVALID_EDIT_ID,
+                                edit_amt, MP4GetTrackDuration(m->file, 1), 0);
+            }
+        }
 
         /*
          * Write the MP4 iTunes metadata if we have any metadata
@@ -1413,3 +1187,4 @@ hb_mux_object_t * hb_mux_mp4_init( hb_job_t * job )
     return m;
 }
 
+#endif // USE_MP4V2

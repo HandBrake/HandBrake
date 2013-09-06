@@ -8,10 +8,7 @@
  */
 
 #include "x264.h"
-
-static const char * const hb_h264_profile_names[] = { "auto", "high", "main", "baseline", NULL, };
-static const char * const   hb_h264_level_names[] = { "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2",  NULL, };
-static const int    const  hb_h264_level_values[] = {     -1,    10,    9,    11,    12,    13,    20,    21,    22,    30,    31,    32,    40,    41,    42,    50,    51,    52,     0, };
+#include "h264_common.h"
 
 /* x264 preferred option names (left) and synonyms (right).
  * The "preferred" names match names used in x264's param2string function more

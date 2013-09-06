@@ -2,6 +2,7 @@
 
 import collections
 import plistlib
+import sys
 
 DepEntry = collections.namedtuple('DepEntry', 'widget dep enable die hide')
 dep_map = (
@@ -27,9 +28,6 @@ dep_map = (
     DepEntry("VideoFramerate", "VideoFrameratePFR", "source", True, True),
     DepEntry("VideoFramerate", "VideoFramerateVFR", "source", False, True),
     DepEntry("VideoTwoPass", "VideoTurboTwoPass", "TRUE", False, False),
-    DepEntry("FileFormat", "Mp4LargeFile", "mp4", False, True),
-    DepEntry("FileFormat", "Mp4HttpOptimize", "mp4", False, True),
-    DepEntry("FileFormat", "Mp4iPodCompatible", "mp4", False, True),
     DepEntry("PictureDecombDeinterlace", "PictureDeinterlace", "TRUE", True, True),
     DepEntry("PictureDecombDeinterlace", "PictureDeinterlaceCustom", "TRUE", True, True),
     DepEntry("PictureDecombDeinterlace", "PictureDeinterlaceLabel", "TRUE", True, True),
@@ -49,14 +47,8 @@ dep_map = (
     DepEntry("VideoEncoder", "x264_tab", "x264", False, True),
     DepEntry("VideoEncoder", "x264VideoSettings", "x264", False, True),
     DepEntry("VideoEncoder", "lavc_mpeg4_tab", "ffmpeg|ffmpeg4|ffmpeg2", False, True),
-    DepEntry("VideoEncoder", "Mp4iPodCompatible", "x264", False, False),
-    DepEntry("AudioTrackQualityEnable", "AudioTrackQuality", "FALSE", True, False),
-    DepEntry("AudioTrackQualityEnable", "AudioTrackQualityValue", "FALSE", True, False),
     DepEntry("AudioTrackQualityEnable", "AudioBitrateLabel", "TRUE", True, False),
     DepEntry("AudioTrackQualityEnable", "AudioBitrate", "TRUE", True, False),
-    DepEntry("AudioEncoderActual", "AudioTrackQualityEnable", "lame|vorbis", False, True),
-    DepEntry("AudioEncoderActual", "AudioTrackQuality", "lame|vorbis", False, True),
-    DepEntry("AudioEncoderActual", "AudioTrackQualityValue", "lame|vorbis", False, True),
     DepEntry("AudioEncoderActual", "AudioBitrateLabel", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
     DepEntry("AudioEncoderActual", "AudioBitrate", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
     DepEntry("AudioEncoderActual", "AudioSamplerateLabel", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),

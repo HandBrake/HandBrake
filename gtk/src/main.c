@@ -52,6 +52,7 @@
 #endif
 
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 #include <gio/gio.h>
 #include "hb.h"
 #include "renderer_button.h"
@@ -73,16 +74,7 @@
 /*
  * Standard gettext macros.
  */
-#ifdef ENABLE_NLS
-#  include <libintl.h>
-#  undef _
-#  define _(String) dgettext(PACKAGE, String)
-#  ifdef gettext_noop
-#    define N_(String) gettext_noop(String)
-#  else
-#    define N_(String) (String)
-#  endif
-#else
+#ifndef ENABLE_NLS
 #  define textdomain(String) (String)
 #  define gettext(String) (String)
 #  define dgettext(Domain,Message) (Message)
@@ -688,9 +680,9 @@ static gboolean ghb_debug = FALSE;
 
 static GOptionEntry entries[] = 
 {
-    { "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, "The device or file to encode", NULL },
-    { "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, "The preset values to use for encoding", NULL },
-    { "debug", 'x', 0, G_OPTION_ARG_NONE, &ghb_debug, "Spam a lot", NULL },
+    { "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, N_("The device or file to encode"), NULL },
+    { "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, N_("The preset values to use for encoding"), NULL },
+    { "debug",  'x', 0, G_OPTION_ARG_NONE, &ghb_debug, N_("Spam a lot"), NULL },
     { NULL }
 };
 
@@ -857,7 +849,7 @@ main(int argc, char *argv[])
     textdomain(GETTEXT_PACKAGE);
 #endif
 
-    context = g_option_context_new("- Transcode media formats");
+    context = g_option_context_new(_("- Transcode media formats"));
     g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
     g_option_context_add_group(context, gtk_get_option_group(TRUE));
 #if defined(_ENABLE_GST)

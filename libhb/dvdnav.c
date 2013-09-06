@@ -318,7 +318,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     int            count;
     uint64_t       duration, longest;
     int            longest_pgcn, longest_pgn, longest_pgcn_end;
-    float          duration_correction;
     const char   * name;
     const char   * codec_name;
 
@@ -758,7 +757,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 
     hb_log( "scan: title %d has %d chapters", t, c );
 
-    duration = 0;
     count = hb_list_count( title->list_chapter );
     for (i = 0; i < count; i++)
     {
@@ -797,16 +795,11 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 #undef cp
             cell_cur = FindNextCell( pgc, cell_cur );
         }
-        duration += chapter->duration;
     }
 
-    /* The durations we get for chapters aren't precise. Scale them so
-       the total matches the title duration */
-    duration_correction = (float) title->duration / (float) duration;
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
         chapter           = hb_list_item( title->list_chapter, i );
-        chapter->duration = duration_correction * chapter->duration;
 
         int seconds       = ( chapter->duration + 45000 ) / 90000;
         chapter->hours    = ( seconds / 3600 );
@@ -1979,7 +1972,7 @@ static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[MAX_PGCN/32]
  **********************************************************************/
 static void PgcWalkInit( uint32_t pgcn_map[MAX_PGCN/32] )
 {
-    memset(pgcn_map, 0, sizeof(pgcn_map) );
+    memset(pgcn_map, 0, sizeof(uint32_t) * MAX_PGCN/32);
 }
 
 /***********************************************************************
@@ -1998,8 +1991,8 @@ static int dvdtime2msec(dvd_time_t * dt)
 
     if( fps > 0 )
     {
-        ms += ((dt->frame_u & 0x30) >> 3) * 5 +
-              (dt->frame_u & 0x0f) * 1000.0 / fps;
+        ms += (((dt->frame_u & 0x30) >> 3) * 5 +
+                (dt->frame_u & 0x0f)) * 1000.0 / fps;
     }
 
     return ms;

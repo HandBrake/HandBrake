@@ -13,6 +13,7 @@
 
 #include "ghbcompat.h"
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 #include <gio/gio.h>
 #include "hb.h"
 #include "settings.h"
@@ -93,13 +94,13 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
     if (!vqtype)
         pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
-    const gchar *points = "Chapters";
+    const gchar *points = _("Chapters");
     if (ghb_settings_combo_int(settings, "PtoPType") == 0)
-        points = "Chapters";
+        points = _("Chapters");
     else if (ghb_settings_combo_int(settings, "PtoPType") == 1)
-        points = "Seconds";
+        points = _("Seconds");
     else if (ghb_settings_combo_int(settings, "PtoPType") == 2)
-        points = "Frames";
+        points = _("Frames");
     info = g_strdup_printf 
     (
         "<big><b>%s</b></big> "
@@ -172,7 +173,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         g_string_append_printf(str, 
             "<b>Format:</b> <small>%s Container</small>\n", container);
     }
-    if (mux == HB_MUX_MP4)
+    if (mux & HB_MUX_MASK_MP4)
     {
         gboolean ipod, http, large;
 
@@ -549,11 +550,11 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
         if (strcmp(dest, filename) == 0)
         {
             message = g_strdup_printf(
-                        "Destination: %s\n\n"
+                        _("Destination: %s\n\n"
                         "Another queued job has specified the same destination.\n"
-                        "Do you want to overwrite?",
+                        "Do you want to overwrite?"),
                         dest);
-            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Overwrite"))
+            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Overwrite")))
             {
                 g_free(filename);
                 g_free(dest);
@@ -569,10 +570,10 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
     if (!g_file_test(destdir, G_FILE_TEST_IS_DIR))
     {
         message = g_strdup_printf(
-                    "Destination: %s\n\n"
-                    "This is not a valid directory.",
+                    _("Destination: %s\n\n"
+                    "This is not a valid directory."),
                     destdir);
-        ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+        ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
         g_free(dest);
         g_free(message);
         g_free(destdir);
@@ -583,10 +584,10 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
     if (g_access(destdir, R_OK|W_OK) != 0)
     {
         message = g_strdup_printf(
-                    "Destination: %s\n\n"
-                    "Can not read or write the directory.",
+                    _("Destination: %s\n\n"
+                    "Can not read or write the directory."),
                     destdir);
-        ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+        ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
         g_free(dest);
         g_free(message);
         g_free(destdir);
@@ -614,10 +615,10 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                 if (size < fsize)
                 {
                     message = g_strdup_printf(
-                                "Destination filesystem is almost full: %uM free\n\n"
-                                "Encode may be incomplete if you proceed.\n",
+                                _("Destination filesystem is almost full: %uM free\n\n"
+                                "Encode may be incomplete if you proceed.\n"),
                                 (guint)(size / (1024L*1024L)));
-                    if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Proceed"))
+                    if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Proceed")))
                     {
                         g_free(dest);
                         g_free(message);
@@ -635,11 +636,11 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
     if (g_file_test(dest, G_FILE_TEST_EXISTS))
     {
         message = g_strdup_printf(
-                    "Destination: %s\n\n"
+                    _("Destination: %s\n\n"
                     "File already exists.\n"
-                    "Do you want to overwrite?",
+                    "Do you want to overwrite?"),
                     dest);
-        if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Overwrite"))
+        if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Overwrite")))
         {
             g_free(dest);
             g_free(message);
@@ -1028,60 +1029,60 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     {
         gtk_widget_set_sensitive (widget, TRUE);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Stop");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Stop Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Encoding"));
     }
     else
     {
         gtk_widget_set_sensitive (widget, show_start);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Start");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Start Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Start Encoding"));
     }
     widget = GHB_WIDGET (ud->builder, "queue_start2");
     if (show_stop)
     {
         gtk_widget_set_sensitive (widget, TRUE);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Stop");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Stop Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Encoding"));
     }
     else
     {
         gtk_widget_set_sensitive (widget, show_start);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Start");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Start Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Start Encoding"));
     }
     widget = GHB_WIDGET (ud->builder, "queue_pause1");
     if (paused)
     {
         gtk_widget_set_sensitive (widget, show_stop);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Resume");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Resume Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Resume"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Resume Encoding"));
     }
     else
     {
         gtk_widget_set_sensitive (widget, show_stop);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-pause");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Pause");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Pause Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Pause"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Pause Encoding"));
     }
     widget = GHB_WIDGET (ud->builder, "queue_pause2");
     if (paused)
     {
         gtk_widget_set_sensitive (widget, show_stop);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Resume");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Resume Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Resume"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Resume Encoding"));
     }
     else
     {
         gtk_widget_set_sensitive (widget, show_stop);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-pause");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Pause");
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Pause Encoding");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Pause"));
+        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Pause Encoding"));
     }
 
     action = GHB_ACTION (ud->builder, "queue_start_menu");
@@ -1090,15 +1091,15 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         gtk_action_set_sensitive (action, TRUE);
 #if GTK_CHECK_VERSION(2, 16, 0)
         gtk_action_set_icon_name(action, "hb-stop");
-        gtk_action_set_label(action, "S_top Queue");
-        gtk_action_set_tooltip(action, "Stop Encoding");
+        gtk_action_set_label(action, _("S_top Queue"));
+        gtk_action_set_tooltip(action, _("Stop Encoding"));
 #else
         g_object_set_property(G_OBJECT(action), "icon-name", 
                                             ghb_string_value("hb-stop"));
         g_object_set_property(G_OBJECT(action), "label",
-                                            ghb_string_value("S_top Queue"));
+                                            ghb_string_value(_("S_top Queue")));
         g_object_set_property(G_OBJECT(action), "tooltip",
-                                            ghb_string_value("Stop Encoding"));
+                                            ghb_string_value(_("Stop Encoding")));
 #endif
     }
     else
@@ -1106,15 +1107,15 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         gtk_action_set_sensitive (action, show_start);
 #if GTK_CHECK_VERSION(2, 16, 0)
         gtk_action_set_icon_name(action, "hb-start");
-        gtk_action_set_label(action, "_Start Queue");
-        gtk_action_set_tooltip(action, "Start Encoding");
+        gtk_action_set_label(action, _("_Start Queue"));
+        gtk_action_set_tooltip(action, _("Start Encoding"));
 #else
         g_object_set_property(G_OBJECT(action), "icon-name", 
                                             ghb_string_value("hb-start"));
         g_object_set_property(G_OBJECT(action), "label",
-                                            ghb_string_value("_Start Queue"));
+                                            ghb_string_value(_("_Start Queue")));
         g_object_set_property(G_OBJECT(action), "tooltip",
-                                            ghb_string_value("Start Encoding"));
+                                            ghb_string_value(_("Start Encoding")));
 #endif
     }
     action = GHB_ACTION (ud->builder, "queue_pause_menu");
@@ -1129,9 +1130,9 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         g_object_set_property(G_OBJECT(action), "icon-name", 
                                         ghb_string_value("hb-start"));
         g_object_set_property(G_OBJECT(action), "label",
-                                        ghb_string_value("_Resume Queue"));
+                                        ghb_string_value(_("_Resume Queue")));
         g_object_set_property(G_OBJECT(action), "tooltip",
-                                        ghb_string_value("Resume Encoding"));
+                                        ghb_string_value(_("Resume Encoding")));
 #endif
     }
     else
@@ -1139,15 +1140,15 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         gtk_action_set_sensitive (action, show_stop);
 #if GTK_CHECK_VERSION(2, 16, 0)
         gtk_action_set_icon_name(action, "hb-pause");
-        gtk_action_set_label(action, "_Pause Queue");
-        gtk_action_set_tooltip(action, "Pause Encoding");
+        gtk_action_set_label(action, _("_Pause Queue"));
+        gtk_action_set_tooltip(action, _("Pause Encoding"));
 #else
         g_object_set_property(G_OBJECT(action), "icon-name", 
                                         ghb_string_value("hb-pause"));
         g_object_set_property(G_OBJECT(action), "label",
-                                        ghb_string_value("_Pause Queue"));
+                                        ghb_string_value(_("_Pause Queue")));
         g_object_set_property(G_OBJECT(action), "tooltip",
-                                        ghb_string_value("Pause Encoding"));
+                                        ghb_string_value(_("Pause Encoding")));
 #endif
     }
 }
@@ -1180,8 +1181,8 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING | 
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
     {
-        ghb_cancel_encode(ud, "You are currently encoding.  "
-                                "What would you like to do?");
+        ghb_cancel_encode(ud, _("You are currently encoding.  "
+                                "What would you like to do?\n\n"));
         return;
     }
 
@@ -1260,12 +1261,9 @@ find_pid:
     if (unfinished)
     {
         message = g_strdup_printf(
-                    "You have %d unfinished job%s in a saved queue.\n\n"
-                    "Would you like to reload %s?",
-                    unfinished, 
-                    (unfinished > 1) ? "s" : "",
-                    (unfinished > 1) ? "them" : "it");
-        if (ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "No", "Yes"))
+                    _("You have %d unfinished job(s) in a saved queue.\n\n"
+                    "Would you like to reload them?"), unfinished);
+        if (ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("No"), _("Yes")))
         {
             GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
             gtk_widget_show (widget);

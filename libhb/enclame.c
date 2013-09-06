@@ -145,9 +145,10 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
         }
     }
 
-    buf        = hb_buffer_init( pv->output_bytes );
-    buf->s.start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
-    buf->s.stop  = buf->s.start + 90000 * 1152 / audio->config.out.samplerate;
+    buf             = hb_buffer_init( pv->output_bytes );
+    buf->s.start    = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
+    buf->s.duration = (double)90000 * 1152 / audio->config.out.samplerate;
+    buf->s.stop     = buf->s.start + buf->s.duration;
     pv->pts = buf->s.stop;
     buf->size  = lame_encode_buffer_float( 
             pv->lame, samples[0], samples[1],

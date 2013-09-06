@@ -114,11 +114,13 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
     /* get the 3 headers */
     vorbis_analysis_headerout(&pv->vd, &pv->vc,
                               &header[0], &header[1], &header[2]);
+    ogg_packet *pheader;
     for (i = 0; i < 3; i++)
     {
-        memcpy(w->config->vorbis.headers[i], &header[i], sizeof(ogg_packet));
-        memcpy(w->config->vorbis.headers[i] + sizeof(ogg_packet),
-               header[i].packet, header[i].bytes);
+        pheader = (ogg_packet*)w->config->theora.headers[i];
+        memcpy(pheader, &header[i], sizeof(ogg_packet));
+        pheader->packet = w->config->theora.headers[i] + sizeof(ogg_packet);
+        memcpy(pheader->packet, header[i].packet, header[i].bytes );
     }
 
     pv->input_samples = pv->out_discrete_channels * OGGVORBIS_FRAME_SIZE;
@@ -180,10 +182,8 @@ static hb_buffer_t * Flush( hb_work_object_t * w )
 
         if( vorbis_bitrate_flushpacket( &pv->vd, &op ) )
         {
-            buf = hb_buffer_init( sizeof( ogg_packet ) + op.bytes );
-            memcpy( buf->data, &op, sizeof( ogg_packet ) );
-            memcpy( buf->data + sizeof( ogg_packet ), op.packet,
-                    op.bytes );
+            buf = hb_buffer_init( op.bytes );
+            memcpy( buf->data, op.packet, op.bytes );
             blocksize = vorbis_packet_blocksize(&pv->vi, &op);
 
             buf->s.type = AUDIO_BUF;
@@ -191,6 +191,7 @@ static hb_buffer_t * Flush( hb_work_object_t * w )
 
             buf->s.start = (int64_t)(vorbis_granule_time(&pv->vd, op.granulepos) * 90000);
             buf->s.stop  = (int64_t)(vorbis_granule_time(&pv->vd, (pv->prev_blocksize + blocksize)/4 + op.granulepos) * 90000);
+            buf->s.duration = buf->s.stop - buf->s.start;
             /* The stop time isn't accurate for the first ~3 packets, as the actual blocksize depends on the previous _and_ current packets. */
             pv->prev_blocksize = blocksize;
             return buf;

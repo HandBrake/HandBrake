@@ -865,6 +865,10 @@ skip_preview:
         title->color_transfer = vid_info.color_transfer;
         title->color_matrix = vid_info.color_matrix;
 
+#ifdef USE_QSV
+        title->qsv_decode_support = vid_info.qsv_decode_support;
+#endif
+
         // compute the aspect ratio based on the storage dimensions and the
         // pixel aspect ratio (if supplied) or just storage dimensions if no PAR.
         title->aspect = (double)title->width / (double)title->height;

@@ -1278,6 +1278,23 @@
         [super keyDown:event];
 }
 
+- (void)scrollWheel:(NSEvent *)theEvent
+{
+    if (!fEncodeState)
+    {
+        if ([theEvent deltaY] < 0)
+        {
+            [fPictureSlider setIntegerValue:fPicture < [fPictureSlider maxValue] ? fPicture + 1 : fPicture];
+            [self pictureSliderChanged:self];
+        }
+        else if ([theEvent deltaY] > 0)
+        {
+            [fPictureSlider setIntegerValue:fPicture > [fPictureSlider minValue] ? fPicture - 1 : fPicture];
+            [self pictureSliderChanged:self];
+        }
+    }
+}
+
 #pragma mark *** QTTime Utilities ***
 
 	// convert a time value (long) to a QTTime structure

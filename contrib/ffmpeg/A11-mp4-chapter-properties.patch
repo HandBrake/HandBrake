@@ -1,0 +1,47 @@
+From 9393762b54c17abd736f8d5dd96cd22c334989da Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins.hb@gmail.com>
+Date: Fri, 10 May 2013 09:19:16 -0700
+Subject: [PATCH 9/9] movenc: Make chapter track QuickTime compatible
+
+QuickTime requires that the stsd.text box be completely filled in.
+---
+ libavformat/movenc.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index bc77a6f..96adfd7 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -2982,12 +2982,17 @@ static void mov_create_chapter_track(AVFormatContext *s, int tracknum)
+     MOVTrack *track = &mov->tracks[tracknum];
+     AVPacket pkt = { .stream_index = tracknum, .flags = AV_PKT_FLAG_KEY };
+     int i, len;
++    // These properties are required to make QT recognize the chapter track
++    uint8_t chapter_properties[43] = {0, 0, 0, 0, 0, 0, 0, 1,};
+ 
+     track->mode = mov->mode;
+     track->tag = MKTAG('t','e','x','t');
+     track->timescale = MOV_TIMESCALE;
+     track->enc = avcodec_alloc_context3(NULL);
+     track->enc->codec_type = AVMEDIA_TYPE_SUBTITLE;
++    track->enc->extradata = av_malloc(43);
++    track->enc->extradata_size = 43;
++    memcpy(track->enc->extradata, chapter_properties, 43);
+ 
+     for (i = 0; i < s->nb_chapters; i++) {
+         AVChapter *c = s->chapters[i];
+@@ -3443,8 +3448,10 @@ static int mov_write_trailer(AVFormatContext *s)
+         mov_write_mfra_tag(pb, mov);
+     }
+ 
+-    if (mov->chapter_track)
++    if (mov->chapter_track) {
++        av_free(mov->tracks[mov->chapter_track].enc->extradata);
+         av_freep(&mov->tracks[mov->chapter_track].enc);
++    }
+ 
+     for (i=0; i<mov->nb_streams; i++) {
+         if (mov->tracks[i].tag == MKTAG('r','t','p',' '))
+-- 
+1.8.1.4
+

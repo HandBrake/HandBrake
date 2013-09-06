@@ -280,16 +280,16 @@ class Display
     end
     
     #Video encoder
-    if hash["VideoEncoder"] != "MPEG-4 (FFmpeg)"
-      commandString << " -e "
-      case hash["VideoEncoder"]
-      when /x264/
-        commandString << "x264"
-      when /Theora/
-        commandString << "theora"
-      when /MPEG/
-        commandString << "ffmpeg2"
-      end
+    commandString << " -e "
+    case hash["VideoEncoder"]
+    when /x264/
+      commandString << "x264"
+    when /Theora/
+      commandString << "theora"
+    when /MPEG-4/
+      commandString << "ffmpeg4"
+    when /MPEG-2/
+      commandString << "ffmpeg2"
     end
 
     #VideoRateControl
@@ -342,23 +342,23 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ffac3"
+          audioEncoders << "ac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (FDK)"
-          audioEncoders << "fdk_aac"
         when "AAC (faac)"
           audioEncoders << "faac"
-        when "AAC (ffmpeg)"
-          audioEncoders << "ffaac"
-        when "AAC (CoreAudio)"
-          audioEncoders << "ca_aac"
+        when "AAC (ffmpeg)", "AAC (avcodec)"
+          audioEncoders << "av_aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
         when "HE-AAC (FDK)"
           audioEncoders << "fdk_haac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
         when "HE-AAC (CoreAudio)"
           audioEncoders << "ca_haac"
         when /Vorbis/
@@ -366,11 +366,11 @@ class Display
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
-          audioEncoders << "lame"
-        when "FLAC (ffmpeg)"
-          audioEncoders << "ffflac"
-        when "FLAC (24-bit)"
-          audioEncoders << "ffflac24"
+          audioEncoders << "mp3"
+        when "FLAC (ffmpeg)", "FLAC 16-bit"
+          audioEncoders << "flac16"
+        when "FLAC (24-bit)", "FLAC 24-bit"
+          audioEncoders << "flac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end
@@ -467,17 +467,27 @@ class Display
     
     case hash["AudioEncoderFallback"]
       when /AC3/
-        audioEncoderFallback << "ffac3"
-      when "AAC (ffmpeg)"
-        audioEncoderFallback << "ffaac"
-      when /AAC/
+        audioEncoderFallback << "ac3"
+      when "AAC (faac)"
         audioEncoderFallback << "faac"
+      when "AAC (ffmpeg)", "AAC (avcodec)"
+        audioEncoderFallback << "av_aac"
+      when "AAC (FDK)"
+        audioEncoderFallback << "fdk_aac"
+      when "HE-AAC (FDK)"
+        audioEncoderFallback << "fdk_haac"
+      when "AAC (CoreAudio)"
+        audioEncoderFallback << "ca_aac"
+      when "HE-AAC (CoreAudio)"
+        audioEncoderFallback << "ca_haac"
       when /Vorbis/
         audioEncoderFallback << "vorbis"
       when /MP3/
-        audioEncoderFallback << "lame"
-      when /FLAC/
-        audioEncoderFallback << "ffflac"
+        audioEncoderFallback << "mp3"
+      when "FLAC (ffmpeg)", "FLAC 16-bit"
+        audioEncoderFallback << "flac16"
+      when "FLAC (24-bit)", "FLAC 24-bit"
+        audioEncoderFallback << "flac24"
     end
     
     if audioEncoderFallback.size > 0
@@ -678,16 +688,16 @@ class Display
     commandString << '+ ' << hash["PresetName"] << ":"
         
     #Video encoder
-    if hash["VideoEncoder"] != "MPEG-4 (FFmpeg)"
-      commandString << " -e "
-      case hash["VideoEncoder"]
-      when /x264/
-        commandString << "x264"
-      when /Theora/
-        commandString << "theora"
-      when /MPEG/
-        commandString << "ffmpeg2"
-      end
+    commandString << " -e "
+    case hash["VideoEncoder"]
+    when /x264/
+      commandString << "x264"
+    when /Theora/
+      commandString << "theora"
+    when /MPEG-4/
+      commandString << "ffmpeg4"
+    when /MPEG-2/
+      commandString << "ffmpeg2"
     end
 
     #VideoRateControl
@@ -740,23 +750,23 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ffac3"
+          audioEncoders << "ac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (FDK)"
-          audioEncoders << "fdk_aac"
         when "AAC (faac)"
           audioEncoders << "faac"
-        when "AAC (ffmpeg)"
-          audioEncoders << "ffaac"
-        when "AAC (CoreAudio)"
-          audioEncoders << "ca_aac"
+        when "AAC (ffmpeg)", "AAC (avcodec)"
+          audioEncoders << "av_aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
         when "HE-AAC (FDK)"
           audioEncoders << "fdk_haac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
         when "HE-AAC (CoreAudio)"
           audioEncoders << "ca_haac"
         when /Vorbis/
@@ -764,11 +774,11 @@ class Display
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
-          audioEncoders << "lame"
-        when "FLAC (ffmpeg)"
-          audioEncoders << "ffflac"
-        when "FLAC (24-bit)"
-          audioEncoders << "ffflac24"
+          audioEncoders << "mp3"
+        when "FLAC (ffmpeg)", "FLAC 16-bit"
+          audioEncoders << "flac16"
+        when "FLAC (24-bit)", "FLAC 24-bit"
+          audioEncoders << "flac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end
@@ -865,17 +875,27 @@ class Display
     
     case hash["AudioEncoderFallback"]
       when /AC3/
-        audioEncoderFallback << "ffac3"
-      when "AAC (ffmpeg)"
-        audioEncoderFallback << "ffaac"
-      when /AAC/
+        audioEncoderFallback << "ac3"
+      when "AAC (faac)"
         audioEncoderFallback << "faac"
+      when "AAC (ffmpeg)", "AAC (avcodec)"
+        audioEncoderFallback << "av_aac"
+      when "AAC (FDK)"
+        audioEncoderFallback << "fdk_aac"
+      when "HE-AAC (FDK)"
+        audioEncoderFallback << "fdk_haac"
+      when "AAC (CoreAudio)"
+        audioEncoderFallback << "ca_aac"
+      when "HE-AAC (CoreAudio)"
+        audioEncoderFallback << "ca_haac"
       when /Vorbis/
         audioEncoderFallback << "vorbis"
       when /MP3/
-        audioEncoderFallback << "lame"
-      when /FLAC/
-        audioEncoderFallback << "ffflac"
+        audioEncoderFallback << "mp3"
+      when "FLAC (ffmpeg)", "FLAC 16-bit"
+        audioEncoderFallback << "flac16"
+      when "FLAC (24-bit)", "FLAC 24-bit"
+        audioEncoderFallback << "flac24"
     end
     
     if audioEncoderFallback.size > 0
@@ -1080,16 +1100,16 @@ class Display
     end
     
     #Video encoder
-    if hash["VideoEncoder"] != "MPEG-4 (FFmpeg)"
-      commandString << "vcodec = "
-      case hash["VideoEncoder"]
-      when /x264/
-        commandString << "HB_VCODEC_X264;\n    "
-      when /Theora/
-        commandString << "HB_VCODEC_THEORA;\n    "        
-      when /MPEG/
-        commandString << "HB_VCODEC_FFMPEG_MPEG2;\n    "
-      end
+    commandString << "vcodec = "
+    case hash["VideoEncoder"]
+    when /x264/
+      commandString << "HB_VCODEC_X264;\n    "
+    when /Theora/
+      commandString << "HB_VCODEC_THEORA;\n    "
+    when /MPEG-4/
+      commandString << "HB_VCODEC_FFMPEG_MPEG4;\n    "
+    when /MPEG-2/
+      commandString << "HB_VCODEC_FFMPEG_MPEG2;\n    "
     end
 
     #VideoRateControl
@@ -1144,23 +1164,23 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ffac3"
+          audioEncoders << "ac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (FDK)"
-          audioEncoders << "fdk_aac"
         when "AAC (faac)"
           audioEncoders << "faac"
-        when "AAC (ffmpeg)"
-          audioEncoders << "ffaac"
-        when "AAC (CoreAudio)"
-          audioEncoders << "ca_aac"
+        when "AAC (ffmpeg)", "AAC (avcodec)"
+          audioEncoders << "av_aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
         when "HE-AAC (FDK)"
           audioEncoders << "fdk_haac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
         when "HE-AAC (CoreAudio)"
           audioEncoders << "ca_haac"
         when /Vorbis/
@@ -1168,11 +1188,11 @@ class Display
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
-          audioEncoders << "lame"
-        when "FLAC (ffmpeg)"
-          audioEncoders << "ffflac"
-        when "FLAC (24-bit)"
-          audioEncoders << "ffflac24"
+          audioEncoders << "mp3"
+        when "FLAC (ffmpeg)", "FLAC 16-bit"
+          audioEncoders << "flac16"
+        when "FLAC (24-bit)", "FLAC 24-bit"
+          audioEncoders << "flac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end
@@ -1287,27 +1307,27 @@ class Display
     
     case hash["AudioEncoderFallback"]
       when /AC3/
-        audioEncoderFallback << "ffac3"
-      when "AAC (FDK)"
-        audioEncoderFallback << "fdk_aac"
+        audioEncoderFallback << "ac3"
       when "AAC (faac)"
         audioEncoderFallback << "faac"
-      when "AAC (ffmpeg)"
-        audioEncoderFallback << "ffaac"
-      when "AAC (CoreAudio)"
-        audioEncoderFallback << "ca_aac"
+      when "AAC (ffmpeg)", "AAC (avcodec)"
+        audioEncoderFallback << "av_aac"
+      when "AAC (FDK)"
+        audioEncoderFallback << "fdk_aac"
       when "HE-AAC (FDK)"
         audioEncoderFallback << "fdk_haac"
+      when "AAC (CoreAudio)"
+        audioEncoderFallback << "ca_aac"
       when "HE-AAC (CoreAudio)"
         audioEncoderFallback << "ca_haac"
       when /Vorbis/
         audioEncoderFallback << "vorbis"
       when /MP3/
-        audioEncoderFallback << "lame"
-      when "FLAC (ffmpeg)"
-        audioEncoderFallback << "ffflac"
-      when "FLAC (24-bit)"
-        audioEncoderFallback << "ffflac24"
+        audioEncoderFallback << "mp3"
+      when "FLAC (ffmpeg)", "FLAC 16-bit"
+        audioEncoderFallback << "flac16"
+      when "FLAC (24-bit)", "FLAC 24-bit"
+        audioEncoderFallback << "flac24"
     end
     
     if audioEncoderFallback.size > 0
@@ -1538,16 +1558,16 @@ class Display
     commandString << "+ " << hash["PresetName"] << ": "
         
     #Video encoder
-    if hash["VideoEncoder"] != "MPEG-4 (FFmpeg)"
-      commandString << " -e "
-      case hash["VideoEncoder"]
-      when /x264/
-        commandString << "x264 "
-      when /Theora/
-        commandString << "theora "
-      when /MPEG/
-        commandString << "ffmpeg2 "
-      end
+    commandString << " -e "
+    case hash["VideoEncoder"]
+    when /x264/
+      commandString << "x264 "
+    when /Theora/
+      commandString << "theora "
+    when /MPEG-4/
+      commandString << "ffmpeg4 "
+    when /MPEG-2/
+      commandString << "ffmpeg2 "
     end
 
     #VideoRateControl
@@ -1600,23 +1620,23 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ffac3"
+          audioEncoders << "ac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (FDK)"
-          audioEncoders << "fdk_aac"
         when "AAC (faac)"
           audioEncoders << "faac"
-        when "AAC (ffmpeg)"
-          audioEncoders << "ffaac"
-        when "AAC (CoreAudio)"
-          audioEncoders << "ca_aac"
+        when "AAC (ffmpeg)", "AAC (avcodec)"
+          audioEncoders << "av_aac"
+        when "AAC (FDK)"
+          audioEncoders << "fdk_aac"
         when "HE-AAC (FDK)"
           audioEncoders << "fdk_haac"
+        when "AAC (CoreAudio)"
+          audioEncoders << "ca_aac"
         when "HE-AAC (CoreAudio)"
           audioEncoders << "ca_haac"
         when /Vorbis/
@@ -1624,11 +1644,11 @@ class Display
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
-          audioEncoders << "lame"
-        when "FLAC (ffmpeg)"
-          audioEncoders << "ffflac"
-        when "FLAC (24-bit)"
-          audioEncoders << "ffflac24"
+          audioEncoders << "mp3"
+        when "FLAC (ffmpeg)", "FLAC 16-bit"
+          audioEncoders << "flac16"
+        when "FLAC (24-bit)", "FLAC 24-bit"
+          audioEncoders << "flac24"
         when /Auto Pass/
           audioEncoders << "copy"
       end
@@ -1725,17 +1745,27 @@ class Display
     
     case hash["AudioEncoderFallback"]
       when /AC3/
-        audioEncoderFallback << "ffac3"
-      when "AAC (ffmpeg)"
-        audioEncoderFallback << "ffaac"
-      when /AAC/
+        audioEncoderFallback << "ac3"
+      when "AAC (faac)"
         audioEncoderFallback << "faac"
+      when "AAC (ffmpeg)", "AAC (avcodec)"
+        audioEncoderFallback << "av_aac"
+      when "AAC (FDK)"
+        audioEncoderFallback << "fdk_aac"
+      when "HE-AAC (FDK)"
+        audioEncoderFallback << "fdk_haac"
+      when "AAC (CoreAudio)"
+        audioEncoderFallback << "ca_aac"
+      when "HE-AAC (CoreAudio)"
+        audioEncoderFallback << "ca_haac"
       when /Vorbis/
         audioEncoderFallback << "vorbis"
       when /MP3/
-        audioEncoderFallback << "lame"
-      when /FLAC/
-        audioEncoderFallback << "ffflac"
+        audioEncoderFallback << "mp3"
+      when "FLAC (ffmpeg)", "FLAC 16-bit"
+        audioEncoderFallback << "flac16"
+      when "FLAC (24-bit)", "FLAC 24-bit"
+        audioEncoderFallback << "flac24"
     end
     
     if audioEncoderFallback.size > 0

@@ -141,7 +141,6 @@ gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_get_title_number(gint titleindex);
 int ghb_get_title_count();
 gint ghb_subtitle_track_source(GValue *settings, gint track);
-const char* ghb_subtitle_track_source_name(GValue *settings, gint track);
 const gchar* ghb_subtitle_track_lang(GValue *settings, gint track);
 
 gboolean ghb_validate_vquality(GValue *settings);
