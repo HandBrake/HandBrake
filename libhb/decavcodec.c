@@ -106,7 +106,7 @@ struct hb_work_private_s
 #ifdef USE_HWD
     hb_va_dxva2_t   *dxva2;
     uint8_t         *dst_frame;
-    hb_oclscale_t   *os;
+    hb_oclscale_t   *opencl_scale;
 #endif
     hb_audio_resample_t *resample;
 };
@@ -306,22 +306,9 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         hb_audio_resample_free(pv->resample);
 #ifdef USE_HWD
-        if ( pv->os )
+        if ( pv->opencl_scale )
         {
-#ifdef USE_OPENCL
-            CL_FREE( pv->os->h_in_buf );
-            CL_FREE( pv->os->h_out_buf );
-            CL_FREE( pv->os->v_out_buf );
-            CL_FREE( pv->os->h_coeff_y );
-            CL_FREE( pv->os->h_coeff_uv );
-            CL_FREE( pv->os->h_index_y );
-            CL_FREE( pv->os->h_index_uv );
-            CL_FREE( pv->os->v_coeff_y );
-            CL_FREE( pv->os->v_coeff_uv );
-            CL_FREE( pv->os->v_index_y );
-            CL_FREE( pv->os->v_index_uv );
-#endif
-            free( pv->os );
+            free( pv->opencl_scale );
         }
         if ( pv->dxva2 )
         {
@@ -634,24 +621,15 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         hb_buffer_t *buf;
         int ww, hh;
 
-        if( (w > pv->job->width || h > pv->job->height) && (pv->job->use_opencl) 
-            && (pv->job->use_decomb == 0) && (pv->job->use_detelecine == 0) )
-        {
-            buf = hb_video_buffer_init( pv->job->width, pv->job->height );
-            ww = pv->job->width;
-            hh = pv->job->height;
-        }
-        else
-        {
-            buf = hb_video_buffer_init( w, h );
-            ww = w;
-            hh = h;
-        }
+        buf = hb_video_buffer_init( w, h );
+        ww = w;
+        hh = h;
+
         if( !pv->dst_frame )
         {
             pv->dst_frame = malloc( ww * hh * 3 / 2 );
         }
-        if( hb_va_extract( pv->dxva2, pv->dst_frame, frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->os, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
+        if( hb_va_extract( pv->dxva2, pv->dst_frame, frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->opencl_scale, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
         {
             hb_log( "hb_va_Extract failed!!!!!!" );
         }
@@ -1205,8 +1183,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                 pv->context->get_buffer = get_frame_buf_hwd;
                 pv->context->release_buffer = hb_ffmpeg_release_frame_buf;
                 pv->context->get_format = hb_ffmpeg_get_format;
-                pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
-                memset( pv->os, 0, sizeof( hb_oclscale_t ) );
+                pv->opencl_scale = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
+                memset( pv->opencl_scale, 0, sizeof( hb_oclscale_t ) );
                 pv->threads = 1;
 
             }

@@ -16,111 +16,43 @@
 #include <math.h>
 #include "common.h"
 #include "openclwrapper.h"
-#define MaxFilterLength 16
 #define FILTER_LEN 4
 
-inline double hb_fit_gauss_kernel( double x )
+#define _A -0.5f
+
+cl_float cubic(cl_float x)
 {
-    double powNum = -1 * M_PI;
+    if (x < 0)
+        x = -x;
 
-    powNum *= x;
-
-    powNum *= x;
-
-    return exp( powNum );
+    if (x < 1)
+        return (_A + 2.0f) * (x * x * x) - (_A + 3.0f) * (x * x) + 0 + 1;
+    else if (x < 2)
+        return (_A) * (x * x * x) - (5.0f * _A) * (x * x) + (8.0f * _A) * x - (4.0f * _A);
+    else
+        return 0;
 }
 
-/**
- * Using gaussian algorithm to calculate the scale filter
- */
-static void hb_set_gauss_interpolation( float *pcoeff, int *pmappedindex, int targetdatalength, int srcdatalength, int filterLength, float bias )
+
+cl_float *hb_bicubic_weights(cl_float scale, int length)
 {
-    int i, j;
+    cl_float *weights = (cl_float*) malloc(length * sizeof(cl_float) * 4);
 
-    float gausskernel[MaxFilterLength];
-
-    int half = filterLength / 2;
-
-    float scalerate = (float)(srcdatalength) / targetdatalength;
-
-    for( i = 0; i < targetdatalength; ++i )
+    int i;    // C rocks
+    cl_float *out = weights;
+    for (i = 0; i < length; ++i)
     {
-        float flindex = i * scalerate + bias;
-
-        if( flindex > (srcdatalength - 1))
-        {
-            flindex -= (int)(flindex - (srcdatalength - 1));
-        }
-
-        int srcindex = (int)(flindex);
-
-        float t = flindex - srcindex;
-
-        for( j = 0; j < (int)half; j++ )
-        {
-            gausskernel[j] = (float)hb_fit_gauss_kernel((half - j) - 1 + t );
-        }
-
-        for( j = 0; j < (int)half; j++ )
-        {
-            gausskernel[half + j] = (float)hb_fit_gauss_kernel( j + 1 - t );
-        }
-
-        while( srcindex < (int)half - 1 )
-        {
-            /* -1 0 1  2
-            * M1 S P1 P2
-            *
-            * if srcindex is 0, M1 and S will be the same sample.  To keep the
-            * convolution kernel from having to check for edge conditions, move
-            * srcindex to 1, then slide down the coefficients
-            */
-            srcindex += 1;
-
-            gausskernel[0] += gausskernel[1];
-
-            for( j = 1; j < filterLength - 1; j++ )
-            {
-                gausskernel[j] = gausskernel[j + 1];
-            }
-
-            gausskernel[filterLength - 1] = 0;
-        }
-
-        while( srcindex >= srcdatalength - half )
-        {
-            /* If srcindex is near the edge, shift down srcindex and slide up
-            * the coefficients
-            */
-            srcindex -= 1;
-
-            gausskernel[3] += gausskernel[2];
-
-            for( j = filterLength - 2; j > 0; j-- )
-            {
-                gausskernel[j] = gausskernel[j - 1];
-            }
-
-            gausskernel[0] = 0;
-        }
-
-        *pmappedindex++ = srcindex - half + 1;
-
-        // Store normalized Gauss kernel
-
-        float sumtemp = 0;
-
-        for( j = 0; j < filterLength; ++j )
-        {
-            sumtemp += gausskernel[j];
-        }
-
-        for( j = 0; j < filterLength; ++j )
-        {
-            pcoeff[targetdatalength * j + i] = gausskernel[j] / sumtemp;
-        }
+        cl_float x = i / scale;
+        cl_float dx = x - (int)x;
+        *out++ = cubic(-dx - 1.0f);
+        *out++ = cubic(-dx);
+        *out++ = cubic(-dx + 1.0f);
+        *out++ = cubic(-dx + 2.0f);
     }
+    return weights;
 }
+
+int setupScaleWeights(cl_float xscale, cl_float yscale, int width, int height, hb_oclscale_t *os, KernelEnv *kenv);
 
 /**
 * executive scale using opencl
@@ -134,128 +66,147 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
 {
     cl_int status;
 
-    uint8_t *in_frame = data[0];
-    uint8_t *out_frame = data[1];
-    int in_frame_w = (int)data[2];
-    int in_frame_h = (int)data[3];
-    int out_frame_w = (int)data[4];
-    int out_frame_h = (int)data[5];
-    hb_oclscale_t *os = data[6];
+    cl_mem in_buf = data[0];
+    cl_mem out_buf = data[1];
+    int crop_top = data[2];
+    int crop_bottom = data[3];
+    int crop_left = data[4];
+    int crop_right = data[5];
+    int in_frame_w = (int)data[6];
+    int in_frame_h = (int)data[7];
+    int out_frame_w = (int)data[8];
+    int out_frame_h = (int)data[9];
+    hb_oclscale_t  *os = data[10];
+    hb_buffer_t *in = data[11];
+    hb_buffer_t *out = data[12];
 
-    if( os->use_ocl_mem )
-        os->h_in_buf = data[0];
-    int h_filter_len = FILTER_LEN;
-    int v_filter_len = FILTER_LEN;
-    //it will make the psnr lower when filter length is 4 in the condition that the video width is shorter than 960 and width is shorter than 544,so we set the filter length to 2
-    if( out_frame_w <= 960 && out_frame_h <= 544 ) 
+    if (os->initialized == 0)
     {
-        h_filter_len>>=1;
-        v_filter_len>>=1;
-    }
-    if( !os->h_out_buf )
-    {
-        hb_log( "OpenCL: Scaling With OpenCL" );
-        //malloc filter args
-        float *hf_y, *hf_uv, *vf_y, *vf_uv;
-        int   *hi_y, *hi_uv, *vi_y, *vi_uv;
-        hf_y =  (float*)malloc( sizeof(float)*out_frame_w * h_filter_len );
-        hf_uv = (float*)malloc( sizeof(float)*(out_frame_w>>1) * h_filter_len );
-        hi_y =  (int*)malloc( sizeof(int)*out_frame_w );
-        hi_uv = (int*)malloc( sizeof(int)*(out_frame_w>>1));
-        vf_y =  (float*)malloc( sizeof(float)*out_frame_h * v_filter_len );
-        vf_uv = (float*)malloc( sizeof(float)*(out_frame_h>>1) * v_filter_len );
-        vi_y =  (int*)malloc( sizeof(int)*out_frame_h );
-        vi_uv = (int*)malloc( sizeof(int)*(out_frame_h>>1) );
-        //get filter args
-        hb_set_gauss_interpolation( hf_y, hi_y, out_frame_w, in_frame_w, h_filter_len, 0 );
-        hb_set_gauss_interpolation( hf_uv, hi_uv, out_frame_w>>1, in_frame_w>>1, h_filter_len, 0 );
-        hb_set_gauss_interpolation( vf_y, vi_y, out_frame_h, in_frame_h, v_filter_len, 0 );
-        hb_set_gauss_interpolation( vf_uv, vi_uv, out_frame_h>>1, in_frame_h>>1, v_filter_len, 0 );
-        //create output buffer
-        if( !os->use_ocl_mem )
-        {
-            CREATEBUF( os->h_in_buf, CL_MEM_ALLOC_HOST_PTR | CL_MEM_READ_ONLY, sizeof(uint8_t)* in_frame_w * in_frame_h*3/2 );
-        }
-        CREATEBUF( os->h_out_buf, CL_MEM_WRITE_ONLY, sizeof(uint8_t) * out_frame_w * in_frame_h*3/2 );
-        CREATEBUF( os->v_out_buf, CL_MEM_WRITE_ONLY, sizeof(uint8_t) * out_frame_w * out_frame_h*3/2 );
-        //create horizontal filter buffer
-        CREATEBUF( os->h_coeff_y, CL_MEM_READ_ONLY, sizeof(float) * out_frame_w * h_filter_len );
-        CREATEBUF( os->h_coeff_uv, CL_MEM_READ_ONLY, sizeof(float) * (out_frame_w>>1) * h_filter_len );
-        CREATEBUF( os->h_index_y, CL_MEM_READ_ONLY, sizeof(int) * out_frame_w );
-        CREATEBUF( os->h_index_uv, CL_MEM_READ_ONLY, sizeof(int) * (out_frame_w>>1) );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->h_coeff_y, CL_TRUE, 0, sizeof(float) * out_frame_w * h_filter_len, hf_y, 0, NULL, NULL );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->h_coeff_uv, CL_TRUE, 0, sizeof(float) * (out_frame_w>>1) * h_filter_len, hf_uv, 0, NULL, NULL );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->h_index_y, CL_TRUE, 0, sizeof(int) * out_frame_w, hi_y, 0, NULL, NULL );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->h_index_uv, CL_TRUE, 0, sizeof(int) * (out_frame_w>>1), hi_uv, 0, NULL, NULL );
-        //create vertical filter buffer
-        CREATEBUF( os->v_coeff_y, CL_MEM_READ_ONLY, sizeof(float) * out_frame_h * v_filter_len );
-        CREATEBUF( os->v_coeff_uv, CL_MEM_READ_ONLY, sizeof(float) * (out_frame_h>>1) * v_filter_len );
-        CREATEBUF( os->v_index_y, CL_MEM_READ_ONLY, sizeof(int) * out_frame_h );
-        CREATEBUF( os->v_index_uv, CL_MEM_READ_ONLY, sizeof(int) * (out_frame_h>>1) );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->v_coeff_y, CL_TRUE, 0, sizeof(float) * out_frame_h * v_filter_len, vf_y, 0, NULL, NULL );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->v_coeff_uv, CL_TRUE, 0, sizeof(float) * (out_frame_h>>1) * v_filter_len, vf_uv, 0, NULL, NULL );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->v_index_y, CL_TRUE, 0, sizeof(int) * out_frame_h, vi_y, 0, NULL, NULL );
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->v_index_uv, CL_TRUE, 0, sizeof(int) * (out_frame_h>>1), vi_uv, 0, NULL, NULL );
-        //create horizontal kernel
-        os->h_kernel = clCreateKernel( kenv->program, "frame_h_scale", NULL );
-        OCLCHECK( clSetKernelArg, os->h_kernel, 1, sizeof(cl_mem), &os->h_coeff_y );
-        OCLCHECK( clSetKernelArg, os->h_kernel, 2, sizeof(cl_mem), &os->h_coeff_uv );
-        OCLCHECK( clSetKernelArg, os->h_kernel, 3, sizeof(cl_mem), &os->h_index_y );
-        OCLCHECK( clSetKernelArg, os->h_kernel, 4, sizeof(cl_mem), &os->h_index_uv );
-        OCLCHECK( clSetKernelArg, os->h_kernel, 6, sizeof(int), &in_frame_w );
-        OCLCHECK( clSetKernelArg, os->h_kernel, 7, sizeof(int), &h_filter_len );
-        //create vertical kernel
-        os->v_kernel = clCreateKernel( kenv->program, "frame_v_scale", NULL );
-        OCLCHECK( clSetKernelArg, os->v_kernel, 1, sizeof(cl_mem), &os->v_coeff_y );
-        OCLCHECK( clSetKernelArg, os->v_kernel, 2, sizeof(cl_mem), &os->v_coeff_uv );
-        OCLCHECK( clSetKernelArg, os->v_kernel, 3, sizeof(cl_mem), &os->v_index_y );
-        OCLCHECK( clSetKernelArg, os->v_kernel, 4, sizeof(cl_mem), &os->v_index_uv );
-        OCLCHECK( clSetKernelArg, os->v_kernel, 6, sizeof(int), &in_frame_h );
-        OCLCHECK( clSetKernelArg, os->v_kernel, 7, sizeof(int), &v_filter_len );
-        free( hf_y );
-        free( hf_uv );
-        free( vf_y );
-        free( vf_uv );
-        free( hi_y );
-        free( hi_uv );
-        free( vi_y );
-        free( vi_uv );
-    }
-    //start horizontal scaling kernel
+        hb_log( "Scaling With OpenCL" );
+        if (kenv->isAMD != 0)
+            hb_log( "Using Zero Copy");
+        // create the block kernel
+        cl_int status;
+        os->m_kernel = clCreateKernel( kenv->program, "frame_scale", &status );
 
-    if( !os->use_ocl_mem )
-    {
-        if( kenv->isAMD )
-        {
-            char *mapped = clEnqueueMapBuffer( kenv->command_queue, os->h_in_buf, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION, 0, sizeof(uint8_t) * in_frame_w * in_frame_h*3/2, 0, NULL, NULL, NULL );
-            memcpy( mapped, in_frame, sizeof(uint8_t) * in_frame_w * in_frame_h*3/2 );
-            clEnqueueUnmapMemObject( kenv->command_queue, os->h_in_buf, mapped, 0, NULL, NULL );
-        }
-        else
-        {
-            OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, os->h_in_buf, CL_TRUE, 0, sizeof(uint8_t) * in_frame_w * in_frame_h * 3/2, in_frame, 0, NULL, NULL );
-        }
+        os->initialized = 1;
     }
 
-    kenv->kernel = os->h_kernel;
-    size_t dims[2];
-    dims[0] = out_frame_w;
-    dims[1] = in_frame_h;
-    OCLCHECK( clSetKernelArg, kenv->kernel, 0, sizeof(cl_mem), &os->h_in_buf );
-    OCLCHECK( clSetKernelArg, kenv->kernel, 5, sizeof(cl_mem), &os->h_out_buf );
-    OCLCHECK( clEnqueueNDRangeKernel, kenv->command_queue, kenv->kernel, 2, NULL, dims, NULL, 0, NULL, NULL );
-    //start vertical scaling kernel
+    {
+        // Use the new kernel
+        cl_event events[5];
+        int eventCount = 0;
 
-    kenv->kernel = os->v_kernel;
-    dims[0] = out_frame_w;
-    dims[1] = out_frame_h;
-    OCLCHECK( clSetKernelArg, kenv->kernel, 0, sizeof(cl_mem), &os->h_out_buf );
-    OCLCHECK( clSetKernelArg, kenv->kernel, 5, sizeof(cl_mem), &os->v_out_buf );
-    OCLCHECK( clEnqueueNDRangeKernel, kenv->command_queue, kenv->kernel, 2, NULL, dims, NULL, 0, NULL, NULL );
-    OCLCHECK( clEnqueueReadBuffer, kenv->command_queue, os->v_out_buf, CL_TRUE, 0, sizeof(uint8_t) * out_frame_w * out_frame_h * 3/2, out_frame, 0, NULL, NULL );
+        if (kenv->isAMD == 0) {
+            status = clEnqueueUnmapMemObject(kenv->command_queue, in->cl.buffer, in->data, 0, NULL, &events[eventCount++]);
+            status = clEnqueueUnmapMemObject(kenv->command_queue, out->cl.buffer, out->data, 0, NULL, &events[eventCount++]);
+        }
+
+        cl_int srcPlaneOffset0 = in->plane[0].data - in->data;
+        cl_int srcPlaneOffset1 = in->plane[1].data - in->data;
+        cl_int srcPlaneOffset2 = in->plane[2].data - in->data;
+        cl_int srcRowWords0 = in->plane[0].stride;
+        cl_int srcRowWords1 = in->plane[1].stride;
+        cl_int srcRowWords2 = in->plane[2].stride;
+        cl_int dstPlaneOffset0 = out->plane[0].data - out->data;
+        cl_int dstPlaneOffset1 = out->plane[1].data - out->data;
+        cl_int dstPlaneOffset2 = out->plane[2].data - out->data;
+        cl_int dstRowWords0 = out->plane[0].stride;
+        cl_int dstRowWords1 = out->plane[1].stride;
+        cl_int dstRowWords2 = out->plane[2].stride;
+
+        if (crop_top != 0 || crop_bottom != 0 || crop_left != 0 || crop_right != 0) {
+            srcPlaneOffset0 += crop_left + crop_top * srcRowWords0;
+            srcPlaneOffset1 += crop_left / 2 + (crop_top / 2) * srcRowWords1;
+            srcPlaneOffset2 += crop_left / 2 + (crop_top / 2) * srcRowWords2;
+            in_frame_w = in_frame_w - crop_right - crop_left;
+            in_frame_h = in_frame_h - crop_bottom - crop_top;
+        }
+
+        cl_float xscale = (out_frame_w * 1.0f) / in_frame_w;
+        cl_float yscale = (out_frame_h * 1.0f) / in_frame_h;
+        setupScaleWeights(xscale, yscale, out_frame_w, out_frame_h, os, kenv);
+
+        OCLCHECK( clSetKernelArg, os->m_kernel, 0, sizeof(cl_mem), &out_buf );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 1, sizeof(cl_mem), &in_buf );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 2, sizeof(cl_float), &xscale );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 3, sizeof(cl_float), &yscale );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 4, sizeof(cl_int), &srcPlaneOffset0 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 5, sizeof(cl_int), &srcPlaneOffset1 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 6, sizeof(cl_int), &srcPlaneOffset2 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 7, sizeof(cl_int), &dstPlaneOffset0 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 8, sizeof(cl_int), &dstPlaneOffset1 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 9, sizeof(cl_int), &dstPlaneOffset2 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 10, sizeof(cl_int), &srcRowWords0 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 11, sizeof(cl_int), &srcRowWords1 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 12, sizeof(cl_int), &srcRowWords2 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 13, sizeof(cl_int), &dstRowWords0 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 14, sizeof(cl_int), &dstRowWords1 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 15, sizeof(cl_int), &dstRowWords2 );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 16, sizeof(int), &in_frame_w );        // FIXME: type mismatch
+        OCLCHECK( clSetKernelArg, os->m_kernel, 17, sizeof(int), &in_frame_h );        //
+        OCLCHECK( clSetKernelArg, os->m_kernel, 18, sizeof(int), &out_frame_w );        //
+        OCLCHECK( clSetKernelArg, os->m_kernel, 19, sizeof(int), &out_frame_h );        //
+        OCLCHECK( clSetKernelArg, os->m_kernel, 20, sizeof(cl_mem), &os->bicubic_x_weights );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 21, sizeof(cl_mem), &os->bicubic_y_weights );
+
+        size_t workOffset[] = { 0, 0, 0 };
+        size_t globalWorkSize[] = { 1, 1, 1 };
+        size_t localWorkSize[] = { 1, 1, 1 };
+
+        int xgroups = (out_frame_w + 63) / 64;
+        int ygroups = (out_frame_h + 15) / 16;
+
+        localWorkSize[0] = 64;
+        localWorkSize[1] = 1;
+        localWorkSize[2] = 1;
+        globalWorkSize[0] = xgroups * 64;
+        globalWorkSize[1] = ygroups;
+        globalWorkSize[2] = 3;
+
+        OCLCHECK( clEnqueueNDRangeKernel, kenv->command_queue, os->m_kernel, 3, workOffset, globalWorkSize, localWorkSize, eventCount, (eventCount == 0) ? NULL : &events[0], &events[eventCount] );
+        ++eventCount;
+
+        if (kenv->isAMD == 0) {
+            in->data = clEnqueueMapBuffer(kenv->command_queue, in->cl.buffer, CL_FALSE, CL_MAP_READ | CL_MAP_WRITE, 0, in->alloc, (eventCount == 0) ? 0 : 1, (eventCount == 0) ? NULL : &events[eventCount - 1], &events[eventCount], &status);
+            out->data = clEnqueueMapBuffer(kenv->command_queue, out->cl.buffer, CL_FALSE, CL_MAP_READ | CL_MAP_WRITE, 0, out->alloc, (eventCount == 0) ? 0 : 1, (eventCount == 0) ? NULL : &events[eventCount - 1], &events[eventCount + 1], &status);
+            eventCount += 2;
+        }
+
+        clFlush(kenv->command_queue);
+        clWaitForEvents(eventCount, &events[0]);
+        int i;
+        for (i = 0; i < eventCount; ++i)
+            clReleaseEvent(events[i]);
+    }
 
     return 1;
 }
+
+int setupScaleWeights(cl_float xscale, cl_float yscale, int width, int height, hb_oclscale_t *os, KernelEnv *kenv) {
+    cl_int status;
+    if (os->xscale != xscale || os->width < width) {
+        cl_float *xweights = hb_bicubic_weights(xscale, width);
+        CL_FREE(os->bicubic_x_weights);
+        CREATEBUF(os->bicubic_x_weights, CL_MEM_READ_ONLY, sizeof(cl_float) * width * 4);
+        OCLCHECK(clEnqueueWriteBuffer, kenv->command_queue, os->bicubic_x_weights, CL_TRUE, 0, sizeof(cl_float) * width * 4, xweights, 0, NULL, NULL );
+        os->width = width;
+        os->xscale = xscale;
+        free(xweights);
+    }
+
+    if ((os->yscale != yscale) || (os->height < height)) {
+        cl_float *yweights = hb_bicubic_weights(yscale, height);
+        CL_FREE(os->bicubic_y_weights);
+        CREATEBUF(os->bicubic_y_weights, CL_MEM_READ_ONLY, sizeof(cl_float) * height * 4);
+        OCLCHECK(clEnqueueWriteBuffer, kenv->command_queue, os->bicubic_y_weights, CL_TRUE, 0, sizeof(cl_float) * height * 4, yweights, 0, NULL, NULL );
+        os->height = height;
+        os->yscale = yscale;
+        free(yweights);
+    }
+    return 0;
+}
+
 
 /**
 * function describe: this function is used to scaling video frame. it uses the gausi scaling algorithm
@@ -267,44 +218,54 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
 *           outputWidth: the width of destination video frame
 *           outputHeight: the height of destination video frame
 */
-int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, int in_h, int out_w, int out_h, hb_oclscale_t  *os )
+
+
+static int s_scale_init_flag = 0;
+
+int do_scale_init()
 {
-    void *data[7];
-    static int init_flag = 0;
-    if( init_flag == 0 )
+    if ( s_scale_init_flag==0 )
     {
-        int st = hb_register_kernel_wrapper( "frame_h_scale", hb_ocl_scale_func );
+        int st = hb_register_kernel_wrapper( "frame_scale", hb_ocl_scale_func );
         if( !st )
         {
-            hb_log( "OpenCL: Register kernel[%s] failed", "frame_h_scale" );
+            hb_log( "register kernel[%s] failed", "frame_scale" );
             return 0;
         }
-        init_flag++;
+        s_scale_init_flag++;
     }
+    return 1;
+}
 
-    if( in_data==NULL )
-    {
-        data[0] = in_buf;
-        os->use_ocl_mem = 1;
-    }
-    else
-    {
-        data[0] = in_data;
-        os->use_ocl_mem = 0;
-    }
 
-    data[1] = out_data;
-    data[2] = (void*)in_w;
-    data[3] = (void*)in_h;
-    data[4] = (void*)out_w;
-    data[5] = (void*)out_h;
-    data[6] = os;
+int hb_ocl_scale(hb_buffer_t *in, hb_buffer_t *out, int *crop, hb_oclscale_t *os)
+{
+    void *data[13];
 
-    if( !hb_run_kernel( "frame_h_scale", data ) )
-	{
-        hb_log( "OpenCL: Run kernel[%s] failed", "frame_scale" );
-	}
+    if (do_scale_init() == 0)
+        return 0;
 
+    data[0] = in->cl.buffer;
+    data[1] = out->cl.buffer;
+    data[2] = (void*)(crop[0]);
+    data[3] = (void*)(crop[1]);
+    data[4] = (void*)(crop[2]);
+    data[5] = (void*)(crop[3]);
+    data[6] = (void*)(in->f.width);
+    data[7] = (void*)(in->f.height);
+    data[8] = (void*)(out->f.width);
+    data[9] = (void*)(out->f.height);
+    data[10] = os;
+    data[11] = in;
+    data[12] = out;
+
+    if( !hb_run_kernel( "frame_scale", data ) )
+        hb_log( "run kernel[%s] failed", "frame_scale" );
     return 0;
 }
+
+
+
+
+
 #endif

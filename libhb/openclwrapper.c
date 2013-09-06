@@ -82,6 +82,7 @@ typedef struct
 
 static GPUEnv gpu_env;
 static int isInited = 0;
+static int useBuffers = 0;
 static hb_kernel_node gKernels[MAX_KERNEL_NUM];
 
 #define ADD_KERNEL_CFG( idx, s, p ){\
@@ -165,17 +166,15 @@ int hb_confirm_gpu_type()
  */
 int hb_regist_opencl_kernel()
 {
-    if( !gpu_env.isUserCreated )
-        memset( &gpu_env, 0, sizeof(gpu_env) );
+    //if( !gpu_env.isUserCreated )
+    //    memset( &gpu_env, 0, sizeof(gpu_env) );
+    //Comment for posterity: When in doubt just zero out a structure full of pointers to allocated resources.
 
     gpu_env.file_count = 0; //argc;
     gpu_env.kernel_count = 0UL;
 
-    ADD_KERNEL_CFG( 0, "frame_h_scale", NULL )
-    ADD_KERNEL_CFG( 1, "frame_v_scale", NULL )
-    ADD_KERNEL_CFG( 2, "nv12toyuv", NULL )
-    ADD_KERNEL_CFG( 3, "scale_opencl", NULL )
-    ADD_KERNEL_CFG( 4, "yadif_filter", NULL )
+    ADD_KERNEL_CFG( 0, "frame_scale", NULL )
+    ADD_KERNEL_CFG( 1, "yadif_filter", NULL )
 
     return 0;
 }
@@ -515,6 +514,8 @@ int hb_release_kernel( KernelEnv * env )
  * hb_init_opencl_env
  * @param gpu_info -
  */
+
+static int init_once = 0;
 int hb_init_opencl_env( GPUEnv *gpu_info )
 {
     size_t length;
@@ -526,6 +527,11 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
     unsigned int i;
     void *handle = INVALID_HANDLE_VALUE;
 
+
+    if (init_once != 0)
+        return 0;
+    else
+        init_once = 1;
     /*
      * Have a look at the available platforms.
      */
@@ -796,20 +802,16 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     if( status == 0 )
         return(0);
 #else
-    int kernel_src_size = strlen( kernel_src_hscale ) + strlen( kernel_src_vscale ) 
-                                  + strlen( kernel_src_nvtoyuv ) + strlen( kernel_src_hscaleall ) 
-                                  + strlen( kernel_src_hscalefast ) + strlen( kernel_src_vscalealldither ) 
-                                  + strlen( kernel_src_vscaleallnodither ) + strlen( kernel_src_vscalefast )
-                                  + strlen( kernel_src_yadif_filter );
+    int kernel_src_size = strlen(kernel_src_scale) + strlen(kernel_src_yadif_filter);
+
+//    char *scale_src;
+//    status = hb_convert_to_string("./scale_kernels.cl", &scale_src, gpu_info, idx);
+//    if (status != 0)
+//        kernel_src_size += strlen(scale_src);
+
     source_str = (char*)malloc( kernel_src_size + 2 );
-    strcpy( source_str, kernel_src_hscale );
-    strcat( source_str, kernel_src_vscale );
-    strcat( source_str, kernel_src_nvtoyuv );
-    strcat( source_str, kernel_src_hscaleall );
-    strcat( source_str, kernel_src_hscalefast );
-    strcat( source_str, kernel_src_vscalealldither );
-    strcat( source_str, kernel_src_vscaleallnodither );
-    strcat( source_str, kernel_src_vscalefast );
+    strcpy( source_str, kernel_src_scale );
+//    strcat( source_str, scale_src );    //
     strcat( source_str, kernel_src_yadif_filter );
 #endif
 
@@ -950,7 +952,7 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
     if (binaryExisted != 1)
     {
-        hb_generat_bin_from_kernel_source(gpu_env.programs[idx], filename);
+        //hb_generat_bin_from_kernel_source(gpu_env.programs[idx], filename);
     }
 
     gpu_info->file_count += 1;
@@ -1045,6 +1047,7 @@ int hb_init_opencl_run_env( int argc, char **argv, const char *build_option )
 
         }
 
+        useBuffers = 1;
         isInited = 1;
     }
 
@@ -1165,6 +1168,40 @@ int hb_read_opencl_buffer( cl_mem cl_inBuf, unsigned char *outbuf, int size )
     }
 
     return 1;
+}
+
+int hb_cl_create_mapped_buffer(cl_mem *mem, unsigned char **addr, int size)
+{
+    int status;
+    int flags = CL_MEM_ALLOC_HOST_PTR;
+    //cl_event event;
+    *mem = clCreateBuffer(gpu_env.context, flags, size, NULL, &status);
+    *addr = clEnqueueMapBuffer(gpu_env.command_queue, *mem, CL_TRUE, CL_MAP_READ | CL_MAP_WRITE, 0, size, 0, NULL, NULL/*&event*/, &status);
+
+    //hb_log("\t **** context: %.8x   cmdqueue: %.8x   cl_mem: %.8x   mapaddr: %.8x   size: %d    status: %d", gpu_env.context, gpu_env.command_queue, mem, addr, size, status);
+
+    return (status == CL_SUCCESS) ? 1 : 0;
+}
+
+int hb_cl_free_mapped_buffer(cl_mem mem, unsigned char *addr)
+{
+    cl_event event;
+    int status = clEnqueueUnmapMemObject(gpu_env.command_queue, mem, addr, 0, NULL, &event);
+    if (status == CL_SUCCESS)
+        clWaitForEvents(1, &event);
+    else
+        hb_log("hb_free_mapped_buffer: error %d", status);
+    return (status == CL_SUCCESS) ? 1 : 0;
+}
+
+void hb_opencl_init()
+{
+    hb_get_opencl_env();
+}
+
+int hb_use_buffers()
+{
+    return useBuffers;
 }
 
 int hb_copy_buffer(cl_mem src_buffer,cl_mem dst_buffer,size_t src_offset,size_t dst_offset,size_t cb)

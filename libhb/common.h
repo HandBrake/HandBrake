@@ -361,7 +361,7 @@ struct hb_job_s
     int             chapter_start;
     int             chapter_end;
 
-	/* Include chapter marker track in mp4? */
+    /* Include chapter marker track in mp4? */
     int             chapter_markers;
 
     /* Picture settings:
@@ -1031,29 +1031,22 @@ extern hb_work_object_t hb_reader;
 typedef struct hb_oclscale_s
 {
 #ifdef USE_OPENCL
-    // input buffer for running horizontal kernel. output buffer of running horizontal kernel. outpuf buffer of running vertiacla kernel
-    cl_mem h_in_buf;
-    cl_mem h_out_buf;
-    cl_mem v_out_buf;
-    // horizontal coefficent buffer for Y U and V plane, hroizontal source index for Y,U and V plane
-    cl_mem h_coeff_y;
-    cl_mem h_coeff_uv;
-    cl_mem h_index_y;
-    cl_mem h_index_uv;
-    // vertical coefficent buffer for Y U and V plane, vertical source index for Y,U and V plane
-    cl_mem v_coeff_y;
-    cl_mem v_coeff_uv;
-    cl_mem v_index_y;
-    cl_mem v_index_uv;
+    int initialized;
+    // bicubic scale weights
+    cl_mem bicubic_x_weights;
+    cl_mem bicubic_y_weights;
+    cl_float xscale;
+    cl_float yscale;
+    int width;
+    int height;
     // horizontal scaling and vertical scaling kernel handle
-    cl_kernel h_kernel;
-    cl_kernel v_kernel;
+    cl_kernel m_kernel;
     int use_ocl_mem; // 0 use host memory. 1 use gpu oclmem
 #endif
 } hb_oclscale_t;
 
 #ifdef USE_OPENCL
-int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, int in_h, int out_w, int out_h, hb_oclscale_t *os );
+int hb_ocl_scale( hb_buffer_t *in, hb_buffer_t *out, int *crop, hb_oclscale_t *os );
 #endif
 
 #ifdef USE_OPENCL

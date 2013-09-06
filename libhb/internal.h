@@ -114,6 +114,15 @@ struct hb_buffer_s
         int           size;
     } plane[4]; // 3 Color components + alpha
 
+#ifdef USE_OPENCL
+    struct cl_data
+    {
+        cl_mem buffer;
+        cl_event last_event;
+        enum { HOST, DEVICE } buffer_location;
+    } cl;
+#endif
+
     // PICTURESUB subtitle packets:
 
     // Video packets (after processing by the hb_sync_video work-object):
