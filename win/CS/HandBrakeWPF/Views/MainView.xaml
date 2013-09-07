@@ -546,19 +546,19 @@
                               VerticalAlignment="Center"
                               Content="OpenCL Support"
                               IsChecked="{Binding Path=CurrentTask.OpenCLSupport}" IsEnabled="True" 
-                              Visibility="{Binding SupportOpenCL,
+                              
+                              /><!--Visibility="{Binding SupportOpenCL,
                                                    Converter={StaticResource boolToVisConverter},
-                                                   ConverterParameter=true}"
-                              />
+                                                   ConverterParameter=true}"-->
                     <CheckBox Name="HWD"
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
                               Content="HWD Support"
                               IsChecked="{Binding Path=CurrentTask.HWDSupport}" IsEnabled="True" 
-                              Visibility="{Binding SupportHardwareDecoding,
+                        
+                              />      <!--Visibility="{Binding SupportHardwareDecoding,
                                                    Converter={StaticResource boolToVisConverter},
-                                                   ConverterParameter=true}"
-                              />
+                                                   ConverterParameter=true}"-->
                 </StackPanel>
             </StackPanel>
 
