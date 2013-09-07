@@ -511,7 +511,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     AVCodecContext *context      = avcodec_alloc_context3(codec);
     AVCodecParserContext *parser = NULL;
 
-    if (w->title->opaque_priv != NULL)
+    if (w->title && w->title->opaque_priv != NULL)
     {
         AVFormatContext *ic = (AVFormatContext*)w->title->opaque_priv;
         avcodec_copy_context(context, ic->streams[w->audio->id]->codec);
