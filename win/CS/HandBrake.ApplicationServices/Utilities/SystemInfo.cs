@@ -10,7 +10,11 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Management;
     using System.Text.RegularExpressions;
+    using System.Windows.Documents;
     using System.Windows.Forms;
 
     using HandBrake.Interop.HbLib;
@@ -107,6 +111,35 @@ namespace HandBrake.ApplicationServices.Utilities
                 }
 
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets the get gpu driver version.
+        /// </summary>
+        public static List<string> GetGPUInfo
+        {
+            get
+            {
+                List<string> gpuInfo = new List<string>();
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(
+                "select * from " + "Win32_VideoController");
+                foreach (ManagementObject share in searcher.Get())
+                {
+                    string gpu = string.Empty, version = string.Empty;
+
+                    foreach (PropertyData PC in share.Properties)
+                    {
+                        if (PC.Name.Equals("DriverVersion")) version = PC.Value.ToString();
+
+
+                        if (PC.Name.Equals("Name"))
+                            gpu = PC.Value.ToString();
+                    }
+
+                    gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
+                }
+                return gpuInfo;
             }
         }
     }
