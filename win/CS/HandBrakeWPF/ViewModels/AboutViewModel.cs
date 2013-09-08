@@ -9,11 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
-    using System.IO;
-    using System.Text;
-    using System.Windows.Forms;
-
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.ViewModels.Interfaces;
