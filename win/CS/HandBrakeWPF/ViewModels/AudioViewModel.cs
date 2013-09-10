@@ -206,7 +206,18 @@ namespace HandBrakeWPF.ViewModels
 
             if (preset != null && preset.Task != null)
             {
+                int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
+                if (mode >= 1)
+                {
+                    this.AutomaticTrackSelection();
+                }
+                else
+                {
+                    this.AddTracksFromPreset(preset); 
+                }
+
                 this.AutomaticTrackSelection();
+
                 this.Task.AllowedPassthruOptions = new AllowedPassthru(preset.Task.AllowedPassthruOptions);
             }
             this.NotifyOfPropertyChange(() => this.Task);
