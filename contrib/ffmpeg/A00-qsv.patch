@@ -1,7 +1,8 @@
-diff -Naur ../../libav-v9.6/configure ./configure
---- ../../libav-v9.6/configure	2013-05-12 08:39:07.000000000 +0200
-+++ ./configure	2013-08-14 10:48:00.520497159 +0200
-@@ -133,6 +133,7 @@
+diff --git a/configure b/configure
+index 6ab04ae..0c5ad1d 100755
+--- a/configure
++++ b/configure
+@@ -133,6 +133,7 @@ Component options:
    --enable-vaapi           enable VAAPI code
    --enable-vda             enable VDA code
    --enable-vdpau           enable VDPAU code
@@ -9,7 +10,7 @@ diff -Naur ../../libav-v9.6/configure ./configure
  
  Individual component options:
    --disable-everything     disable all components listed below
-@@ -1076,6 +1077,7 @@
+@@ -1076,6 +1077,7 @@ CONFIG_LIST="
      vaapi
      vda
      vdpau
@@ -17,7 +18,7 @@ diff -Naur ../../libav-v9.6/configure ./configure
      version3
      xmm_clobber_test
      x11grab
-@@ -1629,6 +1631,7 @@
+@@ -1629,6 +1631,7 @@ vc1_vdpau_decoder_select="vdpau vc1_decoder"
  wmv3_dxva2_hwaccel_select="vc1_dxva2_hwaccel"
  wmv3_vaapi_hwaccel_select="vc1_vaapi_hwaccel"
  wmv3_vdpau_decoder_select="vc1_vdpau_decoder"
@@ -25,7 +26,7 @@ diff -Naur ../../libav-v9.6/configure ./configure
  
  # parsers
  h264_parser_select="error_resilience golomb h264dsp h264pred mpegvideo"
-@@ -3584,6 +3587,12 @@
+@@ -3584,6 +3587,12 @@ if ! disabled vdpau && enabled vdpau_vdpau_h; then
      check_cpp_condition vdpau/vdpau.h "defined VDP_DECODER_PROFILE_MPEG4_PART2_ASP" ||
          { echolog "Please upgrade to libvdpau >= 0.2 if you would like vdpau support." && disable vdpau; }
  fi
@@ -38,7 +39,7 @@ diff -Naur ../../libav-v9.6/configure ./configure
  
  enabled debug && add_cflags -g"$debuglevel" && add_asflags -g"$debuglevel"
  
-@@ -3795,6 +3804,7 @@
+@@ -3795,6 +3804,7 @@ echo "SDL support               ${sdl-no}"
  echo "libdxva2 enabled          ${dxva2-no}"
  echo "libva enabled             ${vaapi-no}"
  echo "libvdpau enabled          ${vdpau-no}"
@@ -46,21 +47,11 @@ diff -Naur ../../libav-v9.6/configure ./configure
  echo "AVISynth enabled          ${avisynth-no}"
  echo "frei0r enabled            ${frei0r-no}"
  echo "gnutls enabled            ${gnutls-no}"
-diff -Naur ../../libav-v9.6/libavcodec/allcodecs.c ./libavcodec/allcodecs.c
---- ../../libav-v9.6/libavcodec/allcodecs.c	2013-05-12 08:39:07.000000000 +0200
-+++ ./libavcodec/allcodecs.c	2013-08-14 10:48:00.520497159 +0200
-@@ -143,6 +143,7 @@
-     REGISTER_DECODER(H263I,             h263i);
-     REGISTER_ENCODER(H263P,             h263p);
-     REGISTER_DECODER(H264,              h264);
-+    REGISTER_DECODER(H264_QSV, 		h264_qsv);
-     REGISTER_DECODER(H264_VDPAU,        h264_vdpau);
-     REGISTER_ENCDEC (HUFFYUV,           huffyuv);
-     REGISTER_DECODER(IDCIN,             idcin);
-diff -Naur ../../libav-v9.6/libavcodec/Makefile ./libavcodec/Makefile
---- ../../libav-v9.6/libavcodec/Makefile	2013-05-12 08:39:07.000000000 +0200
-+++ ./libavcodec/Makefile	2013-08-14 10:48:00.521497282 +0200
-@@ -10,6 +10,7 @@
+diff --git a/libavcodec/Makefile b/libavcodec/Makefile
+index a32ff96..52ad9ad 100644
+--- a/libavcodec/Makefile
++++ b/libavcodec/Makefile
+@@ -10,6 +10,7 @@ HEADERS = avcodec.h                                                     \
            vdpau.h                                                       \
            version.h                                                     \
            xvmc.h                                                        \
@@ -68,7 +59,7 @@ diff -Naur ../../libav-v9.6/libavcodec/Makefile ./libavcodec/Makefile
  
  OBJS = allcodecs.o                                                      \
         audioconvert.o                                                   \
-@@ -196,6 +197,7 @@
+@@ -196,6 +197,7 @@ OBJS-$(CONFIG_H264_DECODER)            += h264.o                               \
                                            h264_loopfilter.o h264_direct.o      \
                                            cabac.o h264_sei.o h264_ps.o         \
                                            h264_refs.o h264_cavlc.o h264_cabac.o
@@ -76,9 +67,23 @@ diff -Naur ../../libav-v9.6/libavcodec/Makefile ./libavcodec/Makefile
  OBJS-$(CONFIG_H264_DXVA2_HWACCEL)      += dxva2_h264.o
  OBJS-$(CONFIG_H264_VAAPI_HWACCEL)      += vaapi_h264.o
  OBJS-$(CONFIG_H264_VDA_HWACCEL)        += vda_h264.o
-diff -Naur ../../libav-v9.6/libavcodec/qsv.c ./libavcodec/qsv.c
---- ../../libav-v9.6/libavcodec/qsv.c	1970-01-01 01:00:00.000000000 +0100
-+++ ./libavcodec/qsv.c	2013-08-19 21:32:01.704244071 +0200
+diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
+index 5786719..94608b0 100644
+--- a/libavcodec/allcodecs.c
++++ b/libavcodec/allcodecs.c
+@@ -143,6 +143,7 @@ void avcodec_register_all(void)
+     REGISTER_DECODER(H263I,             h263i);
+     REGISTER_ENCODER(H263P,             h263p);
+     REGISTER_DECODER(H264,              h264);
++    REGISTER_DECODER(H264_QSV, 		h264_qsv);
+     REGISTER_DECODER(H264_VDPAU,        h264_vdpau);
+     REGISTER_ENCDEC (HUFFYUV,           huffyuv);
+     REGISTER_DECODER(IDCIN,             idcin);
+diff --git a/libavcodec/qsv.c b/libavcodec/qsv.c
+new file mode 100644
+index 0000000..2c46111
+--- /dev/null
++++ b/libavcodec/qsv.c
 @@ -0,0 +1,646 @@
 +/* ********************************************************************* *\
 +
@@ -727,9 +732,11 @@ diff -Naur ../../libav-v9.6/libavcodec/qsv.c ./libavcodec/qsv.c
 +        }
 +}
 \ No newline at end of file
-diff -Naur ../../libav-v9.6/libavcodec/qsv.h ./libavcodec/qsv.h
---- ../../libav-v9.6/libavcodec/qsv.h	1970-01-01 01:00:00.000000000 +0100
-+++ ./libavcodec/qsv.h	2013-08-19 21:32:01.709244686 +0200
+diff --git a/libavcodec/qsv.h b/libavcodec/qsv.h
+new file mode 100644
+index 0000000..52378cf
+--- /dev/null
++++ b/libavcodec/qsv.h
 @@ -0,0 +1,494 @@
 +/* ********************************************************************* *\
 +
@@ -1225,9 +1232,11 @@ diff -Naur ../../libav-v9.6/libavcodec/qsv.h ./libavcodec/qsv.h
 +/* @} */
 +
 +#endif                          //AVCODEC_QSV_H
-diff -Naur ../../libav-v9.6/libavcodec/qsv_h264.c ./libavcodec/qsv_h264.c
---- ../../libav-v9.6/libavcodec/qsv_h264.c	1970-01-01 01:00:00.000000000 +0100
-+++ ./libavcodec/qsv_h264.c	2013-08-19 21:32:01.705244194 +0200
+diff --git a/libavcodec/qsv_h264.c b/libavcodec/qsv_h264.c
+new file mode 100644
+index 0000000..ac9db63
+--- /dev/null
++++ b/libavcodec/qsv_h264.c
 @@ -0,0 +1,974 @@
 +/* ********************************************************************* *\
 +
@@ -2203,9 +2212,11 @@ diff -Naur ../../libav-v9.6/libavcodec/qsv_h264.c ./libavcodec/qsv_h264.c
 +    .pix_fmts       = (const enum PixelFormat[]) {AV_PIX_FMT_QSV_H264,
 +                                                  AV_PIX_FMT_NONE},
 +};
-diff -Naur ../../libav-v9.6/libavcodec/qsv_h264.h ./libavcodec/qsv_h264.h
---- ../../libav-v9.6/libavcodec/qsv_h264.h	1970-01-01 01:00:00.000000000 +0100
-+++ ./libavcodec/qsv_h264.h	2013-08-19 21:32:01.710244809 +0200
+diff --git a/libavcodec/qsv_h264.h b/libavcodec/qsv_h264.h
+new file mode 100644
+index 0000000..3cbdb3f
+--- /dev/null
++++ b/libavcodec/qsv_h264.h
 @@ -0,0 +1,65 @@
 +/* ********************************************************************* *\
 +
@@ -2272,10 +2283,11 @@ diff -Naur ../../libav-v9.6/libavcodec/qsv_h264.h ./libavcodec/qsv_h264.h
 +mfxStatus ff_qsv_mem_buffer_free(mfxHDL pthis, mfxMemId mid);
 +
 +#endif                          //AVCODEC_QSV_H264_H
-diff -Naur ../../libav-v9.6/libavutil/pixfmt.h ./libavutil/pixfmt.h
---- ../../libav-v9.6/libavutil/pixfmt.h	2013-05-12 08:39:07.000000000 +0200
-+++ ./libavutil/pixfmt.h	2013-08-14 10:48:00.522497405 +0200
-@@ -178,6 +178,7 @@
+diff --git a/libavutil/pixfmt.h b/libavutil/pixfmt.h
+index 1072f00..de232d4 100644
+--- a/libavutil/pixfmt.h
++++ b/libavutil/pixfmt.h
+@@ -178,6 +178,7 @@ enum AVPixelFormat {
      AV_PIX_FMT_YUVA422P16LE, ///< planar YUV 4:2:2 48bpp, (1 Cr & Cb sample per 2x1 Y & A samples, little-endian)
      AV_PIX_FMT_YUVA444P16BE, ///< planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, big-endian)
      AV_PIX_FMT_YUVA444P16LE, ///< planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, little-endian)
