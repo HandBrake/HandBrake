@@ -219,7 +219,7 @@
                                 <Setter Property="Tag" Value="{Binding}" />
                                 
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=IsDisc}" Value="true">
+                                    <DataTrigger Binding="{Binding Path=IsDrive}" Value="true">
                                         <Setter Property="Icon" Value="{StaticResource Disc}"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=IsOpenFolder}" Value="true">
@@ -513,15 +513,6 @@
                               Margin="8,0,0,0"
                               ItemsSource="{Binding OutputFormats}"
                               SelectedItem="{Binding SelectedOutputFormat}"
-                              />
-                    <CheckBox Name="LargeFileMp4"
-                              Margin="8,0,0,0"
-                              VerticalAlignment="Center"
-                              Content="Large File Size"
-                              IsChecked="{Binding Path=CurrentTask.LargeFile}"
-                              Visibility="{Binding IsMkv,
-                                                   Converter={StaticResource boolToVisConverter},
-                                                   ConverterParameter=true}"
                               />
                     <CheckBox Name="WebOptimized"
                               Margin="8,0,0,0"

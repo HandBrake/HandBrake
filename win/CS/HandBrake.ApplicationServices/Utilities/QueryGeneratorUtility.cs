@@ -234,9 +234,6 @@ namespace HandBrake.ApplicationServices.Utilities
             query += string.Format(" -f {0} ", EnumHelper<Enum>.GetDescription(task.OutputFormat).ToLower());
 
             // These are output settings features
-            if (task.LargeFile)
-                query += " -4 ";
-
             if (task.IPod5GSupport)
                 query += " -I ";
 

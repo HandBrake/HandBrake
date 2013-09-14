@@ -381,7 +381,6 @@ namespace HandBrakeWPF.ViewModels
                 if (this.SelectedPreset != null)
                 {
                     // Main Window Settings
-                    this.CurrentTask.LargeFile = selectedPreset.Task.LargeFile;
                     this.CurrentTask.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
                     this.CurrentTask.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
                     this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
@@ -622,7 +621,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new List<OutputFormat>
                     {
-                         OutputFormat.av_mp4, OutputFormat.av_mkv, OutputFormat.Mp4, OutputFormat.Mkv
+                         OutputFormat.Mp4, OutputFormat.av_mkv, OutputFormat.Mkv
                     };
             }
         }
@@ -1419,10 +1418,10 @@ namespace HandBrakeWPF.ViewModels
                         this.SelectedOutputFormat = OutputFormat.av_mkv;
                         break;
                     case ".mp4":
-                        this.SelectedOutputFormat = OutputFormat.av_mp4;
+                        this.SelectedOutputFormat = OutputFormat.Mp4;
                         break;
                     case ".m4v":
-                        this.SelectedOutputFormat = OutputFormat.av_mp4;
+                        this.SelectedOutputFormat = OutputFormat.M4V;
                         break;
                 }
 
@@ -1727,7 +1726,6 @@ namespace HandBrakeWPF.ViewModels
             if (newExtension == ".mkv")
             {
                 this.IsMkv = true;
-                this.CurrentTask.LargeFile = false;
                 this.CurrentTask.OptimizeMP4 = false;
                 this.CurrentTask.IPod5GSupport = false;
             }

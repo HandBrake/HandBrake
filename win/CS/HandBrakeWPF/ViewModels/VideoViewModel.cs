@@ -1057,7 +1057,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.NotifyOfPropertyChange(() => this.Task);
 
-            if ((Task.OutputFormat == OutputFormat.Mp4 || Task.OutputFormat == OutputFormat.av_mp4) && this.SelectedVideoEncoder == VideoEncoder.Theora)
+            if ((Task.OutputFormat == OutputFormat.Mp4) && this.SelectedVideoEncoder == VideoEncoder.Theora)
             {
                 this.SelectedVideoEncoder = VideoEncoder.X264;
             }

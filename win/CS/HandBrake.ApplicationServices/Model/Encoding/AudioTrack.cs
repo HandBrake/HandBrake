@@ -63,6 +63,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
 
+        private bool isDefault;
+
         #endregion
 
         #region Constructors and Destructors
@@ -178,6 +180,21 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                     this.drc = value;
                     this.NotifyOfPropertyChange(() => this.DRC);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is default.
+        /// </summary>
+        public bool IsDefault
+        {
+            get
+            {
+                return this.isDefault;
+            }
+            set
+            {
+                this.isDefault = value;
             }
         }
 

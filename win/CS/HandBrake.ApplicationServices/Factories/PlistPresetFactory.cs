@@ -103,9 +103,6 @@ namespace HandBrake.ApplicationServices.Factories
                 case "Mp4HttpOptimize":
                     preset.Task.OptimizeMP4 = kvp.Value == 1;
                     break;
-                case "Mp4LargeFile":
-                    preset.Task.LargeFile = kvp.Value == 1;
-                    break;
                 case "Mp4iPodCompatible":
                     preset.Task.IPod5GSupport = kvp.Value == 1;
                     break;

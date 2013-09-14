@@ -99,7 +99,6 @@ namespace HandBrake.ApplicationServices.Utilities
             profile.IPod5GSupport = work.IPod5GSupport;
             profile.IncludeChapterMarkers = work.IncludeChapterMarkers;
             profile.KeepDisplayAspect = work.KeepDisplayAspect;
-            profile.LargeFile = work.LargeFile;
             profile.MaxHeight = work.MaxHeight.HasValue ? work.MaxHeight.Value : 0;
             profile.MaxWidth = work.MaxWidth.HasValue ? work.MaxWidth.Value : 0;
             profile.Modulus = work.Modulus.HasValue ? work.Modulus.Value : 16;

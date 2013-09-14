@@ -100,7 +100,6 @@ namespace HandBrake.ApplicationServices.Model
             this.IncludeChapterMarkers = task.IncludeChapterMarkers;
             this.IPod5GSupport = task.IPod5GSupport;
             this.KeepDisplayAspect = task.KeepDisplayAspect;
-            this.LargeFile = task.LargeFile;
             this.MaxHeight = task.MaxHeight;
             this.MaxWidth = task.MaxWidth;
             this.Modulus = task.Modulus;
@@ -189,11 +188,6 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets OutputFormat.
         /// </summary>
         public OutputFormat OutputFormat { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether LargeFile.
-        /// </summary>
-        public bool LargeFile { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Optimize.
@@ -474,7 +468,7 @@ namespace HandBrake.ApplicationServices.Model
         {
             get
             {
-                if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4 || this.OutputFormat == OutputFormat.av_mp4)
+                if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4)
                 {
                     bool audio = this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || 
                         item.Encoder == AudioEncoder.Ac3 || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);

@@ -152,7 +152,6 @@ namespace HandBrake.ApplicationServices.Utilities
                 {
                     parsed.OutputFormat = Converters.GetFileFormat(format.Groups[1].ToString());
                 }
-                parsed.LargeFile = largerMp4.Success;
                 parsed.IPod5GSupport = ipodAtom.Success;
                 parsed.OptimizeMP4 = optimizeMP4.Success;
 
