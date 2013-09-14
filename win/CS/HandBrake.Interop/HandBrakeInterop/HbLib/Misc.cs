@@ -94,6 +94,15 @@ namespace HandBrake.Interop.HbLib
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
+	public struct qsv_enc_info_s
+	{
+		public int pic_struct;
+		public int align_width;
+		public int align_height;
+		public int is_init_done;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_encoder_s
 	{
 		[MarshalAs(UnmanagedType.LPStr)]
@@ -105,6 +114,21 @@ namespace HandBrake.Interop.HbLib
 		public int codec;
 
 		public int muxers;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct hb_container_s
+	{
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string name;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string short_name;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string default_extension;
+
+		public int format;
 	}
 
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -264,84 +288,6 @@ namespace HandBrake.Interop.HbLib
 	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_lock_s
 	{
-	}
-
-	// Only called by detect_comb at the moment
-	[StructLayout(LayoutKind.Sequential)]
-	public struct hb_buffer_s
-	{
-		/// int
-		public int size;
-
-		/// int
-		public int alloc;
-
-		/// uint8_t*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string data;
-
-		/// int
-		public int cur;
-
-		/// int64_t->int
-		public long sequence;
-
-		public hb_buffer_type_anon type;
-
-		/// int
-		public int id;
-
-		/// int64_t->int
-		public long start;
-
-		/// int64_t->int
-		public long stop;
-
-		public long pcr;
-
-		public byte discontinuity;
-
-		/// int
-		public int new_chap;
-
-		/// uint8_t->unsigned char
-		public byte frametype;
-
-		// Given uint by default, probably should be ushort?
-		/// uint16_t->unsigned int
-		public uint flags;
-
-		/// int64_t->int
-		public long renderOffset;
-
-		/// int
-		public int x;
-
-		/// int
-		public int y;
-
-		/// int
-		public int width;
-
-		/// int
-		public int height;
-
-		/// hb_buffer_t*
-		public IntPtr sub;
-
-		/// hb_buffer_t*
-		public IntPtr next;
-	}
-
-	public enum hb_buffer_type_anon
-	{
-		AUDIO_BUF,
-
-		VIDEO_BUF,
-
-		SUBTITLE_BUF,
-
-		OTHER_BUF
 	}
 
 	[StructLayout(LayoutKind.Sequential)]

@@ -148,25 +148,13 @@ namespace HandBrake.Interop
 		/// <returns>The converted model.</returns>
 		public static HBVideoEncoder NativeToVideoEncoder(hb_encoder_s encoder)
 		{
-			var result = new HBVideoEncoder
+			return new HBVideoEncoder
 			{
 				Id = encoder.codec,
 				ShortName = encoder.short_name,
 				DisplayName = encoder.name,
-				CompatibleContainers = Container.None
+				CompatibleContainers = encoder.muxers
 			};
-
-			if ((encoder.muxers & NativeConstants.HB_MUX_MKV) > 0)
-			{
-				result.CompatibleContainers = result.CompatibleContainers | Container.Mkv;
-			}
-
-			if ((encoder.muxers & NativeConstants.HB_MUX_MP4) > 0)
-			{
-				result.CompatibleContainers = result.CompatibleContainers | Container.Mp4;
-			}
-
-			return result;
 		}
 
 		/// <summary>
@@ -181,18 +169,8 @@ namespace HandBrake.Interop
 					Id = encoder.codec,
 					ShortName = encoder.short_name,
 					DisplayName = encoder.name,
-					CompatibleContainers = Container.None
+					CompatibleContainers = encoder.muxers
 				};
-
-			if ((encoder.muxers & NativeConstants.HB_MUX_MKV) > 0)
-			{
-				result.CompatibleContainers = result.CompatibleContainers | Container.Mkv;
-			}
-
-			if ((encoder.muxers & NativeConstants.HB_MUX_MP4) > 0)
-			{
-				result.CompatibleContainers = result.CompatibleContainers | Container.Mp4;
-			}
 
 			result.QualityLimits = Encoders.GetAudioQualityLimits(encoder.codec);
 			result.DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec);
@@ -228,6 +206,22 @@ namespace HandBrake.Interop
 					Id = mixdown.amixdown,
 					ShortName = mixdown.short_name,
 					DisplayName = mixdown.name
+				};
+		}
+
+		/// <summary>
+		/// Converts a native HB container structure into an HBContainer object.
+		/// </summary>
+		/// <param name="container">The structure to convert.</param>
+		/// <returns>The converted structure.</returns>
+		public static HBContainer NativeToContainer(hb_container_s container)
+		{
+			return new HBContainer
+				{
+					DisplayName = container.name,
+					ShortName = container.short_name,
+					DefaultExtension = container.default_extension,
+					Id = container.format
 				};
 		}
 

@@ -15,6 +15,7 @@ namespace HandBrake.Interop
 	using System.IO;
 	using System.Linq;
 	using System.Runtime.InteropServices;
+	using System.Text;
 	using System.Windows.Media.Imaging;
 
 	using HandBrake.Interop.EventArgs;
@@ -188,16 +189,12 @@ namespace HandBrake.Interop
 			this.StartScan(path, previewCount, minDuration, 0);
 		}
 
-	    /// <summary>
-	    /// The start scan.
-	    /// </summary>
-	    /// <param name="path">
-	    /// The path.
-	    /// </param>
-	    /// <param name="previewCount">
-	    /// The preview count.
-	    /// </param>
-	    public void StartScan(string path, int previewCount)
+		/// <summary>
+		/// Starts a scan for the given input path.
+		/// </summary>
+		/// <param name="path">The path of the video to scan.</param>
+		/// <param name="previewCount">The number of preview images to generate for each title while scanning.</param>
+		public void StartScan(string path, int previewCount)
 		{
 			this.StartScan(path, previewCount, TimeSpan.FromSeconds(10), 0);
 		}
@@ -206,34 +203,36 @@ namespace HandBrake.Interop
 		/// Starts a scan of the given path.
 		/// </summary>
 		/// <param name="path">The path of the video to scan.</param>
-		/// <param name="previewCount">The number of previews to make on each title.</param>
+		/// <param name="previewCount">The number of preview images to generate for each title while scanning.</param>
 		/// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
 		public void StartScan(string path, int previewCount, int titleIndex)
 		{
 			this.StartScan(path, previewCount, TimeSpan.Zero, titleIndex);
 		}
 
-        /// <summary>
-        /// Starts a scan of the given path.
-        /// </summary>
-        /// <param name="path">The path of the video to scan.</param>
-        /// <param name="previewCount">The number of previews to make on each title.</param>
-        /// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
-        /// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
-        {
-            this.previewCount = previewCount;
-            HBFunctions.hb_scan(this.hbHandle, path, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
-            this.scanPollTimer = new System.Timers.Timer();
-            this.scanPollTimer.Interval = ScanPollIntervalMs;
+		/// <summary>
+		/// Starts a scan of the given path.
+		/// </summary>
+		/// <param name="path">The path of the video to scan.</param>
+		/// <param name="previewCount">The number of previews to make on each title.</param>
+		/// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
+		/// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
+		public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+		{
+			this.previewCount = previewCount;
 
-            // Lambda notation used to make sure we can view any JIT exceptions the method throws
-            this.scanPollTimer.Elapsed += (o, e) =>
-            {
-                this.PollScanProgress();
-            };
-            this.scanPollTimer.Start();
-        }
+			HBFunctions.hb_scan(this.hbHandle, path, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+
+			this.scanPollTimer = new System.Timers.Timer();
+			this.scanPollTimer.Interval = ScanPollIntervalMs;
+
+			// Lambda notation used to make sure we can view any JIT exceptions the method throws
+			this.scanPollTimer.Elapsed += (o, e) =>
+			{
+				this.PollScanProgress();
+			};
+			this.scanPollTimer.Start();
+		}
 
 
 		/// <summary>
@@ -1015,7 +1014,9 @@ namespace HandBrake.Interop
 					{
 						if (i < nativeChapters.Count && i < job.CustomChapterNames.Count)
 						{
-							HBFunctions.hb_chapter_set_title(nativeChapters[i], job.CustomChapterNames[i]);
+							IntPtr chapterNamePtr = InteropUtilities.CreateUtf8Ptr(job.CustomChapterNames[i]);
+							HBFunctions.hb_chapter_set_title__ptr(nativeChapters[i], chapterNamePtr);
+							Marshal.FreeHGlobal(chapterNamePtr);
 						}
 					}
 				}
@@ -1463,13 +1464,20 @@ namespace HandBrake.Interop
 			// Construct final filter list
 			nativeJob.list_filter = this.ConvertFilterListToNative(filterList, allocatedMemory).ListPtr;
 
+#pragma warning disable 612, 618
 			if (profile.OutputFormat == Container.Mp4)
 			{
-				nativeJob.mux = NativeConstants.HB_MUX_MP4;
+				nativeJob.mux = HBFunctions.hb_container_get_from_name("av_mp4");
 			}
-			else
+			else if (profile.OutputFormat == Container.Mkv)
 			{
-				nativeJob.mux = NativeConstants.HB_MUX_MKV;
+				nativeJob.mux = HBFunctions.hb_container_get_from_name("av_mkv");
+			}
+#pragma warning restore 612, 618
+
+			if (profile.ContainerName != null)
+			{
+				nativeJob.mux = HBFunctions.hb_container_get_from_name(profile.ContainerName);
 			}
 
 			nativeJob.file = job.OutputPath;
@@ -1662,6 +1670,7 @@ namespace HandBrake.Interop
 			nativeAudio.config.output.codec = (uint)encoder.Id;
 			nativeAudio.config.output.compression_level = -1;
 			nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
+			nativeAudio.config.output.dither_method = -1;
 
 			if (!encoder.IsPassthrough)
 			{
@@ -1748,7 +1757,7 @@ namespace HandBrake.Interop
 				Framerate = ((double)title.rate) / title.rate_base,
 				FramerateNumerator = title.rate,
 				FramerateDenominator = title.rate_base,
-                Path = title.path
+				Path = title.path
 			};
 
 			switch (title.type)

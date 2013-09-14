@@ -16,7 +16,7 @@ namespace HandBrake.Interop
 	using System.Text;
 	using HandBrake.Interop.HbLib;
 
-    /// <summary>
+	/// <summary>
 	/// Helper utilities for native interop.
 	/// </summary>
 	public static class InteropUtilities
@@ -54,6 +54,25 @@ namespace HandBrake.Interop
 			}
 
 			return Encoding.UTF8.GetString(data.ToArray());
+		}
+
+		/// <summary>
+		/// Creates a pointer to a UTF-8 null-terminated string.
+		/// </summary>
+		/// <param name="str">The string to encode.</param>
+		public static IntPtr CreateUtf8Ptr(string str)
+		{
+			byte[] bytes = Encoding.UTF8.GetBytes(str);
+			IntPtr stringPtr = Marshal.AllocHGlobal(bytes.Length + 1);
+			var offset = 0;
+			foreach (byte b in bytes)
+			{
+				Marshal.WriteByte(stringPtr, offset, b);
+				offset++;
+			}
+
+			Marshal.WriteByte(stringPtr, offset, 0);
+			return stringPtr;
 		}
 
 		/// <summary>
@@ -133,7 +152,7 @@ namespace HandBrake.Interop
 
 			hb_list_s nativeListStruct = new hb_list_s { items = nativeListInternal, items_alloc = capacity, items_count = 0 };
 
-		    IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
+			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
 			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
 
 			returnList.ListPtr = nativeListStructPtr;
@@ -158,13 +177,13 @@ namespace HandBrake.Interop
 			}
 
 			hb_list_s nativeListStruct = new hb_list_s
-			                                 {
-			                                     items = nativeListInternal,
-			                                     items_alloc = list.Count,
-			                                     items_count = list.Count
-			                                 };
+											 {
+												 items = nativeListInternal,
+												 items_alloc = list.Count,
+												 items_count = list.Count
+											 };
 
-		    IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
+			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
 			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
 
 			returnList.ListPtr = nativeListStructPtr;
@@ -194,13 +213,13 @@ namespace HandBrake.Interop
 			}
 
 			hb_list_s nativeListStruct = new hb_list_s
-			                                 {
-			                                     items = nativeListInternal,
-			                                     items_alloc = list.Count,
-			                                     items_count = list.Count
-			                                 };
+											 {
+												 items = nativeListInternal,
+												 items_alloc = list.Count,
+												 items_count = list.Count
+											 };
 
-		    IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
+			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
 			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
 
 			returnList.ListPtr = nativeListStructPtr;

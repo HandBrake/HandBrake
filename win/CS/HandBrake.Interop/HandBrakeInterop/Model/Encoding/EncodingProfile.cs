@@ -21,7 +21,10 @@ namespace HandBrake.Interop.Model.Encoding
 			this.Cropping = new Cropping();
 		}
 
+		[Obsolete("Use ContainerName instead.")]
 		public Container OutputFormat { get; set; }
+
+		public string ContainerName { get; set; }
 		public OutputExtension PreferredExtension { get; set; }
 		public bool IncludeChapterMarkers { get; set; }
 		public bool LargeFile { get; set; }
@@ -77,6 +80,7 @@ namespace HandBrake.Interop.Model.Encoding
 			var profile = new EncodingProfile
 			{
 				OutputFormat = this.OutputFormat,
+				ContainerName = this.ContainerName,
 				PreferredExtension = this.PreferredExtension,
 				IncludeChapterMarkers = this.IncludeChapterMarkers,
 				LargeFile = this.LargeFile,

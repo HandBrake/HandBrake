@@ -14,6 +14,6 @@ namespace HandBrake.Interop.Model.Encoding
 
 		public int Id { get; set; }
 
-		public Container CompatibleContainers { get; set; }
+		public int CompatibleContainers { get; set; }
 	}
 }

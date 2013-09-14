@@ -86,20 +86,6 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_get_titles", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_get_titles(IntPtr hbHandle);
 
-
-		/// Return Type: int
-		///buf: hb_buffer_t*
-		///width: int
-		///height: int
-		///color_equal: int
-		///color_diff: int
-		///threshold: int
-		///prog_equal: int
-		///prog_diff: int
-		///prog_threshold: int
-		[DllImport("hb.dll", EntryPoint = "hb_detect_comb", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_detect_comb(ref hb_buffer_s buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold);
-
 		/// Return Type: void
 		///param0: hb_handle_t*
 		///param1: hb_title_t*
@@ -327,6 +313,19 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_audio_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_audio_encoder_get_next(IntPtr last);
 
+//int                   hb_container_get_from_name(const char *name);
+//int                   hb_container_get_from_extension(const char *extension); // not really a container name
+//const char*           hb_container_get_name(int format);
+//const char*           hb_container_get_short_name(int format);
+//const char*           hb_container_get_default_extension(int format);
+//const char*           hb_container_sanitize_name(const char *name);
+
+		[DllImport("hb.dll", EntryPoint = "hb_container_get_from_name", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_container_get_from_name([In] [MarshalAs(UnmanagedType.LPStr)] string name);
+
+		[DllImport("hb.dll", EntryPoint = "hb_container_get_next", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_container_get_next(IntPtr last);
+
 		[DllImport("hb.dll", EntryPoint = "lang_get_next", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr lang_get_next(IntPtr last);
 
@@ -373,6 +372,10 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_chapter_set_title", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void hb_chapter_set_title(IntPtr chapter, [In] [MarshalAs(UnmanagedType.LPStr)] string title);
 
+		///void hb_chapter_set_title(hb_chapter_t *chapter, const char *title);
+		[DllImport("hb.dll", EntryPoint = "hb_chapter_set_title", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_chapter_set_title__ptr(IntPtr chapter, IntPtr title);
+
 		/// void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * settings ); 
 		[DllImport("hb.dll", EntryPoint = "hb_add_filter", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void hb_add_filter(ref hb_job_s job, ref hb_filter_object_s filter, IntPtr settings);
@@ -398,10 +401,10 @@ namespace HandBrake.Interop.HbLib
 			int height);
 
 
-        [DllImport("hb.dll", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_qsv_available();
-        
-        [DllImport("hb.dll", EntryPoint = "hb_qsv_info_init", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_qsv_info_init();
+		[DllImport("hb.dll", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_qsv_available();
+		
+		[DllImport("hb.dll", EntryPoint = "hb_qsv_info_init", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_qsv_info_init();
 	}
 }

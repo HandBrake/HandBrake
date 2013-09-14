@@ -38,9 +38,14 @@ namespace HandBrake.Interop.Model
 		private static List<HBRate> videoFramerates; 
 
 		/// <summary>
-		/// The mixdowns.
+		/// List of HandBrake mixdowns.
 		/// </summary>
 		private static List<HBMixdown> mixdowns;
+
+		/// <summary>
+		/// List of HandBrake containers.
+		/// </summary>
+		private static List<HBContainer> containers; 
 
 		/// <summary>
 		/// The audio bitrates.
@@ -154,6 +159,22 @@ namespace HandBrake.Interop.Model
 
 				return audioSampleRates;
 			}
+		}
+
+		/// <summary>
+		/// Gets a list of supported containers.
+		/// </summary>
+		public static List<HBContainer> Containers
+		{
+			get
+			{
+				if (containers == null)
+				{
+					containers = InteropUtilities.GetListFromIterator<hb_container_s, HBContainer>(HBFunctions.hb_container_get_next, Converters.NativeToContainer);
+				}
+
+				return containers;
+			}
 		} 
 
 		/// <summary>
@@ -184,6 +205,16 @@ namespace HandBrake.Interop.Model
 		public static HBMixdown GetMixdown(string shortName)
 		{
 			return Mixdowns.SingleOrDefault(m => m.ShortName == shortName);
+		}
+
+		/// <summary>
+		/// Gets the container with the specified short name.
+		/// </summary>
+		/// <param name="shortName">The name of the container.</param>
+		/// <returns>The requested container.</returns>
+		public static HBContainer GetContainer(string shortName)
+		{
+			return Containers.SingleOrDefault(c => c.ShortName == shortName);
 		}
 
 		/// <summary>
