@@ -418,7 +418,7 @@ int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t 
             ff_qsv_atomic_dec(&qsv_vpp->p_syncp[sync_idx]->in_use);
 
             if (MFX_ERR_NOT_ENOUGH_BUFFER == sts)
-                DEBUG_ASSERT( 1,"The bitstream buffer size is insufficient." );
+                HB_DEBUG_ASSERT(1, "The bitstream buffer size is insufficient.");
 
             break;
     }
@@ -434,7 +434,7 @@ static int hb_qsv_filter_pre_work( hb_filter_object_t * filter,
     hb_buffer_t * out = *buf_out;
     int sts = 0;
 
-    av_qsv_context* qsv = pv->job->qsv;
+    av_qsv_context* qsv = pv->job->qsv.ctx;
 
     if(!in->qsv_details.filter_details)
         in->qsv_details.filter_details = pv;
@@ -489,7 +489,7 @@ static void hb_qsv_filter_pre_close( hb_filter_object_t * filter ){
     sws_freeContext(pv->sws_context_to_nv12);
     sws_freeContext(pv->sws_context_from_nv12);
 
-    av_qsv_context* qsv = pv->job->qsv;
+    av_qsv_context* qsv = pv->job->qsv.ctx;
     if(qsv && qsv->vpp_space && av_qsv_list_count(qsv->vpp_space) > 0 ){
         if(pv->qsv_user && qsv->mfx_session){
 
@@ -560,7 +560,7 @@ static int hb_qsv_filter_post_work( hb_filter_object_t * filter,
         return HB_FILTER_DONE;
     }
 
-    av_qsv_context* qsv = pv->job->qsv;
+    av_qsv_context* qsv = pv->job->qsv.ctx;
     pv = in->qsv_details.filter_details;
 
     if (!pv)

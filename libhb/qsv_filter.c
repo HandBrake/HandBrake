@@ -108,7 +108,7 @@ static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
     if(!qsv->dec_space || !qsv->dec_space->is_init_done) return 2;
 
     // we need to know final output settings before we can properly configure
-    if (!pv->job->qsv_enc_info.is_init_done)
+    if (!pv->job->qsv.enc_info.is_init_done)
     {
         return 2;
     }
@@ -168,12 +168,12 @@ static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
         qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD   = pv->job->vrate_base;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
-        qsv_vpp->m_mfxVideoParam.vpp.Out.Width           = pv->job->qsv_enc_info.align_width;
-        qsv_vpp->m_mfxVideoParam.vpp.Out.Height          = pv->job->qsv_enc_info.align_height;
+        qsv_vpp->m_mfxVideoParam.vpp.Out.Width           = pv->job->qsv.enc_info.align_width;
+        qsv_vpp->m_mfxVideoParam.vpp.Out.Height          = pv->job->qsv.enc_info.align_height;
 
         qsv_vpp->m_mfxVideoParam.IOPattern = MFX_IOPATTERN_IN_OPAQUE_MEMORY | MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
 
-        qsv_vpp->m_mfxVideoParam.AsyncDepth = pv->job->qsv_async_depth;
+        qsv_vpp->m_mfxVideoParam.AsyncDepth = pv->job->qsv.async_depth;
 
         memset(&qsv_vpp->request, 0, sizeof(mfxFrameAllocRequest)*2);
 
@@ -415,7 +415,7 @@ static void hb_qsv_filter_close( hb_filter_object_t * filter )
         return;
     }
 
-    av_qsv_context* qsv = pv->job->qsv;
+    av_qsv_context* qsv = pv->job->qsv.ctx;
     if(qsv && qsv->vpp_space && av_qsv_list_count(qsv->vpp_space) > 0){
 
         // closing local stuff
@@ -543,7 +543,7 @@ int process_frame(av_qsv_list* received_item, av_qsv_context* qsv, hb_filter_pri
             ff_qsv_atomic_dec(&qsv_vpp->p_syncp[sync_idx]->in_use);
 
             if (MFX_ERR_NOT_ENOUGH_BUFFER == sts)
-                DEBUG_ASSERT( 1,"The bitstream buffer size is insufficient." );
+                HB_DEBUG_ASSERT(1, "The bitstream buffer size is insufficient.");
 
             break;
     }
@@ -561,7 +561,7 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
     hb_buffer_t * out = *buf_out;
     int sts = 0;
 
-    av_qsv_context* qsv = pv->job->qsv;
+    av_qsv_context* qsv = pv->job->qsv.ctx;
 
     if ( !pv )
     {

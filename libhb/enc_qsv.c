@@ -169,7 +169,7 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
             hb_error("qsv_enc_init: decode enabled but no context!");
             return 3;
         }
-        job->qsv = qsv = av_mallocz(sizeof(av_qsv_context));
+        job->qsv.ctx = qsv = av_mallocz(sizeof(av_qsv_context));
     }
 
     av_qsv_space *qsv_encode = qsv->enc_space;
@@ -388,7 +388,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     // set AsyncDepth to match that of decode and VPP
-    pv->param.videoParam->AsyncDepth = job->qsv_async_depth;
+    pv->param.videoParam->AsyncDepth = job->qsv.async_depth;
 
     // enable and set colorimetry (video signal information)
     pv->param.videoSignalInfo.ColourDescriptionPresent = 1;
@@ -490,15 +490,15 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // some encoding parameters are used by filters to configure their output
     if (pv->param.videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE)
     {
-        job->qsv_enc_info.align_height = AV_QSV_ALIGN32(job->height);
+        job->qsv.enc_info.align_height = AV_QSV_ALIGN32(job->height);
     }
     else
     {
-        job->qsv_enc_info.align_height = AV_QSV_ALIGN16(job->height);
+        job->qsv.enc_info.align_height = AV_QSV_ALIGN16(job->height);
     }
-    job->qsv_enc_info.align_width  = AV_QSV_ALIGN16(job->width);
-    job->qsv_enc_info.pic_struct   = pv->param.videoParam->mfx.FrameInfo.PicStruct;
-    job->qsv_enc_info.is_init_done = 1;
+    job->qsv.enc_info.align_width  = AV_QSV_ALIGN16(job->width);
+    job->qsv.enc_info.pic_struct   = pv->param.videoParam->mfx.FrameInfo.PicStruct;
+    job->qsv.enc_info.is_init_done = 1;
 
     // encode to H.264 and set FrameInfo
     pv->param.videoParam->mfx.CodecId                 = MFX_CODEC_AVC;
@@ -514,9 +514,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.FrameInfo.CropY         = 0;
     pv->param.videoParam->mfx.FrameInfo.CropW         = job->width;
     pv->param.videoParam->mfx.FrameInfo.CropH         = job->height;
-    pv->param.videoParam->mfx.FrameInfo.PicStruct     = job->qsv_enc_info.pic_struct;
-    pv->param.videoParam->mfx.FrameInfo.Width         = job->qsv_enc_info.align_width;
-    pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv_enc_info.align_height;
+    pv->param.videoParam->mfx.FrameInfo.PicStruct     = job->qsv.enc_info.pic_struct;
+    pv->param.videoParam->mfx.FrameInfo.Width         = job->qsv.enc_info.align_width;
+    pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv.enc_info.align_height;
 
     // set H.264 profile and level
     if (job->h264_profile != NULL && job->h264_profile[0] != '\0' &&
@@ -1015,11 +1015,12 @@ void encqsvClose( hb_work_object_t * w )
 
     hb_log( "enc_qsv done: frames: %u in, %u out", pv->frames_in, pv->frames_out );
 
-    // if system memory ( encode only ) additional free(s) for surfaces
-    if( pv && pv->job && pv->job->qsv &&
-        pv->job->qsv->is_context_active ){
+    // if using system memory (encode-only), free allocated surfaces too
+    if (pv != NULL && pv->job != NULL && pv->job->qsv.ctx != NULL &&
+        pv->job->qsv.ctx->is_context_active)
+    {
 
-        av_qsv_context *qsv = pv->job->qsv;
+        av_qsv_context *qsv = pv->job->qsv.ctx;
 
         if(qsv && qsv->enc_space){
         av_qsv_space* qsv_encode = qsv->enc_space;
@@ -1102,7 +1103,7 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_job_t * job = pv->job;
     hb_buffer_t * in = *buf_in, *buf;
-    av_qsv_context *qsv = job->qsv;
+    av_qsv_context *qsv = job->qsv.ctx;
     av_qsv_space* qsv_encode;
     hb_buffer_t *last_buf = NULL;
     mfxStatus sts = MFX_ERR_NONE;
@@ -1112,7 +1113,7 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     while(1){
         int ret = qsv_enc_init(qsv, pv);
-        qsv = job->qsv;
+        qsv = job->qsv.ctx;
         qsv_encode = qsv->enc_space;
         if(ret >= 2)
             av_qsv_sleep(1);
@@ -1310,7 +1311,7 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             ff_qsv_atomic_dec(&qsv_encode->p_syncp[sync_idx]->in_use);
 
             if (MFX_ERR_NOT_ENOUGH_BUFFER == sts)
-                DEBUG_ASSERT( 1,"The bitstream buffer size is insufficient." );
+                HB_DEBUG_ASSERT(1, "The bitstream buffer size is insufficient.");
 
             break;
         }

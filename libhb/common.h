@@ -59,6 +59,10 @@
 #define MAX( a, b ) ( (a) > (b) ? (a) : (b) )
 #endif
 
+#ifndef HB_DEBUG_ASSERT
+#define HB_DEBUG_ASSERT(x, y) { if ((x)) { hb_error("ASSERT: %s", y); exit(1); } }
+#endif
+
 #define EVEN( a )        ( (a) + ( (a) & 1 ) )
 #define MULTIPLE_16( a ) ( 16 * ( ( (a) + 8 ) / 16 ) )
 #define MULTIPLE_MOD( a, b ) ((b==1)?a:( b * ( ( (a) + (b / 2) - 1) / b ) ))
@@ -106,11 +110,6 @@ typedef struct hb_lock_s hb_lock_t;
 #include "libavutil/channel_layout.h"
 
 #ifdef USE_QSV
-
-#ifndef DEBUG_ASSERT
-#define DEBUG_ASSERT(x,y) { if ((x)) { hb_error("ASSERT: %s", y); exit(1); } }
-#endif
-
 #include "libavcodec/qsv.h"
 #endif
 
@@ -513,19 +512,23 @@ struct hb_job_s
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
 #ifdef USE_QSV
-    av_qsv_context   *qsv;
-    int               qsv_decode;
-    int               qsv_async_depth;
-    // shared encoding parameters
-    // initialized by the QSV encoder, then used upstream (e.g. by filters) to
-    // configure their output so that it corresponds to what the encoder expects
+    // QSV-specific settings
     struct
     {
-        int pic_struct;
-        int align_width;
-        int align_height;
-        int is_init_done;
-    } qsv_enc_info;
+        int decode;
+        int async_depth;
+        av_qsv_context *ctx;
+        // shared encoding parameters
+        // initialized by the QSV encoder, then used upstream (e.g. by filters)
+        // to configure their output so that it matches what the encoder expects
+        struct
+        {
+            int pic_struct;
+            int align_width;
+            int align_height;
+            int is_init_done;
+        } enc_info;
+    } qsv;
 #endif
 
 #ifdef __LIBHB__
@@ -860,9 +863,10 @@ struct hb_title_s
     char        *container_name;
     int         data_rate;
 
-#ifdef USE_QSV
-    int qsv_decode_support;
-#endif
+    // additional supported video decoders (e.g. HW-accelerated implementations)
+    int video_decode_support;
+#define HB_DECODE_SUPPORT_SW  0x01 // software (libavcodec or mpeg2dec)
+#define HB_DECODE_SUPPORT_QSV 0x02 // Intel Quick Sync Video
 
     hb_metadata_t *metadata;
 
@@ -960,9 +964,7 @@ typedef struct hb_work_info_s
             int color_prim;
             int color_transfer;
             int color_matrix;
-#ifdef USE_QSV
-            int qsv_decode_support;
-#endif
+            int video_decode_support;
         };
         struct
         {    // info only valid for audio decoders

@@ -103,6 +103,19 @@ namespace HandBrake.Interop.HbLib
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
+	public struct qsv_s
+	{
+		public int decode;
+
+		public int async_depth;
+
+		/// av_qsv_context*
+		public IntPtr ctx;
+
+		public qsv_enc_info_s enc_info;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_encoder_s
 	{
 		[MarshalAs(UnmanagedType.LPStr)]

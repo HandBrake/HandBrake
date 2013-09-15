@@ -106,5 +106,9 @@ namespace HandBrake.Interop.HbLib
 		public const int HB_COLR_MAT_SMPTE170M = 6; // also use for fcc and bt470bg
 		public const int HB_COLR_MAT_SMPTE240M = 7;
 		// 0, 3-5, 8-65535: reserved
+
+		// hb_title_t.video_decode_support values (bit field)
+		public const int HB_DECODE_SUPPORT_SW = 0x01; // software (libavcodec or mpeg2dec)
+		public const int HB_DECODE_SUPPORT_QSV = 0x02; // Intel Quick Sync Video
 	}
 }

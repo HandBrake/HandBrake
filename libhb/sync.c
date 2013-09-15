@@ -530,12 +530,13 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 #ifdef USE_QSV
             // reclaim QSV resources before dropping the buffer
             // when decoding without QSV, the QSV atom will be NULL
-            if (job != NULL && job->qsv != NULL && next->qsv_details.qsv_atom != NULL)
+            if (job != NULL && job->qsv.ctx != NULL &&
+                next->qsv_details.qsv_atom  != NULL)
             {
                 av_qsv_stage *stage = av_qsv_get_last_stage(next->qsv_details.qsv_atom);
                 if (stage != NULL)
                 {
-                    av_qsv_wait_on_sync(job->qsv, stage);
+                    av_qsv_wait_on_sync(job->qsv.ctx, stage);
                     if (stage->out.sync->in_use > 0)
                     {
                         ff_qsv_atomic_dec(&stage->out.sync->in_use);
@@ -545,7 +546,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
                     }
                 }
-                av_qsv_flush_stages(job->qsv->pipes, &next->qsv_details.qsv_atom);
+                av_qsv_flush_stages(job->qsv.ctx->pipes,
+                                    &next->qsv_details.qsv_atom);
             }
 #endif
             hb_buffer_close( &next );
@@ -745,12 +747,13 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 #ifdef USE_QSV
         // reclaim QSV resources before dropping the buffer
         // when decoding without QSV, the QSV atom will be NULL
-        if (job != NULL && job->qsv != NULL && next->qsv_details.qsv_atom != NULL)
+        if (job != NULL && job->qsv.ctx != NULL &&
+            next->qsv_details.qsv_atom  != NULL)
         {
             av_qsv_stage *stage = av_qsv_get_last_stage(next->qsv_details.qsv_atom);
             if (stage != NULL)
             {
-                av_qsv_wait_on_sync(job->qsv, stage);
+                av_qsv_wait_on_sync(job->qsv.ctx, stage);
                 if (stage->out.sync->in_use > 0)
                 {
                     ff_qsv_atomic_dec(&stage->out.sync->in_use);
@@ -760,7 +763,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
                 }
             }
-            av_qsv_flush_stages(job->qsv->pipes, &next->qsv_details.qsv_atom);
+            av_qsv_flush_stages(job->qsv.ctx->pipes,
+                                &next->qsv_details.qsv_atom);
         }
 #endif
 

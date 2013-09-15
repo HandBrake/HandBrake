@@ -138,7 +138,8 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int data_rate;
 
-        public int qsv_decode_support;
+		/// int
+		public int video_decode_support;
 
 		/// hb_metadata_t*
 		public IntPtr metadata;

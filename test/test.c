@@ -1880,9 +1880,9 @@ static int HandleEvents( hb_handle_t * h )
 #ifdef USE_QSV
             if (qsv_async_depth >= 0)
             {
-                job->qsv_async_depth = qsv_async_depth;
+                job->qsv.async_depth = qsv_async_depth;
             }
-            job->qsv_decode = qsv_decode;
+            job->qsv.decode = qsv_decode;
 #endif
 
             /* Grab audio tracks */

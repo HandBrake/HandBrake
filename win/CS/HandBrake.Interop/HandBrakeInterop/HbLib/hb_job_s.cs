@@ -169,13 +169,7 @@ namespace HandBrake.Interop.HbLib
 		/// uint32_t->unsigned int
 		public uint frames_to_skip;
 
-		public IntPtr av_qsv_context;
-
-		public int qsv_decode;
-
-		public int qsv_async_depth;
-
-		public qsv_enc_info_s qsv_enc_info;
+		public qsv_s qsv;
 
 		// Padding for the part of the struct we don't care about marshaling.
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = MarshalingConstants.JobPaddingBytes, ArraySubType = UnmanagedType.U1)]
