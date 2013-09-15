@@ -991,9 +991,11 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                 break;
             default:
                 hb_log("encqsvInit: Trellis on (%s%s%s)",
-                       option2->Trellis & MFX_TRELLIS_I ? "I" : "",
-                       option2->Trellis & MFX_TRELLIS_P ? "P" : "",
-                       option2->Trellis & MFX_TRELLIS_B ? "B" : "");
+                       (option2->Trellis & MFX_TRELLIS_I) ? "I" : "",
+                       (option2->Trellis & MFX_TRELLIS_P) &&
+                       (videoParam.mfx.GopPicSize > 1)    ? "P" : "",
+                       (option2->Trellis & MFX_TRELLIS_B) &&
+                       (videoParam.mfx.GopRefDist > 1)    ? "B" : "");
                 break;
         }
     }
