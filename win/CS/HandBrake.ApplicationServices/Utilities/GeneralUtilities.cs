@@ -31,6 +31,11 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
 
+        /// <summary>
+        /// The is lib hb present.
+        /// </summary>
+        private static bool? isLibHbPresent;
+
         #endregion
 
         #region Properties
@@ -43,6 +48,22 @@ namespace HandBrake.ApplicationServices.Utilities
             get
             {
                 return Process.GetCurrentProcess().Id;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is lib hb present.
+        /// </summary>
+        public static bool IsLibHbPresent
+        {
+            get
+            {
+                if (isLibHbPresent == null)
+                {
+                    isLibHbPresent = File.Exists(Path.Combine(Application.StartupPath, "hb.dll"));
+                }
+
+                return isLibHbPresent.Value;
             }
         }
 

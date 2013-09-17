@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+    using System.ServiceModel.Channels;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -199,7 +200,7 @@ namespace HandBrakeWPF.ViewModels
                 if (!object.Equals(value, this.useAdvancedTab))
                 {
                     // Set the Advanced Tab up with the current settings, if we can.
-                    if (value && !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibHbFeatures))
+                    if (value)
                     {
                         this.Task.AdvancedEncoderOptions = this.GetActualx264Query();
                     }
@@ -1133,7 +1134,7 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private string GetActualx264Query()
         {
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibHbFeatures))
+            if (!GeneralUtilities.IsLibHbPresent)
             {
                 return string.Empty; // Feature is disabled.
             }

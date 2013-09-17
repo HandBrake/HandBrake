@@ -195,11 +195,6 @@ namespace HandBrakeWPF
         /// The last preview duration
         /// </summary>
         public const string LastPreviewDuration = "LastPreviewDuration";
-
-        /// <summary>
-        /// Disable LibHb Features
-        /// </summary>
-        public const string DisableLibHbFeatures = "DisableLibHbFeatures";
     
         /// <summary>
         /// When Complete Action
