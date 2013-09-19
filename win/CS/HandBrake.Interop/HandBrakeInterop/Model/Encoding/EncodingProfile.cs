@@ -79,7 +79,9 @@ namespace HandBrake.Interop.Model.Encoding
 		{
 			var profile = new EncodingProfile
 			{
+#pragma warning disable 612, 618
 				OutputFormat = this.OutputFormat,
+#pragma warning restore 612, 618
 				ContainerName = this.ContainerName,
 				PreferredExtension = this.PreferredExtension,
 				IncludeChapterMarkers = this.IncludeChapterMarkers,

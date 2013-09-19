@@ -167,6 +167,29 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
+		/// Gets the HandBrake version string.
+		/// </summary>
+		public string Version
+		{
+			get
+			{
+				var versionPtr = HBFunctions.hb_get_version(this.hbHandle);
+				return Marshal.PtrToStringAnsi(versionPtr);
+			}
+		}
+
+		/// <summary>
+		/// Gets the HandBrake build number.
+		/// </summary>
+		public int Build
+		{
+			get
+			{
+				return HBFunctions.hb_get_build(this.hbHandle);
+			}
+		}
+
+		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="verbosity">The code for the logging verbosity to use.</param>

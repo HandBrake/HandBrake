@@ -178,6 +178,7 @@ hb_list_t *hb_chapter_list_copy(const hb_list_t *src);
 void hb_chapter_close(hb_chapter_t **chapter);
 void hb_chapter_set_title(hb_chapter_t *chapter, const char *title);
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_rate_s.cs when changing this struct
 struct hb_rate_s
 {
     const char *name;
@@ -191,6 +192,7 @@ struct hb_dither_s
     int         method;
 };
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_mixdown_s.cs when changing this struct
 struct hb_mixdown_s
 {
     const char *name;
@@ -198,6 +200,7 @@ struct hb_mixdown_s
     int         amixdown;
 };
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_encoder_s.cs when changing this struct
 struct hb_encoder_s
 {
     const char *name;       // note: used in presets
@@ -206,6 +209,7 @@ struct hb_encoder_s
     int         muxers;     // supported muxers
 };
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_container_s.cs when changing this struct
 struct hb_container_s
 {
     const char *name;
@@ -214,6 +218,7 @@ struct hb_container_s
     int         format;
 };
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_subtitle_config_s.cs when changing this struct
 struct hb_subtitle_config_s
 {
     enum subdest { RENDERSUB, PASSTHRUSUB } dest;
@@ -341,6 +346,7 @@ const char*           hb_container_get_default_extension(int format);
 const char*           hb_container_sanitize_name(const char *name);
 const hb_container_t* hb_container_get_next(const hb_container_t *last);
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_title_set_s.cs when changing this struct
 struct hb_title_set_s
 {
     hb_list_t   * list_title;
@@ -349,6 +355,7 @@ struct hb_title_set_s
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
+ * Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_job_s.cs when changing this struct
  *****************************************************************************/
 struct hb_job_s
 {
@@ -556,7 +563,7 @@ struct hb_job_s
 };
 
 /* Audio starts here */
-/* Audio Codecs */
+/* Audio Codecs: Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/NativeConstants.cs when changing these consts */
 #define HB_ACODEC_MASK      0x00FFFF00
 #define HB_ACODEC_FAAC      0x00000100
 #define HB_ACODEC_LAME      0x00000200
@@ -593,6 +600,7 @@ struct hb_job_s
 /* define an invalid VBR quality compatible with all VBR-capable codecs */
 #define HB_INVALID_AUDIO_QUALITY (-3.)
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_config_s.cs when changing this struct
 struct hb_audio_config_s
 {
     /* Output */
@@ -658,6 +666,7 @@ struct hb_audio_config_s
 };
 
 #ifdef __LIBHB__
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_s.cs when changing this struct
 struct hb_audio_s
 {
     int id;
@@ -677,6 +686,7 @@ struct hb_audio_s
 };
 #endif
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_chapter_s.cs when changing this struct
 struct hb_chapter_s
 {
     int      index;
@@ -727,6 +737,8 @@ struct hb_chapter_s
  *     - may correspond to the type of track (see the 'type' field; ex: "Closed Captions")
  * > iso639_2
  *     - language code for the subtitle, or "und" if unknown
+ *
+ * Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_subtitle_s.cs when changing this struct
  */
 struct hb_subtitle_s
 {
@@ -812,6 +824,7 @@ struct hb_metadata_s
     hb_list_t * list_coverart;
 };
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_title_s.cs when changing this struct
 struct hb_title_s
 {
     enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE } type;
@@ -886,7 +899,7 @@ struct hb_title_s
 #define         HBTF_SCAN_COMPLETE (1 << 0)
 };
 
-
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_state_s.cs when changing this struct
 struct hb_state_s
 {
 #define HB_STATE_IDLE     1
@@ -1111,6 +1124,7 @@ struct hb_filter_object_s
 #endif
 };
 
+// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_filter_ids.cs when changing this enum
 enum
 {
     // for QSV - important to have before other filters

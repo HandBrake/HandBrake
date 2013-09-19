@@ -76,22 +76,6 @@ namespace HandBrake.Interop.HbLib
 		public int delay;
 	}
 
-	public enum hb_mixdown
-	{
-		HB_INVALID_AMIXDOWN = -1,
-		HB_AMIXDOWN_NONE = 0,
-		HB_AMIXDOWN_MONO,
-		HB_AMIXDOWN_LEFT,
-		HB_AMIXDOWN_RIGHT,
-		HB_AMIXDOWN_STEREO,
-		HB_AMIXDOWN_DOLBY,
-		HB_AMIXDOWN_DOLBYPLII,
-		HB_AMIXDOWN_5POINT1,
-		HB_AMIXDOWN_6POINT1,
-		HB_AMIXDOWN_7POINT1,
-		HB_AMIXDOWN_5_2_LFE,
-	}
-
 	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_audio_config_input_s
 	{

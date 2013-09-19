@@ -175,4 +175,51 @@ namespace HandBrake.Interop.HbLib
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = MarshalingConstants.JobPaddingBytes, ArraySubType = UnmanagedType.U1)]
 		public byte[] padding;
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct hb_anamorphic_substruct
+	{
+		/// int
+		public int mode;
+
+		/// int
+		public int itu_par;
+
+		/// int
+		public int par_width;
+
+		/// int
+		public int par_height;
+
+		/// int
+		public int dar_width;
+
+		/// int
+		public int dar_height;
+
+		/// int
+		public int keep_display_aspect;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct qsv_enc_info_s
+	{
+		public int pic_struct;
+		public int align_width;
+		public int align_height;
+		public int is_init_done;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct qsv_s
+	{
+		public int decode;
+
+		public int async_depth;
+
+		/// av_qsv_context* 
+		public IntPtr ctx;
+
+		public qsv_enc_info_s enc_info;
+	} 
 }

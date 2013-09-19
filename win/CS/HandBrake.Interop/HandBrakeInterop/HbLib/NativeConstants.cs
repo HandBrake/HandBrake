@@ -10,62 +10,38 @@
 
 namespace HandBrake.Interop.HbLib
 {
-	public partial class NativeConstants
+	public class NativeConstants
 	{
-        // Audio Encoders
-        public const uint  HB_ACODEC_MASK   =   0x00FFFF00;
-	    public const uint HB_ACODEC_FAAC = 0x00000100;
-	    public const uint HB_ACODEC_LAME = 0x00000200;
-	    public const uint HB_ACODEC_VORBIS = 0x00000400;
-	    public const uint HB_ACODEC_AC3 = 0x00000800;
-	    public const uint HB_ACODEC_LPCM = 0x00001000;
-	    public const uint HB_ACODEC_DCA = 0x00002000;
-	    public const uint HB_ACODEC_CA_AAC = 0x00004000;
-	    public const uint HB_ACODEC_CA_HAAC = 0x00008000;
-	    public const uint HB_ACODEC_FFAAC = 0x00010000;
-	    public const uint HB_ACODEC_FFMPEG = 0x00020000;
-	    public const uint HB_ACODEC_DCA_HD = 0x00040000;
-	    public const uint HB_ACODEC_MP3 = 0x00080000;
-	    public const uint HB_ACODEC_FFFLAC = 0x00100000;
-	    public const uint HB_ACODEC_FFFLAC24 = 0x00200000;
-	    public const uint HB_ACODEC_FDK_AAC = 0x00400000;
-	    public const uint HB_ACODEC_FDK_HAAC = 0x00800000;
-	    public const uint HB_ACODEC_FF_MASK = 0x00FF2000;
-	    public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
-	    public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA);
-	    public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG);
-	    public const uint HB_ACODEC_MP3_PASS = (HB_ACODEC_MP3 | HB_ACODEC_PASS_FLAG);
-	    public const uint HB_ACODEC_AAC_PASS = (HB_ACODEC_FFAAC | HB_ACODEC_PASS_FLAG);
-	    public const uint HB_ACODEC_AC3_PASS = (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG);
-	    public const uint HB_ACODEC_DCA_PASS = (HB_ACODEC_DCA | HB_ACODEC_PASS_FLAG);
-	    public const uint HB_ACODEC_DCA_HD_PASS = (HB_ACODEC_DCA_HD | HB_ACODEC_PASS_FLAG);
-	    public const uint HB_ACODEC_ANY = (HB_ACODEC_MASK | HB_ACODEC_PASS_FLAG);
+		// Audio encoders
+		public const uint HB_ACODEC_MASK = 0x00FFFF00;
+		public const uint HB_ACODEC_FAAC = 0x00000100;
+		public const uint HB_ACODEC_LAME = 0x00000200;
+		public const uint HB_ACODEC_VORBIS = 0x00000400;
+		public const uint HB_ACODEC_AC3 = 0x00000800;
+		public const uint HB_ACODEC_LPCM = 0x00001000;
+		public const uint HB_ACODEC_DCA = 0x00002000;
+		public const uint HB_ACODEC_CA_AAC = 0x00004000;
+		public const uint HB_ACODEC_CA_HAAC = 0x00008000;
+		public const uint HB_ACODEC_FFAAC = 0x00010000;
+		public const uint HB_ACODEC_FFMPEG = 0x00020000;
+		public const uint HB_ACODEC_DCA_HD = 0x00040000;
+		public const uint HB_ACODEC_MP3 = 0x00080000;
+		public const uint HB_ACODEC_FFFLAC = 0x00100000;
+		public const uint HB_ACODEC_FFFLAC24 = 0x00200000;
+		public const uint HB_ACODEC_FDK_AAC = 0x00400000;
+		public const uint HB_ACODEC_FDK_HAAC = 0x00800000;
+		public const uint HB_ACODEC_FF_MASK = 0x00FF2000;
+		public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
+		public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA);
+		public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG);
+		public const uint HB_ACODEC_MP3_PASS = (HB_ACODEC_MP3 | HB_ACODEC_PASS_FLAG);
+		public const uint HB_ACODEC_AAC_PASS = (HB_ACODEC_FFAAC | HB_ACODEC_PASS_FLAG);
+		public const uint HB_ACODEC_AC3_PASS = (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG);
+		public const uint HB_ACODEC_DCA_PASS = (HB_ACODEC_DCA | HB_ACODEC_PASS_FLAG);
+		public const uint HB_ACODEC_DCA_HD_PASS = (HB_ACODEC_DCA_HD | HB_ACODEC_PASS_FLAG);
+		public const uint HB_ACODEC_ANY = (HB_ACODEC_MASK | HB_ACODEC_PASS_FLAG);
 
-        // Subtitle Types
-		public const int HB_SUBSTREAM_BD_TRUEHD = 0x72;
-		public const int HB_SUBSTREAM_BD_AC3 = 0x76;
-		public const int HB_SUBSTREAM_BD_DTSHD = 0x72;
-		public const int HB_SUBSTREAM_BD_DTS = 0x71;
-
-        // Video Encoders
-        public const int HB_VCODEC_MASK = 0x0000FFF;
-		public const int HB_VCODEC_X264 = 0x000001;
-		public const int HB_VCODEC_THEORA = 0x000002;
-		public const int HB_VCODEC_FFMPEG_MPEG4 = 0x000010;
-		public const int HB_VCODEC_FFMPEG = HB_VCODEC_FFMPEG_MPEG4;
-		public const int HB_VCODEC_FFMPEG_MPEG2 = 0x000020;
-		public const int HB_VCODEC_FFMPEG_MASK = 0x0000F0;
-	    public const int HB_VCODEC_QSV_H264 = 0x0000100;
-	    public const int HB_VCODEC_QSV_MASK = 0x0000F00;
-	    public const int HB_VCODEC_H264_MASK = (HB_VCODEC_X264 | HB_VCODEC_QSV_H264);
-
-        // Muxers
-		public const int HB_MUX_MASK = 0xFF0000;
-		public const int HB_MUX_MP4 = 0x010000;
-		public const int HB_MUX_MKV = 0x100000;
-
-		public const int HBTF_NO_IDR = 1 << 0;
-
+		// Encode state
 		public const int HB_STATE_IDLE = 1;
 		public const int HB_STATE_SCANNING = 2;
 		public const int HB_STATE_SCANDONE = 4;
@@ -73,42 +49,5 @@ namespace HandBrake.Interop.HbLib
 		public const int HB_STATE_PAUSED = 16;
 		public const int HB_STATE_WORKDONE = 32;
 		public const int HB_STATE_MUXING = 64;
-
-		public const int HB_ERROR_NONE = 0;
-		public const int HB_ERROR_CANCELED = 1;
-		public const int HB_ERROR_UNKNOWN = 2;
-
-		public const int AUDIO_F_DOLBY = 1 << 31;
-
-		public const int HB_FRAME_IDR = 0x01;
-		public const int HB_FRAME_I = 0x02;
-		public const int HB_FRAME_AUDIO = 0x04;
-		public const int HB_FRAME_P = 0x10;
-		public const int HB_FRAME_B = 0x20;
-		public const int HB_FRAME_BREF = 0x40;
-		public const int HB_FRAME_KEY = 0x0F;
-		public const int HB_FRAME_REF = 0xF0;
-
-		public const int HB_CONFIG_MAX_SIZE = 8192;
-
-		// see https://developer.apple.com/quicktime/icefloe/dispatch019.html#colr
-		public const int HB_COLR_PRI_BT709 = 1;
-		public const int HB_COLR_PRI_UNDEF = 2;
-		public const int HB_COLR_PRI_EBUTECH = 5; // use for bt470bg
-		public const int HB_COLR_PRI_SMPTEC = 6; // smpte170m; also use for bt470m and smpte240m
-		// 0, 3-4, 7-65535: reserved
-		public const int HB_COLR_TRA_BT709 = 1; // also use for bt470m, bt470bg and smpte170m
-		public const int HB_COLR_TRA_UNDEF = 2;
-		public const int HB_COLR_TRA_SMPTE240M = 7;
-		// 0, 3-6, 8-65535: reserved
-		public const int HB_COLR_MAT_BT709 = 1;
-		public const int HB_COLR_MAT_UNDEF = 2;
-		public const int HB_COLR_MAT_SMPTE170M = 6; // also use for fcc and bt470bg
-		public const int HB_COLR_MAT_SMPTE240M = 7;
-		// 0, 3-5, 8-65535: reserved
-
-		// hb_title_t.video_decode_support values (bit field)
-		public const int HB_DECODE_SUPPORT_SW = 0x01; // software (libavcodec or mpeg2dec)
-		public const int HB_DECODE_SUPPORT_QSV = 0x02; // Intel Quick Sync Video
 	}
 }

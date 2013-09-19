@@ -13,6 +13,9 @@ namespace HandBrake.Interop.HbLib
 	using System;
 	using System.Runtime.InteropServices;
 
+	/// <summary>
+	/// Contains p-invoke function declarations to hblib.
+	/// </summary>
 	public static class HBFunctions
 	{
 		[DllImport("hb.dll", EntryPoint = "hb_register_logger", CallingConvention = CallingConvention.Cdecl)]
@@ -41,20 +44,20 @@ namespace HandBrake.Interop.HbLib
 		/// Return Type: char*
 		///param0: hb_handle_t*
 		[DllImport("hb.dll", EntryPoint = "hb_get_version", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr hb_get_version(ref hb_handle_s param0);
+		public static extern IntPtr hb_get_version(IntPtr hbHandle);
 
 
 		/// Return Type: int
 		///param0: hb_handle_t*
 		[DllImport("hb.dll", EntryPoint = "hb_get_build", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_build(ref hb_handle_s param0);
+		public static extern int hb_get_build(IntPtr hbHandle);
 
 
 		/// Return Type: int
 		///h: hb_handle_t*
 		///version: char**
 		[DllImport("hb.dll", EntryPoint = "hb_check_update", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_check_update(ref hb_handle_s h, ref IntPtr version);
+		public static extern int hb_check_update(IntPtr handle, ref IntPtr version);
 
 
 		/// Return Type: char*
@@ -175,13 +178,13 @@ namespace HandBrake.Interop.HbLib
 		///param0: hb_handle_t*
 		///param1: hb_state_t*
 		[DllImport("hb.dll", EntryPoint = "hb_get_state2", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_get_state2(ref hb_handle_s param0, ref hb_state_s param1);
+		public static extern void hb_get_state2(IntPtr hbHandle, ref hb_state_s param1);
 
 
 		/// Return Type: int
 		///param0: hb_handle_t*
 		[DllImport("hb.dll", EntryPoint = "hb_get_scancount", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_get_scancount(ref hb_handle_s param0);
+		public static extern int hb_get_scancount(IntPtr hbHandle);
 
 
 		/// Return Type: void

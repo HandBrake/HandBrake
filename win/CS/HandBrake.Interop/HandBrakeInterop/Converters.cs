@@ -65,46 +65,6 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
-		/// Gets the native code for the given encoder.
-		/// </summary>
-		/// <param name="encoder">The audio encoder to convert.</param>
-		/// <returns>The native code for the encoder.</returns>
-		public static uint AudioEncoderToNative(AudioEncoder encoder)
-		{
-			switch (encoder)
-			{
-				case AudioEncoder.Passthrough:
-					return NativeConstants.HB_ACODEC_AUTO_PASS;
-				case AudioEncoder.Ac3Passthrough:
-					return NativeConstants.HB_ACODEC_AC3_PASS;
-				case AudioEncoder.Ac3:
-					return NativeConstants.HB_ACODEC_AC3;
-				case AudioEncoder.ffaac:
-					return NativeConstants.HB_ACODEC_FFAAC;
-				case AudioEncoder.fdkaac:
-					return NativeConstants.HB_ACODEC_FDK_AAC;
-				case AudioEncoder.fdkheaac:
-					return NativeConstants.HB_ACODEC_FDK_HAAC;
-				case AudioEncoder.AacPassthru:
-					return NativeConstants.HB_ACODEC_AAC_PASS;
-				case AudioEncoder.Lame:
-					return NativeConstants.HB_ACODEC_LAME;
-				case AudioEncoder.Mp3Passthru:
-					return NativeConstants.HB_ACODEC_MP3_PASS;
-				case AudioEncoder.DtsPassthrough:
-					return NativeConstants.HB_ACODEC_DCA_PASS;
-				case AudioEncoder.DtsHDPassthrough:
-					return NativeConstants.HB_ACODEC_DCA_HD_PASS;
-				case AudioEncoder.Vorbis:
-					return NativeConstants.HB_ACODEC_VORBIS;
-				case AudioEncoder.ffflac:
-					return NativeConstants.HB_ACODEC_FFFLAC;
-			}
-
-			return 0;
-		}
-
-		/// <summary>
 		/// Convert Native HB Internal Audio int to a AudioCodec model.
 		/// </summary>
 		/// <param name="codec">
