@@ -379,15 +379,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
                     ifo->vts_c_adt->cell_adr_table[i].last_sector );
             goto fail;
         }
-        if( ifo->vts_c_adt->cell_adr_table[i].start_sector >=
-            ifo->vts_c_adt->cell_adr_table[i].last_sector )
-        {
-            hb_log( "scan: cell_adr_table[%d].start_sector (0x%x) "
-                    "is not before last_sector (0x%x) - skipping title", i,
-                    ifo->vts_c_adt->cell_adr_table[i].start_sector,
-                    ifo->vts_c_adt->cell_adr_table[i].last_sector );
-            goto fail;
-        }
     }
 
     if( global_verbosity_level == 3 )
