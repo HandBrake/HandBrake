@@ -48,7 +48,7 @@ BOOL                        fIsDragging;
 
 
 
-@interface HBQueueController : NSWindowController
+@interface HBQueueController : NSWindowController <NSToolbarDelegate>
 {
     hb_handle_t                  *fQueueEncodeLibhb;              // reference to libhb
     HBController                 *fHBController;        // reference to HBController
