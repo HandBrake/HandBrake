@@ -99,7 +99,6 @@
     <Compile Include="LibHb\AudioVideoHelpers.cs" />
     <Compile Include="Services\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
-    <Compile Include="Services\Interfaces\IScanServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IServerService.cs" />
     <Compile Include="Services\ServerService.cs" />
     <Compile Include="Utilities\Converters.cs" />

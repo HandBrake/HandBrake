@@ -22,7 +22,7 @@ namespace HandBrakeWPF.Commands
         /// <summary>
         /// The scan service wrapper.
         /// </summary>
-        private readonly IScanServiceWrapper scanServiceWrapper;
+        private readonly IScan scanServiceWrapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CancelScanCommand"/> class.
@@ -30,7 +30,7 @@ namespace HandBrakeWPF.Commands
         /// <param name="ssw">
         /// The scan service wrapper.
         /// </param>
-        public CancelScanCommand(IScanServiceWrapper ssw)
+        public CancelScanCommand(IScan ssw)
         {
             this.scanServiceWrapper = ssw;
             this.scanServiceWrapper.ScanStared += this.ScanServiceWrapperScanStared;

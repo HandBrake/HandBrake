@@ -33,7 +33,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Backing field for the Scan Service
         /// </summary>
-        private readonly IScanServiceWrapper scanService;
+        private readonly IScan scanService;
 
         /// <summary>
         /// The selected tab.
@@ -56,7 +56,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="scanService">
         /// The scan service.
         /// </param>
-        public LogViewModel(IEncodeServiceWrapper encodeService, IScanServiceWrapper scanService)
+        public LogViewModel(IEncodeServiceWrapper encodeService, IScan scanService)
         {
             this.encodeService = encodeService;
             this.scanService = scanService;

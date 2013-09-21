@@ -64,12 +64,7 @@ namespace HandBrakeWPF.Services
                     }
                     else
                     {
-                        if (ScanServiceWrapper.HandbrakeInstance == null)
-                        {
-                            ScanServiceWrapper.HandbrakeInstance = new HandBrakeInstance();
-                        }
-
-                        this.encodeService = new LibEncode(userSettingService, ScanServiceWrapper.HandbrakeInstance);
+                        this.encodeService = new LibEncode(userSettingService, new HandBrakeInstance());
                     }
                 }
                 catch (Exception exc)

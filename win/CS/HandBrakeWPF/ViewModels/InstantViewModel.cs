@@ -69,7 +69,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     The scan service.
         /// </summary>
-        private readonly IScanServiceWrapper scanService;
+        private readonly IScan scanService;
 
         /// <summary>
         ///     The shell view model.
@@ -181,8 +181,8 @@ namespace HandBrakeWPF.ViewModels
         /// The when done service.
         /// </param>
         public InstantViewModel(
-            IUserSettingService userSettingService, 
-            IScanServiceWrapper scanService, 
+            IUserSettingService userSettingService,
+            IScan scanService, 
             IEncodeServiceWrapper encodeService, 
             IPresetService presetService, 
             IErrorService errorService, 

@@ -84,7 +84,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The Source Scan Service.
         /// </summary>
-        private readonly IScanServiceWrapper scanService;
+        private readonly IScan scanService;
 
         /// <summary>
         /// The Encode Service
@@ -211,7 +211,7 @@ namespace HandBrakeWPF.ViewModels
         /// The when Done Service.
         /// *** Leave in Constructor. *** 
         /// </param>
-        public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
+        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, INotificationService notificationService,
             IPrePostActionService whenDoneService)
         {
