@@ -1341,7 +1341,8 @@ namespace HandBrakeWPF.ViewModels
                 QueryGeneratorUtility.GenerateQuery(this.CurrentTask,
                 userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                 userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav)),
+                userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
+                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding)),
                 "CLI Query",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);

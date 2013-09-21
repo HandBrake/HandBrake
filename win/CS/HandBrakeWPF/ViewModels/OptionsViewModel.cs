@@ -358,6 +358,23 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool resetWhenDoneAction;
 
+        /// <summary>
+        /// The selected scaling mode.
+        /// </summary>
+        private VideoScaler selectedScalingMode;
+
+        /// <summary>
+        /// The enable dxva decoding.
+        /// </summary>
+        private bool enableDxvaDecoding;
+
+        /// <summary>
+        /// The disable quick sync decoding.
+        /// </summary>
+        private bool disableQuickSyncDecoding;
+
+        private bool enableQuickSync;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1390,6 +1407,106 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
+        #region Video
+
+        /// <summary>
+        /// Gets or sets a value indicating whether enable quick sync.
+        /// </summary>
+        public bool EnableQuickSync
+        {
+            get
+            {
+                return this.enableQuickSync;
+            }
+            set
+            {
+                if (value.Equals(this.enableQuickSync))
+                {
+                    return;
+                }
+                this.enableQuickSync = value;
+                this.NotifyOfPropertyChange(() => this.EnableQuickSync);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether disable quick sync decoding.
+        /// </summary>
+        public bool DisableQuickSyncDecoding
+        {
+            get
+            {
+                return this.disableQuickSyncDecoding;
+            }
+            set
+            {
+                if (value.Equals(this.disableQuickSyncDecoding))
+                {
+                    return;
+                }
+                this.disableQuickSyncDecoding = value;
+                this.NotifyOfPropertyChange(() => this.DisableQuickSyncDecoding);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether enable dxva decoding.
+        /// </summary>
+        public bool EnableDxvaDecoding
+        {
+            get
+            {
+                return this.enableDxvaDecoding;
+            }
+            set
+            {
+                if (value.Equals(this.enableDxvaDecoding))
+                {
+                    return;
+                }
+                this.enableDxvaDecoding = value;
+                this.NotifyOfPropertyChange(() => this.EnableDxvaDecoding);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected scaling mode.
+        /// </summary>
+        public VideoScaler SelectedScalingMode
+        {
+            get
+            {
+                return this.selectedScalingMode;
+            }
+            set
+            {
+                this.selectedScalingMode = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is quick sync available.
+        /// </summary>
+        public bool IsQuickSyncAvailable
+        {
+            get
+            {
+                return SystemInfo.IsQsvAvailable;
+            }
+        }
+
+        /// <summary>
+        /// Gets the scaling options.
+        /// </summary>
+        public BindingList<VideoScaler> ScalingOptions
+        {
+            get
+            {
+                return new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
+            }
+        }
+        #endregion
+
         #endregion
 
         #region About HandBrake
@@ -1464,231 +1581,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.OnLoad();
             base.OnActivate();
-        }
-
-        /// <summary>
-        /// Load User Settings
-        /// </summary>
-        public override void OnLoad()
-        {
-            // #############################
-            // General
-            // #############################
-
-            this.CheckForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
-
-            // Days between update checks
-            this.checkForUpdatesFrequencies.Clear();
-            this.checkForUpdatesFrequencies.Add("Daily");
-            this.checkForUpdatesFrequencies.Add("Weekly");
-            this.checkForUpdatesFrequencies.Add("Monthly");
-
-            // TODO Refactor this.
-            switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck))
-            {
-                case 1:
-                    this.CheckForUpdatesFrequency = 0;
-                    break;
-                case 7:
-                    this.CheckForUpdatesFrequency = 1;
-                    break;
-                case 30:
-                    this.CheckForUpdatesFrequency = 2;
-                    break;
-            }
-
-            // On Encode Completeion Action
-            this.whenDoneOptions.Clear();
-            this.whenDoneOptions.Add("Do nothing");
-            this.whenDoneOptions.Add("Shutdown");
-            this.whenDoneOptions.Add("Suspend");
-            this.whenDoneOptions.Add("Hibernate");
-            this.whenDoneOptions.Add("Lock System");
-            this.whenDoneOptions.Add("Log off");
-            this.whenDoneOptions.Add("Quit HandBrake");
-            this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
-            {
-                this.WhenDone = "Do nothing";
-                this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, "Do nothing");
-            }
-
-            this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode);
-            this.GrowlAfterQueue = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue);
-            this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
-            this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)) ?? string.Empty;
-            this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
-            this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
-            this.UseSystemColoursForStylesForStyles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseSystemColours);
-            this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
-
-            // #############################
-            // Output Settings
-            // #############################
-
-            // Enable auto naming feature.)
-            this.AutomaticallyNameFiles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming);
-
-            // Store the auto name path
-            this.AutoNameDefaultPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath) ?? string.Empty;
-            if (string.IsNullOrEmpty(this.autoNameDefaultPath))
-                this.AutoNameDefaultPath = "Click 'Browse' to set the default location";
-
-            // Store auto name format
-            this.AutonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) ?? string.Empty;
-
-            // Use iPod/iTunes friendly .m4v extension for MP4 files.
-            this.mp4ExtensionOptions.Clear();
-            this.mp4ExtensionOptions.Add("Automatic");
-            this.mp4ExtensionOptions.Add("Always use MP4");
-            this.mp4ExtensionOptions.Add("Always use M4V");
-            this.SelectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
-
-            // Remove Underscores
-            this.RemoveUnderscores = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore);
-
-            // Title case
-            this.ChangeToTitleCase = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase);
-            this.RemovePunctuation = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RemovePunctuation);
-
-            // #############################
-            // Picture Tab
-            // #############################
-
-            // VLC Path
-            this.VLCPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path) ?? string.Empty;
-
-            // #############################
-            // Audio and Subtitles Tab
-            // #############################
-
-            this.SelectedAvailableToMove = new BindingList<string>();
-            this.SelectedLangaugesToMove = new BindingList<string>();
-
-            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
-            langList = (from entry in langList orderby entry.Key ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-            this.selectedLangauges.Clear();
-            foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
-            {
-                // removing wrong keys when a new Language list comes out.
-                if (langList.ContainsKey(selectedItem))
-                {
-                    this.selectedLangauges.Add(selectedItem);
-                }
-            }
-
-            this.preferredLanguages.Clear();
-            this.availableLanguages.Clear();
-            foreach (string item in langList.Keys)
-            {
-                this.preferredLanguages.Add(item);
-
-                // In the available languages should be no "Any" and no selected language.
-                if ((item != Constants.Any) && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
-                {
-                    this.availableLanguages.Add(item);
-                }
-            }
-
-            this.SelectedPreferredLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) ?? string.Empty;
-            this.SelectedPreferredSubtitleLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) ?? string.Empty;
-
-            this.AddAudioModeOptions.Clear();
-            this.AddAudioModeOptions.Add("None");
-            this.AddAudioModeOptions.Add("Add All Remaining Tracks");
-            this.AddAudioModeOptions.Add("Add All for Selected Languages");
-
-            this.AddSubtitleModeOptions.Clear();
-            this.AddSubtitleModeOptions.Add("None");
-            this.AddSubtitleModeOptions.Add("Add All (Where possible)");
-            this.AddSubtitleModeOptions.Add("Add First");
-            this.AddSubtitleModeOptions.Add("Add all for Selected Languages");
-            this.AddSubtitleModeOptions.Add("Add only for Prefered Language (First)");
-            this.AddSubtitleModeOptions.Add("Add all for Prefered Language");
-
-            this.SelectedAddAudioMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
-            this.SelectedAddSubtitleMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
-
-            this.AddOnlyOneAudioTrackPerLanguage = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
-
-            this.AddClosedCaptions = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
-            this.ShowAdvancedPassthruOpts = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
-
-            // #############################
-            // CLI
-            // #############################
-
-            // Priority level for encodes
-            this.priorityLevelOptions.Clear();
-            this.priorityLevelOptions.Add("High");
-            this.priorityLevelOptions.Add("Above Normal");
-            this.priorityLevelOptions.Add("Normal");
-            this.priorityLevelOptions.Add("Below Normal");
-            this.priorityLevelOptions.Add("Low");
-            this.SelectedPriority = userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority);
-
-            this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
-
-            // Log Verbosity Level
-            this.logVerbosityOptions.Clear();
-            this.logVerbosityOptions.Add(0);
-            this.logVerbosityOptions.Add(1);
-            this.logVerbosityOptions.Add(2);
-            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
-
-            // Logs
-            this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo);
-            this.CopyLogToSepcficedLocation = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory);
-
-            // The saved log path
-            this.LogDirectory = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
-
-            this.ClearOldOlgs = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
-
-            // #############################
-            // Advanced
-            // #############################
-
-            // Minimise to Tray
-            this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
-            this.DisablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
-            this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue);
-            this.ShowAdvancedTab = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
-
-            // Set the preview count
-            this.PreviewPicturesToScan.Clear();
-            this.PreviewPicturesToScan.Add(10);
-            this.PreviewPicturesToScan.Add(15);
-            this.PreviewPicturesToScan.Add(20);
-            this.PreviewPicturesToScan.Add(25);
-            this.PreviewPicturesToScan.Add(30);
-            this.PreviewPicturesToScan.Add(35);
-            this.PreviewPicturesToScan.Add(40);
-            this.PreviewPicturesToScan.Add(45);
-            this.PreviewPicturesToScan.Add(50);
-            this.PreviewPicturesToScan.Add(55);
-            this.PreviewPicturesToScan.Add(60);
-            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount);
-
-            // x264 step
-            this.ConstantQualityGranularity.Clear();
-            this.ConstantQualityGranularity.Add("1.00");
-            this.ConstantQualityGranularity.Add("0.50");
-            this.ConstantQualityGranularity.Add("0.25");
-            this.SelectedGranulairty = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
-
-            // Min Title Length
-            this.MinLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);
-
-            // Use dvdnav
-            this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav);
-
-            int port;
-            int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
-            this.ServerPort = port;
-            this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
-            this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
         }
 
         /// <summary>
@@ -1815,9 +1707,6 @@ namespace HandBrakeWPF.ViewModels
                 MessageBox.Show("HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-        #endregion
-
-        #region Updates
 
         /// <summary>
         /// Download an Update
@@ -1838,6 +1727,240 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        /// <summary>
+        /// Load User Settings
+        /// </summary>
+        public override void OnLoad()
+        {
+            // #############################
+            // General
+            // #############################
+
+            this.CheckForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
+
+            // Days between update checks
+            this.checkForUpdatesFrequencies.Clear();
+            this.checkForUpdatesFrequencies.Add("Daily");
+            this.checkForUpdatesFrequencies.Add("Weekly");
+            this.checkForUpdatesFrequencies.Add("Monthly");
+
+            // TODO Refactor this.
+            switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck))
+            {
+                case 1:
+                    this.CheckForUpdatesFrequency = 0;
+                    break;
+                case 7:
+                    this.CheckForUpdatesFrequency = 1;
+                    break;
+                default:
+                    this.CheckForUpdatesFrequency = 2;
+                    break;
+            }
+
+            // On Encode Completeion Action
+            this.whenDoneOptions.Clear();
+            this.whenDoneOptions.Add("Do nothing");
+            this.whenDoneOptions.Add("Shutdown");
+            this.whenDoneOptions.Add("Suspend");
+            this.whenDoneOptions.Add("Hibernate");
+            this.whenDoneOptions.Add("Lock System");
+            this.whenDoneOptions.Add("Log off");
+            this.whenDoneOptions.Add("Quit HandBrake");
+            this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
+            {
+                this.WhenDone = "Do nothing";
+                this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, "Do nothing");
+            }
+
+            this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode);
+            this.GrowlAfterQueue = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue);
+            this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
+            this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)) ?? string.Empty;
+            this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
+            this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
+            this.UseSystemColoursForStylesForStyles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseSystemColours);
+            this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
+
+            // #############################
+            // Output Settings
+            // #############################
+
+            // Enable auto naming feature.)
+            this.AutomaticallyNameFiles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming);
+
+            // Store the auto name path
+            this.AutoNameDefaultPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath) ?? string.Empty;
+            if (string.IsNullOrEmpty(this.autoNameDefaultPath))
+                this.AutoNameDefaultPath = "Click 'Browse' to set the default location";
+
+            // Store auto name format
+            this.AutonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) ?? string.Empty;
+
+            // Use iPod/iTunes friendly .m4v extension for MP4 files.
+            this.mp4ExtensionOptions.Clear();
+            this.mp4ExtensionOptions.Add("Automatic");
+            this.mp4ExtensionOptions.Add("Always use MP4");
+            this.mp4ExtensionOptions.Add("Always use M4V");
+            this.SelectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
+
+            // Remove Underscores
+            this.RemoveUnderscores = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore);
+
+            // Title case
+            this.ChangeToTitleCase = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase);
+            this.RemovePunctuation = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RemovePunctuation);
+
+            // #############################
+            // Picture Tab
+            // #############################
+
+            // VLC Path
+            this.VLCPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path) ?? string.Empty;
+
+            // #############################
+            // Audio and Subtitles Tab
+            // #############################
+
+            this.SelectedAvailableToMove = new BindingList<string>();
+            this.SelectedLangaugesToMove = new BindingList<string>();
+
+            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
+            langList = (from entry in langList orderby entry.Key ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            this.selectedLangauges.Clear();
+            foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
+            {
+                // removing wrong keys when a new Language list comes out.
+                if (langList.ContainsKey(selectedItem))
+                {
+                    this.selectedLangauges.Add(selectedItem);
+                }
+            }
+
+            this.preferredLanguages.Clear();
+            this.availableLanguages.Clear();
+            foreach (string item in langList.Keys)
+            {
+                this.preferredLanguages.Add(item);
+
+                // In the available languages should be no "Any" and no selected language.
+                if ((item != Constants.Any) && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
+                {
+                    this.availableLanguages.Add(item);
+                }
+            }
+
+            this.SelectedPreferredLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) ?? string.Empty;
+            this.SelectedPreferredSubtitleLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) ?? string.Empty;
+
+            this.AddAudioModeOptions.Clear();
+            this.AddAudioModeOptions.Add("None");
+            this.AddAudioModeOptions.Add("Add All Remaining Tracks");
+            this.AddAudioModeOptions.Add("Add All for Selected Languages");
+
+            this.AddSubtitleModeOptions.Clear();
+            this.AddSubtitleModeOptions.Add("None");
+            this.AddSubtitleModeOptions.Add("Add All (Where possible)");
+            this.AddSubtitleModeOptions.Add("Add First");
+            this.AddSubtitleModeOptions.Add("Add all for Selected Languages");
+            this.AddSubtitleModeOptions.Add("Add only for Prefered Language (First)");
+            this.AddSubtitleModeOptions.Add("Add all for Prefered Language");
+
+            this.SelectedAddAudioMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
+            this.SelectedAddSubtitleMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
+
+            this.AddOnlyOneAudioTrackPerLanguage = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
+
+            this.AddClosedCaptions = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
+            this.ShowAdvancedPassthruOpts = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
+
+
+            // #############################
+            // Video
+            // #############################
+            this.EnableQuickSync = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSync);
+            this.DisableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding);
+            this.EnableDxvaDecoding = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva);
+            this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode);
+
+            // #############################
+            // CLI
+            // #############################
+
+            // Priority level for encodes
+            this.priorityLevelOptions.Clear();
+            this.priorityLevelOptions.Add("High");
+            this.priorityLevelOptions.Add("Above Normal");
+            this.priorityLevelOptions.Add("Normal");
+            this.priorityLevelOptions.Add("Below Normal");
+            this.priorityLevelOptions.Add("Low");
+            this.SelectedPriority = userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority);
+
+            this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
+
+            // Log Verbosity Level
+            this.logVerbosityOptions.Clear();
+            this.logVerbosityOptions.Add(0);
+            this.logVerbosityOptions.Add(1);
+            this.logVerbosityOptions.Add(2);
+            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
+
+            // Logs
+            this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo);
+            this.CopyLogToSepcficedLocation = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory);
+
+            // The saved log path
+            this.LogDirectory = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
+
+            this.ClearOldOlgs = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
+
+            // #############################
+            // Advanced
+            // #############################
+
+            // Minimise to Tray
+            this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
+            this.DisablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
+            this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue);
+            this.ShowAdvancedTab = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
+
+            // Set the preview count
+            this.PreviewPicturesToScan.Clear();
+            this.PreviewPicturesToScan.Add(10);
+            this.PreviewPicturesToScan.Add(15);
+            this.PreviewPicturesToScan.Add(20);
+            this.PreviewPicturesToScan.Add(25);
+            this.PreviewPicturesToScan.Add(30);
+            this.PreviewPicturesToScan.Add(35);
+            this.PreviewPicturesToScan.Add(40);
+            this.PreviewPicturesToScan.Add(45);
+            this.PreviewPicturesToScan.Add(50);
+            this.PreviewPicturesToScan.Add(55);
+            this.PreviewPicturesToScan.Add(60);
+            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount);
+
+            // x264 step
+            this.ConstantQualityGranularity.Clear();
+            this.ConstantQualityGranularity.Add("1.00");
+            this.ConstantQualityGranularity.Add("0.50");
+            this.ConstantQualityGranularity.Add("0.25");
+            this.SelectedGranulairty = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
+
+            // Min Title Length
+            this.MinLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);
+
+            // Use dvdnav
+            this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav);
+
+            int port;
+            int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
+            this.ServerPort = port;
+            this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
+            this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
+        }
 
         /// <summary>
         /// Save the settings selected
@@ -1879,6 +2002,14 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.DubModeAudio, this.SelectedAddAudioMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.DubModeSubtitle, this.SelectedAddSubtitleMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedAudioPassthruOpts, this.ShowAdvancedPassthruOpts);
+
+
+            /* Video */
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSync, this.EnableQuickSync);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.EnableDxva, this.EnableDxvaDecoding);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.ScalingMode, this.SelectedScalingMode);
+
 
             /* System and Logging */
             userSettingService.SetUserSetting(ASUserSettingConstants.ProcessPriority, this.SelectedPriority);

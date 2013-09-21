@@ -63,5 +63,20 @@ namespace HandBrake.ApplicationServices
         /// Clear completed items from the queue automatically.
         /// </summary>
         public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
+
+        /// <summary>
+        /// The disable quick sync decoding.
+        /// </summary>
+        public const string DisableQuickSyncDecoding = "DisableQuickSyncDecoding";
+
+        /// <summary>
+        /// The enable dxva.
+        /// </summary>
+        public const string EnableDxva = "EnableDxva";
+
+        /// <summary>
+        /// The scaling mode.
+        /// </summary>
+        public const string ScalingMode = "ScalingMode";
     }
 }

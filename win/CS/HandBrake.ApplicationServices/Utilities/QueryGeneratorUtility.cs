@@ -15,8 +15,11 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Globalization;
     using System.IO;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
@@ -40,10 +43,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="disableLibDvdNav">
         /// The disable Lib Dvd Nav.
         /// </param>
+        /// <param name="disableQsvDecode">
+        /// The disable Qsv Decode.
+        /// </param>
         /// <returns>
         /// A Cli Query
         /// </returns>
-        public static string GenerateQuery(EncodeTask task, int previewScanCount, int verbosity, bool disableLibDvdNav)
+        public static string GenerateQuery(EncodeTask task, int previewScanCount, int verbosity, bool disableLibDvdNav, bool disableQsvDecode)
         {
             if (string.IsNullOrEmpty(task.Source))
             {
@@ -53,7 +59,7 @@ namespace HandBrake.ApplicationServices.Utilities
             string query = string.Empty;
             query += SourceQuery(task, null, null, previewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav);
+            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode);
 
             return query;
         }
@@ -79,15 +85,18 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="disableLibDvdNav">
         /// The disable Lib Dvd Nav.
         /// </param>
+        /// <param name="disableQsvDecode">
+        /// The disable Qsv Decode.
+        /// </param>
         /// <returns>
         /// A Cli query suitable for generating a preview video.
         /// </returns>
-        public static string GeneratePreviewQuery(EncodeTask task, int duration, string startAtPreview, int previewScanCount, int verbosity, bool disableLibDvdNav)
+        public static string GeneratePreviewQuery(EncodeTask task, int duration, string startAtPreview, int previewScanCount, int verbosity, bool disableLibDvdNav, bool disableQsvDecode)
         {
             string query = string.Empty;
             query += SourceQuery(task, duration, startAtPreview, previewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav);
+            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode);
 
             return query;
         }
@@ -109,10 +118,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="disableLibDvdNav">
         /// The disable Lib Dvd Nav.
         /// </param>
+        /// <param name="disableQsvDecode">
+        /// The disable Qsv Decode.
+        /// </param>
         /// <returns>
         /// The CLI query for the Tabbed section of the main window UI
         /// </returns>
-        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool enableFilters, int verbosity, bool disableLibDvdNav)
+        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool enableFilters, int verbosity, bool disableLibDvdNav, bool disableQsvDecode)
         {
             string query = string.Empty;
 
@@ -142,7 +154,7 @@ namespace HandBrake.ApplicationServices.Utilities
             query += AdvancedQuery(task);
 
             // Extra Settings
-            query += ExtraSettings(verbosity, disableLibDvdNav);
+            query += ExtraSettings(verbosity, disableLibDvdNav, disableQsvDecode);
 
             return query;
         }
@@ -265,7 +277,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             //if (task.HasCropping)
             //{
-                query += string.Format(" --crop {0}:{1}:{2}:{3}", task.Cropping.Top, task.Cropping.Bottom, task.Cropping.Left, task.Cropping.Right);
+            query += string.Format(" --crop {0}:{1}:{2}:{3}", task.Cropping.Top, task.Cropping.Bottom, task.Cropping.Left, task.Cropping.Right);
             //}
 
             switch (task.Anamorphic)
@@ -1009,10 +1021,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="disableLibdvdNav">
         /// The disable Libdvd Nav.
         /// </param>
+        /// <param name="disableQsvDecode">
+        /// The disable Qsv Decode.
+        /// </param>
         /// <returns>
         /// A Cli Query as a string
         /// </returns>
-        private static string ExtraSettings(int verbosity, bool disableLibdvdNav)
+        private static string ExtraSettings(int verbosity, bool disableLibdvdNav, bool disableQsvDecode)
         {
             string query = string.Empty;
 
@@ -1022,6 +1037,10 @@ namespace HandBrake.ApplicationServices.Utilities
             // LibDVDNav
             if (disableLibdvdNav)
                 query += " --no-dvdnav";
+
+            if (disableQsvDecode)
+                query += " --disable-qsv-decoding";
+
 
             return query;
         }

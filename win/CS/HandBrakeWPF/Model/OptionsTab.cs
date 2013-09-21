@@ -25,6 +25,9 @@ namespace HandBrakeWPF.Model
         [Display(Name = "Audio and Subtitles")]
         AudioAndSubtitles,
 
+        [Display(Name = "Video")]
+        Video,
+
         [Display(Name = "Advanced")]
         Advanced,
 

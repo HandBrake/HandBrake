@@ -384,6 +384,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please note, this option is suitable only for slower systems.
+        ///Hardware decoders are designed for playback, not for re-encoding video so will likely bottleneck on faster systems..
+        /// </summary>
+        public static string Video_DxvaDecode {
+            get {
+                return ResourceManager.GetString("Video_DxvaDecode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Higher Quality |.
         /// </summary>
         public static string Video_HigherQuality {
@@ -448,6 +458,33 @@ namespace HandBrakeWPF.Properties {
         public static string Video_QualitySlider {
             get {
                 return ResourceManager.GetString("Video_QualitySlider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QuickSync hardware not detected! 
+        ///
+        ///In order to use the QuickSync encoder, you must:
+        ///
+        ///- Have a Intel Core series CPU with HD Graphics.
+        ///- Have a monitor connected to the HD Graphics
+        ///- Note in multi-GPU enviroments, there may be workarounds but these are not officially supported..
+        /// </summary>
+        public static string Video_QuickSyncNotAvailable {
+            get {
+                return ResourceManager.GetString("Video_QuickSyncNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lanczos  - This is HandBrakes default scaler. It provides the best quality downscaling.
+        ///Bicubic   - Bicubic is faster but quality may not be as good. Video may not appear as soft and as a result file sizes may be larger
+        ///Bicubic OpenCL - A hardware accelerated version of the CPU based Bicubic scaler. 
+        ///                                This can be around 5~7% faster than software bicubic on a fast modern graphics card..
+        /// </summary>
+        public static string Video_ScalingModes {
+            get {
+                return ResourceManager.GetString("Video_ScalingModes", resourceCulture);
             }
         }
         

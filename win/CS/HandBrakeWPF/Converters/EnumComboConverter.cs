@@ -19,6 +19,8 @@ namespace HandBrakeWPF.Converters
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
+    using HandBrakeWPF.Model;
+
     /// <summary>
     /// Enum Combo Converter
     /// </summary>
@@ -91,6 +93,11 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<Denoise>.GetEnumDisplayValues(typeof(Denoise));
             }
 
+            if (value is IEnumerable<VideoScaler>)
+            {
+                return EnumHelper<VideoScaler>.GetEnumDisplayValues(typeof(VideoScaler));
+            }
+
 
 
             // Single Items
@@ -138,6 +145,11 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(QueueItemStatus) || value.GetType() == typeof(QueueItemStatus))
             {
                 return EnumHelper<QueueItemStatus>.GetDisplay((QueueItemStatus)value);
+            }
+
+            if (targetType == typeof(VideoScaler) || value.GetType() == typeof(VideoScaler))
+            {
+                return EnumHelper<VideoScaler>.GetDisplay((VideoScaler)value);
             }
 
             return null;
@@ -190,7 +202,6 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<QsvPreset>.GetValue(value.ToString());
             }
-
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetValue(value.ToString());
@@ -210,6 +221,10 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(Detelecine) || value.GetType() == typeof(Detelecine))
             {
                 return EnumHelper<Detelecine>.GetValue(value.ToString());
+            }
+            if (targetType == typeof(VideoScaler) || value.GetType() == typeof(VideoScaler))
+            {
+                return EnumHelper<VideoScaler>.GetValue(value.ToString());
             }
 
             return null;

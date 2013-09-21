@@ -137,11 +137,13 @@ namespace HandBrake.ApplicationServices.Services
                                        this.currentTask.Task.PreviewEncodeStartAt,
                                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
+                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
+                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding))
                                    : QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.currentTask.Task),
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                                   userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
+                                   userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
+                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding));
 
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, query)
                 {

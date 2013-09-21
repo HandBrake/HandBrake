@@ -236,6 +236,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ResetWhenDoneAction = "ResetWhenDoneAction";
 
+        /// <summary>
+        /// The enable quick sync.
+        /// </summary>
+        public const string EnableQuickSync = "EnableQuickSync";
+
         #endregion
     }
 }

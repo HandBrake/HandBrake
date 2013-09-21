@@ -4,6 +4,8 @@
               xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options"
               xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
               xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" xmlns:local="clr-namespace:HandBrakeWPF.Model"
+              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+              xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
               Style="{StaticResource whiteUserControlStyle}">
 
     <UserControl.Resources>
@@ -34,7 +36,8 @@
 
         <Options:OptionsTabConverter x:Key="tabConverter" />
         <Options:OptionsTabNameConverter x:Key="tabNameConverter" />
-        
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
+
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
         <ObjectDataProvider MethodName="GetValues"
@@ -99,7 +102,7 @@
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal">
                                 <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left" />
-                           
+
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -201,8 +204,8 @@
 
                 <StackPanel Name="Audio" Orientation="Vertical" Margin="10,10,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.AudioAndSubtitles}}">
-                   
-                    
+
+
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Audio and Subtitle Language Handling" FontSize="16" />
                     </Border>
@@ -228,7 +231,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        
+
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -243,7 +246,7 @@
                                   ItemsSource="{Binding AddAudioModeOptions}" SelectedIndex="{Binding SelectedAddAudioMode}" Width="120" Margin="0,0,5,0" />
                         <CheckBox Content="Add only one audio track per language" Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Left"
                                   IsChecked="{Binding AddOnlyOneAudioTrackPerLanguage}" Margin="0,5,0,0" />
-                        
+
                         <!-- Subtitles -->
                         <TextBlock Text="Subtitle:"  Grid.Column="2" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         <ComboBox Name="autoSubtitleMode"  Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left"
@@ -276,7 +279,7 @@
                                 <DockPanel Grid.Column="1" Margin="10,0,10,0">
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                         <Button Content="Move Right"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
-                                        <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />    
+                                        <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
                                         <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
                                     </StackPanel>
                                 </DockPanel>
@@ -301,7 +304,63 @@
 
                 </StackPanel>
 
-                <StackPanel Name="Advanced" Orientation="Vertical" Margin="10,10,0,0"
+                <StackPanel Name="Hardware" Orientation="Vertical" Margin="10,10,0,0"
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Video}}">
+
+                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
+                        <TextBlock Text="Video" FontSize="16" />
+                    </Border>
+
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
+
+                        <TextBlock Text="Decoding" FontSize="14" Margin="0,10,0,10" Visibility="Collapsed" />
+
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0" Visibility="Collapsed" >
+                            <CheckBox Content="Enable DXVA Hardware Accelerated Decoding" IsChecked="{Binding EnableDxvaDecoding}" />
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="37,2,0,0" Visibility="Collapsed" >
+                            <TextBlock Text="{x:Static Properties:Resources.Video_DxvaDecode}"  />
+                        </StackPanel>
+
+
+                        <TextBlock Text="Scaling" FontSize="14" Margin="0,20,0,10" Visibility="Collapsed" />
+                        
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
+                            <TextBlock Text="Choose Scaler: " Margin="0,0,5,0" VerticalAlignment="Center" />
+                            <ComboBox  ItemsSource="{Binding ScalingOptions, Converter={StaticResource enumComboConverter}}" 
+                                       SelectedItem="{Binding SelectedScalingMode, Converter={StaticResource enumComboConverter}}" 
+                                       Width="120" VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="26,2,0,0" Visibility="Collapsed" >
+                            <TextBlock Text="{x:Static Properties:Resources.Video_ScalingModes}" TextWrapping="Wrap "/>
+                        </StackPanel>
+
+
+
+                        <TextBlock Text="Intel QuickSync" FontSize="14" Margin="0,20,0,10"/>
+
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                            <CheckBox Content="Enable the QuickSync Video Encoder" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSync}" />
+                            <CheckBox Content="Disable QuickSync Decoding" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding DisableQuickSyncDecoding}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="37,2,0,0">
+                            <TextBlock Text="{x:Static Properties:Resources.Video_QuickSyncNotAvailable}"
+                                       Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
+                        </StackPanel>
+
+       
+
+               
+                    </StackPanel>
+
+             
+                </StackPanel>
+
+                <StackPanel  Name="Advanced" Orientation="Vertical" Margin="10,10,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Advanced}}">
 
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
@@ -379,13 +438,11 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="Experimental Features" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
-                        
-                        <TextBlock Text="These options are for developer testing of features that are currently in progress!!!!" FontWeight="Bold" Margin="0,0,0,10" />
+                        <TextBlock Text="Beta Features" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
-                            
-                            <CheckBox Content="Enable LibHB based Encoding (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" />
+
+                            <CheckBox Content="Use LibHB for Encoding (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" />
                             <CheckBox Content="Enable Process Isolation (Run Encodes via an intermediate service)" Margin="20,10,0,0" IsChecked="{Binding EnableProcessIsolation}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Column="1">
                                 <TextBlock Text="Server Port:" VerticalAlignment="Center" />
@@ -423,7 +480,7 @@
                         <Button Content="Check for Updates" MaxWidth="130" Margin="0,0,5,0" cal:Message.Attach="[Event Click] = [Action PerformUpdateCheck]" />
                         <Button Content="Download Update" Width="120" cal:Message.Attach="[Event Click] = [Action DownloadUpdate]" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
                     </StackPanel>
-                    
+
                     <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
                         <ProgressBar Minimum="0" Maximum="100" Height="20" Width="400" Value="{Binding DownloadProgressPercentage}" 
                                  Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
