@@ -3639,8 +3639,8 @@ static int ParseOptions( int argc, char ** argv )
     #define NO_OPENCL           287
     #define NORMALIZE_MIX       288
     #define AUDIO_DITHER        289
-    #define QSV_BASELINE        289
-    #define QSV_ASYNC_DEPTH     290
+    #define QSV_BASELINE        290
+    #define QSV_ASYNC_DEPTH     291
 
     for( ;; )
     {
