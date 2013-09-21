@@ -84,5 +84,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Shutdown this View
         /// </summary>
         void Shutdown();
+
+        /// <summary>
+        /// The show cli query.
+        /// </summary>
+        void ShowCliQuery();
     }
 }

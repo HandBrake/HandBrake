@@ -334,11 +334,6 @@ namespace HandBrakeWPF.ViewModels
         private int serverPort;
 
         /// <summary>
-        /// The server port.
-        /// </summary>
-        private bool enableDebugFeatures;
-
-        /// <summary>
         /// Backing field for EnableLibHb
         /// </summary>
         private bool enableLibHb;
@@ -1362,22 +1357,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether debug features are enabled.
-        /// </summary>
-        public bool EnableDebugFeatures
-        {
-            get
-            {
-                return this.enableDebugFeatures;
-            }
-            set
-            {
-                this.enableDebugFeatures = value;
-                this.NotifyOfPropertyChange(() => this.EnableDebugFeatures);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether enable lib hb.
         /// </summary>
         public bool EnableLibHb
@@ -1709,7 +1688,6 @@ namespace HandBrakeWPF.ViewModels
             int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
             this.ServerPort = port;
             this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
-            this.EnableDebugFeatures = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
             this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
         }
 
@@ -1928,8 +1906,7 @@ namespace HandBrakeWPF.ViewModels
 
             userSettingService.SetUserSetting(ASUserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
             userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
-            userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString());
-            userSettingService.SetUserSetting(UserSettingConstants.EnableDebugFeatures, this.EnableDebugFeatures);
+            userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString(CultureInfo.InvariantCulture));
             userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, this.EnableLibHb);
         }
 

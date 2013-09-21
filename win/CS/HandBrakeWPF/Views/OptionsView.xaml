@@ -392,7 +392,6 @@
                                 <TextBox Width="50" MaxLength="5" Text="{Binding ServerPort}" />
                             </StackPanel>
 
-                            <CheckBox Content="Enable Debug Features" IsChecked="{Binding EnableDebugFeatures}" Margin="0,10,0,0" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

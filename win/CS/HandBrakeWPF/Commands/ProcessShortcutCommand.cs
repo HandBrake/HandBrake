@@ -88,6 +88,11 @@ namespace HandBrakeWPF.Commands
                 {
                     mainViewModel.FolderScan();
                 }
+
+                if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) && gesture.Key == Key.D)
+                {
+                    mainViewModel.ShowCliQuery();
+                }
             }
         }
 

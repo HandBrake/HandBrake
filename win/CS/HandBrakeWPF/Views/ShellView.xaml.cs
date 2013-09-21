@@ -68,6 +68,7 @@ namespace HandBrakeWPF.Views
             // Add to Queue (Ctrl+A)
             // Scan a File (Ctrl+F)
             // Scan a Folder (Ctrl+R)
+            // Show CLI Query (Ctrl+Shift+D)
 
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.S, ModifierKeys.Control)), new KeyGesture(Key.S, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.K, ModifierKeys.Control)), new KeyGesture(Key.K, ModifierKeys.Control)));
@@ -76,6 +77,7 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.A, ModifierKeys.Control)), new KeyGesture(Key.A, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.F, ModifierKeys.Control)), new KeyGesture(Key.F, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.R, ModifierKeys.Control)), new KeyGesture(Key.R, ModifierKeys.Control)));
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)), new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)));
 
             // Enable Windows 7 Taskbar progress indication.
             if (this.TaskbarItemInfo == null)

@@ -627,17 +627,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets a value indicating whether show debug menu.
-        /// </summary>
-        public bool ShowDebugMenu
-        {
-            get
-            {
-                return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the cancel scan command.
         /// </summary>
         public CancelScanCommand CancelScanCommand { get; set; }

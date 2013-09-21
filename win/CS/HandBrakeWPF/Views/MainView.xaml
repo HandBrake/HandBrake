@@ -177,10 +177,6 @@
                     <Separator />
                     <MenuItem Header="_About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                 </MenuItem>
-
-                <MenuItem Header="_Debug" Visibility="{Binding ShowDebugMenu, Converter={StaticResource boolToVisConverter}}" >
-                    <MenuItem Header="_Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
-                </MenuItem>
             </Menu>
 
             <!--  ToolBar  -->
