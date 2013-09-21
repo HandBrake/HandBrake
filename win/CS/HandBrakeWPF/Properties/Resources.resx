@@ -361,7 +361,7 @@ In order to use the QuickSync encoder, you must:
 
 - Have a Intel Core series CPU with HD Graphics.
 - Have a monitor connected to the HD Graphics
-- Note in multi-GPU enviroments, there may be workarounds but these are not officially supported.</value>
+- Note in multi-GPU environments, there may be workarounds but these are not officially supported.</value>
   </data>
   <data name="Video_ScalingModes" xml:space="preserve">
     <value>Lanczos  - This is HandBrakes default scaler. It provides the best quality downscaling.

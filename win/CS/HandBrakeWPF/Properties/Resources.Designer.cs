@@ -468,7 +468,7 @@ namespace HandBrakeWPF.Properties {
         ///
         ///- Have a Intel Core series CPU with HD Graphics.
         ///- Have a monitor connected to the HD Graphics
-        ///- Note in multi-GPU enviroments, there may be workarounds but these are not officially supported..
+        ///- Note in multi-GPU environments, there may be workarounds but these are not officially supported..
         /// </summary>
         public static string Video_QuickSyncNotAvailable {
             get {
