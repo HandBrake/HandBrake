@@ -257,7 +257,6 @@ namespace HandBrake.Interop
 			this.scanPollTimer.Start();
 		}
 
-
 		/// <summary>
 		/// Stops an ongoing scan.
 		/// </summary>
@@ -265,6 +264,8 @@ namespace HandBrake.Interop
 		{
 			HBFunctions.hb_scan_stop(this.hbHandle);
 		}
+
+
 
 		/// <summary>
 		/// Gets an image for the given job and preview

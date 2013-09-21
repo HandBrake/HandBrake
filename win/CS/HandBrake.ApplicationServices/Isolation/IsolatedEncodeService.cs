@@ -93,6 +93,17 @@ namespace HandBrake.ApplicationServices.Isolation
         }
 
         /// <summary>
+        /// Gets a value indicating whether can pause.
+        /// </summary>
+        public bool CanPause
+        {
+            get
+            {
+                return false; // TODO make this work.
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding
@@ -169,6 +180,20 @@ namespace HandBrake.ApplicationServices.Isolation
         {
             ThreadPool.QueueUserWorkItem(
                 delegate { this.Service.StartEncode(job, enableLogging); });
+        }
+
+        /// <summary>
+        /// The pause.
+        /// </summary>
+        public void Pause()
+        {
+        }
+
+        /// <summary>
+        /// The resume.
+        /// </summary>
+        public void Resume()
+        {
         }
 
         /// <summary>

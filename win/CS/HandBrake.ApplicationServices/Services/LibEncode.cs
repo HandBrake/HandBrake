@@ -42,14 +42,14 @@ namespace HandBrake.ApplicationServices.Services
         private readonly IUserSettingService userSettingService;
 
         /// <summary>
+        /// The instance.
+        /// </summary>
+        private IHandBrakeInstance instance;
+
+        /// <summary>
         /// The Start time of the current Encode;
         /// </summary>
         private DateTime startTime;
-
-        /// <summary>
-        /// An Instance of the HandBrake Interop Library
-        /// </summary>
-        private IHandBrakeInstance instance;
 
         /// <summary>
         /// A flag to indicate if logging is enabled or not.
@@ -69,21 +69,24 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        /// <param name="handBrakeInstance">
-        /// The hand Brake Instance.
-        /// </param>
-        public LibEncode(IUserSettingService userSettingService, IHandBrakeInstance handBrakeInstance)
+        public LibEncode(IUserSettingService userSettingService)
             : base(userSettingService)
         {
             this.userSettingService = userSettingService;
 
-            // Setup the HandBrake Instance
-            this.instance = handBrakeInstance;
-            this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
-            this.instance.EncodeProgress += this.InstanceEncodeProgress;
-
             HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
             HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether can pause.
+        /// </summary>
+        public bool CanPause
+        {
+            get
+            {
+                return true;
+            }
         }
 
         /// <summary>
@@ -97,10 +100,18 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Start(QueueTask job, bool enableLogging)
         {
+            // Setup
             this.startTime = DateTime.Now;
             this.loggingEnabled = enableLogging;
             this.currentTask = job;
 
+            // Create a new HandBrake instance
+            // Setup the HandBrake Instance
+            instance = new HandBrakeInstance();
+            instance.Initialize(1);
+            instance.EncodeCompleted += this.InstanceEncodeCompleted;
+            instance.EncodeProgress += this.InstanceEncodeProgress;
+            
             try
             {
                 // Sanity Checking and Setup
@@ -110,9 +121,6 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 this.IsEncoding = true;
-
-                // Get an EncodeJob object for the Interop Library
-                EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
 
                 // Enable logging if required.
                 if (enableLogging)
@@ -131,38 +139,40 @@ namespace HandBrake.ApplicationServices.Services
                 // Verify the Destination Path Exists, and if not, create it.
                 this.VerifyEncodeDestinationPath(job);
 
-                // Start the Encode
-                this.instance.StartEncode(encodeJob);
+                // We have to scan the source again but only the title so the HandBrake instance is initialised correctly. 
+                // Since the UI sends the crop params down, we don't have to do all the previews.
+                instance.StartScan(job.Task.Source, 1, job.Task.Title);
 
-                // Set the Process Priority
-                switch (this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority))
-                {
-                    case "Realtime":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-                        break;
-                    case "High":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-                        break;
-                    case "Above Normal":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-                        break;
-                    case "Normal":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
-                        break;
-                    case "Low":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
-                        break;
-                    default:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                        break;
-                }
-
-                // Fire the Encode Started Event
-                this.InvokeEncodeStarted(EventArgs.Empty);
+                instance.ScanCompleted += delegate
+                    {
+                        ScanCompleted(job, instance);
+                    };
             }
             catch (Exception exc)
             {
                 this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error has occured.", this.currentTask.Task.Destination));
+            }
+        }
+
+        /// <summary>
+        /// Pause the currently running encode.
+        /// </summary>
+        public void Pause()
+        {
+            if (this.instance != null)
+            {
+                this.instance.PauseEncode();
+            }
+        }
+
+        /// <summary>
+        /// Resume the currently running encode.
+        /// </summary>
+        public void Resume()
+        {
+            if (this.instance != null)
+            {
+                this.instance.ResumeEncode();
             }
         }
 
@@ -188,6 +198,50 @@ namespace HandBrake.ApplicationServices.Services
         public void Shutdown()
         {
             // Nothing to do for this implementation.
+        }
+
+        /// <summary>
+        /// The scan completed.
+        /// </summary>
+        /// <param name="job">
+        /// The job.
+        /// </param>
+        /// <param name="instance">
+        /// The instance.
+        /// </param>
+        private void ScanCompleted(QueueTask job, IHandBrakeInstance instance)
+        {
+            // Get an EncodeJob object for the Interop Library
+            EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
+
+            // Start the Encode
+            instance.StartEncode(encodeJob);
+
+            // Fire the Encode Started Event
+            this.InvokeEncodeStarted(EventArgs.Empty);
+
+            // Set the Process Priority
+            switch (this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority))
+            {
+                case "Realtime":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+                    break;
+                case "High":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                    break;
+                case "Above Normal":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+                    break;
+                case "Normal":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
+                    break;
+                case "Low":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+                    break;
+                default:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                    break;
+            }
         }
 
         #region HandBrakeInstance Event Handlers.

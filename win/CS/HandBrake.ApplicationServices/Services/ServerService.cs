@@ -16,8 +16,6 @@ namespace HandBrake.ApplicationServices.Services
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.Interop;
-    using HandBrake.Interop.Interfaces;
 
     using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
@@ -104,8 +102,7 @@ namespace HandBrake.ApplicationServices.Services
                 Console.WriteLine("Service Started. Waiting for Clients...");
 
                 // Setup the services we are going to use.
-                IHandBrakeInstance instance = new HandBrakeInstance();
-                encodeService = new LibEncode(new UserSettingService(), instance); // TODO this needs wired up with castle
+                encodeService = new LibEncode(new UserSettingService()); // TODO this needs wired up with castle
 
                 shutdownFlag = new ManualResetEvent(false);
                 shutdownFlag.WaitOne();

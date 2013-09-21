@@ -74,6 +74,17 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         protected Process HbProcess { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether can pause.
+        /// </summary>
+        public bool CanPause
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -199,6 +210,28 @@ namespace HandBrake.ApplicationServices.Services
                         false, exc, "An Error occured when trying to encode this source. ", this.currentTask.Task.Destination));
                 throw;
             }
+        }
+
+        /// <summary>
+        /// The pause.
+        /// </summary>
+        /// <exception cref="NotImplementedException">
+        /// This feature is not available for CLI based encoding.
+        /// </exception>
+        public void Pause()
+        {
+            throw new NotImplementedException("This feature is not available for CLI based encoding.");
+        }
+
+        /// <summary>
+        /// The resume.
+        /// </summary>
+        /// <exception cref="NotImplementedException">
+        /// This feature is not available for CLI based encoding.
+        /// </exception>
+        public void Resume()
+        {
+            throw new NotImplementedException("This feature is not available for CLI based encoding.");
         }
 
         /// <summary>

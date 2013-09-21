@@ -72,6 +72,11 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         int LogIndex { get; }
 
         /// <summary>
+        /// Gets a value indicating whether can pause.
+        /// </summary>
+        bool CanPause { get; }
+
+        /// <summary>
         /// Start with a LibHb EncodeJob Object
         /// </summary>
         /// <param name="job">
@@ -81,6 +86,16 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// The enable Logging.
         /// </param>
         void Start(QueueTask job, bool enableLogging);
+
+        /// <summary>
+        /// The pause.
+        /// </summary>
+        void Pause();
+
+        /// <summary>
+        /// The resume.
+        /// </summary>
+        void Resume();
 
         /// <summary>
         /// Kill the CLI process

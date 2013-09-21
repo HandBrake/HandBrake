@@ -18,7 +18,6 @@ namespace HandBrakeWPF.Services
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.Interop;
 
     using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
@@ -64,7 +63,7 @@ namespace HandBrakeWPF.Services
                     }
                     else
                     {
-                        this.encodeService = new LibEncode(userSettingService, new HandBrakeInstance());
+                        this.encodeService = new LibEncode(userSettingService);
                     }
                 }
                 catch (Exception exc)
@@ -133,6 +132,17 @@ namespace HandBrakeWPF.Services
         }
 
         /// <summary>
+        /// Gets a value indicating whether can pause.
+        /// </summary>
+        public bool CanPause
+        {
+            get
+            {
+                return this.encodeService.CanPause;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding
@@ -183,6 +193,22 @@ namespace HandBrakeWPF.Services
         public void Start(QueueTask job, bool enableLogging)
         {
             this.encodeService.Start(job, enableLogging);
+        }
+
+        /// <summary>
+        /// The pause.
+        /// </summary>
+        public void Pause()
+        {
+            this.encodeService.Pause();
+        }
+
+        /// <summary>
+        /// The resume.
+        /// </summary>
+        public void Resume()
+        {
+            this.encodeService.Resume();
         }
 
         /// <summary>

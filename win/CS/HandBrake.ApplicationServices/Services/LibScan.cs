@@ -13,7 +13,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using System.Threading;
 
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model.Encoding;

@@ -12,7 +12,7 @@ namespace HandBrake.Interop
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Runtime.InteropServices;
+
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
