@@ -42,6 +42,10 @@
 #include "hbffmpeg.h"
 #include "audio_resample.h"
 
+#ifdef USE_HWD
+#include "vadxva2.h"
+#endif
+
 #ifdef USE_QSV
 #include "enc_qsv.h"
 #include "qsv_common.h"
@@ -104,7 +108,11 @@ struct hb_work_private_s
     int             sws_pix_fmt;
     int cadence[12];
     int wait_for_keyframe;
-
+#ifdef USE_HWD
+    hb_va_dxva2_t   *dxva2;
+    uint8_t         *dst_frame;
+    hb_oclscale_t   *opencl_scale;
+#endif
     hb_audio_resample_t *resample;
 
 #ifdef USE_QSV
@@ -381,6 +389,22 @@ static void closePrivData( hb_work_private_t ** ppv )
             hb_list_empty( &pv->list );
         }
         hb_audio_resample_free(pv->resample);
+
+#ifdef USE_HWD
+        if ( pv->opencl_scale )
+        {
+            free( pv->opencl_scale );
+        }
+		
+        if ( pv->dxva2 )
+        {
+#ifdef USE_OPENCL
+            CL_FREE( pv->dxva2->cl_mem_nv12 );
+#endif
+            hb_va_close( pv->dxva2 );    
+        }        
+#endif   
+
 #ifdef USE_QSV_PTS_WORKAROUND
         if (pv->qsv.decode && pv->qsv.pts_list != NULL)
 
@@ -394,6 +418,7 @@ static void closePrivData( hb_work_private_t ** ppv )
             hb_list_close(&pv->qsv.pts_list);
         }
 #endif
+
         free( pv );
     }
     *ppv = NULL;
@@ -402,7 +427,9 @@ static void closePrivData( hb_work_private_t ** ppv )
 static void decavcodecClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-
+#ifdef USE_HWD    
+    if( pv->dst_frame ) free( pv->dst_frame );
+#endif
     if ( pv )
     {
         closePrivData( &pv );
@@ -686,11 +713,47 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     }
     else
     {
-        w =  pv->job->title->width;
-        h =  pv->job->title->height;
+        w = pv->job->title->width;
+        h = pv->job->title->height;
     }
-    hb_buffer_t *buf = hb_video_buffer_init( w, h );
 
+#ifdef USE_HWD
+    if (pv->dxva2 && pv->job)
+    {
+        hb_buffer_t *buf;
+        int ww, hh;
+
+        buf = hb_video_buffer_init( w, h );
+        ww = w;
+        hh = h;
+
+        if( !pv->dst_frame )
+        {
+            pv->dst_frame = malloc( ww * hh * 3 / 2 );
+        }
+        if( hb_va_extract( pv->dxva2, pv->dst_frame, frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->opencl_scale, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
+        {
+            hb_log( "hb_va_Extract failed!!!!!!" );
+        }
+        w = buf->plane[0].stride;
+        h = buf->plane[0].height;
+        uint8_t *dst = buf->plane[0].data;
+        copy_plane( dst, pv->dst_frame, w, ww, h );
+        w = buf->plane[1].stride;
+        h = buf->plane[1].height;
+        dst = buf->plane[1].data;
+        copy_plane( dst, pv->dst_frame + ww * hh, w, ww >> 1, h );
+        w = buf->plane[2].stride;
+        h = buf->plane[2].height;
+        dst = buf->plane[2].data;
+        copy_plane( dst, pv->dst_frame + ww * hh +( ( ww * hh ) >> 2 ), w, ww >> 1, h );
+        return buf;
+    }
+    else
+#endif
+    {
+        hb_buffer_t *buf = hb_video_buffer_init( w, h );
+			
 #ifdef USE_QSV
     // no need to copy the frame data when decoding with QSV to opaque memory
     if (pv->qsv.decode &&
@@ -701,52 +764,90 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     }
 #endif
 
-    uint8_t *dst = buf->data;
+        uint8_t *dst = buf->data;
 
-    if (context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
-        h != context->height)
-    {
-        // have to convert to our internal color space and/or rescale
-        AVPicture dstpic;
-        hb_avpicture_fill(&dstpic, buf);
-
-        if (pv->sws_context == NULL            ||
-            pv->sws_width   != context->width  ||
-            pv->sws_height  != context->height ||
-            pv->sws_pix_fmt != context->pix_fmt)
+        if (context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
+            h != context->height)
         {
-            if (pv->sws_context != NULL)
-                sws_freeContext(pv->sws_context);
-            pv->sws_context = hb_sws_get_context(context->width,
-                                                 context->height,
-                                                 context->pix_fmt,
-                                                 w, h, AV_PIX_FMT_YUV420P,
-                                                  SWS_LANCZOS|SWS_ACCURATE_RND);
-            pv->sws_width   = context->width;
-            pv->sws_height  = context->height;
-            pv->sws_pix_fmt = context->pix_fmt;
+            // have to convert to our internal color space and/or rescale
+            AVPicture dstpic;
+            hb_avpicture_fill(&dstpic, buf);
+
+            if (pv->sws_context == NULL            ||
+                pv->sws_width   != context->width  ||
+                pv->sws_height  != context->height ||
+                pv->sws_pix_fmt != context->pix_fmt)
+            {
+                if (pv->sws_context != NULL)
+                    sws_freeContext(pv->sws_context);
+                pv->sws_context = hb_sws_get_context(context->width,
+                                                     context->height,
+                                                     context->pix_fmt,
+                                                     w, h, AV_PIX_FMT_YUV420P,
+                                                     SWS_LANCZOS|SWS_ACCURATE_RND);
+                pv->sws_width   = context->width;
+                pv->sws_height  = context->height;
+                pv->sws_pix_fmt = context->pix_fmt;
+            }
+            sws_scale(pv->sws_context,
+                      (const uint8_t* const *)frame->data, frame->linesize,
+                      0, context->height, dstpic.data, dstpic.linesize);
         }
-        sws_scale(pv->sws_context,
-                  (const uint8_t* const *)frame->data, frame->linesize,
-                  0, context->height, dstpic.data, dstpic.linesize);
+        else
+        {
+            w = buf->plane[0].stride;
+            h = buf->plane[0].height;
+            dst = buf->plane[0].data;
+            copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
+            w = buf->plane[1].stride;
+            h = buf->plane[1].height;
+            dst = buf->plane[1].data;
+            copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
+            w = buf->plane[2].stride;
+            h = buf->plane[2].height;
+            dst = buf->plane[2].data;
+            copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
+        }
+        return buf;
+    }
+}
+
+#ifdef USE_HWD
+
+static int get_frame_buf_hwd( AVCodecContext *context, AVFrame *frame )
+{
+
+    hb_work_private_t *pv = (hb_work_private_t*)context->opaque;
+    if ( (pv != NULL) && pv->dxva2  )
+    {
+        int result = HB_WORK_ERROR;
+        hb_work_private_t *pv = (hb_work_private_t*)context->opaque;
+        result = hb_va_get_frame_buf( pv->dxva2, context, frame );
+        if( result == HB_WORK_ERROR )
+            return avcodec_default_get_buffer( context, frame );
+        return 0;
     }
     else
-    {
-        w = buf->plane[0].stride;
-        h = buf->plane[0].height;
-        dst = buf->plane[0].data;
-        copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
-        w = buf->plane[1].stride;
-        h = buf->plane[1].height;
-        dst = buf->plane[1].data;
-        copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
-        w = buf->plane[2].stride;
-        h = buf->plane[2].height;
-        dst = buf->plane[2].data;
-        copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
-    }
-    return buf;
+        return avcodec_default_get_buffer( context, frame );
 }
+
+static void hb_ffmpeg_release_frame_buf( struct AVCodecContext *p_context, AVFrame *frame )
+{
+    hb_work_private_t *p_dec = (hb_work_private_t*)p_context->opaque;
+    int i;
+    if( p_dec->dxva2 )
+    {
+        hb_va_release( p_dec->dxva2, frame );
+    }
+    else if( !frame->opaque )
+    {
+        if( frame->type == FF_BUFFER_TYPE_INTERNAL )
+            avcodec_default_release_buffer( p_context, frame );
+    }
+    for( i = 0; i < 4; i++ )
+        frame->data[i] = NULL;
+}
+#endif
 
 static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 {
@@ -979,16 +1080,27 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         if ( !pv->frame_duration_set )
             compute_frame_duration( pv );
 
+        double pts;
         double frame_dur = pv->duration;
         if ( frame.repeat_pict )
         {
             frame_dur += frame.repeat_pict * pv->field_duration;
         }
-
+#ifdef USE_HWD
+        if( pv->dxva2 && pv->dxva2->do_job == HB_WORK_OK )
+        {
+            if( avp.pts>0 )
+            {
+                if( pv->dxva2->input_pts[0] != 0 && pv->dxva2->input_pts[1] == 0 )
+                    frame.pkt_pts = pv->dxva2->input_pts[0];
+                else
+                    frame.pkt_pts = pv->dxva2->input_pts[0]<pv->dxva2->input_pts[1] ? pv->dxva2->input_pts[0] : pv->dxva2->input_pts[1];
+            }
+        }
+#endif
         // If there was no pts for this frame, assume constant frame rate
         // video & estimate the next frame time from the last & duration.
-        double pts;
-        if (frame.pkt_pts == AV_NOPTS_VALUE)
+        if (frame.pkt_pts == AV_NOPTS_VALUE || hb_gui_use_hwd_flag == 1)
         {
             pts = pv->pts_next;
         }
@@ -996,6 +1108,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         {
             pts = frame.pkt_pts;
         }
+
         pv->pts_next = pts + frame_dur;
 
         if ( frame.top_field_first )
@@ -1252,6 +1365,25 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+#ifdef USE_HWD
+        if ( pv->job && job->use_hwd && hb_use_dxva( pv->title ) )
+        {
+            pv->dxva2 = hb_va_create_dxva2( pv->dxva2, w->codec_param );
+            if( pv->dxva2 && pv->dxva2->do_job == HB_WORK_OK )
+            {
+                hb_va_new_dxva2( pv->dxva2, pv->context );
+                pv->context->slice_flags |= SLICE_FLAG_ALLOW_FIELD;
+                pv->context->opaque = pv;
+                pv->context->get_buffer = get_frame_buf_hwd;
+                pv->context->release_buffer = hb_ffmpeg_release_frame_buf;
+                pv->context->get_format = hb_ffmpeg_get_format;
+                pv->opencl_scale = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
+                memset( pv->opencl_scale, 0, sizeof( hb_oclscale_t ) );
+                pv->threads = 1;
+            }
+        }
+#endif
+
 
 #ifdef USE_QSV
         if (pv->qsv.decode)
@@ -1488,6 +1620,16 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->new_chap = in->s.new_chap;
         pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
+#ifdef USE_HWD
+    if( pv->dxva2 && pv->dxva2->do_job == HB_WORK_OK )
+    {
+        if( pv->dxva2->input_pts[0] <= pv->dxva2->input_pts[1] )
+            pv->dxva2->input_pts[0] = pts;
+        else if( pv->dxva2->input_pts[0] > pv->dxva2->input_pts[1] )
+            pv->dxva2->input_pts[1] = pts;
+        pv->dxva2->input_dts = dts;
+    }
+#endif
     decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
     hb_buffer_close( &in );
     *buf_out = link_buf_list( pv );
@@ -1746,7 +1888,6 @@ hb_work_object_t hb_decavcodecv =
     .info = decavcodecvInfo,
     .bsinfo = decavcodecvBSInfo
 };
-
 static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
                         int size, int64_t pts)
 {

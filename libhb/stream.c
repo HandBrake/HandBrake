@@ -16,6 +16,7 @@
 #include "lang.h"
 #include "a52dec/a52.h"
 #include "libbluray/bluray.h"
+#include "vadxva2.h"
 
 #define min(a, b) a < b ? a : b
 #define HB_MAX_PROBE_SIZE (1*1024*1024)
@@ -49,7 +50,7 @@ typedef struct {
 static const stream2codec_t st2codec[256] = {
     st(0x00, U, 0,                0,                      NULL),
     st(0x01, V, WORK_DECMPEG2,    0,                      "MPEG1"),
-    st(0x02, V, WORK_DECMPEG2,    0,                      "MPEG2"),
+    st(0x02, V, WORK_DECMPEG2,    AV_CODEC_ID_MPEG2VIDEO, "MPEG2"),
     st(0x03, A, HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,        "MPEG1"),
     st(0x04, A, HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,        "MPEG2"),
     st(0x05, N, 0,                0,                      "ISO 13818-1 private section"),
@@ -609,6 +610,10 @@ static int hb_stream_get_type(hb_stream_t *stream)
 
     if ( fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) )
     {
+#ifdef USE_HWD
+        if ( hb_gui_use_hwd_flag == 1 )
+            return 0;
+#endif
         int psize;
         if ( ( psize = hb_stream_check_for_ts(buf) ) != 0 )
         {
@@ -1096,7 +1101,28 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     {
         hb_log( "transport stream missing PCRs - using video DTS instead" );
     }
-
+#ifdef USE_HWD
+    hb_va_dxva2_t * dxva2 = NULL;
+    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
+    if ( dxva2 )
+    {
+        title->hwd_support = 1;
+        hb_va_close(dxva2);
+        dxva2 = NULL;
+    }
+    else
+        title->hwd_support = 0;
+#else
+    title->hwd_support = 0;
+#endif
+#ifdef USE_OPENCL
+    if ( hb_confirm_gpu_type() == 0 )
+        title->opencl_support = 1;
+    else
+        title->opencl_support = 0;
+#else
+    title->opencl_support = 0;
+#endif
     // Height, width, rate and aspect ratio information is filled in
     // when the previews are built
     return title;
@@ -5513,6 +5539,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->demuxer = HB_NULL_DEMUXER;
     title->video_codec = 0;
     int i;
+    int pix_fmt = -1;
     for (i = 0; i < ic->nb_streams; ++i )
     {
         if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO &&
@@ -5520,6 +5547,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
              title->video_codec == 0 )
         {
             AVCodecContext *context = ic->streams[i]->codec;
+            pix_fmt = context->pix_fmt;
             if ( context->pix_fmt != AV_PIX_FMT_YUV420P &&
                  !sws_isSupportedInput( context->pix_fmt ) )
             {
@@ -5626,6 +5654,30 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
         chapter->seconds = title->seconds;
         hb_list_add( title->list_chapter, chapter );
     }
+#ifdef USE_HWD
+    hb_va_dxva2_t * dxva2 = NULL;
+    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
+    if (dxva2)
+    {
+        title->hwd_support = 1;
+        hb_va_close(dxva2);
+        dxva2 = NULL;
+    }
+    else
+        title->hwd_support = 0;
+   if ( hb_check_hwd_fmt(pix_fmt) == 0)
+       title->hwd_support = 0;
+#else
+    title->hwd_support = 0;
+#endif
+#ifdef USE_OPENCL
+    if (hb_confirm_gpu_type() == 0)
+        title->opencl_support = 1;
+    else
+        title->opencl_support = 0;
+#else
+    title->opencl_support = 0;
+#endif
 
     return title;
 }

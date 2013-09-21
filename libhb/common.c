@@ -2829,6 +2829,7 @@ static void job_reset_for_mac_ui( hb_job_t * job, hb_title_t * title )
     job->metadata = hb_metadata_copy( title->metadata );
 }
 
+
 static void job_setup( hb_job_t * job, hb_title_t * title )
 {
     if ( job == NULL || title == NULL )
@@ -4129,3 +4130,15 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
         hb_deep_log( level, "    %-50s%20s", line, ascii );
     }
 }
+
+int hb_gui_use_hwd_flag = 0;
+int hb_use_dxva( hb_title_t * title )
+{
+    return ( (title->video_codec_param == AV_CODEC_ID_MPEG2VIDEO 
+              || title->video_codec_param == AV_CODEC_ID_H264
+              || title->video_codec_param == AV_CODEC_ID_VC1 
+              || title->video_codec_param == AV_CODEC_ID_WMV3 
+              || title->video_codec_param == AV_CODEC_ID_MPEG4 )
+             && title->opaque_priv );
+}
+

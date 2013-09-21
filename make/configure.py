@@ -1178,6 +1178,11 @@ def createCLI():
     h = IfHost( 'enable use of Intel Quick Sync Video hardware acceleration', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
 
+    h = IfHost( 'enable OpenCL features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-opencl', default=False, action='store_true', help=h )
+    h = IfHost( 'enable HWD features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-hwd', default=False, action='store_true', help=h )
+    
     h = IfHost( 'enable use of fdk-aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
     grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false' )
@@ -1648,6 +1653,8 @@ int main ()
     doc.add( 'FEATURE.libmkv',     int( options.enable_libmkv ))
     doc.add( 'FEATURE.avformat',   int( options.enable_avformat ))
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
+    doc.add( 'FEATURE.opencl',     int( options.enable_opencl ))
+    doc.add( 'FEATURE.hwd',        int( options.enable_hwd ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:

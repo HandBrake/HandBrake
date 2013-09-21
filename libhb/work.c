@@ -10,6 +10,7 @@
 #include "hb.h"
 #include "a52dec/a52.h"
 #include "libavformat/avformat.h"
+#include "openclwrapper.h"
 
 #ifdef USE_QSV
 #include "qsv_common.h"
@@ -532,8 +533,24 @@ static void do_job(hb_job_t *job)
 
     job->list_work = hb_list_init();
 
+#ifdef USE_OPENCL
+    /* init opencl environment */
+    if (job->use_opencl)
+        job->use_opencl = !hb_init_opencl_run_env(0, NULL, "-I.");
+#else
+    job->use_opencl = 0;
+#endif
+
     hb_log( "starting job" );
 
+    if (job->use_opencl || job->use_hwd)
+    {
+        hb_log("Using GPU: Yes.");
+    }
+    else
+    {
+        hb_log("Using GPU: No.");
+    }
     /* Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan. */
     if( !job->indepth_scan && interjob->select_subtitle )
@@ -792,6 +809,9 @@ static void do_job(hb_job_t *job)
         init.pix_fmt = AV_PIX_FMT_YUV420P;
         init.width = title->width;
         init.height = title->height;
+#ifdef USE_OPENCL
+        init.use_dxva = hb_use_dxva( title ); 
+#endif
         init.par_width = job->anamorphic.par_width;
         init.par_height = job->anamorphic.par_height;
         memcpy(init.crop, title->crop, sizeof(int[4]));
@@ -1093,6 +1113,7 @@ static void do_job(hb_job_t *job)
         title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
     }
 #endif
+
     hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );
     w->codec_param = title->video_codec_param;
     w->fifo_in  = job->fifo_mpeg2;
@@ -1554,7 +1575,6 @@ static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )
     if( src && dst && src->s.start == dst->s.start)
     {
         // restore log below to debug chapter mark propagation problems
-        //hb_log("work %s: Copying Chapter Break @ %"PRId64, w->name, src->s.start);
         dst->s.new_chap = src->s.new_chap;
     }
 }

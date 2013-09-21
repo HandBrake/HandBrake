@@ -9,9 +9,12 @@
    
 #include "hb.h"
 #include "hbffmpeg.h"
+#include "common.h"
+
 
 struct hb_filter_private_s
 {
+    hb_job_t            *job;
     int                 width_in;
     int                 height_in;
     int                 pix_fmt;
@@ -19,6 +22,13 @@ struct hb_filter_private_s
     int                 width_out;
     int                 height_out;
     int                 crop[4];
+    
+#ifdef USE_OPENCL
+    int                 use_dxva;
+    int                 use_decomb;
+    int                 use_detelecine;
+    hb_oclscale_t       *os; //ocl scaler handler
+#endif    
     struct SwsContext * context;
 };
 
@@ -53,11 +63,23 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
 
     // TODO: add pix format option to settings
+    pv->job = init->job;
     pv->pix_fmt_out = init->pix_fmt;
     pv->width_in = init->width;
     pv->height_in = init->height;
     pv->width_out = init->width - (init->crop[2] + init->crop[3]);
     pv->height_out = init->height - (init->crop[0] + init->crop[1]);
+#ifdef USE_OPENCL
+    pv->use_dxva = init->use_dxva;
+    pv->use_decomb = init->job->use_decomb;
+    pv->use_detelecine = init->job->use_detelecine;
+
+    if( pv->job->use_opencl )
+    {
+        pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
+        memset( pv->os, 0, sizeof( hb_oclscale_t ) );
+    }
+#endif
     memcpy( pv->crop, init->crop, sizeof( int[4] ) );
     if( filter->settings )
     {
@@ -71,6 +93,9 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     init->width = pv->width_out;
     init->height = pv->height_out;
     memcpy( init->crop, pv->crop, sizeof( int[4] ) );
+#ifdef USE_OPENCL
+    pv->use_dxva = init->use_dxva;
+#endif
 
     return 0;
 }
@@ -111,8 +136,16 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
     {
         return;
     }
+#ifdef USE_OPENCL
 
-    if ( pv->context )
+    if( pv->job->use_opencl && pv->os )
+    {
+        CL_FREE( pv->os->bicubic_x_weights );
+        CL_FREE( pv->os->bicubic_y_weights );
+        free( pv->os );
+    }
+#endif
+    if( pv->context )
     {
         sws_freeContext( pv->context );
     }
@@ -120,6 +153,25 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
     free( pv );
     filter->private_data = NULL;
 }
+
+#ifdef USE_OPENCL
+static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride, int h )
+{
+    if( dstride == sstride )
+    {
+        memcpy( dst, src, dstride * h );
+        return dst + dstride * h;
+    }
+    int lbytes = dstride <= sstride ? dstride : sstride;
+    while( --h >= 0 )
+    {
+        memcpy( dst, src, lbytes );
+        src += sstride;
+        dst += dstride;
+    }
+    return dst;
+}
+#endif
 
 static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
 {
@@ -137,6 +189,15 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
     av_picture_crop( &pic_crop, &pic_in, in->f.fmt,
                      pv->crop[0], pv->crop[2] );
 
+#ifdef USE_OPENCL
+    // Use bicubic OpenCL scaling when selected and when downsampling < 4:1;
+    if ((pv->job->use_opencl) && (pv->width_out * 4 > pv->width_in) && (in->cl.buffer != NULL) && (out->cl.buffer != NULL))
+    {
+        hb_ocl_scale(in, out, pv->crop, pv->os);
+    }
+    else
+    {
+#endif
     if ( !pv->context ||
          pv->width_in   != in->f.width  ||
          pv->height_in  != in->f.height ||
@@ -164,7 +225,9 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
               pic_crop.linesize,
               0, in->f.height - (pv->crop[0] + pv->crop[1]),
               pic_out.data,  pic_out.linesize);
-
+#ifdef USE_OPENCL
+    }
+#endif
     out->s = in->s;
     hb_buffer_move_subs( out, in );
     return out;
@@ -198,6 +261,18 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
         pv->width_out = in->f.width - (pv->crop[2] + pv->crop[3]);
         pv->height_out = in->f.height - (pv->crop[0] + pv->crop[1]);
     }
+#ifdef USE_OPENCL
+    if ( (in->f.fmt == pv->pix_fmt_out &&
+         !pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
+         in->f.width == pv->width_out && in->f.height == pv->height_out) && 
+         (pv->use_decomb == 0) && (pv->use_detelecine == 0) ||
+         (pv->use_dxva && in->f.width == pv->width_out && in->f.height == pv->height_out) )
+    {
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_OK;
+    }
+#else
     if ( in->f.fmt == pv->pix_fmt_out &&
          !pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
          in->f.width == pv->width_out && in->f.height == pv->height_out )
@@ -206,6 +281,8 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
         *buf_in = NULL;
         return HB_FILTER_OK;
     }
+#endif
+
     *buf_out = crop_scale( pv, in );
 
     return HB_FILTER_OK;

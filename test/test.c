@@ -25,6 +25,7 @@
 #include "hb.h"
 #include "lang.h"
 #include "parsecsv.h"
+#include "openclwrapper.h"
 
 #ifdef USE_QSV
 #include "qsv_common.h"
@@ -136,6 +137,8 @@ static int    start_at_frame = 0;
 static int64_t stop_at_pts    = 0;
 static int    stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
+static int use_opencl = 0;
+static int use_hwd = 0;
 #ifdef USE_QSV
 static int qsv_decode      =  1;
 static int qsv_async_depth = -1;
@@ -209,7 +212,10 @@ int main( int argc, char ** argv )
     /* Init libhb */
     h = hb_init( debug, update );
     hb_dvd_set_dvdnav( dvdnav );
-
+#ifdef USE_OPENCL
+    if( use_opencl )
+        hb_get_opencl_env();
+#endif
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
              HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
@@ -250,9 +256,10 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
+
     hb_system_sleep_prevent(h);
-    hb_scan(h, input, titleindex, preview_count, store_previews,
-            min_title_duration * 90000LL);
+    hb_gui_use_hwd_flag = use_hwd;
+    hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
     /* Wait... */
     while( !die )
@@ -423,6 +430,14 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
              (float) title->rate / title->rate_base );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
+    if ( title->opencl_support )
+        fprintf( stderr, "  + support opencl: yes\n");
+    else
+        fprintf( stderr, "  + support opencl: no\n");
+    if ( title->hwd_support )
+        fprintf( stderr, "  + support hwd: yes\n");
+    else
+        fprintf( stderr, "  + support hwd: no\n");
     fprintf( stderr, "  + chapters:\n" );
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
@@ -629,8 +644,8 @@ static int HandleEvents( hb_handle_t * h )
                 die = 1;
                 break;
             }
-	        if( main_feature )
-	        {
+            if( main_feature )
+            {
                 int i;
                 int main_feature_idx=0;
                 int main_feature_pos=-1;
@@ -1539,9 +1554,9 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
-			if ( chapter_markers )
-			{
-				job->chapter_markers = chapter_markers;
+            if ( chapter_markers )
+            {
+                job->chapter_markers = chapter_markers;
 
                 if( marker_file != NULL )
                 {
@@ -1587,7 +1602,7 @@ static int HandleEvents( hb_handle_t * h )
                         hb_close_csv_file( file );
                     }
                 }
-			}
+            }
 
             if( crop[0] >= 0 && crop[1] >= 0 &&
                 crop[2] >= 0 && crop[3] >= 0 )
@@ -1606,6 +1621,9 @@ static int HandleEvents( hb_handle_t * h )
             job->grayscale   = grayscale;
             
             hb_filter_object_t * filter;
+
+            job->use_detelecine = detelecine;
+            job->use_decomb = decomb;
 
             /* Add selected filters */
             if( detelecine )
@@ -1644,6 +1662,10 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
+            if (use_hwd)
+            {
+                job->use_hwd = use_hwd;
+            }
 
             switch( anamorphic_mode )
             {
@@ -1816,6 +1838,7 @@ static int HandleEvents( hb_handle_t * h )
             filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
                 job->width, job->height, 
                 job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+                    
             filter = hb_filter_init( HB_FILTER_CROP_SCALE );
             hb_add_filter( job, filter, filter_str );
             free( filter_str );
@@ -2793,7 +2816,11 @@ static int HandleEvents( hb_handle_t * h )
                 job->frame_to_start = start_at_frame;
                 subtitle_scan = 0;
             }
-            
+#ifdef USE_OPENCL 
+            job->use_opencl = use_opencl;
+#else
+            job->use_opencl = 0;
+#endif            
             if( subtitle_scan )
             {
                 /*
@@ -2975,6 +3002,7 @@ static void ShowHelp()
     "                            double quotation marks\n"
     "    -z, --preset-list       See a list of available built-in presets\n"
     "        --no-dvdnav         Do not use dvdnav for reading DVDs\n"
+    "    --no-opencl             Disable use of OpenCL\n"
     "\n"
 
     "### Source Options-----------------------------------------------------------\n\n"
@@ -3022,6 +3050,8 @@ static void ShowHelp()
     "                            of data. Note: breaks pre-iOS iPod compatibility.\n"
     "    -O, --optimize          Optimize mp4 files for HTTP streaming (\"fast start\")\n"
     "    -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them\n"
+    "    -P, --use-opencl        Use OpenCL where applicable\n"
+    "    -U, --use-hwd           Use DXVA2 hardware decoding\n"
     "\n"
 
 
@@ -3495,13 +3525,13 @@ static void ShowPresets()
 
 static char * hb_strndup( char * str, int len )
 {
-	char * res;
-	int str_len = strlen( str );
+    char * res;
+    int str_len = strlen( str );
 
-	res = malloc( len > str_len ? str_len + 1 : len + 1 );
-	strncpy( res, str, len );
-	res[len] = '\0';
-	return res;
+    res = malloc( len > str_len ? str_len + 1 : len + 1 );
+    strncpy( res, str, len );
+    res[len] = '\0';
+    return res;
 }
 
 static char** str_split( char *str, char delem )
@@ -3606,8 +3636,9 @@ static int ParseOptions( int argc, char ** argv )
     #define X264_TUNE           284
     #define H264_PROFILE        285
     #define H264_LEVEL          286
-    #define NORMALIZE_MIX       287
-    #define AUDIO_DITHER        288
+    #define NO_OPENCL           287
+    #define NORMALIZE_MIX       288
+    #define AUDIO_DITHER        289
     #define QSV_BASELINE        289
     #define QSV_ASYNC_DEPTH     290
 
@@ -3619,6 +3650,8 @@ static int ParseOptions( int argc, char ** argv )
             { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
+            { "no-opencl",   no_argument,       NULL,    NO_OPENCL },
+           
 #ifdef USE_QSV
             { "qsv-baseline", no_argument,      NULL,    QSV_BASELINE },
             { "qsv-async-depth", required_argument, NULL, QSV_ASYNC_DEPTH },
@@ -3631,6 +3664,8 @@ static int ParseOptions( int argc, char ** argv )
             { "large-file",  no_argument,       NULL,    '4' },
             { "optimize",    no_argument,       NULL,    'O' },
             { "ipod-atom",   no_argument,       NULL,    'I' },
+            { "use-opencl",  no_argument,       NULL,    'P' },
+            { "use-hwd",     no_argument,       NULL,    'U' },
 
             { "title",       required_argument, NULL,    't' },
             { "min-duration",required_argument, NULL,    MIN_DURATION },
@@ -3718,7 +3753,7 @@ static int ParseOptions( int argc, char ** argv )
 
         cur_optind = optind;
         c = getopt_long( argc, argv,
-                         "hv::uC:f:4i:Io:t:c:m::M:a:A:6:s:UF::N:e:E:Q:C:"
+                         "hv::uC:f:4i:Io:PUt:c:m::M:a:A:6:s:F::N:e:E:Q:C:"
                          "2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
@@ -3789,6 +3824,12 @@ static int ParseOptions( int argc, char ** argv )
             case 'I':
                 ipod_atom = 1;
                 break;
+            case 'P':
+                use_opencl = 1;
+                break;
+            case 'U':
+                use_hwd = 1;
+                break;
 
             case 't':
                 titleindex = atoi( optarg );
@@ -3820,6 +3861,9 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             }
+            case NO_OPENCL:
+                use_opencl = 0;
+                break;
             case ANGLE:
                 angle = atoi( optarg );
                 break;

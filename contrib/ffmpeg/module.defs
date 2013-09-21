@@ -63,6 +63,11 @@ else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     FFMPEG.CONFIGURE.extra += \
         --enable-w32threads \
         --enable-memalign-hack \
+        --enable-dxva2 \
+        --enable-hwaccel=h264_dxva2 \
+        --enable-hwaccel=mpeg2_dxva2 \
+        --enable-hwaccel=vc1_dxva2 \
+        --enable-hwaccel=wmv3_dxva2 \
         --target-os=mingw32 \
         --arch=i386 \
         --enable-cross-compile --cross-prefix=$(BUILD.cross.prefix)
