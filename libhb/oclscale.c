@@ -72,10 +72,10 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
     int crop_bottom = data[3];
     int crop_left = data[4];
     int crop_right = data[5];
-    int in_frame_w = (int)data[6];
-    int in_frame_h = (int)data[7];
-    int out_frame_w = (int)data[8];
-    int out_frame_h = (int)data[9];
+    cl_int in_frame_w = (int)data[6];
+    cl_int in_frame_h = (int)data[7];
+    cl_int out_frame_w = (int)data[8];
+    cl_int out_frame_h = (int)data[9];
     hb_oclscale_t  *os = data[10];
     hb_buffer_t *in = data[11];
     hb_buffer_t *out = data[12];
@@ -143,10 +143,10 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
         OCLCHECK( clSetKernelArg, os->m_kernel, 13, sizeof(cl_int), &dstRowWords0 );
         OCLCHECK( clSetKernelArg, os->m_kernel, 14, sizeof(cl_int), &dstRowWords1 );
         OCLCHECK( clSetKernelArg, os->m_kernel, 15, sizeof(cl_int), &dstRowWords2 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 16, sizeof(int), &in_frame_w );        // FIXME: type mismatch
-        OCLCHECK( clSetKernelArg, os->m_kernel, 17, sizeof(int), &in_frame_h );        //
-        OCLCHECK( clSetKernelArg, os->m_kernel, 18, sizeof(int), &out_frame_w );        //
-        OCLCHECK( clSetKernelArg, os->m_kernel, 19, sizeof(int), &out_frame_h );        //
+        OCLCHECK( clSetKernelArg, os->m_kernel, 16, sizeof(cl_int), &in_frame_w );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 17, sizeof(cl_int), &in_frame_h );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 18, sizeof(cl_int), &out_frame_w );
+        OCLCHECK( clSetKernelArg, os->m_kernel, 19, sizeof(cl_int), &out_frame_h );
         OCLCHECK( clSetKernelArg, os->m_kernel, 20, sizeof(cl_mem), &os->bicubic_x_weights );
         OCLCHECK( clSetKernelArg, os->m_kernel, 21, sizeof(cl_mem), &os->bicubic_y_weights );
 
