@@ -15,6 +15,7 @@
 #include <inttypes.h>
 
 #if defined( __MINGW32__ )
+#include <windows.h>
 #include <conio.h>
 #endif
 
@@ -189,6 +190,48 @@ static void hb_cli_error_handler ( const char *errmsg )
     fprintf( stderr, "ERROR: %s\n", errmsg );
 }
 
+static int get_argv_utf8(int *argc_ptr, char ***argv_ptr)
+{
+#if defined( __MINGW32__ )
+    int ret = 0;
+    int argc;
+    char **argv;
+
+    wchar_t **argv_utf16 = CommandLineToArgvW(GetCommandLineW(), &argc);
+    if (argv_utf16)
+    {
+        int i;
+        int offset = (argc+1) * sizeof(char*);
+        int size = offset;
+
+        for(i = 0; i < argc; i++)
+            size += WideCharToMultiByte(CP_UTF8, 0, argv_utf16[i], -1, NULL, 0, NULL, NULL );
+
+        argv = malloc(size);
+        if (argv)
+        {
+            for (i = 0; i < argc; i++)
+            {
+                argv[i] = (char*)argv + offset;
+                offset += WideCharToMultiByte(CP_UTF8, 0, argv_utf16[i], -1, argv[i], size-offset, NULL, NULL);
+            }
+            argv[argc] = NULL;
+            ret = 1;
+        }
+        LocalFree(argv_utf16);
+    }
+    if (ret)
+    {
+        *argc_ptr = argc;
+        *argv_ptr = argv;
+    }
+    return ret;
+#else
+    // On other systems, assume command line is already utf8
+    return 1;
+#endif
+}
+
 int main( int argc, char ** argv )
 {
     hb_handle_t * h;
@@ -198,6 +241,9 @@ int main( int argc, char ** argv )
     hb_global_init();
 
     audios = hb_list_init();
+
+    // Get utf8 command line if windows
+    get_argv_utf8(&argc, &argv);
 
     /* Parse command line */
     if( ParseOptions( argc, argv ) ||

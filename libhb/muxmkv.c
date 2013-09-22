@@ -119,7 +119,18 @@ static int MKVInit( hb_mux_object_t * m )
 
     track = calloc(1, sizeof(mk_TrackConfig));
 
-    m->file = mk_createWriter(job->file, 1000000, 1);
+    // convert file name to current code page
+    char *path = hb_utf8_to_cp(job->file);
+    if (path == NULL)
+    {
+        hb_error("Could not convert string, out of memory?");
+        job->mux_data = NULL;
+        *job->die = 1;
+        return 0;
+    }
+
+    m->file = mk_createWriter(path, 1000000, 1);
+    free(path);
 
     if( !m->file )
     {

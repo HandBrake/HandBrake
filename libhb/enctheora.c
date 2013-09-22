@@ -51,11 +51,11 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         hb_get_tempory_filename( job->h, filename, "theroa.log" );
         if ( job->pass == 1 )
         {
-            pv->file = fopen( filename, "wb" );
+            pv->file = hb_fopen(filename, "wb");
         }
         else
         {
-            pv->file = fopen( filename, "rb" );
+            pv->file = hb_fopen(filename, "rb");
         }
     }
 

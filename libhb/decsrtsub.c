@@ -535,9 +535,9 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 
         } else {
             memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
-            
-            pv->file = fopen( w->subtitle->config.src_filename, "r" );
-            
+
+            pv->file = hb_fopen(w->subtitle->config.src_filename, "r");
+
             if( !pv->file )
             {
                 hb_error("Could not open the SRT subtitle file '%s'\n", 

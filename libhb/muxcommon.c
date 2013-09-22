@@ -346,10 +346,10 @@ void muxClose( hb_work_object_t * w )
         // we're all done muxing -- print final stats and cleanup.
         if( job->pass == 0 || job->pass == 2 )
         {
-            struct stat sb;
+            hb_stat_t sb;
             uint64_t bytes_total, frames_total;
 
-            if( !stat( job->file, &sb ) )
+            if (!hb_stat(job->file, &sb))
             {
                 hb_deep_log( 2, "mux: file size, %"PRId64" bytes", (uint64_t) sb.st_size );
 

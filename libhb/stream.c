@@ -816,7 +816,7 @@ static void prune_streams(hb_stream_t *d)
  **********************************************************************/
 hb_stream_t * hb_stream_open( char *path, hb_title_t *title, int scan )
 {
-    FILE *f = fopen( path, "rb" );
+    FILE *f = hb_fopen(path, "rb");
     if ( f == NULL )
     {
         hb_log( "hb_stream_open: open %s failed", path );

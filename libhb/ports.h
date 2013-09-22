@@ -47,7 +47,33 @@ int      hb_platform_init();
 char *strtok_r(char *s, const char *delim, char **save_ptr);
 #endif
 
+#ifdef SYS_MINGW
+typedef struct
+{
+    _WDIR *wdir;
+    struct dirent entry;
+} HB_DIR;
+#else
+typedef DIR HB_DIR;
+#endif
+
+#ifdef SYS_MINGW
+typedef struct _stat64 hb_stat_t;
+#else
+typedef struct stat hb_stat_t;
+#endif
+
+HB_DIR* hb_opendir(char *path);
+int hb_closedir(HB_DIR *dir);
+struct dirent * hb_readdir(HB_DIR *dir);
+int hb_mkdir(char * name);
+int hb_stat(const char *path, hb_stat_t *sb);
+FILE * hb_fopen(const char *path, const char *mode);
+
 #ifdef __LIBHB__
+
+// Convert utf8 string to current code page.
+char * hb_utf8_to_cp(const char *src);
 
 /* Everything from now is only used internally and hidden to the UI */
 
@@ -62,7 +88,6 @@ int hb_dvd_region(char *device, int *region_mask);
 void hb_get_temporary_directory( char path[512] );
 void hb_get_tempory_filename( hb_handle_t *, char name[1024],
                               char * fmt, ... );
-void hb_mkdir( char * name );
 
 /************************************************************************
  * Threads

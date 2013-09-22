@@ -224,7 +224,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
         if( job->pass == 1 )
         {
-            pv->file = fopen( filename, "wb" );
+            pv->file = hb_fopen(filename, "wb");
             context->flags |= CODEC_FLAG_PASS1;
         }
         else
@@ -232,7 +232,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             int    size;
             char * log;
 
-            pv->file = fopen( filename, "rb" );
+            pv->file = hb_fopen(filename, "rb");
             fseek( pv->file, 0, SEEK_END );
             size = ftell( pv->file );
             fseek( pv->file, 0, SEEK_SET );

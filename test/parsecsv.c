@@ -47,7 +47,7 @@ hb_csv_file_t *hb_open_csv_file( const char *filepath )
         return file;
     }
 
-    fileref = fopen( filepath, "r" );
+    fileref = hb_fopen(filepath, "r");
     if( fileref == NULL )
     {
         return file;

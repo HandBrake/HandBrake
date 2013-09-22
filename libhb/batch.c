@@ -24,28 +24,28 @@ struct hb_batch_s
 hb_batch_t * hb_batch_init( char * path )
 {
     hb_batch_t    * d;
-    struct stat     sb;
-    DIR           * dir;
+    hb_stat_t       sb;
+    HB_DIR        * dir;
     struct dirent * entry;
     char          * filename;
 
-    if ( stat( path, &sb ) )
+    if ( hb_stat( path, &sb ) )
         return NULL;
 
     if ( !S_ISDIR( sb.st_mode ) )
         return NULL;
 
-    dir = opendir( path );
+    dir = hb_opendir(path);
     if ( dir == NULL )
         return NULL;
 
     d = calloc( sizeof( hb_batch_t ), 1 );
     d->list_file = hb_list_init();
 
-    while ( (entry = readdir( dir ) ) )
+    while ( (entry = hb_readdir( dir ) ) )
     {
         filename = hb_strdup_printf( "%s" DIR_SEP_STR "%s", path, entry->d_name );
-        if ( stat( filename, &sb ) )
+        if ( hb_stat( filename, &sb ) )
         {
             free( filename );
             continue;
@@ -60,7 +60,7 @@ hb_batch_t * hb_batch_init( char * path )
         hb_list_add( d->list_file, filename );
     }
 
-    closedir( dir );
+    hb_closedir( dir );
     if ( hb_list_count( d->list_file ) == 0 )
     {
         hb_list_close( &d->list_file );

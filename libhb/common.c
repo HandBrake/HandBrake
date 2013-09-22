@@ -19,6 +19,10 @@
 #include "qsv_common.h"
 #endif
 
+#ifdef SYS_MINGW
+#include <windows.h>
+#endif
+
 /**********************************************************************
  * Global variables
  *********************************************************************/
@@ -2559,6 +2563,21 @@ void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va
 
     /* Add the end of line */
     strcat( string, "\n" );
+
+#ifdef SYS_MINGW
+    wchar_t     wstring[2*362]; /* 360 chars + \n + \0 */
+
+    // Convert internal utf8 to "console output code page".
+    //
+    // This is just bizarre windows behavior.  You would expect that
+    // printf would automatically convert a wide character string to
+    // the current "console output code page" when using the "%ls" format
+    // specifier.  But it doesn't... so we must do it.
+    if (!MultiByteToWideChar(CP_UTF8, 0, string, -1, wstring, sizeof(wstring)))
+        return;
+    if (!WideCharToMultiByte(GetConsoleOutputCP(), 0, wstring, -1, string, sizeof(string), NULL, NULL))
+        return;
+#endif
 
     /* Print it */
     fprintf( stderr, "%s", string );

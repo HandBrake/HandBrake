@@ -47,6 +47,9 @@
 #ifdef SYS_MINGW
 #include <pthread.h>
 #include <windows.h>
+#include <wchar.h>
+#include <mbctype.h>
+#include <locale.h>
 #endif
 
 #ifdef SYS_SunOS
@@ -99,6 +102,34 @@ int gettimeofday( struct timeval * tv, struct timezone * tz )
 }
 #endif
 */
+
+// Convert utf8 string to current code page.
+// The internal string representation in hb is utf8. But some
+// libraries (libmkv, and mp4v2) expect filenames in the current
+// code page.  So we must convert.
+char * hb_utf8_to_cp(const char *src)
+{
+    char *dst = NULL;
+
+#if defined( SYS_MINGW )
+    int num_chars = MultiByteToWideChar(CP_UTF8, 0, src, -1, NULL, 0);
+    if (num_chars <= 0)
+        return NULL;
+    wchar_t * tmp = calloc(num_chars, sizeof(wchar_t));
+    MultiByteToWideChar(CP_UTF8, 0, src, -1, tmp, num_chars);
+    int len = WideCharToMultiByte(GetACP(), 0, tmp, num_chars, NULL, 0, NULL, NULL);
+    if (len <= 0)
+        return NULL;
+    dst = calloc(len, sizeof(char));
+    WideCharToMultiByte(GetACP(), 0, tmp, num_chars, dst, len, NULL, NULL);
+    free(tmp);
+#else
+    // Other platforms don't have code pages
+    dst = strdup(src);
+#endif
+
+    return dst;
+}
 
 int hb_dvd_region(char *device, int *region_mask)
 {
@@ -456,17 +487,119 @@ void hb_get_tempory_filename( hb_handle_t * h, char name[1024],
 }
 
 /************************************************************************
+ * hb_stat
+ ************************************************************************
+ * Wrapper to the real stat, needed to handle utf8 filenames on
+ * windows.
+ ***********************************************************************/
+int hb_stat(const char *path, hb_stat_t *sb)
+{
+#ifdef SYS_MINGW
+    wchar_t path_utf16[MAX_PATH];
+    if (!MultiByteToWideChar(CP_UTF8, 0, path, -1, path_utf16, MAX_PATH))
+        return -1;
+    return _wstat64( path_utf16, sb );
+#else
+    return stat(path, sb);
+#endif
+}
+
+/************************************************************************
+ * hb_fopen
+ ************************************************************************
+ * Wrapper to the real fopen, needed to handle utf8 filenames on
+ * windows.
+ ***********************************************************************/
+FILE * hb_fopen(const char *path, const char *mode)
+{
+#ifdef SYS_MINGW
+    FILE *f;
+    wchar_t path_utf16[MAX_PATH];
+    wchar_t mode_utf16[16];
+    if (!MultiByteToWideChar(CP_UTF8, 0, path, -1, path_utf16, MAX_PATH))
+        return NULL;
+    if (!MultiByteToWideChar(CP_UTF8, 0, mode, -1, mode_utf16, 16))
+        return NULL;
+    errno_t ret = _wfopen_s(&f, path_utf16, mode_utf16);
+    if (ret)
+        return NULL;
+    return f;
+#else
+    return fopen(path, mode);
+#endif
+}
+
+HB_DIR* hb_opendir(char *path)
+{
+#ifdef SYS_MINGW
+    HB_DIR *dir;
+    wchar_t path_utf16[MAX_PATH];
+
+    if (!MultiByteToWideChar(CP_UTF8, 0, path, -1, path_utf16, MAX_PATH))
+        return NULL;
+    dir = malloc(sizeof(HB_DIR));
+    if (dir == NULL)
+        return NULL;
+    dir->wdir = _wopendir(path_utf16);
+    if (dir->wdir == NULL)
+    {
+        free(dir);
+        return NULL;
+    }
+    return dir;
+#else
+    return opendir(path);
+#endif
+}
+
+int hb_closedir(HB_DIR *dir)
+{
+#ifdef SYS_MINGW
+    int ret;
+
+    ret = _wclosedir(dir->wdir);
+    free(dir);
+    return ret;
+#else
+    return closedir(dir);
+#endif
+}
+
+struct dirent * hb_readdir(HB_DIR *dir)
+{
+#ifdef SYS_MINGW
+    struct _wdirent *entry;
+    entry = _wreaddir(dir->wdir);
+    if (entry == NULL)
+        return NULL;
+
+    int len = WideCharToMultiByte(CP_UTF8, 0, entry->d_name, -1,
+                                  dir->entry.d_name, sizeof(dir->entry.d_name),
+                                  NULL, NULL );
+    dir->entry.d_ino = entry->d_ino;
+    dir->entry.d_reclen = entry->d_reclen;
+    dir->entry.d_namlen = len - 1;
+    return &dir->entry;
+#else
+    return readdir(dir);
+#endif
+}
+
+/************************************************************************
  * hb_mkdir
  ************************************************************************
  * Wrapper to the real mkdir, needed only because it doesn't take a
  * second argument on Win32. Grrr.
  ***********************************************************************/
-void hb_mkdir( char * name )
+int hb_mkdir(char * path)
 {
 #ifdef SYS_MINGW
-    mkdir( name );
+    wchar_t path_utf16[MAX_PATH];
+    if (!MultiByteToWideChar(CP_UTF8, 0, path, -1, path_utf16, MAX_PATH))
+        return -1;
+    return _wmkdir(path_utf16);
 #else
-    mkdir( name, 0755 );
+    return mkdir(path, 0755);
 #endif
 }
 

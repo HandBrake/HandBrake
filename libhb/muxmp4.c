@@ -20,6 +20,8 @@ struct hb_mux_object_s
 
     hb_job_t * job;
 
+    /* output file name in current code page */
+    char * path;
     /* libmp4v2 handle */
     MP4FileHandle file;
 
@@ -105,17 +107,25 @@ static int MP4Init( hb_mux_object_t * m )
         TRACK_IN_POSTER  = 0x8
     };
 
+    m->path = hb_utf8_to_cp(job->file);
+    if (m->path == NULL)
+    {
+        hb_error("Could not convert string, out of memory?");
+        *job->die = 1;
+        return 0;
+    }
+
     /* Create an empty mp4 file */
     if (job->largeFileSize)
     /* Use 64-bit MP4 file */
     {
-        m->file = MP4Create( job->file, MP4_DETAILS_ERROR, MP4_CREATE_64BIT_DATA );
+        m->file = MP4Create(m->path, MP4_DETAILS_ERROR, MP4_CREATE_64BIT_DATA);
         hb_deep_log( 2, "muxmp4: using 64-bit MP4 formatting.");
     }
     else
     /* Limit MP4s to less than 4 GB */
     {
-        m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
+        m->file = MP4Create(m->path, MP4_DETAILS_ERROR, 0);
     }
 
     if (m->file == MP4_INVALID_FILE_HANDLE)
@@ -1167,12 +1177,14 @@ static int MP4End( hb_mux_object_t * m )
         {
             hb_log( "muxmp4: optimizing file" );
             char filename[1024]; memset( filename, 0, 1024 );
-            snprintf( filename, 1024, "%s.tmp", job->file );
-            MP4Optimize( job->file, filename, MP4_DETAILS_ERROR );
-            remove( job->file );
-            rename( filename, job->file );
+            snprintf(filename, 1024, "%s.tmp", m->path);
+            MP4Optimize(m->path, filename, MP4_DETAILS_ERROR);
+            remove(m->path);
+            rename(filename, m->path);
         }
+
     }
+    free(m->path);
 
     return 0;
 }

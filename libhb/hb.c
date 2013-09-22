@@ -665,7 +665,7 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
     hb_get_tempory_filename( h, filename, "%d_%d_%d",
                              hb_get_instance_id(h), title, preview );
 
-    file = fopen( filename, "wb" );
+    file = hb_fopen(filename, "wb");
     if( !file )
     {
         hb_error( "hb_save_preview: fopen failed (%s)", filename );
@@ -719,7 +719,7 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
     hb_get_tempory_filename( h, filename, "%d_%d_%d",
                              hb_get_instance_id(h), title_idx, preview );
 
-    file = fopen( filename, "rb" );
+    file = hb_fopen(filename, "rb");
     if( !file )
     {
         hb_error( "hb_read_preview: fopen failed (%s)", filename );
