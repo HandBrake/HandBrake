@@ -850,7 +850,7 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
         b_error |= fread(binary, 1, length, fd) != length;
 #if 0   // this doesn't work under OS X and/or with some non-AMD GPUs
         if (binary[length-1] != '\n')
-            binary[length++]  = '\n;
+            binary[length++]  = '\n';
 #endif
 
         if (b_error)
