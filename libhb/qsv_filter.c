@@ -151,8 +151,8 @@ static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
         qsv_vpp->m_mfxVideoParam.vpp.In.CropY           = pv->crop[0];
         qsv_vpp->m_mfxVideoParam.vpp.In.CropW           = pv-> width_in - pv->crop[3] - pv->crop[2];
         qsv_vpp->m_mfxVideoParam.vpp.In.CropH           = pv->height_in - pv->crop[1] - pv->crop[0];
-        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtN   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN;
-        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtD   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD;
+        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtN   = pv->job->vrate;
+        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtD   = pv->job->vrate_base;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
         qsv_vpp->m_mfxVideoParam.vpp.In.Width           = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.Width;
