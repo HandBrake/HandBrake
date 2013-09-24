@@ -460,22 +460,6 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
             param->codingOption.CAVLC = hb_qsv_codingoption_xlat(ivalue);
         }
     }
-    else if (!strcasecmp(key, "rate-distorsion-opt") ||
-             !strcasecmp(key, "rdo"))
-    {
-        switch (vcodec)
-        {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atobool(value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
-        }
-        if (!error)
-        {
-            param->codingOption.RateDistortionOpt = hb_qsv_codingoption_xlat(ivalue);
-        }
-    }
     else if (!strcasecmp(key, "videoformat"))
     {
         switch (vcodec)

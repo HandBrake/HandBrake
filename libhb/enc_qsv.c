@@ -620,13 +620,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                 hb_log("encqsvInit: MFX_RATECONTROL_LA, ignoring VBV");
             }
             /* 
-             * When LA is used, ExtBRC, MBBRC and RateDistortionOpt are ignored.
-             * But some drivers ignore them too late and change other settings
+             * When LA is used, ExtBRC and MBBRC are ignored. However, some
+             * graphics drivers ignore them too late and change other settings
              * (such as AsyncDepth) based on their values. So disable them here.
              */
-            pv->param.codingOption2.ExtBRC           = MFX_CODINGOPTION_OFF;
-            pv->param.codingOption2.MBBRC            = MFX_CODINGOPTION_OFF;
-            pv->param.codingOption.RateDistortionOpt = MFX_CODINGOPTION_OFF;
+            pv->param.codingOption2.ExtBRC = MFX_CODINGOPTION_OFF;
+            pv->param.codingOption2.MBBRC  = MFX_CODINGOPTION_OFF;
         }
         else
         {
@@ -973,7 +972,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
            hb_qsv_codingoption_get_name(option1->CAVLC));
     if (videoParam.mfx.RateControlMethod != MFX_RATECONTROL_LA)
     {
-        // LA and ExtBRC, MBBRC, RateDistortionOpt are mutually exclusive
+        // LA and ExtBRC/MBBRC are mutually exclusive
         if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
         {
             hb_log("encqsvInit: ExtBRC %s",
@@ -984,8 +983,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             hb_log("encqsvInit: MBBRC %s",
                    hb_qsv_codingoption_get_name(option2->MBBRC));
         }
-        hb_log("encqsvInit: RateDistortionOpt %s",
-               hb_qsv_codingoption_get_name(option1->RateDistortionOpt));
     }
     if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_TRELLIS)
     {
