@@ -95,9 +95,12 @@ int hb_qsv_info_init()
         }
         if (hb_get_cpu_platform() == HB_CPU_PLATFORM_INTEL_HSW)
         {
-            if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7))
+            if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 6))
             {
                 hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_MBBRC;
+            }
+            if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7))
+            {
                 hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_TRELLIS;
                 hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_LOOKAHEAD;
             }
