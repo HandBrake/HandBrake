@@ -685,6 +685,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     pv->param.videoParam->mfx.GopPicSize = pv->param.gop.gop_pic_size;
 
+    // LookAheadDepth 10 will cause a hang with some driver versions
+    pv->param.codingOption2.LookAheadDepth = FFMAX(pv->param.codingOption2.LookAheadDepth, 11);
+
     // sanitize some settings that affect memory consumption
     if (!pv->is_sys_mem)
     {
