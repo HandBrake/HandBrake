@@ -951,9 +951,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     switch (videoParam.mfx.FrameInfo.PicStruct)
     {
+        // quiet, most people don't care
         case MFX_PICSTRUCT_PROGRESSIVE:
-            hb_log("encqsvInit: PicStruct progressive");
             break;
+        // interlaced encoding is intended for advanced users only, who do care
         case MFX_PICSTRUCT_FIELD_TFF:
             hb_log("encqsvInit: PicStruct top field first");
             break;

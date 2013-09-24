@@ -445,18 +445,22 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
             param->rc.vbv_max_bitrate = HB_QSV_CLIP3(0, UINT16_MAX, ivalue);
         }
     }
-    else if (!strcasecmp(key, "cabac"))
+    else if (!strcasecmp(key, "cavlc") || !strcasecmp(key, "cabac"))
     {
         switch (vcodec)
         {
             case HB_VCODEC_QSV_H264:
-                ivalue = !hb_qsv_atobool(value, &error);
+                ivalue = hb_qsv_atobool(value, &error);
                 break;
             default:
                 return HB_QSV_PARAM_UNSUPPORTED;
         }
         if (!error)
         {
+            if (!strcasecmp(key, "cabac"))
+            {
+                ivalue = !ivalue;
+            }
             param->codingOption.CAVLC = hb_qsv_codingoption_xlat(ivalue);
         }
     }
@@ -577,7 +581,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     {
         if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
         {
-            ivalue = hb_qsv_atoi(value, &error);
+            ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
                 param->codingOption2.MBBRC = hb_qsv_codingoption_xlat(ivalue);
@@ -592,7 +596,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     {
         if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
         {
-            ivalue = hb_qsv_atoi(value, &error);
+            ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
                 param->codingOption2.ExtBRC = hb_qsv_codingoption_xlat(ivalue);
@@ -785,7 +789,6 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->codingOption.MVPrecision          = 0; // reserved, must be 0
         param->codingOption.EndOfSequence        = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.RateDistortionOpt    = MFX_CODINGOPTION_UNKNOWN;
-        param->codingOption.CAVLC                = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.ResetRefList         = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.MaxDecFrameBuffering = 0; // unspecified
         param->codingOption.AUDelimiter          = MFX_CODINGOPTION_OFF;
@@ -793,6 +796,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->codingOption.PicTimingSEI         = MFX_CODINGOPTION_OFF;
         param->codingOption.VuiNalHrdParameters  = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.FramePicture         = MFX_CODINGOPTION_UNKNOWN;
+        param->codingOption.CAVLC                = MFX_CODINGOPTION_OFF;
         // introduced in API 1.3
         param->codingOption.RefPicMarkRep        = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.FieldOutput          = MFX_CODINGOPTION_UNKNOWN;
