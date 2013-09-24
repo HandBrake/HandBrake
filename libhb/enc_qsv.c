@@ -74,6 +74,7 @@ struct hb_work_private_s
 
     // if encode-only, system memory used
     int is_sys_mem;
+    mfxSession mfx_session;
     struct SwsContext *sws_context_to_nv12;
 
     // whether to expect input from VPP or from QSV decode
@@ -179,20 +180,10 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
         if (pv->is_sys_mem)
         {
             // no need to use additional sync as encode only -> single thread
-            // XXX: this zeroes the session handle, so call it before MFXInit
             av_qsv_add_context_usage(qsv, 0);
 
-            // initialize the session
-            qsv->ver.Major = AV_QSV_MSDK_VERSION_MAJOR;
-            qsv->ver.Minor = AV_QSV_MSDK_VERSION_MINOR;
-            qsv->impl      = hb_qsv_impl_get_preferred();
-            sts = MFXInit(qsv->impl, &qsv->ver, &qsv->mfx_session);
-            if (sts != MFX_ERR_NONE)
-            {
-                hb_error("qsv_enc_init: MFXInit failed (%d)", sts);
-                *job->die = 1;
-                return -1;
-            }
+            // re-use the session from encqsvInit
+            qsv->mfx_session = pv->mfx_session;
         }
         qsv->enc_space = qsv_encode = &pv->enc_space;
     }
@@ -864,7 +855,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     err = MFXVideoENCODE_GetVideoParam(session, &videoParam);
     MFXVideoENCODE_Close(session);
-    MFXClose(session);
     if (err == MFX_ERR_NONE)
     {
         // remove 32-bit NAL prefix (0x00 0x00 0x00 0x01)
@@ -878,7 +868,18 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     else
     {
         hb_error("encqsvInit: MFXVideoENCODE_GetVideoParam failed (%d)", err);
+        MFXClose(session);
         return -1;
+    }
+
+    // when using system memory, we re-use this same session
+    if (pv->is_sys_mem)
+    {
+        pv->mfx_session = session;
+    }
+    else
+    {
+        MFXClose(session);
     }
 
     // check whether B-frames are used
