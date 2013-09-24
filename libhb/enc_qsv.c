@@ -589,6 +589,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         pv->param.videoParam->mfx.QPI = HB_QSV_CLIP3(0, 51, job->vquality + pv->param.rc.cqp_offsets[0]);
         pv->param.videoParam->mfx.QPP = HB_QSV_CLIP3(0, 51, job->vquality + pv->param.rc.cqp_offsets[1]);
         pv->param.videoParam->mfx.QPB = HB_QSV_CLIP3(0, 51, job->vquality + pv->param.rc.cqp_offsets[2]);
+        // CQP + ExtBRC can cause bad output
+        pv->param.codingOption2.ExtBRC = MFX_CODINGOPTION_OFF;
     }
     else if (job->vbitrate > 0)
     {
@@ -619,13 +621,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             {
                 hb_log("encqsvInit: MFX_RATECONTROL_LA, ignoring VBV");
             }
-            /* 
-             * When LA is used, ExtBRC and MBBRC are ignored. However, some
-             * graphics drivers ignore them too late and change other settings
-             * (such as AsyncDepth) based on their values. So disable them here.
-             */
+            // ignored, but some drivers will change AsyncDepth because of it
             pv->param.codingOption2.ExtBRC = MFX_CODINGOPTION_OFF;
-            pv->param.codingOption2.MBBRC  = MFX_CODINGOPTION_OFF;
         }
         else
         {
@@ -970,9 +967,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     hb_log("encqsvInit: CAVLC %s",
            hb_qsv_codingoption_get_name(option1->CAVLC));
-    if (videoParam.mfx.RateControlMethod != MFX_RATECONTROL_LA)
+    if (videoParam.mfx.RateControlMethod != MFX_RATECONTROL_LA &&
+        videoParam.mfx.RateControlMethod != MFX_RATECONTROL_CQP)
     {
-        // LA and ExtBRC/MBBRC are mutually exclusive
+        // LA/CQP and ExtBRC/MBBRC are mutually exclusive
         if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
         {
             hb_log("encqsvInit: ExtBRC %s",
