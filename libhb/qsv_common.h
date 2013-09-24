@@ -32,9 +32,10 @@ typedef struct hb_qsv_info_s
     int capabilities;
 #define HB_QSV_CAP_H264_BPYRAMID     (1 << 0) // H.264: reference B-frames
 #define HB_QSV_CAP_MSDK_API_1_6      (1 << 1) // Support for API 1.6 or later
-#define HB_QSV_CAP_OPTION2_BRC       (1 << 2) // mfxExtCodingOption2: MBBRC/ExtBRC
-#define HB_QSV_CAP_OPTION2_LOOKAHEAD (1 << 3) // mfxExtCodingOption2: LookAhead
-#define HB_QSV_CAP_OPTION2_TRELLIS   (1 << 4) // mfxExtCodingOption2: Trellis
+#define HB_QSV_CAP_OPTION2_EXTBRC    (1 << 2) // mfxExtCodingOption2: ExtBRC
+#define HB_QSV_CAP_OPTION2_MBBRC     (1 << 3) // mfxExtCodingOption2: MBBRC
+#define HB_QSV_CAP_OPTION2_LOOKAHEAD (1 << 4) // mfxExtCodingOption2: LookAhead
+#define HB_QSV_CAP_OPTION2_TRELLIS   (1 << 5) // mfxExtCodingOption2: Trellis
 
     // TODO: add available decoders, filters, encoders,
     //       maximum decode and encode resolution, etc.

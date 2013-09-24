@@ -971,14 +971,18 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                      videoParam.mfx.FrameInfo.PicStruct);
             return -1;
     }
-    hb_log("encqsvInit: CAVLC %-3s RateDistortionOpt %-3s",
+    hb_log("encqsvInit: CAVLC %s RateDistortionOpt %s",
            hb_qsv_codingoption_get_name(option1->CAVLC),
            hb_qsv_codingoption_get_name(option1->RateDistortionOpt));
-    if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_BRC)
+    if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
     {
-        hb_log("encqsvInit: MBBRC %-3s ExtBRC %-3s",
-               hb_qsv_codingoption_get_name(option2->MBBRC),
+        hb_log("encqsvInit: ExtBRC %s",
                hb_qsv_codingoption_get_name(option2->ExtBRC));
+    }
+    if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
+    {
+        hb_log("encqsvInit: MBBRC %s",
+               hb_qsv_codingoption_get_name(option2->MBBRC));
     }
     if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_TRELLIS)
     {

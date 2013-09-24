@@ -4336,7 +4336,8 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     /* XXX: for testing workarounds */
                     hb_qsv_info->capabilities &= ~HB_QSV_CAP_MSDK_API_1_6;
-                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_BRC;
+                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_MBBRC;
+                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_EXTBRC;
                     hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_TRELLIS;
                     hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_LOOKAHEAD;
                 }

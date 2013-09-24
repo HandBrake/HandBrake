@@ -88,13 +88,14 @@ int hb_qsv_info_init()
     {
         if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 6))
         {
-            hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_BRC;
             hb_qsv_info->capabilities |= HB_QSV_CAP_MSDK_API_1_6;
+            hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_EXTBRC;
         }
         if (hb_get_cpu_platform() == HB_CPU_PLATFORM_INTEL_HSW)
         {
             if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7))
             {
+                hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_MBBRC;
                 hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_TRELLIS;
                 hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_LOOKAHEAD;
             }
@@ -586,7 +587,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "mbbrc"))
     {
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_BRC)
+        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
         {
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
@@ -601,7 +602,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "extbrc"))
     {
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_BRC)
+        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
         {
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
