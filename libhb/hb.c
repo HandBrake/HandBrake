@@ -626,15 +626,14 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 #endif
 
     /* Print CPU info here so that it's in all scan and encode logs */
-    hb_log("hb_scan: CPU count: %i", hb_get_cpu_count());
-    if (hb_get_cpu_name() != NULL)
+    const char *cpu_name = hb_get_cpu_name();
+    const char *cpu_type = hb_get_cpu_platform_name();
+    hb_log("CPU: %s", cpu_name != NULL ? cpu_name : "");
+    if (cpu_type != NULL)
     {
-        hb_log("hb_scan: CPU name:  %s", hb_get_cpu_name());
+        hb_log(" - %s", cpu_type);
     }
-    if (hb_get_cpu_platform_name() != NULL)
-    {
-        hb_log("hb_scan: CPU type:  %s", hb_get_cpu_platform_name());
-    }
+    hb_log(" - logical processor count: %d", hb_get_cpu_count());
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
     h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index, 
