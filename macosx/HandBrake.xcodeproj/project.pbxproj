@@ -282,6 +282,13 @@
 		277A3FD014AE84C500A835E4 /* osx106.i386.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx106.i386.xcconfig; sourceTree = "<group>"; };
 		277A3FD114AE84C500A835E4 /* osx106.x86_64.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx106.x86_64.xcconfig; sourceTree = "<group>"; };
 		277A3FD214AE84C500A835E4 /* osx107.x86_64.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx107.x86_64.xcconfig; sourceTree = "<group>"; };
+		277EFE8917ED4F5D001D4A6A /* osx108.i386.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx108.i386.xcconfig; sourceTree = "<group>"; };
+		277EFE8B17ED4F63001D4A6A /* osx108.x86_64.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx108.x86_64.xcconfig; sourceTree = "<group>"; };
+		277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = supplemental.xcconfig; sourceTree = "<group>"; };
+		277EFE8F17ED7296001D4A6A /* libmp4v2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp4v2.a; path = external/contrib/lib/libmp4v2.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		277EFE9017ED72A1001D4A6A /* libmkv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmkv.a; path = external/contrib/lib/libmkv.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		277EFE9117ED7749001D4A6A /* libfaac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfaac.a; path = external/contrib/lib/libfaac.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		277EFE9217ED799E001D4A6A /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "../../../../Users/mike/Library/Developer/Xcode/DerivedData/HandBrake-anpxrfhxsejsxehiwuiaexjoygra/Build/Products/debug/external/contrib/lib/libfdk-aac.a"; sourceTree = "<group>"; };
 		27D6C72414B1019100B785E4 /* libhb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhb.a; path = external/libhb/libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72714B102DA00B785E4 /* liba52.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liba52.a; path = external/contrib/lib/liba52.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72814B102DA00B785E4 /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = external/contrib/lib/libass.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -680,8 +687,22 @@
 				277A3FD114AE84C500A835E4 /* osx106.x86_64.xcconfig */,
 				276941FA14B161B70027798C /* osx107.i386.xcconfig */,
 				277A3FD214AE84C500A835E4 /* osx107.x86_64.xcconfig */,
+				277EFE8917ED4F5D001D4A6A /* osx108.i386.xcconfig */,
+				277EFE8B17ED4F63001D4A6A /* osx108.x86_64.xcconfig */,
+				277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */,
 			);
 			path = xcconfig;
+			sourceTree = "<group>";
+		};
+		277EFE8E17ED71A2001D4A6A /* Static Libraries (optional) */ = {
+			isa = PBXGroup;
+			children = (
+				277EFE9117ED7749001D4A6A /* libfaac.a */,
+				277EFE9217ED799E001D4A6A /* libfdk-aac.a */,
+				277EFE9017ED72A1001D4A6A /* libmkv.a */,
+				277EFE8F17ED7296001D4A6A /* libmp4v2.a */,
+			);
+			name = "Static Libraries (optional)";
 			sourceTree = "<group>";
 		};
 		27D6C72314B1013400B785E4 /* Products (external) */ = {
@@ -689,6 +710,7 @@
 			children = (
 				271BA4C914B1238E00BC1D2C /* Support */,
 				271BA4C714B1236D00BC1D2C /* Static Libraries */,
+				277EFE8E17ED71A2001D4A6A /* Static Libraries (optional) */,
 			);
 			name = "Products (external)";
 			sourceTree = "<group>";
@@ -983,11 +1005,15 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = (
+					"-filelist",
+					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
+				);
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1006,11 +1032,15 @@
 				EXTERNAL_SRC = ..;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = (
+					"-filelist",
+					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
+				);
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
 				STRIP_INSTALLED_PRODUCT = YES;
 			};

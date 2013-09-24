@@ -106,15 +106,21 @@ if [ -n "$reconfigure" ]; then
         driver="--xcode-driver=$EXTERNAL_DRIVER"
     fi
 
+    ## determine which compiler to use based on Xcode environment (project).
     case "$GCC_VERSION" in
     com.apple.compilers.llvmgcc42)
-        gcc="--gcc=$DEVELOPER_BIN_DIR/llvm-gcc-4.2"
+        gcc="--gcc=`$DEVELOPER_BIN_DIR/xcodebuild -find-executable llvm-gcc-4.2`"
         ;;
     com.apple.compilers.llvm.clang.1_0)
-        gcc="--gcc=$DEVELOPER_BIN_DIR/clang"
+        gcc="--gcc=`$DEVELOPER_BIN_DIR/xcodebuild -find-executable clang`"
         ;;
     *)
-        gcc=
+        echo "*********************************************************************"
+        echo "***"
+        echo "*** ERROR: unexpected value for GCC_VERSION: $GCC_VERSION"
+        echo "***"
+        echo "*********************************************************************"
+        exit 1
         ;;
     esac
 
@@ -145,6 +151,14 @@ if [ -n "$reconfigure" ]; then
         minver=
     fi
 
+    ## pickup user setting from Xcode IDE and avoid recursion
+    if [ -n "$EXTERNAL_CONFIGURE" ]; then
+        extconf="$EXTERNAL_CONFIGURE"
+    else
+        extconf=
+    fi
+    EXTERNAL_CONFIGURE=
+
     ## invoke configure with (hidden) option which indicates conf performed by xcode
     (set -ex; $EXTERNAL_SRC/configure --force \
         $EXTERNAL_CONF_ARGS \
@@ -152,7 +166,7 @@ if [ -n "$reconfigure" ]; then
         $driver \
         --xcode-symroot="$SYMROOT" \
         --xcode-config="$EXTERNAL_XCCONFIG" \
-        $gcc $arch $debug $sysroot $minver)
+        $gcc $arch $debug $sysroot $minver $extconf)
     [ $? -ne 0 ] && exit 1
 fi
 

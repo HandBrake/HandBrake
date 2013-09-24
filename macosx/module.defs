@@ -7,10 +7,12 @@ MACOSX.build/ = $(BUILD/)macosx/
 MACOSX.m4.in  = $(wildcard $(MACOSX.src/)*.m4)
 MACOSX.m4.out = $(MACOSX.m4.in:$(MACOSX.src/)%.m4=$(MACOSX.build/)%)
 
+MACOSX.osl.filelist = $(MACOSX.build/)osl.filelist.txt
+
 ###############################################################################
 
 BUILD.out += $(MACOSX.m4.out)
-BUILD.out += $(MACOSX.m4.wc.out)
+BUILD.out += $(MACOSX.osl.filelist)
 
 ###############################################################################
 
@@ -26,25 +28,8 @@ MACOSX.map.g.std  = debug
 MACOSX.map.g.max  = debug
 
 ifeq (1,$(FEATURE.opencl))
-MACOSX.extra_cflags = OTHER_CFLAGS='-DUSE_OPENCL'
+    MACOSX.extra_cflags = OTHER_CFLAGS='-DUSE_OPENCL'
 endif
-
-ifeq (1,$(FEATURE.fdk_aac))
-    extra_libs += $(abspath $(BUILD))/contrib/lib/libfdk-aac.a
-endif
-
-ifeq (1,$(FEATURE.faac))
-    extra_libs += $(abspath $(BUILD))/contrib/lib/libfaac.a
-endif
-
-ifeq (1,$(FEATURE.mp4v2))
-    extra_libs += $(abspath $(BUILD))/contrib/lib/libmp4v2.a
-endif
-
-ifeq (1,$(FEATURE.libmkv))
-    extra_libs += $(abspath $(BUILD))/contrib/lib/libmkv.a
-endif
-MACOSX.extra_ldflags = OTHER_LDFLAGS='$(extra_libs)'
 
 ## xcconfig: must be one of macosx/xcconfig/*.xcconfig
 MACOSX.xcconfig = $(foreach x,$(XCODE.xcconfig),-xcconfig $(MACOSX.src/)xcconfig/$(x))
@@ -76,6 +61,5 @@ MACOSX.XCODE = $(strip \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         \
         $(MACOSX.extra_cflags) \
-        $(MACOSX.extra_ldflags) \
         \
         $(2) )

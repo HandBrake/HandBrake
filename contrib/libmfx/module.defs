@@ -4,3 +4,7 @@ $(eval $(call import.CONTRIB.defs,LIBMFX))
 LIBMFX.FETCH.url = http://download.handbrake.fr/contrib/libmfx_intel_msdk_2013r2.tar.bz2
 
 LIBMFX.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
+
+## optional static libs need to be marked
+LIBMFX.OSL.libs  = mfx
+LIBMFX.OSL.files = $(foreach i,$(LIBMFX.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))

@@ -12,3 +12,7 @@ MP4V2.CONFIGURE.extra += --disable-util
 
 # gch causes build errors with -g3 on many gcc toolchains
 MP4V2.CONFIGURE.extra += --disable-gch
+
+## optional static libs need to be marked
+MP4V2.OSL.libs  = mp4v2
+MP4V2.OSL.files = $(foreach i,$(MP4V2.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))

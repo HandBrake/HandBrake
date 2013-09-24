@@ -17,3 +17,8 @@ fn.ARGS = $(strip $(foreach a,$(2), \
 fn.VARS = $(foreach v,$($(1).vars),$(v)="$($(1).vars.$(v))")
 
 fn.TARGET = $(TARGET.$(2).prefix)$(1)$(TARGET.$(2).suffix)$(TARGET.$(2).ext)
+
+define fn.PRINTLN
+$(1)
+
+endef

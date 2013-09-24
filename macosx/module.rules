@@ -1,14 +1,22 @@
 $(eval $(call import.MODULE.rules,MACOSX))
 
 macosx.build: $(MACOSX.m4.out)
+macosx.build: $(MACOSX.osl.filelist)
 
 macosx.clean:
 	$(RM.exe) -f $(MACOSX.m4.out)
+	$(RM.exe) -f $(MACOSX.osl.filelist)
 
 $(MACOSX.m4.out): $(BUILD/)project/handbrake.m4
 $(MACOSX.m4.out): | $(dir $(MACOSX.m4.out))
 $(MACOSX.m4.out): $(MACOSX.build/)%: $(MACOSX.src/)%.m4
 	$(M4.exe) -Iproject $< > $@
+
+$(MACOSX.osl.filelist): | $(dir $(MACOSX.osl.filelist))
+$(MACOSX.osl.filelist): $(BUILD/)GNUmakefile
+	@echo "creating $@"
+	@> $@
+	$(foreach i,$(foreach m,$(MODULES.NAMES),$($m.OSL.files)),$(call fn.PRINTLN,@echo $i >> $@))
 
 ###############################################################################
 

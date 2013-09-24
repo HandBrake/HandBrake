@@ -20,25 +20,10 @@ TEST.GCC.l = \
         bluray xml2 bz2 z
 
 ifeq (1,$(FEATURE.qsv))
-    TEST.GCC.l += mfx
     TEST.GCC.D += USE_QSV HAVE_THREADS=1
 endif
 
-ifeq (1,$(FEATURE.fdk_aac))
-TEST.GCC.l += fdk-aac
-endif
-
-ifeq (1,$(FEATURE.faac))
-TEST.GCC.l += faac
-endif
-
-ifeq (1,$(FEATURE.mp4v2))
-TEST.GCC.l += mp4v2
-endif
-
-ifeq (1,$(FEATURE.libmkv))
-TEST.GCC.l += mkv
-endif
+TEST.GCC.l += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
 
