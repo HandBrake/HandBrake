@@ -7,6 +7,8 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifdef USE_QSV
+
 #include "hb.h"
 #include "ports.h"
 #include "common.h"
@@ -846,3 +848,5 @@ const char* hb_qsv_impl_get_name(int impl)
             return NULL;
     }
 }
+
+#endif // USE_QSV

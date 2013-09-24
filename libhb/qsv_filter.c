@@ -26,6 +26,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
+#ifdef USE_QSV
+
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "libavcodec/qsv.h"
@@ -677,4 +679,6 @@ hb_buffer_t *link_buf_list( hb_filter_private_t *pv )
         }
     return head;
 }
+
+#endif // USE_QSV
 

@@ -26,6 +26,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
+#ifdef USE_QSV
+
 #include "hb.h"
 #include "enc_qsv.h"
 #include "qsv_common.h"
@@ -1569,3 +1571,5 @@ void parse_nalus(uint8_t *nal_inits, size_t length, hb_buffer_t *buf, uint32_t f
             }
         }
 }
+
+#endif // USE_QSV

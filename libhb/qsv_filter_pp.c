@@ -26,6 +26,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
+#ifdef USE_QSV
+
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "libavcodec/qsv.h"
@@ -914,3 +916,5 @@ int process_filter(qsv_filter_task_t* task, void* params){
 
     return sts;
 }
+
+#endif // USE_QSV
