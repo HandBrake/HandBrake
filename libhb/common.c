@@ -2906,6 +2906,7 @@ static void job_setup( hb_job_t * job, hb_title_t * title )
 
 #ifdef USE_QSV
     job->qsv.enc_info.is_init_done = 0;
+    job->qsv.preset                = NULL;
     job->qsv.async_depth           = AV_QSV_ASYNC_DEPTH_DEFAULT;
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);

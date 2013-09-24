@@ -318,6 +318,13 @@ void hb_display_job_info(hb_job_t *job)
         {
             hb_log( "     + x264 tune: %s", job->x264_tune );
         }
+#ifdef USE_QSV
+        if ((job->qsv.preset != NULL && *job->qsv.preset) &&
+            (job->vcodec & HB_VCODEC_QSV_MASK))
+        {
+            hb_log("     + QSV preset: %s", job->qsv.preset);
+        }
+#endif
         if (job->advanced_opts != NULL && *job->advanced_opts &&
             (job->vcodec != HB_VCODEC_THEORA))
         {

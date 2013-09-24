@@ -106,6 +106,9 @@ typedef struct
     mfxVideoParam *videoParam;
 } hb_qsv_param_t;
 
+static const char* const hb_qsv_preset_names1[] = { "speed", "balanced",            NULL, };
+static const char* const hb_qsv_preset_names2[] = { "speed", "balanced", "quality", NULL, };
+
 #define HB_QSV_CLIP3(min, max, val) ((val < min) ? min : (val > max) ? max : val)
 int         hb_qsv_codingoption_xlat    (int val);
 const char* hb_qsv_codingoption_get_name(int val);
@@ -116,8 +119,9 @@ int   hb_qsv_atobool (const char *str, int *err);
 int   hb_qsv_atoi    (const char *str, int *err);
 float hb_qsv_atof    (const char *str, int *err);
 
-int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam);
-int hb_qsv_param_parse  (hb_qsv_param_t *param, const char *key, const char *value, int vcodec);
+int hb_qsv_param_default_preset(hb_qsv_param_t *param, mfxVideoParam *videoParam, const char *preset);
+int hb_qsv_param_default       (hb_qsv_param_t *param, mfxVideoParam *videoParam);
+int hb_qsv_param_parse         (hb_qsv_param_t *param, const char *key, const char *value, int vcodec);
 
 mfxIMPL     hb_qsv_impl_get_preferred();
 const char* hb_qsv_impl_get_name(int impl);

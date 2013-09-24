@@ -217,6 +217,9 @@ namespace HandBrake.Interop.HbLib
 
 		public int async_depth;
 
+		/// const char*
+		public IntPtr preset;
+
 		/// av_qsv_context* 
 		public IntPtr ctx;
 

@@ -201,7 +201,7 @@ int hb_qsv_codingoption_xlat(int val)
 
 int hb_qsv_trellisvalue_xlat(int val)
 {
-    switch (HB_QSV_CLIP3(-1, 3, val))
+    switch (HB_QSV_CLIP3(0, 3, val))
     {
         case 0:
             return MFX_TRELLIS_OFF;
@@ -211,7 +211,6 @@ int hb_qsv_trellisvalue_xlat(int val)
             return MFX_TRELLIS_I|MFX_TRELLIS_P;
         case 3: // all frames
             return MFX_TRELLIS_I|MFX_TRELLIS_P|MFX_TRELLIS_B;
-        case -1:
         default:
             return MFX_TRELLIS_UNKNOWN;
     }
@@ -700,6 +699,87 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     return error ? HB_QSV_PARAM_BAD_VALUE : HB_QSV_PARAM_OK;
 }
 
+const char* const* hb_qsv_presets()
+{
+    if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
+    {
+        return hb_qsv_preset_names2;
+    }
+    else
+    {
+        return hb_qsv_preset_names1;
+    }
+}
+
+int hb_qsv_param_default_preset(hb_qsv_param_t *param,
+                                mfxVideoParam *videoParam, const char *preset)
+{
+    if (param != NULL && videoParam != NULL)
+    {
+        int ret = hb_qsv_param_default(param, videoParam);
+        if (ret)
+        {
+            return ret;
+        }
+    }
+    else
+    {
+        hb_error("hb_qsv_param_default_preset: invalid pointer(s)");
+        return -1;
+    }
+    if (preset != NULL && preset[0] != '\0')
+    {
+        if (!strcasecmp(preset, "quality"))
+        {
+            /*
+             * Haswell or later: default settings.
+             * Before Haswell: preset unavailable.
+             */
+        }
+        else if (!strcasecmp(preset, "balanced"))
+        {
+            /*
+             * Haswell or later: adjust settings.
+             *
+             * The idea behind this is that we should try and get a performance
+             * match between platforms (so using the "balanced" preset would
+             * give you similar encoding speeds on Ivy Bridge and Haswell).
+             *
+             * FIXME: figure out whether this actually is a good idea.
+             */
+            if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
+            {
+                param->rc.lookahead                = 0;
+                param->videoParam->mfx.GopRefDist  = 1;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_4;
+            }
+            else
+            {
+                /* Before Haswell: default settings */
+            }
+        }
+        else if (!strcasecmp(preset, "speed"))
+        {
+            if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
+            {
+                param->rc.lookahead                = 0;
+                param->videoParam->mfx.GopRefDist  = 1;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_6;
+            }
+            else
+            {
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_4;
+            }
+        }
+        else
+        {
+            hb_error("hb_qsv_param_default_preset: invalid preset '%s'", preset);
+            return -1;
+        }
+    }
+    return 0;
+}
+
 int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
 {
     if (param != NULL && videoParam != NULL)
@@ -757,17 +837,17 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->codingOption2.IntRefQPDelta   = 0;
         param->codingOption2.MaxFrameSize    = 0;
         param->codingOption2.BitrateLimit    = MFX_CODINGOPTION_ON;
+        param->codingOption2.MBBRC           = MFX_CODINGOPTION_ON;
         param->codingOption2.ExtBRC          = MFX_CODINGOPTION_OFF;
-        param->codingOption2.MBBRC           = MFX_CODINGOPTION_UNKNOWN;
         // introduced in API 1.7
         param->codingOption2.LookAheadDepth  = 40;
-        param->codingOption2.Trellis         = MFX_TRELLIS_UNKNOWN;
+        param->codingOption2.Trellis         = MFX_TRELLIS_OFF;
 
         // GOP & rate control
         param->gop.b_pyramid          =  0;
         param->gop.gop_pic_size       = -1; // set automatically
         param->gop.int_ref_cycle_size = -1; // set automatically
-        param->rc.lookahead           = -1; // set automatically
+        param->rc.lookahead           =  1;
         param->rc.cqp_offsets[0]      =  0;
         param->rc.cqp_offsets[1]      =  2;
         param->rc.cqp_offsets[2]      =  4;
