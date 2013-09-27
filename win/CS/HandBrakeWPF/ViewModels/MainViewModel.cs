@@ -538,7 +538,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 List<int> items = new List<int>();
-                for (int i = 1; i <= this.selectedTitle.AngleCount + 1; i++)
+                for (int i = 1; i <= this.selectedTitle.AngleCount; i++)
                 {
                     items.Add(i);
                 }
