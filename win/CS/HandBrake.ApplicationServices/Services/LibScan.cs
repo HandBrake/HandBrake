@@ -274,7 +274,7 @@ namespace HandBrake.ApplicationServices.Services
                     TimeSpan.FromSeconds(
                         this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration));
 
-                HandBrakeUtils.SetDvdNav(this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
+                HandBrakeUtils.SetDvdNav(!this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
 
                 this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
             }
