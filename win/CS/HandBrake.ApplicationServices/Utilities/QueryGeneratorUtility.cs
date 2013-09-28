@@ -46,10 +46,16 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="disableQsvDecode">
         /// The disable Qsv Decode.
         /// </param>
+        /// <param name="enableHwd">
+        /// The enable Hwd.
+        /// </param>
+        /// <param name="enableOpenCL">
+        /// The enable Open CL.
+        /// </param>
         /// <returns>
         /// A Cli Query
         /// </returns>
-        public static string GenerateQuery(EncodeTask task, int previewScanCount, int verbosity, bool disableLibDvdNav, bool disableQsvDecode)
+        public static string GenerateQuery(EncodeTask task, int previewScanCount, int verbosity, bool disableLibDvdNav, bool disableQsvDecode, bool enableHwd, bool enableOpenCL)
         {
             if (string.IsNullOrEmpty(task.Source))
             {
@@ -59,7 +65,7 @@ namespace HandBrake.ApplicationServices.Utilities
             string query = string.Empty;
             query += SourceQuery(task, null, null, previewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode);
+            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode, enableHwd, enableOpenCL);
 
             return query;
         }
@@ -96,7 +102,7 @@ namespace HandBrake.ApplicationServices.Utilities
             string query = string.Empty;
             query += SourceQuery(task, duration, startAtPreview, previewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode);
+            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode, false, false);
 
             return query;
         }
@@ -121,10 +127,16 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="disableQsvDecode">
         /// The disable Qsv Decode.
         /// </param>
+        /// <param name="enableHwd">
+        /// The enable Hwd.
+        /// </param>
+        /// <param name="enableOpenCL">
+        /// The enable Open CL.
+        /// </param>
         /// <returns>
         /// The CLI query for the Tabbed section of the main window UI
         /// </returns>
-        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool enableFilters, int verbosity, bool disableLibDvdNav, bool disableQsvDecode)
+        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool enableFilters, int verbosity, bool disableLibDvdNav, bool disableQsvDecode, bool enableHwd, bool enableOpenCL)
         {
             string query = string.Empty;
 
@@ -154,7 +166,7 @@ namespace HandBrake.ApplicationServices.Utilities
             query += AdvancedQuery(task);
 
             // Extra Settings
-            query += ExtraSettings(verbosity, disableLibDvdNav, disableQsvDecode);
+            query += ExtraSettings(verbosity, disableLibDvdNav, disableQsvDecode, enableHwd, enableOpenCL);
 
             return query;
         }
@@ -1024,10 +1036,16 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="disableQsvDecode">
         /// The disable Qsv Decode.
         /// </param>
+        /// <param name="enableHwd">
+        /// The enable Hwd.
+        /// </param>
+        /// <param name="enableOpenCL">
+        /// The enable Open CL.
+        /// </param>
         /// <returns>
         /// A Cli Query as a string
         /// </returns>
-        private static string ExtraSettings(int verbosity, bool disableLibdvdNav, bool disableQsvDecode)
+        private static string ExtraSettings(int verbosity, bool disableLibdvdNav, bool disableQsvDecode, bool enableHwd, bool enableOpenCL)
         {
             string query = string.Empty;
 
@@ -1041,6 +1059,11 @@ namespace HandBrake.ApplicationServices.Utilities
             if (disableQsvDecode)
                 query += " --disable-qsv-decoding";
 
+            if (enableOpenCL)
+                query += " -P ";
+
+            if (enableHwd)
+                query += " -U ";
 
             return query;
         }

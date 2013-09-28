@@ -143,7 +143,9 @@ namespace HandBrake.ApplicationServices.Services
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
                                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
-                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding));
+                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding),
+                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva),
+                                       userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode) == VideoScaler.BicubicCl);
 
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, query)
                 {

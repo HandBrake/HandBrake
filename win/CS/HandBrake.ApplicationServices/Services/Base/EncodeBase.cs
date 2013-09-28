@@ -324,7 +324,9 @@ namespace HandBrake.ApplicationServices.Services.Base
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
                     userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
-                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding));
+                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding),
+                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva),
+                                       userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode) == VideoScaler.BicubicCl);
                 this.logBuffer = new StringBuilder();
                 this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
                 this.logBuffer.AppendLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));

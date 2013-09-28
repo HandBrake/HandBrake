@@ -385,7 +385,7 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Please note, this option is suitable only for slower systems.
-        ///Hardware decoders are designed for playback, not for re-encoding video so will likely bottleneck on faster systems..
+        ///Hardware decoders are currently designed for playback, not for re-encoding video so will likely bottleneck on faster systems..
         /// </summary>
         public static string Video_DxvaDecode {
             get {
@@ -466,9 +466,9 @@ namespace HandBrakeWPF.Properties {
         ///
         ///In order to use the QuickSync encoder, you must:
         ///
-        ///- Have a Intel Core series CPU with HD Graphics.
+        ///- Have a Intel Core series CPU with HD Graphics. Haswell or newer parts are recommended.
         ///- Have a monitor connected to the HD Graphics
-        ///- Note in multi-GPU environments, there may be workarounds but these are not officially supported..
+        ///- Note that in multi-GPU enviroments, you may need to use 3rd party tools and workarounds to active the hardware..
         /// </summary>
         public static string Video_QuickSyncNotAvailable {
             get {
@@ -478,9 +478,9 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Lanczos  - This is HandBrakes default scaler. It provides the best quality downscaling.
-        ///Bicubic   - Bicubic is faster but quality may not be as good. Video may not appear as soft and as a result file sizes may be larger
         ///Bicubic OpenCL - A hardware accelerated version of the CPU based Bicubic scaler. 
-        ///                                This can be around 5~7% faster than software bicubic on a fast modern graphics card..
+        ///                                This can be around 5~7% faster than software bicubic on a fast modern graphics card.
+        ///                                If OpenCL is unavailable, it will fallback to a software scaler. .
         /// </summary>
         public static string Video_ScalingModes {
             get {

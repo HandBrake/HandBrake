@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model
+namespace HandBrake.ApplicationServices.Model
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -19,8 +19,8 @@ namespace HandBrakeWPF.Model
         [Display(Name = "Lanczos")]
         Lanczos = 0,
 
-        [Display(Name = "Bicubic")]
-        Bicubic,
+        // [Display(Name = "Bicubic")]
+        // Bicubic,
 
         [Display(Name = "Bicubic (OpenCL)")]
         BicubicCl,
