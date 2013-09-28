@@ -421,35 +421,36 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (int) hbInstances
 {
     /* check to see if another instance of HandBrake.app is running */
-    NSArray *runningAppDictionaries = [[NSWorkspace sharedWorkspace] launchedApplications];
-    NSDictionary *runningAppsDictionary;
-    int hbInstances = 0;
-    NSString * thisInstanceAppPath = [[NSBundle mainBundle] bundlePath];
-    NSString * runningInstanceAppPath;
-    int runningInstancePidNum;
+    NSArray *runningInstances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]];
+    NSRunningApplication *runningInstance;
+    
+    NSRunningApplication *thisInstance = [NSRunningApplication currentApplication];
+    NSString *thisInstanceAppPath = [[NSBundle mainBundle] bundlePath];
     [self writeToActivityLog: "hbInstances path to this instance: %s", [thisInstanceAppPath UTF8String]];
-    for (runningAppsDictionary in runningAppDictionaries)
+    
+    int hbInstances = 0;
+    NSString *runningInstanceAppPath;
+    int runningInstancePidNum;
+    
+    for (runningInstance in runningInstances)
 	{
-        if ([[runningAppsDictionary valueForKey:@"NSApplicationName"] isEqualToString:@"HandBrake"])
-		{
-            /*Report the path to each active instances app path */
-            runningInstancePidNum = [[runningAppsDictionary valueForKey:@"NSApplicationProcessIdentifier"] intValue];
-            runningInstanceAppPath = [runningAppsDictionary valueForKey:@"NSApplicationPath"];
-            [self writeToActivityLog: "hbInstance found instance pidnum:%d at path: %s", runningInstancePidNum, [runningInstanceAppPath UTF8String]];
-            /* see if this is us by comparing the app path */
-            if ([runningInstanceAppPath isEqualToString: thisInstanceAppPath])
-            {
-                /* If so this is our pidnum */
-                [self writeToActivityLog: "hbInstance MATCH FOUND, our pidnum is:%d", runningInstancePidNum];
-                /* Get the PID number for this hb instance, used in multi instance encoding */
-                pidNum = runningInstancePidNum;
-                /* Report this pid to the activity log */
-                [self writeToActivityLog: "Pid for this instance:%d", pidNum];
-                /* Tell fQueueController what our pidNum is */
-                [fQueueController setPidNum:pidNum];
-            }
-            hbInstances++;
+        /*Report the path to each active instances app path */
+        runningInstancePidNum =  [runningInstance processIdentifier];
+        runningInstanceAppPath = [[runningInstance bundleURL] path];
+        [self writeToActivityLog: "hbInstance found instance pidnum: %d at path: %s", runningInstancePidNum, [runningInstanceAppPath UTF8String]];
+        /* see if this is us*/
+        if ([runningInstance isEqual: thisInstance])
+        {
+            /* If so this is our pidnum */
+            [self writeToActivityLog: "hbInstance MATCH FOUND, our pidnum is: %d", runningInstancePidNum];
+            /* Get the PID number for this hb instance, used in multi instance encoding */
+            pidNum = runningInstancePidNum;
+            /* Report this pid to the activity log */
+            [self writeToActivityLog: "Pid for this instance: %d", pidNum];
+            /* Tell fQueueController what our pidNum is */
+            [fQueueController setPidNum:pidNum];
         }
+        hbInstances++;
     }
     return hbInstances;
 }
