@@ -1234,10 +1234,10 @@ index 0000000..52378cf
 +#endif                          //AVCODEC_QSV_H
 diff --git a/libavcodec/qsv_h264.c b/libavcodec/qsv_h264.c
 new file mode 100644
-index 0000000..ac9db63
+index 0000000..6f22b34
 --- /dev/null
 +++ b/libavcodec/qsv_h264.c
-@@ -0,0 +1,974 @@
+@@ -0,0 +1,983 @@
 +/* ********************************************************************* *\
 +
 +Copyright (C) 2013 Intel Corporation.  All rights reserved.
@@ -1418,7 +1418,16 @@ index 0000000..ac9db63
 +
 +    sts = MFXVideoDECODE_DecodeHeader(qsv->mfx_session, &qsv_decode->bs,
 +                                    &qsv_decode->m_mfxVideoParam);
++    if (sts <= MFX_ERR_NONE)
++    {
++         av_log(avctx, AV_LOG_QUIET,"DecodeHeader failed with result:%d\n",sts);
++         sts = MFX_ERR_NONE;
 +
++         qsv_decode->m_mfxVideoParam.mfx.FrameInfo.FourCC = MFX_FOURCC_NV12;
++         qsv_decode->m_mfxVideoParam.mfx.FrameInfo.Width  = AV_QSV_ALIGN16(avctx->width);
++         qsv_decode->m_mfxVideoParam.mfx.FrameInfo.Height = avctx->field_order > AV_FIELD_PROGRESSIVE ? AV_QSV_ALIGN32(avctx->height) : AV_QSV_ALIGN16(avctx->height);
++         qsv_decode->m_mfxVideoParam.mfx.FrameInfo.ChromaFormat = MFX_CHROMAFORMAT_YUV420;
++    }
 +    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 +
 +    qsv_decode->bs.DataLength   -= sizeof(ff_slice_code);
