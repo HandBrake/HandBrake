@@ -24,6 +24,8 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using LumenWorks.Framework.IO.Csv;
+
     using Ookii.Dialogs.Wpf;
 
     /// <summary>
@@ -160,19 +162,17 @@ namespace HandBrakeWPF.ViewModels
             IDictionary<int, string> chapterMap = new Dictionary<int, string>();
             try
             {
-                var sr = new StreamReader(filename);
-                string csv = sr.ReadLine();
-                while (csv != null)
+                using (CsvReader csv = new CsvReader(new StreamReader(filename), false))
                 {
-                    if (csv.Trim() != string.Empty)
+                    while (csv.ReadNextRecord())
                     {
-                        csv = csv.Replace("\\,", "<!comma!>");
-                        string[] contents = csv.Split(',');
-                        int chapter;
-                        int.TryParse(contents[0], out chapter);
-                        chapterMap.Add(chapter, contents[1].Replace("<!comma!>", ","));
+                        if (csv.FieldCount == 2)
+                        {
+                            int chapter;
+                            int.TryParse(csv[0], out chapter);
+                            chapterMap[chapter] = csv[1];
+                        }
                     }
-                    csv = sr.ReadLine();
                 }
             }
             catch (Exception)

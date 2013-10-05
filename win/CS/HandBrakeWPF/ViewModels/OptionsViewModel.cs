@@ -374,6 +374,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool disableQuickSyncDecoding;
 
+        /// <summary>
+        /// The enable quick sync.
+        /// </summary>
         private bool enableQuickSync;
 
         #endregion
