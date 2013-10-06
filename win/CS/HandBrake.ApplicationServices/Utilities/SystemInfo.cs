@@ -129,21 +129,26 @@ namespace HandBrake.ApplicationServices.Utilities
                 List<string> gpuInfo = new List<string>();
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher(
                 "select * from " + "Win32_VideoController");
+
                 foreach (ManagementObject share in searcher.Get())
                 {
                     string gpu = string.Empty, version = string.Empty;
 
                     foreach (PropertyData PC in share.Properties)
                     {
-                        if (PC.Name.Equals("DriverVersion")) version = PC.Value.ToString();
-
-
-                        if (PC.Name.Equals("Name"))
-                            gpu = PC.Value.ToString();
+                        if (!string.IsNullOrEmpty(PC.Name) && PC.Value != null)
+                        {
+                            if (PC.Name.Equals("DriverVersion")) version = PC.Value.ToString();
+                            if (PC.Name.Equals("Name")) gpu = PC.Value.ToString();
+                        }
                     }
 
-                    gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
+                    if (!string.IsNullOrEmpty(gpu) && !string.IsNullOrEmpty(version))
+                    {
+                        gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
+                    }
                 }
+
                 return gpuInfo;
             }
         }
