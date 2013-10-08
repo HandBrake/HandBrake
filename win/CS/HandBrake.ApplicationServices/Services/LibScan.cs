@@ -101,8 +101,15 @@ namespace HandBrake.ApplicationServices.Services
             header = GeneralUtilities.CreateCliLogHeader();
             this.userSettingService = userSettingService;
 
-            HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
-            HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
+            try
+            {
+                HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
+                HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
+            }
+            catch (Exception exc)
+            {
+                // Do nothing. 
+            }
         }
 
         #region Events

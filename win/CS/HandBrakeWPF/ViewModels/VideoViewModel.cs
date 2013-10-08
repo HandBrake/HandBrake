@@ -1166,7 +1166,21 @@ namespace HandBrakeWPF.ViewModels
                 width = 720;
             }
 
-            return HandBrakeUtils.CreateX264OptionsString(preset, tunes, this.ExtraArguments, profile, this.H264Level, width, height);
+            try
+            {
+                return HandBrakeUtils.CreateX264OptionsString(
+                    preset,
+                    tunes,
+                    this.ExtraArguments,
+                    profile,
+                    this.H264Level,
+                    width,
+                    height);
+            }
+            catch (Exception)
+            {
+                return "Error: Libhb not loaded.";
+            }
         }
 
         /// <summary>
