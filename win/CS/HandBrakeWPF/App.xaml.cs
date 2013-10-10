@@ -44,6 +44,14 @@ namespace HandBrakeWPF
         /// </param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            OperatingSystem OS = Environment.OSVersion;
+            if ((OS.Platform == PlatformID.Win32NT) && (OS.Version.Major == 5 && OS.Version.Minor == 1 ))
+            {
+                MessageBox.Show("Windows XP support is currently broken. It is not known if or when it will be fixed.", "Notice", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Application.Current.Shutdown();
+                return;
+            }
+
             if (e.Args.Any(f => f.Equals("--instant")))
             {
                 AppArguments.IsInstantHandBrake = true;
@@ -177,8 +185,8 @@ namespace HandBrakeWPF
                         if (applicationException != null)
                         {
                             MessageBox.Show(applicationException.Error + Environment.NewLine + Environment.NewLine + applicationException.Solution, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        } 
-                    } 
+                        }
+                    }
                 }
             }
             catch (Exception)
