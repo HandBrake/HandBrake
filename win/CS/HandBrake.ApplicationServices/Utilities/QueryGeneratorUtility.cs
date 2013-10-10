@@ -626,7 +626,7 @@ namespace HandBrake.ApplicationServices.Utilities
             // Sample Rate (-R)
             foreach (double item in samplerates)
             {
-                string add = (item == 0.0) ? "Auto" : item.ToString(CultureInfo.InvariantCulture);
+                string add = (item == 0.0) ? "Auto" : item.ToString(new CultureInfo("en-US"));
                 if (firstLoop)
                 {
                     audioItems = add;
