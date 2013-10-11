@@ -71,6 +71,7 @@ int hb_create_kernel( char * kernelname, KernelEnv * env );
 int hb_release_kernel( KernelEnv * env );
 
 void hb_opencl_init();
+void hb_opencl_info_print();
 
 int hb_get_opencl_env();
 

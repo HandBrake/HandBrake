@@ -1103,23 +1103,6 @@ int hb_get_opencl_env()
                                devices,
                                NULL );
 
-    for (i = 0; i < numDevices; i++)
-    {
-        if (devices[i] != NULL)
-        {
-            char deviceVendor[100], deviceName[1024], driverVersion[1024];
-            clGetDeviceInfo(devices[i], CL_DEVICE_VENDOR, sizeof(deviceVendor),
-                            deviceVendor, NULL);
-            clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(deviceName),
-                            deviceName, NULL);
-            clGetDeviceInfo(devices[i], CL_DRIVER_VERSION, sizeof(driverVersion),
-                            driverVersion, NULL);
-            hb_log("hb_get_opencl_env: GPU #%d, Device Vendor:  %s", i + 1, deviceVendor);
-            hb_log("hb_get_opencl_env: GPU #%d, Device Name:    %s", i + 1, deviceName);
-            hb_log("hb_get_opencl_env: GPU #%d, Driver Version: %s", i + 1, driverVersion);
-        }
-    }
-
     if( devices != NULL )
     {
         free( devices );
@@ -1197,6 +1180,54 @@ int hb_cl_free_mapped_buffer(cl_mem mem, unsigned char *addr)
 void hb_opencl_init()
 {
     hb_get_opencl_env();
+}
+
+void hb_opencl_info_print()
+{
+    cl_uint i, numDevices;
+    cl_device_id *devices;
+    
+    if (hb_init_opencl_env(&gpu_env))
+    {
+        return;
+    }
+
+    if (clGetContextInfo(gpu_env.context, CL_CONTEXT_NUM_DEVICES,
+                         sizeof(numDevices), &numDevices, NULL) != CL_SUCCESS)
+    {
+        return;
+    }
+    
+    if ((devices = malloc(sizeof(cl_device_id) * numDevices)) == NULL)
+    {
+        return;
+    }
+    
+    if (clGetContextInfo(gpu_env.context, CL_CONTEXT_DEVICES,
+                         sizeof(cl_device_id) * numDevices, devices, NULL) != CL_SUCCESS)
+    {
+        return;
+    }
+
+    for (i = 0; i < numDevices; i++)
+    {
+        if (devices[i] != NULL)
+        {
+            char vendor[100], name[1024], version[1024];
+
+            clGetDeviceInfo(devices[i], CL_DEVICE_VENDOR,  sizeof(vendor),
+                            vendor,  NULL);
+            clGetDeviceInfo(devices[i], CL_DEVICE_NAME,    sizeof(name),
+                            name,    NULL);
+            clGetDeviceInfo(devices[i], CL_DRIVER_VERSION, sizeof(version),
+                            version, NULL);
+
+            hb_log("GPU #%d: %s %s", i + 1, vendor, name);
+            hb_log(" - OpenCL driver version: %s", version);
+        }
+    }
+
+    free(devices);
 }
 
 int hb_use_buffers()

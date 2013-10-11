@@ -620,11 +620,6 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
         hb_title_close( &title );
     }
 
-#ifdef USE_QSV
-    /* Print QSV info here so that it's in all scan and encode logs */
-    hb_qsv_info_print();
-#endif
-
     /* Print CPU info here so that it's in all scan and encode logs */
     const char *cpu_name = hb_get_cpu_name();
     const char *cpu_type = hb_get_cpu_platform_name();
@@ -634,6 +629,16 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
         hb_log(" - %s", cpu_type);
     }
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
+
+#ifdef USE_OPENCL
+    /* Print OpenCL info here so that it's in all scan and encode logs */
+    hb_opencl_info_print();
+#endif
+
+#ifdef USE_QSV
+    /* Print QSV info here so that it's in all scan and encode logs */
+    hb_qsv_info_print();
+#endif
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
     h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index, 
