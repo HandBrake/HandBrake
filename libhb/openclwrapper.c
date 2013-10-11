@@ -1181,6 +1181,8 @@ void hb_opencl_info_print()
         if (devices[i] != NULL)
         {
             char vendor[100], name[1024], version[1024];
+            cl_device_type device_type;
+            char *device_type_name = "Unknown";
 
             clGetDeviceInfo(devices[i], CL_DEVICE_VENDOR,  sizeof(vendor),
                             vendor,  NULL);
@@ -1188,9 +1190,24 @@ void hb_opencl_info_print()
                             name,    NULL);
             clGetDeviceInfo(devices[i], CL_DRIVER_VERSION, sizeof(version),
                             version, NULL);
+            clGetDeviceInfo(devices[i], CL_DEVICE_TYPE, sizeof(device_type),
+                            &device_type, NULL);
+
+            if (device_type & CL_DEVICE_TYPE_GPU)
+                 device_type_name = "GPU";
+            else
+            if (device_type & CL_DEVICE_TYPE_CPU)
+                 device_type_name = "CPU";
+            else
+            if (device_type & CL_DEVICE_TYPE_ACCELERATOR)
+                 device_type_name = "Accelerator";
+            else
+            if (device_type & CL_DEVICE_TYPE_CUSTOM)
+                 device_type_name = "Custom";
 
             hb_log("GPU #%d: %s %s", i + 1, vendor, name);
             hb_log(" - driver version: %s", version);
+            hb_log(" - OpenCL device type: %s%s",device_type_name,device_type & CL_DEVICE_TYPE_DEFAULT ? "/Default" : "");
         }
     }
 

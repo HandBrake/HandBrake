@@ -74,7 +74,7 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->use_decomb = init->job->use_decomb;
     pv->use_detelecine = init->job->use_detelecine;
 
-    if( pv->job->use_opencl )
+    if( pv->job->use_opencl && pv->job->title->opencl_support)
     {
         pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
         memset( pv->os, 0, sizeof( hb_oclscale_t ) );
@@ -138,7 +138,7 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
     }
 #ifdef USE_OPENCL
 
-    if( pv->job->use_opencl && pv->os )
+    if( pv->job->use_opencl && pv->job->title->opencl_support && pv->os )
     {
         CL_FREE( pv->os->bicubic_x_weights );
         CL_FREE( pv->os->bicubic_y_weights );
@@ -191,7 +191,7 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
 
 #ifdef USE_OPENCL
     // Use bicubic OpenCL scaling when selected and when downsampling < 4:1;
-    if ((pv->job->use_opencl) && (pv->width_out * 4 > pv->width_in) && (in->cl.buffer != NULL) && (out->cl.buffer != NULL))
+    if ((pv->job->use_opencl && pv->job->title->opencl_support) && (pv->width_out * 4 > pv->width_in) && (in->cl.buffer != NULL) && (out->cl.buffer != NULL))
     {
         hb_ocl_scale(in, out, pv->crop, pv->os);
     }

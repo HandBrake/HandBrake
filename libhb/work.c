@@ -550,14 +550,6 @@ static void do_job(hb_job_t *job)
 
     hb_log( "starting job" );
 
-    if (job->use_opencl || job->use_hwd)
-    {
-        hb_log("Using GPU: Yes.");
-    }
-    else
-    {
-        hb_log("Using GPU: No.");
-    }
     /* Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan. */
     if( !job->indepth_scan && interjob->select_subtitle )
