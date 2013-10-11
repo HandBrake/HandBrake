@@ -93,6 +93,10 @@ int hb_qsv_info_init()
             hb_qsv_info->capabilities |= HB_QSV_CAP_MSDK_API_1_6;
             hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_EXTBRC;
         }
+        if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7))
+        {
+            hb_qsv_info->capabilities |= HB_QSV_CAP_COPYFRAME;
+        }
         if (hb_get_cpu_platform() == HB_CPU_PLATFORM_INTEL_HSW)
         {
             if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 6))
@@ -113,6 +117,10 @@ int hb_qsv_info_init()
         {
             hb_qsv_info->capabilities |= HB_QSV_CAP_MSDK_API_1_6;
             hb_qsv_info->capabilities |= HB_QSV_CAP_H264_BPYRAMID;
+        }
+        if (HB_CHECK_MFX_VERSION(qsv_software_version, 1, 7))
+        {
+            hb_qsv_info->capabilities |= HB_QSV_CAP_COPYFRAME;
         }
     }
 

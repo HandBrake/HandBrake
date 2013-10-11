@@ -700,6 +700,48 @@ static void do_job(hb_job_t *job)
 
 #ifdef USE_QSV
     /*
+     * XXX: mfxCoreInterface's CopyFrame doesn't work in old drivers, and our
+     *      workaround is really slow. If we have validated CPU-based filters in
+     *      the list and we can't use CopyFrame, disable QSV decoding until a
+     *      better solution is implemented.
+     */
+    if (!(hb_qsv_info->capabilities & HB_QSV_CAP_COPYFRAME))
+    {
+        if (job->list_filter != NULL)
+        {
+            for (i = 0;
+                 i < hb_list_count(job->list_filter) && hb_qsv_decode_is_enabled(job);
+                 i++)
+            {
+                hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+                switch (filter->id)
+                {
+                    // validated, CPU-based filters
+                    case HB_FILTER_ROTATE:
+                    case HB_FILTER_RENDER_SUB:
+                        hb_log("do_job: QSV: CopyFrame unavailable, using encode-only path");
+                        job->qsv.decode = 0;
+                        break;
+
+                    // CPU-based deinterlace (validated)
+                    case HB_FILTER_DEINTERLACE:
+                        if (filter->settings != NULL &&
+                            strcasecmp(filter->settings, "qsv") != 0)
+                        {
+                            hb_log("do_job: QSV: CopyFrame unavailable, using encode-only path");
+                            job->qsv.decode = 0;
+                        }
+                        break;
+
+                    // other filters will be removed
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    /*
      * When QSV is used for decoding, not all CPU-based filters are supported,
      * so we need to do a little extra setup here.
      */
@@ -744,7 +786,8 @@ static void do_job(hb_job_t *job)
 
                     // pick VPP or CPU deinterlace depending on settings
                     case HB_FILTER_DEINTERLACE:
-                        if (filter->settings == NULL || !strcmp(filter->settings, "qsv"))
+                        if (filter->settings == NULL ||
+                            strcasecmp(filter->settings, "qsv") == 0)
                         {
                             // deinterlacing via VPP filter
                             vpp_settings[6] = 1;
@@ -766,7 +809,7 @@ static void do_job(hb_job_t *job)
 
                     // finally, drop all unsupported filters
                     default:
-                        hb_log("do_job: full QSV path, removing unsupported filter '%s'",
+                        hb_log("do_job: QSV: full path, removing unsupported filter '%s'",
                                filter->name);
                         hb_list_rem(job->list_filter, filter);
                         hb_filter_close(&filter);
