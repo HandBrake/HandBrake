@@ -1075,41 +1075,8 @@ int hb_opencl_stats()
  */
 int hb_get_opencl_env()
 {
-    int i = 0;
-    cl_int status;
-    cl_uint numDevices;
-    cl_device_id *devices;
-
-    /*initialize devices, context, comand_queue*/
-    status = hb_init_opencl_env( &gpu_env );
-    if( status )
-        return(1);
-    status = clGetContextInfo( gpu_env.context,
-                               CL_CONTEXT_NUM_DEVICES,
-                               sizeof(numDevices),
-                               &numDevices,
-                               NULL );
-    if( status != CL_SUCCESS )
-        return 0;
-
-    devices = (cl_device_id*)malloc( sizeof(cl_device_id) * numDevices );
-    if( devices == NULL )
-        return 0;
-
-    /* grab the handles to all of the devices in the context. */
-    status = clGetContextInfo( gpu_env.context,
-                               CL_CONTEXT_DEVICES,
-                               sizeof(cl_device_id) * numDevices,
-                               devices,
-                               NULL );
-
-    if( devices != NULL )
-    {
-        free( devices );
-        devices = NULL;
-    }
-
-    return status;
+    /* initialize devices, context, command_queue */
+    return hb_init_opencl_env(&gpu_env);
 }
 
 /**
@@ -1223,7 +1190,7 @@ void hb_opencl_info_print()
                             version, NULL);
 
             hb_log("GPU #%d: %s %s", i + 1, vendor, name);
-            hb_log(" - OpenCL driver version: %s", version);
+            hb_log(" - driver version: %s", version);
         }
     }
 
