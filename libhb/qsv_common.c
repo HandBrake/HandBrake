@@ -95,7 +95,9 @@ int hb_qsv_info_init()
         }
         if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7))
         {
-            hb_qsv_info->capabilities |= HB_QSV_CAP_COPYFRAME;
+            // we should really check the driver version, but since that's not
+            // available here, checking the API version is the best we can do :-(
+            hb_qsv_info->capabilities |= HB_QSV_CAP_CORE_COPYFRAME;
         }
         if (hb_get_cpu_platform() == HB_CPU_PLATFORM_INTEL_HSW)
         {
@@ -118,10 +120,7 @@ int hb_qsv_info_init()
             hb_qsv_info->capabilities |= HB_QSV_CAP_MSDK_API_1_6;
             hb_qsv_info->capabilities |= HB_QSV_CAP_H264_BPYRAMID;
         }
-        if (HB_CHECK_MFX_VERSION(qsv_software_version, 1, 7))
-        {
-            hb_qsv_info->capabilities |= HB_QSV_CAP_COPYFRAME;
-        }
+        hb_qsv_info->capabilities |= HB_QSV_CAP_CORE_COPYFRAME;
     }
 
     // note: we pass a pointer to MFXInit but it never gets modified

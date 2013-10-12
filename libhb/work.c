@@ -697,13 +697,12 @@ static void do_job(hb_job_t *job)
      *      the list and we can't use CopyFrame, disable QSV decoding until a
      *      better solution is implemented.
      */
-    if (!(hb_qsv_info->capabilities & HB_QSV_CAP_COPYFRAME))
+    if (!(hb_qsv_info->capabilities & HB_QSV_CAP_CORE_COPYFRAME))
     {
         if (job->list_filter != NULL)
         {
-            for (i = 0;
-                 i < hb_list_count(job->list_filter) && hb_qsv_decode_is_enabled(job);
-                 i++)
+            int encode_only = 0;
+            for (i = 0; i < hb_list_count(job->list_filter) && !encode_only; i++)
             {
                 hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
                 switch (filter->id)
@@ -711,8 +710,7 @@ static void do_job(hb_job_t *job)
                     // validated, CPU-based filters
                     case HB_FILTER_ROTATE:
                     case HB_FILTER_RENDER_SUB:
-                        hb_log("do_job: QSV: CopyFrame unavailable, using encode-only path");
-                        job->qsv.decode = 0;
+                        encode_only = 1;
                         break;
 
                     // CPU-based deinterlace (validated)
@@ -720,8 +718,7 @@ static void do_job(hb_job_t *job)
                         if (filter->settings != NULL &&
                             strcasecmp(filter->settings, "qsv") != 0)
                         {
-                            hb_log("do_job: QSV: CopyFrame unavailable, using encode-only path");
-                            job->qsv.decode = 0;
+                            encode_only = 1;
                         }
                         break;
 
@@ -729,6 +726,15 @@ static void do_job(hb_job_t *job)
                     default:
                         break;
                 }
+            }
+            if (encode_only)
+            {
+                hb_log("do_job: QSV: possible CopyFrame bug, using encode-only path");
+                if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_IVB)
+                {
+                    hb_log("do_job: QSV: please update your Intel graphics driver to version 9.18.10.3257 or later");
+                }
+                job->qsv.decode = 0;
             }
         }
     }

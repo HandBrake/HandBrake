@@ -36,7 +36,9 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_OPTION2_MBBRC     (1 << 3) // mfxExtCodingOption2: MBBRC
 #define HB_QSV_CAP_OPTION2_LOOKAHEAD (1 << 4) // mfxExtCodingOption2: LookAhead
 #define HB_QSV_CAP_OPTION2_TRELLIS   (1 << 5) // mfxExtCodingOption2: Trellis
-#define HB_QSV_CAP_COPYFRAME         (1 << 6) // mfxCoreInterface: CopyFrame
+// mfxCoreInterface: CopyFrame has a bug which prevents us from using it, but
+// the bug is fixed in newer drivers, we can use this cap to determine usability
+#define HB_QSV_CAP_CORE_COPYFRAME    (1 << 6)
 
     // TODO: add available decoders, filters, encoders,
     //       maximum decode and encode resolution, etc.
