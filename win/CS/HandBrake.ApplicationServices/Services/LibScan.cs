@@ -474,6 +474,9 @@ namespace HandBrake.ApplicationServices.Services
                         case Interop.SourceData.SubtitleSource.CC708:
                             convertedType = SubtitleType.CC;
                             break;
+                        case Interop.SourceData.SubtitleSource.PGS:
+                            convertedType = SubtitleType.PGS;
+                            break;
                     }
 
                     converted.Subtitles.Add(new Subtitle(track.TrackNumber, track.Language, track.LanguageCode, convertedType));
