@@ -129,8 +129,8 @@ namespace HandBrake.Interop.HbLib
 		public int mux;
 
 		/// char*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string file;
+		/// UTF-8 encoded
+		public IntPtr file;
 
 		/// int
 		public int largeFileSize;
@@ -168,6 +168,14 @@ namespace HandBrake.Interop.HbLib
 
 		/// uint32_t->unsigned int
 		public uint frames_to_skip;
+
+		public int use_opencl;
+
+		public int use_hwd;
+
+		public int use_decomb;
+
+		public int use_detelecine;
 
 		public qsv_s qsv;
 

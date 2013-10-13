@@ -138,7 +138,6 @@
     <Compile Include="HbLib\hb_encoder_s.cs" />
     <Compile Include="HbLib\hb_filter_ids.cs" />
     <Compile Include="HbLib\hb_filter_object_s.cs" />
-    <Compile Include="HbLib\hb_list_s.cs" />
     <Compile Include="HbLib\hb_mixdown_s.cs" />
     <Compile Include="HbLib\hb_rate_s.cs" />
     <Compile Include="HbLib\hb_state_s.cs" />
@@ -177,6 +176,7 @@
     <Compile Include="Model\Encoding\OutputExtension.cs" />
     <Compile Include="Model\Encoding\Container.cs" />
     <Compile Include="Model\Encoding\QsvPreset.cs" />
+    <Compile Include="Model\Encoding\ScaleMethod.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\Encoding\VideoEncodeRateType.cs" />
     <Compile Include="Model\Encoding\x264\x264Preset.cs" />

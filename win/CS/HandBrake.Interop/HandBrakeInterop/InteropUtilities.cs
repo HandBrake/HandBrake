@@ -84,11 +84,11 @@ namespace HandBrake.Interop
 		public static List<T> ToList<T>(this IntPtr listPtr)
 		{
 			List<T> returnList = new List<T>();
-			hb_list_s itemList = ReadStructure<hb_list_s>(listPtr);
+			NativeList nativeList = new NativeList(listPtr);
 
-			for (int i = 0; i < itemList.items_count; i++)
+			for (int i = 0; i < nativeList.Count; i++)
 			{
-				IntPtr itemPtr = Marshal.ReadIntPtr(itemList.items, i * Marshal.SizeOf(typeof(IntPtr)));
+				IntPtr itemPtr = nativeList[i];
 				returnList.Add(ReadStructure<T>(itemPtr));
 			}
 
@@ -103,11 +103,11 @@ namespace HandBrake.Interop
 		public static List<IntPtr> ToIntPtrList(this IntPtr listPtr)
 		{
 			var returnList = new List<IntPtr>();
-			hb_list_s itemList = ReadStructure<hb_list_s>(listPtr);
+			NativeList nativeList = new NativeList(listPtr);
 
-			for (int i = 0; i < itemList.items_count; i++)
+			for (int i = 0; i < nativeList.Count; i++)
 			{
-				IntPtr itemPtr = Marshal.ReadIntPtr(itemList.items, i * Marshal.SizeOf(typeof(IntPtr)));
+				IntPtr itemPtr = nativeList[i];
 				returnList.Add(itemPtr);
 			}
 
@@ -138,55 +138,19 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
-		/// Creats a new, empty native HandBrake list.
-		/// </summary>
-		/// <param name="capacity">The capacity of the new list.</param>
-		/// <returns>The new native list.</returns>
-		public static NativeList CreateNativeList(int capacity)
-		{
-			NativeList returnList = new NativeList();
-			int intSize = Marshal.SizeOf(typeof(IntPtr));
-
-			IntPtr nativeListInternal = Marshal.AllocHGlobal(capacity * intSize);
-			returnList.AllocatedMemory.Add(nativeListInternal);
-
-			hb_list_s nativeListStruct = new hb_list_s { items = nativeListInternal, items_alloc = capacity, items_count = 0 };
-
-			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
-			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
-
-			returnList.ListPtr = nativeListStructPtr;
-			return returnList;
-		}
-
-		/// <summary>
 		/// Creates a native HandBrake list from the given managed list of pointers.
 		/// </summary>
 		/// <param name="list">The managed list to convert.</param>
 		/// <returns>The converted native list.</returns>
 		public static NativeList CreateIntPtrList(List<IntPtr> list)
 		{
-			NativeList returnList = new NativeList();
-			int intSize = Marshal.SizeOf(typeof(IntPtr));
+			NativeList returnList = NativeList.CreateList();
 
-			IntPtr nativeListInternal = Marshal.AllocHGlobal(list.Count * intSize);
-			returnList.AllocatedMemory.Add(nativeListInternal);
-			for (int i = 0; i < list.Count; i++)
+			foreach (IntPtr ptr in list)
 			{
-				Marshal.WriteIntPtr(nativeListInternal, i * intSize, list[i]);
+				returnList.Add(ptr);
 			}
 
-			hb_list_s nativeListStruct = new hb_list_s
-											 {
-												 items = nativeListInternal,
-												 items_alloc = list.Count,
-												 items_count = list.Count
-											 };
-
-			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
-			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
-
-			returnList.ListPtr = nativeListStructPtr;
 			return returnList;
 		}
 
@@ -198,31 +162,16 @@ namespace HandBrake.Interop
 		/// <returns>The converted native list.</returns>
 		public static NativeList ConvertListBack<T>(List<T> list)
 		{
-			NativeList returnList = new NativeList();
-			int intSize = Marshal.SizeOf(typeof(IntPtr));
-
-			IntPtr nativeListInternal = Marshal.AllocHGlobal(list.Count * intSize);
-			returnList.AllocatedMemory.Add(nativeListInternal);
-			for (int i = 0; i < list.Count; i++)
+			NativeList returnList = NativeList.CreateList();
+			foreach (T item in list)
 			{
 				IntPtr itemPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
 				returnList.AllocatedMemory.Add(itemPtr);
-				Marshal.StructureToPtr(list[i], itemPtr, false);
+				Marshal.StructureToPtr(item, itemPtr, false);
 
-				Marshal.WriteIntPtr(nativeListInternal, i * intSize, itemPtr);
+				returnList.Add(itemPtr);
 			}
 
-			hb_list_s nativeListStruct = new hb_list_s
-											 {
-												 items = nativeListInternal,
-												 items_alloc = list.Count,
-												 items_count = list.Count
-											 };
-
-			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
-			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
-
-			returnList.ListPtr = nativeListStructPtr;
 			return returnList;
 		}
 

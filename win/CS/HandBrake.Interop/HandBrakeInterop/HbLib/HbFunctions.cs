@@ -79,7 +79,7 @@ namespace HandBrake.Interop.HbLib
 		///preview_count: int
 		///store_previews: int
 		[DllImport("hb.dll", EntryPoint = "hb_scan", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_scan(IntPtr hbHandle, [In] [MarshalAs(UnmanagedType.LPStr)] string path, int title_index, int preview_count, int store_previews, ulong min_duration);
+		public static extern void hb_scan(IntPtr hbHandle, IntPtr path, int title_index, int preview_count, int store_previews, ulong min_duration);
 
 		[DllImport("hb.dll", EntryPoint = "hb_scan_stop", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void hb_scan_stop(IntPtr hbHandle);
@@ -195,11 +195,41 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_global_close", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void hb_global_close();
 
+		//hb_list_t * hb_list_init();
+		[DllImport("hb.dll", EntryPoint = "hb_list_init", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_list_init();
+
+		//int         hb_list_count( const hb_list_t * );
+		[DllImport("hb.dll", EntryPoint = "hb_list_count", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_list_count(IntPtr listPtr);
+
+		//void        hb_list_add( hb_list_t *, void * );
+		[DllImport("hb.dll", EntryPoint = "hb_list_add", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_list_add(IntPtr listPtr, IntPtr item);
+
+		//void        hb_list_insert( hb_list_t * l, int pos, void * p );
+		[DllImport("hb.dll", EntryPoint = "hb_list_insert", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_list_insert(IntPtr listPtr, int pos, IntPtr item);
+
+		//void        hb_list_rem( hb_list_t *, void * );
+		[DllImport("hb.dll", EntryPoint = "hb_list_rem", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_list_rem(IntPtr listPtr, IntPtr item);
+
+		//void      * hb_list_item( const hb_list_t *, int );
+		[DllImport("hb.dll", EntryPoint = "hb_list_item", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_list_item(IntPtr listPtr, int itemIndex);
+
+		//void        hb_list_close( hb_list_t ** );
+		[DllImport("hb.dll", EntryPoint = "hb_list_close", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void hb_list_close(IntPtr listPtrPtr);
+
+
 		[DllImport("hb.dll", EntryPoint = "hb_subtitle_add", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_subtitle_add(ref hb_job_s job, ref hb_subtitle_config_s subtitleConfig, int track);
 
 		[DllImport("hb.dll", EntryPoint = "hb_srt_add", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_srt_add(ref hb_job_s job, ref hb_subtitle_config_s subtitleConfig, string lang);
+
 
 
 
@@ -403,6 +433,9 @@ namespace HandBrake.Interop.HbLib
 			int width,
 			int height);
 
+
+		[DllImport("hb.dll", EntryPoint = "hb_get_opencl_env", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_get_opencl_env();
 
 		[DllImport("hb.dll", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_qsv_available();

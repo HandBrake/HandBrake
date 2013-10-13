@@ -158,6 +158,10 @@ namespace HandBrake.Interop.HbLib
 
 		/// uint32_t->unsigned int
 		public uint flags;
+
+		public int opencl_support;
+
+		public int hwd_support;
 	}
 
 	public enum hb_title_type_anon

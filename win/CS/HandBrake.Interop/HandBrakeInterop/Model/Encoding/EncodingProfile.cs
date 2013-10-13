@@ -35,6 +35,7 @@ namespace HandBrake.Interop.Model.Encoding
 		public int Height { get; set; }
 		public int MaxWidth { get; set; }
 		public int MaxHeight { get; set; }
+		public ScaleMethod ScaleMethod { get; set; }
 		public CroppingType CroppingType { get; set; }
 		public Cropping Cropping { get; set; }
 		public Anamorphic Anamorphic { get; set; }
@@ -62,6 +63,8 @@ namespace HandBrake.Interop.Model.Encoding
 		public string X264Preset { get; set; }
 
 		public List<string> X264Tunes { get; set; }
+		public string QsvPreset { get; set; }
+		public bool QsvDecode { get; set; }
 		public string H264Level { get; set; }
 		public VideoEncodeRateType VideoEncodeRateType { get; set; }
 		public double Quality { get; set; }
@@ -93,6 +96,7 @@ namespace HandBrake.Interop.Model.Encoding
 				Height = this.Height,
 				MaxWidth = this.MaxWidth,
 				MaxHeight = this.MaxHeight,
+				ScaleMethod = this.ScaleMethod,
 				CroppingType = this.CroppingType,
 				Cropping = this.Cropping.Clone(),
 				Anamorphic = this.Anamorphic,
@@ -119,6 +123,8 @@ namespace HandBrake.Interop.Model.Encoding
 				X264Profile = this.X264Profile,
 				X264Preset = this.X264Preset,
 				X264Tunes = this.X264Tunes,
+				QsvPreset = this.QsvPreset,
+				QsvDecode = this.QsvDecode,
 				H264Level = this.H264Level,
 				VideoEncodeRateType = this.VideoEncodeRateType,
 				Quality = this.Quality,

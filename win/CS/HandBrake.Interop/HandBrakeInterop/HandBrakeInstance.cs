@@ -244,7 +244,9 @@ namespace HandBrake.Interop
 		{
 			this.previewCount = previewCount;
 
-			HBFunctions.hb_scan(this.hbHandle, path, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+			IntPtr pathPtr = InteropUtilities.CreateUtf8Ptr(path);
+			HBFunctions.hb_scan(this.hbHandle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+			Marshal.FreeHGlobal(pathPtr);
 
 			this.scanPollTimer = new System.Timers.Timer();
 			this.scanPollTimer.Interval = ScanPollIntervalMs;
@@ -1038,7 +1040,17 @@ namespace HandBrake.Interop
 					{
 						if (i < nativeChapters.Count && i < job.CustomChapterNames.Count)
 						{
-							IntPtr chapterNamePtr = InteropUtilities.CreateUtf8Ptr(job.CustomChapterNames[i]);
+							IntPtr chapterNamePtr;
+
+							if (string.IsNullOrWhiteSpace(job.CustomChapterNames[i]))
+							{
+								chapterNamePtr = InteropUtilities.CreateUtf8Ptr("Chapter " + (i + 1));
+							}
+							else
+							{
+								chapterNamePtr = InteropUtilities.CreateUtf8Ptr(job.CustomChapterNames[i]);
+							}
+
 							HBFunctions.hb_chapter_set_title__ptr(nativeChapters[i], chapterNamePtr);
 							Marshal.FreeHGlobal(chapterNamePtr);
 						}
@@ -1302,7 +1314,7 @@ namespace HandBrake.Interop
 						{
 							nativeJob.anamorphic.dar_width = profile.DisplayWidth;
 							nativeJob.anamorphic.dar_height = height;
-							nativeJob.anamorphic.keep_display_aspect = profile.KeepDisplayAspect ? 1 : 0;
+							nativeJob.anamorphic.keep_display_aspect = 0;
 						}
 					}
 					else
@@ -1388,27 +1400,8 @@ namespace HandBrake.Interop
 			}
 
 			NativeList nativeAudioList = InteropUtilities.ConvertListBack<hb_audio_s>(audioList);
-			nativeJob.list_audio = nativeAudioList.ListPtr;
+			nativeJob.list_audio = nativeAudioList.Ptr;
 			allocatedMemory.AddRange(nativeAudioList.AllocatedMemory);
-
-			// Create a new empty list
-			int totalSubtitles = 0;
-			if (job.Subtitles != null)
-			{
-				if (job.Subtitles.SourceSubtitles != null)
-				{
-					totalSubtitles += job.Subtitles.SourceSubtitles.Count;
-				}
-
-				if (job.Subtitles.SrtSubtitles != null)
-				{
-					totalSubtitles += job.Subtitles.SrtSubtitles.Count;
-				}
-			}
-
-			NativeList nativeSubtitleList = InteropUtilities.CreateNativeList(totalSubtitles + 2);
-			nativeJob.list_subtitle = nativeSubtitleList.ListPtr;
-			allocatedMemory.AddRange(nativeSubtitleList.AllocatedMemory);
 
 			if (job.Subtitles != null)
 			{
@@ -1486,7 +1479,20 @@ namespace HandBrake.Interop
 			}
 
 			// Construct final filter list
-			nativeJob.list_filter = this.ConvertFilterListToNative(filterList, allocatedMemory).ListPtr;
+			nativeJob.list_filter = this.ConvertFilterListToNative(filterList, allocatedMemory).Ptr;
+
+			if (profile.ScaleMethod == ScaleMethod.Bicubic)
+			{
+				HBFunctions.hb_get_opencl_env();
+				nativeJob.use_opencl = 1;
+			}
+			else
+			{
+				nativeJob.use_opencl = 0;
+			}
+
+			nativeJob.qsv.decode = profile.QsvDecode ? 1 : 0;
+			nativeJob.use_hwd = job.DxvaDecoding ? 1 : 0;
 
 #pragma warning disable 612, 618
 			if (profile.OutputFormat == Container.Mp4)
@@ -1504,7 +1510,9 @@ namespace HandBrake.Interop
 				nativeJob.mux = HBFunctions.hb_container_get_from_name(profile.ContainerName);
 			}
 
-			nativeJob.file = job.OutputPath;
+			IntPtr outputPathPtr = InteropUtilities.CreateUtf8Ptr(job.OutputPath);
+			allocatedMemory.Add(outputPathPtr);
+			nativeJob.file = outputPathPtr;
 
 			nativeJob.largeFileSize = profile.LargeFile ? 1 : 0;
 			nativeJob.mp4_optimize = profile.Optimize ? 1 : 0;
