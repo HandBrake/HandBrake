@@ -20,7 +20,6 @@
 #endif
 
 #include "oclnv12toyuv.h"
-#include "scale.h"
 #endif
 
 #ifdef USE_HWD
@@ -577,34 +576,6 @@ static void hb_copy_from_nv12( uint8_t *dst, uint8_t *src[2], size_t src_pitch[2
     }
 }
 
-#ifdef USE_OPENCL
-void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int dstwidth, int dstheight, int *crop )
-{
-    T_FilterLink fl = {0};
-    int STEP = srcwidth * srcheight * 3 / 2;
-    int OUTSTEP = dstwidth * dstheight * 3 / 2;
-    int HEIGHT = srcheight;
-    int LINESIZEY = srcwidth;
-    int LINESIZEUV = srcwidth / 2;
-
-    cl_mem cl_outbuf;
-
-    if( !hb_create_buffer( &(cl_outbuf), CL_MEM_WRITE_ONLY, OUTSTEP ) )
-    {   
-        hb_log("av_create_buffer cl_outbuf Error");
-        return;
-    }   
-
-    fl.cl_outbuf = cl_outbuf;
-
-    scale_run( src, fl.cl_outbuf, LINESIZEY, LINESIZEUV, HEIGHT );
-
-    hb_read_opencl_buffer( fl.cl_outbuf, dst, OUTSTEP );
-    CL_FREE( cl_outbuf );
-
-    return;
-}
-#endif
 /**
  *  lock frame data form surface.
  *  nv12 to yuv with opencl and with C reference
