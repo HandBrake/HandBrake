@@ -207,7 +207,8 @@
     [audioListArray addObject:audioTrack2Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -311,7 +312,8 @@
     [audioListArray addObject:audioTrack1Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -415,7 +417,8 @@
     [audioListArray addObject:audioTrack1Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -519,7 +522,8 @@
     [audioListArray addObject:audioTrack1Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -635,7 +639,8 @@
     [audioListArray addObject:audioTrack2Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -750,7 +755,8 @@
     [audioListArray addObject:audioTrack2Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -865,7 +871,8 @@
     [audioListArray addObject:audioTrack2Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -969,7 +976,8 @@
     [audioListArray addObject:audioTrack1Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -1073,6 +1081,7 @@
     [audioListArray addObject:audioTrack1Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
+    [audioListArray release];
     
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1177,7 +1186,8 @@
     [audioListArray addObject:audioTrack1Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -1281,7 +1291,8 @@
     [audioListArray addObject:audioTrack1Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     
@@ -1396,7 +1407,8 @@
     [audioListArray addObject:audioTrack2Array];
     /* Add the audio track(s) to the preset's audio list */
     [preset setObject:[NSMutableArray arrayWithArray:audioListArray] forKey:@"AudioList"];
-    
+    [audioListArray release];
+
     /* Subtitles (note: currently ignored) */
     [preset setObject:@"None" forKey:@"Subtitles"];
     

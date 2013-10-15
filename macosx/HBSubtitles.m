@@ -11,66 +11,66 @@
 @implementation HBSubtitles
 - (id)init 
 {
-    self = [super init];
-    if( self != nil )
+
+    if( self = [super init] )
     {
         fTitle = NULL;
-    }
-    
-    /* setup our array of languages */
-    const iso639_lang_t *lang;
-    languagesArray = [[NSMutableArray alloc] init];
-    for (lang = lang_get_next(NULL); lang != NULL; lang = lang_get_next(lang))
-    {
-        [languagesArray addObject:[NSArray arrayWithObjects:
-                                   [NSString stringWithUTF8String:lang->eng_name],
-                                   [NSString stringWithUTF8String:lang->iso639_2],
-                                   nil]];
-        if (!strcasecmp(lang->eng_name, "English"))
+
+        /* setup our array of languages */
+        const iso639_lang_t *lang;
+        languagesArray = [[NSMutableArray alloc] init];
+        for (lang = lang_get_next(NULL); lang != NULL; lang = lang_get_next(lang))
         {
-            languagesArrayDefIndex = [languagesArray count] - 1;
+            [languagesArray addObject:[NSArray arrayWithObjects:
+                                       [NSString stringWithUTF8String:lang->eng_name],
+                                       [NSString stringWithUTF8String:lang->iso639_2],
+                                       nil]];
+            if (!strcasecmp(lang->eng_name, "English"))
+            {
+                languagesArrayDefIndex = [languagesArray count] - 1;
+            }
         }
+
+        /* populate the charCodeArray */
+        charCodeArray = [[NSMutableArray alloc] init];
+        [charCodeArray addObject:@"ANSI_X3.4-1968"];
+        [charCodeArray addObject:@"ANSI_X3.4-1986"];
+        [charCodeArray addObject:@"ANSI_X3.4"];
+        [charCodeArray addObject:@"ANSI_X3.110-1983"];
+        [charCodeArray addObject:@"ANSI_X3.110"];
+        [charCodeArray addObject:@"ASCII"];
+        [charCodeArray addObject:@"ECMA-114"];
+        [charCodeArray addObject:@"ECMA-118"];
+        [charCodeArray addObject:@"ECMA-128"];
+        [charCodeArray addObject:@"ECMA-CYRILLIC"];
+        [charCodeArray addObject:@"IEC_P27-1"];
+        [charCodeArray addObject:@"ISO-8859-1"];
+        [charCodeArray addObject:@"ISO-8859-2"];
+        [charCodeArray addObject:@"ISO-8859-3"];
+        [charCodeArray addObject:@"ISO-8859-4"];
+        [charCodeArray addObject:@"ISO-8859-5"];
+        [charCodeArray addObject:@"ISO-8859-6"];
+        [charCodeArray addObject:@"ISO-8859-7"];
+        [charCodeArray addObject:@"ISO-8859-8"];
+        [charCodeArray addObject:@"ISO-8859-9"];
+        [charCodeArray addObject:@"ISO-8859-9E"];
+        [charCodeArray addObject:@"ISO-8859-10"];
+        [charCodeArray addObject:@"ISO-8859-11"];
+        [charCodeArray addObject:@"ISO-8859-13"];
+        [charCodeArray addObject:@"ISO-8859-14"];
+        [charCodeArray addObject:@"ISO-8859-15"];
+        [charCodeArray addObject:@"ISO-8859-16"];
+        [charCodeArray addObject:@"UTF-7"];
+        [charCodeArray addObject:@"UTF-8"];
+        [charCodeArray addObject:@"UTF-16"];
+        [charCodeArray addObject:@"UTF-16LE"];
+        [charCodeArray addObject:@"UTF-16BE"];
+        [charCodeArray addObject:@"UTF-32"];
+        [charCodeArray addObject:@"UTF-32LE"];
+        [charCodeArray addObject:@"UTF-32BE"];
+        
+        charCodeArrayDefIndex = 11;
     }
-   
-    /* populate the charCodeArray */
-    charCodeArray = [[NSMutableArray alloc] init];
-    [charCodeArray addObject:@"ANSI_X3.4-1968"];
-    [charCodeArray addObject:@"ANSI_X3.4-1986"];
-    [charCodeArray addObject:@"ANSI_X3.4"];
-    [charCodeArray addObject:@"ANSI_X3.110-1983"];
-    [charCodeArray addObject:@"ANSI_X3.110"];
-    [charCodeArray addObject:@"ASCII"];
-    [charCodeArray addObject:@"ECMA-114"];
-    [charCodeArray addObject:@"ECMA-118"];
-    [charCodeArray addObject:@"ECMA-128"];
-    [charCodeArray addObject:@"ECMA-CYRILLIC"];
-    [charCodeArray addObject:@"IEC_P27-1"];
-    [charCodeArray addObject:@"ISO-8859-1"];
-    [charCodeArray addObject:@"ISO-8859-2"];
-    [charCodeArray addObject:@"ISO-8859-3"];
-    [charCodeArray addObject:@"ISO-8859-4"];
-    [charCodeArray addObject:@"ISO-8859-5"];
-    [charCodeArray addObject:@"ISO-8859-6"];
-    [charCodeArray addObject:@"ISO-8859-7"];
-    [charCodeArray addObject:@"ISO-8859-8"];
-    [charCodeArray addObject:@"ISO-8859-9"];
-    [charCodeArray addObject:@"ISO-8859-9E"];
-    [charCodeArray addObject:@"ISO-8859-10"];
-    [charCodeArray addObject:@"ISO-8859-11"];
-    [charCodeArray addObject:@"ISO-8859-13"];
-    [charCodeArray addObject:@"ISO-8859-14"];
-    [charCodeArray addObject:@"ISO-8859-15"];
-    [charCodeArray addObject:@"ISO-8859-16"];
-    [charCodeArray addObject:@"UTF-7"];
-    [charCodeArray addObject:@"UTF-8"];
-    [charCodeArray addObject:@"UTF-16"];
-    [charCodeArray addObject:@"UTF-16LE"];
-    [charCodeArray addObject:@"UTF-16BE"];
-    [charCodeArray addObject:@"UTF-32"];
-    [charCodeArray addObject:@"UTF-32LE"];
-    [charCodeArray addObject:@"UTF-32BE"];
-    
-    charCodeArrayDefIndex = 11;
     
     return self;
 }
@@ -153,8 +153,7 @@
     else
     {
         [foreignAudioSearchTrackName release];
-        foreignAudioSearchTrackName = [[NSString stringWithString:@"Foreign Audio Search - (Bitmap)"]
-                                       retain];
+        foreignAudioSearchTrackName = @"Foreign Audio Search - (Bitmap)";
     }
     [forcedSourceNamesArray release];
     
@@ -205,7 +204,7 @@
     /* create a dictionary of source subtitle information to store in our array */
     NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
     /* Subtitle Source track popup index */
-    [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:[subtitleSourceArray count]+1] forKey:@"sourceTrackNum"];
+    [newSubtitleSourceTrack setObject:[NSNumber numberWithInteger:[subtitleSourceArray count]+1] forKey:@"sourceTrackNum"];
     /* Subtitle Source track name */
     [newSubtitleSourceTrack setObject:displayname forKey:@"sourceTrackName"];
     /* Subtitle Source track type (VobSub, Srt, etc.) */
@@ -231,11 +230,11 @@
     /* Subtitle Source track popup index */
     if ([subtitleArray count] == 0) // we now have an empty array so this will be our first track
     {
-        [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:[subtitleSourceArray count] + 1] forKey:@"subtitleSourceTrackNum"];
+        [newSubtitleSrtTrack setObject:[NSNumber numberWithInteger:[subtitleSourceArray count] + 1] forKey:@"subtitleSourceTrackNum"];
     }
     else
     {
-        [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:[subtitleSourceArray count]] forKey:@"subtitleSourceTrackNum"];
+        [newSubtitleSrtTrack setObject:[NSNumber numberWithInteger:[subtitleSourceArray count]] forKey:@"subtitleSourceTrackNum"];
     }
     
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"sourceTrackType"];
@@ -255,7 +254,7 @@
     
     /* now the srt only info, Language, Chart Code and offset */
     [newSubtitleSrtTrack setObject:filePath forKey:@"subtitleSourceSrtFilePath"];
-    [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:languagesArrayDefIndex] forKey:@"subtitleTrackSrtLanguageIndex"];
+    [newSubtitleSrtTrack setObject:[NSNumber numberWithInteger:languagesArrayDefIndex] forKey:@"subtitleTrackSrtLanguageIndex"];
     [newSubtitleSrtTrack setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:0] forKey:@"subtitleTrackSrtLanguageLong"];
     [newSubtitleSrtTrack setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:1] forKey:@"subtitleTrackSrtLanguageIso3"];
     
@@ -307,7 +306,7 @@
             /* create a dictionary of source subtitle information to store in our array */
             NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
             /* Subtitle Source track popup index */
-            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:[subtitleSourceArray count]+1] forKey:@"sourceTrackNum"];
+            [newSubtitleSourceTrack setObject:[NSNumber numberWithInteger:[subtitleSourceArray count]+1] forKey:@"sourceTrackNum"];
             /* Subtitle Source track name */
             [newSubtitleSourceTrack setObject:displayname forKey:@"sourceTrackName"];
             /* Subtitle Source track type (VobSub, Srt, etc.) */
@@ -340,7 +339,7 @@
  * specified as we always keep one track set to "None" which is ignored
  * for setting up tracks, but is used to add tracks.
  */
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSUInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if( fTitle == NULL || ![subtitleArray count])
     {
@@ -781,7 +780,7 @@
                 else
                 {
                     [aCell selectItemAtIndex:languagesArrayDefIndex]; // English
-                    [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:languagesArrayDefIndex] forKey:@"subtitleTrackSrtLanguageIndex"];
+                    [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInteger:languagesArrayDefIndex] forKey:@"subtitleTrackSrtLanguageIndex"];
                     [[subtitleArray objectAtIndex:rowIndex] setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:0] forKey:@"subtitleTrackSrtLanguageLong"];
                     [[subtitleArray objectAtIndex:rowIndex] setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:1] forKey:@"subtitleTrackSrtLanguageIso3"];
                     
@@ -879,8 +878,8 @@
                              defaultButton:@"OK"
                            alternateButton:nil
                                otherButton:nil
-                 informativeTextWithFormat:@"%d subtitle %@ could neither be converted to burn-in nor passed through",
-              [tracksToDelete count],
+                 informativeTextWithFormat:@"%lu subtitle %@ could neither be converted to burn-in nor passed through",
+              (unsigned long)[tracksToDelete count],
               [tracksToDelete count] > 1 ? @"tracks" : @"track"] runModal];
         }
         [tracksToDelete release];

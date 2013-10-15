@@ -48,7 +48,7 @@ BOOL                        fIsDragging;
 
 
 
-@interface HBQueueController : NSWindowController <NSToolbarDelegate>
+@interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate>
 {
     hb_handle_t                  *fQueueEncodeLibhb;              // reference to libhb
     HBController                 *fHBController;        // reference to HBController
@@ -106,7 +106,14 @@ BOOL                        fIsDragging;
     IBOutlet NSSlider            *fSpacing;     // debug
 #endif
 
+    // Text Styles
+    NSMutableParagraphStyle *ps;
+    NSDictionary            *detailAttr;
+    NSDictionary            *detailBoldAttr;
+    NSDictionary            *titleAttr;
+    NSDictionary            *shortHeightAttr;
 }
+
 - (void)setPidNum: (int)myPidnum;
 - (void)setHandle: (hb_handle_t *)handle;
 - (void)setHBController: (HBController *)controller;

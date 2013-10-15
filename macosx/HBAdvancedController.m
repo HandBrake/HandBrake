@@ -10,9 +10,11 @@
 
 - (id)init
 {
-    [super init];
-    [self loadMyNibFile];
-    
+    if( self = [super init] )
+    {
+        [self loadMyNibFile];
+    }
+
     return self;
 }
 

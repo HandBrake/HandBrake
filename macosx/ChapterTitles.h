@@ -19,7 +19,7 @@
 - (NSArray*)chapterTitlesArray;
 
 // Table View Delegates
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSUInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 
 - (id)tableView:(NSTableView *)aTableView
       objectValueForTableColumn:(NSTableColumn *)aTableColumn

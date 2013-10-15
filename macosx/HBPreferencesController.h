@@ -5,7 +5,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HBPreferencesController : NSWindowController
+@interface HBPreferencesController : NSWindowController <NSToolbarDelegate>
 {
     IBOutlet NSView         * fGeneralView, * fPictureView, * fAudioView, * fAdvancedView;
     IBOutlet NSTextField    * fSendEncodeToAppField;

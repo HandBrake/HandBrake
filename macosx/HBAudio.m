@@ -110,7 +110,7 @@ static NSMutableArray *masterBitRateArray = nil;
         // sample rate depends on the track, which means it depends on the title, so cannot be nicely set up here.
         masterSampleRateArray = [[NSMutableArray alloc] init]; // knowingly leaked
         [masterSampleRateArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          [NSString stringWithString:@"Auto"], keyAudioSampleRateName,
+                                          @"Auto", keyAudioSampleRateName,
                                           [NSNumber numberWithInt:0],          keyAudioSamplerate,
                                           nil]];
         for (const hb_rate_t *audio_samplerate = hb_audio_samplerate_get_next(NULL);
@@ -142,7 +142,7 @@ static NSMutableArray *masterBitRateArray = nil;
 
 {
     NSMutableArray *permittedCodecs = [NSMutableArray array];
-    unsigned int count = [masterCodecArray count];
+    NSUInteger count = [masterCodecArray count];
     NSDictionary *dict;
 
     // First get a list of the permitted codecs based on the internal rules
@@ -199,7 +199,7 @@ static NSMutableArray *masterBitRateArray = nil;
     int currentMixdown;
 
     unsigned long long channelLayout = [[track objectForKey: keyAudioInputChannelLayout] unsignedLongLongValue];
-    unsigned int count               = [masterMixdownArray count];
+    NSUInteger count                 = [masterMixdownArray count];
     int codecCodec                   = [[codec objectForKey: keyAudioCodec] intValue];
     int theDefaultMixdown            = hb_mixdown_get_default(codecCodec, channelLayout);
 
@@ -245,7 +245,7 @@ static NSMutableArray *masterBitRateArray = nil;
     int currentBitRate;
     BOOL shouldAdd;
 
-    unsigned int count = [masterBitRateArray count];
+    NSUInteger count = [masterBitRateArray count];
     int trackInputBitRate = [[[self track] objectForKey: keyAudioInputBitrate] intValue];
     int theSampleRate = [[[self sampleRate] objectForKey: keyAudioSamplerate] intValue];
 
@@ -279,7 +279,7 @@ static NSMutableArray *masterBitRateArray = nil;
     else if (codecIsLossless)
     {
         NSDictionary *bitRateNotApplicable = [NSDictionary dictionaryWithObjectsAndKeys:
-                                              [NSString stringWithString: @"N/A"], keyAudioBitrateName,
+                                              @"N/A", keyAudioBitrateName,
                                               [NSNumber numberWithInt: -1], keyAudioBitrate,
                                               nil];
         [permittedBitRates addObject: bitRateNotApplicable];

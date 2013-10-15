@@ -83,13 +83,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 - (void) prepareAudioForQueueFileJob: (NSMutableDictionary *) aDict
 
 {
-    unsigned int audioArrayCount = [self countOfAudioArray];
-    for (unsigned int counter = 0; counter < audioArrayCount; counter++)
+    NSUInteger audioArrayCount = [self countOfAudioArray];
+    for (NSUInteger counter = 0; counter < audioArrayCount; counter++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: counter];
         if ([anAudio enabled])
         {
-            NSString *prefix = [NSString stringWithFormat: @"Audio%d", counter + 1];
+            NSString *prefix = [NSString stringWithFormat: @"Audio%lu", counter + 1];
             NSNumber *sampleRateToUse = ([[[anAudio sampleRate] objectForKey: keyAudioSamplerate] intValue] == 0 ?
                                          [[anAudio track] objectForKey: keyAudioInputSampleRate] :
                                          [[anAudio sampleRate] objectForKey: keyAudioSamplerate]);
@@ -123,7 +123,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                 [aDict setObject: [NSNumber numberWithInt:0] forKey: [prefix stringByAppendingString: @"TrackDRCSlider"]];
             }
 
-            prefix = [NSString stringWithFormat: @"JobAudio%d", counter + 1];
+            prefix = [NSString stringWithFormat: @"JobAudio%lu", counter + 1];
             [aDict setObject: [[anAudio codec] objectForKey: keyAudioCodec] forKey: [prefix stringByAppendingString: @"Encoder"]];
             [aDict setObject: [[anAudio mixdown] objectForKey: keyAudioMixdown] forKey: [prefix stringByAppendingString: @"Mixdown"]];
             [aDict setObject: sampleRateToUse forKey: [prefix stringByAppendingString: @"Samplerate"]];
@@ -147,7 +147,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     }
 
     // Now add audio tracks based on the current settings
-    unsigned int audioArrayCount = [self countOfAudioArray];
+    NSUInteger audioArrayCount = [self countOfAudioArray];
     for (i = 0; i < audioArrayCount; i++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex:i];
@@ -181,8 +181,8 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 - (void) prepareAudioForPreset: (NSMutableArray *) anArray
 
 {
-    unsigned int audioArrayCount = [self countOfAudioArray];
-    unsigned int i;
+    NSUInteger audioArrayCount = [self countOfAudioArray];
+    NSUInteger i;
 
     for (i = 0; i < audioArrayCount; i++)
     {
@@ -364,7 +364,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
     unsigned int retval = defaultIfNotFound;
-    int count = [masterTrackArray count];
+    NSUInteger count = [masterTrackArray count];
     NSString *languageTitle;
     BOOL found = NO;
 
@@ -436,7 +436,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     // If all tracks should be added, add all track numbers that are not yet processed
     if (allTracks)
     {
-        unsigned int count = [masterTrackArray count];
+        NSUInteger count = [masterTrackArray count];
         for (unsigned int i = 1; i < count; i++)
         {
             NSNumber *trackNumber = [NSNumber numberWithInt:i];
@@ -454,12 +454,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [self _processPresetAudioArray: whatToUse forTrack:[trackNumber intValue] andType: [[aPreset objectForKey: @"Type"] intValue]];
     }
+    [tracksToAdd release];
 }
 
 - (void) _ensureAtLeastOneNonEmptyTrackExists
 
 {
-    int count = [self countOfAudioArray];
+    NSUInteger count = [self countOfAudioArray];
     if (0 == count || ![[self objectInAudioArrayAtIndex: 0] enabled])
     {
         [self addTracksFromPreset: [self _defaultPreset] allTracks: NO];
@@ -485,8 +486,8 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
     BOOL retval = NO;
-    unsigned int audioArrayCount = [self countOfAudioArray];
-    for (unsigned int i = 0; i < audioArrayCount && !retval; i++)
+    NSUInteger audioArrayCount = [self countOfAudioArray];
+    for (NSUInteger i = 0; i < audioArrayCount && !retval; i++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
         if ([anAudio enabled] && aCodecValue == [[[anAudio codec] objectForKey: keyAudioCodec] intValue])
@@ -531,7 +532,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 - (void) switchingTrackFromNone: (HBAudio *) noLongerNoneTrack
 
 {
-    int count = [self countOfAudioArray];
+    NSUInteger count = [self countOfAudioArray];
     BOOL needToAdd = NO;
     int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
 
@@ -626,25 +627,25 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 #pragma mark -
 #pragma mark KVC
 
-- (unsigned int) countOfAudioArray
+- (NSUInteger) countOfAudioArray
 
 {
     return [audioArray count];
 }
 
-- (HBAudio *) objectInAudioArrayAtIndex: (unsigned int) index
+- (HBAudio *) objectInAudioArrayAtIndex: (NSUInteger) index
 
 {
     return [audioArray objectAtIndex: index];
 }
 
-- (void) insertObject: (HBAudio *) audioObject inAudioArrayAtIndex: (unsigned int) index;
+- (void) insertObject: (HBAudio *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
 
 {
     [audioArray insertObject: audioObject atIndex: index];
 }
 
-- (void) removeObjectFromAudioArrayAtIndex: (unsigned int) index
+- (void) removeObjectFromAudioArrayAtIndex: (NSUInteger) index
 
 {
     [audioArray removeObjectAtIndex: index];

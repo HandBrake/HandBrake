@@ -109,9 +109,11 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             nil]];
 
         fJobGroups = [[NSMutableArray arrayWithCapacity:0] retain];
-       }
 
-        return self;
+        [self initStyles];
+    }
+
+    return self;
 }
 
 - (void)setQueueArray: (NSMutableArray *)QueueFileArray
@@ -210,6 +212,12 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 
     [fSavedExpandedItems release];
     [fSavedSelectedItems release];
+
+    [ps release];
+    [detailAttr release];
+    [detailBoldAttr release];
+    [titleAttr release];
+    [shortHeightAttr release];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
@@ -822,40 +830,42 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
     }
 }
 
+- (void)initStyles
+{
+    // Attributes
+    ps = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] retain];
+    [ps setHeadIndent: 40.0];
+    [ps setParagraphSpacing: 1.0];
+    [ps setTabStops:[NSArray array]];    // clear all tabs
+    [ps addTabStop: [[[NSTextTab alloc] initWithType: NSLeftTabStopType location: 20.0] autorelease]];
+
+    detailAttr = [[NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSFont systemFontOfSize:10.0], NSFontAttributeName,
+                                ps, NSParagraphStyleAttributeName,
+                                nil] retain];
+
+    detailBoldAttr = [[NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSFont boldSystemFontOfSize:10.0], NSFontAttributeName,
+                                    ps, NSParagraphStyleAttributeName,
+                                    nil] retain];
+
+    titleAttr = [[NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSFont systemFontOfSize:[NSFont systemFontSize]], NSFontAttributeName,
+                               ps, NSParagraphStyleAttributeName,
+                               nil] retain];
+
+    shortHeightAttr = [[NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSFont systemFontOfSize:2.0], NSFontAttributeName,
+                                     nil] retain];
+}
+
 - (id)outlineView:(NSOutlineView *)fOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
     if ([[tableColumn identifier] isEqualToString:@"desc"])
     {
-        
-        
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         /* Below should be put into a separate method but I am way too f'ing lazy right now */
-        NSMutableAttributedString * finalString = [[[NSMutableAttributedString alloc] initWithString: @""] autorelease];
-        // Attributes
-        NSMutableParagraphStyle * ps = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] retain];
-        [ps setHeadIndent: 40.0];
-        [ps setParagraphSpacing: 1.0];
-        [ps setTabStops:[NSArray array]];    // clear all tabs
-        [ps addTabStop: [[[NSTextTab alloc] initWithType: NSLeftTabStopType location: 20.0] autorelease]];
-        
-        
-        NSDictionary* detailAttr = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSFont systemFontOfSize:10.0], NSFontAttributeName,
-                                    ps, NSParagraphStyleAttributeName,
-                                    nil];
-        
-        NSDictionary* detailBoldAttr = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [NSFont boldSystemFontOfSize:10.0], NSFontAttributeName,
-                                        ps, NSParagraphStyleAttributeName,
-                                        nil];
-        
-        NSDictionary* titleAttr = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSFont systemFontOfSize:[NSFont systemFontSize]], NSFontAttributeName,
-                                   ps, NSParagraphStyleAttributeName,
-                                   nil];
-        
-        NSDictionary* shortHeightAttr = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSFont systemFontOfSize:2.0], NSFontAttributeName,
-                                         nil];
+        NSMutableAttributedString * finalString = [[NSMutableAttributedString alloc] initWithString: @""];
         
         /* First line, we should strip the destination path and just show the file name and add the title num and chapters (if any) */
         NSString * summaryInfo;
@@ -1214,9 +1224,11 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                 [finalString appendString:@"\n" withAttributes:detailAttr];
             }
             i++;
-        }      
-        
-        return finalString;
+        }
+
+        [pool release];
+
+        return [finalString autorelease];
     }
     else if ([[tableColumn identifier] isEqualToString:@"icon"])
     {

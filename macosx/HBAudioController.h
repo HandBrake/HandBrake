@@ -48,9 +48,9 @@ extern NSString *HBMixdownChangedNotification;
 
 @interface HBAudioController (KVC)
 
-- (unsigned int) countOfAudioArray;
-- (HBAudio *) objectInAudioArrayAtIndex: (unsigned int) index;
-- (void) insertObject: (HBAudio *) audioObject inAudioArrayAtIndex: (unsigned int) index;
-- (void) removeObjectFromAudioArrayAtIndex: (unsigned int) index;
+- (NSUInteger) countOfAudioArray;
+- (HBAudio *) objectInAudioArrayAtIndex: (NSUInteger) index;
+- (void) insertObject: (HBAudio *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
+- (void) removeObjectFromAudioArrayAtIndex: (NSUInteger) index;
 
 @end

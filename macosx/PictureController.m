@@ -243,11 +243,9 @@
 {
     
     NSBox * filterBox = nil;
-    NSTextField * filterField;
     if (sender == fDetelecinePopUp)
     {
         filterBox = fDetelecineBox;
-        filterField = fDetelecineField;
     }
     
     if (sender == fDecombDeinterlaceSlider)
@@ -255,30 +253,25 @@
         if ([fDecombDeinterlaceSlider floatValue] == 0.0)
         {
             filterBox = fDecombBox;
-            filterField = fDecombField;
         }
         else
         {
             filterBox = fDeinterlaceBox;
-            filterField = fDeinterlaceField;
         }
     }
     
     if (sender == fDecombPopUp)
     {
         filterBox = fDecombBox;
-        filterField = fDecombField;
     }
     if (sender == fDeinterlacePopUp)
     {
         filterBox = fDeinterlaceBox;
-        filterField = fDeinterlaceField;
     }
     
     if (sender == fDenoisePopUp)
     {
         filterBox = fDenoiseBox;
-        filterField = fDenoiseField;
     }
     
     NSSize currentSize = [filterBox frame].size;

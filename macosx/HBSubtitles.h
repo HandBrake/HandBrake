@@ -10,14 +10,14 @@
 
 
 
-@interface HBSubtitles : NSObject {
+@interface HBSubtitles : NSObject <NSTableViewDataSource> {
 hb_title_t                   *fTitle;
 
 NSMutableArray               *subtitleArray; // contains the output subtitle track info
 NSMutableArray               *subtitleSourceArray;// contains the source subtitle track info
 NSString                     *foreignAudioSearchTrackName;
 NSMutableArray               *languagesArray; // array of languages taken from lang.c
-int                           languagesArrayDefIndex;
+NSInteger                     languagesArrayDefIndex;
 NSMutableArray               *charCodeArray; // array of character codes
 int                           charCodeArrayDefIndex;
 int                           container;
@@ -39,7 +39,7 @@ int                           container;
 - (void)setNewSubtitles:(NSMutableArray*) newSubtitleArray;
 
 // Table View Delegates
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSUInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 
 - (id)tableView:(NSTableView *)aTableView
       objectValueForTableColumn:(NSTableColumn *)aTableColumn

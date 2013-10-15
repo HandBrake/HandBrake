@@ -59,7 +59,7 @@
     return [NSArray arrayWithArray:fChapterTitlesArray];
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSUInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     if (fTitle == NULL)
     {
@@ -91,7 +91,7 @@
 {
     if ([[aTableColumn identifier] intValue] == 1)
     {
-        return [NSString stringWithFormat:@"%d", rowIndex + 1];
+        return [NSString stringWithFormat:@"%ld", rowIndex + 1];
     }
     else if (fTitle != NULL)
     {
