@@ -247,9 +247,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     {
         param.vui.i_sar_width  = job->anamorphic.par_width;
         param.vui.i_sar_height = job->anamorphic.par_height;
-
-        hb_log( "encx264: encoding with stored aspect %d/%d",
-                param.vui.i_sar_width, param.vui.i_sar_height );
     }
 
     if( job->vquality >= 0 )
@@ -257,13 +254,14 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         /* Constant RF */
         param.rc.i_rc_method = X264_RC_CRF;
         param.rc.f_rf_constant = job->vquality;
-        hb_log( "encx264: Encoding at constant RF %f", param.rc.f_rf_constant );
+        hb_log( "encx264: encoding at constant RF %f", param.rc.f_rf_constant );
     }
     else
     {
         /* Average bitrate */
         param.rc.i_rc_method = X264_RC_ABR;
         param.rc.i_bitrate = job->vbitrate;
+        hb_log( "encx264: encoding at average bitrate %d", param.rc.i_bitrate );
         if( job->pass > 0 && job->pass < 3 )
         {
             memset( pv->filename, 0, 1024 );
