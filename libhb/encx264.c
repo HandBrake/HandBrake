@@ -55,7 +55,6 @@ struct hb_work_private_s
 
     uint32_t       frames_in;
     uint32_t       frames_out;
-    uint32_t       frames_split; // number of frames we had to split
     int            chap_mark;   // saved chap mark when we're propagating it
     int64_t        last_stop;   // Debugging - stop time of previous input frame
     int64_t        next_chap;
@@ -375,11 +374,6 @@ void encx264Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
-    if ( pv->frames_split )
-    {
-        hb_log( "encx264: %u frames had to be split (%u in, %u out)",
-                pv->frames_split, pv->frames_in, pv->frames_out );
-    }
     free( pv->grey_data );
     x264_encoder_close( pv->x264 );
     free( pv );
