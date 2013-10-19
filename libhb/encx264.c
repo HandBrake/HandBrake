@@ -328,7 +328,10 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                                                       job->h264_profile,
                                                       job->h264_level,
                                                       job->width, job->height );
-    hb_log( "encx264: unparsed options: %s", x264_opts_unparsed );
+    if( x264_opts_unparsed != NULL )
+    {
+        hb_log( "encx264: unparsed options: %s", x264_opts_unparsed );
+    }
     free( x264_opts_unparsed );
 
     hb_deep_log( 2, "encx264: opening libx264 (pass %d)", job->pass );
