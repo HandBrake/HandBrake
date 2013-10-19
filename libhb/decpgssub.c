@@ -198,7 +198,14 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     avp.data = in->data;
     avp.size = in->size;
     // libav wants pkt pts in AV_TIME_BASE units
-    avp.pts = av_rescale(in->s.start, AV_TIME_BASE, 90000);
+    if (in->s.start != -1)
+    {
+        avp.pts = av_rescale(in->s.start, AV_TIME_BASE, 90000);
+    }
+    else
+    {
+        avp.pts = AV_NOPTS_VALUE;
+    }
 
     int has_subtitle = 0;
 
@@ -276,39 +283,43 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         if (useable_sub)
         {
-            int64_t pts = av_rescale(subtitle.pts, 90000, AV_TIME_BASE);
+            int64_t pts = AV_NOPTS_VALUE;
             hb_buffer_t * out = NULL;
 
-            // work around broken timestamps
-            if (pts < 0 && in->s.start >= 0)
+            if (subtitle.pts != AV_NOPTS_VALUE)
             {
-                if (pts < pv->last_pts)
-                {
-                    // XXX: this should only happen if the prevous pts
-                    // was unknown and our 3 second default duration
-                    // overshot the next pgs pts.
-                    //
-                    // assign a 1 second duration
-                    pts = pv->last_pts + 1 * 90000LL;
-                    hb_log("[warning] decpgssub: track %d, non-monotically increasing PTS",
-                           w->subtitle->out_track);
-                }
-                else
+                pts = av_rescale(subtitle.pts, 90000, AV_TIME_BASE);
+            }
+            else
+            {
+                if (in->s.start >= 0)
                 {
                     pts = in->s.start;
                 }
+                else
+                {
+                    // XXX: a broken pts will cause us to drop this subtitle,
+                    //      which is bad; use a default duration of 3 seconds
+                    //
+                    //      A broken pts is only generated when a pgs packet
+                    //      occurs after a discontinuity and before the
+                    //      next audio or video packet which re-establishes
+                    //      timing (afaik).
+                    pts = pv->last_pts + 3 * 90000LL;
+                    hb_log("[warning] decpgssub: track %d, invalid PTS",
+                           w->subtitle->out_track);
+                }
             }
-            else if (pts < 0)
+            // work around broken timestamps
+            if (pts < pv->last_pts)
             {
-                // XXX: a broken pts will cause us to drop this subtitle,
-                //      which is bad; use a default duration of 3 seconds
+                // XXX: this should only happen if the prevous pts
+                // was unknown and our 3 second default duration
+                // overshot the next pgs pts.
                 //
-                //      A broken pts is only generated when a pgs packet
-                //      occurs after a discontinuity and before the
-                //      next audio or video packet which re-establishes
-                //      timing (afaik).
-                pts = pv->last_pts + 3 * 90000LL;
-                hb_log("[warning] decpgssub: track %d, invalid PTS",
+                // assign a 1 second duration
+                pts = pv->last_pts + 1 * 90000LL;
+                hb_log("[warning] decpgssub: track %d, non-monotically increasing PTS",
                        w->subtitle->out_track);
             }
             pv->last_pts = pts;
@@ -354,6 +365,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     out->s.frametype = HB_FRAME_SUBTITLE;
                     out->sequence = in->sequence;
                 }
+                out->s.renderOffset = -1;
                 out->s.start = out->s.stop = pts;
             }
             else
