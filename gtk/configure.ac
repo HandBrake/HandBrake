@@ -99,7 +99,7 @@ AM_PROG_LIBTOOL
 
 case $host in
   *-*-mingw*)
-    GHB_PACKAGES="gthread-2.0 gio-2.0"
+    GHB_PACKAGES="gthread-2.0 gio-2.0 gmodule-2.0"
 	mingw_flag=yes
     ;;
   *)
@@ -108,7 +108,7 @@ case $host in
 	  pkg_gudev="gudev-1.0"
 	  ;;
     esac
-    GHB_PACKAGES="gthread-2.0 gio-2.0 libnotify dbus-glib-1 $pkg_gudev"
+    GHB_PACKAGES="gthread-2.0 gio-2.0 libnotify dbus-glib-1 gmodule-2.0 $pkg_gudev"
 	mingw_flag=no
     ;;
 esac
