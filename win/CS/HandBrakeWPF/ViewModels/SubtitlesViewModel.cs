@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
+    using System.Windows.Controls.Primitives;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -225,7 +226,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="subtitle">
         /// The subtitle.
         /// </param>
-        public void SelectBurnedInTrack(SubtitleTrack subtitle)
+        public void SetBurnedToFalseForAllExcept(SubtitleTrack subtitle)
         {
             foreach (SubtitleTrack track in this.Task.SubtitleTracks)
             {
@@ -372,11 +373,12 @@ namespace HandBrakeWPF.ViewModels
             string preferred =
                 this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
 
-            Subtitle source = subtitle ??
-                              ((this.SourceTracks != null)
-                                   ? (this.SourceTracks.FirstOrDefault(l => l.Language == preferred) ??
-                                      this.SourceTracks.FirstOrDefault(s => s.SubtitleType != SubtitleType.ForeignAudioSearch))
-                                   : null);
+            Subtitle source = subtitle
+                              ?? ((this.SourceTracks != null)
+                                      ? (this.SourceTracks.FirstOrDefault(l => l.Language == preferred)
+                                         ?? this.SourceTracks.FirstOrDefault(
+                                             s => s.SubtitleType != SubtitleType.ForeignAudioSearch))
+                                      : null);
 
             if (source == null)
             {
@@ -384,18 +386,22 @@ namespace HandBrakeWPF.ViewModels
             }
 
             SubtitleTrack track = new SubtitleTrack
-                    {
-                        SubtitleType = SubtitleType.VobSub,
-                        SourceTrack = source,
-                    };
+                                      {
+                                          SubtitleType = SubtitleType.VobSub,
+                                          SourceTrack = source,
+                                      };
 
-            if ((source.SubtitleType == SubtitleType.PGS || source.SubtitleType == SubtitleType.VobSub) &&
-                this.Task != null &&
-                (this.Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.M4V))
+            if ((source.SubtitleType == SubtitleType.PGS || source.SubtitleType == SubtitleType.VobSub || source.SubtitleType == SubtitleType.ForeignAudioSearch)
+                && this.Task != null
+                && (this.Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.M4V))
             {
-                this.SelectBurnedInTrack(track);
+                if (track.CanBeBurned)
+                {
+                    track.Burned = true;
+                    this.SetBurnedToFalseForAllExcept(track);
+                }
             }
-            
+
             this.Task.SubtitleTracks.Add(track);
         }
 

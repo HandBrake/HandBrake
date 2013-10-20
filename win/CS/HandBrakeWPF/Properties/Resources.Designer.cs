@@ -384,8 +384,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please note, this option is suitable only for slower systems.
-        ///Hardware decoders are currently designed for playback, not for re-encoding video so will likely bottleneck on faster systems..
+        ///   Looks up a localized string similar to Please note, this option is suitable only for slower systems. It will cause a bottleneck on faster systems.
+        ///Accelerates Accelerates H.264, MPEG-4, VC1 and WMV3 only. .
         /// </summary>
         public static string Video_DxvaDecode {
             get {
@@ -466,8 +466,8 @@ namespace HandBrakeWPF.Properties {
         ///
         ///In order to use the QuickSync encoder, you must:
         ///
-        ///- Have a Intel Core series CPU with HD Graphics. Haswell or newer parts are recommended.
-        ///- Have a monitor connected to the HD Graphics
+        ///- Have a Intel Core series CPU with HD Graphics. 4th Generation Haswell or newer parts are recommended for best quality.
+        ///- Have a monitor connected to the HD Graphics or GPU Virtualisation software installed.
         ///- Note that in multi-GPU enviroments, you may need to use 3rd party tools and workarounds to active the hardware..
         /// </summary>
         public static string Video_QuickSyncNotAvailable {
@@ -477,10 +477,10 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lanczos  - This is HandBrakes default scaler. It provides the best quality downscaling.
-        ///Bicubic OpenCL - A hardware accelerated version of the CPU based Bicubic scaler. 
-        ///                                This can be around 5~7% faster than software bicubic on a fast modern graphics card.
-        ///                                If OpenCL is unavailable, it will fallback to a software scaler. .
+        ///   Looks up a localized string similar to Lanczos                - This is HandBrakes default scaler. It provides the best quality downscaling.
+        ///Bicubic OpenCL  - A hardware accelerated version of the CPU based Bicubic scaler. 
+        ///                                 This can be around 5~7% faster than software bicubic on a fast modern graphics card.
+        ///                                 If OpenCL is unavailable, it will fallback to a software scaler. .
         /// </summary>
         public static string Video_ScalingModes {
             get {

@@ -224,7 +224,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <TextBlock Text="Automatic language selection behaviour" Grid.Column="0" Margin="10,20,0,0" FontSize="14"/>
+                    <TextBlock Text="Automatic language selection behaviour" Margin="10,20,0,0" FontSize="14"/>
 
                     <Grid Margin="20,10,0,0" >
                         <Grid.RowDefinitions>
@@ -258,7 +258,7 @@
                                   HorizontalAlignment="Left" IsChecked="{Binding AddForeignAudioScanTrack}"/>
                     </Grid>
 
-                    <TextBlock Text="Additional languages for possible selection" Grid.Column="0" Margin="10,20,0,0" FontSize="14"/>
+                    <TextBlock Text="Additional languages for possible selection" Margin="10,20,0,0" FontSize="14"/>
 
                     <Grid Margin="20,20,0,0">
                         <Grid.ColumnDefinitions>
