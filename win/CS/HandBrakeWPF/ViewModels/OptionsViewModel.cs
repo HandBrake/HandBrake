@@ -379,6 +379,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool enableQuickSync;
 
+        /// <summary>
+        /// The add foreign audio scan track.
+        /// </summary>
+        private bool addForeignAudioScanTrack;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1033,6 +1038,26 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether add foreign audio scan track.
+        /// </summary>
+        public bool AddForeignAudioScanTrack
+        {
+            get
+            {
+                return this.addForeignAudioScanTrack;
+            }
+            set
+            {
+                if (value.Equals(this.addForeignAudioScanTrack))
+                {
+                    return;
+                }
+                this.addForeignAudioScanTrack = value;
+                this.NotifyOfPropertyChange(() => this.AddForeignAudioScanTrack);
+            }
+        }
+
         #endregion
 
         #region System and Logging
@@ -1420,7 +1445,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.enableQuickSync;
+                return this.enableQuickSync && this.IsQuickSyncAvailable;
             }
             set
             {
@@ -1880,7 +1905,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.AddClosedCaptions = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
             this.ShowAdvancedPassthruOpts = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
-
+            this.AddForeignAudioScanTrack = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddForeignAudioScanTrack);
 
             // #############################
             // Video
@@ -2006,8 +2031,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.DubModeAudio, this.SelectedAddAudioMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.DubModeSubtitle, this.SelectedAddSubtitleMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedAudioPassthruOpts, this.ShowAdvancedPassthruOpts);
-
-
+            this.userSettingService.SetUserSetting(UserSettingConstants.AddForeignAudioScanTrack, this.AddForeignAudioScanTrack);
+            
             /* Video */
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSync, this.EnableQuickSync);
             this.userSettingService.SetUserSetting(ASUserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);

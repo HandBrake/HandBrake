@@ -241,6 +241,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string EnableQuickSync = "EnableQuickSync";
 
+        /// <summary>
+        /// The add foreign audio scan track.
+        /// </summary>
+        public const string AddForeignAudioScanTrack = "AddForeignAudioScanTrack";
+
         #endregion
     }
 }

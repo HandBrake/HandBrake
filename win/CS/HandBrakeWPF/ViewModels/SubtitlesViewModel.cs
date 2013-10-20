@@ -245,6 +245,12 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task.SubtitleTracks.Clear();
 
+            // Add Foreign Audio Scan
+            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AddForeignAudioScanTrack))
+            {
+                this.Add(ForeignAudioSearchTrack);
+            }
+
             // New DUB Settings
             int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
             switch (mode)
