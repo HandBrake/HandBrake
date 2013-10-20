@@ -20,12 +20,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+
 #ifdef USE_OPENCL
-#if defined(__APPLE__)
-#include <OpenCL/cl.h>
-#else
-#include <CL/cl.h>
-#endif
+#include "extras/cl.h"
 #endif
 /*
  * It seems WinXP doesn't align the stack of new threads to 16 bytes.

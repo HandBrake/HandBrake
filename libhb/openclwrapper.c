@@ -15,18 +15,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "extras/cl.h"
 #include "openclwrapper.h"
 #include "openclkernels.h"
 
 //#define USE_EXTERNAL_KERNEL
 #ifdef SYS_MINGW
 #include <windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenCL/cl.h>
-#else
-#include <CL/cl.h>
 #endif
 
 #if defined(_MSC_VER)

@@ -13,12 +13,7 @@
 #include "vadxva2.h"
 
 #ifdef USE_OPENCL
-#if defined(__APPLE__)
-#include <OpenCL/cl.h>
-#else
-#include <CL/cl.h>
-#endif
-
+#include "extras/cl.h"
 #include "oclnv12toyuv.h"
 #endif
 

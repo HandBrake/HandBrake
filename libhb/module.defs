@@ -19,6 +19,7 @@ LIBHB.d   = $(LIBHB.m4.out) $(LIBHB.h.out) \
     $(foreach n,$(LIBHB.prerequisites),$($n.INSTALL.target) )
 
 LIBHB.h.in  = $(wildcard $(LIBHB.src/)*.h)
+LIBHB.h.in += $(wildcard $(LIBHB.src/)extras/*.h)
 LIBHB.h.out = $(patsubst $(SRC/)%,$(BUILD/)%,$(LIBHB.h.in))
 
 ###############################################################################
@@ -67,7 +68,6 @@ LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
 ifeq (1,$(FEATURE.opencl))
-LIBHB.GCC.I += $(AMDAPPSDKROOT)/include
 LIBHB.GCC.l += OpenCL
 endif
 

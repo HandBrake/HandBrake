@@ -15,13 +15,8 @@
 #ifndef RENDER_CL_H
 #define RENDER_CL_H
 
-#if defined(__APPLE__)
-#include <OpenCL/cl.h>
-#else
-#include <CL/cl.h>
-#endif
-
 #include "common.h"
+#include "extras/cl.h"
 #include "openclwrapper.h"
 
 /**
