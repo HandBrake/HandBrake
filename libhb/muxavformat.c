@@ -1138,7 +1138,10 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
 
     pkt.stream_index = track->st->index;
     int ret = av_interleaved_write_frame(m->oc, &pkt);
-    if (ret < 0)
+    // Many avformat muxer functions do not check the error status
+    // of the AVIOContext.  So we need to check it ourselves to detect
+    // write errors (like disk full condition).
+    if (ret < 0 || m->oc->pb->error != 0)
     {
         hb_error("av_interleaved_write_frame failed!");
         *job->die = 1;
