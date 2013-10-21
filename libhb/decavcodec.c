@@ -488,17 +488,6 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         if (pout)
         {
-            // set the duration on every frame since the stream format can
-            // change (it shouldn't but there's no way to guarantee it).
-            // duration is a scaling factor to go from #bytes in the decoded
-            // frame to frame time (in 90KHz mpeg ticks). 'channels' converts
-            // total samples to per-channel samples. 'sample_rate' converts
-            // per-channel samples to seconds per sample and the 90000
-            // is mpeg ticks per second.
-            if ( pv->context->sample_rate )
-            {
-                pv->duration = 90000. / (double)( pv->context->sample_rate );
-            }
             decodeAudio( w->audio, pv, pout, pout_len, cur );
         }
     }
@@ -1921,6 +1910,21 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
         }
 
         pos += len;
+
+        // set the duration on every frame since the stream format can
+        // change (it shouldn't but there's no way to guarantee it).
+        // duration is a scaling factor to go from #bytes in the decoded
+        // frame to frame time (in 90KHz mpeg ticks). 'channels' converts
+        // total samples to per-channel samples. 'sample_rate' converts
+        // per-channel samples to seconds per sample and the 90000
+        // is mpeg ticks per second.
+        //
+        // Also, sample rate is not available until we have decoded some
+        // audio.
+        if ( pv->context->sample_rate )
+        {
+            pv->duration = 90000. / (double)( pv->context->sample_rate );
+        }
 
         if (got_frame)
         {
