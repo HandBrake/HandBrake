@@ -1418,7 +1418,7 @@ index 0000000..a353c22
 +
 +    sts = MFXVideoDECODE_DecodeHeader(qsv->mfx_session, &qsv_decode->bs,
 +                                    &qsv_decode->m_mfxVideoParam);
-+    if (sts <= MFX_ERR_NONE && avctx->height && avctx->width)
++    if (sts < MFX_ERR_NONE && avctx->height && avctx->width)
 +    {
 +         av_log(avctx, AV_LOG_QUIET,"DecodeHeader failed with result:%d\n",sts);
 +         sts = MFX_ERR_NONE;
