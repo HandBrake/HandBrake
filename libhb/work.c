@@ -1773,11 +1773,17 @@ static void filter_loop( void * _f )
                 if ( hb_fifo_full_wait( f->fifo_out ) )
                 {
                     hb_fifo_push( f->fifo_out, buf_out );
+                    buf_out = NULL;
                     break;
                 }
             }
         }
     }
+    if ( buf_out )
+    {
+        hb_buffer_close( &buf_out );
+    }
+
     // Consume data in incoming fifo till job complete so that
     // residual data does not stall the pipeline
     while( !*f->done )

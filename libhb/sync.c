@@ -227,6 +227,12 @@ static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i )
     }
 }
 
+static void CloseSubtitle(hb_sync_video_t * sync, int ii)
+{
+    hb_buffer_close(&sync->subtitle_sanitizer[ii].list_current);
+    hb_buffer_close(&sync->subtitle_sanitizer[ii].last);
+}
+
 /***********************************************************************
  * Close Video
  ***********************************************************************
@@ -237,6 +243,7 @@ void syncVideoClose( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_job_t          * job   = pv->job;
     hb_sync_video_t   * sync = &pv->type.video;
+    int ii;
 
     // Wake up audio sync if it's still waiting on condition.
     pv->common->pts_offset = 0;
@@ -265,6 +272,13 @@ void syncVideoClose( hb_work_object_t * w )
         hb_log( "sync: %d frames dropped, %d duplicated", 
                 sync->drops, sync->dups );
     }
+
+    int count = hb_list_count(job->list_subtitle);
+    for( ii = 0; ii < count; ii++ )
+    {
+        CloseSubtitle(sync, ii);
+    }
+    free(sync->subtitle_sanitizer);
 
     hb_lock( pv->common->mutex );
     if ( --pv->common->ref == 0 )

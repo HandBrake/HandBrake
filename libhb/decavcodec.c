@@ -347,6 +347,8 @@ static void closePrivData( hb_work_private_t ** ppv )
     if ( pv )
     {
         flushDelayQueue( pv );
+        hb_buffer_t *buf = link_buf_list( pv );
+        hb_buffer_close( &buf );
 
         if ( pv->job && pv->context && pv->context->codec )
         {
@@ -659,6 +661,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     if ( parser != NULL )
         av_parser_close( parser );
     hb_avcodec_close( context );
+    av_freep( &context->extradata );
     av_free( context );
     return ret;
 }
@@ -1327,28 +1330,28 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
 
+    AVCodec *codec = NULL;
+
+#ifdef USE_QSV
+    if (pv->qsv.decode)
+    {
+        codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
+    }
+    else
+#endif
+    {
+        codec = avcodec_find_decoder(w->codec_param);
+    }
+    if ( codec == NULL )
+    {
+        hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
+        return 1;
+    }
+
     if ( pv->title->opaque_priv )
     {
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
 
-        AVCodec *codec = NULL;
-
-#ifdef USE_QSV
-        if (pv->qsv.decode)
-        {
-            codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
-        }
-        else
-#endif
-        {
-            codec = avcodec_find_decoder(w->codec_param);
-        }
-
-        if ( codec == NULL )
-        {
-            hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
-            return 1;
-        }
         pv->context = avcodec_alloc_context3(codec);
         avcodec_copy_context( pv->context, ic->streams[pv->title->video_id]->codec);
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
@@ -1401,20 +1404,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     }
     else
     {
-        AVCodec *codec = NULL;
-
-#ifdef USE_QSV
-        if (pv->qsv.decode)
-        {
-            codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
-        }
-        else
-#endif
-        {
-            codec = avcodec_find_decoder(w->codec_param);
-        }
-
-
         pv->parser = av_parser_init( w->codec_param );
         pv->context = avcodec_alloc_context3( codec );
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
@@ -1560,15 +1549,6 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             *buf_out = hb_buffer_init( 0 );;
             return HB_WORK_DONE;
         }
-        // Note that there is currently a small memory leak in libav at this
-        // point.  pv->context->priv_data gets allocated by
-        // avcodec_alloc_context3(), then avcodec_get_context_defaults3()
-        // memsets the context and looses the pointer.
-        //
-        // avcodec_get_context_defaults3() looks as if they intended for
-        // it to preserve any existing priv_data because they test the pointer
-        // before allocating new memory, but the memset has already cleared it.
-        avcodec_get_context_defaults3( pv->context, codec );
         if ( setup_extradata( w, in ) )
         {
             // we didn't find the headers needed to set up extradata.

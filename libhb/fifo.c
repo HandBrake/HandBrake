@@ -48,6 +48,8 @@ static hb_fifo_t fifo_list =
  * be at most 32 possible pools when the size is a 32 bit int. To avoid a lot
  * of slow & error-prone run-time checking we allow for all 32. */
 #define MAX_BUFFER_POOLS  32
+#define BUFFER_POOL_FIRST 10
+#define BUFFER_POOL_LAST  25
 /* the buffer pool only exists to avoid the two malloc and two free calls that
  * it would otherwise take to allocate & free a buffer. but we don't want to
  * tie up a lot of memory in the pool because this allocator isn't as general
@@ -72,15 +74,21 @@ void hb_buffer_pool_init( void )
     /* we allocate pools for sizes 2^10 through 2^25. requests larger than
      * 2^25 will get passed through to malloc. */
     int i;
-    for ( i = 10; i < 26; ++i )
+
+    // Create larger queue for 2^10 bucket since all allocations smaller than
+    // 2^10 come from here.
+    buffers.pool[BUFFER_POOL_FIRST] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS*10, 1);
+    buffers.pool[BUFFER_POOL_FIRST]->buffer_size = 1 << 10;
+
+    /* requests smaller than 2^10 are satisfied from the 2^10 pool. */
+    for ( i = 1; i < BUFFER_POOL_FIRST; ++i )
+    {
+        buffers.pool[i] = buffers.pool[BUFFER_POOL_FIRST];
+    }
+    for ( i = BUFFER_POOL_FIRST + 1; i <= BUFFER_POOL_LAST; ++i )
     {
         buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS, 1);
         buffers.pool[i]->buffer_size = 1 << i;
-    }
-    /* requests smaller than 2^10 are satisfied from the 2^10 pool. */
-    for ( i = 1; i < 10; ++i )
-    {
-        buffers.pool[i] = buffers.pool[10];
     }
 }
 
@@ -152,7 +160,7 @@ static void buffer_pool_validate( hb_fifo_t * f )
 static void buffer_pools_validate( void )
 {
     int ii;
-    for ( ii = 10; ii < 26; ++ii )
+    for ( ii = BUFFER_POOL_FIRST; ii <= BUFFER_POOL_LAST; ++ii )
     {
         buffer_pool_validate( buffers.pool[ii] );
     }
@@ -234,7 +242,7 @@ void hb_buffer_pool_free( void )
 
     hb_lock(buffers.lock);
 
-    for( i = 10; i < 26; ++i)
+    for( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i)
     {
         count = 0;
         while( ( b = hb_fifo_get(buffers.pool[i]) ) )
@@ -270,7 +278,7 @@ void hb_buffer_pool_free( void )
 static hb_fifo_t *size_to_pool( int size )
 {
     int i;
-    for ( i = 0; i < 30; ++i )
+    for ( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i )
     {
         if ( size <= (1 << i) )
         {

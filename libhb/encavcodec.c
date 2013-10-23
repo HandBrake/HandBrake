@@ -291,6 +291,7 @@ void encavcodecClose( hb_work_object_t * w )
         hb_deep_log( 2, "encavcodec: closing libavcodec" );
         avcodec_flush_buffers( pv->context );
         hb_avcodec_close( pv->context );
+        av_free( pv->context );
     }
     if( pv->file )
     {

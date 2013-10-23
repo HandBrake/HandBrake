@@ -296,6 +296,7 @@ static void encavcodecaClose(hb_work_object_t * w)
             if (pv->context->codec != NULL)
                 avcodec_flush_buffers(pv->context);
             hb_avcodec_close(pv->context);
+            av_free( pv->context );
         }
 
         if (pv->output_buf != NULL)
