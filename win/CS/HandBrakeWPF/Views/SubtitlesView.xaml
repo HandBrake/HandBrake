@@ -143,7 +143,7 @@
                             <CheckBox Grid.Column="5" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
-                                        <cal:ActionMessage MethodName="SelectBurnedInTrack">
+                                        <cal:ActionMessage MethodName="SetBurnedToFalseForAllExcept">
                                             <cal:Parameter Value="{Binding}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
