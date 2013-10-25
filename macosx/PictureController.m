@@ -277,7 +277,7 @@
     NSSize currentSize = [filterBox frame].size;
     NSRect boxFrame = [filterBox frame];
     
-    if ([sender titleOfSelectedItem] == @"Custom")
+    if ([[sender titleOfSelectedItem]  isEqualToString: @"Custom"])
     {
         
         currentSize.height = 60;
@@ -1195,7 +1195,7 @@ are maintained across different sources */
     fPictureFilterSettings.denoise = [fDenoisePopUp indexOfSelectedItem];
     [self adjustFilterDisplay:fDenoisePopUp];
     
-    if ([fDeblockField stringValue] == @"Off")
+    if ([[fDeblockField stringValue] isEqualToString:@"Off"])
     {
         fPictureFilterSettings.deblock  = 0;
     }
@@ -1240,7 +1240,7 @@ are maintained across different sources */
             /* Grab a still preview ... */
             [self reloadStillPreview];
             /* ... then reset deinterlace back to where specified in the ui */
-            fTitle->job->deinterlace  = [fDeinterlacePopUp indexOfSelectedItem];
+            fTitle->job->deinterlace  = (int)[fDeinterlacePopUp indexOfSelectedItem];
             
         }
         else
@@ -1251,7 +1251,7 @@ are maintained across different sources */
     }
     else
     {
-        fTitle->job->deinterlace  = [fDeinterlacePopUp indexOfSelectedItem];
+        fTitle->job->deinterlace  = (int)[fDeinterlacePopUp indexOfSelectedItem];
         [self reloadStillPreview];
     }
 }
@@ -1271,7 +1271,7 @@ are maintained across different sources */
 }
 
 
-- (int) detelecine
+- (NSInteger)detelecine
 {
     return fPictureFilterSettings.detelecine;
 }
@@ -1281,7 +1281,7 @@ are maintained across different sources */
     return [fDetelecineField stringValue];
 }
 
-- (void) setDetelecine: (int) setting
+- (void) setDetelecine: (NSInteger) setting
 {
     fPictureFilterSettings.detelecine = setting;
 }
@@ -1291,7 +1291,7 @@ are maintained across different sources */
     [fDetelecineField setStringValue:string];
 }
 
-- (int) deinterlace
+- (NSInteger) deinterlace
 {
     return fPictureFilterSettings.deinterlace;
 }
@@ -1305,11 +1305,11 @@ are maintained across different sources */
     [fDeinterlaceField setStringValue:string];
 }
 
-- (void) setDeinterlace: (int) setting 
+- (void) setDeinterlace: (NSInteger) setting
 {
     fPictureFilterSettings.deinterlace = setting;
 }
-- (int) decomb
+- (NSInteger) decomb
 {
     return fPictureFilterSettings.decomb;
 }
@@ -1319,12 +1319,12 @@ are maintained across different sources */
     return [fDecombField stringValue];
 }
 
-- (int) useDecomb
+- (NSInteger) useDecomb
 {
     return fPictureFilterSettings.usedecomb;
 }
 
-- (void) setUseDecomb: (int) setting
+- (void) setUseDecomb: (NSInteger) setting
 {
     fPictureFilterSettings.usedecomb = setting;
     if (fPictureFilterSettings.usedecomb == 1)
@@ -1338,7 +1338,7 @@ are maintained across different sources */
     [self modeDecombDeinterlaceSliderChanged:nil];
 }
 
-- (void) setDecomb: (int) setting {
+- (void) setDecomb: (NSInteger) setting {
     fPictureFilterSettings.decomb = setting;
 }
 
@@ -1347,7 +1347,7 @@ are maintained across different sources */
     [fDecombField setStringValue:string];
 }
 
-- (int) denoise
+- (NSInteger) denoise
 {
     return fPictureFilterSettings.denoise;
 }
@@ -1362,27 +1362,27 @@ are maintained across different sources */
     [fDenoiseField setStringValue:string];
 }
 
-- (void) setDenoise: (int) setting
+- (void) setDenoise: (NSInteger) setting
 {
     fPictureFilterSettings.denoise = setting;
 }
 
-- (int) deblock
+- (NSInteger) deblock
 {
     return fPictureFilterSettings.deblock;
 }
 
-- (void) setDeblock: (int) setting
+- (void) setDeblock: (NSInteger) setting
 {
     fPictureFilterSettings.deblock = setting;
 }
 
-- (int) grayscale
+- (NSInteger) grayscale
 {
     return fPictureFilterSettings.grayscale;
 }
 
-- (void) setGrayscale: (int) setting
+- (void) setGrayscale: (NSInteger) setting
 {
     fPictureFilterSettings.grayscale = setting;
 }

@@ -88,7 +88,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if( ![[NSFileManager defaultManager] fileExistsAtPath:PreviewDirectory] )
     {
         [[NSFileManager defaultManager] createDirectoryAtPath:PreviewDirectory
-                                                   attributes:nil];
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:NULL];
     }                                                            
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[PictureController alloc] init];
@@ -252,7 +254,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         NSArray *files = [ [NSFileManager defaultManager]  contentsOfDirectoryAtPath: PreviewDirectory error: &error ];
         for( NSString *file in files ) 
         {
-            if( file != @"." && file != @".." ) 
+            if( ![file  isEqual: @"."] && ![file  isEqual: @".."] )
             {
                 [ [NSFileManager defaultManager] removeItemAtPath: [ PreviewDirectory stringByAppendingPathComponent: file ] error: &error ];
                 if( error ) 
@@ -431,7 +433,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     int hbInstances = 0;
     NSString *runningInstanceAppPath;
-    int runningInstancePidNum;
+    pid_t runningInstancePidNum;
     
     for (runningInstance in runningInstances)
 	{
@@ -541,14 +543,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
-
-    
     hb_state_t s;
     hb_get_state( fQueueEncodeLibhb, &s );
     
     if ( s.state != HB_STATE_IDLE )
     {
-        int result = NSRunCriticalAlertPanel(
+        NSInteger result = NSRunCriticalAlertPanel(
                                              NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
                                              NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", nil),
                                              NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil, @"A movie" );
@@ -564,7 +564,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // Warn if items still in the queue
     else if ( fPendingCount > 0 )
     {
-        int result = NSRunCriticalAlertPanel(
+        NSInteger result = NSRunCriticalAlertPanel(
                                              NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
                                              NSLocalizedString(@"There are pending encodes in your queue. Do you want to quit anyway?",nil),
                                              NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil);
@@ -1744,20 +1744,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [panel setAllowsMultipleSelection: NO];
     [panel setCanChooseFiles: YES];
     [panel setCanChooseDirectories: YES ];
-    NSString * sourceDirectory;
-	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"])
+    NSURL *sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastSourceDirectoryURL"])
 	{
-		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"];
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastSourceDirectoryURL"];
 	}
 	else
 	{
-		sourceDirectory = @"~/Desktop";
-		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+		sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
 	}
     /* we open up the browse sources sheet here and call for browseSourcesDone after the sheet is closed
         * to evaluate whether we want to specify a title, we pass the sender in the contextInfo variable
         */
-    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel setDirectoryURL:sourceDirectory];
     [panel beginSheetModalForWindow:fWindow completionHandler:
      ^(NSInteger result) {
          [self browseSourcesDone:panel returnCode:(int)result contextInfo:sender];
@@ -1777,10 +1776,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Free display name allocated previously by this code */
         [browsedSourceDisplayName release];
        
-        NSString *scanPath = [[sheet filenames] objectAtIndex: 0];
+        NSURL *scanURL = [[sheet URLs] objectAtIndex: 0];
         /* we set the last searched source directory in the prefs here */
-        NSString *sourceDirectory = [scanPath stringByDeletingLastPathComponent];
-        [[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
+        NSURL *sourceDirectory = [scanURL URLByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setURL:sourceDirectory forKey:@"LastSourceDirectoryURL"];
         /* we order out sheet, which is the browse window as we need to open
          * the title selection sheet right away
          */
@@ -1794,19 +1793,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
              * purposes in the title panel
              */
             /* Full Path */
-            [fScanSrcTitlePathField setStringValue:scanPath];
+            [fScanSrcTitlePathField setStringValue:[scanURL path]];
             NSString *displayTitlescanSourceName;
 
-            if ([[scanPath lastPathComponent] isEqualToString: @"VIDEO_TS"])
+            if ([[scanURL lastPathComponent] isEqualToString: @"VIDEO_TS"])
             {
                 /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name
                  we have to use the title->path value so we get the proper name of the volume if a physical dvd is the source*/
-                displayTitlescanSourceName = [[scanPath stringByDeletingLastPathComponent] lastPathComponent];
+                displayTitlescanSourceName = [[scanURL URLByDeletingLastPathComponent] lastPathComponent];
             }
             else
             {
                 /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
-                displayTitlescanSourceName = [scanPath lastPathComponent];
+                displayTitlescanSourceName = [scanURL lastPathComponent];
             }
             /* we set the source display name in the title selection dialogue */
             [fSrcDsplyNameTitleScan setStringValue:displayTitlescanSourceName];
@@ -1820,21 +1819,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         else
         {
             /* We are just doing a standard full source scan, so we specify "0" to libhb */
-            NSString *path = [[sheet filenames] objectAtIndex: 0];
+            NSURL *url = [[sheet URLs] objectAtIndex: 0];
             
             /* We check to see if the chosen file at path is a package */
-            if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:path])
+            if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:[url path]])
             {
-                [self writeToActivityLog: "trying to open a package at: %s", [path UTF8String]];
+                [self writeToActivityLog: "trying to open a package at: %s", [[url path] UTF8String]];
                 /* We check to see if this is an .eyetv package */
-                if ([[path pathExtension] isEqualToString: @"eyetv"])
+                if ([[url pathExtension] isEqualToString: @"eyetv"])
                 {
                     [self writeToActivityLog:"trying to open eyetv package"];
                     /* We're looking at an EyeTV package - try to open its enclosed
                      .mpg media file */
-                     browsedSourceDisplayName = [[[path stringByDeletingPathExtension] lastPathComponent] retain];
+                     browsedSourceDisplayName = [[[url URLByDeletingPathExtension] lastPathComponent] retain];
                     NSString *mpgname;
-                    int n = [[path stringByAppendingString: @"/"]
+                    NSUInteger n = [[[url path] stringByAppendingString: @"/"]
                              completePathIntoString: &mpgname caseSensitive: YES
                              matchesIntoArray: nil
                              filterTypes: [NSArray arrayWithObject: @"mpg"]];
@@ -1842,9 +1841,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     {
                         /* Found an mpeg inside the eyetv package, make it our scan path 
                         and call performScan on the enclosed mpeg */
-                        path = mpgname;
                         [self writeToActivityLog:"found mpeg in eyetv package"];
-                        [self performScan:path scanTitleNum:0];
+                        [self performScan:mpgname scanTitleNum:0];
                     }
                     else
                     {
@@ -1853,12 +1851,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     }
                 }
                 /* We check to see if this is a .dvdmedia package */
-                else if ([[path pathExtension] isEqualToString: @"dvdmedia"])
+                else if ([[url pathExtension] isEqualToString: @"dvdmedia"])
                 {
                     /* path IS a package - but dvdmedia packages can be treaded like normal directories */
-                    browsedSourceDisplayName = [[[path stringByDeletingPathExtension] lastPathComponent] retain];
+                    browsedSourceDisplayName = [[[url URLByDeletingPathExtension] lastPathComponent] retain];
                     [self writeToActivityLog:"trying to open dvdmedia package"];
-                    [self performScan:path scanTitleNum:0];
+                    [self performScan:[url path] scanTitleNum:0];
                 }
                 else
                 {
@@ -1869,21 +1867,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             else // path is not a package, so we treat it as a dvd parent folder or VIDEO_TS folder
             {
                 /* path is not a package, so we call perform scan directly on our file */
-                if ([[path lastPathComponent] isEqualToString: @"VIDEO_TS"])
+                if ([[url lastPathComponent] isEqualToString: @"VIDEO_TS"])
                 {
                     [self writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
                     /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name*/
-                    browsedSourceDisplayName = [[[path stringByDeletingLastPathComponent] lastPathComponent] retain];
+                    browsedSourceDisplayName = [[[url URLByDeletingLastPathComponent] lastPathComponent] retain];
                 }
                 else
                 {
                     [self writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
                     /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
                     /* make sure we remove any path extension as this can also be an '.mpg' file */
-                    browsedSourceDisplayName = [[path lastPathComponent] retain];
+                    browsedSourceDisplayName = [[url lastPathComponent] retain];
                 }
                 applyQueueToScan = NO;
-                [self performScan:path scanTitleNum:0];
+                [self performScan:[url path] scanTitleNum:0];
             }
 
         }
@@ -1934,7 +1932,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
-- (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
+- (void) performScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum
 {
     /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
@@ -1980,7 +1978,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
             [self writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
-            int status;
+            NSInteger status;
             status = NSRunAlertPanel(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function.",
                                      @"Videolan.org provides libdvdcss if you are not currently using another solution.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
             [NSApp requestUserAttention:NSCriticalRequest];
@@ -2045,7 +2043,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         
         hb_system_sleep_prevent(fHandle);
-        hb_scan(fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 ,
+        hb_scan(fHandle, [path UTF8String], (int)scanTitleNum, hb_num_previews, 1 ,
                 min_title_duration_ticks);
         
         [fSrcDVD2Field setStringValue:@"Scanning new source…"];
@@ -2131,7 +2129,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [fSrcDVD2Field setStringValue:browsedSourceDisplayName];
                 
                 // use the correct extension based on the container
-                int videoContainer = [[fDstFormatPopUp selectedItem] tag];
+                int videoContainer = (int)[[fDstFormatPopUp selectedItem] tag];
                 const char *ext    = hb_container_get_default_extension(videoContainer);
                 
                 /* If its a queue rescan for edit, get the queue item output path */
@@ -2246,7 +2244,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     if( returnCode == NSOKButton )
     {
-        [fDstFile2Field setStringValue: [sheet filename]];
+        [fDstFile2Field setStringValue: [[sheet URL] path]];
         /* Save this path to the prefs so that on next browse destination window it opens there */
         NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
         [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];   
@@ -2391,7 +2389,7 @@ static void queueFSEventStreamCallback(
     
 }
 
-- (void) removeQueueFileItem:(int) queueItemToRemove
+- (void) removeQueueFileItem:(NSUInteger) queueItemToRemove
 {
     [QueueFileArray removeObjectAtIndex:queueItemToRemove];
     [self saveQueueFileItem];
@@ -2473,14 +2471,14 @@ fWorkingCount = 0;
 }
 
 /* Used to get the next pending queue item index and return it if found */
-- (int)getNextPendingQueueIndex
+- (NSInteger)getNextPendingQueueIndex
 {
     /* initialize nextPendingIndex to -1, this value tells incrementQueueItemDone that there are no pending items in the queue */
-    int nextPendingIndex = -1;
+    NSInteger nextPendingIndex = -1;
 	BOOL nextPendingFound = NO;
     NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
 	id tempObject;
-    int i = 0;
+    NSInteger i = 0;
 	while (tempObject = [enumerator nextObject])
 	{
 		NSDictionary *thisQueueDict = tempObject;
@@ -2582,7 +2580,7 @@ fWorkingCount = 0;
     
        hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
+            (int)[fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
     
     
@@ -2599,7 +2597,7 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSString stringWithUTF8String: title->path] forKey:@"SourcePath"];
     [queueFileJob setObject:[fSrcDVD2Field stringValue] forKey:@"SourceName"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->index] forKey:@"TitleNumber"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
     
     /* Determine and set a variable to tell hb what start and stop times to use (chapters, seconds or frames) */
     if( [fEncodeStartStopPopUp indexOfSelectedItem] == 0 )
@@ -2615,8 +2613,8 @@ fWorkingCount = 0;
         [queueFileJob setObject:[NSNumber numberWithInt:2] forKey:@"fEncodeStartStop"];
     }
     /* Chapter encode info */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"ChapterStart"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"ChapterEnd"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"ChapterStart"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"ChapterEnd"];
     /* Time (pts) encode info */
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcTimeStartEncodingField intValue]] forKey:@"StartSeconds"];
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcTimeEndEncodingField intValue] - [fSrcTimeStartEncodingField intValue]] forKey:@"StopSeconds"];
@@ -2633,7 +2631,7 @@ fWorkingCount = 0;
     
     /* Lets get the preset info if there is any */
     [queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
     
     [queueFileJob setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
     /* Chapter Markers*/
@@ -2646,7 +2644,7 @@ fWorkingCount = 0;
     }
     else
     {
-        [queueFileJob setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
+        [queueFileJob setObject:[NSNumber numberWithInteger:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
     }
 	
     /* We need to get the list of chapter names to put into an array and store 
@@ -2656,11 +2654,11 @@ fWorkingCount = 0;
     [queueFileJob setObject:[fChapterTitlesDelegate chapterTitlesArray] forKey:@"ChapterNames"];
     
     /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-	[queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
+	[queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
     /* Mux mp4 with http optimization */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
     /* Add iPod uuid atom */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
     
     /* Codecs */
 	/* Video encoder */
@@ -2687,7 +2685,7 @@ fWorkingCount = 0;
     /* FFmpeg (lavc) Option String */
     [queueFileJob setObject:[fAdvancedOptions optionsStringLavc] forKey:@"lavcOption"];
 
-	[queueFileJob setObject:[NSNumber numberWithInt:[[fVidQualityMatrix selectedCell] tag] + 1] forKey:@"VideoQualityType"];
+	[queueFileJob setObject:[NSNumber numberWithInteger:[[fVidQualityMatrix selectedCell] tag] + 1] forKey:@"VideoQualityType"];
 	[queueFileJob setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
 	[queueFileJob setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
     /* Framerate */
@@ -2712,9 +2710,9 @@ fWorkingCount = 0;
     
     
 	/* 2 Pass Encoding */
-	[queueFileJob setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+	[queueFileJob setObject:[NSNumber numberWithInteger:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
 	/* Turbo 2 pass Encoding fVidTurboPassCheck*/
-	[queueFileJob setObject:[NSNumber numberWithInt:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
+	[queueFileJob setObject:[NSNumber numberWithInteger:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
     
 	/* Picture Sizing */
 	/* Use Max Picture settings for whatever the dvd is.*/
@@ -2756,33 +2754,33 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
     
     /* Picture Filters */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
     [queueFileJob setObject:[fPictureController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fPictureController decomb]] forKey:@"PictureDecomb"];
     [queueFileJob setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
     [queueFileJob setObject:[fPictureController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fPictureController denoise]] forKey:@"PictureDenoise"];
     [queueFileJob setObject:[fPictureController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
     
-    [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureController deblock]] forKey:@"PictureDeblock"];
+    [queueFileJob setObject:[NSString stringWithFormat:@"%ld",(long)[fPictureController deblock]] forKey:@"PictureDeblock"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
     
     /* Auto Passthru */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowAACPassCheck state]] forKey: @"AudioAllowAACPass"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowAC3PassCheck state]] forKey: @"AudioAllowAC3Pass"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowDTSHDPassCheck state]] forKey: @"AudioAllowDTSHDPass"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowDTSPassCheck state]] forKey: @"AudioAllowDTSPass"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowMP3PassCheck state]] forKey: @"AudioAllowMP3Pass"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fAudioAllowAACPassCheck state]] forKey: @"AudioAllowAACPass"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fAudioAllowAC3PassCheck state]] forKey: @"AudioAllowAC3Pass"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fAudioAllowDTSHDPassCheck state]] forKey: @"AudioAllowDTSHDPass"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fAudioAllowDTSPassCheck state]] forKey: @"AudioAllowDTSPass"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fAudioAllowMP3PassCheck state]] forKey: @"AudioAllowMP3Pass"];
     // just in case we need it for display purposes
     [queueFileJob setObject:[fAudioFallbackPopUp titleOfSelectedItem] forKey: @"AudioEncoderFallback"];
     // actual fallback encoder
-    [queueFileJob setObject:[NSNumber numberWithInt:[[fAudioFallbackPopUp selectedItem] tag]] forKey: @"JobAudioEncoderFallback"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[[fAudioFallbackPopUp selectedItem] tag]] forKey: @"JobAudioEncoderFallback"];
     
     /* Audio */
     [fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];
@@ -2794,19 +2792,19 @@ fWorkingCount = 0;
 
     /* Now we go ahead and set the "job->values in the plist for passing right to fQueueEncodeLibhb */
      
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"JobChapterStart"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"JobChapterStart"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"JobChapterEnd"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"JobChapterEnd"];
     
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[[fDstFormatPopUp selectedItem] tag]] forKey:@"JobFileFormatMux"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[[fDstFormatPopUp selectedItem] tag]] forKey:@"JobFileFormatMux"];
     
     /* Codecs */
 	/* Video encoder */
-	[queueFileJob setObject:[NSNumber numberWithInt:[[fVidEncoderPopUp selectedItem] tag]] forKey:@"JobVideoEncoderVcodec"];
+	[queueFileJob setObject:[NSNumber numberWithInteger:[[fVidEncoderPopUp selectedItem] tag]] forKey:@"JobVideoEncoderVcodec"];
 	
     /* Framerate */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fVidRatePopUp indexOfSelectedItem]] forKey:@"JobIndexVideoFramerate"];
+    [queueFileJob setObject:[NSNumber numberWithInteger:[fVidRatePopUp indexOfSelectedItem]] forKey:@"JobIndexVideoFramerate"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->rate]                         forKey:@"JobVrate"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->rate_base]                    forKey:@"JobVrateBase"];
 	
@@ -2868,7 +2866,7 @@ fWorkingCount = 0;
 #pragma mark -
 #pragma mark Queue Job Processing
 
-- (void) incrementQueueItemDone:(int) queueItemDoneIndexNum
+- (void) incrementQueueItemDone:(NSInteger) queueItemDoneIndexNum
 {
     /* Mark the encode just finished as done (status 0)*/
     [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:0] forKey:@"Status"];
@@ -2880,9 +2878,9 @@ fWorkingCount = 0;
      * we can go ahead and increment currentQueueEncodeIndex 
      * so that if there is anything left in the queue we can
      * go ahead and move to the next item if we want to */
-    int queueItems = [QueueFileArray count];
+    NSInteger queueItems = [QueueFileArray count];
     /* Check to see if there are any more pending items in the queue */
-    int newQueueItemIndex = [self getNextPendingQueueIndex];
+    NSInteger newQueueItemIndex = [self getNextPendingQueueIndex];
     /* If we still have more pending items in our queue, lets go to the next one */
     if (newQueueItemIndex >= 0 && newQueueItemIndex < queueItems)
     {
@@ -2910,7 +2908,7 @@ fWorkingCount = 0;
 }
 
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
-- (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
+- (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum
 {
     /* Tell HB to output a new activity log file for this encode */
     [outputPanel startEncodeLog:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"]];
@@ -2948,7 +2946,7 @@ fWorkingCount = 0;
          * care of at this point
          */
         hb_system_sleep_prevent(fQueueEncodeLibhb);
-        hb_scan(fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0);
+        hb_scan(fQueueEncodeLibhb, [path UTF8String], (int)scanTitleNum, 10, 0, 0);
     }
 }
 
@@ -3042,7 +3040,7 @@ fWorkingCount = 0;
 #pragma mark Queue Item Editing
 
 /* Rescans the chosen queue item back into the main window */
-- (void)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (int) scanTitleNum selectedQueueItem: (int) selectedQueueItem
+- (void)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (NSUInteger) scanTitleNum selectedQueueItem: (NSUInteger) selectedQueueItem
 {
     fqueueEditRescanItemNum = selectedQueueItem;
     [self writeToActivityLog: "rescanQueueItemToMainWindow: Re-scanning queue item at index:%d",fqueueEditRescanItemNum];
@@ -3133,7 +3131,7 @@ fWorkingCount = 0;
     
     int direction;
     float minValue, maxValue, granularity;
-    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+    hb_video_quality_get_limits((int)[[fVidEncoderPopUp selectedItem] tag],
                                 &minValue, &maxValue, &granularity, &direction);
     if (!direction)
     {
@@ -3402,18 +3400,18 @@ fWorkingCount = 0;
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
+            (int)[fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
     hb_filter_object_t * filter;
     /* set job->angle for libdvdnav */
-    job->angle = [fSrcAnglePopUp indexOfSelectedItem] + 1;
+    job->angle = (int)[fSrcAnglePopUp indexOfSelectedItem] + 1;
     /* Chapter selection */
-    job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
-    job->chapter_end   = [fSrcChapterEndPopUp   indexOfSelectedItem] + 1;
+    job->chapter_start = (int)[fSrcChapterStartPopUp indexOfSelectedItem] + 1;
+    job->chapter_end   = (int)[fSrcChapterEndPopUp   indexOfSelectedItem] + 1;
 	
     /* Format (Muxer) and Video Encoder */
-    job->mux = [[fDstFormatPopUp selectedItem] tag];
-    job->vcodec = [[fVidEncoderPopUp selectedItem] tag];
+    job->mux = (int)[[fDstFormatPopUp selectedItem] tag];
+    job->vcodec = (int)[[fVidEncoderPopUp selectedItem] tag];
     job->fastfirstpass = 0;
 
     job->chapter_markers = 0;
@@ -3476,7 +3474,7 @@ fWorkingCount = 0;
     {
         /* a specific framerate has been chosen */
         fps_num = 27000000;
-        fps_den = [[fVidRatePopUp selectedItem] tag];
+        fps_den = (int)[[fVidRatePopUp selectedItem] tag];
         if ([fFramerateMatrix selectedRow] == 1)
         {
             // CFR
@@ -3674,7 +3672,7 @@ bool one_burned = FALSE;
     {
         job->acodec_copy_mask |= HB_ACODEC_MP3;
     }
-    job->acodec_fallback = [[fAudioFallbackPopUp selectedItem] tag];
+    job->acodec_fallback = (int)[[fAudioFallbackPopUp selectedItem] tag];
     
     /* Audio tracks and mixdowns */
 	[fAudioDelegate prepareAudioForJob: job];
@@ -3801,7 +3799,7 @@ bool one_burned = FALSE;
     filter = hb_filter_init( HB_FILTER_DEBLOCK );
     if ([fPictureController deblock] != 0)
     {
-        NSString *deblockStringValue = [NSString stringWithFormat: @"%d",[fPictureController deblock]];
+        NSString *deblockStringValue = [NSString stringWithFormat: @"%ld",(long)[fPictureController deblock]];
         hb_add_filter( job, filter, [deblockStringValue UTF8String] );
     }
 
@@ -4031,7 +4029,7 @@ bool one_burned = FALSE;
     {
         /* a specific framerate has been chosen */
         fps_num = 27000000;
-        fps_den = [[fVidRatePopUp itemAtIndex:[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]] tag];
+        fps_den = (int)[[fVidRatePopUp itemAtIndex:[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]] tag];
         if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
         {
             // CFR
@@ -4419,25 +4417,29 @@ bool one_burned = FALSE;
 		}
         i++;
 	}
-    
-    
+
 	if(fileExists == YES)
     {
-        NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists.", @"" ),
-                                  NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
-                                  @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
-                                  NULL, NULL, [NSString stringWithFormat:
-                                               NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
-                                               [fDstFile2Field stringValue]] );
+        NSAlert *alert = [NSAlert alertWithMessageText:@"File already exists."
+                                         defaultButton:@"Cancel"
+                                       alternateButton:@"Overwrite"
+                                           otherButton:nil
+                             informativeTextWithFormat:@"Do you want to overwrite %@?", [fDstFile2Field stringValue]];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
+
     }
     else if (fileExistsInQueue == YES)
     {
-        NSBeginCriticalAlertSheet( NSLocalizedString( @"There is already a queue item for this destination.", @"" ),
-                                  NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
-                                  @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
-                                  NULL, NULL, [NSString stringWithFormat:
-                                               NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
-                                               [fDstFile2Field stringValue]] );
+        NSAlert *alert = [NSAlert alertWithMessageText:@"There is already a queue item for this destination."
+                                         defaultButton:@"Cancel"
+                                       alternateButton:@"Overwrite"
+                                           otherButton:nil
+                             informativeTextWithFormat:@"Do you want to overwrite %@?", [fDstFile2Field stringValue]];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
     }
     else
     {
@@ -4503,13 +4505,14 @@ bool one_burned = FALSE;
     /* We check for duplicate name here */
     if( [[NSFileManager defaultManager] fileExistsAtPath:[fDstFile2Field stringValue]] )
     {
-        NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists", @"" ),
-                                  NSLocalizedString( @"Cancel", "" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
-                                  @selector( overWriteAlertDone:returnCode:contextInfo: ),
-                                  NULL, NULL, [NSString stringWithFormat:
-                                               NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
-                                               [fDstFile2Field stringValue]] );
-        
+        NSAlert *alert = [NSAlert alertWithMessageText:@"File already exists."
+                                         defaultButton:@"Cancel"
+                                       alternateButton:@"Overwrite"
+                                           otherButton:nil
+                             informativeTextWithFormat:@"Do you want to overwrite %@?", [fDstFile2Field stringValue]];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( overWriteAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
         // overWriteAlertDone: will be called when the alert is dismissed. It will call doRip.
     }
     else
@@ -4556,7 +4559,7 @@ bool one_burned = FALSE;
        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
        {
                /*Warn that computer will sleep after encoding*/
-               int reminduser;
+               NSInteger reminduser;
                NSBeep();
                reminduser = NSRunAlertPanel(@"The computer will sleep after encoding is done.",@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"OK", @"Preferences…", nil);
                [NSApp requestUserAttention:NSCriticalRequest];
@@ -4568,7 +4571,7 @@ bool one_burned = FALSE;
        else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
        {
                /*Warn that computer will shut down after encoding*/
-               int reminduser;
+               NSInteger reminduser;
                NSBeep();
                reminduser = NSRunAlertPanel(@"The computer will shut down after encoding is done.",@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"OK", @"Preferences…", nil);
                [NSApp requestUserAttention:NSCriticalRequest];
@@ -4671,10 +4674,10 @@ bool one_burned = FALSE;
     [self saveQueueFileItem];
     
     // and see if there are more items left in our queue
-    int queueItems = [QueueFileArray count];
+    NSInteger queueItems = [QueueFileArray count];
     /* If we still have more items in our queue, lets go to the next one */
     /* Check to see if there are any more pending items in the queue */
-    int newQueueItemIndex = [self getNextPendingQueueIndex];
+    NSInteger newQueueItemIndex = [self getNextPendingQueueIndex];
     /* If we still have more pending items in our queue, lets go to the next one */
     if (newQueueItemIndex >= 0 && newQueueItemIndex < queueItems)
     {
@@ -4737,11 +4740,14 @@ bool one_burned = FALSE;
 #pragma mark Batch Queue Titles Methods
 - (IBAction) addAllTitlesToQueue: (id) sender
 {
-    NSBeginCriticalAlertSheet( NSLocalizedString( @"You are about to add ALL titles to the queue!", @"" ), 
-                              NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Yes, I want to add all titles to the queue.", @"" ), nil, fWindow, self,
-                              @selector( addAllTitlesToQueueAlertDone:returnCode:contextInfo: ),
-                              NULL, NULL, [NSString stringWithFormat:
-                                           NSLocalizedString( @"Current settings will be applied to all %d titles. Are you sure you want to do this?", @"" ),[fSrcTitlePopUp numberOfItems]] );
+    NSAlert *alert = [NSAlert alertWithMessageText:@"You are about to add ALL titles to the queue!"
+                                     defaultButton:@"Cancel"
+                                   alternateButton:@"Yes, I want to add all titles to the queue"
+                                       otherButton:nil
+                         informativeTextWithFormat:@"Current settings will be applied to all %ld titles. Are you sure you want to do this?", (long)[fSrcTitlePopUp numberOfItems]];
+    [alert setAlertStyle:NSCriticalAlertStyle];
+
+    [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( addAllTitlesToQueueAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
 }
 
 - (void) addAllTitlesToQueueAlertDone: (NSWindow *) sheet
@@ -4755,7 +4761,7 @@ bool one_burned = FALSE;
 {
     
     /* first get the currently selected index so we can choose it again after cycling through the available titles. */
-    int currentlySelectedTitle = [fSrcTitlePopUp indexOfSelectedItem];
+    NSInteger currentlySelectedTitle = [fSrcTitlePopUp indexOfSelectedItem];
     
     /* For each title in the fSrcTitlePopUp, select it */
     for( int i = 0; i < [fSrcTitlePopUp numberOfItems]; i++ )
@@ -4779,7 +4785,7 @@ bool one_burned = FALSE;
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
-        hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+        hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
 
     /* If we are a stream type and a batch scan, grok the output file name from title->name upon title change */
     if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) &&
@@ -4958,14 +4964,14 @@ bool one_burned = FALSE;
 		
 	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *)
-        hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+        hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
 
     hb_chapter_t * chapter;
     int64_t        duration = 0;
-    for( int i = [fSrcChapterStartPopUp indexOfSelectedItem];
+    for( NSInteger i = [fSrcChapterStartPopUp indexOfSelectedItem];
          i <= [fSrcChapterEndPopUp indexOfSelectedItem]; i++ )
     {
-        chapter = (hb_chapter_t *) hb_list_item( title->list_chapter, i );
+        chapter = (hb_chapter_t *) hb_list_item( title->list_chapter, (int)i );
         duration += chapter->duration;
     }
     
@@ -4997,7 +5003,7 @@ bool one_burned = FALSE;
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
-    hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+    hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
     
     int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->rate / title->rate_base);
     [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
@@ -5011,7 +5017,7 @@ bool one_burned = FALSE;
 - (IBAction) formatPopUpChanged: (id) sender
 {
     NSString *string   = [fDstFile2Field stringValue];
-    int videoContainer = [[fDstFormatPopUp selectedItem] tag];
+    int videoContainer = (int)[[fDstFormatPopUp selectedItem] tag];
     const char *ext    = NULL;
     NSMenuItem *menuItem;
     /* Initially set the large file (64 bit formatting) output checkbox to hidden */
@@ -5021,7 +5027,7 @@ bool one_burned = FALSE;
     
     /* Update the Video Codec Popup */
     /* lets get the tag of the currently selected item first so we might reset it later */
-    int selectedVidEncoderTag = [[fVidEncoderPopUp selectedItem] tag];
+    int selectedVidEncoderTag = (int)[[fVidEncoderPopUp selectedItem] tag];
     
     /* Note: we now store the video encoder int values from common.c in the tags of each popup for easy retrieval later */
     [fVidEncoderPopUp removeAllItems];
@@ -5053,7 +5059,7 @@ bool one_burned = FALSE;
     
     /* Update the Auto Passtgru Fallback Codec Popup */
     /* lets get the tag of the currently selected item first so we might reset it later */
-    int selectedAutoPassthruFallbackEncoderTag = [[fAudioFallbackPopUp selectedItem] tag];
+    int selectedAutoPassthruFallbackEncoderTag = (int)[[fAudioFallbackPopUp selectedItem] tag];
     
     [fAudioFallbackPopUp removeAllItems];
     for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
@@ -5187,7 +5193,7 @@ the user is using "Custom" settings by determining the sender*/
         [fVidEncoderPopUp selectItemAtIndex:0];
     }
     
-    int videoEncoder = [[fVidEncoderPopUp selectedItem] tag];
+    int videoEncoder = (int)[[fVidEncoderPopUp selectedItem] tag];
     
     [fAdvancedOptions setHidden:YES];
     /* If we are using x264 then show the x264 advanced panel and the x264 presets box */
@@ -5346,11 +5352,11 @@ the user is using "Custom" settings by determining the sender*/
                                           ([fVidQualitySlider maxValue] -
                                            [fVidQualitySlider minValue] + 1));
     [fVidQualityRFLabel setStringValue:[NSString stringWithFormat:@"%s",
-                                        hb_video_quality_get_name([[fVidEncoderPopUp
+                                        hb_video_quality_get_name((int)[[fVidEncoderPopUp
                                                                     selectedItem] tag])]];
     int direction;
     float minValue, maxValue, granularity;
-    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+    hb_video_quality_get_limits((int)[[fVidEncoderPopUp selectedItem] tag],
                                 &minValue, &maxValue, &granularity, &direction);
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
     {
@@ -5400,7 +5406,7 @@ the user is using "Custom" settings by determining the sender*/
     float inverseValue = ([fVidQualitySlider minValue] +
                           [fVidQualitySlider maxValue] -
                           [fVidQualitySlider floatValue]);
-    hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+    hb_video_quality_get_limits((int)[[fVidEncoderPopUp selectedItem] tag],
                                 &minValue, &maxValue, &granularity, &direction);
     if (!direction)
     {
@@ -5437,7 +5443,7 @@ the user is using "Custom" settings by determining the sender*/
 
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
+            (int)[fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
     /* For  hb_calc_bitrate in addition to the Target Size in MB out of the
      * Target Size Field, we also need the job info for the Muxer, the Chapters
@@ -5447,9 +5453,9 @@ the user is using "Custom" settings by determining the sender*/
      * values directly, we duplicate the old prepareJob code here for the variables
      * needed
      */
-    job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
-    job->chapter_end = [fSrcChapterEndPopUp indexOfSelectedItem] + 1; 
-    job->mux = [[fDstFormatPopUp selectedItem] tag];
+    job->chapter_start = (int)[fSrcChapterStartPopUp indexOfSelectedItem] + 1;
+    job->chapter_end = (int)[fSrcChapterEndPopUp indexOfSelectedItem] + 1;
+    job->mux = (int)[[fDstFormatPopUp selectedItem] tag];
     
     /* Audio goes here */
 	[fAudioDelegate prepareAudioForJob: job];
@@ -5783,8 +5789,8 @@ the user is using "Custom" settings by determining the sender*/
     // width and height must be non-zero
     if (fX264PresetsWidthForUnparse && fX264PresetsHeightForUnparse)
     {
-        width  = fX264PresetsWidthForUnparse;
-        height = fX264PresetsHeightForUnparse;
+        width  = (int)fX264PresetsWidthForUnparse;
+        height = (int)fX264PresetsHeightForUnparse;
     }
     // free the previous unparsed string
     free(fX264PresetsUnparsedUTF8String);
@@ -5964,8 +5970,8 @@ the user is using "Custom" settings by determining the sender*/
         /* Deblock */
         if ([fPictureController deblock] > 0)
         {
-            [summary appendFormat:@" - Deblock (%d)",
-             [fPictureController deblock]];
+            [summary appendFormat:@" - Deblock (%ld)",
+             (long)[fPictureController deblock]];
         }
         
         /* Denoise */
@@ -6047,26 +6053,26 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) browseImportSrtFile: (id) sender
 {
+    NSOpenPanel *panel;
 
-    NSOpenPanel * panel;
-	
     panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection: NO];
     [panel setCanChooseFiles: YES];
     [panel setCanChooseDirectories: NO ];
-    NSString * sourceDirectory;
-	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSrtImportDirectory"])
+
+    NSURL *sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSrtImportDirectoryURL"])
 	{
-		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSrtImportDirectory"];
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastSrtImportDirectoryURL"];
 	}
 	else
 	{
-		sourceDirectory = @"~/Desktop";
-		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+		sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
 	}
+
     /* we open up the browse srt sheet here and call for browseImportSrtFileDone after the sheet is closed */
     NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"srt", nil];
-    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel setDirectoryURL:sourceDirectory];
     [panel setAllowedFileTypes:fileTypes];
     [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
         [self browseImportSrtFileDone:panel returnCode:(int)result contextInfo:sender];
@@ -6078,17 +6084,16 @@ the user is using "Custom" settings by determining the sender*/
 {
     if( returnCode == NSOKButton )
     {
-        NSString *importSrtDirectory = [[sheet filename] stringByDeletingLastPathComponent];
-        NSString *importSrtFilePath = [sheet filename];
-        [[NSUserDefaults standardUserDefaults] setObject:importSrtDirectory forKey:@"LastSrtImportDirectory"];
-        
+        NSURL *importSrtFileURL = [sheet URL];
+        NSURL *importSrtDirectory = [importSrtFileURL URLByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setObject:importSrtDirectory forKey:@"LastSrtImportDirectoryURL"];
+
         /* now pass the string off to fSubtitlesDelegate to add the srt file to the dropdown */
-        [fSubtitlesDelegate createSubtitleSrtTrack:importSrtFilePath];
-        
+        [fSubtitlesDelegate createSubtitleSrtTrack:importSrtFileURL];
+
         [fSubtitlesTable reloadData];
-        
     }
-}                                           
+}
 
 #pragma mark -
 #pragma mark Open New Windows
@@ -6170,7 +6175,7 @@ the user is using "Custom" settings by determining the sender*/
 
 
 /* used to specify the number of levels to show for each item */
-- (int)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item
+- (NSInteger)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item
 {
     /* currently use no levels to test outline view viability */
     if (item == nil) // for an outline view the root level of the hierarchy is always nil
@@ -6607,7 +6612,7 @@ return YES;
         
         int direction;
         float minValue, maxValue, granularity;
-        hb_video_quality_get_limits([[fVidEncoderPopUp selectedItem] tag],
+        hb_video_quality_get_limits((int)[[fVidEncoderPopUp selectedItem] tag],
                                     &minValue, &maxValue, &granularity, &direction);
         if (!direction)
         {
@@ -7146,7 +7151,7 @@ return YES;
 
 - (IBAction)insertPreset:(id)sender
 {
-    int index = [fPresetsOutlineView selectedRow];
+    NSInteger index = [fPresetsOutlineView selectedRow];
     [UserPresets insertObject:[self createPreset] atIndex:index];
     [fPresetsOutlineView reloadData];
     [self savePreset];
@@ -7178,20 +7183,20 @@ return YES;
         /*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
         [preset setObject:[NSNumber numberWithInteger:[[fPresetNewPicSettingsPopUp selectedItem] tag]] forKey:@"UsesPictureSettings"];
         /* Get whether or not to use the current Picture Filter settings for the preset */
-        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
+        [preset setObject:[NSNumber numberWithInteger:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
 
         /* Get New Preset Description from the field in the AddPresetPanel*/
         [preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
         /* File Format */
         [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
         /* Chapter Markers fCreateChapterMarkers*/
-        [preset setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
+        [preset setObject:[NSNumber numberWithInteger:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
         /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-        [preset setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
+        [preset setObject:[NSNumber numberWithInteger:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
         /* Mux mp4 with http optimization */
-        [preset setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
+        [preset setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
         /* Add iPod uuid atom */
-        [preset setObject:[NSNumber numberWithInt:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
+        [preset setObject:[NSNumber numberWithInteger:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
         
         /* Codecs */
         /* Video encoder */
@@ -7234,7 +7239,7 @@ return YES;
         /* though there are actually only 0 - 1 types available in the ui we need to map to the old 0 - 2
          * set of indexes from when we had 0 == Target , 1 == Abr and 2 == Constant Quality for presets
          * to take care of any legacy presets. */
-        [preset setObject:[NSNumber numberWithInt:[[fVidQualityMatrix selectedCell] tag] +1 ] forKey:@"VideoQualityType"];
+        [preset setObject:[NSNumber numberWithInteger:[[fVidQualityMatrix selectedCell] tag] +1 ] forKey:@"VideoQualityType"];
         [preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
         [preset setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
         
@@ -7255,7 +7260,7 @@ return YES;
         else // translate the rate (selected item's tag) to the official libhb name
         {
             [preset setObject:[NSString stringWithFormat:@"%s",
-                               hb_video_framerate_get_name([[fVidRatePopUp selectedItem] tag])]
+                               hb_video_framerate_get_name((int)[[fVidRatePopUp selectedItem] tag])]
                        forKey:@"VideoFramerate"];
             
             if ([fFramerateMatrix selectedRow] == 0)
@@ -7267,9 +7272,9 @@ return YES;
 
         
         /* 2 Pass Encoding */
-        [preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+        [preset setObject:[NSNumber numberWithInteger:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
         /* Turbo 2 pass Encoding fVidTurboPassCheck*/
-        [preset setObject:[NSNumber numberWithInt:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
+        [preset setObject:[NSNumber numberWithInteger:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
         /*Picture Settings*/
         hb_job_t * job = fTitle->job;
         
@@ -7289,24 +7294,24 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
         
         /* Picture Filters */
-        [preset setObject:[NSNumber numberWithInt:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
+        [preset setObject:[NSNumber numberWithInteger:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
+        [preset setObject:[NSNumber numberWithInteger:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
         [preset setObject:[fPictureController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+        [preset setObject:[NSNumber numberWithInteger:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
         [preset setObject:[fPictureController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+        [preset setObject:[NSNumber numberWithInteger:[fPictureController denoise]] forKey:@"PictureDenoise"];
         [preset setObject:[fPictureController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
-        [preset setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+        [preset setObject:[NSNumber numberWithInteger:[fPictureController deblock]] forKey:@"PictureDeblock"];
+        [preset setObject:[NSNumber numberWithInteger:[fPictureController decomb]] forKey:@"PictureDecomb"];
         [preset setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
+        [preset setObject:[NSNumber numberWithInteger:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
         
         /* Auto Pasthru */
-        [preset setObject:[NSNumber numberWithInt:[fAudioAllowAACPassCheck state]] forKey: @"AudioAllowAACPass"];
-        [preset setObject:[NSNumber numberWithInt:[fAudioAllowAC3PassCheck state]] forKey: @"AudioAllowAC3Pass"];
-        [preset setObject:[NSNumber numberWithInt:[fAudioAllowDTSHDPassCheck state]] forKey: @"AudioAllowDTSHDPass"];
-        [preset setObject:[NSNumber numberWithInt:[fAudioAllowDTSPassCheck state]] forKey: @"AudioAllowDTSPass"];
-        [preset setObject:[NSNumber numberWithInt:[fAudioAllowMP3PassCheck state]] forKey: @"AudioAllowMP3Pass"];
+        [preset setObject:[NSNumber numberWithInteger:[fAudioAllowAACPassCheck state]] forKey: @"AudioAllowAACPass"];
+        [preset setObject:[NSNumber numberWithInteger:[fAudioAllowAC3PassCheck state]] forKey: @"AudioAllowAC3Pass"];
+        [preset setObject:[NSNumber numberWithInteger:[fAudioAllowDTSHDPassCheck state]] forKey: @"AudioAllowDTSHDPass"];
+        [preset setObject:[NSNumber numberWithInteger:[fAudioAllowDTSPassCheck state]] forKey: @"AudioAllowDTSPass"];
+        [preset setObject:[NSNumber numberWithInteger:[fAudioAllowMP3PassCheck state]] forKey: @"AudioAllowMP3Pass"];
         [preset setObject:[fAudioFallbackPopUp titleOfSelectedItem] forKey: @"AudioEncoderFallback"];
         
         /* Audio */
@@ -7347,12 +7352,12 @@ return YES;
         return;
     }
     /* Alert user before deleting preset */
-    int status;
+    NSInteger status;
     status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
 
     if ( status == NSAlertDefaultReturn )
     {
-        int presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
+        NSInteger presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
         NSDictionary *presetToMod = [self selectedPreset];
         NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
 
@@ -7410,27 +7415,27 @@ return YES;
 {
     if( returnCode == NSOKButton )
     {
-        NSString *presetExportDirectory = [[sheet filename] stringByDeletingLastPathComponent];
-        NSString *exportPresetsFile = [sheet filename];
-        [[NSUserDefaults standardUserDefaults] setObject:presetExportDirectory forKey:@"LastPresetExportDirectory"];
+        NSURL *exportPresetsFile = [sheet URL];
+        NSURL *presetExportDirectory = [exportPresetsFile URLByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
+
         /* We check for the presets.plist */
-        if ([[NSFileManager defaultManager] fileExistsAtPath:exportPresetsFile] == 0)
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[exportPresetsFile path]] == 0)
         {
-            [[NSFileManager defaultManager] createFileAtPath:exportPresetsFile contents:nil attributes:nil];
+            [[NSFileManager defaultManager] createFileAtPath:[exportPresetsFile path] contents:nil attributes:nil];
         }
-        NSMutableArray *presetsToExport = [[[NSMutableArray alloc] initWithContentsOfFile:exportPresetsFile] autorelease];
-        if (nil == presetsToExport)
+
+        NSMutableArray *presetsToExport = [[[NSMutableArray alloc] initWithContentsOfURL:exportPresetsFile] autorelease];
+        if (presetsToExport == nil)
         {
             presetsToExport = [[NSMutableArray alloc] init];
-
             /* now get and add selected presets to export */
 
         }
-        if (YES == [self hasValidPresetSelected])
+        if ([self hasValidPresetSelected])
         {
             [presetsToExport addObject:[self selectedPreset]];
-            [presetsToExport writeToFile:exportPresetsFile atomically:YES];
-
+            [presetsToExport writeToURL:exportPresetsFile atomically:YES];
         }
     }
 }
@@ -7445,22 +7450,21 @@ return YES;
     [panel setAllowsMultipleSelection: NO];
     [panel setCanChooseFiles: YES];
     [panel setCanChooseDirectories: NO ];
-    NSString * sourceDirectory;
-	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastPresetImportDirectory"])
+    NSURL *sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"])
 	{
-		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastPresetImportDirectory"];
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"];
 	}
 	else
 	{
-		sourceDirectory = @"~/Desktop";
-		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+		sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
 	}
     /* we open up the browse sources sheet here and call for browseSourcesDone after the sheet is closed
         * to evaluate whether we want to specify a title, we pass the sender in the contextInfo variable
         */
     /* set this for allowed file types, not sure if we should allow xml or not */
     NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"xml", nil];
-    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel setDirectoryURL:sourceDirectory];
     [panel setAllowedFileTypes:fileTypes];
     [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
         [self browseImportPresetDone:panel returnCode:(int)result contextInfo:sender];
@@ -7472,11 +7476,12 @@ return YES;
 {
     if( returnCode == NSOKButton )
     {
-        NSString *importPresetsDirectory = [[sheet filename] stringByDeletingLastPathComponent];
-        NSString *importPresetsFile = [sheet filename];
-        [[NSUserDefaults standardUserDefaults] setObject:importPresetsDirectory forKey:@"LastPresetImportDirectory"];
+        NSURL *importPresetsFile = [sheet URL];
+        NSURL *importPresetsDirectory = nil;//[importPresetsFile URLByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setURL:importPresetsDirectory forKey:@"LastPresetImportDirectoryURL"];
+
         /* NOTE: here we need to do some sanity checking to verify we do not hose up our presets file   */
-        NSMutableArray * presetsToImport = [[NSMutableArray alloc] initWithContentsOfFile:importPresetsFile];
+        NSMutableArray * presetsToImport = [[NSMutableArray alloc] initWithContentsOfURL:importPresetsFile];
         /* iterate though the new array of presets to import and add them to our presets array */
         int i = 0;
         NSEnumerator *enumerator = [presetsToImport objectEnumerator];
@@ -7653,7 +7658,7 @@ return YES;
 	}
 
 
-    int presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
+    NSInteger presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
     NSDictionary *presetToMod = [self selectedPreset];
     NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
 
@@ -7812,11 +7817,11 @@ return YES;
     NSArray *chaptersArray = nil; /* temp array for chapters */
 	NSMutableArray *chaptersMutableArray = nil; /* temp array for chapters */
     NSString *chapterName = nil; 	/* temp string from file */
-    int chapters, i;
+    NSInteger chapters, i;
     
     if( returnCode == NSOKButton )  /* if they click OK */
-    {	
-        chapterName = [[NSString alloc] initWithContentsOfFile:[sheet filename] encoding:NSUTF8StringEncoding error:NULL];
+    {
+        chapterName = [[NSString alloc] initWithContentsOfURL:[sheet URL] encoding:NSUTF8StringEncoding error:NULL];
         chaptersArray = [chapterName componentsSeparatedByString:@"\n"];
         [chapterName release];
         chaptersMutableArray = [[chaptersArray mutableCopy] autorelease];
@@ -7838,7 +7843,7 @@ return YES;
                            alternateButton:NULL 
                                otherButton:NULL
                  informativeTextWithFormat:NSLocalizedString(@"%d chapters expected, %d chapters found in %@", @"%d chapters expected, %d chapters found in %@"), 
-              chapters, [chaptersMutableArray count], [[sheet filename] lastPathComponent]] runModal];
+              chapters, [chaptersMutableArray count], [[sheet URL] lastPathComponent]] runModal];
             return;
         }
 		/* otherwise, go ahead and populate table with array */
@@ -7865,7 +7870,7 @@ return YES;
                                  defaultButton:NSLocalizedString(@"OK", @"OK")
                                alternateButton:NULL 
                                    otherButton:NULL
-                     informativeTextWithFormat:NSLocalizedString(@"%@ was not formatted as expected.", @"%@ was not formatted as expected."), [[sheet filename] lastPathComponent]] runModal];   
+                     informativeTextWithFormat:NSLocalizedString(@"%@ was not formatted as expected.", @"%@ was not formatted as expected."), [[sheet URL] lastPathComponent]] runModal];
                 [fChapterTable reloadData];
                 return;
             }
@@ -7893,7 +7898,7 @@ return YES;
     NSString *chapterName;      /* pointer for string for later file-writing */
     NSString *chapterTitle;
     NSError *saveError = nil;
-    int chapters, i;    /* ints for the number of chapters in the table and the loop */
+    NSInteger chapters, i;    /* ints for the number of chapters in the table and the loop */
     
     if( returnCode == NSOKButton )   /* if they clicked OK */
     {	
@@ -7904,15 +7909,15 @@ return YES;
             /* put each chapter title from the table into the array */
             if (i<9)
             { /* if i is from 0 to 8 (chapters 1 to 9) add two leading zeros */
-                chapterName = [chapterName stringByAppendingFormat:@"00%d,",i+1];
+                chapterName = [chapterName stringByAppendingFormat:@"00%ld,",i+1];
             }
             else if (i<99)
             { /* if i is from 9 to 98 (chapters 10 to 99) add one leading zero */
-                chapterName = [chapterName stringByAppendingFormat:@"0%d,",i+1];
+                chapterName = [chapterName stringByAppendingFormat:@"0%ld,",i+1];
             }
             else if (i<999)
             { /* in case i is from 99 to 998 (chapters 100 to 999) no leading zeros */
-                chapterName = [chapterName stringByAppendingFormat:@"%d,",i+1];
+                chapterName = [chapterName stringByAppendingFormat:@"%ld,",i+1];
             }
             
             chapterTitle = [fChapterTitlesDelegate tableView:fChapterTable objectValueForTableColumn:fChapterTableNameColumn row:i];
@@ -7927,7 +7932,7 @@ return YES;
             
         }
         /* try to write it to where the user wanted */
-        if (![chapterName writeToFile:[sheet filename] 
+        if (![chapterName writeToURL:[sheet URL]
                            atomically:NO 
                              encoding:NSUTF8StringEncoding 
                                 error:&saveError])

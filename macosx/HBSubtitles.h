@@ -10,7 +10,7 @@
 
 
 
-@interface HBSubtitles : NSObject <NSTableViewDataSource> {
+@interface HBSubtitles : NSObject <NSTableViewDataSource, NSTableViewDelegate> {
 hb_title_t                   *fTitle;
 
 NSMutableArray               *subtitleArray; // contains the output subtitle track info
@@ -32,7 +32,7 @@ int                           container;
 - (NSDictionary *)createSubtitleTrack;
 - (NSMutableArray*) getSubtitleArray;
 // Add an srt file
-- (void)createSubtitleSrtTrack:(NSString *)filePath;
+- (void)createSubtitleSrtTrack:(NSURL *)fileURL;
 
 - (void)containerChanged:(int) newContainer;
 

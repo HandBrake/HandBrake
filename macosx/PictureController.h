@@ -15,7 +15,7 @@
 
 //#define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
 
-@interface PictureController : NSWindowController
+@interface PictureController : NSWindowController <NSWindowDelegate>
 {
     hb_handle_t              * fHandle;
     hb_title_t               * fTitle;
@@ -150,13 +150,13 @@
 
     
         struct {
-        int     detelecine;
-        int     deinterlace;
-        int     decomb;
-        int     usedecomb;
-        int     denoise;
-        int     deblock;
-        int     grayscale;
+        NSInteger     detelecine;
+        NSInteger     deinterlace;
+        NSInteger     decomb;
+        NSInteger     usedecomb;
+        NSInteger     denoise;
+        NSInteger     deblock;
+        NSInteger     grayscale;
     } fPictureFilterSettings;
     
 }
@@ -200,34 +200,34 @@
 
 - (void) decombDeinterlacePreviewImage;
 
-- (int) detelecine;
+- (NSInteger) detelecine;
 - (NSString*) detelecineCustomString;
-- (void) setDetelecine: (int) setting;
+- (void) setDetelecine: (NSInteger) setting;
 - (void) setDetelecineCustomString: (NSString*) string;
 
-- (int) useDecomb;
-- (void) setUseDecomb: (int) setting;
+- (NSInteger) useDecomb;
+- (void) setUseDecomb: (NSInteger) setting;
 
-- (int) decomb;
+- (NSInteger) decomb;
 - (NSString*) decombCustomString;
-- (void) setDecomb: (int) setting;
+- (void) setDecomb: (NSInteger) setting;
 - (void) setDecombCustomString: (NSString*) string;
 
-- (int) deinterlace;
+- (NSInteger) deinterlace;
 - (NSString*) deinterlaceCustomString;
-- (void) setDeinterlace: (int) setting;
+- (void) setDeinterlace: (NSInteger) setting;
 - (void) setDeinterlaceCustomString: (NSString*) string; 
 
-- (int) denoise;
+- (NSInteger) denoise;
 - (NSString*) denoiseCustomString;
-- (void) setDenoise: (int) setting;
+- (void) setDenoise: (NSInteger) setting;
 - (void) setDenoiseCustomString: (NSString*) string;
 
-- (int) deblock;
-- (void) setDeblock: (int) setting;
+- (NSInteger) deblock;
+- (void) setDeblock: (NSInteger) setting;
 
-- (int) grayscale;
-- (void) setGrayscale: (int) setting;
+- (NSInteger) grayscale;
+- (void) setGrayscale: (NSInteger) setting;
 
 
 

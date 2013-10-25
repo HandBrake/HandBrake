@@ -13,6 +13,9 @@ static HBOutputRedirect *g_stdoutRedirect = nil;
 /// Global pointer to HBOutputRedirect object that manages redirects for stderr.
 static HBOutputRedirect *g_stderrRedirect = nil;
 
+static int stdoutwrite(void *inFD, const char *buffer, int size);
+static int stderrwrite(void *inFD, const char *buffer, int size);
+
 @interface HBOutputRedirect (Private)
 - (id)initWithStream:(FILE *)aStream selector:(SEL)aSelector;
 - (void)startRedirect;

@@ -36,7 +36,7 @@ BOOL                        fIsDragging;
 }
 @end
 
-@interface HBController : NSObject <GrowlApplicationBridgeDelegate>
+@interface HBController : NSObject <GrowlApplicationBridgeDelegate, NSToolbarDelegate, NSDrawerDelegate>
 {
     NSImage                      * fApplicationIcon;
     IBOutlet NSWindow            * fWindow;
@@ -217,7 +217,7 @@ BOOL                        fIsDragging;
     FSEventStreamRef               QueueStream;
     NSString                     * QueueFile;
 	NSMutableArray               * QueueFileArray;
-    int                            currentQueueEncodeIndex; // Used to track the currently encoding queueu item
+    NSInteger                      currentQueueEncodeIndex; // Used to track the currently encoding queueu item
     
 	/* User Preset variables here */
 	HBPresets                    * fPresetsBuiltin;
@@ -266,8 +266,8 @@ BOOL                        fIsDragging;
     int                          fCanceledCount;
     int                          fWorkingCount;
     
-    int                          fqueueEditRescanItemNum; // queue array item to be reloaded into the main window
-    int                          pidNum; // The pid number for this instance
+    NSInteger                      fqueueEditRescanItemNum; // queue array item to be reloaded into the main window
+    pid_t                          pidNum; // The pid number for this instance
     NSString                     * currentQueueEncodeNameString;
     
     /* integer to set to determine the previous state
@@ -297,7 +297,7 @@ BOOL                        fIsDragging;
                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (IBAction) showSourceTitleScanPanel: (id) sender;
 - (IBAction) closeSourceTitleScanPanel: (id) sender;  
-- (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum;
+- (void) performScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
 - (IBAction) showNewScan: (id) sender;
 
 
@@ -305,7 +305,7 @@ BOOL                        fIsDragging;
 
 - (void)     updateUI:                                 (NSTimer*) timer;
 - (void)     enableUI:                                 (bool)     enable;
-- (void)     setupX264PresetsWidgets:                  (id)       sender;
+- (IBAction)     setupX264PresetsWidgets:                  (id)       sender;
 - (void)     enableX264Widgets:                        (bool)     enable;
 - (IBAction) updateX264Widgets:                        (id)       sender;
 - (IBAction) x264PresetsChangedDisplayExpandedOptions: (id)       sender;
@@ -363,16 +363,16 @@ BOOL                        fIsDragging;
 - (void) reloadQueue;
 - (NSDictionary *)createQueueFileItem;
 - (void)saveQueueFileItem;
-- (void) incrementQueueItemDone:(int) queueItemDoneIndexNum;
-- (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum;
+- (void) incrementQueueItemDone:(NSInteger) queueItemDoneIndexNum;
+- (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
 - (void) processNewQueueEncode;
 - (void) clearQueueEncodedItems;
 /* Queue Editing */
 - (IBAction)applyQueueSettingsToMainWindow:(id)sender;
-- (IBAction)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (int) scanTitleNum selectedQueueItem: (int) selectedQueueItem;
+- (IBAction)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (NSUInteger) scanTitleNum selectedQueueItem: (NSUInteger) selectedQueueItem;
 
 
-- (void) removeQueueFileItem:(int) queueItemToRemove;
+- (void) removeQueueFileItem:(NSUInteger) queueItemToRemove;
 - (void) clearQueueAllItems;
 - (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 - (void)getQueueStats;
@@ -411,7 +411,7 @@ BOOL                        fIsDragging;
 /* We use this to determine if an item should be expandable */
 - (BOOL)outlineView:(NSOutlineView *)fPresetsOutlineView isItemExpandable:(id)item;
 /* used to specify the number of levels to show for each item */
-- (int)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item;
+- (NSInteger)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item;
 /* Used to tell the outline view which information is to be displayed per item */
 - (id)outlineView:(NSOutlineView *)fPresetsOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
 /* Use to customize the font and display characteristics of the title cell */

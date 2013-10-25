@@ -131,7 +131,7 @@ a timer to avoid interfering with the chain of events that handles the edit. */
 
     if( row >= 0 && row < [chapterTable numberOfRows] )
     {
-        [chapterTable selectRow:row byExtendingSelection:NO];
+        [chapterTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
         [chapterTable editColumn:column row:row withEvent:nil select:YES];
     }
 }

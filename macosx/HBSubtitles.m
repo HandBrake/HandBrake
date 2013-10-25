@@ -197,10 +197,10 @@
     return newSubtitleTrack;
 }
 
-- (void)createSubtitleSrtTrack:(NSString *)filePath
+- (void)createSubtitleSrtTrack:(NSURL *)fileURL
 {
     /* Create a new entry for the subtitle source array so it shows up in our subtitle source list */
-    NSString *displayname = [filePath lastPathComponent];// grok an appropriate display name from the srt subtitle */
+    NSString *displayname = [fileURL lastPathComponent];// grok an appropriate display name from the srt subtitle */
     /* create a dictionary of source subtitle information to store in our array */
     NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
     /* Subtitle Source track popup index */
@@ -211,7 +211,7 @@
     [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"sourceTrackType"];
     [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"subtitleSourceTrackType"];
     /* Subtitle Source file path */
-    [newSubtitleSourceTrack setObject:filePath forKey:@"sourceSrtFilePath"];
+    [newSubtitleSourceTrack setObject:[fileURL path] forKey:@"sourceSrtFilePath"];
     /* Subtitle Source track canBeBurnedIn */
     [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackCanBeBurnedIn"];
     /* Subtitle Source track supportsForcedFlags */
@@ -253,7 +253,7 @@
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackSupportsForcedFlags"];
     
     /* now the srt only info, Language, Chart Code and offset */
-    [newSubtitleSrtTrack setObject:filePath forKey:@"subtitleSourceSrtFilePath"];
+    [newSubtitleSrtTrack setObject:[fileURL path] forKey:@"subtitleSourceSrtFilePath"];
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInteger:languagesArrayDefIndex] forKey:@"subtitleTrackSrtLanguageIndex"];
     [newSubtitleSrtTrack setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:0] forKey:@"subtitleTrackSrtLanguageLong"];
     [newSubtitleSrtTrack setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:1] forKey:@"subtitleTrackSrtLanguageIso3"];

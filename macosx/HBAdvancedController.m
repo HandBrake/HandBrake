@@ -383,8 +383,8 @@
         currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
         
         /*iterate through the array and get <opts> and <values*/
-        int loopcounter;
-        int currentOptsArrayCount = [currentOptsArray count];
+        NSUInteger loopcounter;
+        NSUInteger currentOptsArrayCount = [currentOptsArray count];
         for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
             thisOpt = [currentOptsArray objectAtIndex:loopcounter];
@@ -701,8 +701,8 @@
         currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
         
         /*iterate through the array and get <opts> and <values*/
-        int loopcounter;
-        int currentOptsArrayCount = [currentOptsArray count];
+        NSUInteger loopcounter;
+        NSUInteger currentOptsArrayCount = [currentOptsArray count];
         for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
             thisOpt = [currentOptsArray objectAtIndex:loopcounter];
@@ -1035,7 +1035,7 @@
         {
             /* Otherwise the format is deblock=a,b, where a and b both have an array
                offset of 7 because deblocking values start at -6 instead of at zero. */
-            thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
+            thisOpt = [NSString stringWithFormat:@"%@=%ld,%ld",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
         }
     }
     
@@ -1210,19 +1210,19 @@
         /* Motion estimation range uses an odd array offset because in addition
            to starting with index 0 as default, index 1 starts at 4 instead of 1,
            because merange can't go below 4. So it has to be handled separately.  */
-        thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
+        thisOpt = [NSString stringWithFormat:@"%@=%ld",optName,[sender indexOfSelectedItem]+3];
     }
     
     else if ([optName isEqualToString:@"b-adapt"])
     {
         /* B-adapt starts at index 0 with default then goes 0, 1, 2)*/
-        thisOpt = [NSString stringWithFormat:@"%@=%d", optName, [sender indexOfSelectedItem]-1];
+        thisOpt = [NSString stringWithFormat:@"%@=%ld", optName, [sender indexOfSelectedItem]-1];
     }
     
     else if ([optName isEqualToString:@"ref"])
     {
         /* Refs use actual index numbers */
-        thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]];
+        thisOpt = [NSString stringWithFormat:@"%@=%ld",optName,(long)[sender indexOfSelectedItem]];
     }
     
     else // we have a valid value to change, so change it
@@ -1232,7 +1232,7 @@
            Basically, any options that are PopUp menus with index 0 as default and
            index 1 as 0, with numerical values, are all handled right here. All of
            the above stuff is for the exceptions to the general case.              */
-            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
+            thisOpt = [NSString stringWithFormat:@"%@=%ld",optName,[sender indexOfSelectedItem]-1];
     }
     
     return thisOpt;
@@ -1299,8 +1299,8 @@
         currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
         
         /* Iterate through the array and get <opts> and <values*/
-        int loopcounter;
-        int currentOptsArrayCount = [currentOptsArray count];
+        NSUInteger loopcounter;
+        NSUInteger currentOptsArrayCount = [currentOptsArray count];
         for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
             thisOpt = [currentOptsArray objectAtIndex:loopcounter];

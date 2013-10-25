@@ -7,7 +7,7 @@
 #include <Cocoa/Cocoa.h>
 #include "hb.h"
 
-@interface ChapterTitles : NSObject {
+@interface ChapterTitles : NSObject <NSTableViewDataSource, NSTableViewDelegate> {
     hb_title_t     *fTitle;
     NSMutableArray *fChapterTitlesArray;
 }
