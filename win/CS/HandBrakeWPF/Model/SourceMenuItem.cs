@@ -57,7 +57,7 @@ namespace HandBrakeWPF.Model
         {
             get
             {
-                return !this.IsOpenFolder && (this.Children == null || this.Children.Count == 0);
+                return !this.IsOpenFolder && !this.IsDrive && (this.Children == null || this.Children.Count == 0);
             }
         }
 
