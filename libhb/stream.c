@@ -4908,6 +4908,17 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
         }
     }
 
+    if ( ts_stream_kind( stream, curstream ) == P )
+    {
+        // This is a stream that only contains PCRs.  No need to process
+        // the remainder of the packet.
+        //
+        // I ran across a poorly mastered BD that does not properly pad
+        // the adaptation field and causes parsing errors below if we
+        // do not exit early here.
+        return NULL;
+    }
+
     /* If we get here the packet is valid - process its data */
 
 
