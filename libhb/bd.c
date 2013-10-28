@@ -385,30 +385,39 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     hb_log( "bd: aspect = %g", title->container_aspect );
 
     /* Detect audio */
-    // All BD clips are not all required to have the same audio.
-    // But clips that have seamless transition are required
-    // to have the same audio as the previous clip.
-    // So find the clip that has the most other clips with the 
-    // matching audio.
     // Max primary BD audios is 32
     int matches;
     int most_audio = 0;
     int audio_clip_index = 0;
-    for ( ii = 0; ii < ti->clip_count; ii++ )
+    if (ti->clip_count > 2)
     {
-        matches = 0;
-        for ( jj = 0; jj < ti->clip_count; jj++ )
+        // All BD clips are not all required to have the same audio.
+        // But clips that have seamless transition are required
+        // to have the same audio as the previous clip.
+        // So find the clip that has the most other clips with the 
+        // matching audio.
+        for ( ii = 0; ii < ti->clip_count; ii++ )
         {
-            if ( bd_audio_equal( &ti->clips[ii], &ti->clips[jj] ) )
+            matches = 0;
+            for ( jj = 0; jj < ti->clip_count; jj++ )
             {
-                matches++;
+                if ( bd_audio_equal( &ti->clips[ii], &ti->clips[jj] ) )
+                {
+                    matches++;
+                }
+            }
+            if ( matches > most_audio )
+            {
+                most_audio = matches;
+                audio_clip_index = ii;
             }
         }
-        if ( matches > most_audio )
-        {
-            most_audio = matches;
-            audio_clip_index = ii;
-        }
+    }
+    else if (ti->clip_count == 2)
+    {
+        // If there are only 2 clips, pick audios from the longer clip
+        if (ti->clips[0].pkt_count < ti->clips[1].pkt_count)
+            audio_clip_index = 1;
     }
 
     // Add all the audios found in the above clip.
