@@ -119,7 +119,6 @@ static void hqdn3d_denoise_spatial( unsigned char * frame_src,
                                     short * temporal )
 {
     int x, y;
-    int line_offset_src = 0, line_offset_dst = 0;
     unsigned int pixel_ant;
     unsigned int tmp;
 
@@ -330,7 +329,7 @@ static int hb_denoise_work( hb_filter_object_t * filter,
         pv->hqdn3d_line = malloc( in->plane[0].stride * sizeof(unsigned short) );
     }
 
-    int ret, c;
+    int c;
 
     for ( c = 0; c < 3; c++ )
     {
