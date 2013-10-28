@@ -959,10 +959,16 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
     hb_subtitle_t * subtitle;
     for ( ii = 0; ( subtitle = hb_list_item( title->list_subtitle, ii ) ); ++ii )
     {
-        pid = subtitle->id & 0xFFFF;
-        stream_type = subtitle->stream_type;
+        // If the subtitle track is CC embedded in the video stream, then
+        // it does not have an independent pid.  In this case, we assigned
+        // the subtitle->id to 0.
+        if (subtitle->id != 0)
+        {
+            pid = subtitle->id & 0xFFFF;
+            stream_type = subtitle->stream_type;
 
-        update_ts_streams( d, pid, 0, stream_type, S, NULL );
+            update_ts_streams( d, pid, 0, stream_type, S, NULL );
+        }
     }
 
     // We don't need to wait for a PCR when scanning. In fact, it
