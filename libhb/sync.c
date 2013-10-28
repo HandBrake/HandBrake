@@ -230,7 +230,6 @@ static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i )
 static void CloseSubtitle(hb_sync_video_t * sync, int ii)
 {
     hb_buffer_close(&sync->subtitle_sanitizer[ii].list_current);
-    hb_buffer_close(&sync->subtitle_sanitizer[ii].last);
 }
 
 /***********************************************************************
