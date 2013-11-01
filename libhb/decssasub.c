@@ -132,7 +132,7 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
     
     hb_buffer_t *out_list = NULL;
     hb_buffer_t **nextPtr = &out_list;
-    
+
     const char *EOL = "\r\n";
     char *curLine, *curLine_parserData;
     for ( curLine = strtok_r( (char *) in->data, EOL, &curLine_parserData );
@@ -479,7 +479,7 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     pv->job = job;
 
-    if (job->mux & HB_MUX_MASK_AV)
+    if (job->mux & HB_MUX_MASK_AV && w->subtitle->config.dest != RENDERSUB )
     {
         pv->raw = 1;
     }
