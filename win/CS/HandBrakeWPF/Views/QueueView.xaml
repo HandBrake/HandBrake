@@ -14,8 +14,8 @@
         Title="{Binding Title}"
         Width="700"
         Height="500"
-        MinWidth="200"
-        MinHeight="200"
+        MinWidth="350"
+        MinHeight="250"
         Background="#FFF0F0F0"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -44,18 +44,25 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+
         <ToolBar Name="mainToolBar"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
-                 SnapsToDevicePixels="True">
+                 SnapsToDevicePixels="True" 
+                 AllowDrop="False" Focusable="False" >
+            <ToolBar.Resources>
+                <Style TargetType="{x:Type ToolBarPanel}">
+                    <Setter Property="Orientation" Value="Vertical"/>
+                </Style>
 
-            <DockPanel Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ToolBarPanel}}}" Background="Transparent">
-                <DockPanel.Resources>
-                    <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="{x:Type Button}" />
-                    <Style BasedOn="{StaticResource {x:Static ToolBar.MenuStyleKey}}" TargetType="{x:Type Menu}" />
-                </DockPanel.Resources>
+                <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="{x:Type Button}" />
+                <Style BasedOn="{StaticResource {x:Static ToolBar.MenuStyleKey}}" TargetType="{x:Type Menu}" />
+            </ToolBar.Resources>
 
-                <Button Name="Start"
+            <DockPanel Background="Transparent" HorizontalAlignment="Stretch">
+
+                <Button Name="Start" DockPanel.Dock="Left"
                         cal:Message.Attach="[Event Click] = [Action StartEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
@@ -70,7 +77,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Name="Pause"
+                <Button Name="Pause" DockPanel.Dock="Left"
                         cal:Message.Attach="[Event Click] = [Action PauseEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
@@ -85,7 +92,7 @@
                     </StackPanel>
                 </Button>
 
-                <Menu HorizontalAlignment="Right" Background="Transparent">
+                <Menu HorizontalAlignment="Right" DockPanel.Dock="Right" Background="Transparent">
                     <MenuItem>
                         <MenuItem.Header>
                             <StackPanel Height="32" Orientation="Horizontal">
@@ -138,6 +145,7 @@
                                   YourNamespace:MenuItemExtensions.GroupName="whenDone" />
                     </MenuItem>
                 </Menu>
+
             </DockPanel>
         </ToolBar>
 
