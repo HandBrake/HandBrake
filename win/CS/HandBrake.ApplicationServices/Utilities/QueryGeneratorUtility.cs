@@ -963,15 +963,18 @@ namespace HandBrake.ApplicationServices.Utilities
             // Options that apply to both x264 and QuickSync
             if (task.VideoEncoder == VideoEncoder.QuickSync || task.VideoEncoder == VideoEncoder.X264)
             {
-                if (task.H264Level != "Auto")
+                // when using x264 with the advanced panel, the H.264 profile/level widgets are disabled
+                if (!(task.VideoEncoder == VideoEncoder.X264 && task.ShowAdvancedTab))
                 {
-                    query += string.Format(" --h264-level=\"{0}\" ", task.H264Level);
-                }
-
-                if (task.H264Profile != x264Profile.None)
-                {
-                    query += string.Format(
-                        " --h264-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
+                    if (task.H264Level != "Auto")
+                    {
+                        query += string.Format(" --h264-level=\"{0}\" ", task.H264Level);
+                    }
+                    if (task.H264Profile != x264Profile.None)
+                    {
+                        query += string.Format(
+                            " --h264-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
+                    }
                 }
 
                 if (task.VideoEncoder == VideoEncoder.QuickSync)
