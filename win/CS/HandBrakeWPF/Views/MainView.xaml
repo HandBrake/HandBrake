@@ -202,7 +202,7 @@
                             </StackPanel>
                         </MenuItem.Header>
                         <MenuItem.Resources>
-                            <Image x:Key="Movie" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/Movies.png" />
+                            <Image x:Key="Movie" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/file.png" />
                             <Image x:Key="Folder" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/folder.png" />
                             <Image x:Key="Disc" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/disc_small.png" />
                         </MenuItem.Resources>
