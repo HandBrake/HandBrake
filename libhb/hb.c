@@ -8,6 +8,7 @@
  */
  
 #include "hb.h"
+#include "opencl.h"
 #include "hbffmpeg.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -630,10 +631,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     }
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
 
-#ifdef USE_OPENCL
     /* Print OpenCL info here so that it's in all scan and encode logs */
     hb_opencl_info_print();
-#endif
 
 #ifdef USE_QSV
     /* Print QSV info here so that it's in all scan and encode logs */
