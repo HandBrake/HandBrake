@@ -68,7 +68,8 @@
     IBOutlet NSTextField            * fPreviewMovieStatusField; 
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp; // popup of choices for length of preview in seconds
 }
-- (id)init;
+
+@property (nonatomic, readwrite) BOOL deinterlacePreview;
 
 - (void) SetHandle: (hb_handle_t *) handle;
 - (void) SetTitle:  (hb_title_t *)  title;
@@ -120,7 +121,7 @@
 
 - (IBAction) previewDurationPopUpChanged: (id) sender;
 
-+ (NSImage *) makeImageForPicture: (NSInteger)pictureIndex
+- (NSImage *) makeImageForPicture: (NSInteger)pictureIndex
                 libhb:(hb_handle_t*)handle
                 title:(hb_title_t*)title;
 - (NSImage *) imageForPicture: (NSInteger) pictureIndex;

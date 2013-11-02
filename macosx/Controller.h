@@ -36,7 +36,7 @@ BOOL                        fIsDragging;
 }
 @end
 
-@interface HBController : NSObject <GrowlApplicationBridgeDelegate, NSToolbarDelegate, NSDrawerDelegate>
+@interface HBController : NSObject <GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSToolbarDelegate, NSDrawerDelegate>
 {
     NSImage                      * fApplicationIcon;
     IBOutlet NSWindow            * fWindow;
@@ -54,7 +54,7 @@ BOOL                        fIsDragging;
 
     
     /* Picture Settings */
-    PictureController            * fPictureController;
+    HBPictureController            * fPictureController;
     
     /* Picture Preview */
     PreviewController            * fPreviewController;
@@ -339,7 +339,6 @@ BOOL                        fIsDragging;
                      returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 - (IBAction) showPicturePanel: (id) sender;
-- (void) picturePanelWindowed;
 - (IBAction) showPreviewWindow: (id) sender;
 - (void)pictureSettingsDidChange;
 - (IBAction) calculatePictureSizing: (id) sender;

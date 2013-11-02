@@ -93,7 +93,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                                         error:NULL];
     }                                                            
     outputPanel = [[HBOutputPanelController alloc] init];
-    fPictureController = [[PictureController alloc] init];
+    fPictureController = [[HBPictureController alloc] init];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     /* we init the HBPresets class which currently is only used
@@ -209,8 +209,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	// Set the Growl Delegate
     [GrowlApplicationBridge setGrowlDelegate: self];
     /* Init others controllers */
-    [fPictureController SetHandle: fHandle];
-    [fPictureController   setHBController: self];
+    [fPictureController setHandle: fHandle];
+    [fPictureController setDelegate: self];
     
     [fQueueController   setHandle: fQueueEncodeLibhb];
     [fQueueController   setHBController: self];
@@ -809,17 +809,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
 	if (b) 
     {
-        
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
         [self calculatePictureSizing:nil];
-        /* Also enable the preview window hud controls */
-        [fPictureController enablePreviewHudControls];
     }
     else 
     {
-        
 		[fPresetsOutlineView setEnabled: NO];
-        [fPictureController disablePreviewHudControls];
     }
     
     [self videoMatrixChanged:nil];
@@ -3356,7 +3351,7 @@ fWorkingCount = 0;
     }
     
     /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-    [fPictureController SetTitle:fTitle];
+    [fPictureController setTitle:fTitle];
     [self calculatePictureSizing:nil];
     
     /* somehow we need to figure out a way to tie the queue item to a preset if it used one */
@@ -4874,7 +4869,7 @@ bool one_burned = FALSE;
 	AutoCropRight = title->crop[3];
 
 	/* Reset the new title in fPictureController &&  fPreviewController*/
-    [fPictureController SetTitle:title];
+    [fPictureController setTitle:title];
 
         
     /* Update Subtitle Table */
@@ -5861,10 +5856,6 @@ the user is using "Custom" settings by determining the sender*/
     fX264PresetsHeightForUnparse = fTitle->job->height;
     // width or height may have changed, unparse
     [self x264PresetsChangedDisplayExpandedOptions:nil];
-    
-    // reload still previews
-    // note: fTitle->job->deinterlace is set by fPictureController now
-    [fPictureController decombDeinterlacePreviewImage];
 }
 
 #pragma mark -
@@ -5875,7 +5866,7 @@ the user is using "Custom" settings by determining the sender*/
     NSMutableString *summary = [NSMutableString stringWithString:@""];
     if (fPictureController && fTitle && fTitle->job)
     {
-        [summary appendString:[fPictureController getPictureSizeInfoString]];
+        [summary appendString:[fPictureController pictureSizeInfoString]];
         if (fTitle->job->anamorphic.mode != 1)
         {
             // anamorphic is not Strict, show the modulus
@@ -6156,11 +6147,6 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) showPicturePanel: (id) sender
 {
 	[fPictureController showPictureWindow:sender];
-}
-
-- (void) picturePanelWindowed
-{
-	[fPictureController setToWindowedMode];
 }
 
 - (IBAction) showPreviewWindow: (id) sender
@@ -6958,8 +6944,7 @@ return YES;
             }
         }
         /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-        [fPictureController SetTitle:fTitle];
-        [fPictureController SetTitle:fTitle];
+        [fPictureController setTitle:fTitle];
         [self calculatePictureSizing:nil];
     }
 }
