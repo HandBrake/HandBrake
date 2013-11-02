@@ -505,7 +505,6 @@
     <Resource Include="Views\Images\ErrorX.png" />
     <Resource Include="Views\Images\AddToQueue_small.png" />
     <Resource Include="Views\Images\AddToQueue.png" />
-    <Resource Include="Views\Images\window.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj">

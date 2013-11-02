@@ -25,15 +25,15 @@
     <StackPanel Orientation="Vertical">
 
         <StackPanel Grid.Row="0"
-                    Height="30"
+                    Height="34"
                     Margin="0,0,0,10"
                     Background="White"
                     Orientation="Horizontal">
-            <Image Width="24"
-                   Height="24"
+            <Image Width="32"
+                   Height="32"
                    Margin="10,0,5,0"
                    VerticalAlignment="Center"
-                   Source="Images/window.png" />
+                   Source="Images/picture_small.png" />
             <StackPanel VerticalAlignment="Center" Orientation="Vertical">
                 <TextBlock FontWeight="Bold" Text="Create a video preview" />
             </StackPanel>
