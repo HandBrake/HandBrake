@@ -12,7 +12,7 @@
 {
     hb_title_t               * fTitle;
 
-    PreviewController        * fPreviewController;
+    HBPreviewController        * fPreviewController;
 
     /* Picture Sizing */
     IBOutlet NSTabView       * fSizeFilterView;
@@ -126,7 +126,7 @@
         _decombCustomString = @"";
         _denoiseCustomString = @"";
 
-        fPreviewController = [[PreviewController alloc] init];
+        fPreviewController = [[HBPreviewController alloc] init];
     }
 
 	return self;
@@ -191,12 +191,19 @@
 
 - (void) setHandle: (hb_handle_t *) handle
 {
-    [fPreviewController SetHandle: handle];
-    [fPreviewController setHBController:(HBController *)self.delegate];
+    [fPreviewController setHandle: handle];
+    [fPreviewController setDelegate:(HBController *)self.delegate];
 }
 
 - (void) setTitle: (hb_title_t *) title
 {
+    fTitle = title;
+
+    if (!title) {
+        [fPreviewController setTitle:NULL];
+        return;
+    }
+
     hb_job_t * job = title->job;
 
     fTitle = title;
@@ -257,8 +264,9 @@
     titleParWidth = job->anamorphic.par_width;
     titleParHeight = job->anamorphic.par_height;
 
-    [fPreviewController SetTitle:title];
+    [fPreviewController setTitle:title];
 
+    [self FilterSettingsChanged:nil];
     [self settingsChanged:nil];
 }
 
@@ -504,7 +512,7 @@
 
 - (void) reloadStillPreview
 {
-    [fPreviewController SetTitle:fTitle];
+    [fPreviewController reload];
 }
 
 #pragma mark -
@@ -570,6 +578,9 @@
 
 - (IBAction) settingsChanged: (id) sender
 {
+    if (!fTitle)
+        return;
+
     hb_job_t * job = fTitle->job;
 
     /* if we are anything but strict anamorphic */
@@ -1038,6 +1049,9 @@
 
 - (IBAction) FilterSettingsChanged: (id) sender
 {
+    if (!fTitle)
+        return;
+
     self.detelecine  = [fDetelecinePopUp indexOfSelectedItem];
     [self adjustFilterDisplay:fDetelecinePopUp];
 
@@ -1070,10 +1084,9 @@
     {
         fPreviewController.deinterlacePreview = NO;
     }
-    
+
     self.grayscale = [fGrayscaleCheck state];
-    
-    
+
     if (sender != nil)
     {
         [self.delegate pictureSettingsDidChange];

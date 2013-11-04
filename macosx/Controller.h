@@ -57,7 +57,7 @@ BOOL                        fIsDragging;
     HBPictureController            * fPictureController;
     
     /* Picture Preview */
-    PreviewController            * fPreviewController;
+    HBPreviewController            * fPreviewController;
     
     /* x264 Presets Box */
     NSArray                      * fX264PresetNames;

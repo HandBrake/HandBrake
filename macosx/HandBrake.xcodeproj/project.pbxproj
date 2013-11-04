@@ -122,6 +122,7 @@
 		27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		46AB433515F98A2B009C0961 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
+		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
 		A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */; };
 		A9E1468016BC2AD800C307BC /* next-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467C16BC2AD800C307BC /* next-p.pdf */; };
 		A9E1468116BC2AD800C307BC /* pause-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467D16BC2AD800C307BC /* pause-p.pdf */; };
@@ -315,6 +316,8 @@
 		34FF2FC014EEC363004C2400 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* DockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* DockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockTextField.m; sourceTree = "<group>"; };
+		A9D1E41518262364002F6424 /* HBPreviewGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewGenerator.h; sourceTree = "<group>"; };
+		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
 		A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		A9E1467C16BC2AD800C307BC /* next-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "next-p.pdf"; sourceTree = "<group>"; };
 		A9E1467D16BC2AD800C307BC /* pause-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "pause-p.pdf"; sourceTree = "<group>"; };
@@ -561,6 +564,8 @@
 				273F20A214ADBE670021BE6D /* HBPresets.m */,
 				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
 				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
+				A9D1E41518262364002F6424 /* HBPreviewGenerator.h */,
+				A9D1E41618262364002F6424 /* HBPreviewGenerator.m */,
 				273F20A514ADBE670021BE6D /* HBQueueController.h */,
 				273F20A614ADBE670021BE6D /* HBQueueController.mm */,
 				273F20A714ADBE670021BE6D /* HBSubtitles.h */,
@@ -897,6 +902,7 @@
 				273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */,
 				273F20B614ADBE670021BE6D /* HBPresets.m in Sources */,
 				273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */,
+				A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */,
 				273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */,
 				273F20B914ADBE670021BE6D /* HBSubtitles.m in Sources */,
 				273F20BA14ADBE670021BE6D /* PictureController.m in Sources */,

@@ -209,9 +209,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	// Set the Growl Delegate
     [GrowlApplicationBridge setGrowlDelegate: self];
     /* Init others controllers */
-    [fPictureController setHandle: fHandle];
     [fPictureController setDelegate: self];
-    
+    [fPictureController setHandle: fHandle];
+
     [fQueueController   setHandle: fQueueEncodeLibhb];
     [fQueueController   setHBController: self];
 
@@ -1941,7 +1941,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // Notify Subtitles that there's no title
     [fSubtitlesDelegate resetWithTitle:nil];
     [fSubtitlesTable reloadData];
-    
+
+    [fPictureController setTitle:NULL];
+
 	//	Notify anyone interested (audio controller) that there's no title
 	[[NSNotificationCenter defaultCenter] postNotification:
 	 [NSNotification notificationWithName: HBTitleChangedNotification
@@ -2076,6 +2078,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             // Notify Subtitles that there's no title
             [fChapterTitlesDelegate resetWithTitle:nil];
             [fChapterTable reloadData];
+
+            // Notify PictureController that there's no title
+            [fPictureController setTitle:NULL];
 
 			//	Notify anyone interested (audio controller) that there's no title
 			[[NSNotificationCenter defaultCenter] postNotification:
