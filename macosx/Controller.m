@@ -863,7 +863,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [fScanIndicator setDoubleValue: 0.0];
         [fScanIndicator setHidden: YES];
         [fScanHorizontalLine setHidden: NO];
-        
+        [[fWindow toolbar] validateVisibleItems];
+
 		[self showNewScan:nil];
 	}
     
