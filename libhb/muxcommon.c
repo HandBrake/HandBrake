@@ -477,6 +477,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
 #endif
         default:
             hb_error( "No muxer selected, exiting" );
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             return NULL;
         }

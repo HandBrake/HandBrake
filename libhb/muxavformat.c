@@ -890,6 +890,7 @@ error:
     free(job->mux_data);
     job->mux_data = NULL;
     avformat_free_context(m->oc);
+    *job->done_error = HB_ERROR_INIT;
     *job->die = 1;
     return -1;
 }
@@ -1098,6 +1099,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     if (ret < 0)
                     {
                         hb_error("av_interleaved_write_frame failed!");
+                        *job->done_error = HB_ERROR_UNKNOWN;
                         *job->die = 1;
                         return -1;
                     }
@@ -1144,6 +1146,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     if (ret < 0 || m->oc->pb->error != 0)
     {
         hb_error("av_interleaved_write_frame failed!");
+        *job->done_error = HB_ERROR_UNKNOWN;
         *job->die = 1;
         return -1;
     }

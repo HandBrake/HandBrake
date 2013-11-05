@@ -116,6 +116,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     if( !faacEncSetConfiguration( pv->faac, cfg ) )
     {
         hb_log( "faacEncSetConfiguration failed" );
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         return 0;
     }
@@ -123,6 +124,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     if( faacEncGetDecoderSpecificInfo( pv->faac, &bytes, &length ) < 0 )
     {
         hb_log( "faacEncGetDecoderSpecificInfo failed" );
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         return 0;
     }

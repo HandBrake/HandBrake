@@ -1499,6 +1499,7 @@ void hb_start( hb_handle_t * h )
     h->paused = 0;
 
     h->work_die    = 0;
+    h->work_error  = HB_ERROR_NONE;
     h->work_thread = hb_work_init( h->jobs, &h->work_die, &h->work_error, &h->current_job );
 }
 

@@ -147,6 +147,7 @@ static const char *qsv_preset      = NULL;
 #endif
 
 /* Exit cleanly on Ctrl-C */
+static volatile hb_error_code done_error = HB_ERROR_NONE;
 static volatile int die = 0;
 static void SigHandler( int );
 
@@ -318,6 +319,7 @@ int main( int argc, char ** argv )
                 case 0x03: /* ctrl-c */
                 case 'q':
                     fprintf( stdout, "\nEncoding Quit by user command\n" );
+                    done_error = HB_ERROR_CANCELED;
                     die = 1;
                     break;
                 case 'p':
@@ -369,6 +371,7 @@ int main( int argc, char ** argv )
                 {
                     case 'q':
                         fprintf( stdout, "\nEncoding Quit by user command\n" );
+                        done_error = HB_ERROR_CANCELED;
                         die = 1;
                         break;
                     case 'p':
@@ -437,7 +440,7 @@ int main( int argc, char ** argv )
     fprintf(stdout, "\n");
     fprintf(stderr, "HandBrake has exited.\n");
 
-    return 0;
+    return done_error;
 }
 
 static void PrintTitleInfo( hb_title_t * title, int feature )
@@ -696,6 +699,7 @@ static int HandleEvents( hb_handle_t * h )
             {
                 /* No valid title, stop right there */
                 fprintf( stderr, "No title found.\n" );
+                done_error = HB_ERROR_WRONG_INPUT;
                 die = 1;
                 break;
             }
@@ -732,6 +736,7 @@ static int HandleEvents( hb_handle_t * h )
                 if( main_feature_pos == -1 )
                 {
                     fprintf( stderr, "No main feature title found.\n" );
+                    done_error = HB_ERROR_WRONG_INPUT;
                     die = 1;
                     break;
                 }
@@ -3003,6 +3008,7 @@ static int HandleEvents( hb_handle_t * h )
                     fprintf( stderr, "\nEncode failed (error %x).\n",
                              p.error );
             }
+            done_error = p.error;
             die = 1;
             break;
 #undef p
@@ -3016,6 +3022,7 @@ static int HandleEvents( hb_handle_t * h )
 static volatile int64_t i_die_date = 0;
 void SigHandler( int i_signal )
 {
+    done_error = HB_ERROR_CANCELED;
     if( die == 0 )
     {
         die = 1;
@@ -3026,7 +3033,7 @@ void SigHandler( int i_signal )
     else if( i_die_date + 500 < hb_get_date() )
     {
         fprintf( stderr, "Dying badly, files might remain in your /tmp\n" );
-        exit( 1 );
+        exit( done_error );
     }
 }
 

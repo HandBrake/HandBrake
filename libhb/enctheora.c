@@ -273,6 +273,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if( bytes < 0 )
             {
                 hb_error("Error requesting stats size in second pass.");
+                *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return HB_WORK_DONE;
             }
@@ -291,6 +292,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 fread( pv->stat_buf+pv->stat_fill, 1, size, pv->file ) < size )
             {
                 hb_error("Could not read frame data from two-pass data file!");
+                *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return HB_WORK_DONE;
             }
@@ -304,6 +306,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if( ret < 0 )
             {
                 hb_error("Error submitting pass data in second pass.");
+                *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return HB_WORK_DONE;
             }
@@ -349,12 +352,14 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         if( bytes < 0 )
         {
             fprintf(stderr,"Could not read two-pass data from encoder.\n");
+            *job->done_error = HB_ERROR_UNKNOWN;
             *job->die = 1;
             return HB_WORK_DONE;
         }
         if( fwrite( buffer, 1, bytes, pv->file ) < bytes)
         {
             fprintf(stderr,"Unable to write to two-pass data file.\n");
+            *job->done_error = HB_ERROR_UNKNOWN;
             *job->die = 1;
             return HB_WORK_DONE;
         }

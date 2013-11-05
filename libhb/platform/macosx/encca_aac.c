@@ -200,6 +200,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
         {
             hb_log("Error creating an AudioConverter err=%"PRId64" output.mBytesPerFrame=%"PRIu64"",
                    (int64_t)err, (uint64_t)output.mBytesPerFrame);
+            *job->done_error = HB_ERROR_UNKNOWN;
             *job->die = 1;
             return -1;
         }

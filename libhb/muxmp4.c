@@ -66,6 +66,7 @@ static int MP4TuneTrackDurationPerChunk( hb_mux_object_t* m, MP4TrackId trackId 
     if( !MP4SetTrackDurationPerChunk( m->file, trackId, dur ))
     {
         hb_error( "muxmp4.c: MP4SetTrackDurationPerChunk failed!" );
+        *m->job->done_error = HB_ERROR_UNKNOWN;
         *m->job->die = 1;
         return 0;
     }
@@ -111,6 +112,7 @@ static int MP4Init( hb_mux_object_t * m )
     if (m->path == NULL)
     {
         hb_error("Could not convert string, out of memory?");
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         return 0;
     }
@@ -131,6 +133,7 @@ static int MP4Init( hb_mux_object_t * m )
     if (m->file == MP4_INVALID_FILE_HANDLE)
     {
         hb_error("muxmp4.c: MP4Create failed!");
+        *job->done_error = HB_ERROR_WRONG_INPUT;
         *job->die = 1;
         return 0;
     }
@@ -142,6 +145,7 @@ static int MP4Init( hb_mux_object_t * m )
     if (!(MP4SetTimeScale( m->file, 90000 )))
     {
         hb_error("muxmp4.c: MP4SetTimeScale failed!");
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         return 0;
     }
@@ -159,6 +163,7 @@ static int MP4Init( hb_mux_object_t * m )
         if ( mux_data->track == MP4_INVALID_TRACK_ID )
         {
             hb_error( "muxmp4.c: MP4AddH264VideoTrack failed!" );
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             return 0;
         }
@@ -189,6 +194,7 @@ static int MP4Init( hb_mux_object_t * m )
         if (mux_data->track == MP4_INVALID_TRACK_ID)
         {
             hb_error("muxmp4.c: MP4AddVideoTrack failed!");
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             return 0;
         }
@@ -204,6 +210,7 @@ static int MP4Init( hb_mux_object_t * m )
                 job->config.mpeg4.bytes, job->config.mpeg4.length )))
         {
             hb_error("muxmp4.c: MP4SetTrackESConfiguration failed!");
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             return 0;
         }
@@ -216,6 +223,7 @@ static int MP4Init( hb_mux_object_t * m )
         if (mux_data->track == MP4_INVALID_TRACK_ID)
         {
             hb_error("muxmp4.c: MP4AddVideoTrack failed!");
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             return 0;
         }
@@ -231,6 +239,7 @@ static int MP4Init( hb_mux_object_t * m )
                 job->config.mpeg4.bytes, job->config.mpeg4.length )))
         {
             hb_error("muxmp4.c: MP4SetTrackESConfiguration failed!");
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             return 0;
         }
@@ -630,6 +639,7 @@ static int MP4Init( hb_mux_object_t * m )
                     (uint8_t*)palette, 16 * 4 )))
             {
                 hb_error("muxmp4.c: MP4SetTrackESConfiguration failed!");
+                *job->done_error = HB_ERROR_INIT;
                 *job->die = 1;
                 return 0;
             }
@@ -890,6 +900,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                        dflags ))
         {
             hb_error("Failed to write to output file, disk full?");
+            *job->done_error = HB_ERROR_UNKNOWN;
             *job->die = 1;
         }
     }
@@ -930,6 +941,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                         1 ))
                     {
                         hb_error("Failed to write to output file, disk full?");
+                        *job->done_error = HB_ERROR_UNKNOWN;
                         *job->die = 1;
                     }
                     mux_data->sum_dur += buf->s.start - mux_data->sum_dur;
@@ -971,6 +983,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                      1 ))
                 {
                     hb_error("Failed to write to output file, disk full?");
+                    *job->done_error = HB_ERROR_UNKNOWN;
                     *job->die = 1;
                 }
 
@@ -992,6 +1005,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                     1 ))
                 {
                     hb_error("Failed to write to output file, disk full?");
+                    *job->done_error = HB_ERROR_UNKNOWN;
                     *job->die = 1;
                 } 
                 mux_data->sum_dur += buf->s.start - mux_data->sum_dur;
@@ -1005,6 +1019,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                  1 ))
             {
                 hb_error("Failed to write to output file, disk full?");
+                *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
             }
 
@@ -1025,6 +1040,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                              ( buf->s.frametype & HB_FRAME_KEY ) != 0 ))
         {
             hb_error("Failed to write to output file, disk full?");
+            *job->done_error = HB_ERROR_UNKNOWN;
             *job->die = 1;
         }
     }

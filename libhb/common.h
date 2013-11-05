@@ -101,6 +101,14 @@ typedef struct hb_filter_object_s  hb_filter_object_t;
 typedef struct hb_buffer_s hb_buffer_t;
 typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
+typedef enum
+{
+     HB_ERROR_NONE    = 0,
+     HB_ERROR_CANCELED   ,
+     HB_ERROR_WRONG_INPUT,
+     HB_ERROR_INIT       ,
+     HB_ERROR_UNKNOWN
+} hb_error_code;
 
 #include "ports.h"
 #ifdef __LIBHB__
@@ -553,6 +561,7 @@ struct hb_job_s
     /* Internal data */
     hb_handle_t   * h;
     hb_lock_t     * pause;
+    volatile hb_error_code * done_error;
     volatile int  * die;
     volatile int    done;
 
@@ -954,10 +963,7 @@ struct hb_state_s
         struct
         {
             /* HB_STATE_WORKDONE */
-#define HB_ERROR_NONE     0
-#define HB_ERROR_CANCELED 1
-#define HB_ERROR_UNKNOWN  2
-            int error;
+            hb_error_code error;
         } workdone;
 
         struct
@@ -1115,7 +1121,7 @@ int hb_use_dxva( hb_title_t * title );
 
 #define OCLCHECK( method, ... )\
     status = method( __VA_ARGS__ ); if( status != CL_SUCCESS ) {\
-        printf( # method " error '%d'\n", status ); return status; }
+         hb_error("%s:%d (%s) error: %d\n", __FUNCTION__, __LINE__, #method, status); return status; }
 
 #define CL_FREE( buf )\
 {\

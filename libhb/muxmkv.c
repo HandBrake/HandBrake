@@ -125,6 +125,7 @@ static int MKVInit( hb_mux_object_t * m )
     {
         hb_error("Could not convert string, out of memory?");
         job->mux_data = NULL;
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         return 0;
     }
@@ -136,6 +137,7 @@ static int MKVInit( hb_mux_object_t * m )
     {
         hb_error( "Could not create output file, Disk Full?" );
         job->mux_data = NULL;
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         free(track);
         return 0;
@@ -201,6 +203,7 @@ static int MKVInit( hb_mux_object_t * m )
             }
             break;
         default:
+            *job->done_error = HB_ERROR_WRONG_INPUT;
             *job->die = 1;
             hb_error("muxmkv: Unknown video codec: %x", job->vcodec);
             free(track);
@@ -310,6 +313,7 @@ static int MKVInit( hb_mux_object_t * m )
                 track->codecID = MK_ACODEC_AAC;
                 break;
             default:
+                *job->done_error = HB_ERROR_WRONG_INPUT;
                 *job->die = 1;
                 hb_error("muxmkv: Unknown audio codec: %x", audio->config.out.codec);
                 return 0;
@@ -468,6 +472,7 @@ static int MKVInit( hb_mux_object_t * m )
     if( mk_writeHeader( m->file, "HandBrake " HB_PROJECT_VERSION) < 0 )
     {
         hb_error( "Failed to write to output file, disk full?");
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
     }
     if (track != NULL)
@@ -523,6 +528,7 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
         if( mk_startFrame(m->file, mux_data->track) < 0)
         {
             hb_error("Failed to write frame to output file, Disk Full?");
+            *job->done_error = HB_ERROR_UNKNOWN;
             *job->die = 1;
         }
         uint64_t duration;
@@ -548,6 +554,7 @@ static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
     if( mk_startFrame(m->file, mux_data->track) < 0)
     {
         hb_error( "Failed to write frame to output file, Disk Full?" );
+        *job->done_error = HB_ERROR_UNKNOWN;
         *job->die = 1;
     }
     mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
@@ -682,6 +689,7 @@ static int MKVEnd(hb_mux_object_t *m)
     if( mk_close(m->file) < 0 )
     {
         hb_error( "Failed to flush the last frame and close the output file, Disk Full?" );
+        *job->done_error = HB_ERROR_UNKNOWN;
         *job->die = 1;
     }
 

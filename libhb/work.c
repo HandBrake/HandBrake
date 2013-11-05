@@ -91,13 +91,12 @@ static void work_func( void * _work )
     {
         hb_list_rem( work->jobs, job );
         job->die = work->die;
+        job->done_error = work->error;
         *(work->current_job) = job;
         InitWorkState( job->h );
         do_job( job );
         *(work->current_job) = NULL;
     }
-
-    *(work->error) = HB_ERROR_NONE;
 
     free( work );
 }
@@ -1264,6 +1263,7 @@ static void do_job(hb_job_t *job)
                 if ( ( w = hb_codec_decoder( audio->config.in.codec ) ) == NULL )
                 {
                     hb_error("Invalid input codec: %d", audio->config.in.codec);
+                    *job->done_error = HB_ERROR_WRONG_INPUT;
                     *job->die = 1;
                     goto cleanup;
                 }
@@ -1288,6 +1288,7 @@ static void do_job(hb_job_t *job)
                 {
                     hb_error("Invalid audio codec: %#x", audio->config.out.codec);
                     w = NULL;
+                    *job->done_error = HB_ERROR_WRONG_INPUT;
                     *job->die = 1;
                     goto cleanup;
                 }
@@ -1314,6 +1315,7 @@ static void do_job(hb_job_t *job)
     if ( reader->init( reader, job ) )
     {
         hb_error( "Failure to initialise thread '%s'", reader->name );
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         goto cleanup;
     }
@@ -1350,6 +1352,7 @@ static void do_job(hb_job_t *job)
         if( w->init( w, job ) )
         {
             hb_error( "Failure to initialise thread '%s'", w->name );
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             goto cleanup;
         }
@@ -1370,6 +1373,7 @@ static void do_job(hb_job_t *job)
         if( sync->init( w, job ) )
         {
             hb_error( "Failure to initialise thread '%s'", w->name );
+            *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             goto cleanup;
         }

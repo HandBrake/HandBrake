@@ -263,6 +263,7 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
     if (sts < MFX_ERR_NONE) // ignore warnings
     {
         hb_error("qsv_enc_init: MFXVideoENCODE_QueryIOSurf failed (%d)", sts);
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         return -1;
     }
@@ -320,6 +321,7 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
     if (sts < MFX_ERR_NONE) // ignore warnings
     {
         hb_error("qsv_enc_init: MFXVideoENCODE_Init failed (%d)", sts);
+        *job->done_error = HB_ERROR_INIT;
         *job->die = 1;
         return -1;
     }
