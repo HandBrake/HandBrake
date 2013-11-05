@@ -316,6 +316,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     ReadESDSDescExt(w->config->extradata.bytes, &buffer, &tmpsiz, 0);
     w->config->extradata.length = tmpsiz;
     memmove(w->config->extradata.bytes, buffer, w->config->extradata.length);
+    free(buffer);
 
     pv->list = hb_list_init();
     pv->buf = NULL;
