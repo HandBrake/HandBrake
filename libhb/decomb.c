@@ -373,7 +373,7 @@ void apply_mask(hb_filter_private_t * pv, hb_buffer_t * b)
             {
                 memset(dstp, 128, m->plane[pp].width);
             }
-            else if (pp == 0)
+            if (pp == 0)
             {
                 apply_mask_line(dstp, mskp, m->plane[pp].width);
             }
@@ -496,8 +496,7 @@ int check_combing_results( hb_filter_private_t * pv )
     {
         if( pv->block_score[ii] >= ( threshold / 2 ) )
         {
-            if (pv->block_score[ii] <= threshold &&
-                !( pv->ref[1]->s.flags & 16) )
+            if (pv->block_score[ii] <= threshold)
             {
                 /* Blend video content that scores between
                    ( threshold / 2 ) and threshold.        */
@@ -506,18 +505,9 @@ int check_combing_results( hb_filter_private_t * pv )
             }
             else if( pv->block_score[ii] > threshold )
             {
-                if( pv->ref[1]->s.flags & 16 )
-                {
-                    /* Blend progressive content above the threshold.*/
-                    pv->mask_box_color = 2;
-                    return 2;
-                }
-                else
-                {
-                    /* Yadif deinterlace video content above the threshold. */
-                    pv->mask_box_color = 1;
-                    return 1;
-                }
+                /* Yadif deinterlace video content above the threshold. */
+                pv->mask_box_color = 1;
+                return 1;
             }
         }
     }
