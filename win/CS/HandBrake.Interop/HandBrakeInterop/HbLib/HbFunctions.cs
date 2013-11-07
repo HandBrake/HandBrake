@@ -230,6 +230,14 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_srt_add", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_srt_add(ref hb_job_s job, ref hb_subtitle_config_s subtitleConfig, string lang);
 
+		[DllImport("hb.dll", EntryPoint = "hb_subtitle_can_force", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_subtitle_can_force(int source);
+
+		[DllImport("hb.dll", EntryPoint = "hb_subtitle_can_burn", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_subtitle_can_burn(int source);
+
+		[DllImport("hb.dll", EntryPoint = "hb_subtitle_can_pass", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_subtitle_can_pass(int source, int mux);
 
 
 

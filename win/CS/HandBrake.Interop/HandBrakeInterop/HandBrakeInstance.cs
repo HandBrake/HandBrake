@@ -1825,6 +1825,8 @@ namespace HandBrake.Interop
 					newSubtitle.SubtitleType = SubtitleType.Text;
 				}
 
+				newSubtitle.SubtitleSourceInt = (int)subtitle.source;
+
 				switch (subtitle.source)
 				{
 					case hb_subtitle_s_subsource.CC608SUB:
