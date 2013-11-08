@@ -292,6 +292,11 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
 
+const char* const* hb_video_encoder_get_presets (int encoder);
+const char* const* hb_video_encoder_get_tunes   (int encoder);
+const char* const* hb_video_encoder_get_profiles(int encoder);
+const char* const* hb_video_encoder_get_levels  (int encoder);
+
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
 float hb_audio_quality_get_default(uint32_t codec);
@@ -1242,6 +1247,8 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
                              const char *x264_encopts, const char *h264_profile,
                              const char *h264_level, int width, int height);
 
+#define HB_API_OLD_PRESET_GETTERS
+#ifdef  HB_API_OLD_PRESET_GETTERS
 // x264 preset/tune, qsv preset & h264 profile/level helpers
 const char * const * hb_x264_presets();
 const char * const * hb_x264_tunes();
@@ -1250,6 +1257,7 @@ const char * const * hb_qsv_presets();
 #endif
 const char * const * hb_h264_profiles();
 const char * const * hb_h264_levels();
+#endif
 
 // x264 option name/synonym helper
 const char * hb_x264_encopt_name( const char * name );

@@ -13,8 +13,10 @@
 #include <sys/time.h>
 
 #include "hb.h"
+#include "x264.h"
 #include "lang.h"
 #include "common.h"
+#include "h264_common.h"
 #ifdef USE_QSV
 #include "qsv_common.h"
 #endif
@@ -1139,6 +1141,61 @@ const char* hb_video_quality_get_name(uint32_t codec)
 
         default:
             return "QP";
+    }
+}
+
+const char* const* hb_video_encoder_get_presets(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_X264:
+            return x264_preset_names;
+
+#ifdef USE_QSV
+        case HB_VCODEC_QSV_H264:
+            return hb_qsv_preset_get_names();
+#endif
+
+        default:
+            return NULL;
+    }
+}
+
+const char* const* hb_video_encoder_get_tunes(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_X264:
+            return x264_tune_names;
+
+        default:
+            return NULL;
+    }
+}
+
+const char* const* hb_video_encoder_get_profiles(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_X264:
+        case HB_VCODEC_QSV_H264:
+            return hb_h264_profile_names;
+
+        default:
+            return NULL;
+    }
+}
+
+const char* const* hb_video_encoder_get_levels(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_X264:
+        case HB_VCODEC_QSV_H264:
+            return hb_h264_level_names;
+
+        default:
+            return NULL;
     }
 }
 

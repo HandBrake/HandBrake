@@ -698,7 +698,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     return error ? HB_QSV_PARAM_BAD_VALUE : HB_QSV_PARAM_OK;
 }
 
-const char* const* hb_qsv_presets()
+const char* const* hb_qsv_preset_get_names()
 {
     if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
     {
@@ -709,6 +709,13 @@ const char* const* hb_qsv_presets()
         return hb_qsv_preset_names1;
     }
 }
+
+#ifdef HB_API_OLD_PRESET_GETTERS
+const char* const* hb_qsv_presets()
+{
+    return hb_qsv_preset_get_names();
+}
+#endif
 
 int hb_qsv_param_default_preset(hb_qsv_param_t *param,
                                 mfxVideoParam *videoParam, const char *preset)

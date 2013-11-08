@@ -3143,7 +3143,7 @@ static void ShowHelp()
     fprintf( out,
     "        --x264-preset       When using x264, selects the x264 preset:\n"
     "          <string>          ");
-    x264_opts = hb_x264_presets();
+    x264_opts = hb_video_encoder_get_presets(HB_VCODEC_X264);
     tmp[0] = 0;
     len = 0;
     while( x264_opts && *x264_opts )
@@ -3164,7 +3164,7 @@ static void ShowHelp()
     fprintf( out,
     "        --x264-tune         When using x264, selects the x264 tuning:\n"
     "          <string>          ");
-    x264_opts = hb_x264_tunes();
+    x264_opts = hb_video_encoder_get_tunes(HB_VCODEC_X264);
     tmp[0] = 0;
     len = 0;
     while( x264_opts && *x264_opts )
@@ -3188,7 +3188,7 @@ if (hb_qsv_available())
     fprintf(out,
             "        --qsv-preset        When using QSV, selects the QSV preset:\n"
             "          <string>          ");
-    x264_opts = hb_qsv_presets();
+    x264_opts = hb_video_encoder_get_presets(HB_VCODEC_QSV_H264);
     tmp[0]    = 0;
     len       = 0;
     while (x264_opts != NULL && *x264_opts != NULL)
@@ -3232,7 +3232,7 @@ else
     "        --h264-profile      When using H.264, ensures compliance with the\n"
     "          <string>          specified H.264 profile:\n"
     "                            ");
-    x264_opts = hb_h264_profiles();
+    x264_opts = hb_video_encoder_get_profiles(HB_VCODEC_X264);
     tmp[0] = 0;
     len = 0;
     while( x264_opts && *x264_opts )
@@ -3254,7 +3254,7 @@ else
     "        --h264-level        When using H.264, ensures compliance with the\n"
     "          <string>          specified H.264 level:\n"
     "                            ");
-    x264_opts = hb_h264_levels();
+    x264_opts = hb_video_encoder_get_levels(HB_VCODEC_X264);
     tmp[0] = 0;
     len = 0;
     while( x264_opts && *x264_opts )

@@ -109,6 +109,7 @@ typedef struct
     mfxVideoParam *videoParam;
 } hb_qsv_param_t;
 
+const char* const* hb_qsv_preset_get_names();
 static const char* const hb_qsv_preset_names1[] = { "speed", "balanced",            NULL, };
 static const char* const hb_qsv_preset_names2[] = { "speed", "balanced", "quality", NULL, };
 
