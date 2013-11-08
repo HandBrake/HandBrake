@@ -5469,12 +5469,9 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) setupX264PresetsWidgets: (id) sender
 {
     NSUInteger i;
-    /*
-     * now we populate the x264 preset system widgets via hb_x264_presets(),
-     * hb_x264_tunes(), hb_h264_profiles(), hb_h264_levels()
-     */
+    // populate the preset system widgets via hb_video_encoder_get_* functions.
     // store x264 preset names
-    const char * const * x264_presets = hb_x264_presets();
+    const char* const *x264_presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
     NSMutableArray *tmp_array = [[NSMutableArray alloc] init];
     for (i = 0; x264_presets[i] != NULL; i++)
     {
@@ -5497,7 +5494,7 @@ the user is using "Custom" settings by determining the sender*/
     // setup the x264 tune popup
     [fX264TunePopUp removeAllItems];
     [fX264TunePopUp addItemWithTitle: @"none"];
-    const char * const * x264_tunes = hb_x264_tunes();
+    const char* const *x264_tunes = hb_video_encoder_get_tunes(HB_VCODEC_X264);
     for (int i = 0; x264_tunes[i] != NULL; i++)
     {
         // we filter out "fastdecode" as we have a dedicated checkbox for it
@@ -5510,14 +5507,14 @@ the user is using "Custom" settings by determining the sender*/
     [fX264FastDecodeCheck setState: NSOffState];
     // setup the h264 profile popup
     [fX264ProfilePopUp removeAllItems];
-    const char * const * h264_profiles = hb_h264_profiles();
+    const char* const *h264_profiles = hb_video_encoder_get_profiles(HB_VCODEC_X264);
     for (int i = 0; h264_profiles[i] != NULL; i++)
     {
         [fX264ProfilePopUp addItemWithTitle: [NSString stringWithUTF8String:h264_profiles[i]]];
     }
     // setup the h264 level popup
     [fX264LevelPopUp removeAllItems];
-    const char * const * h264_levels = hb_h264_levels();
+    const char* const *h264_levels = hb_video_encoder_get_levels(HB_VCODEC_X264);
     for (int i = 0; h264_levels[i] != NULL; i++)
     {
         [fX264LevelPopUp addItemWithTitle: [NSString stringWithUTF8String:h264_levels[i]]];
