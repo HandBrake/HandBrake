@@ -449,7 +449,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 case "m4v":
                     return OutputFormat.Mp4;
                 case "mkv":
-                    return OutputFormat.av_mkv;
+                    return OutputFormat.Mkv;
             }
         }
 
@@ -470,7 +470,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "mp4";
                 case OutputFormat.Mp4:
                     return "m4v";
-                case OutputFormat.av_mkv:
+                case OutputFormat.Mkv:
                     return "mkv";
             }
         }

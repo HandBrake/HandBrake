@@ -122,7 +122,7 @@ namespace HandBrakeWPF.Helpers
                             break;
                     }
                 }
-                else if (task.OutputFormat == OutputFormat.Mkv || task.OutputFormat == OutputFormat.av_mkv)
+                else if (task.OutputFormat == OutputFormat.Mkv)
                     destinationFilename += ".mkv";
 
                 /*

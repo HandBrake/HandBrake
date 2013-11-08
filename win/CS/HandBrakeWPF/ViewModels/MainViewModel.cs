@@ -621,7 +621,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new List<OutputFormat>
                     {
-                         OutputFormat.Mp4, OutputFormat.av_mkv, OutputFormat.Mkv
+                         OutputFormat.Mp4, OutputFormat.Mkv
                     };
             }
         }
@@ -1407,7 +1407,7 @@ namespace HandBrakeWPF.ViewModels
                 switch (Path.GetExtension(saveFileDialog.FileName))
                 {
                     case ".mkv":
-                        this.SelectedOutputFormat = OutputFormat.av_mkv;
+                        this.SelectedOutputFormat = OutputFormat.Mkv;
                         break;
                     case ".mp4":
                         this.SelectedOutputFormat = OutputFormat.Mp4;

@@ -12,7 +12,7 @@
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
-        >
+       >
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Drop">
@@ -213,7 +213,7 @@
                                 <Setter Property="ItemsSource" Value="{Binding Children}" />
                                 <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
                                 <Setter Property="Tag" Value="{Binding}" />
-                                
+
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=IsDrive}" Value="true">
                                         <Setter Property="Icon" Value="{StaticResource Disc}"/>
