@@ -1,14 +1,14 @@
 $(eval $(call import.MODULE.defs,X264,x264,YASM PTHREADW32))
 $(eval $(call import.CONTRIB.defs,X264))
 
-X264.FETCH.url = http://download.handbrake.fr/handbrake/contrib/x264-r2358-9e941d1.tar.gz
+X264.FETCH.url = http://download.handbrake.fr/handbrake/contrib/x264-r2377-1ca7bb9.tar.gz
 X264.EXTRACT.tarbase = x264
 
 X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 
 X264.CONFIGURE.extra  = --enable-strip --bit-depth=8 --chroma-format=420
-X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-swscale --disable-gpac --disable-cli
+X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-swscale --disable-gpac --disable-lsmash --disable-cli
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     X264.CONFIGURE.extra += --cross-prefix=$(BUILD.spec)-
