@@ -46,33 +46,7 @@ namespace HandBrakeWPF.Views
             VideoViewModel mvm = ((VideoViewModel)this.DataContext);
             EncodeTask task = mvm.Task;
 
-            string addon = "";
-
-            if (SystemInfo.IsHswOrNewer)
-            {
-                if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
-                {
-                    if (task.QsvPreset == QsvPreset.Balanced ||
-                        task.QsvPreset == QsvPreset.Speed)
-                        addon = "num-ref-frame=1";
-                }
-                if (task.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
-                {
-                    if (task.QsvPreset == QsvPreset.Quality)
-                        addon = "lookahead=1:gop-ref-dist=3";
-                    else
-                        if (task.QsvPreset == QsvPreset.Balanced)
-                        {
-                            addon = "num-ref-frame=1:gop-ref-dist=1";
-                        }
-                        else
-                            if (task.QsvPreset == QsvPreset.Speed)
-                                addon = "gop-ref-dist=1";
-                }
-            }
-
-
-            string full_string = addon + ":";
+            string full_string = "";
 
             IDictionary<string, string> newOptions = new Dictionary<string, string>();
             string[] existingSegments = full_string.Split(':');

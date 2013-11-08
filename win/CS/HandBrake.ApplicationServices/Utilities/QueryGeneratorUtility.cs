@@ -960,6 +960,18 @@ namespace HandBrake.ApplicationServices.Utilities
                 }
             }
 
+            // QSV Only
+            if (task.VideoEncoder == VideoEncoder.QuickSync)
+            {
+                query += string.Format(" --qsv-preset={0}", task.QsvPreset.ToString().ToLower());
+            }
+
+            // options that apply to all encoders
+            if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))
+            {
+                query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
+            }
+
             // Options that apply to both x264 and QuickSync
             if (task.VideoEncoder == VideoEncoder.QuickSync || task.VideoEncoder == VideoEncoder.X264)
             {
@@ -976,55 +988,9 @@ namespace HandBrake.ApplicationServices.Utilities
                             " --h264-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
                     }
                 }
-
-                if (task.VideoEncoder == VideoEncoder.QuickSync)
-                {
-                    string qsvPreset;
-
-                    if (SystemInfo.IsHswOrNewer)
-                    {
-                        switch (task.QsvPreset)
-                        {
-                            case QsvPreset.Speed:
-                                qsvPreset = "6";
-                                break;
-                            case QsvPreset.Balanced:
-                                qsvPreset = "4";
-                                break;
-                            default:
-                                qsvPreset = "2";
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (task.QsvPreset)
-                        {
-                            case QsvPreset.Speed:
-                                qsvPreset = "4";
-                                break;
-                            case QsvPreset.Balanced:
-                                qsvPreset = "2";
-                                break;
-                            default:
-                                qsvPreset = "2";
-                                break;
-                        }
-                    }
-
-                    query += string.IsNullOrEmpty(task.AdvancedEncoderOptions)
-                                 ? string.Format(" -x target-usage={0}", qsvPreset)
-                                 : string.Format(" -x target-usage={0}:{1}", qsvPreset, task.AdvancedEncoderOptions);
-                }
-                else if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))  // Not a H.264 encode
-                {
-                    query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
-                }
-
-                return query;
             }
 
-            return string.IsNullOrEmpty(task.AdvancedEncoderOptions) ? string.Empty : string.Format(" -x {0}", task.AdvancedEncoderOptions);
+            return query;
         }
 
         /// <summary>
