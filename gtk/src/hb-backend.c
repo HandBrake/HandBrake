@@ -217,11 +217,11 @@ combo_opts_t deint_opts =
 
 static options_map_t d_denoise_opts[] =
 {
-    {N_("Off"),    "off",   0, ""},
+    {N_("Off"),    "off",    0, ""},
     {N_("Custom"), "custom", 1, ""},
-    {N_("Weak"),   "weak",   2, "2:1:2:3"},
-    {N_("Medium"), "medium", 3, "3:2:2:3"},
-    {N_("Strong"), "strong", 4, "7:7:5:5"},
+    {N_("Weak"),   "weak",   2, "2:1:1:2:3:3"},
+    {N_("Medium"), "medium", 3, "3:2:2:2:3:3"},
+    {N_("Strong"), "strong", 4, "7:7:7:5:5:5"},
 };
 combo_opts_t denoise_opts =
 {

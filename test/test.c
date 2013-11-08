@@ -3507,7 +3507,8 @@ if (hb_qsv_available())
      "    -8, --denoise           Denoise video with hqdn3d filter\n"
      "          <weak/medium/strong> or omitted (default settings)\n"
      "           or\n"
-     "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
+     "          <SL:SCb:SCr:TL:TCb:TCr>\n"
+     "          (default: 4:3:3:6:4.5:4.5)\n"
      "    -7, --deblock           Deblock video with pp7 filter\n"
      "          <QP:M>            (default 5:2)\n"
      "        --rotate            Flips images axes\n"
@@ -4105,15 +4106,15 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     if (!( strcmp( optarg, "weak" ) ))
                     {
-                        denoise_opt = "2:1:2:3";
+                        denoise_opt = "2:1:1:2:3:3";
                     }
                     else if (!( strcmp( optarg, "medium" ) ))
                     {
-                        denoise_opt = "3:2:2:3";
+                        denoise_opt = "3:2:2:2:3:3";
                     }
                     else if (!( strcmp( optarg, "strong" ) ))
                     {
-                        denoise_opt = "7:7:5:5";
+                        denoise_opt = "7:7:7:5:5:5";
                     }
                     else
                     {

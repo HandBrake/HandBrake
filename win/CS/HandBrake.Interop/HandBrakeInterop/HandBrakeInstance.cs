@@ -1190,13 +1190,13 @@ namespace HandBrake.Interop
 				switch (profile.Denoise)
 				{
 					case Denoise.Weak:
-						settings = "2:1:2:3";
+						settings = "2:1:1:2:3:3";
 						break;
 					case Denoise.Medium:
-						settings = "3:2:2:3";
+						settings = "3:2:2:2:3:3";
 						break;
 					case Denoise.Strong:
-						settings = "7:7:5:5";
+						settings = "7:7:7:5:5:5";
 						break;
 					case Denoise.Custom:
 						settings = profile.CustomDenoise;

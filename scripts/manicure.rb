@@ -1439,11 +1439,11 @@ class Display
       when 1
         commandString << "denoise_opt = \"" << hash["PictureDenoiseCustom"].to_s << "\";\n    "
       when 2
-        commandString << "denoise_opt = \"2:1:2:3\";\n    "
+        commandString << "denoise_opt = \"2:1:1:2:3:3\";\n    "
       when 3
-        commandString << "denoise_opt = \"3:2:2:3\";\n    "
+        commandString << "denoise_opt = \"3:2:2:2:3:3\";\n    "
       when 4
-        commandString << "denoise_opt = \"7:7:5:5\";\n    "
+        commandString << "denoise_opt = \"7:7:7:5:5:5\";\n    "
       end
       
       if hash["PictureDecomb"].to_i != 0

@@ -30,7 +30,7 @@
 
 struct hb_filter_private_s
 {
-    short            hqdn3d_coef[4][512*16];
+    short            hqdn3d_coef[6][512*16];
     unsigned short * hqdn3d_line;
     unsigned short * hqdn3d_frame[3];
 };
@@ -221,55 +221,71 @@ static int hb_denoise_init( hb_filter_object_t * filter,
     filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
     hb_filter_private_t * pv = filter->private_data;
 
-    double spatial_luma, temporal_luma, spatial_chroma, temporal_chroma;
+    double spatial_luma,  spatial_chroma_b,  spatial_chroma_r;
+    double temporal_luma, temporal_chroma_b, temporal_chroma_r;
 
     if( filter->settings )
     {
-        switch( sscanf( filter->settings, "%lf:%lf:%lf:%lf",
-                        &spatial_luma, &spatial_chroma,
-                        &temporal_luma, &temporal_chroma ) )
+        switch( sscanf( filter->settings, "%lf:%lf:%lf:%lf:%lf:%lf",
+                        &spatial_luma, &spatial_chroma_b, &spatial_chroma_r,
+                        &temporal_luma, &temporal_chroma_b, &temporal_chroma_r ) )
         {
             case 0:
-                spatial_luma    = HQDN3D_SPATIAL_LUMA_DEFAULT;
-
-                spatial_chroma  = HQDN3D_SPATIAL_CHROMA_DEFAULT;
-
-                temporal_luma   = HQDN3D_TEMPORAL_LUMA_DEFAULT;
-
-                temporal_chroma = temporal_luma *
-                                  spatial_chroma / spatial_luma;
+                spatial_luma      = HQDN3D_SPATIAL_LUMA_DEFAULT;
+                spatial_chroma_b  = HQDN3D_SPATIAL_CHROMA_DEFAULT;
+                spatial_chroma_r  = spatial_chroma_b;
+                temporal_luma     = HQDN3D_TEMPORAL_LUMA_DEFAULT;
+                temporal_chroma_b = temporal_luma *
+                                    spatial_chroma_b / spatial_luma;
+                temporal_chroma_r = temporal_chroma_b;
                 break;
 
             case 1:
-                spatial_chroma = HQDN3D_SPATIAL_CHROMA_DEFAULT *
-                                 spatial_luma / HQDN3D_SPATIAL_LUMA_DEFAULT;
-
-                temporal_luma   = HQDN3D_TEMPORAL_LUMA_DEFAULT *
-                                  spatial_luma / HQDN3D_SPATIAL_LUMA_DEFAULT;
-
-                temporal_chroma = temporal_luma *
-                                  spatial_chroma / spatial_luma;
+                spatial_chroma_b  = HQDN3D_SPATIAL_CHROMA_DEFAULT *
+                                    spatial_luma / HQDN3D_SPATIAL_LUMA_DEFAULT;
+                spatial_chroma_r  = spatial_chroma_b;
+                temporal_luma     = HQDN3D_TEMPORAL_LUMA_DEFAULT *
+                                    spatial_luma / HQDN3D_SPATIAL_LUMA_DEFAULT;
+                temporal_chroma_b = temporal_luma *
+                                    spatial_chroma_b / spatial_luma;
+                temporal_chroma_r = temporal_chroma_b;
                 break;
 
             case 2:
-                temporal_luma   = HQDN3D_TEMPORAL_LUMA_DEFAULT *
-                                  spatial_luma / HQDN3D_SPATIAL_LUMA_DEFAULT;
-
-                temporal_chroma = temporal_luma *
-                                  spatial_chroma / spatial_luma;
+                spatial_chroma_r  = spatial_chroma_b;
+                temporal_luma     = HQDN3D_TEMPORAL_LUMA_DEFAULT *
+                                    spatial_luma / HQDN3D_SPATIAL_LUMA_DEFAULT;
+                temporal_chroma_b = temporal_luma *
+                                    spatial_chroma_b / spatial_luma;
+                temporal_chroma_r = temporal_chroma_b;
                 break;
 
             case 3:
-                temporal_chroma = temporal_luma *
-                                  spatial_chroma / spatial_luma;
+                temporal_luma     = HQDN3D_TEMPORAL_LUMA_DEFAULT *
+                                    spatial_luma / HQDN3D_SPATIAL_LUMA_DEFAULT;
+                temporal_chroma_b = temporal_luma *
+                                    spatial_chroma_b / spatial_luma;
+                temporal_chroma_r = temporal_chroma_b;
+                break;
+
+            case 4:
+                temporal_chroma_b = temporal_luma *
+                                    spatial_chroma_b / spatial_luma;
+                temporal_chroma_r = temporal_chroma_b;
+                break;
+
+            case 5:
+                temporal_chroma_r = temporal_chroma_b;
                 break;
         }
     }
 
     hqdn3d_precalc_coef( pv->hqdn3d_coef[0], spatial_luma );
     hqdn3d_precalc_coef( pv->hqdn3d_coef[1], temporal_luma );
-    hqdn3d_precalc_coef( pv->hqdn3d_coef[2], spatial_chroma );
-    hqdn3d_precalc_coef( pv->hqdn3d_coef[3], temporal_chroma );
+    hqdn3d_precalc_coef( pv->hqdn3d_coef[2], spatial_chroma_b );
+    hqdn3d_precalc_coef( pv->hqdn3d_coef[3], temporal_chroma_b );
+    hqdn3d_precalc_coef( pv->hqdn3d_coef[4], spatial_chroma_r );
+    hqdn3d_precalc_coef( pv->hqdn3d_coef[5], temporal_chroma_r );
 
     return 0;
 }
@@ -329,18 +345,19 @@ static int hb_denoise_work( hb_filter_object_t * filter,
         pv->hqdn3d_line = malloc( in->plane[0].stride * sizeof(unsigned short) );
     }
 
-    int c;
+    int c, coef_index;
 
     for ( c = 0; c < 3; c++ )
     {
+        coef_index = c * 2;
         hqdn3d_denoise( in->plane[c].data,
                         out->plane[c].data,
                         pv->hqdn3d_line,
                         &pv->hqdn3d_frame[c],
                         in->plane[c].stride,
                         in->plane[c].height,
-                        pv->hqdn3d_coef[c?2:0],
-                        pv->hqdn3d_coef[c?3:1] );
+                        pv->hqdn3d_coef[coef_index],
+                        pv->hqdn3d_coef[coef_index+1] );
     }
 
     out->s = in->s;

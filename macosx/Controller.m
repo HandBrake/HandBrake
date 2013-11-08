@@ -3780,15 +3780,15 @@ bool one_burned = FALSE;
 	}
     else if ([fPictureController denoise] == 2) // Weak in popup
 	{
-        hb_add_filter( job, filter, "2:1:2:3" );
+        hb_add_filter( job, filter, "2:1:1:2:3:3" );
 	}
 	else if ([fPictureController denoise] == 3) // Medium in popup
 	{
-        hb_add_filter( job, filter, "3:2:2:3" );
+        hb_add_filter( job, filter, "3:2:2:2:3:3" );
 	}
 	else if ([fPictureController denoise] == 4) // Strong in popup
 	{
-        hb_add_filter( job, filter, "7:7:5:5" );
+        hb_add_filter( job, filter, "7:7:7:5:5:5" );
 	}
     
     
@@ -4340,15 +4340,15 @@ bool one_burned = FALSE;
 	}
     else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 2) // Weak in popup
 	{
-        hb_add_filter( job, filter, "2:1:2:3" );	
+        hb_add_filter( job, filter, "2:1:1:2:3:3" );	
 	}
 	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 3) // Medium in popup
 	{
-        hb_add_filter( job, filter, "3:2:2:3" );	
+        hb_add_filter( job, filter, "3:2:2:2:3:3" );	
 	}
 	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 4) // Strong in popup
 	{
-        hb_add_filter( job, filter, "7:7:5:5" );	
+        hb_add_filter( job, filter, "7:7:7:5:5:5" );	
 	}
     
     
