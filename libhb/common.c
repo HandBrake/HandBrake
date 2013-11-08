@@ -319,10 +319,10 @@ hb_container_internal_t hb_containers[]  =
     { { "MP4 file",            "mp4",    "mp4",             0, }, NULL, 0, HB_GID_MUX_MP4, },
     { { "MKV file",            "mkv",    "mkv",             0, }, NULL, 0, HB_GID_MUX_MKV, },
     // actual muxers
-    { { "MPEG-4 (mp4v2)",      "mp4v2",  "mp4", HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
-    { { "Matroska (libmkv)",   "libmkv", "mkv", HB_MUX_LIBMKV, }, NULL, 1, HB_GID_MUX_MKV, },
     { { "MPEG-4 (avformat)",   "av_mp4", "mp4", HB_MUX_AV_MP4, }, NULL, 1, HB_GID_MUX_MP4, },
+    { { "MPEG-4 (mp4v2)",      "mp4v2",  "mp4", HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
     { { "Matroska (avformat)", "av_mkv", "mkv", HB_MUX_AV_MKV, }, NULL, 1, HB_GID_MUX_MKV, },
+    { { "Matroska (libmkv)",   "libmkv", "mkv", HB_MUX_LIBMKV, }, NULL, 1, HB_GID_MUX_MKV, },
 };
 int hb_containers_count = sizeof(hb_containers) / sizeof(hb_containers[0]);
 static int hb_container_is_enabled(int format)
