@@ -986,19 +986,47 @@ namespace HandBrakeWPF.ViewModels
             if (preset.Task != null)
             {
                 this.SetEncoder(preset.Task.VideoEncoder);
-                this.X264PresetValue = preset.Task.VideoEncoder == VideoEncoder.X264
-                                           ? (int)preset.Task.X264Preset
-                                           : (int)x264Preset.Medium;
-                this.H264Profile = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.H264Profile : x264Profile.None;
-                this.X264Tune = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.X264Tune : x264Tune.None;
-                this.H264Level = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.H264Level : "Auto";
-                this.FastDecode = preset.Task.VideoEncoder == VideoEncoder.X264 && preset.Task.FastDecode;
+
+                // applies to both x264 and QSV
+                if (preset.Task.VideoEncoder == VideoEncoder.X264 ||
+                    preset.Task.VideoEncoder == VideoEncoder.QuickSync)
+                {
+                    this.H264Profile = preset.Task.H264Profile;
+                    this.H264Level = preset.Task.H264Level;
+                }
+                else
+                {
+                    this.H264Profile = x264Profile.None;
+                    this.H264Level = "Auto";
+                }
+
+                // x264 Only
+                if (preset.Task.VideoEncoder == VideoEncoder.X264)
+                {
+                    this.X264PresetValue = (int)preset.Task.X264Preset;
+                    this.X264Tune = preset.Task.X264Tune;
+                    this.FastDecode = preset.Task.FastDecode;
+                }
+                else
+                {
+                    this.X264PresetValue = (int)x264Preset.Medium;
+                    this.X264Tune = x264Tune.None;
+                    this.FastDecode = false;
+                }
+
+                // QSV Only
+                if (preset.Task.VideoEncoder == VideoEncoder.QuickSync)
+                {
+                    this.QsvPresetValue = (int)preset.Task.QsvPreset;
+                }
+                else
+                {
+                    this.QsvPresetValue = SystemInfo.IsHswOrNewer
+                                              ? (int)QsvPreset.Quality
+                                              : (int)QsvPreset.Balanced;
+                }
+
                 this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
-
-                this.QsvPresetValue = preset.Task.VideoEncoder == VideoEncoder.QuickSync
-                                           ? (int)preset.Task.QsvPreset
-                                           : SystemInfo.IsHswOrNewer ? (int)QsvPreset.Quality : (int)QsvPreset.Balanced;
-
                 this.UseAdvancedTab = !string.IsNullOrEmpty(preset.Task.AdvancedEncoderOptions) && this.ShowAdvancedTab;
             }
         }
