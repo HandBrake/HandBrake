@@ -26,10 +26,31 @@
 #include "common.h"
 #include "opencl.h"
 
-int hb_opencl_library_open(hb_opencl_library_t *opencl)
+hb_opencl_library_t *hb_ocl = NULL;
+
+int hb_ocl_init()
 {
-    if (opencl == NULL)
+    if (hb_ocl == NULL)
     {
+        if ((hb_ocl = hb_opencl_library_init()) == NULL)
+        {
+            return -1;
+        }
+    }
+    return 0;
+}
+
+void hb_ocl_close()
+{
+    hb_opencl_library_close(&hb_ocl);
+}
+
+hb_opencl_library_t* hb_opencl_library_init()
+{
+    hb_opencl_library_t *opencl;
+    if ((opencl = calloc(1, sizeof(hb_opencl_library_t))) == NULL)
+    {
+        hb_error("hb_opencl_library_init: memory allocation failure");
         goto fail;
     }
 
@@ -39,13 +60,13 @@ int hb_opencl_library_open(hb_opencl_library_t *opencl)
         goto fail;
     }
 
-#define HB_OCL_LOAD(func)                                                      \
-{                                                                              \
-    if ((opencl->func = (void*)HB_OCL_DLSYM(opencl->library, #func)) == NULL)  \
-    {                                                                          \
-        hb_log("hb_opencl_library_open: failed to load function '%s'", #func); \
-        goto fail;                                                             \
-    }                                                                          \
+#define HB_OCL_LOAD(func)                                                       \
+{                                                                               \
+    if ((opencl->func = (void*)HB_OCL_DLSYM(opencl->library, #func)) == NULL)   \
+    {                                                                           \
+        hb_log("hb_opencl_library_init: failed to load function '%s'", #func);  \
+        goto fail;                                                              \
+    }                                                                           \
 }
     HB_OCL_LOAD(clBuildProgram);
     HB_OCL_LOAD(clCreateBuffer);
@@ -73,18 +94,27 @@ int hb_opencl_library_open(hb_opencl_library_t *opencl)
     HB_OCL_LOAD(clReleaseContext);
     HB_OCL_LOAD(clReleaseEvent);
     HB_OCL_LOAD(clReleaseKernel);
+    HB_OCL_LOAD(clReleaseMemObject);
     HB_OCL_LOAD(clReleaseProgram);
     HB_OCL_LOAD(clSetKernelArg);
     HB_OCL_LOAD(clWaitForEvents);
-    return 0;
+
+    //success
+    return opencl;
 
 fail:
-    hb_opencl_library_close(opencl);
-    return -1;
+    hb_opencl_library_close(&opencl);
+    return NULL;
 }
 
-void hb_opencl_library_close(hb_opencl_library_t *opencl)
+void hb_opencl_library_close(hb_opencl_library_t **_opencl)
 {
+    if (_opencl == NULL)
+    {
+        return;
+    }
+    hb_opencl_library_t *opencl = *_opencl;
+
     if (opencl != NULL)
     {
         if (opencl->library != NULL)
@@ -120,35 +150,180 @@ void hb_opencl_library_close(hb_opencl_library_t *opencl)
         HB_OCL_UNLOAD(clReleaseContext);
         HB_OCL_UNLOAD(clReleaseEvent);
         HB_OCL_UNLOAD(clReleaseKernel);
+        HB_OCL_UNLOAD(clReleaseMemObject);
         HB_OCL_UNLOAD(clReleaseProgram);
         HB_OCL_UNLOAD(clSetKernelArg);
         HB_OCL_UNLOAD(clWaitForEvents);
     }
+    *_opencl = NULL;
 }
 
-static int hb_opencl_device_is_supported(cl_device_type type,
-                                         const char *vendor,
-                                         const char *version)
+static int hb_opencl_device_is_supported(hb_opencl_device_t* device)
 {
-    int major, minor;
-
-    // we only support OpenCL on GPUs
-    // disable on NVIDIA to to a bug (FIXME)
-    if (!(type & CL_DEVICE_TYPE_GPU) ||
-        !(strncmp(vendor, "NVIDIA", 6 /* strlen("NVIDIA") */)))
+    // we only support OpenCL on GPUs for now
+    // FIXME: disable on NVIDIA to to a bug
+    if ((device != NULL) &&
+        (device->type & CL_DEVICE_TYPE_GPU) &&
+        (device->ocl_vendor != HB_OCL_VENDOR_NVIDIA))
     {
-        return 0;
+        int major, minor;
+        // check OpenCL version:
+        // OpenCL<space><major_version.minor_version><space><vendor-specific information>
+        if (sscanf(device->version, "OpenCL %d.%d", &major, &minor) != 2)
+        {
+            return 0;
+        }
+        return (major > HB_OCL_MINVERSION_MAJOR) || (major == HB_OCL_MINVERSION_MAJOR &&
+                                                     minor >= HB_OCL_MINVERSION_MINOR);
+    }
+    return 0;
+}
+
+static hb_opencl_device_t* hb_opencl_device_get(hb_opencl_library_t *opencl,
+                                                cl_device_id device_id)
+{
+    if (opencl == NULL || opencl->clGetDeviceInfo == NULL)
+    {
+        hb_error("hb_opencl_device_get: OpenCL support not available");
+        return NULL;
+    }
+    else if (device_id == NULL)
+    {
+        hb_error("hb_opencl_device_get: invalid device ID");
+        return NULL;
     }
 
-    // check OpenCL version; format:
-    // OpenCL<space><major_version.minor_version><space><vendor-specific information>
-    if (sscanf(version, "OpenCL %d.%d", &major, &minor) != 2)
+    hb_opencl_device_t *device = calloc(1, sizeof(hb_opencl_device_t));
+    if (device == NULL)
     {
-        return 0;
+        hb_error("hb_opencl_device_get: memory allocation failure");
+        return NULL;
     }
 
-    return (major > HB_OCL_MINVERSION_MAJOR) || (major == HB_OCL_MINVERSION_MAJOR &&
-                                                 minor >= HB_OCL_MINVERSION_MINOR);
+    cl_int status = CL_SUCCESS;
+    device->id    = device_id;
+
+    status |= opencl->clGetDeviceInfo(device->id, CL_DEVICE_VENDOR,   sizeof(device->vendor),
+                                      device->vendor,    NULL);
+    status |= opencl->clGetDeviceInfo(device->id, CL_DEVICE_NAME,     sizeof(device->name),
+                                       device->name,      NULL);
+    status |= opencl->clGetDeviceInfo(device->id, CL_DEVICE_VERSION,  sizeof(device->version),
+                                      device->version,   NULL);
+    status |= opencl->clGetDeviceInfo(device->id, CL_DEVICE_TYPE,     sizeof(device->type),
+                                     &device->type,     NULL);
+    status |= opencl->clGetDeviceInfo(device->id, CL_DEVICE_PLATFORM, sizeof(device->platform),
+                                     &device->platform, NULL);
+    status |= opencl->clGetDeviceInfo(device->id, CL_DRIVER_VERSION,  sizeof(device->driver),
+                                      device->driver,    NULL);
+    if (status != CL_SUCCESS)
+    {
+        free(device);
+        return NULL;
+    }
+
+    if (!strcmp(device->vendor, "Advanced Micro Devices, Inc.") ||
+        !strcmp(device->vendor, "AMD"))
+    {
+        device->ocl_vendor = HB_OCL_VENDOR_AMD;
+    }
+    else if (!strncmp(device->vendor, "NVIDIA", 6 /* strlen("NVIDIA") */))
+    {
+        device->ocl_vendor = HB_OCL_VENDOR_NVIDIA;
+    }
+    else
+    {
+        device->ocl_vendor = HB_OCL_VENDOR_OTHER;
+    }
+
+    return device;
+}
+
+static void hb_opencl_devices_list_close(hb_list_t **_list)
+{
+    if (_list != NULL)
+    {
+        hb_list_t *list = *_list;
+        hb_opencl_device_t *device;
+        while (list != NULL && hb_list_count(list) > 0)
+        {
+            if ((device = hb_list_item(list, 0)) != NULL)
+            {
+                hb_list_rem(list, device);
+                free(device);
+            }
+        }
+    }
+    hb_list_close(_list);
+}
+
+static hb_list_t* hb_opencl_devices_list_get(hb_opencl_library_t *opencl,
+                                             cl_device_type device_type)
+{
+    if (opencl                   == NULL ||
+        opencl->library          == NULL ||
+        opencl->clGetDeviceIDs   == NULL ||
+        opencl->clGetDeviceInfo  == NULL ||
+        opencl->clGetPlatformIDs == NULL)
+    {
+        hb_error("hb_opencl_devices_list_get: OpenCL support not available");
+        return NULL;
+    }
+
+    hb_list_t *list = hb_list_init();
+    if (list == NULL)
+    {
+        hb_error("hb_opencl_devices_list_get: memory allocation failure");
+        return NULL;
+    }
+
+    cl_device_id *device_ids;
+    hb_opencl_device_t *device;
+    cl_platform_id *platform_ids;
+    cl_uint i, j, num_platforms, num_devices;
+
+    if (opencl->clGetPlatformIDs(0, NULL, &num_platforms) != CL_SUCCESS || !num_platforms)
+    {
+        goto fail;
+    }
+    if ((platform_ids = malloc(sizeof(cl_platform_id) * num_platforms)) == NULL)
+    {
+        hb_error("hb_opencl_devices_list_get: memory allocation failure");
+        goto fail;
+    }
+    if (opencl->clGetPlatformIDs(num_platforms, platform_ids, NULL) != CL_SUCCESS)
+    {
+        goto fail;
+    }
+    for (i = 0; i < num_platforms; i++)
+    {
+        if (opencl->clGetDeviceIDs(platform_ids[i], device_type, 0, NULL, &num_devices) != CL_SUCCESS || !num_devices)
+        {
+            // non-fatal
+            continue;
+        }
+        if ((device_ids = malloc(sizeof(cl_device_id) * num_devices)) == NULL)
+        {
+            hb_error("hb_opencl_devices_list_get: memory allocation failure");
+            goto fail;
+        }
+        if (opencl->clGetDeviceIDs(platform_ids[i], device_type, num_devices, device_ids, NULL) != CL_SUCCESS)
+        {
+            // non-fatal
+            continue;
+        }
+        for (j = 0; j < num_devices; j++)
+        {
+            if ((device = hb_opencl_device_get(opencl, device_ids[j])) != NULL)
+            {
+                hb_list_add(list, device);
+            }
+        }
+    }
+    return list;
+
+fail:
+    hb_opencl_devices_list_close(&list);
+    return NULL;
 }
 
 int hb_opencl_available()
@@ -160,74 +335,31 @@ int hb_opencl_available()
     }
     opencl_available = 0;
 
-    cl_device_type type;
-    char vendor[100], version[100];
-    cl_device_id *device_ids = NULL;
-    cl_platform_id *platform_ids = NULL;
-    hb_opencl_library_t lib, *opencl = &lib;
-    cl_uint i, j, num_platforms, num_devices;
-
     /*
      * Check whether we can load the OpenCL library, then check devices and make
      * sure we support running OpenCL code on at least one of them.
      */
-    if (hb_opencl_library_open(opencl) == 0)
+    hb_opencl_library_t *opencl;
+    if ((opencl = hb_opencl_library_init()) != NULL)
     {
-        if (opencl->clGetPlatformIDs(0, NULL, &num_platforms) != CL_SUCCESS || !num_platforms)
+        int i;
+        hb_list_t *device_list;
+        hb_opencl_device_t *device;
+        if ((device_list = hb_opencl_devices_list_get(opencl, CL_DEVICE_TYPE_ALL)) != NULL)
         {
-            goto end;
-        }
-        if ((platform_ids = malloc(sizeof(cl_platform_id) * num_platforms)) == NULL)
-        {
-            goto end;
-        }
-        if (opencl->clGetPlatformIDs(num_platforms, platform_ids, NULL) != CL_SUCCESS)
-        {
-            goto end;
-        }
-        for (i = 0; i < num_platforms; i++)
-        {
-            if (opencl->clGetDeviceIDs(platform_ids[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices) != CL_SUCCESS || !num_devices)
+            for (i = 0; i < hb_list_count(device_list); i++)
             {
-                goto end;
-            }
-            if ((device_ids = malloc(sizeof(cl_device_id) * num_devices)) == NULL)
-            {
-                goto end;
-            }
-            if (opencl->clGetDeviceIDs(platform_ids[i], CL_DEVICE_TYPE_ALL, num_devices, device_ids, NULL) != CL_SUCCESS)
-            {
-                goto end;
-            }
-            for (j = 0; j < num_devices; j++)
-            {
-                if (device_ids[j] != NULL)
+                if ((device = hb_list_item(device_list, i)) != NULL &&
+                    (hb_opencl_device_is_supported(device)))
                 {
-                    opencl->clGetDeviceInfo(device_ids[j], CL_DEVICE_VENDOR,  sizeof(vendor),
-                                            vendor,  NULL);
-                    opencl->clGetDeviceInfo(device_ids[j], CL_DEVICE_VERSION, sizeof(version),
-                                            version, NULL);
-                    opencl->clGetDeviceInfo(device_ids[j], CL_DEVICE_TYPE,    sizeof(type),
-                                            &type,  NULL);
-
-                    if (hb_opencl_device_is_supported(type,
-                                                      (const char*)vendor,
-                                                      (const char*)version))
-                    {
-                        opencl_available = 1;
-                        goto end;
-                    }
+                    opencl_available = 1;
+                    break;
                 }
             }
-            free(device_ids);
-            device_ids = NULL;
+            hb_opencl_devices_list_close(&device_list);
         }
+        hb_opencl_library_close(&opencl);
     }
-
-end:
-    free(device_ids);
-    free(platform_ids);
-    hb_opencl_library_close(opencl);
     return opencl_available;
 }
 
@@ -238,7 +370,7 @@ void hb_opencl_info_print()
      * Its only purpose is to list OpenCL-capable devices, so let's initialize
      * only what we absolutely need here, rather than calling library_open().
      */
-    hb_opencl_library_t lib, *opencl = &lib;
+    hb_opencl_library_t ocl, *opencl = &ocl;
     if ((opencl->library          = (void*)HB_OCL_DLOPEN)                                     == NULL ||
         (opencl->clGetDeviceIDs   = (void*)HB_OCL_DLSYM(opencl->library, "clGetDeviceIDs"  )) == NULL ||
         (opencl->clGetDeviceInfo  = (void*)HB_OCL_DLSYM(opencl->library, "clGetDeviceInfo" )) == NULL ||
@@ -249,76 +381,35 @@ void hb_opencl_info_print()
         goto end;
     }
 
-    cl_device_type type;
-    cl_device_id *device_ids;
-    cl_platform_id *platform_ids;
-    cl_uint i, j, k, num_platforms, num_devices;
-    char vendor[100], name[1024], version[100], driver[1024];
-
-    if (opencl->clGetPlatformIDs(0, NULL, &num_platforms) != CL_SUCCESS || !num_platforms)
+    int i, idx;
+    hb_list_t *device_list;
+    hb_opencl_device_t *device;
+    if ((device_list = hb_opencl_devices_list_get(opencl, CL_DEVICE_TYPE_ALL)) != NULL)
     {
-        goto end;
-    }
-    if ((platform_ids = malloc(sizeof(cl_platform_id) * num_platforms)) == NULL)
-    {
-        goto end;
-    }
-    if (opencl->clGetPlatformIDs(num_platforms, platform_ids, NULL) != CL_SUCCESS)
-    {
-        goto end;
-    }
-    for (i = 0, k = 1; i < num_platforms; i++)
-    {
-        if (opencl->clGetDeviceIDs(platform_ids[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices) != CL_SUCCESS || !num_devices)
+        for (i = 0, idx = 1; i < hb_list_count(device_list); i++)
         {
-            goto end;
-        }
-        if ((device_ids = malloc(sizeof(cl_device_id) * num_devices)) == NULL)
-        {
-            goto end;
-        }
-        if (opencl->clGetDeviceIDs(platform_ids[i], CL_DEVICE_TYPE_ALL, num_devices, device_ids, NULL) != CL_SUCCESS)
-        {
-            goto end;
-        }
-        for (j = 0; j < num_devices; j++)
-        {
-            if (device_ids[j] != NULL)
+            if ((device = hb_list_item(device_list, i)) != NULL)
             {
-                opencl->clGetDeviceInfo(device_ids[j], CL_DEVICE_VENDOR,  sizeof(vendor),
-                                        vendor,  NULL);
-                opencl->clGetDeviceInfo(device_ids[j], CL_DEVICE_NAME,    sizeof(name),
-                                        name,    NULL);
-                opencl->clGetDeviceInfo(device_ids[j], CL_DEVICE_VERSION, sizeof(version),
-                                        version, NULL);
-                opencl->clGetDeviceInfo(device_ids[j], CL_DRIVER_VERSION, sizeof(driver),
-                                        driver, NULL);
-                opencl->clGetDeviceInfo(device_ids[j], CL_DEVICE_TYPE,    sizeof(type),
-                                        &type,  NULL);
-
-                // don't list unsupported devices
-                if (type & CL_DEVICE_TYPE_CPU)
+                // don't list CPU devices (always unsupported)
+                if (!(device->type & CL_DEVICE_TYPE_CPU))
                 {
-                    continue;
+                    hb_log("OpenCL device #%d: %s %s", idx++, device->vendor, device->name);
+                    hb_log(" - OpenCL version: %s", device->version + 7 /* strlen("OpenCL ") */);
+                    hb_log(" - driver version: %s", device->driver);
+                    hb_log(" - device type:    %s%s",
+                           device->type & CL_DEVICE_TYPE_CPU         ? "CPU"         :
+                           device->type & CL_DEVICE_TYPE_GPU         ? "GPU"         :
+                           device->type & CL_DEVICE_TYPE_CUSTOM      ? "Custom"      :
+                           device->type & CL_DEVICE_TYPE_ACCELERATOR ? "Accelerator" : "Unknown",
+                           device->type & CL_DEVICE_TYPE_DEFAULT     ? " (default)"  : "");
+                    hb_log(" - supported:      %s",
+                           hb_opencl_device_is_supported(device) ? "YES" : "no");
                 }
-                hb_log("OpenCL device #%d: %s %s", k++, vendor, name);
-                hb_log(" - OpenCL version: %s", version + 7 /* strlen("OpenCL ") */);
-                hb_log(" - driver version: %s", driver);
-                hb_log(" - device type: %s%s",
-                       type & CL_DEVICE_TYPE_CPU         ? "CPU"         :
-                       type & CL_DEVICE_TYPE_GPU         ? "GPU"         :
-                       type & CL_DEVICE_TYPE_CUSTOM      ? "Custom"      :
-                       type & CL_DEVICE_TYPE_ACCELERATOR ? "Accelerator" : "Unknown",
-                       type & CL_DEVICE_TYPE_DEFAULT     ? " (default)"  : "");
-                hb_log(" - supported: %s",
-                       hb_opencl_device_is_supported(type,
-                                                     (const char*)vendor,
-                                                     (const char*)version) ? "yes" : "no");
             }
         }
-        free(device_ids);
+        hb_opencl_devices_list_close(&device_list);
     }
 
 end:
-    hb_opencl_library_close(opencl);
+    hb_opencl_library_close(&opencl);
 }

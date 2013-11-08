@@ -260,10 +260,7 @@ int main( int argc, char ** argv )
     /* Init libhb */
     h = hb_init( debug, update );
     hb_dvd_set_dvdnav( dvdnav );
-#ifdef USE_OPENCL
-    if( use_opencl )
-        hb_get_opencl_env();
-#endif
+
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
              HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
@@ -481,20 +478,12 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
 
-    fprintf( stderr, "  + support opencl: %s\n",
-#ifdef USE_OPENCL
-             title->opencl_support ? "yes" : "no"
-#else
-             "not built-in"
-#endif
-           );
-    fprintf( stderr, "  + support hwd: %s\n",
+    fprintf(stderr, "  + support opencl: %s\n", title->opencl_support ? "yes" : "no");
 #ifdef USE_HWD
-             title->hwd_support ? "yes" : "no"
+    fprintf(stderr, "  + support hwd: %s\n", title->hwd_support ? "yes" : "no");
 #else
-             "not built-in"
+    fprintf(stderr, "  + support hwd: not built-in\n");
 #endif
-           );
 
     fprintf( stderr, "  + chapters:\n" );
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
@@ -2877,11 +2866,10 @@ static int HandleEvents( hb_handle_t * h )
                 job->frame_to_start = start_at_frame;
                 subtitle_scan = 0;
             }
-#ifdef USE_OPENCL 
+
+            /* OpenCL */
             job->use_opencl = use_opencl;
-#else
-            job->use_opencl = 0;
-#endif            
+
             if( subtitle_scan )
             {
                 /*

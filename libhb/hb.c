@@ -441,11 +441,6 @@ hb_handle_t * hb_init( int verbose, int update_check )
 
     h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
 
-    /* opencl */
-#ifdef USE_OPENCL
-    //hb_opencl_init();	// FIXME: Ensure gui instances call this or hb_get_opencl_env() during startup if needed.
-#endif
-
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
     h->die         = 0;

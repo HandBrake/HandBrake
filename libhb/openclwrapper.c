@@ -10,12 +10,11 @@
             Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
  */
  
-#ifdef USE_OPENCL
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "extras/cl.h"
+#include "opencl.h"
 #include "openclwrapper.h"
 #include "openclkernels.h"
 
@@ -80,80 +79,12 @@ static int isInited = 0;
 static int useBuffers = 0;
 static hb_kernel_node gKernels[MAX_KERNEL_NUM];
 
-#define ADD_KERNEL_CFG( idx, s, p ){\
-        strcpy( gKernels[idx].kernelName, s );\
-        gKernels[idx].kernelStr = p;\
-        strcpy( gpu_env.kernel_names[idx], s );\
-        gpu_env.kernel_count++; }
-
-
-/**
- * hb_confirm_gpu_type
- */
-int hb_confirm_gpu_type()
-{
-    int status = 1;
-    unsigned int i, j;
-    cl_uint numPlatforms = 0; 
-    status = clGetPlatformIDs(0,NULL,&numPlatforms); 
-    if(status != 0) 
-    { 
-        goto end; 
-    } 
-    if(numPlatforms > 0) 
-    { 
-        cl_platform_id* platforms = (cl_platform_id* )malloc (numPlatforms * sizeof(cl_platform_id)); 
-        status = clGetPlatformIDs (numPlatforms, platforms, NULL); 
-        if (status != 0) 
-        { 
-            goto end; 
-        } 
-        for (i=0; i < numPlatforms; i++)
-        { 
-            char pbuff[100];
-            cl_uint numDevices;
-            status = clGetPlatformInfo( platforms[i], 
-                                        CL_PLATFORM_VENDOR, 
-                                        sizeof (pbuff), 
-                                        pbuff,
-                                        NULL); 
-            if (status)
-                continue;
-            status = clGetDeviceIDs( platforms[i], 
-                                     CL_DEVICE_TYPE_GPU , 
-                                     0 , 
-                                     NULL , 
-                                     &numDevices); 
-            
-            cl_device_id *devices = (cl_device_id *)malloc(numDevices * sizeof(cl_device_id));
-            status = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_GPU, numDevices, devices, NULL);
-            for (j = 0; j < numDevices; j++)
-            {
-                char dbuff[100];
-                status = clGetDeviceInfo(devices[j], CL_DEVICE_VENDOR, sizeof(dbuff), dbuff, NULL); 
-                if (!strcmp(dbuff, "Advanced Micro Devices, Inc.") ||
-                    !strcmp(dbuff, "Intel(R) Corporation")         ||
-#ifdef __APPLE__
-                    !strcmp(dbuff, "AMD")                          ||
-                    /* MacBook Pro, AMD ATI Radeon HD 6750M, OS X 10.8.3 */
-                    !strcmp(dbuff, "NVIDIA")                       ||
-                    /* MacBook Pro, NVIDIA GeForce GT 330M,  OS X 10.7.4 */
-#endif
-                    !strcmp(dbuff, "NVIDIA Corporation"))
-                {
-                    return 0;
-                }
-            }
-
-            if ( status != CL_SUCCESS )
-                continue;
-            if( numDevices ) 
-                break; 
-        } 
-        free( platforms ); 
-    } 
-    end:
-    return -1;
+#define HB_OCL_ADD_KERNEL_CFG(idx, s, p)    \
+{                                           \
+    strcpy(gKernels[idx].kernelName, s);    \
+    gKernels[idx].kernelStr = p;            \
+    strcpy(gpu_env.kernel_names[idx], s);   \
+    gpu_env.kernel_count++;                 \
 }
 
 /**
@@ -168,8 +99,8 @@ int hb_regist_opencl_kernel()
     gpu_env.file_count = 0; //argc;
     gpu_env.kernel_count = 0UL;
 
-    ADD_KERNEL_CFG( 0, "frame_scale", NULL )
-    ADD_KERNEL_CFG( 1, "yadif_filter", NULL )
+    HB_OCL_ADD_KERNEL_CFG(0, "frame_scale",  NULL);
+    HB_OCL_ADD_KERNEL_CFG(1, "yadif_filter", NULL);
 
     return 0;
 }
@@ -230,11 +161,14 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
     char * str = NULL;
     FILE * fd = NULL;
 
-    status = clGetContextInfo( context,
-                               CL_CONTEXT_NUM_DEVICES,
-                               sizeof(numDevices),
-                               &numDevices,
-                               NULL );
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_binary_generated: OpenCL support not available");
+        return 0;
+    }
+
+    status = hb_ocl->clGetContextInfo(context, CL_CONTEXT_NUM_DEVICES,
+                                      sizeof(numDevices), &numDevices, NULL);
     if( status != CL_SUCCESS )
     {
         hb_log( "OpenCL: Get context info failed" );
@@ -249,11 +183,9 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
     }
 
     /* grab the handles to all of the devices in the context. */
-    status = clGetContextInfo( context,
-                               CL_CONTEXT_DEVICES,
-                               sizeof(cl_device_id) * numDevices,
-                               devices,
-                               NULL );
+    status = hb_ocl->clGetContextInfo(context, CL_CONTEXT_DEVICES,
+                                      sizeof(cl_device_id) * numDevices,
+                                      devices, NULL);
 
     status = 0;
     /* dump out each binary into its own separate file. */
@@ -264,11 +196,8 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
         if (devices[i])
         {
             char deviceName[1024];
-            status = clGetDeviceInfo(devices[i],
-                                     CL_DEVICE_NAME,
-                                     sizeof(deviceName),
-                                     deviceName,
-                                     NULL);
+            status = hb_ocl->clGetDeviceInfo(devices[i], CL_DEVICE_NAME,
+                                     sizeof(deviceName), deviceName, NULL);
 
             str = (char*)strstr(cl_file_name, ".cl");
             memcpy(cl_name, cl_file_name, str - cl_file_name);
@@ -325,11 +254,14 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     char **binaries;
     char *str = NULL;
 
-    status = clGetProgramInfo( program,
-                               CL_PROGRAM_NUM_DEVICES,
-                               sizeof(numDevices),
-                               &numDevices,
-                               NULL );
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_generat_bin_from_kernel_source: OpenCL support not available");
+        return 0;
+    }
+
+    status = hb_ocl->clGetProgramInfo(program, CL_PROGRAM_NUM_DEVICES,
+                                      sizeof(numDevices), &numDevices, NULL);
     if( status != CL_SUCCESS )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_NUM_DEVICES failed");
@@ -344,11 +276,9 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     }
 
     /* grab the handles to all of the devices in the program. */
-    status = clGetProgramInfo( program,
-                               CL_PROGRAM_DEVICES,
-                               sizeof(cl_device_id) * numDevices,
-                               devices,
-                               NULL );
+    status = hb_ocl->clGetProgramInfo(program, CL_PROGRAM_DEVICES,
+                                      sizeof(cl_device_id) * numDevices,
+                                      devices, NULL);
     if( status != CL_SUCCESS )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_DEVICES failed");
@@ -358,10 +288,9 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     /* figure out the sizes of each of the binaries. */
     binarySizes = (size_t*)malloc( sizeof(size_t) * numDevices );
 
-    status = clGetProgramInfo( program,
-                               CL_PROGRAM_BINARY_SIZES,
-                               sizeof(size_t) * numDevices,
-                               binarySizes, NULL );
+    status = hb_ocl->clGetProgramInfo(program, CL_PROGRAM_BINARY_SIZES,
+                                      sizeof(size_t) * numDevices,
+                                      binarySizes, NULL);
     if( status != CL_SUCCESS )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_BINARY_SIZES failed");
@@ -393,11 +322,9 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
         }
     }
 
-    status = clGetProgramInfo( program,
-                               CL_PROGRAM_BINARIES,
-                               sizeof(char *) * numDevices,
-                               binaries,
-                               NULL );
+    status = hb_ocl->clGetProgramInfo(program, CL_PROGRAM_BINARIES,
+                                      sizeof(char *) * numDevices,
+                                      binaries, NULL);
     if( status != CL_SUCCESS )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_BINARIES failed");
@@ -412,11 +339,9 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
         if (binarySizes[i])
         {
             char deviceName[1024];
-            status = clGetDeviceInfo(devices[i],
-                                     CL_DEVICE_NAME,
-                                     sizeof(deviceName),
-                                     deviceName,
-                                     NULL);
+            status = hb_ocl->clGetDeviceInfo(devices[i], CL_DEVICE_NAME,
+                                             sizeof(deviceName), deviceName,
+                                             NULL);
 
             str = (char*)strstr( cl_file_name, (char*)".cl" );
             memcpy(cl_name, cl_file_name, str - cl_file_name);
@@ -489,8 +414,15 @@ int hb_init_opencl_attr( OpenCLEnv * env )
 int hb_create_kernel( char * kernelname, KernelEnv * env )
 {
     int status;
-    env->kernel = clCreateKernel( gpu_env.programs[0], kernelname, &status );
-    env->context = gpu_env.context;
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_create_kernel: OpenCL support not available");
+        return 0;
+    }
+
+    env->kernel        = hb_ocl->clCreateKernel(gpu_env.programs[0], kernelname, &status);
+    env->context       = gpu_env.context;
     env->command_queue = gpu_env.command_queue;
     return status != CL_SUCCESS ? 1 : 0;
 }
@@ -501,7 +433,13 @@ int hb_create_kernel( char * kernelname, KernelEnv * env )
  */
 int hb_release_kernel( KernelEnv * env )
 {
-    int status = clReleaseKernel( env->kernel );
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_release_kernel: OpenCL support not available");
+        return 0;
+    }
+
+    int status = hb_ocl->clReleaseKernel(env->kernel);
     return status != CL_SUCCESS ? 1 : 0;
 }
 
@@ -522,17 +460,23 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
     unsigned int i;
     void *handle = INVALID_HANDLE_VALUE;
 
-
     if (init_once != 0)
         return 0;
     else
         init_once = 1;
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_init_opencl_env: OpenCL support not available");
+        return 1;
+    }
+
     /*
      * Have a look at the available platforms.
      */
     if( !gpu_info->isUserCreated )
     {
-        status = clGetPlatformIDs( 0, NULL, &numPlatforms );
+        status = hb_ocl->clGetPlatformIDs(0, NULL, &numPlatforms);
         if( status != CL_SUCCESS )
         {
             hb_log( "OpenCL: OpenCL device platform not found." );
@@ -548,7 +492,7 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
             {
                 return(1);
             }
-            status = clGetPlatformIDs( numPlatforms, platforms, NULL );
+            status = hb_ocl->clGetPlatformIDs(numPlatforms, platforms, NULL);
 
             if( status != CL_SUCCESS )
             {
@@ -558,9 +502,8 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
 
             for( i = 0; i < numPlatforms; i++ )
             {
-                status = clGetPlatformInfo( platforms[i], CL_PLATFORM_VENDOR,
-                                            sizeof(platformName), platformName,
-                                            NULL );
+                status = hb_ocl->clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR,
+                                                   sizeof(platformName), platformName, NULL);
 
                 if( status != CL_SUCCESS )
                 {
@@ -576,11 +519,10 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
                 
                 gpu_info->platform = platforms[i];
 
-                status = clGetDeviceIDs( gpu_info->platform /* platform */,
-                                         CL_DEVICE_TYPE_GPU /* device_type */,
-                                         0 /* num_entries */,
-                                         NULL /* devices */,
-                                         &numDevices );
+                status = hb_ocl->clGetDeviceIDs(gpu_info->platform /* platform */,
+                                                CL_DEVICE_TYPE_GPU /* device_type */,
+                                                0 /* num_entries */,
+                                                NULL /* devices */, &numDevices);
 
                 if( status != CL_SUCCESS )
                 {
@@ -614,21 +556,21 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         cps[2] = 0;
         /* Check for GPU. */
         gpu_info->dType = CL_DEVICE_TYPE_GPU;
-        gpu_info->context = clCreateContextFromType(
-            cps, gpu_info->dType, NULL, NULL, &status );
+        gpu_info->context = hb_ocl->clCreateContextFromType(cps, gpu_info->dType,
+                                                            NULL, NULL, &status);
 
         if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
             gpu_info->dType = CL_DEVICE_TYPE_CPU;
-            gpu_info->context = clCreateContextFromType(
-                cps, gpu_info->dType, NULL, NULL, &status );
+            gpu_info->context = hb_ocl->clCreateContextFromType(cps, gpu_info->dType,
+                                                                NULL, NULL, &status);
         }
 
         if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
         {
             gpu_info->dType = CL_DEVICE_TYPE_DEFAULT;
-            gpu_info->context = clCreateContextFromType(
-                cps, gpu_info->dType, NULL, NULL, &status );
+            gpu_info->context = hb_ocl->clCreateContextFromType(cps, gpu_info->dType,
+                                                                NULL, NULL, &status);
         }
 
         if( (gpu_info->context == (cl_context)NULL) || (status != CL_SUCCESS) )
@@ -639,8 +581,8 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
 
         /* Detect OpenCL devices. */
         /* First, get the size of device list data */
-        status = clGetContextInfo( gpu_info->context, CL_CONTEXT_DEVICES,
-                                   0, NULL, &length );
+        status = hb_ocl->clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES,
+                                          0, NULL, &length);
         if((status != CL_SUCCESS) || (length == 0))
         {
             hb_log( "OpenCL: Unable to get the list of devices in context." );
@@ -655,8 +597,8 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         }
 
         /* Now, get the device list data */
-        status = clGetContextInfo( gpu_info->context, CL_CONTEXT_DEVICES, length,
-                                   gpu_info->devices, NULL );
+        status = hb_ocl->clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES,
+                                          length, gpu_info->devices, NULL);
         if( status != CL_SUCCESS )
         {
             hb_log( "OpenCL: Unable to get the device list data in context." );
@@ -664,9 +606,9 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         }
 
         /* Create OpenCL command queue. */
-        gpu_info->command_queue = clCreateCommandQueue( gpu_info->context,
-                                                        gpu_info->devices[0],
-                                                        0, &status );
+        gpu_info->command_queue = hb_ocl->clCreateCommandQueue(gpu_info->context,
+                                                               gpu_info->devices[0],
+                                                               0, &status);
         if( status != CL_SUCCESS )
         {
             hb_log( "OpenCL: Unable to create opencl command queue." );
@@ -674,9 +616,10 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         }
     }
 
-    if( clGetCommandQueueInfo( gpu_info->command_queue,
-                               CL_QUEUE_THREAD_HANDLE_AMD, sizeof(handle),
-                               &handle, NULL ) == CL_SUCCESS && handle != INVALID_HANDLE_VALUE )
+    if ((CL_SUCCESS == hb_ocl->clGetCommandQueueInfo(gpu_info->command_queue,
+                                                     CL_QUEUE_THREAD_HANDLE_AMD,
+                                                     sizeof(handle), &handle, NULL)) &&
+        (INVALID_HANDLE_VALUE != handle))
     {
 #ifdef SYS_MINGW 
         SetThreadPriority( handle, THREAD_PRIORITY_TIME_CRITICAL );
@@ -697,29 +640,36 @@ int hb_release_opencl_env( GPUEnv *gpu_info )
         return 1;
     int i;
 
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_release_opencl_env: OpenCL support not available");
+        return 0;
+    }
+
     for( i = 0; i<gpu_env.file_count; i++ )
     {
         if( gpu_env.programs[i] ) ;
         {
-            clReleaseProgram( gpu_env.programs[i] );
+            hb_ocl->clReleaseProgram(gpu_env.programs[i]);
             gpu_env.programs[i] = NULL;
         }
     }
 
     if( gpu_env.command_queue )
     {
-        clReleaseCommandQueue( gpu_env.command_queue );
+        hb_ocl->clReleaseCommandQueue(gpu_env.command_queue);
         gpu_env.command_queue = NULL;
     }
 
     if( gpu_env.context )
     {
-        clReleaseContext( gpu_env.context );
+        hb_ocl->clReleaseContext(gpu_env.context);
         gpu_env.context = NULL;
     }
 
     isInited = 0;
     gpu_info->isUserCreated = 0;
+
     return 1;
 }
 
@@ -813,13 +763,16 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     source = source_str;
     source_size[0] = strlen( source );
 
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_compile_kernel_file: OpenCL support not available");
+        return 0;
+    }
+
     if ((binaryExisted = hb_binary_generated(gpu_info->context, filename, &fd)) == 1)
     {
-        status = clGetContextInfo(gpu_info->context,
-                                  CL_CONTEXT_NUM_DEVICES,
-                                  sizeof(numDevices),
-                                  &numDevices,
-                                  NULL);
+        status = hb_ocl->clGetContextInfo(gpu_info->context, CL_CONTEXT_NUM_DEVICES,
+                                          sizeof(numDevices), &numDevices, NULL);
         if (status != CL_SUCCESS)
         {
             hb_log("OpenCL: Unable to get the number of devices in context.");
@@ -852,19 +805,17 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
             return 0;
 
         /* grab the handles to all of the devices in the context. */
-        status = clGetContextInfo(gpu_info->context,
-                                  CL_CONTEXT_DEVICES,
-                                  sizeof(cl_device_id) * numDevices,
-                                  devices,
-                                  NULL);
+        status = hb_ocl->clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES,
+                                          sizeof(cl_device_id) * numDevices,
+                                          devices, NULL);
 
-        gpu_info->programs[idx] = clCreateProgramWithBinary(gpu_info->context,
-                                                            numDevices,
-                                                            devices,
-                                                            &length,
-                                                            (const unsigned char**)&binary,
-                                                            &binary_status,
-                                                            &status);
+        gpu_info->programs[idx] = hb_ocl->clCreateProgramWithBinary(gpu_info->context,
+                                                                    numDevices,
+                                                                    devices,
+                                                                    &length,
+                                                                    (const unsigned char**)&binary,
+                                                                    &binary_status,
+                                                                    &status);
 
         fclose(fd);
         free(devices);
@@ -874,8 +825,9 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     else
     {
         /* create a CL program using the kernel source */
-        gpu_info->programs[idx] = clCreateProgramWithSource(
-            gpu_info->context, 1, &source, source_size, &status );
+        gpu_info->programs[idx] = hb_ocl->clCreateProgramWithSource(gpu_info->context, 1,
+                                                                    &source, source_size,
+                                                                    &status);
     }
 
     if((gpu_info->programs[idx] == (cl_program)NULL) || (status != CL_SUCCESS)){
@@ -886,28 +838,30 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     /* create a cl program executable for all the devices specified */
     if( !gpu_info->isUserCreated ) 
     {
-        status = clBuildProgram( gpu_info->programs[idx], 1, gpu_info->devices,
-                                 build_option, NULL, NULL );
+        status = hb_ocl->clBuildProgram(gpu_info->programs[idx], 1, gpu_info->devices,
+                                        build_option, NULL, NULL);
     }
     else
     {
-        status = clBuildProgram( gpu_info->programs[idx], 1, &(gpu_info->dev),
-                                 build_option, NULL, NULL );
+        status = hb_ocl->clBuildProgram(gpu_info->programs[idx], 1, &(gpu_info->dev),
+                                        build_option, NULL, NULL);
     }
 
     if( status != CL_SUCCESS )
     {
         if( !gpu_info->isUserCreated ) 
         {
-            status = clGetProgramBuildInfo( gpu_info->programs[idx],
-                                            gpu_info->devices[0],
-                                            CL_PROGRAM_BUILD_LOG, 0, NULL, &length );
+            status = hb_ocl->clGetProgramBuildInfo(gpu_info->programs[idx],
+                                                   gpu_info->devices[0],
+                                                   CL_PROGRAM_BUILD_LOG,
+                                                   0, NULL, &length);
         }
         else
         {
-            status = clGetProgramBuildInfo( gpu_info->programs[idx],
-                                            gpu_info->dev,
-                                            CL_PROGRAM_BUILD_LOG, 0, NULL, &length );
+            status = hb_ocl->clGetProgramBuildInfo(gpu_info->programs[idx],
+                                                   gpu_info->dev,
+                                                   CL_PROGRAM_BUILD_LOG,
+                                                   0, NULL, &length);
         }
 
         if( status != CL_SUCCESS )
@@ -924,13 +878,17 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
         if( !gpu_info->isUserCreated )
         {
-            status = clGetProgramBuildInfo( gpu_info->programs[idx], gpu_info->devices[0],
-                                            CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
+            status = hb_ocl->clGetProgramBuildInfo(gpu_info->programs[idx],
+                                                   gpu_info->devices[0],
+                                                   CL_PROGRAM_BUILD_LOG,
+                                                   length, buildLog, &length);
         }
         else
         {
-            status = clGetProgramBuildInfo( gpu_info->programs[idx], gpu_info->dev,
-                                            CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
+            status = hb_ocl->clGetProgramBuildInfo(gpu_info->programs[idx],
+                                                   gpu_info->dev,
+                                                   CL_PROGRAM_BUILD_LOG,
+                                                   length, buildLog, &length);
         }
 
         fd1 = fopen( "kernel-build.log", "w+" );
@@ -1083,7 +1041,14 @@ int hb_get_opencl_env()
 int hb_create_buffer( cl_mem *cl_Buf, int flags, int size )
 {
     int status;
-    *cl_Buf = clCreateBuffer( gpu_env.context, (flags), (size), NULL, &status );
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_create_buffer: OpenCL support not available");
+        return 0;
+    }
+
+    *cl_Buf = hb_ocl->clCreateBuffer(gpu_env.context, flags, size, NULL, &status);
     
     if( status != CL_SUCCESS )
     { 
@@ -1105,7 +1070,14 @@ int hb_read_opencl_buffer( cl_mem cl_inBuf, unsigned char *outbuf, int size )
 {
     int status;
 
-    status = clEnqueueReadBuffer( gpu_env.command_queue, cl_inBuf, CL_TRUE, 0, size, outbuf, 0, 0, 0 );
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_read_opencl_suffer: OpenCL support not available");
+        return 0;
+    }
+
+    status = hb_ocl->clEnqueueReadBuffer(gpu_env.command_queue, cl_inBuf,
+                                         CL_TRUE, 0, size, outbuf, 0, 0, 0);
     if( status != CL_SUCCESS )
     { 
         hb_log( "OpenCL: av_read_opencl_buffer error '%d'", status );
@@ -1119,9 +1091,18 @@ int hb_cl_create_mapped_buffer(cl_mem *mem, unsigned char **addr, int size)
 {
     int status;
     int flags = CL_MEM_ALLOC_HOST_PTR;
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_cl_create_mapped_buffer: OpenCL support not available");
+        return 0;
+    }
+
     //cl_event event;
-    *mem = clCreateBuffer(gpu_env.context, flags, size, NULL, &status);
-    *addr = clEnqueueMapBuffer(gpu_env.command_queue, *mem, CL_TRUE, CL_MAP_READ | CL_MAP_WRITE, 0, size, 0, NULL, NULL/*&event*/, &status);
+    *mem  = hb_ocl->clCreateBuffer(gpu_env.context, flags, size, NULL, &status);
+    *addr = hb_ocl->clEnqueueMapBuffer(gpu_env.command_queue, *mem, CL_TRUE,
+                                       CL_MAP_READ|CL_MAP_WRITE, 0, size, 0,
+                                       NULL, NULL/*&event*/, &status);
 
     //hb_log("\t **** context: %.8x   cmdqueue: %.8x   cl_mem: %.8x   mapaddr: %.8x   size: %d    status: %d", gpu_env.context, gpu_env.command_queue, mem, addr, size, status);
 
@@ -1131,9 +1112,17 @@ int hb_cl_create_mapped_buffer(cl_mem *mem, unsigned char **addr, int size)
 int hb_cl_free_mapped_buffer(cl_mem mem, unsigned char *addr)
 {
     cl_event event;
-    int status = clEnqueueUnmapMemObject(gpu_env.command_queue, mem, addr, 0, NULL, &event);
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_cl_free_mapped_buffer: OpenCL support not available");
+        return 0;
+    }
+
+    int status = hb_ocl->clEnqueueUnmapMemObject(gpu_env.command_queue, mem,
+                                                 addr, 0, NULL, &event);
     if (status == CL_SUCCESS)
-        clWaitForEvents(1, &event);
+        hb_ocl->clWaitForEvents(1, &event);
     else
         hb_log("hb_free_mapped_buffer: error %d", status);
     return (status == CL_SUCCESS) ? 1 : 0;
@@ -1151,11 +1140,16 @@ int hb_use_buffers()
 
 int hb_copy_buffer(cl_mem src_buffer,cl_mem dst_buffer,size_t src_offset,size_t dst_offset,size_t cb)
 {
-    int status = clEnqueueCopyBuffer(gpu_env.command_queue,
-        src_buffer,
-        dst_buffer,
-        src_offset, dst_offset, cb,
-        0, 0, 0);
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_copy_buffer: OpenCL support not available");
+        return 0;
+    }
+
+    int status = hb_ocl->clEnqueueCopyBuffer(gpu_env.command_queue,
+                                             src_buffer, dst_buffer,
+                                             src_offset, dst_offset,
+                                             cb, 0, 0, 0);
     if( status != CL_SUCCESS )
     { 
         av_log(NULL,AV_LOG_ERROR, "hb_read_opencl_buffer error '%d'\n", status ); 
@@ -1184,13 +1178,23 @@ int hb_read_opencl_frame_buffer(cl_mem cl_inBuf,unsigned char *Ybuf,unsigned cha
 int hb_write_opencl_frame_buffer(cl_mem cl_inBuf,unsigned char *Ybuf,unsigned char *Ubuf,unsigned char *Vbuf,int linesize0,int linesize1,int linesize2,int height,int offset)
 {
     int status;
-    void *mapped = clEnqueueMapBuffer( gpu_env.command_queue, cl_inBuf,  CL_TRUE,CL_MAP_WRITE, 0, sizeof(uint8_t) * (linesize0  + linesize1)*height + offset, 0, NULL, NULL, NULL );
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_write_opencl_frame_buffer: OpenCL support not available");
+        return 0;
+    }
+
+    void *mapped = hb_ocl->clEnqueueMapBuffer(gpu_env.command_queue, cl_inBuf,
+                                              CL_TRUE,CL_MAP_WRITE, 0,
+                                              sizeof(uint8_t) * (linesize0  + linesize1) * height + offset,
+                                              0, NULL, NULL, NULL);
     uint8_t *temp = (uint8_t *)mapped;
     temp += offset;
     memcpy(temp,Ybuf,sizeof(uint8_t) * linesize0 * height);
     memcpy(temp + sizeof(uint8_t) * linesize0 * height,Ubuf,sizeof(uint8_t) * linesize1 * height/2);
     memcpy(temp + sizeof(uint8_t) * (linesize0 * height + linesize1 * height/2),Vbuf,sizeof(uint8_t) * linesize2 * height/2);
-    clEnqueueUnmapMemObject(gpu_env.command_queue, cl_inBuf, mapped, 0, NULL, NULL );
+    hb_ocl->clEnqueueUnmapMemObject(gpu_env.command_queue, cl_inBuf, mapped, 0, NULL, NULL);
     return 1;
 }
 
@@ -1203,4 +1207,3 @@ cl_context hb_get_context()
 {
     return gpu_env.context;
 }
-#endif

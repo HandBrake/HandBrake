@@ -11,6 +11,7 @@
 #define HB_OPENCL_H
 
 #include "extras/cl.h"
+#include "openclwrapper.h"
 
 // we only support OpenCL 1.1 or later
 #define HB_OCL_MINVERSION_MAJOR 1
@@ -654,15 +655,90 @@ typedef struct hb_opencl_library_s
     HB_OCL_FUNC_DECL(clReleaseContext);
     HB_OCL_FUNC_DECL(clReleaseEvent);
     HB_OCL_FUNC_DECL(clReleaseKernel);
+    HB_OCL_FUNC_DECL(clReleaseMemObject);
     HB_OCL_FUNC_DECL(clReleaseProgram);
     HB_OCL_FUNC_DECL(clSetKernelArg);
     HB_OCL_FUNC_DECL(clWaitForEvents);
 } hb_opencl_library_t;
 
-int  hb_opencl_library_open (hb_opencl_library_t *opencl);
-void hb_opencl_library_close(hb_opencl_library_t *opencl);
+hb_opencl_library_t* hb_opencl_library_init();
+void                 hb_opencl_library_close(hb_opencl_library_t **_opencl);
+
+/*
+ * Convenience pointer to a single shared OpenCL library wrapper.
+ *
+ * It can be initialized and closed via hb_ocl_init/close().
+ */
+extern hb_opencl_library_t *hb_ocl;
+int    hb_ocl_init();
+void   hb_ocl_close();
+
+typedef struct hb_opencl_device_s
+{
+    cl_platform_id platform;
+    cl_device_type type;
+    cl_device_id   id;
+    char version[128];
+    char  driver[128];
+    char  vendor[128];
+    char    name[128];
+    enum
+    {
+        HB_OCL_VENDOR_AMD,
+        HB_OCL_VENDOR_NVIDIA,
+        HB_OCL_VENDOR_OTHER,
+    } ocl_vendor;
+} hb_opencl_device_t;
 
 int  hb_opencl_available();
 void hb_opencl_info_print();
+
+/* OpenCL scaling */
+typedef struct hb_oclscale_s
+{
+    int initialized;
+    // bicubic scale weights
+    cl_mem bicubic_x_weights;
+    cl_mem bicubic_y_weights;
+    cl_float xscale;
+    cl_float yscale;
+    int width;
+    int height;
+    // horizontal scaling and vertical scaling kernel handle
+    cl_kernel m_kernel;
+    int use_ocl_mem; // 0 use host memory. 1 use gpu oclmem
+} hb_oclscale_t;
+
+int hb_ocl_scale(hb_buffer_t *in, hb_buffer_t *out, int *crop,
+                 hb_oclscale_t *os);
+
+/* Utilities */
+#define HB_OCL_BUF_CREATE(ocl_lib, out, flags, size)                            \
+{                                                                               \
+    out = ocl_lib->clCreateBuffer(kenv->context, flags, size, NULL, &status);   \
+    if (CL_SUCCESS != status)                                                   \
+    {                                                                           \
+        return -1;                                                              \
+    }                                                                           \
+}
+
+#define HB_OCL_BUF_FREE(ocl_lib, buf)                                           \
+{                                                                               \
+    if (buf != NULL)                                                            \
+    {                                                                           \
+        ocl_lib->clReleaseMemObject(buf);                                       \
+        buf = NULL;                                                             \
+    }                                                                           \
+}
+
+#define HB_OCL_CHECK(method, ...)                                               \
+{                                                                               \
+    status = method(__VA_ARGS__);                                               \
+    if (status != CL_SUCCESS)                                                   \
+    {                                                                           \
+        hb_error("%s:%d (%s) error: %d\n",__FUNCTION__,__LINE__,#method,status);\
+        return status;                                                          \
+    }                                                                           \
+}
 
 #endif//HB_OPENCL_H

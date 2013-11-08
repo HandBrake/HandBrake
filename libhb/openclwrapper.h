@@ -11,10 +11,11 @@
 
 
  */
-#ifndef __OPENCL_WRAPPER_H
-#define __OPENCL_WRAPPER_H
-#ifdef USE_OPENCL
+#ifndef HB_OPENCL_WRAPPER_H
+#define HB_OPENCL_WRAPPER_H
+
 #include "common.h"
+#include "extras/cl.h"
 
 //support AMD opencl
 #define CL_QUEUE_THREAD_HANDLE_AMD 0x403E
@@ -85,5 +86,5 @@ int hb_cl_free_mapped_buffer(cl_mem mem, unsigned char *addr);
 int hb_use_buffers();
 
 int hb_confirm_gpu_type();
-#endif
-#endif
+
+#endif // HB_OPENCL_WRAPPER_H

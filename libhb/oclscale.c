@@ -7,14 +7,13 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
 
    Authors: Peng Gao <peng@multicorewareinc.com> <http://www.multicorewareinc.com/>
-            Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
+            Li   Cao <li@multicorewareinc.com>   <http://www.multicorewareinc.com/>
 
  */
 
-#ifdef USE_OPENCL
-
 #include <math.h>
 #include "common.h"
+#include "opencl.h"
 #include "openclwrapper.h"
 #define FILTER_LEN 4
 
@@ -80,6 +79,12 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
     hb_buffer_t *in = data[11];
     hb_buffer_t *out = data[12];
 
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_ocl_scale_func: OpenCL support not available");
+        return 0;
+    }
+
     if (os->initialized == 0)
     {
         hb_log( "Scaling With OpenCL" );
@@ -87,7 +92,7 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
             hb_log( "Using Zero Copy");
         // create the block kernel
         cl_int status;
-        os->m_kernel = clCreateKernel( kenv->program, "frame_scale", &status );
+        os->m_kernel = hb_ocl->clCreateKernel(kenv->program, "frame_scale", &status);
 
         os->initialized = 1;
     }
@@ -98,8 +103,12 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
         int eventCount = 0;
 
         if (kenv->isAMD == 0) {
-            status = clEnqueueUnmapMemObject(kenv->command_queue, in->cl.buffer, in->data, 0, NULL, &events[eventCount++]);
-            status = clEnqueueUnmapMemObject(kenv->command_queue, out->cl.buffer, out->data, 0, NULL, &events[eventCount++]);
+            status = hb_ocl->clEnqueueUnmapMemObject(kenv->command_queue,
+                                                     in->cl.buffer, in->data, 0,
+                                                     NULL, &events[eventCount++]);
+            status = hb_ocl->clEnqueueUnmapMemObject(kenv->command_queue,
+                                                     out->cl.buffer, out->data, 0,
+                                                     NULL, &events[eventCount++]);
         }
 
         cl_int srcPlaneOffset0 = in->plane[0].data - in->data;
@@ -127,28 +136,28 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
         cl_float yscale = (out_frame_h * 1.0f) / in_frame_h;
         setupScaleWeights(xscale, yscale, out_frame_w, out_frame_h, os, kenv);
 
-        OCLCHECK( clSetKernelArg, os->m_kernel, 0, sizeof(cl_mem), &out_buf );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 1, sizeof(cl_mem), &in_buf );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 2, sizeof(cl_float), &xscale );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 3, sizeof(cl_float), &yscale );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 4, sizeof(cl_int), &srcPlaneOffset0 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 5, sizeof(cl_int), &srcPlaneOffset1 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 6, sizeof(cl_int), &srcPlaneOffset2 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 7, sizeof(cl_int), &dstPlaneOffset0 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 8, sizeof(cl_int), &dstPlaneOffset1 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 9, sizeof(cl_int), &dstPlaneOffset2 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 10, sizeof(cl_int), &srcRowWords0 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 11, sizeof(cl_int), &srcRowWords1 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 12, sizeof(cl_int), &srcRowWords2 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 13, sizeof(cl_int), &dstRowWords0 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 14, sizeof(cl_int), &dstRowWords1 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 15, sizeof(cl_int), &dstRowWords2 );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 16, sizeof(cl_int), &in_frame_w );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 17, sizeof(cl_int), &in_frame_h );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 18, sizeof(cl_int), &out_frame_w );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 19, sizeof(cl_int), &out_frame_h );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 20, sizeof(cl_mem), &os->bicubic_x_weights );
-        OCLCHECK( clSetKernelArg, os->m_kernel, 21, sizeof(cl_mem), &os->bicubic_y_weights );
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 0, sizeof(cl_mem), &out_buf);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 1, sizeof(cl_mem), &in_buf);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 2, sizeof(cl_float), &xscale);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 3, sizeof(cl_float), &yscale);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 4, sizeof(cl_int), &srcPlaneOffset0);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 5, sizeof(cl_int), &srcPlaneOffset1);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 6, sizeof(cl_int), &srcPlaneOffset2);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 7, sizeof(cl_int), &dstPlaneOffset0);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 8, sizeof(cl_int), &dstPlaneOffset1);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 9, sizeof(cl_int), &dstPlaneOffset2);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 10, sizeof(cl_int), &srcRowWords0);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 11, sizeof(cl_int), &srcRowWords1);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 12, sizeof(cl_int), &srcRowWords2);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 13, sizeof(cl_int), &dstRowWords0);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 14, sizeof(cl_int), &dstRowWords1);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 15, sizeof(cl_int), &dstRowWords2);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 16, sizeof(cl_int), &in_frame_w);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 17, sizeof(cl_int), &in_frame_h);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 18, sizeof(cl_int), &out_frame_w);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 19, sizeof(cl_int), &out_frame_h);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 20, sizeof(cl_mem), &os->bicubic_x_weights);
+        HB_OCL_CHECK(hb_ocl->clSetKernelArg, os->m_kernel, 21, sizeof(cl_mem), &os->bicubic_y_weights);
 
         size_t workOffset[] = { 0, 0, 0 };
         size_t globalWorkSize[] = { 1, 1, 1 };
@@ -164,42 +173,70 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
         globalWorkSize[1] = ygroups;
         globalWorkSize[2] = 3;
 
-        OCLCHECK( clEnqueueNDRangeKernel, kenv->command_queue, os->m_kernel, 3, workOffset, globalWorkSize, localWorkSize, eventCount, (eventCount == 0) ? NULL : &events[0], &events[eventCount] );
+        HB_OCL_CHECK(hb_ocl->clEnqueueNDRangeKernel, kenv->command_queue,
+                     os->m_kernel, 3, workOffset, globalWorkSize, localWorkSize,
+                     eventCount, eventCount == 0 ? NULL : &events[0], &events[eventCount]);
         ++eventCount;
 
         if (kenv->isAMD == 0) {
-            in->data = clEnqueueMapBuffer(kenv->command_queue, in->cl.buffer, CL_FALSE, CL_MAP_READ | CL_MAP_WRITE, 0, in->alloc, (eventCount == 0) ? 0 : 1, (eventCount == 0) ? NULL : &events[eventCount - 1], &events[eventCount], &status);
-            out->data = clEnqueueMapBuffer(kenv->command_queue, out->cl.buffer, CL_FALSE, CL_MAP_READ | CL_MAP_WRITE, 0, out->alloc, (eventCount == 0) ? 0 : 1, (eventCount == 0) ? NULL : &events[eventCount - 1], &events[eventCount + 1], &status);
+            in->data  = hb_ocl->clEnqueueMapBuffer(kenv->command_queue, in->cl.buffer,
+                                                   CL_FALSE, CL_MAP_READ|CL_MAP_WRITE,
+                                                   0, in->alloc,
+                                                   eventCount ? 1                       : 0,
+                                                   eventCount ? &events[eventCount - 1] : NULL,
+                                                   &events[eventCount], &status);
+            out->data = hb_ocl->clEnqueueMapBuffer(kenv->command_queue, out->cl.buffer,
+                                                   CL_FALSE, CL_MAP_READ|CL_MAP_WRITE,
+                                                   0, out->alloc,
+                                                   eventCount ? 1                       : 0,
+                                                   eventCount ? &events[eventCount - 1] : NULL,
+                                                   &events[eventCount + 1], &status);
             eventCount += 2;
         }
 
-        clFlush(kenv->command_queue);
-        clWaitForEvents(eventCount, &events[0]);
+        hb_ocl->clFlush(kenv->command_queue);
+        hb_ocl->clWaitForEvents(eventCount, &events[0]);
         int i;
         for (i = 0; i < eventCount; ++i)
-            clReleaseEvent(events[i]);
+        {
+            hb_ocl->clReleaseEvent(events[i]);
+        }
     }
 
     return 1;
 }
 
-int setupScaleWeights(cl_float xscale, cl_float yscale, int width, int height, hb_oclscale_t *os, KernelEnv *kenv) {
+int setupScaleWeights(cl_float xscale, cl_float yscale, int width, int height, hb_oclscale_t *os, KernelEnv *kenv)
+{
     cl_int status;
-    if (os->xscale != xscale || os->width < width) {
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("setupScaleWeights: OpenCL support not available");
+        return 1;
+    }
+
+    if (os->xscale != xscale || os->width < width)
+    {
         cl_float *xweights = hb_bicubic_weights(xscale, width);
-        CL_FREE(os->bicubic_x_weights);
-        CREATEBUF(os->bicubic_x_weights, CL_MEM_READ_ONLY, sizeof(cl_float) * width * 4);
-        OCLCHECK(clEnqueueWriteBuffer, kenv->command_queue, os->bicubic_x_weights, CL_TRUE, 0, sizeof(cl_float) * width * 4, xweights, 0, NULL, NULL );
+        HB_OCL_BUF_FREE  (hb_ocl, os->bicubic_x_weights);
+        HB_OCL_BUF_CREATE(hb_ocl, os->bicubic_x_weights, CL_MEM_READ_ONLY,
+                          sizeof(cl_float) * width * 4);
+        HB_OCL_CHECK(hb_ocl->clEnqueueWriteBuffer, kenv->command_queue, os->bicubic_x_weights,
+                     CL_TRUE, 0, sizeof(cl_float) * width * 4, xweights, 0, NULL, NULL);
         os->width = width;
         os->xscale = xscale;
         free(xweights);
     }
 
-    if ((os->yscale != yscale) || (os->height < height)) {
+    if ((os->yscale != yscale) || (os->height < height))
+    {
         cl_float *yweights = hb_bicubic_weights(yscale, height);
-        CL_FREE(os->bicubic_y_weights);
-        CREATEBUF(os->bicubic_y_weights, CL_MEM_READ_ONLY, sizeof(cl_float) * height * 4);
-        OCLCHECK(clEnqueueWriteBuffer, kenv->command_queue, os->bicubic_y_weights, CL_TRUE, 0, sizeof(cl_float) * height * 4, yweights, 0, NULL, NULL );
+        HB_OCL_BUF_FREE  (hb_ocl, os->bicubic_y_weights);
+        HB_OCL_BUF_CREATE(hb_ocl, os->bicubic_y_weights, CL_MEM_READ_ONLY,
+                          sizeof(cl_float) * height * 4);
+        HB_OCL_CHECK(hb_ocl->clEnqueueWriteBuffer, kenv->command_queue, os->bicubic_y_weights,
+                     CL_TRUE, 0, sizeof(cl_float) * height * 4, yweights, 0, NULL, NULL);
         os->height = height;
         os->yscale = yscale;
         free(yweights);
@@ -263,9 +300,3 @@ int hb_ocl_scale(hb_buffer_t *in, hb_buffer_t *out, int *crop, hb_oclscale_t *os
         hb_log( "run kernel[%s] failed", "frame_scale" );
     return 0;
 }
-
-
-
-
-
-#endif

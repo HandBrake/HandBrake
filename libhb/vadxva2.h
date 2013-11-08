@@ -11,15 +11,17 @@
 
  */
 
-#ifndef VA_DXVA2_H
-#define VA_DXVA2_H
-
 #ifdef USE_HWD
+
+#ifndef HB_VA_DXVA2_H
+#define HB_VA_DXVA2_H
+
 #include "hbffmpeg.h"
 #include "d3d9.h"
 #include "libavcodec/dxva2.h"
 #include "dxva2api.h"
 #include "common.h"
+#include "opencl.h"
 #include "openclwrapper.h"
 
 #define HB_FOURCC( a, b, c, d ) ( ((uint32_t)a) | ( ((uint32_t)b) << 8 ) | ( ((uint32_t)c) << 16 ) | ( ((uint32_t)d) << 24 ) )
@@ -133,21 +135,18 @@ typedef struct
     int     do_job;
 
     // running nv12toyuv kernel.
-#ifdef USE_OPENCL
     cl_kernel nv12toyuv;
     cl_mem cl_mem_nv12;
     cl_mem cl_mem_yuv;
     uint8_t * nv12toyuv_tmp_in;
     uint8_t * nv12toyuv_tmp_out;
-#endif
 } hb_va_dxva2_t;
 
 typedef struct FilterLink_T
 {
-#ifdef USE_OPENCL
     cl_mem cl_inbuf;
     cl_mem cl_outbuf;
-#endif
+
     uint8_t *mem_inbuf;
     uint8_t *mem_outbuf;
     int width;
@@ -209,5 +208,7 @@ void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context );
 void hb_va_release( hb_va_dxva2_t *dxva2, AVFrame *frame );
 void  hb_va_close( hb_va_dxva2_t *dxva2 );
 int hb_check_hwd_fmt( int fmt );
-#endif
-#endif
+
+#endif // HB_VA_DXVA2_H
+
+#endif // USE_HWD

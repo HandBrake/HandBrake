@@ -8,6 +8,7 @@
  */
 
 #include "hb.h"
+#include "opencl.h"
 #include "hbffmpeg.h"
 #include "a52dec/a52.h"
 
@@ -867,6 +868,9 @@ skip_preview:
         title->color_matrix = vid_info.color_matrix;
 
         title->video_decode_support = vid_info.video_decode_support;
+
+        // TODO: check video dimensions
+        title->opencl_support = !!hb_opencl_available();
 
         // compute the aspect ratio based on the storage dimensions and the
         // pixel aspect ratio (if supplied) or just storage dimensions if no PAR.

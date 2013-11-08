@@ -27,10 +27,6 @@ MACOSX.map.g.min  = debug
 MACOSX.map.g.std  = debug
 MACOSX.map.g.max  = debug
 
-ifeq (1,$(FEATURE.opencl))
-    MACOSX.extra_cflags = OTHER_CFLAGS='-DUSE_OPENCL'
-endif
-
 ## xcconfig: must be one of macosx/xcconfig/*.xcconfig
 MACOSX.xcconfig = $(foreach x,$(XCODE.xcconfig),-xcconfig $(MACOSX.src/)xcconfig/$(x))
 MACOSX.sdk      = $(foreach sdk,$(GCC.sysroot),-sdk $(sdk))

@@ -250,14 +250,20 @@ void hb_buffer_pool_free( void )
             if( b->data )
             {
                 freed += b->alloc;
-#ifdef USE_OPENCL
-                if (b->cl.buffer != NULL) {
+
+                if (b->cl.buffer != NULL)
+                {
+                    /* OpenCL */
                     if (hb_cl_free_mapped_buffer(b->cl.buffer, b->data) == 0)
-                        hb_log("bad free: %.16x -> buffer %.16x map %.16x", b, b->cl.buffer, b->data);
+                    {
+                        hb_log("hb_buffer_pool_free: bad free: %.16x -> buffer %.16x map %.16x",
+                               b, b->cl.buffer, b->data);
+                    }
                 }
                 else
-#endif
-                    free( b->data );
+                {
+                    free(b->data);
+                }
             }
             free( b );
             count++;
@@ -303,17 +309,18 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
     {
         b = hb_fifo_get( buffer_pool );
 
-#ifdef USE_OPENCL
-        if (b && (needsMapped != 0) && (b->cl.buffer == NULL))
+        /* OpenCL */
+        if (b != NULL && needsMapped && b->cl.buffer == NULL)
         {
             // We need a mapped OpenCL buffer and that is not what we got out of the pool.
-            // Ditch it.  It will get replaced with what we need.
-            if (b->data)
+            // Ditch it; it will get replaced with what we need.
+            if (b->data != NULL)
+            {
                 free(b->data);
+            }
             free(b);
             b = NULL;
         }
-#endif
 
         if( b )
         {
@@ -322,11 +329,11 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
              * didn't have to do this.
              */
             uint8_t *data = b->data;
-#ifdef USE_OPENCL
-            cl_mem buffer = b->cl.buffer;
+
+            /* OpenCL */
+            cl_mem buffer       = b->cl.buffer;
             cl_event last_event = b->cl.last_event;
-            int loc = b->cl.buffer_location;
-#endif
+            int loc             = b->cl.buffer_location;
 
             memset( b, 0, sizeof(hb_buffer_t) );
             b->alloc = buffer_pool->buffer_size;
@@ -335,11 +342,12 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
             b->s.start = -1;
             b->s.stop = -1;
             b->s.renderOffset = -1;
-#ifdef USE_OPENCL
-            b->cl.buffer = buffer;
-            b->cl.last_event = last_event;
+
+            /* OpenCL */
+            b->cl.buffer          = buffer;
+            b->cl.last_event      = last_event;
             b->cl.buffer_location = loc;
-#endif
+
             return( b );
         }
     }
@@ -358,19 +366,18 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
 
     if (size)
     {
-#ifdef USE_OPENCL
-        b->cl.last_event = NULL;
+        /* OpenCL */
+        b->cl.last_event      = NULL;
         b->cl.buffer_location = HOST;
 
-        if (needsMapped != 0)
+        /* OpenCL */
+        if (needsMapped)
         {
-            int status;
-            status  = hb_cl_create_mapped_buffer(&b->cl.buffer, &b->data, b->alloc);
-            //hb_log("buf: %.16x -> buffer %.16x map %.16x size %d", b, b->cl.buffer, b->data, size);
+            int status = hb_cl_create_mapped_buffer(&b->cl.buffer, &b->data, b->alloc);
         }
-        else {
+        else
+        {
             b->cl.buffer = NULL;
-#endif
 
 #if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
         b->data  = malloc( b->alloc );
@@ -380,9 +387,7 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
 #else
         b->data  = memalign( 16, b->alloc );
 #endif
-#ifdef USE_OPENCL
         }
-#endif
 
         if( !b->data )
         {
@@ -533,11 +538,10 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
                     hb_image_height_stride( pix_fmt, height, p );
         }
     }
-#ifdef USE_OPENCL
-    buf = hb_buffer_init_internal( size , hb_use_buffers() );
-#else
-    buf = hb_buffer_init( size );
-#endif
+
+    /* OpenCL */
+    buf = hb_buffer_init_internal(size , hb_use_buffers());
+
     if( buf == NULL )
         return NULL;
 
@@ -590,22 +594,22 @@ void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
     uint8_t *data  = dst->data;
     int      size  = dst->size;
     int      alloc = dst->alloc;
-#ifdef USE_OPENCL
-    cl_mem buffer = dst->cl.buffer;
+
+    /* OpenCL */
+    cl_mem buffer       = dst->cl.buffer;
     cl_event last_event = dst->cl.last_event;
-    int loc = dst->cl.buffer_location;
-#endif
+    int loc             = dst->cl.buffer_location;
 
     *dst = *src;
 
     src->data  = data;
     src->size  = size;
     src->alloc = alloc;
-#ifdef USE_OPENCL
-    src->cl.buffer = buffer;
-    src->cl.last_event = last_event;
+
+    /* OpenCL */
+    src->cl.buffer          = buffer;
+    src->cl.last_event      = last_event;
     src->cl.buffer_location = loc;
-#endif
 }
 
 // Frees the specified buffer list.
@@ -633,14 +637,19 @@ void hb_buffer_close( hb_buffer_t ** _b )
         // free the buf 
         if( b->data )
         {
-#ifdef USE_OPENCL
-            if (b->cl.buffer != NULL) {
+            if (b->cl.buffer != NULL)
+            {
+                /* OpenCL */
                 if (hb_cl_free_mapped_buffer(b->cl.buffer, b->data) == 0)
-                    hb_log("bad free2: %.16x -> buffer %.16x map %.16x", b, b->cl.buffer, b->data);
+                {
+                    hb_log("hb_buffer_pool_free: bad free %.16x -> buffer %.16x map %.16x",
+                           b, b->cl.buffer, b->data);
                 }
+            }
             else
-#endif
-                free( b->data );
+            {
+                free(b->data);
+            }
             hb_lock(buffers.lock);
             buffers.allocated -= b->alloc;
             hb_unlock(buffers.lock);

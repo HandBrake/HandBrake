@@ -43,6 +43,7 @@
 #include "audio_resample.h"
 
 #ifdef USE_HWD
+#include "opencl.h"
 #include "vadxva2.h"
 #endif
 
@@ -393,19 +394,19 @@ static void closePrivData( hb_work_private_t ** ppv )
         hb_audio_resample_free(pv->resample);
 
 #ifdef USE_HWD
-        if ( pv->opencl_scale )
+        if (pv->opencl_scale != NULL)
         {
-            free( pv->opencl_scale );
+            free(pv->opencl_scale);
         }
-		
-        if ( pv->dxva2 )
+        if (pv->dxva2 != NULL)
         {
-#ifdef USE_OPENCL
-            CL_FREE( pv->dxva2->cl_mem_nv12 );
-#endif
-            hb_va_close( pv->dxva2 );    
+            if (hb_ocl != NULL)
+            {
+                HB_OCL_BUF_FREE(hb_ocl, pv->dxva2->cl_mem_nv12);
+            }
+            hb_va_close(pv->dxva2);
         }        
-#endif   
+#endif
 
 #ifdef USE_QSV_PTS_WORKAROUND
         if (pv->qsv.decode && pv->qsv.pts_list != NULL)

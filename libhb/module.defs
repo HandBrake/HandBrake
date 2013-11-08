@@ -41,9 +41,6 @@ endif
 ifeq (1,$(FEATURE.fdk_aac))
 LIBHB.GCC.D += USE_FDK_AAC
 endif
-ifeq (1,$(FEATURE.opencl))
-LIBHB.GCC.D += USE_OPENCL
-endif
 
 ifeq (1,$(FEATURE.hwd))
 LIBHB.GCC.D += USE_HWD
@@ -66,10 +63,6 @@ LIBHB.GCC.D += USE_AVFORMAT
 endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
-
-ifeq (1,$(FEATURE.opencl))
-LIBHB.GCC.l += OpenCL
-endif
 
 ifeq ($(BUILD.system),cygwin)
     LIBHB.GCC.D += SYS_CYGWIN

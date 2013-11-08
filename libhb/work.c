@@ -11,6 +11,7 @@
 #include "a52dec/a52.h"
 #include "libavformat/avformat.h"
 #include "openclwrapper.h"
+#include "opencl.h"
 
 #ifdef USE_QSV
 #include "qsv_common.h"
@@ -539,13 +540,13 @@ static void do_job(hb_job_t *job)
 
     job->list_work = hb_list_init();
 
-#ifdef USE_OPENCL
-    /* init opencl environment */
-    if (job->use_opencl)
-        job->use_opencl = !hb_init_opencl_run_env(0, NULL, "-I.");
-#else
-    job->use_opencl = 0;
-#endif
+    /* OpenCL */
+    if (job->use_opencl && (hb_ocl_init() || hb_init_opencl_run_env(0, NULL, "-I.")))
+    {
+        hb_log("work: failed to initialize OpenCL environment, using fallback");
+        job->use_opencl = 0;
+        hb_ocl_close();
+    }
 
     hb_log( "starting job" );
 
@@ -856,9 +857,10 @@ static void do_job(hb_job_t *job)
         init.pix_fmt = AV_PIX_FMT_YUV420P;
         init.width = title->width;
         init.height = title->height;
-#ifdef USE_OPENCL
-        init.use_dxva = hb_use_dxva( title ); 
-#endif
+
+        /* DXVA2 */
+        init.use_dxva = hb_use_dxva(title);
+
         init.par_width = job->anamorphic.par_width;
         init.par_height = job->anamorphic.par_height;
         memcpy(init.crop, title->crop, sizeof(int[4]));
@@ -1615,6 +1617,12 @@ cleanup:
 
     hb_buffer_pool_free();
     hb_job_close( &job );
+
+    /* OpenCL: must be closed *after* freeing the buffer pool */
+    if (job->use_opencl)
+    {
+        hb_ocl_close();
+    }
 }
 
 static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )

@@ -10,8 +10,9 @@
             Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
  */
 
-#ifdef USE_OPENCL
 #ifdef USE_HWD
+
+#include "opencl.h"
 #include "vadxva2.h"
 #include "oclnv12toyuv.h"
 
@@ -50,10 +51,16 @@ static int hb_nv12toyuv_reg_kernel( void );
  */
 static int hb_nv12toyuv_create_cl_buf( KernelEnv *kenv, int w, int h, hb_va_dxva2_t *dxva2 )
 {
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_nv12toyuv_create_cl_kernel: OpenCL support not available");
+        return 1;
+    }
+
     cl_int status = CL_SUCCESS;
     int in_bytes = w*h*3/2;
-    CREATEBUF( dxva2->cl_mem_nv12, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR, in_bytes );
-    CREATEBUF( dxva2->cl_mem_yuv, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, in_bytes );
+    HB_OCL_BUF_CREATE(hb_ocl, dxva2->cl_mem_nv12, CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR, in_bytes);
+    HB_OCL_BUF_CREATE(hb_ocl, dxva2->cl_mem_yuv, CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR, in_bytes);
     return 0;
 }
 
@@ -62,8 +69,14 @@ static int hb_nv12toyuv_create_cl_buf( KernelEnv *kenv, int w, int h, hb_va_dxva
  */
 static int hb_nv12toyuv_create_cl_kernel( KernelEnv *kenv, hb_va_dxva2_t *dxva2 )
 {
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_nv12toyuv_create_cl_kernel: OpenCL support not available");
+        return 1;
+    }
+
     int ret;
-    dxva2->nv12toyuv = clCreateKernel( kenv->program, "nv12toyuv", &ret );
+    dxva2->nv12toyuv = hb_ocl->clCreateKernel(kenv->program, "nv12toyuv", &ret);
     return ret;
 }
 
@@ -74,10 +87,17 @@ static int hb_nv12toyuv_setkernelarg( KernelEnv *kenv, int w, int h, hb_va_dxva2
 {
     int arg = 0, status;
     kenv->kernel = dxva2->nv12toyuv;
-    OCLCHECK( clSetKernelArg, kenv->kernel, arg++, sizeof(cl_mem), &dxva2->cl_mem_nv12 );
-    OCLCHECK( clSetKernelArg, kenv->kernel, arg++, sizeof(cl_mem), &dxva2->cl_mem_yuv );
-    OCLCHECK( clSetKernelArg, kenv->kernel, arg++, sizeof(int), &w );
-    OCLCHECK( clSetKernelArg, kenv->kernel, arg++, sizeof(int), &h );
+
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_nv12toyuv_setkernelarg: OpenCL support not available");
+        return 1;
+    }
+
+    HB_OCL_CHECK(hb_ocl->clSetKernelArg, kenv->kernel, arg++, sizeof(cl_mem), &dxva2->cl_mem_nv12);
+    HB_OCL_CHECK(hb_ocl->clSetKernelArg, kenv->kernel, arg++, sizeof(cl_mem), &dxva2->cl_mem_yuv);
+    HB_OCL_CHECK(hb_ocl->clSetKernelArg, kenv->kernel, arg++, sizeof(int), &w);
+    HB_OCL_CHECK(hb_ocl->clSetKernelArg, kenv->kernel, arg++, sizeof(int), &h);
     return 0;
 }
 
@@ -163,10 +183,19 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
         return -1;
 	}
 
+    if (hb_ocl == NULL)
+    {
+        hb_error("hb_nv12toyuv: OpenCL support not available");
+        return -1;
+    }
+
     int in_bytes = w*h*3/2;
     if( kenv->isAMD )
     {
-        void *data = clEnqueueMapBuffer( kenv->command_queue, dxva2->cl_mem_nv12, CL_MAP_WRITE_INVALIDATE_REGION, CL_TRUE, 0, in_bytes, 0, NULL, NULL, NULL );
+        void *data = hb_ocl->clEnqueueMapBuffer(kenv->command_queue,
+                                                dxva2->cl_mem_nv12,
+                                                CL_MAP_WRITE_INVALIDATE_REGION,
+                                                CL_TRUE, 0, in_bytes, 0, NULL, NULL, NULL);
 
         for ( i = 0; i < dxva2->height; i++ )
         {
@@ -176,7 +205,8 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
                 memcpy( data + ( dxva2->width * dxva2->height ) + i * dxva2->width, bufi2 + i * p, dxva2->width );
 			}		
 		}
-        clEnqueueUnmapMemObject( kenv->command_queue, dxva2->cl_mem_nv12, data, 0, NULL, NULL );
+        hb_ocl->clEnqueueUnmapMemObject(kenv->command_queue, dxva2->cl_mem_nv12,
+                                        data, 0, NULL, NULL);
     }
     else
     {
@@ -189,18 +219,22 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
                 memcpy( tmp + (dxva2->width * dxva2->height) + i * dxva2->width, bufi2 + i * p, dxva2->width );
 			}
         }
-        OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, dxva2->cl_mem_nv12, CL_TRUE, 0, in_bytes, tmp, 0, NULL, NULL );
+        HB_OCL_CHECK(hb_ocl->clEnqueueWriteBuffer, kenv->command_queue,
+                     dxva2->cl_mem_nv12, CL_TRUE, 0, in_bytes, tmp, 0, NULL, NULL);
         free( tmp );
     }
 
     size_t gdim[2] = {w>>1, h>>1};
-    OCLCHECK( clEnqueueNDRangeKernel, kenv->command_queue, kenv->kernel, 2, NULL, gdim, NULL, 0, NULL, NULL );
+    HB_OCL_CHECK(hb_ocl->clEnqueueNDRangeKernel, kenv->command_queue,
+                 kenv->kernel, 2, NULL, gdim, NULL, 0, NULL, NULL );
 
     if( (crop[0] || crop[1] || crop[2] || crop[3]) && (decomb == 0) && (detelecine == 0) )
     {
         AVPicture pic_in;
         AVPicture pic_crop;
-        clEnqueueReadBuffer( kenv->command_queue, dxva2->cl_mem_yuv, CL_TRUE, 0, in_bytes, dxva2->nv12toyuv_tmp_out, 0, NULL, NULL );
+        hb_ocl->clEnqueueReadBuffer(kenv->command_queue,  dxva2->cl_mem_yuv,
+                                    CL_TRUE, 0, in_bytes, dxva2->nv12toyuv_tmp_out,
+                                    0, NULL, NULL);
         hb_buffer_t *in = hb_video_buffer_init( w, h );
 
         int wmp = in->plane[0].stride;
@@ -226,13 +260,20 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
 
         if( kenv->isAMD )
         {
-            void *data = clEnqueueMapBuffer( kenv->command_queue, dxva2->cl_mem_yuv, CL_MAP_WRITE_INVALIDATE_REGION, CL_TRUE, 0, ww * hh * 3 / 2, 0, NULL, NULL, NULL );
+            void *data = hb_ocl->clEnqueueMapBuffer(kenv->command_queue,
+                                                    dxva2->cl_mem_yuv,
+                                                    CL_MAP_WRITE_INVALIDATE_REGION,
+                                                    CL_TRUE, 0, ww * hh * 3 / 2, 0,
+                                                    NULL, NULL, NULL);
             memcpy( data, dxva2->nv12toyuv_tmp_in, ww * hh * 3 / 2 );
-            clEnqueueUnmapMemObject( kenv->command_queue, dxva2->cl_mem_yuv, data, 0, NULL, NULL );
+            hb_ocl->clEnqueueUnmapMemObject(kenv->command_queue,
+                                            dxva2->cl_mem_yuv, data, 0, NULL, NULL);
         }
         else
         {
-            OCLCHECK( clEnqueueWriteBuffer, kenv->command_queue, dxva2->cl_mem_yuv, CL_TRUE, 0, in_bytes, dxva2->nv12toyuv_tmp_in, 0, NULL, NULL );
+            HB_OCL_CHECK(hb_ocl->clEnqueueWriteBuffer, kenv->command_queue,
+                         dxva2->cl_mem_yuv, CL_TRUE, 0, in_bytes,
+                         dxva2->nv12toyuv_tmp_in, 0, NULL, NULL);
         }
 
         hb_buffer_close( &in );
@@ -281,5 +322,5 @@ int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxv
     }
     return 0;
 }
-#endif
-#endif
+
+#endif // USE_HWD

@@ -11,20 +11,17 @@
 
  */
 
-#ifdef USE_OPENCL
-#ifndef RENDER_CL_H
-#define RENDER_CL_H
+#ifndef HB_OCLNV12TOYUV_H
+#define HB_OCLNV12TOYUV_H
 
 #include "common.h"
 #include "extras/cl.h"
 #include "openclwrapper.h"
 
-/**
+/*
  * nv12 to yuv interface
  * bufi is input frame of nv12, w is input frame width, h is input frame height
  */
-#ifdef USE_HWD
-int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxva2_t *dxva2, int decomb, int detelecine );
-#endif
-#endif
-#endif
+int hb_ocl_nv12toyuv(uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxva2_t *dxva2, int decomb, int detelecine);
+
+#endif // HB_OCLNV12TOYUV_H

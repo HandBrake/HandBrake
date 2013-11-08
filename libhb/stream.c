@@ -1121,14 +1121,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
 #else
     title->hwd_support = 0;
 #endif
-#ifdef USE_OPENCL
-    if (hb_confirm_gpu_type() == 0 && hb_opencl_available() == 1)
-        title->opencl_support = 1;
-    else
-        title->opencl_support = 0;
-#else
-    title->opencl_support = 0;
-#endif
+
     // Height, width, rate and aspect ratio information is filled in
     // when the previews are built
     return title;
@@ -5686,14 +5679,6 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
        title->hwd_support = 0;
 #else
     title->hwd_support = 0;
-#endif
-#ifdef USE_OPENCL
-    if (hb_confirm_gpu_type() == 0 && hb_opencl_available() == 1)
-        title->opencl_support = 1;
-    else
-        title->opencl_support = 0;
-#else
-    title->opencl_support = 0;
 #endif
 
     return title;

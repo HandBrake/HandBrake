@@ -10,14 +10,12 @@
             Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
 
  */
-#include "vadxva2.h"
-
-#ifdef USE_OPENCL
-#include "extras/cl.h"
-#include "oclnv12toyuv.h"
-#endif
 
 #ifdef USE_HWD
+
+#include "vadxva2.h"
+#include "extras/cl.h"
+#include "oclnv12toyuv.h"
 
 static int   hb_va_setup( hb_va_dxva2_t *dxva2, void **hw, int width, int height );
 static int   hb_va_get( hb_va_dxva2_t *dxva2, AVFrame *frame );
@@ -112,12 +110,11 @@ void hb_va_close( hb_va_dxva2_t *dxva2 )
     if( dxva2->hd3d9_dll )
         FreeLibrary( dxva2->hd3d9_dll );
 
-#ifdef USE_OPENCL
     if ( dxva2->nv12toyuv_tmp_in )
         free( dxva2->nv12toyuv_tmp_in );
     if ( dxva2->nv12toyuv_tmp_out )
         free( dxva2->nv12toyuv_tmp_out );
-#endif
+
     dxva2->description = NULL;
     free( dxva2 );
 }
@@ -775,4 +772,5 @@ int hb_check_hwd_fmt( int fmt )
     }
     return result;
 }
-#endif
+
+#endif // USE_HWD

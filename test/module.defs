@@ -39,15 +39,6 @@ BUILD.out += $(TEST.install.exe)
 
 TEST.GCC.I += $(LIBHB.GCC.I)
 
-ifeq (1,$(FEATURE.opencl))
-ifeq ($(BUILD.system),darwin)
-    TEST.GCC.f += OpenCL
-else
-    TEST.GCC.l += OpenCL
-endif
-    TEST.GCC.D += USE_OPENCL
-endif
-
 ifeq ($(BUILD.system),darwin)
     TEST.GCC.f += IOKit CoreServices AudioToolbox
     TEST.GCC.l += iconv
