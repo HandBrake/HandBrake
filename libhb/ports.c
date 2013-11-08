@@ -467,7 +467,7 @@ void hb_get_temporary_directory( char path[512] )
     if( base[strlen(base)-1] == '/' )
         base[strlen(base)-1] = '\0';
 
-    snprintf( path, 512, "%s/hb.%d", base, getpid() );
+    snprintf( path, 512, "%s/hb.%d", base, (int)getpid() );
 }
 
 /************************************************************************
