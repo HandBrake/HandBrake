@@ -197,6 +197,8 @@
 /* Begin PBXFileReference section */
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
+		271E74EF182F260C0077C311 /* osx109.i386.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.i386.xcconfig; sourceTree = "<group>"; };
+		271E74F0182F260C0077C311 /* osx109.x86_64.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.x86_64.xcconfig; sourceTree = "<group>"; };
 		273F1FFF14ADAE950021BE6D /* HandBrakeCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HandBrakeCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		273F202214ADB8650021BE6D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		273F202514ADB8A40021BE6D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -688,6 +690,8 @@
 				277A3FD214AE84C500A835E4 /* osx107.x86_64.xcconfig */,
 				277EFE8917ED4F5D001D4A6A /* osx108.i386.xcconfig */,
 				277EFE8B17ED4F63001D4A6A /* osx108.x86_64.xcconfig */,
+				271E74EF182F260C0077C311 /* osx109.i386.xcconfig */,
+				271E74F0182F260C0077C311 /* osx109.x86_64.xcconfig */,
 				277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */,
 			);
 			path = xcconfig;
