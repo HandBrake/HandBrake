@@ -284,6 +284,7 @@ finish:
     free( data->path );
     free( data );
     _data = NULL;
+    hb_buffer_pool_free();
 }
 
 // -----------------------------------------------
@@ -539,7 +540,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         {
             free( info_list );
             crop_record_free( crops );
-            hb_buffer_pool_free();
             return 0;
         }
         if (data->bd)
@@ -945,7 +945,6 @@ skip_preview:
     if (data->dvd)
       hb_dvd_stop( data->dvd );
 
-    hb_buffer_pool_free();
     return npreviews;
 }
 
