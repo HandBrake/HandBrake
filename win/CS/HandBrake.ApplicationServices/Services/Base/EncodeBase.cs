@@ -323,13 +323,12 @@ namespace HandBrake.ApplicationServices.Services.Base
                 string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task),
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
+                    encodeQueueTask.Configuration.IsDvdNavDisabled,
                     userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding),
                                        userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva),
                                        userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode) == VideoScaler.BicubicCl);
                 this.logBuffer = new StringBuilder();
                 this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
-                this.logBuffer.AppendLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
                 this.logBuffer.AppendLine();
 
                 // Clear the current Encode Logs)
@@ -346,7 +345,6 @@ namespace HandBrake.ApplicationServices.Services.Base
                 this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
                 this.fileWriter.WriteLine(header);
                 this.fileWriter.WriteLine(string.Format("CLI Query: {0}", query));
-                this.fileWriter.WriteLine(string.Format("User Query: {0}", encodeQueueTask.CustomQuery));
                 this.fileWriter.WriteLine();
             }
             catch (Exception)

@@ -95,14 +95,11 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="job">
         /// The job.
         /// </param>
-        /// <param name="enableLogging">
-        /// The enable Logging.
-        /// </param>
-        public void Start(QueueTask job, bool enableLogging)
+        public void Start(QueueTask job)
         {
             // Setup
             this.startTime = DateTime.Now;
-            this.loggingEnabled = enableLogging;
+            this.loggingEnabled = job.Configuration.IsLoggingEnabled;
             this.currentTask = job;
 
             // Create a new HandBrake instance
@@ -123,7 +120,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.IsEncoding = true;
 
                 // Enable logging if required.
-                if (enableLogging)
+                if (job.Configuration.IsLoggingEnabled)
                 {
                     try
                     {

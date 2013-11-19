@@ -115,16 +115,13 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="job">
         /// The job.
         /// </param>
-        /// <param name="enableLogging">
-        /// The enable logging.
-        /// </param>
-        public void StartEncode(QueueTask job, bool enableLogging)
+        public void StartEncode(QueueTask job)
         {
             Console.WriteLine("Starting Source Encode for: " + job.Task.Source);
             encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
             encodeService.EncodeStarted += this.encodeService_EncodeStarted;
             encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
-            encodeService.Start(job, enableLogging);
+            encodeService.Start(job);
         }
 
         /// <summary>

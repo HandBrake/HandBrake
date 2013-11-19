@@ -1982,7 +1982,7 @@ namespace HandBrakeWPF.ViewModels
             this.MinLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);
 
             // Use dvdnav
-            this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav);
+            this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
 
             int port;
             int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
@@ -2064,7 +2064,7 @@ namespace HandBrakeWPF.ViewModels
                 this.userSettingService.SetUserSetting(ASUserSettingConstants.MinScanDuration, value);
             }
 
-            userSettingService.SetUserSetting(ASUserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
+            userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
             userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
             userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString(CultureInfo.InvariantCulture));
             userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, this.EnableLibHb);

@@ -581,7 +581,7 @@ namespace HandBrake.ApplicationServices.Services
             if (job != null)
             {
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
-                this.EncodeService.Start(job, true);
+                this.EncodeService.Start(job);
             }
             else
             {

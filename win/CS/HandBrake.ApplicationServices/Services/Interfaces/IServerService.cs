@@ -54,11 +54,8 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="job">
         /// The job.
         /// </param>
-        /// <param name="enableLogging">
-        /// The enable logging.
-        /// </param>
         [OperationContract]
-        void StartEncode(QueueTask job, bool enableLogging);
+        void StartEncode(QueueTask job);
 
         /// <summary>
         /// The process encode logs.

@@ -45,11 +45,6 @@ namespace HandBrake.ApplicationServices
         public const string HandBrakeBuild = "HandBrakeBuild";
 
         /// <summary>
-        /// Disable Libdvdnav
-        /// </summary>
-        public const string DisableLibDvdNav = "DisableLibDvdNav";
-
-        /// <summary>
         /// Min Title Scan Duration
         /// </summary>
         public const string MinScanDuration = "MinTitleScanDuration";

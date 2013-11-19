@@ -246,6 +246,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string AddForeignAudioScanTrack = "AddForeignAudioScanTrack";
 
+        /// <summary>
+        /// The disable lib dvd nav.
+        /// </summary>
+        public const string DisableLibDvdNav = "DisableLibDvdNav";
+
         #endregion
     }
 }

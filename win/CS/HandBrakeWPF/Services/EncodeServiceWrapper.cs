@@ -187,12 +187,9 @@ namespace HandBrakeWPF.Services
         /// <param name="job">
         /// The job.
         /// </param>
-        /// <param name="enableLogging">
-        /// The enable Logging.
-        /// </param>
-        public void Start(QueueTask job, bool enableLogging)
+        public void Start(QueueTask job)
         {
-            this.encodeService.Start(job, enableLogging);
+            this.encodeService.Start(job);
         }
 
         /// <summary>

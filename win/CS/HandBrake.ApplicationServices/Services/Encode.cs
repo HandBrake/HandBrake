@@ -96,10 +96,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="encodeQueueTask">
         /// The encodeQueueTask.
         /// </param>
-        /// <param name="enableLogging">
-        /// Enable Logging. When Disabled we onlt parse Standard Ouput for progress info. Standard Error log data is ignored.
-        /// </param>
-        public void Start(QueueTask encodeQueueTask, bool enableLogging)
+        public void Start(QueueTask encodeQueueTask)
         {
             try
             {
@@ -111,7 +108,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.IsEncoding = true;
                 this.currentTask = encodeQueueTask;
 
-                if (enableLogging)
+                if (encodeQueueTask.Configuration.IsLoggingEnabled)
                 {
                     try
                     {
@@ -137,12 +134,12 @@ namespace HandBrake.ApplicationServices.Services
                                        this.currentTask.Task.PreviewEncodeStartAt,
                                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
+                                       encodeQueueTask.Configuration.IsDvdNavDisabled,
                                        userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding))
                                    : QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.currentTask.Task),
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                                   userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
+                                   encodeQueueTask.Configuration.IsDvdNavDisabled,
                                        userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding),
                                        userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva),
                                        userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode) == VideoScaler.BicubicCl);
@@ -150,7 +147,7 @@ namespace HandBrake.ApplicationServices.Services
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, query)
                 {
                     RedirectStandardOutput = true,
-                    RedirectStandardError = enableLogging,
+                    RedirectStandardError = encodeQueueTask.Configuration.IsLoggingEnabled,
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
@@ -161,7 +158,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 this.startTime = DateTime.Now;
 
-                if (enableLogging)
+                if (encodeQueueTask.Configuration.IsLoggingEnabled)
                 {
                     this.HbProcess.ErrorDataReceived += this.HbProcErrorDataReceived;
                     this.HbProcess.BeginErrorReadLine();

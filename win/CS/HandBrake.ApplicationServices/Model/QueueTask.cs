@@ -38,14 +38,25 @@ namespace HandBrake.ApplicationServices.Model
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="QueueTask"/> class.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        public QueueTask(EncodeTask task, HBConfiguration configuration)
+        {
+            this.Task = task;
+            this.Configuration = configuration;
+            this.Status = QueueItemStatus.Waiting;
+        }
+
+        /// <summary>
         /// Gets or sets ScannedSource.
         /// </summary>
         public Source ScannedSource { get; set; } 
-
-        /// <summary>
-        /// Gets or sets a value indicating whether if this is a user or GUI generated query
-        /// </summary>
-        public bool CustomQuery { get; set; }
 
         /// <summary>
         /// Gets or sets Status.
@@ -65,9 +76,14 @@ namespace HandBrake.ApplicationServices.Model
         }
 
         /// <summary>
-        /// Gets or sets the Encode Task.
+        /// Gets the task.
         /// </summary>
         public EncodeTask Task { get; set; }
+
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        public HBConfiguration Configuration { get; set; }
 
         #endregion
 
@@ -82,7 +98,7 @@ namespace HandBrake.ApplicationServices.Model
         /// </returns>
         protected bool Equals(QueueTask other)
         {
-            return Equals(this.ScannedSource, other.ScannedSource) && this.CustomQuery.Equals(other.CustomQuery) && Equals(this.Task, other.Task) && this.status == other.status;
+            return Equals(this.ScannedSource, other.ScannedSource) && Equals(this.Task, other.Task) && this.status == other.status;
         }
 
         /// <summary>
@@ -125,7 +141,6 @@ namespace HandBrake.ApplicationServices.Model
             unchecked
             {
                 int hashCode = (this.ScannedSource != null ? this.ScannedSource.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ this.CustomQuery.GetHashCode();
                 hashCode = (hashCode * 397) ^ (this.Task != null ? this.Task.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (int)this.status;
                 return hashCode;

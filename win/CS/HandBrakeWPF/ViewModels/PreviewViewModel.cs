@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -300,11 +301,7 @@ namespace HandBrakeWPF.ViewModels
             encodeTask.IsPreviewEncode = true;
             encodeTask.PreviewEncodeStartAt = this.StartAt.ToString(CultureInfo.InvariantCulture);
             encodeTask.PreviewEncodeDuration = this.Duration;
-            QueueTask task = new QueueTask
-                {
-                    Task = encodeTask,
-                };
-
+            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(false));
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
@@ -389,7 +386,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.EncodeCompleted += this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
 
-            this.encodeService.Start((QueueTask)state, false);
+            this.encodeService.Start((QueueTask)state);
             this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
         #endregion

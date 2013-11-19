@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
     using System;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
@@ -87,7 +88,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction);
+        /// <param name="configuration">
+        /// The configuraiton.
+        /// </param>
+        void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction, HBConfiguration configuration);
 
         /// <summary>
         /// Kill the scan

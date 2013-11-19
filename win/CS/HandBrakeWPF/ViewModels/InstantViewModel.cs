@@ -29,6 +29,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
@@ -777,7 +778,8 @@ namespace HandBrakeWPF.ViewModels
                     filename, 
                     title, 
                     this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), 
-                    null);
+                    null,
+                    HBConfigurationFactory.Create());
             }
         }
 

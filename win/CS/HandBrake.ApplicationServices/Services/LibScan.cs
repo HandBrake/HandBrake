@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Text;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -175,7 +176,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
+        /// <param name="configuraiton">
+        /// The configuraiton.
+        /// </param>
+        public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction, HBConfiguration configuraiton)
         {
             // Try to cleanup any previous scan instances.
             if (instance != null)
@@ -223,7 +227,7 @@ namespace HandBrake.ApplicationServices.Services
             instance.ScanCompleted += this.InstanceScanCompleted;
 
             // Start the scan on a back
-            this.ScanSource(sourcePath, title, previewCount);
+            this.ScanSource(sourcePath, title, previewCount, configuraiton);
         }
 
         /// <summary>
@@ -263,7 +267,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        private void ScanSource(object sourcePath, int title, int previewCount)
+        /// <param name="configuraiton">
+        /// The configuraiton.
+        /// </param>
+        private void ScanSource(object sourcePath, int title, int previewCount, HBConfiguration configuraiton)
         {
             try
             {
@@ -281,7 +288,7 @@ namespace HandBrake.ApplicationServices.Services
                     TimeSpan.FromSeconds(
                         this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration));
 
-                HandBrakeUtils.SetDvdNav(!this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
+                HandBrakeUtils.SetDvdNav(!configuraiton.IsDvdNavDisabled);
 
                 this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
             }

@@ -31,6 +31,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
@@ -1087,7 +1088,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            QueueTask task = new QueueTask { Task = new EncodeTask(this.CurrentTask) };
+            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
                 this.queueProcessor.Add(task);
@@ -1284,11 +1285,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Create the Queue Task and Start Processing
-            QueueTask task = new QueueTask
-                {
-                    Task = new EncodeTask(this.CurrentTask),
-                    CustomQuery = false
-                };
+            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
             this.queueProcessor.Add(task);
             this.queueProcessor.Start();
             this.IsEncoding = true;
@@ -1304,7 +1301,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Rescan the source to make sure it's still valid
             this.queueEditTask = task;
-            this.scanService.Scan(task.Source, task.Title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), QueueEditAction);
+            this.scanService.Scan(task.Source, task.Title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), QueueEditAction, HBConfigurationFactory.Create());
         }
 
         /// <summary>
@@ -1341,7 +1338,7 @@ namespace HandBrakeWPF.ViewModels
                 QueryGeneratorUtility.GenerateQuery(this.CurrentTask,
                 userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                 userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav),
+                HBConfigurationFactory.Create().IsDvdNavDisabled,
                     userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding),
                                        userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva),
                                        userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode) == VideoScaler.BicubicCl),
@@ -1630,7 +1627,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(filename))
             {
-                this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null);
+                this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null, HBConfigurationFactory.Create());
             }
         }
 
