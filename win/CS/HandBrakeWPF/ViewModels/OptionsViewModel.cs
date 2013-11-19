@@ -1953,7 +1953,7 @@ namespace HandBrakeWPF.ViewModels
             // Minimise to Tray
             this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
             this.DisablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
-            this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue);
+            this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue);
             this.ShowAdvancedTab = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
 
             // Set the preview count
@@ -2052,7 +2052,7 @@ namespace HandBrakeWPF.ViewModels
             /* Advanced */
             userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
             userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
-            userSettingService.SetUserSetting(ASUserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
+            userSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
             userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);

@@ -26,6 +26,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

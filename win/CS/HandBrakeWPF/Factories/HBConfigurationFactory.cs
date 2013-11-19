@@ -14,6 +14,8 @@ namespace HandBrakeWPF.Factories
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.Services.Interfaces;
+
     /// <summary>
     /// HBConfiguration Factory
     /// </summary>

@@ -30,6 +30,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Commands.Interfaces;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

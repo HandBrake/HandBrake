@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Size = System.Drawing.Size;

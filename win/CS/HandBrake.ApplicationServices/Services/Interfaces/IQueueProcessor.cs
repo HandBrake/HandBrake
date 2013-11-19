@@ -173,7 +173,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Starts encoding the first job in the queue and continues encoding until all jobs
         /// have been encoded.
         /// </summary>
-        void Start();
+        /// <param name="clearCompleted">
+        /// The clear Completed.
+        /// </param>
+        void Start(bool clearCompleted);
 
         #endregion
     }

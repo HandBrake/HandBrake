@@ -17,6 +17,11 @@ namespace HandBrakeWPF
         #region Constants and Fields
 
         /// <summary>
+        /// HandBrakes build
+        /// </summary>
+        public const string HandBrakeBuild = "HandBrakeBuild";
+
+        /// <summary>
         /// Add Only One Per Langage
         /// </summary>
         public const string AddOnlyOneAudioPerLanguage = "addOnlyOneAudioPerLanguage";
@@ -301,6 +306,10 @@ namespace HandBrakeWPF
         /// </summary>
         public const string SaveLogCopyDirectory = "SaveLogCopyDirectory";
 
+        /// <summary>
+        /// The clear completed from queue.
+        /// </summary>
+        public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
 
         #endregion
     }

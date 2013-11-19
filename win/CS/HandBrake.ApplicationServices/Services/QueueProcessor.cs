@@ -42,14 +42,14 @@ namespace HandBrake.ApplicationServices.Services
         private readonly BindingList<QueueTask> queue = new BindingList<QueueTask>();
 
         /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private readonly IUserSettingService userSettingService;
-
-        /// <summary>
         /// HandBrakes Queue file with a place holder for an extra string.
         /// </summary>
         private readonly string queueFile;
+
+        /// <summary>
+        /// The clear completed.
+        /// </summary>
+        private bool clearCompleted;
 
         #endregion
 
@@ -61,15 +61,11 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="encodeService">
         /// The encode Service.
         /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
         /// <exception cref="ArgumentNullException">
         /// Services are not setup
         /// </exception>
-        public QueueProcessor(IEncodeServiceWrapper encodeService, IUserSettingService userSettingService)
+        public QueueProcessor(IEncodeServiceWrapper encodeService)
         {
-            this.userSettingService = userSettingService;
             this.EncodeService = encodeService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
@@ -436,12 +432,17 @@ namespace HandBrake.ApplicationServices.Services
         /// Starts encoding the first job in the queue and continues encoding until all jobs
         /// have been encoded.
         /// </summary>
-        public void Start()
+        /// <param name="isClearCompleted">
+        /// The is Clear Completed.
+        /// </param>
+        public void Start(bool isClearCompleted)
         {
             if (this.IsProcessing)
             {
                 throw new Exception("Already Processing the Queue");
             }
+
+            clearCompleted = isClearCompleted;
 
             this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
@@ -472,7 +473,7 @@ namespace HandBrake.ApplicationServices.Services
             this.LastProcessedJob.Status = QueueItemStatus.Completed;
 
             // Clear the completed item of the queue if the setting is set.
-            if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue))
+            if (clearCompleted)
             {
                 this.ClearCompleted();
             }

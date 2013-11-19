@@ -23,6 +23,8 @@ namespace HandBrakeWPF.Converters.Video
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Services.Interfaces;
+
     /// <summary>
     /// Video Encoder Converter
     /// </summary>

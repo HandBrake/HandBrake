@@ -85,7 +85,7 @@ namespace HandBrakeWPF.Helpers
                         int buildValue;
                         int.TryParse(build, out buildValue);
 
-                        userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, buildValue);
+                        userSettingService.SetUserSetting(UserSettingConstants.HandBrakeBuild, buildValue);
                         success = true;
                     }
                 }
@@ -109,7 +109,7 @@ namespace HandBrakeWPF.Helpers
             }
             catch (Exception e)
             {
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, 0);
+                userSettingService.SetUserSetting(UserSettingConstants.HandBrakeBuild, 0);
                 userSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, string.Empty);
 
                 errorService.ShowError(

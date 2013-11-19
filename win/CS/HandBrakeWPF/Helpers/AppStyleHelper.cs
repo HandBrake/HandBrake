@@ -15,6 +15,8 @@ namespace HandBrakeWPF.Helpers
 
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.Services.Interfaces;
+
     /// <summary>
     /// The AppStyle Helper.
     /// </summary>

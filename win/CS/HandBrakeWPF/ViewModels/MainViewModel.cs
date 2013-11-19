@@ -1258,7 +1258,7 @@ namespace HandBrakeWPF.ViewModels
             // Check if we already have jobs, and if we do, just start the queue.
             if (this.queueProcessor.Count != 0)
             {
-                this.queueProcessor.Start();
+                this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 return;
             }
 
@@ -1287,7 +1287,7 @@ namespace HandBrakeWPF.ViewModels
             // Create the Queue Task and Start Processing
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
             this.queueProcessor.Add(task);
-            this.queueProcessor.Start();
+            this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
             this.IsEncoding = true;
         }
 
@@ -1572,8 +1572,7 @@ namespace HandBrakeWPF.ViewModels
                     PlistUtility.Export(
                         savefiledialog.FileName,
                         this.selectedPreset,
-                        this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)
-                                          .ToString(CultureInfo.InvariantCulture));
+                        this.userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString(CultureInfo.InvariantCulture));
                 }
             }
             else

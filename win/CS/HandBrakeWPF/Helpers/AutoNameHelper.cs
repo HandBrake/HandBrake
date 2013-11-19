@@ -21,6 +21,8 @@ namespace HandBrakeWPF.Helpers
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Services.Interfaces;
+
     /// <summary>
     /// The Destination AutoName Helper
     /// </summary>

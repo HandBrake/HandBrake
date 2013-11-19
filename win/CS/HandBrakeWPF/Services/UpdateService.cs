@@ -92,7 +92,7 @@ namespace HandBrakeWPF.Services
                                 : Constants.Appcast32;
 
                         var currentBuild =
-                            this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild);
+                            this.userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild);
                         var skipBuild = this.userSettingService.GetUserSetting<int>(
                             UserSettingConstants.Skipversion);
 

@@ -31,7 +31,6 @@ namespace HandBrake.ApplicationServices
         {
             container.Register(Component.For<IPresetService>().ImplementedBy<PresetService>());
             container.Register(Component.For<IQueueProcessor>().ImplementedBy<QueueProcessor>());
-            container.Register(Component.For<IUserSettingService>().ImplementedBy<UserSettingService>());
         }
 
         #endregion

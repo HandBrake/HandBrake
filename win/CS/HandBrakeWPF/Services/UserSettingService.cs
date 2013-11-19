@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services
+namespace HandBrakeWPF.Services
 {
     using System;
     using System.Collections.Specialized;
@@ -19,7 +19,8 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Collections;
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Services.Interfaces;
+
+    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// The User Setting Serivce
@@ -137,7 +138,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 using (FileStream strm = new FileStream(this.settingsFile, FileMode.Create, FileAccess.Write))
                 {
-                    serializer.Serialize(strm, this.userSettings);
+                    this.serializer.Serialize(strm, this.userSettings);
                 }
             }
             catch (Exception exc)
@@ -161,7 +162,7 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
-                        SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
+                        SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)this.serializer.Deserialize(reader);
                         this.userSettings = data;
                     }
                 }

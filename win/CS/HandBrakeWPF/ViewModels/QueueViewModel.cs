@@ -304,7 +304,7 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
             this.IsEncoding = true;
 
-            this.queueProcessor.Start();
+            this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
         }
 
         /// <summary>
