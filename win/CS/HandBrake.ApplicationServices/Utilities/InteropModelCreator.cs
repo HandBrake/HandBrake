@@ -25,13 +25,13 @@ namespace HandBrake.ApplicationServices.Utilities
     public class InteropModelCreator
     {
         /// <summary>
-        /// Get an EncodeJob model for a LibHB Encode.
+        /// The get encode job.
         /// </summary>
         /// <param name="task">
         /// The task.
         /// </param>
         /// <returns>
-        /// An Interop.EncodeJob model.
+        /// The <see cref="EncodeJob"/>.
         /// </returns>
         public static EncodeJob GetEncodeJob(QueueTask task)
         {
@@ -41,8 +41,22 @@ namespace HandBrake.ApplicationServices.Utilities
                 return null;
             }
 
+            return GetEncodeJob(task.Task);
+        }
+
+        /// <summary>
+        /// Get an EncodeJob model for a LibHB Encode.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        /// <returns>
+        /// An Interop.EncodeJob model.
+        /// </returns>
+        public static EncodeJob GetEncodeJob(EncodeTask task)
+        {
             // The current Job Configuration
-            EncodeTask work = task.Task;
+            EncodeTask work = task;
 
             // Which will be converted to this EncodeJob Model.
             EncodeJob job = new EncodeJob();

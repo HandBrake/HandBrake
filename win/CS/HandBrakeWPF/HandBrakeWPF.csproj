@@ -145,6 +145,8 @@
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IStaticPreviewViewModel.cs" />
+    <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
     <Compile Include="Views\CountdownAlertView.xaml.cs">
       <DependentUpon>CountdownAlertView.xaml</DependentUpon>
     </Compile>
@@ -216,6 +218,9 @@
     <Compile Include="ViewModels\Interfaces\ITitleSpecificViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
+    <Compile Include="Views\StaticPreviewView.xaml.cs">
+      <DependentUpon>StaticPreviewView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TitleSpecificView.xaml.cs">
       <DependentUpon>TitleSpecificView.xaml</DependentUpon>
     </Compile>
@@ -392,6 +397,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ShellView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StaticPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

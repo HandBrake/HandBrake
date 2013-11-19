@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
@@ -23,6 +24,7 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.Interop;
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Interfaces;
+    using HandBrake.Interop.Model;
 
     using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
     using ScanProgressEventArgs = HandBrake.Interop.EventArgs.ScanProgressEventArgs;
@@ -237,6 +239,30 @@ namespace HandBrake.ApplicationServices.Services
             {
                 // Do Nothing.
             }
+        }
+
+        /// <summary>
+        /// Get a Preview image for the current job and preview number.
+        /// </summary>
+        /// <param name="job">
+        /// The job.
+        /// </param>
+        /// <param name="preview">
+        /// The preview.
+        /// </param>
+        /// <returns>
+        /// The <see cref="BitmapImage"/>.
+        /// </returns>
+        public BitmapImage GetPreview(EncodeTask job, int preview)
+        {
+            if (this.instance == null)
+            {
+                return null;
+            }
+
+            EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
+            BitmapImage bitmapImage = this.instance.GetPreview(encodeJob, preview);
+            return bitmapImage;
         }
 
         #endregion

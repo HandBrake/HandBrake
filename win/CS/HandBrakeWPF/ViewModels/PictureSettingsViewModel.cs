@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Windows.Media.Imaging;
 
     using Caliburn.Micro;
 
@@ -109,13 +110,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.PictureSettingsViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public PictureSettingsViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public PictureSettingsViewModel()
         {
             this.Task = new EncodeTask();
             this.SelectedModulus = 16;
@@ -129,6 +124,11 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the static preview view model.
+        /// </summary>
+        public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
 
         /// <summary>
         /// Gets AnamorphicModes.
@@ -595,9 +595,7 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
-        #region Implemented Interfaces
-
-        #region ITabInterface
+        #region Public Methods
 
         /// <summary>
         /// Setup this tab for the specified preset.
@@ -802,7 +800,21 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
-        #endregion
+        /// <summary>
+        /// The preview image.
+        /// Experimental Feature => In-Progress
+        /// </summary>
+        public void PreviewImage()
+        {
+            IScan scanService = IoC.Get<IScan>();
+            BitmapImage image = scanService.GetPreview(this.Task, 5);
+
+            if (image != null)
+            {
+                this.StaticPreviewViewModel.PreviewFrame(image);
+                this.WindowManager.ShowDialog(this.StaticPreviewViewModel);
+            }
+        }
 
         #endregion
 
@@ -1164,6 +1176,6 @@ namespace HandBrakeWPF.ViewModels
             return job;
         }
 
-        #endregion
+       #endregion
     }
 }

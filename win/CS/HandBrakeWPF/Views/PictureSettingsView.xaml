@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-             xmlns:controls="clr-namespace:HandBrakeWPF.Controls">
+             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
+             xmlns:cal="http://www.caliburnproject.org">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
@@ -59,7 +60,7 @@
                           Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}"
                           Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
             </Grid>
-            
+
             <!-- Custom Anamoprhic -->
             <Grid Margin="5,15,5,0" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
                 <Grid.RowDefinitions>
@@ -84,7 +85,7 @@
                 <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" AllowEmpty="False"
                                              IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
             </Grid>
-            
+
             <!-- Row 5-->
             <Grid Margin="5,15,5,0">
                 <Grid.RowDefinitions>
@@ -142,6 +143,10 @@
                                     Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
 
             </Grid>
+
+
+            <Label Content="Preview" FontWeight="Bold" Margin="15,0,0,0" Visibility="Collapsed" />
+            <Button Content="Show Preview" cal:Message.Attach="[Event Click] = [Action PreviewImage]" Visibility="Collapsed" />
 
         </StackPanel>
     </StackPanel>
