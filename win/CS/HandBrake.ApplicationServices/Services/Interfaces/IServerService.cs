@@ -63,8 +63,11 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="destination">
         /// The destination.
         /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
         [OperationContract]
-        void ProcessEncodeLogs(string destination);
+        void ProcessEncodeLogs(string destination, HBConfiguration configuration);
 
         /// <summary>
         /// Stop and Encode

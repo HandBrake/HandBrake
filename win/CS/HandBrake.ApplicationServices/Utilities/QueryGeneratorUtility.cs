@@ -34,28 +34,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="task">
         /// The task.
         /// </param>
-        /// <param name="previewScanCount">
-        /// The preview Scan Count.
-        /// </param>
-        /// <param name="verbosity">
-        /// The verbosity.
-        /// </param>
-        /// <param name="disableLibDvdNav">
-        /// The disable Lib Dvd Nav.
-        /// </param>
-        /// <param name="disableQsvDecode">
-        /// The disable Qsv Decode.
-        /// </param>
-        /// <param name="enableHwd">
-        /// The enable Hwd.
-        /// </param>
-        /// <param name="enableOpenCL">
-        /// The enable Open CL.
+        /// <param name="configuration">
+        /// The configuration.
         /// </param>
         /// <returns>
         /// A Cli Query
         /// </returns>
-        public static string GenerateQuery(EncodeTask task, int previewScanCount, int verbosity, bool disableLibDvdNav, bool disableQsvDecode, bool enableHwd, bool enableOpenCL)
+        public static string GenerateQuery(EncodeTask task, HBConfiguration configuration)
         {
             if (string.IsNullOrEmpty(task.Source))
             {
@@ -63,9 +48,9 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             string query = string.Empty;
-            query += SourceQuery(task, null, null, previewScanCount);
+            query += SourceQuery(task, null, null, configuration.PreviewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode, enableHwd, enableOpenCL);
+            query += GenerateTabbedComponentsQuery(task, true, configuration.Verbosity, configuration.IsDvdNavDisabled, configuration.DisableQuickSyncDecoding, configuration.EnableDxva, configuration.ScalingMode == VideoScaler.BicubicCl);
 
             return query;
         }
@@ -76,33 +61,24 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="task">
         /// The task.
         /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
         /// <param name="duration">
         /// The duration.
         /// </param>
         /// <param name="startAtPreview">
         /// The start At Preview.
         /// </param>
-        /// <param name="previewScanCount">
-        /// The preview Scan Count.
-        /// </param>
-        /// <param name="verbosity">
-        /// The verbosity.
-        /// </param>
-        /// <param name="disableLibDvdNav">
-        /// The disable Lib Dvd Nav.
-        /// </param>
-        /// <param name="disableQsvDecode">
-        /// The disable Qsv Decode.
-        /// </param>
         /// <returns>
         /// A Cli query suitable for generating a preview video.
         /// </returns>
-        public static string GeneratePreviewQuery(EncodeTask task, int duration, string startAtPreview, int previewScanCount, int verbosity, bool disableLibDvdNav, bool disableQsvDecode)
+        public static string GeneratePreviewQuery(EncodeTask task, HBConfiguration configuration, int duration, string startAtPreview)
         {
             string query = string.Empty;
-            query += SourceQuery(task, duration, startAtPreview, previewScanCount);
+            query += SourceQuery(task, duration, startAtPreview, configuration.PreviewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav, disableQsvDecode, false, false);
+            query += GenerateTabbedComponentsQuery(task, true, configuration.Verbosity, configuration.IsDvdNavDisabled, configuration.DisableQuickSyncDecoding, false, false);
 
             return query;
         }

@@ -105,7 +105,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="destination">
         /// The destination.
         /// </param>
-        void ProcessLogs(string destination);
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        void ProcessLogs(string destination, HBConfiguration configuration);
 
         /// <summary>
         /// Shutdown the service.

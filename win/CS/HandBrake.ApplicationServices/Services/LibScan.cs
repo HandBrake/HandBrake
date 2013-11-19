@@ -48,11 +48,6 @@ namespace HandBrake.ApplicationServices.Services
         static readonly object LogLock = new object();
 
         /// <summary>
-        /// The user setting service.
-        /// </summary>
-        private readonly IUserSettingService userSettingService;
-
-        /// <summary>
         /// Log data from HandBrakeInstance
         /// </summary>
         private readonly StringBuilder logging;
@@ -92,15 +87,11 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LibScan"/> class. 
         /// </summary>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public LibScan(IUserSettingService userSettingService)
+        public LibScan()
         {
             logging = new StringBuilder();
 
             header = GeneralUtilities.CreateCliLogHeader();
-            this.userSettingService = userSettingService;
 
             try
             {
@@ -170,16 +161,13 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="title">
         /// int title number. 0 for scan all
         /// </param>
-        /// <param name="previewCount">
-        /// The preview Count.
-        /// </param>
         /// <param name="postAction">
         /// The post Action.
         /// </param>
         /// <param name="configuraiton">
         /// The configuraiton.
         /// </param>
-        public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction, HBConfiguration configuraiton)
+        public void Scan(string sourcePath, int title, Action<bool> postAction, HBConfiguration configuraiton)
         {
             // Try to cleanup any previous scan instances.
             if (instance != null)
@@ -227,7 +215,7 @@ namespace HandBrake.ApplicationServices.Services
             instance.ScanCompleted += this.InstanceScanCompleted;
 
             // Start the scan on a back
-            this.ScanSource(sourcePath, title, previewCount, configuraiton);
+            this.ScanSource(sourcePath, title, configuraiton.PreviewScanCount, configuraiton);
         }
 
         /// <summary>
@@ -286,7 +274,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 TimeSpan minDuration =
                     TimeSpan.FromSeconds(
-                        this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration));
+                       configuraiton.MinScanDuration);
 
                 HandBrakeUtils.SetDvdNav(!configuraiton.IsDvdNavDisabled);
 

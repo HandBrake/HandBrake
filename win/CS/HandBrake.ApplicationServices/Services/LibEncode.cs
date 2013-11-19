@@ -37,11 +37,6 @@ namespace HandBrake.ApplicationServices.Services
         private static readonly object logLock = new object();
 
         /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private readonly IUserSettingService userSettingService;
-
-        /// <summary>
         /// The instance.
         /// </summary>
         private IHandBrakeInstance instance;
@@ -66,14 +61,8 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LibEncode"/> class.
         /// </summary>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public LibEncode(IUserSettingService userSettingService)
-            : base(userSettingService)
+        public LibEncode()
         {
-            this.userSettingService = userSettingService;
-
             HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
             HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
         }
@@ -218,7 +207,7 @@ namespace HandBrake.ApplicationServices.Services
             this.InvokeEncodeStarted(EventArgs.Empty);
 
             // Set the Process Priority
-            switch (this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority))
+            switch (job.Configuration.ProcessPriority)
             {
                 case "Realtime":
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;

@@ -34,11 +34,6 @@ namespace HandBrake.ApplicationServices.Services.Base
         private static readonly object FileWriterLock = new object();
 
         /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private readonly IUserSettingService userSettingService;
-
-        /// <summary>
         /// The Log File Header
         /// </summary>
         private readonly StringBuilder header;
@@ -58,16 +53,10 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodeBase"/> class.
         /// </summary>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public EncodeBase(IUserSettingService userSettingService)
+        public EncodeBase()
         {
-            this.userSettingService = userSettingService;
             this.logBuffer = new StringBuilder();
-            header =
-                GeneralUtilities.CreateCliLogHeader();
-
+            header = GeneralUtilities.CreateCliLogHeader();
             this.LogIndex = 0;
         }
 
@@ -197,7 +186,10 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <param name="destination">
         /// The Destination File Path
         /// </param>
-        public void ProcessLogs(string destination)
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        public void ProcessLogs(string destination, HBConfiguration configuration)
         {
             try
             {
@@ -220,17 +212,16 @@ namespace HandBrake.ApplicationServices.Services.Base
                 File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
-                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo))
+                if (configuration.SaveLogWithVideo)
                 {
                     File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
                 }
 
                 // Save a copy of the log file to a user specified location
-                if (Directory.Exists(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory)) &&
-                    this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory))
+                if (Directory.Exists(configuration.SaveLogCopyDirectory) && configuration.SaveLogToCopyDirectory)
                 {
                     File.Copy(
-                        tempLogFile, Path.Combine(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory), encodeLogFile));
+                        tempLogFile, Path.Combine(configuration.SaveLogCopyDirectory, encodeLogFile));
                 }
             }
             catch (Exception)
@@ -320,13 +311,7 @@ namespace HandBrake.ApplicationServices.Services.Base
 
             try
             {
-                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task),
-                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
-                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                    encodeQueueTask.Configuration.IsDvdNavDisabled,
-                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding),
-                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva),
-                                       userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode) == VideoScaler.BicubicCl);
+                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task), encodeQueueTask.Configuration);
                 this.logBuffer = new StringBuilder();
                 this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
                 this.logBuffer.AppendLine();

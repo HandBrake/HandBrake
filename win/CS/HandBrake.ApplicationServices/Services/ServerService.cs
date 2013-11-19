@@ -79,9 +79,12 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="destination">
         /// The destination.
         /// </param>
-        public void ProcessEncodeLogs(string destination)
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        public void ProcessEncodeLogs(string destination, HBConfiguration configuration)
         {
-            encodeService.ProcessLogs(destination);
+            encodeService.ProcessLogs(destination, configuration);
         }
 
 
@@ -102,8 +105,7 @@ namespace HandBrake.ApplicationServices.Services
                 Console.WriteLine("Service Started. Waiting for Clients...");
 
                 // Setup the services we are going to use.
-                encodeService = new LibEncode(new UserSettingService()); // TODO this needs wired up with castle
-
+                encodeService = new LibEncode(); 
                 shutdownFlag = new ManualResetEvent(false);
                 shutdownFlag.WaitOne();
             }

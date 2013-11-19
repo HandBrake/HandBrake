@@ -63,7 +63,7 @@ namespace HandBrakeWPF.Services
                     }
                     else
                     {
-                        this.encodeService = new LibEncode(userSettingService);
+                        this.encodeService = new LibEncode();
                     }
                 }
                 catch (Exception exc)
@@ -78,7 +78,7 @@ namespace HandBrakeWPF.Services
             }
             else
             {
-                this.encodeService = new Encode(userSettingService);
+                this.encodeService = new Encode();
             }
 
             this.encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
@@ -165,9 +165,12 @@ namespace HandBrakeWPF.Services
         /// <param name="destination">
         /// The destination.
         /// </param>
-        public void ProcessLogs(string destination)
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        public void ProcessLogs(string destination, HBConfiguration configuration)
         {
-            this.encodeService.ProcessLogs(destination);
+            this.encodeService.ProcessLogs(destination, configuration);
         }
 
         /// <summary>

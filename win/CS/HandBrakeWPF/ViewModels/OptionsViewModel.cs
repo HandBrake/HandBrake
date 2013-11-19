@@ -1911,9 +1911,9 @@ namespace HandBrakeWPF.ViewModels
             // Video
             // #############################
             this.EnableQuickSync = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSync);
-            this.DisableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding);
-            this.EnableDxvaDecoding = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva);
-            this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode);
+            this.DisableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding);
+            this.EnableDxvaDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDxva);
+            this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
 
             // #############################
             // CLI
@@ -1926,7 +1926,7 @@ namespace HandBrakeWPF.ViewModels
             this.priorityLevelOptions.Add("Normal");
             this.priorityLevelOptions.Add("Below Normal");
             this.priorityLevelOptions.Add("Low");
-            this.SelectedPriority = userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority);
+            this.SelectedPriority = userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
 
             this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
 
@@ -1935,14 +1935,14 @@ namespace HandBrakeWPF.ViewModels
             this.logVerbosityOptions.Add(0);
             this.logVerbosityOptions.Add(1);
             this.logVerbosityOptions.Add(2);
-            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
+            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
 
             // Logs
-            this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo);
-            this.CopyLogToSepcficedLocation = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory);
+            this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo);
+            this.CopyLogToSepcficedLocation = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory);
 
             // The saved log path
-            this.LogDirectory = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
+            this.LogDirectory = userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
 
             this.ClearOldOlgs = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
 
@@ -1969,7 +1969,7 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewPicturesToScan.Add(50);
             this.PreviewPicturesToScan.Add(55);
             this.PreviewPicturesToScan.Add(60);
-            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount);
+            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
 
             // x264 step
             this.ConstantQualityGranularity.Clear();
@@ -1979,7 +1979,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedGranulairty = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
 
             // Min Title Length
-            this.MinLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);
+            this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
@@ -2035,25 +2035,25 @@ namespace HandBrakeWPF.ViewModels
             
             /* Video */
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSync, this.EnableQuickSync);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.EnableDxva, this.EnableDxvaDecoding);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.ScalingMode, this.SelectedScalingMode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableDxva, this.EnableDxvaDecoding);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);
 
 
             /* System and Logging */
-            userSettingService.SetUserSetting(ASUserSettingConstants.ProcessPriority, this.SelectedPriority);
+            userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
             userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
-            userSettingService.SetUserSetting(ASUserSettingConstants.Verbosity, this.SelectedVerbosity);
-            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
-            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
-            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogCopyDirectory, this.LogDirectory);
+            userSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
+            userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
+            userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
+            userSettingService.SetUserSetting(UserSettingConstants.SaveLogCopyDirectory, this.LogDirectory);
             userSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, this.ClearOldOlgs);
 
             /* Advanced */
             userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
             userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
             userSettingService.SetUserSetting(ASUserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
-            userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
+            userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
             userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
             userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
@@ -2061,7 +2061,7 @@ namespace HandBrakeWPF.ViewModels
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
             {
-                this.userSettingService.SetUserSetting(ASUserSettingConstants.MinScanDuration, value);
+                this.userSettingService.SetUserSetting(UserSettingConstants.MinScanDuration, value);
             }
 
             userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);

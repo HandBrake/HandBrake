@@ -777,7 +777,6 @@ namespace HandBrakeWPF.ViewModels
                 this.scanService.Scan(
                     filename, 
                     title, 
-                    this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), 
                     null,
                     HBConfigurationFactory.Create());
             }

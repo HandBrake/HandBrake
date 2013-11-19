@@ -484,7 +484,7 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             // Handling Log Data 
-            this.EncodeService.ProcessLogs(this.LastProcessedJob.Task.Destination);
+            this.EncodeService.ProcessLogs(this.LastProcessedJob.Task.Destination, this.LastProcessedJob.Configuration);
 
             // Move onto the next job.
             if (this.IsProcessing)

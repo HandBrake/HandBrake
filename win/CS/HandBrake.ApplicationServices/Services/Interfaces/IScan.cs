@@ -82,16 +82,13 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="title">
         /// int title number. 0 for scan all
         /// </param>
-        /// <param name="previewCount">
-        /// The preview Count.
-        /// </param>
         /// <param name="postAction">
         /// The post Action.
         /// </param>
         /// <param name="configuration">
         /// The configuraiton.
         /// </param>
-        void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction, HBConfiguration configuration);
+        void Scan(string sourcePath, int title, Action<bool> postAction, HBConfiguration configuration);
 
         /// <summary>
         /// Kill the scan

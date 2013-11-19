@@ -162,9 +162,12 @@ namespace HandBrake.ApplicationServices.Isolation
         /// <param name="destination">
         /// The destination.
         /// </param>
-        public void ProcessLogs(string destination)
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        public void ProcessLogs(string destination, HBConfiguration configuration)
         {
-            ThreadPool.QueueUserWorkItem(delegate { this.Service.ProcessEncodeLogs(destination); });
+            ThreadPool.QueueUserWorkItem(delegate { this.Service.ProcessEncodeLogs(destination, configuration); });
         }
 
         /// <summary>

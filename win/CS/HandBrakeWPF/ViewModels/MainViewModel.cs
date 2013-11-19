@@ -1301,7 +1301,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Rescan the source to make sure it's still valid
             this.queueEditTask = task;
-            this.scanService.Scan(task.Source, task.Title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), QueueEditAction, HBConfigurationFactory.Create());
+            this.scanService.Scan(task.Source, task.Title, QueueEditAction, HBConfigurationFactory.Create());
         }
 
         /// <summary>
@@ -1335,13 +1335,7 @@ namespace HandBrakeWPF.ViewModels
         public void ShowCliQuery()
         {
             this.errorService.ShowMessageBox(
-                QueryGeneratorUtility.GenerateQuery(this.CurrentTask,
-                userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
-                userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
-                HBConfigurationFactory.Create().IsDvdNavDisabled,
-                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableQuickSyncDecoding),
-                                       userSettingService.GetUserSetting<bool>(ASUserSettingConstants.EnableDxva),
-                                       userSettingService.GetUserSetting<VideoScaler>(ASUserSettingConstants.ScalingMode) == VideoScaler.BicubicCl),
+                QueryGeneratorUtility.GenerateQuery(this.CurrentTask, HBConfigurationFactory.Create()),
                 "CLI Query",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -1627,7 +1621,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(filename))
             {
-                this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null, HBConfigurationFactory.Create());
+                this.scanService.Scan(filename, title, null, HBConfigurationFactory.Create());
             }
         }
 

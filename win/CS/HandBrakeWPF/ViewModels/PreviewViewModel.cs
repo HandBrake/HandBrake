@@ -173,7 +173,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 List<int> startPoints = new List<int>();
                 for (int i = 1;
-                     i <= this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount);
+                     i <= this.UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
                      i++)
                 {
                     startPoints.Add(i);
