@@ -133,7 +133,6 @@ namespace HandBrake.ApplicationServices.Model
             this.FastDecode = task.FastDecode;
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
             
-
             this.PreviewStartAt = task.PreviewStartAt;
             this.PreviewDuration = task.PreviewDuration;
 

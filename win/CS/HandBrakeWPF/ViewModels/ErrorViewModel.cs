@@ -120,7 +120,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 Console.WriteLine(e);
             }
-
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Simple Encoder options screen
     /// </summary>
-    public class EncoderOptionsViewModel : ViewModelBase, IEncoderOptionsViewModel, ITabInterface
+    public class EncoderOptionsViewModel : ViewModelBase, IEncoderOptionsViewModel
     {
         /// <summary>
         /// The cached options.

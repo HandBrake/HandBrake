@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.Windows.Forms.VisualStyles;
     using System.Windows.Threading;
 
     using HandBrakeWPF.ViewModels.Interfaces;

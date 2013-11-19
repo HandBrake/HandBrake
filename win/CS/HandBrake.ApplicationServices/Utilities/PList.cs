@@ -43,7 +43,6 @@ namespace HandBrake.ApplicationServices.Utilities
 
         #region Public Methods
 
-
         /// <summary>
         /// Load a plist file.
         /// </summary>

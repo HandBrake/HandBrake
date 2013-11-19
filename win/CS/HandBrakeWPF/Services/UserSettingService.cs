@@ -216,7 +216,7 @@ namespace HandBrakeWPF.Services
                     return (SerializableDictionary<string, object>)this.serializer.Deserialize(stream);
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 return new SerializableDictionary<string, object>();
             }

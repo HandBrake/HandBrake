@@ -98,8 +98,6 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<VideoScaler>.GetEnumDisplayValues(typeof(VideoScaler));
             }
 
-
-
             // Single Items
             if (targetType == typeof(x264Preset) || value.GetType() == typeof(x264Preset))
             {

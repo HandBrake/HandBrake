@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
@@ -20,7 +19,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
@@ -429,7 +427,6 @@ namespace HandBrakeWPF.ViewModels
         private IEnumerable<Audio> GetSelectedLanguagesTracks()
         {
             List<Audio> trackList = new List<Audio>();
-
 
             List<string> isoCodes =
                 LanguageUtilities.GetLanguageCodes(

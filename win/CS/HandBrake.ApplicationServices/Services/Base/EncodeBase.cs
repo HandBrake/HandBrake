@@ -290,7 +290,7 @@ namespace HandBrake.ApplicationServices.Services.Base
 
                 return null;
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 return null;
             }
@@ -371,7 +371,7 @@ namespace HandBrake.ApplicationServices.Services.Base
                         }
                     }
                 }
-                catch (Exception exc)
+                catch (Exception)
                 {
                     // Do Nothing.
                 }

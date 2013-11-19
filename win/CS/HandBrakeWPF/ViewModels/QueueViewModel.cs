@@ -415,13 +415,10 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The EncodeProgressEventArgs.
         /// </param>
-        private void EncodeService_EncodeStatusChanged(
-            object sender, EncodeProgressEventArgs e)
+        private void EncodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
             Caliburn.Micro.Execute.OnUIThread(() =>
             {
-
-
                 this.JobStatus =
                     string.Format(
                         "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",

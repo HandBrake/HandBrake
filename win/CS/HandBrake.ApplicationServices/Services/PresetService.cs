@@ -440,7 +440,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                 } 
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 RecoverFromCorruptedPresetFile(this.builtInPresetFile);
                 this.UpdateBuiltInPresets();

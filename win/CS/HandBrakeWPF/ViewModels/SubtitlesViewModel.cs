@@ -13,7 +13,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
-    using System.Windows.Controls.Primitives;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -34,14 +33,14 @@ namespace HandBrakeWPF.ViewModels
         #region Constants and Fields
 
         /// <summary>
-        /// Backing field for the source subtitle tracks.
-        /// </summary>
-        private IList<Subtitle> sourceTracks;
-
-        /// <summary>
         /// The Foreign Audio Search Track
         /// </summary>
         private readonly Subtitle ForeignAudioSearchTrack;
+
+        /// <summary>
+        /// Backing field for the source subtitle tracks.
+        /// </summary>
+        private IList<Subtitle> sourceTracks;
 
         #endregion
 

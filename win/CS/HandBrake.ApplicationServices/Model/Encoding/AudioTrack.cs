@@ -63,6 +63,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
 
+        /// <summary>
+        /// The is default.
+        /// </summary>
         private bool isDefault;
 
         #endregion

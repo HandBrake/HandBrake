@@ -2039,7 +2039,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableDxva, this.EnableDxvaDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);
 
-
             /* System and Logging */
             userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
             userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);

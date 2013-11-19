@@ -126,7 +126,6 @@ namespace HandBrakeWPF.Services
                 return;
             }
 
-
             if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction) == "Do nothing")
             {
                 return;
@@ -140,7 +139,6 @@ namespace HandBrakeWPF.Services
                         titleSpecificView.SetAction(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction));
                         this.windowManager.ShowDialog(titleSpecificView);
                     });
-
 
             if (!titleSpecificView.IsCancelled)
             {

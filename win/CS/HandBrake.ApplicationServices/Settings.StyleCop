@@ -1,4 +1,7 @@
 <StyleCopSettings Version="105">
+  <GlobalSettings>
+    <BooleanProperty Name="AutoCheckForUpdate">False</BooleanProperty>
+  </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCop.CSharp.DocumentationRules">
       <Rules>

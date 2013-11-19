@@ -14,7 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
-    using System.ServiceModel.Channels;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -22,7 +21,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
     using HandBrake.Interop.Model.Encoding;
@@ -477,7 +475,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         /// <summary>
         /// Gets or sets SelectedFramerate.
         /// </summary>
@@ -619,7 +616,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         /// <summary>
         /// Gets or sets a value indicating whether display x 264 options.
         /// </summary>
@@ -636,7 +632,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => FullOptionsTooltip);
             }
         }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether to display qsv options.
@@ -846,7 +841,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets QsvPreset.
         /// </summary>
         public BindingList<QsvPreset> QsvPresets { get; set; }
-
 
         /// <summary>
         /// Gets or sets X264Profiles.

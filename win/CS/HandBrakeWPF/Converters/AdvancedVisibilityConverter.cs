@@ -40,7 +40,7 @@ namespace HandBrakeWPF.Converters
         /// The culture.
         /// </param>
         /// <returns>
-        /// The convert.
+        /// The Visibility Result
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -71,10 +71,9 @@ namespace HandBrakeWPF.Converters
         /// The culture.
         /// </param>
         /// <returns>
-        /// The convert back.
+        /// The Visibility Result
         /// </returns>
-        public object ConvertBack(
-            object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             Visibility visibility = (Visibility)value;
             bool result = visibility == Visibility.Visible;

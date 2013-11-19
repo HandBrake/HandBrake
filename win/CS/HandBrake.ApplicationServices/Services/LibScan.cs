@@ -98,7 +98,7 @@ namespace HandBrake.ApplicationServices.Services
                 HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
                 HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 // Do nothing. 
             }
@@ -178,7 +178,7 @@ namespace HandBrake.ApplicationServices.Services
                     this.scanLog.Dispose();
                     instance.Dispose();
                 }
-                catch (Exception exc)
+                catch (Exception)
                 {
                     // Do Nothing
                 }

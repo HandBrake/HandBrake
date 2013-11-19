@@ -79,7 +79,6 @@ namespace HandBrake.ApplicationServices.Factories
                 preset.Task.MaxHeight = preset.Task.Width;
             }
 
-
             return preset;
         }
 

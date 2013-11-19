@@ -258,7 +258,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.HbProcess.CancelOutputRead();
                 this.ShutdownFileWriter();
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }

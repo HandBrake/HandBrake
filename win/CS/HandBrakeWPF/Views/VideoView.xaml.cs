@@ -13,14 +13,9 @@ namespace HandBrakeWPF.Views
     using System.Windows;
     using System.Windows.Controls;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.ViewModels;
-    using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// Interaction logic for VideoView.xaml
@@ -35,18 +30,35 @@ namespace HandBrakeWPF.Views
             InitializeComponent();
         }
 
-
+        /// <summary>
+        /// The qsv_preset_radiobutton.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void qsv_preset_radiobutton(object sender, System.Windows.RoutedEventArgs e)
         {
             qsv_preset_ValueChanged(sender, null);
         }
 
+        /// <summary>
+        /// The qsv_preset_ value changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void qsv_preset_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             VideoViewModel mvm = ((VideoViewModel)this.DataContext);
             EncodeTask task = mvm.Task;
 
-            string full_string = "";
+            string full_string = string.Empty;
 
             IDictionary<string, string> newOptions = new Dictionary<string, string>();
             string[] existingSegments = full_string.Split(':');
@@ -70,7 +82,7 @@ namespace HandBrakeWPF.Views
                 }
             }
 
-            full_string = "";
+            full_string = string.Empty;
             foreach (KeyValuePair<string, string> entry in newOptions)
             {
                 full_string += entry.Key;

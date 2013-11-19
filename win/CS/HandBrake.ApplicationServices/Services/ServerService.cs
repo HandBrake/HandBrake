@@ -87,7 +87,6 @@ namespace HandBrake.ApplicationServices.Services
             encodeService.ProcessLogs(destination, configuration);
         }
 
-
         /// <summary>
         /// Start the service
         /// </summary>

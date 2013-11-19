@@ -76,12 +76,12 @@ namespace HandBrake.ApplicationServices.Model
         }
 
         /// <summary>
-        /// Gets the task.
+        /// Gets or sets the task.
         /// </summary>
         public EncodeTask Task { get; set; }
 
         /// <summary>
-        /// Gets the configuration.
+        /// Gets or sets the configuration.
         /// </summary>
         public HBConfiguration Configuration { get; set; }
 

@@ -263,10 +263,12 @@ namespace HandBrake.ApplicationServices.Utilities
                 if (task.Height.HasValue && task.Height != 0) query += string.Format(" -l {0}", task.Height);
             }
 
-            //if (task.HasCropping)
-            //{
-            query += string.Format(" --crop {0}:{1}:{2}:{3}", task.Cropping.Top, task.Cropping.Bottom, task.Cropping.Left, task.Cropping.Right);
-            //}
+            query += string.Format(
+                " --crop {0}:{1}:{2}:{3}",
+                task.Cropping.Top,
+                task.Cropping.Bottom,
+                task.Cropping.Left,
+                task.Cropping.Right);
 
             switch (task.Anamorphic)
             {
@@ -442,7 +444,6 @@ namespace HandBrake.ApplicationServices.Utilities
                         query += string.Format(" -b {0}", task.VideoBitrate.Value);
                     break;
                 case VideoEncodeRateType.ConstantQuality:
-                    double value;
                     switch (task.VideoEncoder)
                     {
                         case VideoEncoder.FFMpeg:
