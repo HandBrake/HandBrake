@@ -328,7 +328,7 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
 {
     if ( pv->job->areBframes )
     {
-        if ( ( pv->frameno_in - 1 ) == pv->job->areBframes )
+        if ( ( pv->frameno_in ) == pv->job->areBframes )
         {
             pv->dts_delay = buf->s.start;
             pv->job->config.h264.init_delay = pv->dts_delay;
@@ -370,12 +370,20 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
         // and return all queued buffers.
         if ( pv->delay_tail == NULL && buf != NULL )
         {
-            pv->frameno_out++;
             // Use the cached frame info to get the start time of Nth frame
             // Note that start Nth frame != start time this buffer since the
             // output buffers have rearranged start times.
-            int64_t start = get_frame_start( pv, pv->frameno_out );
-            buf->s.renderOffset = start - pv->dts_delay;
+            if (pv->frameno_out < pv->job->areBframes)
+            {
+                int64_t start = get_frame_start( pv, pv->frameno_out );
+                buf->s.renderOffset = start - pv->dts_delay;
+            }
+            else
+            {
+                buf->s.renderOffset =
+                    get_frame_start(pv, pv->frameno_out - pv->job->areBframes);
+            }
+            pv->frameno_out++;
             return buf;
         }
         else
@@ -384,13 +392,21 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
             buf = pv->delay_head;
             while ( buf )
             {
-                pv->frameno_out++;
                 // Use the cached frame info to get the start time of Nth frame
                 // Note that start Nth frame != start time this buffer since the
                 // output buffers have rearranged start times.
-                int64_t start = get_frame_start( pv, pv->frameno_out );
-                buf->s.renderOffset = start - pv->dts_delay;
+                if (pv->frameno_out < pv->job->areBframes)
+                {
+                    int64_t start = get_frame_start( pv, pv->frameno_out );
+                    buf->s.renderOffset = start - pv->dts_delay;
+                }
+                else
+                {
+                    buf->s.renderOffset = get_frame_start(pv,
+                                        pv->frameno_out - pv->job->areBframes);
+                }
                 buf = buf->next;
+                pv->frameno_out++;
             }
             buf = pv->delay_head;
             pv->delay_head = pv->delay_tail = NULL;
@@ -399,7 +415,7 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
     }
     else if ( buf )
     {
-        buf->s.renderOffset = buf->s.start - pv->dts_delay;
+        buf->s.renderOffset = buf->s.start;
         return buf;
     }
     return NULL;
@@ -438,16 +454,16 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // doesn't do the trick.  It must be set in the AVFrame.
     frame->quality = pv->context->global_quality;
 
-    // Bizarro ffmpeg appears to require the input AVFrame.pts to be
-    // set to a frame number.  Setting it to an actual pts causes
-    // jerky video.
-    // frame->pts = in->s.start;
-    frame->pts = ++pv->frameno_in;
-
     // Remember info about this frame that we need to pass across
     // the avcodec_encode_video call (since it reorders frames).
     save_frame_info( pv, in );
     compute_dts_offset( pv, in );
+
+    // Bizarro ffmpeg appears to require the input AVFrame.pts to be
+    // set to a frame number.  Setting it to an actual pts causes
+    // jerky video.
+    // frame->pts = in->s.start;
+    frame->pts = pv->frameno_in++;
 
     if ( pv->context->codec )
     {
