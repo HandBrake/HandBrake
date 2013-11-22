@@ -11,6 +11,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using System.Windows.Media.Imaging;
 
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// The Static Preview View Model Interface
     /// </summary>
@@ -22,6 +24,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="image">
         /// The image.
         /// </param>
-        void PreviewFrame(BitmapImage image);
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        void PreviewFrame(BitmapImage image, EncodeTask task);
     }
 }

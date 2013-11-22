@@ -807,11 +807,11 @@ namespace HandBrakeWPF.ViewModels
         public void PreviewImage()
         {
             IScan scanService = IoC.Get<IScan>();
-            BitmapImage image = scanService.GetPreview(this.Task, 5);
+            BitmapImage image = scanService.GetPreview(this.Task, 1);
 
             if (image != null)
             {
-                this.StaticPreviewViewModel.PreviewFrame(image);
+                this.StaticPreviewViewModel.PreviewFrame(image, this.Task);
                 this.WindowManager.ShowDialog(this.StaticPreviewViewModel);
             }
         }
