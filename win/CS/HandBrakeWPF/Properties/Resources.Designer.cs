@@ -385,7 +385,7 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Please note, this option is suitable only for slower systems. It will cause a bottleneck on faster systems.
-        ///Accelerates Accelerates H.264, MPEG-4, VC1 and WMV3 only. .
+        ///Accelerates H.264, MPEG-4, VC1 and WMV3 only. .
         /// </summary>
         public static string Video_DxvaDecode {
             get {
