@@ -1631,7 +1631,10 @@ static void compute_frame_duration( hb_work_private_t *pv )
             duration = ( (double)st->duration * (double)st->time_base.num ) /
                        ( (double)st->nb_frames * (double)st->time_base.den );
         }
-        else
+        // Raw demuxers set a default fps of 25 and do not parse
+        // a value from the container.  So use the codec time_base
+        // for raw demuxers.
+        else if (ic->iformat->raw_codec_id == AV_CODEC_ID_NONE)
         {
             // XXX We don't have a frame count or duration so try to use the
             // far less reliable time base info in the stream.
