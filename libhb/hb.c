@@ -51,7 +51,7 @@ struct hb_handle_s
     int            job_count;
     int            job_count_permanent;
     volatile int   work_die;
-    int            work_error;
+    hb_error_code  work_error;
     hb_thread_t  * work_thread;
 
     hb_lock_t    * state_lock;

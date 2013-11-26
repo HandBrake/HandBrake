@@ -156,23 +156,6 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
 }
 
 /* OpenCL */
-static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride, int h )
-{
-    if( dstride == sstride )
-    {
-        memcpy( dst, src, dstride * h );
-        return dst + dstride * h;
-    }
-    int lbytes = dstride <= sstride ? dstride : sstride;
-    while( --h >= 0 )
-    {
-        memcpy( dst, src, lbytes );
-        src += sstride;
-        dst += dstride;
-    }
-    return dst;
-}
-
 static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
 {
     AVPicture           pic_in;

@@ -648,7 +648,7 @@ int hb_release_opencl_env( GPUEnv *gpu_info )
 
     for( i = 0; i<gpu_env.file_count; i++ )
     {
-        if( gpu_env.programs[i] ) ;
+        if( gpu_env.programs[i] )
         {
             hb_ocl->clReleaseProgram(gpu_env.programs[i]);
             gpu_env.programs[i] = NULL;
@@ -1177,8 +1177,6 @@ int hb_read_opencl_frame_buffer(cl_mem cl_inBuf,unsigned char *Ybuf,unsigned cha
 
 int hb_write_opencl_frame_buffer(cl_mem cl_inBuf,unsigned char *Ybuf,unsigned char *Ubuf,unsigned char *Vbuf,int linesize0,int linesize1,int linesize2,int height,int offset)
 {
-    int status;
-
     if (hb_ocl == NULL)
     {
         hb_error("hb_write_opencl_frame_buffer: OpenCL support not available");

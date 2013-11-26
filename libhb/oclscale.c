@@ -67,14 +67,14 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
 
     cl_mem in_buf = data[0];
     cl_mem out_buf = data[1];
-    int crop_top = data[2];
-    int crop_bottom = data[3];
-    int crop_left = data[4];
-    int crop_right = data[5];
-    cl_int in_frame_w = (int)data[6];
-    cl_int in_frame_h = (int)data[7];
-    cl_int out_frame_w = (int)data[8];
-    cl_int out_frame_h = (int)data[9];
+    int crop_top = (intptr_t)data[2];
+    int crop_bottom = (intptr_t)data[3];
+    int crop_left = (intptr_t)data[4];
+    int crop_right = (intptr_t)data[5];
+    cl_int in_frame_w = (intptr_t)data[6];
+    cl_int in_frame_h = (intptr_t)data[7];
+    cl_int out_frame_w = (intptr_t)data[8];
+    cl_int out_frame_h = (intptr_t)data[9];
     hb_oclscale_t  *os = data[10];
     hb_buffer_t *in = data[11];
     hb_buffer_t *out = data[12];
@@ -284,14 +284,14 @@ int hb_ocl_scale(hb_buffer_t *in, hb_buffer_t *out, int *crop, hb_oclscale_t *os
 
     data[0] = in->cl.buffer;
     data[1] = out->cl.buffer;
-    data[2] = (void*)(crop[0]);
-    data[3] = (void*)(crop[1]);
-    data[4] = (void*)(crop[2]);
-    data[5] = (void*)(crop[3]);
-    data[6] = (void*)(in->f.width);
-    data[7] = (void*)(in->f.height);
-    data[8] = (void*)(out->f.width);
-    data[9] = (void*)(out->f.height);
+    data[2] = (void*)(intptr_t)(crop[0]);
+    data[3] = (void*)(intptr_t)(crop[1]);
+    data[4] = (void*)(intptr_t)(crop[2]);
+    data[5] = (void*)(intptr_t)(crop[3]);
+    data[6] = (void*)(intptr_t)(in->f.width);
+    data[7] = (void*)(intptr_t)(in->f.height);
+    data[8] = (void*)(intptr_t)(out->f.width);
+    data[9] = (void*)(intptr_t)(out->f.height);
     data[10] = os;
     data[11] = in;
     data[12] = out;

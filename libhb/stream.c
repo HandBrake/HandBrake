@@ -5678,6 +5678,8 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
    if ( hb_check_hwd_fmt(pix_fmt) == 0)
        title->hwd_support = 0;
 #else
+    // Eliminate compiler warning "pix_fmt set but not used"
+    (void)pix_fmt;
     title->hwd_support = 0;
 #endif
 

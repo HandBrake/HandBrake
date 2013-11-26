@@ -22,7 +22,7 @@ typedef struct
 {
     hb_list_t * jobs;
     hb_job_t  ** current_job;
-    int       * error;
+    hb_error_code * error;
     volatile int * die;
 
 } hb_work_t;
@@ -47,7 +47,7 @@ static void filter_loop( void * );
  * @param die Handle to user inititated exit indicator.
  * @param error Handle to error indicator.
  */
-hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, int * error, hb_job_t ** job )
+hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, hb_error_code * error, hb_job_t ** job )
 {
     hb_work_t * work = calloc( sizeof( hb_work_t ), 1 );
 

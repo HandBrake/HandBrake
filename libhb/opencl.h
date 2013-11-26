@@ -21,8 +21,10 @@
 #define HB_OCL_FUNC_DECL(name)      HB_OCL_FUNC_TYPE(name) name
 #define HB_OCL_API(ret, attr, name) typedef ret (attr* HB_OCL_FUNC_TYPE(name))
 
+#ifdef __APPLE__
 #pragma mark -
 #pragma mark OpenCL API
+#endif // __APPLE__
 
 /* Platform API */
 HB_OCL_API(cl_int, CL_API_CALL, clGetPlatformIDs)
@@ -622,7 +624,9 @@ HB_OCL_API(void *, CL_API_CALL, clGetExtensionFunctionAddressForPlatform)
 (cl_platform_id /* platform */,
  const char *   /* func_name */);
 
+#ifdef __APPLE__
 #pragma mark -
+#endif // __APPLE__
 
 typedef struct hb_opencl_library_s
 {

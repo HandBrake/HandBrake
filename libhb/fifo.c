@@ -8,6 +8,7 @@
  */
 
 #include "hb.h"
+#include "openclwrapper.h"
 
 #ifndef SYS_DARWIN
 #include <malloc.h>
@@ -256,7 +257,7 @@ void hb_buffer_pool_free( void )
                     /* OpenCL */
                     if (hb_cl_free_mapped_buffer(b->cl.buffer, b->data) == 0)
                     {
-                        hb_log("hb_buffer_pool_free: bad free: %.16x -> buffer %.16x map %.16x",
+                        hb_log("hb_buffer_pool_free: bad free: %p -> buffer %p map %p",
                                b, b->cl.buffer, b->data);
                     }
                 }
@@ -312,7 +313,8 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
         /* OpenCL */
         if (b != NULL && needsMapped && b->cl.buffer == NULL)
         {
-            // We need a mapped OpenCL buffer and that is not what we got out of the pool.
+            // We need a mapped OpenCL buffer and that is not
+            // what we got out of the pool.
             // Ditch it; it will get replaced with what we need.
             if (b->data != NULL)
             {
@@ -374,18 +376,24 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
         if (needsMapped)
         {
             int status = hb_cl_create_mapped_buffer(&b->cl.buffer, &b->data, b->alloc);
+            if (!status)
+            {
+                hb_error("Failed to map CL buffer");
+                free(b);
+                return NULL;
+            }
         }
         else
         {
             b->cl.buffer = NULL;
 
 #if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
-        b->data  = malloc( b->alloc );
+            b->data  = malloc( b->alloc );
 #elif defined( SYS_CYGWIN )
-        /* FIXME */
-        b->data  = malloc( b->alloc + 17 );
+            /* FIXME */
+            b->data  = malloc( b->alloc + 17 );
 #else
-        b->data  = memalign( 16, b->alloc );
+            b->data  = memalign( 16, b->alloc );
 #endif
         }
 
@@ -642,7 +650,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
                 /* OpenCL */
                 if (hb_cl_free_mapped_buffer(b->cl.buffer, b->data) == 0)
                 {
-                    hb_log("hb_buffer_pool_free: bad free %.16x -> buffer %.16x map %.16x",
+                    hb_log("hb_buffer_pool_free: bad free %p -> buffer %p map %p",
                            b, b->cl.buffer, b->data);
                 }
             }
