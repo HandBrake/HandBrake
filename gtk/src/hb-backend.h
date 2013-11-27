@@ -107,7 +107,7 @@ void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 void ghb_set_scale_settings(GValue *settings, gint mode);
 GValue* ghb_get_chapters(gint titleindex);
-void ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss);
+void ghb_get_chapter_duration(gint ti, gint ii, gint64 *dur);
 void ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
 gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
 gboolean ghb_ac3_in_audio_list(const GValue *audio_list);

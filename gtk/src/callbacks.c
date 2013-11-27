@@ -1352,6 +1352,13 @@ get_rate_string(gint rate_base, gint rate)
     return rate_s;
 }
 
+static void break_duration(gint64 duration, gint *hh, gint *mm, gint *ss)
+{
+    *hh = duration / (60*60);
+    *mm = (duration / 60) % 60;
+    *ss = duration % 60;
+}
+
 static void
 update_title_duration(signal_user_data_t *ud)
 {
@@ -1376,9 +1383,7 @@ update_title_duration(signal_user_data_t *ud)
         start = ghb_settings_get_int(ud->settings, "start_point");
         end = ghb_settings_get_int(ud->settings, "end_point");
         duration = end - start;
-        hh = duration / (60*60);
-        mm = (duration / 60) % 60;
-        ss = duration % 60;
+        break_duration(duration, &hh, &mm, &ss);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
@@ -1392,9 +1397,7 @@ update_title_duration(signal_user_data_t *ud)
             end = ghb_settings_get_int(ud->settings, "end_point");
             frames = end - start + 1;
             duration = frames * title->rate_base / title->rate;
-            hh = duration / (60*60);
-            mm = (duration / 60) % 60;
-            ss = duration % 60;
+            break_duration(duration, &hh, &mm, &ss);
         }
         else
         {
@@ -3569,6 +3572,7 @@ reset_chapter_list(signal_user_data_t *ud, GValue *settings)
     GValue *chapters;
     gint titleindex, ii;
     gint count;
+    gint64 ch_start = 0;
     
     g_debug("reset_chapter_list ()");
     chapters = ghb_value_dup(ghb_settings_get_value(settings, "chapter_list"));
@@ -3586,19 +3590,26 @@ reset_chapter_list(signal_user_data_t *ud, GValue *settings)
 
             if (ii < count)
             {
-                gchar *chapter, *duration;
+                gchar *chapter, *duration, *start;
                 gint hh, mm, ss;
+                gint64 dur;
 
                 // Update row with settings data
                 g_debug("Updating row");
                 chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
-                ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+                ghb_get_chapter_duration(titleindex, ii, &dur);
+                dur /= 90000;
+                break_duration(dur, &hh, &mm, &ss);
                 duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+                break_duration(ch_start, &hh, &mm, &ss);
+                start = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+                ch_start += dur;
                 gtk_list_store_set(store, &iter, 
                     0, ii+1,
-                    1, duration,
-                    2, chapter,
-                    3, TRUE,
+                    1, start,
+                    2, duration,
+                    3, chapter,
+                    4, TRUE,
                     -1);
                 g_free(chapter);
                 g_free(duration);
@@ -3615,20 +3626,27 @@ reset_chapter_list(signal_user_data_t *ud, GValue *settings)
     }
     while (ii < count)
     {
-        gchar *chapter, *duration;
+        gchar *chapter, *duration, *start;
         gint hh, mm, ss;
+        gint64 dur;
 
         // Additional settings, add row
         g_debug("Adding row");
         chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
-        ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+        ghb_get_chapter_duration(titleindex, ii, &dur);
+        dur /= 90000;
+        break_duration(dur, &hh, &mm, &ss);
         duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+        break_duration(ch_start, &hh, &mm, &ss);
+        start = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+        ch_start += dur;
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
             0, ii+1,
-            1, duration,
-            2, chapter,
-            3, TRUE,
+            1, start,
+            2, duration,
+            3, chapter,
+            4, TRUE,
             -1);
         g_free(chapter);
         g_free(duration);
@@ -3659,6 +3677,7 @@ update_chapter_list_from_settings(GtkBuilder *builder, GValue *settings)
     GValue *chapters;
     gint titleindex, ii;
     gint count;
+    gint64 ch_start = 0;
     
     g_debug("update_chapter_list ()");
     titleindex = ghb_settings_get_int(settings, "title_no");
@@ -3675,19 +3694,26 @@ update_chapter_list_from_settings(GtkBuilder *builder, GValue *settings)
 
             if (ii < count)
             {
-                gchar *chapter, *duration;
+                gchar *chapter, *duration, *start;
                 gint hh, mm, ss;
+                gint64 dur;
 
                 // Update row with settings data
                 g_debug("Updating row");
                 chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
-                ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+                ghb_get_chapter_duration(titleindex, ii, &dur);
+                dur /= 90000;
+                break_duration(dur, &hh, &mm, &ss);
                 duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+                break_duration(ch_start, &hh, &mm, &ss);
+                start = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+                ch_start += dur;
                 gtk_list_store_set(store, &iter, 
                     0, ii+1,
-                    1, duration,
-                    2, chapter,
-                    3, TRUE,
+                    1, start,
+                    2, duration,
+                    3, chapter,
+                    4, TRUE,
                     -1);
                 g_free(chapter);
                 g_free(duration);
@@ -3704,20 +3730,27 @@ update_chapter_list_from_settings(GtkBuilder *builder, GValue *settings)
     }
     while (ii < count)
     {
-        gchar *chapter, *duration;
+        gchar *chapter, *duration, *start;
         gint hh, mm, ss;
+        gint64 dur;
 
         // Additional settings, add row
         g_debug("Adding row");
         chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
-        ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+        ghb_get_chapter_duration(titleindex, ii, &dur);
+        dur /= 90000;
+        break_duration(dur, &hh, &mm, &ss);
         duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+        break_duration(ch_start, &hh, &mm, &ss);
+        start = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+        ch_start += dur;
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
             0, ii+1,
-            1, duration,
-            2, chapter,
-            3, TRUE,
+            1, start,
+            2, duration,
+            3, chapter,
+            4, TRUE,
             -1);
         g_free(chapter);
         g_free(duration);
@@ -3762,8 +3795,8 @@ chapter_edited_cb(
     row = pi[0];
     gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath);
     gtk_list_store_set(store, &iter, 
-        2, text,
-        3, TRUE,
+        3, text,
+        4, TRUE,
         -1);
     gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 0, &index, -1);
 
@@ -3803,14 +3836,14 @@ chapter_edited_cb(
         // I got industrious and made my own CellTextRendererText that
         // passes on the key-press-event. So now I have much better
         // control of this.
-        column = gtk_tree_view_get_column(treeview, 2);
+        column = gtk_tree_view_get_column(treeview, 3);
         gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
     }
     else if (chapter_edit_key == GDK_KEY_Up && row > 0)
     {
         GtkTreeViewColumn *column;
         gtk_tree_path_prev(treepath);
-        column = gtk_tree_view_get_column(treeview, 2);
+        column = gtk_tree_view_get_column(treeview, 3);
         gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
     }
     gtk_tree_path_free (treepath);

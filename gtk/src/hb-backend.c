@@ -3274,23 +3274,21 @@ ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
 }
 
 void
-ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss)
+ghb_get_chapter_duration(gint ti, gint ii, gint64 *duration)
 {
     hb_title_t * title;
     hb_chapter_t * chapter;
     gint count;
     
     g_debug("ghb_get_chapter_duration (title = %d)\n", ti);
-    *hh = *mm = *ss = 0;
+    *duration = 0;
     title = ghb_get_title_info( ti );
     if (title == NULL) return;
     count = hb_list_count( title->list_chapter );
     if (ii >= count) return;
     chapter = hb_list_item(title->list_chapter, ii);
     if (chapter == NULL) return;
-    *hh = chapter->hours;
-    *mm = chapter->minutes;
-    *ss = chapter->seconds;
+    *duration = chapter->duration;
 }
 
 GValue*

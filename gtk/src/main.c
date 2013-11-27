@@ -216,7 +216,7 @@ bind_chapter_tree_model(signal_user_data_t *ud)
 
     g_debug("bind_chapter_tree_model()\n");
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
-    treestore = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+    treestore = gtk_list_store_new(5, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
     cell = ghb_cell_renderer_text_new();
@@ -226,12 +226,17 @@ bind_chapter_tree_model(signal_user_data_t *ud)
 
     cell = ghb_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
-                                    _("Duration"), cell, "text", 1, NULL);
+                                    _("Start"), cell, "text", 1, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
     cell = ghb_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
-                    _("Title"), cell, "text", 2, "editable", 3, NULL);
+                                    _("Duration"), cell, "text", 2, NULL);
+    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+
+    cell = ghb_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(
+                    _("Title"), cell, "text", 3, "editable", 4, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
     g_signal_connect(cell, "key-press-event", chapter_keypress_cb, ud);
