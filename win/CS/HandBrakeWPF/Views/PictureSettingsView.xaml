@@ -145,8 +145,8 @@
             </Grid>
 
 
-            <Label Content="Preview" FontWeight="Bold" Margin="15,0,0,0" />
-            <Button Content="Show Preview" cal:Message.Attach="[Event Click] = [Action PreviewImage]" />
+            <Label Content="Preview" FontWeight="Bold" Margin="15,0,0,0"  Visibility="Collapsed"/>
+            <Button Content="Show Preview" cal:Message.Attach="[Event Click] = [Action PreviewImage]" Visibility="Collapsed" />
 
         </StackPanel>
     </StackPanel>
