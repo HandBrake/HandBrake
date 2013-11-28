@@ -813,6 +813,12 @@ namespace HandBrake.Interop
 				foreach (hb_title_s title in this.originalTitles)
 				{
 					var newTitle = this.ConvertTitle(title);
+                    
+                    // Convert the Path to UTF-8.
+                    byte[] bytes = Encoding.Default.GetBytes(title.path);
+                    string utf8Str = Encoding.UTF8.GetString(bytes);
+                    newTitle.Path = utf8Str;
+                   
 					this.titles.Add(newTitle);
 				}
 
