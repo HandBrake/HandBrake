@@ -6,7 +6,6 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
-             xmlns:handBrakeWpf="clr-namespace:HandBrakeWPF"
              AllowDrop="True"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -187,7 +186,23 @@
                      ToolBar.OverflowMode="Never"
                      ToolBarTray.IsLocked="True"
                      >
-                <Menu Background="Transparent">
+
+                <Button Name="SelectSource"
+                        Micro:Message.Attach="[Event Click] = [Action SelectSourceWindow]">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="32"
+                               Height="32"
+                               Source="Images/Movies.png"
+                               />
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="Source"
+                               />
+                    </StackPanel>
+                </Button>
+                
+                
+                <Menu Background="Transparent" Visibility="Collapsed">
                     <MenuItem ItemsSource="{Binding SourceMenu}" attachedProperties:DriveMenu.ShowAvailableDrives="true">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
@@ -201,6 +216,7 @@
                                        />
                             </StackPanel>
                         </MenuItem.Header>
+                        
                         <MenuItem.Resources>
                             <Image x:Key="Movie" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/file.png" />
                             <Image x:Key="Folder" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/folder.png" />
@@ -667,7 +683,11 @@
                 </Grid>
             </GroupBox>
         </Grid>
-
+        
+        <!-- Source Selection-->       
+        <Controls:SourceSelection Grid.Row="1" Width="400" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="DarkGray"
+                                  Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}}"  />
+        
         <!--  StatusPanel  -->
         <Controls:StatusPanel x:Name="loadingPanel"
                               Grid.Row="1"

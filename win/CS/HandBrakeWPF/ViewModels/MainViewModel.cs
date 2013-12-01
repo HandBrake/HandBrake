@@ -18,11 +18,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Threading;
     using System.Windows;
-    using System.Windows.Media.Imaging;
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Factories;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -42,8 +40,6 @@ namespace HandBrakeWPF.ViewModels
     using Microsoft.Win32;
 
     using Ookii.Dialogs.Wpf;
-
-    using Image = System.Windows.Controls.Image;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -177,6 +173,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool isPresetPanelShowing;
 
+        /// <summary>
+        /// The show source selection.
+        /// </summary>
+        private bool showSourceSelection;
+
+        /// <summary>
+        /// The drives.
+        /// </summary>
+        private BindingList<SourceMenuItem> drives;
+
         #endregion
 
         /// <summary>
@@ -243,6 +249,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.Presets = this.presetService.Presets;
             this.CancelScanCommand = new CancelScanCommand(this.scanService);
+            this.Drives = new BindingList<SourceMenuItem>();
         }
 
         #region View Model Properties
@@ -859,6 +866,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.selectedOutputFormat;
             }
+
             set
             {
                 this.selectedOutputFormat = value;
@@ -913,6 +921,65 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets a value indicating progress percentage.
         /// </summary>
         public int ProgressPercentage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show source selection.
+        /// </summary>
+        public bool ShowSourceSelection
+        {
+            get
+            {
+                return this.showSourceSelection;
+            }
+            set
+            {
+                if (value.Equals(this.showSourceSelection))
+                {
+                    return;
+                }
+                this.showSourceSelection = value;
+                this.NotifyOfPropertyChange(() => this.ShowSourceSelection);
+
+                // Refresh the drives.
+                if (this.showSourceSelection)
+                {
+                    this.Drives.Clear();
+                    foreach (SourceMenuItem menuItem in from item in GeneralUtilities.GetDrives()
+                                                        let driveInformation = item
+                                                        select new SourceMenuItem
+                                                        {
+                                                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
+                                                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
+                                                            Tag = item,
+                                                            IsDrive = true
+                                                        })
+                    {
+                        this.Drives.Add(menuItem);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the drives.
+        /// </summary>
+        public BindingList<SourceMenuItem> Drives
+        {
+            get
+            {
+                return this.drives;
+            }
+            set
+            {
+                if (Equals(value, this.drives))
+                {
+                    return;
+                }
+
+                this.drives = value;
+                this.NotifyOfPropertyChange(() => this.Drives);
+            }
+        }
 
         #endregion
 
@@ -1179,6 +1246,9 @@ namespace HandBrakeWPF.ViewModels
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true };
             dialog.ShowDialog();
+
+            ShowSourceSelection = false;
+
             this.StartScan(dialog.SelectedPath, 0);
         }
 
@@ -1189,6 +1259,9 @@ namespace HandBrakeWPF.ViewModels
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
             dialog.ShowDialog();
+
+            ShowSourceSelection = false;
+
             this.StartScan(dialog.FileName, 0);
         }
 
@@ -1339,6 +1412,22 @@ namespace HandBrakeWPF.ViewModels
                 "CLI Query",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+        }
+
+        /// <summary>
+        /// The select source window.
+        /// </summary>
+        public void SelectSourceWindow()
+        {
+            ShowSourceSelection = !ShowSourceSelection;
+        }
+
+        /// <summary>
+        /// The close source selection.
+        /// </summary>
+        public void CloseSourceSelection()
+        {
+            this.ShowSourceSelection = false;
         }
 
         #endregion
@@ -1996,7 +2085,20 @@ namespace HandBrakeWPF.ViewModels
         {
             if (item != null)
             {
-                this.StartScan(((DriveInformation)item).RootDirectory, 0);
+                if (item.GetType() == typeof(DriveInformation))
+                {
+                    this.StartScan(((DriveInformation)item).RootDirectory, 0);
+                }
+                else if (item.GetType() == typeof(SourceMenuItem))
+                {
+                    DriveInformation driveInfo = ((SourceMenuItem)item).Tag as DriveInformation;
+                    if (driveInfo != null)
+                    {
+                        this.StartScan(driveInfo.RootDirectory, 0);
+                    }
+
+                    this.ShowSourceSelection = false;
+                }
             }
         }
 

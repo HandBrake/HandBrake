@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="HandBrakeWPF.Controls.SourceSelection"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
+        Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+
+    <Grid VerticalAlignment="Top" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="15,30,0,0">
+            <TextBlock Text="Source Selection" FontSize="14" FontWeight="Bold" /> 
+        </StackPanel>
+
+        <!-- Title Specific Scan -->
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="15,10,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Optionally choose a specific title: " />
+
+                <controls:NumberBox Width="60" Height="24" Margin="10,0,0,0"
+                                Minimum="0" Maximum="1000" Number="{Binding SelectedTitle, Mode=TwoWay}" />
+            </StackPanel>
+
+            <TextBlock Text="Then choose your source: " Margin="0,20,0,0" />
+        </StackPanel>
+
+        <!-- Source Type -->
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="15,10,0,0">
+
+            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
+                    Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" MinWidth="100">
+                    <Image Source="../Views/Images/folder32.png" Width="32" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Folder" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="Open a Video_TS folder or batch scan a number of files" VerticalAlignment="Center" Margin="5,0,0,0" />
+                    </StackPanel>                   
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
+                    Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" MinWidth="100">
+                    <Image Source="../Views/Images/File32.png" Width="32" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="File" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="Open a single file." VerticalAlignment="Center" Margin="5,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+            
+            <ListBox ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
+                                cal:Message.Attach="[Event Click] = [Action ProcessDrive($this.Tag)]"
+                                Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left" 
+                                Tag="{Binding}">
+                            <StackPanel Orientation="Horizontal" MinWidth="100">
+                                <Image Source="../Views/Images/Disc.png" Width="32" />
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                                    <TextBlock Text="Open this DVD or Bluray Drive" VerticalAlignment="Center" Margin="5,0,0,0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                
+            </ListBox>
+        </StackPanel>
+
+        <!-- Cancel Window -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,10">
+            <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="Cancel" Padding="8,2" />
+        </StackPanel>
+        
+        <StackPanel Grid.Row="4" />
+        
+        <StackPanel Grid.Row="5" VerticalAlignment="Bottom" Orientation="Vertical">
+            <TextBlock Text="This is an experimental replacement for the source selection menu. Feedback welcome on the forum." Margin="10,0,10,0" TextWrapping="Wrap" />
+        </StackPanel>
+
+    </Grid>
+</UserControl>

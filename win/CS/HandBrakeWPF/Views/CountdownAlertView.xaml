@@ -13,7 +13,6 @@
         <StackPanel Grid.Row="0"
                     Height="30"
                     Margin="0,0,0,10"
-                    Background="White"
                     Orientation="Horizontal">
             <Image Width="24"
                    Height="24"
