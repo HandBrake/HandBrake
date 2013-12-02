@@ -786,19 +786,11 @@ void hb_get_preview( hb_handle_t * h, hb_job_t * job, int picture,
 
     if( job->deinterlace )
     {
-        int width = (in_buf->plane[0].width + 3) & ~0x3;
-        int height = (in_buf->plane[0].height + 3) & ~0x3;
-
         // Deinterlace and crop
-        // avpicture_deinterlace requires 4 pixel aligned width and height
-        // we have aligned all buffers to 16 byte width and height strides
-        // so there is room in the buffers to accomodate a litte
-        // overscan.
         deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
                                           title->width, title->height );
+        hb_deinterlace(deint_buf, in_buf);
         hb_avpicture_fill( &pic_deint, deint_buf );
-        avpicture_deinterlace( &pic_deint, &pic_in, AV_PIX_FMT_YUV420P,
-            width, height );
 
         av_picture_crop( &pic_crop, &pic_deint, AV_PIX_FMT_YUV420P,
                 job->crop[0], job->crop[2] );

@@ -40,6 +40,16 @@ typedef struct yadif_arguments_s {
     int tff;
 } yadif_arguments_t;
 
+typedef struct deint_arguments_s {
+    hb_buffer_t * src;
+    hb_buffer_t * dst;
+} deint_arguments_t;
+
+typedef struct deint_thread_arg_s {
+    hb_filter_private_t *pv;
+    int segment;
+} deint_thread_arg_t;
+
 struct hb_filter_private_s
 {
     int              width;
@@ -52,9 +62,14 @@ struct hb_filter_private_s
     hb_buffer_t      * yadif_ref[3];
 
     int              cpu_count;
+    int              segments;
 
-    taskset_t        yadif_taskset;         // Threads for Yadif - one per CPU
+    int              deint_nsegs;
 
+    taskset_t        deint_taskset;         // Threads for fast deint
+    taskset_t        yadif_taskset;         // Threads for Yadif
+
+    deint_arguments_t *deint_arguments;     // Arguments to thread for work
     yadif_arguments_t *yadif_arguments;     // Arguments to thread for work
 };
 
@@ -192,17 +207,16 @@ void yadif_filter_thread( void *thread_args_v )
              */
             run = 0;
             goto report_completion;
-        } 
+        }
 
         yadif_work = &pv->yadif_arguments[segment];
 
         if( yadif_work->dst == NULL )
         {
             hb_error( "Thread started when no work available" );
-            hb_snooze(500);
             goto report_completion;
         }
-        
+
         /*
          * Process all three planes, but only this segment of it.
          */
@@ -218,9 +232,9 @@ void yadif_filter_thread( void *thread_args_v )
             int tff = yadif_work->tff;
             int penultimate = h - 2;
 
-            int segment_height = (h / pv->cpu_count) & ~1;
+            int segment_height = (h / pv->segments) & ~1;
             segment_start = segment_height * segment;
-            if( segment == pv->cpu_count - 1 )
+            if( segment == pv->segments - 1 )
             {
                 /*
                  * Final segment
@@ -248,7 +262,7 @@ void yadif_filter_thread( void *thread_args_v )
                     {
                         /* This isn't the top or bottom,
                          * proceed as normal to yadif. */
-                        yadif_filter_line(pv, dst2, prev, cur, next, w, s, 
+                        yadif_filter_line(pv, dst2, prev, cur, next, w, s,
                                           parity ^ tff);
                     }
                     else
@@ -295,8 +309,8 @@ static void yadif_filter( hb_filter_private_t * pv,
 
     int segment;
 
-    for( segment = 0; segment < pv->cpu_count; segment++ )
-    {  
+    for( segment = 0; segment < pv->segments; segment++ )
+    {
         /*
          * Setup the work for this plane.
          */
@@ -311,6 +325,128 @@ static void yadif_filter( hb_filter_private_t * pv,
     /*
      * Entire frame is now deinterlaced.
      */
+}
+
+/*
+ * deinterlace a frame in a single thread.
+ */
+void deint_filter_thread( void *thread_args_v )
+{
+    deint_arguments_t *args = NULL;
+    hb_filter_private_t * pv;
+    int run = 1;
+    int segment;
+    deint_thread_arg_t *thread_args = thread_args_v;
+
+    pv = thread_args->pv;
+    segment = thread_args->segment;
+
+    hb_log("Fast Deinterlace thread started for segment %d", segment);
+
+    while( run )
+    {
+        /*
+         * Wait here until there is work to do.
+         */
+        taskset_thread_wait4start( &pv->deint_taskset, segment );
+
+
+        if( taskset_thread_stop( &pv->deint_taskset, segment ) )
+        {
+            /*
+             * No more work to do, exit this thread.
+             */
+            run = 0;
+            goto report_completion;
+        }
+
+        args = &pv->deint_arguments[segment];
+
+        if( args->dst == NULL )
+        {
+            // This can happen when flushing final buffers.
+            goto report_completion;
+        }
+
+        /*
+         * Process all three planes, but only this segment of it.
+         */
+        hb_deinterlace(args->dst, args->src);
+
+report_completion:
+        /*
+         * Finished this segment, let everyone know.
+         */
+        taskset_thread_complete( &pv->deint_taskset, segment );
+    }
+}
+
+/*
+ * threaded fast deint - each thread deinterlaces a single frame.
+ *
+ * This function blocks until all frames are deinterlaced.
+ */
+static hb_buffer_t * deint_fast(hb_filter_private_t * pv, hb_buffer_t * in)
+{
+
+    int ii;
+    hb_buffer_t *dst, *src;
+
+    if (in != NULL)
+    {
+        dst = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+        pv->deint_arguments[pv->deint_nsegs].src = in;
+        pv->deint_arguments[pv->deint_nsegs].dst = dst;
+        pv->deint_nsegs++;
+    }
+    if (in != NULL && pv->deint_nsegs < pv->segments)
+    {
+        return NULL;
+    }
+
+    if (pv->deint_nsegs > 0)
+    {
+        /* Allow the taskset threads to make one pass over the data. */
+        taskset_cycle( &pv->deint_taskset );
+    }
+
+    hb_buffer_t *first = NULL, *last = NULL;
+    for (ii = 0; ii < pv->deint_nsegs; ii++)
+    {
+        src = pv->deint_arguments[ii].src;
+        dst = pv->deint_arguments[ii].dst;
+        pv->deint_arguments[ii].src = NULL;
+        pv->deint_arguments[ii].dst = NULL;
+        if (first == NULL)
+        {
+            first = dst;
+        }
+        if (last != NULL)
+        {
+            last->next = dst;
+        }
+        last = dst;
+
+        dst->s = src->s;
+        hb_buffer_move_subs(dst, src);
+        hb_buffer_close(&src);
+    }
+    if (in == NULL)
+    {
+        // Flushing final buffers.  Append EOS marker buffer.
+        dst = hb_buffer_init(0);
+        if (first == NULL)
+        {
+            first = dst;
+        }
+        else
+        {
+            last->next = dst;
+        }
+    }
+    pv->deint_nsegs = 0;
+
+    return first;
 }
 
 static int hb_deinterlace_init( hb_filter_object_t * filter,
@@ -341,16 +477,17 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
         /*
          * Setup yadif taskset.
          */
-        pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->cpu_count );
+        pv->segments = pv->cpu_count;
+        pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->segments );
         if( pv->yadif_arguments == NULL ||
-            taskset_init( &pv->yadif_taskset, /*thread_count*/pv->cpu_count,
-                          sizeof( yadif_arguments_t ) ) == 0 )
+            taskset_init( &pv->yadif_taskset, /*thread_count*/pv->segments,
+                          sizeof( yadif_thread_arg_t ) ) == 0 )
         {
             hb_error( "yadif could not initialize taskset" );
         }
 
         int ii;
-        for( ii = 0; ii < pv->cpu_count; ii++ )
+        for( ii = 0; ii < pv->segments; ii++ )
         {
             yadif_thread_arg_t *thread_args;
 
@@ -369,7 +506,41 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
             }
         }
     }
-    
+    else
+    {
+        /*
+         * Setup fast deint taskset.
+         */
+        pv->segments = pv->cpu_count;
+        pv->deint_arguments = malloc( sizeof( deint_arguments_t ) * pv->segments );
+        if( pv->deint_arguments == NULL ||
+            taskset_init( &pv->deint_taskset, pv->segments,
+                          sizeof( deint_thread_arg_t ) ) == 0 )
+        {
+            hb_error( "deint could not initialize taskset" );
+        }
+
+        int ii;
+        for( ii = 0; ii < pv->segments; ii++ )
+        {
+            deint_thread_arg_t *thread_args;
+
+            thread_args = taskset_thread_args( &pv->deint_taskset, ii );
+
+            thread_args->pv = pv;
+            thread_args->segment = ii;
+            pv->deint_arguments[ii].dst = NULL;
+
+            if( taskset_thread_spawn( &pv->deint_taskset, ii,
+                                      "deint_filter_segment",
+                                      deint_filter_thread,
+                                      HB_NORMAL_PRIORITY ) == 0 )
+            {
+                hb_error( "deint could not spawn thread" );
+            }
+        }
+    }
+
     return 0;
 }
 
@@ -395,35 +566,14 @@ static void hb_deinterlace_close( hb_filter_object_t * filter )
 
         free( pv->yadif_arguments );
     }
-    
+    else
+    {
+        taskset_fini( &pv->deint_taskset );
+        free( pv->deint_arguments );
+    }
+
     free( pv );
     filter->private_data = NULL;
-}
-
-static hb_buffer_t * deint_fast(hb_buffer_t * in)
-{
-    AVPicture pic_in;
-    AVPicture pic_out;
-    hb_buffer_t * out;
-
-    int w = (in->plane[0].width + 3) & ~0x3;
-    int h = (in->plane[0].height + 3) & ~0x3;
-
-    out = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
-
-    hb_avpicture_fill( &pic_in, in );
-    hb_avpicture_fill( &pic_out, out );
-
-    // avpicture_deinterlace requires 4 pixel aligned width and height
-    // we have aligned all buffers to 16 byte width and height strides
-    // so there is room in the buffers to accomodate a litte
-    // overscan.
-    avpicture_deinterlace(&pic_out, &pic_in, out->f.fmt, w, h);
-
-    out->s = in->s;
-    hb_buffer_move_subs(out, in);
-
-    return out;
 }
 
 static int hb_deinterlace_work( hb_filter_object_t * filter,
@@ -438,13 +588,19 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
     {
         *buf_out = in;
         *buf_in = NULL;
+        if( !( pv->yadif_mode & MODE_YADIF_ENABLE ) )
+        {
+            // Flush final frames
+            *buf_out = deint_fast(pv, NULL);
+        }
         return HB_FILTER_DONE;
     }
 
     /* Use libavcodec deinterlace if yadif_mode < 0 */
     if( !( pv->yadif_mode & MODE_YADIF_ENABLE ) )
     {
-        *buf_out = deint_fast(in);
+        *buf_in = NULL;
+        *buf_out = deint_fast(pv, in);
         return HB_FILTER_OK;
     }
 
