@@ -52,7 +52,7 @@ typedef enum EncodeState : NSUInteger {
  *
  * @param index picture index in title.
  */
-- (NSImage *) imageAtIndex: (NSUInteger) index
+- (NSImage *) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache
 {
     if (index >= self.imagesCount)
         return nil;
@@ -67,7 +67,8 @@ typedef enum EncodeState : NSUInteger {
                                                      libhb:self.handle
                                                      title:self.title
                                                deinterlace:self.deinterlace];
-        [self.picturePreviews setObject:theImage forKey:@(index)];
+        if (cache)
+            [self.picturePreviews setObject:theImage forKey:@(index)];
     }
 
     return theImage;

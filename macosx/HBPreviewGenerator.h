@@ -22,7 +22,7 @@
 - (id) initWithHandle: (hb_handle_t *) handle andTitle: (hb_title_t *) title;
 
 /* Still image generator */
-- (NSImage *) imageAtIndex: (NSUInteger) index;
+- (NSImage *) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
 - (NSUInteger) imagesCount;
 - (void) purgeImageCache;
 

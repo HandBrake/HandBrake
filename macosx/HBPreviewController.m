@@ -283,6 +283,7 @@ typedef enum ViewMode : NSUInteger {
         [self stopMovieTimer];
     }
 
+    [self.generator purgeImageCache];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
 }
 
@@ -634,7 +635,7 @@ typedef enum ViewMode : NSUInteger {
 {
     hb_title_t *title = self.title;
 
-    NSImage *fPreviewImage = [self.generator imageAtIndex:self.pictureIndex];
+    NSImage *fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
     NSSize imageScaledSize = [fPreviewImage size];
     [self.pictureLayer setContents:fPreviewImage];
 
