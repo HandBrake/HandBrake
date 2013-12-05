@@ -1193,7 +1193,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             } break;
             case HB_ACODEC_AAC_PASS:
             {
-                codec = avcodec_find_encoder( AV_CODEC_ID_AAC );
+                codec = avcodec_find_encoder_ny_name("aac");
             } break;
             default:
             {
