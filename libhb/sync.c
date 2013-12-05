@@ -1254,7 +1254,9 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
                 int ret = avcodec_encode_audio2( c, &pkt, &frame, &got_packet);
                 if ( ret < 0 )
                 {
-                    hb_log( "sync: avcodec_encode_audio failed" );
+                    hb_log("sync: track %d, avcodec_encode_audio() failed, dropping video to sync",
+                           w->audio->config.out.track);
+                    sync->drop_video_to_sync = 1;
                     break;
                 }
 
@@ -1262,6 +1264,12 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
                 {
                     sync->silence_size = pkt.size;
                     break;
+                }
+                else if (ii + 1 == 10)
+                {
+                    hb_log("sync: track %d, failed to get output packet, dropping video to sync",
+                           w->audio->config.out.track);
+                    sync->drop_video_to_sync = 1;
                 }
             }
             free( zeros );
