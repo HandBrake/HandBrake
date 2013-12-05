@@ -94,6 +94,7 @@ typedef struct
     {
         int b_pyramid;
         int gop_pic_size;
+        int gop_ref_dist;
         int int_ref_cycle_size;
     } gop;
     struct

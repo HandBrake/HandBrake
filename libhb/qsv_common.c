@@ -355,7 +355,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            param->videoParam->mfx.GopRefDist = HB_QSV_CLIP3(0, 32, ivalue);
+            param->gop.gop_ref_dist = HB_QSV_CLIP3(-1, 32, ivalue);
         }
     }
     else if (!strcasecmp(key, "gop-pic-size") ||
@@ -374,14 +374,14 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
             switch (vcodec)
             {
                 case HB_VCODEC_QSV_H264:
-                    ivalue = hb_qsv_atobool(value, &error);
+                    ivalue = hb_qsv_atoi(value, &error);
                     break;
                 default:
                     return HB_QSV_PARAM_UNSUPPORTED;
             }
             if (!error)
             {
-                param->gop.b_pyramid = ivalue;
+                param->gop.b_pyramid = HB_QSV_CLIP3(-1, 1, ivalue);
             }
         }
         else
@@ -738,42 +738,91 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
         if (!strcasecmp(preset, "quality"))
         {
             /*
-             * Haswell or later: default settings.
-             * Before Haswell: preset unavailable.
+             * HSW TargetUsage:     2
+             *     NumRefFrame:     0
+             *     GopRefDist:      4 (CQP), 3 (VBR)        -> -1 (set by encoder)
+             *     GopPicSize:     32 (CQP), 1 second (VBR) -> -1 (set by encoder)
+             *     BPyramid:        1 (CQP), 0 (VBR)        -> -1 (set by encoder)
+             *     LookAhead:       1 (on)
+             *     LookAheadDepth: 40
+             *
+             *
+             * SNB
+             * IVB Preset Not Available
+             *
+             * Note: this preset is the libhb default (like x264's "medium").
              */
         }
         else if (!strcasecmp(preset, "balanced"))
         {
             /*
-             * Haswell or later: adjust settings.
-             *
-             * The idea behind this is that we should try and get a performance
-             * match between platforms (so using the "balanced" preset would
-             * give you similar encoding speeds on Ivy Bridge and Haswell).
-             *
-             * FIXME: figure out whether this actually is a good idea.
+             * HSW TargetUsage:     4
+             *     NumRefFrame:     1
+             *     GopRefDist:      4 (CQP), 3 (VBR)        -> -1 (set by encoder)
+             *     GopPicSize:     32 (CQP), 1 second (VBR) -> -1 (set by encoder)
+             *     BPyramid:        1 (CQP), 0 (VBR)        -> -1 (set by encoder)
+             *     LookAhead:       0 (off)
+             *     LookAheadDepth: Not Applicable
              */
             if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
             {
                 param->rc.lookahead                = 0;
-                param->videoParam->mfx.GopRefDist  = 1;
+                param->videoParam->mfx.NumRefFrame = 1;
                 param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_4;
             }
             else
             {
-                /* Before Haswell: default settings */
+                /*
+                 * SNB
+                 * IVB TargetUsage:     2
+                 *     NumRefFrame:     0
+                 *     GopRefDist:      4 (CQP), 3 (VBR)        -> -1 (set by encoder)
+                 *     GopPicSize:     32 (CQP), 1 second (VBR) -> -1 (set by encoder)
+                 *     BPyramid:       Not Applicable
+                 *     LookAhead:      Not Applicable
+                 *     LookAheadDepth: Not Applicable
+                 *
+                 * Note: this preset is not the libhb default,
+                 * but the settings are the same so do nothing.
+                 */
             }
         }
         else if (!strcasecmp(preset, "speed"))
         {
             if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
             {
+                /*
+                 * HSW TargetUsage:     6
+                 *     NumRefFrame:     0 (CQP), 1 (VBR)        -> see note
+                 *     GopRefDist:      4 (CQP), 3 (VBR)        -> -1 (set by encoder)
+                 *     GopPicSize:     32 (CQP), 1 second (VBR) -> -1 (set by encoder)
+                 *     BPyramid:        1 (CQP), 0 (VBR)        -> -1 (set by encoder)
+                 *     LookAhead:       0 (off)
+                 *     LookAheadDepth: Not Applicable
+                 *
+                 * Note: NumRefFrame depends on the RC method, which we don't
+                 *       know here. Rather than have an additional variable and
+                 *       having the encoder set it, we set it to 1 and let the
+                 *       B-pyramid code sanitize it. Since BPyramid is 1 w/CQP,
+                 *       the result (3) is the same as what MSDK would pick for
+                 *       NumRefFrame 0 GopRefDist 4 GopPicSize 32.
+                 */
                 param->rc.lookahead                = 0;
-                param->videoParam->mfx.GopRefDist  = 1;
+                param->videoParam->mfx.NumRefFrame = 1;
                 param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_6;
             }
             else
             {
+                /*
+                 * SNB
+                 * IVB TargetUsage:     4
+                 *     NumRefFrame:     0
+                 *     GopRefDist:      4 (CQP), 3 (VBR)        -> -1 (set by encoder)
+                 *     GopPicSize:     32 (CQP), 1 second (VBR) -> -1 (set by encoder)
+                 *     BPyramid:       Not Applicable
+                 *     LookAhead:      Not Applicable
+                 *     LookAheadDepth: Not Applicable
+                 */
                 param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_4;
             }
         }
@@ -850,8 +899,9 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->codingOption2.Trellis         = MFX_TRELLIS_OFF;
 
         // GOP & rate control
-        param->gop.b_pyramid          =  0;
+        param->gop.b_pyramid          = -1; // set automatically
         param->gop.gop_pic_size       = -1; // set automatically
+        param->gop.gop_ref_dist       = -1; // set automatically
         param->gop.int_ref_cycle_size = -1; // set automatically
         param->rc.lookahead           =  1;
         param->rc.cqp_offsets[0]      =  0;

@@ -666,6 +666,34 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 
+    // set B-pyramid
+    if (pv->param.gop.b_pyramid < 0)
+    {
+        if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
+        {
+            pv->param.gop.b_pyramid = 1;
+        }
+        else
+        {
+            pv->param.gop.b_pyramid = 0;
+        }
+    }
+    pv->param.gop.b_pyramid = !!pv->param.gop.b_pyramid;
+
+    // set the GOP structure
+    if (pv->param.gop.gop_ref_dist < 0)
+    {
+        if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
+        {
+            pv->param.gop.gop_ref_dist = 4;
+        }
+        else
+        {
+            pv->param.gop.gop_ref_dist = 3;
+        }
+    }
+    pv->param.videoParam->mfx.GopRefDist = pv->param.gop.gop_ref_dist;
+
     // set the keyframe interval
     if (pv->param.gop.gop_pic_size < 0)
     {
@@ -678,7 +706,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         else
         {
             // set the keyframe interval based on the framerate
-            pv->param.gop.gop_pic_size = 5 * rate + 1;
+            pv->param.gop.gop_pic_size = rate;
         }
     }
     pv->param.videoParam->mfx.GopPicSize = pv->param.gop.gop_pic_size;
