@@ -5553,6 +5553,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     for (i = 0; i < ic->nb_streams; ++i )
     {
         if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO &&
+           !(ic->streams[i]->disposition & AV_DISPOSITION_ATTACHED_PIC) &&
              avcodec_find_decoder( ic->streams[i]->codec->codec_id ) &&
              title->video_codec == 0 )
         {
