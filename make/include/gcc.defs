@@ -4,6 +4,7 @@ GCC.gxx = $(dir $(GCC.gcc))$(subst clang,clang++,$(subst gcc,g++,$(notdir $(GCC.
 GCC.strip   = $$(if $$(filter none,$$(GCC.g)),1)
 GCC.dylib   = 1
 GCC.pipe    = 1
+GCC.c_std   = 1
 GCC.ML      = 1
 GCC.H       = 0
 GCC.W       = all
@@ -50,6 +51,7 @@ GCC.args.sysroot   = --sysroot=$(1)
 GCC.args.minver    = -mmacosx-version-min=$(1)
 GCC.args.vis       = -fvisibility=hidden
 GCC.args.pic       = -fPIC
+GCC.args.c_std     = -std=gnu99
 GCC.args.g.none    = -g0
 GCC.args.g.min     = -gdwarf-2 -g1
 GCC.args.g.std     = -gdwarf-2
@@ -84,6 +86,7 @@ define import.GCC
     $(1).GCC.gxx = $$(dir $$($(1).GCC.gcc))$$(subst gcc,g++,$$(notdir $$($(1).GCC.gcc)))
 
     $(1).GCC.pipe    = $$(GCC.pipe)
+    $(1).GCC.c_std   = $$(GCC.c_std)
     $(1).GCC.strip   = $$(if $$(filter none,$$($(1).GCC.g)),1)
     $(1).GCC.dylib   = $$(GCC.dylib)
     $(1).GCC.ML      = $$(GCC.ML) 
@@ -118,6 +121,7 @@ define import.GCC
     $(1).GCC.extra.exe++   = $$(GCC.extra.exe++)
 
     $(1).GCC.args.pipe      = $$(GCC.args.pipe)
+    $(1).GCC.args.c_std     = $$(GCC.args.c_std)
     $(1).GCC.args.strip     = $$(GCC.args.strip)
     $(1).GCC.args.dylib     = $$(GCC.args.dylib)
     $(1).GCC.args.ML        = $$(GCC.args.ML)
@@ -161,11 +165,11 @@ define import.GCC
     $(1).GCC.o = -o $$(3)
 
     # FUNCTION: C precompiled headers
-    $(1).GCC.H_O.args = !gcc ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.h_o *D *I !c !o
+    $(1).GCC.H_O.args = !gcc ?c_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.h_o *D *I !c !o
     $(1).GCC.H_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.H_O.args),$$(1),$$(2))
 
     # FUNCTION: C compile source
-    $(1).GCC.C_O.args = !gcc ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.c_o *D *I !c !o
+    $(1).GCC.C_O.args = !gcc ?c_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.c_o *D *I !c !o
     $(1).GCC.C_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.C_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ precompile headers
@@ -181,11 +185,11 @@ define import.GCC
     $(1).GCC.i = $$(4)
 
     # FUNCTION: C link dynamic-lib
-    $(1).GCC.DYLIB.args = !gcc ?pipe ?strip ?dylib ?extra.dylib ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB.args = !gcc ?c_std ?pipe ?strip ?dylib ?extra.dylib ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.DYLIB = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB.args),$$(1),$$(2))
 
     # FUNCTION: C link executable
-    $(1).GCC.EXE.args = !gcc ?pipe ?strip ?extra.exe ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE.args = !gcc ?c_std ?pipe ?strip ?extra.exe ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.EXE = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE.args),$$(1),$$(2))
 
     # FUNCTION: C++ link dynamic-lib

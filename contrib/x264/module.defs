@@ -4,6 +4,8 @@ $(eval $(call import.CONTRIB.defs,X264))
 X264.FETCH.url = http://download.handbrake.fr/handbrake/contrib/x264-r2377-1ca7bb9.tar.gz
 X264.EXTRACT.tarbase = x264
 
+X264.GCC.args.c_std =
+
 X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 
