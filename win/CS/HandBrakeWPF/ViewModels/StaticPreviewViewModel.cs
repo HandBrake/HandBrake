@@ -189,6 +189,12 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewImage = image;
         }
 
+        protected override void OnActivate()
+        {
+            Console.Write("test");
+            base.OnActivate();
+        }
+
         /// <summary>
         ///     The update preview frame.
         /// </summary>

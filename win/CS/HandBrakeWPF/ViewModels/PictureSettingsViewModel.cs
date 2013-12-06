@@ -23,7 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Helpers;
-    using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Size = System.Drawing.Size;
@@ -103,6 +103,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool showKeepAr = true;
 
+        /// <summary>
+        /// The delayed previewprocessor.
+        /// </summary>
+        private DelayedActionProcessor delayedPreviewprocessor = new DelayedActionProcessor();
+
         #endregion
 
         #region Constructors and Destructors
@@ -157,6 +162,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.CropBottom);
                 this.CropAdjust();
                 this.SetDisplaySize();
+                this.UpdatePreviewImage();
             }
         }
 
@@ -176,6 +182,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.CropLeft);
                 this.CropAdjust();
                 this.SetDisplaySize();
+                this.UpdatePreviewImage();
             }
         }
 
@@ -195,6 +202,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.CropRight);
                 this.CropAdjust();
                 this.SetDisplaySize();
+                this.UpdatePreviewImage();
             }
         }
 
@@ -214,6 +222,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.CropTop);
                 this.CropAdjust();
                 this.SetDisplaySize();
+                this.UpdatePreviewImage();
             }
         }
 
@@ -253,6 +262,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.DisplayWidth = value;
                     this.CustomAnamorphicAdjust();
                     this.NotifyOfPropertyChange(() => this.DisplayWidth);
+                    this.UpdatePreviewImage();
                 }
             }
         }
@@ -274,6 +284,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Height = value;
                     this.HeightAdjust();
                     this.NotifyOfPropertyChange(() => this.Height);
+                    this.UpdatePreviewImage();
                 }
             }
         }
@@ -327,6 +338,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.KeepDisplayAspect = value;
                 this.WidthAdjust();
                 this.NotifyOfPropertyChange(() => this.MaintainAspectRatio);
+                this.UpdatePreviewImage();
             }
         }
 
@@ -358,6 +370,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.PixelAspectY = value;
                     this.CustomAnamorphicAdjust();
                     this.NotifyOfPropertyChange(() => this.ParHeight);
+                    this.UpdatePreviewImage();
                 }
             }
         }
@@ -379,6 +392,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.PixelAspectX = value;
                     this.CustomAnamorphicAdjust();
                     this.NotifyOfPropertyChange(() => this.ParWidth);
+                    this.UpdatePreviewImage();
                 }
             }
         }
@@ -400,6 +414,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Anamorphic = value;
                     this.AnamorphicAdjust();
                     this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
+                    this.UpdatePreviewImage();
                 }
             }
         }
@@ -419,6 +434,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.Modulus = value;
                 this.ModulusAdjust();
                 this.NotifyOfPropertyChange(() => this.SelectedModulus);
+                this.UpdatePreviewImage();
             }
         }
 
@@ -510,6 +526,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Width = value;
                     this.WidthAdjust();
                     this.NotifyOfPropertyChange(() => this.Width);
+                    this.UpdatePreviewImage();
                 }
             }
         }
@@ -768,7 +785,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.SelectedAnamorphicMode == Anamorphic.None)
                     {
                         this.Width = preset.Task.Width ?? (this.MaxWidth - this.CropLeft - this.CropRight);
-                            // Note: This will be auto-corrected in the property if it's too large.
+                        // Note: This will be auto-corrected in the property if it's too large.
                     }
                     else
                     {
@@ -812,7 +829,7 @@ namespace HandBrakeWPF.ViewModels
             if (image != null)
             {
                 this.StaticPreviewViewModel.PreviewFrame(image, this.Task);
-                this.WindowManager.ShowDialog(this.StaticPreviewViewModel);
+                this.WindowManager.ShowWindow(this.StaticPreviewViewModel);
             }
         }
 
@@ -1176,6 +1193,28 @@ namespace HandBrakeWPF.ViewModels
             return job;
         }
 
-       #endregion
+        /// <summary>
+        /// Updates the preview after a period of time.
+        /// This gives the user the opertunity to make changes in quick sucession without the image refreshing instantly
+        /// and causing performance lag.
+        /// </summary>
+        private void UpdatePreviewImage()
+        {
+            if (delayedPreviewprocessor != null)
+            {
+                delayedPreviewprocessor.PerformTask(() =>
+                {
+                    IScan scanService = IoC.Get<IScan>();
+                    BitmapImage image = scanService.GetPreview(this.Task, 1);
+
+                    if (image != null)
+                    {
+                        this.StaticPreviewViewModel.PreviewFrame(image, this.Task);
+                    }
+                }, 800);
+            }
+        }
+
+        #endregion
     }
 }

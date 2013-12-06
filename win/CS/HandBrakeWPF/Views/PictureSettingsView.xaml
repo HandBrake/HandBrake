@@ -16,6 +16,12 @@
 
     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
+        <StackPanel.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Show Still Preview (Experimental)" cal:Message.Attach="[Event Click] = [Action PreviewImage]" Visibility="Visible" />
+            </ContextMenu>
+        </StackPanel.ContextMenu>
+        
         <!-- Size Panel-->
         <StackPanel Name="SizePanel" Orientation="Vertical" >
             <Label Content="Size" FontWeight="Bold" />
@@ -143,10 +149,6 @@
                                     Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
 
             </Grid>
-
-
-            <Label Content="Preview" FontWeight="Bold" Margin="15,0,0,0"  Visibility="Collapsed"/>
-            <Button Content="Show Preview" cal:Message.Attach="[Event Click] = [Action PreviewImage]" Visibility="Collapsed" />
 
         </StackPanel>
     </StackPanel>
