@@ -88,14 +88,6 @@
     <Reference Include="GongSolutions.Wpf.DragDrop">
       <HintPath>..\libraries\WPFDragDrop\GongSolutions.Wpf.DragDrop.dll</HintPath>
     </Reference>
-    <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libraries\Growl.Connector.dll</HintPath>
-    </Reference>
-    <Reference Include="Growl.CoreLibrary, Version=2.0.0.0, Culture=neutral, PublicKeyToken=13e59d82e007b064, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libraries\Growl.CoreLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="LumenWorks.Framework.IO">
       <HintPath>..\libraries\CsvReader\LumenWorks.Framework.IO.dll</HintPath>
     </Reference>
@@ -180,7 +172,6 @@
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Converters\Video\EncoderOptionsTooltipConverter.cs" />
     <Compile Include="Helpers\GrayscaleImage.cs" />
-    <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Helpers\AppStyleHelper.cs" />
     <Compile Include="Helpers\PictureSize.cs" />
     <Compile Include="Model\OptionsTab.cs" />

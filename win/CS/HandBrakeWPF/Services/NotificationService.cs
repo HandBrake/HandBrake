@@ -11,7 +11,6 @@ namespace HandBrakeWPF.Services
 {
     using HandBrake.ApplicationServices.Services.Interfaces;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
@@ -39,9 +38,8 @@ namespace HandBrakeWPF.Services
         public NotificationService(IEncodeServiceWrapper encodeService, IQueueProcessor queueProcessor, IUserSettingService userSettingService)
         {
             this.userSettingService = userSettingService;
-            encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
-            queueProcessor.QueueCompleted += this.QueueProcessorQueueCompleted;
-            GrowlCommunicator.Register();
+           // encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
+           // queueProcessor.QueueCompleted += this.QueueProcessorQueueCompleted;
         }
 
         /// <summary>
@@ -55,10 +53,9 @@ namespace HandBrakeWPF.Services
         /// </param>
         private void QueueProcessorQueueCompleted(object sender, System.EventArgs e)
         {
-            // Growl
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue))
             {
-                GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
+               //  GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
             }
         }
 
@@ -73,11 +70,9 @@ namespace HandBrakeWPF.Services
         /// </param>
         private void EncodeServiceEncodeCompleted(object sender, HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs e)
         {
-            // Growl
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode))
             {
-                GrowlCommunicator.Notify(
-                    "Encode Completed", "Put down that cocktail...\nyour Handbrake encode is done.");
+               // GrowlCommunicator.Notify("Encode Completed", "Put down that cocktail...\nyour Handbrake encode is done.");
             }
         }
     }
