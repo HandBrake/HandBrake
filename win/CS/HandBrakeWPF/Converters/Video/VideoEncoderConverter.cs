@@ -15,15 +15,10 @@ namespace HandBrakeWPF.Converters.Video
     using System.Linq;
     using System.Windows.Data;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
-
-    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// Video Encoder Converter
@@ -60,8 +55,7 @@ namespace HandBrakeWPF.Converters.Video
                     encoders.Remove(VideoEncoder.Theora);
                 }
 
-                IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
-                if (!SystemInfo.IsQsvAvailable || !userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSync))
+                if (!SystemInfo.IsQsvAvailable)
                 {
                     encoders.Remove(VideoEncoder.QuickSync);
                 }

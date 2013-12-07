@@ -242,11 +242,6 @@ namespace HandBrakeWPF
         public const string ResetWhenDoneAction = "ResetWhenDoneAction";
 
         /// <summary>
-        /// The enable quick sync.
-        /// </summary>
-        public const string EnableQuickSync = "EnableQuickSync";
-
-        /// <summary>
         /// The add foreign audio scan track.
         /// </summary>
         public const string AddForeignAudioScanTrack = "AddForeignAudioScanTrack";

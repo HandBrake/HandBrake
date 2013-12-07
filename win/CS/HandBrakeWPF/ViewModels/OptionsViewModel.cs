@@ -375,11 +375,6 @@ namespace HandBrakeWPF.ViewModels
         private bool disableQuickSyncDecoding;
 
         /// <summary>
-        /// The enable quick sync.
-        /// </summary>
-        private bool enableQuickSync;
-
-        /// <summary>
         /// The add foreign audio scan track.
         /// </summary>
         private bool addForeignAudioScanTrack;
@@ -1439,26 +1434,6 @@ namespace HandBrakeWPF.ViewModels
         #region Video
 
         /// <summary>
-        /// Gets or sets a value indicating whether enable quick sync.
-        /// </summary>
-        public bool EnableQuickSync
-        {
-            get
-            {
-                return this.enableQuickSync && this.IsQuickSyncAvailable;
-            }
-            set
-            {
-                if (value.Equals(this.enableQuickSync))
-                {
-                    return;
-                }
-                this.enableQuickSync = value;
-                this.NotifyOfPropertyChange(() => this.EnableQuickSync);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether disable quick sync decoding.
         /// </summary>
         public bool DisableQuickSyncDecoding
@@ -1910,7 +1885,6 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             // Video
             // #############################
-            this.EnableQuickSync = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSync);
             this.DisableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding);
             this.EnableDxvaDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDxva);
             this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
@@ -2034,7 +2008,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.AddForeignAudioScanTrack, this.AddForeignAudioScanTrack);
             
             /* Video */
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSync, this.EnableQuickSync);
             this.userSettingService.SetUserSetting(UserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableDxva, this.EnableDxvaDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);

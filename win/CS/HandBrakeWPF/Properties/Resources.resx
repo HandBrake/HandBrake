@@ -233,10 +233,6 @@ Baseline profile, as required for iPods and similar devices, requires weighted P
 Note that some devices and players, even those that support Main Profile, 
 may have problems with Weighted P-frame prediction: the Apple TV is completely incompatible with it, for example.</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="logo64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\logo64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Video_x264ExtraArgs" xml:space="preserve">
     <value>The full x264 list of parameters: 
 {0}</value>
