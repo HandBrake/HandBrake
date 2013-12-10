@@ -10,3 +10,8 @@ ifeq (darwin,$(BUILD.system))
 endif
 
 MPEG2DEC.CONFIGURE.extra = --disable-sdl --without-x
+
+# this contrib will not build under MinGW with -std=gnu99
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    MPEG2DEC.GCC.args.c_std =
+endif

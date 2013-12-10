@@ -6,3 +6,8 @@ A52DEC.EXTRACT.tarbase = a52dec
 A52DEC.INSTALL.strip = liba52.a
 
 A52DEC.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
+
+# this contrib will not build under MinGW with -std=gnu99
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    A52DEC.GCC.args.c_std =
+endif
