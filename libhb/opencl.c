@@ -161,10 +161,13 @@ void hb_opencl_library_close(hb_opencl_library_t **_opencl)
 static int hb_opencl_device_is_supported(hb_opencl_device_t* device)
 {
     // we only support OpenCL on GPUs for now
+    // Ivy Bridge supports OpenCL on GPU, but it's too slow to be usable
     // FIXME: disable on NVIDIA to to a bug
     if ((device != NULL) &&
         (device->type & CL_DEVICE_TYPE_GPU) &&
-        (device->ocl_vendor != HB_OCL_VENDOR_NVIDIA))
+        (device->ocl_vendor != HB_OCL_VENDOR_NVIDIA) &&
+        (device->ocl_vendor != HB_OCL_VENDOR_INTEL ||
+         hb_get_cpu_platform() != HB_CPU_PLATFORM_INTEL_IVB))
     {
         int major, minor;
         // check OpenCL version:
@@ -229,6 +232,10 @@ static hb_opencl_device_t* hb_opencl_device_get(hb_opencl_library_t *opencl,
     else if (!strncmp(device->vendor, "NVIDIA", 6 /* strlen("NVIDIA") */))
     {
         device->ocl_vendor = HB_OCL_VENDOR_NVIDIA;
+    }
+    else if (!strncmp(device->vendor, "Intel", 5 /* strlen("Intel") */))
+    {
+        device->ocl_vendor = HB_OCL_VENDOR_INTEL;
     }
     else
     {

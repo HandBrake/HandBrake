@@ -690,6 +690,7 @@ typedef struct hb_opencl_device_s
     {
         HB_OCL_VENDOR_AMD,
         HB_OCL_VENDOR_NVIDIA,
+        HB_OCL_VENDOR_INTEL,
         HB_OCL_VENDOR_OTHER,
     } ocl_vendor;
 } hb_opencl_device_t;
