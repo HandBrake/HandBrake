@@ -1614,14 +1614,15 @@ cleanup:
             }
         }
     }
-    
+
+    hb_buffer_pool_free();
+          
     /* OpenCL: must be closed *after* freeing the buffer pool */
     if (job->use_opencl)
     {
         hb_ocl_close();
     }
-
-    hb_buffer_pool_free();
+    
     hb_job_close( &job );
 }
 
