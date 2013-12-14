@@ -636,6 +636,7 @@ static void apply_loose_crop(int total, int * v1, int * v2, int mod, int max)
 static int HandleEvents( hb_handle_t * h )
 {
     hb_state_t s;
+    hb_encoder_t *encoder;
     int tmp_num_audio_tracks;
     int filter_cfr, filter_vrate, filter_vrate_base;
 
@@ -1944,9 +1945,25 @@ static int HandleEvents( hb_handle_t * h )
                 job->vquality = -1.0;
                 job->vbitrate = vbitrate;
             }
-            if( vcodec )
+
+            /* Set video encoder and check muxer compatibility */
+            if (vcodec)
             {
                 job->vcodec = vcodec;
+            }
+            encoder = NULL;
+            while ((encoder = hb_video_encoder_get_next(encoder)) != NULL)
+            {
+                if ((encoder->codec == job->vcodec) &&
+                    (encoder->muxers & job->mux) == 0)
+                {
+                    hb_error("incompatible video encoder '%s' for muxer '%s'",
+                             hb_video_encoder_get_short_name(job->vcodec),
+                             hb_container_get_short_name    (job->mux));
+                    done_error = HB_ERROR_INIT;
+                    die        = 1;
+                    return -1;
+                }
             }
 
 #ifdef USE_QSV
@@ -2158,6 +2175,28 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
                     audio->out.codec = acodec;
+                }
+            }
+            // sanity check muxer compatibility
+            for (i = 0; i < num_audio_tracks; i++)
+            {
+                encoder = NULL;
+                audio   = hb_list_audio_config_item(job->list_audio, i);
+                if (audio != NULL)
+                {
+                    while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
+                    {
+                        if ((encoder->codec == audio->out.codec) &&
+                            (encoder->muxers & job->mux) == 0)
+                        {
+                            hb_error("audio track %d: incompatible encoder '%s' for muxer '%s'", i + 1,
+                                     hb_audio_encoder_get_short_name(audio->out.codec),
+                                     hb_container_get_short_name    (job->mux));
+                            done_error = HB_ERROR_INIT;
+                            die        = 1;
+                            return -1;
+                        }
+                    }
                 }
             }
             /* Audio Codecs */
