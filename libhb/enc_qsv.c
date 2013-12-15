@@ -1437,35 +1437,36 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             buf->s.duration = duration;
             if (pv->bfrm_delay)
             {
+                if ((pv->frames_out == 0)                                 &&
+                    (hb_qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6) &&
+                    (hb_qsv_info->capabilities & HB_QSV_CAP_H264_BPYRAMID))
+                {
+                    // with B-pyramid, the delay may be more than 1 frame,
+                    // so compute the actual delay based on the initial DTS
+                    // provided by MSDK; also, account for rounding errors
+                    // (e.g. 24000/1001 fps @ 90kHz -> 3753.75 ticks/frame)
+                    pv->bfrm_delay = HB_QSV_CLIP3(1, BFRM_DELAY_MAX,
+                                                  ((task->bs->TimeStamp -
+                                                    task->bs->DecodeTimeStamp +
+                                                    (duration / 2)) / duration));
+                    // check whether b_pyramid is respected, log if needed
+                    if ((pv->param.gop.b_pyramid != 0 && pv->bfrm_delay <= 1) ||
+                        (pv->param.gop.b_pyramid == 0 && pv->bfrm_delay >= 2))
+                    {
+                        hb_log( "encqsvWork: b_pyramid %d not respected (delay: %d)",
+                               pv->param.gop.b_pyramid, pv->bfrm_delay);
+                    }
+                }
+
                 if (!pv->bfrm_workaround)
                 {
                     buf->s.renderOffset = task->bs->DecodeTimeStamp;
                 }
                 else
                 {
-                    // MSDK API < 1.6 or VFR, so generate our own DTS
-                    if ((pv->frames_out == 0)                                 &&
-                        (hb_qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6) &&
-                        (hb_qsv_info->capabilities & HB_QSV_CAP_H264_BPYRAMID))
-                    {
-                        // with B-pyramid, the delay may be more than 1 frame,
-                        // so compute the actual delay based on the initial DTS
-                        // provided by MSDK; also, account for rounding errors
-                        // (e.g. 24000/1001 fps @ 90kHz -> 3753.75 ticks/frame)
-                        pv->bfrm_delay = ((task->bs->TimeStamp -
-                                           task->bs->DecodeTimeStamp +
-                                           (duration / 2)) / duration);
-                        pv->bfrm_delay = FFMAX(pv->bfrm_delay, 1);
-                        pv->bfrm_delay = FFMIN(pv->bfrm_delay, BFRM_DELAY_MAX);
-                        // check whether b_pyramid is respected, log if needed
-                        if ((pv->param.gop.b_pyramid != 0 && pv->bfrm_delay <= 1) ||
-                            (pv->param.gop.b_pyramid == 0 && pv->bfrm_delay >= 2))
-                        {
-                            hb_log("encqsvWork: b_pyramid %d not respected (delay: %d)",
-                                   pv->param.gop.b_pyramid, pv->bfrm_delay);
-                        }
-                    }
                     /*
+                     * MSDK API < 1.6 or VFR
+                     *
                      * Generate VFR-compatible output DTS based on input PTS.
                      *
                      * Depends on the B-frame delay:
