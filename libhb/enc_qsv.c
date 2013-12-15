@@ -718,7 +718,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         pv->param.videoParam->mfx.GopRefDist   = FFMIN(pv->param.videoParam->mfx.GopRefDist,
                                                        pv->param.rc.lookahead ? 8 : 16);
         pv->param.codingOption2.LookAheadDepth = FFMIN(pv->param.codingOption2.LookAheadDepth,
-                                                       pv->param.rc.lookahead ? 48 - pv->param.videoParam->mfx.GopRefDist : 0);
+                                                       pv->param.rc.lookahead ? (48 - pv->param.videoParam->mfx.GopRefDist -
+                                                                                 3 * !pv->param.videoParam->mfx.GopRefDist) : 0);
     }
     else
     {
