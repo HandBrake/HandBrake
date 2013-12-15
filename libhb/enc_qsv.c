@@ -964,9 +964,16 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
            videoParam.mfx.TargetUsage, videoParam.AsyncDepth);
     hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",
            videoParam.mfx.GopRefDist, videoParam.mfx.GopPicSize, videoParam.mfx.NumRefFrame);
-    hb_log("encqsvInit: BFrames %s BPyramid %s",
-           pv->bfrm_delay                            ? "on" : "off",
-           pv->bfrm_delay && pv->param.gop.b_pyramid ? "on" : "off");
+    if (hb_qsv_info->capabilities & HB_QSV_CAP_H264_BPYRAMID)
+    {
+        hb_log("encqsvInit: BFrames %s BPyramid %s",
+               pv->bfrm_delay                            ? "on" : "off",
+               pv->bfrm_delay && pv->param.gop.b_pyramid ? "on" : "off");
+    }
+    else
+    {
+        hb_log("encqsvInit: BFrames %s", pv->bfrm_delay ? "on" : "off");
+    }
     if (videoParam.mfx.RateControlMethod == MFX_RATECONTROL_CQP)
     {
         char qpi[7], qpp[9], qpb[9];
