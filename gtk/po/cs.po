@@ -1,0 +1,1542 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Czech X Team <info@czechxteam.net>, 2013
+# fri <pavelfric@seznam.cz>, 2013
+# fri <pavelfric@seznam.cz>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: HandBrake\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-07-13 12:44+0400\n"
+"PO-Revision-Date: 2013-11-20 11:11+0000\n"
+"Last-Translator: fri <pavelfric@seznam.cz>\n"
+"Language-Team: Czech (http://www.transifex.com/projects/p/handbrake/language/cs/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: rc.cpp:1
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Pavel Fric"
+
+#: rc.cpp:2
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "fripohled.blogspot.com"
+
+msgid "File:"
+msgstr "Soubor:"
+
+msgid "_File"
+msgstr "_Soubor"
+
+msgid "_Queue"
+msgstr "Ř_ada"
+
+msgid "_View"
+msgstr "_Pohled"
+
+msgid "Format:"
+msgstr "Formát:"
+
+msgid "<b>Source:</b>"
+msgstr "<b>Zdroj:</b>"
+
+msgid "_Source"
+msgstr "_Zdroj"
+
+msgid "Single _Title"
+msgstr "Jeden _titul"
+
+msgid "_Destination"
+msgstr "_Cíl"
+
+msgid "_Make Default"
+msgstr "_Udělat výchozím"
+
+msgid "Start Encoding"
+msgstr "Spustit kódování"
+
+msgid "_Start Encoding"
+msgstr "_Spustit kódování"
+
+msgid "_Pause Encoding"
+msgstr "P_ozastavit kódování"
+
+msgid "Pause Encoding"
+msgstr "Pozastavit kódování"
+
+msgid "_Stop Encoding"
+msgstr "Z_astavit kódování"
+
+msgid "Stop Encoding"
+msgstr "Zastavit kódování"
+
+msgid "_Resume Encoding"
+msgstr "Pokračov_at v kódování"
+
+msgid "Resume Encoding"
+msgstr "Pokračovat v kódování"
+
+msgid "Add Queue"
+msgstr "Přidat řadu"
+
+msgid "_Add Queue"
+msgstr "_Přidat řadu"
+
+msgid "Add A_ll Queue"
+msgstr "Přidat _vše do řady"
+
+msgid "_Start Queue"
+msgstr "_Spustit řadu"
+
+msgid "Start Queue"
+msgstr "Spustit řadu"
+
+msgid "_Pause Queue"
+msgstr "P_ozastavit řadu"
+
+msgid "Pause Queue"
+msgstr "Pozastavit řadu"
+
+msgid "_Resume Queue"
+msgstr "Po_kračovat v řadě"
+
+msgid "Resume Queue"
+msgstr "Pokračovat v řadě"
+
+msgid "_Stop Queue"
+msgstr "_Zastavit řadu"
+
+msgid "S_top Queue"
+msgstr "Z_astavit řadu"
+
+msgid "Stop Queue"
+msgstr "Zastavit řadu"
+
+msgid "None"
+msgstr "Žádný"
+
+msgid "<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>\n"
+msgstr "<b>Obrázek:</b> Zdroj: <small>%d x %d, Výstup %d x %d %s</small>\n"
+
+msgid "No Titles"
+msgstr "Žádné názvy"
+
+msgid "hh:mm:ss"
+msgstr "hh:mm:ss"
+
+msgid "HandBrake For _Dumbies"
+msgstr "HandBrake pro natvrdlé"
+
+msgid "Show Presets"
+msgstr "Ukázat přednastavení"
+
+msgid "_Picture Settings"
+msgstr "Nastavení _obrázku"
+
+msgid "_Activity Window"
+msgstr "Okno pro č_innost"
+
+msgid "Show _Queue"
+msgstr "Ukázat ř_adu"
+
+msgid "_Help"
+msgstr "_Nápověda"
+
+msgid "_Guide"
+msgstr "Prů_vodce"
+
+msgid "_Minimize/Maximize"
+msgstr "Zvě_tšit/Zmenšit"
+
+msgid "New _Folder"
+msgstr "Nová složka"
+
+msgid "_Export"
+msgstr "_Vyvést"
+
+msgid "_Import"
+msgstr "_Zavést"
+
+msgid "_Update Built-in Presets"
+msgstr "_Obnovit vestavěná přednastavení"
+
+msgid "Choose Video Source"
+msgstr "Vybrat zdroj videa"
+
+msgid "Add to Queue"
+msgstr "Přidat do řady"
+
+msgid "Enqueue"
+msgstr "Zařadit"
+
+msgid "Show Queue"
+msgstr "Ukázat řadu"
+
+msgid "Queue"
+msgstr "Řada"
+
+msgid ""
+"Open Picture Settings and Preview window.  Here you can adjust cropping, "
+"resolution, aspect ratio, and filters."
+msgstr "Otevřít nastavení obrázku a okno s náhledem. Zde můžete upravit ořez, rozlišení, poměr stran a filtry."
+
+msgid "Picture Settings"
+msgstr "Nastavení obrázku"
+
+msgid "Show Activity Window"
+msgstr "Zobrazit okno činností"
+
+msgid "Activity"
+msgstr "Činnost"
+
+msgid ""
+"Set the title to encode. By default the longest title is chosen.  This is "
+"often the feature title of a DVD."
+msgstr "Nastavit titul k zakódování. Ve výchozím nastavení je vybrán nejdelší titul. To je často hlavní titul DVD."
+
+msgid "Angle:"
+msgstr "Úhel:"
+
+msgid "For multi-angle DVD's, select the desired angle to encode."
+msgstr "Pro víceúhlová DVD, vyberte požadovaný úhel k zakódování."
+
+msgid "Range of title to encode. Can be chapters, seconds, or frames."
+msgstr "Rozsah titulu k zakódování. Můžou to být kapitoly, sekundy nebo snímky."
+
+msgid ""
+"The source subtitle track\n"
+"\n"
+"You can choose any of the subtitles\n"
+"recognized in your source file.\n"
+"\n"
+"In addition, there is a special track option\n"
+"\"Foreign Audio Search\".  This option will add\n"
+"an extra pass to the encode that searches for\n"
+"subtitles that may correspond to a foreign\n"
+"language scene.  This option is best used in\n"
+"conjunction with the \"Forced\" option."
+msgstr "Stopa titulků zdroje\n\nMůžete vybrat kterékoli z titulků\nrozpoznaných ve vašem zdrojovém souboru.\n\nNavíc je tu ještě zvláštní volba pro stopu, kterou\nje hledání zvuku v cizím jazyce.  Tato volba přidá\ndo zakódování další průchod, jenž vyhledá\ntitulky, jež odpovídají výstupu v cizím\njazyce.  Tuto volbu je nejlepší použít\nve spojení s volbou \"Vynuceno\"."
+
+msgid "<b>Track</b>"
+msgstr "<b>Stopa</b>"
+
+msgid "<b>Forced Only</b>"
+msgstr "<b>Vynuceno pouze</b>"
+
+msgid ""
+"Use only subtitles that have been flagged\n"
+"as forced in the source subtitle track\n"
+"\n"
+"\"Forced\" subtitles are usually used to show\n"
+"subtitles during scenes where someone is speaking\n"
+"a foreign language.\n"
+msgstr "Použít pouze titulky označené příznakem\njako vynucené ve zdrojové stopě titulků\n\n\"Vynucené\" titulky se obvykle používají na zobrazení\ntitulků během scén, kde někdo mluví cizím\njazykem.\n"
+
+msgid "<b>Burned In</b>"
+msgstr "<b>Vloženo</b>"
+
+msgid ""
+"Render the subtitle over the video.\n"
+"\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr "Vložit titulky do videa.\n\nTitulky budou součástí obrazového záznamu a nepůjde je zakázat."
+
+msgid "<b>Default</b>"
+msgstr "<b>Výchozí</b>"
+
+msgid ""
+"Set the default output subtitle track.\n"
+"\n"
+"Most players will automatically display this\n"
+"subtitle track whenever the video is played.\n"
+"\n"
+"This is usefule for creating a \"forced\" track\n"
+"in your output."
+msgstr "Nastavit výchozí výstupní stopu titulků.\n\nVětšina přehrávačů automaticky zobrazí tuto\nstopu titulků vždycky, když je video přehráváno.\n\nToto je užitečné při vytváření \"vynucené\" stopy\nve vašem výstupu."
+
+msgid "<b>SRT Offset</b>"
+msgstr "<b>Posun SRT</b>"
+
+msgid ""
+"Add (or subtract) an offset (in milliseconds)\n"
+"to the start of the SRT subtitle track.\n"
+"\n"
+"Often, the start of an external SRT file\n"
+"does not coincide with the start of the video.\n"
+"This setting allows you to synchronize the files."
+msgstr "Přidat (nebo odečíst) posun (v milisekundách)\nna začátek stopy titulku SRT.\n\nČasto se začátek vnějšího souboru SRT\nčasově neshoduje se začátkem videa.\nToto nastavení umožňuje soubory srovnat."
+
+msgid "Set the first chapter to encode."
+msgstr "Nastavit první kapitolu k zakódování."
+
+msgid "through"
+msgstr ""
+
+msgid "Set the last chapter to encode."
+msgstr "Nastavit poslední kapitolu k zakódování."
+
+msgid "Duration:"
+msgstr "Doba trvání:"
+
+msgid "Destination Directory"
+msgstr "Cílový adresář"
+
+msgid "Destination directory for your encode."
+msgstr "Cílový adresář pro zakódovaný soubor."
+
+msgid "Destination filename for your encode."
+msgstr "Cílový souborový název pro zakódovaný soubor."
+
+msgid "Format to mux encoded tracks to."
+msgstr "Formátovat do mux zakódovaných stop."
+
+msgid "iPod 5G Support"
+msgstr "Podpora pro iPod 5G"
+
+msgid "Add iPod Atom needed by some older iPods."
+msgstr "Přidat iPod Atom, jenž je potřeba některými staršími zařízeními iPod."
+
+msgid "Web optimized"
+msgstr "Vyladěno pro internet"
+
+msgid ""
+"Optimize the layout of the MP4 file for progressive download.  This allows a"
+" player to initiate playback before downloading the entire file."
+msgstr "Přizpůsobit uspořádání souboru MP4 pro postupné stahování. To přehrávači umožní začít přehrávat před dokončením stahování celého souboru."
+
+msgid "Large file (>4GB)"
+msgstr "Velký soubor (>4GB)"
+
+msgid ""
+"Allow 64 bit MP4 file which can be over 4GB.\n"
+"\n"
+"    <b>Caution:</b> This option may break device compatibility."
+msgstr "Povolit 64 bitový soubor MP4, který může mít víc než 4 GB.\n\n    <b>Výstraha:</b> Tato volba může vést k porušení kompatibility zařízení."
+
+msgid "<b><u>D</u>estination</b>"
+msgstr "<b><u>C</u>íl</b>"
+
+msgid "Source Codec:"
+msgstr "Kodek zdroje:"
+
+msgid "Dimensions:"
+msgstr "Rozměry:"
+
+msgid "Aspect: "
+msgstr "Poměr:"
+
+msgid "Frame Rate:"
+msgstr "Snímková rychlost:"
+
+msgid "<b>Source Picture Parameters</b>"
+msgstr "<b>Parametry zdrojového obrázku</b>"
+
+msgid "Autocrop:"
+msgstr "Automatické oříznutí:"
+
+msgid "On"
+msgstr "Zapnuto"
+
+msgid "Crop:"
+msgstr "Ořez:"
+
+msgid "Scale Dimensions:"
+msgstr "Rozměry pro změnu velikosti:"
+
+msgid "Optimal for Source:"
+msgstr "Nejlepší pro zdroj:"
+
+msgid "Off"
+msgstr "Vypnuto"
+
+msgid "Anamorphic:"
+msgstr "Pokřivené:"
+
+msgid "<b>Scaling</b>"
+msgstr "<b>Změna velikosti</b>"
+
+msgid "Presentation Dimensions:"
+msgstr "Rozměry při promítání:"
+
+msgid "Summary"
+msgstr "Shrnutí"
+
+msgid "Video Encoder:"
+msgstr "Kodér videa:"
+
+msgid "Available video encoders."
+msgstr "Dostupné kodéry videa."
+
+msgid "Framerate:"
+msgstr "Rychlost snímkování:"
+
+msgid ""
+"Output framerate.  'Same as source' is recommended. If your source video has"
+" a variable framerate, 'Same as source' will preserve it."
+msgstr "Výstupní rychlost snímkování. Doporučena je stejná, jakou má zdroj. Pokud má zdroj proměnlivou rychlost snímkování, volba Stejné jako zdroj ji zachová."
+
+msgid "Constant Framerate"
+msgstr "Stálá rychlost snímkování"
+
+msgid ""
+"Enables variable framerate output with a peak rate determined by the "
+"framerate setting. VFR is not compatible with some players."
+msgstr "Povolí výstup s proměnlivou rychlostí snímkování s nejvyšší rychlostí určenou nastavením rychlosti snímkování. Proměnlivá rychlost snímkování (PromRS) se neslučuje s některými přehrávači."
+
+msgid "Peak Framerate (VFR)"
+msgstr "Nejvyšší rychlost snímkování (PromRS)"
+
+msgid ""
+"Enables variable framerate output. VFR is not compatible with some players."
+msgstr "Povolí výstup s proměnlivou rychlostí snímkování. Proměnlivá rychlost snímkování (PromRS) se neslučuje s některými přehrávači."
+
+msgid "Variable Framerate"
+msgstr "Proměnlivá rychlost snímkování"
+
+msgid ""
+"Set the desired quality factor. The encoder targets a certain quality.  The scale used by each video encoder is different.  \n"
+"\n"
+"            x264's scale is logarithmic and lower values coorespond to higher quality.  So small decreases in value will result in progressively larger increases in the resulting file size.  A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless.\n"
+"\n"
+"            FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode."
+msgstr "Nastavit požadovaný koeficient kvality. Kodér cílí na určitou jakost.  Měřítko používané každým kodérem videa je jiné.  \n\n            Měřítko x264 je logaritmické a nižší hodnoty odpovídají vyšší kvalitě.  Malý pokles hodnoty tedy povede k progresivně většímu růstu velikosti výsledného souboru.  Hodnota 0 znamená, že kvalita je bezztrátová, a výsledkem je velikost souboru větší, než jakou měl původní soubor, ledaže by byl zdroj rovněž bezztrátový.\n\n            Měřítko u FFMpeg a Theory je více lineární.  Tyto kodéry nemají bezztrátový režim."
+
+msgid "Constant Quality:"
+msgstr "Stálá jakost:"
+
+msgid ""
+"Set the average bitrate. The instantaneous bitrate can be much higher or "
+"lower at any point in time.  But the average over a long duration will be "
+"the value set here.  If you need to limit instantaneous bitrate, look into "
+"x264's vbv-bufsize and vbv-maxrate settings."
+msgstr "Nastavit průměrný datový tok. Okamžitý datový tok může být vyšší nebo nižší v kterémkoli časovém bodě.  Ale průměr pro dlouhou dobu trvání bude hodnota nastavená zde.  Pokud okamžitý datový tok  potřebujete omezit, podívejte se na nastavení x264 vbv-bufsize a vbv-maxrate."
+
+msgid "Bitrate (kbps):    "
+msgstr "Datový tok (k/ps):  "
+
+msgid ""
+"Set the average bitrate. The instantaneous bitrate can be much higher or "
+"lower at any point in time.  But the average over a long duration will be "
+"the value set here.  If you need to limit instantaneous bitrate, look into "
+"x264 vbv-bufsize and vbv-maxrate."
+msgstr "Nastavit průměrný datový tok. Okamžitý datový tok může být mnohem vyšší nebo nižší v kterémkoli časovém bodě.  Ale průměr pro dlouhou dobu trvání bude hodnota nastavená zde.  Pokud okamžitý datový tok potřebujete omezit, podívejte se na nastavení x264 vbv-bufsize a vbv-maxrate."
+
+msgid ""
+"Perform 2 Pass Encoding.  The 'Bitrate' option is prerequisite. During the "
+"1st pass, statistics about the video are collected.  Then in the second "
+"pass, those statistics are used to make bitrate allocation decisions."
+msgstr "Provést dvouprůchodové kódování. Předpokladem je volba Datový tok. Během prvního průchodu jsou shromažďovány statistiky o videu. Při druhém průchodu jsou tyto statistiky použity při rozhodování o rozvržení datového toku."
+
+msgid "2-Pass Encoding"
+msgstr "Dvouprůchodové kódování"
+
+msgid ""
+"During the 1st pass of a 2 pass encode, use settings that speed things "
+"along."
+msgstr "Během prvního průchodu dvouprůchodového kódování použít nastavení, která věci dál urychlí."
+
+msgid "Turbo First Pass"
+msgstr "Rychlý první průchod"
+
+msgid ""
+"Use advanced options Tab for x264 settings.\n"
+"\n"
+"        Use at your own risk!"
+msgstr "Použít kartu s pokročilými volbami k nastavení x264.\n\n        Použijte na vlastní nebezpečí!"
+
+msgid "Use Advanced Options"
+msgstr "Použít rozšířené volby"
+
+msgid "x264 Preset:"
+msgstr "Přednastavení x264:"
+
+msgid ""
+"Adjusts x264 settings to trade off compression efficiency against encoding speed.\n"
+"\n"
+"            This establishes your default x264 settings.  Tunes, profiles, levels and advanced option string will be applied to this.\n"
+"\n"
+"            You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files."
+msgstr "Upraví nastavení x264 pro vzdání se účinnosti komprese oproti rychlosti kódování.\n\n            Tímto se zřídí vaše výchozí nastavení x264.  Seřízení, profily, úrovně a rozšířené volby budou použity na toto.\n\n            Obecně byste tuto volbu měl nastavit na nejpomalejší, kterou snesete, protože pomalejší nastavení dávají ve výsledku lepší kvalitu nebo menší soubory."
+
+msgid "x264 Tune:"
+msgstr "Naladění x264:"
+
+msgid ""
+"Tune settings to optimize for common scenarios.\n"
+"\n"
+"            This can improve effeciency for particular source characteristics or set characteristics of the output file.\n"
+"\n"
+"            Changes will be applied after the preset but before all other parameters."
+msgstr "Přizpůsobit nastavení, aby byla vyladěna pro běžné scénáře.\n\n            Toto může zlepšit účinnost pro vlastnosti určitého zdroje nebo nastavit vlastnosti výstupního souboru.\n\n            Změny se použijí po přednastavení ale přede všemi ostatními parametry."
+
+msgid ""
+"Reduce decoder CPU usage.\n"
+"\n"
+"            Set this if your device is struggling to play the output (dropped frames)."
+msgstr "Omezit využití CPU dekodérem.\n\n            Nastavte, pokud se vaše zařízení potýká s přehráváním výstupu (zahozené snímky)."
+
+msgid "Fast Decode"
+msgstr "Rychlé dekódování"
+
+msgid ""
+"Minimize latency between input to encoder and output of decoder.\n"
+"\n"
+"            This is useful for broadcast of live streams.\n"
+"            Since HandBrake is not suitable for live stream broadcast purposes, this setting is of little value here."
+msgstr "Zmenšit prodlevu mezi vstupem do kodéru a výstupem dekodéru.\n\n            Toto je užitečné pro přenos živých proudů.\n            Protože HandBrake není vhodný pro přenos živých proudů, má toto nastavení zde malý význam."
+
+msgid "Zero Latency"
+msgstr "Nulová prodleva"
+
+msgid "H.264 Profile:"
+msgstr "Profil H.264:"
+
+msgid ""
+"Limit the H.264 profile of the output stream.\n"
+"\n"
+"            Overrides all other settings."
+msgstr "Omezit profil H.264 výstupního proudu.\n\n            Potlačí všechna ostatní nastavení."
+
+msgid "H.264 Level:"
+msgstr "Úroveň H.264:"
+
+msgid ""
+"Sets and ensures compliance with the specified H.264 level.\n"
+"\n"
+"            Overrides all other settings."
+msgstr "Nastaví a zajistí shodu se zadanou úrovní H.264.\n\n            Potlačí všechna ostatní nastavení."
+
+msgid "More Settings:"
+msgstr "Další nastavení:"
+
+msgid ""
+"Additional x264 settings.\n"
+"\n"
+"            Colon separated list of x264 options."
+msgstr "Dodatečné nastavení pro x264.\n\n            Dvojtečkou oddělený seznam voleb pro x264."
+
+msgid "Video"
+msgstr "Obraz"
+
+msgid "Add new audio settings to the list"
+msgstr "Přidat nové nastavení zvuku do seznamu"
+
+msgid "Remove the selected audio settings"
+msgstr "Odstranit vybrané nastavení pro zvuk"
+
+msgid "Auto Passthru:"
+msgstr "Auto Passthru:"
+
+msgid ""
+"Enable this if your playback device supports AAC. This permits AAC passthru "
+"to be selected when automatic passthru selection is enabled."
+msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje AAC. Toto dovolí, aby bylo vybráno AAC passthru, když je povolen automatický výběr passthru."
+
+msgid ""
+"Enable this if your playback device supports AC-3. This permits AC-3 "
+"passthru to be selected when automatic passthru selection is enabled."
+msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje AC-3 Toto dovolí, aby bylo vybráno AC-3 passthru, když je povolen automatický výběr passthru."
+
+msgid ""
+"Enable this if your playback device supports DTS. This permits DTS passthru "
+"to be selected when automatic passthru selection is enabled."
+msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje DTS Toto dovolí, aby bylo vybráno DTS passthru, když je povolen automatický výběr passthru."
+
+msgid ""
+"Enable this if your playback device supports DTS-HD. This permits DTS-HD "
+"passthru to be selected when automatic passthru selection is enabled."
+msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje DTS-HD Toto dovolí, aby bylo vybráno DTS-HD passthru, když je povolen automatický výběr passthru."
+
+msgid "Passthru Fallback:"
+msgstr "Nouzový passthru:"
+
+msgid ""
+"Set the audio codec to encode with when a suitable track can not be found "
+"for audio passthru."
+msgstr "Nastavit zvukový kodek, který se má použít při kódování, když nelze najít vhodnou stopu pro \"audio passthru\"."
+
+msgid "Track Name:"
+msgstr "Název stopy:"
+
+msgid ""
+"Set the audio track name. Players may use this in the audio selection list."
+msgstr "Nastavit název zvukové stopy. Tento mohou použít přehrávače v seznamu pro výběr zvuku."
+
+msgid "Sample Rate:"
+msgstr "Vzorkovací kmitočet:"
+
+msgid "Set the sample rate of the output audio track."
+msgstr "Nastavit vzorkovací kmitočet výstupní zvukové stopy."
+
+msgid "Gain:"
+msgstr "Zesílení:"
+
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
+"audio track."
+msgstr "<b>Zesílení zvuku:</b> Upravit zesílení nebo zeslabení výstupní zvukové stopy."
+
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
+"\n"
+"                                For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
+msgstr "<b>Komprese dynamického rozsahu:</b> Upravit dynamický rozsah výstupní zvukové stopy. \n\n                                U zdrojového zvuku, který má široký dynamický rozsah (velmi hlasité a velmi slabé sekvence), vám komprese dynamického rozsahu (DRC - Dynamic Range Compression) 'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé oblasti hlasitějšími."
+
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
+"\n"
+"                                    For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
+msgstr "<b>Komprese dynamického rozsahu:</b> Upravit dynamický rozsah výstupní zvukové stopy. \n\n                                U zdrojového zvuku, který má široký dynamický rozsah (velmi hlasité a velmi slabé sekvence), vám komprese dynamického rozsahu (DRC - Dynamic Range Compression) 'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé oblasti hlasitějšími."
+
+msgid "Quality:"
+msgstr "Kvalita:"
+
+msgid ""
+"<b>Quality:</b> For output codec's that support it, adjust the quality of "
+"the output.</b>"
+msgstr "<b>Kvalita:</b> Upravit jakost výstupu u výstupních kodeků, jež to podporují.</b>"
+
+msgid "Track"
+msgstr "Stopa"
+
+msgid "Encoder"
+msgstr "Kodér"
+
+msgid "Bitrate"
+msgstr "Datový tok"
+
+msgid "Mix"
+msgstr "Smíchání"
+
+msgid "List of audio tracks available from your source."
+msgstr "Seznam zvukových stop dostupných ze zdroje."
+
+msgid "Set the audio codec to encode this track with."
+msgstr "Nastavit zvukový kodek, kterým se má tato stopa zakódovat."
+
+msgid "Set the bitrate to encode this track with."
+msgstr "Nastavit datový tok, ve kterém se má tato stopa zakódovat."
+
+msgid "Set the mixdown of the output audio track."
+msgstr "Nastavit finální mixáž výstupní zvukové stopy."
+
+msgid "Audio"
+msgstr "Zvuk"
+
+msgid "Add new subtitle to the list"
+msgstr "Přidat nový titulek do seznamu"
+
+msgid "Add new SRT subtitle to the list"
+msgstr "Přidat nový titulek SRT do seznamu"
+
+msgid "Remove the selected subtitle settings"
+msgstr "Odstranit vybrané nastavení pro titulky"
+
+msgid "Language"
+msgstr "Jazyk"
+
+msgid "Character Code"
+msgstr "Kód znaku"
+
+msgid "File"
+msgstr "Soubor"
+
+msgid "Offset (ms)"
+msgstr "Posun (ms)"
+
+msgid "List of subtitle tracks available from your source."
+msgstr "Seznam stop s titulky dostupných ze zdroje."
+
+msgid ""
+"Set the language of this subtitle. This value will be used by players in "
+"subtitle menus."
+msgstr "Nastavit jazyk tohoto titulku. Tato hodnota bude používána přehrávači v nabídkách s titulky."
+
+msgid ""
+"Set the character code used by the SRT file you are importing. SRTs come in "
+"all flavours of character sets.  We translate the character set to UTF-8. "
+"The source's character code is needed in order to perform this translation."
+msgstr "Nastavit znakový kód používaný souborem SRT, který zavádíte. Soubory SRTs přichází ve všech druzích znakových sad.  Znakovou sadu překládáme do UTF-8. Znakový kód zdroje je potřeba za účelem provedení tohoto překódování znaků."
+
+msgid "Srt File"
+msgstr "Soubor SRT"
+
+msgid "Select the SRT file to import."
+msgstr "Vybrat soubor titulků SRT k zavedení."
+
+msgid "Adjust the offset in milliseconds between video and SRT timestamps"
+msgstr "Upravit posun v milisekundách mezi časovými razítky obrazového záznamu a souborem titulků SRT"
+
+msgid "Subtitles"
+msgstr "Titulky"
+
+msgid "<small>Reference Frames:</small>"
+msgstr "<small>Referenční snímky:</small>"
+
+msgid ""
+"Sane values are ~1-6.  The more you add, the better the compression, but the"
+" slower the encode.  Cel animation tends to benefit from more reference "
+"frames a lot more than film content.  Note that many hardware devices have "
+"limitations on the number of supported reference frames, so if you're "
+"encoding for a handheld or standalone player, don't touch this unless you're"
+" absolutely sure you know what you're doing!"
+msgstr "Rozumné hodnoty jsou ~1-6.  Čím více přidáte, tím lepší komprese, ale pomalejší kódování.  Animace má sklon mít užitek z více referenčních snímků mnohem více než obsah filmu.  Všimněte si, že mnohá zařízení mají omezení na počet referenčních snímků, takže pokud provádíte zakódování pro počítač do ruky nebo samostatný přehrávač, nešahejte na to, pokud si nejste naprosto jistí, co děláte!"
+
+msgid "<small>Maximum B-Frames:</small>"
+msgstr "<small>Maximum B-snímky:</small>"
+
+msgid ""
+"Sane values are ~2-5.  This specifies the maximum number of sequential "
+"B-frames that the encoder can use.  Large numbers generally won't help "
+"significantly unless Adaptive B-frames is set to Optimal.  Cel-animated "
+"source material and B-pyramid also significantly increase the usefulness of "
+"larger values. Baseline profile, as required for iPods and similar devices, "
+"requires B-frames to be set to 0 (off)."
+msgstr "Rozumné hodnoty jsou ~2-5.  Toto udává největší počet sekvenčních B-snímků, které může kodér použít.  Velké počty obecně moc nepomáhají, dokud nejsou přizpůsobivé B-snímky nastaveny na nejvýhodnější.  Cel-animovaný zdrojový materiál a B-jehlan také podstatně zvětšují prospěšnost větších hodnot. Základní profil, požadovaný iPody a podobnými zařízeními, vyžaduje, aby byly B-snímky nastaveny na 0 (vypnuto)."
+
+msgid "<small>Pyramidal B-Frames:</small>"
+msgstr "<small>Jehlanovité B-snímky:</small>"
+
+msgid ""
+"B-pyramid improves compression by creating a pyramidal structure (hence the "
+"name) of B-frames, allowing B-frames to reference each other to improve "
+"compression.  Requires Max B-frames greater than 1; optimal adaptive "
+"B-frames is strongly recommended for full compression benefit."
+msgstr "B-jehlan zlepšuje kompresi vytvořením jehlanovité stavby (odtud název) z B-snímků, dovoluje B-snímkům, aby jeden na druhý odkazovaly kvůli zlepšení komprese.  Vyžaduje Max B-snímky větší než 1; nejvýhodnější přizpůsobivé B-snímky se doporučují kvůli plnému užitku z komprese."
+
+msgid "<small>Weighted P-Frames:</small>"
+msgstr "<small>Vážené P-snímky:</small>"
+
+msgid ""
+"Performs extra analysis to decide upon weighting parameters for each frame."
+"  This improves overall compression slightly and improves the quality of "
+"fades greatly. Baseline profile, as required for iPods and similar devices, "
+"requires weighted P-frame prediction to be disabled.  Note that some devices"
+" and players, even those that support Main Profile, may have problems with "
+"Weighted P-frame prediction: the Apple TV is completely incompatible with "
+"it, for example."
+msgstr "Provede další rozbor kvůli rozhodnutí o zvážení parametrů pro každý snímek. To lehce zlepší celkovou kompresi a značně vylepší kvalitu prolínání. Základní profil, požadovaný iPody a podobnými zařízeními, vyžaduje, aby bylo vážené předvídání P-snímku zakázáno. Všimněte si, že některá zařízení a přehrávače, dokonce ty, které podporují hlavní profil, mohou mít s předvídáním váženého P-snímu potíže: například Apple TV se s ním naprosto neslučuje."
+
+msgid ""
+"The 8x8 transform is the single most useful feature of x264 in terms of "
+"compression-per-speed.  It improves compression by at least 5% at a very "
+"small speed cost and may provide an unusually high visual quality benefit "
+"compared to its compression gain.  However, it requires High Profile, which "
+"many devices may not support."
+msgstr "Transformace 8x8 je jedna z nejužitečnějších vlastností x264 pokud jde o rychlost komprese.  Zlepšuje kompresi alespoň o 5% za velmi malou cenu, pokud jde o rychlost, a může poskytnout neobyčejně velký zisk, pokud jde o obrazovou kvalitu, ve srovnání s kompresním ziskem.  Nicméně vyžaduje nejvyšší kvalitu, což mnohá zařízení nemusí podporovat."
+
+msgid "8x8 Transform"
+msgstr "Transformace 8x8"
+
+msgid ""
+"After the encoder has done its work, it has a bunch of data that needs to be"
+" compressed losslessly, similar to ZIP or RAR.  H.264 provides two options "
+"for this: CAVLC and CABAC.  CABAC decodes a lot slower but compresses "
+"significantly better (10-30%), especially at lower bitrates.  If you're "
+"looking to minimize CPU requirements for video playback, disable this "
+"option. Baseline profile, as required for iPods and similar devices, "
+"requires CABAC to be disabled."
+msgstr "Když kodér udělal svoji práci, má hromadu dat, která je potřeba bezztrátově zkomprimovat, což je podobné ZIP nebo RAR.  H.264 pro to poskytuje dvě volby: CAVLC a CABAC.  CABAC dekóduje o hodně pomaleji ale komprimuje podstatně lépe (10-30%), obzvláště při nižších datových tocích.  Pokud hledáte něco, co zmenší nároky CPU na přehrávání videa, tuto volbu zakažte. Základní profil, požadovaný iPody a podobnými zařízeními, vyžaduje, aby byl CABAC zakázán."
+
+msgid "CABAC Entropy Encoding"
+msgstr "Kódování CABAC Entropy"
+
+msgid "<small><b>Encoding Features</b></small>"
+msgstr "<small><b>Volby pro kódování</b></small>"
+
+msgid "<small>Motion Est. Method:</small>"
+msgstr "<small>Způsob odhadování pohybu:</small>"
+
+msgid ""
+"Controls the motion estimation method. Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.  A better motion search method improves compression at the cost of speed.\n"
+"\n"
+"        Diamond: performs an extremely fast and simple search using a diamond pattern.\n"
+"\n"
+"        Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.\n"
+"\n"
+"        Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.\n"
+"\n"
+"        Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
+"\n"
+"        Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
+msgstr "Ovládá způsob odhadování pohybu. Odhad pohybu je to, jak kodér odhaduje, jak se každý blok pixelů pohnul.  Lepší způsob hledání pohybu zlepšuje kompresi za cenu rychlosti.\n\n        Diamant: provádí nesmírně rychlé a jednoduché hledání pomocí diamantového vzoru.\n\n        Šestiúhelník: provádí poněkud účinnější ale lehce pomalejší hledání pomocí šestiúhelníkového vzoru.\n\n        Nerovnoměrný Multi-Hex: provádí velice široké hledání pomocí různých druhů vzorů, přesnější zachycení složitého pohybu.\n\n        Důkladné: provádí vyčerpávající hledání každého pixelu v široké oblasti.  Podstatně pomalejší, přitom kompresní zisk je malý.\n\n        Transformované důkladné: podobá se důkladnému, ale dělá ještě přesnější rozhodnutí. Podle toho je poněkud pomalé, a zlepšení je jen malé."
+
+msgid "<small>Subpel ME & Mode:</small>"
+msgstr "<small>Subpixel ME & režim:</small>"
+
+msgid ""
+"This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
+"\n"
+"        Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n"
+"\n"
+"        Mode decision is the method used to choose how to encode each block of the frame: a very important decision.\n"
+"\n"
+"        SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n"
+"\n"
+"        6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n"
+"\n"
+"        11 disables all early terminations in analysis.\n"
+"\n"
+"        10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
+msgstr "Toto nastavení ovládá jak způsob odhadování pohybu o subpixelové přesnosti, tak způsob rozhodování režimu.\n\n        Subpixelové odhadování pohybu se používá na zjemňování odhadování pohybu jdoucí za pouhou pixelovou přesnost při současném zlepšení komprese.\n\n        Rozhodování režimu je postup používaný pro výběr toho, jak zakódovat každý blok snímku: velice důležité rozhodnutí.\n\n        SAD je nejrychlejší způsob, následuje jej SATD, RD, RD zjemňování, a nejpomalejší je QPRD.\n\n        6 nebo vyšší se důrazně doporučuje: Psy-RD, velice výkonná psy optimalizace, která napomáhá uchování podrobností, vyžaduje RD.\n\n        11 zakazuje všechna brzká ukončení rozboru.\n\n        10 a 11, nejvýkonnější a nejpomalejší volby, vyžadují přizpůsobivou kvantizaci (aq-mode > 0) a mříž 2 (vždy)."
+
+msgid "<small>Motion Est. Range:</small>"
+msgstr "<small>Rozsah odhadování pohybu:</small>"
+
+msgid ""
+"This is the distance x264 searches from its best guess at the motion of a "
+"block in order to try to find its actual motion.  The default is fine for "
+"most content, but extremely high motion video, especially at HD resolutions,"
+" may benefit from higher ranges, albeit at a high speed cost."
+msgstr "Toto je vzdálenost hledání x264 od svého nejlepšího odhadu pohybu bloku, aby se pokusil najít jeho skutečný pohyb.  Pro většinu obsahu je výchozí dobrá, ale video s mimořádně velkým pohybem, obzvláště při rozlišení HD, může mít užitek z větších rozsahů, třebaže za cenu rychlosti."
+
+msgid "<small>Adaptive Direct Mode:</small>"
+msgstr "<small>Přizpůsobivý přímý režim:</small>"
+
+msgid ""
+"H.264 allows for two different prediction modes, spatial and temporal, in B-frames.\n"
+"\n"
+"        Spatial, the default, is almost always better, but temporal is sometimes useful too.\n"
+"\n"
+"        x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain), adaptively select which is better for each particular frame."
+msgstr "H.264 umožňuje v B-snímcích dva odlišné režimy předpovídání, prostorový a časový.\n\n        Prostorový, který je výchozím režimem, je skoro vždy lepší, ale časový je někdy také užitečný.\n\n        x264 může, za cenu malé ztráty na rychlosti (a podle toho za malý zisk na kompresi), podle okolností vybrat, který je lepší, pro každý jednotlivý snímek."
+
+msgid "<small>Adaptive B-Frames:</small>"
+msgstr "<small>Přizpůsobivé B-snímky:</small>"
+
+msgid ""
+"x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
+"\n"
+"        Fast mode takes roughly the same amount of time no matter how many B-frames you specify.  However, while fast, its decisions are often suboptimal.\n"
+"\n"
+"        Optimal mode gets slower as the maximum number of B-Frames increases, but makes much more accurate decisions, especially when used with B-pyramid."
+msgstr "x264 má různé druhy algoritmů na rozhodnutí, kdy použít B-snímky, a kolik jich použít.\n\n        Rychlý režim zabere zhruba stejně tolik času bez ohledu na to, kolik B-snímků určíte.  Nicméně však, i když je rychlý, jeho rozhodnutí jsou často méně než vhodná.\n\n        Nejvhodnější režim zpomaluje, jak se zvyšuje největší počet B-snímků, ale dělá mnohem přesnější rozhodnutí, obzvláště když se použije s B-jehlanem."
+
+msgid "<small>Partitions:</small>"
+msgstr "<small>Úseky:</small>"
+
+msgid ""
+"Mode decision picks from a variety of options to make its decision: this "
+"option chooses what options those are.  Fewer partitions to check means "
+"faster encoding, at the cost of worse decisions, since the best option might"
+" have been one that was turned off."
+msgstr "Režimové rozhodnutí volí z mnoha druhů voleb, aby učinilo své rozhodnutí: Tato volba vybírá, které volby to jsou. Menší počet částí ke kontrole znamená rychlejší kódování za cenu horších rozhodnutí, protože ta nejlepší volba mohla být tou, jež byla vypnuta."
+
+msgid "<small>Trellis:</small>"
+msgstr "<small>Mříž:</small>"
+
+msgid ""
+"Trellis fine-tunes the rounding of transform coefficients to squeeze out "
+"3-5% more compression at the cost of some speed. \"Always\" uses trellis not"
+" only during the main encoding process, but also during analysis, which "
+"improves compression even more, albeit at great speed cost.  Trellis costs "
+"more speed at higher bitrates and requires CABAC."
+msgstr "Mříž jemně naladí zaokrouhlení transformačních koeficientů, aby vymačkala o 3-5% větší kompresi za cenu\nnějaké rychlosti. \"Vždy\" používá mříž nejen během hlavního procesu kódování, ale i během rozboru, což zlepšuje\nkompresi ještě víc, i když za velkou cenu na rychlosti. Mříž stojí více rychlosti při vyšších datových tocích a vyžaduje CABAC."
+
+msgid "<small><b>Analysis</b></small>"
+msgstr "<small><b>Rozbor</b></small>"
+
+msgid "<small>Adaptive Quantization Strength:</small>"
+msgstr "<small>Přizpůsobivá síla kvantizace:</small>"
+
+msgid ""
+"Adaptive quantization controls how the encoder distributes bits across the "
+"frame.  Higher values take more bits away from edges and complex areas to "
+"improve areas with finer detail."
+msgstr "Přizpůsobivá kvantizace řídí to, jak kodér rozmísťuje bity napříč snímkem. Vyšší hodnoty odvádějí více bitů z okrajů a složitých oblastí kvůli zlepšení oblastí s jemnější podrobností."
+
+msgid "<small>Psychovisual Rate Distortion:</small>"
+msgstr "<small>Psychozrakové zkreslení rychlosti:</small>"
+
+msgid ""
+"Psychovisual rate-distortion optimization takes advantage of the "
+"characteristics of human vision to dramatically improve apparent detail and "
+"sharpness.  The effect can be made weaker or stronger by adjusting the "
+"strength.  Being an RD algorithm, it requires mode decision to be at least "
+"\"6\"."
+msgstr "Přizpůsobení psychozrakového zkreslení rychlosti těží z vlastnosti lidského zraku na dramatické zlepšení zjevných podrobností a ostrosti.  Účinek může být udělán slabší nebo silnější upravením jeho síly.  Algoritmus vyžaduje, aby rozhodnutí režimu bylo alespoň \"6\"."
+
+msgid "<small>Psychovisual Trellis:</small>"
+msgstr "<small>Psychozraková mříž:</small>"
+
+msgid ""
+"Psychovisual trellis is an experimental algorithm to further improve "
+"sharpness and detail retention beyond what Psychovisual RD does.  "
+"Recommended values are around 0.2, though higher values may help for very "
+"grainy video or lower bitrate encodes.  Not recommended for cel animation "
+"and other sharp-edged graphics."
+msgstr "Psychozraková mříž je pokusný algoritmus pro další zlepšení ostrosti a uchování podrobnosti, které jde dál, než k tomu, co dělá Psychozrakové zkreslení rychlosti.  Doporučené hodnoty se pohybují okolo 0.2, ačkoliv vyšší hodnoty mohou pomoci v případě velmi for very zrnitého videa nebo při kódování s nižším datovým tokem.  Nedoporučuje se použít na cel animace a jinou grafiku s ostrými okraji."
+
+msgid "Deblocking: "
+msgstr "Odstranění bloků:"
+
+msgid ""
+"H.264 has a built-in deblocking filter that smooths out blocking artifacts after decoding each frame.  This not only improves visual quality, but also helps compression significantly. The deblocking filter takes a lot of CPU power, so if you're looking to minimize CPU requirements for video playback, disable it.\n"
+"\n"
+"        The deblocking filter has two adjustable parameters, \"strength\" (Alpha) and \"threshold\" (Beta). The former controls how strong (or weak) the deblocker is, while the latter controls how many (or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking. The default is 0 (normal strength) for both parameters."
+msgstr "H.264 má vestavěný filtr na odstranění bloků, který vyhlazuje blokující artefakty po dekódování každého snímku.  Toto nejen že zlepšuje pohledovou kvalitu, ale také podstatně pomáhá kompresi. Filtr na odstranění bloků si bere hodně z výkonu procesoru, takže pokud se staráte o požadavky procesoru na přehrávání obrazového záznamu, zakažte jej.\n\n        Filtr na odstranění bloků má dva nastavitelné parametry, \"sílu\" (Alpha) a \"práh\" (Beta). První ovládá to, jak silný (nebo slabý) rušitel bloků je, zatímco druhý ovládá to, na jak mnoho (nebo málo) okrajů se použije. Nižší hodnoty znamenají méně odstraněných bloků, vyšší hodnoty znamenají více odstraněných bloků. Výchozí je 0 (normální síla) pro oba parametry."
+
+msgid ""
+"x264 normally zeroes out nearly-empty data blocks to save bits to be better "
+"used for some other purpose in the video.  However, this can sometimes have "
+"slight negative effects on retention of subtle grain and dither.  Don't "
+"touch this unless you're having banding issues or other such cases where you"
+" are having trouble keeping fine noise."
+msgstr "x264 normálně nuluje téměř prázdné datové bloky, aby ušetřil bity, které tak mohou být ve videu využity pro nějaký jiný účel.  Toto však může mít někdy záporný účinek na uchování jemné zrnitosti grain a chvění.  Nešahejte na to, pokud nemáte potíže s odstupňováním nebo s jinými takovými případy, kde máte potíže se zachováním jemného šumu."
+
+msgid "No DCT Decimate"
+msgstr "Žádné ničení DCT"
+
+msgid "<small><b>Psychovisual</b></small>"
+msgstr "<small><b>Psychozrakový</b></small>"
+
+msgid ""
+"Your selected options will appear here. \n"
+"        You can edit these and add additional options.  \n"
+"\n"
+"        Default values will not be shown. The defaults are:\n"
+"        ref=3:bframes=3:b-adapt=fast:direct=spatial:\n"
+"        b-pyramid=normal:weightp=2:me=hex:merange=16:\n"
+"        subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
+"        deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
+"        no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+msgstr "Vámi vybrané volby se objeví zde. \n        Můžete je upravovat a přidávat dodatečné volby.  \n\n        Výchozí hodnoty nebudou zobrazeny. Výchozí jsou:\n        ref=3:bframes=3:b-adapt=fast:direct=spatial:\n        b-pyramid=normal:weightp=2:me=hex:merange=16:\n        subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n        deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n        no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+
+msgid "<small><b>Current x264 Advanced Option String</b></small>"
+msgstr "<small><b>Rozšířené volby pro x264</b></small>"
+
+msgid ""
+"Your selected options will appear here. \n"
+"            You can edit these and add additional options."
+msgstr "Vámi vybrané volby se objeví zde. \n            Můžete je upravovat a přidat další volby."
+
+msgid "<small><b>Current FFMpeg Advanced Option String</b></small>"
+msgstr "<small><b>Rozšířené volby pro FFMpeg</b></small>"
+
+msgid "Advanced"
+msgstr "Pokročilé"
+
+msgid "Add chapter markers to output file."
+msgstr "Přidat značky kapitol do výstupního souboru."
+
+msgid "Chapter Markers"
+msgstr "Značky kapitol"
+
+msgid "Chapters"
+msgstr "Kapitoly"
+
+msgid "Title:"
+msgstr "Název:"
+
+msgid "Actors:"
+msgstr "Herci:"
+
+msgid "Director:"
+msgstr "Režisér:"
+
+msgid "Release Date:"
+msgstr "Datum vydání:"
+
+msgid "Comment:"
+msgstr "Poznámka:"
+
+msgid "Genre:"
+msgstr "Žánr:"
+
+msgid "Description:"
+msgstr "Popis:"
+
+msgid "Plot:"
+msgstr "Zápletka:"
+
+msgid "Tags"
+msgstr "Značky"
+
+msgid "_Save"
+msgstr "_Uložit"
+
+msgid "Save current settings to new preset."
+msgstr "Uložit nynější nastavení do nového přednastavení."
+
+msgid "Delete the currently selected preset."
+msgstr "Smazat nyní vybrané přednastavení."
+
+msgid "_Options"
+msgstr "_Volby"
+
+msgid "Preset Options"
+msgstr "Volby pro přednastavení"
+
+msgid "<b>Presets</b>"
+msgstr "<b>Přednastavení</b>"
+
+msgid "Preferences"
+msgstr "Nastavení"
+
+msgid "Automatically check for updates"
+msgstr "Automaticky ověřit dostupnost aktualizací"
+
+msgid "When all encodes are complete"
+msgstr "Když byla všechna kódování dokončena"
+
+msgid "Use automatic naming (uses modified source name)"
+msgstr "Použít automatické pojmenovávání (používá změněný název zdroje)"
+
+msgid "Add chapters to destination name"
+msgstr "Přidat kapitoly do názvu cíle"
+
+msgid "Add title # to destination name"
+msgstr "Přidat název # do názvu cíle"
+
+msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
+msgstr "Použít souborovou příponu iPod/iTunes friendly (.m4v) pro MP4"
+
+msgid "Number of previews"
+msgstr "Počet náhledů"
+
+msgid "Filter short titles (seconds)"
+msgstr "Filtrovat krátké tituly (sekundy)"
+
+msgid "Show system tray icon"
+msgstr "Ukázat ikonu v oznamovací části panelu"
+
+msgid "General"
+msgstr "Obecné"
+
+msgid "Preferred Language:"
+msgstr "Upřednostňovaný jazyk:"
+
+msgid "DUB Foreign language audio"
+msgstr "Zvuk dabingu v cizím jazyku"
+
+msgid "Use foreign language audio and add subtitles"
+msgstr "Použít zvuk dabingu v cizím jazyku a přidat titulky"
+
+msgid "Add Closed Captions when available"
+msgstr "Přidat skryté titulky, když jsou dostupné"
+
+msgid "Audio/Subtitles"
+msgstr "Zvuk/Titulky"
+
+msgid "Constant Quality fractional granularity"
+msgstr "Nepatrná zrnitost při stálé kvalitě"
+
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "Použít dvdnav (namísto libdvdread)"
+
+msgid "Put individual encode logs in same location as movie"
+msgstr "Dát jednotlivé záznamy o kódování do stejného umístění, kde je film"
+
+msgid "Activity Log Verbosity Level"
+msgstr "Úroveň podrobnosti zápisu o činnosti"
+
+msgid "Activity Log Longevity"
+msgstr "Délka života zápisu o činnosti"
+
+msgid "Scale down High Definition previews"
+msgstr "Zmenšit rozlišení náhledů ve vysokém rozlišení"
+
+msgid "Automatically Scan DVD when loaded"
+msgstr "Automaticky prohledat DVD při nahrání"
+
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "Při nahrání disku prohlédne DVD"
+
+msgid "Enable Advanced Auto-Passthru options"
+msgstr "Povolit pokročilé volby pro Auto-Passthru"
+
+msgid ""
+"Enabling this adds extra widgets to the audio panel that allow\n"
+"    you to specify which particular codecs shall be passed\n"
+"    and which codec to use when passthru is not possible"
+msgstr "Povolení tohoto přidá přidá další doplňky do zvukového panel, což vám umožní\n    které určité kodeky se mají vynechat\n    a který kodek se má použít, kdy není passthru možné"
+
+msgid "Hide Advanced Video Options Tab"
+msgstr "Skrýt kartu s pokročilými volbami pro video"
+
+msgid ""
+"Use advanced video options at your own risk.\n"
+"We recommend that you use the controls available\n"
+"on the Video tab instead."
+msgstr "Použít pokročilé volby pro obrazový záznam na vlastní nebezpečí.\nDoporučuje se namísto toho použít ovladače dostupné na kartě Video."
+
+msgid "Allow Tweaks"
+msgstr "Povolit vyladění"
+
+msgid "Allow HandBrake For Dummies"
+msgstr "Povolit HandBrake pro natvrdlé"
+
+msgid "Setting:"
+msgstr "Nastavení:"
+
+msgid "Folder Name:"
+msgstr "Název složky:"
+
+msgid "Preset Name:"
+msgstr "Název přednastavení:"
+
+msgid "<b>Custom Picture Dimensions</b>"
+msgstr "<b>Vlastní rozměry obrázku</b>"
+
+msgid "Maximum Width:"
+msgstr "Největší šířka:"
+
+msgid "Enable maximum width limit."
+msgstr "Povolit nejzazší mez pro šířku."
+
+msgid ""
+"This is the maximum width that the video will be stored at.  Whenever a new "
+"source is loaded, this value will be applied if the source width is greater."
+" Setting this to 0 means there is no maximum width."
+msgstr "Toto je největší šířka, se kterou bude video ukládáno. Vždy když je nahrán nový zdroj, použije se tato hodnota, pokud je šířka zdroje větší. Nastavení této hodnoty na 0 znamená, že není žádná největší šířka."
+
+msgid "Maximum Height:"
+msgstr "Největší výška:"
+
+msgid "Enable maximum height limit."
+msgstr "Povolit nejzazší mez pro výšku."
+
+msgid ""
+"This is the maximum height that the video will be stored at.  Whenever a new"
+" source is loaded, this value will be applied if the source height is "
+"greater. Setting this to 0 means there is no maximum height."
+msgstr "Toto je největší výška, se kterou bude video ukládáno. Vždy když je nahrán nový zdroj, použije se tato hodnota, pokud je šířka zdroje větší. Nastavení této hodnoty na 0 znamená, že není žádná největší výška."
+
+msgid "<b>Description</b>"
+msgstr "<b>Popis</b>"
+
+msgid "HandBrake Queue"
+msgstr "Řada HandBrake"
+
+msgid "Start"
+msgstr "Spustit"
+
+msgid "Pause"
+msgstr "Pozastavit"
+
+msgid "Edit"
+msgstr "Upravit"
+
+msgid "_Start"
+msgstr "_Spustit"
+
+msgid "_Pause"
+msgstr "_Pozastavit"
+
+msgid "_Edit"
+msgstr "_Upravit"
+
+msgid "Open Preview Window"
+msgstr "Otevřít náhledové okno"
+
+msgid "Show Preview"
+msgstr "Ukázat náhled"
+
+msgid "Left Crop"
+msgstr "Ořezání vlevo"
+
+msgid "Top Crop"
+msgstr "Ořezání nahoře"
+
+msgid "Bottom Crop"
+msgstr "Ořezání dole"
+
+msgid "Right Crop"
+msgstr "Oříznout vpravo"
+
+msgid "Auto Crop"
+msgstr "Automaticky oříznout"
+
+msgid "Automatically crop black borders around edges of the video."
+msgstr "Automaticky oříznout černý lem okolo okrajů videa."
+
+msgid "Loose Crop"
+msgstr "Volné ořezání"
+
+msgid "Loose"
+msgstr "Volně"
+
+msgid "Crop Dimensions:"
+msgstr "Rozměry pro ořezání:"
+
+msgid "<b>Cropping</b>"
+msgstr "<b>Ořezání</b>"
+
+msgid "width:"
+msgstr "Šířka:"
+
+msgid ""
+"This is the width that the video will be stored at.  The actual display "
+"dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr "Toto je šířka, se kterou bude obrazový záznam uložen. Skutečné rozměry zobrazení se budou lišit, pokud poměr strany pixelu není 1:1."
+
+msgid "height:"
+msgstr "Výška:"
+
+msgid ""
+"This is the height that the video will be stored at.  The actual display "
+"dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr "Toto je výška, se kterou bude obrazový záznam uložen. Skutečné rozměry zobrazení se budou lišit, pokud poměr strany pixelu není 1:1."
+
+msgid "Optimal for source"
+msgstr "Nejlepší pro zdroj"
+
+msgid ""
+"If enabled, select the 'optimal' storage resolution.  This will be the "
+"resolution that most closely matches the source resolution after cropping."
+msgstr "Je-li povoleno, vybrat nejlepší rozlišení pro ukládání. Toto bude rozlišení, které nejvíce odpovídá rozlišení zdroje po ořezání."
+
+msgid ""
+"<b>Anamorphic Modes:</b>\n"
+"<small><tt>\n"
+"None   - Force pixel aspect ratio to 1:1.\n"
+"Loose  - Align dimensions to chosen 'Alignment' value \n"
+"         and pick pixel aspect ratio that preserves the\n"
+"         original display aspect ratio\n"
+"Strict - Keep original source dimensions and pixel \n"
+"         aspect ratio</tt></small>"
+msgstr "<b>Pokřivené režimy:</b>\n<small><tt>\nŽádný   - Vynutit poměr stran pixelu 1:1.\nLoose  - Zarovnat rozměry na zvolenou hodnotu zarovnání \n         a zvolit poměr stran pixelu, jenž zachovává\n         původní poměr stran zobrazení\nPřísný - Zachovat původní rozměry zdroje a poměr \n         stran pixelu</tt></small>"
+
+msgid "Alignment:"
+msgstr "Zarovnání:"
+
+msgid ""
+"Align storage dimensions to multiples of this value.\n"
+"\n"
+"Encoders are most effecient when the video dimensions are aligned to some specific value (usually 16). Setting this to some other value will result in slightly larger file size."
+msgstr "Zarovnat rozměry pro uložení na násobky této hodnoty.\n\nKodéry jsou nejúčinnější, když jsou rozměry videa zarovnány na nějakou určitou hodnotu (obvykle 16). Když se toto nastaví na nějakou jinou hodnotu, výsledkem jsou soubory o trošku větší velikosti."
+
+msgid "<b>Storage</b>"
+msgstr "<b>Úložiště</b>"
+
+msgid ""
+"This is the display width. It is the result of scaling the storage "
+"dimensions by the pixel aspect."
+msgstr "Toto je šířka zobrazení. Je to výsledek změny velikosti rozměrů pro ukládání pomocí stránky pixelu."
+
+msgid "Pixel Aspect:"
+msgstr "Strana pixelu:"
+
+msgid ""
+"Pixel aspect defines the shape of the pixels. A 1:1 ratio defines a square "
+"pixel.  Other values define rectangular shapes. Players will scale the image"
+" in order to achieve the specified aspect."
+msgstr "Strana pixelu určuje tvar pixelů. Poměr 1:1 stanovuje čtvercový pixel. Jiné hodnoty stanovují obdélníkové tvary. Přehrávače změní velikost obrázku tak, aby dosáhly stanovené stránky."
+
+msgid ""
+"If enabled, the original display aspect of the source will be maintained."
+msgstr "Je-li povoleno, bude zachován původní vzhled zobrazení zdroje."
+
+msgid "Display Aspect:"
+msgstr "Zobrazit poměr stran:"
+
+msgid "<b>Display</b>"
+msgstr "<b>Zobrazit</b>"
+
+msgid "Dimensions"
+msgstr "Rozměry"
+
+msgid "Grayscale"
+msgstr "Odstíny šedi"
+
+msgid "If enabled, filter colour components out of video."
+msgstr "Je-li povoleno, filtrovat složky barvy mimo video."
+
+msgid "Deblock:"
+msgstr "Odstranit bloky:"
+
+msgid ""
+"The deblocking filter removes a common type of compression artifact. If your"
+" source exhibits 'blockiness', this filter may help clean it up."
+msgstr "Filtr na odstranění bloků odstraňuje běžný typ kompresního artefaktu. Pokud se u vašeho zdroje projevuje blokovitost, tento filtr může pomoci s jejím odstraněním."
+
+msgid "Denoise:"
+msgstr "Odstranit šum:"
+
+msgid ""
+"The denoise filter is a low pass filter that removes noise. Film grain and "
+"other types of high frequency noise are difficult to compress. Using this "
+"filter on such sources can result in smaller file sizes."
+msgstr "Filtr na odstranění šumu je nízkopásmový filtr, který odstraňuje šum. Zrnitost filmu a jiné typy vysokokmitočtového šumu je obtížné zkomprimovat. Použití tohoto filtru na tyto zdroje může vést k menším velikostem souborů."
+
+msgid ""
+"Custom denoise filter string format\n"
+"    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+msgstr "Vlastní formát řetězce filtru na odstranění šumu\n    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+
+msgid "Detelecine:"
+msgstr "Odstranit filmové snímání:"
+
+msgid ""
+"This filter removes 'combing' artifacts that are the result of telecining. "
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC "
+"video frame rates which are 30fps."
+msgstr "Filtr odstraňuje 'česací' artefakty, které jsou výsledkem filmového snímání. Filmové snímání je proces, který upravuje rychlosti snímkování filmu, které jsou 24 snímků za sekundu (SZS) na rychlosti snímkování videa NTSC, které jsou 30 SZS."
+
+msgid ""
+"Custom detelecine filter string format\n"
+"    JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+msgstr "Vlastní formát řetězce filtru na odstranění filmového snímače\n    JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+
+msgid "Decomb"
+msgstr "Odstranění hřebenu"
+
+msgid ""
+"Choose decomb or deinterlace filter options.\n"
+"\n"
+"The decomb filter selectively deinterlaces frames that appear to be interlaced.  This will preserve quality in frames that are not interlaced.\n"
+"\n"
+"The classic deinterlace filter is applied to all frames. Frames that are not interlaced will suffer some quality degradation."
+msgstr "Vyberte volby pro filtr na odstranění hřebenu nebo odstranění prokládání.\n\nFiltr na odstranění hřebenu výběrově odstraňuje prokládání snímků, jež se jeví být prokládané.  To uchová kvalitu snímků, které nejsou prokládány.\n\nKlasický filtr na odstranění prokládání je použit na všechny snímky. Snímky, které nejsou prokládány, utrpí určitým poklesem jakosti."
+
+msgid "Deinterlace"
+msgstr "Odstranit prokládání"
+
+msgid "Decomb:"
+msgstr "Odstranit hřeben:"
+
+msgid ""
+"The decomb filter selectively deinterlaces frames that appear to be "
+"interlaced.  This will preserve quality in frames that are not interlaced."
+msgstr "Filtr na odstranění hřebenu výběrově odstraňuje prokládání snímků, jež se jeví být prokládané.  To uchová kvalitu snímků, které nejsou prokládány."
+
+msgid ""
+"Custom decomb filter string format\n"
+"    Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+msgstr "Vlastní formát řetězce filtru na odstranění hřebenu\n    Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+
+msgid "Deinterlace:"
+msgstr "Odstranit prokládání:"
+
+msgid ""
+"The classic deinterlace filter is applied to all frames. Frames that are not"
+" interlaced will suffer some quality degradation."
+msgstr "Klasický filtr pro odstranění prokládání se používá na všechny snímky. Snímky, jež nejsou prokládané, zakouší určité zhoršení jakosti."
+
+msgid ""
+"Custom deinterlace filter string format\n"
+"    YadifMode:YadifParity:McdintMode:McdeintQp"
+msgstr "Vlastní formát řetězce filtru pro odstranění prokládání.\n    YadifMode:YadifParity:McdintMode:McdeintQp"
+
+msgid "Filters"
+msgstr "Filtry"
+
+msgid "Select preview frames."
+msgstr "Vybrat náhledové snímky."
+
+msgid ""
+"Encode and play a short sequence of video starting from the current preview "
+"position."
+msgstr "Zakódovat a přehrát krátkou videosekvenci počínaje nynějším místem náhledu."
+
+msgid "<b>Duration:</b>"
+msgstr "<b>Doba trvání</b>"
+
+msgid "Set the duration of the live preview in seconds."
+msgstr "Nastavit dobu trvání živého náhledu v sekundách."
+
+msgid "Show Cropped area of the preview"
+msgstr "Ukázat oříznutou oblast v náhledu"
+
+msgid "Show Crop"
+msgstr "Ukázat oříznutí"
+
+msgid "View Fullscreen Preview"
+msgstr "Zobrazit náhled celé obrazovky"
+
+msgid "Fullscreen"
+msgstr "Celá obrazovka"
+
+msgid "Hide the picture settings window while leaving the preview visible."
+msgstr "Skrýt okno s nastavením pro obrázky, ale náhled ponechat viditelný."
+
+msgid "Hide Settings"
+msgstr "Skrýt nastavení"
+
+msgid "Preview"
+msgstr "Náhled"
+
+msgid "About HandBrake"
+msgstr "O programu HandBrake"
+
+msgid "<b>A new version of HandBrake is available!</b>"
+msgstr "<b>Je dostupná nová verze HandBrake!</b>"
+
+msgid "HandBrake xxx is now available (you have yyy)."
+msgstr "HandBrake xxx je nyní dostupný (máte yyy)."
+
+msgid "Release Notes"
+msgstr "Poznámky k vydání"
+
+msgid "Skip This Version"
+msgstr "Přeskočit tuto verzi"
+
+msgid "Remind Me Later"
+msgstr "Připomenout později"
+
+msgid "Title Number:"
+msgstr "Název titulu:"
+
+msgid "Detected DVD devices:"
+msgstr "Zjištěná zařízení DVD:"
+
+msgid "Same As Source:"
+msgstr "Stejné jako zdroj:"
+
+msgid "Same As Source"
+msgstr "Stejné jako zdroj"
+
+msgid "<small>Same as source</small>"
+msgstr "<small>Stejné jako zdroj</small>"
+
+msgid "Same as source"
+msgstr "Stejné jako zdroj"
+
+msgid "Same as source "
+msgstr "Stejné jako zdroj "
+
+msgid "Source"
+msgstr "Zdroj"
+
+msgid "Codec"
+msgstr "Kodek"
+
+msgid "Gain"
+msgstr "Zesílení"
+
+msgid "Sample Rate"
+msgstr "Vzorkovací kmitočet"
+
+msgid "Import SRT"
+msgstr "Zavést SRT"
+
+msgid "Subtitle"
+msgstr "Podnázev"
+
+msgid "Index"
+msgstr "Rejstřík"
+
+msgid "Duration"
+msgstr "Trvání"
+
+msgid "Title"
+msgstr "Název"
+
+msgid "Stop Scan"
+msgstr "Zastavit prohledávání"
+
+msgid "Encode Complete"
+msgstr "Kódování dokončeno"
+
+msgid ""
+"Encode Complete\n"
+"Put down that cocktail, Your HandBrake queue is done!"
+msgstr "Kódování dokončeno\nOdložte sklenici s koktejlem. Vaše řada HandBrake je hotová!"
+
+msgid "Put down that cocktail, Your HandBrake queue is done!"
+msgstr "Dejte si koktejl. Vaše řada HandBrake je hotová!"
+
+msgid "HandBrake's normal, default settings."
+msgstr "Standardní, výchozí nastavení pro HandBrake."
+
+msgid ""
+"HandBrake's settings for compatibility with all Apple devices (including the"
+" iPod 6G and later). Includes Dolby Digital audio for surround sound."
+msgstr "Nastavení HandBrake pro slučitelnost se všemi zařízeními Apple (včetně iPod 6G a novějších). Zahrnuje Dolby Digital audio pro obklopující zvuk."
+
+msgid "Universal"
+msgstr "Univerzální"
+
+msgid ""
+"HandBrake's settings for playback on the iPod with Video (all generations)."
+msgstr "Nastavení HandBrake pro přehrávání na zařízení iPod (všechny generace)"
+
+msgid "iPod"
+msgstr "iPod"
+
+msgid ""
+"HandBrake's settings for handheld iOS devices (iPhone 4, iPod touch 3G and "
+"later)."
+msgstr "Nastavení HandBrake pro zařízení iOS do ruky (iPhone 4, iPod touch 3G a novější)."
+
+msgid "iPhone & iPod touch"
+msgstr "iPhone a iPod touch"
+
+msgid "HandBrake's settings for playback on the iPad (all generations)."
+msgstr "Nastavení HandBrake pro přehrávání na zařízení iPad (všechny generace)"
+
+msgid "iPad"
+msgstr "iPad"
+
+msgid ""
+"HandBrake's settings for the original AppleTV. Includes Dolby Digital audio "
+"for surround sound. Also compatible with iOS devices released since 2009."
+msgstr "Nastavení pro přehrávání na originální Apple TV. Včetně Dolby Digital pro prostorový zvuk. Také kompatibilní s iOS zařízeními uvedených po roce 2009."
+
+msgid "AppleTV"
+msgstr "AppleTV"
+
+msgid ""
+"HandBrake's settings for the second-generation AppleTV. Includes Dolby "
+"Digital audio for surround sound. NOT compatible with the original AppleTV."
+msgstr "Nastavení HandBrake pro AppleTV druhé generace. Zahrnuje Dolby Digital audio pro prostorový zvuk. NENÍ slučitelné s původním AppleTV."
+
+msgid "AppleTV 2"
+msgstr "AppleTV 2"
+
+msgid ""
+"HandBrake's settings for the third-generation AppleTV. Includes Dolby "
+"Digital audio for surround sound. NOT compatible with the original AppleTV. "
+"May stutter on the second-generation AppleTV."
+msgstr "Nastavení HandBrake pro AppleTV třetí generace. Zahrnuje Dolby Digital audio pro prostorový zvuk. NENÍ slučitelné s původním AppleTV. U druhé generace AppleTV se může zadrhávat."
+
+msgid "AppleTV 3"
+msgstr "AppleTV 3"
+
+msgid ""
+"HandBrake's settings for midrange devices running Android 2.3 or later."
+msgstr "Nastavení HandBrake pro zařízení ze středu sortimentu, na nichž běží Android 2.3 nebo novější."
+
+msgid "Android"
+msgstr "Android"
+
+msgid "HandBrake's preset for tablets running Android 2.3 or later."
+msgstr "Přednastavení HandBrake pro tablety, na nichž běží Android 2.3 nebo novější."
+
+msgid "Android Tablet"
+msgstr "Tablet Android"
+
+msgid "Normal"
+msgstr "Normální"
+
+msgid "HandBrake's general-purpose preset for High Profile H.264 video."
+msgstr "Obvyklé nastavení pro nejvyšší kvalitu H.264 videa."
+
+msgid "High Profile"
+msgstr "Nejvyšší kvalita"
+
+msgid "Regular"
+msgstr "Běžná kvalita"
+
+msgid "Devices"
+msgstr "Zařízení"
+
+msgid "Keep Aspect"
+msgstr "Zachovat poměr"
+
+msgid "Encoding: %s%s%.2f %%"
+msgstr "Kódování: %s%s%.2f %%"
+
+msgid "Chapter"
+msgstr "Kapitola"
+
+msgid "Chapter %2d"
+msgstr "Kapitola %2d"
