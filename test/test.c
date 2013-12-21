@@ -1466,7 +1466,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !anamorphic_mode )
                     {
-                        anamorphic_mode = 2;
+                        anamorphic_mode = 0;
                     }
                     modulus = 2;
                 }
@@ -3636,7 +3636,7 @@ static void ShowPresets()
     printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1920 -Y 1080 --decomb=fast --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.0\n");
     printf("\n   + Android:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 720 -Y 576 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.0\n");
     printf("\n   + Android Tablet:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
-    printf("\n   + Windows Phone 8:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
+    printf("\n   + Windows Phone 8:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
 	printf("\n>\n");
     printf("\n< Regular\n");
     printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 --loose-anamorphic --modulus 2 -m --x264-preset veryfast --h264-profile main --h264-level 4.0\n");
