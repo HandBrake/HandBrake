@@ -1345,7 +1345,7 @@
 				<key>PictureModulus</key>
 				<integer>2</integer>
 				<key>PicturePAR</key>
-				<integer>2</integer>
+				<integer>0</integer>
 				<key>PictureRightCrop</key>
 				<integer>0</integer>
 				<key>PictureTopCrop</key>
