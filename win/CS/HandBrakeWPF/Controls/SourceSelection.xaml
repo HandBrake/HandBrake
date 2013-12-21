@@ -16,12 +16,12 @@
         </Grid.RowDefinitions>
         
         
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="15,30,0,0">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5,10,0,0">
             <TextBlock Text="Source Selection" FontSize="14" FontWeight="Bold" /> 
         </StackPanel>
 
         <!-- Title Specific Scan -->
-        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="15,10,0,0">
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="5,10,0,0">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Optionally choose a specific title: " />
 
@@ -29,19 +29,19 @@
                                 Minimum="0" Maximum="1000" Number="{Binding SelectedTitle, Mode=TwoWay}" />
             </StackPanel>
 
-            <TextBlock Text="Then choose your source: " Margin="0,20,0,0" />
+            <TextBlock Text="Then choose your source: " Margin="0,10,0,0" />
         </StackPanel>
 
         <!-- Source Type -->
-        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="15,10,0,0">
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" Margin="5,10,0,0">
 
             <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
-                    Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left">
+                    Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal" MinWidth="100">
                     <Image Source="../Views/Images/folder32.png" Width="32" />
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="Folder" VerticalAlignment="Center" Margin="5,0,0,0" />
-                        <TextBlock Text="Open a Video_TS folder or batch scan a number of files" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="Open a VIDEO_TS folder or a batch of files" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>                   
                 </StackPanel>
             </Button>
@@ -86,7 +86,8 @@
         <StackPanel Grid.Row="4" />
         
         <StackPanel Grid.Row="5" VerticalAlignment="Bottom" Orientation="Vertical">
-            <TextBlock Text="This is an experimental replacement for the source selection menu. Feedback welcome on the forum." Margin="10,0,10,0" TextWrapping="Wrap" />
+            <TextBlock Text="This is an experimental replacement for the source selection menu. Feedback welcome on the forum." Margin="10,0,10,0"
+                       MaxWidth="300" TextWrapping="Wrap" />
         </StackPanel>
 
     </Grid>
