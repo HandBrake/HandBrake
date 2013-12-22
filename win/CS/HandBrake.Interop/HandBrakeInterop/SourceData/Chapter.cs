@@ -17,6 +17,11 @@ namespace HandBrake.Interop.SourceData
 	/// </summary>
 	public class Chapter
 	{
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name { get; set; }
+
 		/// <summary>
 		/// Gets or sets the number of this Chapter, in regards to its parent Title
 		/// </summary>

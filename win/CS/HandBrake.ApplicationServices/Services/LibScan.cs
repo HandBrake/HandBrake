@@ -460,7 +460,8 @@ namespace HandBrake.ApplicationServices.Services
 
                 foreach (Interop.SourceData.Chapter chapter in title.Chapters)
                 {
-                    converted.Chapters.Add(new Chapter(chapter.ChapterNumber, string.Empty, chapter.Duration));
+                    string chapterName = !string.IsNullOrEmpty(chapter.Name) ? chapter.Name : string.Empty;
+                    converted.Chapters.Add(new Chapter(chapter.ChapterNumber, chapterName, chapter.Duration));
                 }
 
                 foreach (Interop.SourceData.AudioTrack track in title.AudioTracks)

@@ -1892,9 +1892,10 @@ namespace HandBrake.Interop
 
 			List<hb_chapter_s> chapterList = title.list_chapter.ToList<hb_chapter_s>();
 			foreach (hb_chapter_s chapter in chapterList)
-			{
+			{      
 				var newChapter = new Chapter
 				{
+                    Name = chapter.title,
 					ChapterNumber = chapter.index,
 					Duration = Converters.PtsToTimeSpan(chapter.duration),
 					DurationPts = chapter.duration
