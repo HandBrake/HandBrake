@@ -206,7 +206,8 @@ namespace HandBrakeWPF.Properties {
         ///Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
         ///
         ///Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
-        ///        /// [rest of string was truncated]&quot;;.
+        ///
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Advanced_MotionEstimationMethodToolTip {
             get {
@@ -374,8 +375,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please note, this option is suitable only for slower systems. It will cause a bottleneck on faster systems.
-        ///Accelerates H.264, MPEG-4, VC1 and WMV3 only. .
+        ///   Looks up a localized string similar to Accelerates H.264, MPEG-4, VC1 and WMV3 only.  
+        ///This can provide a small to modest improvement on slow hardware..
         /// </summary>
         public static string Video_DxvaDecode {
             get {
@@ -467,10 +468,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lanczos                - This is HandBrakes default scaler. It provides the best quality downscaling.
-        ///Bicubic OpenCL  - A hardware accelerated version of the CPU based Bicubic scaler. 
-        ///                                 This can be around 5~7% faster than software bicubic on a fast modern graphics card.
-        ///                                 If OpenCL is unavailable, it will fallback to a software scaler. .
+        ///   Looks up a localized string similar to OpenCL Scaling is only available for modern graphics cards that support OpenCL 1.1 or later. It will fallback to Lanczos software scaling when it is not available for use.  Performance gain up to 5%. Minor decrease in quality in some cases..
         /// </summary>
         public static string Video_ScalingModes {
             get {

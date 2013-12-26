@@ -121,7 +121,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppArguments.cs" />
-    <Compile Include="AttachedProperties\DriveMenu.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
     <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />

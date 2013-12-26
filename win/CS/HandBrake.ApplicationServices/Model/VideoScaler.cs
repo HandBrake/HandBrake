@@ -16,7 +16,7 @@ namespace HandBrake.ApplicationServices.Model
     /// </summary>
     public enum VideoScaler
     {
-        [Display(Name = "Lanczos")]
+        [Display(Name = "Lanczos (default)")]
         Lanczos = 0,
 
         // [Display(Name = "Bicubic")]

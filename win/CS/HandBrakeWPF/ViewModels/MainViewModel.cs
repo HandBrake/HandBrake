@@ -159,11 +159,6 @@ namespace HandBrakeWPF.ViewModels
         private EncodeTask queueEditTask;
 
         /// <summary>
-        /// The Source Menu Backing Field
-        /// </summary>
-        private BindingList<SourceMenuItem> sourceMenu;
-
-        /// <summary>
         /// The last percentage complete value.
         /// </summary>
         private int lastEncodePercentage;
@@ -353,22 +348,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets the source menu.
-        /// </summary>
-        public BindingList<SourceMenuItem> SourceMenu
-        {
-            get
-            {
-                return this.sourceMenu;
-            }
-            set
-            {
-                this.sourceMenu = value;
-                this.NotifyOfPropertyChange(() => SourceMenu);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets Presets.
         /// </summary>
         public IEnumerable<Preset> Presets { get; set; }
@@ -432,6 +411,11 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("ScannedSource");
             }
         }
+
+        /// <summary>
+        /// Gets or sets the title specific scan.
+        /// </summary>
+        public int TitleSpecificScan { get; set; }
 
         /// <summary>
         /// Gets or sets the Source Label
@@ -956,6 +940,9 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.Drives.Add(menuItem);
                     }
+
+                    this.TitleSpecificScan = 0;
+                    this.NotifyOfPropertyChange(() => this.TitleSpecificScan);
                 }
             }
         }
@@ -1013,12 +1000,6 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.SelectedPreset = this.presetService.DefaultPreset;
-
-            // Populate the Source menu with drives.
-            if (!AppArguments.IsInstantHandBrake)
-            {
-                this.SourceMenu = new BindingList<SourceMenuItem>(this.GenerateSourceMenu());
-            }
 
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
@@ -1249,7 +1230,7 @@ namespace HandBrakeWPF.ViewModels
 
             ShowSourceSelection = false;
 
-            this.StartScan(dialog.SelectedPath, 0);
+            this.StartScan(dialog.SelectedPath, this.TitleSpecificScan);
         }
 
         /// <summary>
@@ -1262,51 +1243,7 @@ namespace HandBrakeWPF.ViewModels
 
             ShowSourceSelection = false;
 
-            this.StartScan(dialog.FileName, 0);
-        }
-
-        /// <summary>
-        /// Folder Scan
-        /// </summary>
-        public void FolderScanTitleSpecific()
-        {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true };
-            dialog.ShowDialog();
-
-            if (string.IsNullOrEmpty(dialog.SelectedPath))
-            {
-                return;
-            }
-
-            ITitleSpecificViewModel titleSpecificView = IoC.Get<ITitleSpecificViewModel>();
-            this.WindowManager.ShowDialog(titleSpecificView);
-
-            if (titleSpecificView.SelectedTitle.HasValue)
-            {
-                this.StartScan(dialog.SelectedPath, titleSpecificView.SelectedTitle.Value);
-            }
-        }
-
-        /// <summary>
-        /// File Scan
-        /// </summary>
-        public void FileScanTitleSpecific()
-        {
-            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
-            dialog.ShowDialog();
-
-            if (string.IsNullOrEmpty(dialog.FileName))
-            {
-                return;
-            }
-
-            ITitleSpecificViewModel titleSpecificView = IoC.Get<ITitleSpecificViewModel>();
-            this.WindowManager.ShowDialog(titleSpecificView);
-
-            if (titleSpecificView.SelectedTitle.HasValue)
-            {
-                this.StartScan(dialog.FileName, titleSpecificView.SelectedTitle.Value);
-            }
+            this.StartScan(dialog.FileName, this.TitleSpecificScan);
         }
 
         /// <summary>
@@ -2100,71 +2037,6 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowSourceSelection = false;
                 }
             }
-        }
-
-        /// <summary>
-        /// The generate source menu.
-        /// </summary>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; HandBrakeWPF.Model.SourceMenuItem].
-        /// </returns>
-        private IList<SourceMenuItem> GenerateSourceMenu()
-        {
-            List<SourceMenuItem> menuItems = new List<SourceMenuItem>();
-
-            SourceMenuItem folderScan = new SourceMenuItem
-            {
-                IsOpenFolder = true,
-                Text = "Open Folder",
-                Command = new SourceMenuCommand(this.FolderScan),
-                IsDrive = false,
-                InputGestureText = "Ctrl + R"
-            };
-            SourceMenuItem fileScan = new SourceMenuItem
-            {
-                IsOpenFolder = false,
-                Text = "Open File",
-                Command = new SourceMenuCommand(this.FileScan),
-                IsDrive = false,
-                InputGestureText = "Ctrl + F"
-            };
-
-            SourceMenuItem titleSpecific = new SourceMenuItem { Text = "Title Specific Scan" };
-            SourceMenuItem folderScanTitle = new SourceMenuItem
-            {
-                IsOpenFolder = true,
-                Text = "Open Folder",
-                Command = new SourceMenuCommand(this.FolderScanTitleSpecific),
-                IsDrive = false
-            };
-            SourceMenuItem fileScanTitle = new SourceMenuItem
-            {
-                IsOpenFolder = false,
-                Text = "Open File",
-                Command = new SourceMenuCommand(this.FileScanTitleSpecific),
-                IsDrive = false
-            };
-            titleSpecific.Children.Add(folderScanTitle);
-            titleSpecific.Children.Add(fileScanTitle);
-
-            menuItems.Add(folderScan);
-            menuItems.Add(fileScan);
-            menuItems.Add(titleSpecific);
-
-            // Drives
-            menuItems.AddRange(
-                from item in GeneralUtilities.GetDrives()
-                let driveInformation = item
-                select
-                    new SourceMenuItem
-                        {
-                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
-                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
-                            Tag = item,
-                            IsDrive = true
-                        });
-
-            return menuItems;
         }
 
         /// <summary>

@@ -200,52 +200,7 @@
                                />
                     </StackPanel>
                 </Button>
-                
-                
-                <Menu Background="Transparent" Visibility="Collapsed">
-                    <MenuItem ItemsSource="{Binding SourceMenu}" attachedProperties:DriveMenu.ShowAvailableDrives="true">
-                        <MenuItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="32"
-                                       Height="32"
-                                       Source="Images/Movies.png"
-                                       />
-                                <Label Margin="8,0,0,0"
-                                       VerticalAlignment="Center"
-                                       Content="Source"
-                                       />
-                            </StackPanel>
-                        </MenuItem.Header>
-                        
-                        <MenuItem.Resources>
-                            <Image x:Key="Movie" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/file.png" />
-                            <Image x:Key="Folder" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/folder.png" />
-                            <Image x:Key="Disc" x:Shared="False" MaxWidth="16" SnapsToDevicePixels="True" Source="Images/disc_small.png" />
-                        </MenuItem.Resources>
-                        <MenuItem.ItemContainerStyle>
-                            <Style TargetType="{x:Type MenuItem}" x:Shared="True">
-                                <Setter Property="Header" Value="{Binding Text}" />
-                                <Setter Property="Command" Value="{Binding Command}"/>
-                                <Setter Property="ItemsSource" Value="{Binding Children}" />
-                                <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
-                                <Setter Property="Tag" Value="{Binding}" />
-
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=IsDrive}" Value="true">
-                                        <Setter Property="Icon" Value="{StaticResource Disc}"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=IsOpenFolder}" Value="true">
-                                        <Setter Property="Icon" Value="{StaticResource Folder}"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=IsOpenFile}" Value="true">
-                                        <Setter Property="Icon" Value="{StaticResource Movie}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </MenuItem.ItemContainerStyle>
-                    </MenuItem>
-                </Menu>
-
+                               
                 <Separator />
 
                 <Button Name="Start"

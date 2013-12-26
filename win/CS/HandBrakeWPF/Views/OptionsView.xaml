@@ -320,7 +320,7 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0"  >
                             <CheckBox Content="Enable DXVA Hardware Accelerated Decoding" IsChecked="{Binding EnableDxvaDecoding}" />
-                            <TextBlock Text="{x:Static Properties:Resources.Video_DxvaDecode}" Margin="17,2,0,0"  />
+                            <TextBlock Text="{x:Static Properties:Resources.Video_DxvaDecode}" Margin="17,2,0,0" />
 
                         </StackPanel>
 
@@ -340,7 +340,8 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical" Margin="26,2,0,0" >
-                            <TextBlock Text="{x:Static Properties:Resources.Video_ScalingModes}" TextWrapping="Wrap "/>
+                            <TextBlock Text="{x:Static Properties:Resources.Video_ScalingModes}" TextWrapping="Wrap "
+                                       Visibility="{Binding IsClScaling, Converter={StaticResource boolToVisConverter}}" />
                         </StackPanel>
                
                     </StackPanel>

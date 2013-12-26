@@ -347,8 +347,8 @@ If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; 
     <value>Placebo Quality |</value>
   </data>
   <data name="Video_DxvaDecode" xml:space="preserve">
-    <value>Please note, this option is suitable only for slower systems. It will cause a bottleneck on faster systems.
-Accelerates H.264, MPEG-4, VC1 and WMV3 only. </value>
+    <value>Accelerates H.264, MPEG-4, VC1 and WMV3 only.  
+This can provide a small to modest improvement on slow hardware.</value>
   </data>
   <data name="Video_QuickSyncNotAvailable" xml:space="preserve">
     <value>QuickSync hardware not detected! 
@@ -360,9 +360,6 @@ In order to use the QuickSync encoder, you must:
 - Note that in multi-GPU enviroments, you may need to use 3rd party tools and workarounds to active the hardware.</value>
   </data>
   <data name="Video_ScalingModes" xml:space="preserve">
-    <value>Lanczos                - This is HandBrakes default scaler. It provides the best quality downscaling.
-Bicubic OpenCL  - A hardware accelerated version of the CPU based Bicubic scaler. 
-                                 This can be around 5~7% faster than software bicubic on a fast modern graphics card.
-                                 If OpenCL is unavailable, it will fallback to a software scaler. </value>
+    <value>OpenCL Scaling is only available for modern graphics cards that support OpenCL 1.1 or later. It will fallback to Lanczos software scaling when it is not available for use.  Performance gain up to 5%. Minor decrease in quality in some cases.</value>
   </data>
 </root>

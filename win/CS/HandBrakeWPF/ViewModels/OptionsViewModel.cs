@@ -379,6 +379,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool addForeignAudioScanTrack;
 
+        /// <summary>
+        /// The is cl scaling.
+        /// </summary>
+        private bool isClScaling;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1485,6 +1490,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedScalingMode = value;
+                this.IsClScaling = value == VideoScaler.BicubicCl;
             }
         }
 
@@ -1509,6 +1515,27 @@ namespace HandBrakeWPF.ViewModels
                 return new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is cl scaling.
+        /// </summary>
+        public bool IsClScaling
+        {
+            get
+            {
+                return this.isClScaling;
+            }
+            set
+            {
+                if (value.Equals(this.isClScaling))
+                {
+                    return;
+                }
+                this.isClScaling = value;
+                this.NotifyOfPropertyChange(() => this.IsClScaling);
+            }
+        }
+
         #endregion
 
         #endregion
