@@ -23,8 +23,10 @@ enum hb_cpu_platform
 {
     // list of microarchitecture codenames
     HB_CPU_PLATFORM_UNSPECIFIED = 0,
+    HB_CPU_PLATFORM_INTEL_BNL,
     HB_CPU_PLATFORM_INTEL_SNB,
     HB_CPU_PLATFORM_INTEL_IVB,
+    HB_CPU_PLATFORM_INTEL_SLM,
     HB_CPU_PLATFORM_INTEL_HSW,
 };
 int         hb_get_cpu_count();

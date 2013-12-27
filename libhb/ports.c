@@ -247,10 +247,14 @@ const char* hb_get_cpu_platform_name()
     {
         // Intel 64 and IA-32 Architectures Software Developer's Manual, Vol. 3C
         // Table 35-1: CPUID Signature Values of DisplayFamily_DisplayModel
+        case HB_CPU_PLATFORM_INTEL_BNL:
+            return "Intel microarchitecture Bonnell";
         case HB_CPU_PLATFORM_INTEL_SNB:
             return "Intel microarchitecture Sandy Bridge";
         case HB_CPU_PLATFORM_INTEL_IVB:
             return "Intel microarchitecture Ivy Bridge";
+        case HB_CPU_PLATFORM_INTEL_SLM:
+            return "Intel microarchitecture Silvermont";
         case HB_CPU_PLATFORM_INTEL_HSW:
             return "Intel microarchitecture Haswell";
 
@@ -281,6 +285,13 @@ static void init_cpu_info()
             {
                 switch (model)
                 {
+                    case 0x1C:
+                    case 0x26:
+                    case 0x27:
+                    case 0x35:
+                    case 0x36:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_BNL;
+                        break;
                     case 0x2A:
                     case 0x2D:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_SNB;
@@ -288,6 +299,11 @@ static void init_cpu_info()
                     case 0x3A:
                     case 0x3E:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_IVB;
+                        break;
+                    case 0x37:
+                    case 0x4A:
+                    case 0x4D:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_SLM;
                         break;
                     case 0x3C:
                     case 0x45:

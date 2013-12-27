@@ -77,10 +77,15 @@ int hb_qsv_info_init()
     if (MFXInit(MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY,
                 &qsv_minimum_version, &session) == MFX_ERR_NONE)
     {
-        qsv_hardware_available   = 1;
-        preferred_implementation = MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY;
-        // our minimum is supported, but query the actual version
-        MFXQueryVersion(session, &qsv_hardware_version);
+        // Cloverview (Bonnell microarchitecture) supports MSDK via third-party
+        // hardware - we don't support this configuration for the time being
+        if (hb_get_cpu_platform() != HB_CPU_PLATFORM_INTEL_BNL)
+        {
+            qsv_hardware_available   = 1;
+            preferred_implementation = MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY;
+            // our minimum is supported, but query the actual version
+            MFXQueryVersion(session, &qsv_hardware_version);
+        }
         MFXClose(session);
     }
 
