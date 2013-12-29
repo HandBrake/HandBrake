@@ -362,4 +362,19 @@ In order to use the QuickSync encoder, you must:
   <data name="Video_ScalingModes" xml:space="preserve">
     <value>OpenCL Scaling is only available for modern graphics cards that support OpenCL 1.1 or later. It will fallback to Lanczos software scaling when it is not available for use.  Performance gain up to 5%. Minor decrease in quality in some cases.</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
+    <value>Warning: It is not currently possible to use this feature if you require specific subtitle or audio tracks that the automatic selection feature (see options) doesn't support! Tracks are reset with every new source / title selected.</value>
+  </data>
+  <data name="Main_ScanSourceFirst" xml:space="preserve">
+    <value>You must first scan a source and setup your job before adding to the queue.</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>You must turn on automatic file naming AND set a default path in preferences before you can add to the queue.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
 </root>

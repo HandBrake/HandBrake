@@ -1159,19 +1159,19 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox("You must first scan a source and setup your job before adding to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSourceFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (!AutoNameHelper.IsAutonamingEnabled())
             {
-                this.errorService.ShowMessageBox("You must turn on automatic file naming in preferences before you can add to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_TurnOnAutoFileNaming, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (this.CurrentTask != null && this.CurrentTask.SubtitleTracks != null && this.CurrentTask.SubtitleTracks.Count > 0)
             {
-                this.errorService.ShowMessageBox("Warning: It is not currently possible to use this feature if you require specific subtitle or audio tracks that the automatic selection feature (see options) doesn't support! Tracks are reset with every new source / title selected.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_AutoAdd_AudioAndSubWarning, Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             foreach (Title title in this.ScannedSource.Titles)
