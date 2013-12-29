@@ -96,7 +96,7 @@
                 <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
-                    <RadioButton Content="Constant Quality:" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0" Checked="qsv_preset_radiobutton"/>
+                    <RadioButton Content="Constant Quality:" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0" />
                     <TextBlock Text="{Binding DisplayRF}" MinWidth="30" />
                     <TextBlock Text="{Binding Rfqp}" FontWeight="Bold" Margin="5,0,0,0" />
 
@@ -119,7 +119,7 @@
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                    <RadioButton Content="Avg Bitrate (kbps):" IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0" Checked="qsv_preset_radiobutton"/>
+                    <RadioButton Content="Avg Bitrate (kbps):" IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
                     <TextBox Width="75" Text="{Binding Task.VideoBitrate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
                 </StackPanel>
 
@@ -192,7 +192,7 @@
                     <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal"
                                 Visibility="{Binding DisplayQSVOptions, Converter={StaticResource boolToVisConverter}}" >
                         <Slider Minimum="0" Maximum="{Binding QsvSliderMax}" Width="150" Value="{Binding QsvPresetValue, Mode=Default, UpdateSourceTrigger=PropertyChanged}" 
-                            IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" ValueChanged="qsv_preset_ValueChanged"/>
+                            IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" />
                         <TextBlock Text="{Binding QsvPreset, Converter={StaticResource enumComboConverter}}" Margin="5,0,0,0" />
                     </StackPanel>
 

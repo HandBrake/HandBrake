@@ -75,7 +75,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Picture Settings - Filters
             Match decomb = Regex.Match(input, @" --decomb");
-            Match decombValue = Regex.Match(input, @" --decomb=\""([a-zA-Z0-9.:]*)\""");
+            Match decombValue = Regex.Match(input, @" --decomb=([a-zA-Z0-9.:""\\]*)");
             Match deinterlace = Regex.Match(input, @"--deinterlace=\""([a-zA-Z0-9.:]*)\""");
             Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z0-9.:]*)\""");
             Match deblock = Regex.Match(input, @"--deblock=([0-9:]*)");

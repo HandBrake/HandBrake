@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Commands
 {
     using System;
+    using System.Windows;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -79,6 +80,12 @@ namespace HandBrakeWPF.Commands
 
                 // Scan a File (Ctrl+F)
                 if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.F)
+                {
+                    mainViewModel.FileScan();
+                    MessageBox.Show("Please use Ctrl-O in future. Ctrl-F is being deprecated in favour of something more standard. :)");
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.O)
                 {
                     mainViewModel.FileScan();
                 }

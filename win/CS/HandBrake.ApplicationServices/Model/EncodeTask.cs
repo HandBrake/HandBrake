@@ -33,6 +33,8 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         private bool showAdvancedTab;
 
+        private string advancedEncoderOptions;
+
         #endregion
 
         /// <summary>
@@ -405,7 +407,17 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets AdvancedEncoderOptions.
         /// </summary>
-        public string AdvancedEncoderOptions { get; set; }
+        public string AdvancedEncoderOptions
+        {
+            get
+            {
+                return this.advancedEncoderOptions;
+            }
+            set
+            {
+                this.advancedEncoderOptions = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets x264Preset.

@@ -77,6 +77,7 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.Q, ModifierKeys.Control)), new KeyGesture(Key.Q, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.A, ModifierKeys.Control)), new KeyGesture(Key.A, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.F, ModifierKeys.Control)), new KeyGesture(Key.F, ModifierKeys.Control)));
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.O, ModifierKeys.Control)), new KeyGesture(Key.O, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.R, ModifierKeys.Control)), new KeyGesture(Key.R, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)), new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)));
 
