@@ -717,7 +717,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // if (this.queueProcessor.IsProcessing)
             // {
-            // this.errorService.ShowMessageBox("HandBrake is already encoding.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            // this.errorService.ShowMessageBox("HandBrake is already encoding.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             // return;
             // }
 
@@ -731,13 +731,13 @@ namespace HandBrakeWPF.ViewModels
             //// Otherwise, perform Santiy Checking then add to the queue and start if everything is ok.
             // if (this.SelectedTitle == null)
             // {
-            // this.errorService.ShowMessageBox("You must first scan a source.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            // this.errorService.ShowMessageBox("You must first scan a source.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             // return;
             // }
 
             // if (string.IsNullOrEmpty(this.Destination))
             // {
-            // this.errorService.ShowMessageBox("The Destination field was empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            // this.errorService.ShowMessageBox("The Destination field was empty.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             // return;
             // }
 

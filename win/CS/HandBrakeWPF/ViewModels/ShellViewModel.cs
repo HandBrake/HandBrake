@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -198,7 +199,7 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxResult result =
                     errorService.ShowMessageBox(
                         "An Encode is currently running. Exiting HandBrake will stop this encode.\nAre you sure you wish to continue?",
-                        "Warning",
+                        Resources.Warning,
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Warning);
 

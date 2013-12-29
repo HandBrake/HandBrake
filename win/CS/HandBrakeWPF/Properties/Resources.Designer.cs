@@ -338,11 +338,38 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure?.
+        /// </summary>
+        public static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake.
+        /// </summary>
+        public static string HandBrake_Title {
+            get {
+                return ResourceManager.GetString("HandBrake_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake is already encoding..
+        /// </summary>
+        public static string Main_AlreadyEncoding {
+            get {
+                return ResourceManager.GetString("Main_AlreadyEncoding", resourceCulture);
             }
         }
         
@@ -356,6 +383,232 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose a destination for the file..
+        /// </summary>
+        public static string Main_ChooseDestination {
+            get {
+                return ResourceManager.GetString("Main_ChooseDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current file already exists, do you wish to overwrite it?.
+        /// </summary>
+        public static string Main_DestinationOverwrite {
+            get {
+                return ResourceManager.GetString("Main_DestinationOverwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are jobs on the queue with the same destination path. Please choose a different path for this job..
+        /// </summary>
+        public static string Main_DuplicateDestinationOnQueue {
+            get {
+                return ResourceManager.GetString("Main_DuplicateDestinationOnQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}.
+        /// </summary>
+        public static string Main_EncodeStatusDisplay {
+            get {
+                return ResourceManager.GetString("Main_EncodeStatusDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ,  Pending Jobs {5}.
+        /// </summary>
+        public static string Main_JobsPending_addon {
+            get {
+                return ResourceManager.GetString("Main_JobsPending_addon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Default Preset Set: {0}.
+        /// </summary>
+        public static string Main_NewDefaultPreset {
+            get {
+                return ResourceManager.GetString("Main_NewDefaultPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A New Update is Available. Goto Tools Menu &gt; Options to Install.
+        /// </summary>
+        public static string Main_NewUpdate {
+            get {
+                return ResourceManager.GetString("Main_NewUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Preset selected..
+        /// </summary>
+        public static string Main_NoPresetSelected {
+            get {
+                return ResourceManager.GetString("Main_NoPresetSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can not modify built in presets. Please select one of your own presets..
+        /// </summary>
+        public static string Main_NoUpdateOfBuiltInPresets {
+            get {
+                return ResourceManager.GetString("Main_NoUpdateOfBuiltInPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a folder..
+        /// </summary>
+        public static string Main_PleaseSelectFolder {
+            get {
+                return ResourceManager.GetString("Main_PleaseSelectFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing to encode ....
+        /// </summary>
+        public static string Main_PreparingToEncode {
+            get {
+                return ResourceManager.GetString("Main_PreparingToEncode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can not import a preset with the same name as a built-in preset..
+        /// </summary>
+        public static string Main_PresetErrorBuiltInName {
+            get {
+                return ResourceManager.GetString("Main_PresetErrorBuiltInName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This preset appears to already exist. Would you like to overwrite it?.
+        /// </summary>
+        public static string Main_PresetOverwriteWarning {
+            get {
+                return ResourceManager.GetString("Main_PresetOverwriteWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Presets.
+        /// </summary>
+        public static string Main_Presets {
+            get {
+                return ResourceManager.GetString("Main_Presets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to update the selected preset?.
+        /// </summary>
+        public static string Main_PresetUpdateConfrimation {
+            get {
+                return ResourceManager.GetString("Main_PresetUpdateConfrimation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Preset has now been updated with your current settings..
+        /// </summary>
+        public static string Main_PresetUpdated {
+            get {
+                return ResourceManager.GetString("Main_PresetUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake has determined your built-in presets are out of date... These presets will now be updated.
+        ///Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them..
+        /// </summary>
+        public static string Main_PresetUpdateNotification {
+            get {
+                return ResourceManager.GetString("Main_PresetUpdateNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Finished.
+        /// </summary>
+        public static string Main_QueueFinished {
+            get {
+                return ResourceManager.GetString("Main_QueueFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan Cancelled..
+        /// </summary>
+        public static string Main_ScanCancelled {
+            get {
+                return ResourceManager.GetString("Main_ScanCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan Completed.
+        /// </summary>
+        public static string Main_ScanCompleted {
+            get {
+                return ResourceManager.GetString("Main_ScanCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan failed: .
+        /// </summary>
+        public static string Main_ScanFailed_NoReason {
+            get {
+                return ResourceManager.GetString("Main_ScanFailed_NoReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan Failed... See Activity Log for details..
+        /// </summary>
+        public static string Main_ScanFailled_CheckLog {
+            get {
+                return ResourceManager.GetString("Main_ScanFailled_CheckLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning source, please wait....
+        /// </summary>
+        public static string Main_ScanningPleaseWait {
+            get {
+                return ResourceManager.GetString("Main_ScanningPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning Title {0} of {1} ({2}%).
+        /// </summary>
+        public static string Main_ScanningTitleXOfY {
+            get {
+                return ResourceManager.GetString("Main_ScanningTitleXOfY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must first scan a source and setup your job before starting an encode..
+        /// </summary>
+        public static string Main_ScanSource {
+            get {
+                return ResourceManager.GetString("Main_ScanSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must first scan a source and setup your job before adding to the queue..
         /// </summary>
         public static string Main_ScanSourceFirst {
@@ -365,11 +618,65 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a preset..
+        /// </summary>
+        public static string Main_SelectPreset {
+            get {
+                return ResourceManager.GetString("Main_SelectPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a preset to update..
+        /// </summary>
+        public static string Main_SelectPresetForUpdate {
+            get {
+                return ResourceManager.GetString("Main_SelectPresetForUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select &apos;Source&apos; to continue.
+        /// </summary>
+        public static string Main_SelectSource {
+            get {
+                return ResourceManager.GetString("Main_SelectSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must turn on automatic file naming AND set a default path in preferences before you can add to the queue..
         /// </summary>
         public static string Main_TurnOnAutoFileNaming {
             get {
                 return ResourceManager.GetString("Main_TurnOnAutoFileNaming", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Encodes Pending.
+        /// </summary>
+        public static string Main_XEncodesPending {
+            get {
+                return ResourceManager.GetString("Main_XEncodesPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notice.
+        /// </summary>
+        public static string Notice {
+            get {
+                return ResourceManager.GetString("Notice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overwrite?.
+        /// </summary>
+        public static string Overwrite {
+            get {
+                return ResourceManager.GetString("Overwrite", resourceCulture);
             }
         }
         
@@ -392,6 +699,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question.
+        /// </summary>
+        public static string Question {
+            get {
+                return ResourceManager.GetString("Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WARNING: You do not have automatic file naming turned on. Please enable this in options..
         /// </summary>
         public static string QueueSelection_AutoNameWarning {
@@ -406,6 +722,24 @@ namespace HandBrakeWPF.Properties {
         public static string QueueSelection_AutoTrackSelectionWarning {
             get {
                 return ResourceManager.GetString("QueueSelection_AutoTrackSelectionWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read.
+        /// </summary>
+        public static string State_Ready {
+            get {
+                return ResourceManager.GetString("State_Ready", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated.
+        /// </summary>
+        public static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
             }
         }
         

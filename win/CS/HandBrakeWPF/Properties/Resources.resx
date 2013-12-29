@@ -377,4 +377,116 @@ In order to use the QuickSync encoder, you must:
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake is already encoding.</value>
+  </data>
+  <data name="Main_ChooseDestination" xml:space="preserve">
+    <value>Please choose a destination for the file.</value>
+  </data>
+  <data name="Main_DestinationOverwrite" xml:space="preserve">
+    <value>The current file already exists, do you wish to overwrite it?</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
+  </data>
+  <data name="Main_EncodeStatusDisplay" xml:space="preserve">
+    <value>{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>,  Pending Jobs {5}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>New Default Preset Set: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>A New Update is Available. Goto Tools Menu &gt; Options to Install</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>No Preset selected.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>You can not modify built in presets. Please select one of your own presets.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Please select a folder.</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>Preparing to encode ...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>You can not import a preset with the same name as a built-in preset.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>This preset appears to already exist. Would you like to overwrite it?</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+    <value>Are you sure you wish to update the selected preset?</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>The Preset has now been updated with your current settings.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake has determined your built-in presets are out of date... These presets will now be updated.
+Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>Queue Finished</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>Scan Cancelled.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>Scan Completed</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>Scan failed: </value>
+  </data>
+  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+    <value>Scan Failed... See Activity Log for details.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>Scanning source, please wait...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>Scanning Title {0} of {1} ({2}%)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>You must first scan a source and setup your job before starting an encode.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Please select a preset.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Please select a preset to update.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Select 'Source' to continue</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} Encodes Pending</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Overwrite?</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
 </root>

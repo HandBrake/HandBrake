@@ -227,7 +227,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor = IoC.Get<IQueueProcessor>();
 
             // Setup Properties
-            this.WindowTitle = "HandBrake";
+            this.WindowTitle = Resources.HandBrake_Title;
             this.CurrentTask = new EncodeTask();
             this.CurrentTask.PropertyChanged += this.CurrentTask_PropertyChanged;
             this.ScannedSource = new Source();
@@ -313,7 +313,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.IsNullOrEmpty(this.programStatusLabel) ? "Ready" : this.programStatusLabel;
+                return string.IsNullOrEmpty(this.programStatusLabel) ? Resources.State_Ready : this.programStatusLabel;
             }
 
             set
@@ -334,7 +334,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.IsNullOrEmpty(this.statusLabel) ? "Ready" : this.statusLabel;
+                return string.IsNullOrEmpty(this.statusLabel) ? Resources.State_Ready : this.statusLabel;
             }
 
             set
@@ -408,7 +408,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.scannedSource = value;
-                this.NotifyOfPropertyChange("ScannedSource");
+                this.NotifyOfPropertyChange(() => ScannedSource);
             }
         }
 
@@ -425,7 +425,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.IsNullOrEmpty(this.sourceLabel) ? "Select 'Source' to continue" : this.sourceLabel;
+                return string.IsNullOrEmpty(this.sourceLabel) ? Resources.Main_SelectSource : this.sourceLabel;
             }
 
             set
@@ -433,7 +433,7 @@ namespace HandBrakeWPF.ViewModels
                 if (!Equals(this.sourceLabel, value))
                 {
                     this.sourceLabel = value;
-                    this.NotifyOfPropertyChange("SourceLabel");
+                    this.NotifyOfPropertyChange(() => SourceLabel);
                 }
             }
         }
@@ -550,7 +550,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 duration = value;
-                this.NotifyOfPropertyChange("Duration");
+                this.NotifyOfPropertyChange(() => Duration);
             }
         }
 
@@ -858,7 +858,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => SelectedOutputFormat);
                 this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
                 this.NotifyOfPropertyChange(() => IsMkv);
-                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().Replace("av_", string.Empty).ToLower())); // TODO, tidy up
+                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower()));
 
                 this.VideoViewModel.RefreshTask();
                 this.AudioViewModel.RefreshTask();
@@ -989,9 +989,8 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.Load();
             if (this.presetService.CheckIfPresetsAreOutOfDate())
                 if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
-                    this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated." + Environment.NewLine +
-             "Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them.",
-                                    "Preset Update", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.errorService.ShowMessageBox(Resources.Main_PresetUpdateNotification,
+                                    Resources.Notice, MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Queue Recovery
             if (!AppArguments.IsInstantHandBrake)
@@ -1132,7 +1131,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || string.IsNullOrEmpty(this.ScannedSource.ScanPath) || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox("You must first scan a source and setup your job before adding to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSourceFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -1143,12 +1142,12 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.errorService.ShowMessageBox("There are jobs on the queue with the same destination path. Please choose a different path for this job.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                this.errorService.ShowMessageBox(Resources.Main_DuplicateDestinationOnQueue, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             if (!this.IsEncoding)
             {
-                this.ProgramStatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.Count);
+                this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
             }
         }
 
@@ -1188,13 +1187,13 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox("You must first scan a source and setup your job before adding to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSourceFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (!AutoNameHelper.IsAutonamingEnabled())
             {
-                this.errorService.ShowMessageBox("You must turn on automatic file naming in preferences before you can add to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_TurnOnAutoFileNaming, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -1225,7 +1224,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void FolderScan()
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true };
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.Main_PleaseSelectFolder, UseDescriptionForTitle = true };
             dialog.ShowDialog();
 
             ShowSourceSelection = false;
@@ -1261,7 +1260,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.queueProcessor.IsProcessing)
             {
-                this.errorService.ShowMessageBox("HandBrake is already encoding.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_AlreadyEncoding, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -1275,19 +1274,19 @@ namespace HandBrakeWPF.ViewModels
             // Otherwise, perform Santiy Checking then add to the queue and start if everything is ok.
             if (this.SelectedTitle == null)
             {
-                this.errorService.ShowMessageBox("You must first scan a source.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (string.IsNullOrEmpty(this.Destination))
             {
-                this.errorService.ShowMessageBox("The Destination field was empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (File.Exists(this.Destination))
             {
-                MessageBoxResult result = this.errorService.ShowMessageBox("The current file already exists, do you wish to overwrite it?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_DestinationOverwrite, Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
                 {
                     return;
@@ -1475,7 +1474,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.SelectedPreset == null)
             {
                 this.errorService.ShowMessageBox(
-                    "Please select a preset to update.", "No Preset selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Resources.Main_SelectPresetForUpdate, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
 
                 return;
             }
@@ -1483,17 +1482,17 @@ namespace HandBrakeWPF.ViewModels
             if (this.SelectedPreset.IsBuildIn)
             {
                 this.errorService.ShowMessageBox(
-                    "You can not modify built in presets. Please select one of your own presets.", "No Preset selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (this.errorService.ShowMessageBox("Are you sure you wish to update the selected preset?", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (this.errorService.ShowMessageBox(Resources.Main_PresetUpdateConfrimation, Resources.AreYouSure, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 this.SelectedPreset.Task = new EncodeTask(this.CurrentTask);
                 this.presetService.Update(this.SelectedPreset);
 
                 this.errorService.ShowMessageBox(
-                        "The Preset has now been updated with your current settings.", "Preset Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Resources.Main_PresetUpdated, Resources.Updated, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -1508,7 +1507,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                MessageBox.Show("Please select a preset.", "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Resources.Main_SelectPreset, Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -1520,11 +1519,11 @@ namespace HandBrakeWPF.ViewModels
             if (this.selectedPreset != null)
             {
                 this.presetService.SetDefault(this.selectedPreset);
-                MessageBox.Show(string.Format("New Default Preset Set: {0}", this.selectedPreset.Name), "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(string.Format(Resources.Main_NewDefaultPreset, this.selectedPreset.Name), Resources.Main_Presets, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Please select a preset.", "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Resources.Main_SelectPreset, Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -1547,8 +1546,8 @@ namespace HandBrakeWPF.ViewModels
                     if (!presetService.CanUpdatePreset(preset.Name))
                     {
                         MessageBox.Show(
-                            "You can not import a preset with the same name as a built-in preset.",
-                            "Error",
+                            Resources.Main_PresetErrorBuiltInName,
+                            Resources.Error,
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
                         return;
@@ -1556,8 +1555,8 @@ namespace HandBrakeWPF.ViewModels
 
                     MessageBoxResult result =
                         MessageBox.Show(
-                            "This preset appears to already exist. Would you like to overwrite it?",
-                            "Overwrite preset?",
+                            Resources.Main_PresetOverwriteWarning,
+                            Resources.Overwrite,
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
@@ -1603,7 +1602,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                MessageBox.Show("Please select a preset.", "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Resources.Main_SelectPreset, Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -1613,7 +1612,7 @@ namespace HandBrakeWPF.ViewModels
         public void PresetReset()
         {
             this.presetService.UpdateBuiltInPresets();
-            this.NotifyOfPropertyChange("Presets");
+            this.NotifyOfPropertyChange(() => this.Presets);
             this.SelectedPreset = this.presetService.DefaultPreset;
             this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -1699,7 +1698,7 @@ namespace HandBrakeWPF.ViewModels
                     // Cleanup
                     this.ShowStatusWindow = false;
                     this.SourceLabel = this.SourceName;
-                    this.StatusLabel = "Scan Completed";
+                    this.StatusLabel = Resources.Main_ScanCompleted;
                 });
         }
 
@@ -1804,7 +1803,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (information.NewVersionAvailable)
             {
-                this.ProgramStatusLabel = "A New Update is Available. Goto Tools Menu > Options to Install";
+                this.ProgramStatusLabel = Resources.Main_NewUpdate;
             }
         }
 
@@ -1822,8 +1821,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs e)
         {
-            this.SourceLabel = string.Format("Scanning Title {0} of {1} ({2}%)", e.CurrentTitle, e.Titles, e.Percentage);
-            this.StatusLabel = string.Format("Scanning Title {0} of {1} ({2}%)", e.CurrentTitle, e.Titles, e.Percentage);
+            this.SourceLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
+            this.StatusLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
         }
 
         /// <summary>
@@ -1852,21 +1851,22 @@ namespace HandBrakeWPF.ViewModels
                     if (e.Successful)
                     {
                         this.SourceLabel = this.SourceName;
-                        this.StatusLabel = "Scan Completed";
+                        this.StatusLabel = Resources.Main_ScanCompleted;
                     }
                     else if (e.Cancelled)
                     {
-                        this.SourceLabel = "Scan Cancelled.";
-                        this.StatusLabel = "Scan Cancelled.";
+                        this.SourceLabel = Resources.Main_ScanCancelled;
+                        this.StatusLabel = Resources.Main_ScanCancelled;
                     }
                     else if (e.Exception == null && e.ErrorInformation != null)
                     {
-                        this.SourceLabel = "Scan failed: " + e.ErrorInformation;
-                        this.StatusLabel = "Scan failed: " + e.ErrorInformation;
+                        this.SourceLabel = Resources.Main_ScanFailed_NoReason + e.ErrorInformation;
+                        this.StatusLabel = Resources.Main_ScanFailed_NoReason + e.ErrorInformation;
                     }
                     else
                     {
-                        this.SourceLabel = "Scan Failed... See Activity Log for details."; this.StatusLabel = "Scan Failed... See Activity Log for details.";
+                        this.SourceLabel = Resources.Main_ScanFailled_CheckLog;
+                        this.StatusLabel = Resources.Main_ScanFailled_CheckLog;
                     }
                 });
         }
@@ -1885,7 +1885,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    this.StatusLabel = "Scanning source, please wait...";
+                    this.StatusLabel = Resources.Main_ScanningPleaseWait;
                     this.ShowStatusWindow = true;
                 });
         }
@@ -1914,12 +1914,12 @@ namespace HandBrakeWPF.ViewModels
                         string josPending = string.Empty;
                         if (!AppArguments.IsInstantHandBrake)
                         {
-                            josPending = ",  Pending Jobs {5}";
+                            josPending = Resources.Main_JobsPending_addon;
                         }
 
                         this.ProgramStatusLabel =
                             string.Format(
-                                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}" + josPending,
+                                Resources.Main_EncodeStatusDisplay + josPending,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,
@@ -1938,7 +1938,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        this.ProgramStatusLabel = "Queue Finished";
+                        this.ProgramStatusLabel = Resources.Main_QueueFinished;
                         this.IsEncoding = false;
 
                         if (this.windowsSeven.IsWindowsSeven)
@@ -1963,7 +1963,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                () =>
                {
-                   this.ProgramStatusLabel = "Preparing to encode ...";
+                   this.ProgramStatusLabel = Resources.Main_PreparingToEncode;
                    this.IsEncoding = true;
                });
         }
@@ -1984,7 +1984,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    this.ProgramStatusLabel = "Queue Finished";
+                    this.ProgramStatusLabel = Resources.Main_QueueFinished;
                     this.IsEncoding = false;
 
                     if (this.windowsSeven.IsWindowsSeven)
@@ -2008,7 +2008,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
               () =>
               {
-                  this.ProgramStatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.Count);
+                  this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
               });
         }
 

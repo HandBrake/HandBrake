@@ -19,6 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -259,7 +260,7 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxResult result =
                     this.errorService.ShowMessageBox(
                         "This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?",
-                        "Warning",
+                        Resources.Warning,
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Question);
 
@@ -296,7 +297,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.queueProcessor.Count == 0)
             {
                 this.errorService.ShowMessageBox(
-                    "There are no pending jobs.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    "There are no pending jobs.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 

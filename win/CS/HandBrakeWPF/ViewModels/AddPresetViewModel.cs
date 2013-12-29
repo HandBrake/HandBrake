@@ -19,6 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -154,13 +155,13 @@ namespace HandBrakeWPF.ViewModels
         {
             if (string.IsNullOrEmpty(this.Preset.Name))
             {
-                this.errorService.ShowMessageBox("A Preset must have a Name. Please fill out the Preset Name field.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox("A Preset must have a Name. Please fill out the Preset Name field.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (this.presetService.CheckIfPresetExists(this.Preset.Name))
             {
-                MessageBoxResult result = this.errorService.ShowMessageBox("A Preset with this name already exists. Would you like to overwrite it?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                MessageBoxResult result = this.errorService.ShowMessageBox("A Preset with this name already exists. Would you like to overwrite it?", Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error);
                 if (result == MessageBoxResult.No)
                 {
                     return;
@@ -169,7 +170,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && this.selectedTitle == null)
             {
-                this.errorService.ShowMessageBox("You must first scan a source to use the 'Source Maximum' Option.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox("You must first scan a source to use the 'Source Maximum' Option.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
