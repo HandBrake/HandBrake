@@ -2669,13 +2669,13 @@ void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src)
         uint8_t *psrc = &src->plane[pp].data[0];
 
         /* These will be useful if we ever do temporal blending. */
-        for( yy = 0; yy < height; yy += 2 )
+        for( yy = 0; yy < height - 1; yy += 2 )
         {
             /* This line gets blend filtered, not yadif filtered. */
             memcpy(pdst, psrc, width);
             pdst += stride;
             psrc += stride;
-            blend_filter_line(&filter, pdst, psrc, width, height, stride, yy);
+            blend_filter_line(&filter, pdst, psrc, width, height, stride, yy + 1);
             pdst += stride;
             psrc += stride;
         }
