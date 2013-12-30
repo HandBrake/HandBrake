@@ -1458,7 +1458,7 @@ try:
         else:
             gmake = ToolProbe( 'GMAKE.exe', 'gmake', 'make' )
 
-        m4       = ToolProbe( 'M4.exe',       'm4' )
+        m4       = ToolProbe( 'M4.exe',       'gm4', 'm4' )
         mkdir    = ToolProbe( 'MKDIR.exe',    'mkdir' )
         patch    = ToolProbe( 'PATCH.exe',    'gpatch', 'patch' )
         rm       = ToolProbe( 'RM.exe',       'rm' )
