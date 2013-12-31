@@ -17,6 +17,10 @@
 #include <unistd.h>
 #include <inttypes.h>
 
+#ifdef SYS_SunOS
+#include <strings.h>
+#endif
+
 #if defined( __MINGW32__ )
 #include <windows.h>
 #include <conio.h>
