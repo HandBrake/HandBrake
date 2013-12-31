@@ -54,7 +54,10 @@ else ifeq ($(BUILD.system),linux)
 else ifeq ($(BUILD.system),kfreebsd)
     TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),solaris)
-    TEST.GCC.l += pthread nsl socket iconv
+    TEST.GCC.l += pthread nsl socket
+ifneq (,$(filter $(BUILD.release),2.10))
+    TEST.GCC.l += iconv
+endif
     TEST.GCC.D += _POSIX_C_SOURCE=200112L __EXTENSIONS__
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
 ifeq ($(HAS.dlfcn),1)
