@@ -957,6 +957,64 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
     return 0;
 }
 
+const char* hb_qsv_frametype_name(uint16_t qsv_frametype)
+{
+    if      (qsv_frametype & MFX_FRAMETYPE_IDR)
+    {
+        return qsv_frametype & MFX_FRAMETYPE_REF ? "IDR (ref)" : "IDR";
+    }
+    else if (qsv_frametype & MFX_FRAMETYPE_I)
+    {
+        return qsv_frametype & MFX_FRAMETYPE_REF ? "I (ref)"   : "I";
+    }
+    else if (qsv_frametype & MFX_FRAMETYPE_P)
+    {
+        return qsv_frametype & MFX_FRAMETYPE_REF ? "P (ref)"   : "P";
+    }
+    else if (qsv_frametype & MFX_FRAMETYPE_B)
+    {
+        return qsv_frametype & MFX_FRAMETYPE_REF ? "B (ref)"   : "B";
+    }
+    else
+    {
+        return "unknown";
+    }
+}
+
+uint8_t hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags)
+{
+    uint16_t flags     = 0;
+    uint8_t  frametype = 0;
+
+    if      (qsv_frametype & MFX_FRAMETYPE_IDR)
+    {
+        frametype = HB_FRAME_IDR;
+    }
+    else if (qsv_frametype & MFX_FRAMETYPE_I)
+    {
+        frametype = HB_FRAME_I;
+    }
+    else if (qsv_frametype & MFX_FRAMETYPE_P)
+    {
+        frametype = HB_FRAME_P;
+    }
+    else if (qsv_frametype & MFX_FRAMETYPE_B)
+    {
+        frametype = HB_FRAME_B;
+    }
+
+    if (qsv_frametype & MFX_FRAMETYPE_REF)
+    {
+        flags |= HB_FRAME_REF;
+    }
+
+    if (out_flags != NULL)
+    {
+       *out_flags = flags;
+    }
+    return frametype;
+}
+
 mfxIMPL hb_qsv_impl_get_preferred()
 {
     return preferred_implementation;

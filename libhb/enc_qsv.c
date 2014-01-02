@@ -1406,18 +1406,10 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 // see nal_encode
                 buf = hb_video_buffer_init( job->width, job->height );
                 buf->size = 0;
-                buf->s.frametype = 0;
 
-                // maping of FrameType(s)
-                if(task->bs->FrameType & MFX_FRAMETYPE_IDR ) buf->s.frametype = HB_FRAME_IDR;
-                else
-                if(task->bs->FrameType & MFX_FRAMETYPE_I )   buf->s.frametype = HB_FRAME_I;
-                else
-                if(task->bs->FrameType & MFX_FRAMETYPE_P )   buf->s.frametype = HB_FRAME_P;
-                else
-                if(task->bs->FrameType & MFX_FRAMETYPE_B )   buf->s.frametype = HB_FRAME_B;
-
-                if(task->bs->FrameType & MFX_FRAMETYPE_REF ) buf->s.flags      = HB_FRAME_REF;
+                // map Media SDK's FrameType to our internal representation
+                buf->s.frametype = hb_qsv_frametype_xlat(task->bs->FrameType,
+                                                         &buf->s.flags);
 
                 parse_nalus(task->bs->Data + task->bs->DataOffset,task->bs->DataLength, buf, pv->frames_out);
 
