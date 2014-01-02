@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style x:Key="mainWindowStyle" TargetType="Window">
+    <Style x:Key="windowStyle" TargetType="Window">
         <Style.Triggers>
             <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
                 <Setter Property="Background" Value="#FFF0F0F0" />

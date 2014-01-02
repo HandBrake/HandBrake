@@ -492,7 +492,17 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel HorizontalAlignment="Stretch" Background="LightGray" Grid.Row="1" Grid.ColumnSpan="2" >
+        <StackPanel HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" >
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                            <Setter Property="Background" Value="LightGray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            
             <Button Content="Close" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]"
                     HorizontalAlignment="Center" Padding="12,2" Margin="0,5,10,5" />
         </StackPanel>

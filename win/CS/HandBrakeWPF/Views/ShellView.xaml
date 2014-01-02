@@ -14,7 +14,7 @@
         UseLayoutRounding="True"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
-        Style="{StaticResource mainWindowStyle}"
+        Style="{StaticResource windowStyle}"
         x:Name="shellView"
         >
     <Window.Resources>

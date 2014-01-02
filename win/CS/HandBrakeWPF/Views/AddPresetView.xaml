@@ -25,8 +25,7 @@
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          Background="#FFF1F0EF">
+          VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -34,12 +33,32 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                        <Setter Property="Background" Value="#FFF1F0EF" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+
+
         <!--  Header  -->
         <StackPanel Grid.Row="0"
                     Height="30"
                     Margin="0,0,0,10"
-                    Background="White"
                     Orientation="Horizontal">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                            <Setter Property="Background" Value="White" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            
             <Image Width="24"
                    Height="24"
                    Margin="10,0,5,0"
@@ -134,8 +153,18 @@
 
         <!--  Controls  -->
         <Grid Grid.Row="3"
-              Margin="0,20,0,0"
-              Background="LightGray">
+              Margin="0,20,0,0">
+
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                            <Setter Property="Background" Value="LightGray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />

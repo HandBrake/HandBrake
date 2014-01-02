@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="{Binding Title}"
         Width="380"
-        Background="#FFF1F0EF"
+        Style="{StaticResource windowStyle}"
         ResizeMode="NoResize"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
@@ -24,11 +24,20 @@
 
     <StackPanel Orientation="Vertical">
 
-        <StackPanel Grid.Row="0"
-                    Height="34"
+        <StackPanel Height="34"
                     Margin="0,0,0,10"
-                    Background="White"
                     Orientation="Horizontal">
+
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
+                            <Setter Property="Background" Value="White" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+
             <Image Width="32"
                    Height="32"
                    Margin="10,0,5,0"

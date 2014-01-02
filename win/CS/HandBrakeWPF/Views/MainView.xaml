@@ -380,6 +380,7 @@
                                   SelectedItem="{Binding Path=SelectedTitle}"
                                   />
                         <Label Margin="8,0,0,0" Content="Angle" />
+                        
                         <ComboBox Name="Angles"
                                   MinWidth="60"
                                   Margin="8,0,0,0"
