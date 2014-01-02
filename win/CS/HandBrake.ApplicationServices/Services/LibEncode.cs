@@ -34,7 +34,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Lock for the log file
         /// </summary>
-        private static readonly object logLock = new object();
+        private static readonly object LogLock = new object();
 
         /// <summary>
         /// The instance.
@@ -244,7 +244,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (this.loggingEnabled)
             {
-                lock (logLock)
+                lock (LogLock)
                 {
                     this.ProcessLogMessage(e.Message);
                 }
@@ -264,7 +264,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (this.loggingEnabled)
             {
-                lock (logLock)
+                lock (LogLock)
                 {
                     this.ProcessLogMessage(e.Message);
                 }

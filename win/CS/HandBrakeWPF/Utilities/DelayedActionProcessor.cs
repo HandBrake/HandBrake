@@ -44,7 +44,6 @@ namespace HandBrakeWPF.Utilities
                 timer.Close();                
             }
 
-
             timer = new Timer(timems) { AutoReset = true };
             timer.Elapsed += this.timer_Elapsed;
             task = taskReset;

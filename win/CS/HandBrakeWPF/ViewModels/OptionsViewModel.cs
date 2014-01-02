@@ -1849,7 +1849,7 @@ namespace HandBrakeWPF.ViewModels
             // #############################
 
             // VLC Path
-            this.VLCPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path) ?? string.Empty;
+            this.VLCPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath) ?? string.Empty;
 
             // #############################
             // Audio and Subtitles Tab
@@ -2019,7 +2019,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.RemovePunctuation, this.RemovePunctuation);
 
             /* Previews */
-            this.userSettingService.SetUserSetting(UserSettingConstants.VLC_Path, this.VLCPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);
 
             /* Audio and Subtitles */
             this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguage, this.SelectedPreferredLangauge);

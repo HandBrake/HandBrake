@@ -17,7 +17,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Threading;
     using System.Windows;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -327,7 +326,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        if (!File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path)))
+                        if (!File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
                         {
                             // Attempt to find VLC if it doesn't exist in the default set location.
                             string vlcPath;
@@ -344,7 +343,7 @@ namespace HandBrakeWPF.ViewModels
 
                             if (File.Exists(vlcPath))
                             {
-                                UserSettingService.SetUserSetting(UserSettingConstants.VLC_Path, vlcPath);
+                                UserSettingService.SetUserSetting(UserSettingConstants.VLCPath, vlcPath);
                             }
                             else
                             {
@@ -353,9 +352,9 @@ namespace HandBrakeWPF.ViewModels
                             }
                         }
 
-                        if (File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path)))
+                        if (File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
                         {
-                            ProcessStartInfo vlc = new ProcessStartInfo(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path), args);
+                            ProcessStartInfo vlc = new ProcessStartInfo(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath), args);
                             Process.Start(vlc);
                         }
                     }

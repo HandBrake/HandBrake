@@ -85,7 +85,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     return val;
                 }
                 
-                if (insensitiveCase && currDescription.ToLower() == description.ToLower() || currDisplay.ToLower() == description.ToLower())
+                if (insensitiveCase && (currDescription.ToLower() == description.ToLower() || currDisplay.ToLower() == description.ToLower()))
                 {
                     return val;
                 }

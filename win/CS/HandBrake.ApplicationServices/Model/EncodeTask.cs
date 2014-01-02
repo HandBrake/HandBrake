@@ -33,6 +33,9 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         private bool showAdvancedTab;
 
+        /// <summary>
+        /// The advanced encoder options.
+        /// </summary>
         private string advancedEncoderOptions;
 
         #endregion

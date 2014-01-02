@@ -1545,20 +1545,12 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (!presetService.CanUpdatePreset(preset.Name))
                     {
-                        MessageBox.Show(
-                            Resources.Main_PresetErrorBuiltInName,
-                            Resources.Error,
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
+                        MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
 
                     MessageBoxResult result =
-                        MessageBox.Show(
-                            Resources.Main_PresetOverwriteWarning,
-                            Resources.Overwrite,
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Warning);
+                        MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
                         presetService.Update(preset);

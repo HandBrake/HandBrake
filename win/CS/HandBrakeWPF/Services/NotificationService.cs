@@ -55,7 +55,7 @@ namespace HandBrakeWPF.Services
         {
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue))
             {
-               //  GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
+               // GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
             }
         }
 

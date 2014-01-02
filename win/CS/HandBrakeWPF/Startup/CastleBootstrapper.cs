@@ -122,7 +122,7 @@ namespace HandBrakeWPF.Startup
         /// The Service Requested
         /// </returns>
         protected override object GetInstance(Type service, string key)
-        {
+        {    
             return string.IsNullOrWhiteSpace(key) ? this.windsorContainer.Resolve(service) : this.windsorContainer.Resolve(key, new { });
         }
 

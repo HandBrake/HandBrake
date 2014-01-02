@@ -144,7 +144,7 @@ namespace HandBrakeWPF
         /// <summary>
         /// Vlc Path
         /// </summary>
-        public const string VLC_Path = "VLC_Path";
+        public const string VLCPath = "VLC_Path";
 
         /// <summary>
         /// The enable process isolation.

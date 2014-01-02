@@ -269,7 +269,7 @@ namespace HandBrake.ApplicationServices.Factories
                     preset.Name = kvp.Value;
                     break;
                 case "Type":
-                    //preset.Task.Type = kvp.Value; // TODO find out what this is
+                    // preset.Task.Type = kvp.Value; // TODO find out what this is
                     break;
                 case "UsesMaxPictureSettings":
                     // TODO Not sure if this is used now!?

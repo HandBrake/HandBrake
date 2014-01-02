@@ -409,7 +409,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                 }
             } 
-            catch(IOException)
+            catch (IOException)
             {
                 // Give up
             }
