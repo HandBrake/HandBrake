@@ -1480,6 +1480,15 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     }
                 }
 
+                // check for PTS < DTS
+                if (buf->s.start < buf->s.renderOffset)
+                {
+                    hb_log("encqsvWork: PTS %"PRId64" < DTS %"PRId64" for frame %d with type '%s' (bfrm_workaround: %d)",
+                           buf->s.start, buf->s.renderOffset, pv->frames_out + 1,
+                           hb_qsv_frametype_name(task->bs->FrameType),
+                           pv->bfrm_workaround);
+                }
+
                 /*
                  * In the MP4 container, DT(0) = STTS(0) = 0.
                  *
