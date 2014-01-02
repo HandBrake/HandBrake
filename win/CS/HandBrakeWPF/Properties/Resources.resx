@@ -395,9 +395,6 @@ In order to use the QuickSync encoder, you must:
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
     <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
   </data>
-  <data name="Main_EncodeStatusDisplay" xml:space="preserve">
-    <value>{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}</value>
-  </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>,  Pending Jobs {5}</value>
   </data>

@@ -410,15 +410,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}.
-        /// </summary>
-        public static string Main_EncodeStatusDisplay {
-            get {
-                return ResourceManager.GetString("Main_EncodeStatusDisplay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ,  Pending Jobs {5}.
         /// </summary>
         public static string Main_JobsPending_addon {

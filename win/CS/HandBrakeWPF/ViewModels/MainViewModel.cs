@@ -1918,8 +1918,7 @@ namespace HandBrakeWPF.ViewModels
                         }
 
                         this.ProgramStatusLabel =
-                            string.Format(
-                                Resources.Main_EncodeStatusDisplay + josPending,
+                            string.Format("{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}" + josPending,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,

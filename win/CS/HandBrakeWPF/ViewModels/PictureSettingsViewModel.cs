@@ -1200,6 +1200,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void UpdatePreviewImage()
         {
+            return;
             if (delayedPreviewprocessor != null)
             {
                 delayedPreviewprocessor.PerformTask(() =>
