@@ -511,7 +511,7 @@ static void hb_buffer_init_planes_internal( hb_buffer_t * b, uint8_t * has_plane
 
 void hb_buffer_init_planes( hb_buffer_t * b )
 {
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[b->f.fmt];
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(b->f.fmt);
     int p;
 
     uint8_t has_plane[4] = {0,};
@@ -527,7 +527,7 @@ void hb_buffer_init_planes( hb_buffer_t * b )
 // with pixel format pix_fmt and dimensions width x height.
 hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
 {
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
     hb_buffer_t * buf;
     int p;
     uint8_t has_plane[4] = {0,};
@@ -566,7 +566,7 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
 // with dimensions width x height.
 void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
 {
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[buf->f.fmt];
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(buf->f.fmt);
     int p;
     uint8_t has_plane[4] = {0,};
 
