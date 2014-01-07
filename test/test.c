@@ -7,6 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
 #include <getopt.h>
 #include <sys/time.h>
