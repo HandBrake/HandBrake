@@ -336,15 +336,6 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             "Unknown"
           );
 
-    if ( bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_VC1 &&
-       ( bdvideo->format == BLURAY_VIDEO_FORMAT_480I ||
-         bdvideo->format == BLURAY_VIDEO_FORMAT_576I ||
-         bdvideo->format == BLURAY_VIDEO_FORMAT_1080I ) )
-    {
-        hb_log( "bd: Interlaced VC-1 not supported" );
-        goto fail;
-    }
-
     switch( bdvideo->coding_type )
     {
         case BLURAY_STREAM_TYPE_VIDEO_MPEG1:
