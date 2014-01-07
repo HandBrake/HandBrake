@@ -58,11 +58,14 @@ struct hb_work_private_s
     av_qsv_space enc_space;
 
     mfxEncodeCtrl force_keyframe;
-    struct
+    hb_list_t *delayed_chapters;
+    int64_t next_chapter_pts;
+    // used in delayed_chapters list
+    struct chapter_s
     {
         int     index;
         int64_t start;
-    } next_chapter;
+    };
 
 #define BFRM_DELAY_MAX 16
     // for DTS generation (when MSDK API < 1.6 or VFR)
@@ -372,8 +375,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->force_keyframe.ExtParam    = NULL;
     pv->force_keyframe.Payload     = NULL;
 
-    pv->next_chapter.index = 0;
-    pv->next_chapter.start = INT64_MIN;
+    pv->next_chapter_pts = AV_NOPTS_VALUE;
+    pv->delayed_chapters = hb_list_init();
 
     // default encoding parameters
     if (hb_qsv_param_default_preset(&pv->param, &pv->enc_space.m_mfxVideoParam,
@@ -1154,6 +1157,16 @@ void encqsvClose( hb_work_object_t * w )
             }
             hb_list_close(&pv->list_dts);
         }
+        if (pv->delayed_chapters != NULL)
+        {
+            struct chapter_s *item;
+            while ((item = hb_list_item(pv->delayed_chapters, 0)) != NULL)
+            {
+                hb_list_rem(pv->delayed_chapters, item);
+                free(item);
+            }
+            hb_list_close(&pv->delayed_chapters);
+        }
     }
 
     free( pv );
@@ -1273,19 +1286,28 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              */
             if (in->s.new_chap > 0 && job->chapter_markers)
             {
-                if (!pv->next_chapter.index)
+                if (pv->next_chapter_pts == AV_NOPTS_VALUE)
                 {
-                    pv->next_chapter.start = work_surface->Data.TimeStamp;
-                    pv->next_chapter.index = in->s.new_chap;
-                    work_control           = &pv->force_keyframe;
+                    pv->next_chapter_pts = work_surface->Data.TimeStamp;
                 }
-                else
+                /* insert an IDR */
+                work_control = &pv->force_keyframe;
+                /*
+                 * Chapter markers are sometimes so close we can get a new
+                 * one before the previous goes through the encoding queue.
+                 *
+                 * Dropping markers can cause weird side-effects downstream,
+                 * including but not limited to missing chapters in the
+                 * output, so we need to save it somehow.
+                 */
+                struct chapter_s *item = malloc(sizeof(struct chapter_s));
+                if (item != NULL)
                 {
-                    // however unlikely, this can happen in theory
-                    hb_log("encqsvWork: got chapter %d before we could write chapter %d, dropping marker",
-                           in->s.new_chap, pv->next_chapter.index);
+                    item->index = in->s.new_chap;
+                    item->start = work_surface->Data.TimeStamp;
+                    hb_list_add(pv->delayed_chapters, item);
                 }
-                // don't let 'work_loop' put a chapter mark on the wrong buffer
+                /* don't let 'work_loop' put a chapter mark on the wrong buffer */
                 in->s.new_chap = 0;
             }
 
@@ -1515,11 +1537,31 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              * presentation time stamp is at or after the marker's time stamp,
              * use this as the chapter start.
              */
-            if (pv->next_chapter.index && buf->s.frametype == HB_FRAME_IDR &&
-                pv->next_chapter.start <= buf->s.start)
+            if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
+                pv->next_chapter_pts <= buf->s.start   &&
+                (task->bs->FrameType & MFX_FRAMETYPE_IDR))
             {
-                buf->s.new_chap = pv->next_chapter.index;
-                pv->next_chapter.index = 0;
+                // we're no longer looking for this chapter
+                pv->next_chapter_pts = AV_NOPTS_VALUE;
+
+                // get the chapter index from the list
+                struct chapter_s *item = hb_list_item(pv->delayed_chapters, 0);
+                if (item != NULL)
+                {
+                    // we're done with this chapter
+                    buf->s.new_chap = item->index;
+                    hb_list_rem(pv->delayed_chapters, item);
+                    free(item);
+
+                    // we may still have another pending chapter
+                    item = hb_list_item(pv->delayed_chapters, 0);
+                    if (item != NULL)
+                    {
+                        // we're looking for this one now
+                        // we still need it, don't remove it
+                        pv->next_chapter_pts = item->start;
+                    }
+                }
             }
 
                 // shift for fifo

@@ -55,9 +55,16 @@ struct hb_work_private_s
 
     uint32_t       frames_in;
     uint32_t       frames_out;
-    int            chap_mark;   // saved chap mark when we're propagating it
     int64_t        last_stop;   // Debugging - stop time of previous input frame
-    int64_t        next_chap;
+
+    hb_list_t *delayed_chapters;
+    int64_t next_chapter_pts;
+    // used in delayed_chapters list
+    struct chapter_s
+    {
+        int     index;
+        int64_t start;
+    };
 
     struct {
         int64_t duration;
@@ -81,6 +88,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
 
     pv->job = job;
+    pv->next_chapter_pts = AV_NOPTS_VALUE;
+    pv->delayed_chapters = hb_list_init();
 
     if( x264_param_default_preset( &param, job->x264_preset, job->x264_tune ) < 0 )
     {
@@ -374,6 +383,17 @@ void encx264Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
+    if (pv->delayed_chapters != NULL)
+    {
+        struct chapter_s *item;
+        while ((item = hb_list_item(pv->delayed_chapters, 0)) != NULL)
+        {
+            hb_list_rem(pv->delayed_chapters, item);
+            free(item);
+        }
+        hb_list_close(&pv->delayed_chapters);
+    }
+
     free( pv->grey_data );
     x264_encoder_close( pv->x264 );
     free( pv );
@@ -505,10 +525,30 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
                frame's presentation time stamp is at or after
                the marker's time stamp, use this as the
                chapter start. */
-            if( pv->next_chap != 0 && pv->next_chap <= pic_out->i_pts )
+            if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
+                pv->next_chapter_pts <= pic_out->i_pts)
             {
-                pv->next_chap = 0;
-                buf->s.new_chap = pv->chap_mark;
+                // we're no longer looking for this chapter
+                pv->next_chapter_pts = AV_NOPTS_VALUE;
+
+                // get the chapter index from the list
+                struct chapter_s *item = hb_list_item(pv->delayed_chapters, 0);
+                if (item != NULL)
+                {
+                    // we're done with this chapter
+                    buf->s.new_chap = item->index;
+                    hb_list_rem(pv->delayed_chapters, item);
+                    free(item);
+
+                    // we may still have another pending chapter
+                    item = hb_list_item(pv->delayed_chapters, 0);
+                    if (item != NULL)
+                    {
+                        // we're looking for this one now
+                        // we still need it, don't remove it
+                        pv->next_chapter_pts = item->start;
+                    }
+                }
             }
         }
 
@@ -547,10 +587,24 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
            when this frame finally pops out of the encoder we'll mark
            its buffer as the start of a chapter. */
         pv->pic_in.i_type = X264_TYPE_IDR;
-        if( pv->next_chap == 0 )
+        if (pv->next_chapter_pts == AV_NOPTS_VALUE)
         {
-            pv->next_chap = in->s.start;
-            pv->chap_mark = in->s.new_chap;
+            pv->next_chapter_pts = in->s.start;
+        }
+        /*
+         * Chapter markers are sometimes so close we can get a new one before the
+         * previous marker has been through the encoding queue.
+         *
+         * Dropping markers can cause weird side-effects downstream, including but
+         * not limited to missing chapters in the output, so we need to save it
+         * somehow.
+         */
+        struct chapter_s *item = malloc(sizeof(struct chapter_s));
+        if (item != NULL)
+        {
+            item->start = in->s.start;
+            item->index = in->s.new_chap;
+            hb_list_add(pv->delayed_chapters, item);
         }
         /* don't let 'work_loop' put a chapter mark on the wrong buffer */
         in->s.new_chap = 0;
