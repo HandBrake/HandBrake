@@ -1733,6 +1733,8 @@ static void filter_loop( void * _f )
         {
             f->chapter_time = buf_in->s.start;
             f->chapter_val = buf_in->s.new_chap;
+            // don't let 'filter_loop' put a chapter mark on the wrong buffer
+            buf_in->s.new_chap = 0;
         }
         if ( *f->done )
         {
