@@ -58,7 +58,6 @@
 
 #include <time.h>
 #include <sys/time.h>
-#include <ctype.h>
 
 #if defined( SYS_LINUX )
 #include <linux/cdrom.h>

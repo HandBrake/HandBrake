@@ -7,8 +7,6 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#define USE_FF_MPEG2
-
 #include "hbffmpeg.h"
 #include "extras/cl.h"
 

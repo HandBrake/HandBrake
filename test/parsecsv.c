@@ -54,11 +54,6 @@ hb_csv_file_t *hb_open_csv_file( const char *filepath )
     }
 
     file = malloc( sizeof( hb_csv_file_t ) );
-    if( file == NULL )
-    {
-        return file;
-    }
-
     file->fileref       = fileref;
     file->eof           = 0;
     file->parse_state   = CSV_PARSE_SEEK;
@@ -96,11 +91,6 @@ hb_csv_cell_t *hb_read_next_cell( hb_csv_file_t *file )
     }
 
     cell = malloc( sizeof( hb_csv_cell_t ) );
-    if( cell == NULL )
-    {
-        return cell;
-    }
-
     cell->cell_row = file->curr_row;
     cell->cell_col = file->curr_col;
     index = 0;
