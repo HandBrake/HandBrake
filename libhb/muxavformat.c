@@ -774,7 +774,7 @@ static int avformatInit( hb_mux_object_t * m )
                 avcodec_get_context_defaults3(st->codec, NULL);
 
                 st->codec->codec_type = AVMEDIA_TYPE_ATTACHMENT;
-                track->st->codec->codec_id = AV_CODEC_ID_TTF;
+                st->codec->codec_id = AV_CODEC_ID_TTF;
 
                 priv_size = attachment->size;
                 priv_data = av_malloc(priv_size);
@@ -785,8 +785,8 @@ static int avformatInit( hb_mux_object_t * m )
                 }
                 memcpy(priv_data, attachment->data, priv_size);
 
-                track->st->codec->extradata = priv_data;
-                track->st->codec->extradata_size = priv_size;
+                st->codec->extradata = priv_data;
+                st->codec->extradata_size = priv_size;
 
                 av_dict_set(&st->metadata, "filename", attachment->name, 0);
             }
