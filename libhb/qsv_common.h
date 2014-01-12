@@ -131,6 +131,7 @@ int hb_qsv_param_parse         (hb_qsv_param_t *param, const char *key, const ch
 const char* hb_qsv_frametype_name(uint16_t qsv_frametype);
 uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
+void        hb_qsv_impl_set_preferred(int impl);
 mfxIMPL     hb_qsv_impl_get_preferred();
 const char* hb_qsv_impl_get_name(int impl);
 

@@ -1015,6 +1015,11 @@ uint8_t hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags)
     return frametype;
 }
 
+void hb_qsv_impl_set_preferred(int impl)
+{
+    preferred_implementation = impl;
+}
+
 mfxIMPL hb_qsv_impl_get_preferred()
 {
     return preferred_implementation;

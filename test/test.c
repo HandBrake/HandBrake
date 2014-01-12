@@ -3765,6 +3765,7 @@ static int ParseOptions( int argc, char ** argv )
     #define QSV_BASELINE        290
     #define QSV_ASYNC_DEPTH     291
     #define QSV_PRESET          292
+    #define QSV_IMPLEMENTATION  293
 
     for( ;; )
     {
@@ -3780,6 +3781,7 @@ static int ParseOptions( int argc, char ** argv )
             { "qsv-preset",           required_argument, NULL,        QSV_PRESET,      },
             { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,    },
             { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH, },
+            { "qsv-implementation",   required_argument, NULL,     QSV_IMPLEMENTATION, },
             { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,               },
 #endif
 
@@ -4427,6 +4429,46 @@ static int ParseOptions( int argc, char ** argv )
             case QSV_PRESET:
                 qsv_preset = strdup(optarg);
                 break;
+            case QSV_IMPLEMENTATION:
+                if( optarg != NULL )
+                {
+                    if (!strcasecmp(optarg, "auto"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_AUTO_ANY|MFX_IMPL_VIA_ANY);
+                    }
+                    else if (!strcasecmp(optarg, "auto1"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_AUTO|MFX_IMPL_VIA_ANY);
+                    }
+                    else if (!strcasecmp(optarg, "software"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_SOFTWARE);
+                    }
+                    else if (!strcasecmp(optarg, "hardware"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY);
+                    }
+                    else if (!strcasecmp(optarg, "hardware1"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_HARDWARE|MFX_IMPL_VIA_ANY);
+                    }
+                    else if (!strcasecmp(optarg, "hardware2"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_HARDWARE2|MFX_IMPL_VIA_ANY);
+                    }
+                    else if (!strcasecmp(optarg, "hardware3"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_HARDWARE3|MFX_IMPL_VIA_ANY);
+                    }
+                    else if (!strcasecmp(optarg, "hardware4"))
+                    {
+                        hb_qsv_impl_set_preferred(MFX_IMPL_HARDWARE4|MFX_IMPL_VIA_ANY);
+                    }
+                    else
+                    {
+                        hb_qsv_impl_set_preferred(atoi(optarg));
+                    }
+                } break;
 #endif
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[cur_optind] );
