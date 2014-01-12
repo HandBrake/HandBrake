@@ -56,6 +56,19 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     pv->context          = context;
     pv->job              = job;
 
+    // Set decoder opts...
+    AVDictionary * av_opts = NULL;
+    // e.g. av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
+
+    if (hb_avcodec_open(pv->context, codec, &av_opts, 0))
+    {
+        av_dict_free( &av_opts );
+        hb_log("decsubInit: avcodec_open failed");
+        return 1;
+    }
+    av_dict_free( &av_opts );
+
+
     return 0;
 }
 

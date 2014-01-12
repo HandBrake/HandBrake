@@ -442,7 +442,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
        return HB_WORK_DONE;
     }
 
-    frame              = avcodec_alloc_frame();
+    frame              = av_frame_alloc();
     frame->data[0]     = in->plane[0].data;
     frame->data[1]     = in->plane[1].data;
     frame->data[2]     = in->plane[2].data;
@@ -556,7 +556,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_error( "encavcodec: codec context has uninitialized codec; skipping frame" );
     }
 
-    avcodec_free_frame(&frame);
+    av_frame_free(&frame);
 
     *buf_out = buf;
 

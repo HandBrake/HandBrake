@@ -1,21 +1,21 @@
 diff --git a/configure b/configure
-index 6ab04ae..fa9f980 100755
+index e9fc08c..72bff03 100755
 --- a/configure
 +++ b/configure
-@@ -2893,6 +2893,7 @@ case $target_os in
-         AVSERVERLDFLAGS=-Wl,-bind_at_load
+@@ -3263,6 +3263,7 @@ case $target_os in
+         SLIBNAME_WITH_MAJOR='$(SLIBPREF)$(FULLNAME).$(LIBMAJOR)$(SLIBSUF)'
          objformat="macho"
          enabled x86_64 && objformat="macho64"
 +        enabled x86_64 && enable pic
          enabled_any pic shared ||
              { check_cflags -mdynamic-no-pic && add_asflags -mdynamic-no-pic; }
          ;;
-@@ -3095,7 +3096,7 @@ esc(){
+@@ -3502,7 +3503,7 @@ esc(){
  
  echo "config:$arch:$subarch:$cpu:$target_os:$(esc $cc_ident):$(esc $LIBAV_CONFIGURATION)" >config.fate
  
--check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable pic
-+#check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable pic
+-check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable_weak pic
++#check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable_weak pic
  
  set_default $PATHS_LIST
  set_default nm
