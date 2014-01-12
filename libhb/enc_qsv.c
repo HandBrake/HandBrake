@@ -1464,13 +1464,6 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                                   ((task->bs->TimeStamp -
                                                     task->bs->DecodeTimeStamp +
                                                     (duration / 2)) / duration));
-                    // check whether b_pyramid is respected, log if needed
-                    if ((pv->param.gop.b_pyramid != 0 && pv->bfrm_delay <= 1) ||
-                        (pv->param.gop.b_pyramid == 0 && pv->bfrm_delay >= 2))
-                    {
-                        hb_log( "encqsvWork: b_pyramid %d not respected (delay: %d)",
-                               pv->param.gop.b_pyramid, pv->bfrm_delay);
-                    }
                 }
 
                 if (!pv->bfrm_workaround)
@@ -1500,6 +1493,15 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     {
                         buf->s.renderOffset = hb_qsv_pop_next_dts(pv->list_dts);
                     }
+                }
+
+                // check whether B-pyramid is used even though it's disabled
+                if ((pv->param.gop.b_pyramid == 0)          &&
+                    (task->bs->FrameType & MFX_FRAMETYPE_B) &&
+                    (task->bs->FrameType & MFX_FRAMETYPE_REF))
+                {
+                    hb_log("encqsvWork: BPyramid off not respected (delay: %d)",
+                           pv->bfrm_delay);
                 }
 
                 // check for PTS < DTS
