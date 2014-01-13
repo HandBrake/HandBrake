@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,MPEG2DEC))
-$(eval $(call import.CONTRIB.rules,MPEG2DEC))

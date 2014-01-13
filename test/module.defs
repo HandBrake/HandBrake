@@ -15,7 +15,7 @@ TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
         a52 ass avcodec avformat avutil avresample dvdnav dvdread \
-        fontconfig freetype fribidi mpeg2 mp3lame ogg \
+        fontconfig freetype fribidi mp3lame ogg \
         samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
         bluray xml2 bz2 z
 

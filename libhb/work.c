@@ -1154,16 +1154,12 @@ static void do_job(hb_job_t *job)
     sync = hb_sync_init( job );
 
     /* Video decoder */
-    int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
-#if defined(USE_FF_MPEG2)
-    if (vcodec == WORK_DECMPEG2)
+    if (title->video_codec == WORK_NONE)
     {
-        vcodec = WORK_DECAVCODECV;
-        title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
+        hb_error("No video decoder set!");
+        goto cleanup;
     }
-#endif
-
-    hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );
+    hb_list_add(job->list_work, (w = hb_get_work(title->video_codec)));
     w->codec_param = title->video_codec_param;
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;

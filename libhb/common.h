@@ -1061,7 +1061,6 @@ struct hb_work_object_s
 
 extern hb_work_object_t hb_sync_video;
 extern hb_work_object_t hb_sync_audio;
-extern hb_work_object_t hb_decmpeg2;
 extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_encvobsub;
 extern hb_work_object_t hb_deccc608;

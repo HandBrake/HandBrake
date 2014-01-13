@@ -35,9 +35,6 @@ LIBHB.out += $(LIBHB.a)
 
 ###############################################################################
 
-ifeq (1,$(FEATURE.ff.mpeg2))
-LIBHB.GCC.D += USE_FF_MPEG2
-endif
 ifeq (1,$(FEATURE.fdk_aac))
 LIBHB.GCC.D += USE_FDK_AAC
 endif

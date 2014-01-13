@@ -68,7 +68,6 @@ which will feed EEDI2 interpolations to yadif.
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "mpeg2dec/mpeg2.h"
 #include "eedi2.h"
 #include "taskset.h"
 

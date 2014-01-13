@@ -18,7 +18,6 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "mpeg2dec/mpeg2.h"
 #include "taskset.h"
 
 // yadif_mode is a bit vector with the following flags

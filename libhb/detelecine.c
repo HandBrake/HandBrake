@@ -9,7 +9,6 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "mpeg2dec/mpeg2.h"
 
 /*
  *

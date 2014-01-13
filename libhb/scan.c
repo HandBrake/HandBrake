@@ -517,15 +517,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         data->stream = hb_stream_open( title->path, title, 1 );
     }
 
-    int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
-#if defined(USE_FF_MPEG2)
-    if (vcodec == WORK_DECMPEG2)
+    if (title->video_codec == WORK_NONE)
     {
-        vcodec = WORK_DECAVCODECV;
-        title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
+        hb_error("No video decoder set!");
+        return 0;
     }
-#endif
-    hb_work_object_t *vid_decoder = hb_get_work( vcodec );
+    hb_work_object_t *vid_decoder = hb_get_work(title->video_codec);
     vid_decoder->codec_param = title->video_codec_param;
     vid_decoder->title = title;
     vid_decoder->init( vid_decoder, NULL );

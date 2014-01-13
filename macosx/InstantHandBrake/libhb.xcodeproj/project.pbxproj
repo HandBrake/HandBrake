@@ -14,7 +14,6 @@
 		A9DB39140D37EA0300F77345 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EB0D37EA0300F77345 /* decavcodec.c */; };
 		A9DB39150D37EA0300F77345 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EC0D37EA0300F77345 /* decdca.c */; };
 		A9DB39160D37EA0300F77345 /* declpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38ED0D37EA0300F77345 /* declpcm.c */; };
-		A9DB39170D37EA0300F77345 /* decmpeg2.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EE0D37EA0300F77345 /* decmpeg2.c */; };
 		A9DB39180D37EA0300F77345 /* decsub.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EF0D37EA0300F77345 /* decsub.c */; };
 		A9DB39190D37EA0300F77345 /* deinterlace.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F00D37EA0300F77345 /* deinterlace.c */; };
 		A9DB391A0D37EA0300F77345 /* demuxmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F10D37EA0300F77345 /* demuxmpeg.c */; };
@@ -59,7 +58,6 @@
 		A9DB39BA0D37EB4700F77345 /* libmkv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A50D37EB4700F77345 /* libmkv.a */; };
 		A9DB39BB0D37EB4700F77345 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A60D37EB4700F77345 /* libmp3lame.a */; };
 		A9DB39BC0D37EB4700F77345 /* libmp4v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A70D37EB4700F77345 /* libmp4v2.a */; };
-		A9DB39BD0D37EB4700F77345 /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A80D37EB4700F77345 /* libmpeg2.a */; };
 		A9DB39BE0D37EB4700F77345 /* libmpeg2convert.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A90D37EB4700F77345 /* libmpeg2convert.a */; };
 		A9DB39BF0D37EB4700F77345 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AA0D37EB4700F77345 /* libogg.a */; };
 		A9DB39C00D37EB4700F77345 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AB0D37EB4700F77345 /* libsamplerate.a */; };
@@ -85,7 +83,6 @@
 		A9DB38EB0D37EA0300F77345 /* decavcodec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decavcodec.c; path = ../../libhb/decavcodec.c; sourceTree = SOURCE_ROOT; };
 		A9DB38EC0D37EA0300F77345 /* decdca.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decdca.c; path = ../../libhb/decdca.c; sourceTree = SOURCE_ROOT; };
 		A9DB38ED0D37EA0300F77345 /* declpcm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = declpcm.c; path = ../../libhb/declpcm.c; sourceTree = SOURCE_ROOT; };
-		A9DB38EE0D37EA0300F77345 /* decmpeg2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decmpeg2.c; path = ../../libhb/decmpeg2.c; sourceTree = SOURCE_ROOT; };
 		A9DB38EF0D37EA0300F77345 /* decsub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decsub.c; path = ../../libhb/decsub.c; sourceTree = SOURCE_ROOT; };
 		A9DB38F00D37EA0300F77345 /* deinterlace.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = deinterlace.c; path = ../../libhb/deinterlace.c; sourceTree = SOURCE_ROOT; };
 		A9DB38F10D37EA0300F77345 /* demuxmpeg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = demuxmpeg.c; path = ../../libhb/demuxmpeg.c; sourceTree = SOURCE_ROOT; };
@@ -130,7 +127,6 @@
 		A9DB39A50D37EB4700F77345 /* libmkv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmkv.a; path = ../../contrib/lib/libmkv.a; sourceTree = SOURCE_ROOT; };
 		A9DB39A60D37EB4700F77345 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = ../../contrib/lib/libmp3lame.a; sourceTree = SOURCE_ROOT; };
 		A9DB39A70D37EB4700F77345 /* libmp4v2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp4v2.a; path = ../../contrib/lib/libmp4v2.a; sourceTree = SOURCE_ROOT; };
-		A9DB39A80D37EB4700F77345 /* libmpeg2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpeg2.a; path = ../../contrib/lib/libmpeg2.a; sourceTree = SOURCE_ROOT; };
 		A9DB39A90D37EB4700F77345 /* libmpeg2convert.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpeg2convert.a; path = ../../contrib/lib/libmpeg2convert.a; sourceTree = SOURCE_ROOT; };
 		A9DB39AA0D37EB4700F77345 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = ../../contrib/lib/libogg.a; sourceTree = SOURCE_ROOT; };
 		A9DB39AB0D37EB4700F77345 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = ../../contrib/lib/libsamplerate.a; sourceTree = SOURCE_ROOT; };
@@ -158,7 +154,6 @@
 				A9DB39BA0D37EB4700F77345 /* libmkv.a in Frameworks */,
 				A9DB39BB0D37EB4700F77345 /* libmp3lame.a in Frameworks */,
 				A9DB39BC0D37EB4700F77345 /* libmp4v2.a in Frameworks */,
-				A9DB39BD0D37EB4700F77345 /* libmpeg2.a in Frameworks */,
 				A9DB39BE0D37EB4700F77345 /* libmpeg2convert.a in Frameworks */,
 				A9DB39BF0D37EB4700F77345 /* libogg.a in Frameworks */,
 				A9DB39C00D37EB4700F77345 /* libsamplerate.a in Frameworks */,
@@ -192,7 +187,6 @@
 				A9DB38EB0D37EA0300F77345 /* decavcodec.c */,
 				A9DB38EC0D37EA0300F77345 /* decdca.c */,
 				A9DB38ED0D37EA0300F77345 /* declpcm.c */,
-				A9DB38EE0D37EA0300F77345 /* decmpeg2.c */,
 				A9DB38EF0D37EA0300F77345 /* decsub.c */,
 				A9DB38F00D37EA0300F77345 /* deinterlace.c */,
 				A9DB38F10D37EA0300F77345 /* demuxmpeg.c */,
@@ -246,7 +240,6 @@
 				A9DB39A50D37EB4700F77345 /* libmkv.a */,
 				A9DB39A60D37EB4700F77345 /* libmp3lame.a */,
 				A9DB39A70D37EB4700F77345 /* libmp4v2.a */,
-				A9DB39A80D37EB4700F77345 /* libmpeg2.a */,
 				A9DB39A90D37EB4700F77345 /* libmpeg2convert.a */,
 				A9DB39AA0D37EB4700F77345 /* libogg.a */,
 				A9DB39AB0D37EB4700F77345 /* libsamplerate.a */,
@@ -328,7 +321,6 @@
 				A9DB39140D37EA0300F77345 /* decavcodec.c in Sources */,
 				A9DB39150D37EA0300F77345 /* decdca.c in Sources */,
 				A9DB39160D37EA0300F77345 /* declpcm.c in Sources */,
-				A9DB39170D37EA0300F77345 /* decmpeg2.c in Sources */,
 				A9DB39180D37EA0300F77345 /* decsub.c in Sources */,
 				A9DB39190D37EA0300F77345 /* deinterlace.c in Sources */,
 				A9DB391A0D37EA0300F77345 /* demuxmpeg.c in Sources */,

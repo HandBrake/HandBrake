@@ -60,7 +60,6 @@ MODULES += contrib/ffmpeg
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
-MODULES += contrib/mpeg2dec
 
 ifneq (,$(filter $(BUILD.system),mingw))
 ifneq ($(HAS.pthread),1)

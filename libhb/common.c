@@ -2808,7 +2808,8 @@ hb_title_t * hb_title_init( char * path, int index )
     strcat( t->path, path );
     // default to decoding mpeg2
     t->video_id      = 0xE0;
-    t->video_codec   = WORK_DECMPEG2;
+    t->video_codec   = WORK_DECAVCODECV;
+    t->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
     t->angle_count   = 1;
     t->pixel_aspect_width = 1;
     t->pixel_aspect_height = 1;

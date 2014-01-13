@@ -7,8 +7,6 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#define USE_FF_MPEG2
-
 #include "hbffmpeg.h"
 #include "extras/cl.h"
 
@@ -409,9 +407,9 @@ union hb_esconfig_u
 
 enum
 {
-    WORK_SYNC_VIDEO = 1,
+    WORK_NONE = 0,
+    WORK_SYNC_VIDEO,
     WORK_SYNC_AUDIO,
-    WORK_DECMPEG2,
     WORK_DECCC608,
     WORK_DECVOBSUB,
     WORK_DECSRTSUB,

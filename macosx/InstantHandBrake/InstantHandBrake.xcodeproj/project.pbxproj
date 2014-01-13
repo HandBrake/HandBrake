@@ -393,7 +393,6 @@
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
 					../contrib/lib/libogg.a,

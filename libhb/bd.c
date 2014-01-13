@@ -340,7 +340,8 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     {
         case BLURAY_STREAM_TYPE_VIDEO_MPEG1:
         case BLURAY_STREAM_TYPE_VIDEO_MPEG2:
-            title->video_codec = WORK_DECMPEG2;
+            title->video_codec = WORK_DECAVCODECV;
+            title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
             title->video_codec_param = 0;
             break;
 
