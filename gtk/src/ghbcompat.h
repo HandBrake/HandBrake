@@ -29,6 +29,10 @@ static inline gboolean gtk_widget_get_realized(GtkWidget *widget)
 }
 #endif
 
+#if !GTK_CHECK_VERSION(3, 0, 0)
+#define gtk_widget_override_font gtk_widget_modify_font
+#endif
+
 #if !GTK_CHECK_VERSION(3, 10, 0)
 #define gtk_image_set_from_icon_name gtk_image_set_from_stock
 #define GHB_PLAY_ICON "gtk-media-play"
