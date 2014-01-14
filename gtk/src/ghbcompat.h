@@ -29,6 +29,29 @@ static inline gboolean gtk_widget_get_realized(GtkWidget *widget)
 }
 #endif
 
+static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
+{
+    PangoFontDescription *font = NULL;
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+    GtkStyleContext *style;
+
+    style = gtk_widget_get_style_context(widget);
+
+#if GTK_CHECK_VERSION(3, 8, 0)
+    gtk_style_context_get(style, GTK_STATE_FLAG_NORMAL,
+                          "font", &font, NULL);
+#else
+    font = gtk_style_context_get_font(style, GTK_STATE_FLAG_NORMAL);
+#endif
+
+#else
+    font = gtk_widget_get_style(widget)->font_desc;
+#endif
+
+    return font;
+} 
+
 #if !GTK_CHECK_VERSION(3, 0, 0)
 #define gtk_widget_override_font gtk_widget_modify_font
 #endif
