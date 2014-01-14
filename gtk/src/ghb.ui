@@ -1987,7 +1987,8 @@ This setting allows you to synchronize the files.</property>
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
-                                          <object class="GtkHScale" id="VideoQualitySlider">
+                                          <object class="GtkScale" id="VideoQualitySlider">
+                                            <property name="orientation">horizontal</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2190,7 +2191,8 @@ This setting allows you to synchronize the files.</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkHScale" id="x264PresetSlider">
+                                          <object class="GtkScale" id="x264PresetSlider">
+                                            <property name="orientation">horizontal</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4190,7 +4192,8 @@ This setting allows you to synchronize the files.</property>
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkHScale" id="x264_aq_strength">
+                                                      <object class="GtkScale" id="x264_aq_strength">
+                                                        <property name="orientation">horizontal</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4221,7 +4224,8 @@ This setting allows you to synchronize the files.</property>
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkHScale" id="x264_psy_rd">
+                                                      <object class="GtkScale" id="x264_psy_rd">
+                                                        <property name="orientation">horizontal</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4254,7 +4258,8 @@ This setting allows you to synchronize the files.</property>
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkHScale" id="x264_psy_trell">
+                                                      <object class="GtkScale" id="x264_psy_trell">
+                                                        <property name="orientation">horizontal</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -7466,7 +7471,8 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="PictureDeblock">
+                                  <object class="GtkScale" id="PictureDeblock">
+                                    <property name="orientation">horizontal</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="adjustment">adjustment20</property>
@@ -7813,7 +7819,8 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
-                  <object class="GtkHScale" id="preview_frame">
+                  <object class="GtkScale" id="preview_frame">
+                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment19</property>
@@ -7853,7 +7860,8 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkHScale" id="live_preview_progress">
+                      <object class="GtkScale" id="live_preview_progress">
+                        <property name="orientation">horizontal</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">preview_progress_adj</property>
                         <property name="draw_value">False</property>

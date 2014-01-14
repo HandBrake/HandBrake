@@ -300,7 +300,7 @@ ghb_widget_value(GtkWidget *widget)
         ival = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
         value = ghb_int64_value_new(ival);
     }
-    else if (type == GTK_TYPE_HSCALE)
+    else if (type == GTK_TYPE_SCALE)
     {
         gdouble dval;
         gint digits;
@@ -591,7 +591,7 @@ update_widget(GtkWidget *widget, const GValue *value)
         g_debug("spin (%s)", str);
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), dval);
     }
-    else if (type == GTK_TYPE_HSCALE)
+    else if (type == GTK_TYPE_SCALE)
     {
         g_debug("hscale");
         gtk_range_set_value(GTK_RANGE(widget), dval);
