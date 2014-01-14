@@ -29,4 +29,13 @@ static inline gboolean gtk_widget_get_realized(GtkWidget *widget)
 }
 #endif
 
+#if !GTK_CHECK_VERSION(3, 10, 0)
+#define gtk_image_set_from_icon_name gtk_image_set_from_stock
+#define GHB_PLAY_ICON "gtk-media-play"
+#define GHB_PAUSE_ICON "gtk-media-pause"
+#else
+#define GHB_PLAY_ICON "media-playback-start"
+#define GHB_PAUSE_ICON "media-playback-pause"
+#endif
+
 #endif // _GHB_COMPAT_H_

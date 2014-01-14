@@ -474,7 +474,7 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
 
         //printf("eos");
         img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
-        gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
+        gtk_image_set_from_icon_name(img, GHB_PLAY_ICON, GTK_ICON_SIZE_BUTTON);
         gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
         ud->preview->pause = TRUE;
         gst_element_seek(ud->preview->play, 1.0,
@@ -664,14 +664,14 @@ live_preview_start(signal_user_data_t *ud)
     img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
     if (!ud->preview->encoded[ud->preview->frame])
     {
-        gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
+        gtk_image_set_from_icon_name(img, GHB_PLAY_ICON, GTK_ICON_SIZE_BUTTON);
         gst_element_set_state(ud->preview->play, GST_STATE_NULL);
         ud->preview->pause = TRUE;
         return;
     }
 
     uri = g_strdup_printf("file://%s", ud->preview->current);
-    gtk_image_set_from_stock(img, "gtk-media-pause", GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name(img, GHB_PAUSE_ICON, GTK_ICON_SIZE_BUTTON);
     ud->preview->state = PREVIEW_STATE_LIVE;
     g_object_set(G_OBJECT(ud->preview->play), "uri", uri, NULL);
     gst_element_set_state(ud->preview->play, GST_STATE_PLAYING);
@@ -688,7 +688,7 @@ live_preview_pause(signal_user_data_t *ud)
         return;
 
     img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
-    gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name(img, GHB_PLAY_ICON, GTK_ICON_SIZE_BUTTON);
     gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
     ud->preview->pause = TRUE;
 }
@@ -704,7 +704,7 @@ live_preview_stop(signal_user_data_t *ud)
         return;
 
     img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
-    gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name(img, GHB_PLAY_ICON, GTK_ICON_SIZE_BUTTON);
 #if defined(_ENABLE_GST)
     gst_element_set_state(ud->preview->play, GST_STATE_NULL);
 #endif
