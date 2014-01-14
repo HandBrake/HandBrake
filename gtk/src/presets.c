@@ -3721,8 +3721,8 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     dialog = gtk_file_chooser_dialog_new("Import Preset", NULL,
                 GTK_FILE_CHOOSER_ACTION_OPEN,
-                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GHB_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                 NULL);
 
     filter = gtk_file_filter_new();
@@ -3843,8 +3843,8 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     dialog = gtk_file_chooser_dialog_new("Export Preset", NULL,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
-                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                 NULL);
 
     exportDir = ghb_settings_get_string(ud->settings, "ExportDirectory");

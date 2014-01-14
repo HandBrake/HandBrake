@@ -1215,8 +1215,8 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
     dialog = gtk_file_chooser_dialog_new ("Choose Destination",
                       NULL,
                       GTK_FILE_CHOOSER_ACTION_SAVE,
-                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                      GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                      GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                       NULL);
     gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), destname);
     basename = g_path_get_basename(destname);

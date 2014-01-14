@@ -38,4 +38,14 @@ static inline gboolean gtk_widget_get_realized(GtkWidget *widget)
 #define GHB_PAUSE_ICON "media-playback-pause"
 #endif
 
+#if !GTK_CHECK_VERSION(3, 10, 0)
+#define GHB_STOCK_OPEN      GTK_STOCK_OPEN
+#define GHB_STOCK_CANCEL    GTK_STOCK_CANCEL
+#define GHB_STOCK_SAVE      GTK_STOCK_SAVE
+#else
+#define GHB_STOCK_OPEN      "_Open"
+#define GHB_STOCK_CANCEL    "_Cancel"
+#define GHB_STOCK_SAVE      "_Save"
+#endif
+
 #endif // _GHB_COMPAT_H_
