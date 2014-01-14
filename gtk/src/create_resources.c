@@ -521,7 +521,10 @@ main(gint argc, gchar *argv[])
     src = argv[optind++];
     dst = argv[optind++];
 
+#if !GLIB_CHECK_VERSION(2, 36, 0)
     g_type_init();
+#endif
+
     file = g_fopen(src, "r");
     if (file == NULL)
     {
