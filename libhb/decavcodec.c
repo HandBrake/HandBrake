@@ -302,30 +302,57 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
             hb_error("decavcodecaInit: hb_audio_resample_init() failed");
             return 1;
         }
-        // some decoders can downmix using embedded coefficients,
-        // or dedicated audio substreams for a specific channel layout
-        switch (w->audio->config.out.mixdown)
+        /*
+         * Some audio decoders can downmix using embedded coefficients,
+         * or dedicated audio substreams for a specific channel layout.
+         *
+         * But some will e.g. use normalized mix coefficients unconditionally,
+         * so we need to make sure this matches what the user actually requested.
+         */
+        int avcodec_downmix = 0;
+        switch (w->codec_param)
         {
-            case HB_AMIXDOWN_MONO:
-                if (w->codec_param == AV_CODEC_ID_TRUEHD)
-                {
-                    // libavcodec can't decode TrueHD Mono (bug #356)
-                    // work around it by requesting Stereo and downmixing
-                    pv->context->request_channel_layout = AV_CH_LAYOUT_STEREO;
-                    break;
-                }
-                pv->context->request_channel_layout = AV_CH_LAYOUT_MONO;
+            case AV_CODEC_ID_AC3:
+            case AV_CODEC_ID_EAC3:
+                avcodec_downmix = w->audio->config.out.normalize_mix_level != 0;
                 break;
-            // request 5.1 before downmixing to dpl1/dpl2
-            case HB_AMIXDOWN_DOLBY:
-            case HB_AMIXDOWN_DOLBYPLII:
-                pv->context->request_channel_layout = AV_CH_LAYOUT_5POINT1;
+            case AV_CODEC_ID_DTS:
+                avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
                 break;
-            // request the layout corresponding to the selected mixdown
+            case AV_CODEC_ID_TRUEHD:
+                avcodec_downmix = (w->audio->config.out.normalize_mix_level == 0     ||
+                                   w->audio->config.out.mixdown == HB_AMIXDOWN_MONO  ||
+                                   w->audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
+                                   w->audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII);
+                break;
             default:
-                pv->context->request_channel_layout =
-                    hb_ff_mixdown_xlat(w->audio->config.out.mixdown, NULL);
                 break;
+        }
+        if (avcodec_downmix)
+        {
+            switch (w->audio->config.out.mixdown)
+            {
+                case HB_AMIXDOWN_MONO:
+                    if (w->codec_param == AV_CODEC_ID_TRUEHD)
+                    {
+                        // libavcodec can't decode TrueHD Mono (bug #356)
+                        // work around it by requesting Stereo and downmixing
+                        pv->context->request_channel_layout = AV_CH_LAYOUT_STEREO;
+                        break;
+                    }
+                    pv->context->request_channel_layout = AV_CH_LAYOUT_MONO;
+                    break;
+                // request 5.1 before downmixing to dpl1/dpl2
+                case HB_AMIXDOWN_DOLBY:
+                case HB_AMIXDOWN_DOLBYPLII:
+                    pv->context->request_channel_layout = AV_CH_LAYOUT_5POINT1;
+                    break;
+                // request the layout corresponding to the selected mixdown
+                default:
+                    pv->context->request_channel_layout =
+                        hb_ff_mixdown_xlat(w->audio->config.out.mixdown, NULL);
+                    break;
+            }
         }
     }
 
