@@ -3163,18 +3163,6 @@ libx264 authors:
         audio-volume-low
         audio-volume-medium</property>
                                                         <signal name="value-changed" handler="gain_widget_changed_cb" swapped="no"/>
-                                                        <child internal-child="plus_button">
-                                                          <object class="GtkButton" id="scalebutton-plus_button1">
-                                                            <property name="can_focus">False</property>
-                                                            <property name="receives_default">False</property>
-                                                          </object>
-                                                        </child>
-                                                        <child internal-child="minus_button">
-                                                          <object class="GtkButton" id="scalebutton-minus_button1">
-                                                            <property name="can_focus">False</property>
-                                                            <property name="receives_default">False</property>
-                                                          </object>
-                                                        </child>
                                                       </object>
                                                       <packing>
                                                         <property name="expand">False</property>
@@ -3242,18 +3230,6 @@ libx264 authors:
                                                         <property name="adjustment">adjustment28</property>
                                                         <property name="icons">audio-input-microphone</property>
                                                         <signal name="value-changed" handler="drc_widget_changed_cb" swapped="no"/>
-                                                        <child internal-child="plus_button">
-                                                          <object class="GtkButton" id="scalebutton-plus_button2">
-                                                            <property name="can_focus">False</property>
-                                                            <property name="receives_default">False</property>
-                                                          </object>
-                                                        </child>
-                                                        <child internal-child="minus_button">
-                                                          <object class="GtkButton" id="scalebutton-minus_button2">
-                                                            <property name="can_focus">False</property>
-                                                            <property name="receives_default">False</property>
-                                                          </object>
-                                                        </child>
                                                       </object>
                                                       <packing>
                                                         <property name="expand">False</property>
@@ -3328,18 +3304,6 @@ libx264 authors:
         weather-few-clouds
         weather-clear</property>
                                                         <signal name="value-changed" handler="quality_widget_changed_cb" swapped="no"/>
-                                                        <child internal-child="plus_button">
-                                                          <object class="GtkButton" id="scalebutton-plus_button3">
-                                                            <property name="can_focus">False</property>
-                                                            <property name="receives_default">False</property>
-                                                          </object>
-                                                        </child>
-                                                        <child internal-child="minus_button">
-                                                          <object class="GtkButton" id="scalebutton-minus_button3">
-                                                            <property name="can_focus">False</property>
-                                                            <property name="receives_default">False</property>
-                                                          </object>
-                                                        </child>
                                                       </object>
                                                       <packing>
                                                         <property name="expand">False</property>
