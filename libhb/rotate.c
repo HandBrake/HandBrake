@@ -9,7 +9,6 @@
  
 #include "hb.h"
 #include "hbffmpeg.h"
-//#include "mpeg2dec/mpeg2.h"
 #include "taskset.h"
 
 #define MODE_DEFAULT     3
