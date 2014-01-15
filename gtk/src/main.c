@@ -1088,9 +1088,7 @@ main(int argc, char *argv[])
     GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
 #if defined(_USE_APP_IND)
-    GtkUIManager * uim = GTK_UI_MANAGER(GHB_OBJECT(ud->builder, "uimanager1"));
-
-    GtkMenu *ai_menu = GTK_MENU(gtk_ui_manager_get_widget(uim, "/ui/tray_menu"));
+    GtkMenu *ai_menu = GTK_MENU(GHB_OBJECT(ud->builder, "tray_menu"));
     ud->ai = app_indicator_new("HandBrake", "hb-icon", APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
     app_indicator_set_menu( ud->ai, ai_menu );
     app_indicator_set_label( ud->ai, "", "99.99%");

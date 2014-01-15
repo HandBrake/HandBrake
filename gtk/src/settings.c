@@ -254,13 +254,6 @@ ghb_widget_value(GtkWidget *widget)
         bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
         value = ghb_boolean_value_new(bval);
     }
-    else if (type == GTK_TYPE_TOGGLE_ACTION)
-    {
-        g_debug("\ttoggle action");
-        gboolean bval;
-        bval = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(widget));
-        value = ghb_boolean_value_new(bval);
-    }
     else if (type == GTK_TYPE_CHECK_MENU_ITEM)
     {
         g_debug("\tcheck_menu_item");
@@ -515,11 +508,6 @@ update_widget(GtkWidget *widget, const GValue *value)
     {
         g_debug("toggle button");
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
-    }
-    else if (type == GTK_TYPE_TOGGLE_ACTION)
-    {
-        g_debug("toggle action");
-        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(widget), ival);
     }
     else if (type == GTK_TYPE_CHECK_MENU_ITEM)
     {

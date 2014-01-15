@@ -245,27 +245,19 @@ ghb_check_dependency(
             continue;
         }
         sensitive = dep_check(ud, dep_name, &hide);
-        if (GTK_IS_ACTION(dep_object))
+        gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+        if (!sensitive && hide)
         {
-            gtk_action_set_sensitive(GTK_ACTION(dep_object), sensitive);
-            gtk_action_set_visible(GTK_ACTION(dep_object), sensitive || !hide);
+            if (gtk_widget_get_visible(GTK_WIDGET(dep_object)))
+            {
+                gtk_widget_hide(GTK_WIDGET(dep_object));
+            }
         }
         else
         {
-            gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
-            if (!sensitive && hide)
+            if (!gtk_widget_get_visible(GTK_WIDGET(dep_object)))
             {
-                if (gtk_widget_get_visible(GTK_WIDGET(dep_object)))
-                {
-                    gtk_widget_hide(GTK_WIDGET(dep_object));
-                }
-            }
-            else
-            {
-                if (!gtk_widget_get_visible(GTK_WIDGET(dep_object)))
-                {
-                    gtk_widget_show_now(GTK_WIDGET(dep_object));
-                }
+                gtk_widget_show_now(GTK_WIDGET(dep_object));
             }
         }
         g_free(dep_name);
@@ -298,22 +290,14 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
             continue;
         }
         sensitive = dep_check(ud, dep_name, &hide);
-        if (GTK_IS_ACTION(dep_object))
+        gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+        if (!sensitive && hide)
         {
-            gtk_action_set_sensitive(GTK_ACTION(dep_object), sensitive);
-            gtk_action_set_visible(GTK_ACTION(dep_object), sensitive || !hide);
+            gtk_widget_hide(GTK_WIDGET(dep_object));
         }
         else
         {
-            gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
-            if (!sensitive && hide)
-            {
-                gtk_widget_hide(GTK_WIDGET(dep_object));
-            }
-            else
-            {
-                gtk_widget_show_now(GTK_WIDGET(dep_object));
-            }
+            gtk_widget_show_now(GTK_WIDGET(dep_object));
         }
     }
 }
@@ -895,7 +879,6 @@ start_scan(
     gint preview_count)
 {
     GtkWidget *widget;
-    GtkAction *action;
     ghb_status_t status;
 
     ghb_get_status(&status);
@@ -908,10 +891,10 @@ start_scan(
     gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Scan"));
     //gtk_widget_set_sensitive(widget, FALSE);
 
-    action = GHB_ACTION(ud->builder, "source_action");
-    gtk_action_set_sensitive(action, FALSE);
-    action = GHB_ACTION(ud->builder, "source_single_action");
-    gtk_action_set_sensitive(action, FALSE);
+    widget = GHB_WIDGET(ud->builder, "source_open");
+    gtk_widget_set_sensitive(widget, FALSE);
+    widget = GHB_WIDGET(ud->builder, "source_title_open");
+    gtk_widget_set_sensitive(widget, FALSE);
     ghb_backend_scan(path, titlenum, preview_count, 
             90000L * ghb_settings_get_int64(ud->settings, "MinTitleDuration"));
 }
@@ -1059,13 +1042,13 @@ single_title_source_cb(GtkButton *button, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
+dvd_source_activate_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     const gchar *filename;
     gchar *sourcename;
 
     sourcename = ghb_settings_get_string(ud->settings, "scan_source");
-    filename = gtk_buildable_get_name(GTK_BUILDABLE(action));
+    filename = gtk_buildable_get_name(GTK_BUILDABLE(widget));
     ghb_do_scan(ud, filename, 0, TRUE);
     if (strcmp(sourcename, filename) != 0)
     {
@@ -2914,17 +2897,16 @@ ghb_backend_events(signal_user_data_t *ud)
         GtkLabel *label;
 
         GtkWidget *widget;
-        GtkAction *action;
 
         widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Source"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Choose Video Source"));
 
-        action = GHB_ACTION(ud->builder, "source_action");
-        gtk_action_set_sensitive(action, TRUE);
-        action = GHB_ACTION(ud->builder, "source_single_action");
-        gtk_action_set_sensitive(action, TRUE);
+        widget = GHB_WIDGET(ud->builder, "source_open");
+        gtk_widget_set_sensitive(widget, TRUE);
+        widget = GHB_WIDGET(ud->builder, "source_title_open");
+        gtk_widget_set_sensitive(widget, TRUE);
 
         source = ghb_settings_get_string(ud->settings, "scan_source");
         update_source_label(ud, source, FALSE);
@@ -4016,76 +3998,74 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_pref_save(ud->settings, name);
 
     gboolean hbfd = ghb_settings_get_boolean(ud->settings, "hbfd_feature");
-    GtkAction *action;
     if (hbfd)
     {
         const GValue *val;
         val = ghb_settings_get_value(ud->settings, "hbfd");
         ghb_ui_update(ud, "hbfd", val);
     }
-    action = GHB_ACTION (ud->builder, "hbfd");
-    gtk_action_set_visible(action, hbfd);
+    widget = GHB_WIDGET (ud->builder, "hbfd");
+    gtk_widget_set_visible(widget, hbfd);
 }
 
 gboolean
 ghb_file_menu_add_dvd(signal_user_data_t *ud)
 {
     GList *link, *drives;
-    static GtkActionGroup *agroup = NULL;
-    static gint merge_id;
+    static GList *dvd_items = NULL;
 
     g_debug("ghb_file_menu_add_dvd()");
+    GtkMenu *menu = GTK_MENU(GHB_WIDGET(ud->builder, "file_submenu"));
+
+    // Clear previous dvd items from list
+    link = dvd_items;
+    while (link != NULL)
+    {
+        GtkWidget * widget = GTK_WIDGET(link->data);
+        // widget_destroy automatically removes widget from container.
+        gtk_widget_destroy(widget);
+        link = link->next;
+    }
+    g_list_free(dvd_items);
+    dvd_items = NULL;
+
+    int pos = 5;
     link = drives = dvd_device_list();
     if (drives != NULL)
     {
-        GtkUIManager *ui = GTK_UI_MANAGER(
-            gtk_builder_get_object(ud->builder, "uimanager1"));
+        GtkWidget *widget = gtk_separator_menu_item_new();
+        dvd_items = g_list_append(dvd_items, (gpointer)widget);
 
-        if (agroup == NULL)
-        {
-            agroup = gtk_action_group_new("dvdgroup");
-            gtk_ui_manager_insert_action_group(ui, agroup, 0);
-        }
-        else
-            gtk_ui_manager_remove_ui(ui, merge_id);
-
-        merge_id = gtk_ui_manager_new_merge_id(ui);
-        // Add separator
-        gtk_ui_manager_add_ui(ui, merge_id, 
-            "ui/menubar1/menuitem1/quit1", "dvdsep", NULL,
-            GTK_UI_MANAGER_SEPARATOR, TRUE);
+        gtk_menu_shell_insert(GTK_MENU_SHELL(menu), widget, pos++);
+        gtk_widget_set_visible(widget, TRUE);
 
         while (link != NULL)
         {
-            GtkAction *action;
+            GtkWidget *widget;
             gchar *drive = get_dvd_device_name(link->data);
             gchar *name = get_dvd_volume_name(link->data);
         
-            action = gtk_action_group_get_action(agroup, drive);
-            if (action != NULL)
-            {
-                gtk_action_group_remove_action(agroup, action);
-                g_object_unref(G_OBJECT(action));
-            }
-            // Create action for this drive
-            action = gtk_action_new(drive, name,
-                "Scan this DVD source", "gtk-cdrom");
-            // Add action to action group
-            gtk_action_group_add_action_with_accel(agroup, action, NULL);
-            // Add to ui manager
-            gtk_ui_manager_add_ui(ui, merge_id, 
-                "ui/menubar1/menuitem1/dvdsep", drive, drive,
-                GTK_UI_MANAGER_AUTO, TRUE);
+            widget = gtk_menu_item_new_with_label(name);
+            gtk_buildable_set_name(GTK_BUILDABLE(widget), drive);
+            gtk_widget_set_tooltip_text(widget, _("Scan this DVD source"));
+
+            dvd_items = g_list_append(dvd_items, (gpointer)widget);
+            gtk_menu_shell_insert(GTK_MENU_SHELL(menu), widget, pos++);
+
+            gtk_widget_set_visible(widget, TRUE);
+
             // Connect signal to action (menu item)
-            g_signal_connect(action, "activate", 
+            g_signal_connect(widget, "activate", 
                 (GCallback)dvd_source_activate_cb, ud);
             g_free(name);
             g_free(drive);
             free_drive(link->data);
             link = link->next;
         }
+
         g_list_free(drives);
     }
+
     return FALSE;
 }
 

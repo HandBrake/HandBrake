@@ -1378,11 +1378,11 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
     ghb_ui_update(ud, "show_presets", val);
     if (ghb_settings_get_boolean(ud->settings, "hbfd_feature"))
     {
-        GtkAction *action;
+        GtkWidget *widget;
         val = ghb_settings_get_value(ud->settings, "hbfd");
         ghb_ui_update(ud, "hbfd", val);
-        action = GHB_ACTION (ud->builder, "hbfd");
-        gtk_action_set_visible(action, TRUE);
+        widget = GHB_WIDGET (ud->builder, "hbfd");
+        gtk_widget_set_visible(widget, TRUE);
     }
     else
     {

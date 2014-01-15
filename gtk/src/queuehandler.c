@@ -996,7 +996,6 @@ void
 ghb_queue_buttons_grey(signal_user_data_t *ud)
 {
     GtkWidget *widget;
-    GtkAction *action;
     gint queue_count;
     gint titleindex;
     gint queue_state, scan_state;
@@ -1019,10 +1018,10 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 
     widget = GHB_WIDGET(ud->builder, "queue_add");
     gtk_widget_set_sensitive(widget, show_start);
-    action = GHB_ACTION(ud->builder, "queue_add_menu");
-    gtk_action_set_sensitive(action, show_start);
-    action = GHB_ACTION(ud->builder, "queue_add_all_menu");
-    gtk_action_set_sensitive(action, show_start);
+    widget = GHB_WIDGET(ud->builder, "queue_add_menu");
+    gtk_widget_set_sensitive(widget, show_start);
+    widget = GHB_WIDGET(ud->builder, "queue_add_all_menu");
+    gtk_widget_set_sensitive(widget, show_start);
 
     widget = GHB_WIDGET (ud->builder, "queue_start1");
     if (show_stop)
@@ -1085,69 +1084,57 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Pause Encoding"));
     }
 
-    action = GHB_ACTION (ud->builder, "queue_start_menu");
+    widget = GHB_WIDGET (ud->builder, "queue_start_menu");
     if (show_stop)
     {
-        gtk_action_set_sensitive (action, TRUE);
+        gtk_widget_set_sensitive (widget, TRUE);
 #if GTK_CHECK_VERSION(2, 16, 0)
-        gtk_action_set_icon_name(action, "hb-stop");
-        gtk_action_set_label(action, _("S_top Queue"));
-        gtk_action_set_tooltip(action, _("Stop Encoding"));
+        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("S_top Queue"));
+        gtk_widget_set_tooltip_text(widget, _("Stop Encoding"));
 #else
-        g_object_set_property(G_OBJECT(action), "icon-name", 
-                                            ghb_string_value("hb-stop"));
-        g_object_set_property(G_OBJECT(action), "label",
+        g_object_set_property(G_OBJECT(widget), "label",
                                             ghb_string_value(_("S_top Queue")));
-        g_object_set_property(G_OBJECT(action), "tooltip",
+        g_object_set_property(G_OBJECT(widget), "tooltip",
                                             ghb_string_value(_("Stop Encoding")));
 #endif
     }
     else
     {
-        gtk_action_set_sensitive (action, show_start);
+        gtk_widget_set_sensitive (widget, show_start);
 #if GTK_CHECK_VERSION(2, 16, 0)
-        gtk_action_set_icon_name(action, "hb-start");
-        gtk_action_set_label(action, _("_Start Queue"));
-        gtk_action_set_tooltip(action, _("Start Encoding"));
+        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Start Queue"));
+        gtk_widget_set_tooltip_text(widget, _("Start Encoding"));
 #else
-        g_object_set_property(G_OBJECT(action), "icon-name", 
-                                            ghb_string_value("hb-start"));
-        g_object_set_property(G_OBJECT(action), "label",
+        g_object_set_property(G_OBJECT(widget), "label",
                                             ghb_string_value(_("_Start Queue")));
-        g_object_set_property(G_OBJECT(action), "tooltip",
+        g_object_set_property(G_OBJECT(widget), "tooltip",
                                             ghb_string_value(_("Start Encoding")));
 #endif
     }
-    action = GHB_ACTION (ud->builder, "queue_pause_menu");
+    widget = GHB_WIDGET (ud->builder, "queue_pause_menu");
     if (paused)
     {
-        gtk_action_set_sensitive (action, show_start);
+        gtk_widget_set_sensitive (widget, show_start);
 #if GTK_CHECK_VERSION(2, 16, 0)
-        gtk_action_set_icon_name(action, "hb-start");
-        gtk_action_set_label(action, "_Resume Queue");
-        gtk_action_set_tooltip(action, "Resume Encoding");
+        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), "_Resume Queue");
+        gtk_widget_set_tooltip_text(widget, "Resume Encoding");
 #else
-        g_object_set_property(G_OBJECT(action), "icon-name", 
-                                        ghb_string_value("hb-start"));
-        g_object_set_property(G_OBJECT(action), "label",
+        g_object_set_property(G_OBJECT(widget), "label",
                                         ghb_string_value(_("_Resume Queue")));
-        g_object_set_property(G_OBJECT(action), "tooltip",
+        g_object_set_property(G_OBJECT(widget), "tooltip",
                                         ghb_string_value(_("Resume Encoding")));
 #endif
     }
     else
     {
-        gtk_action_set_sensitive (action, show_stop);
+        gtk_widget_set_sensitive (widget, show_stop);
 #if GTK_CHECK_VERSION(2, 16, 0)
-        gtk_action_set_icon_name(action, "hb-pause");
-        gtk_action_set_label(action, _("_Pause Queue"));
-        gtk_action_set_tooltip(action, _("Pause Encoding"));
+        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Pause Queue"));
+        gtk_widget_set_tooltip_text(widget, _("Pause Encoding"));
 #else
-        g_object_set_property(G_OBJECT(action), "icon-name", 
-                                        ghb_string_value("hb-pause"));
-        g_object_set_property(G_OBJECT(action), "label",
+        g_object_set_property(G_OBJECT(widget), "label",
                                         ghb_string_value(_("_Pause Queue")));
-        g_object_set_property(G_OBJECT(action), "tooltip",
+        g_object_set_property(G_OBJECT(widget), "tooltip",
                                         ghb_string_value(_("Pause Encoding")));
 #endif
     }
