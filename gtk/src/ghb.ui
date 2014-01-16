@@ -3159,9 +3159,9 @@ libx264 authors:
                                                         <property name="orientation">vertical</property>
                                                         <property name="adjustment">adjustment35</property>
                                                         <property name="icons">audio-volume-muted
-        audio-volume-high
-        audio-volume-low
-        audio-volume-medium</property>
+audio-volume-high
+audio-volume-low
+audio-volume-medium</property>
                                                         <signal name="value-changed" handler="gain_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -3296,13 +3296,13 @@ libx264 authors:
                                                         <property name="orientation">vertical</property>
                                                         <property name="adjustment">audio_quality_adj</property>
                                                         <property name="icons">weather-storm
-        weather-clear
-        weather-storm
-        weather-showers-scattered
-        weather-showers
-        weather-overcast
-        weather-few-clouds
-        weather-clear</property>
+weather-clear
+weather-storm
+weather-showers-scattered
+weather-showers
+weather-overcast
+weather-few-clouds
+weather-clear</property>
                                                         <signal name="value-changed" handler="quality_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
