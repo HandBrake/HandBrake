@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn5208 (2013012701) on Linux
+Guide to Building HandBrake svn5976 (2014011501) on Linux
 *********************************************************
 
 Table of Contents
@@ -38,9 +38,9 @@ Linux; but is not necessarily the only configuration that is possible:
 
    * Intel 32-bit or 64-bit kernel
 
-   * Ubuntu 12.04, gcc 4.5, yasm 1.2.x
+   * Ubuntu 13.10, gcc 4.8, yasm 1.2.x
 
-   * Fedora 17 and 18, gcc 4.5, yasm 1.2.x
+   * Fedora 20, gcc 4.8, yasm 1.2.x
 
    * gcc 4.5 or higher is reported to work
 
@@ -75,7 +75,7 @@ The GTK UI introduces some significant extra build requirements. If you
 intend to disable building the GUI with `configure --disable-gtk' you
 will not need many of these packages installed:
 
-Ubuntu 12+ packages:
+Ubuntu 13.10 packages:
    * subversion (cli/gui)
 
    * yasm (cli/gui)
@@ -114,19 +114,18 @@ Ubuntu 12+ packages:
 
    * libdbus-glib-1-dev (gui)
 
-   * libgtk2.0-dev (gui)
+   * libgtk-3-dev (gui)
 
    * libgudev-1.0-dev (gui)
 
-   * libwebkit-dev (gui)
+   * libwebkit-3.0-dev (gui)
 
    * libnotify-dev (gui)
 
-   * libgstreamer0.10-dev (gui)
+   * libgstreamer1.0-dev (gui)
 
-   * libgstreamer-plugins-base0.10-dev (gui)
+   * libgstreamer-plugins-base1.0-dev (gui)
 
-Ubuntu 12+ packages:
    * libappindicator-dev (gui)
 
 To install these packages:
@@ -134,10 +133,10 @@ To install these packages:
      zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
      libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
      libfontconfig1-dev libass-dev intltool libglib2.0-dev libdbus-glib-1-dev \
-     libgtk2.0-dev libgudev-1.0-dev libwebkit-dev libnotify-dev \
-     libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libappindicator-dev
+     libgtk-3-dev libgudev-1.0-dev libwebkit-3.0-dev libnotify-dev \
+     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libappindicator-dev
 
-Fedora 17+ package groups:
+Fedora 20 package groups:
    * Development Tools
 
    * Development Libraries
@@ -179,20 +178,20 @@ Additional Fedora packages:
 
    * libgudev1-devel (gui)
 
-   * webkitgtk-devel (gui)
+   * webkitgtk3-devel (gui)
 
    * libnotify-devel (gui)
 
-   * gstreamer-devel (gui)
+   * gstreamer1-devel (gui)
 
-   * gstreamer-plugins-base-devel (gui)
+   * gstreamer1-plugins-base-devel (gui)
 
 To install these packages:
      sudo yum install yasm zlib-devel bzip2-devel libogg-devel libtheora-devel \
      libvorbis-devel libsamplerate-devel libxml2-devel fribidi-devel \
      freetype-devel fontconfig-devel libass-devel dbus-glib-devel \
-     libgudev1-devel webkitgtk-devel libnotify-devel \
-     gstreamer-devel gstreamer-plugins-base-devel
+     libgudev1-devel webkitgtk3-devel libnotify-devel \
+     gstreamer1-devel gstreamer1-plugins-base-devel
 
 3 QuickStart
 ************
@@ -200,7 +199,7 @@ To install these packages:
 This chapter is for building from a terminal/shell environment in as
 few commands as possible. Upon completion of the following commands you
 should have a fresh build of HandBrake. Further instructions are
-available beginning with *Note overview:: which describes procedures
+available beginning with *note overview:: which describes procedures
 suitable for repeating builds. This chapter should be skipped by those
 seeking more than a minimalist build.
 
@@ -590,7 +589,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    5208
-     date:   2013-01-26 18:47:13 +0000
+     rev:    5976
+     date:   2014-01-15 14:45:39 -0800
      type:   developer
 
