@@ -3802,7 +3802,7 @@ weather-clear</property>
                                             <signal name="changed" handler="srt_changed_cb" swapped="no"/>
                                             <child internal-child="entry">
                                               <object class="GtkEntry" id="combobox-entry1">
-                                                <property name="can_focus">False</property>
+                                                <property name="can_focus">True</property>
                                               </object>
                                             </child>
                                           </object>
@@ -8816,7 +8816,7 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                 </child>
                                 <child>
                                   <object class="GtkEntry" id="PictureDenoiseCustom">
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom denoise filter string format
     SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                     <property name="width_chars">8</property>
@@ -8908,7 +8908,7 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                 </child>
                                 <child>
                                   <object class="GtkEntry" id="PictureDetelecineCustom">
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom detelecine filter string format
     JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
                                     <property name="width_chars">8</property>
@@ -9000,7 +9000,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                 </child>
                                 <child>
                                   <object class="GtkEntry" id="PictureDecombCustom">
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom decomb filter string format
     Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity</property>
                                     <property name="width_chars">8</property>
@@ -9047,7 +9047,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                 </child>
                                 <child>
                                   <object class="GtkEntry" id="PictureDeinterlaceCustom">
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom deinterlace filter string format
     YadifMode:YadifParity:McdintMode:McdeintQp</property>
                                     <property name="width_chars">8</property>
