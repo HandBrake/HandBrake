@@ -7,7 +7,7 @@
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties"
+        xmlns:AttachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
         xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
         xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
@@ -92,59 +92,87 @@
                     </StackPanel>
                 </Button>
 
-                <Menu HorizontalAlignment="Right" DockPanel.Dock="Right" Background="Transparent">
-                    <MenuItem>
-                        <MenuItem.Header>
-                            <StackPanel Height="32" Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center"
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                    <Menu HorizontalAlignment="Right" Background="Transparent">
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <StackPanel Height="32" Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center"
                                            FontWeight="Bold"
                                            Text="When Done: " />
-                                <Label Margin="8,0,0,0"
+                                    <Label Margin="8,0,0,0"
                                        VerticalAlignment="Center"
                                        Content="{Binding WhenDoneAction}" />
-                                <Path Height="5"
+                                    <Path Height="5"
                                       Margin="2,2,2,0"
                                       Data="M 0 0 L 4 4 L 8 0 Z"
                                       Fill="{DynamicResource GlyphBrush}" />
-                            </StackPanel>
-                        </MenuItem.Header>
-                        <MenuItem x:Name="doNothing"
+                                </StackPanel>
+                            </MenuItem.Header>
+
+                            <MenuItem x:Name="doNothing"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
                                   Header="Do nothing"
                                   IsCheckable="True"
-                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
-                        <MenuItem x:Name="shutdown"
+                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                            <MenuItem x:Name="shutdown"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]"
                                   Header="Shutdown"
                                   IsCheckable="True"
-                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
-                        <MenuItem x:Name="suspend"
+                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                            <MenuItem x:Name="suspend"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
                                   Header="Suspend"
                                   IsCheckable="True"
-                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
-                        <MenuItem x:Name="hibernate"
+                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                            <MenuItem x:Name="hibernate"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
                                   Header="Hibernate"
                                   IsCheckable="True"
-                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
-                        <MenuItem x:Name="lock"
+                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                            <MenuItem x:Name="lock"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
                                   Header="Lock System"
                                   IsCheckable="True"
-                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
-                        <MenuItem x:Name="logoff"
+                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                            <MenuItem x:Name="logoff"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
                                   Header="Log off"
                                   IsCheckable="True"
-                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
-                        <MenuItem x:Name="quit"
+                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                            <MenuItem x:Name="quit"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
                                   Header="Quit HandBrake"
                                   IsCheckable="True"
-                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
-                    </MenuItem>
-                </Menu>
+                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                        </MenuItem>
+                    </Menu>
+
+                    <Menu HorizontalAlignment="Right" Background="Transparent">
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <StackPanel Height="32" Orientation="Horizontal">
+                                    <Image Source="Images\Advanced.png" Width="28" Height="28" VerticalAlignment="Center" />
+                                    <TextBlock VerticalAlignment="Center"
+                                           Text="Options " Margin="5,0,0,0" />
+                                    <Path Height="5"
+                                      Margin="2,2,2,0"
+                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                      Fill="{DynamicResource GlyphBrush}" />
+                                </StackPanel>
+                            </MenuItem.Header>
+
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="Clear Completed" />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="Clear Queue" />
+                            <Separator />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="Import Queue" />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="Export Queue" />
+
+                        </MenuItem>
+                    </Menu>
+
+                </StackPanel>
+
 
             </DockPanel>
         </ToolBar>
@@ -161,7 +189,7 @@
                  dd:DragDrop.IsDropTarget="True"
                  ItemsSource="{Binding QueueTasks, Mode=OneWay}"
                  SelectionMode="Extended">
-            
+
             <ListBox.Style>
                 <Style TargetType="ListBox">
                     <Style.Triggers>
@@ -239,7 +267,7 @@
                             <Setter Property="Background" Value="WhiteSmoke" />
                         </DataTrigger>
                     </Style.Triggers>
-                    
+
                 </Style>
             </ListBox.ItemContainerStyle>
 

@@ -200,7 +200,7 @@
                                />
                     </StackPanel>
                 </Button>
-                               
+
                 <Separator />
 
                 <Button Name="Start"
@@ -279,11 +279,6 @@
                                                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                                               />
                                                         </Border>
-                                                        <ControlTemplate.Triggers>
-                                                            <Trigger Property="IsPressed" Value="True">
-                                                                <Setter TargetName="border" Property="Background" Value="#FF98B5E2" />
-                                                            </Trigger>
-                                                        </ControlTemplate.Triggers>
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
@@ -380,7 +375,7 @@
                                   SelectedItem="{Binding Path=SelectedTitle}"
                                   />
                         <Label Margin="8,0,0,0" Content="Angle" />
-                        
+
                         <ComboBox Name="Angles"
                                   MinWidth="60"
                                   Margin="8,0,0,0"
@@ -639,12 +634,12 @@
                 </Grid>
             </GroupBox>
         </Grid>
-        
-        <!-- Source Selection-->       
+
+        <!-- Source Selection-->
         <Controls:SourceSelection Grid.Row="1" MinWidth="300" HorizontalAlignment="Left" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="DarkGray"
                                   Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}}" 
                                   />
-        
+
         <!--  StatusPanel  -->
         <Controls:StatusPanel x:Name="loadingPanel"
                               Grid.Row="1"
