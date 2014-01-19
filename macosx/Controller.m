@@ -6055,7 +6055,7 @@ the user is using "Custom" settings by determining the sender*/
     [panel setCanChooseDirectories: NO ];
 
     NSURL *sourceDirectory;
-	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSrtImportDirectoryURL"])
+	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastSrtImportDirectoryURL"])
 	{
 		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastSrtImportDirectoryURL"];
 	}
@@ -6080,7 +6080,7 @@ the user is using "Custom" settings by determining the sender*/
     {
         NSURL *importSrtFileURL = [sheet URL];
         NSURL *importSrtDirectory = [importSrtFileURL URLByDeletingLastPathComponent];
-        [[NSUserDefaults standardUserDefaults] setObject:importSrtDirectory forKey:@"LastSrtImportDirectoryURL"];
+        [[NSUserDefaults standardUserDefaults] setURL:importSrtDirectory forKey:@"LastSrtImportDirectoryURL"];
 
         /* now pass the string off to fSubtitlesDelegate to add the srt file to the dropdown */
         [fSubtitlesDelegate createSubtitleSrtTrack:importSrtFileURL];
