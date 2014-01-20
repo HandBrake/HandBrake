@@ -927,7 +927,8 @@ libx264 authors:
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="tooltip_text" translatable="yes">Open Picture Settings and Preview window.  Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
+                <property name="tooltip_text" translatable="yes">Open Picture Settings and Preview window.
+Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes">Picture Settings</property>
                 <property name="icon_name">hb-picture</property>
@@ -1101,7 +1102,9 @@ libx264 authors:
                                           <object class="GtkComboBox" id="title">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="tooltip_text" translatable="yes">Set the title to encode. By default the longest title is chosen.  This is often the feature title of a DVD.</property>
+                                            <property name="tooltip_text" translatable="yes">Set the title to encode.
+By default the longest title is chosen.
+This is often the feature title of a DVD.</property>
                                             <property name="has_frame">False</property>
                                             <signal name="changed" handler="title_changed_cb" swapped="no"/>
                                           </object>
@@ -1466,7 +1469,8 @@ libx264 authors:
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">Optimize the layout of the MP4 file for progressive download.  This allows a player to initiate playback before downloading the entire file.</property>
+                                        <property name="tooltip_text" translatable="yes">Optimize the layout of the MP4 file for progressive download.
+This allows a player to initiate playback before downloading the entire file.</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="http_opt_changed_cb" swapped="no"/>
@@ -1487,7 +1491,7 @@ libx264 authors:
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_markup">Allow 64 bit MP4 file which can be over 4GB.
 
-    &lt;b&gt;Caution:&lt;/b&gt; This option may break device compatibility.</property>
+&lt;b&gt;Caution:&lt;/b&gt; This option may break device compatibility.</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -2182,7 +2186,9 @@ libx264 authors:
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Output framerate.  'Same as source' is recommended. If your source video has a variable framerate, 'Same as source' will preserve it.</property>
+                                            <property name="tooltip_text" translatable="yes">Output framerate.
+
+'Same as source' is recommended. If your source video has a variable framerate, 'Same as source' will preserve it.</property>
                                             <signal name="changed" handler="framerate_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
@@ -2218,7 +2224,9 @@ libx264 authors:
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Enables variable framerate output with a peak rate determined by the framerate setting. VFR is not compatible with some players.</property>
+                                            <property name="tooltip_text" translatable="yes">Enables variable framerate output with a peak rate determined by the framerate setting.
+
+VFR is not compatible with some players.</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">VideoFramerateCFR</property>
@@ -2238,7 +2246,9 @@ libx264 authors:
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Enables variable framerate output. VFR is not compatible with some players.</property>
+                                            <property name="tooltip_text" translatable="yes">Enables variable framerate output.
+
+VFR is not compatible with some players.</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">VideoFramerateCFR</property>
@@ -2309,11 +2319,17 @@ libx264 authors:
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Set the desired quality factor. The encoder targets a certain quality.  The scale used by each video encoder is different.  
+                                            <property name="tooltip_text" translatable="yes">Set the desired quality factor. The encoder targets a certain quality.
+The scale used by each video encoder is different.
 
-            x264's scale is logarithmic and lower values coorespond to higher quality.  So small decreases in value will result in progressively larger increases in the resulting file size.  A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless.
+x264's scale is logarithmic and lower values coorespond to higher quality.
+So small decreases in value will result in progressively larger increases
+in the resulting file size.  A value of 0 means lossless and will result
+in a file size that is larger than the original source, unless the source
+was also lossless.
 
-            FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
+FFMpeg's and Theora's scale is more linear.
+These encoders do not have a lossless mode.</property>
                                             <property name="adjustment">adjustment5</property>
                                             <property name="digits">3</property>
                                             <property name="hexpand">True</property>
@@ -2334,11 +2350,18 @@ libx264 authors:
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Set the desired quality factor. The encoder targets a certain quality.  The scale used by each video encoder is different.  
+                                            <property name="tooltip_text" translatable="yes">Set the desired quality factor.
+The encoder targets a certain quality.  The scale used by each video
+encoder is different.
 
-            x264's scale is logarithmic and lower values coorespond to higher quality.  So small decreases in value will result in progressively larger increases in the resulting file size.  A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless.
+x264's scale is logarithmic and lower values coorespond to higher quality.
+So small decreases in value will result in progressively larger increases
+in the resulting file size.  A value of 0 means lossless and will result
+in a file size that is larger than the original source, unless the source
+was also lossless.
 
-            FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
+FFMpeg's and Theora's scale is more linear.
+These encoders do not have a lossless mode.</property>
                                             <property name="xalign">0</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
@@ -2358,7 +2381,11 @@ libx264 authors:
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time.  But the average over a long duration will be the value set here.  If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</property>
+                                            <property name="tooltip_text" translatable="yes">Set the average bitrate.
+
+The instantaneous bitrate can be much higher or lower at any point in time.
+But the average over a long duration will be the value set here.  If you need
+to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">vquality_type_constant</property>
@@ -2376,7 +2403,11 @@ libx264 authors:
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time.  But the average over a long duration will be the value set here.  If you need to limit instantaneous bitrate, look into x264 vbv-bufsize and vbv-maxrate.</property>
+                                            <property name="tooltip_text" translatable="yes">Set the average bitrate.
+
+The instantaneous bitrate can be much higher or lower at any point in time.
+But the average over a long duration will be the value set here.  If you need
+to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</property>
                                             <property name="primary_icon_activatable">False</property>
                                             <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment3</property>
@@ -2396,7 +2427,11 @@ libx264 authors:
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Perform 2 Pass Encoding.  The 'Bitrate' option is prerequisite. During the 1st pass, statistics about the video are collected.  Then in the second pass, those statistics are used to make bitrate allocation decisions.</property>
+                                            <property name="tooltip_text" translatable="yes">Perform 2 Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
+the video are collected.  Then in the second pass, those statistics are used
+to make bitrate allocation decisions.</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -2476,7 +2511,7 @@ libx264 authors:
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">Use advanced options Tab for x264 settings.
 
-        Use at your own risk!</property>
+Use at your own risk!</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="x264_use_advanced_options_changed_cb" swapped="no"/>
@@ -2523,9 +2558,10 @@ libx264 authors:
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Adjusts x264 settings to trade off compression efficiency against encoding speed.
 
-            This establishes your default x264 settings.  Tunes, profiles, levels and advanced option string will be applied to this.
-
-            You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</property>
+This establishes your default x264 settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.</property>
                                             <property name="adjustment">x264PresetRange</property>
                                             <property name="digits">0</property>
                                             <property name="value_pos">right</property>
@@ -2562,9 +2598,9 @@ libx264 authors:
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Tune settings to optimize for common scenarios.
 
-            This can improve effeciency for particular source characteristics or set characteristics of the output file.
-
-            Changes will be applied after the preset but before all other parameters.</property>
+This can improve effeciency for particular source characteristics or set
+characteristics of the output file.  Changes will be applied after the
+preset but before all other parameters.</property>
                                             <signal name="changed" handler="x264_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
@@ -2583,7 +2619,7 @@ libx264 authors:
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Reduce decoder CPU usage.
 
-            Set this if your device is struggling to play the output (dropped frames).</property>
+Set this if your device is struggling to play the output (dropped frames).</property>
                                             <property name="xalign">0</property>
                                             <property name="margin_left">20</property>
                                             <property name="draw_indicator">True</property>
@@ -2604,8 +2640,10 @@ libx264 authors:
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Minimize latency between input to encoder and output of decoder.
 
-            This is useful for broadcast of live streams.
-            Since HandBrake is not suitable for live stream broadcast purposes, this setting is of little value here.</property>
+This is useful for broadcast of live streams.
+
+Since HandBrake is not suitable for live stream broadcast purposes,
+this setting is of little value here.</property>
                                             <property name="xalign">0</property>
                                             <property name="margin_left">20</property>
                                             <property name="draw_indicator">True</property>
@@ -2640,7 +2678,7 @@ libx264 authors:
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Limit the H.264 profile of the output stream.
 
-            Overrides all other settings.</property>
+Overrides all other settings.</property>
                                             <signal name="changed" handler="x264_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
@@ -2672,7 +2710,7 @@ libx264 authors:
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Sets and ensures compliance with the specified H.264 level.
 
-            Overrides all other settings.</property>
+Overrides all other settings.</property>
                                             <signal name="changed" handler="x264_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
@@ -2717,7 +2755,7 @@ libx264 authors:
                                                     <property name="can_focus">True</property>
                                                     <property name="tooltip_text" translatable="yes">Additional x264 settings.
 
-            Colon separated list of x264 options.</property>
+Colon separated list of x264 options.</property>
                                                     <property name="wrap_mode">char</property>
                                                     <property name="accepts_tab">False</property>
                                                   </object>
@@ -2942,7 +2980,8 @@ libx264 authors:
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selection is enabled.</property>
+                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports MP3.
+This permits MP3 passthru to be selected when automatic passthru selection is enabled.</property>
                                                         <property name="xalign">0</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -2961,7 +3000,8 @@ libx264 authors:
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selection is enabled.</property>
+                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports AAC.
+This permits AAC passthru to be selected when automatic passthru selection is enabled.</property>
                                                         <property name="xalign">0</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -2980,7 +3020,8 @@ libx264 authors:
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports AC-3. This permits AC-3 passthru to be selected when automatic passthru selection is enabled.</property>
+                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports AC-3.
+This permits AC-3 passthru to be selected when automatic passthru selection is enabled.</property>
                                                         <property name="xalign">0</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -2999,7 +3040,8 @@ libx264 authors:
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selection is enabled.</property>
+                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports DTS.
+This permits DTS passthru to be selected when automatic passthru selection is enabled.</property>
                                                         <property name="xalign">0</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -3018,7 +3060,8 @@ libx264 authors:
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selection is enabled.</property>
+                                                        <property name="tooltip_text" translatable="yes">Enable this if your playback device supports DTS-HD.
+This permits DTS-HD passthru to be selected when automatic passthru selection is enabled.</property>
                                                         <property name="xalign">0</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -3147,7 +3190,8 @@ libx264 authors:
                                                     <property name="can_focus">False</property>
                                                     <property name="tooltip_markup">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track. 
 
-                                For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder.</property>
+For source audio that has a wide dynamic range (very loud and very soft sequences),
+DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder.</property>
                                                     <property name="label" translatable="yes">DRC:</property>
                                                     <property name="use_markup">True</property>
                                                     <property name="halign">center</property>
@@ -3183,7 +3227,9 @@ libx264 authors:
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="tooltip_text" translatable="yes">Set the audio track name. Players may use this in the audio selection list.</property>
+                                                    <property name="tooltip_text" translatable="yes">Set the audio track name.
+
+Players may use this in the audio selection list.</property>
                                                     <property name="max_length">40</property>
                                                     <property name="activates_default">True</property>
                                                     <property name="width_chars">20</property>
@@ -3278,7 +3324,8 @@ audio-volume-medium</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                         <property name="tooltip_markup">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track. 
 
-                                    For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder.</property>
+For source audio that has a wide dynamic range (very loud and very soft sequences),
+DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder.</property>
                                                         <property name="orientation">vertical</property>
                                                         <property name="adjustment">adjustment28</property>
                                                         <property name="icons">audio-input-microphone</property>
@@ -3781,7 +3828,8 @@ weather-clear</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Set the language of this subtitle. This value will be used by players in subtitle menus.</property>
+                                            <property name="tooltip_text" translatable="yes">Set the language of this subtitle.
+This value will be used by players in subtitle menus.</property>
                                             <signal name="changed" handler="srt_lang_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
@@ -3797,7 +3845,11 @@ weather-clear</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Set the character code used by the SRT file you are importing. SRTs come in all flavours of character sets.  We translate the character set to UTF-8. The source's character code is needed in order to perform this translation.</property>
+                                            <property name="tooltip_text" translatable="yes">Set the character code used by the SRT file you are importing.
+
+SRTs come in all flavours of character sets.
+We translate the character set to UTF-8.
+The source's character code is needed in order to perform this translation.</property>
                                             <property name="has_entry">True</property>
                                             <signal name="changed" handler="srt_changed_cb" swapped="no"/>
                                             <child internal-child="entry">
@@ -3977,7 +4029,12 @@ weather-clear</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_text" translatable="yes">Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.  Cel animation tends to benefit from more reference frames a lot more than film content.  Note that many hardware devices have limitations on the number of supported reference frames, so if you're encoding for a handheld or standalone player, don't touch this unless you're absolutely sure you know what you're doing!</property>
+                                                            <property name="tooltip_text" translatable="yes">Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.
+Cel animation tends to benefit from more reference frames a lot more than film content.
+
+Note that many hardware devices have limitations on the number of supported reference
+frames, so if you're encoding for a handheld or standalone player, don't touch this unless
+you're absolutely sure you know what you're doing!</property>
                                                             <property name="primary_icon_activatable">False</property>
                                                             <property name="secondary_icon_activatable">False</property>
                                                             <property name="adjustment">adjustment8</property>
@@ -4019,7 +4076,13 @@ weather-clear</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_text" translatable="yes">Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.  Large numbers generally won't help significantly unless Adaptive B-frames is set to Optimal.  Cel-animated source material and B-pyramid also significantly increase the usefulness of larger values. Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off).</property>
+                                                            <property name="tooltip_text" translatable="yes">Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.
+
+Large numbers generally won't help significantly unless Adaptive B-frames is set to Optimal.
+Cel-animated source material and B-pyramid also significantly increase the usefulness of larger
+values.
+
+Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off).</property>
                                                             <property name="primary_icon_activatable">False</property>
                                                             <property name="secondary_icon_activatable">False</property>
                                                             <property name="adjustment">adjustment9</property>
@@ -4055,7 +4118,10 @@ weather-clear</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">B-pyramid improves compression by creating a pyramidal structure (hence the name) of B-frames, allowing B-frames to reference each other to improve compression.  Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit.</property>
+                                                        <property name="tooltip_text" translatable="yes">B-pyramid improves compression by creating a pyramidal structure (hence the name)
+of B-frames, allowing B-frames to reference each other to improve compression.
+
+Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit.</property>
                                                         <signal name="changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4086,7 +4152,14 @@ weather-clear</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Performs extra analysis to decide upon weighting parameters for each frame.  This improves overall compression slightly and improves the quality of fades greatly. Baseline profile, as required for iPods and similar devices, requires weighted P-frame prediction to be disabled.  Note that some devices and players, even those that support Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is completely incompatible with it, for example.</property>
+                                                        <property name="tooltip_text" translatable="yes">Performs extra analysis to decide upon weighting parameters for each frame.
+
+This improves overall compression slightly and improves the quality of fades greatly.
+
+Baseline profile, as required for iPods and similar devices, requires weighted P-frame
+prediction to be disabled.  Note that some devices and players, even those that support
+Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is
+completely incompatible with it, for example.</property>
                                                         <signal name="changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4103,7 +4176,11 @@ weather-clear</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.  It improves compression by at least 5% at a very small speed cost and may provide an unusually high visual quality benefit compared to its compression gain.  However, it requires High Profile, which many devices may not support.</property>
+                                                        <property name="tooltip_text" translatable="yes">The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.
+
+It improves compression by at least 5% at a very small speed cost and may
+provide an unusually high visual quality benefit compared to its compression
+gain.  However, it requires High Profile, which many devices may not support.</property>
                                                         <property name="xalign">0</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -4123,7 +4200,13 @@ weather-clear</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">After the encoder has done its work, it has a bunch of data that needs to be compressed losslessly, similar to ZIP or RAR.  H.264 provides two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but compresses significantly better (10-30%), especially at lower bitrates.  If you're looking to minimize CPU requirements for video playback, disable this option. Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled.</property>
+                                                        <property name="tooltip_text" translatable="yes">After the encoder has done its work, it has a bunch of data that
+needs to be compressed losslessly, similar to ZIP or RAR.  H.264 provides
+two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but
+compresses significantly better (10-30%), especially at lower bitrates.
+
+If you're looking to minimize CPU requirements for video playback, disable this option.
+Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled.</property>
                                                         <property name="xalign">0</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -4211,17 +4294,16 @@ weather-clear</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Controls the motion estimation method. Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.  A better motion search method improves compression at the cost of speed.
+                                                        <property name="tooltip_text" translatable="yes">Controls the motion estimation method.
 
-    Diamond: performs an extremely fast and simple search using a diamond pattern.
+Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.
+A better motion search method improves compression at the cost of speed.
 
-    Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
-
-    Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
-
-    Exhaustive: performs a "dumb" search of every pixel in a wide area.  Significantly slower for only a small compression gain.
-
-    Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement.</property>
+Diamond: performs an extremely fast and simple search using a diamond pattern.
+Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
+Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
+Exhaustive: performs a "dumb" search of every pixel in a wide area.  Significantly slower for only a small compression gain.
+Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement.</property>
                                                         <signal name="changed" handler="x264_me_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4254,17 +4336,12 @@ weather-clear</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                         <property name="tooltip_markup">This setting controls both subpixel-precision motion estimation and mode decision methods.
 
-    Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.
-
-    Mode decision is the method used to choose how to encode each block of the frame: a very important decision.
-
-    SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.
-
-    6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.
-
-    11 disables all early terminations in analysis.
-
-    10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode &gt; 0) and trellis 2 (always).</property>
+Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.
+Mode decision is the method used to choose how to encode each block of the frame: a very important decision.
+SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.
+6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.
+11 disables all early terminations in analysis.
+10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode &gt; 0) and trellis 2 (always).</property>
                                                         <signal name="changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4295,7 +4372,12 @@ weather-clear</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  The default is fine for most content, but extremely high motion video, especially at HD resolutions, may benefit from higher ranges, albeit at a high speed cost.</property>
+                                                        <property name="tooltip_text" translatable="yes">This is the distance x264 searches from its initial guess at the
+motion of a block in order to try to find its actual motion.
+
+The default is fine for most content, but extremely high motion video,
+especially at HD resolutions, may benefit from higher ranges, albeit at
+a high speed cost.</property>
                                                         <property name="primary_icon_activatable">False</property>
                                                         <property name="secondary_icon_activatable">False</property>
                                                         <property name="adjustment">adjustment10</property>
@@ -4331,9 +4413,9 @@ weather-clear</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                         <property name="tooltip_text" translatable="yes">H.264 allows for two different prediction modes, spatial and temporal, in B-frames.
 
-    Spatial, the default, is almost always better, but temporal is sometimes useful too.
-
-    x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain), adaptively select which is better for each particular frame.</property>
+Spatial, the default, is almost always better, but temporal is sometimes useful too.
+x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),
+adaptively select which is better for each particular frame.</property>
                                                         <signal name="changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4366,9 +4448,11 @@ weather-clear</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                         <property name="tooltip_markup">x264 has a variety of algorithms to decide when to use B-frames and how many to use.
 
-    Fast mode takes roughly the same amount of time no matter how many B-frames you specify.  However, while fast, its decisions are often suboptimal.
+Fast mode takes roughly the same amount of time no matter how many B-frames you specify.
+However, while fast, its decisions are often suboptimal.
 
-    Optimal mode gets slower as the maximum number of B-Frames increases, but makes much more accurate decisions, especially when used with B-pyramid.</property>
+Optimal mode gets slower as the maximum number of B-Frames increases,
+but makes much more accurate decisions, especially when used with B-pyramid.</property>
                                                         <signal name="changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4426,7 +4510,11 @@ weather-clear</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Mode decision picks from a variety of options to make its decision: this option chooses what options those are.  Fewer partitions to check means faster encoding, at the cost of worse decisions, since the best option might have been one that was turned off.</property>
+                                                        <property name="tooltip_text" translatable="yes">Mode decision picks from a variety of options to make its decision:
+this option chooses what options those are.
+
+Fewer partitions to check means faster encoding, at the cost of worse
+decisions, since the best option might have been one that was turned off.</property>
                                                         <signal name="changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4457,7 +4545,13 @@ weather-clear</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="tooltip_text" translatable="yes">Trellis fine-tunes the rounding of transform coefficients to squeeze out 3-5% more compression at the cost of some speed. "Always" uses trellis not only during the main encoding process, but also during analysis, which improves compression even more, albeit at great speed cost.  Trellis costs more speed at higher bitrates and requires CABAC.</property>
+                                                        <property name="tooltip_text" translatable="yes">Trellis fine-tunes the rounding of transform coefficients to
+squeeze out 3-5% more compression at the cost of some speed.
+
+"Always" uses trellis not only during the main encoding process, but also
+during analysis, which improves compression even more, albeit at great speed cost.
+
+Trellis costs more speed at higher bitrates and requires CABAC.</property>
                                                         <signal name="changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -4542,7 +4636,9 @@ weather-clear</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="hexpand">True</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_text" translatable="yes">Adaptive quantization controls how the encoder distributes bits across the frame.  Higher values take more bits away from edges and complex areas to improve areas with finer detail.</property>
+                                                            <property name="tooltip_text" translatable="yes">Adaptive quantization controls how the encoder distributes bits across the frame.
+
+Higher values take more bits away from edges and complex areas to improve areas with finer detail.</property>
                                                             <property name="adjustment">adjustment34</property>
                                                             <property name="restrict_to_fill_level">False</property>
                                                             <property name="value_pos">right</property>
@@ -4578,7 +4674,10 @@ weather-clear</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="hexpand">True</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_text" translatable="yes">Psychovisual rate-distortion optimization takes advantage of the characteristics of human vision to dramatically improve apparent detail and sharpness.  The effect can be made weaker or stronger by adjusting the strength.  Being an RD algorithm, it requires mode decision to be at least "6".</property>
+                                                            <property name="tooltip_text" translatable="yes">Psychovisual rate-distortion optimization takes advantage of the characteristics of human
+vision to dramatically improve apparent detail and sharpness.
+The effect can be made weaker or stronger by adjusting the strength.
+Being an RD algorithm, it requires mode decision to be at least "6".</property>
                                                             <property name="adjustment">adjustment22</property>
                                                             <property name="restrict_to_fill_level">False</property>
                                                             <property name="value_pos">right</property>
@@ -4614,7 +4713,12 @@ weather-clear</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="hexpand">True</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_text" translatable="yes">Psychovisual trellis is an experimental algorithm to further improve sharpness and detail retention beyond what Psychovisual RD does.  Recommended values are around 0.2, though higher values may help for very grainy video or lower bitrate encodes.  Not recommended for cel animation and other sharp-edged graphics.</property>
+                                                            <property name="tooltip_text" translatable="yes">Psychovisual trellis is an experimental algorithm to further
+improve sharpness and detail retention beyond what Psychovisual RD does.
+
+Recommended values are around 0.2, though higher values may help for very
+grainy video or lower bitrate encodes.  Not recommended for cel animation
+and other sharp-edged graphics.</property>
                                                             <property name="adjustment">adjustment23</property>
                                                             <property name="restrict_to_fill_level">False</property>
                                                             <property name="digits">2</property>
@@ -4661,9 +4765,17 @@ weather-clear</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_markup">H.264 has a built-in deblocking filter that smooths out blocking artifacts after decoding each frame.  This not only improves visual quality, but also helps compression significantly. The deblocking filter takes a lot of CPU power, so if you're looking to minimize CPU requirements for video playback, disable it.
+                                                            <property name="tooltip_markup">H.264 deblocking filter.
 
-        The deblocking filter has two adjustable parameters, "strength" (Alpha) and "threshold" (Beta). The former controls how strong (or weak) the deblocker is, while the latter controls how many (or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking. The default is 0 (normal strength) for both parameters.</property>
+h.264 has a built-in deblocking filter that smooths out blocking artifacts
+after decoding each frame.  This not only improves visual quality, but also
+helps compression significantly. The deblocking filter takes a lot of CPU power,
+so if you're looking to minimize CPU requirements for video playback, disable it.
+
+The deblocking filter has two adjustable parameters, "strength" (Alpha) and "threshold" (Beta).
+The former controls how strong (or weak) the deblocker is, while the latter controls how many
+(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.
+The default is 0 (normal strength) for both parameters.</property>
                                                             <property name="primary_icon_activatable">False</property>
                                                             <property name="secondary_icon_activatable">False</property>
                                                             <property name="adjustment">adjustment11</property>
@@ -4680,9 +4792,17 @@ weather-clear</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_markup">H.264 has a built-in deblocking filter that smooths out blocking artifacts after decoding each frame.  This not only improves visual quality, but also helps compression significantly. The deblocking filter takes a lot of CPU power, so if you're looking to minimize CPU requirements for video playback, disable it.
+                                                            <property name="tooltip_markup">H.264 deblocking filter.
 
-        The deblocking filter has two adjustable parameters, "strength" (Alpha) and "threshold" (Beta). The former controls how strong (or weak) the deblocker is, while the latter controls how many (or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking. The default is 0 (normal strength) for both parameters.</property>
+h.264 has a built-in deblocking filter that smooths out blocking artifacts
+after decoding each frame.  This not only improves visual quality, but also
+helps compression significantly. The deblocking filter takes a lot of CPU power,
+so if you're looking to minimize CPU requirements for video playback, disable it.
+
+The deblocking filter has two adjustable parameters, "strength" (Alpha) and "threshold" (Beta).
+The former controls how strong (or weak) the deblocker is, while the latter controls how many
+(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.
+The default is 0 (normal strength) for both parameters.</property>
                                                             <property name="primary_icon_activatable">False</property>
                                                             <property name="secondary_icon_activatable">False</property>
                                                             <property name="adjustment">adjustment12</property>
@@ -4701,7 +4821,13 @@ weather-clear</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="receives_default">False</property>
                                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                            <property name="tooltip_text" translatable="yes">x264 normally zeroes out nearly-empty data blocks to save bits to be better used for some other purpose in the video.  However, this can sometimes have slight negative effects on retention of subtle grain and dither.  Don't touch this unless you're having banding issues or other such cases where you are having trouble keeping fine noise.</property>
+                                                            <property name="tooltip_text" translatable="yes">x264 normally zeroes out nearly-empty data blocks to save bits to
+be better used for some other purpose in the video.  However, this can
+sometimes have slight negative effects on retention of subtle grain and
+dither.
+
+Don't touch this unless you're having banding issues or other such cases
+where you are having trouble keeping fine noise.</property>
                                                             <property name="xalign">0</property>
                                                             <property name="active">True</property>
                                                             <property name="draw_indicator">True</property>
@@ -4774,15 +4900,15 @@ weather-clear</property>
                                           <object class="GtkTextView" id="x264Option">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Your selected options will appear here. 
-    You can edit these and add additional options.  
+                                            <property name="tooltip_text" translatable="yes">Your selected options will appear here.
+You can edit these and add additional options.  
 
-    Default values will not be shown. The defaults are:
-    ref=3:bframes=3:b-adapt=fast:direct=spatial:
-    b-pyramid=normal:weightp=2:me=hex:merange=16:
-    subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:
-    deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:
-    no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
+Default values will not be shown. The defaults are:
+ref=3:bframes=3:b-adapt=fast:direct=spatial:
+b-pyramid=normal:weightp=2:me=hex:merange=16:
+subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:
+deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:
+no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                             <property name="wrap_mode">char</property>
                                             <property name="accepts_tab">False</property>
                                             <signal name="focus-out-event" handler="x264_focus_out_cb" swapped="no"/>
@@ -4860,8 +4986,8 @@ weather-clear</property>
                                               <object class="GtkTextView" id="lavcOption">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
-                                                <property name="tooltip_text" translatable="yes">Your selected options will appear here. 
-            You can edit these and add additional options.</property>
+                                                <property name="tooltip_text" translatable="yes">Your selected options will appear here.
+You can edit these and add additional options.</property>
                                                 <property name="wrap_mode">char</property>
                                                 <property name="accepts_tab">False</property>
                                                 <signal name="focus-out-event" handler="lavc_focus_out_cb" swapped="no"/>
@@ -6467,8 +6593,8 @@ weather-clear</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Enabling this adds extra widgets to the audio panel that allow
-    you to specify which particular codecs shall be passed
-    and which codec to use when passthru is not possible</property>
+you to specify which particular codecs shall be passed
+and which codec to use when passthru is not possible</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="advanced_audio_changed_cb" swapped="no"/>
@@ -7097,7 +7223,10 @@ on the Video tab instead.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">This is the maximum width that the video will be stored at.  Whenever a new source is loaded, this value will be applied if the source width is greater. Setting this to 0 means there is no maximum width.</property>
+                    <property name="tooltip_text" translatable="yes">This is the maximum width that the video will be stored at.
+
+Whenever a new source is loaded, this value will be applied if the source width is greater.
+Setting this to 0 means there is no maximum width.</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment32</property>
@@ -7135,7 +7264,10 @@ on the Video tab instead.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">This is the maximum height that the video will be stored at.  Whenever a new source is loaded, this value will be applied if the source height is greater. Setting this to 0 means there is no maximum height.</property>
+                    <property name="tooltip_text" translatable="yes">This is the maximum height that the video will be stored at.
+
+Whenever a new source is loaded, this value will be applied if the source height is greater.
+Setting this to 0 means there is no maximum height.</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment33</property>
@@ -8240,7 +8372,8 @@ the required multiple.</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">This is the width that the video will be stored at.  The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
+                                        <property name="tooltip_text" translatable="yes">This is the width that the video will be stored at.
+The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
                                         <property name="primary_icon_activatable">False</property>
                                         <property name="secondary_icon_activatable">False</property>
                                         <property name="adjustment">adjustment17</property>
@@ -8271,7 +8404,8 @@ the required multiple.</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">This is the height that the video will be stored at.  The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
+                                        <property name="tooltip_text" translatable="yes">This is the height that the video will be stored at.
+The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
                                         <property name="primary_icon_activatable">False</property>
                                         <property name="secondary_icon_activatable">False</property>
                                         <property name="adjustment">adjustment18</property>
@@ -8302,7 +8436,8 @@ the required multiple.</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">If enabled, select the 'optimal' storage resolution.  This will be the resolution that most closely matches the source resolution after cropping.</property>
+                                        <property name="tooltip_text" translatable="yes">If enabled, select the 'optimal' storage resolution.
+This will be the resolution that most closely matches the source resolution after cropping.</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
@@ -8395,7 +8530,8 @@ Strict - Keep original source dimensions and pixel
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">Align storage dimensions to multiples of this value.
 
-Encoders are most effecient when the video dimensions are aligned to some specific value (usually 16). Setting this to some other value will result in slightly larger file size.</property>
+This setting is only necessary for compatibility with some devices.
+You should use 2 unless you experience compatibility issues.</property>
                                         <signal name="changed" handler="scale_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
@@ -8554,7 +8690,10 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels. A 1:1 ratio defines a square pixel.  Other values define rectangular shapes. Players will scale the image in order to achieve the specified aspect.</property>
+                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels.
+
+A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
+Players will scale the image in order to achieve the specified aspect.</property>
                                         <property name="primary_icon_activatable">False</property>
                                         <property name="secondary_icon_activatable">False</property>
                                         <property name="adjustment">adjustment29</property>
@@ -8585,7 +8724,9 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels. A 1:1 ratio defines a square pixel.  Other values define rectangular shapes. Players will scale the image in order to achieve the specified aspect.</property>
+                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels.
+A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
+Players will scale the image in order to achieve the specified aspect.</property>
                                         <property name="primary_icon_activatable">False</property>
                                         <property name="secondary_icon_activatable">False</property>
                                         <property name="adjustment">adjustment30</property>
@@ -8770,7 +8911,8 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                   <object class="GtkScale" id="PictureDeblock">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">The deblocking filter removes a common type of compression artifact. If your source exhibits 'blockiness', this filter may help clean it up.</property>
+                                    <property name="tooltip_text" translatable="yes">The deblocking filter removes a common type of compression artifact.
+If your source exhibits 'blockiness', this filter may help clean it up.</property>
                                     <property name="adjustment">adjustment20</property>
                                     <property name="digits">0</property>
                                     <property name="value_pos">right</property>
@@ -8804,7 +8946,9 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip_text" translatable="yes">The denoise filter is a low pass filter that removes noise. Film grain and other types of high frequency noise are difficult to compress. Using this filter on such sources can result in smaller file sizes.</property>
+                                    <property name="tooltip_text" translatable="yes">The denoise filter is a low pass filter that removes noise.
+Film grain and other types of high frequency noise are difficult to compress.
+Using this filter on such sources can result in smaller file sizes.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
@@ -8818,7 +8962,8 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                   <object class="GtkEntry" id="PictureDenoiseCustom">
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom denoise filter string format
-    SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
+
+SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                     <property name="width_chars">8</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
@@ -8896,7 +9041,9 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip_text" translatable="yes">This filter removes 'combing' artifacts that are the result of telecining. Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</property>
+                                    <property name="tooltip_text" translatable="yes">This filter removes 'combing' artifacts that are the result of telecining.
+
+Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
@@ -8910,7 +9057,8 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                   <object class="GtkEntry" id="PictureDetelecineCustom">
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom detelecine filter string format
-    JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
+
+JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
                                     <property name="width_chars">8</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
@@ -8931,9 +9079,11 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Choose decomb or deinterlace filter options.
 
-The decomb filter selectively deinterlaces frames that appear to be interlaced.  This will preserve quality in frames that are not interlaced.
+The decomb filter selectively deinterlaces frames that appear to be interlaced.
+This will preserve quality in frames that are not interlaced.
 
-The classic deinterlace filter is applied to all frames. Frames that are not interlaced will suffer some quality degradation.</property>
+The classic deinterlace filter is applied to all frames.
+Frames that are not interlaced will suffer some quality degradation.</property>
                                     <property name="xalign">0</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
@@ -8954,9 +9104,11 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Choose decomb or deinterlace filter options.
 
-The decomb filter selectively deinterlaces frames that appear to be interlaced.  This will preserve quality in frames that are not interlaced.
+The decomb filter selectively deinterlaces frames that appear to be interlaced.
+This will preserve quality in frames that are not interlaced.
 
-The classic deinterlace filter is applied to all frames. Frames that are not interlaced will suffer some quality degradation.</property>
+The classic deinterlace filter is applied to all frames.
+Frames that are not interlaced will suffer some quality degradation.</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">PictureDecombDeinterlace</property>
@@ -8988,7 +9140,8 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip_text" translatable="yes">The decomb filter selectively deinterlaces frames that appear to be interlaced.  This will preserve quality in frames that are not interlaced.</property>
+                                    <property name="tooltip_text" translatable="yes">The decomb filter selectively deinterlaces frames that appear to be interlaced.
+This will preserve quality in frames that are not interlaced.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
@@ -9002,7 +9155,10 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                   <object class="GtkEntry" id="PictureDecombCustom">
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom decomb filter string format
-    Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity</property>
+
+Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:
+BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:
+ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity</property>
                                     <property name="width_chars">8</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
@@ -9035,7 +9191,8 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip_text" translatable="yes">The classic deinterlace filter is applied to all frames. Frames that are not interlaced will suffer some quality degradation.</property>
+                                    <property name="tooltip_text" translatable="yes">The classic deinterlace filter is applied to all frames.
+Frames that are not interlaced will suffer some quality degradation.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
@@ -9049,7 +9206,8 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                   <object class="GtkEntry" id="PictureDeinterlaceCustom">
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Custom deinterlace filter string format
-    YadifMode:YadifParity:McdintMode:McdeintQp</property>
+
+YadifMode:YadifParity:McdintMode:McdeintQp</property>
                                     <property name="width_chars">8</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
