@@ -486,4 +486,19 @@ Your custom presets have not been updated so you may have to re-create these by 
   <data name="Updated" xml:space="preserve">
     <value>Updated</value>
   </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Preset Version</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>The preset you are trying to import is from a different version of HandBrake. 
+Some values may be reset to default as a result. 
+
+Do you wish to proceed?</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>Unable to import preset!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>Unable to import the preset as it appears to be corrupted or from an older version of HandBrake.</value>
+  </data>
 </root>

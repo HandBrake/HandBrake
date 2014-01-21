@@ -1539,6 +1539,33 @@ namespace HandBrakeWPF.ViewModels
             if (!string.IsNullOrEmpty(filename))
             {
                 PList plist = new PList(filename);
+
+                object build;
+                plist.TryGetValue("PresetBuildNumber", out build);
+
+                string buildNumber = build as string;
+                if (buildNumber == null)
+                {
+                    MessageBox.Show(
+                        Resources.Preset_UnableToImport_Message,
+                        Resources.Preset_UnableToImport_Header,
+                        MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    return;
+                }
+
+                if (buildNumber != userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString(CultureInfo.InvariantCulture))
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                        Resources.Preset_OldVersion_Message,
+                        Resources.Preset_OldVersion_Header,
+                        MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
+
                 Preset preset = PlistPresetFactory.CreatePreset(plist);
 
                 if (this.presetService.CheckIfPresetExists(preset.Name))

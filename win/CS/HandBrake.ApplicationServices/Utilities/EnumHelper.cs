@@ -14,6 +14,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
 
@@ -91,7 +92,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 }
             }
 
-            throw new ArgumentOutOfRangeException("The Description for the enum was not recognized.");
+            Debug.WriteLine("EnumHelper.GetValue: The Description for the enum was not recognized: " + description);
+
+            return default(T);
         }
 
         /// <summary>

@@ -672,6 +672,45 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preset Version.
+        /// </summary>
+        public static string Preset_OldVersion_Header {
+            get {
+                return ResourceManager.GetString("Preset_OldVersion_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The preset you are trying to import is from a different version of HandBrake. 
+        ///Some values may be reset to default as a result. 
+        ///
+        ///Do you wish to proceed?.
+        /// </summary>
+        public static string Preset_OldVersion_Message {
+            get {
+                return ResourceManager.GetString("Preset_OldVersion_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to import preset!.
+        /// </summary>
+        public static string Preset_UnableToImport_Header {
+            get {
+                return ResourceManager.GetString("Preset_UnableToImport_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to import the preset as it appears to be corrupted or from an older version of HandBrake..
+        /// </summary>
+        public static string Preset_UnableToImport_Message {
+            get {
+                return ResourceManager.GetString("Preset_UnableToImport_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Built-in presets have been reset..
         /// </summary>
         public static string Presets_ResetComplete {
