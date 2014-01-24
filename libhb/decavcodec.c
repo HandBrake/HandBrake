@@ -428,7 +428,7 @@ static void closePrivData( hb_work_private_t ** ppv )
         if ( pv->context )
         {
             av_freep( &pv->context->extradata );
-            av_free( pv->context );
+            av_freep( &pv->context );
         }
         if ( pv->list )
         {
@@ -704,7 +704,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         av_parser_close( parser );
     hb_avcodec_close( context );
     av_freep( &context->extradata );
-    av_free( context );
+    av_freep( &context );
     return ret;
 }
 
@@ -2022,7 +2022,7 @@ static void decavcodecvFlush( hb_work_object_t *w )
             pv->video_codec_opened = 0;
             hb_avcodec_close( pv->context );
             av_freep( &pv->context->extradata );
-            av_free( pv->context );
+            av_freep( &pv->context );
             if ( pv->parser )
             {
                 av_parser_close(pv->parser);
