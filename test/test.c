@@ -638,7 +638,7 @@ static void apply_loose_crop(int total, int * v1, int * v2, int mod, int max)
 static int HandleEvents( hb_handle_t * h )
 {
     hb_state_t s;
-    hb_encoder_t *encoder;
+    const hb_encoder_t *encoder;
     int tmp_num_audio_tracks;
     int filter_cfr, filter_vrate, filter_vrate_base;
 
