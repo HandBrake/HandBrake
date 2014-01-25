@@ -152,7 +152,7 @@
                         <MenuItem>
                             <MenuItem.Header>
                                 <StackPanel Height="32" Orientation="Horizontal">
-                                    <Image Source="Images\Advanced.png" Width="28" Height="28" VerticalAlignment="Center" />
+                                    <Image Source="Images\Advanced.png" Width="20" Height="20" VerticalAlignment="Center" />
                                     <TextBlock VerticalAlignment="Center"
                                            Text="Options " Margin="5,0,0,0" />
                                     <Path Height="5"

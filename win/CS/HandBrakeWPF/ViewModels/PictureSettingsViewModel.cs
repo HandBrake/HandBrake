@@ -823,12 +823,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PreviewImage()
         {
-            IScan scanService = IoC.Get<IScan>();
-            BitmapImage image = scanService.GetPreview(this.Task, 1);
-
-            if (image != null)
+            if (!string.IsNullOrEmpty(this.Task.Source))
             {
-                this.StaticPreviewViewModel.PreviewFrame(image, this.Task);
+                this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task);
                 this.WindowManager.ShowWindow(this.StaticPreviewViewModel);
             }
         }
@@ -1200,19 +1197,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void UpdatePreviewImage()
         {
-            return;
-            if (delayedPreviewprocessor != null)
+            if (delayedPreviewprocessor != null && this.Task != null)
             {
-                delayedPreviewprocessor.PerformTask(() =>
-                {
-                    IScan scanService = IoC.Get<IScan>();
-                    BitmapImage image = scanService.GetPreview(this.Task, 1);
-
-                    if (image != null)
-                    {
-                        this.StaticPreviewViewModel.PreviewFrame(image, this.Task);
-                    }
-                }, 800);
+                delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task), 800);
             }
         }
 

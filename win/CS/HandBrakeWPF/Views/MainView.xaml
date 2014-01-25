@@ -149,19 +149,8 @@
                     <MenuItem Header="_Set Current as Default" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                     <MenuItem Header="_Reset Built-In Presets" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
                     <Separator />
-                    <MenuItem IsCheckable="True" x:Name="showPresetPanelMenuItem" IsChecked="{Binding IsPresetPanelShowing}">
-                        <MenuItem.Style>
-                            <Style TargetType="MenuItem">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=showPresetPanelMenuItem}" Value="True">
-                                        <Setter Property="Header" Value="_Hide Preset Panel"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=showPresetPanelMenuItem}" Value="False">
-                                        <Setter Property="Header" Value="S_how Preset Panel"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </MenuItem.Style>
+                    <MenuItem IsCheckable="True" x:Name="showPresetPanelMenuItem" IsChecked="{Binding IsPresetPanelShowing}"
+                              Header="S_how Preset Panel">
                     </MenuItem>
                 </MenuItem>
 

@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using System.Windows.Media.Imaging;
-
     using HandBrake.ApplicationServices.Model;
 
     /// <summary>
@@ -21,12 +19,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// The preview frame.
         /// </summary>
-        /// <param name="image">
-        /// The image.
-        /// </param>
         /// <param name="task">
         /// The task.
         /// </param>
-        void PreviewFrame(BitmapImage image, EncodeTask task);
+        void UpdatePreviewFrame(EncodeTask task);
     }
 }

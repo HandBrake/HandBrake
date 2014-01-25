@@ -172,21 +172,11 @@ namespace HandBrakeWPF.ViewModels
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The preview frame.
-        /// </summary>
-        /// <param name="image">
-        /// The image.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        public void PreviewFrame(BitmapImage image, EncodeTask task)
+        public void UpdatePreviewFrame(EncodeTask task)
         {
             this.Task = task;
-            this.Width = (int)Math.Ceiling(image.Width);
-            this.Height = (int)Math.Ceiling(image.Height);
-            this.PreviewImage = image;
+            this.UpdatePreviewFrame();
+            this.DisplayName = "Picture Preview";
         }
 
         /// <summary>
@@ -198,10 +188,11 @@ namespace HandBrakeWPF.ViewModels
 
             if (image != null)
             {
-                this.PreviewFrame(image, this.Task);
+                this.Width = (int)Math.Ceiling(image.Width);
+                this.Height = (int)Math.Ceiling(image.Height);
+                this.PreviewImage = image;
             }
         }
-
         #endregion
     }
 }

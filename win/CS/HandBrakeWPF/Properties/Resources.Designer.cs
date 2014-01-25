@@ -682,7 +682,7 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to The preset you are trying to import is from a different version of HandBrake. 
-        ///Some values may be reset to default as a result. 
+        /// It may not be possible to import or some values may be reset to default as a result. 
         ///
         ///Do you wish to proceed?.
         /// </summary>
