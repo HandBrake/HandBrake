@@ -1,0 +1,39 @@
+From 1ad55faa4d730f437bce612531132f00556d29fb Mon Sep 17 00:00:00 2001
+From: Michael Niedermayer <michaelni@gmx.at>
+Date: Sun, 19 Jan 2014 17:13:51 +0100
+Subject: [PATCH] vc1: Always reset numref when parsing a new frame header.
+
+Fixes an issue where the B-frame coding mode switches from interlaced
+fields to interlaced frames, causing incorrect decisions in the motion
+compensation code and resulting in visual artifacts.
+
+CC: libav-stable@libav.org
+Signed-off-by: Tim Walker <tdskywalker@gmail.com>
+---
+ libavcodec/vc1.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/libavcodec/vc1.c b/libavcodec/vc1.c
+index acefce6..a7f2aab 100644
+--- a/libavcodec/vc1.c
++++ b/libavcodec/vc1.c
+@@ -842,6 +842,7 @@ int ff_vc1_parse_frame_header_adv(VC1Context *v, GetBitContext* gb)
+     int mbmodetab, imvtab, icbptab, twomvbptab, fourmvbptab; /* useful only for debugging */
+     int field_mode, fcm;
+ 
++    v->numref          = 0;
+     v->p_frame_skipped = 0;
+     if (v->second_field) {
+         v->s.pict_type = (v->fptype & 1) ? AV_PICTURE_TYPE_P : AV_PICTURE_TYPE_I;
+@@ -1011,8 +1012,6 @@ int ff_vc1_parse_frame_header_adv(VC1Context *v, GetBitContext* gb)
+                 v->reffield          = get_bits1(gb);
+                 v->ref_field_type[0] = v->reffield ^ !v->cur_field_type;
+             }
+-        } else {
+-            v->numref = 0;
+         }
+         if (v->extended_mv)
+             v->mvrange = get_unary(gb, 0, 3);
+-- 
+1.8.3.4 (Apple Git-47)
+

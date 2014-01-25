@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index e9fc08c..72bff03 100755
+index 945a012..e9b706f 100755
 --- a/configure
 +++ b/configure
-@@ -3263,6 +3263,7 @@ case $target_os in
+@@ -3267,6 +3267,7 @@ case $target_os in
          SLIBNAME_WITH_MAJOR='$(SLIBPREF)$(FULLNAME).$(LIBMAJOR)$(SLIBSUF)'
          objformat="macho"
          enabled x86_64 && objformat="macho64"
@@ -10,7 +10,7 @@ index e9fc08c..72bff03 100755
          enabled_any pic shared ||
              { check_cflags -mdynamic-no-pic && add_asflags -mdynamic-no-pic; }
          ;;
-@@ -3502,7 +3503,7 @@ esc(){
+@@ -3506,7 +3507,7 @@ esc(){
  
  echo "config:$arch:$subarch:$cpu:$target_os:$(esc $cc_ident):$(esc $LIBAV_CONFIGURATION)" >config.fate
  
