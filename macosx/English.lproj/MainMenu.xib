@@ -5677,7 +5677,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>bitRates</string>
 					<string>bitRates.keyAudioBitrateName</string>
 					<string>bitRate</string>
-					<string>AC3Enabled</string>
+					<string>DRCEnabled</string>
 					<string>gain</string>
 					<string>PassThruEnabled</string>
 					<string>PassThruDisabled</string>
@@ -7360,15 +7360,15 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
+						<string key="label">enabled: arrangedObjects.DRCEnabled</string>
 						<reference key="source" ref="581296833"/>
 						<reference key="destination" ref="141316080"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="581296833"/>
 							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
+							<string key="NSLabel">enabled: arrangedObjects.DRCEnabled</string>
 							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
+							<string key="NSKeyPath">arrangedObjects.DRCEnabled</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -7405,15 +7405,15 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
+						<string key="label">enabled: arrangedObjects.DRCEnabled</string>
 						<reference key="source" ref="393032802"/>
 						<reference key="destination" ref="141316080"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="393032802"/>
 							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
+							<string key="NSLabel">enabled: arrangedObjects.DRCEnabled</string>
 							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
+							<string key="NSKeyPath">arrangedObjects.DRCEnabled</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>

@@ -15,6 +15,7 @@ NSString *keyAudioTrackName = @"keyAudioTrackName";
 NSString *keyAudioInputBitrate = @"keyAudioInputBitrate";
 NSString *keyAudioInputSampleRate = @"keyAudioInputSampleRate";
 NSString *keyAudioInputCodec = @"keyAudioInputCodec";
+NSString *keyAudioInputCodecParam = @"keyAudioInputCodecParam";
 NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
 NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
@@ -112,8 +113,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                 [aDict setObject: [NSNumber numberWithInt:0] forKey: [prefix stringByAppendingString: @"TrackGainSlider"]];
             }
 
-            if ((HB_ACODEC_AC3 == [[[anAudio track] objectForKey: keyAudioInputCodec] intValue]) &&
-                (HB_ACODEC_AC3_PASS != [[[anAudio codec] objectForKey: keyAudioCodec] intValue]))
+            if (hb_audio_can_apply_drc([[[anAudio track] objectForKey: keyAudioInputCodec] intValue],
+                                       [[[anAudio track] objectForKey: keyAudioInputCodecParam] intValue],
+                                       [[[anAudio codec] objectForKey: keyAudioCodec] intValue]))
             {
                 [aDict setObject: [anAudio drc] forKey: [prefix stringByAppendingString: @"TrackDRCSlider"]];
             }
@@ -609,6 +611,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                                        [NSNumber numberWithInt: audio->in.bitrate / 1000], keyAudioInputBitrate,
                                        [NSNumber numberWithInt: audio->in.samplerate], keyAudioInputSampleRate,
                                        [NSNumber numberWithInt: audio->in.codec], keyAudioInputCodec,
+                                       [NSNumber numberWithInt: audio->in.codec_param], keyAudioInputCodecParam,
                                        [NSNumber numberWithUnsignedLongLong: audio->in.channel_layout], keyAudioInputChannelLayout,
                                        nil]];
         }

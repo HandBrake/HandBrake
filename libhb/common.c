@@ -3709,6 +3709,28 @@ int hb_subtitle_can_pass( int source, int mux )
     }
 }
 
+int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder)
+{
+    if (encoder & HB_ACODEC_PASS_FLAG)
+    {
+        // can't apply DRC to passthrough audio
+        return 0;
+    }
+    else if (codec & HB_ACODEC_FF_MASK)
+    {
+        return (codec_param == AV_CODEC_ID_AC3 ||
+                codec_param == AV_CODEC_ID_EAC3);
+    }
+    else if (codec == HB_ACODEC_AC3)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 /**********************************************************************
  * hb_metadata_init
  **********************************************************************

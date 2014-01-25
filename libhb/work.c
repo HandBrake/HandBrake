@@ -452,7 +452,10 @@ void hb_display_job_info(hb_job_t *job)
                 {
                     hb_log( "   + gain: %.fdB", audio->config.out.gain );
                 }
-                if( ( audio->config.out.dynamic_range_compression != 0.0 ) && ( audio->config.in.codec == HB_ACODEC_AC3 ) )
+                if (audio->config.out.dynamic_range_compression > 0.0f &&
+                    hb_audio_can_apply_drc(audio->config.in.codec,
+                                           audio->config.in.codec_param,
+                                           audio->config.out.codec))
                 {
                     hb_log( "   + dynamic range compression: %f", audio->config.out.dynamic_range_compression );
                 }

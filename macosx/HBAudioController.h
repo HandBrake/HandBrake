@@ -13,6 +13,7 @@ extern NSString *keyAudioTrackName;
 extern NSString *keyAudioInputBitrate;
 extern NSString *keyAudioInputSampleRate;
 extern NSString *keyAudioInputCodec;
+extern NSString *keyAudioInputCodecParam;
 extern NSString *keyAudioInputChannelLayout;
 extern NSString *HBMixdownChangedNotification;
 

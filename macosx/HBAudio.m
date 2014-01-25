@@ -564,16 +564,17 @@ static NSMutableArray *masterBitRateArray = nil;
     return retval;
 }
 
-- (BOOL) AC3Enabled
+- (BOOL) DRCEnabled
 
 {
     BOOL retval = [self enabled];
 
     if (retval)
     {
+        int myTrackParam = [[[self track] objectForKey: keyAudioInputCodecParam] intValue];
         int myTrackCodec = [[[self track] objectForKey: keyAudioInputCodec] intValue];
         int myCodecCodec = [[[self codec] objectForKey: keyAudioCodec] intValue];
-        if (HB_ACODEC_AC3 != myTrackCodec || HB_ACODEC_AC3_PASS == myCodecCodec)
+        if (!hb_audio_can_apply_drc(myTrackCodec, myTrackParam, myCodecCodec))
         {
             retval = NO;
         }
@@ -610,7 +611,7 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         retval = [NSSet setWithObjects: @"track", @"codec", nil];
     }
-    else if ([key isEqualToString: @"AC3Enabled"])
+    else if ([key isEqualToString: @"DRCEnabled"])
     {
         retval = [NSSet setWithObjects: @"track", @"codec", nil];
     }

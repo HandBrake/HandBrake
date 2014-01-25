@@ -360,11 +360,53 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     AVDictionary * av_opts = NULL;
     av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
 
+    // Dynamic Range Compression
+    if (w->audio->config.out.dynamic_range_compression >= 0.0f &&
+        hb_audio_can_apply_drc(w->audio->config.in.codec,
+                               w->audio->config.in.codec_param, 0))
+    {
+        float drc_scale_max = 1.0f;
+        /*
+         * avcodec_open will fail if the value for any of the options is out of
+         * range, so assume a conservative maximum of 1 and try to determine the
+         * option's actual upper limit.
+         */
+        if (codec != NULL && codec->priv_class != NULL)
+        {
+            const AVOption *opt;
+            opt = av_opt_find2((void*)&codec->priv_class, "drc_scale", NULL,
+                               AV_OPT_FLAG_DECODING_PARAM|AV_OPT_FLAG_AUDIO_PARAM,
+                               AV_OPT_SEARCH_FAKE_OBJ, NULL);
+            if (opt != NULL)
+            {
+                drc_scale_max = opt->max;
+            }
+        }
+        if (w->audio->config.out.dynamic_range_compression > drc_scale_max)
+        {
+            hb_log("decavcodecaInit: track %d, sanitizing out-of-range DRC %.2f to %.2f",
+                   w->audio->config.out.track,
+                   w->audio->config.out.dynamic_range_compression, drc_scale_max);
+            w->audio->config.out.dynamic_range_compression = drc_scale_max;
+        }
+
+        char drc_scale[5]; // "?.??\n"
+        snprintf(drc_scale, sizeof(drc_scale), "%.2f",
+                 w->audio->config.out.dynamic_range_compression);
+        av_dict_set(&av_opts, "drc_scale", drc_scale, 0);
+    }
+
     if (hb_avcodec_open(pv->context, codec, &av_opts, 0))
     {
         av_dict_free( &av_opts );
         hb_log("decavcodecaInit: avcodec_open failed");
         return 1;
+    }
+    // avcodec_open populates av_opts with the things it didn't recognize.
+    AVDictionaryEntry *t = NULL;
+    while ((t = av_dict_get(av_opts, "", t, AV_DICT_IGNORE_SUFFIX)) != NULL)
+    {
+            hb_log("decavcodecaInit: unknown option '%s'", t->key);
     }
     av_dict_free( &av_opts );
 

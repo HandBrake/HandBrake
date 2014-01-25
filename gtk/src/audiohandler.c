@@ -29,6 +29,35 @@ static void ghb_clear_audio_list_ui(GtkBuilder *builder);
 
 static gboolean block_updates = FALSE;
 
+static void audio_deps(signal_user_data_t *ud)
+{
+    gint track = -1, encoder = 0;
+    hb_audio_config_t *aconfig = NULL;
+    gint titleindex = ghb_settings_combo_int(ud->settings, "title");
+    GValue *asettings = get_selected_asettings(ud);
+
+    if (asettings != NULL)
+    {
+        track = ghb_settings_combo_int(asettings, "AudioTrack");
+        encoder = ghb_settings_combo_int(asettings, "AudioEncoderActual");
+        aconfig = ghb_get_scan_audio_info(titleindex, track);
+    }
+
+    gboolean enable_drc = TRUE;
+    if (aconfig != NULL)
+    {
+        enable_drc = hb_audio_can_apply_drc(aconfig->in.codec,
+                                            aconfig->in.codec_param, encoder);
+    }
+
+    GtkWidget * widget = GHB_WIDGET(ud->builder, "AudioTrackDRCSlider");
+    gtk_widget_set_sensitive(widget, enable_drc);
+    widget = GHB_WIDGET(ud->builder, "AudioTrackDRCSliderLabel");
+    gtk_widget_set_sensitive(widget, enable_drc);
+    widget = GHB_WIDGET(ud->builder, "AudioTrackDRCValue");
+    gtk_widget_set_sensitive(widget, enable_drc);
+}
+
 void
 ghb_show_hide_advanced_audio( signal_user_data_t *ud )
 {
@@ -731,6 +760,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_adjust_audio_rate_combos(ud);
     ghb_grey_combo_options (ud);
     ghb_check_dependency(ud, widget, NULL);
+    audio_deps(ud);
     prev_acodec = acodec_code;
     if (asettings != NULL)
     {
@@ -771,6 +801,7 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_adjust_audio_rate_combos(ud);
     ghb_check_dependency(ud, widget, NULL);
+    audio_deps(ud);
     ghb_grey_combo_options(ud);
     asettings = get_selected_asettings(ud);
     if (asettings != NULL)
@@ -1117,6 +1148,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
         widget = GHB_WIDGET (ud->builder, "audio_remove");
         gtk_widget_set_sensitive(widget, FALSE);
     }
+    audio_deps(ud);
 }
 
 static gboolean
