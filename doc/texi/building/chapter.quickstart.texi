@@ -1,9 +1,9 @@
 @anchor{quickstart}
 @chapter QuickStart
-This chapter is for building from a terminal/shell environment in as few commands as possible. Upon completion of the following commands you should have a fresh build of @value{HB.name}. Further instructions are available beginning with @ref{overview} which describes procedures suitable for repeating builds. This chapter should be skipped by those seeking more than a minimalist build.
+This chapter is for building from a terminal/shell environment in as few commands as possible. Upon completion of the following commands you should have a fresh build of @value{HB-name}. Further instructions are available beginning with @ref{overview} which describes procedures suitable for repeating builds. This chapter should be skipped by those seeking more than a minimalist build.
 
 @example
-@COMMAND.checkout{}
+@COMMAND-checkout{}
 ./configure --launch
 @end example
 

@@ -24,7 +24,7 @@ The @command{configure} utility accepts many options. It is recommended that you
 List available options.
 
 @item --src=DIR
-Specify top-level source directory for @value{HB.name} sources.
+Specify top-level source directory for @value{HB-name} sources.
 
 @item --build=DIR
 Specify destination directory for final product install. The default is to use either @file{build} if in the top-level source directory, otherwise @file{.} 
@@ -38,7 +38,7 @@ All-in-one option which launches the build and logs output automatically.
 Useful for novices and quick-start procedures.
 
 @item --disable-gtk
-Disable building the GTK GUI on applicable platforms such as @value{OS.linux}.
+Disable building the GTK GUI on applicable platforms such as @value{OS-linux}.
 
 @item --debug=MODE
 Select debug mode. Must be one of @samp{none}, @samp{min}, @samp{std}, @samp{max}.
@@ -49,13 +49,13 @@ Select optimize mode. Must be one of @samp{none}, @samp{speed}, @samp{size}.
 This generally maps to gcc options @samp{-g0}, @samp{-O0}, @samp{-O3}, @samp{-Os}.
 
 @item --arch=MODE
-Select build architecture. The available architectures vary by platform. Most platforms support exactly one architecture except @value{OS.osx} which has support for various universal binary architectures. The available choices are hard-coded per platform and no sanity checks for the required tools are performed.
+Select build architecture. The available architectures vary by platform. Most platforms support exactly one architecture except @value{OS-osx} which has support for various universal binary architectures. The available choices are hard-coded per platform and no sanity checks for the required tools are performed.
 
 @item --disable-xcode
-Disable shunting the build through @command{xcodebuild}. If this option is applied, @command{HandBrakeCLI} will be produced in a similar fashion as it is on other platforms; sans Xcode and the Cocoa application will not be produced. @value{OS.osx} only.
+Disable shunting the build through @command{xcodebuild}. If this option is applied, @command{HandBrakeCLI} will be produced in a similar fashion as it is on other platforms; sans Xcode and the Cocoa application will not be produced. @value{OS-osx} only.
 
 @item --xcconfig=MODE
-Select Xcode project configuration file. The available modes are the basenames of files located in @file{macosx/xcconfig/*.xcconfig} which direct Xcode to build using various architecture and @value{OS.osx} deployment options. @value{OS.osx} only.
+Select Xcode project configuration file. The available modes are the basenames of files located in @file{macosx/xcconfig/*.xcconfig} which direct Xcode to build using various architecture and @value{OS-osx} deployment options. @value{OS-osx} only.
 @end table
 
 Clean-room procedures dictate that when certain factors change, old builds should be scrapped and new builds configured. This is the main reason for requiring a scratch directory; to promote consistent, reliable and clean software builds. The following is a short list of some of the reasons why someone may choose to scrap an existing build:

@@ -1,21 +1,22 @@
-@input texinfo @c -*- Texinfo -*-
+\input texinfo @c -*- Texinfo -*-
 @c %**start of header
 @setfilename Building.linux.info
 @include base/article.texi
 @include building/command.texi
 @paragraphindent none
 
-@set BG.platform linux
+@set BG-platform @value{OS-linux}
 @c %**end of header
 
-@majorheading Guide to Building @value{HB.title} on @value{OS.@value{BG.platform}}
+@majorheading Guide to Building @value{HB-title} on @value{BG-platform}
 @contents
+@sp 1
 @include building/chapter.introduction.texi
 
 @c %**-------------------------------------------------------------------------
 @anchor{prerequisites}
 @chapter Prerequisites
-The following are the recommended specifications for building on @value{OS.linux}; but is not necessarily the only configuration that is possible:
+The following are the recommended specifications for building on @value{OS-linux}; but is not necessarily the only configuration that is possible:
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit kernel
@@ -120,7 +121,7 @@ gstreamer1-devel gstreamer1-plugins-base-devel
 
 @anchor{overview}
 @chapter Overview
-@value{OS.linux} builds are performed from a @b{terminal}. There is no support for building from any IDEs.
+@value{OS-linux} builds are performed from a @b{terminal}. There is no support for building from any IDEs.
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi

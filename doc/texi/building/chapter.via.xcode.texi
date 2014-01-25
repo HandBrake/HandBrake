@@ -12,7 +12,7 @@
 Perform the following steps to build:
 
 @itemize
-@item Finder - navigate to @file{macosx/} in the @value{HB.name} source tree
+@item Finder - navigate to @file{macosx/} in the @value{HB-name} source tree
 @item Finder - open @file{HandBrake.xcodeproj}
 @item Xcode workspace - select scheme @b{HandBrake [RELEASE]}
 @item Xcode menu - select Product -> Build
@@ -28,8 +28,8 @@ Under default Xcode.app options the products from a build are managed by the Xco
 @itemize
 @item Xcode menu - select Window -> Organizer
 @item Xcode organizer - select Projects tab
-@item Xcode organizer Projects - select @value{HB.name} item
-@item @value{HB.name} item - click Derived Data location arrow (immediately right of path)
+@item Xcode organizer Projects - select @value{HB-name} item
+@item @value{HB-name} item - click Derived Data location arrow (immediately right of path)
 @item Finder - navigate to Build -> Products -> release
 @end itemize
 
@@ -69,8 +69,8 @@ The following are some examples of using @command{make} from the terminal to eff
 @itemize
 @item Xcode menu - select Window -> Organizer
 @item Xcode organizer - select Projects tab
-@item Xcode organizer Projects - select @value{HB.name} item
-@item @value{HB.name} item - click Derived Data location arrow (immediately right of path)
+@item Xcode organizer Projects - select @value{HB-name} item
+@item @value{HB-name} item - click Derived Data location arrow (immediately right of path)
 @item Finder - navigate to Build -> Products -> release -> external
 @end itemize
 
@@ -120,7 +120,7 @@ Specifies the concurrency factor for the external build system when builds are l
 Modify for faster external builds if your system has the horsepower and resources. Specifying a value greater than the number of CPU cores (or virtual cores) in your system is unlikely to produce gains and will needlessly consume extra resources. A special string value of @b{auto} sets the factor to the number of active CPUs on the host system.
 
 @item EXTERNAL_SRC
-Do not modify; specifies the top-level source directory for @value{HB.name}, relative to Xcode project.
+Do not modify; specifies the top-level source directory for @value{HB-name}, relative to Xcode project.
 
 @item EXTERNAL_XCCONFIG
 Do not modify; specifies which xcconfig file is active. Defined inside xcconfig file.

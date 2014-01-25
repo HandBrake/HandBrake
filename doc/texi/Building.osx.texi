@@ -1,26 +1,26 @@
-@input texinfo @c -*- Texinfo -*-
+\input texinfo @c -*- Texinfo -*-
 @c %**start of header
 @setfilename Building.osx.info
 @include base/article.texi
 @include building/command.texi
 @paragraphindent none
 
-@set BG.platform osx
+@set BG-platform @value{OS-osx}
 @c %**end of header
 
-@majorheading Build Guide for @value{HB.name} @value{HB.version} on @value{OS.@value{BG.platform}}
-
+@majorheading Build Guide for @value{HB-name} @value{HB-version} on @value{BG-platform}
 @contents
+@sp 1
 @include building/chapter.introduction.texi
 
 @c %**-------------------------------------------------------------------------
 @anchor{prerequisites}
 @chapter Prerequisites
-Building on @value{OS.osx} is well supported. It is the reference platform for @value{HB.name}. The following are the recommended specifications for this platform; but is not necessarily the only configuration that is possible:
+Building on @value{OS-osx} is well supported. It is the reference platform for @value{HB-name}. The following are the recommended specifications for this platform; but is not necessarily the only configuration that is possible:
 
 @itemize @bullet
 @item Mac Intel hardware
-@item @value{OS.osx} 10.7.5 or @value{OS.osx} 10.8.3
+@item @value{OS-osx} 10.7.5 or @value{OS-osx} 10.8.3
 @item Xcode 4.6.1 (4H512)
 @item llvm-gcc-4.2 version 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
 @item Xcode command-line tools (installed via Preferences > Downloads > Components)
@@ -45,7 +45,7 @@ The following tools are compiled during the build process if necessary, but you 
 @c %**-------------------------------------------------------------------------
 @anchor{overview}
 @chapter Overview
-The two general methods to build on @value{OS.osx} are from @b{terminal} or @b{Xcode.app}. The preferred method for automated and repeatable builds is to use the terminal. Otherwise the choice is generally up to the individual. To be extra clear, building from the terminal by default actually invokes @command{xcodebuild} to build the very same targets contained in the Xcode project. Think of it as building with Xcode but without the GUI.
+The two general methods to build on @value{OS-osx} are from @b{terminal} or @b{Xcode.app}. The preferred method for automated and repeatable builds is to use the terminal. Otherwise the choice is generally up to the individual. To be extra clear, building from the terminal by default actually invokes @command{xcodebuild} to build the very same targets contained in the Xcode project. Think of it as building with Xcode but without the GUI.
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi
@@ -68,7 +68,7 @@ make ub.build
 make ub.combine
 @end example
 
-The list of architectures is hard coded to @value{HB.name}'s desired product and currently is composed of combining the binaries produced from two xcconfigs: osx106.i386 and osx106.x86_64. The following example shows how to specify a different list of xcconfigs:
+The list of architectures is hard coded to @value{HB-name}'s desired product and currently is composed of combining the binaries produced from two xcconfigs: osx106.i386 and osx106.x86_64. The following example shows how to specify a different list of xcconfigs:
 
 @example
 ./configure --disable-xcode

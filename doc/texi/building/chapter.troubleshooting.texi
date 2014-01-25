@@ -16,5 +16,5 @@ Record of verbose output from @b{configure}.
 Record of output from @command{configure --launch}. Similar output may be recorded using @command{make} depending on which shell is in use, eg: @command{make >& log/build.txt} or @command{make > log/build.txt 2>&1}.
 
 @item log/xcodemake.env.txt
-Environment (variables) dump as seen when Xcode forks @command{make}. @value{OS.osx} only.
+Environment (variables) dump as seen when Xcode forks @command{make}. @value{OS-osx} only.
 @end table
