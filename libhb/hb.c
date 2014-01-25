@@ -288,23 +288,6 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
     return ff_layout;
 }
 
-uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels)
-{
-    uint64_t hb_layout = ff_channel_layout;
-    if (!hb_layout || av_get_channel_layout_nb_channels(hb_layout) != nchannels)
-    {
-        hb_layout = av_get_default_channel_layout(nchannels);
-        if (!hb_layout)
-        {
-            // This will likely not sound very good ;)
-            hb_layout = AV_CH_LAYOUT_STEREO;
-            hb_error("hb_ff_layout_xlat: unsupported layout 0x%"PRIx64" with %d channels",
-                     ff_channel_layout, nchannels);
-        }
-    }
-    return hb_layout;
-}
-
 /*
  * Set sample format to the request format if supported by the codec.
  * The planar/packed variant of the requested format is the next best thing.

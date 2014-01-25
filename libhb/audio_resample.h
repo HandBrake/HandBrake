@@ -74,13 +74,10 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
  *
  * They should be called whenever the relevant characteristic(s) differ from the
  * requested output characteristics, or if they may have changed in the source.
- *
- * Note: channel_layout is automatically sanitized.
  */
 
 void                 hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
-                                                          uint64_t channel_layout,
-                                                          int channels);
+                                                          uint64_t channel_layout);
 
 void                 hb_audio_resample_set_mix_levels(hb_audio_resample_t *resample,
                                                       double surround_mix_level,

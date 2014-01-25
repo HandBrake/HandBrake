@@ -655,18 +655,17 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 avp.size = pbuffer_size;
 
                 len = avcodec_decode_audio4(context, frame, &got_frame, &avp);
-                if (len > 0 && context->sample_rate > 0)
+                if (len > 0 && got_frame)
                 {
                     info->rate_base          = 1;
-                    info->rate               = context->sample_rate;
+                    info->rate               = frame->sample_rate;
                     info->samples_per_frame  = frame->nb_samples;
 
                     int bps = av_get_bits_per_sample(context->codec_id);
-                    if (bps > 0 && context->channels > 0)
+                    int channels = av_get_channel_layout_nb_channels(frame->channel_layout);
+                    if (bps > 0)
                     {
-                        info->bitrate = (bps *
-                                         context->channels *
-                                         context->sample_rate);
+                        info->bitrate = (bps * channels * info->rate);
                     }
                     else if (context->bit_rate > 0)
                     {
@@ -683,9 +682,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     }
                     else
                     {
-                        info->channel_layout =
-                            hb_ff_layout_xlat(context->channel_layout,
-                                              context->channels);
+                        info->channel_layout = frame->channel_layout;
                     }
 
                     ret = 1;
@@ -2081,26 +2078,11 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
 
         pos += len;
 
-        // set the duration on every frame since the stream format can
-        // change (it shouldn't but there's no way to guarantee it).
-        // duration is a scaling factor to go from #bytes in the decoded
-        // frame to frame time (in 90KHz mpeg ticks). 'channels' converts
-        // total samples to per-channel samples. 'sample_rate' converts
-        // per-channel samples to seconds per sample and the 90000
-        // is mpeg ticks per second.
-        //
-        // Also, sample rate is not available until we have decoded some
-        // audio.
-        if ( pv->context->sample_rate )
-        {
-            pv->duration = 90000. / (double)( pv->context->sample_rate );
-        }
-
         if (got_frame)
         {
             hb_buffer_t *out;
-            double duration = pv->frame->nb_samples * pv->duration;
-            double pts_next = pv->pts_next + duration;
+            double duration = (90000. * pv->frame->nb_samples /
+                               (double)pv->frame->sample_rate);
 
             if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
             {
@@ -2113,10 +2095,9 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
             else
             {
                 hb_audio_resample_set_channel_layout(pv->resample,
-                                                     context->channel_layout,
-                                                     context->channels);
+                                                     pv->frame->channel_layout);
                 hb_audio_resample_set_sample_fmt(pv->resample,
-                                                 context->sample_fmt);
+                                                 pv->frame->format);
                 if (hb_audio_resample_update(pv->resample))
                 {
                     hb_log("decavcodec: hb_audio_resample_update() failed");
@@ -2132,8 +2113,8 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
             {
                 out->s.start    = pv->pts_next;
                 out->s.duration = duration;
-                out->s.stop     = pts_next;
-                pv->pts_next    = pts_next;
+                out->s.stop     = duration + pv->pts_next;
+                pv->pts_next    = duration + pv->pts_next;
                 hb_list_add(pv->list, out);
             }
         }

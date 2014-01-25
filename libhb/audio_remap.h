@@ -73,8 +73,7 @@ hb_audio_remap_t* hb_audio_remap_init(enum AVSampleFormat sample_fmt,
  * Must be called at least once before remapping.
  */
 void              hb_audio_remap_set_channel_layout(hb_audio_remap_t *remap,
-                                                    uint64_t channel_layout,
-                                                    int channels);
+                                                    uint64_t channel_layout);
 
 /*
  * Free an hb_audio_remap_t.

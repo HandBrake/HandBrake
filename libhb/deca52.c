@@ -38,7 +38,6 @@ struct hb_work_private_s
     uint8_t       buf[6][6][256 * sizeof(float)]; // decoded frame (up to 6 channels, 6 blocks * 256 samples)
     uint8_t      *samples[6];                     // pointers to the start of each plane (1 per channel)
 
-    int                 nchannels;
     int                 use_mix_levels;
     uint64_t            channel_layout;
     hb_audio_remap_t    *remap;
@@ -383,13 +382,10 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
         if (new_layout != pv->channel_layout)
         {
             pv->channel_layout = new_layout;
-            pv->nchannels      = av_get_channel_layout_nb_channels(new_layout);
             hb_audio_remap_set_channel_layout(pv->remap,
-                                              pv->channel_layout,
-                                              pv->nchannels);
+                                              pv->channel_layout);
             hb_audio_resample_set_channel_layout(pv->resample,
-                                                 pv->channel_layout,
-                                                 pv->nchannels);
+                                                 pv->channel_layout);
         }
         if (pv->use_mix_levels)
         {
@@ -416,7 +412,8 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
              *
              * copy samples to our internal buffer
              */
-            for (j = 0; j < pv->nchannels; j++)
+            for (j = 0;
+                 j < av_get_channel_layout_nb_channels(pv->channel_layout); j++)
             {
                 pv->samples[j] = (uint8_t*)pv->buf[j];
                 memcpy(pv->buf[j][i], block_samples, 256 * sizeof(float));

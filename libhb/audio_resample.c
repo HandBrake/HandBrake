@@ -75,12 +75,10 @@ fail:
 }
 
 void hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
-                                          uint64_t channel_layout,
-                                          int channels)
+                                          uint64_t channel_layout)
 {
     if (resample != NULL)
     {
-        channel_layout = hb_ff_layout_xlat(channel_layout, channels);
         if (channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
         {
             // Dolby Surround is Stereo when it comes to remixing

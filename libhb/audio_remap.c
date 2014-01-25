@@ -246,33 +246,31 @@ fail:
 }
 
 void hb_audio_remap_set_channel_layout(hb_audio_remap_t *remap,
-                                       uint64_t channel_layout,
-                                       int channels)
+                                       uint64_t channel_layout)
 {
     if (remap != NULL)
     {
         int ii;
         remap->remap_needed = 0;
 
+        // sanitize the layout
+        if (channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
+        {
+            channel_layout = AV_CH_LAYOUT_STEREO;
+        }
+        remap->nchannels = av_get_channel_layout_nb_channels(channel_layout);
+
         // in some cases, remapping is not necessary and/or supported
-        if (channels > HB_AUDIO_REMAP_MAX_CHANNELS)
+        if (remap->nchannels > HB_AUDIO_REMAP_MAX_CHANNELS)
         {
             hb_log("hb_audio_remap_set_channel_layout: too many channels (%d)",
-                   channels);
+                   remap->nchannels);
             return;
         }
         if (remap->channel_map_in == remap->channel_map_out)
         {
             return;
         }
-
-        // sanitize the layout
-        channel_layout = hb_ff_layout_xlat(channel_layout, channels);
-        if (channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
-        {
-            channel_layout = AV_CH_LAYOUT_STEREO;
-        }
-        remap->nchannels = av_get_channel_layout_nb_channels(channel_layout);
 
         // build the table and check whether remapping is necessary
         hb_audio_remap_build_table(remap->channel_map_out,
