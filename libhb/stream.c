@@ -1902,183 +1902,14 @@ static const char *stream_type_name2(hb_stream_t *stream, hb_pes_stream_t *pes)
     return "Unknown";
 }
 
-static const char *stream_type_name (uint32_t reg_desc, uint8_t stream_type)
+static void set_audio_description(hb_audio_t *audio, iso639_lang_t *lang)
 {
-    if ( reg_desc == STR4_TO_UINT32("HDMV") )
-    {
-        // Names for streams we know about.
-        switch ( stream_type )
-        {
-            case 0x80:
-                return "BD LPCM";
-
-            case 0x83:
-                return "TrueHD";
-
-            case 0x84:
-                return "E-AC3";
-
-            case 0x85:
-                return "DTS-HD HRA";
-
-            case 0x86:
-                return "DTS-HD MA";
-
-            default:
-                break;
-        }
-    }
-    return st2codec[stream_type].name ? st2codec[stream_type].name : "Unknown";
-}
-
-static void set_audio_description(
-    hb_stream_t * stream,
-    hb_audio_t *audio,
-    iso639_lang_t *lang)
-{
-    int idx;
-    const char *codec_name;
-    char codec_name_caps[80];
-    AVCodecContext *cc = NULL;
-
-    if ( stream && stream->ffmpeg_ic )
-    {
-        cc = stream->ffmpeg_ic->streams[audio->id]->codec;
-    }
-
-    // Names for streams we know about.
-    if ( audio->config.in.stream_type == 0x80 &&
-         audio->config.in.reg_desc == STR4_TO_UINT32("HDMV") )
-    {
-        // LPCM audio in bluray have an stype of 0x80
-        codec_name = "BD LPCM";
-    }
-    else if ( audio->config.in.stream_type == 0x83 &&
-         audio->config.in.reg_desc == STR4_TO_UINT32("HDMV") )
-    {
-        // This is an interleaved TrueHD/AC-3 stream and the esid of
-        // the AC-3 is 0x76
-        if (audio->config.in.substream_type == HB_SUBSTREAM_BD_AC3)
-            codec_name = "AC3";
-        else
-            codec_name = "TrueHD";
-    }
-    else if ( audio->config.in.stream_type == 0x86 &&
-         audio->config.in.reg_desc == STR4_TO_UINT32("HDMV") )
-    {
-        // This is an interleaved DTS-HD MA/DTS stream and the
-        // esid of the DTS is 0x71
-        if (audio->config.in.substream_type == HB_SUBSTREAM_BD_DTS)
-            codec_name = "DTS";
-        else
-            codec_name = "DTS-HD MA";
-    }
-    else if ( audio->config.in.stream_type == 0x85 &&
-         audio->config.in.reg_desc == STR4_TO_UINT32("HDMV") )
-    {
-        // DTS-HD HRA audio in bluray has an stype of 0x85
-        // which conflicts with ATSC Program ID
-        // To distinguish, Bluray streams have a reg_desc of HDMV
-        // This is an interleaved DTS-HD HRA/DTS stream and the
-        // esid of the DTS is 0x71
-        if (audio->config.in.substream_type == HB_SUBSTREAM_BD_DTS)
-            codec_name = "DTS";
-        else
-            codec_name = "DTS-HD HRA";
-    }
-    else if ( audio->config.in.stream_type == 0x84 &&
-         audio->config.in.reg_desc == STR4_TO_UINT32("HDMV") )
-    {
-        // EAC3 audio in bluray has an stype of 0x84
-        // which conflicts with SDDS
-        // To distinguish, Bluray streams have a reg_desc of HDMV
-        codec_name = "E-AC3";
-    }
-    // For streams demuxed and decoded by ffmpeg, we have a cached context.
-    // Use it to get the name and profile information.  Obtaining
-    // the profile requires that ffmpeg has already probed the stream.
-    else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) && cc &&
-         avcodec_find_decoder( cc->codec_id ) )
-    {
-        AVCodec *codec = avcodec_find_decoder( cc->codec_id );
-        codec_name = codec->name;
-
-        const char *profile_name;
-        profile_name = av_get_profile_name( codec, cc->profile );
-        if ( profile_name )
-        {
-            codec_name = profile_name;
-        }
-    }
-    else if ( stream->hb_stream_type != ffmpeg && 
-              (idx = index_of_id( stream, audio->id ) ) >= 0 )
-    {
-        codec_name = stream_type_name2( stream, &stream->pes.list[idx] );
-    }
-    else if ( st2codec[audio->config.in.stream_type].kind == A )
-    {
-        codec_name = stream_type_name(audio->config.in.reg_desc,
-                                      audio->config.in.stream_type);
-    }
-    // For streams demuxed by us and decoded by ffmpeg, we can lookup the
-    // decoder name.
-    else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
-              avcodec_find_decoder( audio->config.in.codec_param ) )
-    {
-        codec_name = avcodec_find_decoder( audio->config.in.codec_param )->name;
-        strncpyupper( codec_name_caps, codec_name, 80 );
-        codec_name = codec_name_caps;
-    }
-    else
-    {
-        switch( audio->config.in.codec )
-        {
-            case HB_ACODEC_AC3:
-                codec_name = "AC3";
-                break;
-            case HB_ACODEC_DCA:
-                codec_name = "DTS";
-                break;
-            case HB_ACODEC_LPCM:
-                codec_name = "LPCM";
-                break;
-            case HB_ACODEC_MP3:
-                codec_name = "MP3";
-                break;
-            case HB_ACODEC_FFAAC:
-                codec_name = "AAC";
-                break;
-            case HB_ACODEC_DCA_HD:
-                codec_name = "DTS-HD";
-                break;
-            default:
-                codec_name = ( audio->config.in.codec & HB_ACODEC_FF_MASK ) ? "Unknown FFmpeg" : "Unknown";
-                break;
-        }
-    }
-
     snprintf( audio->config.lang.simple,
               sizeof( audio->config.lang.simple ), "%s",
               strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2,
               sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
-    snprintf( audio->config.lang.description,
-              sizeof( audio->config.lang.description ), "%s (%s)",
-              audio->config.lang.simple, codec_name );
-
-    if (audio->config.in.channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
-    {
-        strcat(audio->config.lang.description, " (Dolby Surround)");
-    }
-    else if (audio->config.in.channel_layout)
-    {
-        int lfes     = (!!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY) +
-                        !!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY_2));
-        int channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
-        char *desc   = audio->config.lang.description +
-                        strlen(audio->config.lang.description);
-        sprintf(desc, " (%d.%d ch)", channels - lfes, lfes);
-    }
+    audio->config.lang.type = 0;
 }
 
 // Sort specifies the index in the audio list where you would
@@ -2230,7 +2061,7 @@ static void pes_add_audio_to_title(
     audio->config.in.codec = pes->codec;
     audio->config.in.codec_param = pes->codec_param;
 
-    set_audio_description( stream, audio, lang_for_code( pes->lang_code ) );
+    set_audio_description(audio, lang_for_code(pes->lang_code));
 
     hb_log("stream id 0x%x (type 0x%x substream 0x%x) audio 0x%x",
            pes->stream_id, pes->stream_type, pes->stream_id_ext, audio->id);
@@ -5210,7 +5041,7 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
             break;
     }
 
-    set_audio_description(stream, audio,
+    set_audio_description(audio,
                           lang_for_code2(tag != NULL ? tag->value : "und"));
     hb_list_add(title->list_audio, audio);
 }

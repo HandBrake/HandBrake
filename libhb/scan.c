@@ -1035,7 +1035,116 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     audio->config.in.flags = info.flags;
     audio->config.in.mode = info.mode;
 
-    // update the audio description string based on the info we found
+    // now that we have all the info, set the audio description
+    const char *codec_name = NULL;
+    if (audio->config.in.codec & HB_ACODEC_FF_MASK)
+    {
+        AVCodec *codec = avcodec_find_decoder(audio->config.in.codec_param);
+        if (codec != NULL)
+        {
+            if (info.profile != FF_PROFILE_UNKNOWN)
+            {
+                codec_name = av_get_profile_name(codec, info.profile);
+            }
+            if (codec_name == NULL)
+            {
+                // use our own capitalization for the most common codecs
+                switch (audio->config.in.codec_param)
+                {
+                    case AV_CODEC_ID_AAC:
+                        codec_name = "AAC";
+                        break;
+                    case AV_CODEC_ID_AC3:
+                        codec_name = "AC3";
+                        break;
+                    case AV_CODEC_ID_EAC3:
+                        codec_name = "E-AC3";
+                        break;
+                    case AV_CODEC_ID_TRUEHD:
+                        codec_name = "TrueHD";
+                        break;
+                    case AV_CODEC_ID_DTS:
+                        codec_name = audio->config.in.codec == HB_ACODEC_DCA_HD ? "DTS-HD" : "DTS";
+                        break;
+                    case AV_CODEC_ID_FLAC:
+                        codec_name = "FLAC";
+                        break;
+                    case AV_CODEC_ID_MP2:
+                        codec_name = "MPEG";
+                        break;
+                    case AV_CODEC_ID_MP3:
+                        codec_name = "MP3";
+                        break;
+                    case AV_CODEC_ID_PCM_BLURAY:
+                        codec_name = "BD LPCM";
+                        break;
+                    case AV_CODEC_ID_OPUS:
+                        codec_name = "Opus";
+                        break;
+                    case AV_CODEC_ID_VORBIS:
+                        codec_name = "Vorbis";
+                        break;
+                    default:
+                        codec_name = codec->name;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            switch (audio->config.in.codec)
+            {
+                case HB_ACODEC_DCA:
+                    codec_name = "DTS";
+                    break;
+                case HB_ACODEC_DCA_HD:
+                    codec_name = "DTS-HD";
+                    break;
+                case HB_ACODEC_FFAAC:
+                    codec_name = "AAC";
+                    break;
+                case HB_ACODEC_MP3:
+                    codec_name = "MP3";
+                    break;
+                default:
+                    codec_name = "Unknown (libav)";
+                    break;
+            }
+        }
+    }
+    else
+    {
+        switch (audio->config.in.codec)
+        {
+            case HB_ACODEC_AC3:
+                codec_name = "AC3";
+                break;
+            case HB_ACODEC_LPCM:
+                codec_name = "LPCM";
+                break;
+            default:
+                codec_name = "Unknown";
+                break;
+        }
+    }
+    sprintf(audio->config.lang.description, "%s (%s)",
+            audio->config.lang.simple, codec_name);
+
+    switch (audio->config.lang.type)
+    {
+        case 2:
+            strcat(audio->config.lang.description, " (Visually Impaired)");
+            break;
+        case 3:
+            strcat(audio->config.lang.description, " (Director's Commentary 1)");
+            break;
+        case 4:
+            strcat(audio->config.lang.description, " (Director's Commentary 2)");
+            break;
+        default:
+            break;
+    }
+
     if (audio->config.in.channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
     {
         strcat(audio->config.lang.description, " (Dolby Surround)");

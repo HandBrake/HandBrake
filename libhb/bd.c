@@ -194,12 +194,9 @@ static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdau
               strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2, 
               sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
-    snprintf( audio->config.lang.description,
-              sizeof( audio->config.lang.description ), "%s (%s)",
-              audio->config.lang.simple, codec_name );
 
-    hb_log( "bd: audio id=0x%x, lang=%s, 3cc=%s", audio->id,
-            audio->config.lang.description, audio->config.lang.iso639_2 );
+    hb_log("bd: audio id=0x%x, lang=%s (%s), 3cc=%s", audio->id,
+           audio->config.lang.simple, codec_name, audio->config.lang.iso639_2);
 
     audio->config.in.track = track;
     hb_list_add( list_audio, audio );

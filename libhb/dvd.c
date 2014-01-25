@@ -424,28 +424,10 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
                   strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
         snprintf( audio->config.lang.iso639_2,
                   sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
-        snprintf( audio->config.lang.description,
-                  sizeof( audio->config.lang.description ), "%s (%s)",
-                  audio->config.lang.simple, codec_name );
 
-        switch( lang_extension )
-        {
-            case 2:
-                strcat( audio->config.lang.description, " (Visually Impaired)" );
-                break;
-            case 3:
-                strcat( audio->config.lang.description, " (Director's Commentary 1)" );
-                break;
-            case 4:
-                strcat( audio->config.lang.description, " (Director's Commentary 2)" );
-                break;
-            default:
-                break;
-        }
-
-        hb_log( "scan: id=0x%x, lang=%s, 3cc=%s ext=%i", audio->id,
-                audio->config.lang.description, audio->config.lang.iso639_2,
-                lang_extension );
+        hb_log("scan: id=0x%x, lang=%s (%s), 3cc=%s ext=%i", audio->id,
+               audio->config.lang.simple, codec_name,
+               audio->config.lang.iso639_2, lang_extension);
 
         audio->config.in.track = i;
         hb_list_add( title->list_audio, audio );
