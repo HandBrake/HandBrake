@@ -1029,6 +1029,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     audio->config.in.samplerate = info.rate;
     audio->config.in.samples_per_frame = info.samples_per_frame;
     audio->config.in.bitrate = info.bitrate;
+    audio->config.in.matrix_encoding = info.matrix_encoding;
     audio->config.in.channel_layout = info.channel_layout;
     audio->config.in.channel_map = info.channel_map;
     audio->config.in.version = info.version;
@@ -1145,11 +1146,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
             break;
     }
 
-    if (audio->config.in.channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
-    {
-        strcat(audio->config.lang.description, " (Dolby Surround)");
-    }
-    else if (audio->config.in.channel_layout)
+    if (audio->config.in.channel_layout)
     {
         int lfes     = (!!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY) +
                         !!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY_2));
@@ -1157,6 +1154,39 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
         char *desc   = audio->config.lang.description +
                         strlen(audio->config.lang.description);
         sprintf(desc, " (%d.%d ch)", channels - lfes, lfes);
+
+        // describe the matrix encoding mode, if any
+        switch (audio->config.in.matrix_encoding)
+        {
+            case AV_MATRIX_ENCODING_DOLBY:
+                if (audio->config.in.codec       == HB_ACODEC_AC3    ||
+                    audio->config.in.codec_param == AV_CODEC_ID_AC3  ||
+                    audio->config.in.codec_param == AV_CODEC_ID_EAC3 ||
+                    audio->config.in.codec_param == AV_CODEC_ID_TRUEHD)
+                {
+                    strcat(audio->config.lang.description, " (Dolby Surround)");
+                    break;
+                }
+                strcat(audio->config.lang.description, " (Lt/Rt)");
+                break;
+            case AV_MATRIX_ENCODING_DPLII:
+                strcat(audio->config.lang.description, " (Dolby Pro Logic II)");
+                break;
+            case AV_MATRIX_ENCODING_DPLIIX:
+                strcat(audio->config.lang.description, " (Dolby Pro Logic IIx)");
+                break;
+            case AV_MATRIX_ENCODING_DPLIIZ:
+                strcat(audio->config.lang.description, " (Dolby Pro Logic IIz)");
+                break;
+            case AV_MATRIX_ENCODING_DOLBYEX:
+                strcat(audio->config.lang.description, " (Dolby Digital EX)");
+                break;
+            case AV_MATRIX_ENCODING_DOLBYHEADPHONE:
+                strcat(audio->config.lang.description, " (Dolby Headphone)");
+                break;
+            default:
+                break;
+        }
     }
 
     hb_log( "scan: audio 0x%x: %s, rate=%dHz, bitrate=%d %s", audio->id,

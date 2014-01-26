@@ -721,10 +721,30 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     if (truehd_mono)
                     {
                         info->channel_layout = AV_CH_LAYOUT_MONO;
+                        info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
                     }
                     else
                     {
-                        info->channel_layout = frame->channel_layout;
+                        AVFrameSideData *side_data;
+                        if ((side_data =
+                             av_frame_get_side_data(frame,
+                                                    AV_FRAME_DATA_MATRIXENCODING)) != NULL)
+                        {
+                            info->matrix_encoding = *side_data->data;
+                        }
+                        else
+                        {
+                            info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
+                        }
+                        if (info->matrix_encoding == AV_MATRIX_ENCODING_DOLBY ||
+                            info->matrix_encoding == AV_MATRIX_ENCODING_DPLII)
+                        {
+                            info->channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
+                        }
+                        else
+                        {
+                            info->channel_layout = frame->channel_layout;
+                        }
                     }
 
                     ret = 1;

@@ -115,6 +115,9 @@ namespace HandBrake.Interop.HbLib
 		/* Input bitrate (bps) */
 		public int bitrate;
 
+		/* Source matrix encoding mode, set by the audio decoder */
+		public int matrix_encoding;
+
 		/* Source channel layout, set by the audio decoder */
 		public ulong channel_layout;
 

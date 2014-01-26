@@ -537,6 +537,14 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->mode = raw & 0x7;      /* bsmod is the following 3 bits */
     info->samples_per_frame = 1536;
 
+    if ((flags & A52_CHANNEL_MASK) == A52_DOLBY)
+    {
+        info->matrix_encoding = AV_MATRIX_ENCODING_DOLBY;
+    }
+    else
+    {
+        info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
+    }
     info->channel_layout = (acmod2layout[(flags & A52_CHANNEL_MASK)] |
                             lfeon2layout[(flags & A52_LFE) != 0]);
 

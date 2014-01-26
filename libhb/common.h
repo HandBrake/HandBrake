@@ -677,6 +677,7 @@ struct hb_audio_config_s
         PRIVATE int samplerate; /* Input sample rate (Hz) */
         PRIVATE int samples_per_frame; /* Number of samples per frame */
         PRIVATE int bitrate; /* Input bitrate (bps) */
+        PRIVATE int matrix_encoding; /* Source matrix encoding mode, set by the audio decoder */
         PRIVATE uint64_t channel_layout; /* Source channel layout, set by the audio decoder */
         PRIVATE hb_chan_map_t * channel_map; /* Source channel map, set by the audio decoder */
     } in;
@@ -1010,6 +1011,7 @@ typedef struct hb_work_info_s
             uint64_t channel_layout;
             hb_chan_map_t * channel_map;
             int samples_per_frame;
+            int matrix_encoding;
         };
     };
 } hb_work_info_t;
