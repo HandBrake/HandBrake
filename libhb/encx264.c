@@ -59,18 +59,18 @@ struct hb_work_private_s
 
     hb_list_t *delayed_chapters;
     int64_t next_chapter_pts;
-    // used in delayed_chapters list
-    struct chapter_s
-    {
-        int     index;
-        int64_t start;
-    };
-
     struct {
         int64_t duration;
     } frame_info[FRAME_INFO_SIZE];
 
     char             filename[1024];
+};
+
+// used in delayed_chapters list
+struct chapter_s
+{
+    int     index;
+    int64_t start;
 };
 
 /***********************************************************************
