@@ -593,7 +593,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         snprintf( audio->config.lang.iso639_2,
                   sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
 
-        hb_log("scan: id=0x%x, lang=%s, 3cc=%s ext=%i", audio->id,
+        hb_log("scan: id=0x%x, lang=%s (%s), 3cc=%s ext=%i", audio->id,
                audio->config.lang.simple, codec_name,
                audio->config.lang.iso639_2, lang_extension);
 
