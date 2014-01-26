@@ -1,0 +1,44 @@
+From e275318cecee53cf8ce13e4ab41df91c8c7fdcd4 Mon Sep 17 00:00:00 2001
+From: John Stebbins <stebbins@jetheaddev.com>
+Date: Mon, 13 Jan 2014 17:04:30 +0000
+Subject: [PATCH] ac3dec: Allow asymmetric application of DRC when drc_scale >
+ 1
+
+Amplification of quiet sounds is enhanced.
+Inspired by gbooker's A52Decoder.
+---
+ libavcodec/ac3dec.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/libavcodec/ac3dec.c b/libavcodec/ac3dec.c
+index 87638e7..0416dbc 100644
+--- a/libavcodec/ac3dec.c
++++ b/libavcodec/ac3dec.c
+@@ -772,8 +772,13 @@ static int decode_audio_block(AC3DecodeContext *s, int blk)
+     i = !s->channel_mode;
+     do {
+         if (get_bits1(gbc)) {
+-            s->dynamic_range[i] = powf(dynamic_range_tab[get_bits(gbc, 8)],
+-                                       s->drc_scale);
++            /* Allow asymmetric application of DRC when drc_scale > 1.
++               Amplification of quiet sounds is enhanced */
++            float range = dynamic_range_tab[get_bits(gbc, 8)];
++            if (range > 1.0 || s->drc_scale <= 1.0)
++                s->dynamic_range[i] = powf(range, s->drc_scale);
++            else
++                s->dynamic_range[i] = range;
+         } else if (blk == 0) {
+             s->dynamic_range[i] = 1.0f;
+         }
+@@ -1487,7 +1492,7 @@ static av_cold int ac3_decode_end(AVCodecContext *avctx)
+ #define OFFSET(x) offsetof(AC3DecodeContext, x)
+ #define PAR (AV_OPT_FLAG_DECODING_PARAM | AV_OPT_FLAG_AUDIO_PARAM)
+ static const AVOption options[] = {
+-    { "drc_scale", "percentage of dynamic range compression to apply", OFFSET(drc_scale), AV_OPT_TYPE_FLOAT, {.dbl = 1.0}, 0.0, 1.0, PAR },
++    { "drc_scale", "percentage of dynamic range compression to apply", OFFSET(drc_scale), AV_OPT_TYPE_FLOAT, {.dbl = 1.0}, 0.0, 6.0, PAR },
+     { NULL},
+ };
+ 
+-- 
+1.8.3.4 (Apple Git-47)
+
