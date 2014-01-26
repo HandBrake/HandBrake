@@ -13,6 +13,7 @@
 #include "libavutil/imgutils.h"
 #include "libavutil/mathematics.h"
 #include "libavutil/opt.h"
+#include "libavutil/avutil.h"
 #include "libswscale/swscale.h"
 #include "libavresample/avresample.h"
 #include "common.h"

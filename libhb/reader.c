@@ -119,7 +119,7 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
     r->stream_timing[0].startup = 10;
     r->stream_timing[1].id = -1;
 
-    r->demux.last_scr = -1;
+    r->demux.last_scr = AV_NOPTS_VALUE;
 
     if ( !job->pts_to_start )
         r->start_found = 1;
@@ -552,8 +552,10 @@ void ReadLoop( void * _w )
                 // The first data packet with a PTS from an audio or video stream
                 // that we're decoding defines 'time zero'. Discard packets until
                 // we get one.
-                if ( buf->s.start != -1 && buf->s.renderOffset != -1 &&
-                     ( buf->s.id == r->title->video_id || is_audio( r, buf->s.id ) ) )
+                if (buf->s.start != AV_NOPTS_VALUE &&
+                    buf->s.renderOffset != AV_NOPTS_VALUE &&
+                     (buf->s.id == r->title->video_id ||
+                      is_audio( r, buf->s.id)))
                 {
                     // force a new scr offset computation
                     r->scr_changes = r->demux.scr_changes - 1;
@@ -572,7 +574,7 @@ void ReadLoop( void * _w )
 
             if ( r->job->indepth_scan || fifos )
             {
-                if ( buf->s.renderOffset != -1 )
+                if ( buf->s.renderOffset != AV_NOPTS_VALUE )
                 {
                     if ( r->scr_changes != r->demux.scr_changes )
                     {
@@ -597,12 +599,12 @@ void ReadLoop( void * _w )
                             // frame but video & subtitles don't. Clear
                             // the timestamps so the decoder will generate
                             // them from the frame durations.
-                            buf->s.start = -1;
-                            buf->s.renderOffset = -1;
+                            buf->s.start = AV_NOPTS_VALUE;
+                            buf->s.renderOffset = AV_NOPTS_VALUE;
                         }
                     }
                 }
-                if ( buf->s.start != -1 )
+                if ( buf->s.start != AV_NOPTS_VALUE )
                 {
                     int64_t start = buf->s.start - r->scr_offset;
 
@@ -634,7 +636,7 @@ void ReadLoop( void * _w )
                     //        buf->s.start - r->scr_offset);
                     buf->s.start -= r->scr_offset;
                 }
-                if ( buf->s.renderOffset != -1 )
+                if ( buf->s.renderOffset != AV_NOPTS_VALUE )
                 {
                     // This packet is referenced to the same SCR as the last.
                     // Adjust timestamp to remove the System Clock Reference

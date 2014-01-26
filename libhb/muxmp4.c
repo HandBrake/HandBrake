@@ -691,7 +691,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                    hb_buffer_t * buf )
 {
     hb_job_t * job = m->job;
-    int64_t duration, stop = -1;
+    int64_t duration, stop = AV_NOPTS_VALUE;
     int64_t offset = 0;
     hb_buffer_t *tmp;
 

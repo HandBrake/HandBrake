@@ -196,7 +196,7 @@ static int64_t heap_pop( pts_heap_t *heap )
 
     if ( heap->nheap <= 0 )
     {
-        return -1;
+        return AV_NOPTS_VALUE;
     }
 
     // return the top of the heap then put the bottom element on top,
@@ -546,7 +546,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_out = NULL;
 
-    if ( in->s.start < -1 && pv->pts_next <= 0 )
+    if ( in->s.start < 0 && pv->pts_next <= 0 )
     {
         // discard buffers that start before video time 0
         return HB_WORK_OK;
@@ -566,8 +566,6 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             len = av_parser_parse2( pv->parser, pv->context, &pout, &pout_len,
                                 in->data + pos, in->size - pos, cur, cur, 0 );
             cur = pv->parser->pts;
-            if ( cur == AV_NOPTS_VALUE )
-                cur = -1;
         }
         else
         {
@@ -2115,7 +2113,7 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
     int pos = 0;
 
     // If we are given a pts, use it; but don't lose partial ticks.
-    if (pts != -1 && (int64_t)pv->pts_next != pts)
+    if (pts != AV_NOPTS_VALUE && (int64_t)pv->pts_next != pts)
         pv->pts_next = pts;
     while (pos < size)
     {

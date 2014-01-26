@@ -48,7 +48,7 @@ struct hb_mux_object_s
     int                 ntracks;
     hb_mux_data_t    ** tracks;
 
-    int                 delay;
+    int64_t             delay;
 };
 
 enum
@@ -130,7 +130,7 @@ static int avformatInit( hb_mux_object_t * m )
     char *lang;
 
 
-    m->delay = -1;
+    m->delay = AV_NOPTS_VALUE;
     max_tracks = 1 + hb_list_count( job->list_audio ) +
                      hb_list_count( job->list_subtitle );
 
@@ -951,20 +951,20 @@ static void computeDelay(hb_mux_object_t *m)
 static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *buf)
 {
     AVPacket pkt;
-    int64_t dts, pts, duration = -1;
+    int64_t dts, pts, duration = AV_NOPTS_VALUE;
     hb_job_t *job     = m->job;
     uint8_t tx3g_out[2048];
 
-    if (m->delay == -1)
+    if (m->delay == AV_NOPTS_VALUE)
     {
         computeDelay(m);
     }
 
     if (buf != NULL)
     {
-        if (buf->s.start != -1)
+        if (buf->s.start != AV_NOPTS_VALUE)
             buf->s.start += m->delay;
-        if (buf->s.renderOffset != -1)
+        if (buf->s.renderOffset != AV_NOPTS_VALUE)
             buf->s.renderOffset += m->delay;
     }
 
@@ -981,7 +981,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     if (buf == NULL)
         return 0;
 
-    if (buf->s.renderOffset == -1)
+    if (buf->s.renderOffset == AV_NOPTS_VALUE)
     {
         dts = av_rescale_q(buf->s.start, (AVRational){1,90000},
                            track->st->time_base);

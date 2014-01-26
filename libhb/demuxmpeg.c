@@ -39,10 +39,11 @@ static inline void check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )
     // 'tol'ms between the last scr & this or if this scr goes back
     // by more than half a frame time.
     int64_t scr_delta = scr - state->last_scr;
-    if ( state->last_scr == -1 || scr_delta > 90*tol || scr_delta < -90*10 )
+    if (state->last_scr == AV_NOPTS_VALUE ||
+        scr_delta > 90*tol || scr_delta < -90*10)
     {
         ++state->scr_changes;
-        state->last_pts = -1;
+        state->last_pts = AV_NOPTS_VALUE;
     }
     state->last_scr = scr;
 }
@@ -128,7 +129,7 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
             int      pes_header_d_length;
             int      pes_header_end;
             int      has_pts;
-            int64_t  pts = -1, dts = -1;
+            int64_t  pts = AV_NOPTS_VALUE, dts = AV_NOPTS_VALUE;
 
             pos               += 3;               /* packet_start_code_prefix */
             id           = d[pos];
@@ -220,7 +221,7 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
             buf_es->s.id       = id;
             buf_es->s.start    = pts;
             buf_es->s.renderOffset = dts;
-            buf_es->s.stop     = -1;
+            buf_es->s.stop     = AV_NOPTS_VALUE;
             if ( state && id == 0xE0)
             {
                 // Consume a chapter break, and apply it to the ES.
@@ -266,7 +267,7 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
             {
                 // we have a new pcr
                 check_mpeg_scr( state, buf->s.pcr, 300 );
-                buf->s.pcr = -1;
+                buf->s.pcr = AV_NOPTS_VALUE;
                 // Some streams have consistantly bad PCRs or SCRs
                 // So filter out the offset
                 if ( buf->s.start >= 0 )
@@ -348,8 +349,9 @@ void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state 
         {
             // if we don't have a time offset yet, 
             // use this timestamp as the offset.
-            if ( state->scr_changes == 0 &&
-                 ( buf->s.start != -1 || buf->s.renderOffset != -1 ) )
+            if (state->scr_changes == 0 &&
+                (buf->s.start != AV_NOPTS_VALUE ||
+                 buf->s.renderOffset != AV_NOPTS_VALUE))
             {
                 ++state->scr_changes;
                 state->last_scr = buf->s.start >= 0 ? buf->s.start : buf->s.renderOffset;

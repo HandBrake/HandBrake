@@ -232,7 +232,7 @@ static int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if ( (*buf_in)->s.start < -1 && pv->next_expected_pts == 0 )
+    if ( (*buf_in)->s.start < 0 && pv->next_expected_pts == 0 )
     {
         // discard buffers that start before video time 0
         *buf_out = NULL;
@@ -331,15 +331,15 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
         // spec says that the PTS is the start time of the first frame
         // that starts in the PES frame so we only use the PTS once then
         // get the following frames' PTS from the frame length.
-        ipts = -1;
+        ipts = AV_NOPTS_VALUE;
     }
 
     double frame_dur = (6. * 256. * 90000.) / pv->rate;
     double pts;
-    if (hb_gui_use_hwd_flag == 1 && ipts != -1)
+    if (hb_gui_use_hwd_flag == 1 && ipts != AV_NOPTS_VALUE)
         pts = ((double)ipts >= pv->next_expected_pts) ? (double)ipts : pv->next_expected_pts;
     else
-        pts = (ipts != -1) ? (double)ipts : pv->next_expected_pts;
+        pts = (ipts != AV_NOPTS_VALUE) ? (double)ipts : pv->next_expected_pts;
 
     /* AC3 passthrough: don't decode the AC3 frame */
     if (audio->config.out.codec == HB_ACODEC_AC3_PASS)

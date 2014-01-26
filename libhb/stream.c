@@ -1472,7 +1472,7 @@ static hb_buffer_t * hb_ps_stream_getVideo(
         }
         if ( stream->pes.list[idx].stream_kind == V )
         {
-            if ( pes_info.pts != -1 )
+            if ( pes_info.pts != AV_NOPTS_VALUE )
             {
                 *pi = pes_info;
                 return buf;
@@ -3170,8 +3170,8 @@ static int hb_parse_ps(
     hb_pes_info_t *pes_info )
 {
     memset( pes_info, 0, sizeof( hb_pes_info_t ) );
-    pes_info->pts = -1;
-    pes_info->dts = -1;
+    pes_info->pts = AV_NOPTS_VALUE;
+    pes_info->dts = AV_NOPTS_VALUE;
 
     bitbuf_t bb, cc;
     bits_init(&bb, buf, len, 0);
@@ -3462,7 +3462,7 @@ static hb_buffer_t * hb_ps_stream_decode( hb_stream_t *stream )
         buf->size -= pes_info.header_len;
         if ( buf->size == 0 )
             continue;
-        stream->pes.scr = -1;
+        stream->pes.scr = AV_NOPTS_VALUE;
         return buf;
     }
 }
@@ -4521,7 +4521,7 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         }
         else
         {
-            buf->s.pcr = -1;
+            buf->s.pcr = AV_NOPTS_VALUE;
         }
 
         // check if this packet was referenced to an older pcr and if that
@@ -4531,10 +4531,10 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
             // we've sent up a new pcr but have a packet referenced to an
             // old pcr and the difference was enough to trigger a discontinuity
             // correction. smash the timestamps or we'll mess up the correction.
-            buf->s.start = -1;
-            buf->s.renderOffset = -1;
-            buf->s.stop = -1;
-            buf->s.pcr = -1;
+            buf->s.start = AV_NOPTS_VALUE;
+            buf->s.renderOffset = AV_NOPTS_VALUE;
+            buf->s.stop = AV_NOPTS_VALUE;
+            buf->s.pcr = AV_NOPTS_VALUE;
         }
         else
         {
@@ -4887,9 +4887,9 @@ void hb_ts_stream_reset(hb_stream_t *stream)
     stream->ts.found_pcr = 0;
     stream->ts.pcr_out = 0;
     stream->ts.pcr_in = 0;
-    stream->ts.pcr = -1;
+    stream->ts.pcr = AV_NOPTS_VALUE;
     stream->ts.pcr_current = -1;
-    stream->ts.last_timestamp = -1;
+    stream->ts.last_timestamp = AV_NOPTS_VALUE;
 
     stream->frames = 0;
     stream->errors = 0;
@@ -4902,7 +4902,7 @@ void hb_ps_stream_reset(hb_stream_t *stream)
     stream->need_keyframe = 1;
 
     stream->pes.found_scr = 0;
-    stream->pes.scr = -1;
+    stream->pes.scr = AV_NOPTS_VALUE;
 
     stream->frames = 0;
     stream->errors = 0;
@@ -5521,7 +5521,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 static int64_t av_to_hb_pts( int64_t pts, double conv_factor )
 {
     if ( pts == AV_NOPTS_VALUE )
-        return -1;
+        return AV_NOPTS_VALUE;
     return (int64_t)( (double)pts * conv_factor );
 }
 
@@ -5643,11 +5643,11 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
 
     buf->s.start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
     buf->s.renderOffset = av_to_hb_pts( stream->ffmpeg_pkt->dts, tsconv );
-    if ( buf->s.renderOffset >= 0 && buf->s.start == -1 )
+    if ( buf->s.renderOffset >= 0 && buf->s.start == AV_NOPTS_VALUE )
     {
         buf->s.start = buf->s.renderOffset;
     }
-    else if ( buf->s.renderOffset == -1 && buf->s.start >= 0 )
+    else if ( buf->s.renderOffset == AV_NOPTS_VALUE && buf->s.start >= 0 )
     {
         buf->s.renderOffset = buf->s.start;
     }

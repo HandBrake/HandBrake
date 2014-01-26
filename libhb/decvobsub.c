@@ -177,7 +177,7 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->size_got = 0;
         pv->size_rle = 0;
 
-        if ( pv->pts_stop != -1 )
+        if ( pv->pts_stop != AV_NOPTS_VALUE )
         {
             // If we don't get a valid next timestamp, use the stop time
             // of the current sub as the start of the next.
@@ -225,8 +225,8 @@ static void ParseControls( hb_work_object_t * w )
     int command;
     int date, next;
 
-    pv->pts_start = -1;
-    pv->pts_stop  = -1;
+    pv->pts_start = AV_NOPTS_VALUE;
+    pv->pts_stop  = AV_NOPTS_VALUE;
     pv->pts_forced  = 0;
 
     pv->alpha[3] = 0;
@@ -271,7 +271,7 @@ static void ParseControls( hb_work_object_t * w )
                     break;
 
                 case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments
-                    if(pv->pts_stop == -1)
+                    if(pv->pts_stop == AV_NOPTS_VALUE)
                         pv->pts_stop = pv->pts + date * 1024;
                     break;
 
@@ -347,7 +347,7 @@ static void ParseControls( hb_work_object_t * w )
                     }
 
                     // fading-out
-                    if( currAlpha < lastAlpha && pv->pts_stop == -1 )
+                    if (currAlpha < lastAlpha && pv->pts_stop == AV_NOPTS_VALUE)
                     {
                         pv->pts_stop = pv->pts + date * 1024;
                     }
@@ -382,7 +382,7 @@ static void ParseControls( hb_work_object_t * w )
         i = next;
     }
     // Generate timestamps if they are not set
-    if( pv->pts_start == -1 )
+    if( pv->pts_start == AV_NOPTS_VALUE )
     {
         // Set pts to end of last sub if the start time is unknown.
         pv->pts_start = pv->pts;

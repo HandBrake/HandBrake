@@ -211,7 +211,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     avp.data = in->data;
     avp.size = in->size;
     // libav wants pkt pts in AV_TIME_BASE units
-    if (in->s.start != -1)
+    if (in->s.start != AV_NOPTS_VALUE)
     {
         avp.pts = av_rescale(in->s.start, AV_TIME_BASE, 90000);
     }
@@ -378,7 +378,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     out->s.frametype = HB_FRAME_SUBTITLE;
                     out->sequence = in->sequence;
                 }
-                out->s.renderOffset = -1;
+                out->s.renderOffset = AV_NOPTS_VALUE;
                 out->s.start = out->s.stop = pts;
             }
             else
