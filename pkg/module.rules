@@ -18,9 +18,7 @@ $(PKG.src.tar.bz2): | $(STAGE.out.src/)
 
 $(STAGE.out.src/):
 	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(PKG.basename)
-	sed 's/\(self.rev.*=.*\)0/\1$(HB.repo.rev)/' \
-	    $@/$(PKG.basename)/make/configure.py > $@/$(PKG.basename)/make/configure.py.tmp
-	$(MV.exe) $@/$(PKG.basename)/make/configure.py.tmp $@/$(PKG.basename)/make/configure.py
+	svn info $(HB.repo.url)@$(HB.repo.rev) > $@/$(PKG.basename)/version.txt
 
 $(PKG.src-contrib.tar.bz2):
 	$(TAR.exe) cjf $@ -C $(CONTRIB.download/) \

@@ -28,7 +28,8 @@ $(STAGE.out.rpm.src/): GNUmakefile
 #	tar c --exclude build ../* | tar x -C $(STAGE.out.rpm.src/)$(PKG.basename)
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $@/$(PKG.basename)
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(PKG.basename)
+	svn info $(HB.repo.url)@$(HB.repo.rev) > $@/$(PKG.basename)/version.txt
 	-$(MKDIR.exe) $(STAGE.out.rpm.src/)$(PKG.basename)/download
 	$(CP.exe) $(SRC/)download/*.tar.* $(STAGE.out.rpm.src/)$(PKG.basename)/download
 
@@ -84,7 +85,8 @@ pkg.push.src.deb:: $(PKG.src.deb.stamp)
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)saucy/$(PKG.deb.basename)
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)saucy/$(PKG.deb.basename)
+	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)saucy/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)saucy/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)saucy/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)saucy/$(PKG.deb.basename)/debian/control.saucy $(STAGE.out.src/)saucy/$(PKG.deb.basename)/debian/control
@@ -96,7 +98,8 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)saucy/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)saucy/$(PKG.src.deb.tar) -C $(STAGE.out.src/)saucy $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)saucy/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)raring/$(PKG.deb.basename)
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)raring/$(PKG.deb.basename)
+	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)raring/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)raring/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)raring/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/control.raring $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/control
@@ -108,7 +111,8 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)raring/$(PKG.src.deb.tar) -C $(STAGE.out.src/)raring $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)raring/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
+	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)quantal/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)quantal/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/control.quantal $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/control
@@ -120,7 +124,8 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)quantal/$(PKG.src.deb.tar) -C $(STAGE.out.src/)quantal $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)quantal/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)precise/$(PKG.deb.basename)
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)precise/$(PKG.deb.basename)
+	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)precise/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)precise/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)precise/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control.precise $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control

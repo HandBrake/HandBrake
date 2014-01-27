@@ -247,6 +247,7 @@ class Action( object ):
                 self._dumpSession( cfg.infof )
                 cfg.errln( 'unable to continue' )
             self._dumpSession( cfg.verbosef )
+            self._failSession()
         else:
             cfg.infof( '(%s) %s\n', self.msg_pass, self.msg_end )
             self._dumpSession( cfg.verbosef )
@@ -259,6 +260,9 @@ class Action( object ):
             printf( '  : <NO-OUTPUT>\n' )
 
     def _parseSession( self ):
+        pass
+
+    def _failSession( self ):
         pass
 
     def run( self ):
@@ -742,6 +746,30 @@ class RepoProbe( ShellProbe ):
                 self.type = 'developer'
 
         self.msg_end = self.url
+
+    def _failSession( self ):
+        # Look for svn info in version file.
+        #
+        # Version file would be created manually by source packager.
+        # e.g.
+        # $ svn info HandBrake > HandBrake/version.txt
+        # $ tar -czf handbrake-source.tgz --exclude .svn HandBrake
+        cfg.infof( 'probe: version.txt...' )
+        try:
+            hvp = os.path.join( cfg.src_dir, 'version.txt' )
+            if os.path.isfile( hvp ) and os.path.getsize( hvp ) > 0:
+                file = open( hvp, 'r' )
+                self.session = file.readlines()
+                file.close()
+                if self.session:
+                    self._parseSession()
+            if self.rev != 0:
+                cfg.infof( '(pass)\n' )
+            else:
+                cfg.infof( '(fail)\n' )
+
+        except:
+            cfg.infof( '(fail)\n' )
 
 ###############################################################################
 ##
