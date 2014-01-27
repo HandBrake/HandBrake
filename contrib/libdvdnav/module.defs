@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
-LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-svn1168.tar.gz
+LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-5c47461.tar.bz2
 LIBDVDNAV.EXTRACT.tarbase = libdvdnav
 
 ifneq (max,$(LIBDVDNAV.GCC.g))
