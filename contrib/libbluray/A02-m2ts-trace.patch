@@ -1,0 +1,15 @@
+diff --git a/src/libbluray/decoders/m2ts_filter.c b/src/libbluray/decoders/m2ts_filter.c
+index 38fa37c..200f9cd 100644
+--- a/src/libbluray/decoders/m2ts_filter.c
++++ b/src/libbluray/decoders/m2ts_filter.c
+@@ -30,8 +30,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-#define M2TS_TRACE(...) BD_DEBUG(DBG_CRIT,__VA_ARGS__)
+-//#define M2TS_TRACE(...) do {} while(0)
++//#define M2TS_TRACE(...) BD_DEBUG(DBG_CRIT,__VA_ARGS__)
++#define M2TS_TRACE(...) do {} while(0)
+ 
+ /*
+  *

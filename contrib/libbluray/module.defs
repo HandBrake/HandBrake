@@ -1,9 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,LIBXML2))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libbluray-0.2.3.tar.bz2
-
-LIBBLURAY.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; ./bootstrap;
+LIBBLURAY.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libbluray-0.5.0.tar.bz2
 
 ifneq (max,$(LIBBLURAY.GCC.g))
 	LIBBLURAY.CONFIGURE.extra += --disable-debug
