@@ -1953,6 +1953,9 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 
     memset( info, 0, sizeof(*info) );
 
+    if (pv->context == NULL)
+        return 0;
+
     info->bitrate = pv->context->bit_rate;
     // HandBrake's video pipeline uses yuv420 color.  This means all
     // dimensions must be even.  So we must adjust the dimensions
