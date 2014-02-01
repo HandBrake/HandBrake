@@ -252,6 +252,17 @@ namespace HandBrake.Interop.Model
 		}
 
 		/// <summary>
+		/// Determines if DRC can be applied to the given track with the given encoder.
+		/// </summary>
+		/// <param name="track">The track to apply DRC to.</param>
+		/// <param name="encoder">The encoder to use for DRC.</param>
+		/// <returns>True if DRC can be applied to the track with the given encoder.</returns>
+		public static bool CanApplyDrc(AudioTrack track, HBAudioEncoder encoder)
+		{
+			return HBFunctions.hb_audio_can_apply_drc(track.CodecId, track.CodecParam, encoder.Id) > 0;
+		}
+
+		/// <summary>
 		/// Sanitizes a mixdown given the output codec and input channel layout.
 		/// </summary>
 		/// <param name="mixdown">The desired mixdown.</param>

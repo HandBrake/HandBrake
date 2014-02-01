@@ -138,7 +138,7 @@ namespace HandBrake.Interop
             if (!string.IsNullOrEmpty(message))
             {
                 // These errors happen in normal operations. Log them as messages.
-                if (message == "dvd: ifoOpen failed" || message.Contains("avformat_seek_file failed"))
+				if (message == "dvd: ifoOpen failed" || message.Contains("avformat_seek_file failed") || message.Contains("nav_get_title_list"))
                 {
                     SendMessageEvent(message);
                     return;

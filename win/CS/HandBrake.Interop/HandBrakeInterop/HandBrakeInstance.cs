@@ -928,10 +928,10 @@ namespace HandBrake.Interop
                 InteropUtilities.FreeMemory(this.encodeAllocatedMemory);
                 this.encodePollTimer.Stop();
 
-                if (this.EncodeCompleted != null)
-                {
-                    this.EncodeCompleted(this, new EncodeCompletedEventArgs { Error = state.param.workdone.error > 0 });
-                }
+				if (this.EncodeCompleted != null)
+				{
+					this.EncodeCompleted(this, new EncodeCompletedEventArgs { Error = state.param.workdone.error != hb_error_code.HB_ERROR_NONE });
+				}
             }
         }
 
@@ -1516,9 +1516,16 @@ namespace HandBrake.Interop
                 nativeJob.mux = HBFunctions.hb_container_get_from_name(profile.ContainerName);
             }
 
-            IntPtr outputPathPtr = InteropUtilities.CreateUtf8Ptr(job.OutputPath);
-            allocatedMemory.Add(outputPathPtr);
-            nativeJob.file = outputPathPtr;
+			if (job.OutputPath == null)
+			{
+				nativeJob.file = IntPtr.Zero;
+			}
+			else
+			{
+				IntPtr outputPathPtr = InteropUtilities.CreateUtf8Ptr(job.OutputPath);
+				allocatedMemory.Add(outputPathPtr);
+				nativeJob.file = outputPathPtr;
+			}
 
             nativeJob.largeFileSize = profile.LargeFile ? 1 : 0;
             nativeJob.mp4_optimize = profile.Optimize ? 1 : 0;
@@ -1704,6 +1711,11 @@ namespace HandBrake.Interop
             hb_audio_s nativeAudio = baseStruct;
             HBAudioEncoder encoder = Encoders.GetAudioEncoder(encoding.Encoder);
 
+			if (encoder == null)
+			{
+				throw new InvalidOperationException("Could not find audio encoder " + encoding.Name);
+			}
+
             nativeAudio.config.output.track = outputTrack;
             nativeAudio.config.output.codec = (uint)encoder.Id;
             nativeAudio.config.output.compression_level = -1;
@@ -1876,6 +1888,7 @@ namespace HandBrake.Interop
                 {
                     TrackNumber = currentAudioTrack,
                     Codec = Converters.NativeToAudioCodec(audio.config.input.codec),
+					CodecParam = audio.config.input.codec_param,
                     CodecId = audio.config.input.codec,
                     Language = audio.config.lang.simple,
                     LanguageCode = audio.config.lang.iso639_2,

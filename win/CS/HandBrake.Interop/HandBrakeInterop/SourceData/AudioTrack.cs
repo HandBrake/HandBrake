@@ -30,6 +30,11 @@ namespace HandBrake.Interop.SourceData
 		public uint CodecId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the codec parameters for this track.
+		/// </summary>
+		public uint CodecParam { get; set; }
+
+		/// <summary>
 		/// Gets or sets the language (if detected) of this Audio Track
 		/// </summary>
 		public string Language { get; set; }

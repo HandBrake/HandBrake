@@ -84,7 +84,7 @@ namespace HandBrake.Interop.HbLib
 	public struct hb_state_workdone_anon
 	{
 		/// int
-		public int error;
+		public hb_error_code error;
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
