@@ -698,7 +698,16 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 if (len > 0 && got_frame)
                 {
                     info->rate_base          = 1;
-                    info->rate               = frame->sample_rate;
+                    // libavcoded doesn't consistently set frame->sample_rate
+                    if (frame->sample_rate != 0)
+                    {
+                        info->rate = frame->sample_rate;
+                    }
+                    else
+                    {
+                        info->rate = context->sample_rate;
+                        hb_log("decavcodecaBSInfo: warning: invalid frame sample_rate! Using context sample_rate.");
+                    }
                     info->samples_per_frame  = frame->nb_samples;
 
                     int bps = av_get_bits_per_sample(context->codec_id);
@@ -2144,8 +2153,18 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
         if (got_frame)
         {
             hb_buffer_t *out;
+            int samplerate;
+            // libavcoded doesn't yet consistently set frame->sample_rate
+            if (pv->frame->sample_rate != 0)
+            {
+                samplerate = pv->frame->sample_rate;
+            }
+            else
+            {
+                samplerate = context->sample_rate;
+            }
             double duration = (90000. * pv->frame->nb_samples /
-                               (double)pv->frame->sample_rate);
+                               (double)samplerate);
 
             if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
             {
