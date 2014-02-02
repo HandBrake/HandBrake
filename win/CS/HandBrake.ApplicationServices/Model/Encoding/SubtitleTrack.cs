@@ -233,8 +233,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 if (this.SourceTrack != null)
                 {
-                    return this.SourceTrack.SubtitleType == SubtitleType.VobSub || this.SourceTrack.SubtitleType == SubtitleType.PGS
-                        || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch;
+                    return this.SourceTrack.CanForce || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch;
                 }
 
                 return false;
@@ -247,11 +246,10 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         public bool CanBeBurned
         {
             get
-            {
+            {    
                 if (this.SourceTrack != null)
                 {
-                    return this.SourceTrack.SubtitleType == SubtitleType.VobSub || this.SourceTrack.SubtitleType == SubtitleType.PGS
-                        || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch || this.SourceTrack.SubtitleType == SubtitleType.SSA;
+                    return this.SourceTrack.CanBurnIn || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch;
                 }
 
                 return false;

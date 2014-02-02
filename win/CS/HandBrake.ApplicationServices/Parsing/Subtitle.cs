@@ -10,6 +10,7 @@
 namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
+    using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Utilities;
@@ -29,6 +30,9 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <summary>
         /// Initializes a new instance of the <see cref="Subtitle"/> class.
         /// </summary>
+        /// <param name="sourceId">
+        /// The source Id.
+        /// </param>
         /// <param name="trackNumber">
         /// The track number.
         /// </param>
@@ -41,13 +45,27 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="subtitleType">
         /// The subtitle type.
         /// </param>
-        public Subtitle(int trackNumber, string language, string languageCode, SubtitleType subtitleType)
+        /// <param name="canBurn">
+        /// The can Burn.
+        /// </param>
+        /// <param name="canForce">
+        /// The can Force.
+        /// </param>
+        public Subtitle(int sourceId, int trackNumber, string language, string languageCode, SubtitleType subtitleType, bool canBurn, bool canForce)
         {
+            this.SourceId = sourceId;
             this.TrackNumber = trackNumber;
             this.Language = language;
             this.LanguageCode = languageCode;
             this.SubtitleType = subtitleType;
+            this.CanBurnIn = canBurn;
+            this.CanForce = canForce;
         }
+
+        /// <summary>
+        /// Gets or sets the source id.
+        /// </summary>
+        public int SourceId { get; set; }
 
         /// <summary>
         /// Gets or sets the track number of this Subtitle
@@ -79,6 +97,18 @@ namespace HandBrake.ApplicationServices.Parsing
                 return string.Empty;
             }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether can burn in.
+        /// </summary>
+        [XmlIgnore]
+        public bool CanBurnIn { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether can force.
+        /// </summary>
+        [XmlIgnore]
+        public bool CanForce { get; private set; }
 
         /// <summary>
         /// Gets or sets the Subtitle Type

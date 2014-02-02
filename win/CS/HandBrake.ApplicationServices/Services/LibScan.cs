@@ -501,7 +501,7 @@ namespace HandBrake.ApplicationServices.Services
                             break;
                     }
 
-                    converted.Subtitles.Add(new Subtitle(track.TrackNumber, track.Language, track.LanguageCode, convertedType));
+                    converted.Subtitles.Add(new Subtitle(track.SubtitleSourceInt, track.TrackNumber, track.Language, track.LanguageCode, convertedType, track.CanBurn, track.CanSetForcedOnly));
                 }
 
                 titleList.Add(converted);
