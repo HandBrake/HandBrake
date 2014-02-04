@@ -78,7 +78,6 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
 	(cd $(STAGE.out.src/)saucy && dput handbrake-snapshots handbrake_$(HB.version)ppa1~saucy1_source.changes )
-	(cd $(STAGE.out.src/)raring && dput handbrake-snapshots handbrake_$(HB.version)ppa1~raring1_source.changes )
 	(cd $(STAGE.out.src/)quantal && dput handbrake-snapshots handbrake_$(HB.version)ppa1~quantal1_source.changes )
 	(cd $(STAGE.out.src/)precise && dput handbrake-snapshots handbrake_$(HB.version)ppa1~precise1_source.changes )
 
@@ -98,19 +97,6 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)saucy/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)saucy/$(PKG.src.deb.tar) -C $(STAGE.out.src/)saucy $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)saucy/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)raring/$(PKG.deb.basename)
-	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)raring/$(PKG.deb.basename)/version.txt
-	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)raring/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)raring/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/control.raring $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/control
-	$(CP.exe) $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/rules.raring $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/rules
-	echo "handbrake ($(HB.version)ppa1~raring1) raring; urgency=low" > $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
-	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)raring/$(PKG.deb.basename)/debian/changelog
-	$(TAR.exe) czf $(STAGE.out.src/)raring/$(PKG.src.deb.tar) -C $(STAGE.out.src/)raring $(PKG.deb.basename)
-	(cd $(STAGE.out.src/)raring/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
 	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)quantal/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)quantal/$(PKG.deb.basename)
