@@ -10,10 +10,10 @@ URL:		http://handbrake.fr/
 Source0:	%{name}-%{version}.tar.bz2
 Prefix:		%{_prefix}
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
-BuildRequires: glib2-devel, gtk2-devel, webkitgtk-devel
-BuildRequires: gstreamer-devel, gstreamer-plugins-base-devel, libgudev1-devel
+BuildRequires: glib2-devel, gtk3-devel, webkitgtk3-devel
+BuildRequires: gstreamer1-devel, gstreamer1-plugins-base-devel, libgudev1-devel
 BuildRequires: bzip2-devel, intltool, libnotify-devel, libtool, yasm
-Requires:	gtk2, coreutils
+Requires:	gtk3, coreutils
 
 %define debug_package %{nil}
 
