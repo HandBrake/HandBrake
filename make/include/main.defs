@@ -8,6 +8,10 @@ include $(SRC/)make/include/tool.defs
 
 ###############################################################################
 
+ifeq (1,$(FEATURE.local_pkgconfig))
+    MODULES += contrib/pkgconfig
+endif
+
 ifeq (1,$(FEATURE.local_autotools))
     MODULES += contrib/autoconf
     MODULES += contrib/automake

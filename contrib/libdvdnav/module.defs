@@ -1,8 +1,13 @@
-$(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,LIBDVDREAD))
+$(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,PKGCONFIG LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
 LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-a5c1325.tar.bz2
 
 ifneq (max,$(LIBDVDNAV.GCC.g))
     LIBDVDNAV.GCC.D += NDEBUG
+endif
+
+ifeq (1,$(FEATURE.local_pkgconfig))
+    LIBDVDNAV.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBDVDNAV.BUILD.env     = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif

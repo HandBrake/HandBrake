@@ -1,5 +1,4 @@
-__deps__ := LIBXML2 FREETYPE
-$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,$(__deps__)))
+$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,PKGCONFIG LIBXML2 FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
 LIBBLURAY.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libbluray-0.5.0.tar.bz2
@@ -15,3 +14,8 @@ ifeq (none,$(LIBBLURAY.GCC.O))
 endif
 
 LIBBLURAY.CONFIGURE.extra += --disable-examples
+
+ifeq (1,$(FEATURE.local_pkgconfig))
+    LIBBLURAY.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBBLURAY.BUILD.env     = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+endif

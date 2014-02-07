@@ -1260,6 +1260,8 @@ def createCLI():
     grp.add_option( '--enable-local-yasm', default=False, action='store_true', help=h )
     h = IfHost( 'Build and use local autotools', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-autotools', default=False, action='store_true', help=h )
+    h = IfHost( 'Build and use local pkg-config', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-local-pkgconfig', default=False, action='store_true', help=h )
 
     cli.add_option_group( grp )
 
@@ -1430,6 +1432,7 @@ try:
         autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=False )
         automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=False )
         libtool  = ToolProbe( 'LIBTOOL.exe',  'libtool', abort=False )
+        pkgconfig = ToolProbe( 'PKGCONFIG.exe', 'pkg-config', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
@@ -1500,6 +1503,11 @@ try:
     if not options.enable_local_autotools and (Tools.autoconf.fail or Tools.automake.fail or Tools.libtool.fail):
         stdout.write( 'note: enabling local autotools\n' )
         options.enable_local_autotools = True
+
+    ## enable local pkg-config when probe fails
+    if not options.enable_local_pkgconfig and Tools.pkgconfig.fail:
+        stdout.write( 'note: enabling local pkgconfig\n' )
+        options.enable_local_pkgconfig = True
 
     if build.system == 'mingw':
         dlfcn_test = """
@@ -1664,6 +1672,7 @@ int main ()
     doc.addBlank()
     doc.add( 'FEATURE.local_yasm', int( options.enable_local_yasm ))
     doc.add( 'FEATURE.local_autotools', int( options.enable_local_autotools ))
+    doc.add( 'FEATURE.local_pkgconfig', int( options.enable_local_pkgconfig ))
     doc.add( 'FEATURE.asm',        'disabled' )
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
