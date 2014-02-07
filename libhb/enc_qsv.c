@@ -1464,6 +1464,16 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                                   ((task->bs->TimeStamp -
                                                     task->bs->DecodeTimeStamp +
                                                     (duration / 2)) / duration));
+
+                    // When forcing an IDR for a chapter right after another IDR
+                    // selected by MSDK, we may end up with one more consecutive
+                    // B-reference frame than the original delay accounts for;
+                    // work around it by incrementing the delay in this case
+                    if (pv->bfrm_workaround && job->chapter_markers &&
+                        pv->bfrm_delay > 1)
+                    {
+                        pv->bfrm_delay++;
+                    }
                 }
 
                 if (!pv->bfrm_workaround)
