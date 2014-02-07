@@ -54,7 +54,7 @@ Ubuntu 13.10 packages:
 @item libdbus-glib-1-dev (gui)
 @item libgtk-3-dev (gui)
 @item libgudev-1.0-dev (gui)
-@item libwebkit-3.0-dev (gui)
+@item libwebkitgtk-3.0-dev (gui)
 @item libnotify-dev (gui)
 @item libgstreamer1.0-dev (gui)
 @item libgstreamer-plugins-base1.0-dev (gui)
@@ -67,7 +67,7 @@ sudo apt-get install subversion yasm build-essential autoconf libtool \
 zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
 libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
 libfontconfig1-dev libass-dev intltool libglib2.0-dev libdbus-glib-1-dev \
-libgtk-3-dev libgudev-1.0-dev libwebkit-3.0-dev libnotify-dev \
+libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev libnotify-dev \
 libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libappindicator-dev
 @end example
 

@@ -1,131 +1,92 @@
-Guide to Building HandBrake svn5976 (2014011501) on Linux
+Guide to Building HandBrake svn5962 (2014011201) on Linux
 *********************************************************
-
-Table of Contents
-*****************
 
 1 Introduction
 2 Prerequisites
 3 QuickStart
 4 Overview
 5 Building via Terminal
-  5.1 Checkout Sources
-  5.2 Configure
-  5.3 Build
-  5.4 Make Targets
-    5.4.1 Global
-    5.4.2 General Modules
-    5.4.3 Contrib Modules
-    5.4.4 Contrib Touch and Untouch
-    5.4.5 Contrib Aggregates
-  5.5 Customizing Make
+5.1 Checkout Sources
+5.2 Configure
+5.3 Build
+5.4 Make Targets
+  5.4.1 Global
+  5.4.2 General Modules
+  5.4.3 Contrib Modules
+  5.4.4 Contrib Touch and Untouch
+  5.4.5 Contrib Aggregates
+5.5 Customizing Make
 6 Troubleshooting
 Appendix A Project Repository Details
-
 
 1 Introduction
 **************
 
-This guide documents the recommended process to build HandBrake on
-Linux hosts from the official source-code repository. Building from any
-other source is not supported.
+This guide documents the recommended process to build HandBrake on Linux
+hosts from the official source-code repository.  Building from any other
+source is not supported.
 
 2 Prerequisites
 ***************
 
-The following are the recommended specifications for building on
-Linux; but is not necessarily the only configuration that is possible:
+The following are the recommended specifications for building on Linux;
+but is not necessarily the only configuration that is possible:
 
    * Intel 32-bit or 64-bit kernel
-
    * Ubuntu 13.10, gcc 4.8, yasm 1.2.x
-
    * Fedora 20, gcc 4.8, yasm 1.2.x
-
    * gcc 4.5 or higher is reported to work
 
-     Note: It is recommended to use the platform distribution's
-     standard compiler for maximum C++ compatibility. If you build with
-     a custom compiler it will likely introduce non-standard runtime
-     requirements and have new/delete, exception and RTTI
-     incompatibilities. There are of course many valid reasons to build
-     with unbundled compilers, but be aware it is generally unsupported
-     and left as an exercise to the reader.
+     Note: It is recommended to use the platform distribution's standard
+     compiler for maximum C++ compatibility.  If you build with a custom
+     compiler it will likely introduce non-standard runtime requirements
+     and have new/delete, exception and RTTI incompatibilities.  There
+     are of course many valid reasons to build with unbundled compilers,
+     but be aware it is generally unsupported and left as an exercise to
+     the reader.
 
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
 
    * subversion - 1.6.16
-
    * python - Python 2.7.1
-
    * curl - curl 7.21.4 (or wget)
-
    * m4 - GNU M4 1.4.6
-
    * make - GNU Make 3.81
-
    * patch - Patch 2.5.8
-
    * tar - GNU tar 1.26
-
    * wget - GNU Wget 1.13.4 (or curl)
 
-The GTK UI introduces some significant extra build requirements. If you
-intend to disable building the GUI with `configure --disable-gtk' you
+The GTK UI introduces some significant extra build requirements.  If you
+intend to disable building the GUI with 'configure --disable-gtk' you
 will not need many of these packages installed:
 
 Ubuntu 13.10 packages:
    * subversion (cli/gui)
-
    * yasm (cli/gui)
-
    * build-essential (cli/gui)
-
    * autoconf (cli/gui)
-
    * libtool (cli/gui)
-
    * zlib1g-dev (cli/gui)
-
    * libbz2-dev (cli/gui)
-
    * libxml2-dev (cli/gui)
-
    * libogg-dev (cli/gui)
-
    * libtheora-dev (cli/gui)
-
    * libvorbis-dev (cli/gui)
-
    * libsamplerate-dev (cli/gui)
-
    * libfribidi-dev (cli/gui)
-
    * libfreetype6-dev (cli/gui)
-
    * libfontconfig1-dev (cli/gui)
-
    * libass-dev (cli/gui)
-
    * intltool (gui)
-
    * libglib2.0-dev (gui)
-
    * libdbus-glib-1-dev (gui)
-
    * libgtk-3-dev (gui)
-
    * libgudev-1.0-dev (gui)
-
-   * libwebkit-3.0-dev (gui)
-
+   * libwebkitgtk-3.0-dev (gui)
    * libnotify-dev (gui)
-
    * libgstreamer1.0-dev (gui)
-
    * libgstreamer-plugins-base1.0-dev (gui)
-
    * libappindicator-dev (gui)
 
 To install these packages:
@@ -133,16 +94,13 @@ To install these packages:
      zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
      libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
      libfontconfig1-dev libass-dev intltool libglib2.0-dev libdbus-glib-1-dev \
-     libgtk-3-dev libgudev-1.0-dev libwebkit-3.0-dev libnotify-dev \
+     libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev libnotify-dev \
      libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libappindicator-dev
 
 Fedora 20 package groups:
    * Development Tools
-
    * Development Libraries
-
    * X Software Development (gui)
-
    * GNOME Software Development (gui)
 
 To install these package groups:
@@ -151,39 +109,22 @@ To install these package groups:
 
 Additional Fedora packages:
    * yasm (cli/gui)
-
    * zlib-devel (cli/gui)
-
    * bzip2-devel (cli/gui)
-
    * libogg-devel (cli/gui)
-
    * libtheora-devel (cli/gui)
-
    * libvorbis-devel (cli/gui)
-
    * libsamplerate-devel (cli/gui)
-
    * libxml2-devel (cli/gui)
-
    * fribidi-devel (cli/gui)
-
    * freetype-devel (cli/gui)
-
    * fontconfig-devel (cli/gui)
-
    * libass-devel (cli/gui)
-
    * dbus-glib-devel (gui)
-
    * libgudev1-devel (gui)
-
    * webkitgtk3-devel (gui)
-
    * libnotify-devel (gui)
-
    * gstreamer1-devel (gui)
-
    * gstreamer1-plugins-base-devel (gui)
 
 To install these packages:
@@ -196,40 +137,33 @@ To install these packages:
 3 QuickStart
 ************
 
-This chapter is for building from a terminal/shell environment in as
-few commands as possible. Upon completion of the following commands you
-should have a fresh build of HandBrake. Further instructions are
+This chapter is for building from a terminal/shell environment in as few
+commands as possible.  Upon completion of the following commands you
+should have a fresh build of HandBrake.  Further instructions are
 available beginning with *note overview:: which describes procedures
-suitable for repeating builds. This chapter should be skipped by those
+suitable for repeating builds.  This chapter should be skipped by those
 seeking more than a minimalist build.
 
      svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
      cd hb-trunk
      ./configure --launch
 
-The special option `--launch' selects launch mode and performs the
+The special option '--launch' selects launch mode and performs the
 following steps:
 
-   * assert scratch directory `build/' does not exist
-
-   * create scratch directory `build/'
-
-   * change to directory `build/'
-
-   * launch `make'
-
-   * capture build output to `build/log/build.txt'
-
+   * assert scratch directory 'build/' does not exist
+   * create scratch directory 'build/'
+   * change to directory 'build/'
+   * launch 'make'
+   * capture build output to 'build/log/build.txt'
    * echo build output
-
    * print elapsed time
-
    * indicate if build ultimately succeeded or failed
 
 4 Overview
 **********
 
-Linux builds are performed from a terminal. There is no support for
+Linux builds are performed from a terminal.  There is no support for
 building from any IDEs.
 
 5 Building via Terminal
@@ -243,13 +177,13 @@ Checkout HandBrake from the official source-code repository.
      svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
      cd hb-trunk
 
-Sources are checked out from the `trunk' branch. This document was
+Sources are checked out from the 'trunk' branch.  This document was
 generated from that very branch, and for example purposes, we will use
 exactly the same branch.
 
 If you have write-access to the repository, then you may add the
-appropriate login/password information as needed. It is recommended to
-use Subversion 1.6.0 or higher. Lower versions should also work.
+appropriate login/password information as needed.  It is recommended to
+use Subversion 1.6.0 or higher.  Lower versions should also work.
 
 5.2 Configure
 =============
@@ -258,101 +192,98 @@ Configure the build system.
 
      ./configure
 
-Configure will automatically create a scratch build directory `build'
-unless you use GNU-style build procedures and first `cd' to a directory
-other than top-level source. Additionally you may use `--build' to
-specify the directory. The name of the directory is arbitrary but it is
+Configure will automatically create a scratch build directory 'build'
+unless you use GNU-style build procedures and first 'cd' to a directory
+other than top-level source.  Additionally you may use '--build' to
+specify the directory.  The name of the directory is arbitrary but it is
 recommended to use something which indicates transient files which are
 not checked into the repository.
 
-The `configure' utility accepts many options. It is recommended that
-you specify `--help' for the complete list of options. The following
+The 'configure' utility accepts many options.  It is recommended that
+you specify '--help' for the complete list of options.  The following
 options are also documented here:
 
-`--help'
+'--help'
      List available options.
 
-`--src=DIR'
+'--src=DIR'
      Specify top-level source directory for HandBrake sources.
 
-`--build=DIR'
-     Specify destination directory for final product install. The
-     default is to use either `build' if in the top-level source
-     directory, otherwise `.'
+'--build=DIR'
+     Specify destination directory for final product install.  The
+     default is to use either 'build' if in the top-level source
+     directory, otherwise '.'
 
-`--prefix=DIR'
+'--prefix=DIR'
      Specify destination directory for final product install.  This
      defaults to a reasonable platform-specific value.
 
-`--launch'
+'--launch'
      All-in-one option which launches the build and logs output
      automatically.  Useful for novices and quick-start procedures.
 
-`--disable-gtk'
-     Disable building the GTK GUI on applicable platforms such as
-     Linux.
+'--disable-gtk'
+     Disable building the GTK GUI on applicable platforms such as Linux.
 
-`--debug=MODE'
-     Select debug mode. Must be one of `none', `min', `std', `max'.
-     This generally maps to gcc options `-g0', `-g1', `-g2', `-g3'.
+'--debug=MODE'
+     Select debug mode.  Must be one of 'none', 'min', 'std', 'max'.
+     This generally maps to gcc options '-g0', '-g1', '-g2', '-g3'.
 
-`--optimize=MODE'
-     Select optimize mode. Must be one of `none', `speed', `size'.
-     This generally maps to gcc options `-g0', `-O0', `-O3', `-Os'.
+'--optimize=MODE'
+     Select optimize mode.  Must be one of 'none', 'speed', 'size'.
+     This generally maps to gcc options '-g0', '-O0', '-O3', '-Os'.
 
-`--arch=MODE'
-     Select build architecture. The available architectures vary by
-     platform. Most platforms support exactly one architecture except
+'--arch=MODE'
+     Select build architecture.  The available architectures vary by
+     platform.  Most platforms support exactly one architecture except
      Mac OS X which has support for various universal binary
-     architectures. The available choices are hard-coded per platform
+     architectures.  The available choices are hard-coded per platform
      and no sanity checks for the required tools are performed.
 
-`--disable-xcode'
-     Disable shunting the build through `xcodebuild'. If this option is
-     applied, `HandBrakeCLI' will be produced in a similar fashion as
-     it is on other platforms; sans Xcode and the Cocoa application
-     will not be produced. Mac OS X only.
+'--disable-xcode'
+     Disable shunting the build through 'xcodebuild'.  If this option is
+     applied, 'HandBrakeCLI' will be produced in a similar fashion as it
+     is on other platforms; sans Xcode and the Cocoa application will
+     not be produced.  Mac OS X only.
 
-`--xcconfig=MODE'
-     Select Xcode project configuration file. The available modes are
-     the basenames of files located in `macosx/xcconfig/*.xcconfig'
-     which direct Xcode to build using various architecture and Mac OS
-     X deployment options. Mac OS X only.
+'--xcconfig=MODE'
+     Select Xcode project configuration file.  The available modes are
+     the basenames of files located in 'macosx/xcconfig/*.xcconfig'
+     which direct Xcode to build using various architecture and Mac OS X
+     deployment options.  Mac OS X only.
 
 Clean-room procedures dictate that when certain factors change, old
-builds should be scrapped and new builds configured. This is the main
+builds should be scrapped and new builds configured.  This is the main
 reason for requiring a scratch directory; to promote consistent,
-reliable and clean software builds. The following is a short list of
+reliable and clean software builds.  The following is a short list of
 some of the reasons why someone may choose to scrap an existing build:
 
    * configure with different options
-
    * subversion working dir is updated and you want configure to
      re-evaluate working dir metadata.
-
    * build corruption is suspected
 
-There are generally two methods for scrapping a build. The `build'
+There are generally two methods for scrapping a build.  The 'build'
 directory can be recursively removed which has the effect of loosing
 your existing configuration but does guarantee no residuals are left
-behind. The other method is to ask the build system to perform an `make
-xclean'. This is known to work well but will leave empty directories
-behind. However, the configuration is left intact.
+behind.  The other method is to ask the build system to perform an 'make
+xclean'.  This is known to work well but will leave empty directories
+behind.  However, the configuration is left intact.
 
 5.3 Build
 =========
 
-Build main product. All necessary dependencies are also built if
+Build main product.  All necessary dependencies are also built if
 required.
 
      make
 
-Parallel builds may optionally be enabled. Be aware that while a
+Parallel builds may optionally be enabled.  Be aware that while a
 parallel build may save time on systems with additional cores, the
 output is often mixed, overlapped and sometimes even corrupted with
-binary characters. Thus if you experience a build issue, you should
+binary characters.  Thus if you experience a build issue, you should
 clean and redo the build in default serial mode to produce a readable
-log. The following command allows for up to 4 concurrent jobs via make:
+log.  The following command allows for up to 4 concurrent jobs via make:
 
      make -j4
 
@@ -360,105 +291,104 @@ log. The following command allows for up to 4 concurrent jobs via make:
 ================
 
 The build system supports passing many kinds of targets some of which
-become very useful in normal development cycles. The targets by
-convention are lower-case words passed to `make'. Global targets are
-one-word targets. Scoped targets are usually two-words separated by a
+become very useful in normal development cycles.  The targets by
+convention are lower-case words passed to 'make'.  Global targets are
+one-word targets.  Scoped targets are usually two-words separated by a
 period.
 
 5.4.1 Global
 ------------
 
-`make'
-     Alias for `make build'.
+'make'
+     Alias for 'make build'.
 
-`make build'
-     Build main product. All necessary dependencies are also built if
+'make build'
+     Build main product.  All necessary dependencies are also built if
      required.
 
-`make clean'
-     Clean all build output excluding contrib modules. Configuration is
+'make clean'
+     Clean all build output excluding contrib modules.  Configuration is
      retained.
 
-`make install'
-     Perform final product(s) install.  This will install build
-     products to a standard directory or one specified via `configure
-     --prefix' option.
+'make install'
+     Perform final product(s) install.  This will install build products
+     to a standard directory or one specified via 'configure --prefix'
+     option.
 
-`make uninstall'
+'make uninstall'
      Perform final product(s) uninstall.  This will uninstall any
      products which may have been previously installed.
 
-`make xclean'
-     Clean all build output including contrib modules. Configuration is
+'make xclean'
+     Clean all build output including contrib modules.  Configuration is
      retained.
 
-`make doc'
-     Build auto-generated project documentation. Various articles are
-     produced and may be found in `build/doc/articles'.
+'make doc'
+     Build auto-generated project documentation.  Various articles are
+     produced and may be found in 'build/doc/articles'.
 
-`make doc.post'
+'make doc.post'
      Build auto-generated project documentation and post produced
      articles directly to source tree.
 
-`make report.help'
+'make report.help'
      Print list of available makefile vars report targets.  These
      reports detail var definitions and expanded values used by the
      build system.  For experts only.
 
-`make report.all'
+'make report.all'
      Convenience target which aggregates all reports.  For experts only.
 
 5.4.2 General Modules
 ---------------------
 
-General modules such as `libhb', `test' and `gtk' have the following
+General modules such as 'libhb', 'test' and 'gtk' have the following
 scoped targets:
 
-`make MODULE.build'
+'make MODULE.build'
      Build MODULE.
 
-`make MODULE.clean'
+'make MODULE.clean'
      Clean build output for MODULE.
 
 5.4.3 Contrib Modules
 ---------------------
 
-Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
-`fontconfig', `freetype', `fribidi', `lame', `libass', `libbluray',
-`libdca', `libdvdnav', `libdvdread', `libdvdread', `libiconv',
-`libmkv', `libogg', `libsamplerate', `libtheora', `libvorbis',
-`libxml2', `mp4v2', `mpeg2dec', `x264', `yasm' and `zlib' have the
-following scoped targets:
+Contrib modules such as 'a52dec', 'bzip2', 'faac', 'faad2', 'ffmpeg',
+'fontconfig', 'freetype', 'fribidi', 'lame', 'libass', 'libbluray',
+'libdca', 'libdvdnav', 'libdvdread', 'libdvdread', 'libiconv', 'libmkv',
+'libogg', 'libsamplerate', 'libtheora', 'libvorbis', 'libxml2', 'mp4v2',
+'mpeg2dec', 'x264', 'yasm' and 'zlib' have the following scoped targets:
 
-`make MODULE.fetch'
+'make MODULE.fetch'
      Download source tarball from the Internet and save to
-     `TOP/downloads' directory. No check-summing is performed.
+     'TOP/downloads' directory.  No check-summing is performed.
 
-`make MODULE.extract'
-     Extract source tarball into `build' tree.
+'make MODULE.extract'
+     Extract source tarball into 'build' tree.
 
-`make MODULE.patch'
+'make MODULE.patch'
      Apply appropriate patches (if any) to module sources.
 
-`make MODULE.configure'
+'make MODULE.configure'
      Configure module sources.  This usually invokes autotool configure.
 
-`make MODULE.build'
+'make MODULE.build'
      Build module.  This usually invokes autotool build.
 
-`make MODULE.install'
-     Install module products such as headers and libraries into `build'
+'make MODULE.install'
+     Install module products such as headers and libraries into 'build'
      tree.  This usually invokes autotool install.
 
-`make MODULE.uninstall'
+'make MODULE.uninstall'
      Uninstall module products; generally the reverse of install.  This
      usually invokes autotool uninstall.
 
-`make MODULE.clean'
-     Clean module; generally the reverse of build.  This usually
-     invokes autotool clean.
+'make MODULE.clean'
+     Clean module; generally the reverse of build.  This usually invokes
+     autotool clean.
 
-`make MODULE.xclean'
+'make MODULE.xclean'
      Extra clean module; first invokes uninstall then recursively
      removes the module build directory.
 
@@ -466,29 +396,20 @@ following scoped targets:
 -------------------------------
 
 Also available are some very granular targets which help force builds
-from specific cycle points. The following targets are available to
+from specific cycle points.  The following targets are available to
 touch and untouch the respective module target; this will force the
 build system to treat the target as satisfied after a touch or
 unsatisfied after an untouch:
 
    * make MODULE.extract.touch
-
    * make MODULE.extract.untouch
-
    * make MODULE.patch.touch
-
    * make MODULE.patch.untouch
-
    * make MODULE.configure.touch
-
    * make MODULE.configure.untouch
-
    * make MODULE.build.touch
-
    * make MODULE.build.untouch
-
    * make MODULE.install.touch
-
    * make MODULE.install.untouch
 
 5.4.5 Contrib Aggregates
@@ -498,55 +419,45 @@ For convenience, the following targets aggregate the all contrib
 modules' respective targets together:
 
    * make contrib.fetch
-
    * make contrib.extract
-
    * make contrib.patch
-
    * make contrib.configure
-
    * make contrib.build
-
    * make contrib.install
-
    * make contrib.uninstall
-
    * make contrib.clean
-
    * make contrib.xclean
 
 5.5 Customizing Make
 ====================
 
-If the need arises to override settings in the build system
-(essentially gnu-make variables) the recommended method is to create
-optional include files which are automatically included if present and
-follow this naming convention; Do not check these files into the
-repository:
+If the need arises to override settings in the build system (essentially
+gnu-make variables) the recommended method is to create optional include
+files which are automatically included if present and follow this naming
+convention; Do not check these files into the repository:
 
-`_SRC_/custom.defs'
-     Custom makevar definitions outside `build'. Suitable for settings
+'_SRC_/custom.defs'
+     Custom makevar definitions outside 'build'.  Suitable for settings
      which apply across all builds for a particular checkout; or which
-     survives manual removal of `build'.
+     survives manual removal of 'build'.
 
-`_SRC_/custom.rules'
-     Custom make rules outside `build'. Suitable for rules which apply
+'_SRC_/custom.rules'
+     Custom make rules outside 'build'.  Suitable for rules which apply
      across all builds for a particular checkout; or which survives
-     manual removal of `build'.
+     manual removal of 'build'.
 
-`_BUILD_/GNUmakefile.custom.defs'
-     Custom makevar definitions specific to a `build' directory.
+'_BUILD_/GNUmakefile.custom.defs'
+     Custom makevar definitions specific to a 'build' directory.
 
-`_BUILD_/GNUmakefile.custom.rules'
-     Custom makevar rules specific to a `build' directory.
-
+'_BUILD_/GNUmakefile.custom.rules'
+     Custom makevar rules specific to a 'build' directory.
 
 The purpose is to allow a place to store local build settings for
 testing, tweaking, and experimenting with build configuration without
-losing your settings if `configure' is invoked; ie: `configure' would
-overwrite `GNUmakefile' and any customizations contained therein would
-be lost. Here is a short example of what the contents of
-`_SRC_/custom.defs' might contain:
+losing your settings if 'configure' is invoked; ie: 'configure' would
+overwrite 'GNUmakefile' and any customizations contained therein would
+be lost.  Here is a short example of what the contents of
+'_SRC_/custom.defs' might contain:
 
      ## bump to gcc-4.6 in current path
      GCC.gcc = /usr/bin/gcc-4.6
@@ -554,33 +465,33 @@ be lost. Here is a short example of what the contents of
      ## replace optimize for 'speed' with more aggressive settings
      GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
 
-See also `make report.help' which displays a set of reports used to
-dump makefile vars.
+See also 'make report.help' which displays a set of reports used to dump
+makefile vars.
 
 6 Troubleshooting
 *****************
 
 When troubleshooting build issues, the following files relative to the
-`build/' directory may be especially useful:
+'build/' directory may be especially useful:
 
-`GNUmakefile'
+'GNUmakefile'
      Top-level makefile which contains build settings generated via
      configure.
 
-`log/config.info.txt'
+'log/config.info.txt'
      Record of output from configure.
 
-`log/config.verbose.txt'
+'log/config.verbose.txt'
      Record of verbose output from configure.
 
-`log/build.txt'
-     Record of output from `configure --launch'. Similar output may be
-     recorded using `make' depending on which shell is in use, eg:
-     `make >& log/build.txt' or `make > log/build.txt 2>&1'.
+'log/build.txt'
+     Record of output from 'configure --launch'.  Similar output may be
+     recorded using 'make' depending on which shell is in use, eg: 'make
+     >& log/build.txt' or 'make > log/build.txt 2>&1'.
 
-`log/xcodemake.env.txt'
-     Environment (variables) dump as seen when Xcode forks `make'.
-     Mac OS X only.
+'log/xcodemake.env.txt'
+     Environment (variables) dump as seen when Xcode forks 'make'.  Mac
+     OS X only.
 
 Appendix A Project Repository Details
 *************************************
@@ -589,7 +500,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    5976
-     date:   2014-01-15 14:45:39 -0800
+     rev:    5962
+     date:   2014-01-12 14:48:54 -0700
      type:   developer
-
