@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn5962 (2014011201) on Linux
+Guide to Building HandBrake svn6017 (2014020701) on Linux
 *********************************************************
 
 1 Introduction
@@ -500,6 +500,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    5962
-     date:   2014-01-12 14:48:54 -0700
+     rev:    6017
+     date:   2014-02-07 08:20:18 -0700
      type:   developer
