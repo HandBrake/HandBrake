@@ -179,7 +179,7 @@ case $host in
     ;;
 esac
 
-HB_LIBS="-lhb -la52 -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lz -lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2"
+HB_LIBS="-lhandbrake -la52 -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lz -lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2"
 
 if test "x$use_fdk_aac" = "xyes" ; then
     HB_LIBS+=" -lfdk-aac"

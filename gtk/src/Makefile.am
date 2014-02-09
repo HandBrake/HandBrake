@@ -112,7 +112,7 @@ endif
 
 ghb_LDADD = $(HB_LIBS) $(GHB_LIBS)
 
-ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhb.a
+ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhandbrake.a
 
 resources.o: resource_data.h
 

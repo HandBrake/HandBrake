@@ -70,7 +70,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0DFF0B720B6BC6E600549488 /* libhb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DFF0B720B6BC6E600549488 /* libhandbrake.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhandbrake.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -172,7 +172,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0DFF0B720B6BC6E600549488 /* libhb.a */,
+				0DFF0B720B6BC6E600549488 /* libhandbrake.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -276,9 +276,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0DFF0B710B6BC6E600549488 /* libhb */ = {
+		0DFF0B710B6BC6E600549488 /* libhandbrake */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */;
+			buildConfigurationList = 0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhandbrake" */;
 			buildPhases = (
 				0DFF0B6E0B6BC6E600549488 /* Headers */,
 				0DFF0B6F0B6BC6E600549488 /* Sources */,
@@ -288,9 +288,9 @@
 			);
 			dependencies = (
 			);
-			name = libhb;
+			name = libhandbrake;
 			productName = libmediafork;
-			productReference = 0DFF0B720B6BC6E600549488 /* libhb.a */;
+			productReference = 0DFF0B720B6BC6E600549488 /* libhandbrake.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -298,14 +298,14 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "libhb" */;
+			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "libhandbrake" */;
 			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* HandBrake */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0DFF0B710B6BC6E600549488 /* libhb */,
+				0DFF0B710B6BC6E600549488 /* libhandbrake */,
 			);
 		};
 /* End PBXProject section */
@@ -511,7 +511,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */ = {
+		0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhandbrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DFF0B740B6BC70400549488 /* Development */,
@@ -521,7 +521,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
 		};
-		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "libhb" */ = {
+		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "libhandbrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D4E7BC5087804870051572B /* Development */,

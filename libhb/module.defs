@@ -24,7 +24,7 @@ LIBHB.h.out = $(patsubst $(SRC/)%,$(BUILD/)%,$(LIBHB.h.in))
 
 ###############################################################################
 
-LIBHB.a = $(LIBHB.build/)$(call TARGET.archive,hb)
+LIBHB.a = $(LIBHB.build/)$(call TARGET.archive,handbrake)
 
 ###############################################################################
 
