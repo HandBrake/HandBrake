@@ -21,6 +21,10 @@
 #include "qsv_common.h"
 #endif
 
+#ifdef USE_X265
+#include "x265.h"
+#endif
+
 #ifdef SYS_MINGW
 #include <windows.h>
 #endif
@@ -35,6 +39,7 @@ enum
 {
     HB_GID_NONE = -1, // encoders must NEVER use it
     HB_GID_VCODEC_H264,
+    HB_GID_VCODEC_H265,
     HB_GID_VCODEC_MPEG2,
     HB_GID_VCODEC_MPEG4,
     HB_GID_VCODEC_THEORA,
@@ -52,6 +57,7 @@ enum
     HB_GID_ACODEC_VORBIS,
     HB_GID_MUX_MKV,
     HB_GID_MUX_MP4,
+    HB_GID_MUX_RAW,
 };
 
 typedef struct
@@ -201,6 +207,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     // actual encoders
     { { "H.264 (x264)",      "x264",      HB_VCODEC_X264,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264,   },
     { { "H.264 (Intel QSV)", "qsv_h264",  HB_VCODEC_QSV_H264,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264,   },
+    { { "H.265 (x265)",      "x265",      HB_VCODEC_X265,                              HB_MUX_RAW, }, NULL, 1, HB_GID_VCODEC_H265,   },
     { { "MPEG-4",            "mpeg4",     HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
     { { "MPEG-2",            "mpeg2",     HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
     { { "Theora",            "theora",    HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
@@ -220,6 +227,9 @@ static int hb_video_encoder_is_enabled(int encoder)
         case HB_VCODEC_THEORA:
         case HB_VCODEC_FFMPEG_MPEG4:
         case HB_VCODEC_FFMPEG_MPEG2:
+#ifdef USE_X265
+        case HB_VCODEC_X265:
+#endif
             return 1;
 
         default:
@@ -323,6 +333,7 @@ hb_container_internal_t hb_containers[]  =
     { { "MPEG-4 (mp4v2)",      "mp4v2",  "mp4", HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
     { { "Matroska (avformat)", "av_mkv", "mkv", HB_MUX_AV_MKV, }, NULL, 1, HB_GID_MUX_MKV, },
     { { "Matroska (libmkv)",   "libmkv", "mkv", HB_MUX_LIBMKV, }, NULL, 1, HB_GID_MUX_MKV, },
+    { { "Raw",                 "raw",    "raw", HB_MUX_RAW,    }, NULL, 1, HB_GID_MUX_RAW, },
 };
 int hb_containers_count = sizeof(hb_containers) / sizeof(hb_containers[0]);
 static int hb_container_is_enabled(int format)
@@ -338,6 +349,9 @@ static int hb_container_is_enabled(int format)
 #ifdef USE_AVFORMAT
         case HB_MUX_AV_MP4:
         case HB_MUX_AV_MKV:
+#endif
+#ifdef USE_X265
+        case HB_MUX_RAW:
 #endif
             return 1;
 
@@ -1108,6 +1122,9 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
     switch (codec)
     {
         case HB_VCODEC_X264:
+#ifdef USE_X265
+        case HB_VCODEC_X265:
+#endif
             *direction   = 1;
             *granularity = 0.1;
             *low         = 0.;
@@ -1137,6 +1154,9 @@ const char* hb_video_quality_get_name(uint32_t codec)
     switch (codec)
     {
         case HB_VCODEC_X264:
+#ifdef USE_X265
+        case HB_VCODEC_X265:
+#endif
             return "RF";
 
         default:
@@ -1156,6 +1176,10 @@ const char* const* hb_video_encoder_get_presets(int encoder)
             return hb_qsv_preset_get_names();
 #endif
 
+#ifdef USE_X265
+        case HB_VCODEC_X265:
+            return x265_preset_names;
+#endif
         default:
             return NULL;
     }
@@ -1168,6 +1192,10 @@ const char* const* hb_video_encoder_get_tunes(int encoder)
         case HB_VCODEC_X264:
             return x264_tune_names;
 
+#ifdef USE_X265
+        case HB_VCODEC_X265:
+            return x265_tune_names;
+#endif
         default:
             return NULL;
     }
@@ -1181,6 +1209,10 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_QSV_H264:
             return hb_h264_profile_names;
 
+#ifdef USE_X265
+        case HB_VCODEC_X265:
+            return x265_profile_names;
+#endif
         default:
             return NULL;
     }

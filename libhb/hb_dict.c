@@ -186,6 +186,11 @@ hb_dict_t * hb_encopts_to_dict( const char * encopts, int encoder )
                 // x264 has multiple names for some options
                 if( encoder == HB_VCODEC_X264 )
                     name = hb_x264_encopt_name( name );
+#ifdef USE_X265
+                // x265 has multiple names for some options
+                if( encoder == HB_VCODEC_X265 )
+                    name = hb_x265_encopt_name( name );
+#endif
                 hb_dict_set( &dict, name, value );
             }
         }

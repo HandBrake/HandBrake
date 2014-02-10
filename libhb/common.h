@@ -439,6 +439,7 @@ struct hb_job_s
 #define HB_VCODEC_MASK         0x0000FFF
 #define HB_VCODEC_X264         0x0000001
 #define HB_VCODEC_THEORA       0x0000002
+#define HB_VCODEC_X265         0x0000004
 #define HB_VCODEC_FFMPEG_MPEG4 0x0000010
 #define HB_VCODEC_FFMPEG_MPEG2 0x0000020
 #define HB_VCODEC_FFMPEG_MASK  0x00000F0
@@ -508,6 +509,7 @@ struct hb_job_s
 #define HB_MUX_AV_MKV   0x200000
 #define HB_MUX_MASK_MKV 0x300000
 #define HB_MUX_MASK_AV  0x220000
+#define HB_MUX_RAW      0x001000
 /* default muxer for each container */
 #define HB_MUX_MP4      HB_MUX_AV_MP4
 #define HB_MUX_MKV      HB_MUX_AV_MKV
@@ -1077,6 +1079,7 @@ extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
+extern hb_work_object_t hb_encx265;
 extern hb_work_object_t hb_deca52;
 extern hb_work_object_t hb_decdca;
 extern hb_work_object_t hb_decavcodeca;
@@ -1217,5 +1220,10 @@ const char * const * hb_h264_levels();
 
 // x264 option name/synonym helper
 const char * hb_x264_encopt_name( const char * name );
+
+#ifdef USE_X265
+// x265 option name/synonym helper
+const char * hb_x265_encopt_name( const char * name );
+#endif
 
 #endif

@@ -1239,6 +1239,11 @@ static void do_job(hb_job_t *job)
         case HB_VCODEC_THEORA:
             w = hb_get_work( WORK_ENCTHEORA );
             break;
+#ifdef USE_X265
+        case HB_VCODEC_X265:
+            w = hb_get_work( WORK_ENCX265 );
+            break;
+#endif
         }
         // Handle case where there are no filters.  
         // This really should never happen.

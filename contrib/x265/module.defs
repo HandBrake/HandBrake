@@ -1,0 +1,30 @@
+$(eval $(call import.MODULE.defs,X265,x265,YASM))
+$(eval $(call import.CONTRIB.defs,X265))
+
+X265.FETCH.url = http://download.handbrake.fr/contrib/x265-5825-9e923f539d89.tar.bz2
+
+X265.CONFIGURE.exe         = cmake
+X265.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265.CONFIGURE.prefix)"
+X265.CONFIGURE.deps        =
+X265.CONFIGURE.static      =
+X265.CONFIGURE.shared      = -DENABLE_SHARED=OFF
+X265.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=OFF
+
+ifeq (1,$(BUILD.cross))
+    X265.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(X265.CONFIGURE.host)"
+else
+    X265.CONFIGURE.args.host = -DCMAKE_HOST_SYSTEM="$(X265.CONFIGURE.host)"
+    ifeq (1,$(FEATURE.local_yasm))
+        X265.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+        X265.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    endif
+endif
+
+## find CMakeLists.txt
+X265.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(X265.EXTRACT.dir/)source/)"
+
+## optional static libs need to be marked
+X265.OSL.libs  = x265
+X265.OSL.files = $(foreach i,$(X265.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))
+
+

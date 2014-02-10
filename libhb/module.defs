@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 FAAC FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBMKV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
-    MP4V2 PTHREADW32 X264 ZLIB LIBBLURAY FDKAAC LIBMFX
+    MP4V2 PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -81,6 +81,10 @@ ifeq (1,$(FEATURE.qsv))
     LIBHB.GCC.D += USE_QSV HAVE_THREADS=1
 endif  
 
+ifeq (1,$(FEATURE.x265))    
+    LIBHB.GCC.D += USE_X265
+endif  
+
 ## required for <libdvdread/*.h>
 ifneq (,$(filter $(BUILD.arch),ppc ppc64))
 	LIBHB.GCC.D += WORDS_BIGENDIAN
@@ -132,6 +136,10 @@ endif
 
 ifeq (1,$(FEATURE.qsv))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libmfx.a
+endif
+
+ifeq (1,$(FEATURE.x265))
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libx265.a
 endif
 
 ifeq (1,$(FEATURE.mp4v2))
