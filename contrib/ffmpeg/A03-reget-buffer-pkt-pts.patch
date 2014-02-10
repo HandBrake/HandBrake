@@ -1,0 +1,30 @@
+From 091f3393401f7eb83fef4fb9cbb2e5ed2837b623 Mon Sep 17 00:00:00 2001
+From: John Stebbins <stebbins@jetheaddev.com>
+Date: Mon, 10 Feb 2014 08:52:07 -0700
+Subject: [PATCH] lavc: set AVFrame pkt_pts and reordered_opaque in
+ reget_buffer
+
+---
+ libavcodec/utils.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/utils.c b/libavcodec/utils.c
+index 46f339f..b2b11ef 100644
+--- a/libavcodec/utils.c
++++ b/libavcodec/utils.c
+@@ -762,8 +762,11 @@ int ff_reget_buffer(AVCodecContext *avctx, AVFrame *frame)
+     if (!frame->data[0])
+         return ff_get_buffer(avctx, frame, AV_GET_BUFFER_FLAG_REF);
+ 
+-    if (av_frame_is_writable(frame))
++    if (av_frame_is_writable(frame)) {
++        frame->pkt_pts = avctx->internal->pkt ? avctx->internal->pkt->pts : AV_NOPTS_VALUE;
++        frame->reordered_opaque = avctx->reordered_opaque;
+         return 0;
++    }
+ 
+     av_frame_move_ref(&tmp, frame);
+ 
+-- 
+1.8.5.3
+
