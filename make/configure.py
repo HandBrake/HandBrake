@@ -1207,6 +1207,9 @@ def createCLI():
     h = IfHost( 'enable HWD features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-hwd', default=False, action='store_true', help=h )
     
+    h = IfHost( 'enable use of x265 encoding', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-x265', default=False, action='store_true', help=h )
+
     h = IfHost( 'enable use of fdk-aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
     grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false' )
@@ -1687,6 +1690,7 @@ int main ()
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
     doc.add( 'FEATURE.hwd',        int( options.enable_hwd ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
+    doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:
         doc.addBlank()
