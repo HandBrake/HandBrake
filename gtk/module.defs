@@ -44,3 +44,7 @@ endif
 ifeq (1,$(FEATURE.libmkv))
 	GTK.CONFIGURE.extra += --enable-libmkv
 endif
+
+ifeq (1,$(FEATURE.x265))
+	GTK.CONFIGURE.extra += --enable-x265
+endif

@@ -72,6 +72,10 @@ AC_ARG_ENABLE(libmkv,
 	AS_HELP_STRING([--enable-libmkv], [enable libmkv muxer]),
 	use_libmkv=yes, use_libmkv=no)
 
+AC_ARG_ENABLE(x265,
+	AS_HELP_STRING([--enable-x265], [enable x265 encoder]),
+	use_x265=yes, use_x265=no)
+
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
 	gst_disable=yes, gst_disable=no)
@@ -195,6 +199,10 @@ fi
 
 if test "x$use_libmkv" = "xyes" ; then
     HB_LIBS+=" -lmkv"
+fi
+
+if test "x$use_x265" = "xyes" ; then
+    HB_LIBS+=" -lx265"
 fi
 
 AC_SUBST(HB_LIBS)
