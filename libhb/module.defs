@@ -81,7 +81,7 @@ ifeq (1,$(FEATURE.qsv))
     LIBHB.GCC.D += USE_QSV HAVE_THREADS=1
 endif  
 
-ifeq (1,$(FEATURE.x265))    
+ifeq (1,$(FEATURE.x265))
     LIBHB.GCC.D += USE_X265
 endif  
 
