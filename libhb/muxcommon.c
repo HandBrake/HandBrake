@@ -476,7 +476,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
             break;
 #endif
 #ifdef USE_X265
-        case HB_MUX_RAW:
+        case HB_MUX_X265:
             break;
 #endif
         default:
