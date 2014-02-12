@@ -60,12 +60,6 @@ struct hb_work_private_s
     mfxEncodeCtrl force_keyframe;
     hb_list_t *delayed_chapters;
     int64_t next_chapter_pts;
-    // used in delayed_chapters list
-    struct chapter_s
-    {
-        int     index;
-        int64_t start;
-    };
 
 #define BFRM_DELAY_MAX 16
     // for DTS generation (when MSDK API < 1.6 or VFR)
@@ -89,6 +83,13 @@ struct hb_work_private_s
     int init_done;
 
     hb_list_t *delayed_processing;
+};
+
+// used in delayed_chapters list
+struct chapter_s
+{
+    int     index;
+    int64_t start;
 };
 
 // for DTS generation (when MSDK API < 1.6 or VFR)
