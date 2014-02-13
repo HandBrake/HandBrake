@@ -159,11 +159,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->time_base.num = fps.den;
     context->gop_size  = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
 
-    /* place job->advanced_opts in an hb_dict_t for convenience */
+    /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * lavc_opts = NULL;
-    if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
+    if (job->encoder_options != NULL && *job->encoder_options)
     {
-        lavc_opts = hb_encopts_to_dict( job->advanced_opts, job->vcodec );
+        lavc_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
     }
     /* iterate through lavc_opts and have avutil parse the options for us */
     AVDictionary * av_opts = NULL;

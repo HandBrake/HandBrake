@@ -3067,18 +3067,18 @@ static void job_clean( hb_job_t * job )
         hb_filter_object_t *filter;
         hb_attachment_t *attachment;
 
+        free(job->encoder_preset);
+        job->encoder_preset = NULL;
+        free(job->encoder_tune);
+        job->encoder_tune = NULL;
+        free(job->encoder_options);
+        job->encoder_options = NULL;
+        free(job->encoder_profile);
+        job->encoder_profile = NULL;
+        free(job->encoder_level);
+        job->encoder_level = NULL;
         free(job->file);
         job->file = NULL;
-        free(job->advanced_opts);
-        job->advanced_opts = NULL;
-        free(job->x264_preset);
-        job->x264_preset = NULL;
-        free(job->x264_tune);
-        job->x264_tune = NULL;
-        free(job->h264_profile);
-        job->h264_profile = NULL;
-        free(job->h264_level);
-        job->h264_level = NULL;
 
         // clean up chapter list
         while( ( chapter = hb_list_item( job->list_chapter, 0 ) ) )
@@ -3184,53 +3184,80 @@ void hb_job_close( hb_job_t ** _j )
     }
 }
 
-void hb_job_set_file( hb_job_t *job, const char *file )
+void hb_job_set_encoder_preset(hb_job_t *job, const char *preset)
 {
-    if ( job )
+    if (job != NULL)
     {
-        hb_update_str( &job->file, file );
+        hb_update_str(&job->encoder_preset, preset);
     }
 }
 
-void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts )
+void hb_job_set_encoder_tune(hb_job_t *job, const char *tune)
 {
-    if ( job )
+    if (job != NULL)
     {
-        hb_update_str( &job->advanced_opts, advanced_opts );
+        hb_update_str(&job->encoder_tune, tune);
     }
 }
 
-void hb_job_set_x264_preset( hb_job_t *job, const char *preset )
+void hb_job_set_encoder_options(hb_job_t *job, const char *options)
 {
-    if ( job )
+    if (job != NULL)
     {
-        hb_update_str( &job->x264_preset, preset );
+        hb_update_str(&job->encoder_options, options);
     }
 }
 
-void hb_job_set_x264_tune( hb_job_t *job, const char *tune )
+void hb_job_set_encoder_profile(hb_job_t *job, const char *profile)
 {
-    if ( job )
+    if (job != NULL)
     {
-        hb_update_str( &job->x264_tune, tune );
+        hb_update_str(&job->encoder_profile, profile);
     }
 }
 
-void hb_job_set_h264_profile( hb_job_t *job, const char *profile )
+void hb_job_set_encoder_level(hb_job_t *job, const char *level)
 {
-    if ( job )
+    if (job != NULL)
     {
-        hb_update_str( &job->h264_profile, profile );
+        hb_update_str(&job->encoder_level, level);
     }
 }
 
-void hb_job_set_h264_level( hb_job_t *job, const char *level )
+void hb_job_set_file(hb_job_t *job, const char *file)
 {
-    if ( job )
+    if (job != NULL)
     {
-        hb_update_str( &job->h264_level, level );
+        hb_update_str(&job->file, file);
     }
 }
+
+#ifdef HB_API_OLD_PRESET_SETTERS
+void hb_job_set_x264_preset(hb_job_t *job, const char *preset)
+{
+    hb_job_set_encoder_preset(job, preset);
+}
+
+void hb_job_set_x264_tune(hb_job_t *job, const char *tune)
+{
+    hb_job_set_encoder_tune(job, tune);
+}
+
+void hb_job_set_advanced_opts(hb_job_t *job, const char *opts)
+{
+    hb_job_set_encoder_options(job, opts);
+}
+
+void hb_job_set_h264_profile(hb_job_t *job, const char *profile)
+{
+    hb_job_set_encoder_profile(job, profile);
+}
+
+void hb_job_set_h264_level(hb_job_t *job, const char *level)
+{
+    hb_job_set_encoder_level(job, level);
+}
+#endif
 
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter )
 {

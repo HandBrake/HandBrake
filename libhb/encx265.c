@@ -90,7 +90,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     x265_param *param = pv->param = x265_param_alloc();
 
     if (x265_param_default_preset(param,
-                                  job->x264_preset, job->x264_tune) < 0)
+                                  job->encoder_preset, job->encoder_tune) < 0)
     {
         free(pv);
         pv = NULL;
@@ -99,9 +99,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
     /* If the PSNR or SSIM tunes are in use, enable the relevant metric */
     param->bEnablePsnr = param->bEnableSsim = 0;
-    if (job->x264_tune != NULL && *job->x264_tune)
+    if (job->encoder_tune != NULL && *job->encoder_tune)
     {
-        char *tmp = strdup(job->x264_tune);
+        char *tmp = strdup(job->encoder_tune);
         char *tok = strtok(tmp,   ",./-+");
         do
         {
@@ -122,7 +122,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
     /*
      * Some HandBrake-specific defaults; users can override them
-     * using the advanced_opts string.
+     * using the encoder_options string.
      */
     param->frameRate   = (int)((double)job->vrate / (double)job->vrate_base + 0.5); // yes, this is an int
     param->keyframeMax = param->frameRate * 10;
@@ -130,7 +130,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
     /* iterate through x265_opts and parse the options */
     hb_dict_entry_t *entry = NULL;
-    hb_dict_t *x265_opts = hb_encopts_to_dict(job->advanced_opts, job->vcodec);
+    hb_dict_t *x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
     while ((entry = hb_dict_next(x265_opts, entry)) != NULL)
     {
         // here's where the strings are passed to libx265 for parsing
@@ -152,7 +152,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     hb_dict_free(&x265_opts);
 
     /*
-     * Settings which can't be overriden in the advanced_opts string
+     * Settings which can't be overriden in the encodeer_options string
      * (muxer-specific settings, resolution, ratecontrol, etc.).
      */
     param->sourceWidth  = job->width;
@@ -185,7 +185,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* Apply profile and level settings last. */
-    if (x265_param_apply_profile(param, job->h264_profile) < 0)
+    if (x265_param_apply_profile(param, job->encoder_profile) < 0)
     {
         free(pv);
         pv = NULL;

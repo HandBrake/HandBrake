@@ -2974,35 +2974,35 @@ fWorkingCount = 0;
      */
     if (job->indepth_scan == 1)
     {
-        char *x264_preset_tmp   = job->x264_preset   != NULL ? strdup(job->x264_preset)   : NULL;
-        char *x264_tune_tmp     = job->x264_tune     != NULL ? strdup(job->x264_tune)     : NULL;
-        char *advanced_opts_tmp = job->advanced_opts != NULL ? strdup(job->advanced_opts) : NULL;
-        char *h264_profile_tmp  = job->h264_profile  != NULL ? strdup(job->h264_profile)  : NULL;
-        char *h264_level_tmp    = job->h264_level    != NULL ? strdup(job->h264_level)    : NULL;
+        char *encoder_preset_tmp  = job->encoder_preset  != NULL ? strdup(job->encoder_preset)  : NULL;
+        char *encoder_tune_tmp    = job->encoder_tune    != NULL ? strdup(job->encoder_tune)    : NULL;
+        char *encoder_options_tmp = job->encoder_options != NULL ? strdup(job->encoder_options) : NULL;
+        char *encoder_profile_tmp = job->encoder_profile != NULL ? strdup(job->encoder_profile) : NULL;
+        char *encoder_level_tmp   = job->encoder_level   != NULL ? strdup(job->encoder_level)   : NULL;
         /*
          * When subtitle scan is enabled do a fast pre-scan job
          * which will determine which subtitles to enable, if any.
          */
-        hb_job_set_x264_preset  (job, NULL);
-        hb_job_set_x264_tune    (job, NULL);
-        hb_job_set_advanced_opts(job, NULL);
-        hb_job_set_h264_profile (job, NULL);
-        hb_job_set_h264_level   (job, NULL);
+        hb_job_set_encoder_preset (job, NULL);
+        hb_job_set_encoder_tune   (job, NULL);
+        hb_job_set_encoder_options(job, NULL);
+        hb_job_set_encoder_profile(job, NULL);
+        hb_job_set_encoder_level  (job, NULL);
         job->pass = -1;
         hb_add(fQueueEncodeLibhb, job);
         /*
          * reset the advanced settings
          */
-        hb_job_set_x264_preset  (job, x264_preset_tmp);
-        hb_job_set_x264_tune    (job, x264_tune_tmp);
-        hb_job_set_advanced_opts(job, advanced_opts_tmp);
-        hb_job_set_h264_profile (job, h264_profile_tmp);
-        hb_job_set_h264_level   (job, h264_level_tmp);
-        free(x264_preset_tmp);
-        free(x264_tune_tmp);
-        free(advanced_opts_tmp);
-        free(h264_profile_tmp);
-        free(h264_level_tmp);
+        hb_job_set_encoder_preset (job, encoder_preset_tmp);
+        hb_job_set_encoder_tune   (job, encoder_tune_tmp);
+        hb_job_set_encoder_options(job, encoder_options_tmp);
+        hb_job_set_encoder_profile(job, encoder_profile_tmp);
+        hb_job_set_encoder_level  (job, encoder_level_tmp);
+        free(encoder_preset_tmp);
+        free(encoder_tune_tmp);
+        free(encoder_options_tmp);
+        free(encoder_profile_tmp);
+        free(encoder_level_tmp);
     }
 
     
@@ -3422,17 +3422,17 @@ fWorkingCount = 0;
         /* advanced x264 options */
         NSString   *tmpString;
         // translate zero-length strings to NULL for libhb
-        const char *x264_preset   = NULL;
-        const char *x264_tune     = NULL;
-        const char *advanced_opts = NULL;
-        const char *h264_profile  = NULL;
-        const char *h264_level    = NULL;
+        const char *encoder_preset  = NULL;
+        const char *encoder_tune    = NULL;
+        const char *encoder_options = NULL;
+        const char *encoder_profile = NULL;
+        const char *encoder_level   = NULL;
         if ([fX264UseAdvancedOptionsCheck state])
         {
             // we are using the advanced panel
             if ([(tmpString = [fAdvancedOptions optionsString]) length])
             {
-                advanced_opts = [tmpString UTF8String];
+                encoder_options = [tmpString UTF8String];
             }
         }
         else
@@ -3440,33 +3440,33 @@ fWorkingCount = 0;
             // we are using the x264 preset system
             if ([(tmpString = [self x264Tune]) length])
             {
-                x264_tune = [tmpString UTF8String];
+                encoder_tune = [tmpString UTF8String];
             }
             if ([(tmpString = [self x264OptionExtra]) length])
             {
-                advanced_opts = [tmpString UTF8String];
+                encoder_options = [tmpString UTF8String];
             }
             if ([(tmpString = [self h264Profile]) length])
             {
-                h264_profile = [tmpString UTF8String];
+                encoder_profile = [tmpString UTF8String];
             }
             if ([(tmpString = [self h264Level]) length])
             {
-                h264_level = [tmpString UTF8String];
+                encoder_level = [tmpString UTF8String];
             }
-            x264_preset = [[self x264Preset] UTF8String];
+            encoder_preset = [[self x264Preset] UTF8String];
         }
-        hb_job_set_x264_preset  (job, x264_preset);
-        hb_job_set_x264_tune    (job, x264_tune);
-        hb_job_set_advanced_opts(job, advanced_opts);
-        hb_job_set_h264_profile (job, h264_profile);
-        hb_job_set_h264_level   (job, h264_level);
+        hb_job_set_encoder_preset (job, encoder_preset);
+        hb_job_set_encoder_tune   (job, encoder_tune);
+        hb_job_set_encoder_options(job, encoder_options);
+        hb_job_set_encoder_profile(job, encoder_profile);
+        hb_job_set_encoder_level  (job, encoder_level);
     }
     else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
-        hb_job_set_advanced_opts(job,
-                                 [[fAdvancedOptions optionsStringLavc]
-                                  UTF8String]);
+        hb_job_set_encoder_options(job,
+                                   [[fAdvancedOptions optionsStringLavc]
+                                    UTF8String]);
     }
 
     /* Video settings */
@@ -3947,17 +3947,17 @@ bool one_burned = FALSE;
         /* advanced x264 options */
         NSString   *tmpString;
         // translate zero-length strings to NULL for libhb
-        const char *x264_preset   = NULL;
-        const char *x264_tune     = NULL;
-        const char *advanced_opts = NULL;
-        const char *h264_profile  = NULL;
-        const char *h264_level    = NULL;
+        const char *encoder_preset  = NULL;
+        const char *encoder_tune    = NULL;
+        const char *encoder_options = NULL;
+        const char *encoder_profile = NULL;
+        const char *encoder_level   = NULL;
         if ([[queueToApply objectForKey:@"x264UseAdvancedOptions"] intValue])
         {
             // we are using the advanced panel
             if ([(tmpString = [queueToApply objectForKey:@"x264Option"]) length])
             {
-                advanced_opts = [tmpString UTF8String];
+                encoder_options = [tmpString UTF8String];
             }
         }
         else
@@ -3965,33 +3965,33 @@ bool one_burned = FALSE;
             // we are using the x264 preset system
             if ([(tmpString = [queueToApply objectForKey:@"x264Tune"]) length])
             {
-                x264_tune = [tmpString UTF8String];
+                encoder_tune = [tmpString UTF8String];
             }
             if ([(tmpString = [queueToApply objectForKey:@"x264OptionExtra"]) length])
             {
-                advanced_opts = [tmpString UTF8String];
+                encoder_options = [tmpString UTF8String];
             }
             if ([(tmpString = [queueToApply objectForKey:@"h264Profile"]) length])
             {
-                h264_profile = [tmpString UTF8String];
+                encoder_profile = [tmpString UTF8String];
             }
             if ([(tmpString = [queueToApply objectForKey:@"h264Level"]) length])
             {
-                h264_level = [tmpString UTF8String];
+                encoder_level = [tmpString UTF8String];
             }
-            x264_preset = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
+            encoder_preset = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
         }
-        hb_job_set_x264_preset  (job, x264_preset);
-        hb_job_set_x264_tune    (job, x264_tune);
-        hb_job_set_advanced_opts(job, advanced_opts);
-        hb_job_set_h264_profile (job, h264_profile);
-        hb_job_set_h264_level   (job, h264_level);
+        hb_job_set_encoder_preset (job, encoder_preset);
+        hb_job_set_encoder_tune   (job, encoder_tune);
+        hb_job_set_encoder_options(job, encoder_options);
+        hb_job_set_encoder_profile(job, encoder_profile);
+        hb_job_set_encoder_level  (job, encoder_level);
     }
     else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
-        hb_job_set_advanced_opts(job,
-                                 [[queueToApply objectForKey:@"lavcOption"]
-                                  UTF8String]);
+        hb_job_set_encoder_options(job,
+                                   [[queueToApply objectForKey:@"lavcOption"]
+                                    UTF8String]);
     }
     
     

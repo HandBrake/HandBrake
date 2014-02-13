@@ -137,12 +137,21 @@ void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int6
 #define HB_KEEP_HEIGHT 1
 void hb_fix_aspect( hb_job_t * job, int keep );
 
-void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts );
-void hb_job_set_x264_preset( hb_job_t *job, const char *preset );
-void hb_job_set_x264_tune( hb_job_t *job, const char *tune );
-void hb_job_set_h264_profile( hb_job_t *job, const char *profile );
-void hb_job_set_h264_level( hb_job_t *job, const char *level );
-void hb_job_set_file( hb_job_t *job, const char *file );
+void hb_job_set_encoder_preset (hb_job_t *job, const char *preset);
+void hb_job_set_encoder_tune   (hb_job_t *job, const char *tune);
+void hb_job_set_encoder_options(hb_job_t *job, const char *options);
+void hb_job_set_encoder_profile(hb_job_t *job, const char *profile);
+void hb_job_set_encoder_level  (hb_job_t *job, const char *level);
+void hb_job_set_file           (hb_job_t *job, const char *file);
+// TODO: legacy functions, remove once UIs are updated
+#define HB_API_OLD_PRESET_SETTERS
+#ifdef  HB_API_OLD_PRESET_SETTERS
+void hb_job_set_x264_preset  (hb_job_t *job, const char *preset);
+void hb_job_set_x264_tune    (hb_job_t *job, const char *tune);
+void hb_job_set_advanced_opts(hb_job_t *job, const char *opts);
+void hb_job_set_h264_profile (hb_job_t *job, const char *profile);
+void hb_job_set_h264_level   (hb_job_t *job, const char *level);
+#endif
 
 hb_audio_t *hb_audio_copy(const hb_audio_t *src);
 hb_list_t *hb_audio_list_copy(const hb_list_t *src);
@@ -441,8 +450,7 @@ struct hb_job_s
          vrate, vrate_base: output framerate is vrate / vrate_base
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
-         advanced_opts:     string of extra advanced encoder options
-         areBframes:        boolean to note if b-frames are included in advanced_opts */
+         areBframes:        boolean to note if b-frames are used */
 #define HB_VCODEC_MASK         0x0000FFF
 #define HB_VCODEC_X264         0x0000001
 #define HB_VCODEC_THEORA       0x0000002
@@ -462,11 +470,41 @@ struct hb_job_s
     int             cfr;
     int             pass;
     int             fastfirstpass;
-    char            *x264_preset;
-    char            *x264_tune;
-    char            *advanced_opts;
-    char            *h264_profile;
-    char            *h264_level;
+    union
+    {
+#ifdef HB_API_OLD_PRESET_SETTERS
+        char *x264_preset;     // TODO: legacy name, remove once UIs are updated
+#endif
+        char *encoder_preset;
+    };
+    union
+    {
+#ifdef HB_API_OLD_PRESET_SETTERS
+        char *x264_tune;       // TODO: legacy name, remove once UIs are updated
+#endif
+        char *encoder_tune;
+    };
+    union
+    {
+#ifdef HB_API_OLD_PRESET_SETTERS
+        char *advanced_opts;   // TODO: legacy name, remove once UIs are updated
+#endif
+        char *encoder_options;
+    };
+    union
+    {
+#ifdef HB_API_OLD_PRESET_SETTERS
+        char *h264_profile;    // TODO: legacy name, remove once UIs are updated
+#endif
+        char *encoder_profile;
+    };
+    union
+    {
+#ifdef HB_API_OLD_PRESET_SETTERS
+        char *h264_level;      // TODO: legacy name, remove once UIs are updated
+#endif
+        char *encoder_level;
+    };
     int             areBframes;
 
     int             color_matrix_code;
@@ -556,7 +594,11 @@ struct hb_job_s
     {
         int decode;
         int async_depth;
-        const char *preset;
+#ifdef HB_API_OLD_PRESET_SETTERS
+        const char *preset;   // TODO: deprecated, remove once UIs are updated
+#else
+        const char *reserved; // keep around until Interop is updated
+#endif
         av_qsv_context *ctx;
         // shared encoding parameters
         // initialized by the QSV encoder, then used upstream (e.g. by filters)

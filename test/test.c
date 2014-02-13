@@ -145,7 +145,6 @@ static int use_hwd = 0;
 #ifdef USE_QSV
 static int         qsv_async_depth = -1;
 static int         qsv_decode      =  1;
-static const char *qsv_preset      = NULL;
 #endif
 
 /* Exit cleanly on Ctrl-C */
@@ -171,6 +170,8 @@ static int  HandleEvents( hb_handle_t * h );
 
 static void str_vfree( char **strv );
 static char** str_split( char *str, char delem );
+
+static void print_preset_list(FILE *out, const char* const *list, const char *indent);
 
 #ifdef __APPLE_CC__
 static char* bsd_name_for_path(char *path);
@@ -1974,7 +1975,6 @@ static int HandleEvents( hb_handle_t * h )
                 job->qsv.async_depth = qsv_async_depth;
             }
             job->qsv.decode = qsv_decode;
-            job->qsv.preset = qsv_preset;
 #endif
 
             /* Grab audio tracks */
@@ -2868,10 +2868,10 @@ static int HandleEvents( hb_handle_t * h )
                 job->color_matrix_code = color_matrix_code;
             }
 
-            hb_job_set_x264_preset(job, x264_preset);
-            hb_job_set_x264_tune(job, x264_tune);
-            hb_job_set_h264_profile(job, h264_profile);
-            hb_job_set_h264_level(job, h264_level);
+            hb_job_set_encoder_preset (job, x264_preset);
+            hb_job_set_encoder_tune   (job, x264_tune);
+            hb_job_set_encoder_profile(job, h264_profile);
+            hb_job_set_encoder_level  (job, h264_level);
 
             if (maxWidth)
                 job->maxWidth = maxWidth;
@@ -2919,7 +2919,7 @@ static int HandleEvents( hb_handle_t * h )
                  */
                 job->pass = -1;
 
-                hb_job_set_advanced_opts(job, NULL);
+                hb_job_set_encoder_options(job, NULL);
 
                 job->indepth_scan = subtitle_scan;
                 fprintf( stderr, "Subtitle Scan Enabled - enabling "
@@ -2931,7 +2931,7 @@ static int HandleEvents( hb_handle_t * h )
                 hb_add( h, job );
             }
 
-            hb_job_set_advanced_opts(job, advanced_opts);
+            hb_job_set_encoder_options(job, advanced_opts);
 
             if( twoPass )
             {
@@ -3071,7 +3071,7 @@ void SigHandler( int i_signal )
  ****************************************************************************/
 static void ShowHelp()
 {
-    int i, len;
+    int i;
     const char *name;
     const hb_rate_t *rate;
     const hb_dither_t *dither;
@@ -3079,8 +3079,6 @@ static void ShowHelp()
     const hb_encoder_t *encoder;
     const hb_container_t *container;
     FILE* const out = stdout;
-    const char * const *x264_opts;
-    char tmp[80];
 
     fprintf( out,
     "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
@@ -3169,139 +3167,64 @@ static void ShowHelp()
         }
     }
     fprintf(out, "                            (default: %s)\n", name);
-    fprintf( out,
+    fprintf(out,
     "        --x264-preset       When using x264, selects the x264 preset:\n"
     "          <string>          ");
-    x264_opts = hb_video_encoder_get_presets(HB_VCODEC_X264);
-    tmp[0] = 0;
-    len = 0;
-    while( x264_opts && *x264_opts )
+    print_preset_list(out, hb_video_encoder_get_presets(HB_VCODEC_X264),
+    "                            ");
+#ifdef USE_X265
+    fprintf(out,
+    "        --x265-preset       When using x265, selects the x265 preset:\n"
+    "          <string>          ");
+    print_preset_list(out, hb_video_encoder_get_presets(HB_VCODEC_X265),
+    "                            ");
+#endif
+#ifdef USE_QSV
+    if (hb_qsv_available())
     {
-        strncat( tmp, *x264_opts++, 79 - len );
-        if( *x264_opts )
-            strcat( tmp, "/" );
-        len = strlen( tmp );
-        if( len > 40 && *x264_opts )
-        {
-            fprintf( out, "%s\n                            ", tmp );
-            len = 0;
-            tmp[0] = 0;
-        }
+        fprintf(out,
+        "        --qsv-preset        When using QSV, selects the QSV preset:\n"
+        "          <string>          ");
+        print_preset_list(out, hb_video_encoder_get_presets(HB_VCODEC_QSV_H264),
+        "                            ");
     }
-    if( len )
-        fprintf( out, "%s\n", tmp );
+#endif
     fprintf( out,
     "        --x264-tune         When using x264, selects the x264 tuning:\n"
     "          <string>          ");
-    x264_opts = hb_video_encoder_get_tunes(HB_VCODEC_X264);
-    tmp[0] = 0;
-    len = 0;
-    while( x264_opts && *x264_opts )
-    {
-        strncat( tmp, *x264_opts++, 79 - len );
-        if( *x264_opts )
-            strcat( tmp, "/" );
-        len = strlen( tmp );
-        if( len > 40 && *x264_opts )
-        {
-            fprintf( out, "%s\n                            ", tmp );
-            len = 0;
-            tmp[0] = 0;
-        }
-    }
-    if( len )
-        fprintf( out, "%s\n", tmp );
-#ifdef USE_QSV
-if (hb_qsv_available())
-{
+    print_preset_list(out, hb_video_encoder_get_tunes(HB_VCODEC_X264),
+    "                            ");
+#ifdef USE_X265
     fprintf(out,
-            "        --qsv-preset        When using QSV, selects the QSV preset:\n"
-            "          <string>          ");
-    x264_opts = hb_video_encoder_get_presets(HB_VCODEC_QSV_H264);
-    tmp[0]    = 0;
-    len       = 0;
-    while (x264_opts != NULL && *x264_opts != NULL)
-    {
-        strncat(tmp, *x264_opts++, sizeof(tmp) - 1 - len);
-        if (*x264_opts != NULL)
-        {
-            strcat(tmp, "/");
-        }
-        len = strlen(tmp);
-        if (len > 40 && *x264_opts != NULL)
-        {
-            fprintf(out, "%s\n                            ", tmp);
-            tmp[0] = 0;
-            len    = 0;
-        }
-    }
-    if (len > 0)
-    {
-        fprintf(out, "%s\n", tmp);
-    }
-}
+    "        --x265-tune         When using x265, selects the x265 tuning:\n"
+    "          <string>          ");
+    print_preset_list(out, hb_video_encoder_get_tunes(HB_VCODEC_X265),
+    "                            ");
 #endif
     fprintf(out,
-    "    -x, --encopts <string>  Specify advanced encoder options in the\n");
-#ifdef USE_QSV
-if (hb_qsv_available())
-{
-    fprintf(out,
-    "                            same style as mencoder (x264/qsv/ffmpeg only):\n");
-}
-else
-#endif
-{
-    fprintf(out,
-    "                            same style as mencoder (x264 and ffmpeg only):\n");
-}
-    
-    fprintf(out,
+    "    -x, --encopts <string>  Specify advanced encoder options in the\n"
+    "                            same style as mencoder (all except theora):\n"
     "                            option1=value1:option2=value2\n"
     "        --h264-profile      When using H.264, ensures compliance with the\n"
     "          <string>          specified H.264 profile:\n"
     "                            ");
-    x264_opts = hb_video_encoder_get_profiles(HB_VCODEC_X264);
-    tmp[0] = 0;
-    len = 0;
-    while( x264_opts && *x264_opts )
-    {
-        strncat( tmp, *x264_opts++, 79 - len );
-        if( *x264_opts )
-            strcat( tmp, "/" );
-        len = strlen( tmp );
-        if( len > 40 && *x264_opts )
-        {
-            fprintf( out, "%s\n                            ", tmp );
-            len = 0;
-            tmp[0] = 0;
-        }
-    }
-    if( len )
-        fprintf( out, "%s\n", tmp );
-    fprintf( out,
+    print_preset_list(out, hb_video_encoder_get_profiles(HB_VCODEC_X264),
+    "                            ");
+#ifdef USE_X265
+    fprintf(out,
+    "        --h265-profile      When using H.265, ensures compliance with the\n"
+    "          <string>          specified H.265 profile:\n"
+    "                            ");
+    print_preset_list(out, hb_video_encoder_get_profiles(HB_VCODEC_X265),
+    "                            ");
+#endif
+    fprintf(out,
     "        --h264-level        When using H.264, ensures compliance with the\n"
     "          <string>          specified H.264 level:\n"
     "                            ");
-    x264_opts = hb_video_encoder_get_levels(HB_VCODEC_X264);
-    tmp[0] = 0;
-    len = 0;
-    while( x264_opts && *x264_opts )
-    {
-        strncat( tmp, *x264_opts++, 79 - len );
-        if( *x264_opts )
-            strcat( tmp, "/" );
-        len = strlen( tmp );
-        if( len > 40 && *x264_opts )
-        {
-            fprintf( out, "%s\n                            ", tmp );
-            len = 0;
-            tmp[0] = 0;
-        }
-    }
-    if( len )
-        fprintf( out, "%s\n", tmp );
-    fprintf( out,
+    print_preset_list(out, hb_video_encoder_get_levels(HB_VCODEC_X264),
+    "                            ");
+    fprintf(out,
     "    -q, --quality <number>  Set video quality\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -2, --two-pass          Use two-pass mode\n"
@@ -3755,16 +3678,15 @@ static int ParseOptions( int argc, char ** argv )
     #define ALLOWED_AUDIO_COPY  280
     #define AUDIO_FALLBACK      281
     #define LOOSE_CROP          282
-    #define X264_PRESET         283
-    #define X264_TUNE           284
-    #define H264_PROFILE        285
-    #define H264_LEVEL          286
+    #define ENCODER_PRESET      283
+    #define ENCODER_TUNE        284
+    #define ENCODER_PROFILE     285
+    #define ENCODER_LEVEL       286
     #define NO_OPENCL           287
     #define NORMALIZE_MIX       288
     #define AUDIO_DITHER        289
     #define QSV_BASELINE        290
     #define QSV_ASYNC_DEPTH     291
-    #define QSV_PRESET          292
 
     for( ;; )
     {
@@ -3777,7 +3699,7 @@ static int ParseOptions( int argc, char ** argv )
             { "no-opencl",   no_argument,       NULL,    NO_OPENCL },
 
 #ifdef USE_QSV
-            { "qsv-preset",           required_argument, NULL,        QSV_PRESET,      },
+            { "qsv-preset",           required_argument, NULL,        ENCODER_PRESET,  },
             { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,    },
             { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH, },
             { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,               },
@@ -3846,12 +3768,18 @@ static int ParseOptions( int argc, char ** argv )
             { "ac",          required_argument, NULL,    'C' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-            { "x264-preset", required_argument, NULL,    X264_PRESET },
-            { "x264-tune",   required_argument, NULL,    X264_TUNE },
+            { "x264-preset", required_argument, NULL,    ENCODER_PRESET },
+            { "x264-tune",   required_argument, NULL,    ENCODER_TUNE },
             { "encopts",     required_argument, NULL,    'x' },
-            { "x264-profile", required_argument, NULL,   H264_PROFILE },
-            { "h264-profile", required_argument, NULL,   H264_PROFILE },
-            { "h264-level",  required_argument, NULL,    H264_LEVEL },
+            { "x264-profile", required_argument, NULL,   ENCODER_PROFILE },
+            { "h264-profile", required_argument, NULL,   ENCODER_PROFILE },
+            { "h264-level",  required_argument, NULL,    ENCODER_LEVEL },
+#ifdef USE_X265
+            { "x265-preset",  required_argument, NULL,   ENCODER_PRESET },
+            { "x265-tune",    required_argument, NULL,   ENCODER_TUNE },
+            { "h265-profile", required_argument, NULL,   ENCODER_PROFILE },
+            { "h265-level",   required_argument, NULL,   ENCODER_LEVEL },
+#endif
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
             { "maxWidth",    required_argument, NULL,    'X' },
@@ -4279,19 +4207,19 @@ static int ParseOptions( int argc, char ** argv )
             case 'C':
                 acompressions = str_split( optarg, ',' );
                 break;
-            case X264_PRESET:
+            case ENCODER_PRESET:
                 x264_preset = strdup( optarg );
                 break;
-            case X264_TUNE:
+            case ENCODER_TUNE:
                 x264_tune = strdup( optarg );
                 break;
             case 'x':
                 advanced_opts = strdup( optarg );
                 break;
-            case H264_PROFILE:
+            case ENCODER_PROFILE:
                 h264_profile = strdup( optarg );
                 break;
-            case H264_LEVEL:
+            case ENCODER_LEVEL:
                 h264_level = strdup( optarg );
                 break;
             case 'T':
@@ -4424,9 +4352,6 @@ static int ParseOptions( int argc, char ** argv )
             case QSV_ASYNC_DEPTH:
                 qsv_async_depth = atoi(optarg);
                 break;
-            case QSV_PRESET:
-                qsv_preset = strdup(optarg);
-                break;
 #endif
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[cur_optind] );
@@ -4506,6 +4431,34 @@ static int CheckOptions( int argc, char ** argv )
     }
 
     return 0;
+}
+
+static void print_preset_list(FILE *out, const char* const *list, const char *indent)
+{
+    if (out != NULL && list != NULL && indent != NULL)
+    {
+        int len = 0;
+        char tmp[80];
+        tmp[0] = '\0';
+        while (list != NULL && *list != NULL)
+        {
+            strncat(tmp, *list++, sizeof(tmp) - 1  - len);
+            if (*list != NULL)
+            {
+                strcat(tmp, "/");
+            }
+            if ((len = strlen(tmp)) > 40 && *list != NULL)
+            {
+                fprintf(out, "%s\n%s", tmp, indent);
+                tmp[0] = '\0';
+                len = 0;
+            }
+        }
+        if (len)
+        {
+            fprintf(out, "%s\n", tmp);
+        }
+    }
 }
 
 #ifdef __APPLE_CC__

@@ -23,6 +23,10 @@ ifeq (1,$(FEATURE.qsv))
     TEST.GCC.D += USE_QSV HAVE_THREADS=1
 endif
 
+ifeq (1,$(FEATURE.x265))
+    TEST.GCC.D += USE_X265
+endif
+
 TEST.GCC.l += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))

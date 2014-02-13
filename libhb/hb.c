@@ -1398,18 +1398,18 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     job_copy->list_attachment = hb_attachment_list_copy( job->list_attachment );
     job_copy->metadata = hb_metadata_copy( job->metadata );
 
-    if ( job->file )
-        job_copy->file  = strdup( job->file );
-    if ( job->advanced_opts )
-        job_copy->advanced_opts  = strdup( job->advanced_opts );
-    if ( job->x264_preset )
-        job_copy->x264_preset  = strdup( job->x264_preset );
-    if ( job->x264_tune )
-        job_copy->x264_tune  = strdup( job->x264_tune );
-    if ( job->h264_profile )
-        job_copy->h264_profile  = strdup( job->h264_profile );
-    if ( job->h264_level )
-        job_copy->h264_level  = strdup( job->h264_level );
+    if (job->encoder_preset != NULL)
+        job_copy->encoder_preset = strdup(job->encoder_preset);
+    if (job->encoder_tune != NULL)
+        job_copy->encoder_tune = strdup(job->encoder_tune);
+    if (job->encoder_options != NULL)
+        job_copy->encoder_options = strdup(job->encoder_options);
+    if (job->encoder_profile != NULL)
+        job_copy->encoder_profile = strdup(job->encoder_profile);
+    if (job->encoder_level != NULL)
+        job_copy->encoder_level = strdup(job->encoder_level);
+    if (job->file != NULL)
+        job_copy->file = strdup(job->file);
 
     job_copy->h     = h;
     job_copy->pause = h->pause_lock;

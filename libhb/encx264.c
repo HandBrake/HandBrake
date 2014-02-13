@@ -91,7 +91,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     pv->next_chapter_pts = AV_NOPTS_VALUE;
     pv->delayed_chapters = hb_list_init();
 
-    if( x264_param_default_preset( &param, job->x264_preset, job->x264_tune ) < 0 )
+    if (x264_param_default_preset(&param,
+                                  job->encoder_preset, job->encoder_tune) < 0)
     {
         free( pv );
         pv = NULL;
@@ -99,9 +100,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
 
     /* If the PSNR or SSIM tunes are in use, enable the relevant metric */
-    if (job->x264_tune != NULL && job->x264_tune[0] != '\0')
+    if (job->encoder_tune != NULL && *job->encoder_tune)
     {
-        char *tmp = strdup(job->x264_tune);
+        char *tmp = strdup(job->encoder_tune);
         char *tok = strtok(tmp,   ",./-+");
         do
         {
@@ -121,7 +122,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
 
     /* Some HandBrake-specific defaults; users can override them
-     * using the advanced_opts string. */
+     * using the encoder_options string. */
     if( job->pass == 2 && job->cfr != 1 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
@@ -191,11 +192,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.vui.i_colmatrix = job->title->color_matrix;
     }
 
-    /* place job->advanced_opts in an hb_dict_t for convenience */
+    /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * x264_opts = NULL;
-    if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
+    if (job->encoder_options != NULL && *job->encoder_options)
     {
-        x264_opts = hb_encopts_to_dict( job->advanced_opts, job->vcodec );
+        x264_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
     }
     /* iterate through x264_opts and have libx264 parse the options for us */
     int ret;
@@ -213,7 +214,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     hb_dict_free( &x264_opts );
 
     /* Reload colorimetry settings in case custom values were set
-     * in the advanced_opts string */
+     * in the encoder_options string */
     job->color_matrix_code = 4;
     job->color_prim = param.vui.i_colorprim;
     job->color_transfer = param.vui.i_transfer;
@@ -242,7 +243,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         hb_log( "encx264: min-keyint: %s, keyint: %s", min, max );
     }
 
-    /* Settings which can't be overriden in the advanced_opts string
+    /* Settings which can't be overriden in the encoder_options string
      * (muxer-specific settings, resolution, ratecontrol, etc.). */
 
     /* Disable annexb. Inserts size into nal header instead of start code. */
@@ -291,19 +292,19 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
 
     /* Apply profile and level settings last, if present. */
-    if (job->h264_profile != NULL && *job->h264_profile)
+    if (job->encoder_profile != NULL && *job->encoder_profile)
     {
-        if (hb_apply_h264_profile(&param, job->h264_profile, 1))
+        if (hb_apply_h264_profile(&param, job->encoder_profile, 1))
         {
             free(pv);
             pv = NULL;
             return 1;
         }
     }
-    if (job->h264_level != NULL && *job->h264_level)
+    if (job->encoder_level != NULL && *job->encoder_level)
     {
-        if (hb_apply_h264_level(&param, job->h264_level,
-                                job->h264_profile, 1) < 0)
+        if (hb_apply_h264_level(&param, job->encoder_level,
+                                job->encoder_profile, 1) < 0)
         {
             free(pv);
             pv = NULL;
@@ -330,12 +331,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
     
     /* Log the unparsed x264 options string. */
-    char *x264_opts_unparsed = hb_x264_param_unparse( job->x264_preset,
-                                                      job->x264_tune,
-                                                      job->advanced_opts,
-                                                      job->h264_profile,
-                                                      job->h264_level,
-                                                      job->width, job->height );
+    char *x264_opts_unparsed = hb_x264_param_unparse(job->encoder_preset,
+                                                     job->encoder_tune,
+                                                     job->encoder_options,
+                                                     job->encoder_profile,
+                                                     job->encoder_level,
+                                                     job->width, job->height);
     if( x264_opts_unparsed != NULL )
     {
         hb_log( "encx264: unparsed options: %s", x264_opts_unparsed );

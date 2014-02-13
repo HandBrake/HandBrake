@@ -381,7 +381,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 
     // default encoding parameters
     if (hb_qsv_param_default_preset(&pv->param, &pv->enc_space.m_mfxVideoParam,
-                                    job->qsv.preset))
+                                    job->encoder_preset))
     {
         hb_error("encqsvInit: hb_qsv_param_default_preset failed");
         return -1;
@@ -426,12 +426,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             break;
     }
 
-    // parse user-specified advanced options, if present
-    if (job->advanced_opts != NULL && job->advanced_opts[0] != '\0')
+    // parse user-specified encoder options, if present
+    if (job->encoder_options != NULL && *job->encoder_options)
     {
         hb_dict_t *options_list;
         hb_dict_entry_t *option = NULL;
-        options_list = hb_encopts_to_dict(job->advanced_opts, job->vcodec);
+        options_list = hb_encopts_to_dict(job->encoder_options, job->vcodec);
         while ((option = hb_dict_next(options_list, option)) != NULL)
         {
             switch (hb_qsv_param_parse(&pv->param,
@@ -462,7 +462,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         hb_dict_free(&options_list);
     }
 
-    // reload colorimetry in case values were set in advanced_opts
+    // reload colorimetry in case values were set in encoder_options
     if (pv->param.videoSignalInfo.ColourDescriptionPresent)
     {
         job->color_matrix_code = 4;
@@ -519,36 +519,36 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv.enc_info.align_height;
 
     // set H.264 profile and level
-    if (job->h264_profile != NULL && job->h264_profile[0] != '\0' &&
-        strcasecmp(job->h264_profile, "auto"))
+    if (job->encoder_profile != NULL && *job->encoder_profile &&
+        strcasecmp(job->encoder_profile, "auto"))
     {
-        if (!strcasecmp(job->h264_profile, "baseline"))
+        if (!strcasecmp(job->encoder_profile, "baseline"))
         {
             pv->param.videoParam->mfx.CodecProfile = MFX_PROFILE_AVC_BASELINE;
         }
-        else if (!strcasecmp(job->h264_profile, "main"))
+        else if (!strcasecmp(job->encoder_profile, "main"))
         {
             pv->param.videoParam->mfx.CodecProfile = MFX_PROFILE_AVC_MAIN;
         }
-        else if (!strcasecmp(job->h264_profile, "high"))
+        else if (!strcasecmp(job->encoder_profile, "high"))
         {
             pv->param.videoParam->mfx.CodecProfile = MFX_PROFILE_AVC_HIGH;
         }
         else
         {
-            hb_error("encqsvInit: bad profile %s", job->h264_profile);
+            hb_error("encqsvInit: bad profile %s", job->encoder_profile);
             return -1;
         }
     }
-    if (job->h264_level != NULL && job->h264_level[0] != '\0' &&
-        strcasecmp(job->h264_level, "auto"))
+    if (job->encoder_level != NULL && *job->encoder_level &&
+        strcasecmp(job->encoder_level, "auto"))
     {
         int err;
-        int i = hb_qsv_atoindex(hb_h264_level_names, job->h264_level, &err);
+        int i = hb_qsv_atoindex(hb_h264_level_names, job->encoder_level, &err);
         if (err || i >= (sizeof(hb_h264_level_values) /
                          sizeof(hb_h264_level_values[0])))
         {
-            hb_error("encqsvInit: bad level %s", job->h264_level);
+            hb_error("encqsvInit: bad level %s", job->encoder_level);
             return -1;
         }
         else if (hb_qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6)

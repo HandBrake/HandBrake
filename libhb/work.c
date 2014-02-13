@@ -309,37 +309,70 @@ void hb_display_job_info(hb_job_t *job)
         hb_log("   + encoder: %s",
                hb_video_encoder_get_long_name(job->vcodec));
 
-        if( job->x264_preset && *job->x264_preset &&
-            job->vcodec == HB_VCODEC_X264 )
+        if (job->encoder_preset && *job->encoder_preset)
         {
-            hb_log( "     + x264 preset: %s", job->x264_preset );
-        }
-        if( job->x264_tune && *job->x264_tune &&
-            job->vcodec == HB_VCODEC_X264 )
-        {
-            hb_log( "     + x264 tune: %s", job->x264_tune );
-        }
+            switch (job->vcodec)
+            {
+                case HB_VCODEC_X264:
+                    hb_log("     + x264 preset: %s", job->encoder_preset);
+                    break;
+                case HB_VCODEC_X265:
+                    hb_log("     + x265 preset: %s", job->encoder_preset);
+                    break;
 #ifdef USE_QSV
-        if ((job->qsv.preset != NULL && *job->qsv.preset) &&
-            (job->vcodec & HB_VCODEC_QSV_MASK))
-        {
-            hb_log("     + QSV preset: %s", job->qsv.preset);
-        }
+                case HB_VCODEC_QSV_H264:
+                    hb_log("     + QSV preset: %s", job->encoder_preset);
+                    break;
 #endif
-        if (job->advanced_opts != NULL && *job->advanced_opts &&
-            (job->vcodec != HB_VCODEC_THEORA))
-        {
-            hb_log("     + options: %s", job->advanced_opts);
+                default:
+                    break;
+            }
         }
-        if (job->h264_profile != NULL && *job->h264_profile &&
-            (job->vcodec & HB_VCODEC_H264_MASK))
+        if (job->encoder_tune && *job->encoder_tune)
         {
-            hb_log("     + h264 profile: %s", job->h264_profile);
+            switch (job->vcodec)
+            {
+                case HB_VCODEC_X264:
+                    hb_log("     + x264 tune: %s", job->encoder_tune);
+                    break;
+                case HB_VCODEC_X265:
+                    hb_log("     + x265 tune: %s", job->encoder_tune);
+                    break;
+                default:
+                    break;
+            }
         }
-        if (job->h264_level != NULL && *job->h264_level &&
-            (job->vcodec & HB_VCODEC_H264_MASK))
+        if (job->encoder_options != NULL && *job->encoder_options &&
+            job->vcodec != HB_VCODEC_THEORA)
         {
-            hb_log("     + h264 level: %s", job->h264_level);
+            hb_log("     + options: %s", job->encoder_options);
+        }
+        if (job->encoder_profile && *job->encoder_profile)
+        {
+            switch (job->vcodec)
+            {
+                case HB_VCODEC_X264:
+                case HB_VCODEC_QSV_H264:
+                    hb_log("     + H.264 profile: %s", job->encoder_profile);
+                    break;
+                case HB_VCODEC_X265:
+                    hb_log("     + H.265 profile: %s", job->encoder_profile);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (job->encoder_level && *job->encoder_level)
+        {
+            switch (job->vcodec)
+            {
+                case HB_VCODEC_X264:
+                case HB_VCODEC_QSV_H264:
+                    hb_log("     + H.264 level: %s", job->encoder_level);
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (job->vquality >= 0)

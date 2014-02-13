@@ -3174,7 +3174,7 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
             if (ghb_settings_get_boolean(js, "x264UseAdvancedOptions"))
             {
                 char *opts = ghb_settings_get_string(js, "x264Option");
-                hb_job_set_advanced_opts(job, opts);
+                hb_job_set_encoder_options(job, opts);
                 g_free(opts);
             }
             else
@@ -3198,18 +3198,18 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
                 }
                 tunes = g_string_free(str, FALSE);
 
-                hb_job_set_x264_preset(job, preset);
+                hb_job_set_encoder_preset(job, preset);
 
                 if (tunes != NULL && strcasecmp(tune, "none"))
-                    hb_job_set_x264_tune(job, tunes);
+                    hb_job_set_encoder_tune(job, tunes);
 
                 if (profile != NULL && strcasecmp(profile, "auto"))
-                    hb_job_set_h264_profile(job, profile);
+                    hb_job_set_encoder_profile(job, profile);
 
                 if (level != NULL && strcasecmp(level, "auto"))
-                    hb_job_set_h264_level(job, level);
+                    hb_job_set_encoder_level(job, level);
 
-                hb_job_set_advanced_opts(job, opts);
+                hb_job_set_encoder_options(job, opts);
 
                 g_free(preset);
                 g_free(tune);
@@ -3226,7 +3226,7 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
             gchar *opts = ghb_settings_get_string(js, "lavcOption");
             if (opts != NULL && opts[0])
             {
-                hb_job_set_advanced_opts(job, opts);
+                hb_job_set_encoder_options(job, opts);
             }
             g_free(opts);
         } break;
@@ -5233,7 +5233,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
          */
         job->pass = -1;
         job->indepth_scan = 1;
-        hb_job_set_advanced_opts(job, NULL);
+        hb_job_set_encoder_options(job, NULL);
 
         /*
          * Add the pre-scan job
