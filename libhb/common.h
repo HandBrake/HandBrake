@@ -216,6 +216,7 @@ struct hb_encoder_s
 {
     const char *name;       // note: used in presets
     const char *short_name; // note: used in CLI
+    const char *long_name;  // used in log
     int         codec;      // HB_*CODEC_* define
     int         muxers;     // supported muxers
 };
@@ -225,6 +226,7 @@ struct hb_container_s
 {
     const char *name;
     const char *short_name;
+    const char *long_name;
     const char *default_extension;
     int         format;
 };
@@ -255,6 +257,8 @@ struct hb_subtitle_config_s
  *
  * Use hb_*_get_name() and hb_*_get_short_name() to get the corresponding value.
  * Returns NULL if the value is invalid.
+ *
+ * Use hb_*_get_long_name() when the name is not descriptive enough for you.
  *
  * hb_*_sanitize_name() are convenience functions for use when dealing
  * with full names (e.g. to translate legacy values while loading a preset).
@@ -328,6 +332,7 @@ int                 hb_video_encoder_get_default(int muxer);
 int                 hb_video_encoder_get_from_name(const char *name);
 const char*         hb_video_encoder_get_name(int encoder);
 const char*         hb_video_encoder_get_short_name(int encoder);
+const char*         hb_video_encoder_get_long_name(int encoder);
 const char*         hb_video_encoder_sanitize_name(const char *name);
 const hb_encoder_t* hb_video_encoder_get_next(const hb_encoder_t *last);
 
@@ -343,6 +348,7 @@ int                 hb_audio_encoder_get_default(int muxer);
 int                 hb_audio_encoder_get_from_name(const char *name);
 const char*         hb_audio_encoder_get_name(int encoder);
 const char*         hb_audio_encoder_get_short_name(int encoder);
+const char*         hb_audio_encoder_get_long_name(int encoder);
 const char*         hb_audio_encoder_sanitize_name(const char *name);
 const hb_encoder_t* hb_audio_encoder_get_next(const hb_encoder_t *last);
 
@@ -358,6 +364,7 @@ int                   hb_container_get_from_name(const char *name);
 int                   hb_container_get_from_extension(const char *extension); // not really a container name
 const char*           hb_container_get_name(int format);
 const char*           hb_container_get_short_name(int format);
+const char*           hb_container_get_long_name(int format);
 const char*           hb_container_get_default_extension(int format);
 const char*           hb_container_sanitize_name(const char *name);
 const hb_container_t* hb_container_get_next(const hb_container_t *last);

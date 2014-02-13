@@ -335,6 +335,7 @@ namespace HandBrake.Interop.HbLib
 //int                 hb_video_encoder_get_from_name(const char *name);
 //const char*         hb_video_encoder_get_name(int encoder);
 //const char*         hb_video_encoder_get_short_name(int encoder);
+//const char*         hb_video_encoder_get_long_name(int encoder);
 //const char*         hb_video_encoder_sanitize_name(const char *name);
 
 		[DllImport("hb.dll", EntryPoint = "hb_video_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
@@ -352,6 +353,7 @@ namespace HandBrake.Interop.HbLib
 //int                 hb_audio_encoder_get_from_name(const char *name);
 //const char*         hb_audio_encoder_get_name(int encoder);
 //const char*         hb_audio_encoder_get_short_name(int encoder);
+//const char*         hb_audio_encoder_get_long_name(int encoder);
 //const char*         hb_audio_encoder_sanitize_name(const char *name);
 
 		[DllImport("hb.dll", EntryPoint = "hb_audio_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
@@ -361,6 +363,7 @@ namespace HandBrake.Interop.HbLib
 //int                   hb_container_get_from_extension(const char *extension); // not really a container name
 //const char*           hb_container_get_name(int format);
 //const char*           hb_container_get_short_name(int format);
+//const char*           hb_container_get_long_name(int format);
 //const char*           hb_container_get_default_extension(int format);
 //const char*           hb_container_sanitize_name(const char *name);
 

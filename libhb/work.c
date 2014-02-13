@@ -213,7 +213,7 @@ void hb_display_job_info(hb_job_t *job)
 
     hb_log( "   + %s", job->file );
 
-    hb_log("   + container: %s", hb_container_get_name(job->mux));
+    hb_log("   + container: %s", hb_container_get_long_name(job->mux));
     switch (job->mux)
     {
         case HB_MUX_MP4V2:
@@ -306,7 +306,8 @@ void hb_display_job_info(hb_job_t *job)
     if( !job->indepth_scan )
     {
         /* Video encoder */
-        hb_log("   + encoder: %s", hb_video_encoder_get_name(job->vcodec));
+        hb_log("   + encoder: %s",
+               hb_video_encoder_get_long_name(job->vcodec));
 
         if( job->x264_preset && *job->x264_preset &&
             job->vcodec == HB_VCODEC_X264 )
@@ -465,7 +466,7 @@ void hb_display_job_info(hb_job_t *job)
                            hb_audio_dither_get_description(audio->config.out.dither_method));
                 }
                 hb_log("   + encoder: %s",
-                       hb_audio_encoder_get_name(audio->config.out.codec));
+                       hb_audio_encoder_get_long_name(audio->config.out.codec));
                 if (audio->config.out.bitrate > 0)
                 {
                     hb_log("     + bitrate: %d kbps, samplerate: %d Hz",

@@ -18,6 +18,9 @@ namespace HandBrake.Interop.HbLib
 		[MarshalAs(UnmanagedType.LPStr)]
 		public string short_name;
 
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string long_name;
+
 		public int codec;
 
 		public int muxers;

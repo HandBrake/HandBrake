@@ -19,6 +19,9 @@ namespace HandBrake.Interop.HbLib
 		public string short_name;
 
 		[MarshalAs(UnmanagedType.LPStr)]
+		public string long_name;
+
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string default_extension;
 
 		public int format;
