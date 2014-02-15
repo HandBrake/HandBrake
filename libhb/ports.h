@@ -33,7 +33,6 @@ int         hb_get_cpu_count();
 int         hb_get_cpu_platform();
 const char* hb_get_cpu_name();
 const char* hb_get_cpu_platform_name();
-extern void ff_cpu_cpuid(int index, int *eax, int *ebx, int *ecx, int *edx);
 
 /************************************************************************
  * Utils

@@ -264,6 +264,24 @@ const char* hb_get_cpu_platform_name()
     }
 }
 
+#if ARCH_X86_64
+#    define REG_b "rbx"
+#    define REG_S "rsi"
+#elif ARCH_X86_32
+#    define REG_b "ebx"
+#    define REG_S "esi"
+#endif // ARCH_X86_32
+
+#if ARCH_X86_64 || ARCH_X86_32
+#define cpuid(index, eax, ebx, ecx, edx)                        \
+    __asm__ volatile (                                          \
+        "mov    %%"REG_b", %%"REG_S" \n\t"                      \
+        "cpuid                       \n\t"                      \
+        "xchg   %%"REG_b", %%"REG_S                             \
+        : "=a" (*eax), "=S" (*ebx), "=c" (*ecx), "=d" (*edx)    \
+        : "0" (index))
+#endif // ARCH_X86_64 || ARCH_X86_32
+
 static void init_cpu_info()
 {
     hb_cpu_info.name     = NULL;
@@ -272,9 +290,10 @@ static void init_cpu_info()
 
     if (av_get_cpu_flags() & AV_CPU_FLAG_SSE)
     {
+#if ARCH_X86_64 || ARCH_X86_32
         int eax, ebx, ecx, edx, family, model;
 
-        ff_cpu_cpuid(1, &eax, &ebx, &ecx, &edx);
+        cpuid(1, &eax, &ebx, &ecx, &edx);
         family = ((eax >> 8) & 0xf) + ((eax >> 20) & 0xff);
         model  = ((eax >> 4) & 0xf) + ((eax >> 12) & 0xf0);
 
@@ -323,24 +342,24 @@ static void init_cpu_info()
         // Intel 64 and IA-32 Architectures Software Developer's Manual, Vol. 2A
         // Figure 3-8: Determination of Support for the Processor Brand String
         // Table 3-17: Information Returned by CPUID Instruction
-        ff_cpu_cpuid(0x80000000, &eax, &ebx, &ecx, &edx);
+        cpuid(0x80000000, &eax, &ebx, &ecx, &edx);
         if ((eax & 0x80000004) < 0x80000004)
         {
-            ff_cpu_cpuid(0x80000002,
-                         (int*)&hb_cpu_info.buf[ 0],
-                         (int*)&hb_cpu_info.buf[ 4],
-                         (int*)&hb_cpu_info.buf[ 8],
-                         (int*)&hb_cpu_info.buf[12]);
-            ff_cpu_cpuid(0x80000003,
-                         (int*)&hb_cpu_info.buf[16],
-                         (int*)&hb_cpu_info.buf[20],
-                         (int*)&hb_cpu_info.buf[24],
-                         (int*)&hb_cpu_info.buf[28]);
-            ff_cpu_cpuid(0x80000004,
-                         (int*)&hb_cpu_info.buf[32],
-                         (int*)&hb_cpu_info.buf[36],
-                         (int*)&hb_cpu_info.buf[40],
-                         (int*)&hb_cpu_info.buf[44]);
+            cpuid(0x80000002,
+                  (int*)&hb_cpu_info.buf[ 0],
+                  (int*)&hb_cpu_info.buf[ 4],
+                  (int*)&hb_cpu_info.buf[ 8],
+                  (int*)&hb_cpu_info.buf[12]);
+            cpuid(0x80000003,
+                  (int*)&hb_cpu_info.buf[16],
+                  (int*)&hb_cpu_info.buf[20],
+                  (int*)&hb_cpu_info.buf[24],
+                  (int*)&hb_cpu_info.buf[28]);
+            cpuid(0x80000004,
+                  (int*)&hb_cpu_info.buf[32],
+                  (int*)&hb_cpu_info.buf[36],
+                  (int*)&hb_cpu_info.buf[40],
+                  (int*)&hb_cpu_info.buf[44]);
 
             hb_cpu_info.name    = hb_cpu_info.buf;
             hb_cpu_info.buf[47] = '\0'; // just in case
@@ -351,6 +370,7 @@ static void init_cpu_info()
                 hb_cpu_info.name++;
             }
         }
+#endif // ARCH_X86_64 || ARCH_X86_32
     }
 }
 

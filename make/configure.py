@@ -1741,6 +1741,11 @@ int main ()
         doc.add( 'GCC.sysroot', '' )
         doc.add( 'GCC.minver', '' )
 
+    if build.match( 'i?86-*' ):
+        doc.add( 'LIBHB.GCC.D', 'ARCH_X86_32', append=True )
+    elif build.match( 'x86_64-*' ):
+        doc.add( 'LIBHB.GCC.D', 'ARCH_X86_64', append=True )
+
     if options.enable_asm and ( not Tools.yasm.fail or options.enable_local_yasm ):
         asm = ''
         if build.match( 'i?86-*' ):
