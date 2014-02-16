@@ -11,6 +11,9 @@ namespace HandBrake.ApplicationServices.Model
 {
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Model.Audio;
+    using HandBrake.ApplicationServices.Model.Subtitle;
+
     /// <summary>
     /// A Preset for encoding with.
     /// </summary>
@@ -24,6 +27,7 @@ namespace HandBrake.ApplicationServices.Model
         private bool isDefault;
 
         #endregion
+
 
         #region Properties
 
@@ -88,6 +92,16 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets The version number which associates this preset with a HB build
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audio track behaviours.
+        /// </summary>
+        public AudioBehaviours AudioTrackBehaviours { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subtitle track behaviours.
+        /// </summary>
+        public SubtitleBehaviours SubtitleTrackBehaviours { get; set; }
 
         #endregion
 

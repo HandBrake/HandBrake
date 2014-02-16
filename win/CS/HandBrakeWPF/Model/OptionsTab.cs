@@ -22,9 +22,6 @@ namespace HandBrakeWPF.Model
         [Display(Name = "Output Files")]
         OutputFiles,
 
-        [Display(Name = "Audio and Subtitles")]
-        AudioAndSubtitles,
-
         [Display(Name = "Video")]
         Video,
 

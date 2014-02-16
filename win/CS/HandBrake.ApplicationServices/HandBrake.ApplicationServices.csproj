@@ -97,7 +97,11 @@
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
     <Compile Include="LibHb\AudioVideoHelpers.cs" />
+    <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
+    <Compile Include="Model\Audio\AudioBehaviours.cs" />
     <Compile Include="Model\HBConfiguration.cs" />
+    <Compile Include="Model\Subtitle\SubtitleBehaviourModes.cs" />
+    <Compile Include="Model\Subtitle\SubtitleBehaviours.cs" />
     <Compile Include="Model\VideoScaler.cs" />
     <Compile Include="Services\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />

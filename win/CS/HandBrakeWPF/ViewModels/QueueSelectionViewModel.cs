@@ -122,12 +122,12 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 // TODO decide what is the minimal requirement to hide the warning message.
-                if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) != Constants.Any ||
-                    this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) !=
-                    Constants.Any)
-                {
-                    return true;
-                }
+                //if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) != Constants.Any ||
+                //    this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) !=
+                //    Constants.Any)
+                //{
+                //    return true;
+                //}
 
                 return false;
             }

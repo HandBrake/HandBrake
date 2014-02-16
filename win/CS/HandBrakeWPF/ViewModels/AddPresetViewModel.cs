@@ -13,6 +13,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Audio;
+    using HandBrake.ApplicationServices.Model.Subtitle;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -132,9 +134,17 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="title">
         /// The title.
         /// </param>
-        public void Setup(EncodeTask task, Title title)
+        /// <param name="audioBehaviours">
+        /// The audio Behaviours.
+        /// </param>
+        /// <param name="subtitleBehaviours">
+        /// The subtitle Behaviours.
+        /// </param>
+        public void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
         {
             this.Preset.Task = new EncodeTask(task);
+            this.Preset.AudioTrackBehaviours = audioBehaviours.Clone();
+            this.Preset.SubtitleTrackBehaviours = subtitleBehaviours.Clone();
             this.selectedTitle = title;
 
             switch (task.Anamorphic)

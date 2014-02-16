@@ -22,11 +22,6 @@ namespace HandBrakeWPF
         public const string HandBrakeBuild = "HandBrakeBuild";
 
         /// <summary>
-        /// Add Only One Per Langage
-        /// </summary>
-        public const string AddOnlyOneAudioPerLanguage = "addOnlyOneAudioPerLanguage";
-
-        /// <summary>
         /// Auto name format
         /// </summary>
         public const string AutoNameFormat = "autoNameFormat";
@@ -67,21 +62,6 @@ namespace HandBrakeWPF
         public const string DefaultPlayer = "defaultPlayer";
 
         /// <summary>
-        /// Dub mode
-        /// </summary>
-        public const string DubMode = "DubMode";
-
-        /// <summary>
-        /// Dub Mode Audio
-        /// </summary>
-        public const string DubModeAudio = "DubModeAudio";
-
-        /// <summary>
-        /// Dub Mode Subs
-        /// </summary>
-        public const string DubModeSubtitle = "DubModeSubtitle";
-
-        /// <summary>
         /// Last Update Check
         /// </summary>
         public const string LastUpdateCheckDate = "lastUpdateCheckDate";
@@ -97,29 +77,9 @@ namespace HandBrakeWPF
         public const string MinTitleLength = "MinTitleLength";
 
         /// <summary>
-        /// Native Language Audio
-        /// </summary>
-        public const string NativeLanguage = "NativeLanguage";
-
-        /// <summary>
-        /// Native Language Subs
-        /// </summary>
-        public const string NativeLanguageForSubtitles = "NativeLanguageSubtitles";
-
-        /// <summary>
         /// Preset Notification
         /// </summary>
         public const string PresetNotification = "presetNotification";
-
-        /// <summary>
-        /// Selected Languages
-        /// </summary>
-        public const string SelectedLanguages = "SelectedLanguages";
-
-        /// <summary>
-        /// AUudio Passthru
-        /// </summary>
-        public const string ShowAdvancedAudioPassthruOpts = "ShowAdvancedAudioPassthruOpts";
 
         /// <summary>
         /// Skip Version
@@ -130,11 +90,6 @@ namespace HandBrakeWPF
         /// Update Status
         /// </summary>
         public const string UpdateStatus = "updateStatus";
-
-        /// <summary>
-        /// Closed Captions
-        /// </summary>
-        public const string UseClosedCaption = "useClosedCaption";
 
         /// <summary>
         /// Use m4v
@@ -240,11 +195,6 @@ namespace HandBrakeWPF
         /// The reset when done action.
         /// </summary>
         public const string ResetWhenDoneAction = "ResetWhenDoneAction";
-
-        /// <summary>
-        /// The add foreign audio scan track.
-        /// </summary>
-        public const string AddForeignAudioScanTrack = "AddForeignAudioScanTrack";
 
         /// <summary>
         /// The disable lib dvd nav.

@@ -19,8 +19,6 @@ namespace HandBrakeWPF.Converters
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
-    using HandBrakeWPF.Model;
-
     /// <summary>
     /// Enum Combo Converter
     /// </summary>

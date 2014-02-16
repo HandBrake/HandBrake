@@ -10,6 +10,8 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Audio;
+    using HandBrake.ApplicationServices.Model.Subtitle;
     using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
@@ -26,6 +28,12 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="title">
         /// The title.
         /// </param>
-        void Setup(EncodeTask task, Title title);
+        /// <param name="audioBehaviours">
+        /// The audio Behaviours.
+        /// </param>
+        /// <param name="subtitleBehaviours">
+        /// The subtitle Behaviours.
+        /// </param>
+        void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours);
     }
 }

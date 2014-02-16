@@ -267,8 +267,6 @@ namespace HandBrake.Interop
             HBFunctions.hb_scan_stop(this.hbHandle);
         }
 
-
-
         /// <summary>
         /// Gets an image for the given job and preview
         /// </summary>

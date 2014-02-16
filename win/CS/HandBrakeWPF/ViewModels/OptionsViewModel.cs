@@ -10,8 +10,6 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
@@ -21,9 +19,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model;
@@ -55,26 +51,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly IUpdateService updateService;
 
         /// <summary>
-        /// The add audio mode options.
-        /// </summary>
-        private BindingList<string> addAudioModeOptions = new BindingList<string>();
-
-        /// <summary>
-        /// The add closed captions.
-        /// </summary>
-        private bool addClosedCaptions;
-
-        /// <summary>
-        /// The add only one audio track per language.
-        /// </summary>
-        private bool addOnlyOneAudioTrackPerLanguage;
-
-        /// <summary>
-        /// The add subtitle mode options.
-        /// </summary>
-        private BindingList<string> addSubtitleModeOptions = new BindingList<string>();
-
-        /// <summary>
         /// The arguments.
         /// </summary>
         private string arguments;
@@ -93,11 +69,6 @@ namespace HandBrakeWPF.ViewModels
         /// The autoname format.
         /// </summary>
         private string autonameFormat;
-
-        /// <summary>
-        /// The available languages.
-        /// </summary>
-        private BindingList<string> availableLanguages = new BindingList<string>();
 
         /// <summary>
         /// The change to title case.
@@ -205,16 +176,6 @@ namespace HandBrakeWPF.ViewModels
         private bool removeUnderscores;
 
         /// <summary>
-        /// The selected add audio mode.
-        /// </summary>
-        private int selectedAddAudioMode;
-
-        /// <summary>
-        /// The selected add subtitle mode.
-        /// </summary>
-        private int selectedAddSubtitleMode;
-
-        /// <summary>
         /// The selected granulairty.
         /// </summary>
         private string selectedGranulairty;
@@ -223,21 +184,6 @@ namespace HandBrakeWPF.ViewModels
         /// The selected mp 4 extension.
         /// </summary>
         private int selectedMp4Extension;
-
-        /// <summary>
-        /// The selected preferred languages.
-        /// </summary>
-        private BindingList<string> preferredLanguages = new BindingList<string>();
-
-        /// <summary>
-        /// The selected preferred langauge.
-        /// </summary>
-        private string selectedPreferredLangauge;
-
-        /// <summary>
-        /// The selected preferred subtitle language
-        /// </summary>
-        private string selectedPreferredSubtitleLangauge;
 
         /// <summary>
         /// The selected preview count.
@@ -283,16 +229,6 @@ namespace HandBrakeWPF.ViewModels
         /// The when done options.
         /// </summary>
         private BindingList<string> whenDoneOptions = new BindingList<string>();
-
-        /// <summary>
-        /// Selected Langauges
-        /// </summary>
-        private BindingList<string> selectedLangauges = new BindingList<string>();
-
-        /// <summary>
-        /// The backing field for show advanced passthru options for Audio
-        /// </summary>
-        private bool showAdvancedPassthruOpts;
 
         /// <summary>
         /// Backing field for clear queue on encode completed.
@@ -373,11 +309,6 @@ namespace HandBrakeWPF.ViewModels
         /// The disable quick sync decoding.
         /// </summary>
         private bool disableQuickSyncDecoding;
-
-        /// <summary>
-        /// The add foreign audio scan track.
-        /// </summary>
-        private bool addForeignAudioScanTrack;
 
         /// <summary>
         /// The is cl scaling.
@@ -822,242 +753,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("VLCPath");
             }
         }
-        #endregion
-
-        #region Audio and Subtitles
-
-        /// <summary>
-        /// Gets or sets preferredLanguages.
-        /// </summary>
-        public BindingList<string> PreferredLanguages
-        {
-            get
-            {
-                return this.preferredLanguages;
-            }
-
-            set
-            {
-                this.preferredLanguages = value;
-                this.NotifyOfPropertyChange("PreferredLanguages");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedPreferreedLangauge.
-        /// </summary>
-        public string SelectedPreferredLangauge
-        {
-            get
-            {
-                return this.selectedPreferredLangauge;
-            }
-
-            set
-            {
-                this.selectedPreferredLangauge = value;
-                this.NotifyOfPropertyChange(() => SelectedPreferredLangauge);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedPreferredSubtitleLangauge.
-        /// </summary>
-        public string SelectedPreferredSubtitleLangauge
-        {
-            get
-            {
-                return this.selectedPreferredSubtitleLangauge;
-            }
-
-            set
-            {
-                this.selectedPreferredSubtitleLangauge = value;
-                this.NotifyOfPropertyChange(() => SelectedPreferredSubtitleLangauge);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets AvailableLanguages.
-        /// </summary>
-        public BindingList<string> AvailableLanguages
-        {
-            get
-            {
-                return this.availableLanguages;
-            }
-
-            set
-            {
-                this.availableLanguages = value;
-                this.NotifyOfPropertyChange("AvailableLanguages");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedLangauges.
-        /// </summary>
-        public BindingList<string> SelectedLangauges
-        {
-            get
-            {
-                return this.selectedLangauges;
-            }
-            set
-            {
-                this.selectedLangauges = value;
-                this.NotifyOfPropertyChange("SelectedLangauges");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedLangauges.
-        /// </summary>
-        public BindingList<string> SelectedAvailableToMove { get; set; }
-
-        /// <summary>
-        /// Gets or sets SelectedLangauges.
-        /// </summary>
-        public BindingList<string> SelectedLangaugesToMove { get; set; }
-
-        /// <summary>
-        /// Gets or sets AddAudioModeOptions.
-        /// </summary>
-        public BindingList<string> AddAudioModeOptions
-        {
-            get
-            {
-                return this.addAudioModeOptions;
-            }
-
-            set
-            {
-                this.addAudioModeOptions = value;
-                this.NotifyOfPropertyChange("AddAudioModeOptions");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether AddClosedCaptions.
-        /// </summary>
-        public bool AddClosedCaptions
-        {
-            get
-            {
-                return this.addClosedCaptions;
-            }
-
-            set
-            {
-                this.addClosedCaptions = value;
-                this.NotifyOfPropertyChange("AddClosedCaptions");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether AddOnlyOneAudioTrackPerLanguage.
-        /// </summary>
-        public bool AddOnlyOneAudioTrackPerLanguage
-        {
-            get
-            {
-                return this.addOnlyOneAudioTrackPerLanguage;
-            }
-
-            set
-            {
-                this.addOnlyOneAudioTrackPerLanguage = value;
-                this.NotifyOfPropertyChange("AddOnlyOneAudioTrackPerLanguage");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets AddSubtitleModeOptions.
-        /// </summary>
-        public BindingList<string> AddSubtitleModeOptions
-        {
-            get
-            {
-                return this.addSubtitleModeOptions;
-            }
-
-            set
-            {
-                this.addSubtitleModeOptions = value;
-                this.NotifyOfPropertyChange("AddSubtitleModeOptions");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedAddAudioMode.
-        /// </summary>
-        public int SelectedAddAudioMode
-        {
-            get
-            {
-                return this.selectedAddAudioMode;
-            }
-
-            set
-            {
-                this.selectedAddAudioMode = value;
-                this.NotifyOfPropertyChange("SelectedAddAudioMode");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedAddSubtitleMode.
-        /// </summary>
-        public int SelectedAddSubtitleMode
-        {
-            get
-            {
-                return this.selectedAddSubtitleMode;
-            }
-
-            set
-            {
-                this.selectedAddSubtitleMode = value;
-                this.NotifyOfPropertyChange("SelectedAddSubtitleMode");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowAdvancedPassthruOpts.
-        /// </summary>
-        public bool ShowAdvancedPassthruOpts
-        {
-            get
-            {
-                return this.showAdvancedPassthruOpts;
-            }
-            set
-            {
-                this.showAdvancedPassthruOpts = value;
-                this.NotifyOfPropertyChange(() => this.ShowAdvancedPassthruOpts);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether add foreign audio scan track.
-        /// </summary>
-        public bool AddForeignAudioScanTrack
-        {
-            get
-            {
-                return this.addForeignAudioScanTrack;
-            }
-            set
-            {
-                if (value.Equals(this.addForeignAudioScanTrack))
-                {
-                    return;
-                }
-                this.addForeignAudioScanTrack = value;
-                this.NotifyOfPropertyChange(() => this.AddForeignAudioScanTrack);
-            }
-        }
-
         #endregion
 
         #region System and Logging
@@ -1655,56 +1350,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Audio List Move Left
-        /// </summary>
-        public void LanguageMoveRight()
-        {
-            if (this.SelectedAvailableToMove.Count > 0)
-            {
-                List<string> copiedList = SelectedAvailableToMove.ToList();
-                foreach (string item in copiedList)
-                {
-                    this.AvailableLanguages.Remove(item);
-                    this.SelectedLangauges.Add(item);
-                }
-
-                this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
-            }
-        }
-
-        /// <summary>
-        /// Audio List Move Right
-        /// </summary>
-        public void LanguageMoveLeft()
-        {
-            if (this.SelectedLangaugesToMove.Count > 0)
-            {
-                List<string> copiedList = SelectedLangaugesToMove.ToList();
-                foreach (string item in copiedList)
-                {
-                    this.SelectedLangauges.Remove(item);
-                    this.AvailableLanguages.Add(item);
-                }
-            }
-
-            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
-        }
-
-        /// <summary>
-        /// Audio List Clear all selected languages
-        /// </summary>
-        public void LanguageClearAll()
-        {
-            foreach (string item in this.SelectedLangauges)
-            {
-                this.AvailableLanguages.Add(item);
-            }
-            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
-
-            this.SelectedLangauges.Clear();
-        }
-
-        /// <summary>
         /// Browse - Log Path
         /// </summary>
         public void BrowseLogPath()
@@ -1852,64 +1497,6 @@ namespace HandBrakeWPF.ViewModels
             this.VLCPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath) ?? string.Empty;
 
             // #############################
-            // Audio and Subtitles Tab
-            // #############################
-
-            this.SelectedAvailableToMove = new BindingList<string>();
-            this.SelectedLangaugesToMove = new BindingList<string>();
-
-            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
-            langList = (from entry in langList orderby entry.Key ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-            this.selectedLangauges.Clear();
-            foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
-            {
-                // removing wrong keys when a new Language list comes out.
-                if (langList.ContainsKey(selectedItem))
-                {
-                    this.selectedLangauges.Add(selectedItem);
-                }
-            }
-
-            this.preferredLanguages.Clear();
-            this.availableLanguages.Clear();
-            foreach (string item in langList.Keys)
-            {
-                this.preferredLanguages.Add(item);
-
-                // In the available languages should be no "Any" and no selected language.
-                if ((item != Constants.Any) && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
-                {
-                    this.availableLanguages.Add(item);
-                }
-            }
-
-            this.SelectedPreferredLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) ?? string.Empty;
-            this.SelectedPreferredSubtitleLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) ?? string.Empty;
-
-            this.AddAudioModeOptions.Clear();
-            this.AddAudioModeOptions.Add("None");
-            this.AddAudioModeOptions.Add("Add All Remaining Tracks");
-            this.AddAudioModeOptions.Add("Add All for Selected Languages");
-
-            this.AddSubtitleModeOptions.Clear();
-            this.AddSubtitleModeOptions.Add("None");
-            this.AddSubtitleModeOptions.Add("Add All (Where possible)");
-            this.AddSubtitleModeOptions.Add("Add First");
-            this.AddSubtitleModeOptions.Add("Add all for Selected Languages");
-            this.AddSubtitleModeOptions.Add("Add only for Prefered Language (First)");
-            this.AddSubtitleModeOptions.Add("Add all for Prefered Language");
-
-            this.SelectedAddAudioMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
-            this.SelectedAddSubtitleMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
-
-            this.AddOnlyOneAudioTrackPerLanguage = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
-
-            this.AddClosedCaptions = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
-            this.ShowAdvancedPassthruOpts = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
-            this.AddForeignAudioScanTrack = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddForeignAudioScanTrack);
-
-            // #############################
             // Video
             // #############################
             this.DisableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding);
@@ -2020,19 +1607,6 @@ namespace HandBrakeWPF.ViewModels
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);
-
-            /* Audio and Subtitles */
-            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguage, this.SelectedPreferredLangauge);
-            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguageForSubtitles, this.SelectedPreferredSubtitleLangauge);
-            StringCollection collection = new StringCollection();
-            collection.AddRange(this.SelectedLangauges.ToArray());
-            this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, collection);
-            this.userSettingService.SetUserSetting(UserSettingConstants.AddOnlyOneAudioPerLanguage, this.AddOnlyOneAudioTrackPerLanguage);
-            this.userSettingService.SetUserSetting(UserSettingConstants.UseClosedCaption, this.AddClosedCaptions);
-            this.userSettingService.SetUserSetting(UserSettingConstants.DubModeAudio, this.SelectedAddAudioMode);
-            this.userSettingService.SetUserSetting(UserSettingConstants.DubModeSubtitle, this.SelectedAddSubtitleMode);
-            this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedAudioPassthruOpts, this.ShowAdvancedPassthruOpts);
-            this.userSettingService.SetUserSetting(UserSettingConstants.AddForeignAudioScanTrack, this.AddForeignAudioScanTrack);
             
             /* Video */
             this.userSettingService.SetUserSetting(UserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);

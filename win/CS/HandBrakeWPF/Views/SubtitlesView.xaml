@@ -10,12 +10,15 @@
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:dropButton="clr-namespace:HandBrakeWPF.Controls.DropButton"
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
+             xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
+             xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
              d:DesignHeight="153"
              d:DesignWidth="319"
              mc:Ignorable="d"
              x:Name="subTab">
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
+        <subtitles:SubtitleBehaviourConverter x:Key="subtitleBehaviourConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -25,12 +28,30 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Row 0 -->
+        <TextBlock Grid.Row="0" Grid.Column="0"
                    Margin="10,5,0,0"
                    FontWeight="Bold"
-                   Text="Subtitles" />
+                   VerticalAlignment="Top"
+                   Text="{Binding PanelTitle}" />
 
-        <StackPanel Grid.Row="1" Margin="10,5,10,0" Orientation="Horizontal">
+        <Grid Grid.Row="0" Grid.Column="1" Margin="0,5,10,0">
+            <Border cal:Message.Attach="[Event MouseDown] = [Action ShowSubtitleDefaultsPanel]">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Views/Images/Advanced.png" Width="20"   />
+                    <TextBlock Text="{Binding SwitchDisplayTitle}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                </StackPanel>
+            </Border> 
+        </Grid>
+
+        <!-- Row 1 -->
+        <StackPanel Grid.Row="1" Margin="10,5,10,0" Orientation="Horizontal"
+                    Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}" >
             <splitButton:SplitMenuButton Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0">
                 <splitButton:SplitMenuButton.ItemSource>
                     <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
@@ -50,7 +71,10 @@
                     Content="Clear" />
         </StackPanel>
 
-        <ListBox Grid.Row="2"
+
+        <!-- Row 2 -->
+        <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                 Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}"
                  Margin="10,10,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
@@ -236,6 +260,80 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,10,10,10"
+              Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}">
+
+            <Grid Margin="5,0,0,0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Subtitles -->
+                <TextBlock Text="Track Selection Behaviour:"  Grid.Column="2" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <ComboBox Name="autoSubtitleMode"  Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left"
+                          ItemsSource="{Binding SubtitleBehaviourModeList, Converter={StaticResource subtitleBehaviourConverter}}" 
+                          SelectedItem="{Binding SubtitleBehaviours.SelectedBehaviour, Converter={StaticResource subtitleBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
+                <CheckBox Content="Add Closed Captions when available"  Grid.Column="3" Grid.Row="1" Margin="0,5,0,0" 
+                                  HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddClosedCaptions}"/>
+                <CheckBox Content="Add 'Foreign Audio Scan'"  Grid.Column="3" Grid.Row="2" Margin="0,5,0,0" 
+                                  HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddForeignAudioScanTrack}"/>
+            </Grid>
+
+            <TextBlock Text="Choose Languages:" Margin="5,15,0,0"/>
+
+            <Grid Margin="20,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="0">
+                            <TextBlock Text="Available Languages:" Margin="0,0,0,5"/>
+                            <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
+                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
+                                             SelectionMode="Extended" Width="140" Height="120" />
+                        </StackPanel>
+
+                        <DockPanel Grid.Column="1" Margin="10,0,10,0">
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                <Button Content="Move Right"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
+                                <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
+                                <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="2">
+                            <TextBlock Text="Chosen Languages:"  Margin="0,0,0,5"/>
+                            <ListBox Name="selectedLangauges" ItemsSource="{Binding SubtitleBehaviours.SelectedLangauges}" 
+                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
+                                             SelectionMode="Extended" Width="140" Height="120"
+                                             dd:DragDrop.DropHandler="{Binding}"
+                                             dd:DragDrop.IsDragSource="True"
+                                             dd:DragDrop.IsDropTarget="True"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+        </StackPanel>
 
 
     </Grid>

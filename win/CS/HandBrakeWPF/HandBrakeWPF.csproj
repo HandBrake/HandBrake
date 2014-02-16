@@ -130,6 +130,8 @@
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
+    <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
+    <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
     <Compile Include="Model\ScanMode.cs" />
     <Compile Include="Factories\HBConfigurationFactory.cs" />

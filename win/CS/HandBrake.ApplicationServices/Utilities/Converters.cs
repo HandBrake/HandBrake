@@ -129,7 +129,7 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 case Mixdown.Auto:
                 case Mixdown.None:
-                    return "auto";
+                    return "none";
                 case Mixdown.Mono:
                     return "mono";
                 case Mixdown.LeftOnly:

@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
 
     /// <summary>
     /// Language Utilities
@@ -248,6 +249,42 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             return iso6392Codes;
-        } 
+        }
+
+        /// <summary>
+        /// The get language codes.
+        /// </summary>
+        /// <param name="userLanguages">
+        /// The user languages.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
+        public static List<string> GetLanguageCodes(IList<string> userLanguages)
+        {
+            // Translate to Iso Codes
+            List<string> iso6392Codes = new List<string>();
+            foreach (var item in userLanguages)
+            {
+                string isoCode;
+                if (LanguageUtilities.MapLanguages().TryGetValue(item, out isoCode))
+                {
+                    iso6392Codes.Add(isoCode);
+                }
+            }
+
+            return iso6392Codes;
+        }
+
+        /// <summary>
+        /// The get iso codes.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
+        public static List<string> GetIsoCodes()
+        {
+           return MapLanguages().Values.ToList();
+        }
     }
 }

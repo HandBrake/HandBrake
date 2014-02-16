@@ -9,11 +9,18 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrake.ApplicationServices.Model.Audio;
+
     /// <summary>
     /// The Audio View Model Interface
     /// </summary>
     public interface IAudioViewModel : ITabInterface
     {
+        /// <summary>
+        /// Gets the audio behaviours.
+        /// </summary>
+        AudioBehaviours AudioBehaviours { get; }
+
         /// <summary>
         /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
         /// </summary>

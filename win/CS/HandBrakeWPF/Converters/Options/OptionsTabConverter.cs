@@ -40,9 +40,7 @@ namespace HandBrakeWPF.Converters.Options
                     case OptionsTab.OutputFiles:
                         if ((OptionsTab)parameter == OptionsTab.OutputFiles) return Visibility.Visible;
                         break;
-                    case OptionsTab.AudioAndSubtitles:
-                        if ((OptionsTab)parameter == OptionsTab.AudioAndSubtitles) return Visibility.Visible;
-                        break;
+
                     case OptionsTab.Advanced:
                         if ((OptionsTab)parameter == OptionsTab.Advanced) return Visibility.Visible;
                         break;

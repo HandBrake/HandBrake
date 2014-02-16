@@ -9,21 +9,21 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
+    using System.ComponentModel;
     using System.Linq;
 
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Commands;
-    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -41,6 +41,21 @@ namespace HandBrakeWPF.ViewModels
         /// The current preset.
         /// </summary>
         private Preset currentPreset;
+
+        /// <summary>
+        /// The show audio defaults panel.
+        /// </summary>
+        private bool showAudioDefaultsPanel;
+
+        /// <summary>
+        /// The available languages.
+        /// </summary>
+        private BindingList<string> availableLanguages;
+
+        /// <summary>
+        /// The audio behaviours.
+        /// </summary>
+        private AudioBehaviours audioBehaviours;
 
         #region Constructors and Destructors
 
@@ -60,11 +75,48 @@ namespace HandBrakeWPF.ViewModels
             this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
             this.AudioMixdowns = EnumHelper<Mixdown>.GetEnumList();
             this.SourceTracks = new List<Audio>();
+
+            this.AudioBehaviours = new AudioBehaviours();
+            this.SelectedAvailableToMove = new BindingList<string>();
+            this.SelectedLangaugesToMove = new BindingList<string>();
+            this.AvailableLanguages = new BindingList<string>();
+            this.SetupLanguages(null);
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the audio behaviours.
+        /// </summary>
+        public AudioBehaviours AudioBehaviours
+        {
+            get
+            {
+                return this.audioBehaviours;
+            }
+            set
+            {
+                if (Equals(value, this.audioBehaviours))
+                {
+                    return;
+                }
+                this.audioBehaviours = value;
+                this.NotifyOfPropertyChange(() => this.AudioBehaviours);
+            }
+        }
+
+        /// <summary>
+        /// Gets the audio behaviour modes.
+        /// </summary>
+        public BindingList<AudioBehaviourModes> AudioBehaviourModeList
+        {
+            get
+            {
+                return new BindingList<AudioBehaviourModes>(EnumHelper<AudioBehaviourModes>.GetEnumList().ToList());
+            }
+        }
 
         /// <summary>
         /// Gets or sets AudioBitrates.
@@ -108,15 +160,75 @@ namespace HandBrakeWPF.ViewModels
         public EncodeTask Task { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether ShowPassthruOptions.
+        /// Gets or sets a value indicating whether show audio defaults panel.
         /// </summary>
-        public bool ShowPassthruOptions
+        public bool ShowAudioDefaultsPanel
         {
             get
             {
-                return this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
+                return this.showAudioDefaultsPanel;
+            }
+            set
+            {
+                if (value.Equals(this.showAudioDefaultsPanel))
+                {
+                    return;
+                }
+                this.showAudioDefaultsPanel = value;
+                this.NotifyOfPropertyChange(() => this.ShowAudioDefaultsPanel);
+                this.NotifyOfPropertyChange(() => this.PanelTitle);
+                this.NotifyOfPropertyChange(() => this.SwitchDisplayTitle);
             }
         }
+
+        /// <summary>
+        /// Gets the panel title.
+        /// </summary>
+        public string PanelTitle
+        {
+            get
+            {
+                return this.ShowAudioDefaultsPanel ? "Audio Defaults" : "Audio Tracks";
+            }
+        }
+
+        /// <summary>
+        /// Gets the switch display title.
+        /// </summary>
+        public string SwitchDisplayTitle
+        {
+            get
+            {
+                return this.ShowAudioDefaultsPanel ? "Switch to Tracks" : "Switch to Defaults";
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets AvailableLanguages.
+        /// </summary>
+        public BindingList<string> AvailableLanguages
+        {
+            get
+            {
+                return this.availableLanguages;
+            }
+
+            set
+            {
+                this.availableLanguages = value;
+                this.NotifyOfPropertyChange("AvailableLanguages");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedLangauges.
+        /// </summary>
+        public BindingList<string> SelectedAvailableToMove { get; set; }
+
+        /// <summary>
+        /// Gets or sets SelectedLangauges.
+        /// </summary>
+        public BindingList<string> SelectedLangaugesToMove { get; set; }
 
         #endregion
 
@@ -179,8 +291,65 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void SetDefaultBehaviour()
         {
-            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
-            command.Execute(OptionsTab.AudioAndSubtitles);
+            this.ShowAudioDefaultsPanel = true;
+        }
+
+        /// <summary>
+        /// The show audio defaults.
+        /// </summary>
+        public void ShowAudioDefaults()
+        {
+            this.ShowAudioDefaultsPanel = !this.ShowAudioDefaultsPanel;
+        }
+
+        /// <summary>
+        /// Audio List Move Left
+        /// </summary>
+        public void LanguageMoveRight()
+        {
+            if (this.SelectedAvailableToMove.Count > 0)
+            {
+                List<string> copiedList = SelectedAvailableToMove.ToList();
+                foreach (string item in copiedList)
+                {
+                    this.AvailableLanguages.Remove(item);
+                    this.AudioBehaviours.SelectedLangauges.Add(item);
+                }
+
+                this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
+            }
+        }
+
+        /// <summary>
+        /// Audio List Move Right
+        /// </summary>
+        public void LanguageMoveLeft()
+        {
+            if (this.SelectedLangaugesToMove.Count > 0)
+            {
+                List<string> copiedList = SelectedLangaugesToMove.ToList();
+                foreach (string item in copiedList)
+                {
+                    this.AudioBehaviours.SelectedLangauges.Remove(item);
+                    this.AvailableLanguages.Add(item);
+                }
+            }
+
+            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
+        }
+
+        /// <summary>
+        /// Audio List Clear all selected languages
+        /// </summary>
+        public void LanguageClearAll()
+        {
+            foreach (string item in this.AudioBehaviours.SelectedLangauges)
+            {
+                this.AvailableLanguages.Add(item);
+            }
+            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
+
+            this.AudioBehaviours.SelectedLangauges.Clear();
         }
 
         #endregion
@@ -203,16 +372,18 @@ namespace HandBrakeWPF.ViewModels
             this.Task = task;
             this.currentPreset = preset;
 
+            // Audio Behaviours
+            this.SetupLanguages(preset);
+
             if (preset != null && preset.Task != null)
             {
-                int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
-                if (mode >= 1)
+                if (this.AudioBehaviours.SelectedBehaviour != AudioBehaviourModes.None)
                 {
                     this.AutomaticTrackSelection();
                 }
                 else
                 {
-                    this.AddTracksFromPreset(preset); 
+                    this.AddTracksFromPreset(preset);
                 }
 
                 this.AutomaticTrackSelection();
@@ -303,12 +474,6 @@ namespace HandBrakeWPF.ViewModels
             // For all the source audio tracks
             foreach (Audio sourceTrack in this.SourceTracks)
             {
-                // Step 1:  If "Add only One per language" is turned on, check to see if this language is already added.
-                if (this.CanSkipSourceTrack(sourceTrack))
-                {
-                    continue;
-                }
-
                 // Step 2: Check if the track list already contrains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
                 if (!found)
@@ -327,12 +492,6 @@ namespace HandBrakeWPF.ViewModels
             // Add them if they are not already added.
             foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
-                // Step 1:  If "Add only One per language" is turned on, check to see if this language is already added.
-                if (this.CanSkipSourceTrack(sourceTrack))
-                {
-                    continue;
-                }
-
                 // Step 2: Check if the track list already contrains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
                 if (!found)
@@ -362,6 +521,35 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// The add first for selected languages.
+        /// </summary>
+        private void AddFirstForSelectedLanguages()
+        {
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
+            {
+                // Step 2: Check if the track list already contrains this track
+                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
+                if (!found)
+                {
+                    // Check if we are already using this language
+                    bool foundLanguage = false;
+                    foreach (var item in this.Task.AudioTracks.Where(item => item.ScannedTrack != null && sourceTrack.LanguageCode.Contains(item.ScannedTrack.LanguageCode)))
+                    {
+                        foundLanguage = true;
+                    }
+
+                    if (foundLanguage)
+                    {
+                        continue;
+                    }
+
+                    // If it doesn't, add it.
+                    this.Add(sourceTrack);
+                }
+            }
+        }
+
+        /// <summary>
         /// Attempt to automatically select the correct audio tracks based on the users settings.
         /// </summary>
         private void AutomaticTrackSelection()
@@ -381,8 +569,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Handle the default selection behaviour.
-            int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
-            if (mode == 1 || mode == 2)
+            if (this.AudioBehaviours.SelectedBehaviour != AudioBehaviourModes.None)
             {
                 // First, we'll clear out all current tracks and go back to what the current preset has.
                 // This will alteast provide a consistent behavior when switching tracks.
@@ -390,12 +577,12 @@ namespace HandBrakeWPF.ViewModels
                 this.AddTracksFromPreset(this.currentPreset);
             }
 
-            switch (mode)
+            switch (this.AudioBehaviours.SelectedBehaviour)
             {
-                case 1: // Adding all remaining audio tracks
-                    this.AddAllRemaining();
+                case AudioBehaviourModes.FirstMatch: // Adding all remaining audio tracks
+                    this.AddFirstForSelectedLanguages();
                     break;
-                case 2: // Add Langauges tracks for the additional languages selected, in-order.
+                case AudioBehaviourModes.AllMatching: // Add Langauges tracks for the additional languages selected, in-order.
                     this.AddAllRemainingForSelectedLanguages();
                     break;
             }
@@ -409,12 +596,18 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private Audio GetPreferredAudioTrack()
         {
-            // Get the preferred Language
-            IEnumerable<Audio> preferredAudioTracks =
-                this.SourceTracks.Where(
-                    item =>
-                    item.Language.Contains(
-                        this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)));
+            // The first track in the selected languages list is considered the preferred language.
+            // So, try match tracks on this.
+            IEnumerable<Audio> preferredAudioTracks = new List<Audio>();
+            if (this.AudioBehaviours.SelectedLangauges.Count > 0)
+            {
+                string langName = this.AudioBehaviours.SelectedLangauges.FirstOrDefault(w => !w.Equals(Constants.Any));
+                if (!string.IsNullOrEmpty(langName))
+                {
+                    preferredAudioTracks = this.SourceTracks.Where(item => item.Language.Contains(langName));
+                }
+            }
+
             return preferredAudioTracks.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
         }
 
@@ -428,9 +621,10 @@ namespace HandBrakeWPF.ViewModels
         {
             List<Audio> trackList = new List<Audio>();
 
-            List<string> isoCodes =
-                LanguageUtilities.GetLanguageCodes(
-                    this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages));
+            List<string> isoCodes = this.AudioBehaviours.SelectedLangauges.Contains(Constants.Any)
+                                            ? LanguageUtilities.GetIsoCodes()
+                                            : LanguageUtilities.GetLanguageCodes(
+                                                this.AudioBehaviours.SelectedLangauges.ToArray());
 
             foreach (string code in isoCodes)
             {
@@ -441,25 +635,39 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Checks to see if we can skip over the given source audio track.
-        /// True when the user has set "Add only one per language" feature AND the language is contained in the track list.
+        /// The setup languages.
         /// </summary>
-        /// <param name="sourceTrack">
-        /// The source track.
+        /// <param name="preset">
+        /// The preset.
         /// </param>
-        /// <returns>
-        /// True when the user has set "Add only one per language" feature AND the language is contained in the track list
-        /// </returns>
-        private bool CanSkipSourceTrack(Audio sourceTrack)
+        private void SetupLanguages(Preset preset)
         {
-            bool addOnlyOnePerLanguage = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
-            bool sourceTrackLanguageFound = this.Task.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack != null && sourceTrack.Language == audioTrack.ScannedTrack.Language);
-            if (addOnlyOnePerLanguage && sourceTrackLanguageFound)
+            // Step 1, Set the behaviour mode
+            this.AudioBehaviours.SelectedBehaviour = AudioBehaviourModes.None;
+            this.AudioBehaviours.SelectedLangauges.Clear();
+
+            // Step 2, Get all the languages
+            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
+            langList = (from entry in langList orderby entry.Key ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            // Step 3, Setup Available Languages
+            this.AvailableLanguages.Clear();
+            foreach (string item in langList.Keys)
             {
-                return true; // This track can be skipped.
+                this.AvailableLanguages.Add(item);
             }
 
-            return false;
+            // Step 4, Set the Selected Languages          
+            if (preset != null && preset.AudioTrackBehaviours != null)
+            {
+                this.AudioBehaviours.SelectedBehaviour = preset.AudioTrackBehaviours.SelectedBehaviour;
+
+                foreach (string selectedItem in preset.AudioTrackBehaviours.SelectedLangauges)
+                {
+                    this.AvailableLanguages.Remove(selectedItem);
+                    this.AudioBehaviours.SelectedLangauges.Add(selectedItem);
+                }
+            }
         }
 
         #endregion
