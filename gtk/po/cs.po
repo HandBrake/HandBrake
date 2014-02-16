@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Czech X Team <info@czechxteam.net>, 2013
+# fri <pavelfric@seznam.cz>, 2013-2014
 # fri <pavelfric@seznam.cz>, 2013
-# fri <pavelfric@seznam.cz>, 2013
+# fri <pavelfric@seznam.cz>, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-13 12:44+0400\n"
-"PO-Revision-Date: 2013-11-20 11:11+0000\n"
+"PO-Revision-Date: 2014-02-15 17:00+0000\n"
 "Last-Translator: fri <pavelfric@seznam.cz>\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/handbrake/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -120,8 +121,8 @@ msgstr "Z_astavit řadu"
 msgid "Stop Queue"
 msgstr "Zastavit řadu"
 
-msgid "None"
-msgstr "Žádný"
+msgid " None"
+msgstr " Žádný"
 
 msgid "<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>\n"
 msgstr "<b>Obrázek:</b> Zdroj: <small>%d x %d, Výstup %d x %d %s</small>\n"
@@ -135,8 +136,8 @@ msgstr "hh:mm:ss"
 msgid "HandBrake For _Dumbies"
 msgstr "HandBrake pro natvrdlé"
 
-msgid "Show Presets"
-msgstr "Ukázat přednastavení"
+msgid "_Show Presets"
+msgstr "_Ukázat přednastavení"
 
 msgid "_Picture Settings"
 msgstr "Nastavení _obrázku"
@@ -278,7 +279,7 @@ msgid "Set the first chapter to encode."
 msgstr "Nastavit první kapitolu k zakódování."
 
 msgid "through"
-msgstr ""
+msgstr "až"
 
 msgid "Set the last chapter to encode."
 msgstr "Nastavit poslední kapitolu k zakódování."
@@ -524,7 +525,7 @@ msgid ""
 msgstr "Dodatečné nastavení pro x264.\n\n            Dvojtečkou oddělený seznam voleb pro x264."
 
 msgid "Video"
-msgstr "Obraz"
+msgstr "Video"
 
 msgid "Add new audio settings to the list"
 msgstr "Přidat nové nastavení zvuku do seznamu"
@@ -978,8 +979,8 @@ msgstr "Volby pro přednastavení"
 msgid "<b>Presets</b>"
 msgstr "<b>Přednastavení</b>"
 
-msgid "Preferences"
-msgstr "Nastavení"
+msgid "_Preferences"
+msgstr "_Nastavení"
 
 msgid "Automatically check for updates"
 msgstr "Automaticky ověřit dostupnost aktualizací"
@@ -1540,3 +1541,668 @@ msgstr "Kapitola"
 
 msgid "Chapter %2d"
 msgstr "Kapitola %2d"
+
+msgid "Initialization"
+msgstr "Inicializace"
+
+msgid "Seconds"
+msgstr "Sekundy"
+
+msgid "Frames"
+msgstr "Snímky"
+
+msgid "Chapters:"
+msgstr "Kapitoly:"
+
+msgid "Seconds:"
+msgstr "Sekundy:"
+
+msgid "Frames:"
+msgstr "Snímky:"
+
+msgid "No Audio"
+msgstr "Žádný zvuk"
+
+msgid "Any"
+msgstr "Jakýkoli"
+
+msgid "Mono"
+msgstr "Mono"
+
+msgid "Stereo"
+msgstr "Stereo"
+
+msgid "Dolby Surround"
+msgstr "Dolby Surround"
+
+msgid "Dolby Pro Logic II"
+msgstr "Dolby Pro Logic II"
+
+msgid "Mono (Left Only)"
+msgstr "Mono (pouze levý)"
+
+msgid "Mono (Right Only)"
+msgstr "Mono (pouze pravý)"
+
+msgid "None"
+msgstr "Žádný"
+
+msgid "Your encode is complete."
+msgstr "Kódování je dokončeno."
+
+msgid "Shutting down the computer"
+msgstr "Vypíná se počítač"
+
+msgid "Putting computer to sleep"
+msgstr "Uspává se počítač"
+
+msgid "Quiting Handbrake"
+msgstr "Ukončuje se Handbrake"
+
+msgid "Quit Handbrake"
+msgstr "Ukončit Handbrake"
+
+msgid "Put Computer To Sleep"
+msgstr "Uspat počítač"
+
+msgid "Shutdown Computer"
+msgstr "Vypnout počítač"
+
+msgid "_Quit"
+msgstr "_Ukončit"
+
+msgid "_About"
+msgstr "O _programu"
+
+msgid "Never"
+msgstr "Nikdy"
+
+msgid "Daily"
+msgstr "Denně"
+
+msgid "Weekly"
+msgstr "Týdně"
+
+msgid "Monthly"
+msgstr "Měsíčně"
+
+msgid "Default"
+msgstr "Výchozí"
+
+msgid "Fast"
+msgstr "Rychlý"
+
+msgid "Slower"
+msgstr "Pomalejší"
+
+msgid "Weak"
+msgstr "Slabý"
+
+msgid "Medium"
+msgstr "Střední"
+
+msgid "Strong"
+msgstr "Silný"
+
+msgid "Spatial"
+msgstr "Prostorový"
+
+msgid "Temporal"
+msgstr "Časový"
+
+msgid "Automatic"
+msgstr "Automaticky"
+
+msgid "Optimal"
+msgstr "Nejlepší"
+
+msgid "Simple"
+msgstr "Jednoduchý"
+
+msgid "Smart"
+msgstr "Chytrý"
+
+msgid "Diamond"
+msgstr "Kosočtverec"
+
+msgid "Hexagon"
+msgstr "Šestiúhelník"
+
+msgid "Uneven Multi-Hexagon"
+msgstr "Nestejnoměrný více-šestiúhelník"
+
+msgid "Exhaustive"
+msgstr "Vyčerpávající"
+
+msgid "Hadamard Exhaustive"
+msgstr ""
+
+msgid "Most"
+msgstr "Nejvíce"
+
+msgid "Some"
+msgstr "Některý"
+
+msgid "All"
+msgstr "Vše"
+
+msgid "Encode only"
+msgstr "Pouze zakódovat"
+
+msgid "Always"
+msgstr "Vždy"
+
+msgid "0: SAD, no subpel"
+msgstr "0: SAD, žádný subpel"
+
+msgid "1: SAD, qpel"
+msgstr "1: SAD, qpel"
+
+msgid "2: SATD, qpel"
+msgstr "2: SATD, qpel"
+
+msgid "3: SATD: multi-qpel"
+msgstr "3: SATD: více-qpel"
+
+msgid "4: SATD, qpel on all"
+msgstr "4: SATD, qpel na vše"
+
+msgid "5: SATD, multi-qpel on all"
+msgstr "5: SATD, více-qpel  na vše"
+
+msgid "6: RD in I/P-frames"
+msgstr "6: RD v I/P-snímky"
+
+msgid "7: RD in all frames"
+msgstr "7: RD ve všech snímcích"
+
+msgid "8: RD refine in I/P-frames"
+msgstr "8: RD refine in I/P-snímcích"
+
+msgid "9: RD refine in all frames"
+msgstr "8: RD refine v I/P-snímcích"
+
+msgid "10: QPRD in all frames"
+msgstr "10: QPRD ve všech snímcích"
+
+msgid "11: No early terminations in analysis"
+msgstr "11: Žádná brzká ukončení rozborů"
+
+msgid "Strict"
+msgstr "Přísný"
+
+msgid "Custom"
+msgstr "Vlastní"
+
+msgid ""
+"%s\n"
+"\n"
+"%s in %d seconds ..."
+msgstr "%s\n\n%s za %d sekund..."
+
+msgid "%sYour movie will be lost if you don't continue encoding."
+msgstr "%s Váš film bude ztracen, pokud nebudete pokračovat v kódování."
+
+msgid "Cancel Current and Stop"
+msgstr "Zrušit nynější a zastavit"
+
+msgid "Cancel Current, Start Next"
+msgstr "Zrušit nynější, začít další"
+
+msgid "Finish Current, then Stop"
+msgstr "Dokončit nynější, potom zastavit"
+
+msgid "Continue Encoding"
+msgstr "Pokračovat v kódování"
+
+msgid "Custom "
+msgstr "Vlastní"
+
+msgid "Modified "
+msgstr "Změněno "
+
+msgid "%s%sPreset: %s"
+msgstr "%s%s Přednastavenít: %s"
+
+msgid "Handbrake Version: %s (%d)\n"
+msgstr "Verze Handbrake: %s (%d)\n"
+
+msgid "%d encode(s) pending"
+msgstr "%d kódování čeká na vyřízení"
+
+msgid "Searching for start time, "
+msgstr "Hledá se čas začátku, "
+
+msgid "Scanning..."
+msgstr "Prohledává se..."
+
+msgid "Paused"
+msgstr "Pozastaveno"
+
+msgid "Encode Done!"
+msgstr "Kódování hotovo!"
+
+msgid "Encode Canceled."
+msgstr "Kódování zrušeno."
+
+msgid "Encode Failed."
+msgstr "Kódování selhalo"
+
+msgid "Muxing: This may take a while..."
+msgstr "Muxing: Může to chvíli trvat..."
+
+msgid "Updating preview\n"
+msgstr "Obnovuje se náhled\n"
+
+msgid "Update Check"
+msgstr "Kontrola aktualizace"
+
+msgid "Error while reading activity from pipe"
+msgstr "Chyba při čtení činnosti z kanálu"
+
+msgid "Updating row"
+msgstr "Obnovuje se řádek"
+
+msgid "Removing row"
+msgstr "Odstraňuje se řádek"
+
+msgid "Adding row"
+msgstr "Přidává se řádek"
+
+msgid "Scan this DVD source"
+msgstr "Prohledat tento DVD zdroj"
+
+msgid "Cache Volume Names"
+msgstr "Uložit názvy svazků do vyrovnávací paměti"
+
+msgid "AutoScan"
+msgstr "Automatické prohledání"
+
+msgid "Encoding"
+msgstr "Kódování"
+
+msgid "Failed to open icon file %s: %s"
+msgstr "Nepodařilo se otevřít soubor s ikonou %s: %s"
+
+msgid "%s:missing a requried attribute"
+msgstr "%s: Chybí požadovaná vlastnost"
+
+msgid "No key for dictionary item"
+msgstr "Žádná klávesa pro slovníkovou položku"
+
+msgid "Invalid container type. This shouldn't happen"
+msgstr "Neplatný typ kontejneru. To by se nemělo stát"
+
+msgid ""
+"Usage: %s [-I <inc path>] <in resource list> <out resource plist>\n"
+"Summary:\n"
+"    Creates a resource plist from a resource list\n"
+"Options:\n"
+"    I - Include path to search for files\n"
+"    <in resource list>    Input resources file\n"
+"    <out resource plist>  Output resources plist file\n"
+msgstr "Použití: %s [-I <inc path>] <in resource list> <out resource plist>\nPřehled:\n    Vytvoří zdrojový plist ze zdrojového seznamu\nVolby:\n    I - zahrnout cestu pro hledání souborů\n    <in resource list>    Vstupní soubor se zdroji\n    <out resource plist>  Výstupní soubor se zdroji plist\n"
+
+msgid "Error: failed to open %s\n"
+msgstr "Chyba: Nepodařilo se otevřít %s\n"
+
+msgid "Whether the text can be modified by the user"
+msgstr "Zda může být text změněn uživatelem"
+
+msgid "Foreign Audio Search"
+msgstr "Hledání zvuku v cizím jazyce"
+
+msgid "Preset Name"
+msgstr "Název přednastavení"
+
+msgid "Failed to redirect IO. Logging impaired\n"
+msgstr "Nepodařilo se přesměrovat IO. Přihlášení znehodnoceno\n"
+
+msgid "The device or file to encode"
+msgstr "Zařízení nebo soubor k zakódování"
+
+msgid "The preset values to use for encoding"
+msgstr "Hodnoty přednastavení, které se mají použít k zakódování"
+
+msgid "- Transcode media formats"
+msgstr "- Překódovat multimediální formáty"
+
+msgid "Can't map language value: (%s)"
+msgstr "Nelze přiřadit hodnotu jazyka: (%s)"
+
+msgid "Autoselect"
+msgstr "Automatický výběr"
+
+msgid "Superfluous tunes! %s"
+msgstr ""
+
+msgid ""
+"%s: Folder already exists.\n"
+"You can not replace it with a preset."
+msgstr "%s: Složka již existuje.\nNemůžete ji nahradit přednastavením."
+
+msgid ""
+"%s: Preset already exists.\n"
+"You can not replace it with a folder."
+msgstr "%s: Přednastavení již existuje.\nNemůžete ji nahradit složkou."
+
+msgid "Import Preset"
+msgstr "Zavést přednastavení"
+
+msgid "All (*)"
+msgstr "Vše (*)"
+
+msgid "Presets (*.plist)"
+msgstr "Přednastavení (*.plist)"
+
+msgid "Export Preset"
+msgstr "Vyvést přednastavení"
+
+msgid "FolderName"
+msgstr "Název složky"
+
+msgid ""
+"Confirm deletion of %s:\n"
+"\n"
+"%s"
+msgstr "Potvrdit smazání %s:\n\n%s"
+
+msgid "folder"
+msgstr "složka"
+
+msgid "Auto"
+msgstr "Automaticky"
+
+msgid "MP4 file"
+msgstr "Soubor MP4"
+
+msgid "M4V file"
+msgstr "Soubor M4V"
+
+msgid "MKV file"
+msgstr "Soubor MKV"
+
+msgid "AVI file"
+msgstr "Soubor AVI"
+
+msgid "OGM file"
+msgstr "Soubor OGM"
+
+msgid "AC3 Passthru"
+msgstr "AC3 Passthru"
+
+msgid "Unrecognized key: (%s)"
+msgstr "Nerozpoznaná klávesa"
+
+msgid "Usage: <mac plist> <lin plist>\n"
+msgstr "Použití: <mac plist> <lin plist>\n"
+
+msgid "Couldn't create native window for GstXOverlay. Disabling live preview."
+msgstr "Nepodařilo se vytvořit nativní okno pro GstXOverlay. Zakazuje se živý náhled."
+
+msgid "Couldn't initialize gstreamer. Disabling live preview."
+msgstr "Nepodařilo se spustit gstreamer. Zakazuje se živý náhled."
+
+msgid "Gstreamer Error: %s"
+msgstr "Chyba Gstreameru: %s"
+
+msgid ""
+"Missing GStreamer plugin\n"
+"Audio or Video may not play as expected\n"
+"\n"
+"%s"
+msgstr "Chybí přídavný modul GStreameru\nZvuk nebo obraz nemusí být přehrávány tak, jak je očekáváno\n\n%s"
+
+msgid "Done"
+msgstr "Hotovo"
+
+msgid "Show Settings"
+msgstr "Ukázat nastavení"
+
+msgid "Show picture settings."
+msgstr "Ukázat nastavení obrázku"
+
+msgid ""
+"<big><b>%s</b></big> <small>(Title %d, %s %d through %d, %d Video %s) --> "
+"%s</small>"
+msgstr "<big><b>%s</b></big> <small>(Title %d, %s %d až %d, %d Obrazový záznam %s) --> %s</small>"
+
+msgid "Passes"
+msgstr "Průchody"
+
+msgid "Pass"
+msgstr "Průchod"
+
+msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
+msgstr "<b>Změněné přednastavení založené na:</b> <small>%s</small>\n"
+
+msgid "<b>Preset:</b> <small>%s</small>\n"
+msgstr "<b>Přednastavení:</b> <small>%s</small>\n"
+
+msgid "<b>Format:</b> <small>%s Container, Chapter Markers</small>\n"
+msgstr "<b>Formát:</b> <small>%s Kontejner, značky kapitol</small>\n"
+
+msgid "<b>Format:</b> <small>%s Container</small>\n"
+msgstr "<b>Formát:</b> <small>%s Kontejner</small>\n"
+
+msgid "<b>MP4 Options:</b><small>"
+msgstr "<b>Volby pro MP4:</b><small>"
+
+msgid " - iPod 5G Support"
+msgstr " - Podpora pro iPod 5G"
+
+msgid " - Web Optimized"
+msgstr " - Odladěno pro web"
+
+msgid " - Large File Size (>4GB)"
+msgstr " - Velikost velkých souborů (> 4GB)"
+
+msgid "<b>Destination:</b> <small>%s</small>\n"
+msgstr "<b>Cíl:</b> <small>%s</small>\n"
+
+msgid "(Aspect Preserved)"
+msgstr "(Poměr stran zachován)"
+
+msgid "(Aspect Lost)"
+msgstr "(Poměr stran ztracen)"
+
+msgid "(Strict Anamorphic)"
+msgstr "(Přísně anamorfický)"
+
+msgid "(Loose Anamorphic)"
+msgstr "(Volně anamorfický)"
+
+msgid "(Custom Anamorphic)"
+msgstr "(Vlastní anamorfický)"
+
+msgid "(Unknown)"
+msgstr "(Neznámý)"
+
+msgid "Error"
+msgstr "Chyba"
+
+msgid "Bitrate:"
+msgstr "Datový tok:"
+
+msgid "kbps"
+msgstr "kb/s"
+
+msgid "Same As Source (constant)"
+msgstr "Stejný jako zdroj (stálý)"
+
+msgid "Same As Source (variable)"
+msgstr "Stejný jako zdroj (proměnlivý)"
+
+msgid "Peak %s (may be lower)"
+msgstr "Vrchol %s (může být nižší)"
+
+msgid "%s (constant frame rate)"
+msgstr "%s (stálý datový tok)"
+
+msgid "<b>Filters:</b><small>"
+msgstr "<b>Filtry:</b><small>"
+
+msgid " - Detelecine"
+msgstr " - Odstranění filmového snímání"
+
+msgid " - Decomb"
+msgstr " - Odstranění hřebenu"
+
+msgid " - Deinterlace: %s"
+msgstr " - Odstranění prokládání: %s"
+
+msgid " - Denoise: %s"
+msgstr " - Odstranění šumu: %s"
+
+msgid " - Deblock (%d)"
+msgstr " - Odstranění bloků: %s"
+
+msgid " - Grayscale"
+msgstr " - Odstíny šedi"
+
+msgid "<b>Video:</b> <small>%s, Framerate: %s, %s %s%s</small>\n"
+msgstr "<b>Obrazový záznam:</b> <small>%s, Rychlost snímkování: %s, %s %s%s</small>\n"
+
+msgid "<b>Turbo:</b> <small>On</small>\n"
+msgstr "<b>Turbo:</b> <small>Zapnuto</small>\n"
+
+msgid "<b>Advanced Options:</b> <small>%s</small>\n"
+msgstr "<b>Pokročilé volby:</b> <small>%s</small>\n"
+
+msgid "Quality: "
+msgstr "Jakost:"
+
+msgid "Bitrate: %s"
+msgstr "Datový tok: %s"
+
+msgid "<b>Audio:</b>"
+msgstr "<b>Zvuk:</b>"
+
+msgid "<b>Audio:</b>\n"
+msgstr "<b>Zvuk:</b>\n"
+
+msgid "<small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n"
+msgstr "<small> %s, Kodér: %s, Finální mixáž: %s, Vzorkovací kmitočet: %s, %s</small>\n"
+
+msgid "<b>Subtitle:</b>"
+msgstr "<b>Titulek:</b>"
+
+msgid "<b>Subtitles:</b>\n"
+msgstr "<b>Titulky:</b>\n"
+
+msgid " (Force)"
+msgstr " (Vynutit)"
+
+msgid " (Burn)"
+msgstr " (Vypálit)"
+
+msgid " (Default)"
+msgstr " (Výchozí)"
+
+msgid "<small> %s (%s), %s, Offset (ms) %d%s</small>"
+msgstr "<small> %s (%s), %s, Posun (ms) %d%s</small>"
+
+msgid ""
+"Destination: %s\n"
+"\n"
+"Another queued job has specified the same destination.\n"
+"Do you want to overwrite?"
+msgstr "Cíl: %s\n\nJiná zařazená úloha má stanoven stejný cíl.\nChcete jej přepsat?"
+
+msgid "Overwrite"
+msgstr "Přepsat"
+
+msgid ""
+"Destination: %s\n"
+"\n"
+"This is not a valid directory."
+msgstr "Cíl: %s\n\nToto není platný adresář."
+
+msgid ""
+"Destination: %s\n"
+"\n"
+"Can not read or write the directory."
+msgstr "Cíl: %s\n\nNelze přečíst nebo zapisovat do adresáře."
+
+msgid ""
+"Destination filesystem is almost full: %uM free\n"
+"\n"
+"Encode may be incomplete if you proceed.\n"
+msgstr "Cílový souborový systém je skoro plný: %uM volné\n\npokud budete pokračovat, zakódování může být nedokončeno.\n"
+
+msgid "Proceed"
+msgstr "Pokračovat"
+
+msgid ""
+"Destination: %s\n"
+"\n"
+"File already exists.\n"
+"Do you want to overwrite?"
+msgstr "Cíl: %s\n\nSoubor  již existuje.\nPřejete si jej přepsat?"
+
+msgid ""
+"You have %d unfinished job(s) in a saved queue.\n"
+"\n"
+"Would you like to reload them?"
+msgstr "Máte %d nezařazených úloh v uložené řadě.\n\nChcete je nahrát znovu?"
+
+msgid "Usage: %s infile [outfile]\n"
+msgstr "Použití: %s infile [outfile]\n"
+
+msgid "No value found for %s\n"
+msgstr "Pro %s nebyla nalezena žádná hodnota.\n"
+
+msgid ""
+"%s\n"
+"\n"
+"Expanded Options:\n"
+"\"%s\""
+msgstr "%s\n\nRozšířené volby:\n\"%s\""
+
+msgid "auto"
+msgstr "Automaticky"
+
+msgid "high"
+msgstr "Velký"
+
+msgid "main"
+msgstr "Hlavní"
+
+msgid "baseline"
+msgstr "Základní"
+
+msgid "film"
+msgstr "Film"
+
+msgid "animation"
+msgstr "Animace"
+
+msgid "grain"
+msgstr "Zrnitost"
+
+msgid "stillimage"
+msgstr ""
+
+msgid "psnr"
+msgstr "psnr"
+
+msgid "ssim"
+msgstr "ssim"
+
+msgid "Show Notification"
+msgstr "Ukázat oznámení"
+
+msgid "Do Nothing"
+msgstr "Nedělat nic"
+
+msgid "Week"
+msgstr "Týden"
+
+msgid "Month"
+msgstr "Měsíc"
+
+msgid "Year"
+msgstr "Rok"
+
+msgid "Immortal"
+msgstr "Už nikdy"
