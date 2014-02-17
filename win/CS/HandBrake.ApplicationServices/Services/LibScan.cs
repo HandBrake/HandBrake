@@ -261,7 +261,17 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
-            BitmapImage bitmapImage = this.instance.GetPreview(encodeJob, preview);
+
+            BitmapImage bitmapImage = null;
+            try
+            {
+                bitmapImage = this.instance.GetPreview(encodeJob, preview);
+            }
+            catch (AccessViolationException e)
+            {
+                Console.WriteLine(e);
+            }
+           
             return bitmapImage;
         }
 

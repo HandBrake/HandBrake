@@ -501,4 +501,7 @@ Do you wish to proceed?</value>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
     <value>Unable to import the preset as it appears to be corrupted or from an older version of HandBrake.</value>
   </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>You must first set the destination path for the output file before adding to the queue.</value>
+  </data>
 </root>

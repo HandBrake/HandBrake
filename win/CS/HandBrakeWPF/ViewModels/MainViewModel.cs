@@ -1135,7 +1135,14 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
+            if (string.IsNullOrEmpty(this.CurrentTask.Destination))
+            {
+                this.errorService.ShowMessageBox(Resources.Main_SetDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
+
+
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
                 this.queueProcessor.Add(task);
