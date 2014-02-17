@@ -476,26 +476,26 @@ namespace HandBrake.Interop
 
             if (!string.IsNullOrEmpty(profile.X264Profile))
             {
-                nativeJob.h264_profile = Marshal.StringToHGlobalAnsi(profile.X264Profile);
-                this.encodeAllocatedMemory.Add(nativeJob.h264_profile);
+                nativeJob.encoder_profile = Marshal.StringToHGlobalAnsi(profile.X264Profile);
+                this.encodeAllocatedMemory.Add(nativeJob.encoder_profile);
             }
 
             if (!string.IsNullOrEmpty(profile.X264Preset))
             {
-                nativeJob.x264_preset = Marshal.StringToHGlobalAnsi(profile.X264Preset);
-                this.encodeAllocatedMemory.Add(nativeJob.x264_preset);
+                nativeJob.encoder_preset = Marshal.StringToHGlobalAnsi(profile.X264Preset);
+                this.encodeAllocatedMemory.Add(nativeJob.encoder_preset);
             }
 
             if (profile.X264Tunes != null && profile.X264Tunes.Count > 0)
             {
-                nativeJob.x264_tune = Marshal.StringToHGlobalAnsi(string.Join(",", profile.X264Tunes));
-                this.encodeAllocatedMemory.Add(nativeJob.x264_tune);
+                nativeJob.encoder_tune = Marshal.StringToHGlobalAnsi(string.Join(",", profile.X264Tunes));
+                this.encodeAllocatedMemory.Add(nativeJob.encoder_tune);
             }
 
             if (!string.IsNullOrEmpty(job.EncodingProfile.H264Level))
             {
-                nativeJob.h264_level = Marshal.StringToHGlobalAnsi(job.EncodingProfile.H264Level);
-                this.encodeAllocatedMemory.Add(nativeJob.h264_level);
+                nativeJob.encoder_level = Marshal.StringToHGlobalAnsi(job.EncodingProfile.H264Level);
+                this.encodeAllocatedMemory.Add(nativeJob.encoder_level);
             }
 
             if (this.subtitleScan)
@@ -504,7 +504,7 @@ namespace HandBrake.Interop
                 nativeJob.pass = -1;
                 nativeJob.indepth_scan = 1;
 
-                nativeJob.advanced_opts = IntPtr.Zero;
+                nativeJob.encoder_options = IntPtr.Zero;
 
                 HBFunctions.hb_add(this.hbHandle, ref nativeJob);
             }
@@ -528,14 +528,14 @@ namespace HandBrake.Interop
                     }
                 }
 
-                nativeJob.advanced_opts = Marshal.StringToHGlobalAnsi(firstPassAdvancedOptions);
-                this.encodeAllocatedMemory.Add(nativeJob.advanced_opts);
+                nativeJob.encoder_options = Marshal.StringToHGlobalAnsi(firstPassAdvancedOptions);
+                this.encodeAllocatedMemory.Add(nativeJob.encoder_options);
 
                 HBFunctions.hb_add(this.hbHandle, ref nativeJob);
 
                 // Second pass. Apply normal options.
                 nativeJob.pass = 2;
-                nativeJob.advanced_opts = originalX264Options;
+                nativeJob.encoder_options = originalX264Options;
 
                 HBFunctions.hb_add(this.hbHandle, ref nativeJob);
             }
@@ -543,7 +543,7 @@ namespace HandBrake.Interop
             {
                 // One pass job.
                 nativeJob.pass = 0;
-                nativeJob.advanced_opts = originalX264Options;
+                nativeJob.encoder_options = originalX264Options;
 
                 HBFunctions.hb_add(this.hbHandle, ref nativeJob);
             }

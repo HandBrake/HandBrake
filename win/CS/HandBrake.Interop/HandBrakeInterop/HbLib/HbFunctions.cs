@@ -408,8 +408,8 @@ namespace HandBrake.Interop.HbLib
 		public static extern void hb_job_close(IntPtr job);
 
 		///void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts );
-		[DllImport("hb.dll", EntryPoint = "hb_job_set_advanced_opts", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_job_set_advanced_opts(ref hb_job_s job, IntPtr advanced_opts);
+        [DllImport("hb.dll", EntryPoint = "hb_job_set_encoder_options", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void hb_job_set_encoder_options(ref hb_job_s job, IntPtr advanced_opts);
 
 		///void hb_job_set_file( hb_job_t *job, const char *file );
 		[DllImport("hb.dll", EntryPoint = "hb_job_set_file", CallingConvention = CallingConvention.Cdecl)]

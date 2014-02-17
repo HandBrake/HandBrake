@@ -88,15 +88,15 @@ namespace HandBrake.Interop.HbLib
 
 		public int fastfirstpass;
 
-		public IntPtr x264_preset;
+        public IntPtr encoder_preset;
 
-		public IntPtr x264_tune;
+        public IntPtr encoder_tune;
 
-		public IntPtr advanced_opts;
+        public IntPtr encoder_options;
 
-		public IntPtr h264_profile;
+        public IntPtr encoder_profile;
 
-		public IntPtr h264_level;
+        public IntPtr encoder_level;
 
 		/// int
 		public int areBframes;
