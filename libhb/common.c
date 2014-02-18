@@ -215,13 +215,14 @@ hb_encoder_internal_t hb_video_encoders[]  =
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
 static int hb_video_encoder_is_enabled(int encoder)
 {
+#ifdef USE_QSV
+    if (encoder & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_video_encoder_is_enabled(encoder);
+    }
+#endif
     switch (encoder)
     {
-#ifdef USE_QSV
-        case HB_VCODEC_QSV_H264:
-            return hb_qsv_available();
-#endif
-
         // the following encoders are always enabled
         case HB_VCODEC_X264:
         case HB_VCODEC_THEORA:
@@ -1119,6 +1120,14 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
 void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
                                  float *granularity, int *direction)
 {
+#ifdef USE_QSV
+    if (codec & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_video_quality_get_limits(codec, low, high, granularity,
+                                               direction);
+    }
+#endif
+
     switch (codec)
     {
         case HB_VCODEC_X264:
@@ -1151,6 +1160,13 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 
 const char* hb_video_quality_get_name(uint32_t codec)
 {
+#ifdef USE_QSV
+    if (codec & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_video_quality_get_name(codec);
+    }
+#endif
+
     switch (codec)
     {
         case HB_VCODEC_X264:
@@ -1166,15 +1182,17 @@ const char* hb_video_quality_get_name(uint32_t codec)
 
 const char* const* hb_video_encoder_get_presets(int encoder)
 {
+#ifdef USE_QSV
+    if (encoder & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_preset_get_names();
+    }
+#endif
+
     switch (encoder)
     {
         case HB_VCODEC_X264:
             return x264_preset_names;
-
-#ifdef USE_QSV
-        case HB_VCODEC_QSV_H264:
-            return hb_qsv_preset_get_names();
-#endif
 
 #ifdef USE_X265
         case HB_VCODEC_X265:
@@ -1203,10 +1221,16 @@ const char* const* hb_video_encoder_get_tunes(int encoder)
 
 const char* const* hb_video_encoder_get_profiles(int encoder)
 {
+#ifdef USE_QSV
+    if (encoder & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_profile_get_names(encoder);
+    }
+#endif
+
     switch (encoder)
     {
         case HB_VCODEC_X264:
-        case HB_VCODEC_QSV_H264:
             return hb_h264_profile_names;
 
 #ifdef USE_X265
@@ -1220,10 +1244,16 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
 
 const char* const* hb_video_encoder_get_levels(int encoder)
 {
+#ifdef USE_QSV
+    if (encoder & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_level_get_names(encoder);
+    }
+#endif
+
     switch (encoder)
     {
         case HB_VCODEC_X264:
-        case HB_VCODEC_QSV_H264:
             return hb_h264_level_names;
 
         default:
@@ -3050,7 +3080,6 @@ static void job_setup( hb_job_t * job, hb_title_t * title )
 
 #ifdef USE_QSV
     job->qsv.enc_info.is_init_done = 0;
-    job->qsv.preset                = NULL;
     job->qsv.async_depth           = AV_QSV_ASYNC_DEPTH_DEFAULT;
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);

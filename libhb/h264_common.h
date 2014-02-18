@@ -10,8 +10,15 @@
 #ifndef HB_H264_COMMON_H
 #define HB_H264_COMMON_H
 
-static const char * const hb_h264_profile_names[] = { "auto", "high", "main", "baseline", NULL, };
-static const char * const   hb_h264_level_names[] = { "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2",  NULL, };
-static const int    const  hb_h264_level_values[] = {     -1,    10,    9,    11,    12,    13,    20,    21,    22,    30,    31,    32,    40,    41,    42,    50,    51,    52,     0, };
+static const char * const   hb_h264_profile_names[] = { "auto", "high", "main", "baseline", NULL, };
+static const char * const     hb_h264_level_names[] = { "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2",  NULL, };
+static const int    const    hb_h264_level_values[] = {     -1,    10,    9,    11,    12,    13,    20,    21,    22,    30,    31,    32,    40,    41,    42,    50,    51,    52,     0, };
+
+// stolen from libx264's x264.h
+static const char * const hb_h264_fullrange_names[] = { "off", "on", NULL, };
+static const char * const hb_h264_vidformat_names[] = { "component", "pal", "ntsc", "secam", "mac", "undef", NULL, };
+static const char * const hb_h264_colorprim_names[] = { "", "bt709", "undef", "", "bt470m", "bt470bg", "smpte170m", "smpte240m", "film", "bt2020", NULL, };
+static const char * const  hb_h264_transfer_names[] = { "", "bt709", "undef", "", "bt470m", "bt470bg", "smpte170m", "smpte240m", "linear", "log100", "log316", "iec61966-2-4", "bt1361e", "iec61966-2-1", "bt2020-10", "bt2020-12", NULL, };
+static const char * const hb_h264_colmatrix_names[] = { "GBR", "bt709", "undef", "", "fcc", "bt470bg", "smpte170m", "smpte240m", "YCgCo", "bt2020nc", "bt2020c", NULL, };
 
 #endif  //HB_H264_COMMON_H

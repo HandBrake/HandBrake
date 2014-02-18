@@ -3687,6 +3687,7 @@ static int ParseOptions( int argc, char ** argv )
     #define AUDIO_DITHER        289
     #define QSV_BASELINE        290
     #define QSV_ASYNC_DEPTH     291
+    #define QSV_IMPLEMENTATION  292
 
     for( ;; )
     {
@@ -4339,18 +4340,13 @@ static int ParseOptions( int argc, char ** argv )
                 break;
 #ifdef USE_QSV
             case QSV_BASELINE:
-                if (hb_qsv_available())
-                {
-                    /* XXX: for testing workarounds */
-                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_MSDK_API_1_6;
-                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_MBBRC;
-                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_EXTBRC;
-                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_TRELLIS;
-                    hb_qsv_info->capabilities &= ~HB_QSV_CAP_OPTION2_LOOKAHEAD;
-                }
+                hb_qsv_force_workarounds();
                 break;
             case QSV_ASYNC_DEPTH:
                 qsv_async_depth = atoi(optarg);
+                break;
+            case QSV_IMPLEMENTATION:
+                hb_qsv_impl_set_preferred(optarg);
                 break;
 #endif
             default:

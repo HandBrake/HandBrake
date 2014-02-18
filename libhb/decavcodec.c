@@ -1518,20 +1518,25 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 #ifdef USE_QSV
     if (hb_qsv_decode_is_enabled(job))
     {
-        // setup the QSV configuration
-        pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
-        pv->qsv.config.impl_requested     = hb_qsv_impl_get_preferred();
-        pv->qsv.config.async_depth        = job->qsv.async_depth;
-        pv->qsv.config.sync_need          =  0;
-        pv->qsv.config.usage_threaded     =  1;
-        pv->qsv.config.additional_buffers = 64; // FIFO_LARGE
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_LOOKAHEAD)
+        // determine which encoder we're using
+        hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
+        pv->qsv.decode = info != NULL;
+        if (pv->qsv.decode)
         {
-            // more surfaces may be needed for the lookahead
-            pv->qsv.config.additional_buffers = 160;
+            // setup the QSV configuration
+            pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
+            pv->qsv.config.impl_requested     = info->implementation;
+            pv->qsv.config.async_depth        = job->qsv.async_depth;
+            pv->qsv.config.sync_need          =  0;
+            pv->qsv.config.usage_threaded     =  1;
+            pv->qsv.config.additional_buffers = 64; // FIFO_LARGE
+            if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
+            {
+                // more surfaces may be needed for the lookahead
+                pv->qsv.config.additional_buffers = 160;
+            }
+            pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
         }
-        pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
-        pv->qsv.decode     = 1;
     }
     else
     {

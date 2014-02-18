@@ -9,6 +9,8 @@
 
 #ifdef USE_QSV
 
+#include <stdio.h>
+
 #include "hb.h"
 #include "ports.h"
 #include "common.h"
@@ -16,167 +18,582 @@
 #include "qsv_common.h"
 #include "h264_common.h"
 
-// for x264_vidformat_names etc.
-#include "x264.h"
-
-// avoids a warning
-#include "libavutil/cpu.h"
-extern void ff_cpu_cpuid(int index, int *eax, int *ebx, int *ecx, int *edx);
-
-// make the Intel QSV information available to the UIs
-hb_qsv_info_t *hb_qsv_info = NULL;
-
-// availability and versions
-static mfxIMPL preferred_implementation;
-static mfxVersion qsv_hardware_version;
-static mfxVersion qsv_software_version;
-static mfxVersion qsv_minimum_version;
-static int qsv_hardware_available = 0;
-static int qsv_software_available = 0;
+// QSV info for each codec
+static hb_qsv_info_t *hb_qsv_info_avc       = NULL;
+static hb_qsv_info_t *hb_qsv_info_hevc      = NULL;
+// API versions
+static mfxVersion qsv_software_version      = { .Version   = 0, };
+static mfxVersion qsv_hardware_version      = { .Version   = 0, };
+// AVC implementations
+static hb_qsv_info_t qsv_software_info_avc  = { .available = 0, .codec_id = MFX_CODEC_AVC,  .implementation = MFX_IMPL_SOFTWARE, };
+static hb_qsv_info_t qsv_hardware_info_avc  = { .available = 0, .codec_id = MFX_CODEC_AVC,  .implementation = MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY, };
+// HEVC implementations
+static mfxPluginUID  qsv_encode_plugin_hevc = { .Data      = { 0x2F, 0xCA, 0x99, 0x74, 0x9F, 0xDB, 0x49, 0xAE, 0xB1, 0x21, 0xA5, 0xB6, 0x3E, 0xF5, 0x68, 0xF7 } };
+static hb_qsv_info_t qsv_software_info_hevc = { .available = 0, .codec_id = MFX_CODEC_HEVC, .implementation = MFX_IMPL_SOFTWARE, };
+static hb_qsv_info_t qsv_hardware_info_hevc = { .available = 0, .codec_id = MFX_CODEC_HEVC, .implementation = MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY, };
 
 // check available Intel Media SDK version against a minimum
 #define HB_CHECK_MFX_VERSION(MFX_VERSION, MAJOR, MINOR) \
     (MFX_VERSION.Major == MAJOR  && MFX_VERSION.Minor >= MINOR)
 
+/*
+ * Determine the "generation" of QSV hardware based on the CPU microarchitecture.
+ * Anything unknown is assumed to be more recent than the latest known generation.
+ * This avoids having to order the hb_cpu_platform enum depending on QSV hardware.
+ */
+enum
+{
+    QSV_G0, // third party hardware
+    QSV_G1, // Sandy Bridge or equivalent
+    QSV_G2, // Ivy Bridge or equivalent
+    QSV_G3, // Haswell or equivalent
+};
+static int qsv_hardware_generation(int cpu_platform)
+{
+    switch (cpu_platform)
+    {
+        case HB_CPU_PLATFORM_INTEL_BNL:
+            return QSV_G0;
+        case HB_CPU_PLATFORM_INTEL_SNB:
+            return QSV_G1;
+        case HB_CPU_PLATFORM_INTEL_IVB:
+        case HB_CPU_PLATFORM_INTEL_SLM:
+            return QSV_G2;
+        case HB_CPU_PLATFORM_INTEL_HSW:
+        default:
+            return QSV_G3;
+    }
+}
+
+/*
+ * Determine whether a given mfxIMPL is hardware-accelerated.
+ */
+static int qsv_implementation_is_hardware(mfxIMPL implementation)
+{
+    return MFX_IMPL_BASETYPE(implementation) != MFX_IMPL_SOFTWARE;
+}
+
 int hb_qsv_available()
 {
-    return hb_qsv_info != NULL && (qsv_hardware_available ||
-                                   qsv_software_available);
+    return hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H264);
+}
+
+int hb_qsv_video_encoder_is_enabled(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_QSV_H264:
+            return hb_qsv_info_avc != NULL && hb_qsv_info_avc->available;
+        default:
+            return 0;
+    }
+}
+
+int hb_qsv_audio_encoder_is_enabled(int encoder)
+{
+    switch (encoder)
+    {
+        default:
+            return 0;
+    }
+}
+
+static void init_video_param(mfxVideoParam *videoParam)
+{
+    if (videoParam == NULL)
+    {
+        return;
+    }
+
+    memset(videoParam, 0, sizeof(mfxVideoParam));
+    videoParam->mfx.CodecId                 = MFX_CODEC_AVC;
+    videoParam->mfx.CodecLevel              = MFX_LEVEL_UNKNOWN;
+    videoParam->mfx.CodecProfile            = MFX_PROFILE_UNKNOWN;
+    videoParam->mfx.RateControlMethod       = MFX_RATECONTROL_VBR;
+    videoParam->mfx.TargetUsage             = MFX_TARGETUSAGE_BALANCED;
+    videoParam->mfx.TargetKbps              = 5000;
+    videoParam->mfx.GopOptFlag              = MFX_GOP_CLOSED;
+    videoParam->mfx.FrameInfo.FourCC        = MFX_FOURCC_NV12;
+    videoParam->mfx.FrameInfo.ChromaFormat  = MFX_CHROMAFORMAT_YUV420;
+    videoParam->mfx.FrameInfo.PicStruct     = MFX_PICSTRUCT_PROGRESSIVE;
+    videoParam->mfx.FrameInfo.FrameRateExtN = 25;
+    videoParam->mfx.FrameInfo.FrameRateExtD = 1;
+    videoParam->mfx.FrameInfo.Width         = 1920;
+    videoParam->mfx.FrameInfo.CropW         = 1920;
+    videoParam->mfx.FrameInfo.AspectRatioW  = 1;
+    videoParam->mfx.FrameInfo.Height        = 1088;
+    videoParam->mfx.FrameInfo.CropH         = 1080;
+    videoParam->mfx.FrameInfo.AspectRatioH  = 1;
+    videoParam->AsyncDepth                  = AV_QSV_ASYNC_DEPTH_DEFAULT;
+    videoParam->IOPattern                   = MFX_IOPATTERN_IN_SYSTEM_MEMORY;
+}
+
+static void init_ext_coding_option2(mfxExtCodingOption2 *extCodingOption2)
+{
+    if (extCodingOption2 == NULL)
+    {
+        return;
+    }
+
+    memset(extCodingOption2, 0, sizeof(mfxExtCodingOption2));
+    extCodingOption2->Header.BufferId = MFX_EXTBUFF_CODING_OPTION2;
+    extCodingOption2->Header.BufferSz = sizeof(mfxExtCodingOption2);
+    extCodingOption2->MBBRC           = MFX_CODINGOPTION_ON;
+    extCodingOption2->ExtBRC          = MFX_CODINGOPTION_ON;
+    extCodingOption2->Trellis         = MFX_TRELLIS_I|MFX_TRELLIS_P|MFX_TRELLIS_B;
+    extCodingOption2->RepeatPPS       = MFX_CODINGOPTION_ON;
+    extCodingOption2->BRefType        = MFX_B_REF_PYRAMID;
+    extCodingOption2->AdaptiveI       = MFX_CODINGOPTION_ON;
+    extCodingOption2->AdaptiveB       = MFX_CODINGOPTION_ON;
+    extCodingOption2->LookAheadDS     = MFX_LOOKAHEAD_DS_4x;
+    extCodingOption2->NumMbPerSlice   = 2040; // 1920x1088/4
+}
+
+static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_info_t *info)
+{
+    /*
+     * MFXVideoENCODE_Query(mfxSession, mfxVideoParam *in, mfxVideoParam *out);
+     *
+     * Mode 1:
+     * - in is NULL
+     * - out has the parameters we want to query set to 1
+     * - out->mfx.CodecId field has to be set (mandatory)
+     * - MFXVideoENCODE_Query should zero out all unsupported parameters
+     *
+     * Mode 2:
+     * - the paramaters we want to query are set for in
+     * - in ->mfx.CodecId field has to be set (mandatory)
+     * - out->mfx.CodecId field has to be set (mandatory)
+     * - MFXVideoENCODE_Query should sanitize all unsupported parameters
+     */
+    mfxStatus status;
+    mfxPluginUID *pluginUID;
+    mfxExtBuffer *videoExtParam[1];
+    mfxVideoParam videoParam, inputParam;
+    mfxExtCodingOption2 extCodingOption2;
+
+    /* Reset capabilities before querying */
+    info->capabilities = 0;
+
+    /* Load optional codec plug-ins */
+    switch (info->codec_id)
+    {
+        case MFX_CODEC_HEVC:
+            pluginUID = &qsv_encode_plugin_hevc;
+            break;
+        default:
+            pluginUID = NULL;
+            break;
+    }
+    if (pluginUID != NULL && HB_CHECK_MFX_VERSION(version, 1, 8) &&
+        MFXVideoUSER_Load(session, pluginUID, 0) < MFX_ERR_NONE)
+    {
+        // couldn't load plugin successfully
+        return 0;
+    }
+
+    /*
+     * First of all, check availability of an encoder for
+     * this combination of a codec ID and implementation.
+     *
+     * Note: can error out rather than sanitizing
+     * unsupported codec IDs, so don't log errors.
+     */
+    if (HB_CHECK_MFX_VERSION(version, HB_QSV_MINVERSION_MAJOR, HB_QSV_MINVERSION_MINOR))
+    {
+        if (info->implementation & MFX_IMPL_AUDIO)
+        {
+            /* Not yet supported */
+            return 0;
+        }
+        else
+        {
+            init_video_param(&inputParam);
+            inputParam.mfx.CodecId = info->codec_id;
+
+            memset(&videoParam, 0, sizeof(mfxVideoParam));
+            videoParam.mfx.CodecId = inputParam.mfx.CodecId;
+
+            if (MFXVideoENCODE_Query(session, &inputParam, &videoParam) >= MFX_ERR_NONE &&
+                videoParam.mfx.CodecId == info->codec_id)
+            {
+                info->available = 1;
+            }
+        }
+    }
+    if (!info->available)
+    {
+        /* Don't check capabilities for unavailable encoders */
+        return 0;
+    }
+
+    if (info->implementation & MFX_IMPL_AUDIO)
+    {
+        /* We don't have any audio capability checks yet */
+        return 0;
+    }
+    else
+    {
+        /* Implementation-specific features that can't be queried */
+        if (qsv_implementation_is_hardware(info->implementation))
+        {
+            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
+            {
+                info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
+            }
+        }
+        else
+        {
+            if (HB_CHECK_MFX_VERSION(version, 1, 6))
+            {
+                info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
+            }
+        }
+
+        /* API-specific features that can't be queried */
+        if (HB_CHECK_MFX_VERSION(version, 1, 6))
+        {
+            // API >= 1.6 (mfxBitstream::DecodeTimeStamp, mfxExtCodingOption2)
+            info->capabilities |= HB_QSV_CAP_MSDK_API_1_6;
+        }
+
+        /*
+         * Check availability of optional rate control methods.
+         *
+         * Mode 2 tends to error out, but mode 1 gives false negatives, which
+         * is worse. So use mode 2 and assume an error means it's unsupported.
+         *
+         * Also assume that LA and ICQ combined imply LA_ICQ is
+         * supported, so we don't need to check the latter too.
+         */
+        if (HB_CHECK_MFX_VERSION(version, 1, 7))
+        {
+            init_video_param(&inputParam);
+            inputParam.mfx.CodecId           = info->codec_id;
+            inputParam.mfx.RateControlMethod = MFX_RATECONTROL_LA;
+
+            memset(&videoParam, 0, sizeof(mfxVideoParam));
+            videoParam.mfx.CodecId = inputParam.mfx.CodecId;
+
+            if (MFXVideoENCODE_Query(session, &inputParam, &videoParam) >= MFX_ERR_NONE &&
+                videoParam.mfx.RateControlMethod == MFX_RATECONTROL_LA)
+            {
+                info->capabilities |= HB_QSV_CAP_RATECONTROL_LA;
+
+                // also check for LA + interlaced support
+                init_video_param(&inputParam);
+                inputParam.mfx.CodecId             = info->codec_id;
+                inputParam.mfx.RateControlMethod   = MFX_RATECONTROL_LA;
+                inputParam.mfx.FrameInfo.PicStruct = MFX_PICSTRUCT_FIELD_TFF;
+
+                memset(&videoParam, 0, sizeof(mfxVideoParam));
+                videoParam.mfx.CodecId = inputParam.mfx.CodecId;
+
+                if (MFXVideoENCODE_Query(session, &inputParam, &videoParam) >= MFX_ERR_NONE &&
+                    videoParam.mfx.FrameInfo.PicStruct == MFX_PICSTRUCT_FIELD_TFF           &&
+                    videoParam.mfx.RateControlMethod   == MFX_RATECONTROL_LA)
+                {
+                    info->capabilities |= HB_QSV_CAP_RATECONTROL_LAi;
+                }
+            }
+        }
+        if (HB_CHECK_MFX_VERSION(version, 1, 8))
+        {
+            init_video_param(&inputParam);
+            inputParam.mfx.CodecId           = info->codec_id;
+            inputParam.mfx.RateControlMethod = MFX_RATECONTROL_ICQ;
+
+            memset(&videoParam, 0, sizeof(mfxVideoParam));
+            videoParam.mfx.CodecId = inputParam.mfx.CodecId;
+
+            if (MFXVideoENCODE_Query(session, &inputParam, &videoParam) >= MFX_ERR_NONE &&
+                videoParam.mfx.RateControlMethod == MFX_RATECONTROL_ICQ)
+            {
+                info->capabilities |= HB_QSV_CAP_RATECONTROL_ICQ;
+            }
+        }
+
+        /*
+         * Check mfxExtCodingOption2 fields.
+         *
+         * Mode 2 suffers from false negatives with some drivers, whereas mode 1
+         * suffers from false positives instead. The latter is probably easier
+         * and/or safer to sanitize for us, so use mode 1.
+         */
+        if (HB_CHECK_MFX_VERSION(version, 1, 6))
+        {
+            init_video_param(&videoParam);
+            videoParam.mfx.CodecId = info->codec_id;
+
+            init_ext_coding_option2(&extCodingOption2);
+            videoParam.ExtParam    = videoExtParam;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2;
+            videoParam.NumExtParam = 1;
+
+            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            if (status >= MFX_ERR_NONE)
+            {
+#if 0
+                // testing code that could come in handy
+                fprintf(stderr, "-------------------\n");
+                fprintf(stderr, "MBBRC:         0x%02X\n",     extCodingOption2.MBBRC);
+                fprintf(stderr, "ExtBRC:        0x%02X\n",     extCodingOption2.ExtBRC);
+                fprintf(stderr, "Trellis:       0x%02X\n",     extCodingOption2.Trellis);
+                fprintf(stderr, "RepeatPPS:     0x%02X\n",     extCodingOption2.RepeatPPS);
+                fprintf(stderr, "BRefType:      %4"PRIu16"\n", extCodingOption2.BRefType);
+                fprintf(stderr, "AdaptiveI:     0x%02X\n",     extCodingOption2.AdaptiveI);
+                fprintf(stderr, "AdaptiveB:     0x%02X\n",     extCodingOption2.AdaptiveB);
+                fprintf(stderr, "LookAheadDS:   %4"PRIu16"\n", extCodingOption2.LookAheadDS);
+                fprintf(stderr, "-------------------\n");
+#endif
+
+                /*
+                 * Sanitize API 1.6 fields:
+                 *
+                 * - MBBRC  requires G3 hardware (Haswell or equivalent)
+                 * - ExtBRC requires G2 hardware (Ivy Bridge or equivalent)
+                 */
+                if (qsv_implementation_is_hardware(info->implementation) &&
+                    qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
+                {
+                    if (extCodingOption2.MBBRC)
+                    {
+                        info->capabilities |= HB_QSV_CAP_OPTION2_MBBRC;
+                    }
+                }
+                if (qsv_implementation_is_hardware(info->implementation) &&
+                    qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G2)
+                {
+                    if (extCodingOption2.ExtBRC)
+                    {
+                        info->capabilities |= HB_QSV_CAP_OPTION2_EXTBRC;
+                    }
+                }
+
+                /*
+                 * Sanitize API 1.7 fields:
+                 *
+                 * - Trellis requires G3 hardware (Haswell or equivalent)
+                 */
+                if (HB_CHECK_MFX_VERSION(version, 1, 7))
+                {
+                    if (qsv_implementation_is_hardware(info->implementation) &&
+                        qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
+                    {
+                        if (extCodingOption2.Trellis)
+                        {
+                            info->capabilities |= HB_QSV_CAP_OPTION2_TRELLIS;
+                        }
+                    }
+                }
+
+                /*
+                 * Sanitize API 1.8 fields:
+                 *
+                 * - BRefType    requires B-pyramid support
+                 * - LookAheadDS requires lookahead support
+                 * - AdaptiveI, AdaptiveB, NumMbPerSlice unknown (trust Query)
+                 */
+                if (HB_CHECK_MFX_VERSION(version, 1, 8))
+                {
+                    if (info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
+                    {
+                        if (extCodingOption2.BRefType)
+                        {
+                            info->capabilities |= HB_QSV_CAP_OPTION2_BREFTYPE;
+                        }
+                    }
+                    if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
+                    {
+                        if (extCodingOption2.LookAheadDS)
+                        {
+                            info->capabilities |= HB_QSV_CAP_OPTION2_LA_DOWNS;
+                        }
+                    }
+                    if (extCodingOption2.AdaptiveI && extCodingOption2.AdaptiveB)
+                    {
+                        info->capabilities |= HB_QSV_CAP_OPTION2_IB_ADAPT;
+                    }
+                    if (extCodingOption2.NumMbPerSlice)
+                    {
+                        info->capabilities |= HB_QSV_CAP_OPTION2_NMBSLICE;
+                    }
+                }
+            }
+            else
+            {
+                fprintf(stderr,
+                        "hb_qsv_info_init: mfxExtCodingOption2 check failed (0x%"PRIX32", 0x%"PRIX32", %d)\n",
+                        info->codec_id, info->implementation, status);
+            }
+        }
+    }
+
+    /* Unload optional codec plug-ins */
+    if (pluginUID != NULL && HB_CHECK_MFX_VERSION(version, 1, 8))
+    {
+        MFXVideoUSER_UnLoad(session, pluginUID);
+    }
+
+    return 0;
 }
 
 int hb_qsv_info_init()
 {
     static int init_done = 0;
     if (init_done)
-        return (hb_qsv_info == NULL);
+        return 0;
     init_done = 1;
 
-    hb_qsv_info = calloc(1, sizeof(*hb_qsv_info));
-    if (hb_qsv_info == NULL)
-    {
-        hb_error("hb_qsv_info_init: alloc failure");
-        return -1;
-    }
-
+    /*
+     * First, check for any MSDK version to determine whether one or
+     * more implementations are present; then check if we can use them.
+     *
+     * I've had issues using a NULL version with some combinations of
+     * hardware and driver, so use a low version number (1.0) instead.
+     */
     mfxSession session;
-    qsv_minimum_version.Major = HB_QSV_MINVERSION_MAJOR;
-    qsv_minimum_version.Minor = HB_QSV_MINVERSION_MINOR;
+    mfxVersion version = { .Major = 1, .Minor = 0, };
 
     // check for software fallback
-    if (MFXInit(MFX_IMPL_SOFTWARE,
-                &qsv_minimum_version, &session) == MFX_ERR_NONE)
+    if (MFXInit(MFX_IMPL_SOFTWARE, &version, &session) == MFX_ERR_NONE)
     {
-        qsv_software_available   = 1;
-        preferred_implementation = MFX_IMPL_SOFTWARE;
-        // our minimum is supported, but query the actual version
+        // Media SDK software found, but check that our minimum is supported
         MFXQueryVersion(session, &qsv_software_version);
+        if (HB_CHECK_MFX_VERSION(qsv_software_version,
+                                 HB_QSV_MINVERSION_MAJOR,
+                                 HB_QSV_MINVERSION_MINOR))
+        {
+            query_capabilities(session, qsv_software_version, &qsv_software_info_avc);
+            query_capabilities(session, qsv_software_version, &qsv_software_info_hevc);
+            // now that we know which hardware encoders are
+            // available, we can set the preferred implementation
+            hb_qsv_impl_set_preferred("software");
+        }
         MFXClose(session);
     }
 
     // check for actual hardware support
-    if (MFXInit(MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY,
-                &qsv_minimum_version, &session) == MFX_ERR_NONE)
+    if (MFXInit(MFX_IMPL_HARDWARE_ANY, &version, &session) == MFX_ERR_NONE)
     {
-        // Cloverview (Bonnell microarchitecture) supports MSDK via third-party
-        // hardware - we don't support this configuration for the time being
-        if (hb_get_cpu_platform() != HB_CPU_PLATFORM_INTEL_BNL)
+        // Media SDK hardware found, but check that our minimum is supported
+        //
+        // Note: this-party hardware (QSV_G0) is unsupported for the time being
+        MFXQueryVersion(session, &qsv_hardware_version);
+        if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G1 &&
+            HB_CHECK_MFX_VERSION(qsv_hardware_version,
+                                 HB_QSV_MINVERSION_MAJOR,
+                                 HB_QSV_MINVERSION_MINOR))
         {
-            qsv_hardware_available   = 1;
-            preferred_implementation = MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY;
-            // our minimum is supported, but query the actual version
-            MFXQueryVersion(session, &qsv_hardware_version);
+            query_capabilities(session, qsv_hardware_version, &qsv_hardware_info_avc);
+            query_capabilities(session, qsv_hardware_version, &qsv_hardware_info_hevc);
+            // now that we know which hardware encoders are
+            // available, we can set the preferred implementation
+            hb_qsv_impl_set_preferred("hardware");
         }
         MFXClose(session);
-    }
-
-    // check for version-specific or hardware-specific capabilities
-    // we only use software as a fallback, so check hardware first
-    if (qsv_hardware_available)
-    {
-        if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 6))
-        {
-            hb_qsv_info->capabilities |= HB_QSV_CAP_MSDK_API_1_6;
-            hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_EXTBRC;
-        }
-        if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7))
-        {
-            // we should really check the driver version, but since that's not
-            // available here, checking the API version is the best we can do :-(
-            hb_qsv_info->capabilities |= HB_QSV_CAP_CORE_COPYFRAME;
-        }
-        if (hb_get_cpu_platform() == HB_CPU_PLATFORM_INTEL_HSW)
-        {
-            if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 6))
-            {
-                hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_MBBRC;
-            }
-            if (HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7))
-            {
-                hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_TRELLIS;
-                hb_qsv_info->capabilities |= HB_QSV_CAP_OPTION2_LOOKAHEAD;
-            }
-            hb_qsv_info->capabilities |= HB_QSV_CAP_H264_BPYRAMID;
-        }
-    }
-    else if (qsv_software_available)
-    {
-        if (HB_CHECK_MFX_VERSION(qsv_software_version, 1, 6))
-        {
-            hb_qsv_info->capabilities |= HB_QSV_CAP_MSDK_API_1_6;
-            hb_qsv_info->capabilities |= HB_QSV_CAP_H264_BPYRAMID;
-        }
-        hb_qsv_info->capabilities |= HB_QSV_CAP_CORE_COPYFRAME;
-    }
-
-    // note: we pass a pointer to MFXInit but it never gets modified
-    //       let's make sure of it just to be safe though
-    if (qsv_minimum_version.Major != HB_QSV_MINVERSION_MAJOR ||
-        qsv_minimum_version.Minor != HB_QSV_MINVERSION_MINOR)
-    {
-        hb_error("hb_qsv_info_init: minimum version (%d.%d) was modified",
-                 qsv_minimum_version.Major,
-                 qsv_minimum_version.Minor);
     }
 
     // success
     return 0;
 }
 
-// we don't need it beyond this point
-#undef HB_CHECK_MFX_VERSION
+static void log_capabilities(int log_level, uint64_t caps, const char *prefix)
+{
+    if (!caps)
+    {
+        hb_deep_log(log_level, "%s none (standard feature set)", prefix);
+    }
+    else
+    {
+        hb_deep_log(log_level, "%s%s%s%s%s%s%s%s%s%s%s%s%s", prefix,
+                    !(caps & HB_QSV_CAP_MSDK_API_1_6)     ? "" : " api1.6",
+                    !(caps & HB_QSV_CAP_B_REF_PYRAMID)    ? "" : " bpyramid",
+                    !(caps & HB_QSV_CAP_OPTION2_BREFTYPE) ? "" : " breftype",
+                    !(caps & HB_QSV_CAP_RATECONTROL_LA)   ? "" : " lookahead",
+                    !(caps & HB_QSV_CAP_RATECONTROL_LAi)  ? "" : " lookaheadi",
+                    !(caps & HB_QSV_CAP_OPTION2_LA_DOWNS) ? "" : " lookaheadds",
+                    !(caps & HB_QSV_CAP_RATECONTROL_ICQ)  ? "" : " icq",
+                    !(caps & HB_QSV_CAP_OPTION2_MBBRC)    ? "" : " mbbrc",
+                    !(caps & HB_QSV_CAP_OPTION2_EXTBRC)   ? "" : " extbrc",
+                    !(caps & HB_QSV_CAP_OPTION2_TRELLIS)  ? "" : " trellis",
+                    !(caps & HB_QSV_CAP_OPTION2_IB_ADAPT) ? "" : " adaptivei adaptiveb",
+                    !(caps & HB_QSV_CAP_OPTION2_NMBSLICE) ? "" : " nummbperslice");
+    }
+}
 
 void hb_qsv_info_print()
 {
-    if (hb_qsv_info == NULL)
-    {
-        hb_error("hb_qsv_info_print: QSV info not initialized!");
-    }
-
-    // is QSV available?
+    // is QSV available and usable?
     hb_log("Intel Quick Sync Video support: %s",
            hb_qsv_available() ? "yes": "no");
 
-    // if we have Quick Sync Video support, also print the details
+    // also print the details
+    if (qsv_hardware_version.Version)
+    {
+        hb_log(" - Intel Media SDK hardware: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
+               qsv_hardware_version.Major, qsv_hardware_version.Minor,
+               HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
+    }
+    if (qsv_software_version.Version)
+    {
+        hb_log(" - Intel Media SDK software: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
+               qsv_software_version.Major, qsv_software_version.Minor,
+               HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
+    }
     if (hb_qsv_available())
     {
-        if (qsv_hardware_available)
+        if (hb_qsv_info_avc != NULL && hb_qsv_info_avc->available)
         {
-            hb_log(" - Intel Media SDK hardware: API %d.%d (minimum: %d.%d)",
-                   qsv_hardware_version.Major,
-                   qsv_hardware_version.Minor,
-                   qsv_minimum_version.Major,
-                   qsv_minimum_version.Minor);
+            hb_log(" - H.264 encoder: yes");
+            hb_log("    - preferred implementation: %s",
+                   hb_qsv_impl_get_name(hb_qsv_info_avc->implementation));
+            if (qsv_hardware_info_avc.available)
+            {
+                log_capabilities(2, qsv_hardware_info_avc.capabilities,
+                                 "    - capabilities (hardware): ");
+            }
+            if (qsv_software_info_avc.available)
+            {
+                log_capabilities(2, qsv_software_info_avc.capabilities,
+                                 "    - capabilities (software): ");
+            }
         }
-        if (qsv_software_available)
+        else
         {
-            hb_log(" - Intel Media SDK software: API %d.%d (minimum: %d.%d)",
-                   qsv_software_version.Major,
-                   qsv_software_version.Minor,
-                   qsv_minimum_version.Major,
-                   qsv_minimum_version.Minor);
+            hb_log(" - H.264 encoder: no");
         }
-        hb_log(" - Preferred implementation: %s",
-               hb_qsv_impl_get_name(preferred_implementation));
+        if (hb_qsv_info_hevc != NULL && hb_qsv_info_hevc->available)
+        {
+            hb_log(" - H.265 encoder: yes (unsupported)");
+            hb_log("    - preferred implementation: %s",
+                   hb_qsv_impl_get_name(hb_qsv_info_hevc->implementation));
+            if (qsv_hardware_info_hevc.available)
+            {
+                log_capabilities(2, qsv_hardware_info_hevc.capabilities,
+                                 "    - capabilities (hardware): ");
+            }
+            if (qsv_software_info_hevc.available)
+            {
+                log_capabilities(2, qsv_software_info_hevc.capabilities,
+                                 "    - capabilities (software): ");
+            }
+        }
+        else
+        {
+            hb_log(" - H.265 encoder: no");
+        }
+    }
+}
+
+hb_qsv_info_t* hb_qsv_info_get(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_QSV_H264:
+            return hb_qsv_info_avc;
+        default:
+            return NULL;
     }
 }
 
@@ -197,6 +614,18 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
     return ((job != NULL && job->qsv.decode)                        &&
             (job->vcodec                      & HB_VCODEC_QSV_MASK) &&
             (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV));
+}
+
+int hb_qsv_copyframe_is_slow(int encoder)
+{
+    hb_qsv_info_t *info = hb_qsv_info_get(encoder);
+    if (info != NULL && qsv_implementation_is_hardware(info->implementation))
+    {
+        // we should really check the driver version, but since it's not
+        // available, checking the API version is the best we can do :-(
+        return !HB_CHECK_MFX_VERSION(qsv_hardware_version, 1, 7);
+    }
+    return 0;
 }
 
 int hb_qsv_codingoption_xlat(int val)
@@ -305,12 +734,12 @@ float hb_qsv_atof(const char *str, int *err)
     return v;
 }
 
-int hb_qsv_param_parse(hb_qsv_param_t *param,
-                       const char *key, const char *value, int vcodec)
+int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
+                       const char *key, const char *value)
 {
     float fvalue;
     int ivalue, error = 0;
-    if (param == NULL)
+    if (param == NULL || info == NULL)
     {
         return HB_QSV_PARAM_ERROR;
     }
@@ -374,16 +803,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "b-pyramid"))
     {
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_H264_BPYRAMID)
+        if (info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
         {
-            switch (vcodec)
-            {
-                case HB_VCODEC_QSV_H264:
-                    ivalue = hb_qsv_atoi(value, &error);
-                    break;
-                default:
-                    return HB_QSV_PARAM_UNSUPPORTED;
-            }
+            ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
                 param->gop.b_pyramid = HB_QSV_CLIP3(-1, 1, ivalue);
@@ -407,6 +829,46 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
             {
                 param->videoParam->mfx.GopOptFlag &= ~MFX_GOP_STRICT;
             }
+        }
+    }
+    else if (!strcasecmp(key, "adaptive-i") ||
+             !strcasecmp(key, "i-adapt"))
+    {
+        if (info->capabilities & HB_QSV_CAP_OPTION2_IB_ADAPT)
+        {
+            ivalue = hb_qsv_atobool(value, &error);
+            if (!error)
+            {
+                param->codingOption2.AdaptiveI = hb_qsv_codingoption_xlat(ivalue);
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
+    else if (!strcasecmp(key, "adaptive-b") ||
+             !strcasecmp(key, "b-adapt"))
+    {
+        if (info->capabilities & HB_QSV_CAP_OPTION2_IB_ADAPT)
+        {
+            ivalue = hb_qsv_atobool(value, &error);
+            if (!error)
+            {
+                param->codingOption2.AdaptiveB = hb_qsv_codingoption_xlat(ivalue);
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
+    else if (!strcasecmp(key, "force-cqp"))
+    {
+        ivalue = hb_qsv_atobool(value, &error);
+        if (!error)
+        {
+            param->rc.icq = !ivalue;
         }
     }
     else if (!strcasecmp(key, "cqp-offset-i"))
@@ -459,9 +921,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "cavlc") || !strcasecmp(key, "cabac"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
+            case MFX_CODEC_AVC:
                 ivalue = hb_qsv_atobool(value, &error);
                 break;
             default:
@@ -478,10 +940,10 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "videoformat"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atoindex(x264_vidformat_names, value, &error);
+            case MFX_CODEC_AVC:
+                ivalue = hb_qsv_atoindex(hb_h264_vidformat_names, value, &error);
                 break;
             default:
                 return HB_QSV_PARAM_UNSUPPORTED;
@@ -493,10 +955,10 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "fullrange"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atoindex(x264_fullrange_names, value, &error);
+            case MFX_CODEC_AVC:
+                ivalue = hb_qsv_atoindex(hb_h264_fullrange_names, value, &error);
                 break;
             default:
                 return HB_QSV_PARAM_UNSUPPORTED;
@@ -508,10 +970,10 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "colorprim"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atoindex(x264_colorprim_names, value, &error);
+            case MFX_CODEC_AVC:
+                ivalue = hb_qsv_atoindex(hb_h264_colorprim_names, value, &error);
                 break;
             default:
                 return HB_QSV_PARAM_UNSUPPORTED;
@@ -524,10 +986,10 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "transfer"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atoindex(x264_transfer_names, value, &error);
+            case MFX_CODEC_AVC:
+                ivalue = hb_qsv_atoindex(hb_h264_transfer_names, value, &error);
                 break;
             default:
                 return HB_QSV_PARAM_UNSUPPORTED;
@@ -540,10 +1002,10 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "colormatrix"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atoindex(x264_colmatrix_names, value, &error);
+            case MFX_CODEC_AVC:
+                ivalue = hb_qsv_atoindex(hb_h264_colmatrix_names, value, &error);
                 break;
             default:
                 return HB_QSV_PARAM_UNSUPPORTED;
@@ -557,9 +1019,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     else if (!strcasecmp(key, "tff") ||
              !strcasecmp(key, "interlaced"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
+            case MFX_CODEC_AVC:
                 ivalue = hb_qsv_atobool(value, &error);
                 break;
             default:
@@ -574,9 +1036,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "bff"))
     {
-        switch (vcodec)
+        switch (info->codec_id)
         {
-            case HB_VCODEC_QSV_H264:
+            case MFX_CODEC_AVC:
                 ivalue = hb_qsv_atobool(value, &error);
                 break;
             default:
@@ -591,7 +1053,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "mbbrc"))
     {
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
+        if (info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
         {
             ivalue = hb_qsv_atobool(value, &error);
             if (!error)
@@ -606,7 +1068,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     }
     else if (!strcasecmp(key, "extbrc"))
     {
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
+        if (info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
         {
             ivalue = hb_qsv_atobool(value, &error);
             if (!error)
@@ -622,16 +1084,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     else if (!strcasecmp(key, "lookahead") ||
              !strcasecmp(key, "la"))
     {
-        switch (vcodec)
+        if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atobool(value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
-        }
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_LOOKAHEAD)
-        {
+            ivalue = hb_qsv_atobool(value, &error);
             if (!error)
             {
                 param->rc.lookahead = ivalue;
@@ -645,16 +1100,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     else if (!strcasecmp(key, "lookahead-depth") ||
              !strcasecmp(key, "la-depth"))
     {
-        switch (vcodec)
+        if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atoi(value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
-        }
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_LOOKAHEAD)
-        {
+            ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
                 // LookAheadDepth 10 will cause a hang with some driver versions
@@ -667,18 +1115,29 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
             return HB_QSV_PARAM_UNSUPPORTED;
         }
     }
+    else if (!strcasecmp(key, "lookahead-ds") ||
+             !strcasecmp(key, "la-ds"))
+    {
+        if (info->capabilities & HB_QSV_CAP_OPTION2_LA_DOWNS)
+        {
+            ivalue = hb_qsv_atoi(value, &error);
+            if (!error)
+            {
+                param->codingOption2.LookAheadDS = HB_QSV_CLIP3(MFX_LOOKAHEAD_DS_UNKNOWN,
+                                                                MFX_LOOKAHEAD_DS_4x,
+                                                                ivalue);
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
     else if (!strcasecmp(key, "trellis"))
     {
-        switch (vcodec)
+        if (info->capabilities & HB_QSV_CAP_OPTION2_TRELLIS)
         {
-            case HB_VCODEC_QSV_H264:
-                ivalue = hb_qsv_atoi(value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
-        }
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_OPTION2_TRELLIS)
-        {
+            ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
                 param->codingOption2.Trellis = hb_qsv_trellisvalue_xlat(ivalue);
@@ -693,7 +1152,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     {
         /*
          * TODO:
-         * - slice count control
+         * - slice count (num-slice/slices, num-mb-per-slice/slice-max-mbs)
          * - open-gop
          * - fake-interlaced (mfxExtCodingOption.FramePicture???)
          * - intra-refresh
@@ -703,18 +1162,6 @@ int hb_qsv_param_parse(hb_qsv_param_t *param,
     return error ? HB_QSV_PARAM_BAD_VALUE : HB_QSV_PARAM_OK;
 }
 
-const char* const* hb_qsv_preset_get_names()
-{
-    if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
-    {
-        return hb_qsv_preset_names2;
-    }
-    else
-    {
-        return hb_qsv_preset_names1;
-    }
-}
-
 #ifdef HB_API_OLD_PRESET_GETTERS
 const char* const* hb_qsv_presets()
 {
@@ -722,12 +1169,84 @@ const char* const* hb_qsv_presets()
 }
 #endif
 
-int hb_qsv_param_default_preset(hb_qsv_param_t *param,
-                                mfxVideoParam *videoParam, const char *preset)
+const char* const* hb_qsv_preset_get_names()
 {
-    if (param != NULL && videoParam != NULL)
+    if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
     {
-        int ret = hb_qsv_param_default(param, videoParam);
+        return hb_qsv_preset_names2;
+    }
+    else
+    {
+        return hb_qsv_preset_names2;
+    }
+}
+
+const char* const* hb_qsv_profile_get_names(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_QSV_H264:
+            return hb_h264_profile_names;
+        default:
+            return NULL;
+    }
+}
+
+const char* const* hb_qsv_level_get_names(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_QSV_H264:
+            return hb_h264_level_names;
+        default:
+            return NULL;
+    }
+}
+
+const char* hb_qsv_video_quality_get_name(uint32_t codec)
+{
+    uint64_t caps;
+    switch (codec)
+    {
+        case HB_VCODEC_QSV_H264:
+            caps = hb_qsv_info_avc != NULL ? hb_qsv_info_avc->capabilities : 0;
+            return (caps & HB_QSV_CAP_RATECONTROL_ICQ) ? "ICQ" : "QP";
+
+        default:
+            return "QP";
+    }
+}
+
+void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high,
+                                     float *granularity, int *direction)
+{
+    uint64_t caps;
+    switch (codec)
+    {
+        case HB_VCODEC_QSV_H264:
+            caps = hb_qsv_info_avc != NULL ? hb_qsv_info_avc->capabilities : 0;
+            *direction   = 1;
+            *granularity = 1.;
+            *low         = (caps & HB_QSV_CAP_RATECONTROL_ICQ) ? 1. : 0.;
+            *high        = 51.;
+            break;
+
+        default:
+            *direction   = 1;
+            *granularity = 1.;
+            *low         = 0.;
+            *high        = 51.;
+            break;
+    }
+}
+
+int hb_qsv_param_default_preset(hb_qsv_param_t *param,
+                                mfxVideoParam *videoParam,
+                                hb_qsv_info_t *info, const char *preset)
+{
+    if (param != NULL && videoParam != NULL && info != NULL)
+    {
+        int ret = hb_qsv_param_default(param, videoParam, info);
         if (ret)
         {
             return ret;
@@ -769,7 +1288,7 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
              *     LookAhead:       0 (off)
              *     LookAheadDepth: Not Applicable
              */
-            if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
+            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
             {
                 param->rc.lookahead                = 0;
                 param->videoParam->mfx.NumRefFrame = 1;
@@ -794,7 +1313,7 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
         }
         else if (!strcasecmp(preset, "speed"))
         {
-            if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_HSW)
+            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
             {
                 /*
                  * HSW TargetUsage:     6
@@ -840,9 +1359,10 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
     return 0;
 }
 
-int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
+int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
+                         hb_qsv_info_t  *info)
 {
-    if (param != NULL && videoParam != NULL)
+    if (param != NULL && videoParam != NULL && info != NULL)
     {
         // introduced in API 1.0
         memset(&param->codingOption, 0, sizeof(mfxExtCodingOption));
@@ -902,13 +1422,21 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         // introduced in API 1.7
         param->codingOption2.LookAheadDepth  = 40;
         param->codingOption2.Trellis         = MFX_TRELLIS_OFF;
+        // introduced in API 1.8
+        param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_ON;
+        param->codingOption2.BRefType        = MFX_B_REF_UNKNOWN; // controlled via gop.b_pyramid
+        param->codingOption2.AdaptiveI       = MFX_CODINGOPTION_ON;
+        param->codingOption2.AdaptiveB       = MFX_CODINGOPTION_ON;
+        param->codingOption2.LookAheadDS     = MFX_LOOKAHEAD_DS_OFF;
+        param->codingOption2.NumMbPerSlice   = 0;
 
         // GOP & rate control
         param->gop.b_pyramid          = -1; // set automatically
         param->gop.gop_pic_size       = -1; // set automatically
         param->gop.gop_ref_dist       = -1; // set automatically
         param->gop.int_ref_cycle_size = -1; // set automatically
-        param->rc.lookahead           =  1;
+        param->rc.icq                 =  1; // enabled by default (if supported)
+        param->rc.lookahead           =  1; // enabled by default (if supported)
         param->rc.cqp_offsets[0]      =  0;
         param->rc.cqp_offsets[1]      =  2;
         param->rc.cqp_offsets[2]      =  4;
@@ -944,7 +1472,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam)
         param->videoParam->ExtParam                                   = param->ExtParamArray;
         param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption;
         param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->videoSignalInfo;
-        if (hb_qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6)
+        if (info->capabilities & HB_QSV_CAP_MSDK_API_1_6)
         {
             param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption2;
         }
@@ -1015,9 +1543,37 @@ uint8_t hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags)
     return frametype;
 }
 
-mfxIMPL hb_qsv_impl_get_preferred()
+int hb_qsv_impl_set_preferred(const char *name)
 {
-    return preferred_implementation;
+    if (name == NULL)
+    {
+        return -1;
+    }
+    if (!strcasecmp(name, "software"))
+    {
+        if (qsv_software_info_avc.available)
+        {
+            hb_qsv_info_avc = &qsv_software_info_avc;
+        }
+        if (qsv_software_info_hevc.available)
+        {
+            hb_qsv_info_hevc = &qsv_software_info_hevc;
+        }
+        return 0;
+    }
+    if (!strcasecmp(name, "hardware"))
+    {
+        if (qsv_hardware_info_avc.available)
+        {
+            hb_qsv_info_avc = &qsv_hardware_info_avc;
+        }
+        if (qsv_hardware_info_hevc.available)
+        {
+            hb_qsv_info_hevc = &qsv_hardware_info_hevc;
+        }
+        return 0;
+    }
+    return -1;
 }
 
 const char* hb_qsv_impl_get_name(int impl)
@@ -1046,6 +1602,14 @@ const char* hb_qsv_impl_get_name(int impl)
         default:
             return NULL;
     }
+}
+
+void hb_qsv_force_workarounds()
+{
+    qsv_software_info_avc.capabilities  &= ~HB_QSV_CAP_MSDK_API_1_6;
+    qsv_hardware_info_avc.capabilities  &= ~HB_QSV_CAP_MSDK_API_1_6;
+    qsv_software_info_hevc.capabilities &= ~HB_QSV_CAP_MSDK_API_1_6;
+    qsv_hardware_info_hevc.capabilities &= ~HB_QSV_CAP_MSDK_API_1_6;
 }
 
 #endif // USE_QSV

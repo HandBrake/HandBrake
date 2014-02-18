@@ -734,7 +734,7 @@ static void do_job(hb_job_t *job)
      *      the list and we can't use CopyFrame, disable QSV decoding until a
      *      better solution is implemented.
      */
-    if (!(hb_qsv_info->capabilities & HB_QSV_CAP_CORE_COPYFRAME))
+    if (hb_qsv_copyframe_is_slow(job->vcodec))
     {
         if (job->list_filter != NULL)
         {
