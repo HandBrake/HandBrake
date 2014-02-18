@@ -223,7 +223,11 @@ struct
 {
     enum hb_cpu_platform platform;
     const char *name;
-    char buf[48];
+    union
+    {
+        char buf[48];
+        uint32_t buf4[12];
+    };
     int count;
 } hb_cpu_info;
 
@@ -346,20 +350,20 @@ static void init_cpu_info()
         if ((eax & 0x80000004) < 0x80000004)
         {
             cpuid(0x80000002,
-                  (int*)&hb_cpu_info.buf[ 0],
-                  (int*)&hb_cpu_info.buf[ 4],
-                  (int*)&hb_cpu_info.buf[ 8],
-                  (int*)&hb_cpu_info.buf[12]);
+                  &hb_cpu_info.buf4[ 0],
+                  &hb_cpu_info.buf4[ 1],
+                  &hb_cpu_info.buf4[ 2],
+                  &hb_cpu_info.buf4[ 3]);
             cpuid(0x80000003,
-                  (int*)&hb_cpu_info.buf[16],
-                  (int*)&hb_cpu_info.buf[20],
-                  (int*)&hb_cpu_info.buf[24],
-                  (int*)&hb_cpu_info.buf[28]);
+                  &hb_cpu_info.buf4[ 4],
+                  &hb_cpu_info.buf4[ 5],
+                  &hb_cpu_info.buf4[ 6],
+                  &hb_cpu_info.buf4[ 7]);
             cpuid(0x80000004,
-                  (int*)&hb_cpu_info.buf[32],
-                  (int*)&hb_cpu_info.buf[36],
-                  (int*)&hb_cpu_info.buf[40],
-                  (int*)&hb_cpu_info.buf[44]);
+                  &hb_cpu_info.buf4[ 8],
+                  &hb_cpu_info.buf4[ 9],
+                  &hb_cpu_info.buf4[10],
+                  &hb_cpu_info.buf4[11]);
 
             hb_cpu_info.name    = hb_cpu_info.buf;
             hb_cpu_info.buf[47] = '\0'; // just in case
