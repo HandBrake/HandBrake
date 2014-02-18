@@ -3261,33 +3261,6 @@ void hb_job_set_file(hb_job_t *job, const char *file)
     }
 }
 
-#ifdef HB_API_OLD_PRESET_SETTERS
-void hb_job_set_x264_preset(hb_job_t *job, const char *preset)
-{
-    hb_job_set_encoder_preset(job, preset);
-}
-
-void hb_job_set_x264_tune(hb_job_t *job, const char *tune)
-{
-    hb_job_set_encoder_tune(job, tune);
-}
-
-void hb_job_set_advanced_opts(hb_job_t *job, const char *opts)
-{
-    hb_job_set_encoder_options(job, opts);
-}
-
-void hb_job_set_h264_profile(hb_job_t *job, const char *profile)
-{
-    hb_job_set_encoder_profile(job, profile);
-}
-
-void hb_job_set_h264_level(hb_job_t *job, const char *level)
-{
-    hb_job_set_encoder_level(job, level);
-}
-#endif
-
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter )
 {
     if( filter == NULL )

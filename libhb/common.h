@@ -143,15 +143,6 @@ void hb_job_set_encoder_options(hb_job_t *job, const char *options);
 void hb_job_set_encoder_profile(hb_job_t *job, const char *profile);
 void hb_job_set_encoder_level  (hb_job_t *job, const char *level);
 void hb_job_set_file           (hb_job_t *job, const char *file);
-// TODO: legacy functions, remove once UIs are updated
-#define HB_API_OLD_PRESET_SETTERS
-#ifdef  HB_API_OLD_PRESET_SETTERS
-void hb_job_set_x264_preset  (hb_job_t *job, const char *preset);
-void hb_job_set_x264_tune    (hb_job_t *job, const char *tune);
-void hb_job_set_advanced_opts(hb_job_t *job, const char *opts);
-void hb_job_set_h264_profile (hb_job_t *job, const char *profile);
-void hb_job_set_h264_level   (hb_job_t *job, const char *level);
-#endif
 
 hb_audio_t *hb_audio_copy(const hb_audio_t *src);
 hb_list_t *hb_audio_list_copy(const hb_list_t *src);
@@ -470,41 +461,11 @@ struct hb_job_s
     int             cfr;
     int             pass;
     int             fastfirstpass;
-    union
-    {
-#ifdef HB_API_OLD_PRESET_SETTERS
-        char *x264_preset;     // TODO: legacy name, remove once UIs are updated
-#endif
-        char *encoder_preset;
-    };
-    union
-    {
-#ifdef HB_API_OLD_PRESET_SETTERS
-        char *x264_tune;       // TODO: legacy name, remove once UIs are updated
-#endif
-        char *encoder_tune;
-    };
-    union
-    {
-#ifdef HB_API_OLD_PRESET_SETTERS
-        char *advanced_opts;   // TODO: legacy name, remove once UIs are updated
-#endif
-        char *encoder_options;
-    };
-    union
-    {
-#ifdef HB_API_OLD_PRESET_SETTERS
-        char *h264_profile;    // TODO: legacy name, remove once UIs are updated
-#endif
-        char *encoder_profile;
-    };
-    union
-    {
-#ifdef HB_API_OLD_PRESET_SETTERS
-        char *h264_level;      // TODO: legacy name, remove once UIs are updated
-#endif
-        char *encoder_level;
-    };
+    char           *encoder_preset;
+    char           *encoder_tune;
+    char           *encoder_options;
+    char           *encoder_profile;
+    char           *encoder_level;
     int             areBframes;
 
     int             color_matrix_code;
@@ -594,11 +555,6 @@ struct hb_job_s
     {
         int decode;
         int async_depth;
-#ifdef HB_API_OLD_PRESET_SETTERS
-        const char *preset;   // TODO: deprecated, remove once UIs are updated
-#else
-        const char *reserved; // keep around until Interop is updated
-#endif
         av_qsv_context *ctx;
         // shared encoding parameters
         // initialized by the QSV encoder, then used upstream (e.g. by filters)
