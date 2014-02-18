@@ -391,7 +391,8 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
         {
             hb_audio_resample_set_mix_levels(pv->resample,
                                              (double)pv->state->slev,
-                                             (double)pv->state->clev);
+                                             (double)pv->state->clev,
+                                             HB_MIXLEV_ZERO);
         }
         if (hb_audio_resample_update(pv->resample))
         {

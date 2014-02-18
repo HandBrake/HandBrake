@@ -14,6 +14,7 @@
 #include "libavutil/mathematics.h"
 #include "libavutil/opt.h"
 #include "libavutil/avutil.h"
+#include "libavutil/downmix_info.h"
 #include "libswscale/swscale.h"
 #include "libavresample/avresample.h"
 #include "common.h"

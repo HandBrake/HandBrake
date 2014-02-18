@@ -2176,6 +2176,29 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
             }
             else
             {
+                AVFrameSideData *side_data;
+                if ((side_data =
+                     av_frame_get_side_data(pv->frame,
+                                            AV_FRAME_DATA_DOWNMIX_INFO)) != NULL)
+                {
+                    double surround_mix_level, center_mix_level;
+                    AVDownmixInfo *downmix_info = (AVDownmixInfo*)side_data->data;
+                    if (audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
+                        audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII)
+                    {
+                        surround_mix_level = downmix_info->surround_mix_level_ltrt;
+                        center_mix_level   = downmix_info->center_mix_level_ltrt;
+                    }
+                    else
+                    {
+                        surround_mix_level = downmix_info->surround_mix_level;
+                        center_mix_level   = downmix_info->center_mix_level;
+                    }
+                    hb_audio_resample_set_mix_levels(pv->resample,
+                                                     surround_mix_level,
+                                                     center_mix_level,
+                                                     downmix_info->lfe_mix_level);
+                }
                 hb_audio_resample_set_channel_layout(pv->resample,
                                                      pv->frame->channel_layout);
                 hb_audio_resample_set_sample_fmt(pv->resample,

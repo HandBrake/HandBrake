@@ -24,6 +24,8 @@
 
 /* Default mix level for center and surround channels */
 #define HB_MIXLEV_DEFAULT ((double)M_SQRT1_2)
+/* Default mix level for LFE channel */
+#define HB_MIXLEV_ZERO    ((double)0.0)
 
 typedef struct
 {
@@ -36,6 +38,7 @@ typedef struct
     struct
     {
         uint64_t channel_layout;
+        double lfe_mix_level;
         double center_mix_level;
         double surround_mix_level;
         enum AVSampleFormat sample_fmt;
@@ -45,6 +48,7 @@ typedef struct
     {
         int channels;
         uint64_t channel_layout;
+        double lfe_mix_level;
         double center_mix_level;
         double surround_mix_level;
         enum AVSampleFormat sample_fmt;
@@ -81,7 +85,8 @@ void                 hb_audio_resample_set_channel_layout(hb_audio_resample_t *r
 
 void                 hb_audio_resample_set_mix_levels(hb_audio_resample_t *resample,
                                                       double surround_mix_level,
-                                                      double center_mix_level);
+                                                      double center_mix_level,
+                                                      double lfe_mix_level);
 
 void                 hb_audio_resample_set_sample_fmt(hb_audio_resample_t *resample,
                                                       enum AVSampleFormat sample_fmt);
