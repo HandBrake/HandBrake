@@ -19,6 +19,7 @@
 
 #include "settings.h"
 #include "hb.h"
+#include "lang.h"
 
 enum
 {
@@ -120,18 +121,13 @@ void ghb_set_bitrate_opts(
 void ghb_grey_combo_options(signal_user_data_t *ud);
 void ghb_update_ui_combo_box(
     signal_user_data_t *ud, const gchar *name, gint user_data, gboolean all);
-const gchar* ghb_get_source_audio_lang(gint titleindex, gint track);
-gint ghb_find_audio_track(
-    gint titleindex, const gchar *lang, gint acodec, 
-    gint fallback_acodec, GHashTable *track_indices);
+const gchar* ghb_get_source_audio_lang(hb_title_t *title, gint track);
+gint ghb_find_audio_track(hb_title_t *title, const gchar *lang, int start);
 const gchar* ghb_audio_track_description(gint track, int titleindex);
 void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
 gint ghb_find_pref_subtitle_track(const gchar *lang);
-gint ghb_find_subtitle_track(
-    gint titleindex, const gchar *lang, gboolean burn, 
-    gboolean force, gint source, GHashTable *track_indices);
+gint ghb_find_subtitle_track(hb_title_t * title, const gchar * lang, int start);
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
-gint ghb_find_cc_track(gint titleindex);
 gint ghb_longest_title(void);
 gchar* ghb_build_advanced_opts_string(GValue *settings);
 GdkPixbuf* ghb_get_preview_image(
@@ -157,5 +153,18 @@ const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
 gint ghb_find_closest_audio_samplerate(gint rate);
 GValue* ghb_lookup_audio_encoder_value(gint val);
+
+void ghb_init_lang_list_box(GtkListBox *list_box);
+
+void ghb_init_combo_box(GtkComboBox *combo);
+void ghb_audio_encoder_opts_set(GtkComboBox *combo);
+void ghb_audio_bitrate_opts_set(GtkComboBox *combo, gboolean extra);
+void ghb_audio_bitrate_opts_filter(GtkComboBox *combo, gint first_rate, gint last_rate);
+void ghb_mix_opts_set(GtkComboBox *combo);
+void ghb_mix_opts_filter(GtkComboBox *combo, gint acodec);
+void ghb_audio_samplerate_opts_set(GtkComboBox *combo);
+
+int ghb_lookup_audio_lang(const GValue *glang);
+const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
 
 #endif // _HBBACKEND_H_

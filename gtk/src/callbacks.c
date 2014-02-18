@@ -56,7 +56,6 @@
 #define NOTIFY_CHECK_VERSION(x,y,z) 0
 #endif
 #else
-#define WINVER 0x0500
 #include <winsock2.h>
 #include <dbt.h>
 #endif
@@ -889,7 +888,6 @@ start_scan(
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop Scan"));
     gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Scan"));
-    //gtk_widget_set_sensitive(widget, FALSE);
 
     widget = GHB_WIDGET(ud->builder, "source_open");
     gtk_widget_set_sensitive(widget, FALSE);
@@ -1258,7 +1256,7 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
 }
 
 static void
-update_acodec_combo(signal_user_data_t *ud)
+update_acodec(signal_user_data_t *ud)
 {
     ghb_adjust_audio_rate_combos(ud);
     ghb_grey_combo_options (ud);
@@ -1299,12 +1297,12 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     show_container_options(ud);
-    update_acodec_combo(ud);
+    update_acodec(ud);
     ghb_update_destination_extension(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     ghb_subtitle_prune(ud);
-    ghb_subtitle_list_refresh_selected(ud);
+    ghb_subtitle_list_refresh_all(ud);
     ghb_audio_list_refresh_selected(ud);
 }
 
@@ -1641,10 +1639,10 @@ set_title_settings(GValue *settings, gint titleindex)
             ghb_settings_set_string(settings, "MetaLongDescription",
                     title->metadata->long_description);
         }
+        ghb_set_pref_subtitle_settings(title, settings);
     }
     update_chapter_list_settings(settings);
     ghb_set_pref_audio_settings(titleindex, settings);
-    ghb_set_pref_subtitle_settings(titleindex, settings);
     set_destination_settings(settings);
 
     char *dest_file, *dest_dir, *dest;
@@ -1705,8 +1703,10 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     update_chapter_list_settings(ud->settings);
     update_chapter_list_from_settings(ud->builder, ud->settings);
+    ghb_audio_title_change(ud, title != NULL);
     ghb_set_pref_audio_settings(titleindex, ud->settings);
     ghb_set_pref_audio_from_settings(ud, ud->settings);
+    ghb_subtitle_title_change(ud, title != NULL);
     ghb_set_pref_subtitle(titleindex, ud);
     ghb_grey_combo_options (ud);
 
@@ -3424,8 +3424,7 @@ static void
 browse_url(const gchar *url)
 {
 #if defined(_WIN32)
-    HINSTANCE r;
-    r = ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+    ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
 #else
     gboolean result;
     char *argv[] = 
@@ -3895,7 +3894,6 @@ advanced_audio_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_save(ud->settings, name);
-    ghb_show_hide_advanced_audio( ud );
 }
 
 G_MODULE_EXPORT void

@@ -6,8 +6,6 @@
     <dict>
         <key>AudioTrackName</key>
         <string></string>
-        <key>AudioEncoderActual</key>
-        <string></string>
         <key>angle_count</key>
         <integer>1</integer>
         <key>angle</key>
@@ -215,10 +213,6 @@
         <string>0.1</string>
         <key>PreferredLanguage</key>
         <string>und</string>
-        <key>AudioDUB</key>
-        <false />
-        <key>NotAudioDUB</key>
-        <true />
         <key>constant_rate_factor</key>
         <true />
         <key>WhenComplete</key>
@@ -335,6 +329,10 @@
         <true />
         <key>AudioEncoderFallback</key>
         <string>ffac3</string>
+        <key>AudioLanguageList</key>
+        <array>
+            <string>und</string>
+        </array>
         <key>AudioList</key>
         <array>
             <dict>
@@ -342,10 +340,6 @@
                 <string>192</string>
                 <key>AudioEncoder</key>
                 <string>copy:ac3</string>
-                <key>AudioTrack</key>
-                <integer>1</integer>
-                <key>AudioTrackDescription</key>
-                <string></string>
                 <key>AudioTrackQualityEnable</key>
                 <false />
                 <key>AudioTrackQuality</key>
@@ -360,27 +354,28 @@
                 <string>source</string>
             </dict>
         </array>
+        <key>AudioSecondaryEncoderMode</key>
+        <true />
+        <key>AudioTrackSelectionBehavior</key>
+        <string>first</string>
         <key>PresetDescription</key>
         <string></string>
         <key>PresetName</key>
         <string>Name Missing</string>
         <key>Type</key>
         <integer>1</integer>
-        <key>SubtitleList</key>
+        <key>SubtitleLanguageList</key>
         <array>
-            <dict>
-                <key>SubtitleLanguage</key>
-                <string>und</string>
-                <key>SubtitleForced</key>
-                <true />
-                <key>SubtitleSource</key>
-                <integer>0</integer>
-                <key>SubtitleBurned</key>
-                <true />
-                <key>SubtitleDefaultTrack</key>
-                <false />
-            </dict>
+            <string>und</string>
         </array>
+        <key>SubtitleTrackSelectionBehavior</key>
+        <string>none</string>
+        <key>SubtitleAddCC</key>
+        <false />
+        <key>SubtitleAddForeignAudioSearch</key>
+        <false />
+        <key>SubtitleAddForeignAudioSubtitle</key>
+        <false />
         <key>VideoTurboTwoPass</key>
         <false />
         <key>UsesPictureFilters</key>

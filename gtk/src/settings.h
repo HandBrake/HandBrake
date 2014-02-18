@@ -118,5 +118,6 @@ int ghb_ui_update(
 int ghb_ui_update_from_settings(
     GtkBuilder *builder, const gchar *name, const GValue *settings);
 const gchar* ghb_get_setting_key(GtkWidget *widget);
+void ghb_update_widget(GtkWidget *widget, const GValue *value);
 
 #endif // _SETTINGS_H_

@@ -807,9 +807,9 @@ init_settings_from_array(
             else
                 init_settings_from_array(new_array, gval, gval);
         }
-        else
+        else if (val != NULL)
         {
-            ghb_array_append(dest, val);
+            ghb_array_append(dest, ghb_value_dup(val));
         }
     }
 }
@@ -1581,7 +1581,7 @@ ghb_prefs_load(signal_user_data_t *ud)
     GValue *dict, *internal;
     GHashTableIter iter;
     gchar *key;
-    GValue *gval, *path;
+    GValue *gval;
     
     g_debug("ghb_prefs_load");
     prefsPlist = load_plist("preferences");
@@ -1634,32 +1634,6 @@ ghb_prefs_load(signal_user_data_t *ud)
                         ghb_value_dup(ghb_string_value(source)));
         g_free(source);
 #endif
-        store_prefs();
-    }
-    // Read legacy default_preset preference and update accordingly
-    path = ghb_dict_lookup(dict, "default_preset");
-    if (path)
-    {
-        gint *indices, len;
-
-        if (G_VALUE_TYPE(path) == G_TYPE_STRING)
-        {
-            GValue *str = path;
-
-            path = ghb_array_value_new(1);
-            ghb_array_append(path, ghb_value_dup(str));
-            indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
-            ghb_value_free(path);
-        }
-        else
-            indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
-
-        if (indices)
-        {
-            presets_set_default(indices, len);
-            g_free(indices);
-        }
-        ghb_dict_remove(dict, "default_preset");
         store_prefs();
     }
 }
@@ -2057,6 +2031,7 @@ value_map_t decomb_xlat[] =
     {NULL, NULL}
 };
 
+#if 0
 extern iso639_lang_t ghb_language_table[];
 
 static GValue*
@@ -2091,30 +2066,6 @@ export_lang_xlat2(GValue *lin_val)
 }
 
 static GValue*
-export_subtitle_xlat2(GValue *lin_val)
-{
-    gchar *str;
-    GValue *gval;
-
-    if (lin_val == NULL) return NULL;
-    str = ghb_value_string(lin_val);
-    if (strcmp(str, "none") == 0)
-    {
-        gval = ghb_string_value_new("None");
-    }
-    else if (strcmp(str, "auto") == 0)
-    {
-        gval = ghb_string_value_new("Autoselect");
-    }
-    else
-    {
-        gval = export_lang_xlat2(lin_val);
-    }
-    g_free(str);
-    return gval;
-}
-
-static GValue*
 import_lang_xlat2(GValue *mac_val)
 {
     GValue *gval;
@@ -2138,74 +2089,7 @@ import_lang_xlat2(GValue *mac_val)
     g_free(str);
     return NULL;
 }
-
-static GValue*
-import_subtitle_xlat2(GValue *mac_val)
-{
-    gchar *str;
-    GValue *gval;
-
-    if (mac_val == NULL) return NULL;
-    str = ghb_value_string(mac_val);
-    if (strcmp(str, "None") == 0)
-    {
-        gval = ghb_string_value_new("none");
-    }
-    else if (strcmp(str, "Autoselect") == 0)
-    {
-        gval = ghb_string_value_new("auto");
-    }
-    else
-    {
-        gval = import_lang_xlat2(mac_val);
-    }
-    g_free(str);
-    return gval;
-}
-
-static GValue*
-export_audio_track_xlat2(GValue *lin_val)
-{
-    gchar *str;
-    GValue *gval = NULL;
-
-    if (lin_val == NULL) return NULL;
-    str = ghb_value_string(lin_val);
-    if (strcmp(str, "none") == 0)
-    {
-        gval = ghb_int_value_new(1);
-    }
-    else
-    {
-        gint val = ghb_value_int(lin_val) + 1;
-        gval = ghb_int_value_new(val);
-    }
-    g_free(str);
-    return gval;
-}
-
-static GValue*
-import_audio_track_xlat2(GValue *mac_val)
-{
-    gint val;
-    gchar *str;
-    GValue *gval;
-
-    if (mac_val == NULL) return NULL;
-    val = ghb_value_int(mac_val);
-    if (val <= 0)
-    {
-        val = 0;
-    }
-    else
-    {
-        val--;
-    }
-    str = g_strdup_printf("%d", val);
-    gval = ghb_string_value_new(str);
-    g_free(str);
-    return gval;
-}
+#endif
 
 static GValue*
 export_value_xlat2(value_map_t *value_map, GValue *lin_val, GType mac_type)
@@ -2379,22 +2263,7 @@ export_value_xlat(GValue *dict)
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
 
-    GValue *slist;
-    GValue *sdict;
     gint count, ii;
-
-    slist = ghb_dict_lookup(dict, "SubtitleList");
-    count = ghb_array_len(slist);
-    for (ii = 0; ii < count; ii++)
-    {
-        sdict = ghb_array_get_nth(slist, ii);
-        key = "SubtitleLanguage";
-        lin_val = ghb_dict_lookup(sdict, key);
-        gval = export_subtitle_xlat2(lin_val);
-        if (gval)
-            ghb_dict_insert(sdict, g_strdup(key), gval);
-    }
-
     GValue *alist;
     GValue *adict;
 
@@ -2409,11 +2278,6 @@ export_value_xlat(GValue *dict)
     for (ii = 0; ii < count; ii++)
     {
         adict = ghb_array_get_nth(alist, ii);
-        key = "AudioTrack";
-        lin_val = ghb_dict_lookup(adict, key);
-        gval = export_audio_track_xlat2(lin_val);
-        if (gval)
-            ghb_dict_insert(adict, g_strdup(key), gval);
         key = "AudioEncoder";
         lin_val = ghb_dict_lookup(adict, key);
         gval = export_value_audio_encoder(lin_val);
@@ -2649,75 +2513,10 @@ import_value_xlat(GValue *dict)
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
 
-    GValue *sdeflist;
-    GValue *slist;
-    GValue *sdict;
-    gint count, ii;
-
-    sdeflist = ghb_dict_lookup(defaults, "SubtitleList");
-    if (sdeflist)
-    {
-        slist = ghb_dict_lookup(dict, "SubtitleList");
-        if (slist)
-        {
-            count = ghb_array_len(slist);
-            for (ii = 0; ii < count; ii++)
-            {
-                sdict = ghb_array_get_nth(slist, ii);
-                key = "SubtitleLanguage";
-                mac_val = ghb_dict_lookup(sdict, key);
-                gval = import_subtitle_xlat2(mac_val);
-                if (gval)
-                    ghb_dict_insert(sdict, g_strdup(key), gval);
-            }
-        
-        }
-        else
-        {
-            key = "Subtitles";
-            mac_val = ghb_dict_lookup(dict, key);
-            slist = ghb_array_value_new(8);
-            ghb_dict_insert(dict, g_strdup("SubtitleList"), slist);
-            if (mac_val)
-            {
-                gchar *lang;
-    
-                gval = import_subtitle_xlat2(mac_val);
-                lang = ghb_value_string(gval);
-                if (lang && strcasecmp(lang, "none") != 0 && !slist)
-                {
-                    sdict = ghb_dict_value_new();
-                    ghb_array_append(slist, sdict);
-                    ghb_dict_insert(sdict, g_strdup("SubtitleLanguage"), gval);
-                    gval = ghb_dict_lookup(dict, "SubtitlesForced");
-                    if (gval != NULL)
-                    {
-                        ghb_dict_insert(sdict, g_strdup("SubtitleForced"), 
-                                        ghb_value_dup(gval));
-                    }
-                    else
-                    {
-                        ghb_dict_insert(sdict, g_strdup("SubtitleForced"), 
-                                        ghb_boolean_value_new(FALSE));
-                    }
-                    ghb_dict_insert(sdict, g_strdup("SubtitleBurned"),
-                                    ghb_boolean_value_new(TRUE));
-                    ghb_dict_insert(sdict, g_strdup("SubtitleDefaultTrack"),
-                                    ghb_boolean_value_new(FALSE));
-                }
-                else
-                {
-                    ghb_value_free(gval);
-                }
-                if (lang)
-                    g_free(lang);
-            }
-        }
-    }
     ghb_dict_remove(dict, "Subtitles");
     ghb_dict_remove(dict, "SubtitlesForced");
 
-
+    gint count, ii;
     GValue *alist;
     GValue *adict;
     GValue *adefaults;
@@ -2738,11 +2537,6 @@ import_value_xlat(GValue *dict)
         for (ii = 0; ii < count; ii++)
         {
             adict = ghb_array_get_nth(alist, ii);
-            key = "AudioTrack";
-            mac_val = ghb_dict_lookup(adict, key);
-            gval = import_audio_track_xlat2(mac_val);
-            if (gval)
-                ghb_dict_insert(adict, g_strdup(key), gval);
             key = "AudioEncoder";
             mac_val = ghb_dict_lookup(adict, key);
             gval = import_value_audio_encoder(mac_val);
@@ -2789,7 +2583,6 @@ import_xlat_preset(GValue *dict)
     gint vqtype;
 
     g_debug("import_xlat_preset ()");
-
     uses_max = ghb_value_boolean(
                         preset_dict_get_value(dict, "UsesMaxPictureSettings"));
     uses_pic = ghb_value_int(
@@ -2860,6 +2653,75 @@ import_xlat_preset(GValue *dict)
         ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
                         ghb_boolean_value_new(TRUE));
     } break;
+    }
+
+    // Initialize the AudioLanguageList from preferences PreferredLanguage
+    // and translate old AudioDUB preference option if found
+    GValue *list = ghb_dict_lookup(dict, "AudioLanguageList");
+    if (list == NULL)
+    {
+        list = ghb_array_value_new(8);
+        ghb_dict_insert(dict, g_strdup("AudioLanguageList"), list);
+    }
+    if (ghb_array_len(list) == 0)
+    {
+        GValue *prefs = plist_get_dict(prefsPlist, "Preferences");
+        GValue *gdub = ghb_dict_lookup(prefs, "AudioDUB");
+        GValue *glang = ghb_dict_lookup(prefs, "PreferredLanguage");
+        const char *lang = NULL;
+        if (glang != NULL)
+        {
+            lang = g_value_get_string(glang);
+        }
+        if (gdub != NULL && !ghb_value_boolean(gdub))
+        {
+            if (lang == NULL || strncmp(lang, "und", 4))
+            {
+                ghb_array_append(list, ghb_string_value_new("und"));
+            }
+        }
+        if (glang != NULL)
+        {
+            ghb_array_append(list, ghb_value_dup(glang));
+        }
+    }
+
+    // Initialize the SubtitleLanguageList from preferences PreferredLanguage
+    // and translate old AudioDUB preference option if found
+    list = ghb_dict_lookup(dict, "SubtitleLanguageList");
+    if (list == NULL)
+    {
+        list = ghb_array_value_new(8);
+        ghb_dict_insert(dict, g_strdup("SubtitleLanguageList"), list);
+    }
+    if (ghb_array_len(list) == 0)
+    {
+        GValue *prefs = plist_get_dict(prefsPlist, "Preferences");
+        GValue *val = ghb_dict_lookup(prefs, "PreferredLanguage");
+        if (val != NULL)
+        {
+            ghb_array_append(list, ghb_value_dup(val));
+
+            val = ghb_dict_lookup(prefs, "AudioDUB");
+            if (val != NULL && !ghb_value_boolean(val))
+            {
+                ghb_dict_insert(dict,
+                                g_strdup("SubtitleAddForeignAudioSubtitle"),
+                                ghb_boolean_value_new(TRUE));
+            }
+        }
+    }
+
+    GValue *addCC = ghb_dict_lookup(dict, "SubtitleAddCC");
+    if (addCC == NULL)
+    {
+        GValue *prefs = plist_get_dict(prefsPlist, "Preferences");
+        GValue *val = ghb_dict_lookup(prefs, "AddCC");
+        if (val != NULL)
+        {
+            ghb_dict_insert(dict, g_strdup("SubtitleAddCC"), 
+                            ghb_value_dup(val));
+        }
     }
 
     import_value_xlat(dict);
@@ -3665,16 +3527,6 @@ ghb_presets_list_clear_default(signal_user_data_t *ud)
 }
 
 static void
-update_audio_presets(signal_user_data_t *ud)
-{
-    g_debug("update_audio_presets");
-    const GValue *audio_list;
-
-    audio_list = ghb_settings_get_value(ud->settings, "audio_list");
-    ghb_settings_set_value(ud->settings, "AudioList", audio_list);
-}
-
-static void
 update_subtitle_presets(signal_user_data_t *ud)
 {
     g_debug("update_subtitle_presets");
@@ -4037,8 +3889,6 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
         ghb_widget_to_setting(ud->settings, GTK_WIDGET(desc));
 
-        // Construct the audio settings presets from the current audio list
-        update_audio_presets(ud);
         update_subtitle_presets(ud);
         settings_save(ud, dest);
         ghb_value_free(dest);
@@ -4502,6 +4352,8 @@ ghb_refresh_preset(signal_user_data_t *ud)
             ghb_set_preset_from_indices(ud, indices, len);
             gint titleindex;
             titleindex = ghb_settings_combo_int(ud->settings, "title");
+            ghb_audio_def_settings_init(ud);
+            ghb_subtitle_def_settings_init(ud);
             ghb_set_pref_audio_settings(titleindex, ud->settings);
             ghb_set_pref_audio_from_settings(ud, ud->settings);
             ghb_set_pref_subtitle(titleindex, ud);
@@ -4579,6 +4431,8 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             ghb_set_preset_from_indices(ud, indices, len);
             gint titleindex;
             titleindex = ghb_settings_combo_int(ud->settings, "title");
+            ghb_audio_def_settings_init(ud);
+            ghb_subtitle_def_settings_init(ud);
             ghb_set_pref_audio_settings(titleindex, ud->settings);
             ghb_set_pref_audio_from_settings(ud, ud->settings);
             ghb_set_pref_subtitle(titleindex, ud);

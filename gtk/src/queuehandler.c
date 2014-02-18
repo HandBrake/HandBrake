@@ -417,12 +417,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
         asettings = ghb_array_get_nth(audio_list, ii);
 
-        acodec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
+        acodec = ghb_settings_combo_option(asettings, "AudioEncoder");
         double q = ghb_settings_get_double(asettings, "AudioTrackQuality");
         if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
             q != HB_INVALID_AUDIO_QUALITY)
         {
-            int codec = ghb_settings_combo_int(asettings, "AudioEncoderActual");
+            int codec = ghb_settings_combo_int(asettings, "AudioEncoder");
             quality = ghb_format_quality("Quality: ", codec, q);
         }
         else
@@ -715,7 +715,7 @@ queue_add_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (!ghb_queue_add(ud, settings, 0))
         ghb_value_free(settings);
     // Validation of settings may have changed audio list
-    ghb_audio_list_refresh(ud);
+    ghb_audio_list_refresh_all(ud);
 }
 
 G_MODULE_EXPORT void
@@ -1196,7 +1196,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
             return;
         }
         // Validation of settings may have changed audio list
-        ghb_audio_list_refresh(ud);
+        ghb_audio_list_refresh_all(ud);
     }
     if (state == GHB_STATE_IDLE)
     {

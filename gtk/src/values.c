@@ -14,6 +14,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
 #include "values.h"

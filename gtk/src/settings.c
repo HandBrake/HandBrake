@@ -190,6 +190,10 @@ ghb_get_setting_key(GtkWidget *widget)
         
     if (name == NULL)
     {
+        name = gtk_widget_get_name(widget);
+    }
+    if (name == NULL)
+    {
         // Bad widget pointer?  Should never happen.
         g_debug("Bad widget\n");
         return NULL;
@@ -415,26 +419,6 @@ ghb_widget_boolean(GtkWidget *widget)
     return bval;
 }
 
-static void check_radio_consistency(GValue *settings, GtkWidget *widget)
-{
-    const gchar *key = NULL;
-    GValue *value;
-
-    if (widget == NULL) return;
-    if (G_OBJECT_TYPE(widget) == GTK_TYPE_RADIO_BUTTON)
-    {
-        // Find corresponding setting
-        key = ghb_get_setting_key(widget);
-        if (key == NULL) return;
-        value = ghb_widget_value(widget);
-        if (value == NULL) return;
-        if (ghb_value_boolean(value) == ghb_settings_get_boolean(settings, key))
-        {
-            gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget), FALSE);
-        }
-    }
-}
-
 void
 ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
 {
@@ -449,7 +433,6 @@ ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
     value = ghb_widget_value(widget);
     if (value != NULL)
     {
-        check_radio_consistency(settings, widget);
         ghb_settings_take_value(settings, key, value);
     }
     else
@@ -458,15 +441,15 @@ ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
     }
 }
 
-static void
-update_widget(GtkWidget *widget, const GValue *value)
+void
+ghb_update_widget(GtkWidget *widget, const GValue *value)
 {
     GType type;
     gchar *str;
     gint ival;
     gdouble dval;
 
-    g_debug("update_widget");
+    g_debug("ghb_update_widget");
     type = G_VALUE_TYPE(value);
     if (type == ghb_array_get_type() || type == ghb_dict_get_type())
         return;
@@ -475,6 +458,7 @@ update_widget(GtkWidget *widget, const GValue *value)
     ival = ghb_value_int(value);
     dval = ghb_value_double(value);
     type = G_OBJECT_TYPE(widget);
+
     if (type == GTK_TYPE_ENTRY)
     {
         g_debug("entry");
@@ -483,16 +467,7 @@ update_widget(GtkWidget *widget, const GValue *value)
     else if (type == GTK_TYPE_RADIO_BUTTON)
     {
         g_debug("radio button");
-        int cur_val = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-        if (cur_val && !ival)
-        {
-            gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget), TRUE);
-        }
-        else
-        {
-            gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget), FALSE);
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
-        }
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!ival);
     }
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
@@ -666,7 +641,7 @@ ghb_ui_update_from_settings(GtkBuilder *builder, const gchar *name, const GValue
         g_debug("Failed to find widget for key: %s\n", name);
         return -1;
     }
-    update_widget((GtkWidget*)object, value);
+    ghb_update_widget((GtkWidget*)object, value);
     return 0;
 }
 
@@ -684,7 +659,7 @@ ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GValue *value)
         g_debug("Failed to find widget for key: %s\n", name);
         return -1;
     }
-    update_widget((GtkWidget*)object, value);
+    ghb_update_widget((GtkWidget*)object, value);
     // Its possible the value hasn't changed. Since settings are only
     // updated when the value changes, I'm initializing settings here as well.
     ghb_widget_to_setting(ud->settings, (GtkWidget*)object);
