@@ -2,19 +2,19 @@
 /*
  * callbacks.h
  * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
- * 
+ *
  * callbacks.h is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
- * 
+ *
  * callbacks.h is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with callbacks.h.  If not, write to:
  *  The Free Software Foundation, Inc.,
@@ -30,6 +30,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include "hb.h"
 #include "settings.h"
 
 #if GLIB_CHECK_VERSION(2, 32, 0)
@@ -51,7 +52,7 @@ void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_udev_init(void);
 gboolean ghb_message_dialog(
-    GtkMessageType type, const gchar *message, 
+    GtkMessageType type, const gchar *message,
     const gchar *no, const gchar *yes);
 void ghb_error_dialog(
     GtkMessageType type, const gchar *message, const gchar *cancel);
@@ -61,7 +62,7 @@ gboolean ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg);
 GValue* ghb_start_next_job(signal_user_data_t *ud, gboolean find_first);
 void ghb_check_dependency(
     signal_user_data_t *ud, GtkWidget *widget, const gchar *alt_name);
-void ghb_do_scan( signal_user_data_t *ud, const gchar *filename, 
+void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,
     gint titlenum, gboolean force);
 void ghb_log(gchar *log, ...);
 gpointer ghb_check_update(signal_user_data_t *ud);
@@ -76,6 +77,10 @@ void ghb_update_destination_extension(signal_user_data_t *ud);
 void ghb_update_pending(signal_user_data_t *ud);
 gboolean ghb_idle_scan(signal_user_data_t *ud);
 void ghb_add_all_titles(signal_user_data_t *ud);
+void ghb_update_title_info(signal_user_data_t *ud);
+void ghb_chapter_list_refresh_all(signal_user_data_t *ud);
+void ghb_load_settings(signal_user_data_t * ud);
+void ghb_set_current_title_settings(signal_user_data_t *ud);
 
 #endif // _CALLBACKS_H_
 

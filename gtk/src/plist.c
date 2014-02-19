@@ -11,11 +11,11 @@
 
 #define BUF_SZ  (128*1024)
 
-static gchar *preamble = 
+static gchar *preamble =
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
     "<plist version=\"1.0\">\n";
-static gchar *postfix = 
+static gchar *postfix =
     "</plist>\n";
 
 enum
@@ -68,15 +68,15 @@ typedef struct
 
 static void
 start_element(
-    GMarkupParseContext *ctx, 
-    const gchar *name, 
+    GMarkupParseContext *ctx,
+    const gchar *name,
     const gchar **attr_names,
     const gchar **attr_values,
     gpointer ud,
     GError **error)
 {
     parse_data_t *pd = (parse_data_t*)ud;
-    union 
+    union
     {
         gint id;
         gpointer pid;
@@ -181,14 +181,14 @@ start_element(
 
 static void
 end_element(
-    GMarkupParseContext *ctx, 
-    const gchar *name, 
+    GMarkupParseContext *ctx,
+    const gchar *name,
     gpointer ud,
     GError **error)
 {
     parse_data_t *pd = (parse_data_t*)ud;
     gint id;
-    union 
+    union
     {
         gint id;
         gpointer pid;
@@ -315,8 +315,8 @@ end_element(
 
 static void
 text_data(
-    GMarkupParseContext *ctx, 
-    const gchar *text, 
+    GMarkupParseContext *ctx,
+    const gchar *text,
     gsize len,
     gpointer ud,
     GError **error)
@@ -328,8 +328,8 @@ text_data(
 
 static void
 passthrough(
-    GMarkupParseContext *ctx, 
-    const gchar *text, 
+    GMarkupParseContext *ctx,
+    const gchar *text,
     gsize len,
     gpointer ud,
     GError **error)
@@ -346,7 +346,7 @@ parse_error(GMarkupParseContext *ctx, GError *error, gpointer ud)
 }
 
 // This is required or the parser crashes
-static void 
+static void
 destroy_notify(gpointer data)
 { // Do nothing
     //g_debug("destroy parser");
@@ -498,7 +498,7 @@ gval_write(FILE *file, GValue *gval)
     {
         GDate *date;
         date = g_value_get_boxed(gval);
-        indent_fprintf(file, indent, "<date>%d-%d-%d</date>\n", 
+        indent_fprintf(file, indent, "<date>%d-%d-%d</date>\n",
             g_date_get_year(date),
             g_date_get_month(date),
             g_date_get_day(date)

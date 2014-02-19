@@ -67,7 +67,6 @@ dep_map = (
     DepEntry("x264_trellis", "x264_psy_trell", "0", True, False),
     DepEntry("x264UseAdvancedOptions", "x264VideoSettingsTable", "TRUE", True, False),
     DepEntry("x264UseAdvancedOptions", "x264_tab", "FALSE", True, False),
-    DepEntry("HideAdvancedVideoSettings", "x264UseAdvancedOptions", "TRUE", True, True),
     DepEntry("use_source_name", "chapters_in_destination", "TRUE", False, False),
     DepEntry("use_source_name", "title_no_in_destination", "TRUE", False, False),
     )

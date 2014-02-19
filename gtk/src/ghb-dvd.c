@@ -11,17 +11,17 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
- 
+
 // Well, I waisted a bit of time on this.  It seems libhb has a function for
 // this that I hadn't discovered yet. hb_dvd_name().
 
@@ -89,7 +89,7 @@ struct volume_structure_descriptor {
 } PACKED;
 
 #define VOLUME_ID_LABEL_SIZE        64
-typedef struct 
+typedef struct
 {
     gint fd;
     gchar label[VOLUME_ID_LABEL_SIZE+1];
@@ -128,14 +128,14 @@ static guint8*
 get_buffer(int fd, guint64 off, gsize len)
 {
     gint buf_len;
-    
-    if (lseek(fd, off, SEEK_SET) < 0) 
+
+    if (lseek(fd, off, SEEK_SET) < 0)
     {
         return NULL;
     }
     guint8 *buffer = g_malloc(len);
     buf_len = read(fd, buffer, len);
-    if (buf_len < 0) 
+    if (buf_len < 0)
     {
         g_free(buffer);
         return NULL;
@@ -143,7 +143,7 @@ get_buffer(int fd, guint64 off, gsize len)
     return buffer;
 }
 
-static gint 
+static gint
 set_unicode16(guint8 *str, gsize len, const guint8 *buf, gint endianess, gsize count)
 {
     gint ii, jj;
@@ -179,25 +179,25 @@ set_unicode16(guint8 *str, gsize len, const guint8 *buf, gint endianess, gsize c
     return jj;
 }
 
-static void 
+static void
 set_label_string(guint8 *str, const guint8 *buf, gsize count)
 {
     gint ii;
 
     memcpy(str, buf, count);
     str[count] = 0;
-    
+
     /* remove trailing whitespace */
     ii = strlen((gchar*)str);
-    while (ii--) 
+    while (ii--)
     {
         if (!g_ascii_isspace(str[ii]))
             break;
     }
     str[ii+1] = 0;
 }
- 
-static gint 
+
+static gint
 probe_udf(udf_info_t *id)
 {
     struct volume_descriptor *vd;
@@ -327,7 +327,7 @@ ghb_resolve_symlink(const gchar *name)
     GFile *gfile;
 
     gfile = g_file_new_for_path(name);
-    info = g_file_query_info(gfile, 
+    info = g_file_query_info(gfile,
         G_FILE_ATTRIBUTE_STANDARD_NAME ","
         G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET ","
         G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK,
@@ -344,7 +344,7 @@ ghb_resolve_symlink(const gchar *name)
         g_object_unref(parent);
 
         g_object_unref(info);
-        info = g_file_query_info(gfile, 
+        info = g_file_query_info(gfile,
             G_FILE_ATTRIBUTE_STANDARD_NAME ","
             G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET ","
             G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK,
@@ -377,15 +377,15 @@ ghb_dvd_set_current(const gchar *name, signal_user_data_t *ud)
         ud->current_dvd_device = NULL;
     }
     gfile = g_file_new_for_path(resolved);
-    info = g_file_query_info(gfile, 
+    info = g_file_query_info(gfile,
         G_FILE_ATTRIBUTE_STANDARD_TYPE,
         G_FILE_QUERY_INFO_NONE, NULL, NULL);
     if (info != NULL)
     {
         if (g_file_info_get_file_type(info) == G_FILE_TYPE_SPECIAL)
         {
-            // I could go through the trouble to scan the connected drives and 
-            // verify that this device is connected and is a DVD.  But I don't 
+            // I could go through the trouble to scan the connected drives and
+            // verify that this device is connected and is a DVD.  But I don't
             // think its neccessary.
             ud->current_dvd_device = resolved;
         }

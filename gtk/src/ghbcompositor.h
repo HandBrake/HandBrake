@@ -66,7 +66,7 @@ struct _GhbCompositorChild
 GType      ghb_compositor_get_type           (void) G_GNUC_CONST;
 GtkWidget* ghb_compositor_new                (void);
 void       ghb_compositor_zlist_insert       (GhbCompositor *compositor,
-                                              GtkWidget *child, 
+                                              GtkWidget *child,
                                               gint z_pos, gdouble opacity);
 
 G_END_DECLS

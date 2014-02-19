@@ -2,19 +2,19 @@
 /*
  * main.c
  * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
- * 
+ *
  * main.c is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
- * 
+ *
  * main.c is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with main.c.  If not, write to:
  *  The Free Software Foundation, Inc.,
@@ -108,7 +108,7 @@ create_builder_or_die(const gchar * name)
     ghb_ui = g_value_get_string(gval);
     if (xml != NULL)
         res = gtk_builder_add_from_string(xml, ghb_ui, -1, &error);
-    if (!xml || !res) 
+    if (!xml || !res)
     {
         GtkWidget *dialog = gtk_message_dialog_new_with_markup(NULL,
             GTK_DIALOG_MODAL,
@@ -158,16 +158,16 @@ MyConnect(
     g_debug("handler_name %s", handler_name);
     g_debug("signal_name %s", signal_name);
     callback = self_symbol_lookup(handler_name);
-    if (!callback) 
+    if (!callback)
     {
         g_message("Signal handler (%s) not found", handler_name);
         return;
     }
-    if (connect_object) 
+    if (connect_object)
     {
         g_signal_connect_object(object, signal_name, callback, connect_object, flags);
     }
-    else 
+    else
     {
         if (flags & G_CONNECT_AFTER)
         {
@@ -293,14 +293,14 @@ bind_queue_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_min_width(column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
-    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1, 
+    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1,
                                             GDK_ACTION_MOVE);
-    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK, 
+    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
                                             &SrcEntry, 1, GDK_ACTION_MOVE);
 
     g_signal_connect(selection, "changed", queue_list_selection_changed_cb, ud);
     g_signal_connect(cell, "clicked", queue_remove_clicked_cb, ud);
-    g_signal_connect(treeview, "size-allocate", queue_list_size_allocate_cb, 
+    g_signal_connect(treeview, "size-allocate", queue_list_size_allocate_cb,
                         textcell);
     g_signal_connect(treeview, "drag_data_received", queue_drag_cb, ud);
     g_signal_connect(treeview, "drag_motion", queue_drag_motion_cb, ud);
@@ -455,13 +455,13 @@ bind_presets_tree_model(signal_user_data_t *ud)
     g_debug("bind_presets_tree_model()\n");
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     selection = gtk_tree_view_get_selection(treeview);
-    treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, 
+    treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT,
                                   G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
     cell = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Preset Name"), cell, 
-        "text", 0, "weight", 1, "style", 2, 
+    column = gtk_tree_view_column_new_with_attributes(_("Preset Name"), cell,
+        "text", 0, "weight", 1, "style", 2,
         "foreground", 3, "editable", 5, NULL);
 
     g_signal_connect(cell, "edited", preset_edited_cb, ud);
@@ -470,9 +470,9 @@ bind_presets_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_set_tooltip_column(treeview, 4);
 
-    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1, 
+    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1,
                                             GDK_ACTION_MOVE);
-    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK, 
+    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
                                             &SrcEntry, 1, GDK_ACTION_MOVE);
 
     g_signal_connect(treeview, "drag_data_received", presets_drag_cb, ud);
@@ -650,7 +650,7 @@ static gchar *dvd_device = NULL;
 static gchar *arg_preset = NULL;
 static gboolean ghb_debug = FALSE;
 
-static GOptionEntry entries[] = 
+static GOptionEntry entries[] =
 {
     { "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, N_("The device or file to encode"), NULL },
     { "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, N_("The preset values to use for encoding"), NULL },
@@ -846,7 +846,7 @@ main(int argc, char *argv[])
     {
         dvd_device = argv[1];
     }
-    
+
     gtk_init(&argc, &argv);
 
 #if GTK_CHECK_VERSION(3, 0, 0)
@@ -888,7 +888,13 @@ main(int argc, char *argv[])
     g_log_set_handler(NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
     g_log_set_handler("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
     //g_log_set_handler("Gtk", G_LOG_LEVEL_CRITICAL, warn_log_handler, ud);
+
+    ud->globals = ghb_settings_new();
+    ud->prefs = ghb_settings_new();
+    ud->settings_array = ghb_array_value_new(1);
     ud->settings = ghb_settings_new();
+    ghb_array_append(ud->settings_array, ud->settings);
+
     ud->builder = create_builder_or_die(BUILDER_NAME);
     // Enable events that alert us to media change events
     watch_volumes(ud);
@@ -1005,25 +1011,30 @@ main(int argc, char *argv[])
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);
 
-    // Load all internal settings
-    ghb_settings_init(ud);
+    // Load all internal settings with default values
+    ghb_settings_init(ud->globals, "Globals");
+    ghb_settings_init(ud->prefs, "Preferences");
+    ghb_settings_init(ud->settings, "Initialization");
+    ghb_settings_init(ud->settings, "Presets");
+
     // Load prefs before presets.  Some preset defaults may depend
     // on preference settings.
     ghb_prefs_load(ud);
     // Load the presets files
     ghb_presets_load(ud);
 
+    ghb_globals_to_ui(ud);
     ghb_prefs_to_ui(ud);
 
     gint logLevel;
-    logLevel = ghb_settings_get_int(ud->settings, "LoggingLevel");
+    logLevel = ghb_settings_get_int(ud->prefs, "LoggingLevel");
     ghb_backend_init(logLevel);
 
-    if (ghb_settings_get_boolean(ud->settings, "hbfd"))
+    if (ghb_settings_get_boolean(ud->prefs, "hbfd"))
     {
         ghb_hbfd(ud, TRUE);
     }
-    gchar *source = ghb_settings_get_string(ud->settings, "default_source");
+    gchar *source = ghb_settings_get_string(ud->prefs, "default_source");
     ghb_dvd_set_current(source, ud);
     g_free(source);
 
@@ -1053,7 +1064,7 @@ main(int argc, char *argv[])
     if (dvd_device != NULL)
     {
         // Source overridden from command line option
-        ghb_settings_set_string(ud->settings, "scan_source", dvd_device);
+        ghb_settings_set_string(ud->globals, "scan_source", dvd_device);
         g_idle_add((GSourceFunc)ghb_idle_scan, ud);
     }
     // Reload and check status of the last saved queue
@@ -1071,7 +1082,7 @@ main(int argc, char *argv[])
     ud->ai = app_indicator_new("HandBrake", "hb-icon", APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
     app_indicator_set_menu( ud->ai, ai_menu );
     app_indicator_set_label( ud->ai, "", "99.99%");
-    if (ghb_settings_get_boolean(ud->settings, "show_status"))
+    if (ghb_settings_get_boolean(ud->prefs, "show_status"))
     {
         app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_ACTIVE );
     }
@@ -1088,11 +1099,11 @@ main(int argc, char *argv[])
     si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 
     gtk_status_icon_set_visible(si,
-            ghb_settings_get_boolean(ud->settings, "show_status"));
+            ghb_settings_get_boolean(ud->prefs, "show_status"));
 
 #if GTK_CHECK_VERSION(2, 16, 0)
     gtk_status_icon_set_has_tooltip(si, TRUE);
-    g_signal_connect(si, "query-tooltip", 
+    g_signal_connect(si, "query-tooltip",
                     status_icon_query_tooltip_cb, ud);
 #else
     gtk_status_icon_set_tooltip(si, "HandBrake");
@@ -1104,7 +1115,7 @@ main(int argc, char *argv[])
     gint width, height;
 #if GTK_CHECK_VERSION(3, 0, 0)
     GtkRequisition min_size, size;
-    
+
     widget = GHB_WIDGET(ud->builder, "SrtCodeset");
     gtk_widget_get_preferred_size( widget, &min_size, &size );
     height = MAX(min_size.height, size.height);
@@ -1113,7 +1124,7 @@ main(int argc, char *argv[])
     height += MAX(min_size.height, size.height);
 #else
     GtkRequisition size;
-    
+
     widget = GHB_WIDGET(ud->builder, "SrtCodeset");
     gtk_widget_size_request( widget, &size );
     height = size.height;
@@ -1121,17 +1132,17 @@ main(int argc, char *argv[])
     gtk_widget_size_request( widget, &size );
     height += size.height;
 #endif
-    
+
     widget = GHB_WIDGET(ud->builder, "hb_window");
 
-    GdkGeometry geo = { 
+    GdkGeometry geo = {
         -1, -1, 1024, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
     };
     GdkWindowHints geo_mask;
     geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
     gtk_window_set_geometry_hints( GTK_WINDOW(widget), widget, &geo, geo_mask);
-    width = ghb_settings_get_int(ud->settings, "window_width");
-    height = ghb_settings_get_int(ud->settings, "window_height");
+    width = ghb_settings_get_int(ud->prefs, "window_width");
+    height = ghb_settings_get_int(ud->prefs, "window_height");
     gtk_window_resize(GTK_WINDOW(widget), width, height);
     gtk_widget_show(widget);
 
@@ -1241,8 +1252,8 @@ main(int argc, char *argv[])
     PangoFontDescription *font_desc;
     font_desc = pango_font_description_from_string("monospace 10");
     textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "activity_view"));
-    gtk_widget_override_font(GTK_WIDGET(textview), font_desc);      
-    pango_font_description_free(font_desc);      
+    gtk_widget_override_font(GTK_WIDGET(textview), font_desc);
+    pango_font_description_free(font_desc);
 
     // Everything should be go-to-go.  Lets rock!
 

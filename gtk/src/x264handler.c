@@ -2,9 +2,9 @@
 /*
  * x264handler.c
  * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
- * 
+ *
  * x264handler.c is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
@@ -29,22 +29,23 @@ static gboolean ignore_options_update = FALSE;
 
 void ghb_show_hide_advanced_video( signal_user_data_t *ud )
 {
-    GtkWidget *nb = GHB_WIDGET(ud->builder, "SettingsNotebook");
-    GtkWidget *at = GHB_WIDGET(ud->builder, "advanced_tab");
+    gboolean hide;
 
-    int pgn = gtk_notebook_page_num(GTK_NOTEBOOK(nb), at);
-
-    GtkWidget *pg;
-    pg = gtk_notebook_get_nth_page(GTK_NOTEBOOK(nb), pgn);
-    if (ghb_settings_get_boolean(ud->settings, "HideAdvancedVideoSettings"))
+    hide = ghb_settings_get_boolean(ud->prefs, "HideAdvancedVideoSettings");
+    if (hide)
     {
-        gtk_widget_hide(pg);
         ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
     }
-    else
-    {
-        gtk_widget_show(pg);
-    }
+
+    GtkWidget *widget;
+    GtkWidget *nb = GHB_WIDGET(ud->builder, "SettingsNotebook");
+    GtkWidget *at = GHB_WIDGET(ud->builder, "advanced_tab");
+    int pgn = gtk_notebook_page_num(GTK_NOTEBOOK(nb), at);
+
+    widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(nb), pgn);
+    gtk_widget_set_visible(widget, !hide);
+    widget = GHB_WIDGET(ud->builder, "x264UseAdvancedOptions");
+    gtk_widget_set_visible(widget, !hide);
 }
 
 G_MODULE_EXPORT void
@@ -52,7 +53,7 @@ x264_use_advanced_options_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
 
-    if (ghb_settings_get_boolean(ud->settings, "HideAdvancedVideoSettings") &&
+    if (ghb_settings_get_boolean(ud->prefs, "HideAdvancedVideoSettings") &&
         ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
     {
         ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
@@ -347,7 +348,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT gboolean
-x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
+x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
     signal_user_data_t *ud)
 {
     gchar *options, *sopts;
@@ -442,7 +443,7 @@ struct x264_opt_map_s
 static gchar *x264_ref_syns[] = {"ref", "frameref", NULL};
 static gchar *x264_bframes_syns[] = {"bframes", NULL};
 static gchar *x264_badapt_syns[] = {"b-adapt", "b_adapt", NULL};
-static gchar *x264_direct_syns[] = 
+static gchar *x264_direct_syns[] =
     {"direct", "direct-pred", "direct_pred", NULL};
 static gchar *x264_weightp_syns[] = {"weightp", NULL};
 static gchar *x264_bpyramid_syns[] = {"b-pyramid", "b_pyramid", NULL};
@@ -458,7 +459,7 @@ static gchar *x264_pskip_syns[] = {"no-fast-pskip", "no_fast_pskip", NULL};
 static gchar *x264_psy_syns[] = {"psy-rd", "psy_rd", NULL};
 static gchar *x264_aq_strength_syns[] = {"aq-strength", "aq_strength", NULL};
 static gchar *x264_mbtree_syns[] = {"mbtree", NULL};
-static gchar *x264_decimate_syns[] = 
+static gchar *x264_decimate_syns[] =
     {"no-dct-decimate", "no_dct_decimate", NULL};
 static gchar *x264_cabac_syns[] = {"cabac", NULL};
 
@@ -554,7 +555,7 @@ static gchar *true_str[] =
     NULL
 };
 
-static gboolean 
+static gboolean
 str_is_true(const gchar *str)
 {
     gint ii;
@@ -654,7 +655,7 @@ x264_update_deblock(signal_user_data_t *ud, const gchar *xval)
     if (xval == NULL) return;
     val = g_strdup(xval);
     bvalue = avalue = 0;
-    if (val != NULL) 
+    if (val != NULL)
     {
         gchar *pos = strchr(val, ',');
         if (pos != NULL)
@@ -783,7 +784,7 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
                     val = trans_x264_val(x264_opt_map[jj].translation, val);
                     if (val != NULL)
                     {
-                        do_update(ud, x264_opt_map[jj].name, 
+                        do_update(ud, x264_opt_map[jj].name,
                             x264_opt_map[jj].translation->ui_type, val);
                         // TODO un-grey the ui control
                     }
@@ -836,7 +837,7 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
                 val = g_strdup(trans_x264_val(x264_opt_map[jj].translation, val));
                 if (val != NULL)
                 {
-                    do_update(ud, x264_opt_map[jj].name, 
+                    do_update(ud, x264_opt_map[jj].name,
                         x264_opt_map[jj].translation->ui_type, val);
                     // TODO un-grey the ui control
                 }
@@ -1107,7 +1108,7 @@ ghb_lookup_badapt(const gchar *options)
     gint ret = 0;
     gchar *result;
     gchar **split;
-    
+
     if (options == NULL)
         options = "";
 
@@ -1129,7 +1130,7 @@ ghb_lookup_aqmode(const gchar *options)
     gint ret = 0;
     gchar *result;
     gchar **split;
-    
+
     if (options == NULL)
         options = "";
 
@@ -1151,7 +1152,7 @@ ghb_lookup_bframes(const gchar *options)
     gint ret = 0;
     gchar *result;
     gchar **split;
-    
+
     if (options == NULL)
         options = "";
 
@@ -1173,7 +1174,7 @@ ghb_lookup_mbtree(const gchar *options)
     gint ret = ghb_lookup_bframes(options) != 0;
     gchar *result;
     gchar **split;
-    
+
     if (options == NULL)
         options = "";
 
@@ -1282,7 +1283,7 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 }
 
 G_MODULE_EXPORT gboolean
-lavc_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
+lavc_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
     signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);

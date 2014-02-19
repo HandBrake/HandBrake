@@ -11,12 +11,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
@@ -55,7 +55,7 @@ typedef struct
 static gchar **index_str = NULL;
 static gint index_str_size = 0;
 
-static void 
+static void
 index_str_init(gint max_index)
 {
     gint ii;
@@ -470,7 +470,7 @@ typedef struct iso639_lang_t
 #endif
 
 const iso639_lang_t ghb_language_table[] =
-{ 
+{
     { "Any", "", "zz", "und" },
     { "Afar", "", "aa", "aar" },
     { "Abkhazian", "", "ab", "abk" },
@@ -698,8 +698,8 @@ ghb_version()
 
 void
 ghb_vquality_range(
-    signal_user_data_t *ud, 
-    gdouble *min, 
+    signal_user_data_t *ud,
+    gdouble *min,
     gdouble *max,
     gdouble *step,
     gdouble *page,
@@ -715,7 +715,7 @@ ghb_vquality_range(
         {
             *min = 0;
             *max = 51;
-            *step = ghb_settings_combo_double(ud->settings, 
+            *step = ghb_settings_combo_double(ud->prefs,
                                             "VideoQualityGranularity");
             if (*step == 0.2 || *step == 0.5)
                 *digits = 1;
@@ -1425,7 +1425,7 @@ ghb_subtitle_track_source(GValue *settings, gint track)
 
     hb_title_t * title;
     hb_subtitle_t * sub;
-    
+
     if (h_scan == NULL) return VOBSUB;
     title = ghb_get_title_info( titleindex );
     if (title == NULL) return VOBSUB;   // Bad titleindex
@@ -1466,7 +1466,7 @@ gint
 ghb_get_title_number(gint titleindex)
 {
     hb_title_t * title;
-    
+
     title = ghb_get_title_info( titleindex );
     if (title == NULL) return 1;    // Bad titleindex
     return title->index;
@@ -1478,7 +1478,7 @@ get_hb_audio(hb_handle_t *h, gint titleindex, gint track)
     hb_list_t  * list;
     hb_title_t * title;
     hb_audio_config_t *audio = NULL;
-    
+
     if (h == NULL) return NULL;
     list = hb_get_titles( h );
     if( !hb_list_count( list ) )
@@ -1516,12 +1516,12 @@ grey_combo_box_item(GtkComboBox *combo, gint value, gboolean grey)
 {
     GtkListStore *store;
     GtkTreeIter iter;
-    
+
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     if (find_combo_item_by_int(GTK_TREE_MODEL(store), value, &iter))
     {
-        gtk_list_store_set(store, &iter, 
-                           1, !grey, 
+        gtk_list_store_set(store, &iter,
+                           1, !grey,
                            -1);
     }
 }
@@ -1591,14 +1591,14 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     {
         if (!(mux & enc->muxers))
         {
-            grey_builder_combo_box_item(ud->builder, "AudioEncoder", 
+            grey_builder_combo_box_item(ud->builder, "AudioEncoder",
                 enc->codec, TRUE);
             grey_builder_combo_box_item(ud->builder, "AudioEncoderFallback",
                 enc->codec, TRUE);
         }
         else
         {
-            grey_builder_combo_box_item(ud->builder, "AudioEncoder", 
+            grey_builder_combo_box_item(ud->builder, "AudioEncoder",
                 enc->codec, FALSE);
             grey_builder_combo_box_item(ud->builder, "AudioEncoderFallback",
                 enc->codec, FALSE);
@@ -1609,12 +1609,12 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     {
         if (!(mux & enc->muxers))
         {
-            grey_builder_combo_box_item(ud->builder, "VideoEncoder", 
+            grey_builder_combo_box_item(ud->builder, "VideoEncoder",
                 enc->codec, TRUE);
         }
         else
         {
-            grey_builder_combo_box_item(ud->builder, "VideoEncoder", 
+            grey_builder_combo_box_item(ud->builder, "VideoEncoder",
                 enc->codec, FALSE);
         }
     }
@@ -1660,7 +1660,7 @@ ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
 
     if (mix == HB_AMIXDOWN_NONE)
         mix = HB_INVALID_AMIXDOWN;
-    
+
     return hb_mixdown_get_best( acodec, layout, mix );
 }
 
@@ -1681,7 +1681,7 @@ ghb_init_combo_box(GtkComboBox *combo)
     // 3 - String that is used for presets
     // 4 - Int value determined by backend
     // 5 - String value determined by backend
-    store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN, 
+    store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN,
                                G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_STRING);
     gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
 
@@ -1697,7 +1697,7 @@ ghb_init_combo_box(GtkComboBox *combo)
     { // Combo box entry
         gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(combo), 0);
     }
-}   
+}
 
 // Set up the model for the combo box
 static void
@@ -1709,7 +1709,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
     // First modify the combobox model to allow greying out of options
     combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     ghb_init_combo_box(combo);
-}   
+}
 
 void
 ghb_audio_samplerate_opts_set(GtkComboBox *combo)
@@ -1717,19 +1717,19 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     g_debug("audio_samplerate_opts_set ()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     // Add an item for "Same As Source"
     gtk_list_store_append(store, &iter);
     str = g_strdup_printf("<small>%s</small>", _("Same as source"));
-    gtk_list_store_set(store, &iter, 
+    gtk_list_store_set(store, &iter,
                        0, str,
-                       1, TRUE, 
-                       2, "source", 
-                       3, 0.0, 
-                       4, "source", 
+                       1, TRUE,
+                       2, "source",
+                       3, 0.0,
+                       4, "source",
                        -1);
     g_free(str);
 
@@ -1739,11 +1739,11 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
     {
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf("<small>%s</small>", rate->name);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, rate->name, 
-                           3, (gdouble)rate->rate, 
+                           1, TRUE,
+                           2, rate->name,
+                           3, (gdouble)rate->rate,
                            4, rate->name,
                            -1);
         g_free(str);
@@ -1763,19 +1763,19 @@ video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    
+
     g_debug("video_framerate_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     // Add an item for "Same As Source"
     gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter, 
-                       0, _("Same as source"), 
-                       1, TRUE, 
-                       2, "source", 
-                       3, 0.0, 
-                       4, "source", 
+    gtk_list_store_set(store, &iter,
+                       0, _("Same as source"),
+                       1, TRUE,
+                       2, "source",
+                       3, 0.0,
+                       4, "source",
                        -1);
 
     const hb_rate_t *rate;
@@ -1798,12 +1798,12 @@ video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
         }
         option = g_strdup_printf ("%s %s", rate->name, desc);
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
-                           0, option, 
-                           1, TRUE, 
-                           2, rate->name, 
-                           3, (gdouble)rate->rate, 
-                           4, rate->name, 
+        gtk_list_store_set(store, &iter,
+                           0, option,
+                           1, TRUE,
+                           2, rate->name,
+                           3, (gdouble)rate->rate,
+                           4, rate->name,
                            -1);
         g_free(option);
     }
@@ -1817,7 +1817,7 @@ video_encoder_opts_set(
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     g_debug("video_encoder_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -1829,12 +1829,12 @@ video_encoder_opts_set(
     {
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf("<small>%s</small>", enc->name);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, enc->short_name, 
+                           1, TRUE,
+                           2, enc->short_name,
                            3, (gdouble)enc->codec,
-                           4, enc->short_name, 
+                           4, enc->short_name,
                            -1);
         g_free(str);
     }
@@ -1849,7 +1849,7 @@ ghb_audio_encoder_opts_set_with_mask(
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     g_debug("ghb_audio_encoder_opts_set_with_mask()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
@@ -1862,12 +1862,12 @@ ghb_audio_encoder_opts_set_with_mask(
         {
             gtk_list_store_append(store, &iter);
             str = g_strdup_printf("<small>%s</small>", enc->name);
-            gtk_list_store_set(store, &iter, 
+            gtk_list_store_set(store, &iter,
                                0, str,
-                               1, TRUE, 
-                               2, enc->short_name, 
+                               1, TRUE,
+                               2, enc->short_name,
                                3, (gdouble)enc->codec,
-                               4, enc->short_name, 
+                               4, enc->short_name,
                                -1);
             g_free(str);
         }
@@ -1900,7 +1900,7 @@ audio_encoder_opts_set(
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
@@ -1913,12 +1913,12 @@ audio_encoder_opts_set(
         {
             gtk_list_store_append(store, &iter);
             str = g_strdup_printf("<small>%s</small>", enc->name);
-            gtk_list_store_set(store, &iter, 
+            gtk_list_store_set(store, &iter,
                                0, str,
-                               1, TRUE, 
-                               2, enc->short_name, 
+                               1, TRUE,
+                               2, enc->short_name,
                                3, (gdouble)enc->codec,
-                               4, enc->short_name, 
+                               4, enc->short_name,
                                -1);
             g_free(str);
         }
@@ -1937,7 +1937,7 @@ ghb_mix_opts_set(GtkComboBox *combo)
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     g_debug("mix_opts_set ()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
@@ -1948,12 +1948,12 @@ ghb_mix_opts_set(GtkComboBox *combo)
     {
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf("<small>%s</small>", mix->name);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, mix->short_name, 
-                           3, (gdouble)mix->amixdown, 
-                           4, mix->short_name, 
+                           1, TRUE,
+                           2, mix->short_name,
+                           3, (gdouble)mix->amixdown,
+                           4, mix->short_name,
                            -1);
         g_free(str);
     }
@@ -1975,7 +1975,7 @@ container_opts_set(
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     g_debug("hb_container_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -1987,12 +1987,12 @@ container_opts_set(
     {
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf("<small>%s</small>", mux->name);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, mux->short_name, 
+                           1, TRUE,
+                           2, mux->short_name,
                            3, (gdouble)mux->format,
-                           4, mux->short_name, 
+                           4, mux->short_name,
                            -1);
         g_free(str);
     }
@@ -2004,7 +2004,7 @@ srt_codeset_opts_set(GtkBuilder *builder, const gchar *name)
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii;
-    
+
     g_debug("srt_codeset_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -2012,11 +2012,11 @@ srt_codeset_opts_set(GtkBuilder *builder, const gchar *name)
     for (ii = 0; ii < SRT_TABLE_SIZE; ii++)
     {
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, srt_codeset_table[ii],
-                           1, TRUE, 
+                           1, TRUE,
                            2, srt_codeset_table[ii],
-                           3, (gdouble)ii, 
+                           3, (gdouble)ii,
                            4, srt_codeset_table[ii],
                            -1);
     }
@@ -2028,7 +2028,7 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii;
-    
+
     g_debug("language_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -2041,14 +2041,14 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
             lang = ghb_language_table[ii].native_name;
         else
             lang = ghb_language_table[ii].eng_name;
-        
+
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, lang,
-                           1, TRUE, 
-                           2, ghb_language_table[ii].iso639_2, 
-                           3, (gdouble)ii, 
-                           4, ghb_language_table[ii].iso639_1, 
+                           1, TRUE,
+                           2, ghb_language_table[ii].iso639_2,
+                           3, (gdouble)ii,
+                           4, ghb_language_table[ii].iso639_1,
                            -1);
     }
 }
@@ -2064,7 +2064,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
     hb_title_t * title = NULL;
     gint ii;
     gint count = 0;
-    
+
     g_debug("title_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -2092,12 +2092,12 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
     {
         // No titles.  Fill in a default.
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
-                           0, _("No Titles"), 
-                           1, TRUE, 
-                           2, "none", 
-                           3, -1.0, 
-                           4, "none", 
+        gtk_list_store_set(store, &iter,
+                           0, _("No Titles"),
+                           1, TRUE,
+                           2, "none",
+                           3, -1.0,
+                           4, "none",
                            -1);
         title_opts.map[0].option = "No Titles";
         title_opts.map[0].shortOpt = "none";
@@ -2114,7 +2114,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
             {
                 char *tmp;
                 tmp  = g_strdup_printf ("%d - %02dh%02dm%02ds - %s",
-                    title->index, title->hours, title->minutes, title->seconds, 
+                    title->index, title->hours, title->minutes, title->seconds,
                     title->name);
                 titles[ii] = g_markup_escape_text(tmp, -1);
                 g_free(tmp);
@@ -2122,7 +2122,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
             else
             {
                 char *tmp;
-                tmp  = g_strdup_printf ("%d - %s", 
+                tmp  = g_strdup_printf ("%d - %s",
                                         title->index, title->name);
                 titles[ii] = g_markup_escape_text(tmp, -1);
                 g_free(tmp);
@@ -2133,7 +2133,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
             if (title->duration != 0)
             {
                 titles[ii] = g_strdup_printf("%d (%05d.MPLS) - %02dh%02dm%02ds",
-                    title->index, title->playlist, title->hours, 
+                    title->index, title->playlist, title->hours,
                     title->minutes, title->seconds);
             }
             else
@@ -2156,12 +2156,12 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
             }
         }
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
-                           0, titles[ii], 
-                           1, TRUE, 
-                           2, titles[ii], 
-                           3, (gdouble)ii, 
-                           4, titles[ii], 
+        gtk_list_store_set(store, &iter,
+                           0, titles[ii],
+                           1, TRUE,
+                           2, titles[ii],
+                           3, (gdouble)ii,
+                           4, titles[ii],
                            -1);
         title_opts.map[ii].option = titles[ii];
         title_opts.map[ii].shortOpt = titles[ii];
@@ -2188,11 +2188,11 @@ x264_tune_opts_set(GtkBuilder *builder, const gchar *name)
     gtk_list_store_clear(store);
 
     gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter, 
+    gtk_list_store_set(store, &iter,
                        0, _("None"),
-                       1, TRUE, 
+                       1, TRUE,
                        2, "none",
-                       3, (gdouble)0, 
+                       3, (gdouble)0,
                        4, "none",
                        -1);
 
@@ -2201,9 +2201,9 @@ x264_tune_opts_set(GtkBuilder *builder, const gchar *name)
         if (strcmp(tunes[ii], "fastdecode") && strcmp(tunes[ii], "zerolatency"))
         {
             gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter, 
+            gtk_list_store_set(store, &iter,
                                0, tunes[ii],
-                               1, TRUE, 
+                               1, TRUE,
                                2, tunes[ii],
                                3, (gdouble)ii + 1,
                                4, tunes[ii],
@@ -2231,9 +2231,9 @@ h264_profile_opts_set(GtkBuilder *builder, const gchar *name)
     for (ii = 0; ii < count; ii++)
     {
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, profiles[ii],
-                           1, TRUE, 
+                           1, TRUE,
                            2, profiles[ii],
                            3, (gdouble)ii,
                            4, profiles[ii],
@@ -2260,9 +2260,9 @@ h264_level_opts_set(GtkBuilder *builder, const gchar *name)
     for (ii = 0; ii < count; ii++)
     {
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, levels[ii],
-                           1, TRUE, 
+                           1, TRUE,
                            2, levels[ii],
                            3, (gdouble)ii,
                            4, levels[ii],
@@ -2281,7 +2281,7 @@ find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 {
     gdouble ivalue;
     gboolean foundit = FALSE;
-    
+
     if (gtk_tree_model_get_iter_first (store, iter))
     {
         do
@@ -2307,7 +2307,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     gint ii;
     gint count = 0;
     gchar *str;
-    
+
     g_debug("audio_track_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -2342,12 +2342,12 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
         // No audio. set some default
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf("<small>%s</small>", _("No Audio"));
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, "none", 
-                           3, -1.0, 
-                           4, "none", 
+                           1, TRUE,
+                           2, "none",
+                           3, -1.0,
+                           4, "none",
                            -1);
         g_free(str);
         audio_track_opts.map[0].option = g_strdup("No Audio");
@@ -2363,12 +2363,12 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
         gtk_list_store_append(store, &iter);
         char *tmp = g_strdup_printf("%d - %s", ii + 1, audio->lang.description);
         str = g_strdup_printf("<small>%s</small>", tmp);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, index_str[ii], 
-                           3, (gdouble)ii, 
-                           4, index_str[ii], 
+                           1, TRUE,
+                           2, index_str[ii],
+                           3, (gdouble)ii,
+                           4, index_str[ii],
                            -1);
         g_free(str);
         audio_track_opts.map[ii].option = g_strdup(tmp);
@@ -2386,7 +2386,7 @@ ghb_audio_track_description(gint track, int titleindex)
     hb_title_t * title = NULL;
     hb_audio_config_t * audio;
     gchar * desc = "Unknown";
-    
+
     g_debug("ghb_audio_track_description ()\n");
 
     title = ghb_get_title_info( titleindex );
@@ -2407,7 +2407,7 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     hb_subtitle_t * subtitle;
     gint ii, count = 0;
     static char ** options = NULL;
-    
+
     g_debug("subtitle_track_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
@@ -2425,12 +2425,12 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     if (count > 0)
     {
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
-                           0, _("Foreign Audio Search"), 
-                           1, TRUE, 
-                           2, "-1", 
-                           3, -1.0, 
-                           4, "auto", 
+        gtk_list_store_set(store, &iter,
+                           0, _("Foreign Audio Search"),
+                           1, TRUE,
+                           2, "-1",
+                           3, -1.0,
+                           4, "auto",
                            -1);
         subtitle_opts.map[0].option = "Foreign Audio Search";
         subtitle_opts.map[0].shortOpt = "-1";
@@ -2444,20 +2444,20 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
         for (ii = 0; ii < count; ii++)
         {
             subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
-            options[ii] = g_strdup_printf("%d - %s (%s)", ii+1, 
-                subtitle->lang, 
+            options[ii] = g_strdup_printf("%d - %s (%s)", ii+1,
+                subtitle->lang,
                 hb_subsource_name(subtitle->source));
             subtitle_opts.map[ii+1].option = options[ii];
             subtitle_opts.map[ii+1].shortOpt = index_str[ii];
             subtitle_opts.map[ii+1].ivalue = ii;
             subtitle_opts.map[ii+1].svalue = subtitle->iso639_2;
             gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter, 
-                        0, options[ii], 
-                        1, TRUE, 
-                        2, index_str[ii], 
-                        3, (gdouble)ii, 
-                        4, subtitle->iso639_2, 
+            gtk_list_store_set(store, &iter,
+                        0, options[ii],
+                        1, TRUE,
+                        2, index_str[ii],
+                        3, (gdouble)ii,
+                        4, subtitle->iso639_2,
                         -1);
         }
         options[count] = NULL;
@@ -2465,12 +2465,12 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     else
     {
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
-                           0, _("None"), 
-                           1, TRUE, 
-                           2, "0", 
-                           3, 0.0, 
-                           4, "none", 
+        gtk_list_store_set(store, &iter,
+                           0, _("None"),
+                           1, TRUE,
+                           2, "0",
+                           3, 0.0,
+                           4, "none",
                            -1);
         subtitle_opts.map[0].option = "None";
         subtitle_opts.map[0].shortOpt = "0";
@@ -2488,7 +2488,7 @@ ghb_longest_title()
     gint ii;
     gint count = 0;
     gint feature;
-    
+
     g_debug("ghb_longest_title ()\n");
     if (h_scan == NULL) return 0;
     title_set = hb_get_title_set( h_scan );
@@ -2512,7 +2512,7 @@ ghb_get_source_audio_lang(hb_title_t *title, gint track)
 {
     hb_audio_config_t * audio;
     const gchar *lang = "und";
-    
+
     g_debug("ghb_lookup_1st_audio_lang ()\n");
     if (title == NULL)
         return lang;
@@ -2591,7 +2591,7 @@ generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii;
-    
+
     g_debug("generic_opts_set ()\n");
     if (name == NULL || opts == NULL) return;
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
@@ -2600,12 +2600,12 @@ generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
     for (ii = 0; ii < opts->count; ii++)
     {
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
-                           0, gettext(opts->map[ii].option), 
-                           1, TRUE, 
-                           2, opts->map[ii].shortOpt, 
-                           3, opts->map[ii].ivalue, 
-                           4, opts->map[ii].svalue, 
+        gtk_list_store_set(store, &iter,
+                           0, gettext(opts->map[ii].option),
+                           1, TRUE,
+                           2, opts->map[ii].shortOpt,
+                           3, opts->map[ii].ivalue,
+                           4, opts->map[ii].svalue,
                            -1);
     }
 }
@@ -2617,7 +2617,7 @@ small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
     GtkListStore *store;
     gint ii;
     gchar *str;
-    
+
     g_debug("small_opts_set ()\n");
     if (name == NULL || opts == NULL) return;
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
@@ -2628,12 +2628,12 @@ small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf("<small>%s</small>",
                               gettext(opts->map[ii].option));
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, opts->map[ii].shortOpt, 
-                           3, opts->map[ii].ivalue, 
-                           4, opts->map[ii].svalue, 
+                           1, TRUE,
+                           2, opts->map[ii].shortOpt,
+                           3, opts->map[ii].ivalue,
+                           4, opts->map[ii].svalue,
                            -1);
         g_free(str);
     }
@@ -2851,9 +2851,9 @@ void ghb_init_lang_list_box(GtkListBox *list_box)
 
 void
 ghb_update_ui_combo_box(
-    signal_user_data_t *ud, 
-    const gchar *name, 
-    gint user_data, 
+    signal_user_data_t *ud,
+    const gchar *name,
+    gint user_data,
     gboolean all)
 {
     GtkComboBox *combo = NULL;
@@ -2861,7 +2861,7 @@ ghb_update_ui_combo_box(
     gint handler_id = 0;
 
     if (name != NULL)
-    {       
+    {
         g_debug("ghb_update_ui_combo_box() %s\n", name);
         // Clearing a combo box causes a rash of "changed" events, even when
         // the active item is -1 (inactive).  To control things, I'm disabling
@@ -2871,7 +2871,7 @@ ghb_update_ui_combo_box(
         if (signal_id > 0)
         {
             // Valid signal id found.  This should always succeed.
-            handler_id = g_signal_handler_find ((gpointer)combo, G_SIGNAL_MATCH_ID, 
+            handler_id = g_signal_handler_find ((gpointer)combo, G_SIGNAL_MATCH_ID,
                                                 signal_id, 0, 0, 0, 0);
             if (handler_id > 0)
             {
@@ -2879,7 +2879,7 @@ ghb_update_ui_combo_box(
                 g_signal_handler_block ((gpointer)combo, handler_id);
             }
         }
-    }   
+    }
     if (all)
     {
         audio_bitrate_opts_set(ud->builder, "AudioBitrate");
@@ -2963,7 +2963,7 @@ ghb_update_ui_combo_box(
         g_signal_handler_unblock ((gpointer)combo, handler_id);
     }
 }
-    
+
 static void
 init_ui_combo_boxes(GtkBuilder *builder)
 {
@@ -3119,7 +3119,7 @@ ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
     hb_chapter_t * chapter;
     gint count, c;
     gint64 duration;
-    
+
     *hh = *mm = *ss = 0;
     title = ghb_get_title_info( tt );
     if (title == NULL) return;
@@ -3147,22 +3147,42 @@ ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
     *ss =  (duration / 90000) % 60;
 }
 
-void
-ghb_get_chapter_duration(gint ti, gint ii, gint64 *duration)
+gint64
+ghb_get_chapter_duration(gint ti, gint chap)
 {
     hb_title_t * title;
     hb_chapter_t * chapter;
     gint count;
-    
+
     g_debug("ghb_get_chapter_duration (title = %d)\n", ti);
-    *duration = 0;
     title = ghb_get_title_info( ti );
-    if (title == NULL) return;
+    if (title == NULL) return 0;
     count = hb_list_count( title->list_chapter );
-    if (ii >= count) return;
-    chapter = hb_list_item(title->list_chapter, ii);
-    if (chapter == NULL) return;
-    *duration = chapter->duration;
+    if (chap >= count) return 0;
+    chapter = hb_list_item(title->list_chapter, chap);
+    if (chapter == NULL) return 0;
+    return chapter->duration;
+}
+
+gint64
+ghb_get_chapter_start(gint ti, gint chap)
+{
+    hb_title_t * title;
+    hb_chapter_t * chapter;
+    gint count, ii;
+    gint64 start = 0;
+
+    g_debug("ghb_get_chapter_start (title = %d)\n", ti);
+    title = ghb_get_title_info( ti );
+    if (title == NULL) return 0;
+    count = hb_list_count( title->list_chapter );
+    if (chap > count) return chap = count;
+    for (ii = 0; ii < chap; ii++)
+    {
+        chapter = hb_list_item(title->list_chapter, ii);
+        start += chapter->duration;
+    }
+    return start;
 }
 
 GValue*
@@ -3172,7 +3192,7 @@ ghb_get_chapters(gint titleindex)
     hb_chapter_t * chapter;
     gint count, ii;
     GValue *chapters = NULL;
-    
+
     g_debug("ghb_get_chapters (title = %d)\n", titleindex);
     chapters = ghb_array_value_new(0);
 
@@ -3190,7 +3210,7 @@ ghb_get_chapters(gint titleindex)
             ghb_array_append(chapters, ghb_string_value_new(str));
             g_free(str);
         }
-        else 
+        else
         {
             ghb_array_append(chapters, ghb_string_value_new(chapter->title));
         }
@@ -3223,7 +3243,7 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     g_debug("audio_bitrate_opts_add ()\n");
 
     if (rate >= 0 && rate < 8) return;
@@ -3248,12 +3268,12 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
     {
         str = g_strdup_printf ("<small>%s</small>", ghb_custom_bitrate_str);
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 
-                           0, str, 
-                           1, TRUE, 
-                           2, ghb_custom_bitrate_str, 
-                           3, (gdouble)rate, 
-                           4, ghb_custom_bitrate_str, 
+        gtk_list_store_set(store, &iter,
+                           0, str,
+                           1, TRUE,
+                           2, ghb_custom_bitrate_str,
+                           3, (gdouble)rate,
+                           4, ghb_custom_bitrate_str,
                            -1);
         g_free(str);
     }
@@ -3262,14 +3282,14 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 void
 ghb_audio_bitrate_opts_filter(
     GtkComboBox *combo,
-    gint first_rate, 
+    gint first_rate,
     gint last_rate)
 {
     GtkTreeIter iter;
     GtkListStore *store;
     gdouble ivalue;
     gboolean done = FALSE;
-    
+
     g_debug("audio_bitrate_opts_filter ()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
@@ -3292,9 +3312,9 @@ ghb_audio_bitrate_opts_filter(
 
 static void
 audio_bitrate_opts_update(
-    GtkBuilder *builder, 
-    const gchar *name, 
-    gint first_rate, 
+    GtkBuilder *builder,
+    const gchar *name,
+    gint first_rate,
     gint last_rate,
     gint extra_rate)
 {
@@ -3302,7 +3322,7 @@ audio_bitrate_opts_update(
     GtkListStore *store;
     gdouble ivalue;
     gboolean done = FALSE;
-    
+
     g_debug("audio_bitrate_opts_clean ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     ghb_audio_bitrate_opts_filter(combo, first_rate, last_rate);
@@ -3341,7 +3361,7 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo, gboolean extra)
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
-    
+
     g_debug("audio_bitrate_opts_set ()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
@@ -3352,12 +3372,12 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo, gboolean extra)
     {
         gtk_list_store_append(store, &iter);
         str = g_strdup_printf ("<small>%s</small>", rate->name);
-        gtk_list_store_set(store, &iter, 
+        gtk_list_store_set(store, &iter,
                            0, str,
-                           1, TRUE, 
-                           2, rate->name, 
-                           3, (gdouble)rate->rate, 
-                           4, rate->name, 
+                           1, TRUE,
+                           2, rate->name,
+                           3, (gdouble)rate->rate,
+                           4, rate->name,
                            -1);
         g_free(str);
     }
@@ -3385,8 +3405,8 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 
 void
 ghb_set_bitrate_opts(
-    GtkBuilder *builder, 
-    gint first_rate, 
+    GtkBuilder *builder,
+    gint first_rate,
     gint last_rate,
     gint extra_rate)
 {
@@ -3489,7 +3509,7 @@ ghb_get_status(ghb_status_t *status)
     memcpy(status, &hb_status, sizeof(ghb_status_t));
 }
 
-void 
+void
 ghb_track_status()
 {
     hb_state_t s_scan;
@@ -3536,7 +3556,7 @@ ghb_track_status()
         case HB_STATE_PAUSED:
             hb_status.scan.state |= GHB_STATE_PAUSED;
             break;
-                
+
         case HB_STATE_MUXING:
         {
             hb_status.scan.state |= GHB_STATE_MUXING;
@@ -3568,7 +3588,7 @@ ghb_track_status()
             // When a job is stopped, libhb removes it from the job list,
             // but does not remove other jobs that may be associated with it.
             // Associated jobs are taged in the sequence id.
-            while ((job = hb_job(h_scan, 0)) != NULL) 
+            while ((job = hb_job(h_scan, 0)) != NULL)
                 hb_rem( h_scan, job );
         } break;
 #undef p
@@ -3629,7 +3649,7 @@ ghb_track_status()
         case HB_STATE_PAUSED:
             hb_status.queue.state |= GHB_STATE_PAUSED;
             break;
-                
+
         case HB_STATE_MUXING:
         {
             hb_status.queue.state |= GHB_STATE_MUXING;
@@ -3662,7 +3682,7 @@ ghb_track_status()
             // When a job is stopped, libhb removes it from the job list,
             // but does not remove other jobs that may be associated with it.
             // Associated jobs are taged in the sequence id.
-            while ((job = hb_job(h_queue, 0)) != NULL) 
+            while ((job = hb_job(h_queue, 0)) != NULL)
                 hb_rem( h_queue, job );
         } break;
 #undef p
@@ -3680,11 +3700,18 @@ ghb_get_title_info(gint titleindex)
     return hb_list_item( list, titleindex );
 }
 
+hb_list_t *
+ghb_get_title_list()
+{
+    if (h_scan == NULL) return NULL;
+    return hb_get_titles( h_scan );
+}
+
 hb_audio_config_t*
 ghb_get_scan_audio_info(gint titleindex, gint audioindex)
 {
     hb_audio_config_t *aconfig;
-    
+
     aconfig = get_hb_audio(h_scan, titleindex, audioindex);
     return aconfig;
 }
@@ -3788,7 +3815,7 @@ ghb_set_scale_settings(GValue *settings, gint mode)
     gint mod;
     gint max_width = 0;
     gint max_height = 0;
-    
+
     g_debug("ghb_set_scale ()\n");
 
     pic_par = ghb_settings_combo_int(settings, "PicturePAR");
@@ -3870,8 +3897,8 @@ ghb_set_scale_settings(GValue *settings, gint mode)
         ghb_settings_set_int(settings, "PictureLeftCrop", crop[2]);
         ghb_settings_set_int(settings, "PictureRightCrop", crop[3]);
     }
-    hb_reduce(&aspect_n, &aspect_d, 
-                title->width * title->pixel_aspect_width, 
+    hb_reduce(&aspect_n, &aspect_d,
+                title->width * title->pixel_aspect_width,
                 title->height * title->pixel_aspect_height);
     crop_width = title->width - crop[2] - crop[3];
     crop_height = title->height - crop[0] - crop[1];
@@ -3931,14 +3958,14 @@ ghb_set_scale_settings(GValue *settings, gint mode)
             job->anamorphic.keep_display_aspect = 0;
             if (mode & GHB_PIC_KEEP_PAR)
             {
-                job->anamorphic.par_width = 
+                job->anamorphic.par_width =
                     ghb_settings_get_int(settings, "PicturePARWidth");
-                job->anamorphic.par_height = 
+                job->anamorphic.par_height =
                     ghb_settings_get_int(settings, "PicturePARHeight");
             }
             else
             {
-                job->anamorphic.dar_width = 
+                job->anamorphic.dar_width =
                     ghb_settings_get_int(settings, "PictureDisplayWidth");
                 job->anamorphic.dar_height = height;
             }
@@ -3948,10 +3975,10 @@ ghb_set_scale_settings(GValue *settings, gint mode)
             job->anamorphic.keep_display_aspect = 1;
         }
         // hb_set_anamorphic_size will adjust par, dar, and width/height
-        // to conform to job parameters that have been set, including 
+        // to conform to job parameters that have been set, including
         // maxWidth and maxHeight
         hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
-        if (job->anamorphic.mode == 3 && !keep_aspect && 
+        if (job->anamorphic.mode == 3 && !keep_aspect &&
             mode & GHB_PIC_KEEP_PAR)
         {
             // hb_set_anamorphic_size reduces the par, which we
@@ -3961,7 +3988,7 @@ ghb_set_scale_settings(GValue *settings, gint mode)
             par_height = ghb_settings_get_int(settings, "PicturePARHeight");
         }
     }
-    else 
+    else
     {
         // Adjust dims according to max values
         if (max_height) height = MIN(height, max_height);
@@ -3971,8 +3998,8 @@ ghb_set_scale_settings(GValue *settings, gint mode)
         {
             gdouble par;
             gint new_width, new_height;
-            
-            // Compute pixel aspect ration.  
+
+            // Compute pixel aspect ration.
             par = (gdouble)(title->height * aspect_n) / (title->width * aspect_d);
             // Must scale so that par becomes 1:1
             // Try to keep largest dimension
@@ -4029,6 +4056,36 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 }
 
 void
+ghb_update_display_aspect_label(signal_user_data_t *ud)
+{
+    gint disp_width, disp_height, dar_width, dar_height;
+    gchar *str;
+
+    disp_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
+    disp_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
+    hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
+    gint iaspect = dar_width * 9 / dar_height;
+    if (dar_width > 2 * dar_height)
+    {
+        str = g_strdup_printf("%.2f : 1", (gdouble)dar_width / dar_height);
+    }
+    else if (iaspect <= 16 && iaspect >= 15)
+    {
+        str = g_strdup_printf("%.2f : 9", (gdouble)dar_width * 9 / dar_height);
+    }
+    else if (iaspect <= 12 && iaspect >= 11)
+    {
+        str = g_strdup_printf("%.2f : 3", (gdouble)dar_width * 3 / dar_height);
+    }
+    else
+    {
+        str = g_strdup_printf("%d : %d", dar_width, dar_height);
+    }
+    ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
+    g_free(str);
+}
+
+void
 ghb_set_scale(signal_user_data_t *ud, gint mode)
 {
     if (ud->scale_busy) return;
@@ -4072,53 +4129,29 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
         gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
     }
 
-    ghb_ui_update_from_settings(ud->builder, "autoscale", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureModulus", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureLooseCrop", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureKeepRatio", ud->settings);
+    ghb_ui_update_from_settings(ud, "autoscale", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureModulus", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureLooseCrop", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureKeepRatio", ud->settings);
 
-    ghb_ui_update_from_settings(ud->builder, "PictureTopCrop", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureBottomCrop", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureLeftCrop", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureRightCrop", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureTopCrop", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureBottomCrop", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureLeftCrop", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureRightCrop", ud->settings);
 
-    ghb_ui_update_from_settings(ud->builder, "scale_width", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "scale_height", ud->settings);
+    ghb_ui_update_from_settings(ud, "scale_width", ud->settings);
+    ghb_ui_update_from_settings(ud, "scale_height", ud->settings);
 
-    ghb_ui_update_from_settings(ud->builder, "PicturePARWidth", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PicturePARHeight", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureDisplayWidth", ud->settings);
-    ghb_ui_update_from_settings(ud->builder, "PictureDisplayHeight", ud->settings);
-    gint disp_width, disp_height, dar_width, dar_height;
-    gchar *str;
-
-    disp_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
-    disp_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
-    hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
-    gint iaspect = dar_width * 9 / dar_height;
-    if (dar_width > 2 * dar_height)
-    {
-        str = g_strdup_printf("%.2f : 1", (gdouble)dar_width / dar_height);
-    }
-    else if (iaspect <= 16 && iaspect >= 15)
-    {
-        str = g_strdup_printf("%.2f : 9", (gdouble)dar_width * 9 / dar_height);
-    }
-    else if (iaspect <= 12 && iaspect >= 11)
-    {
-        str = g_strdup_printf("%.2f : 3", (gdouble)dar_width * 3 / dar_height);
-    }
-    else
-    {
-        str = g_strdup_printf("%d : %d", dar_width, dar_height);
-    }
-    ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
-    g_free(str);
+    ghb_ui_update_from_settings(ud, "PicturePARWidth", ud->settings);
+    ghb_ui_update_from_settings(ud, "PicturePARHeight", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureDisplayWidth", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureDisplayHeight", ud->settings);
+    ghb_update_display_aspect_label(ud);
     ud->scale_busy = FALSE;
 }
 
 static void
-set_preview_job_settings(hb_job_t *job, GValue *settings)
+set_preview_job_settings(signal_user_data_t *ud, hb_job_t *job, GValue *settings)
 {
     job->crop[0] = ghb_settings_get_int(settings, "PictureTopCrop");
     job->crop[1] = ghb_settings_get_int(settings, "PictureBottomCrop");
@@ -4126,17 +4159,17 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
     job->crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
 
     job->anamorphic.mode = ghb_settings_combo_int(settings, "PicturePAR");
-    job->modulus = 
+    job->modulus =
         ghb_settings_combo_int(settings, "PictureModulus");
     job->width = ghb_settings_get_int(settings, "scale_width");
     job->height = ghb_settings_get_int(settings, "scale_height");
-    if (ghb_settings_get_boolean(settings, "preview_show_crop"))
+    if (ghb_settings_get_boolean(ud->prefs, "preview_show_crop"))
     {
-        gdouble xscale = (gdouble)job->width / 
+        gdouble xscale = (gdouble)job->width /
             (gdouble)(job->title->width - job->crop[2] - job->crop[3]);
-        gdouble yscale = (gdouble)job->height / 
+        gdouble yscale = (gdouble)job->height /
             (gdouble)(job->title->height - job->crop[0] - job->crop[1]);
-    
+
         job->width += xscale * (job->crop[2] + job->crop[3]);
         job->height += yscale * (job->crop[0] + job->crop[1]);
         job->crop[0] = 0;
@@ -4170,9 +4203,9 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
         if (job->anamorphic.mode == 3 && !keep_aspect)
         {
             job->anamorphic.keep_display_aspect = 0;
-            job->anamorphic.par_width = 
+            job->anamorphic.par_width =
                 ghb_settings_get_int(settings, "PicturePARWidth");
-            job->anamorphic.par_height = 
+            job->anamorphic.par_height =
                 ghb_settings_get_int(settings, "PicturePARHeight");
         }
         else
@@ -4373,7 +4406,7 @@ ghb_validate_subtitles(GValue *settings)
                 _("Srt file does not exist or not a regular file.\n\n"
                     "You should choose a valid file.\n"
                     "If you continue, this subtitle will be ignored."));
-                if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, 
+                if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message,
                     _("Cancel"), _("Continue")))
                 {
                     g_free(message);
@@ -4425,7 +4458,7 @@ ghb_validate_audio(GValue *settings)
         aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
                                             title->list_audio, track );
         if ( ghb_audio_is_passthru(codec) &&
-            !(ghb_audio_can_passthru(aconfig->in.codec) && 
+            !(ghb_audio_can_passthru(aconfig->in.codec) &&
              (aconfig->in.codec & codec)))
         {
             // Not supported.  AC3 is passthrough only, so input must be AC3
@@ -4458,7 +4491,7 @@ ghb_validate_audio(GValue *settings)
         gchar *a_unsup = NULL;
         gchar *mux_s = NULL;
         if (mux & HB_MUX_MASK_MP4)
-        { 
+        {
             mux_s = "MP4";
             // mp4/vorbis|DTS combination is not supported.
             if (codec == HB_ACODEC_VORBIS)
@@ -4519,7 +4552,6 @@ ghb_validate_vquality(GValue *settings)
     gchar *message;
     gint min, max;
 
-    if (ghb_settings_get_boolean(settings, "nocheckvquality")) return TRUE;
     vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
     gdouble vquality;
     vquality = ghb_settings_get_double(settings, "VideoQualitySlider");
@@ -4560,7 +4592,7 @@ ghb_validate_vquality(GValue *settings)
                         "many players and editors.\n\n"
                         "It will produce enormous output files.\n\n"
                         "Are you sure you wish to use this setting?"));
-            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
+            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message,
                                     _("Cancel"), _("Continue")))
             {
                 g_free(message);
@@ -4576,7 +4608,7 @@ ghb_validate_vquality(GValue *settings)
                         "Typical values range from %d to %d.\n\n"
                         "Are you sure you wish to use this setting?"),
                         (gint)vquality, min, max);
-            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
+            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message,
                                     _("Cancel"), _("Continue")))
             {
                 g_free(message);
@@ -4598,6 +4630,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     hb_filter_object_t * filter;
     gchar *filter_str;
     gchar *dest_str = NULL;
+    GValue *prefs;
 
     g_debug("add_job()\n");
     if (h == NULL) return;
@@ -4615,12 +4648,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     job = hb_job_init( title );
     if (job == NULL) return;
 
+    prefs = ghb_settings_get_value(js, "Preferences");
     job->angle = ghb_settings_get_int(js, "angle");
     job->start_at_preview = ghb_settings_get_int(js, "start_frame") + 1;
     if (job->start_at_preview)
     {
-        job->seek_points = ghb_settings_get_int(js, "preview_count");
-        job->pts_to_stop = ghb_settings_get_int(js, "live_duration") * 90000LL;
+        job->seek_points = ghb_settings_get_int(prefs, "preview_count");
+        job->pts_to_stop = ghb_settings_get_int(prefs, "live_duration") * 90000LL;
     }
 
     job->mux = ghb_settings_combo_int(js, "FileFormat");
@@ -4656,7 +4690,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
             start = ghb_settings_get_int(js, "start_point");
             end = ghb_settings_get_int(js, "end_point");
             job->pts_to_start = (int64_t)MIN(duration-1, start) * 90000;
-            job->pts_to_stop = (int64_t)MAX(start+1, end) * 90000 - 
+            job->pts_to_stop = (int64_t)MAX(start+1, end) * 90000 -
                                 job->pts_to_start;
         }
         if (ghb_settings_combo_int(js, "PtoPType") == 2)
@@ -4666,7 +4700,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
             gint64 max_frames;
             max_frames = (gint64)duration * title->rate / title->rate_base;
             job->frame_to_start = (int64_t)MIN(max_frames-1, start-1);
-            job->frame_to_stop = (int64_t)MAX(start, end-1) - 
+            job->frame_to_stop = (int64_t)MAX(start, end-1) -
                                  job->frame_to_start;
         }
         if (job->chapter_start != job->chapter_end)
@@ -4691,7 +4725,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
                 name = NULL;
                 chapter = ghb_array_get_nth(chapters, chap);
-                name = ghb_value_string(chapter); 
+                name = ghb_value_string(chapter);
                 if (name == NULL)
                 {
                     name = g_strdup_printf ("Chapter %2d", chap+1);
@@ -4702,7 +4736,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
             }
         }
     }
-    
+
     gboolean decomb_deint = ghb_settings_get_boolean(js, "PictureDecombDeinterlace");
     gint decomb = ghb_settings_combo_int(js, "PictureDecomb");
     gint deint = ghb_settings_combo_int(js, "PictureDeinterlace");
@@ -4718,9 +4752,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     job->modulus = ghb_settings_combo_int(js, "PictureModulus");
     if (job->anamorphic.mode)
     {
-        job->anamorphic.par_width = 
+        job->anamorphic.par_width =
             ghb_settings_get_int(js, "PicturePARWidth");
-        job->anamorphic.par_height = 
+        job->anamorphic.par_height =
             ghb_settings_get_int(js, "PicturePARHeight");
         job->anamorphic.dar_width = 0;
         job->anamorphic.dar_height = 0;
@@ -4744,7 +4778,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     crop[2] = ghb_settings_get_int(js, "PictureLeftCrop");
     crop[3] = ghb_settings_get_int(js, "PictureRightCrop");
 
-    filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d", 
+    filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d",
                             width, height, crop[0], crop[1], crop[2], crop[3]);
     filter = hb_filter_init(HB_FILTER_CROP_SCALE);
     hb_add_filter( job, filter, filter_str );
@@ -4876,7 +4910,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     const GValue *audio_list;
     gint count, ii;
     gint tcount = 0;
-    
+
     audio_list = ghb_settings_get_value(js, "audio_list");
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
@@ -4894,7 +4928,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
         char * aname = ghb_settings_get_string(asettings, "AudioTrackName");
         if (aname && *aname)
         {
-            // This leaks, but there is no easy way to clean up 
+            // This leaks, but there is no easy way to clean up
             // presently
             audio.out.name = aname;
         }
@@ -4912,10 +4946,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
         gint copy_mask = ghb_get_copy_mask(js);
         audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec, fallback, copy_mask);
 
-        audio.out.gain = 
+        audio.out.gain =
             ghb_settings_get_double(asettings, "AudioTrackGain");
 
-        audio.out.dynamic_range_compression = 
+        audio.out.dynamic_range_compression =
             ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
         if (audio.out.dynamic_range_compression < 1.0)
             audio.out.dynamic_range_compression = 0.0;
@@ -4929,7 +4963,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
         {
             audio.out.mixdown = ghb_settings_combo_int(asettings, "AudioMixdown");
             // Make sure the mixdown is valid and pick a new one if not.
-            audio.out.mixdown = ghb_get_best_mix(aconfig, audio.out.codec, 
+            audio.out.mixdown = ghb_get_best_mix(aconfig, audio.out.codec,
                                                     audio.out.mixdown);
             gint srate = ghb_settings_combo_int(asettings, "AudioSamplerate");
             if (srate == 0) // 0 is same as source
@@ -4946,11 +4980,11 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
             else
             {
                 audio.out.quality = HB_INVALID_AUDIO_QUALITY;
-                audio.out.bitrate = 
+                audio.out.bitrate =
                     ghb_settings_combo_int(asettings, "AudioBitrate");
 
                 audio.out.bitrate = hb_audio_bitrate_get_best(
-                    audio.out.codec, audio.out.bitrate, 
+                    audio.out.codec, audio.out.bitrate,
                     audio.out.samplerate, audio.out.mixdown);
             }
         }
@@ -4967,7 +5001,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     const GValue *subtitle_list;
     gint subtitle;
     gboolean force, burned, def, one_burned = FALSE;
-    
+
     ghb_settings_set_boolean(js, "subtitle_scan", FALSE);
     subtitle_list = ghb_settings_get_value(js, "subtitle_list");
     count = ghb_array_len(subtitle_list);
@@ -5063,7 +5097,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     {
         // Add filter that renders vobsubs
         filter = hb_filter_init(HB_FILTER_RENDER_SUB);
-        filter_str = g_strdup_printf("%d:%d:%d:%d", 
+        filter_str = g_strdup_printf("%d:%d:%d:%d",
                                 crop[0], crop[1], crop[2], crop[3]);
         hb_add_filter( job, filter, filter_str );
         g_free(filter_str);
@@ -5194,7 +5228,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 void
 ghb_add_job(GValue *js, gint unique_id)
 {
-    // Since I'm doing a scan of the single title I want just prior 
+    // Since I'm doing a scan of the single title I want just prior
     // to adding the job, there is only the one title to choose from.
     add_job(h_queue, js, unique_id, 0);
 }
@@ -5211,7 +5245,7 @@ ghb_remove_job(gint unique_id)
 {
     hb_job_t * job;
     gint ii;
-    
+
     // Multiples passes all get the same id
     // remove them all.
     // Go backwards through list, so reordering doesn't screw me.
@@ -5267,13 +5301,13 @@ ghb_pause_queue()
 
 static void
 vert_line(
-    GdkPixbuf * pb, 
-    guint8 r, 
-    guint8 g, 
-    guint8 b, 
-    gint x, 
-    gint y, 
-    gint len, 
+    GdkPixbuf * pb,
+    guint8 r,
+    guint8 g,
+    guint8 b,
+    gint x,
+    gint y,
+    gint len,
     gint width)
 {
     guint8 *pixels = gdk_pixbuf_get_pixels (pb);
@@ -5297,12 +5331,12 @@ vert_line(
 
 static void
 horz_line(
-    GdkPixbuf * pb, 
-    guint8 r, 
-    guint8 g, 
-    guint8 b, 
-    gint x, 
-    gint y, 
+    GdkPixbuf * pb,
+    guint8 r,
+    guint8 g,
+    guint8 b,
+    gint x,
+    gint y,
     gint len,
     gint width)
 {
@@ -5342,7 +5376,7 @@ hash_pixbuf(
         guint8 r;
         guint8 g;
         guint8 b;
-    } c[4] = 
+    } c[4] =
     {{0x80, 0x80, 0x80},{0xC0, 0x80, 0x70},{0x80, 0xA0, 0x80},{0x70, 0x80, 0xA0}};
 
     if (!orientation)
@@ -5365,32 +5399,30 @@ hash_pixbuf(
 
 GdkPixbuf*
 ghb_get_preview_image(
-    gint titleindex, 
-    gint index, 
+    gint titleindex,
+    gint index,
     signal_user_data_t *ud,
     gint *out_width,
     gint *out_height)
 {
-    GValue *settings;
     hb_title_t *title;
     hb_job_t *job;
-    
-    settings = ud->settings;
+
     title = ghb_get_title_info( titleindex );
     if( title == NULL ) return NULL;
 
     job = hb_job_init( title );
     if (job == NULL) return NULL;
 
-    set_preview_job_settings(job, settings);
+    set_preview_job_settings(ud, job, ud->settings);
 
     // hb_get_preview doesn't compensate for anamorphic, so lets
     // calculate scale factors
     gint width, height, par_width = 1, par_height = 1;
-    gint pic_par = ghb_settings_combo_int(settings, "PicturePAR");
+    gint pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
     if (pic_par)
     {
-        hb_set_anamorphic_size( job, &width, &height, 
+        hb_set_anamorphic_size( job, &width, &height,
                                 &par_width, &par_height );
     }
 
@@ -5413,13 +5445,13 @@ ghb_get_preview_image(
 
     // Create an GdkPixbuf and copy the libhb image into it, converting it from
     // libhb's format something suitable.
-    
-    // The image data returned by hb_get_preview is 4 bytes per pixel, 
+
+    // The image data returned by hb_get_preview is 4 bytes per pixel,
     // BGRA format. Alpha is ignored.
 
     GdkPixbuf *preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, dstWidth, dstHeight);
     guint8 *pixels = gdk_pixbuf_get_pixels (preview);
-    
+
     guint32 *src = (guint32*)buffer;
     guint8 *dst = pixels;
 
@@ -5441,30 +5473,30 @@ ghb_get_preview_image(
         }
         dst += stride;
     }
-    gint w = ghb_settings_get_int(settings, "scale_width");
-    gint h = ghb_settings_get_int(settings, "scale_height");
+    gint w = ghb_settings_get_int(ud->settings, "scale_width");
+    gint h = ghb_settings_get_int(ud->settings, "scale_height");
     ghb_par_scale(ud, &w, &h, par_width, par_height);
 
     gint c0, c1, c2, c3;
-    c0 = ghb_settings_get_int(settings, "PictureTopCrop");
-    c1 = ghb_settings_get_int(settings, "PictureBottomCrop");
-    c2 = ghb_settings_get_int(settings, "PictureLeftCrop");
-    c3 = ghb_settings_get_int(settings, "PictureRightCrop");
+    c0 = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+    c1 = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+    c2 = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+    c3 = ghb_settings_get_int(ud->settings, "PictureRightCrop");
 
     gdouble xscale = (gdouble)w / (gdouble)(title->width - c2 - c3);
     gdouble yscale = (gdouble)h / (gdouble)(title->height - c0 - c1);
-    
+
     ghb_par_scale(ud, &dstWidth, &dstHeight, par_width, par_height);
     *out_width = w;
     *out_height = h;
-    if (ghb_settings_get_boolean(settings, "reduce_hd_preview"))
+    if (ghb_settings_get_boolean(ud->prefs, "reduce_hd_preview"))
     {
         GdkScreen *ss;
         gint s_w, s_h;
         gint orig_w, orig_h;
         gint factor = 80;
 
-        if (ghb_settings_get_boolean(settings, "preview_fullscreen"))
+        if (ghb_settings_get_boolean(ud->prefs, "preview_fullscreen"))
         {
             factor = 100;
         }
@@ -5491,7 +5523,7 @@ ghb_get_preview_image(
     }
     GdkPixbuf *scaled_preview;
     scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
-    if (ghb_settings_get_boolean(settings, "preview_show_crop"))
+    if (ghb_settings_get_boolean(ud->prefs, "preview_show_crop"))
     {
         c0 *= yscale;
         c1 *= yscale;

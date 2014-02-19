@@ -15,7 +15,7 @@ typedef struct
 
 #if 0
 static value_map_t subtitle_xlat[] =
-{ 
+{
     { "None", "none" },
     { "Auto", "auto" },
     { "Any", "und" },
@@ -299,7 +299,7 @@ typedef struct
     gboolean ignore;
 } key_map_t;
 
-key_map_t key_map[] = 
+key_map_t key_map[] =
 {
     {"Audio1Bitrate", NULL, NULL, FALSE, FALSE},
     {"Audio1Encoder", NULL, NULL, FALSE, FALSE},
@@ -378,9 +378,9 @@ key_xlat(key_map_t *key_map, const gchar *mac_key)
 
 static GValue*
 value_xlat(
-    GValue *defaults, 
-    key_map_t *key_map, 
-    gint key_index, 
+    GValue *defaults,
+    key_map_t *key_map,
+    gint key_index,
     GValue *mac_val)
 {
     GValue *gval, *def_val;
@@ -554,7 +554,7 @@ parse_preset_array(GValue *mac_array, GValue *lin_array)
     for (ii = 0; ii < count; ii++)
     {
         mac_dict = ghb_array_get_nth(mac_array, ii);
-        
+
         // Only process builtin types
         if (ghb_value_int(ghb_dict_lookup(mac_dict, "Type")) != 0)
             continue;
@@ -564,13 +564,13 @@ parse_preset_array(GValue *mac_array, GValue *lin_array)
         gval = ghb_dict_lookup(mac_dict, "PresetName");
         if (gval)
         {
-            ghb_dict_insert(lin_dict, g_strdup("PresetName"), 
+            ghb_dict_insert(lin_dict, g_strdup("PresetName"),
                             ghb_value_dup(gval));
         }
         gval = ghb_dict_lookup(mac_dict, "PresetDescription");
         if (gval)
         {
-            ghb_dict_insert(lin_dict, g_strdup("PresetDescription"), 
+            ghb_dict_insert(lin_dict, g_strdup("PresetDescription"),
                             ghb_value_dup(gval));
         }
         gval = ghb_dict_lookup(mac_dict, "Folder");
@@ -581,15 +581,15 @@ parse_preset_array(GValue *mac_array, GValue *lin_array)
             mval = ghb_dict_lookup(mac_dict, "ChildrenArray");
             lval = ghb_array_value_new(32);
             ghb_dict_insert(lin_dict, g_strdup("ChildrenArray"), lval);
-            ghb_dict_insert(lin_dict, g_strdup("Folder"), 
+            ghb_dict_insert(lin_dict, g_strdup("Folder"),
                             ghb_boolean_value_new(TRUE));
-            ghb_dict_insert(lin_dict, g_strdup("Type"), 
+            ghb_dict_insert(lin_dict, g_strdup("Type"),
                             ghb_int_value_new(0));
             parse_preset_array(mval, lval);
         }
         else
         { // Normal preset
-            ghb_dict_insert(lin_dict, g_strdup("Type"), 
+            ghb_dict_insert(lin_dict, g_strdup("Type"),
                             ghb_int_value_new(0));
             parse_preset_dict(mac_dict, lin_dict);
         }

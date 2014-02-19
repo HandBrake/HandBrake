@@ -50,7 +50,7 @@ static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
 #endif
 
     return font;
-} 
+}
 
 #if !GTK_CHECK_VERSION(3, 0, 0)
 #define gtk_widget_override_font gtk_widget_modify_font

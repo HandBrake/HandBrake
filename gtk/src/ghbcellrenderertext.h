@@ -47,7 +47,7 @@ struct _GhbCellRendererText
   gdouble font_scale;
   PangoColor foreground;
   PangoColor background;
-  
+
   PangoAttrList *extra_attrs;
 
   PangoUnderline underline_style;
@@ -60,14 +60,14 @@ struct _GhbCellRendererText
   guint editable  : 1;
 
   guint scale_set : 1;
-  
+
   guint foreground_set : 1;
   guint background_set : 1;
-  
+
   guint underline_set : 1;
 
   guint rise_set : 1;
-  
+
   guint strikethrough_set : 1;
 
   guint editable_set : 1;

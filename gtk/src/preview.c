@@ -2,14 +2,14 @@
 /*
  * preview.c
  * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
- * 
+ *
  * preview.c is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
- * 
+ *
  */
 #include <unistd.h>
 #include <glib.h>
@@ -72,11 +72,11 @@ struct preview_s
 
 #if defined(_ENABLE_GST)
 G_MODULE_EXPORT gboolean live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data);
-static GstBusSyncReply create_window(GstBus *bus, GstMessage *msg, 
+static GstBusSyncReply create_window(GstBus *bus, GstMessage *msg,
                 gpointer data);
 #endif
 
-G_MODULE_EXPORT gboolean preview_expose_cb(GtkWidget *widget, GdkEventExpose *event, 
+G_MODULE_EXPORT gboolean preview_expose_cb(GtkWidget *widget, GdkEventExpose *event,
                 signal_user_data_t *ud);
 
 void
@@ -169,7 +169,7 @@ ghb_preview_init(signal_user_data_t *ud)
     ud->preview->live_id = -1;
     widget = GHB_WIDGET (ud->builder, "preview_button_image");
     gtk_widget_get_size_request(widget, &ud->preview->button_width, &ud->preview->button_height);
-    
+
 #if defined(_ENABLE_GST)
     GstBus *bus;
     GstElement *xover;
@@ -214,7 +214,7 @@ ghb_preview_init(signal_user_data_t *ud)
     {
 
         g_object_set(G_OBJECT(ud->preview->play), "video-sink", xover, NULL);
-        g_object_set(ud->preview->play, "subtitle-font-desc", 
+        g_object_set(ud->preview->play, "subtitle-font-desc",
                     "sans bold 20", NULL);
 
         bus = gst_pipeline_get_bus(GST_PIPELINE(ud->preview->play));
@@ -311,7 +311,7 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
         else
             height = gst_util_uint64_scale_int(width, den, num);
 
-        if (ghb_settings_get_boolean(ud->settings, "reduce_hd_preview"))
+        if (ghb_settings_get_boolean(ud->prefs, "reduce_hd_preview"))
         {
             GdkScreen *ss;
             gint s_w, s_h;
@@ -331,7 +331,7 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
                 width = gst_util_uint64_scale_int(height, num, den);
             }
         }
-        
+
         if (width != ud->preview->width || height != ud->preview->height)
         {
             gtk_widget_set_size_request(ud->preview->view, width, height);
@@ -389,7 +389,7 @@ get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
     if (info_arr == NULL)
         return NULL;
 
-    for (ii = 0; ii < info_arr->n_values; ++ii) 
+    for (ii = 0; ii < info_arr->n_values; ++ii)
     {
         GObject *info_obj;
         GValue *val;
@@ -397,7 +397,7 @@ get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
         val = g_value_array_get_nth(info_arr, ii);
         //val = &((GValue*)info_arr->values)[ii];
         info_obj = g_value_get_object(val);
-        if (info_obj) 
+        if (info_obj)
         {
             GParamSpec *pspec;
             GEnumValue *value;
@@ -408,10 +408,10 @@ get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
                         G_OBJECT_GET_CLASS (info_obj), "type");
             value = g_enum_get_value(
                         G_PARAM_SPEC_ENUM (pspec)->enum_class, type);
-            if (value) 
+            if (value)
             {
                 if (g_ascii_strcasecmp (value->value_nick, typestr) == 0 ||
-                    g_ascii_strcasecmp (value->value_name, typestr) == 0) 
+                    g_ascii_strcasecmp (value->value_name, typestr) == 0)
                 {
                     ret = g_list_prepend (ret, g_object_ref (info_obj));
                 }
@@ -785,7 +785,7 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
 
     ud->preview->live_id = -1;
     prog = GHB_WIDGET(ud->builder, "live_encode_progress");
-    if (success && 
+    if (success &&
         ud->preview->encode_frame == ud->preview->frame)
     {
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(prog), "Done");
@@ -947,14 +947,14 @@ ghb_set_preview_image(signal_user_data_t *ud)
     if (ud->preview->pix != NULL)
         g_object_unref(ud->preview->pix);
 
-    ud->preview->pix = 
-        ghb_get_preview_image(titleindex, ud->preview->frame, 
+    ud->preview->pix =
+        ghb_get_preview_image(titleindex, ud->preview->frame,
                                 ud, &width, &height);
     if (ud->preview->pix == NULL) return;
     preview_width = gdk_pixbuf_get_width(ud->preview->pix);
     preview_height = gdk_pixbuf_get_height(ud->preview->pix);
     widget = GHB_WIDGET (ud->builder, "preview_image");
-    if (preview_width != ud->preview->width || 
+    if (preview_width != ud->preview->width ||
         preview_height != ud->preview->height)
     {
         gtk_widget_set_size_request(widget, preview_width, preview_height);
@@ -967,7 +967,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
     widget = GHB_WIDGET (ud->builder, "preview_dims");
     gtk_label_set_text(GTK_LABEL(widget), text);
     g_free(text);
-    
+
     g_debug("preview %d x %d", preview_width, preview_height);
     target_height = MIN(ud->preview->button_height, 200);
     height = target_height;
@@ -981,7 +981,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
     if ((height >= 16) && (width >= 16))
     {
         GdkPixbuf *scaled_preview;
-        scaled_preview = gdk_pixbuf_scale_simple (ud->preview->pix, width, 
+        scaled_preview = gdk_pixbuf_scale_simple (ud->preview->pix, width,
                                                 height, GDK_INTERP_NEAREST);
         if (scaled_preview != NULL)
         {
@@ -1048,8 +1048,8 @@ delayed_expose_cb(signal_user_data_t *ud)
 G_MODULE_EXPORT gboolean
 position_overlay_cb(
     GtkWidget *overlay,
-    GtkWidget *widget, 
-    GdkRectangle *rect, 
+    GtkWidget *widget,
+    GdkRectangle *rect,
     signal_user_data_t *ud)
 {
     GtkRequisition min_size, size;
@@ -1066,8 +1066,8 @@ position_overlay_cb(
 
 G_MODULE_EXPORT gboolean
 preview_expose_cb(
-    GtkWidget *widget, 
-    GdkEventExpose *event, 
+    GtkWidget *widget,
+    GdkEventExpose *event,
     signal_user_data_t *ud)
 {
 #if defined(_ENABLE_GST)
@@ -1139,24 +1139,11 @@ preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, si
         g_debug("nothing to do");
         return;
     }
-    g_debug("prev allocate %d x %d", ud->preview->button_width, 
+    g_debug("prev allocate %d x %d", ud->preview->button_width,
             ud->preview->button_height);
     ud->preview->button_width = allocation->width;
     ud->preview->button_height = allocation->height;
     ghb_set_preview_image(ud);
-}
-
-static void
-set_visible(GtkWidget *widget, gboolean visible)
-{
-    if (visible)
-    {
-        gtk_widget_show_now(widget);
-    }
-    else
-    {
-        gtk_widget_hide(widget);
-    }
 }
 
 void
@@ -1166,22 +1153,22 @@ ghb_preview_set_visible(signal_user_data_t *ud)
     GtkWidget *widget;
     gboolean settings_active;
 
-    settings_active = ghb_settings_get_boolean(ud->settings, "show_picture");
-    widget = GHB_WIDGET (ud->builder, "preview_window");
+    settings_active = ghb_settings_get_boolean(ud->globals, "show_picture");
+    widget = GHB_WIDGET(ud->builder, "preview_window");
     titleindex = ghb_settings_combo_int(ud->settings, "title");
     if (settings_active && titleindex >= 0)
     {
         gint x, y;
-        x = ghb_settings_get_int(ud->settings, "preview_x");
-        y = ghb_settings_get_int(ud->settings, "preview_y");
+        x = ghb_settings_get_int(ud->prefs, "preview_x");
+        y = ghb_settings_get_int(ud->prefs, "preview_y");
         if (x >= 0 && y >= 0)
             gtk_window_move(GTK_WINDOW(widget), x, y);
-        set_visible(widget, 
-                    ghb_settings_get_boolean(ud->settings, "show_preview"));
+        gtk_widget_set_visible(widget,
+                    ghb_settings_get_boolean(ud->prefs, "show_preview"));
     }
     else
     {
-        set_visible(widget, FALSE);
+        gtk_widget_set_visible(widget, FALSE);
     }
 }
 
@@ -1189,11 +1176,11 @@ G_MODULE_EXPORT void
 preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     g_debug("preview_button_clicked_cb()");
-    ghb_widget_to_setting (ud->settings, xwidget);
+    ghb_widget_to_setting (ud->prefs, xwidget);
     ghb_preview_set_visible(ud);
     ghb_check_dependency(ud, xwidget, NULL);
     const gchar *name = ghb_get_setting_key(xwidget);
-    ghb_pref_save(ud->settings, name);
+    ghb_pref_save(ud->prefs, name);
 }
 
 G_MODULE_EXPORT void
@@ -1204,17 +1191,17 @@ picture_settings_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gint x, y;
 
     g_debug("picture_settings_clicked_cb()");
-    ghb_widget_to_setting (ud->settings, xwidget);
+    ghb_widget_to_setting(ud->globals, xwidget);
 
-    hide_settings = ghb_settings_get_boolean(ud->settings, "hide_settings");
+    hide_settings = ghb_settings_get_boolean(ud->globals, "hide_settings");
 
-    active = ghb_settings_get_boolean(ud->settings, "show_picture");
+    active = ghb_settings_get_boolean(ud->globals, "show_picture");
     widget = GHB_WIDGET (ud->builder, "settings_window");
-    x = ghb_settings_get_int(ud->settings, "settings_x");
-    y = ghb_settings_get_int(ud->settings, "settings_y");
+    x = ghb_settings_get_int(ud->prefs, "settings_x");
+    y = ghb_settings_get_int(ud->prefs, "settings_y");
     if (x >= 0 && y >= 0)
         gtk_window_move(GTK_WINDOW(widget), x, y);
-    set_visible(widget, active && !hide_settings);
+    gtk_widget_set_visible(widget, active && !hide_settings);
     ghb_preview_set_visible(ud);
 }
 
@@ -1247,10 +1234,10 @@ fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
     GtkWindow *window;
 
     g_debug("fullscreen_clicked_cb()");
-    ghb_widget_to_setting (ud->settings, toggle);
+    ghb_widget_to_setting (ud->prefs, toggle);
     ghb_check_dependency(ud, toggle, NULL);
     const gchar *name = ghb_get_setting_key(toggle);
-    ghb_pref_save(ud->settings, name);
+    ghb_pref_save(ud->prefs, name);
 
     window = GTK_WINDOW(GHB_WIDGET (ud->builder, "preview_window"));
     active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle));
@@ -1280,15 +1267,15 @@ picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     GtkWidget *window;
 
     g_debug("picture_settings_alt2_clicked_cb()");
-    ghb_widget_to_setting (ud->settings, xwidget);
-    active = ghb_settings_get_boolean(ud->settings, "hide_settings");
+    ghb_widget_to_setting(ud->globals, xwidget);
+    active = ghb_settings_get_boolean(ud->globals, "hide_settings");
 
-    toggle = GHB_WIDGET (ud->builder, "hide_settings");
+    toggle = GHB_WIDGET(ud->builder, "hide_settings");
     window = GHB_WIDGET(ud->builder, "settings_window");
     if (!active)
     {
         gtk_button_set_label(GTK_BUTTON(toggle), _("Hide Settings"));
-        gtk_widget_set_tooltip_text(toggle, 
+        gtk_widget_set_tooltip_text(toggle,
             _("Hide the picture settings window while "
             "leaving the preview visible."));
         gtk_widget_show(window);
@@ -1315,24 +1302,24 @@ preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 G_MODULE_EXPORT gboolean
 preview_window_delete_cb(
-    GtkWidget *widget, 
-    GdkEvent *event, 
+    GtkWidget *widget,
+    GdkEvent *event,
     signal_user_data_t *ud)
 {
     live_preview_stop(ud);
-    widget = GHB_WIDGET (ud->builder, "show_picture");
+    widget = GHB_WIDGET(ud->builder, "show_picture");
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
     return TRUE;
 }
 
 G_MODULE_EXPORT gboolean
 settings_window_delete_cb(
-    GtkWidget *widget, 
-    GdkEvent *event, 
+    GtkWidget *widget,
+    GdkEvent *event,
     signal_user_data_t *ud)
 {
     live_preview_stop(ud);
-    widget = GHB_WIDGET (ud->builder, "show_picture");
+    widget = GHB_WIDGET(ud->builder, "show_picture");
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
 
     return TRUE;
@@ -1343,10 +1330,10 @@ preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("preview_duration_changed_cb ()");
     ghb_live_reset(ud);
-    ghb_widget_to_setting (ud->settings, widget);
+    ghb_widget_to_setting (ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->settings, name);
+    ghb_pref_save(ud->prefs, name);
 }
 
 static guint hud_timeout_id = 0;
@@ -1546,7 +1533,7 @@ preview_hud_size_alloc_cb(
     //g_message("preview_hud_size_alloc_cb()");
     if (gtk_widget_get_visible(widget) && allocation->height > 50)
     {
-        shape = ghb_curved_rect_mask(allocation->width, 
+        shape = ghb_curved_rect_mask(allocation->width,
                                     allocation->height, allocation->height/4);
         if (shape != NULL)
         {
@@ -1573,10 +1560,10 @@ preview_configure_cb(
     if (gtk_widget_get_visible(widget))
     {
         gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
-        ghb_settings_set_int(ud->settings, "preview_x", x);
-        ghb_settings_set_int(ud->settings, "preview_y", y);
-        ghb_pref_set(ud->settings, "preview_x");
-        ghb_pref_set(ud->settings, "preview_y");
+        ghb_settings_set_int(ud->prefs, "preview_x", x);
+        ghb_settings_set_int(ud->prefs, "preview_y", y);
+        ghb_pref_set(ud->prefs, "preview_x");
+        ghb_pref_set(ud->prefs, "preview_y");
         ghb_prefs_store();
     }
     return FALSE;
@@ -1594,10 +1581,10 @@ settings_configure_cb(
     if (gtk_widget_get_visible(widget))
     {
         gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
-        ghb_settings_set_int(ud->settings, "settings_x", x);
-        ghb_settings_set_int(ud->settings, "settings_y", y);
-        ghb_pref_set(ud->settings, "settings_x");
-        ghb_pref_set(ud->settings, "settings_y");
+        ghb_settings_set_int(ud->prefs, "settings_x", x);
+        ghb_settings_set_int(ud->prefs, "settings_y", y);
+        ghb_pref_set(ud->prefs, "settings_x");
+        ghb_pref_set(ud->prefs, "settings_y");
         ghb_prefs_store();
     }
     return FALSE;

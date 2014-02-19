@@ -103,7 +103,7 @@ enum {
   PROP_WIDTH_CHARS,
   PROP_WRAP_WIDTH,
   PROP_ALIGN,
-  
+
   /* Style args */
   PROP_BACKGROUND,
   PROP_FOREGROUND,
@@ -126,7 +126,7 @@ enum {
   PROP_LANGUAGE,
   PROP_ELLIPSIZE,
   PROP_WRAP_MODE,
-  
+
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
   PROP_FOREGROUND_SET,
@@ -160,20 +160,20 @@ struct _GhbCellRendererTextPrivate
   guint markup_set : 1;
   guint ellipsize_set : 1;
   guint align_set : 1;
-  
+
   gulong focus_out_id;
   PangoLanguage *language;
   PangoEllipsizeMode ellipsize;
   PangoWrapMode wrap_mode;
   PangoAlignment align;
-  
+
   gulong populate_popup_id;
   gulong entry_menu_popdown_timeout;
   gboolean in_entry_menu;
-  
+
   gint width_chars;
   gint wrap_width;
-  
+
   GtkWidget *entry;
 };
 
@@ -208,7 +208,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
 
   object_class->finalize = ghb_cell_renderer_text_finalize;
-  
+
   object_class->get_property = ghb_cell_renderer_text_get_property;
   object_class->set_property = ghb_cell_renderer_text_set_property;
 
@@ -223,7 +223,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                         P_("Text to render"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
-  
+
   g_object_class_install_property (object_class,
                                    PROP_MARKUP,
                                    g_param_spec_string ("markup",
@@ -248,7 +248,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
-  
+
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND,
                                    g_param_spec_string ("background",
@@ -263,7 +263,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                        P_("Background color"),
                                                        P_("Background color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));  
+                                                       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND,
@@ -306,7 +306,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                        PANGO_TYPE_FONT_DESCRIPTION,
                                                        GTK_PARAM_READWRITE));
 
-  
+
   g_object_class_install_property (object_class,
                                    PROP_FAMILY,
                                    g_param_spec_string ("family",
@@ -332,7 +332,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                       PANGO_TYPE_VARIANT,
                                                       PANGO_VARIANT_NORMAL,
                                                       GTK_PARAM_READWRITE));
-  
+
   g_object_class_install_property (object_class,
                                    PROP_WEIGHT,
                                    g_param_spec_int ("weight",
@@ -351,7 +351,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                       PANGO_TYPE_STRETCH,
                                                       PANGO_STRETCH_NORMAL,
                                                       GTK_PARAM_READWRITE));
-  
+
   g_object_class_install_property (object_class,
                                    PROP_SIZE,
                                    g_param_spec_int ("size",
@@ -370,7 +370,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                         0.0,
                                                         G_MAXDOUBLE,
                                                         0.0,
-                                                        GTK_PARAM_READWRITE));  
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
                                    PROP_SCALE,
@@ -381,7 +381,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                         G_MAXDOUBLE,
                                                         1.0,
                                                         GTK_PARAM_READWRITE));
-  
+
   g_object_class_install_property (object_class,
                                    PROP_RISE,
                                    g_param_spec_int ("rise",
@@ -401,7 +401,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                          P_("Whether to strike through the text"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-  
+
   g_object_class_install_property (object_class,
                                    PROP_UNDERLINE,
                                    g_param_spec_enum ("underline",
@@ -425,8 +425,8 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   /**
    * GhbCellRendererText:ellipsize:
    *
-   * Specifies the preferred place to ellipsize the string, if the cell renderer 
-   * does not have enough room to display the entire string. Setting it to 
+   * Specifies the preferred place to ellipsize the string, if the cell renderer
+   * does not have enough room to display the entire string. Setting it to
    * %PANGO_ELLIPSIZE_NONE turns off ellipsizing. See the wrap-width property
    * for another way of making the text fit into a given width.
    *
@@ -445,11 +445,11 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
 
   /**
    * GhbCellRendererText:width-chars:
-   * 
+   *
    * The desired width of the cell, in characters. If this property is set to
    * -1, the width will be calculated automatically, otherwise the cell will
    * request either 3 characters or the property value, whichever is greater.
-   * 
+   *
    * Since: 2.6
    **/
   g_object_class_install_property (object_class,
@@ -461,12 +461,12 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                      G_MAXINT,
                                                      -1,
                                                      GTK_PARAM_READWRITE));
-  
+
   /**
    * GhbCellRendererText:wrap-mode:
    *
-   * Specifies how to break the string into multiple lines, if the cell 
-   * renderer does not have enough room to display the entire string. 
+   * Specifies how to break the string into multiple lines, if the cell
+   * renderer does not have enough room to display the entire string.
    * This property has no effect unless the wrap-width property is set.
    *
    * Since: 2.8
@@ -485,7 +485,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   /**
    * GhbCellRendererText:wrap-width:
    *
-   * Specifies the width at which the text is wrapped. The wrap-mode property can 
+   * Specifies the width at which the text is wrapped. The wrap-mode property can
    * be used to influence at what character positions the line breaks can be placed.
    * Setting wrap-width to -1 turns wrapping off.
    *
@@ -504,10 +504,10 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   /**
    * GhbCellRendererText:alignment:
    *
-   * Specifies how to align the lines of text with respect to each other. 
+   * Specifies how to align the lines of text with respect to each other.
    *
-   * Note that this property describes how to align the lines of text in 
-   * case there are several of them. The "xalign" property of #GtkCellRenderer, 
+   * Note that this property describes how to align the lines of text in
+   * case there are several of them. The "xalign" property of #GtkCellRenderer,
    * on the other hand, sets the horizontal alignment of the whole text.
    *
    * Since: 2.10
@@ -520,7 +520,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                               PANGO_TYPE_ALIGNMENT,
                               PANGO_ALIGN_LEFT,
                               GTK_PARAM_READWRITE));
-  
+
   /* Style props are set or not */
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
@@ -532,14 +532,14 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET,
                 P_("Foreground set"),
                 P_("Whether this tag affects the foreground color"));
-  
+
   ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET,
                 P_("Editability set"),
                 P_("Whether this tag affects text editability"));
 
   ADD_SET_PROP ("family-set", PROP_FAMILY_SET,
                 P_("Font family set"),
-                P_("Whether this tag affects the font family"));  
+                P_("Whether this tag affects the font family"));
 
   ADD_SET_PROP ("style-set", PROP_STYLE_SET,
                 P_("Font style set"),
@@ -564,7 +564,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   ADD_SET_PROP ("scale-set", PROP_SCALE_SET,
                 P_("Font scale set"),
                 P_("Whether this tag scales the font size by a factor"));
-  
+
   ADD_SET_PROP ("rise-set", PROP_RISE_SET,
                 P_("Rise set"),
                 P_("Whether this tag affects the rise"));
@@ -695,11 +695,11 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_BACKGROUND_GDK:
       {
         GdkColor color;
-        
+
         color.red = celltext->background.red;
         color.green = celltext->background.green;
         color.blue = celltext->background.blue;
-        
+
         g_value_set_boxed (value, &color);
       }
       break;
@@ -707,11 +707,11 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_FOREGROUND_GDK:
       {
         GdkColor color;
-        
+
         color.red = celltext->foreground.red;
         color.green = celltext->foreground.green;
         color.blue = celltext->foreground.blue;
-        
+
         g_value_set_boxed (value, &color);
       }
       break;
@@ -719,7 +719,7 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_FONT:
         g_value_take_string (value, pango_font_description_to_string (celltext->font));
       break;
-      
+
     case PROP_FONT_DESC:
       g_value_set_boxed (value, celltext->font);
       break;
@@ -755,7 +755,7 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_SCALE:
       g_value_set_double (value, celltext->font_scale);
       break;
-      
+
     case PROP_EDITABLE:
       g_value_set_boolean (value, celltext->editable);
       break;
@@ -770,7 +770,7 @@ ghb_cell_renderer_text_get_property (GObject        *object,
 
     case PROP_RISE:
       g_value_set_int (value, celltext->rise);
-      break;  
+      break;
 
     case PROP_LANGUAGE:
       g_value_set_static_string (value, pango_language_to_string (priv->language));
@@ -779,7 +779,7 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_ELLIPSIZE:
       g_value_set_enum (value, priv->ellipsize);
       break;
-      
+
     case PROP_WRAP_MODE:
       g_value_set_enum (value, priv->wrap_mode);
       break;
@@ -787,7 +787,7 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_WRAP_WIDTH:
       g_value_set_int (value, priv->wrap_width);
       break;
-      
+
     case PROP_ALIGN:
       g_value_set_enum (value, priv->align);
       break;
@@ -809,14 +809,14 @@ ghb_cell_renderer_text_get_property (GObject        *object,
       {
     PangoFontMask mask = get_property_font_set_mask (param_id);
     g_value_set_boolean (value, (pango_font_description_get_set_fields (celltext->font) & mask) != 0);
-    
+
     break;
       }
 
     case PROP_SCALE_SET:
       g_value_set_boolean (value, celltext->scale_set);
       break;
-      
+
     case PROP_EDITABLE_SET:
       g_value_set_boolean (value, celltext->editable_set);
       break;
@@ -844,10 +844,10 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_ALIGN_SET:
       g_value_set_boolean (value, priv->align_set);
       break;
-      
+
     case PROP_WIDTH_CHARS:
       g_value_set_int (value, priv->width_chars);
-      break;  
+      break;
 
     case PROP_BACKGROUND:
     case PROP_FOREGROUND:
@@ -870,7 +870,7 @@ set_bg_color (GhbCellRendererText *celltext,
           celltext->background_set = TRUE;
           g_object_notify (G_OBJECT (celltext), "background-set");
         }
-      
+
       celltext->background.red = color->red;
       celltext->background.green = color->green;
       celltext->background.blue = color->blue;
@@ -897,7 +897,7 @@ set_fg_color (GhbCellRendererText *celltext,
           celltext->foreground_set = TRUE;
           g_object_notify (G_OBJECT (celltext), "foreground-set");
         }
-      
+
       celltext->foreground.red = color->red;
       celltext->foreground.green = color->green;
       celltext->foreground.blue = color->blue;
@@ -917,7 +917,7 @@ set_font_desc_fields (PangoFontDescription *desc,
               PangoFontMask         to_set)
 {
   PangoFontMask changed_mask = 0;
-  
+
   if (to_set & PANGO_FONT_MASK_FAMILY)
     {
       const char *family = pango_font_description_get_family (desc);
@@ -945,7 +945,7 @@ set_font_desc_fields (PangoFontDescription *desc,
       size = 10 * PANGO_SCALE;
       changed_mask |= PANGO_FONT_MASK_SIZE;
     }
-      
+
       pango_font_description_set_size (desc, size);
     }
 
@@ -995,7 +995,7 @@ set_font_description (GhbCellRendererText  *celltext,
   GObject *object = G_OBJECT (celltext);
   PangoFontDescription *new_font_desc;
   PangoFontMask old_mask, new_mask, changed_mask, set_changed_mask;
-  
+
   if (font_desc)
     new_font_desc = pango_font_description_copy (font_desc);
   else
@@ -1009,12 +1009,12 @@ set_font_description (GhbCellRendererText  *celltext,
 
   pango_font_description_free (celltext->font);
   celltext->font = new_font_desc;
-  
+
   g_object_freeze_notify (object);
 
   g_object_notify (object, "font-desc");
   g_object_notify (object, "font");
-  
+
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
     g_object_notify (object, "family");
   if (changed_mask & PANGO_FONT_MASK_STYLE)
@@ -1032,7 +1032,7 @@ set_font_description (GhbCellRendererText  *celltext,
     }
 
   notify_set_changed (object, set_changed_mask);
-  
+
   g_object_thaw_notify (object);
 }
 
@@ -1108,7 +1108,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
     case PROP_SINGLE_PARAGRAPH_MODE:
       priv->single_paragraph = g_value_get_boolean (value);
       break;
-      
+
     case PROP_BACKGROUND:
       {
         GdkColor color;
@@ -1123,7 +1123,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
         g_object_notify (object, "background-gdk");
       }
       break;
-      
+
     case PROP_FOREGROUND:
       {
         GdkColor color;
@@ -1162,7 +1162,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
         set_font_description (celltext, font_desc);
 
     pango_font_description_free (font_desc);
-        
+
     if (celltext->fixed_height_rows != -1)
       celltext->calc_fixed_height = TRUE;
       }
@@ -1170,7 +1170,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       set_font_description (celltext, g_value_get_boxed (value));
-      
+
       if (celltext->fixed_height_rows != -1)
     celltext->calc_fixed_height = TRUE;
       break;
@@ -1184,7 +1184,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
     case PROP_SIZE_POINTS:
       {
     PangoFontMask old_set_mask = pango_font_description_get_set_fields (celltext->font);
-    
+
     switch (param_id)
       {
       case PROP_FAMILY:
@@ -1218,17 +1218,17 @@ ghb_cell_renderer_text_set_property (GObject      *object,
         g_object_notify (object, "size");
         break;
       }
-    
+
     if (celltext->fixed_height_rows != -1)
       celltext->calc_fixed_height = TRUE;
-    
+
     notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (celltext->font));
     g_object_notify (object, "font-desc");
     g_object_notify (object, "font");
 
     break;
       }
-      
+
     case PROP_SCALE:
       celltext->font_scale = g_value_get_double (value);
       celltext->scale_set = TRUE;
@@ -1236,7 +1236,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
     celltext->calc_fixed_height = TRUE;
       g_object_notify (object, "scale-set");
       break;
-      
+
     case PROP_EDITABLE:
       celltext->editable = g_value_get_boolean (value);
       celltext->editable_set = TRUE;
@@ -1257,7 +1257,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
       celltext->underline_style = g_value_get_enum (value);
       celltext->underline_set = TRUE;
       g_object_notify (object, "underline-set");
-            
+
       break;
 
     case PROP_RISE:
@@ -1266,7 +1266,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (object, "rise-set");
       if (celltext->fixed_height_rows != -1)
     celltext->calc_fixed_height = TRUE;
-      break;  
+      break;
 
     case PROP_LANGUAGE:
       priv->language_set = TRUE;
@@ -1281,18 +1281,18 @@ ghb_cell_renderer_text_set_property (GObject      *object,
       priv->ellipsize_set = TRUE;
       g_object_notify (object, "ellipsize-set");
       break;
-      
+
     case PROP_WRAP_MODE:
       priv->wrap_mode = g_value_get_enum (value);
       break;
-      
+
     case PROP_WRAP_WIDTH:
       priv->wrap_width = g_value_get_int (value);
       break;
-            
+
     case PROP_WIDTH_CHARS:
       priv->width_chars = g_value_get_int (value);
-      break;  
+      break;
 
     case PROP_ALIGN:
       priv->align = g_value_get_enum (value);
@@ -1322,7 +1322,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
       else
     {
       PangoFontMask changed_mask;
-      
+
       changed_mask = set_font_desc_fields (celltext->font,
                            get_property_font_set_mask (param_id));
       notify_fields_changed (G_OBJECT (celltext), changed_mask);
@@ -1332,7 +1332,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
     case PROP_SCALE_SET:
       celltext->scale_set = g_value_get_boolean (value);
       break;
-      
+
     case PROP_EDITABLE_SET:
       celltext->editable_set = g_value_get_boolean (value);
       break;
@@ -1360,7 +1360,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
     case PROP_ALIGN_SET:
       priv->align_set = g_value_get_boolean (value);
       break;
-      
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -1369,7 +1369,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
 
 /**
  * ghb_cell_renderer_text_new:
- * 
+ *
  * Creates a new #GhbCellRendererText. Adjust how text is drawn using
  * object properties. Object properties can be
  * set globally (with g_object_set()). Also, with #GtkTreeViewColumn,
@@ -1377,7 +1377,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
  * you can bind the "text" property on the cell renderer to a string
  * value in the model, thus rendering a different string in each row
  * of the #GtkTreeView
- * 
+ *
  * Return value: the new cell renderer
  **/
 GtkCellRenderer *
@@ -1392,7 +1392,7 @@ add_attr (PangoAttrList  *attr_list,
 {
   attr->start_index = 0;
   attr->end_index = G_MAXINT;
-  
+
   pango_attr_list_insert (attr_list, attr);
 }
 
@@ -1408,7 +1408,7 @@ get_layout (GhbCellRendererText *celltext,
   GhbCellRendererTextPrivate *priv;
 
   priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (celltext);
-  
+
   layout = gtk_widget_create_pango_layout (widget, celltext->text);
 
   if (celltext->extra_attrs)
@@ -1421,18 +1421,18 @@ get_layout (GhbCellRendererText *celltext,
   if (will_render)
     {
       /* Add options that affect appearance but not size */
-      
+
       /* note that background doesn't go here, since it affects
        * background_area not the PangoLayout area
        */
-      
+
       if (celltext->foreground_set
       && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
         {
           PangoColor color;
 
           color = celltext->foreground;
-          
+
           add_attr (attr_list,
                     pango_attr_foreground_new (color.red, color.green, color.blue));
         }
@@ -1447,7 +1447,7 @@ get_layout (GhbCellRendererText *celltext,
   if (celltext->scale_set &&
       celltext->font_scale != 1.0)
     add_attr (attr_list, pango_attr_scale_new (celltext->font_scale));
-  
+
   if (celltext->underline_set)
     uline = celltext->underline_style;
   else
@@ -1455,7 +1455,7 @@ get_layout (GhbCellRendererText *celltext,
 
   if (priv->language_set)
     add_attr (attr_list, pango_attr_language_new (priv->language));
-  
+
   if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT)
     {
       switch (uline)
@@ -1512,7 +1512,7 @@ get_layout (GhbCellRendererText *celltext,
   pango_layout_set_attributes (layout, attr_list);
 
   pango_attr_list_unref (attr_list);
-  
+
   return layout;
 }
 
@@ -1567,7 +1567,7 @@ get_size (GtkCellRenderer *cell,
       gtk_cell_renderer_set_fixed_size (cell,
                     cell_width, 2*cell_ypad +
                     celltext->fixed_height_rows * PANGO_PIXELS (row_height));
-      
+
       if (height)
     {
           *height = cell_height;
@@ -1577,7 +1577,7 @@ get_size (GtkCellRenderer *cell,
       if (width == NULL)
     return;
     }
-  
+
   if (layout)
     g_object_ref (layout);
   else
@@ -1594,7 +1594,7 @@ get_size (GtkCellRenderer *cell,
     {
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         *x_offset = (1.0 - cell_xalign) * (cell_area->width - (2 * cell_xpad));
-      else 
+      else
         *x_offset = cell_xalign * (cell_area->width - (2 * cell_xpad));
 
       if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
@@ -1661,7 +1661,7 @@ static void ghb_cell_renderer_text_render(
     gboolean sensitive;
 
     sensitive = gtk_cell_renderer_get_sensitive(cell);
-    if (!sensitive) 
+    if (!sensitive)
     {
       state = GTK_STATE_INSENSITIVE;
     }
@@ -1688,7 +1688,7 @@ static void ghb_cell_renderer_text_render(
 
     gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
 
-    if (celltext->background_set && 
+    if (celltext->background_set &&
       (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
         gdk_cairo_rectangle (cr, background_area);
@@ -1700,7 +1700,7 @@ static void ghb_cell_renderer_text_render(
     }
 
     if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
-        pango_layout_set_width (layout, 
+        pango_layout_set_width (layout,
                 (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
     else if (priv->wrap_width == -1)
         pango_layout_set_width (layout, -1);
@@ -1738,7 +1738,7 @@ static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
     gint xpad, ypad;
 
     sensitive = gtk_cell_renderer_get_sensitive(cell);
-    if (!sensitive) 
+    if (!sensitive)
     {
       state = GTK_STATE_INSENSITIVE;
     }
@@ -1764,7 +1764,7 @@ static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
 
     gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
 
-    if (celltext->background_set && 
+    if (celltext->background_set &&
       (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
         cairo_t *cr = gdk_cairo_create (window);
@@ -1781,12 +1781,12 @@ static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
                 celltext->background.green / 65535.,
                 celltext->background.blue / 65535.);
         cairo_fill (cr);
-      
+
         cairo_destroy (cr);
     }
 
     if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
-        pango_layout_set_width (layout, 
+        pango_layout_set_width (layout,
                 (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
     else if (priv->wrap_width == -1)
         pango_layout_set_width (layout, -1);
@@ -1850,7 +1850,7 @@ ghb_cell_renderer_text_editing_done (GtkCellEditable *entry,
 
   gboolean editing_canceled;
   g_object_get(entry, "editing-canceled", &editing_canceled, NULL);
-  gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), 
+  gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data),
                   editing_canceled);
   if (editing_canceled)
     return;
@@ -1965,9 +1965,9 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 
     g_object_set_data_full (G_OBJECT (priv->entry),
             I_(GHB_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
-  
+
     gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
-  
+
 #if 0
     GtkRequisition min_size, size;
 
@@ -2023,7 +2023,7 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
     priv->populate_popup_id = g_signal_connect (priv->entry, "populate_popup",
                       G_CALLBACK (ghb_cell_renderer_text_populate_popup),
                       celltext);
- 
+
     gtk_widget_show (priv->entry);
 
     return GTK_CELL_EDITABLE (priv->entry);
@@ -2033,7 +2033,7 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
  * ghb_cell_renderer_text_set_fixed_height_from_font:
  * @renderer: A #GhbCellRendererText
  * @number_of_rows: Number of rows of text each cell renderer is allocated, or -1
- * 
+ *
  * Sets the height of a renderer to explicitly be determined by the "font" and
  * "y_pad" property set on it.  Further changes in these properties do not
  * affect the height, so they must be accompanied by a subsequent call to this

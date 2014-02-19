@@ -3,17 +3,17 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
- 
+
 #if !defined(_HBBACKEND_H_)
 #define _HBBACKEND_H_
 
@@ -71,8 +71,8 @@ typedef struct
 
 const gchar* ghb_version(void);
 void ghb_vquality_range(
-    signal_user_data_t *ud, 
-    gdouble *min, 
+    signal_user_data_t *ud,
+    gdouble *min,
     gdouble *max,
     gdouble *step,
     gdouble *page,
@@ -104,11 +104,13 @@ void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, gu
 void ghb_backend_scan_stop();
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 hb_title_t* ghb_get_title_info(gint titleindex);
+hb_list_t * ghb_get_title_list();
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 void ghb_set_scale_settings(GValue *settings, gint mode);
 GValue* ghb_get_chapters(gint titleindex);
-void ghb_get_chapter_duration(gint ti, gint ii, gint64 *dur);
+gint64 ghb_get_chapter_duration(gint ti, gint chap);
+gint64 ghb_get_chapter_start(gint ti, gint chap);
 void ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
 gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
 gboolean ghb_ac3_in_audio_list(const GValue *audio_list);
@@ -166,5 +168,6 @@ void ghb_audio_samplerate_opts_set(GtkComboBox *combo);
 
 int ghb_lookup_audio_lang(const GValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
+void ghb_update_display_aspect_label(signal_user_data_t *ud);
 
 #endif // _HBBACKEND_H_

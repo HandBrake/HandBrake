@@ -76,8 +76,8 @@ find_file(GList *list, const gchar *name)
 
 static const gchar*
 lookup_attr_value(
-    const gchar *name, 
-    const gchar **attr_names, 
+    const gchar *name,
+    const gchar **attr_names,
     const gchar **attr_values)
 {
     gint ii;
@@ -90,7 +90,7 @@ lookup_attr_value(
     }
     return NULL;
 }
- 
+
 static GValue*
 read_string_from_file(const gchar *filename)
 {
@@ -116,15 +116,15 @@ read_string_from_file(const gchar *filename)
 
 static void
 start_element(
-    GMarkupParseContext *ctx, 
-    const gchar *tag, 
+    GMarkupParseContext *ctx,
+    const gchar *tag,
     const gchar **attr_names,
     const gchar **attr_values,
     gpointer ud,
     GError **error)
 {
     parse_data_t *pd = (parse_data_t*)ud;
-    union 
+    union
     {
         gint id;
         gpointer pid;
@@ -196,17 +196,17 @@ start_element(
                 int bps = gdk_pixbuf_get_bits_per_sample(pb);
                 int rowstride = gdk_pixbuf_get_rowstride(pb);
 
-                ghb_dict_insert(gval, g_strdup("colorspace"), 
+                ghb_dict_insert(gval, g_strdup("colorspace"),
                                 ghb_int_value_new(colorspace));
-                ghb_dict_insert(gval, g_strdup("alpha"), 
+                ghb_dict_insert(gval, g_strdup("alpha"),
                                 ghb_boolean_value_new(alpha));
-                ghb_dict_insert(gval, g_strdup("width"), 
+                ghb_dict_insert(gval, g_strdup("width"),
                                 ghb_int_value_new(width));
-                ghb_dict_insert(gval, g_strdup("height"), 
+                ghb_dict_insert(gval, g_strdup("height"),
                                 ghb_int_value_new(height));
-                ghb_dict_insert(gval, g_strdup("bps"), 
+                ghb_dict_insert(gval, g_strdup("bps"),
                                 ghb_int_value_new(bps));
-                ghb_dict_insert(gval, g_strdup("rowstride"), 
+                ghb_dict_insert(gval, g_strdup("rowstride"),
                                 ghb_int_value_new(rowstride));
 
                 rd = g_malloc(sizeof(ghb_rawdata_t));
@@ -302,14 +302,14 @@ start_element(
 
 static void
 end_element(
-    GMarkupParseContext *ctx, 
-    const gchar *name, 
+    GMarkupParseContext *ctx,
+    const gchar *name,
     gpointer ud,
     GError **error)
 {
     parse_data_t *pd = (parse_data_t*)ud;
     gint id;
-    union 
+    union
     {
         gint id;
         gpointer pid;
@@ -386,8 +386,8 @@ end_element(
 
 static void
 text_data(
-    GMarkupParseContext *ctx, 
-    const gchar *text, 
+    GMarkupParseContext *ctx,
+    const gchar *text,
     gsize len,
     gpointer ud,
     GError **error)
@@ -399,8 +399,8 @@ text_data(
 
 static void
 passthrough(
-    GMarkupParseContext *ctx, 
-    const gchar *text, 
+    GMarkupParseContext *ctx,
+    const gchar *text,
     gsize len,
     gpointer ud,
     GError **error)
@@ -417,7 +417,7 @@ parse_error(GMarkupParseContext *ctx, GError *error, gpointer ud)
 }
 
 // This is required or the parser crashes
-static void 
+static void
 destroy_notify(gpointer data)
 { // Do nothing
     //g_debug("destroy parser");

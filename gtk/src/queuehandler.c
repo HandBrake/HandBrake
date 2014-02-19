@@ -2,9 +2,9 @@
 /*
  * callbacks.c
  * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
- * 
+ *
  * callbacks.c is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
@@ -29,7 +29,7 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 {
     GtkTreeModel *store;
     GtkTreeIter iter, piter;
-    
+
     g_debug("queue_list_selection_changed_cb ()");
     // A queue entry is made up of a parent and multiple
     // children that are visible when expanded.  When and entry
@@ -43,7 +43,7 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
         {
             GtkTreePath *path;
             GtkTreeView *treeview;
-            
+
             gtk_tree_selection_select_iter (selection, &piter);
             path = gtk_tree_model_get_path (store, &piter);
             treeview = gtk_tree_selection_get_tree_view (selection);
@@ -76,12 +76,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     gboolean pass2 = FALSE, keep_aspect, vqtype, turbo;
     gint pic_par;
     gchar *escape, *escape2;
-    
+
     g_debug("update_queue_list ()");
     if (settings == NULL) return;
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
     store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-        
+
     title = ghb_settings_get_int(settings, "titlenum");
     start_point = ghb_settings_get_int(settings, "start_point");
     end_point = ghb_settings_get_int(settings, "end_point");
@@ -101,12 +101,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         points = _("Seconds");
     else if (ghb_settings_combo_int(settings, "PtoPType") == 2)
         points = _("Frames");
-    info = g_strdup_printf 
+    info = g_strdup_printf
     (
         "<big><b>%s</b></big> "
         "<small>(Title %d, %s %d through %d, %d Video %s)"
         " --> %s</small>",
-         escape2, title, points, start_point, end_point, 
+         escape2, title, points, start_point, end_point,
          pass2 ? 2:1, pass2 ? "Passes":"Pass", escape
     );
     g_free(basename);
@@ -154,23 +154,23 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     markers = ghb_settings_get_boolean(settings, "ChapterMarkers");
 
     if (preset_modified)
-        g_string_append_printf(str, 
-            "<b>Modified Preset Based On:</b> <small>%s</small>\n", 
+        g_string_append_printf(str,
+            "<b>Modified Preset Based On:</b> <small>%s</small>\n",
             preset);
     else
-        g_string_append_printf(str, 
-            "<b>Preset:</b> <small>%s</small>\n", 
+        g_string_append_printf(str,
+            "<b>Preset:</b> <small>%s</small>\n",
             preset);
 
     if (markers)
     {
-        g_string_append_printf(str, 
-            "<b>Format:</b> <small>%s Container, Chapter Markers</small>\n", 
+        g_string_append_printf(str,
+            "<b>Format:</b> <small>%s Container, Chapter Markers</small>\n",
             container);
     }
     else
     {
-        g_string_append_printf(str, 
+        g_string_append_printf(str,
             "<b>Format:</b> <small>%s Container</small>\n", container);
     }
     if (mux & HB_MUX_MASK_MP4)
@@ -193,7 +193,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
     }
     escape = g_markup_escape_text(dest, -1);
-    g_string_append_printf(str, 
+    g_string_append_printf(str,
         "<b>Destination:</b> <small>%s</small>\n", escape);
 
     width = ghb_settings_get_int(settings, "scale_width");
@@ -398,7 +398,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         strcmp(vcodec_abbr, "ffmpeg") == 0)
     {
         gchar *opts = ghb_build_advanced_opts_string(settings);
-        g_string_append_printf(str, 
+        g_string_append_printf(str,
             "<b>Advanced Options:</b> <small>%s</small>\n", opts);
         g_free(opts);
     }
@@ -487,7 +487,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         {
             g_string_append_printf(str,
                 "<small> %s%s%s%s</small>",
-                track, 
+                track,
                 force ? " (Force)":"",
                 burn  ? " (Burn)":"",
                 def   ? " (Default)":""
@@ -602,15 +602,15 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
         gchar *resolved = ghb_resolve_symlink(destdir);
 
         gfile = g_file_new_for_path(resolved);
-        info = g_file_query_filesystem_info(gfile, 
+        info = g_file_query_filesystem_info(gfile,
                             G_FILE_ATTRIBUTE_FILESYSTEM_FREE, NULL, NULL);
         if (info != NULL)
         {
             if (g_file_info_has_attribute(info, G_FILE_ATTRIBUTE_FILESYSTEM_FREE))
             {
-                size = g_file_info_get_attribute_uint64(info, 
+                size = g_file_info_get_attribute_uint64(info,
                                         G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
-                
+
                 gint64 fsize = (guint64)10 * 1024 * 1024 * 1024;
                 if (size < fsize)
                 {
@@ -684,7 +684,7 @@ ghb_queue_add(signal_user_data_t *ud, GValue *settings, gint batch)
     // Add settings to the queue
     gint titleindex;
     gint titlenum;
-    
+
     g_debug("queue_add ()");
     if (!validate_settings(ud, settings, batch))
     {
@@ -693,6 +693,12 @@ ghb_queue_add(signal_user_data_t *ud, GValue *settings, gint batch)
 
     if (ud->queue == NULL)
         ud->queue = ghb_array_value_new(32);
+
+    // Copy current prefs into settings
+    // The job should run with the preferences that existed
+    // when the job was added to the queue.
+    ghb_settings_set_value(settings, "Preferences", ud->prefs);
+
     // Make a copy of current settings to be used for the new job
     ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
     ghb_settings_set_int(settings, "job_unique_id", 0);
@@ -775,7 +781,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         ghb_save_queue(ud->queue);
     }
     else
-    {   
+    {
         gtk_tree_path_free (treepath);
     }
     ghb_update_pending(ud);
@@ -787,7 +793,7 @@ find_last_finished(GValue *queue)
     GValue *js;
     gint ii, count;
     gint status;
-    
+
     g_debug("find_last_finished");
     count = ghb_array_len(queue);
     for (ii = 0; ii < count; ii++)
@@ -876,7 +882,7 @@ queue_drag_motion_cb(
         gdk_drag_status(ctx, 0, time);
         return TRUE;
     }
-    if (pos != GTK_TREE_VIEW_DROP_AFTER && 
+    if (pos != GTK_TREE_VIEW_DROP_AFTER &&
         row == finished)
     {
         gtk_tree_path_free(path);
@@ -889,13 +895,13 @@ queue_drag_motion_cb(
     return TRUE;
 }
 
-G_MODULE_EXPORT void 
+G_MODULE_EXPORT void
 queue_drag_cb(
-    GtkTreeView *dstwidget, 
-    GdkDragContext *dc, 
-    gint x, gint y, 
-    GtkSelectionData *selection_data, 
-    guint info, guint t, 
+    GtkTreeView *dstwidget,
+    GdkDragContext *dc,
+    gint x, gint y,
+    GtkSelectionData *selection_data,
+    guint info, guint t,
     signal_user_data_t *ud)
 {
     GtkTreePath *path = NULL;
@@ -904,9 +910,9 @@ queue_drag_cb(
     GtkTreeIter dstiter, srciter;
     gint *indices, row;
     GValue *js;
-    
+
     GtkTreeModel *dstmodel = gtk_tree_view_get_model(dstwidget);
-            
+
     g_debug("queue_drag_cb ()");
     // This doesn't work here for some reason...
     // gtk_tree_view_get_drag_dest_row(dstwidget, &path, &pos);
@@ -957,13 +963,13 @@ queue_drag_cb(
             {
                 case GTK_TREE_VIEW_DROP_BEFORE:
                 case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
-                    gtk_tree_store_insert_before (GTK_TREE_STORE (dstmodel), 
+                    gtk_tree_store_insert_before (GTK_TREE_STORE (dstmodel),
                                                     &iter, NULL, &dstiter);
                     break;
 
                 case GTK_TREE_VIEW_DROP_AFTER:
                 case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
-                    gtk_tree_store_insert_after (GTK_TREE_STORE (dstmodel), 
+                    gtk_tree_store_insert_after (GTK_TREE_STORE (dstmodel),
                                                     &iter, NULL, &dstiter);
                     break;
 
@@ -1007,10 +1013,10 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     queue_state = ghb_get_queue_state();
     scan_state = ghb_get_scan_state();
 
-    show_stop = queue_state & 
-                (GHB_STATE_WORKING | GHB_STATE_SEARCHING | 
+    show_stop = queue_state &
+                (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING);
-    show_start = !(scan_state & GHB_STATE_SCANNING) && 
+    show_start = !(scan_state & GHB_STATE_SCANNING) &&
                     (titleindex >= 0 || queue_count > 0);
 
 
@@ -1145,7 +1151,7 @@ queue_list_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, GtkCel
 {
     GtkTreeViewColumn *column;
     gint width;
-    
+
     column = gtk_tree_view_get_column (GTK_TREE_VIEW(widget), 0);
     width = gtk_tree_view_column_get_width(column);
     g_debug("col width %d alloc width %d", width, allocation->width);
@@ -1165,7 +1171,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gint state;
 
     state = ghb_get_queue_state();
-    if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING | 
+    if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING))
     {
         ghb_cancel_encode(ud, _("You are currently encoding.  "
@@ -1178,7 +1184,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     {
         js = ghb_array_get_nth(ud->queue, ii);
         status = ghb_settings_get_int(js, "job_status");
-        if ((status == GHB_QUEUE_RUNNING) || 
+        if ((status == GHB_QUEUE_RUNNING) ||
             (status == GHB_QUEUE_PENDING))
         {
             running = TRUE;
@@ -1290,9 +1296,9 @@ find_pid:
     return FALSE;
 }
 
-G_MODULE_EXPORT gboolean 
+G_MODULE_EXPORT gboolean
 queue_key_press_cb(
-    GtkWidget *widget, 
+    GtkWidget *widget,
     GdkEventKey *event,
     signal_user_data_t *ud)
 {

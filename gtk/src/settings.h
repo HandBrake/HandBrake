@@ -3,12 +3,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
@@ -58,7 +58,10 @@ typedef struct
     gboolean scale_busy;
     gint cancel_encode;
     GtkBuilder *builder;
+    GValue *globals;
+    GValue *prefs;
     GValue *settings;
+    GValue *settings_array;
     GValue *queue;
     GValue *current_job;
     GIOChannel *activity_log;
@@ -116,7 +119,10 @@ void ghb_widget_to_setting(GValue *settings, GtkWidget *widget);
 int ghb_ui_update(
     signal_user_data_t *ud, const gchar *name, const GValue *value);
 int ghb_ui_update_from_settings(
-    GtkBuilder *builder, const gchar *name, const GValue *settings);
+    signal_user_data_t *ud, const gchar *name, const GValue *settings);
+int ghb_ui_settings_update(
+    signal_user_data_t *ud, GValue *settings, const gchar *name,
+    const GValue *value);
 const gchar* ghb_get_setting_key(GtkWidget *widget);
 void ghb_update_widget(GtkWidget *widget, const GValue *value);
 

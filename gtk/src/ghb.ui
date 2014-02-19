@@ -1014,7 +1014,7 @@ Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="source_title">
+                                  <object class="GtkLabel" id="volume_label">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1605,7 +1605,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkLabel" id="source_codec">
+                                                  <object class="GtkLabel" id="source_video_codec">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -7288,7 +7288,7 @@ Setting this to 0 means there is no maximum height.</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">Show Cropped area of the preview</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">False</property>
+                        <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="show_crop_changed_cb" swapped="no"/>
                       </object>
                       <packing>
@@ -7551,8 +7551,9 @@ Setting this to 0 means there is no maximum height.</property>
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Open Preview Window</property>
             <property name="hexpand">False</property>
-            <property name="xalign">0</property>
-            <property name="draw_indicator">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="draw_indicator">True</property>
             <signal name="toggled" handler="preview_button_clicked_cb" swapped="no"/>
           </object>
           <packing>
@@ -8809,6 +8810,7 @@ Frames that are not interlaced will suffer some quality degradation.</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">PictureDecombDeinterlace</property>
+                                    <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="top_attach">2</property>

@@ -148,7 +148,7 @@ ghb_compositor_child_type(GtkContainer *container)
     return GTK_TYPE_WIDGET;
 }
 
-static void 
+static void
 ghb_compositor_get_property (
     GObject    *object,
     guint       prop_id,
@@ -163,7 +163,7 @@ ghb_compositor_get_property (
     }
 }
 
-static void 
+static void
 ghb_compositor_set_property (
     GObject      *object,
     guint         prop_id,
@@ -189,7 +189,7 @@ zsort(gconstpointer a, gconstpointer b)
     return (cca->z_pos - ccb->z_pos);
 }
 
-static void 
+static void
 ghb_compositor_set_child_property(
     GtkContainer *container,
     GtkWidget    *child,
@@ -231,7 +231,7 @@ ghb_compositor_set_child_property(
         break;
     }
 
-    if (gtk_widget_get_visible (child) && 
+    if (gtk_widget_get_visible (child) &&
         gtk_widget_get_visible (GTK_WIDGET(compositor)))
     {
         gtk_widget_queue_resize (child);
@@ -239,7 +239,7 @@ ghb_compositor_set_child_property(
 
 }
 
-static void 
+static void
 ghb_compositor_get_child_property(
     GtkContainer *container,
     GtkWidget    *child,
@@ -345,13 +345,13 @@ find_drawables(GtkWidget *widget, gpointer data)
  * Insert in the given position of the zlist in the compositor.
  * All children in the zlist must have associated GdkDrawable's
  * This means they must be GtkDrawingArea or GtkEventBox
- * 
+ *
  **/
 void
 ghb_compositor_zlist_insert (
     GhbCompositor *compositor,
-    GtkWidget *child, 
-    gint z_pos, 
+    GtkWidget *child,
+    gint z_pos,
     gdouble opacity)
 {
     GhbCompositorChild *cc;
@@ -529,7 +529,7 @@ ghb_compositor_realize (GtkWidget *widget)
     gtk_widget_style_attach(widget);
 
     if (visible_window)
-        gtk_style_set_background(widget->style, window, 
+        gtk_style_set_background(widget->style, window,
                                 GTK_STATE_NORMAL);
 #endif
 }
@@ -635,9 +635,9 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
     if (!gtk_widget_get_has_window(widget))
     {
-        child_allocation.x = allocation->x + 
+        child_allocation.x = allocation->x +
                          gtk_container_get_border_width(GTK_CONTAINER(widget));
-        child_allocation.y = allocation->y + 
+        child_allocation.y = allocation->y +
                          gtk_container_get_border_width(GTK_CONTAINER(widget));
     }
     else
@@ -646,9 +646,9 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         child_allocation.y = 0;
     }
 
-    child_allocation.width = MAX (allocation->width - 
+    child_allocation.width = MAX (allocation->width -
                  gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2, 0);
-    child_allocation.height = MAX (allocation->height - 
+    child_allocation.height = MAX (allocation->height -
                  gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2, 0);
 
     if (gtk_widget_get_realized(widget))
@@ -712,7 +712,7 @@ ghb_compositor_blend (GtkWidget *widget, cairo_t *cr)
 
             if (
 //!gtk_cairo_should_draw_window(cr, gtk_widget_get_window(child)) ||
-                !gtk_widget_get_visible(cc->widget) || 
+                !gtk_widget_get_visible(cc->widget) ||
                 !gtk_widget_get_visible(child))
                 continue;
 
@@ -776,7 +776,7 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
         {
             /* get our child */
             child = GTK_WIDGET(draw->data);
-            if (!gtk_widget_get_visible(cc->widget) || 
+            if (!gtk_widget_get_visible(cc->widget) ||
                 !gtk_widget_get_visible(child))
                 continue;
 

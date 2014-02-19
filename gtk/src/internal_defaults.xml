@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>Globals</key>
+    <dict>
+        <key>hide_settings</key>
+        <false />
+        <key>show_picture</key>
+        <false />
+        <key>scan_source</key>
+        <string></string>
+    </dict>
     <key>Initialization</key>
     <dict>
         <key>AudioTrackName</key>
@@ -10,8 +19,6 @@
         <integer>1</integer>
         <key>angle</key>
         <integer>1</integer>
-        <key>anamorphic</key>
-        <true />
         <key>autoscale</key>
         <false />
         <key>dest_dir</key>
@@ -20,8 +27,6 @@
         <string>new_video.mp4</string>
         <key>end_point</key>
         <integer>100</integer>
-        <key>folder</key>
-        <string></string>
         <key>MetaName</key>
         <string></string>
         <key>MetaArtist</key>
@@ -40,10 +45,14 @@
         <string></string>
         <key>preset</key>
         <array>
+            <string>Regular</string>
             <string>Normal</string>
         </array>
+        <key>preset_reload</key>
+        <false />
         <key>preset_selection</key>
         <array>
+            <string>Regular</string>
             <string>Normal</string>
         </array>
         <key>PictureDisplayWidth</key>
@@ -56,12 +65,6 @@
         <integer>0</integer>
         <key>scale_width</key>
         <integer>0</integer>
-        <key>preview_show_crop</key>
-        <false />
-        <key>hide_settings</key>
-        <false />
-        <key>show_picture</key>
-        <false />
         <key>single_title</key>
         <integer>1</integer>
         <key>start_point</key>
@@ -115,6 +118,9 @@
         <key>audio_list</key>
         <array>
         </array>
+        <key>chapter_list</key>
+        <array>
+        </array>
         <key>subtitle_list</key>
         <array>
         </array>
@@ -140,8 +146,6 @@
     <key>Preferences</key>
     <dict>
         <key>HideAdvancedVideoSettings</key>
-        <false />
-        <key>AdvancedAutoPassthru</key>
         <false />
         <key>AutoScan</key>
         <false />
@@ -177,8 +181,6 @@
         <string>1</string>
         <key>LogLongevity</key>
         <string>immortal</string>
-        <key>nocheckvquality</key>
-        <false />
         <key>use_dvdnav</key>
         <true />
         <key>reduce_hd_preview</key>
@@ -188,6 +190,8 @@
         <key>preview_count</key>
         <integer>10</integer>
         <key>preview_fullscreen</key>
+        <false />
+        <key>preview_show_crop</key>
         <false />
         <key>preview_x</key>
         <integer>-1</integer>
@@ -213,8 +217,6 @@
         <string>0.1</string>
         <key>PreferredLanguage</key>
         <string>und</string>
-        <key>constant_rate_factor</key>
-        <true />
         <key>WhenComplete</key>
         <string>notify</string>
         <key>SrtDir</key>

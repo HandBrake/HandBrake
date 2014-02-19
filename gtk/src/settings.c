@@ -2,14 +2,14 @@
 /*
  * settings.c
  * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
- * 
+ *
  * settings.c is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
- * 
+ *
  */
 #include <fcntl.h>
 #include <unistd.h>
@@ -39,8 +39,8 @@ ghb_settings_new()
 
 void
 ghb_settings_set_value(
-    GValue *settings, 
-    const gchar *key, 
+    GValue *settings,
+    const gchar *key,
     const GValue *value)
 {
     if (key == NULL || value == NULL)
@@ -56,8 +56,8 @@ ghb_settings_take_value(GValue *settings, const gchar *key, GValue *value)
 
 void
 ghb_settings_set_string(
-    GValue *settings, 
-    const gchar *key, 
+    GValue *settings,
+    const gchar *key,
     const gchar *sval)
 {
     GValue *value;
@@ -183,11 +183,11 @@ const gchar*
 ghb_get_setting_key(GtkWidget *widget)
 {
     const gchar *name;
-    
+
     g_debug("get_setting_key ()\n");
     if (widget == NULL) return NULL;
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
-        
+
     if (name == NULL)
     {
         name = gtk_widget_get_name(widget);
@@ -207,7 +207,7 @@ ghb_widget_value(GtkWidget *widget)
     GValue *value = NULL;
     const gchar *name;
     GType type;
-    
+
     if (widget == NULL)
     {
         g_debug("NULL widget\n");
@@ -364,7 +364,7 @@ ghb_widget_string(GtkWidget *widget)
 {
     GValue *value;
     gchar *sval;
-    
+
     value = ghb_widget_value(widget);
     sval = ghb_value_string(value);
     ghb_value_free(value);
@@ -376,7 +376,7 @@ ghb_widget_double(GtkWidget *widget)
 {
     GValue *value;
     gdouble dval;
-    
+
     value = ghb_widget_value(widget);
     dval = ghb_value_double(value);
     ghb_value_free(value);
@@ -388,7 +388,7 @@ ghb_widget_int64(GtkWidget *widget)
 {
     GValue *value;
     gint64 ival;
-    
+
     value = ghb_widget_value(widget);
     ival = ghb_value_int64(value);
     ghb_value_free(value);
@@ -400,7 +400,7 @@ ghb_widget_int(GtkWidget *widget)
 {
     GValue *value;
     gint ival;
-    
+
     value = ghb_widget_value(widget);
     ival = (gint)ghb_value_int64(value);
     ghb_value_free(value);
@@ -412,7 +412,7 @@ ghb_widget_boolean(GtkWidget *widget)
 {
     GValue *value;
     gboolean bval;
-    
+
     value = ghb_widget_value(widget);
     bval = ghb_value_boolean(value);
     ghb_value_free(value);
@@ -424,7 +424,7 @@ ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
 {
     const gchar *key = NULL;
     GValue *value;
-    
+
     if (widget == NULL) return;
     g_debug("ghb_widget_to_setting");
     // Find corresponding setting
@@ -467,7 +467,8 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
     else if (type == GTK_TYPE_RADIO_BUTTON)
     {
         g_debug("radio button");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!ival);
+        if (ival)
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!ival);
     }
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
@@ -624,7 +625,7 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
 }
 
 int
-ghb_ui_update_from_settings(GtkBuilder *builder, const gchar *name, const GValue *settings)
+ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const GValue *settings)
 {
     GObject *object;
     GValue * value;
@@ -635,13 +636,16 @@ ghb_ui_update_from_settings(GtkBuilder *builder, const gchar *name, const GValue
     value = ghb_settings_get_value(settings, name);
     if (value == NULL)
         return 0;
-    object = GHB_OBJECT(builder, name);
+    object = GHB_OBJECT(ud->builder, name);
     if (object == NULL)
     {
         g_debug("Failed to find widget for key: %s\n", name);
         return -1;
     }
     ghb_update_widget((GtkWidget*)object, value);
+    // Its possible the value hasn't changed. Since settings are only
+    // updated when the value changes, I'm initializing settings here as well.
+    ghb_widget_to_setting(ud->settings, (GtkWidget*)object);
     return 0;
 }
 
@@ -663,6 +667,31 @@ ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GValue *value)
     // Its possible the value hasn't changed. Since settings are only
     // updated when the value changes, I'm initializing settings here as well.
     ghb_widget_to_setting(ud->settings, (GtkWidget*)object);
+    return 0;
+}
+
+int
+ghb_ui_settings_update(
+    signal_user_data_t *ud,
+    GValue *settings,
+    const gchar *name,
+    const GValue *value)
+{
+    GObject *object;
+
+    g_debug("ghb_ui_update() %s", name);
+    if (name == NULL || value == NULL)
+        return 0;
+    object = GHB_OBJECT(ud->builder, name);
+    if (object == NULL)
+    {
+        g_debug("Failed to find widget for key: %s\n", name);
+        return -1;
+    }
+    ghb_update_widget((GtkWidget*)object, value);
+    // Its possible the value hasn't changed. Since settings are only
+    // updated when the value changes, I'm initializing settings here as well.
+    ghb_widget_to_setting(settings, (GtkWidget*)object);
     return 0;
 }
 

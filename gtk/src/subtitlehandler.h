@@ -2,19 +2,19 @@
 /*
  * subtitlehandler.h
  * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
- * 
+ *
  * audiohandler.h is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
- * 
+ *
  * callbacks.h is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with callbacks.h.  If not, write to:
  *  The Free Software Foundation, Inc.,
@@ -28,14 +28,14 @@
 #include "settings.h"
 
 void ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud);
-void ghb_set_pref_subtitle_settings(hb_title_t *title, GValue *settings);
+void ghb_set_pref_subtitle_settings(signal_user_data_t *ud, hb_title_t *title, GValue *settings);
 void ghb_set_subtitle(signal_user_data_t *ud, gint track, GValue *settings);
 void ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);
 void ghb_subtitle_list_refresh_selected(signal_user_data_t *ud);
 void ghb_subtitle_list_refresh_all(signal_user_data_t *ud);
 void ghb_init_subtitle_defaults_ui(signal_user_data_t *ud);
-void ghb_subtitle_def_settings_init(signal_user_data_t *ud);
+void ghb_subtitle_defaults_to_ui(signal_user_data_t *ud);
 void ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show);
 
 #endif // _SUBTITLEHANDLER_H_
