@@ -1575,7 +1575,7 @@ update_crop_info(signal_user_data_t *ud)
 {
     GtkWidget *widget;
     gchar *text;
-    gint width, height, crop[4];
+    gint width, height, crop[4] = {0,};
     gint titleindex;
     hb_title_t *title;
 
