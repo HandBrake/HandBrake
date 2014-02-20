@@ -17,6 +17,7 @@
 #define _RESOURCES_H_
 
 void ghb_resource_init(void);
+void ghb_resource_free();
 GValue* ghb_resource_get(const gchar *name);
 
 #endif // _RESOURCES_H_

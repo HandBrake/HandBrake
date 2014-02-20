@@ -217,7 +217,7 @@ x264_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    ghb_widget_to_setting(ud->settings, widget);
+    ghb_widget_to_setting(ud->x264_priv, widget);
     if (!ignore_options_update)
     {
         ignore_options_update = TRUE;
@@ -231,7 +231,7 @@ x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 x264_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    ghb_widget_to_setting(ud->settings, widget);
+    ghb_widget_to_setting(ud->x264_priv, widget);
 
     // Lock slider values to multiples of step_increment
     GtkAdjustment * adj = gtk_range_get_adjustment(GTK_RANGE(widget));
@@ -265,7 +265,7 @@ x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint me;
 
-    ghb_widget_to_setting(ud->settings, widget);
+    ghb_widget_to_setting(ud->x264_priv, widget);
     if (!ignore_options_update)
     {
         ignore_options_update = TRUE;
@@ -275,7 +275,7 @@ x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     widget = GHB_WIDGET(ud->builder, "x264_merange");
-    me = ghb_settings_combo_int(ud->settings, "x264_me");
+    me = ghb_settings_combo_int(ud->x264_priv, "x264_me");
     if (me < 2)
     {   // me < umh
         // me_range 4 - 16
@@ -331,17 +331,6 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             g_free(options);
             options = sopts;
         }
-#if 0
-        if (ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
-        {
-            ghb_ui_update(ud, "x264PresetSlider", ghb_int_value(5));
-            ghb_ui_update(ud, "x264Tune", ghb_string_value("none"));
-            ghb_ui_update(ud, "h264Profile", ghb_string_value("auto"));
-            ghb_ui_update(ud, "h264Level", ghb_string_value("auto"));
-
-            ghb_ui_update(ud, "x264OptionExtra", ghb_string_value(options));
-        }
-#endif
         g_free(options);
         ignore_options_update = FALSE;
     }
@@ -523,7 +512,7 @@ x264_update_double(signal_user_data_t *ud, const gchar *name, const gchar *val)
 
     if (val == NULL) return;
     dval = g_strtod (val, NULL);
-    ghb_ui_update(ud, name, ghb_double_value(dval));
+    ghb_settings_set_double(ud->x264_priv, name, dval);
 }
 
 static void
@@ -533,7 +522,7 @@ x264_update_int(signal_user_data_t *ud, const gchar *name, const gchar *val)
 
     if (val == NULL) return;
     ival = g_strtod (val, NULL);
-    ghb_ui_update(ud, name, ghb_int64_value(ival));
+    ghb_settings_set_int(ud->x264_priv, name, ival);
 }
 
 static void
@@ -543,7 +532,7 @@ x264_update_int_setting(signal_user_data_t *ud, const gchar *name, const gchar *
 
     if (val == NULL) return;
     ival = g_strtod (val, NULL);
-    ghb_settings_set_value(ud->settings, name, ghb_int64_value(ival));
+    ghb_settings_set_value(ud->x264_priv, name, ghb_int64_value(ival));
     ghb_check_dependency(ud, NULL, name);
 }
 
@@ -571,18 +560,18 @@ static void
 x264_update_bool(signal_user_data_t *ud, const gchar *name, const gchar *val)
 {
     if (val == NULL)
-        ghb_ui_update(ud, name, ghb_boolean_value(1));
+        ghb_settings_set_boolean(ud->x264_priv, name, TRUE);
     else
-        ghb_ui_update(ud, name, ghb_boolean_value(str_is_true(val)));
+        ghb_settings_set_boolean(ud->x264_priv, name, str_is_true(val));
 }
 
 static void
 x264_update_bool_setting(signal_user_data_t *ud, const gchar *name, const gchar *val)
 {
     if (val == NULL)
-        ghb_settings_set_value(ud->settings, name, ghb_boolean_value(1));
+        ghb_settings_set_boolean(ud->x264_priv, name, TRUE);
     else
-        ghb_settings_set_value(ud->settings, name, ghb_boolean_value(str_is_true(val)));
+        ghb_settings_set_boolean(ud->x264_priv, name, str_is_true(val));
 
     ghb_check_dependency(ud, NULL, name);
 }
@@ -590,64 +579,13 @@ x264_update_bool_setting(signal_user_data_t *ud, const gchar *name, const gchar 
 static void
 x264_update_combo(signal_user_data_t *ud, const gchar *name, const gchar *val)
 {
-    GtkTreeModel *store;
-    GtkTreeIter iter;
-    gchar *shortOpt;
-    gdouble ivalue;
-    gboolean foundit = FALSE;
-    GtkWidget *widget;
-
-    if (val == NULL) return;
-    widget = GHB_WIDGET(ud->builder, name);
-    if (widget == NULL)
-    {
-        g_debug("Failed to find widget for key: %s\n", name);
-        return;
-    }
-    store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-    if (gtk_tree_model_get_iter_first (store, &iter))
-    {
-        do
-        {
-            gtk_tree_model_get(store, &iter, 2, &shortOpt, 3, &ivalue, -1);
-            if (strcmp(shortOpt, val) == 0)
-            {
-                gtk_combo_box_set_active_iter (GTK_COMBO_BOX(widget), &iter);
-                g_free(shortOpt);
-                foundit = TRUE;
-                break;
-            }
-            g_free(shortOpt);
-        } while (gtk_tree_model_iter_next (store, &iter));
-    }
-    if (!foundit)
-    {
-        if (gtk_tree_model_get_iter_first (store, &iter))
-        {
-            do
-            {
-                gtk_tree_model_get(store, &iter, 2, &shortOpt, 3, &ivalue, -1);
-                if (strcmp(shortOpt, "custom") == 0)
-                {
-                    gtk_list_store_set(GTK_LIST_STORE(store), &iter, 4, val, -1);
-                    gtk_combo_box_set_active_iter (GTK_COMBO_BOX(widget), &iter);
-                    g_free(shortOpt);
-                    foundit = TRUE;
-                    break;
-                }
-                g_free(shortOpt);
-            } while (gtk_tree_model_iter_next (store, &iter));
-        }
-    }
-    // Its possible the value hasn't changed. Since settings are only
-    // updated when the value changes, I'm initializing settings here as well.
-    ghb_widget_to_setting(ud->settings, widget);
+    ghb_settings_set_string(ud->x264_priv, name, val);
 }
 
 static void
 x264_update_deblock(signal_user_data_t *ud, const gchar *xval)
 {
-    gdouble avalue, bvalue;
+    int avalue, bvalue;
     gchar *end;
     gchar *val;
     gchar *bval = NULL;
@@ -663,15 +601,15 @@ x264_update_deblock(signal_user_data_t *ud, const gchar *xval)
             bval = pos + 1;
             *pos = 0;
         }
-        avalue = g_strtod (val, &end);
+        avalue = (int)g_strtod(val, &end);
         if (bval != NULL)
         {
-            bvalue = g_strtod (bval, &end);
+            bvalue = (int)g_strtod(bval, &end);
         }
     }
     g_free(val);
-    ghb_ui_update(ud, "x264_deblock_alpha", ghb_int64_value(avalue));
-    ghb_ui_update(ud, "x264_deblock_beta", ghb_int64_value(bvalue));
+    ghb_settings_set_int(ud->x264_priv, "x264_deblock_alpha", avalue);
+    ghb_settings_set_int(ud->x264_priv, "x264_deblock_beta", bvalue);
 }
 
 static void
@@ -693,8 +631,8 @@ x264_update_psy(signal_user_data_t *ud, const gchar *xval)
 
     if (xval == NULL) return;
     x264_parse_psy(xval, &rd_value, &trell_value);
-    ghb_ui_update(ud, "x264_psy_rd", ghb_double_value(rd_value));
-    ghb_ui_update(ud, "x264_psy_trell", ghb_double_value(trell_value));
+    ghb_settings_set_double(ud->x264_priv, "x264_psy_rd", rd_value);
+    ghb_settings_set_double(ud->x264_priv, "x264_psy_trell", trell_value);
 }
 
 static void do_update(signal_user_data_t *ud, char *name, gint type, char *val)
@@ -852,6 +790,7 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
         }
     }
     g_strfreev(split);
+    ghb_settings_to_ui(ud, ud->x264_priv);
 }
 
 gchar*
@@ -859,8 +798,8 @@ get_deblock_val(signal_user_data_t *ud)
 {
     gchar *alpha, *beta;
     gchar *result;
-    alpha = ghb_settings_get_string(ud->settings, "x264_deblock_alpha");
-    beta = ghb_settings_get_string(ud->settings, "x264_deblock_beta");
+    alpha = ghb_settings_get_string(ud->x264_priv, "x264_deblock_alpha");
+    beta = ghb_settings_get_string(ud->x264_priv, "x264_deblock_beta");
     result = g_strdup_printf("%s,%s", alpha, beta);
     g_free(alpha);
     g_free(beta);
@@ -872,8 +811,8 @@ get_psy_val(signal_user_data_t *ud)
 {
     gdouble rd, trell;
     gchar *result;
-    rd = ghb_settings_get_double(ud->settings, "x264_psy_rd");
-    trell = ghb_settings_get_double(ud->settings, "x264_psy_trell");
+    rd = ghb_settings_get_double(ud->x264_priv, "x264_psy_rd");
+    trell = ghb_settings_get_double(ud->x264_priv, "x264_psy_trell");
     result = g_strdup_printf("%g|%g", rd, trell);
     return result;
 }
@@ -1200,12 +1139,12 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
     gint ii;
 
     // Fix up option dependencies
-    gint subme = ghb_settings_combo_int(ud->settings, "x264_subme");
+    gint subme = ghb_settings_combo_int(ud->x264_priv, "x264_subme");
     if (subme < 6)
     {
         x264_remove_opt(split, x264_psy_syns);
     }
-    gint trell = ghb_settings_combo_int(ud->settings, "x264_trellis");
+    gint trell = ghb_settings_combo_int(ud->x264_priv, "x264_trellis");
     if (subme >= 10)
     {
         gint aqmode = ghb_lookup_aqmode(options);
@@ -1233,7 +1172,7 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
             split[psy] = g_strdup_printf("psy-rd=%g|0", psy_rd);
         }
     }
-    gint bframes = ghb_settings_get_int(ud->settings, "x264_bframes");
+    gint bframes = ghb_settings_get_int(ud->x264_priv, "x264_bframes");
     if (bframes == 0)
     {
         x264_remove_opt(split, x264_direct_syns);
@@ -1321,3 +1260,9 @@ format_x264_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     return g_strdup_printf(" %-12s", preset);
 }
 
+void
+ghb_x264_init(signal_user_data_t *ud)
+{
+    ud->x264_priv = ghb_settings_new();
+    ghb_x264_parse_options(ud, "");
+}

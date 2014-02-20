@@ -1079,6 +1079,8 @@ ghb_load_settings(signal_user_data_t * ud)
     ud->dont_clear_presets = FALSE;
     ud->scale_busy = FALSE;
     busy = FALSE;
+
+    ghb_picture_settings_deps(ud);
 }
 
 static void
@@ -2135,6 +2137,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT);
+
     update_preview = TRUE;
     ghb_live_reset(ud);
 
@@ -2222,7 +2225,7 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
         ghb_set_scale(ud, 0);
-    ghb_pref_save (ud->prefs, "preview_show_crop");
+    ghb_pref_save(ud->prefs, "preview_show_crop");
     update_preview = TRUE;
 }
 
@@ -2252,6 +2255,7 @@ prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
+    ghb_prefs_store();
 }
 
 typedef struct
@@ -3264,7 +3268,7 @@ ghb_timer_cb(gpointer data)
         if (strcmp(dest_dir, def_dest) != 0)
         {
             ghb_settings_set_string (ud->prefs, "destination_dir", dest_dir);
-            ghb_pref_save (ud->prefs, "destination_dir");
+            ghb_pref_save(ud->prefs, "destination_dir");
         }
         g_free(dest);
         g_free(dest_dir);
@@ -3835,19 +3839,18 @@ advanced_video_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     g_debug("advanced_video_changed_cb");
     ghb_widget_to_setting(ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->prefs, name);
+    ghb_pref_set(ud->prefs, name);
     ghb_show_hide_advanced_video(ud);
 }
 
 G_MODULE_EXPORT void
 pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("pref_changed_cb");
     ghb_widget_to_setting (ud->prefs, widget);
 // FIXME?
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->prefs, name);
+    ghb_pref_set(ud->prefs, name);
 
     gint preview_count;
     preview_count = ghb_settings_get_int(ud->prefs, "preview_count");
@@ -3862,7 +3865,7 @@ use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting (ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->prefs, name);
+    ghb_pref_set(ud->prefs, name);
     ghb_update_destination_extension(ud);
 }
 
@@ -3873,7 +3876,7 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting (ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->prefs, name);
+    ghb_pref_set(ud->prefs, name);
 
 #if defined(_USE_APP_IND)
     if (ud->ai)
@@ -3904,7 +3907,7 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
 
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->prefs, name);
+    ghb_pref_set(ud->prefs, name);
 
     gdouble vqmin, vqmax, step, page;
     gboolean inverted;
@@ -3922,7 +3925,7 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     g_debug("tweaks_changed_cb");
     ghb_widget_to_setting (ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->prefs, name);
+    ghb_pref_set(ud->prefs, name);
 }
 
 G_MODULE_EXPORT void
@@ -3931,7 +3934,7 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     g_debug("hbfd_feature_changed_cb");
     ghb_widget_to_setting (ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_save(ud->prefs, name);
+    ghb_pref_set(ud->prefs, name);
 
     gboolean hbfd = ghb_settings_get_boolean(ud->prefs, "hbfd_feature");
     if (hbfd)
@@ -3940,7 +3943,7 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         val = ghb_settings_get_value(ud->prefs, "hbfd");
         ghb_ui_settings_update(ud, ud->prefs, "hbfd", val);
     }
-    widget = GHB_WIDGET (ud->builder, "hbfd");
+    widget = GHB_WIDGET(ud->builder, "hbfd");
     gtk_widget_set_visible(widget, hbfd);
 }
 

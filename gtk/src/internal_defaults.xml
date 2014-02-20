@@ -20,6 +20,8 @@
         <key>angle</key>
         <integer>1</integer>
         <key>autoscale</key>
+        <true />
+        <key>UsesMaxPictureSettings</key>
         <false />
         <key>dest_dir</key>
         <string></string>
@@ -77,44 +79,6 @@
         <string>none</string>
         <key>volume_label</key>
         <string>New Video</string>
-        <key>x264_8x8dct</key>
-        <false />
-        <key>x264_analyse</key>
-        <string>some</string>
-        <key>x264_bframes</key>
-        <integer>0</integer>
-        <key>x264_mbtree</key>
-        <true />
-        <key>x264_bpyramid</key>
-        <false />
-        <key>x264_cabac</key>
-        <true />
-        <key>x264_deblock_alpha</key>
-        <integer>0</integer>
-        <key>x264_deblock_beta</key>
-        <integer>0</integer>
-        <key>x264_direct</key>
-        <string>spatial</string>
-        <key>x264_b_adapt</key>
-        <string>1</string>
-        <key>x264_me</key>
-        <string>hex</string>
-        <key>x264_merange</key>
-        <integer>16</integer>
-        <key>x264_mixed_refs</key>
-        <false />
-        <key>x264_no_dct_decimate</key>
-        <false />
-        <key>x264_no_fast_pskip</key>
-        <false />
-        <key>x264_refs</key>
-        <integer>1</integer>
-        <key>x264_subme</key>
-        <integer>6</integer>
-        <key>x264_trellis</key>
-        <integer>0</integer>
-        <key>x264_weighted_bframes</key>
-        <false />
         <key>audio_list</key>
         <array>
         </array>
@@ -141,6 +105,14 @@
         <key>VideoFrameratePFR</key>
         <false />
         <key>VideoFramerateVFR</key>
+        <true />
+        <key>PictureDeinterlaceDecomb</key>
+        <false />
+        <key>x264PresetSlider</key>
+        <integer>0</integer>
+        <key>x264ZeroLatency</key>
+        <false />
+        <key>x264FastDecode</key>
         <false />
     </dict>
     <key>Preferences</key>
@@ -226,29 +198,6 @@
         <key>window_height</key>
         <integer>1</integer>
     </dict>
-    <key>XlatPresets</key>
-    <dict>
-        <key>autoscale</key>
-        <false />
-        <key>vquality_type_bitrate</key>
-        <false />
-        <key>vquality_type_constant</key>
-        <false />
-        <key>VideoFramerateCFR</key>
-        <false />
-        <key>VideoFrameratePFR</key>
-        <false />
-        <key>VideoFramerateVFR</key>
-        <false />
-        <key>PictureDeinterlaceDecomb</key>
-        <false />
-        <key>x264PresetSlider</key>
-        <integer>0</integer>
-        <key>x264ZeroLatency</key>
-        <false />
-        <key>x264FastDecode</key>
-        <false />
-    </dict>
     <key>Presets</key>
     <dict>
         <key>PresetBuildNumber</key>
@@ -264,7 +213,7 @@
         <key>PictureLooseCrop</key>
         <false />
         <key>PictureModulus</key>
-        <integer>16</integer>
+        <integer>2</integer>
         <key>PictureDeblock</key>
         <integer>0</integer>
         <key>PictureDecombDeinterlace</key>
@@ -346,7 +295,7 @@
                 <false />
                 <key>AudioTrackQuality</key>
                 <real>-1</real>
-                <key>AudioTrackGain</key>
+                <key>AudioTrackGainSlider</key>
                 <real>0</real>
                 <key>AudioTrackDRCSlider</key>
                 <real>0</real>
@@ -384,8 +333,6 @@
         <true />
         <key>UsesPictureSettings</key>
         <integer>2</integer>
-        <key>UsesMaxPictureSettings</key>
-        <false />
         <key>VideoTwoPass</key>
         <false />
         <key>VideoAvgBitrate</key>
@@ -396,8 +343,6 @@
         <integer>2</integer>
         <key>VideoQualitySlider</key>
         <real>0.60</real>
-        <key>VideoTargetSize</key>
-        <integer>700</integer>
         <key>lavcOption</key>
         <string></string>
         <key>x264Option</key>

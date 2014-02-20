@@ -40,3 +40,9 @@ ghb_resource_get(const gchar *name)
     result = ghb_dict_lookup(resources, name);
     return result;
 }
+
+void
+ghb_resource_free()
+{
+    ghb_value_free(resources);
+}

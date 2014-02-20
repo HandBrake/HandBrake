@@ -1011,20 +1011,28 @@ main(int argc, char *argv[])
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);
 
-    // Load all internal settings with default values
-    ghb_settings_init(ud->globals, "Globals");
-    ghb_settings_init(ud->prefs, "Preferences");
-    ghb_settings_init(ud->settings, "Initialization");
-    ghb_settings_init(ud->settings, "Presets");
-
     // Load prefs before presets.  Some preset defaults may depend
     // on preference settings.
+    // First load default values
+    ghb_settings_init(ud->prefs, "Preferences");
+    ghb_settings_init(ud->globals, "Globals");
+    ghb_settings_init(ud->settings, "Initialization");
+    // Load user preferences file
     ghb_prefs_load(ud);
+    // Store user preferences into ud->prefs
+    ghb_prefs_to_settings(ud->prefs);
+
+    // Load all settings with default preset values
+    ghb_settings_init(ud->settings, "Presets");
     // Load the presets files
     ghb_presets_load(ud);
+    // Note that ghb_preset_to_settings(ud->settings) is called when
+    // the default preset is selected.
 
-    ghb_globals_to_ui(ud);
-    ghb_prefs_to_ui(ud);
+    ghb_settings_to_ui(ud, ud->globals);
+    ghb_settings_to_ui(ud, ud->prefs);
+    // Note that ghb_settings_to_ui(ud->settings) happens when initial
+    // empty title is initialized.
 
     gint logLevel;
     logLevel = ghb_settings_get_int(ud->prefs, "LoggingLevel");
@@ -1039,7 +1047,7 @@ main(int argc, char *argv[])
     g_free(source);
 
     // Parsing x264 options "" initializes x264 widgets to proper defaults
-    ghb_x264_parse_options(ud, "");
+    ghb_x264_init(ud);
 
     // Populate the presets tree view
     ghb_presets_list_init(ud, NULL, 0);
@@ -1066,6 +1074,11 @@ main(int argc, char *argv[])
         // Source overridden from command line option
         ghb_settings_set_string(ud->globals, "scan_source", dvd_device);
         g_idle_add((GSourceFunc)ghb_idle_scan, ud);
+    }
+    else
+    {
+        GValue *gval = ghb_settings_get_value(ud->prefs, "default_source");
+        ghb_settings_set_value(ud->globals, "scan_source", gval);
     }
     // Reload and check status of the last saved queue
     g_idle_add((GSourceFunc)ghb_reload_queue, ud);
@@ -1265,6 +1278,7 @@ main(int argc, char *argv[])
     ghb_value_free(ud->settings);
     g_io_channel_unref(ud->activity_log);
     ghb_settings_close();
+    ghb_resource_free();
 #if !defined(_WIN32)
     notify_uninit();
 #endif

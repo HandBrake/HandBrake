@@ -1278,14 +1278,13 @@ picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         gtk_widget_set_tooltip_text(toggle,
             _("Hide the picture settings window while "
             "leaving the preview visible."));
-        gtk_widget_show(window);
     }
     else
     {
         gtk_button_set_label(GTK_BUTTON(toggle), _("Show Settings"));
         gtk_widget_set_tooltip_text(toggle, _("Show picture settings."));
-        gtk_widget_hide(window);
     }
+    gtk_widget_set_visible(window, !active);
 }
 
 G_MODULE_EXPORT void

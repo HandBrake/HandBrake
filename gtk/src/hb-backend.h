@@ -108,6 +108,7 @@ hb_list_t * ghb_get_title_list();
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 void ghb_set_scale_settings(GValue *settings, gint mode);
+void ghb_picture_settings_deps(signal_user_data_t *ud);
 GValue* ghb_get_chapters(gint titleindex);
 gint64 ghb_get_chapter_duration(gint ti, gint chap);
 gint64 ghb_get_chapter_start(gint ti, gint chap);

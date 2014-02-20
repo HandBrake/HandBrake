@@ -3736,8 +3736,8 @@ ghb_get_default_acodec()
     return HB_ACODEC_FAAC;
 }
 
-static void
-picture_settings_deps(signal_user_data_t *ud)
+void
+ghb_picture_settings_deps(signal_user_data_t *ud)
 {
     gboolean autoscale, keep_aspect, enable_keep_aspect;
     gboolean enable_scale_width, enable_scale_height;
@@ -4092,7 +4092,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
     ud->scale_busy = TRUE;
 
     ghb_set_scale_settings(ud->settings, mode);
-    picture_settings_deps(ud);
+    ghb_picture_settings_deps(ud);
 
     // Step needs to be at least 2 because odd widths cause scaler crash
     // subsampled chroma requires even crop values.
@@ -4947,7 +4947,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
         audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec, fallback, copy_mask);
 
         audio.out.gain =
-            ghb_settings_get_double(asettings, "AudioTrackGain");
+            ghb_settings_get_double(asettings, "AudioTrackGainSlider");
 
         audio.out.dynamic_range_compression =
             ghb_settings_get_double(asettings, "AudioTrackDRCSlider");

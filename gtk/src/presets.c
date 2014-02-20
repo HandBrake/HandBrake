@@ -40,8 +40,8 @@ enum
     PRESETS_CUSTOM
 };
 
+static GValue *presetsPlistFile = NULL;
 static GValue *presetsPlist = NULL;
-static GValue *internalPlist = NULL;
 static GValue *prefsPlist = NULL;
 static gboolean prefs_modified = FALSE;
 
@@ -49,6 +49,30 @@ static const GValue* preset_dict_get_value(GValue *dict, const gchar *key);
 static void store_plist(GValue *plist, const gchar *name);
 static void store_presets(void);
 static void store_prefs(void);
+
+static void
+dict_clean(GValue *dict, GValue *template)
+{
+    GValue *tmp = ghb_value_dup(dict);
+    GHashTableIter iter;
+    gchar *key;
+    GValue *value;
+    GValue *template_val;
+
+    ghb_dict_iter_init(&iter, tmp);
+    // middle (void*) cast prevents gcc warning "defreferencing type-punned
+    // pointer will break strict-aliasing rules"
+    while (g_hash_table_iter_next(
+            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
+    {
+        template_val = ghb_dict_lookup(template, key);
+        if (template_val == NULL)
+        {
+            ghb_dict_remove(dict, key);
+        }
+    }
+    ghb_value_free(tmp);
+}
 
 gint
 preset_path_cmp(gint *indices1, gint len1, gint *indices2, gint len2)
@@ -736,131 +760,7 @@ key_cmp(gconstpointer a, gconstpointer b)
 static const GValue*
 preset_dict_get_value(GValue *dict, const gchar *key)
 {
-    const GValue *gval = NULL;
-
-    if (dict)
-    {
-        gval = ghb_dict_lookup(dict, key);
-    }
-    if (internalPlist == NULL) return NULL;
-    if (gval == NULL)
-    {
-        dict = plist_get_dict(internalPlist, "Presets");
-        if (dict == NULL) return NULL;
-        gval = ghb_dict_lookup(dict, key);
-    }
-    return gval;
-}
-
-const gchar*
-ghb_presets_get_description(GValue *pdict)
-{
-    const gchar *desc;
-
-    if (pdict == NULL) return NULL;
-    desc = g_value_get_string(
-            preset_dict_get_value(pdict, "PresetDescription"));
-    if (desc[0] == 0) return NULL;
-    return desc;
-}
-
-
-static void init_settings_from_dict(
-    GValue *dest, GValue *internal, GValue *dict);
-
-static void
-init_settings_from_array(
-    GValue *dest,
-    GValue *internal,
-    GValue *array)
-{
-    GValue *gval, *val;
-    gint count, ii;
-
-    count = ghb_array_len(array);
-    // The first element of the internal version is always the
-    // template for the allowed values
-    gval = ghb_array_get_nth(internal, 0);
-    for (ii = 0; ii < count; ii++)
-    {
-        val = NULL;
-        val = ghb_array_get_nth(array, ii);
-        if (val == NULL)
-            val = gval;
-        if (G_VALUE_TYPE(gval) == ghb_dict_get_type())
-        {
-            GValue *new_dict;
-            new_dict = ghb_dict_value_new();
-            ghb_array_append(dest, new_dict);
-            if (G_VALUE_TYPE(val) == ghb_dict_get_type())
-                init_settings_from_dict(new_dict, gval, val);
-            else
-                init_settings_from_dict(new_dict, gval, gval);
-        }
-        else if (G_VALUE_TYPE(gval) == ghb_array_get_type())
-        {
-            GValue *new_array;
-            new_array = ghb_array_value_new(8);
-            ghb_array_append(dest, new_array);
-            if (G_VALUE_TYPE(val) == ghb_array_get_type())
-                init_settings_from_array(new_array, gval, val);
-            else
-                init_settings_from_array(new_array, gval, gval);
-        }
-        else if (val != NULL)
-        {
-            ghb_array_append(dest, ghb_value_dup(val));
-        }
-    }
-}
-
-static void
-init_settings_from_dict(
-    GValue *dest,
-    GValue *internal,
-    GValue *dict)
-{
-    GHashTableIter iter;
-    gchar *key;
-    GValue *gval, *val;
-
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
-    {
-        val = NULL;
-        if (dict)
-            val = ghb_dict_lookup(dict, key);
-        if (val == NULL)
-            val = gval;
-        if (G_VALUE_TYPE(gval) == ghb_dict_get_type())
-        {
-            GValue *new_dict;
-            new_dict = ghb_dict_value_new();
-            ghb_settings_take_value(dest, key, new_dict);
-            if (G_VALUE_TYPE(val) == ghb_dict_get_type())
-                init_settings_from_dict(new_dict, gval, val);
-            else
-                init_settings_from_dict(new_dict, gval, gval);
-        }
-        else if (G_VALUE_TYPE(gval) == ghb_array_get_type())
-        {
-            GValue *new_array;
-            new_array = ghb_array_value_new(8);
-            ghb_settings_take_value(dest, key, new_array);
-            if (G_VALUE_TYPE(val) == ghb_array_get_type())
-                init_settings_from_array(new_array, gval, val);
-            else
-                init_settings_from_array(new_array, gval, gval);
-
-        }
-        else
-        {
-            ghb_settings_set_value(dest, key, val);
-        }
-    }
+    return ghb_dict_lookup(dict, key);
 }
 
 static const char * dict_get_string(GValue *dict, const char *key)
@@ -881,45 +781,161 @@ static gboolean dict_get_boolean(GValue *dict, const char *key)
     return g_value_get_boolean(gval);
 }
 
-void
-init_ui_from_dict(
-    signal_user_data_t *ud,
-    GValue *internal,
-    GValue *dict)
+const gchar*
+ghb_presets_get_description(GValue *pdict)
+{
+    return dict_get_string(pdict, "PresetDescription");
+}
+
+
+static void init_settings_from_dict(
+    GValue *dest, GValue *template, GValue *dict, gboolean filter);
+
+static void
+init_settings_from_array(
+    GValue *dest,
+    GValue *template,
+    GValue *array,
+    gboolean filter)
+{
+    GValue *gval, *val, *new_val;
+    gint count, ii;
+
+    if (ghb_array_len(template) == 0)
+    {
+        if (!filter)
+        {
+            count = ghb_array_len(array);
+            for (ii = 0; ii < count; ii++)
+            {
+                val = ghb_array_get_nth(array, ii);
+                ghb_array_append(dest, ghb_value_dup(val));
+            }
+        }
+        return;
+    }
+
+    count = ghb_array_len(array);
+    // The first element of the template array is always the
+    // template for the allowed values
+    gval = ghb_array_get_nth(template, 0);
+    for (ii = 0; ii < count; ii++)
+    {
+        val = ghb_array_get_nth(array, ii);
+        if (G_VALUE_TYPE(gval) == ghb_dict_get_type())
+        {
+            GValue *new_dict;
+            if (val != NULL && G_VALUE_TYPE(val) == ghb_dict_get_type())
+            {
+                new_dict = ghb_dict_value_new();
+                init_settings_from_dict(new_dict, gval, val, filter);
+            }
+            else
+            {
+                new_dict = ghb_value_dup(gval);
+            }
+            new_val = new_dict;
+        }
+        else if (G_VALUE_TYPE(gval) == ghb_array_get_type())
+        {
+            GValue *new_array;
+            if (val != NULL && G_VALUE_TYPE(val) == ghb_array_get_type())
+            {
+                new_array = ghb_array_value_new(8);
+                init_settings_from_array(new_array, gval, val, filter);
+            }
+            else
+            {
+                new_array = ghb_value_dup(gval);
+            }
+            new_val = new_array;
+        }
+        else
+        {
+            if (val == NULL)
+                new_val = ghb_value_dup(gval);
+            else
+                new_val = ghb_value_dup(val);
+        }
+        ghb_array_append(dest, new_val);
+    }
+}
+
+static void
+init_settings_from_dict(
+    GValue *dest,
+    GValue *template,
+    GValue *dict,
+    gboolean filter)
 {
     GHashTableIter iter;
     gchar *key;
-    GValue *gval, *val;
-    GValue *tmp = ghb_value_dup(internal);
+    GValue *gval, *val, *new_val;
 
-    ghb_dict_iter_init(&iter, tmp);
+    ghb_dict_iter_init(&iter, template);
     // middle (void*) cast prevents gcc warning "defreferencing type-punned
     // pointer will break strict-aliasing rules"
     while (g_hash_table_iter_next(
             &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
     {
-        if (!strcmp(key, "x264Option"))
-        {
-            continue;
-        }
         val = NULL;
         if (dict)
             val = ghb_dict_lookup(dict, key);
-        if (val == NULL)
-            val = gval;
-        ghb_ui_update(ud, key, val);
+        if (G_VALUE_TYPE(gval) == ghb_dict_get_type())
+        {
+            GValue *new_dict;
+            if (val != NULL && G_VALUE_TYPE(val) == ghb_dict_get_type())
+            {
+                new_dict = ghb_dict_value_new();
+                init_settings_from_dict(new_dict, gval, val, filter);
+            }
+            else
+            {
+                new_dict = ghb_value_dup(gval);
+            }
+            new_val = new_dict;
+        }
+        else if (G_VALUE_TYPE(gval) == ghb_array_get_type())
+        {
+            GValue *new_array;
+            if (val != NULL && G_VALUE_TYPE(val) == ghb_array_get_type())
+            {
+                new_array = ghb_array_value_new(8);
+                init_settings_from_array(new_array, gval, val, filter);
+            }
+            else
+            {
+                new_array = ghb_value_dup(gval);
+            }
+            new_val = new_array;
+
+        }
+        else
+        {
+            if (val == NULL)
+                new_val = ghb_value_dup(gval);
+            else
+                new_val = ghb_value_dup(val);
+        }
+        ghb_settings_take_value(dest, key, new_val);
     }
-    ghb_value_free(tmp);
 
-    if (dict == NULL)
-        dict = internal;
+    if (filter || dict == NULL)
+        return;
 
-    if (ghb_value_boolean(preset_dict_get_value(dict, "x264UseAdvancedOptions")))
-
+    // If not filtering the source, copy source elements that
+    // were not in the template.
+    ghb_dict_iter_init(&iter, dict);
+    // middle (void*) cast prevents gcc warning "defreferencing type-punned
+    // pointer will break strict-aliasing rules"
+    while (g_hash_table_iter_next(
+            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
     {
-        val = ghb_dict_lookup(dict, "x264Option");
-        if (val != NULL)
-            ghb_ui_update(ud, "x264Option", val);
+        val = ghb_dict_lookup(template, key);
+        if (val == NULL)
+        {
+            ghb_settings_set_value(dest, key, gval);
+        }
     }
 }
 
@@ -927,50 +943,175 @@ void
 ghb_preset_to_settings(GValue *settings, GValue *preset)
 {
     // Initialize the ui from presets file.
-    GValue *internal, *hidden;
+    GValue *internal;
 
     // Get key list from internal default presets.  This way we do not
     // load any unknown keys.
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
     if (internalPlist == NULL) return;
     internal = plist_get_dict(internalPlist, "Presets");
-    hidden = plist_get_dict(internalPlist, "XlatPresets");
-    // Setting a ui widget will cause the corresponding setting
-    // to be set, but it also triggers a callback that can
-    // have the side effect of using other settings values
-    // that have not yet been set.  So set *all* settings first
-    // then update the ui.
-    init_settings_from_dict(settings, internal, preset);
-    init_settings_from_dict(settings, hidden, preset);
-
     if (preset == NULL)
         preset = internal;
 
-    GValue *val;
-    gboolean dd;
+    init_settings_from_dict(settings, preset, NULL, TRUE);
 
-    val = ghb_dict_lookup(preset, "PictureDecombDeinterlace");
-    if (val != NULL)
-    {
-        dd = ghb_value_boolean(val);
-        ghb_settings_set_boolean(settings, "PictureDeinterlaceDecomb", !dd);
-    }
-    val = ghb_dict_lookup(preset, "PictureHeight");
-    if (val != NULL)
-    {
-        ghb_settings_set_value(settings, "scale_height", val);
-    }
-    val = ghb_dict_lookup(preset, "PictureWidth");
-    if (val != NULL)
-    {
-        ghb_settings_set_value(settings, "scale_width", val);
-    }
+    // Fix up all the internal settings that are derived from preset values.
+    ghb_settings_set_boolean(settings, "PictureDeinterlaceDecomb", 
+        !ghb_settings_get_boolean(settings, "PictureDecombDeinterlace"));
+
+    ghb_settings_set_value(settings, "scale_height",
+        ghb_settings_get_value(settings, "PictureHeight"));
+
+    ghb_settings_set_value(settings, "scale_width",
+        ghb_settings_get_value(settings, "PictureWidth"));
+
     ghb_settings_set_boolean(settings, "preset_modified", FALSE);
+
+    gboolean uses_max;
+    gint uses_pic;
+    gint vqtype;
+
+    uses_max = ghb_settings_get_boolean(settings, "UsesMaxPictureSettings");
+    uses_pic = ghb_settings_get_int(settings, "UsesPictureSettings");
+    vqtype = ghb_settings_get_int(settings, "VideoQualityType");
+
+    // "Use max" or "strict anamorphic" imply autoscale
+    if (uses_max || uses_pic == 2)
+    {
+        ghb_settings_set_boolean(settings, "autoscale", TRUE);
+    }
+    else if (uses_pic == 1)
+    {
+        ghb_settings_set_boolean(settings, "autoscale", FALSE);
+    }
+
+    // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
+    // *note: target is no longer used
+    switch (vqtype)
+    {
+    case 0:
+    {
+        ghb_settings_set_boolean(settings, "vquality_type_bitrate", TRUE);
+        ghb_settings_set_boolean(settings, "vquality_type_constant", FALSE);
+    } break;
+    case 1:
+    {
+        ghb_settings_set_boolean(settings, "vquality_type_bitrate", TRUE);
+        ghb_settings_set_boolean(settings, "vquality_type_constant", FALSE);
+    } break;
+    case 2:
+    {
+        ghb_settings_set_boolean(settings, "vquality_type_bitrate", FALSE);
+        ghb_settings_set_boolean(settings, "vquality_type_constant", TRUE);
+    } break;
+    default:
+    {
+        ghb_settings_set_boolean(settings, "vquality_type_bitrate", FALSE);
+        ghb_settings_set_boolean(settings, "vquality_type_constant", TRUE);
+    } break;
+    }
+
+    gchar *mode = ghb_settings_get_string(settings, "VideoFramerateMode");
+    if (strcmp(mode, "cfr") == 0)
+    {
+        ghb_settings_set_boolean(settings, "VideoFramerateCFR", TRUE);
+        ghb_settings_set_boolean(settings, "VideoFrameratePFR", FALSE);
+        ghb_settings_set_boolean(settings, "VideoFramerateVFR", FALSE);
+    }
+    else if (strcmp(mode, "pfr") == 0)
+    {
+        ghb_settings_set_boolean(settings, "VideoFramerateCFR", FALSE);
+        ghb_settings_set_boolean(settings, "VideoFrameratePFR", TRUE);
+        ghb_settings_set_boolean(settings, "VideoFramerateVFR", FALSE);
+    }
+    else
+    {
+        ghb_settings_set_boolean(settings, "VideoFramerateCFR", FALSE);
+        ghb_settings_set_boolean(settings, "VideoFrameratePFR", FALSE);
+        ghb_settings_set_boolean(settings, "VideoFramerateVFR", TRUE);
+    }
+    g_free(mode);
+
+    if (ghb_settings_get_boolean(settings, "x264UseAdvancedOptions"))
+    {
+        // Force preset/tune/profile/level/opts to conform to option string
+        ghb_settings_set_string(settings, "x264Preset", "medium");
+        ghb_settings_set_string(settings, "x264Tune", "none");
+        ghb_settings_set_string(settings, "h264Profile", "auto");
+        ghb_settings_set_string(settings, "h264Level", "auto");
+        ghb_settings_set_value(settings, "x264OptionExtra",
+            ghb_settings_get_value(settings, "x264Option"));
+    }
+    else
+    {
+        ghb_dict_remove(settings, "x264Option");
+    }
+
+    const char * const *x264preset = hb_x264_presets();
+    char *x264Preset = ghb_settings_get_string(settings, "x264Preset");
+    int ii;
+    for (ii = 0; x264preset[ii]; ii++)
+    {
+        if (!strcasecmp(x264Preset, x264preset[ii]))
+        {
+            ghb_settings_set_int(settings, "x264PresetSlider", ii);
+        }
+    }
+    g_free(x264Preset);
+
+    char *x264Tune = ghb_settings_get_string(settings, "x264Tune");
+    char *tune = NULL;
+    char *tmp = g_strdup(x264Tune);
+    char *saveptr;
+    char * tok = strtok_r(tmp, ",./-+", &saveptr);
+    while (tok != NULL)
+    {
+        if (!strcasecmp(tok, "fastdecode"))
+        {
+            ghb_settings_set_boolean(settings, "x264FastDecode", TRUE);
+        }
+        else if (!strcasecmp(tok, "zerolatency"))
+        {
+            ghb_settings_set_boolean(settings, "x264ZeroLatency", TRUE);
+        }
+        else if (tune == NULL)
+        {
+            tune = g_strdup(tok);
+        }
+        else
+        {
+            ghb_log("Superfluous tunes! %s", tok);
+        }
+        tok = strtok_r(NULL, ",./-+", &saveptr);
+    }
+    if (tune != NULL)
+    {
+        ghb_settings_set_string(settings, "x264Tune", tune);
+        g_free(tune);
+    }
+    g_free(x264Tune);
 }
 
 void
 ghb_settings_to_ui(signal_user_data_t *ud, GValue *dict)
 {
-    init_ui_from_dict(ud, dict, NULL);
+    GHashTableIter iter;
+    gchar *key;
+    GValue *gval;
+    GValue *tmp = ghb_value_dup(dict);
+
+    if (dict == NULL)
+        return;
+
+    ghb_dict_iter_init(&iter, tmp);
+    // middle (void*) cast prevents gcc warning "defreferencing type-punned
+    // pointer will break strict-aliasing rules"
+    while (g_hash_table_iter_next(
+            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
+    {
+        ghb_ui_settings_update(ud, dict, key, gval);
+    }
+    ghb_value_free(tmp);
 }
 
 static GValue *current_preset = NULL;
@@ -1322,111 +1463,6 @@ remove_plist(const gchar *name)
     g_free(config);
 }
 
-static gboolean prefs_initializing = FALSE;
-
-void
-ghb_globals_to_ui(signal_user_data_t *ud)
-{
-    const GValue *gval;
-    gchar *key;
-    GValue *internal;
-    GHashTableIter iter;
-
-    internal = plist_get_dict(internalPlist, "Initialization");
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
-    {
-        ghb_ui_settings_update(ud, ud->settings, key, gval);
-    }
-
-    internal = plist_get_dict(internalPlist, "Globals");
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
-    {
-        ghb_ui_settings_update(ud, ud->globals, key, gval);
-    }
-}
-
-void
-ghb_prefs_to_ui(signal_user_data_t *ud)
-{
-    const GValue *gval;
-    gchar *key;
-    GValue *internal, *dict;
-    GHashTableIter iter;
-
-
-    g_debug("ghb_prefs_to_ui");
-    prefs_initializing = TRUE;
-
-    // Setting a ui widget will cause the corresponding setting
-    // to be set, but it also triggers a callback that can
-    // have the side effect of using other settings values
-    // that have not yet been set.  So set *all* settings first
-    // then update the ui.
-    dict = plist_get_dict(prefsPlist, "Preferences");
-    internal = plist_get_dict(internalPlist, "Preferences");
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
-    {
-        const GValue *value = NULL;
-        if (dict)
-            value = ghb_dict_lookup(dict, key);
-        if (value == NULL)
-            value = gval;
-        ghb_settings_set_value(ud->prefs, key, value);
-    }
-    internal = plist_get_dict(internalPlist, "Preferences");
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
-    {
-        const GValue *value = NULL;
-        if (dict)
-            value = ghb_dict_lookup(dict, key);
-        if (value == NULL)
-            value = gval;
-        ghb_ui_settings_update(ud, ud->prefs, key, value);
-    }
-#if 0
-    const GValue *val;
-    val = ghb_settings_get_value(ud->prefs, "show_presets");
-    ghb_ui_settings_update(ud, ud->prefs, "show_presets", val);
-#endif
-    if (ghb_settings_get_boolean(ud->prefs, "hbfd_feature"))
-    {
-        GtkWidget *widget;
-#if 0
-        val = ghb_settings_get_value(ud->settings, "hbfd");
-        ghb_ui_settings_update(ud, ud->prefs, "hbfd", val);
-#endif
-        widget = GHB_WIDGET (ud->builder, "hbfd");
-        gtk_widget_set_visible(widget, TRUE);
-    }
-    else
-    {
-        ghb_ui_settings_update(ud, ud->prefs, "hbfd", ghb_int64_value(0));
-    }
-    gval = ghb_settings_get_value(ud->prefs, "default_source");
-    ghb_settings_set_value(ud->globals, "scan_source", gval);
-
-    ghb_ui_settings_update(ud, ud->settings, "dest_dir",
-                   ghb_settings_get_value(ud->prefs, "destination_dir"));
-
-    prefs_initializing = FALSE;
-}
-
 void
 ghb_prefs_save(GValue *settings)
 {
@@ -1436,7 +1472,7 @@ ghb_prefs_save(GValue *settings)
     gchar *key;
     const GValue *value;
 
-    if (prefs_initializing) return;
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
     dict = plist_get_dict(internalPlist, "Preferences");
     if (dict == NULL) return;
     pref_dict = plist_get_dict(prefsPlist, "Preferences");
@@ -1462,7 +1498,6 @@ ghb_pref_save(GValue *settings, const gchar *key)
 {
     const GValue *value, *value2;
 
-    if (prefs_initializing) return;
     value = ghb_settings_get_value(settings, key);
     if (value != NULL)
     {
@@ -1484,7 +1519,6 @@ ghb_pref_set(GValue *settings, const gchar *key)
 {
     const GValue *value, *value2;
 
-    if (prefs_initializing) return;
     value = ghb_settings_get_value(settings, key);
     if (value != NULL)
     {
@@ -1519,7 +1553,7 @@ ghb_settings_init(GValue *settings, const char *name)
     GValue *gval;
 
     g_debug("ghb_settings_init");
-    internalPlist = ghb_resource_get("internal-defaults");
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
     // Setting a ui widget will cause the corresponding setting
     // to be set, but it also triggers a callback that can
     // have the side effect of using other settings values
@@ -1539,8 +1573,6 @@ ghb_settings_init(GValue *settings, const char *name)
 void
 ghb_settings_close()
 {
-    if (internalPlist)
-        ghb_value_free(internalPlist);
     if (presetsPlist)
         ghb_value_free(presetsPlist);
     if (prefsPlist)
@@ -1584,6 +1616,7 @@ ghb_prefs_load(signal_user_data_t *ud)
     GValue *gval;
 
     g_debug("ghb_prefs_load");
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
     prefsPlist = load_plist("preferences");
     if (prefsPlist == NULL)
         prefsPlist = ghb_dict_value_new();
@@ -1636,6 +1669,29 @@ ghb_prefs_load(signal_user_data_t *ud)
 #endif
         store_prefs();
     }
+}
+
+void
+ghb_prefs_to_settings(GValue *settings)
+{
+    // Initialize the ui from presets file.
+    GValue *internal, *dict;
+
+    if (prefsPlist == NULL)
+        return;
+
+    // Get key list from internal default presets.  This way we do not
+    // load any unknown keys.
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    if (internalPlist == NULL) return;
+    internal = plist_get_dict(internalPlist, "Preferences");
+    dict = plist_get_dict(prefsPlist, "Preferences");
+    // Setting a ui widget will cause the corresponding setting
+    // to be set, but it also triggers a callback that can
+    // have the side effect of using other settings values
+    // that have not yet been set.  So set *all* settings first
+    // then update the ui.
+    init_settings_from_dict(settings, internal, dict, TRUE);
 }
 
 static const gchar*
@@ -2221,6 +2277,7 @@ export_value_container(GValue *lin_val)
     return sval;
 }
 
+// Translate values for compatibility with other platforms
 static void
 export_value_xlat(GValue *dict)
 {
@@ -2476,6 +2533,7 @@ import_value_xlat(GValue *dict)
     GValue *defaults, *mac_val, *gval;
     const gchar *key;
 
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
     defaults = plist_get_dict(internalPlist, "Presets");
     key = "VideoEncoder";
     mac_val = ghb_dict_lookup(dict, key);
@@ -2564,7 +2622,7 @@ import_value_xlat(GValue *dict)
             {
                 gdouble drc;
                 drc = ghb_value_double(mac_val);
-                if (drc < 1.0 && drc > 0.0)
+                if (drc < 1.0)
                 {
                     ghb_dict_insert(adict, g_strdup("AudioTrackDRCSlider"),
                                     ghb_double_value_new(0.0));
@@ -2574,86 +2632,20 @@ import_value_xlat(GValue *dict)
     }
 }
 
-static void
-import_xlat_preset(GValue *dict)
+static GValue*
+import_xlat_preset(GValue *user_preset)
 {
-    gboolean uses_max;
-    gint uses_pic;
-    gint par;
-    gint vqtype;
+    GValue *dict, *internal;
 
     g_debug("import_xlat_preset ()");
-    uses_max = ghb_value_boolean(
-                        preset_dict_get_value(dict, "UsesMaxPictureSettings"));
-    uses_pic = ghb_value_int(
-                        preset_dict_get_value(dict, "UsesPictureSettings"));
-    par = ghb_value_int(preset_dict_get_value(dict, "PicturePAR"));
-    vqtype = ghb_value_int(preset_dict_get_value(dict, "VideoQualityType"));
 
-    if (uses_max || uses_pic == 2)
-    {
-        ghb_dict_insert(dict, g_strdup("autoscale"),
-                        ghb_boolean_value_new(TRUE));
-    }
-    switch (par)
-    {
-    case 0:
-    {
-        if (ghb_dict_lookup(dict, "PictureModulus") == NULL)
-            ghb_dict_insert(dict, g_strdup("PictureModulus"),
-                            ghb_int_value_new(16));
-    } break;
-    case 1:
-    {
-        ghb_dict_insert(dict, g_strdup("PictureModulus"),
-                        ghb_int_value_new(1));
-    } break;
-    case 2:
-    {
-        if (ghb_dict_lookup(dict, "PictureModulus") == NULL)
-            ghb_dict_insert(dict, g_strdup("PictureModulus"),
-                            ghb_int_value_new(16));
-    } break;
-    default:
-    {
-        if (ghb_dict_lookup(dict, "PictureModulus") == NULL)
-            ghb_dict_insert(dict, g_strdup("PictureModulus"),
-                            ghb_int_value_new(16));
-    } break;
-    }
-    // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
-    // *note: target is no longer used
-    switch (vqtype)
-    {
-    case 0:
-    {
-        ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"),
-                        ghb_boolean_value_new(TRUE));
-        ghb_dict_insert(dict, g_strdup("vquality_type_constant"),
-                        ghb_boolean_value_new(FALSE));
-    } break;
-    case 1:
-    {
-        ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"),
-                        ghb_boolean_value_new(TRUE));
-        ghb_dict_insert(dict, g_strdup("vquality_type_constant"),
-                        ghb_boolean_value_new(FALSE));
-    } break;
-    case 2:
-    {
-        ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"),
-                        ghb_boolean_value_new(FALSE));
-        ghb_dict_insert(dict, g_strdup("vquality_type_constant"),
-                        ghb_boolean_value_new(TRUE));
-    } break;
-    default:
-    {
-        ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"),
-                        ghb_boolean_value_new(FALSE));
-        ghb_dict_insert(dict, g_strdup("vquality_type_constant"),
-                        ghb_boolean_value_new(TRUE));
-    } break;
-    }
+    dict = ghb_dict_value_new();
+
+    // First, initialize the preset with defaults.
+    // Then import user presets over top of defaults
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    internal = plist_get_dict(internalPlist, "Presets");
+    init_settings_from_dict(dict, internal, user_preset, FALSE);
 
     // Initialize the AudioLanguageList from preferences PreferredLanguage
     // and translate old AudioDUB preference option if found
@@ -2726,163 +2718,7 @@ import_xlat_preset(GValue *dict)
 
     import_value_xlat(dict);
 
-    GValue *mode = ghb_dict_lookup(dict, "VideoFramerateMode");
-    if (mode == NULL)
-    {
-        GValue *fr = ghb_dict_lookup(dict, "VideoFramerate");
-        if (fr)
-        {
-            gchar *str;
-            gboolean pfr = FALSE;
-            GValue *pfr_val = ghb_dict_lookup(dict, "VideoFrameratePFR");
-            if (pfr_val)
-            {
-                pfr = ghb_value_boolean(pfr_val);
-            }
-            str = ghb_value_string(fr);
-            if (strcmp(str, "source") == 0)
-            {
-                ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"),
-                                ghb_boolean_value_new(FALSE));
-                ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"),
-                                ghb_boolean_value_new(TRUE));
-            }
-            else if (!pfr)
-            {
-                ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"),
-                                ghb_boolean_value_new(TRUE));
-                ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"),
-                                ghb_boolean_value_new(FALSE));
-            }
-            else
-            {
-                ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"),
-                                ghb_boolean_value_new(FALSE));
-                ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"),
-                                ghb_boolean_value_new(FALSE));
-            }
-            g_free(str);
-        }
-    }
-    else
-    {
-        gchar *str;
-        str = ghb_value_string(mode);
-        if (strcmp(str, "cfr") == 0)
-        {
-                ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"),
-                                ghb_boolean_value_new(TRUE));
-                ghb_dict_insert(dict, g_strdup("VideoFrameratePFR"),
-                                ghb_boolean_value_new(FALSE));
-                ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"),
-                                ghb_boolean_value_new(FALSE));
-        }
-        else if (strcmp(str, "pfr") == 0)
-        {
-                ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"),
-                                ghb_boolean_value_new(FALSE));
-                ghb_dict_insert(dict, g_strdup("VideoFrameratePFR"),
-                                ghb_boolean_value_new(TRUE));
-                ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"),
-                                ghb_boolean_value_new(FALSE));
-        }
-        else
-        {
-                ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"),
-                                ghb_boolean_value_new(FALSE));
-                ghb_dict_insert(dict, g_strdup("VideoFrameratePFR"),
-                                ghb_boolean_value_new(FALSE));
-                ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"),
-                                ghb_boolean_value_new(TRUE));
-        }
-        g_free(str);
-    }
-
-    const char * const *preset = hb_x264_presets();
-    if (ghb_value_boolean(preset_dict_get_value(dict, "x264UseAdvancedOptions")))
-    {
-        // Force preset/tune/profile/level/opts to conform to option string
-        ghb_dict_insert(dict, g_strdup("x264Preset"),
-                        ghb_string_value_new("medium"));
-        ghb_dict_insert(dict, g_strdup("x264Tune"),
-                        ghb_string_value_new("none"));
-        ghb_dict_insert(dict, g_strdup("h264Profile"),
-                        ghb_string_value_new("auto"));
-        ghb_dict_insert(dict, g_strdup("h264Level"),
-                        ghb_string_value_new("auto"));
-        GValue *opt = ghb_dict_lookup(dict, "x264Option");
-        ghb_dict_insert(dict, g_strdup("x264OptionExtra"),
-                        ghb_value_dup(opt));
-    }
-
-    GValue *x264Preset = ghb_dict_lookup(dict, "x264Preset");
-    if (x264Preset != NULL)
-    {
-        gchar *str;
-        str = ghb_value_string(x264Preset);
-        int ii;
-        for (ii = 0; preset[ii]; ii++)
-        {
-            if (!strcasecmp(str, preset[ii]))
-            {
-                ghb_dict_insert(dict, g_strdup("x264PresetSlider"),
-                                ghb_int_value_new(ii));
-            }
-        }
-        g_free(str);
-    }
-    else
-    {
-        int ii;
-        for (ii = 0; preset[ii]; ii++)
-        {
-            if (!strcasecmp("medium", preset[ii]))
-            {
-                ghb_dict_insert(dict, g_strdup("x264PresetSlider"),
-                                ghb_int_value_new(ii));
-            }
-        }
-        ghb_dict_insert(dict, g_strdup("x264UseAdvancedOptions"),
-                        ghb_boolean_value_new(TRUE));
-    }
-
-    const char *x264Tune = dict_get_string(dict, "x264Tune");
-    if (x264Tune != NULL)
-    {
-        char *tune = NULL;
-        char *tmp = g_strdup(x264Tune);
-        char *saveptr;
-
-        char * tok = strtok_r(tmp, ",./-+", &saveptr);
-        while (tok != NULL)
-        {
-            if (!strcasecmp(tok, "fastdecode"))
-            {
-                ghb_dict_insert(dict, g_strdup("x264FastDecode"),
-                                ghb_boolean_value_new(TRUE));
-            }
-            else if (!strcasecmp(tok, "zerolatency"))
-            {
-                ghb_dict_insert(dict, g_strdup("x264ZeroLatency"),
-                                ghb_boolean_value_new(TRUE));
-            }
-            else if (tune == NULL)
-            {
-                tune = g_strdup(tok);
-            }
-            else
-            {
-                ghb_log("Superfluous tunes! %s", tok);
-            }
-            tok = strtok_r(NULL, ",./-+", &saveptr);
-        }
-        if (tune != NULL)
-        {
-            ghb_dict_insert(dict, g_strdup("x264Tune"),
-                            ghb_string_value_new(tune));
-            g_free(tune);
-        }
-    }
+    return dict;
 }
 
 static void
@@ -2908,11 +2744,13 @@ import_xlat_presets(GValue *presets)
         }
         else
         {
-            import_xlat_preset(dict);
+            GValue *import_dict = import_xlat_preset(dict);
+            ghb_array_replace(presets, ii, import_dict);
         }
     }
 }
 
+// Translate internal values to preset key, value pairs
 static void
 export_xlat_preset(GValue *dict)
 {
@@ -2961,6 +2799,11 @@ export_xlat_preset(GValue *dict)
                         ghb_string_value_new("vfr"));
     }
 
+    if (ghb_value_int(preset_dict_get_value(dict, "PictureDeblock")) < 5)
+    {
+        ghb_dict_insert(dict, g_strdup("PictureDeblock"), ghb_int_value_new(0));
+    }
+
     GValue *alist, *adict;
     gint count, ii;
 
@@ -2973,7 +2816,7 @@ export_xlat_preset(GValue *dict)
         adict = ghb_array_get_nth(alist, ii);
         drc = ghb_value_double(
                 preset_dict_get_value(adict, "AudioTrackDRCSlider"));
-        if (drc < 1.0 && drc > 0.0)
+        if (drc < 1.0)
         {
             ghb_dict_insert(adict, g_strdup("AudioTrackDRCSlider"),
                             ghb_double_value_new(0.0));
@@ -3010,24 +2853,11 @@ export_xlat_preset(GValue *dict)
         g_free(tunes);
     }
 
+    // Remove everything from dist that isn't in "Presets"
     GValue *internal;
-    GHashTableIter iter;
-    gchar *key;
-    GValue *value;
-    internal = plist_get_dict(internalPlist, "XlatPresets");
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
-    {
-        ghb_dict_remove(dict, key);
-    }
-
-    // remove obsolete keys
-    ghb_dict_remove(dict, "UsesMaxPictureSettings");
-    ghb_dict_remove(dict, "VFR");
-    ghb_dict_remove(dict, "VideoFrameratePFR");
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    internal = plist_get_dict(internalPlist, "Presets");
+    dict_clean(dict, internal);
 
     export_value_xlat(dict);
 }
@@ -3104,7 +2934,7 @@ ghb_presets_reload(signal_user_data_t *ud)
     int *indices, len;
 
     g_debug("ghb_presets_reload()\n");
-    std_presets = ghb_resource_get("standard-presets");
+    std_presets = ghb_value_dup(ghb_resource_get("standard-presets"));
     if (std_presets == NULL) return;
 
     remove_std_presets(ud);
@@ -3131,20 +2961,21 @@ ghb_presets_reload(signal_user_data_t *ud)
     }
     import_xlat_presets(presetsPlist);
     store_presets();
+    ghb_value_free(std_presets);
 }
 
 static gboolean
-check_old_presets()
+check_old_presets(GValue *presetsArray)
 {
     gint count, ii;
 
-    count = ghb_array_len(presetsPlist);
+    count = ghb_array_len(presetsArray);
     for (ii = count-1; ii >= 0; ii--)
     {
         GValue *dict;
         GValue *type;
 
-        dict = ghb_array_get_nth(presetsPlist, ii);
+        dict = ghb_array_get_nth(presetsArray, ii);
         type = ghb_dict_lookup(dict, "Type");
         if (type == NULL)
             return TRUE;
@@ -3153,36 +2984,42 @@ check_old_presets()
 }
 
 static void
-replace_standard_presets()
+replace_standard_presets(GValue *presetsArray)
 {
-    GValue *std_presets;
+    GValue *std_presets, *tmp;
     int *indices, len;
     gint count, ii;
 
-    count = ghb_array_len(presetsPlist);
+    // Remove existing standard presets
+    count = ghb_array_len(presetsArray);
     for (ii = count-1; ii >= 0; ii--)
     {
         GValue *dict;
         gint ptype;
 
-        dict = ghb_array_get_nth(presetsPlist, ii);
+        dict = ghb_array_get_nth(presetsArray, ii);
         ptype = ghb_value_int(preset_dict_get_value(dict, "Type"));
         if (ptype == PRESETS_BUILTIN)
         {
             gint indices = 0;
-            ghb_presets_remove(presetsPlist, &indices, 1);
+            ghb_presets_remove(presetsArray, &indices, 1);
         }
     }
 
-    std_presets = ghb_resource_get("standard-presets");
-    if (std_presets == NULL) return;
+    // Get the default standard presets
+    tmp = ghb_resource_get("standard-presets");
+    if (tmp == NULL) return;
+    std_presets = ghb_value_dup(tmp);
 
-    indices = presets_find_default(presetsPlist, &len);
+    // Clear the default in the standard presets if one is already set
+    // in custom presets
+    indices = presets_find_default(presetsArray, &len);
     if (indices)
     {
         presets_clear_default(std_presets);
         g_free(indices);
     }
+
     // Merge the keyfile contents into our presets
     count = ghb_array_len(std_presets);
     for (ii = count-1; ii >= 0; ii--)
@@ -3195,18 +3032,17 @@ replace_standard_presets()
         copy_dict = ghb_value_dup(std_dict);
         ghb_dict_insert(copy_dict, g_strdup("PresetBuildNumber"),
                         ghb_int64_value_new(hb_get_build(NULL)));
-        ghb_presets_insert(presetsPlist, copy_dict, &indices, 1);
+        ghb_presets_insert(presetsArray, copy_dict, &indices, 1);
     }
-    import_xlat_presets(presetsPlist);
-    store_presets();
+    ghb_value_free(std_presets);
 }
 
 static int
-update_standard_presets(signal_user_data_t *ud)
+update_standard_presets(signal_user_data_t *ud, GValue *presetsArray)
 {
     gint count, ii;
 
-    count = ghb_array_len(presetsPlist);
+    count = ghb_array_len(presetsArray);
     for (ii = count-1; ii >= 0; ii--)
     {
         GValue *dict;
@@ -3214,12 +3050,12 @@ update_standard_presets(signal_user_data_t *ud)
         gint64 build;
         gint type;
 
-        dict = ghb_array_get_nth(presetsPlist, ii);
+        dict = ghb_array_get_nth(presetsArray, ii);
         gval = ghb_dict_lookup(dict, "Type");
         if (gval == NULL)
         {
             // Old preset that doesn't have a Type
-            replace_standard_presets();
+            replace_standard_presets(presetsArray);
             return 1;
         }
 
@@ -3230,7 +3066,7 @@ update_standard_presets(signal_user_data_t *ud)
             if (gval == NULL)
             {
                 // Old preset that doesn't have a build number
-                replace_standard_presets();
+                replace_standard_presets(presetsArray);
                 return 1;
             }
 
@@ -3238,7 +3074,7 @@ update_standard_presets(signal_user_data_t *ud)
             if (build != hb_get_build(NULL))
             {
                 // Build number does not match
-                replace_standard_presets();
+                replace_standard_presets(presetsArray);
                 return 1;
             }
         }
@@ -3249,48 +3085,37 @@ update_standard_presets(signal_user_data_t *ud)
 void
 ghb_presets_load(signal_user_data_t *ud)
 {
-    presetsPlist = load_plist("presets");
-    if (presetsPlist == NULL)
+    gboolean store = FALSE;
+    presetsPlistFile = load_plist("presets");
+    if ((presetsPlistFile == NULL) ||
+        (G_VALUE_TYPE(presetsPlistFile) == ghb_dict_get_type()) ||
+        (check_old_presets(presetsPlistFile)))
     {
-        presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
-        import_xlat_presets(presetsPlist);
-        store_presets();
-    }
-    else if (G_VALUE_TYPE(presetsPlist) == ghb_dict_get_type())
-    { // Presets is older dictionary format. Convert to array
-        ghb_value_free(presetsPlist);
-        presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
-        import_xlat_presets(presetsPlist);
-        store_presets();
-    }
-    else if (check_old_presets())
-    {
-        ghb_value_free(presetsPlist);
-        presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
-        import_xlat_presets(presetsPlist);
-        store_presets();
+        presetsPlistFile = ghb_resource_get("standard-presets");
+        store = TRUE;
     }
     else
     {
-        if (!update_standard_presets(ud))
-            import_xlat_presets(presetsPlist);
+        update_standard_presets(ud, presetsPlistFile);
     }
+    presetsPlist = ghb_value_dup(presetsPlistFile);
+    import_xlat_presets(presetsPlist);
+    if (store)
+        store_presets();
 
 }
 
 static void
 settings_save(signal_user_data_t *ud, const GValue *path)
 {
-    GValue *dict, *internal;
-    GHashTableIter iter;
-    gchar *key;
-    GValue *value;
+    GValue *dict;
     gint *indices, len, count;
     gint *def_indices, def_len;
     const gchar *name;
     gboolean replace = FALSE;
 
     g_debug("settings_save");
+    GValue *internalPlist = ghb_resource_get("internal-defaults");
     if (internalPlist == NULL) return;
     count = ghb_array_len(path);
     name = g_value_get_string(ghb_array_get_nth(path, count-1));
@@ -3308,7 +3133,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
             g_free(message);
             return;
         }
-        dict = ghb_dict_value_new();
+        dict = ghb_value_dup(ud->settings);
         ghb_presets_replace(presetsPlist, dict, indices, len);
         replace = TRUE;
     }
@@ -3317,7 +3142,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
         indices = presets_find_pos(path, PRESETS_CUSTOM, &len);
         if (indices)
         {
-            dict = ghb_dict_value_new();
+            dict = ghb_value_dup(ud->settings);
             ghb_presets_insert(presetsPlist, dict, indices, len);
         }
         else
@@ -3327,41 +3152,9 @@ settings_save(signal_user_data_t *ud, const GValue *path)
         }
     }
     current_preset = dict;
-    ghb_settings_set_int64(ud->settings, "Type", PRESETS_CUSTOM);
-    ghb_settings_set_int64(ud->settings, "PresetBuildNumber", hb_get_build(NULL));
+    ghb_settings_set_int64(dict, "Type", PRESETS_CUSTOM);
+    ghb_settings_set_int64(dict, "PresetBuildNumber", hb_get_build(NULL));
 
-    internal = plist_get_dict(internalPlist, "Presets");
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
-    {
-        const GValue *gval;
-
-        gval = ghb_settings_get_value(ud->settings, key);
-        if (gval == NULL)
-        {
-            continue;
-        }
-        ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
-    }
-    internal = plist_get_dict(internalPlist, "XlatPresets");
-    ghb_dict_iter_init(&iter, internal);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
-    {
-        const GValue *gval;
-
-        gval = ghb_settings_get_value(ud->settings, key);
-        if (gval == NULL)
-        {
-            continue;
-        }
-        ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
-    }
     ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(name));
     if (replace)
     {
@@ -3380,18 +3173,18 @@ settings_save(signal_user_data_t *ud, const GValue *path)
                         ghb_boolean_value_new(FALSE));
         presets_list_insert(ud, indices, len);
     }
-    if (!ghb_settings_get_boolean( ud->settings, "PictureWidthEnable"))
+    if (!ghb_settings_get_boolean(ud->settings, "PictureWidthEnable"))
     {
         ghb_dict_remove(dict, "PictureWidth");
     }
-    if (!ghb_settings_get_boolean( ud->settings, "PictureHeightEnable"))
+    if (!ghb_settings_get_boolean(ud->settings, "PictureHeightEnable"))
     {
         ghb_dict_remove(dict, "PictureHeight");
     }
     ghb_dict_insert(dict, g_strdup("autoscale"),
         ghb_boolean_value_new(
-            !ghb_settings_get_boolean( ud->settings, "PictureWidthEnable") &&
-            !ghb_settings_get_boolean( ud->settings, "PictureHeightEnable")
+            !ghb_settings_get_boolean(ud->settings, "PictureWidthEnable") &&
+            !ghb_settings_get_boolean(ud->settings, "PictureHeightEnable")
         )
     );
 

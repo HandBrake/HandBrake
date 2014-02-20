@@ -1339,7 +1339,7 @@
 				<key>PictureHeight</key>
 				<integer>720</integer>
 				<key>PictureKeepRatio</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>PictureLeftCrop</key>
 				<integer>0</integer>
 				<key>PictureModulus</key>

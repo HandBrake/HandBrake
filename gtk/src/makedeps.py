@@ -57,7 +57,7 @@ dep_map = (
     DepEntry("AudioEncoder", "AudioMixdownLabel", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
     DepEntry("AudioEncoder", "AudioMixdown", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
     DepEntry("AudioEncoder", "AudioTrackGainLabel", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
-    DepEntry("AudioEncoder", "AudioTrackGain", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
+    DepEntry("AudioEncoder", "AudioTrackGainSlider", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
     DepEntry("AudioEncoder", "AudioTrackGainValue", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
     DepEntry("x264_bframes", "x264_bpyramid", "<2", True, False),
     DepEntry("x264_bframes", "x264_direct", "0", True, False),

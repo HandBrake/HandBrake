@@ -49,6 +49,7 @@ void ghb_write_pid_file();
 GValue* ghb_get_current_preset(signal_user_data_t *ud);
 GValue* ghb_get_current_preset_path(signal_user_data_t *ud);
 void ghb_preset_to_settings(GValue *settings, GValue *preset);
+void ghb_prefs_to_settings(GValue *settings);
 void dump_preset_path(const gchar *msg, const GValue *path);
 
 #endif // _GHB_PRESETS_H_

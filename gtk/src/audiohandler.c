@@ -94,9 +94,7 @@ static void audio_deps(signal_user_data_t *ud, GValue *asettings, GtkWidget *wid
     gtk_widget_set_sensitive(widget, !is_passthru);
     widget = GHB_WIDGET(ud->builder, "AudioSamplerate");
     gtk_widget_set_sensitive(widget, !is_passthru);
-    widget = GHB_WIDGET(ud->builder, "AudioTrackGain");
-    gtk_widget_set_sensitive(widget, !is_passthru);
-    widget = GHB_WIDGET(ud->builder, "AudioTrackGain");
+    widget = GHB_WIDGET(ud->builder, "AudioTrackGainSlider");
     gtk_widget_set_sensitive(widget, !is_passthru);
     widget = GHB_WIDGET(ud->builder, "AudioTrackGainValue");
     gtk_widget_set_sensitive(widget, !is_passthru);
@@ -379,8 +377,8 @@ audio_update_dialog_widgets(signal_user_data_t *ud, GValue *asettings)
                       ghb_settings_get_value(asettings, "AudioMixdown"));
         ghb_ui_update(ud, "AudioTrackDRCSlider",
                       ghb_settings_get_value(asettings, "AudioTrackDRCSlider"));
-        ghb_ui_update(ud, "AudioTrackGain",
-                      ghb_settings_get_value(asettings, "AudioTrackGain"));
+        ghb_ui_update(ud, "AudioTrackGainSlider",
+                      ghb_settings_get_value(asettings, "AudioTrackGainSlider"));
         ghb_ui_update(ud, "AudioTrackQuality",
                       ghb_settings_get_value(asettings, "AudioTrackQuality"));
         ghb_ui_update(ud, "AudioTrackQualityEnable",
@@ -477,7 +475,7 @@ audio_add_track(
 
     ghb_settings_set_double(asettings, "AudioTrackDRCSlider", drc);
 
-    ghb_settings_set_double(asettings, "AudioTrackGain", gain);
+    ghb_settings_set_double(asettings, "AudioTrackGainSlider", gain);
 
     audio_sanitize_settings(settings, asettings);
     audio_add_to_settings(settings, asettings);
@@ -514,7 +512,7 @@ audio_select_and_add_track(
     samplerate = ghb_settings_combo_int(audio, "AudioSamplerate");
     mix = ghb_settings_combo_int(audio, "AudioMixdown");
     drc = ghb_settings_get_double(audio, "AudioTrackDRCSlider");
-    gain = ghb_settings_get_double(audio, "AudioTrackGain");
+    gain = ghb_settings_get_double(audio, "AudioTrackGainSlider");
     enable_quality = ghb_settings_get_boolean(audio, "AudioTrackQualityEnable");
     quality = ghb_settings_get_double(audio, "AudioTrackQuality");
 
@@ -577,7 +575,7 @@ static void set_pref_audio_with_lang(
             samplerate = ghb_settings_combo_int(audio, "AudioSamplerate");
             mix = ghb_settings_combo_int(audio, "AudioMixdown");
             drc = ghb_settings_get_double(audio, "AudioTrackDRCSlider");
-            gain = ghb_settings_get_double(audio, "AudioTrackGain");
+            gain = ghb_settings_get_double(audio, "AudioTrackGainSlider");
             enable_quality = ghb_settings_get_boolean(audio,
                                                   "AudioTrackQualityEnable");
             quality = ghb_settings_get_double(audio, "AudioTrackQuality");
@@ -770,7 +768,7 @@ audio_refresh_list_row_ui(
     s_sr = g_strdup_printf("%.4gkHz", (double)sr/1000);
 
     s_mix = ghb_settings_combo_option(settings, "AudioMixdown");
-    gain = ghb_settings_get_double(settings, "AudioTrackGain");
+    gain = ghb_settings_get_double(settings, "AudioTrackGainSlider");
     s_gain = g_strdup_printf("%ddB", (int)gain);
 
     drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
@@ -1672,7 +1670,7 @@ audio_def_settings_init_row(GValue *adict, GtkWidget *row)
     ghb_widget_to_setting(adict, widget);
     widget = find_widget(row, "AudioSamplerate");
     ghb_widget_to_setting(adict, widget);
-    widget = find_widget(row, "AudioTrackGain");
+    widget = find_widget(row, "AudioTrackGainSlider");
     ghb_widget_to_setting(adict, widget);
     widget = find_widget(row, "AudioTrackDRCSlider");
     ghb_widget_to_setting(adict, widget);
@@ -1856,7 +1854,7 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
         "Adjust the amplification or attenuation of the output audio track.");
 
     gtk_widget_set_valign(GTK_WIDGET(scale), GTK_ALIGN_CENTER);
-    gtk_widget_set_name(GTK_WIDGET(scale), "AudioTrackGain");
+    gtk_widget_set_name(GTK_WIDGET(scale), "AudioTrackGainSlider");
     gtk_widget_show(GTK_WIDGET(scale));
     g_signal_connect(scale, "value-changed", (GCallback)audio_def_gain_changed_cb, ud);
     gtk_box_pack_start(box3, GTK_WIDGET(scale), FALSE, FALSE, 0);
