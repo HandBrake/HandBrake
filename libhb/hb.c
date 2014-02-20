@@ -1634,7 +1634,6 @@ int hb_global_init()
     hb_register(&hb_reader);
     hb_register(&hb_sync_video);
     hb_register(&hb_sync_audio);
-    hb_register(&hb_deca52);
     hb_register(&hb_decavcodecv);
     hb_register(&hb_decavcodeca);
     hb_register(&hb_declpcm);

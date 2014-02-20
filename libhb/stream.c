@@ -14,7 +14,6 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "lang.h"
-#include "a52dec/a52.h"
 #include "libbluray/bluray.h"
 #include "vadxva2.h"
 
@@ -73,7 +72,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x1b, V, WORK_DECAVCODECV, AV_CODEC_ID_H264,       "H.264"),
 
     st(0x80, U, HB_ACODEC_FFMPEG, AV_CODEC_ID_PCM_BLURAY, "Digicipher II Video"),
-    st(0x81, A, HB_ACODEC_AC3,    0,                      "AC3"),
+    st(0x81, A, HB_ACODEC_AC3,    AV_CODEC_ID_AC3,        "AC3"),
     st(0x82, A, HB_ACODEC_DCA,    AV_CODEC_ID_DTS,        "DTS"),
     // 0x83 can be LPCM or BD TrueHD.  Set to 'unknown' till we know more.
     st(0x83, U, HB_ACODEC_LPCM,   0,                      "LPCM"),
@@ -4130,6 +4129,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             update_ts_streams( stream, pid, HB_SUBSTREAM_BD_AC3,
                                stype, A, &pes_idx );
             stream->pes.list[pes_idx].codec = HB_ACODEC_AC3;
+            stream->pes.list[pes_idx].codec_param = AV_CODEC_ID_AC3;
 
             update_ts_streams( stream, pid, HB_SUBSTREAM_BD_TRUEHD,
                                stype, A, &pes_idx );
@@ -5010,7 +5010,6 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 
         case AV_CODEC_ID_AC3:
             audio->config.in.codec       = HB_ACODEC_AC3;
-            audio->config.in.codec_param = 0;
             break;
 
         case AV_CODEC_ID_DTS:

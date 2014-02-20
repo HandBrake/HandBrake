@@ -385,7 +385,6 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,

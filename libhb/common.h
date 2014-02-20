@@ -613,7 +613,7 @@ struct hb_job_s
 #define HB_ACODEC_FFFLAC24  0x00200000
 #define HB_ACODEC_FDK_AAC   0x00400000
 #define HB_ACODEC_FDK_HAAC  0x00800000
-#define HB_ACODEC_FF_MASK   0x00FF2000
+#define HB_ACODEC_FF_MASK   0x00FF2800
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA)
 #define HB_ACODEC_AUTO_PASS (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG)
@@ -1085,8 +1085,6 @@ extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_encx265;
-extern hb_work_object_t hb_deca52;
-extern hb_work_object_t hb_decdca;
 extern hb_work_object_t hb_decavcodeca;
 extern hb_work_object_t hb_decavcodecv;
 extern hb_work_object_t hb_declpcm;

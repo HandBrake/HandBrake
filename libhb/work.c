@@ -8,7 +8,6 @@
  */
 
 #include "hb.h"
-#include "a52dec/a52.h"
 #include "libavformat/avformat.h"
 #include "openclwrapper.h"
 #include "opencl.h"
@@ -125,7 +124,6 @@ hb_work_object_t* hb_codec_decoder(int codec)
     }
     switch (codec)
     {
-        case HB_ACODEC_AC3:  return hb_get_work(WORK_DECA52);
         case HB_ACODEC_LPCM: return hb_get_work(WORK_DECLPCM);
         default:             break;
     }

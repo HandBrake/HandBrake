@@ -360,6 +360,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
             case 0x00:
                 audio->id    = ( ( 0x80 + position ) << 8 ) | 0xbd;
                 audio->config.in.codec = HB_ACODEC_AC3;
+                audio->config.in.codec_param = AV_CODEC_ID_AC3;
                 codec_name = "AC3";
                 break;
 

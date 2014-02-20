@@ -10,7 +10,6 @@
 		A9DB39100D37EA0300F77345 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E70D37EA0300F77345 /* common.c */; };
 		A9DB39110D37EA0300F77345 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38E80D37EA0300F77345 /* common.h */; };
 		A9DB39120D37EA0300F77345 /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E90D37EA0300F77345 /* deblock.c */; };
-		A9DB39130D37EA0300F77345 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EA0D37EA0300F77345 /* deca52.c */; };
 		A9DB39140D37EA0300F77345 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EB0D37EA0300F77345 /* decavcodec.c */; };
 		A9DB39150D37EA0300F77345 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EC0D37EA0300F77345 /* decdca.c */; };
 		A9DB39160D37EA0300F77345 /* declpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38ED0D37EA0300F77345 /* declpcm.c */; };
@@ -47,7 +46,6 @@
 		A9DB39360D37EA0300F77345 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390D0D37EA0300F77345 /* sync.c */; };
 		A9DB39370D37EA0300F77345 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390E0D37EA0300F77345 /* update.c */; };
 		A9DB39380D37EA0300F77345 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390F0D37EA0300F77345 /* work.c */; };
-		A9DB39B20D37EB4700F77345 /* liba52.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399D0D37EB4700F77345 /* liba52.a */; };
 		A9DB39B30D37EB4700F77345 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399E0D37EB4700F77345 /* libavcodec.a */; };
 		A9DB39B40D37EB4700F77345 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399F0D37EB4700F77345 /* libavformat.a */; };
 		A9DB39B50D37EB4700F77345 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A00D37EB4700F77345 /* libavutil.a */; };
@@ -79,7 +77,6 @@
 		A9DB38E70D37EA0300F77345 /* common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../../libhb/common.c; sourceTree = SOURCE_ROOT; };
 		A9DB38E80D37EA0300F77345 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../../libhb/common.h; sourceTree = SOURCE_ROOT; };
 		A9DB38E90D37EA0300F77345 /* deblock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = deblock.c; path = ../../libhb/deblock.c; sourceTree = SOURCE_ROOT; };
-		A9DB38EA0D37EA0300F77345 /* deca52.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = deca52.c; path = ../../libhb/deca52.c; sourceTree = SOURCE_ROOT; };
 		A9DB38EB0D37EA0300F77345 /* decavcodec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decavcodec.c; path = ../../libhb/decavcodec.c; sourceTree = SOURCE_ROOT; };
 		A9DB38EC0D37EA0300F77345 /* decdca.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decdca.c; path = ../../libhb/decdca.c; sourceTree = SOURCE_ROOT; };
 		A9DB38ED0D37EA0300F77345 /* declpcm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = declpcm.c; path = ../../libhb/declpcm.c; sourceTree = SOURCE_ROOT; };
@@ -116,7 +113,6 @@
 		A9DB390D0D37EA0300F77345 /* sync.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sync.c; path = ../../libhb/sync.c; sourceTree = SOURCE_ROOT; };
 		A9DB390E0D37EA0300F77345 /* update.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = update.c; path = ../../libhb/update.c; sourceTree = SOURCE_ROOT; };
 		A9DB390F0D37EA0300F77345 /* work.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = work.c; path = ../../libhb/work.c; sourceTree = SOURCE_ROOT; };
-		A9DB399D0D37EB4700F77345 /* liba52.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liba52.a; path = ../../contrib/lib/liba52.a; sourceTree = SOURCE_ROOT; };
 		A9DB399E0D37EB4700F77345 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../../contrib/lib/libavcodec.a; sourceTree = SOURCE_ROOT; };
 		A9DB399F0D37EB4700F77345 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../../contrib/lib/libavformat.a; sourceTree = SOURCE_ROOT; };
 		A9DB39A00D37EB4700F77345 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../../contrib/lib/libavutil.a; sourceTree = SOURCE_ROOT; };
@@ -143,7 +139,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9DB39B20D37EB4700F77345 /* liba52.a in Frameworks */,
 				A9DB39B30D37EB4700F77345 /* libavcodec.a in Frameworks */,
 				A9DB39B40D37EB4700F77345 /* libavformat.a in Frameworks */,
 				A9DB39B50D37EB4700F77345 /* libavutil.a in Frameworks */,
@@ -183,7 +178,6 @@
 				A9DB38E70D37EA0300F77345 /* common.c */,
 				A9DB38E80D37EA0300F77345 /* common.h */,
 				A9DB38E90D37EA0300F77345 /* deblock.c */,
-				A9DB38EA0D37EA0300F77345 /* deca52.c */,
 				A9DB38EB0D37EA0300F77345 /* decavcodec.c */,
 				A9DB38EC0D37EA0300F77345 /* decdca.c */,
 				A9DB38ED0D37EA0300F77345 /* declpcm.c */,
@@ -229,7 +223,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A9DB399D0D37EB4700F77345 /* liba52.a */,
 				A9DB399E0D37EB4700F77345 /* libavcodec.a */,
 				A9DB399F0D37EB4700F77345 /* libavformat.a */,
 				A9DB39A00D37EB4700F77345 /* libavutil.a */,
@@ -317,7 +310,6 @@
 			files = (
 				A9DB39100D37EA0300F77345 /* common.c in Sources */,
 				A9DB39120D37EA0300F77345 /* deblock.c in Sources */,
-				A9DB39130D37EA0300F77345 /* deca52.c in Sources */,
 				A9DB39140D37EA0300F77345 /* decavcodec.c in Sources */,
 				A9DB39150D37EA0300F77345 /* decdca.c in Sources */,
 				A9DB39160D37EA0300F77345 /* declpcm.c in Sources */,

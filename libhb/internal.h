@@ -386,23 +386,6 @@ union hb_esconfig_u
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
         char *language;
     } vorbis;
-
-    struct
-    {
-    	/* ac3flags stores the flags from the AC3 source, as found in scan.c */
-    	int     ac3flags;
-        // next two items are used by the bsinfo routine to accumulate small
-        // frames until we have enough to validate the crc.
-        int     len;        // space currently used in 'buf'
-        uint8_t buf[HB_CONFIG_MAX_SIZE-sizeof(int)];
-    } a52;
-
-    struct
-    {
-    	/* dcaflags stores the flags from the DCA source, as found in scan.c */
-    	int  dcaflags;
-    } dca;
-
 };
 
 enum
@@ -423,7 +406,6 @@ enum
     WORK_ENCX264,
     WORK_ENCX265,
     WORK_ENCTHEORA,
-    WORK_DECA52,
     WORK_DECAVCODEC,
     WORK_DECAVCODECV,
     WORK_DECLPCM,

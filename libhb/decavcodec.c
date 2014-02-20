@@ -18,7 +18,7 @@
         has different decoder calling conventions for audio & video.
         These work objects are self-contained & follow all
         of HB's conventions for a decoder module. They can be used like
-        any other HB decoder (deca52, decmpeg2, etc.).
+        any other HB decoder
 
     These decoders handle 2 kinds of input.  Streams that are demuxed
     by HandBrake and streams that are demuxed by libavformat.  In the
@@ -751,6 +751,18 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         else
                         {
                             info->channel_layout = frame->channel_layout;
+                        }
+                    }
+                    if (context->codec_id == AV_CODEC_ID_AC3 ||
+                        context->codec_id == AV_CODEC_ID_EAC3)
+                    {
+                        if (context->audio_service_type == AV_AUDIO_SERVICE_TYPE_KARAOKE)
+                        {
+                            info->mode = 7;
+                        }
+                        else
+                        {
+                            info->mode = context->audio_service_type;
                         }
                     }
 

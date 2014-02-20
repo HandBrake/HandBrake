@@ -23,8 +23,6 @@ else
     AUTOTOOL_MODULES =
 endif
 
-MODULES += contrib/a52dec
-
 ifneq (,$(filter $(BUILD.system),cygwin mingw))
 ifneq ($(HAS.bz2),1)
     MODULES += contrib/bzip2
