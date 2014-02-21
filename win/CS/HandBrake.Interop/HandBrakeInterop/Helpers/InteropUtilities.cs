@@ -7,16 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.Helpers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Runtime.InteropServices;
-	using System.Text;
-	using HandBrake.Interop.HbLib;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
 
-	/// <summary>
+    using HandBrake.Interop.HbLib;
+
+    /// <summary>
 	/// Helper utilities for native interop.
 	/// </summary>
 	public static class InteropUtilities
@@ -59,7 +60,12 @@ namespace HandBrake.Interop
 		/// <summary>
 		/// Creates a pointer to a UTF-8 null-terminated string.
 		/// </summary>
-		/// <param name="str">The string to encode.</param>
+		/// <param name="str">
+		/// The string to encode.
+		/// </param>
+		/// <returns>
+		/// The <see cref="IntPtr"/>.
+		/// </returns>
 		public static IntPtr CreateUtf8Ptr(string str)
 		{
 			byte[] bytes = Encoding.UTF8.GetBytes(str);

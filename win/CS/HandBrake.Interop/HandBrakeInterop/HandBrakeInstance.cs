@@ -20,6 +20,7 @@ namespace HandBrake.Interop
 
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.HbLib;
+    using HandBrake.Interop.Helpers;
     using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
@@ -1175,7 +1176,7 @@ namespace HandBrake.Interop
                 }
 
                 nativeJob.vrate = 27000000;
-                nativeJob.vrate_base = Converters.FramerateToVrate(profile.Framerate);
+                nativeJob.vrate_base = Converters.Converters.FramerateToVrate(profile.Framerate);
             }
 
             string vfrSettings = string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", nativeJob.cfr, nativeJob.vrate, nativeJob.vrate_base);
@@ -1498,17 +1499,6 @@ namespace HandBrake.Interop
             nativeJob.qsv.decode = profile.QsvDecode ? 1 : 0;
             nativeJob.use_hwd = job.DxvaDecoding ? 1 : 0;
 
-#pragma warning disable 612, 618
-            if (profile.OutputFormat == Container.Mp4)
-            {
-                nativeJob.mux = HBFunctions.hb_container_get_from_name("av_mp4");
-            }
-            else if (profile.OutputFormat == Container.Mkv)
-            {
-                nativeJob.mux = HBFunctions.hb_container_get_from_name("av_mkv");
-            }
-#pragma warning restore 612, 618
-
             if (profile.ContainerName != null)
             {
                 nativeJob.mux = HBFunctions.hb_container_get_from_name(profile.ContainerName);
@@ -1790,7 +1780,7 @@ namespace HandBrake.Interop
                 Playlist = title.playlist,
                 Resolution = new Size(title.width, title.height),
                 ParVal = new Size(title.pixel_aspect_width, title.pixel_aspect_height),
-                Duration = Converters.PtsToTimeSpan(title.duration),
+                Duration = Converters.Converters.PtsToTimeSpan(title.duration),
                 DurationPts = title.duration,
                 AutoCropDimensions = new Cropping
                 {
@@ -1885,7 +1875,7 @@ namespace HandBrake.Interop
                 var newAudio = new AudioTrack
                 {
                     TrackNumber = currentAudioTrack,
-                    Codec = Converters.NativeToAudioCodec(audio.config.input.codec),
+                    Codec = Converters.Converters.NativeToAudioCodec(audio.config.input.codec),
 					CodecParam = audio.config.input.codec_param,
                     CodecId = audio.config.input.codec,
                     Language = audio.config.lang.simple,
@@ -1908,7 +1898,7 @@ namespace HandBrake.Interop
                 {
                     Name = chapter.title,
                     ChapterNumber = chapter.index,
-                    Duration = Converters.PtsToTimeSpan(chapter.duration),
+                    Duration = Converters.Converters.PtsToTimeSpan(chapter.duration),
                     DurationPts = chapter.duration
                 };
 

@@ -7,18 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.Converters
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
 
-	using HandBrake.Interop.HbLib;
-	using HandBrake.Interop.Model.Encoding;
-	using HandBrake.Interop.SourceData;
-	using HandBrake.Interop.Model;
+    using HandBrake.Interop.HbLib;
+    using HandBrake.Interop.Helpers;
+    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.Interop.SourceData;
 
-	/// <summary>
+    /// <summary>
 	/// Converters for various encoding values.
 	/// </summary>
 	public static class Converters
@@ -125,19 +126,19 @@ namespace HandBrake.Interop
 		public static HBAudioEncoder NativeToAudioEncoder(hb_encoder_s encoder)
 		{
 			var result = new HBAudioEncoder
-				{
-					Id = encoder.codec,
-					ShortName = encoder.short_name,
-					DisplayName = encoder.name,
-					CompatibleContainers = encoder.muxers
-				};
+			                 {
+			                     Id = encoder.codec,
+			                     ShortName = encoder.short_name,
+			                     DisplayName = encoder.name,
+			                     CompatibleContainers = encoder.muxers,
+			                     QualityLimits = Encoders.GetAudioQualityLimits(encoder.codec),
+			                     DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec),
+			                     CompressionLimits = Encoders.GetAudioCompressionLimits(encoder.codec),
+			                     DefaultCompression =
+			                     HBFunctions.hb_audio_compression_get_default((uint)encoder.codec)
+			                 };
 
-			result.QualityLimits = Encoders.GetAudioQualityLimits(encoder.codec);
-			result.DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec);
-			result.CompressionLimits = Encoders.GetAudioCompressionLimits(encoder.codec);
-			result.DefaultCompression = HBFunctions.hb_audio_compression_get_default((uint)encoder.codec);
-
-			return result;
+		    return result;
 		}
 
 		/// <summary>

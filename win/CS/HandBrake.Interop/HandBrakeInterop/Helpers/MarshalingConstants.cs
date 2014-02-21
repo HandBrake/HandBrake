@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.Helpers
 {
     /// <summary>
     /// The marshaling constants.

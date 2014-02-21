@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageCodes.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="Languages.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -7,12 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.Helpers
 {
-	using System.Collections.Generic;
-	using HbLib;
+    using System.Collections.Generic;
 
-	/// <summary>
+    using HandBrake.Interop.HbLib;
+    using HandBrake.Interop.Model;
+
+    /// <summary>
 	/// Contains utilities for converting language codes.
 	/// </summary>
 	public static class Languages
@@ -29,14 +31,9 @@ namespace HandBrake.Interop
 		{
 			get
 			{
-				if (allLanguages == null)
-				{
-					allLanguages = InteropUtilities.GetListFromIterator<iso639_lang_t, Language>(
-						HBFunctions.lang_get_next,
-						Converters.NativeToLanguage);
-				}
-
-				return allLanguages;
+			    return allLanguages
+			           ?? (allLanguages =
+			               InteropUtilities.GetListFromIterator<iso639_lang_t, Language>(HBFunctions.lang_get_next, Converters.Converters.NativeToLanguage));
 			}
 		}
 
@@ -48,7 +45,7 @@ namespace HandBrake.Interop
 		public static Language Get(string code)
 		{
 			iso639_lang_t language = InteropUtilities.ReadStructure<iso639_lang_t>(HBFunctions.lang_for_code2(code));
-			return Converters.NativeToLanguage(language);
+			return Converters.Converters.NativeToLanguage(language);
 		}
 	}
 }

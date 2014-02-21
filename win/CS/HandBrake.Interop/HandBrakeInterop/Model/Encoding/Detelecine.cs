@@ -9,7 +9,10 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-	public enum Detelecine
+    /// <summary>
+    /// The detelecine.
+    /// </summary>
+    public enum Detelecine
 	{
 		Off = 0,
 		Default = 2,

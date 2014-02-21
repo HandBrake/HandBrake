@@ -11,7 +11,10 @@ namespace HandBrake.Interop.Model.Encoding
 {
 	using System.ComponentModel.DataAnnotations;
 
-	public enum Anamorphic
+    /// <summary>
+    /// The anamorphic.
+    /// </summary>
+    public enum Anamorphic
 	{
 		[Display(Name = "None")]
 		None = 0,

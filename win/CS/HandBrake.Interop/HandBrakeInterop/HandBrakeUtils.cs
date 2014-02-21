@@ -104,8 +104,8 @@ namespace HandBrake.Interop
             if (loggingCallback == null)
             {
                 // Keep the callback as a member to prevent it from being garbage collected.
-                loggingCallback = new LoggingCallback(LoggingHandler);
-                errorCallback = new LoggingCallback(ErrorHandler);
+                loggingCallback = LoggingHandler;
+                errorCallback = ErrorHandler;
                 HBFunctions.hb_register_logger(loggingCallback);
                 HBFunctions.hb_register_error_handler(errorCallback);
             }
@@ -151,7 +151,12 @@ namespace HandBrake.Interop
         /// <summary>
         /// Gets the standard x264 option name given the starting point.
         /// </summary>
-        /// <returns>The standard x264 option name.</returns>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// The standard x264 option name.
+        /// </returns>
         public static string SanitizeX264OptName(string name)
         {
             IntPtr namePtr = Marshal.StringToHGlobalAnsi(name);
@@ -223,7 +228,6 @@ namespace HandBrake.Interop
                 height);
 
             string x264Settings = Marshal.PtrToStringAnsi(ptr);
-
 
             return x264Settings;
         }

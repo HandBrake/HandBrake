@@ -13,7 +13,9 @@ namespace HandBrake.Interop.Model
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using HandBrake.Interop.Converters;
 	using HandBrake.Interop.HbLib;
+	using HandBrake.Interop.Helpers;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
 

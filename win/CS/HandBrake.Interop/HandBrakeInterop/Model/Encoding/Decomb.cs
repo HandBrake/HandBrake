@@ -9,7 +9,10 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-	public enum Decomb
+    /// <summary>
+    /// The decomb.
+    /// </summary>
+    public enum Decomb
 	{
 		Off = 0,
 		Default = 2,

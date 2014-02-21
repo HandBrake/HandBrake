@@ -13,7 +13,9 @@ namespace HandBrake.Interop.HbLib
 	using System;
 	using System.Runtime.InteropServices;
 
-	[StructLayout(LayoutKind.Sequential)]
+	using HandBrake.Interop.Helpers;
+
+    [StructLayout(LayoutKind.Sequential)]
 	public struct hb_job_s
 	{
 		/// int

@@ -9,82 +9,288 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-	using System;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 
 	using HandBrake.Interop.Model;
 
-	public class EncodingProfile
+    /// <summary>
+    /// The encoding profile.
+    /// </summary>
+    public class EncodingProfile
 	{
-		public EncodingProfile()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EncodingProfile"/> class.
+        /// </summary>
+        public EncodingProfile()
 		{
 			this.Cropping = new Cropping();
 		}
 
-		[Obsolete("Use ContainerName instead.")]
-		public Container OutputFormat { get; set; }
+        #region Destination and Output Settings
 
-		public string ContainerName { get; set; }
-		public OutputExtension PreferredExtension { get; set; }
-		public bool IncludeChapterMarkers { get; set; }
-		public bool LargeFile { get; set; }
-		public bool Optimize { get; set; }
-		public bool IPod5GSupport { get; set; }
+        /// <summary>
+        /// Gets or sets the container name.
+        /// </summary>
+        public string ContainerName { get; set; }
 
-		public int Width { get; set; }
-		public int Height { get; set; }
-		public int MaxWidth { get; set; }
-		public int MaxHeight { get; set; }
-		public ScaleMethod ScaleMethod { get; set; }
-		public CroppingType CroppingType { get; set; }
-		public Cropping Cropping { get; set; }
-		public Anamorphic Anamorphic { get; set; }
-		public bool UseDisplayWidth { get; set; }
-		public int DisplayWidth { get; set; }
-		public bool KeepDisplayAspect { get; set; }
-		public int PixelAspectX { get; set; }
-		public int PixelAspectY { get; set; }
-		public int Modulus { get; set; }
+        /// <summary>
+        /// Gets or sets the preferred extension.
+        /// </summary>
+        public OutputExtension PreferredExtension { get; set; }
 
-		public Deinterlace Deinterlace { get; set; }
-		public string CustomDeinterlace { get; set; }
-		public Decomb Decomb { get; set; }
-		public string CustomDecomb { get; set; }
-		public Detelecine Detelecine { get; set; }
-		public string CustomDetelecine { get; set; }
-		public Denoise Denoise { get; set; }
-		public string CustomDenoise { get; set; }
-		public int Deblock { get; set; }
-		public bool Grayscale { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether include chapter markers.
+        /// </summary>
+        public bool IncludeChapterMarkers { get; set; }
 
-		public string VideoEncoder { get; set; }
-		public string X264Options { get; set; }
-		public string X264Profile { get; set; }
-		public string X264Preset { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether large file.
+        /// </summary>
+        public bool LargeFile { get; set; }
 
-		public List<string> X264Tunes { get; set; }
-		public string QsvPreset { get; set; }
-		public bool QsvDecode { get; set; }
-		public string H264Level { get; set; }
-		public VideoEncodeRateType VideoEncodeRateType { get; set; }
-		public double Quality { get; set; }
-		public int TargetSize { get; set; }
-		public int VideoBitrate { get; set; }
-		public bool TwoPass { get; set; }
-		public bool TurboFirstPass { get; set; }
-		public double Framerate { get; set; }
-		public bool ConstantFramerate { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether optimize.
+        /// </summary>
+        public bool Optimize { get; set; }
 
-		public List<AudioEncoding> AudioEncodings { get; set; }
-		public string AudioEncoderFallback { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether i pod 5 g support.
+        /// </summary>
+        public bool IPod5GSupport { get; set; }
+        #endregion
 
-		public EncodingProfile Clone()
+        #region Picture Settings
+
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max width.
+        /// </summary>
+        public int MaxWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max height.
+        /// </summary>
+        public int MaxHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the scale method.
+        /// </summary>
+        public ScaleMethod ScaleMethod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cropping type.
+        /// </summary>
+        public CroppingType CroppingType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cropping.
+        /// </summary>
+        public Cropping Cropping { get; set; }
+
+        /// <summary>
+        /// Gets or sets the anamorphic.
+        /// </summary>
+        public Anamorphic Anamorphic { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether use display width.
+        /// </summary>
+        public bool UseDisplayWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the display width.
+        /// </summary>
+        public int DisplayWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether keep display aspect.
+        /// </summary>
+        public bool KeepDisplayAspect { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pixel aspect x.
+        /// </summary>
+        public int PixelAspectX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pixel aspect y.
+        /// </summary>
+        public int PixelAspectY { get; set; }
+
+        /// <summary>
+        /// Gets or sets the modulus.
+        /// </summary>
+        public int Modulus { get; set; }
+        #endregion
+
+        #region Filters
+
+        /// <summary>
+        /// Gets or sets the deinterlace.
+        /// </summary>
+        public Deinterlace Deinterlace { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom deinterlace.
+        /// </summary>
+        public string CustomDeinterlace { get; set; }
+
+        /// <summary>
+        /// Gets or sets the decomb.
+        /// </summary>
+        public Decomb Decomb { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom decomb.
+        /// </summary>
+        public string CustomDecomb { get; set; }
+
+        /// <summary>
+        /// Gets or sets the detelecine.
+        /// </summary>
+        public Detelecine Detelecine { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom detelecine.
+        /// </summary>
+        public string CustomDetelecine { get; set; }
+
+        /// <summary>
+        /// Gets or sets the denoise.
+        /// </summary>
+        public Denoise Denoise { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom denoise.
+        /// </summary>
+        public string CustomDenoise { get; set; }
+
+        /// <summary>
+        /// Gets or sets the deblock.
+        /// </summary>
+        public int Deblock { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether grayscale.
+        /// </summary>
+        public bool Grayscale { get; set; }
+        #endregion
+
+        #region Video
+
+        /// <summary>
+        /// Gets or sets the video encoder.
+        /// </summary>
+        public string VideoEncoder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 264 options.
+        /// </summary>
+        public string X264Options { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 264 profile.
+        /// </summary>
+        public string X264Profile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 264 preset.
+        /// </summary>
+        public string X264Preset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 264 tunes.
+        /// </summary>
+        public List<string> X264Tunes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the qsv preset.
+        /// </summary>
+        public string QsvPreset { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether qsv decode.
+        /// </summary>
+        public bool QsvDecode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the h 264 level.
+        /// </summary>
+        public string H264Level { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video encode rate type.
+        /// </summary>
+        public VideoEncodeRateType VideoEncodeRateType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quality.
+        /// </summary>
+        public double Quality { get; set; }
+
+        /// <summary>
+        /// Gets or sets the target size.
+        /// </summary>
+        public int TargetSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video bitrate.
+        /// </summary>
+        public int VideoBitrate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether two pass.
+        /// </summary>
+        public bool TwoPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether turbo first pass.
+        /// </summary>
+        public bool TurboFirstPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets the framerate.
+        /// </summary>
+        public double Framerate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether constant framerate.
+        /// </summary>
+        public bool ConstantFramerate { get; set; }
+        #endregion
+
+        #region Audio
+
+        /// <summary>
+        /// Gets or sets the audio encodings.
+        /// </summary>
+        public List<AudioEncoding> AudioEncodings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audio encoder fallback.
+        /// </summary>
+        public string AudioEncoderFallback { get; set; }
+        #endregion
+
+        /// <summary>
+	    /// The clone.
+	    /// </summary>
+	    /// <returns>
+	    /// The <see cref="EncodingProfile"/>.
+	    /// </returns>
+	    public EncodingProfile Clone()
 		{
 			var profile = new EncodingProfile
 			{
-#pragma warning disable 612, 618
-				OutputFormat = this.OutputFormat,
-#pragma warning restore 612, 618
 				ContainerName = this.ContainerName,
 				PreferredExtension = this.PreferredExtension,
 				IncludeChapterMarkers = this.IncludeChapterMarkers,

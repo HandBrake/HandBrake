@@ -9,7 +9,10 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-	public enum OutputExtension
+    /// <summary>
+    /// The output extension.
+    /// </summary>
+    public enum OutputExtension
 	{
 		Mp4,
 		M4v

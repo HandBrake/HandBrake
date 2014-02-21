@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.Helpers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Runtime.InteropServices;
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
 
-	using HandBrake.Interop.HbLib;
+    using HandBrake.Interop.HbLib;
 
-	/// <summary>
+    /// <summary>
 	/// Represents a HandBrake style native list.
 	/// </summary>
 	public class NativeList : IDisposable
@@ -32,10 +32,10 @@ namespace HandBrake.Interop
 		/// <summary>
 		/// The list of native memory locations allocated for this list.
 		/// </summary>
-		private List<IntPtr> allocatedMemory = new List<IntPtr>();
+		private readonly List<IntPtr> allocatedMemory = new List<IntPtr>();
 
 		/// <summary>
-		/// Gets or sets the pointer to the native list.
+		/// Gets the pointer to the native list.
 		/// </summary>
 		public IntPtr Ptr { get; private set; }
 
@@ -57,7 +57,7 @@ namespace HandBrake.Interop
 		{
 			get
 			{
-				return allocatedMemory;
+				return this.allocatedMemory;
 			}
 		}
 

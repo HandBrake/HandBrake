@@ -13,7 +13,9 @@ namespace HandBrake.Interop.HbLib
 	using System;
 	using System.Runtime.InteropServices;
 
-	[StructLayout(LayoutKind.Sequential)]
+	using HandBrake.Interop.Helpers;
+
+    [StructLayout(LayoutKind.Sequential)]
 	public struct hb_audio_s
 	{
 		/// int
@@ -26,8 +28,8 @@ namespace HandBrake.Interop.HbLib
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = MarshalingConstants.AudioPaddingBytes, ArraySubType = UnmanagedType.U1)]
 		public byte[] padding;
 
-		/// Anonymous_e6c7b779_b5a3_4e80_9fa8_13619d14f545
-		//public Anonymous_e6c7b779_b5a3_4e80_9fa8_13619d14f545 priv;
+		// Anonymous_e6c7b779_b5a3_4e80_9fa8_13619d14f545
+		// public Anonymous_e6c7b779_b5a3_4e80_9fa8_13619d14f545 priv;
 	}
 
 	[StructLayout(LayoutKind.Sequential)]

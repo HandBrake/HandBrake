@@ -9,7 +9,10 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-	public enum Denoise
+    /// <summary>
+    /// The denoise.
+    /// </summary>
+    public enum Denoise
 	{
 		Off = 0,
 		Weak = 2,
