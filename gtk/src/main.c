@@ -286,6 +286,8 @@ bind_queue_tree_model(signal_user_data_t *ud)
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_column_set_max_width(column, 550);
+    g_signal_connect(treeview, "size-allocate", queue_list_size_allocate_cb,
+                        textcell);
 
     cell = custom_cell_renderer_button_new();
     column = gtk_tree_view_column_new_with_attributes(
@@ -300,8 +302,6 @@ bind_queue_tree_model(signal_user_data_t *ud)
 
     g_signal_connect(selection, "changed", queue_list_selection_changed_cb, ud);
     g_signal_connect(cell, "clicked", queue_remove_clicked_cb, ud);
-    g_signal_connect(treeview, "size-allocate", queue_list_size_allocate_cb,
-                        textcell);
     g_signal_connect(treeview, "drag_data_received", queue_drag_cb, ud);
     g_signal_connect(treeview, "drag_motion", queue_drag_motion_cb, ud);
 }
@@ -868,8 +868,6 @@ main(int argc, char *argv[])
     gtk_rc_parse_string(hud_rcstyle);
 #endif
 
-    g_type_class_unref(g_type_class_ref(GTK_TYPE_BUTTON));
-    g_object_set(gtk_settings_get_default(), "gtk-button-images", TRUE, NULL);
 #if !defined(_WIN32)
     notify_init("HandBrake");
 #endif
@@ -1273,15 +1271,23 @@ main(int argc, char *argv[])
     gtk_main();
     gtk_status_icon_set_visible(si, FALSE);
     ghb_backend_close();
-    if (ud->queue)
-        ghb_value_free(ud->queue);
-    ghb_value_free(ud->settings);
+
+    ghb_value_free(ud->queue);
+    ghb_value_free(ud->settings_array);
+    ghb_value_free(ud->prefs);
+    ghb_value_free(ud->globals);
+    ghb_value_free(ud->x264_priv);
+
     g_io_channel_unref(ud->activity_log);
     ghb_settings_close();
     ghb_resource_free();
 #if !defined(_WIN32)
     notify_uninit();
 #endif
+
+    g_object_unref(ud->builder);
+
+    g_free(ud->current_dvd_device);
     g_free(ud);
 
     return 0;

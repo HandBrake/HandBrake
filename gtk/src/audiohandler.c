@@ -284,6 +284,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     gval = ghb_widget_value(widget);
     acodec = ghb_lookup_combo_int("AudioEncoder", gval);
     ghb_value_free(gval);
+
     widget = GHB_WIDGET(ud->builder, "AudioMixdown");
     gval = ghb_widget_value(widget);
     mix = ghb_lookup_combo_int("AudioMixdown", gval);
@@ -292,11 +293,12 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     widget = GHB_WIDGET(ud->builder, "AudioBitrate");
     gval = ghb_widget_value(widget);
     bitrate = ghb_lookup_combo_int("AudioBitrate", gval);
+    ghb_value_free(gval);
 
     widget = GHB_WIDGET(ud->builder, "AudioSamplerate");
     gval = ghb_widget_value(widget);
     sr = ghb_lookup_combo_int("AudioSamplerate", gval);
-
+    ghb_value_free(gval);
 
     aconfig = ghb_get_scan_audio_info(titleindex, track);
     if (sr == 0)
@@ -2031,7 +2033,9 @@ audio_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 
         // Remove from preset language list
         alang_list = ghb_settings_get_value(ud->settings, "AudioLanguageList");
+        GValue *glang = ghb_array_get_nth(alang_list, index);
         ghb_array_remove(alang_list, index);
+        ghb_value_free(glang);
         ghb_clear_presets_selection(ud);
     }
 }
@@ -2263,7 +2267,9 @@ audio_def_setting_remove_cb(GtkWidget *widget, signal_user_data_t *ud)
         return;
     }
     gtk_widget_destroy(GTK_WIDGET(row));
+    GValue *asettings = ghb_array_get_nth(alist, index);
     ghb_array_remove(alist, index);
+    ghb_value_free(asettings);
     ghb_clear_presets_selection(ud);
 }
 
@@ -2369,7 +2375,9 @@ audio_def_lang_list_init(signal_user_data_t *ud)
         {
             // Error in list.  Probably duplicate languages.  Remove
             // this item from the list.
+            GValue *glang = ghb_array_get_nth(lang_list, ii);
             ghb_array_remove(lang_list, ii);
+            ghb_value_free(glang);
             count--;
         }
     }

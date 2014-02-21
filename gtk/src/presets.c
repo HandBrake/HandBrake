@@ -1061,9 +1061,8 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
 
     char *x264Tune = ghb_settings_get_string(settings, "x264Tune");
     char *tune = NULL;
-    char *tmp = g_strdup(x264Tune);
     char *saveptr;
-    char * tok = strtok_r(tmp, ",./-+", &saveptr);
+    char * tok = strtok_r(x264Tune, ",./-+", &saveptr);
     while (tok != NULL)
     {
         if (!strcasecmp(tok, "fastdecode"))
@@ -1084,12 +1083,12 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
         }
         tok = strtok_r(NULL, ",./-+", &saveptr);
     }
+    g_free(x264Tune);
     if (tune != NULL)
     {
         ghb_settings_set_string(settings, "x264Tune", tune);
         g_free(tune);
     }
-    g_free(x264Tune);
 }
 
 void
@@ -3110,7 +3109,6 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 {
     GValue *dict;
     gint *indices, len, count;
-    gint *def_indices, def_len;
     const gchar *name;
     gboolean replace = FALSE;
 
@@ -3158,6 +3156,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
     ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(name));
     if (replace)
     {
+        gint *def_indices, def_len;
         def_indices = presets_find_default(presetsPlist, &def_len);
         if (def_indices != NULL &&
             preset_path_cmp(indices, len, def_indices, def_len) != 0)
@@ -3166,6 +3165,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
                             ghb_boolean_value_new(FALSE));
         }
         presets_list_update_item(ud, indices, len, FALSE);
+        g_free(def_indices);
     }
     else
     {
@@ -3446,6 +3446,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
             ghb_presets_insert(presetsPlist, ghb_value_dup(dict), indices, len);
             presets_list_insert(ud, indices, len);
             ghb_value_free(path);
+            g_free(indices);
         }
         ghb_value_free(array);
 
@@ -3612,8 +3613,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         folder_save(ud, dest);
         ghb_value_free(dest);
     }
-    if (indices != NULL)
-        g_free(indices);
+    g_free(indices);
 }
 
 G_MODULE_EXPORT void
@@ -3732,6 +3732,7 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         path = gtk_tree_model_get_path(store, &iter);
         indices = gtk_tree_path_get_indices(path);
         len = gtk_tree_path_get_depth(path);
+        gtk_tree_path_free(path);
 
         folder = ghb_presets_get_folder(presetsPlist, indices, len);
         dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
@@ -3764,15 +3765,17 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 valid = gtk_tree_model_get_iter_first(store, &nextIter);
             if (valid)
             {
-                gtk_tree_path_free(path);
+                GtkTreePath *path;
+                gint *indices;
+
                 path = gtk_tree_model_get_path(store, &nextIter);
                 indices = gtk_tree_path_get_indices(path);
                 len = gtk_tree_path_get_depth(path);
                 ghb_select_preset2(ud->builder, indices, len);
+                gtk_tree_path_free(path);
             }
         }
         g_free(preset);
-        gtk_tree_path_free(path);
     }
 }
 
@@ -3850,6 +3853,7 @@ presets_drag_motion_cb(
     len = gtk_tree_path_get_depth(path);
     dst_ptype = ghb_presets_get_type(presetsPlist, indices, len);
     dst_folder = ghb_presets_get_folder(presetsPlist, indices, len);
+
     // Don't allow mixing custom presets in the builtins
     if (dst_ptype != PRESETS_CUSTOM)
     {
@@ -3957,6 +3961,7 @@ presets_drag_cb(
         dst_indices = gtk_tree_path_get_indices(path);
         dst_len = gtk_tree_path_get_depth(path);
         dst_folder = ghb_presets_get_folder(presetsPlist, dst_indices, dst_len);
+
         // Only allow *drop into* for folders
         if (!dst_folder)
         {
@@ -4040,7 +4045,9 @@ presets_row_expanded_cb(
     if (preset_folder_is_open(dict))
     {
         if (expanded)
+        {
             return;
+        }
     }
     else if (!expanded)
     {
@@ -4098,6 +4105,7 @@ ghb_get_current_preset(signal_user_data_t *ud)
         indices = gtk_tree_path_get_indices(tp);
         len = gtk_tree_path_get_depth(tp);
         preset = presets_get_dict(presetsPlist, indices, len);
+        gtk_tree_path_free(tp);
     }
     return preset;
 }
@@ -4122,6 +4130,7 @@ ghb_get_current_preset_path(signal_user_data_t *ud)
         indices = gtk_tree_path_get_indices(tp);
         len = gtk_tree_path_get_depth(tp);
         path = preset_path_from_indices(presetsPlist, indices, len);
+        gtk_tree_path_free(tp);
     }
     return path;
 }

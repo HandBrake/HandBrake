@@ -696,59 +696,62 @@ ghb_version()
     return hb_get_version(NULL);
 }
 
+float
+ghb_vquality_default(signal_user_data_t *ud)
+{
+    float quality;
+    gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+
+    switch (vcodec)
+    {
+    case HB_VCODEC_X264:
+        return 20;
+    case HB_VCODEC_THEORA:
+        return 45;
+    case HB_VCODEC_FFMPEG_MPEG2:
+    case HB_VCODEC_FFMPEG_MPEG4:
+        return 3;
+    default:
+    {
+        float min, max, step;
+        int direction;
+
+        hb_video_quality_get_limits(vcodec, &min, &max, &step, &direction);
+        // Pick something that is 70% of max
+        // Probably too low for some and too high for others...
+        quality = (max - min) * 0.7;
+        if (direction)
+            quality = max - quality;
+    }
+    }
+    return quality;
+}
+
 void
 ghb_vquality_range(
     signal_user_data_t *ud,
-    gdouble *min,
-    gdouble *max,
-    gdouble *step,
-    gdouble *page,
+    float *min,
+    float *max,
+    float *step,
+    float *page,
     gint *digits,
-    gboolean *inverted)
+    int *direction)
 {
+    float min_step;
     gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+
     *page = 10;
     *digits = 0;
-    switch (vcodec)
-    {
-        case HB_VCODEC_X264:
-        {
-            *min = 0;
-            *max = 51;
-            *step = ghb_settings_combo_double(ud->prefs,
-                                            "VideoQualityGranularity");
-            if (*step == 0.2 || *step == 0.5)
-                *digits = 1;
-            else if (*step == 0.25)
-                *digits = 2;
-            *inverted = TRUE;
-        } break;
+    hb_video_quality_get_limits(vcodec, min, max, &min_step, direction);
+    *step = ghb_settings_combo_double(ud->prefs, "VideoQualityGranularity");
 
-        case HB_VCODEC_FFMPEG_MPEG2:
-        case HB_VCODEC_FFMPEG_MPEG4:
-        {
-            *min = 1;
-            *max = 31;
-            *step = 1;
-            *inverted = TRUE;
-        } break;
+    if (*step < min_step)
+        *step = min_step;
 
-        case HB_VCODEC_THEORA:
-        {
-            *min = 0;
-            *max = 63;
-            *step = 1;
-            *inverted = FALSE;
-        } break;
-
-        default:
-        {
-            *min = 0;
-            *max = 100;
-            *step = 1;
-            *inverted = FALSE;
-        } break;
-    }
+    if ((int)(*step * 100) % 10 != 0)
+        *digits = 2;
+    else if ((int)(*step * 10) % 10 != 0)
+        *digits = 1;
 }
 
 gint

@@ -134,7 +134,10 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
         widget = GHB_WIDGET(ud->builder, widget_name);
         dep_object = gtk_builder_get_object(ud->builder, name);
         if (widget != NULL && !gtk_widget_is_sensitive(widget))
+        {
+            g_free(widget_name);
             continue;
+        }
         if (dep_object == NULL)
         {
             g_message("Failed to find widget");
@@ -929,12 +932,62 @@ static void show_container_options(signal_user_data_t *ud)
     gtk_widget_set_visible(w3, (mux & HB_MUX_MASK_MP4) && (enc == HB_VCODEC_X264));
 }
 
+static void
+adjustment_configure(
+    GtkAdjustment *adj,
+    double val,
+    double min, double max,
+    double step, double page, double page_sz)
+{
+    gtk_adjustment_configure(adj, val, min, max, step, page, page_sz);
+}
+
+static void
+spin_configure(signal_user_data_t *ud, char *name, double val, double min, double max)
+{
+    GtkSpinButton *spin;
+    GtkAdjustment *adj;
+    double step, page, page_sz;
+
+    spin = GTK_SPIN_BUTTON(GHB_WIDGET(ud->builder, name));
+
+    adj = gtk_spin_button_get_adjustment(spin);
+    step = gtk_adjustment_get_step_increment(adj);
+    page = gtk_adjustment_get_page_increment(adj);
+    page_sz = gtk_adjustment_get_page_size(adj);
+
+    adjustment_configure(adj, val, min, max, step, page, page_sz);
+}
+
+static void
+scale_configure(
+    signal_user_data_t *ud,
+    char *name,
+    double val, double min, double max,
+    double step, double page,
+    int digits, gboolean inverted)
+{
+    GtkScale *scale;
+    GtkAdjustment *adj;
+    double page_sz;
+
+    scale = GTK_SCALE(GHB_WIDGET(ud->builder, name));
+
+    adj = gtk_range_get_adjustment(GTK_RANGE(scale));
+    page_sz = gtk_adjustment_get_page_size(adj);
+
+    adjustment_configure(adj, val, min, max, step, page, page_sz);
+
+    gtk_scale_set_digits(scale, digits);
+    gtk_range_set_inverted(GTK_RANGE(scale), inverted);
+}
+
 void
 ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
 {
-    GtkWidget *widget;
     int titleindex = ghb_settings_combo_int(settings, "title");
     hb_title_t * title = ghb_get_title_info(titleindex);
+    double val;
 
     // Reconfigure the UI combo boxes
     ghb_update_ui_combo_box(ud, "AudioTrack", titleindex, FALSE);
@@ -942,61 +995,62 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
 
     if (title != NULL)
     {
+
         // Set the limits of cropping.  hb_set_anamorphic_size crashes if
         // you pass it a cropped width or height == 0.
-        gint bound;
-        bound = title->height / 2 - 8;
-        widget = GHB_WIDGET(ud->builder, "PictureTopCrop");
-        gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 0, bound);
-        widget = GHB_WIDGET(ud->builder, "PictureBottomCrop");
-        gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 0, bound);
-        bound = title->width / 2 - 8;
-        widget = GHB_WIDGET(ud->builder, "PictureLeftCrop");
-        gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 0, bound);
-        widget = GHB_WIDGET(ud->builder, "PictureRightCrop");
-        gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 0, bound);
+        gint vbound, hbound;
+        vbound = title->height / 2 - 8;
+        hbound = title->width / 2 - 8;
+
+        val = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+        spin_configure(ud, "PictureTopCrop", val, 0, vbound);
+        val = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+        spin_configure(ud, "PictureBottomCrop", val, 0, vbound);
+        val = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+        spin_configure(ud, "PictureLeftCrop", val, 0, hbound);
+        val = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+        spin_configure(ud, "PictureRightCrop", val, 0, hbound);
 
         gint duration = title->duration / 90000;
 
-        gint num_chapters = hb_list_count(title->list_chapter);
         if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
         {
-            widget = GHB_WIDGET(ud->builder, "start_point");
-            gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 1, num_chapters);
-            widget = GHB_WIDGET(ud->builder, "end_point");
-            gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 1, num_chapters);
+            gint num_chapters = hb_list_count(title->list_chapter);
+
+            val = ghb_settings_get_int(ud->settings, "start_point");
+            spin_configure(ud, "start_point", val, 1, num_chapters);
+            val = ghb_settings_get_int(ud->settings, "end_point");
+            spin_configure(ud, "end_point", val, 1, num_chapters);
         }
         else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
         {
-
-            widget = GHB_WIDGET (ud->builder, "start_point");
-            gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 0, duration-1);
-            widget = GHB_WIDGET (ud->builder, "end_point");
-            gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 1, duration);
+            val = ghb_settings_get_int(ud->settings, "start_point");
+            spin_configure(ud, "start_point", val, 0, duration-1);
+            val = ghb_settings_get_int(ud->settings, "end_point");
+            spin_configure(ud, "end_point", val, 0, duration);
         }
         else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
         {
-            gdouble max_frames = (gdouble)duration * title->rate / title->rate_base;
-            widget = GHB_WIDGET(ud->builder, "start_point");
-            gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 1, max_frames);
-            widget = GHB_WIDGET(ud->builder, "end_point");
-            gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 1, max_frames);
+            gdouble max_frames;
+            max_frames = (gdouble)duration * title->rate / title->rate_base;
+
+            val = ghb_settings_get_int(ud->settings, "start_point");
+            spin_configure(ud, "start_point", val, 1, max_frames);
+            val = ghb_settings_get_int(ud->settings, "end_point");
+            spin_configure(ud, "end_point", val, 1, max_frames);
         }
 
-        widget = GHB_WIDGET (ud->builder, "angle");
-        gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 1, title->angle_count);
+        val = ghb_settings_get_int(ud->settings, "angle");
+        spin_configure(ud, "angle", val, 1, title->angle_count);
     }
 
-    gdouble vqmin, vqmax, step, page;
-    gboolean inverted;
-    gint digits;
+    float vqmin, vqmax, step, page;
+    int inverted, digits;
 
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
-    GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
-    gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
-    gtk_range_set_increments (GTK_RANGE(qp), step, page);
-    gtk_scale_set_digits(GTK_SCALE(qp), digits);
-    gtk_range_set_inverted (GTK_RANGE(qp), inverted);
+    val = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
+    scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
+                    step, page, digits, inverted);
 }
 
 static void
@@ -1059,13 +1113,13 @@ ghb_load_settings(signal_user_data_t * ud)
         ghb_settings_set_boolean(ud->settings, "preset_reload", FALSE);
     }
 
+    ud->dont_clear_presets = TRUE;
+    ud->scale_busy = TRUE;
+
     ghb_set_widget_ranges(ud, ud->settings);
     ghb_check_all_depencencies(ud);
     show_container_options(ud);
     check_chapter_markers(ud);
-
-    ud->dont_clear_presets = TRUE;
-    ud->scale_busy = TRUE;
 
     ghb_settings_to_ui(ud, ud->settings);
     ghb_audio_defaults_to_ui(ud);
@@ -1797,12 +1851,12 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
         GValue *settings = ghb_settings_new();
 
         ghb_settings_init(settings, "Initialization");
-        ghb_settings_init(settings, "Presets");
         ghb_preset_to_settings(settings, preset);
         ghb_settings_set_value(settings, "preset", preset_path);
         set_title_settings(ud, settings, ii);
         ghb_array_append(settings_array, settings);
     }
+    ghb_value_free(preset_path);
     if (titleindex < 0 || titleindex >= count)
     {
         titleindex = 0;
@@ -1874,38 +1928,23 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (title == NULL)
         return;
 
-    gint num_chapters = hb_list_count(title->list_chapter);
     gint duration = title->duration / 90000;
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
-        widget = GHB_WIDGET (ud->builder, "start_point");
-        gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, num_chapters);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
-
-        widget = GHB_WIDGET (ud->builder, "end_point");
-        gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, num_chapters);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), num_chapters);
+        gint num_chapters = hb_list_count(title->list_chapter);
+        spin_configure(ud, "start_point", 1, 1, num_chapters);
+        spin_configure(ud, "end_point", num_chapters, 1, num_chapters);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
     {
-        widget = GHB_WIDGET (ud->builder, "start_point");
-        gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, duration-1);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 0);
-
-        widget = GHB_WIDGET (ud->builder, "end_point");
-        gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, duration);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), duration);
+        spin_configure(ud, "start_point", 0, 0, duration-1);
+        spin_configure(ud, "end_point", duration, 0, duration);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
         gdouble max_frames = (gdouble)duration * title->rate / title->rate_base;
-        widget = GHB_WIDGET (ud->builder, "start_point");
-        gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
-
-        widget = GHB_WIDGET (ud->builder, "end_point");
-        gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), max_frames);
+        spin_configure(ud, "start_point", 1, 1, max_frames);
+        spin_configure(ud, "end_point", max_frames, 1, max_frames);
     }
 }
 
@@ -2006,30 +2045,26 @@ http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    gdouble vqmin, vqmax, step, page;
-    gboolean inverted;
-    gint digits;
+    float val, vqmin, vqmax, step, page;
+    int inverted, digits;
 
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     show_container_options(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
+
+    val = ghb_vquality_default(ud);
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
-    GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
-    gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
-    gtk_range_set_increments (GTK_RANGE(qp), step, page);
-    gtk_scale_set_digits(GTK_SCALE(qp), digits);
-    gtk_range_set_inverted (GTK_RANGE(qp), inverted);
+    scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
+                    step, page, digits, inverted);
 }
 
 G_MODULE_EXPORT void
 start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint start, end;
-    const gchar *name = ghb_get_setting_key(widget);
 
-    g_debug("start_point_changed_cb () %s", name);
     ghb_widget_to_setting(ud->settings, widget);
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
@@ -2072,9 +2107,7 @@ G_MODULE_EXPORT void
 end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint start, end;
-    const gchar *name = ghb_get_setting_key(widget);
 
-    g_debug("end_point_changed_cb () %s", name);
     ghb_widget_to_setting(ud->settings, widget);
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
@@ -2953,6 +2986,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
         source = ghb_settings_get_string(ud->globals, "scan_source");
         update_source_label(ud, source);
+        g_free(source);
 
         scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
         gtk_progress_bar_set_fraction (scan_prog, 1.0);
@@ -3683,7 +3717,7 @@ update_chapter_list_settings(GValue *settings)
     titleindex = ghb_settings_get_int(settings, "title_no");
     chapters = ghb_get_chapters(titleindex);
     if (chapters)
-        ghb_settings_set_value(settings, "chapter_list", chapters);
+        ghb_settings_take_value(settings, "chapter_list", chapters);
 }
 
 static gint chapter_edit_key = 0;
@@ -3909,14 +3943,13 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
 
-    gdouble vqmin, vqmax, step, page;
-    gboolean inverted;
-    gint digits;
+    float val, vqmin, vqmax, step, page;
+    int inverted, digits;
 
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
-    GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
-    gtk_range_set_increments (GTK_RANGE(qp), step, page);
-    gtk_scale_set_digits(GTK_SCALE(qp), digits);
+    val = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
+    scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
+                    step, page, digits, inverted);
 }
 
 G_MODULE_EXPORT void
@@ -4092,6 +4125,7 @@ ghb_is_cd(GDrive *gd)
 
     gint val;
     val = g_udev_device_get_property_as_int(udd, "ID_CDROM_DVD");
+    g_object_unref(udd);
     if (val == 1)
         return TRUE;
 

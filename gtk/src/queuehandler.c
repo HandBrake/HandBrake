@@ -195,6 +195,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     escape = g_markup_escape_text(dest, -1);
     g_string_append_printf(str,
         "<b>Destination:</b> <small>%s</small>\n", escape);
+    g_free(escape);
 
     width = ghb_settings_get_int(settings, "scale_width");
     height = ghb_settings_get_int(settings, "scale_height");
@@ -388,6 +389,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     g_string_append_printf(str,
         "<b>Video:</b> <small>%s, Framerate: %s, %s %s%s</small>\n",
          vcodec, fps, vq_desc, vqstr, vq_units);
+    g_free(vqstr);
 
     turbo = ghb_settings_get_boolean(settings, "VideoTurboTwoPass");
     if (turbo)
@@ -427,12 +429,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         else
         {
-            const char *br;
+            char *br;
             br = ghb_settings_get_string(asettings, "AudioBitrate");
             quality = g_strdup_printf("Bitrate: %s", br);
+            g_free(br);
         }
         sr = ghb_settings_get_double(asettings, "AudioSamplerate");
-        samplerate = ghb_settings_get_string(asettings, "AudioSamplerate");
         if ((int)sr == 0)
         {
             samplerate = g_strdup("Same As Source");
@@ -776,8 +778,8 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
         // Remove the corresponding item from the queue list
         GValue *old = ghb_array_get_nth(ud->queue, row);
-        ghb_value_free(old);
         ghb_array_remove(ud->queue, row);
+        ghb_value_free(old);
         ghb_save_queue(ud->queue);
     }
     else
@@ -1292,6 +1294,10 @@ find_pid:
             ghb_value_free(queue);
         }
         g_free(message);
+    }
+    else
+    {
+        ghb_value_free(queue);
     }
     return FALSE;
 }

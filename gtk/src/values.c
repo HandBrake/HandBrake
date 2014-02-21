@@ -713,7 +713,11 @@ ghb_array_copy(GValue *arr1, GValue *arr2, gint count)
     // empty the first array if it is not already empty
     len = ghb_array_len(arr1);
     for (ii = 0; ii < len; ii++)
+    {
+        GValue *old = ghb_array_get_nth(arr1, 0);
         ghb_array_remove(arr1, 0);
+        ghb_value_free(old);
+    }
 
     len = ghb_array_len(arr2);
     count = MIN(count, len);

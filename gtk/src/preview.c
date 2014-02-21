@@ -240,8 +240,8 @@ ghb_preview_cleanup(signal_user_data_t *ud)
 {
     if (ud->preview->current)
     {
-        ud->preview->current = NULL;
         g_free(ud->preview->current);
+        ud->preview->current = NULL;
     }
 }
 
@@ -987,7 +987,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
         {
             widget = GHB_WIDGET (ud->builder, "preview_button_image");
             gtk_image_set_from_pixbuf(GTK_IMAGE(widget), scaled_preview);
-            g_object_unref (scaled_preview);
+            g_object_unref(scaled_preview);
         }
     }
 }

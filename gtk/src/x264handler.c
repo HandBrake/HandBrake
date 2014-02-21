@@ -197,6 +197,7 @@ x264_setting_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         else
             new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"\"", tt);
         gtk_widget_set_tooltip_text(eo, new_tt);
+        g_free(new_tt);
 
         g_free(opts);
     }
@@ -327,6 +328,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             else
                 new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"\"", tt);
             gtk_widget_set_tooltip_text(eo, new_tt);
+            g_free(new_tt);
 
             g_free(options);
             options = sopts;

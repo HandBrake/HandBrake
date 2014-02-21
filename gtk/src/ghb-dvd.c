@@ -389,6 +389,10 @@ ghb_dvd_set_current(const gchar *name, signal_user_data_t *ud)
             // think its neccessary.
             ud->current_dvd_device = resolved;
         }
+        else
+        {
+            g_free(resolved);
+        }
         g_object_unref(info);
     }
     else

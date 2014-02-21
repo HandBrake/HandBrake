@@ -72,13 +72,14 @@ typedef struct
 const gchar* ghb_version(void);
 void ghb_vquality_range(
     signal_user_data_t *ud,
-    gdouble *min,
-    gdouble *max,
-    gdouble *step,
-    gdouble *page,
+    float *min,
+    float *max,
+    float *step,
+    float *page,
     gint *digits,
-    gboolean *inverted);
-//const gchar* ghb_get_rate_string(gint rate, gint type);
+    int *direction);
+float ghb_vquality_default(signal_user_data_t *ud);
+
 void ghb_combo_init(signal_user_data_t *ud);
 void ghb_backend_init(gint debug);
 void ghb_backend_close(void);
