@@ -783,26 +783,51 @@ static GtkWidget *find_widget(GtkWidget *widget, gchar *name)
     return result;
 }
 
+static PangoAttrList *default_title_attrs;
+
 static void
 title_add_multiple_set_sensitive(GtkWidget *row, gboolean sensitive)
 {
     GtkWidget *widget;
     widget = find_widget(row, "title_selected");
     gtk_widget_set_sensitive(widget, sensitive);
+
     widget = find_widget(row, "title_label");
-    gtk_widget_set_sensitive(widget, sensitive);
+    if (!sensitive)
+    {
+        PangoAttrList *pal;
+        PangoAttribute *bg;
+        bg = pango_attr_background_new(0xFFFF, 0xFFFF, 0xA000);
+        pal = pango_attr_list_new();
+        pango_attr_list_insert(pal, bg);
+        gtk_label_set_attributes(GTK_LABEL(widget), pal);
+        gtk_widget_set_has_tooltip(widget, TRUE);
+    }
+    else
+    {
+        gtk_label_set_attributes(GTK_LABEL(widget), default_title_attrs);
+        gtk_widget_set_has_tooltip(widget, FALSE);
+    }
 }
 
 static gboolean
 title_add_multiple_are_conflicts(signal_user_data_t *ud)
 {
+    GtkListBox *list;
+    GtkWidget *row;
     gint count, ii;
 
+    list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
+        row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
         if (!title_multiple_can_select(ud->settings_array, ii))
+        {
+            title_add_multiple_set_sensitive(GTK_WIDGET(row), FALSE);
             return TRUE;
+        }
+        title_add_multiple_set_sensitive(GTK_WIDGET(row), TRUE);
     }
     return FALSE;
 }
@@ -1115,6 +1140,13 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_name(GTK_WIDGET(title), "title_label");
     gtk_widget_show(GTK_WIDGET(title));
     gtk_box_pack_start(hbox, GTK_WIDGET(title), FALSE, FALSE, 0);
+
+    default_title_attrs = gtk_label_get_attributes(title);
+    gtk_widget_set_tooltip_text(GTK_WIDGET(title),
+        "There is another title with the same destination file name.\n"
+        "This title will not be added to the queue unless you change\n"
+        "the output file name.\n");
+    gtk_widget_set_has_tooltip(GTK_WIDGET(title), FALSE);
 
     // Destination entry and file chooser
     vbox_dest = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
