@@ -65,35 +65,37 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     GtkTreeView *treeview;
     GtkTreeIter iter;
     GtkTreeStore *store;
-    gchar *info;
     gint status;
     GtkTreeIter citer;
-    gchar *dest, *preset, *vol_name, *basename;
-    const gchar *vcodec, *container;
-    gchar *fps, *vcodec_abbr;
-    gint title, start_point, end_point, width, height;
-    gint source_width, source_height;
-    gboolean pass2 = FALSE, keep_aspect, vqtype, turbo;
-    gint pic_par;
+    gchar *basename;
+    const char *vol_name, *dest;
+    gint title, start_point, end_point;
+    gboolean two_pass, vqtype;
     gchar *escape, *escape2;
+    GString *str = g_string_new("");
+
+#define XPRINT(fmt, ...) \
+    g_string_append_printf(str, fmt, ##__VA_ARGS__)
 
     g_debug("update_queue_list ()");
     if (settings == NULL) return;
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
     store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 
+    // Collect information for first line in the display
+    // Volume (Title X, Chapters Y through Z, N Video Passes) --> Destination
     title = ghb_settings_get_int(settings, "titlenum");
     start_point = ghb_settings_get_int(settings, "start_point");
     end_point = ghb_settings_get_int(settings, "end_point");
-    vol_name = ghb_settings_get_string(settings, "volume_label");
-    dest = ghb_settings_get_string(settings, "destination");
+    vol_name = ghb_settings_get_const_string(settings, "volume_label");
+    dest = ghb_settings_get_const_string(settings, "destination");
     basename = g_path_get_basename(dest);
     escape = g_markup_escape_text(basename, -1);
     escape2 = g_markup_escape_text(vol_name, -1);
 
     vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
-    if (!vqtype)
-        pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
+    two_pass = ghb_settings_get_boolean(settings, "VideoTwoPass");
+
     const gchar *points = _("Chapters");
     if (ghb_settings_combo_int(settings, "PtoPType") == 0)
         points = _("Chapters");
@@ -101,51 +103,63 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         points = _("Seconds");
     else if (ghb_settings_combo_int(settings, "PtoPType") == 2)
         points = _("Frames");
-    info = g_strdup_printf
-    (
-        "<big><b>%s</b></big> "
-        "<small>(Title %d, %s %d through %d, %d Video %s)"
-        " --> %s</small>",
-         escape2, title, points, start_point, end_point,
-         pass2 ? 2:1, pass2 ? "Passes":"Pass", escape
+
+    XPRINT("<big><b>%s</b></big> "
+            "<small>(Title %d, %s %d through %d, %d Video %s)"
+            " --> %s</small>",
+            escape2, title, points, start_point, end_point,
+            two_pass ? 2:1, two_pass ? "Passes":"Pass", escape
     );
     g_free(basename);
     g_free(escape);
     g_free(escape2);
 
     if (piter)
+    {
         iter = *piter;
+    }
     else
+    {
         gtk_tree_store_append(store, &iter, NULL);
+    }
 
-    gtk_tree_store_set(store, &iter, 1, info, 2, "hb-queue-delete", -1);
-    g_free(info);
+    // Set the job status icon
     status = ghb_settings_get_int(settings, "job_status");
+    const char *status_icon = "hb-queue-job";
     switch (status)
     {
         case GHB_QUEUE_PENDING:
-            gtk_tree_store_set(store, &iter, 0, "hb-queue-job", -1);
+            status_icon = "hb-queue-job";
             break;
         case GHB_QUEUE_CANCELED:
-            gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
+            status_icon = "hb-canceled";
             break;
         case GHB_QUEUE_RUNNING:
-            gtk_tree_store_set(store, &iter, 0, "hb-working0", -1);
+            status_icon = "hb-working0";
             break;
         case GHB_QUEUE_DONE:
-            gtk_tree_store_set(store, &iter, 0, "hb-complete", -1);
+            status_icon = "hb-complete";
             break;
         default:
-            gtk_tree_store_set(store, &iter, 0, "hb-queue-job", -1);
+            status_icon = "hb-queue-job";
             break;
     }
+    // Set the status icon, job description, and delete icon button
+    gtk_tree_store_set(store, &iter, 0, status_icon, 1, str->str,
+                       2, "hb-queue-delete", -1);
 
-    GString *str = g_string_new("");
+    // Reset the string for the next line
+    g_string_assign(str, "");
+
+    // Next line in the display
+    // Preset: PresetName
+    gchar *preset;
     gboolean markers;
     gboolean preset_modified;
     gint mux;
     const GValue *path;
 
+    const gchar *container;
     container = ghb_settings_combo_option(settings, "FileFormat");
     mux = ghb_settings_combo_int(settings, "FileFormat");
     preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
@@ -154,52 +168,69 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     markers = ghb_settings_get_boolean(settings, "ChapterMarkers");
 
     if (preset_modified)
-        g_string_append_printf(str,
-            "<b>Modified Preset Based On:</b> <small>%s</small>\n",
-            preset);
+    {
+        XPRINT("<b>Modified Preset Based On:</b> <small>%s</small>\n", preset);
+    }
     else
-        g_string_append_printf(str,
-            "<b>Preset:</b> <small>%s</small>\n",
-            preset);
+    {
+        XPRINT("<b>Preset:</b> <small>%s</small>\n", preset);
+    }
+    g_free(preset);
 
-    if (markers)
-    {
-        g_string_append_printf(str,
-            "<b>Format:</b> <small>%s Container, Chapter Markers</small>\n",
-            container);
-    }
-    else
-    {
-        g_string_append_printf(str,
-            "<b>Format:</b> <small>%s Container</small>\n", container);
-    }
+    // Next line in the display (Container type)
+    // Format: XXX Container
+    XPRINT("<b>Format:</b> <small>%s Container</small>\n", container);
+
+    // Next line in the display (Container options)
+    // Container Options: - Chapter Markers
+    gboolean ipod = FALSE, http = FALSE, large = FALSE;
     if (mux & HB_MUX_MASK_MP4)
     {
-        gboolean ipod, http, large;
-
         ipod = ghb_settings_get_boolean(settings, "Mp4iPodCompatible");
         http = ghb_settings_get_boolean(settings, "Mp4HttpOptimize");
         large = ghb_settings_get_boolean(settings, "Mp4LargeFile");
-        if (http || ipod || large)
-        {
-            g_string_append_printf(str, "<b>MP4 Options:</b><small>");
-            if (ipod)
-                g_string_append_printf(str, " - iPod 5G Support");
-            if (http)
-                g_string_append_printf(str, " - Web Optimized");
-            if (large)
-                g_string_append_printf(str, " - Large File Size (>4GB)");
-            g_string_append_printf(str, "</small>\n");
-        }
     }
+    if (http || ipod || large || markers)
+    {
+        const char *prefix = " ";
+        XPRINT("<b>Container Options:</b><small>");
+        if (markers)
+        {
+            XPRINT("%sChapter Markers", prefix);
+            prefix = " - ";
+        }
+        if (ipod)
+        {
+            XPRINT("%siPod 5G Support", prefix);
+            prefix = " - ";
+        }
+        if (http)
+        {
+            XPRINT("%sWeb Optimized", prefix);
+            prefix = " - ";
+        }
+        if (large)
+        {
+            XPRINT("%sLarge File Size (>4GB)", prefix);
+            prefix = " - ";
+        }
+        XPRINT("</small>\n");
+    }
+
+    // Next line in the display (Destination)
+    // Destination: /Full/Destination/Path.mkv
     escape = g_markup_escape_text(dest, -1);
-    g_string_append_printf(str,
-        "<b>Destination:</b> <small>%s</small>\n", escape);
+    XPRINT("<b>Destination:</b> <small>%s</small>\n", escape);
     g_free(escape);
+
+    // Next line in the display (Picture settings)
+    // Picture: Source: W x H, Output W x H (Animorphic), Display W x H
+    int width, height, pic_par;
+    gboolean keep_aspect;
 
     width = ghb_settings_get_int(settings, "scale_width");
     height = ghb_settings_get_int(settings, "scale_height");
-    pic_par = ghb_settings_combo_int(settings, "PicturePAR");
+    pic_par = ghb_settings_get_int(settings, "PicturePAR");
     keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
 
     gchar *aspect_desc;
@@ -219,12 +250,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     case 1:
     {
-        aspect_desc = "(Strict Anamorphic)";
+        aspect_desc = "(Anamorphic)";
     } break;
 
     case 2:
     {
-        aspect_desc = "(Loose Anamorphic)";
+        aspect_desc = "(Anamorphic)";
     } break;
 
     case 3:
@@ -234,16 +265,153 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     default:
     {
-        aspect_desc = "(Unknown)";
+        aspect_desc = "";
     } break;
     }
-    vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
-    vcodec = ghb_settings_combo_option(settings, "VideoEncoder");
-    vcodec_abbr = ghb_settings_get_string(settings, "VideoEncoder");
 
-    gchar *vq_desc = "Error";
-    gchar *vq_units = "";
-    gchar *vqstr;
+    gint source_width, source_height;
+    source_width = ghb_settings_get_int(settings, "source_width");
+    source_height = ghb_settings_get_int(settings, "source_height");
+    XPRINT(
+        "<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>",
+         source_width, source_height, width, height, aspect_desc);
+    if (pic_par)
+    {
+        int display_width, display_height;
+        display_width = ghb_settings_get_int(settings, "PictureDisplayWidth");
+        display_height = ghb_settings_get_int(settings, "PictureDisplayHeight");
+        XPRINT("<small>, Display %d x %d</small>",
+                display_width, display_height);
+    }
+    XPRINT("\n");
+
+    // Next line in the display (Filter settings)
+    // Filters: - Deinterlace
+    gint decomb, detel, deint, deblock, denoise;
+    const gchar *detel_cust, *deint_cust, *decomb_cust, *denoise_cust;
+    const gchar *deint_opt, *decomb_opt, *denoise_opt;
+    gboolean decomb_deint;
+    gboolean grayscale;
+    gboolean filters;
+
+    decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
+    decomb = ghb_settings_combo_int(settings, "PictureDecomb");
+    decomb_opt = ghb_settings_combo_option(settings, "PictureDecomb");
+    decomb_cust = ghb_settings_get_const_string(settings,
+                                                "PictureDecombCustom");
+    deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
+    deint_opt = ghb_settings_combo_option(settings, "PictureDeinterlace");
+    deint_cust = ghb_settings_get_const_string(settings,
+                                               "PictureDeinterlaceCustom");
+    detel = ghb_settings_combo_int(settings, "PictureDetelecine");
+    detel_cust = ghb_settings_get_const_string(settings,
+                                               "PictureDetelecineCustom");
+    deblock = ghb_settings_get_int(settings, "PictureDeblock");
+    denoise = ghb_settings_combo_int(settings, "PictureDenoise");
+    denoise_opt = ghb_settings_combo_option(settings, "PictureDenoise");
+    denoise_cust = ghb_settings_get_const_string(settings,
+                                                 "PictureDenoiseCustom");
+    grayscale = ghb_settings_get_boolean(settings, "VideoGrayScale");
+
+    filters = detel || (decomb_deint && decomb) || (!decomb_deint && deint) ||
+              denoise || (deblock >= 5) || grayscale;
+    if (filters)
+    {
+        const char *prefix = " ";
+        XPRINT("<b>Filters:</b><small>");
+        if (detel)
+        {
+            XPRINT("%sDetelecine", prefix);
+            if (detel == 1)
+            {
+                XPRINT(": %s", detel_cust);
+            }
+            prefix = " - ";
+        }
+        if (decomb_deint && decomb)
+        {
+            XPRINT("%sDecomb", prefix);
+            if (decomb == 1)
+            {
+                XPRINT(": %s", decomb_cust);
+            }
+            else
+            {
+                XPRINT(": %s", decomb_opt);
+            }
+            prefix = " - ";
+        }
+        else if (!decomb_deint && deint)
+        {
+            XPRINT("%sDeinterlace", prefix);
+            if (deint == 1)
+            {
+                XPRINT(": %s", deint_cust);
+            }
+            else
+            {
+                XPRINT(": %s", deint_opt);
+            }
+            prefix = " - ";
+        }
+        if (denoise)
+        {
+            XPRINT("%sDenoise", prefix);
+            if (denoise == 1)
+            {
+                XPRINT(": %s", denoise_cust);
+            }
+            else
+            {
+                XPRINT(": %s", denoise_opt);
+            }
+            prefix = " - ";
+        }
+        if (deblock >= 5)
+        {
+            XPRINT("%sDeblock: %d", prefix, deblock);
+            prefix = " - ";
+        }
+        if (grayscale)
+        {
+            XPRINT("%sGrayscale", prefix);
+            prefix = " - ";
+        }
+        XPRINT("</small>\n");
+    }
+
+    // Next line in the display (Video Encoder)
+    // Video: Encoder, Framerate: fps, RF/Bitrate/QP
+    const char *vcodec_opt;
+    int vcodec;
+    vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
+    vcodec_opt = ghb_settings_combo_option(settings, "VideoEncoder");
+
+    XPRINT("<b>Video:</b> <small>%s</small>", vcodec_opt);
+
+    const char *fps;
+    fps = ghb_settings_get_const_string(settings, "VideoFramerate");
+    if (strcmp("source", fps) == 0)
+    {
+        if (ghb_settings_get_boolean(settings, "VideoFramerateCFR"))
+            fps = "Same As Source (constant)";
+        else
+            fps = "Same As Source (variable)";
+        XPRINT("<small>, Framerate: %s</small>", fps);
+    }
+    else
+    {
+        if (ghb_settings_get_boolean(settings, "VideoFrameratePFR"))
+        {
+            XPRINT("<small>, Framerate: Peak %s (may be lower)</small>", fps);
+        }
+        else
+        {
+            XPRINT("<small>, Framerate: %s (constant frame rate)</small>", fps);
+        }
+    }
+    const gchar *vq_desc = "Error";
+    const gchar *vq_units = "";
     gdouble vqvalue;
     if (!vqtype)
     {
@@ -251,181 +419,129 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         vqvalue = ghb_settings_get_int(settings, "VideoAvgBitrate");
         vq_desc = "Bitrate:";
         vq_units = "kbps";
-        vqstr = g_strdup_printf("%d", (gint)vqvalue);
+        XPRINT("<small>, %s %d%s</small>\n",
+               vq_desc, (int)vqvalue, vq_units);
     }
     else
     {
         // Constant quality
         vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
         vq_desc = "Constant Quality:";
-        vqstr = g_strdup_printf("%d", (gint)vqvalue);
-        if (strcmp(vcodec_abbr, "x264") == 0)
-        {
-            vq_units = "(RF)";
-        }
-        else
-        {
-            vq_units = "(QP)";
-        }
+        vq_units = hb_video_quality_get_name(vcodec);
+        XPRINT("<small>, %s %.4g(%s)</small>\n",
+               vq_desc, vqvalue, vq_units);
     }
-    fps = ghb_settings_get_string(settings, "VideoFramerate");
-    if (strcmp("source", fps) == 0)
-    {
-        g_free(fps);
-        if (ghb_settings_get_boolean(settings, "VideoFramerateCFR"))
-            fps = g_strdup("Same As Source (constant)");
-        else
-            fps = g_strdup("Same As Source (variable)");
-    }
-    else
-    {
-        if (ghb_settings_get_boolean(settings, "VideoFrameratePFR"))
-        {
-            gchar *tmp;
-            tmp = g_strdup_printf("Peak %s (may be lower)", fps);
-            g_free(fps);
-            fps = tmp;
-        }
-        else
-        {
-            gchar *tmp;
-            tmp = g_strdup_printf("%s (constant frame rate)", fps);
-            g_free(fps);
-            fps = tmp;
-        }
-    }
-    source_width = ghb_settings_get_int(settings, "source_width");
-    source_height = ghb_settings_get_int(settings, "source_height");
-    g_string_append_printf(str,
-        "<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>\n",
-         source_width, source_height, width, height, aspect_desc);
 
-    gint decomb, detel;
-    gboolean decomb_deint;
-    gboolean filters = FALSE;
-
-    decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
-    decomb = ghb_settings_combo_int(settings, "PictureDecomb");
-    g_string_append_printf(str, "<b>Filters:</b><small>");
-    detel = ghb_settings_combo_int(settings, "PictureDetelecine");
-    if (detel)
-    {
-        g_string_append_printf(str, " - Detelecine");
-        if (detel == 1)
-        {
-            gchar *cust;
-            cust = ghb_settings_get_string(settings, "PictureDetelecineCustom");
-            g_string_append_printf(str, ": %s", cust);
-            g_free(cust);
-        }
-        filters = TRUE;
-    }
-    if (decomb_deint && decomb)
-    {
-        g_string_append_printf(str, " - Decomb");
-        if (decomb == 1)
-        {
-            gchar *cust;
-            cust = ghb_settings_get_string(settings, "PictureDecombCustom");
-            g_string_append_printf(str, ": %s", cust);
-            g_free(cust);
-        }
-        filters = TRUE;
-    }
-    else if (!decomb_deint)
-    {
-        gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
-        if (deint)
-        {
-            if (deint == 1)
-            {
-                gchar *cust = ghb_settings_get_string(settings,
-                                                "PictureDeinterlaceCustom");
-                g_string_append_printf(str, " - Deinterlace: %s", cust);
-                g_free(cust);
-            }
-            else
-            {
-                const gchar *opt = ghb_settings_combo_option(settings,
-                                                    "PictureDeinterlace");
-                g_string_append_printf(str, " - Deinterlace: %s", opt);
-            }
-            filters = TRUE;
-        }
-    }
-    gint denoise = ghb_settings_combo_int(settings, "PictureDenoise");
-    if (denoise)
-    {
-        if (denoise == 1)
-        {
-            gchar *cust = ghb_settings_get_string(settings,
-                                                    "PictureDenoiseCustom");
-            g_string_append_printf(str, " - Denoise: %s", cust);
-            g_free(cust);
-        }
-        else
-        {
-            const gchar *opt = ghb_settings_combo_option(settings,
-                                                    "PictureDenoise");
-            g_string_append_printf(str, " - Denoise: %s", opt);
-        }
-        filters = TRUE;
-    }
-    gint deblock = ghb_settings_get_int(settings, "PictureDeblock");
-    if (deblock >= 5)
-    {
-        g_string_append_printf(str, " - Deblock (%d)", deblock);
-        filters = TRUE;
-    }
-    if (ghb_settings_get_boolean(settings, "VideoGrayScale"))
-    {
-        g_string_append_printf(str, " - Grayscale");
-        filters = TRUE;
-    }
-    if (!filters)
-        g_string_append_printf(str, " None");
-    g_string_append_printf(str, "</small>\n");
-
-    g_string_append_printf(str,
-        "<b>Video:</b> <small>%s, Framerate: %s, %s %s%s</small>\n",
-         vcodec, fps, vq_desc, vqstr, vq_units);
-    g_free(vqstr);
-
+    // Next line in the display (Turbo setting)
+    gboolean turbo;
     turbo = ghb_settings_get_boolean(settings, "VideoTurboTwoPass");
-    if (turbo)
+    if (!vqtype && two_pass && turbo)
     {
-        g_string_append_printf(str, "<b>Turbo:</b> <small>On</small>\n");
+        XPRINT("<b>Turbo 1st Pass:</b> <small>On</small>\n");
     }
-    if (strcmp(vcodec_abbr, "x264") == 0 ||
-        strcmp(vcodec_abbr, "ffmpeg") == 0)
+
+    // Next line in the display (Video Encoder Options)
+    // Video Options: Preset - Tune - Profile - Level
+    if (vcodec == HB_VCODEC_X264 &&
+        !ghb_settings_get_boolean(settings, "x264UseAdvancedOptions"))
     {
+        const gchar *preset_opt, *tune_opt;
+        const gchar *profile_opt, *level_opt, *extra_opt;
+        gboolean fastdecode, zerolatency;
+
+        preset_opt = ghb_settings_get_const_string(settings, "x264Preset");
+        tune_opt = ghb_settings_get_const_string(settings, "x264Tune");
+        fastdecode = ghb_settings_get_boolean(settings, "x264FastDecode");
+        zerolatency = ghb_settings_get_boolean(settings, "x264ZeroLatency");
+        profile_opt = ghb_settings_get_const_string(settings, "h264Profile");
+        level_opt = ghb_settings_get_const_string(settings, "h264Level");
+        extra_opt = ghb_settings_get_const_string(settings, "x264OptionExtra");
+
+        XPRINT("<b>Video Options:</b> <small>Preset: %s</small>", preset_opt);
+        if ((tune_opt != NULL && tune_opt[0] != 0) || zerolatency || fastdecode)
+        {
+            const char *prefix = "";
+            XPRINT("<small> - Tune: ");
+            if (tune_opt != NULL && tune_opt[0] != 0)
+            {
+                XPRINT("%s%s", prefix, tune_opt);
+                prefix = ",";
+            }
+            if (fastdecode)
+            {
+                XPRINT("%sfastdecode", prefix);
+                prefix = ",";
+            }
+            if (zerolatency)
+            {
+                XPRINT("%szerolatency", prefix);
+                prefix = ",";
+            }
+            XPRINT("</small>");
+        }
+        if (profile_opt != NULL && profile_opt[0] != 0)
+        {
+            XPRINT("<small> - Profile: %s</small>", profile_opt);
+        }
+        if (level_opt != NULL && level_opt[0] != 0)
+        {
+            XPRINT("<small> - Level: %s</small>", level_opt);
+        }
+        XPRINT("\n");
+
+        // Next line in the display (Video Encoder Options)
+        // Video Advanced Options: detailed settings
+        if (extra_opt != NULL && extra_opt[0] != 0)
+        {
+            XPRINT("<b>Advanced Options:</b> <small>%s</small>\n", extra_opt);
+        }
+    }
+    else if (vcodec == HB_VCODEC_X264 || (vcodec | HB_VCODEC_FFMPEG_MASK))
+    {
+        // Next line in the display (Video Encoder Options)
+        // Video Advanced Options: detailed settings
         gchar *opts = ghb_build_advanced_opts_string(settings);
-        g_string_append_printf(str,
-            "<b>Advanced Options:</b> <small>%s</small>\n", opts);
+        if (opts != NULL && opts[0] != 0)
+        {
+            XPRINT("<b>Advanced Options:</b> <small>%s</small>\n", opts);
+        }
         g_free(opts);
     }
-    // Add the audios
+
+    // Next line in the display (Audio)
+    // Audio Tracks: count
+    //      Source description, Encoder, Mix, Samplerate, Bitrate
+    //      ...
     gint count, ii;
     const GValue *audio_list;
 
     audio_list = ghb_settings_get_value(settings, "audio_list");
     count = ghb_array_len(audio_list);
+    if (count == 1)
+    {
+        XPRINT("<b>Audio:</b> ");
+    }
+    else if (count > 1)
+    {
+        XPRINT("<b>Audio Tracks: %d</b>\n", count);
+    }
     for (ii = 0; ii < count; ii++)
     {
         gchar *quality = NULL, *samplerate, *track;
-        const gchar *acodec, *mix;
+        const gchar *acodec_opt, *mix;
+        int acodec;
         GValue *asettings;
         gdouble sr;
 
         asettings = ghb_array_get_nth(audio_list, ii);
 
-        acodec = ghb_settings_combo_option(asettings, "AudioEncoder");
+        acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
+        acodec_opt = ghb_settings_combo_option(asettings, "AudioEncoder");
         double q = ghb_settings_get_double(asettings, "AudioTrackQuality");
         if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
             q != HB_INVALID_AUDIO_QUALITY)
         {
-            int codec = ghb_settings_combo_int(asettings, "AudioEncoder");
-            quality = ghb_format_quality("Quality: ", codec, q);
+            quality = ghb_format_quality("Quality: ", acodec, q);
         }
         else
         {
@@ -445,26 +561,40 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         track = ghb_settings_get_string(asettings, "AudioTrackDescription");
         mix = ghb_settings_combo_option(asettings, "AudioMixdown");
-        if (count == 1)
-            g_string_append_printf(str, "<b>Audio:</b>");
-        else if (ii == 0)
-            g_string_append_printf(str, "<b>Audio:</b>\n");
-        if (count != 1)
-            g_string_append_printf(str, "\t");
+        if (count > 1)
+            XPRINT("\t");
 
-        g_string_append_printf(str,
-            "<small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
-             track, acodec, mix, samplerate, quality);
+        if (acodec & HB_ACODEC_PASS_FLAG)
+        {
+            XPRINT("<small>%s, Encoder: %s</small>\n", track, acodec_opt);
+        }
+        else
+        {
+            XPRINT(
+            "<small>%s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
+             track, acodec_opt, mix, samplerate, quality);
+        }
         g_free(track);
         g_free(quality);
         g_free(samplerate);
     }
 
-    // Add the audios
+    // Next line in the display (Subtitle)
+    // Subtitle Tracks: count
+    //      Subtitle description(Subtitle options)
+    //      ...
     const GValue *sub_list;
 
     sub_list = ghb_settings_get_value(settings, "subtitle_list");
     count = ghb_array_len(sub_list);
+    if (count == 1)
+    {
+        XPRINT("<b>Subtitle:</b> ");
+    }
+    else if (count > 1)
+    {
+        XPRINT("<b>Subtitle Tracks: %d</b>\n", count);
+    }
     for (ii = 0; ii < count; ii++)
     {
         GValue *settings;
@@ -478,21 +608,15 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         force = ghb_settings_get_boolean(settings, "SubtitleForced");
         burn = ghb_settings_get_boolean(settings, "SubtitleBurned");
         def = ghb_settings_get_boolean(settings, "SubtitleDefaultTrack");
-        if (count == 1)
-            g_string_append_printf(str, "<b>Subtitle:</b>");
-        else if (ii == 0)
-            g_string_append_printf(str, "<b>Subtitles:</b>\n");
-        if (count != 1)
-            g_string_append_printf(str, "\t");
+        if (count > 1)
+            XPRINT("\t");
 
         if (source != SRTSUB)
         {
-            g_string_append_printf(str,
-                "<small> %s%s%s%s</small>",
-                track,
-                force ? " (Force)":"",
-                burn  ? " (Burn)":"",
-                def   ? " (Default)":""
+            XPRINT("<small>%s%s%s%s</small>\n", track,
+                    force ? " (Force)":"",
+                    burn  ? " (Burn)":"",
+                    def   ? " (Default)":""
             );
         }
         else
@@ -504,29 +628,25 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             filename = ghb_settings_get_string(settings, "SrtFile");
             basename = g_path_get_basename(filename);
             code = ghb_settings_get_string(settings, "SrtCodeset");
-            g_string_append_printf(str,
-                "<small> %s (%s), %s, Offset (ms) %d%s</small>",
-                track, code, basename, offset,
-                def   ? " (Default)":""
-            );
+
+            XPRINT("<small> %s (%s), %s, Offset (ms) %d%s</small>\n",
+                track, code, basename, offset, def   ? " (Default)":"");
+
             g_free(filename);
             g_free(basename);
             g_free(code);
         }
-        if (ii < count-1)
-            g_string_append_printf(str, "\n");
         g_free(track);
     }
 
-    info = g_string_free(str, FALSE);
+    // Remove the final newline in the string
+    if (str->len > 0 && str->str[str->len-1] == '\n')
+        str->str[str->len-1] = 0;
+
     gtk_tree_store_append(store, &citer, &iter);
-    gtk_tree_store_set(store, &citer, 1, info, -1);
-    g_free(info);
-    g_free(fps);
-    g_free(vcodec_abbr);
-    g_free(vol_name);
-    g_free(dest);
-    g_free(preset);
+    gtk_tree_store_set(store, &citer, 1, str->str, -1);
+
+    g_string_free(str, TRUE);
 }
 
 static gboolean

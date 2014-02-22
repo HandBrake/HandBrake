@@ -759,6 +759,9 @@ find_combo_entry(combo_opts_t *opts, const GValue *gval)
 {
     gint ii;
 
+    if (opts == NULL)
+        return 0;
+
     if (G_VALUE_TYPE(gval) == G_TYPE_STRING)
     {
         gchar *str;
@@ -823,6 +826,9 @@ lookup_generic_int(combo_opts_t *opts, const GValue *gval)
 {
     gint ii;
     gint result = -1;
+
+    if (opts == NULL)
+        return 0;
 
     ii = find_combo_entry(opts, gval);
     if (ii < opts->count)
@@ -2192,7 +2198,7 @@ x264_tune_opts_set(GtkBuilder *builder, const gchar *name)
     gint ii, count = 0;
 
     const char * const *tunes;
-    tunes = hb_x264_tunes();
+    tunes = hb_video_encoder_get_tunes(HB_VCODEC_X264);
     while (tunes && tunes[count]) count++;
 
     g_debug("x264_tune_opts_set ()\n");
@@ -2233,7 +2239,7 @@ h264_profile_opts_set(GtkBuilder *builder, const gchar *name)
     gint ii, count = 0;
 
     const char * const *profiles;
-    profiles = hb_h264_profiles();
+    profiles = hb_video_encoder_get_profiles(HB_VCODEC_X264);
     while (profiles && profiles[count]) count++;
 
     g_debug("h264_profile_opts_set ()\n");
@@ -2262,7 +2268,7 @@ h264_level_opts_set(GtkBuilder *builder, const gchar *name)
     gint ii, count = 0;
 
     const char * const *levels;
-    levels = hb_h264_levels();
+    levels = hb_video_encoder_get_levels(HB_VCODEC_X264);
     while (levels && levels[count]) count++;
 
     g_debug("h264_level_opts_set ()\n");
@@ -3008,46 +3014,19 @@ init_ui_combo_boxes(GtkBuilder *builder)
 gchar*
 ghb_build_advanced_opts_string(GValue *settings)
 {
-    gchar *result;
-
     gint vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
-
     switch (vcodec)
     {
         case HB_VCODEC_X264:
-        {
-            gchar *opts = ghb_settings_get_string(settings, "x264Option");
-            if (opts != NULL)
-            {
-                result = opts;
-            }
-            else
-            {
-                result = g_strdup("");
-            }
-        } break;
+            return ghb_settings_get_string(settings, "x264Option");
 
         case HB_VCODEC_FFMPEG_MPEG2:
         case HB_VCODEC_FFMPEG_MPEG4:
-        {
-            gchar *opts = ghb_settings_get_string(settings, "lavcOption");
-            if (opts != NULL)
-            {
-                result = opts;
-            }
-            else
-            {
-                result = g_strdup("");
-            }
-        } break;
+            return ghb_settings_get_string(settings, "lavcOption");
 
-        case HB_VCODEC_THEORA:
         default:
-        {
-            result = g_strdup("");
-        } break;
+            return NULL;
     }
-    return result;
 }
 
 void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)

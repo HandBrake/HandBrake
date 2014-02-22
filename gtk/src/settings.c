@@ -143,6 +143,14 @@ ghb_settings_get_double(const GValue *settings, const gchar *key)
     return ghb_value_double(value);
 }
 
+const gchar*
+ghb_settings_get_const_string(const GValue *settings, const gchar *key)
+{
+    const GValue* value;
+    value = ghb_settings_get_value(settings, key);
+    return g_value_get_string(value);
+}
+
 gchar*
 ghb_settings_get_string(const GValue *settings, const gchar *key)
 {

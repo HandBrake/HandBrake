@@ -104,6 +104,8 @@ gint64 ghb_settings_get_int64(const GValue *settings, const gchar *key);
 gint ghb_settings_get_int(const GValue *settings, const gchar *key);
 gdouble ghb_settings_get_double(const GValue *settings, const gchar *key);
 gchar* ghb_settings_get_string(const GValue *settings, const gchar *key);
+const gchar* ghb_settings_get_const_string(
+    const GValue *settings, const gchar *key);
 gint ghb_settings_combo_int(const GValue *settings, const gchar *key);
 gdouble ghb_settings_combo_double(const GValue *settings, const gchar *key);
 const gchar* ghb_settings_combo_option(const GValue *settings, const gchar *key);
