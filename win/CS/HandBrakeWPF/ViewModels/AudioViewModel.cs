@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -377,19 +376,11 @@ namespace HandBrakeWPF.ViewModels
 
             if (preset != null && preset.Task != null)
             {
-                if (this.AudioBehaviours.SelectedBehaviour != AudioBehaviourModes.None)
-                {
-                    this.AutomaticTrackSelection();
-                }
-                else
-                {
-                    this.AddTracksFromPreset(preset);
-                }
-
-                this.AutomaticTrackSelection();
+                this.SetupTracks();
 
                 this.Task.AllowedPassthruOptions = new AllowedPassthru(preset.Task.AllowedPassthruOptions);
             }
+
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
@@ -435,7 +426,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.AutomaticTrackSelection();
+                this.SetupTracks();
             }
 
             // Force UI Updates
@@ -485,38 +476,42 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Add all remaining for selected languages.
+        /// Attempt to automatically select the correct audio tracks based on the users settings.
         /// </summary>
-        public void AddAllRemainingForSelectedLanguages()
+        private void SetupTracks()
         {
-            // Add them if they are not already added.
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
+            if (!this.SourceTracks.Any())
             {
-                // Step 2: Check if the track list already contrains this track
-                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
-                if (!found)
-                {
-                    // If it doesn't, add it.
-                    this.Add(sourceTrack);
-                }
-            }
-        }
+                // Clear out the old tracks
+                this.Task.AudioTracks.Clear();
 
-        /// <summary>
-        /// Add the required tracks for the current preset
-        /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        private void AddTracksFromPreset(Preset preset)
-        {
-            // Clear out the old tracks
+                return;
+            }
+
+            // Step 1, Cleanup Previous Tracks
             this.Task.AudioTracks.Clear();
 
-            // Add the preset audio tracks with the preferred language
-            foreach (AudioTrack track in preset.Task.AudioTracks)
+            // Step 2, Sanity Check
+            if (this.SourceTracks == null || !this.SourceTracks.Any())
+            {
+                return;
+            }
+
+            // Step 3, Setup the tracks from the preset
+            foreach (AudioTrack track in this.currentPreset.Task.AudioTracks)
             {
                 this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = this.GetPreferredAudioTrack() });
+            }
+           
+            // Step 4, Handle the default selection behaviour.
+            switch (this.AudioBehaviours.SelectedBehaviour)
+            {
+                case AudioBehaviourModes.FirstMatch: // Adding all remaining audio tracks
+                    this.AddFirstForSelectedLanguages();
+                    break;
+                case AudioBehaviourModes.AllMatching: // Add Langauges tracks for the additional languages selected, in-order.
+                    this.AddAllRemainingForSelectedLanguages();
+                    break;
             }
         }
 
@@ -550,41 +545,20 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Attempt to automatically select the correct audio tracks based on the users settings.
+        /// Add all remaining for selected languages.
         /// </summary>
-        private void AutomaticTrackSelection()
+        public void AddAllRemainingForSelectedLanguages()
         {
-            if (!this.SourceTracks.Any())
+            // Add them if they are not already added.
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
-                // Clear out the old tracks
-                this.Task.AudioTracks.Clear();
-
-                return;
-            }
-
-            // We've changed source, so lets try reset the language, description and formats as close as possible to the previous track.
-            foreach (AudioTrack track in this.Task.AudioTracks)
-            {
-                track.ScannedTrack = this.GetPreferredAudioTrack();
-            }
-
-            // Handle the default selection behaviour.
-            if (this.AudioBehaviours.SelectedBehaviour != AudioBehaviourModes.None)
-            {
-                // First, we'll clear out all current tracks and go back to what the current preset has.
-                // This will alteast provide a consistent behavior when switching tracks.
-                this.Task.AudioTracks.Clear();
-                this.AddTracksFromPreset(this.currentPreset);
-            }
-
-            switch (this.AudioBehaviours.SelectedBehaviour)
-            {
-                case AudioBehaviourModes.FirstMatch: // Adding all remaining audio tracks
-                    this.AddFirstForSelectedLanguages();
-                    break;
-                case AudioBehaviourModes.AllMatching: // Add Langauges tracks for the additional languages selected, in-order.
-                    this.AddAllRemainingForSelectedLanguages();
-                    break;
+                // Step 2: Check if the track list already contrains this track
+                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
+                if (!found)
+                {
+                    // If it doesn't, add it.
+                    this.Add(sourceTrack);
+                }
             }
         }
 

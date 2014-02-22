@@ -23,7 +23,9 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.ApplicationServices.Factories;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Model.Subtitle;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
@@ -1495,7 +1497,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.errorService.ShowMessageBox(Resources.Main_PresetUpdateConfrimation, Resources.AreYouSure, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                this.SelectedPreset.Task = new EncodeTask(this.CurrentTask);
+                this.SelectedPreset.Update(new EncodeTask(this.CurrentTask), new AudioBehaviours(this.AudioViewModel.AudioBehaviours), new SubtitleBehaviours(this.SubtitleViewModel.SubtitleBehaviours));
                 this.presetService.Update(this.SelectedPreset);
 
                 this.errorService.ShowMessageBox(

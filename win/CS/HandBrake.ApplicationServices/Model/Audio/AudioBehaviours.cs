@@ -38,6 +38,18 @@ namespace HandBrake.ApplicationServices.Model.Audio
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AudioBehaviours"/> class.
+        /// </summary>
+        /// <param name="behaviours">
+        /// The behaviours.
+        /// </param>
+        public AudioBehaviours(AudioBehaviours behaviours)
+        {
+            this.SelectedBehaviour = behaviours.SelectedBehaviour;
+            this.SelectedLangauges = new BindingList<string>(behaviours.selectedLangauges);
+        }
+
+        /// <summary>
         /// Gets or sets the selected behaviour.
         /// </summary>
         public AudioBehaviourModes SelectedBehaviour

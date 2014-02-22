@@ -48,6 +48,18 @@ namespace HandBrake.ApplicationServices.Model.Subtitle
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SubtitleBehaviours"/> class.
+        /// </summary>
+        /// <param name="behaviours">
+        /// The behaviours.
+        /// </param>
+        public SubtitleBehaviours(SubtitleBehaviours behaviours)
+        {
+            this.SelectedBehaviour = behaviours.selectedBehaviour;
+            this.SelectedLangauges = new BindingList<string>(behaviours.SelectedLangauges);
+        }
+
+        /// <summary>
         /// Gets or sets the selected behaviour.
         /// </summary>
         public SubtitleBehaviourModes SelectedBehaviour

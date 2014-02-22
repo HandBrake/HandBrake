@@ -28,7 +28,6 @@ namespace HandBrake.ApplicationServices.Model
 
         #endregion
 
-
         #region Properties
 
         /// <summary>
@@ -106,6 +105,26 @@ namespace HandBrake.ApplicationServices.Model
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Update this preset.
+        /// The given parameters should be copy-constructed.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        /// <param name="audioBehaviours">
+        /// The audio behaviours.
+        /// </param>
+        /// <param name="subtitleBehaviours">
+        /// The subtitle behaviours.
+        /// </param>
+        public void Update(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
+        {
+            this.Task = task;
+            this.AudioTrackBehaviours = audioBehaviours;
+            this.SubtitleTrackBehaviours = subtitleBehaviours;
+        }
 
         /// <summary>
         ///  Override the ToString Method
