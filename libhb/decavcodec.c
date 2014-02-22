@@ -667,10 +667,9 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             }
             else
             {
-                pbuffer = buf->data;
-                len = pbuffer_size = buf->size;
+                pbuffer = buf->data + pos;
+                len = pbuffer_size = buf->size - pos;
             }
-            pos += len;
 
             // libavcodec can't decode TrueHD Mono (bug #356)
             // work around it by requesting Stereo before decoding
@@ -770,6 +769,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     break;
                 }
             }
+            pos += len;
         }
         buf = buf->next;
     }
