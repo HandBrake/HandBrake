@@ -16,6 +16,11 @@ struct hb_batch_s
     hb_list_t * list_file;
 };
 
+static int compare_str(const void *a, const void *b)
+{
+    return strncmp(*(const char**)a, *(const char**)b, PATH_MAX);
+}
+
 /***********************************************************************
  * hb_batch_init
  ***********************************************************************
@@ -28,6 +33,8 @@ hb_batch_t * hb_batch_init( char * path )
     HB_DIR        * dir;
     struct dirent * entry;
     char          * filename;
+    int             count, ii;
+    char         ** files;
 
     if ( hb_stat( path, &sb ) )
         return NULL;
@@ -39,9 +46,16 @@ hb_batch_t * hb_batch_init( char * path )
     if ( dir == NULL )
         return NULL;
 
-    d = calloc( sizeof( hb_batch_t ), 1 );
-    d->list_file = hb_list_init();
+    // Count the total number of entries
+    while ( (entry = hb_readdir( dir ) ) )
+    {
+        count++;
+    }
+    files = malloc(count * sizeof(char*));
 
+    // Find all regular files
+    ii = 0;
+    hb_rewinddir(dir);
     while ( (entry = hb_readdir( dir ) ) )
     {
         filename = hb_strdup_printf( "%s" DIR_SEP_STR "%s", path, entry->d_name );
@@ -57,10 +71,23 @@ hb_batch_t * hb_batch_init( char * path )
             continue;
         }
 
-        hb_list_add( d->list_file, filename );
+        files[ii++] = filename;
     }
+    count = ii;
 
+    // Sort the files
+    qsort(files, count, sizeof(char*), compare_str);
+
+    // Create file list
+    d = calloc( sizeof( hb_batch_t ), 1 );
+    d->list_file = hb_list_init();
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_list_add( d->list_file, files[ii] );
+    }
     hb_closedir( dir );
+    free(files);
+
     if ( hb_list_count( d->list_file ) == 0 )
     {
         hb_list_close( &d->list_file );
