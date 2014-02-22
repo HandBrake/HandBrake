@@ -649,26 +649,27 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     {
         return -1;
     }
-    unsigned char *pbuffer;
-    int pos, pbuffer_size;
+    unsigned char *parse_buffer;
+    int parse_pos, dec_pos, parse_buffer_size;
 
     while (buf != NULL && !ret)
     {
-        pos = 0;
-        while (pos < buf->size)
+        parse_pos = 0;
+        while (parse_pos < buf->size)
         {
-            int len, truehd_mono = 0;
+            int parse_len, truehd_mono = 0;
 
             if (parser != NULL)
             {
-                len = av_parser_parse2(parser, context, &pbuffer, &pbuffer_size,
-                                       buf->data + pos, buf->size - pos,
-                                       buf->s.start, buf->s.start, 0);
+                parse_len = av_parser_parse2(parser, context,
+                                &parse_buffer, &parse_buffer_size,
+                                buf->data + parse_pos, buf->size - parse_pos,
+                                buf->s.start, buf->s.start, 0);
             }
             else
             {
-                pbuffer = buf->data + pos;
-                len = pbuffer_size = buf->size - pos;
+                parse_buffer = buf->data + parse_pos;
+                parse_len = parse_buffer_size = buf->size - parse_pos;
             }
 
             // libavcodec can't decode TrueHD Mono (bug #356)
@@ -684,17 +685,23 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 context->request_channel_layout = 0;
             }
 
-            if (pbuffer_size > 0)
+            dec_pos = 0;
+            while (dec_pos < parse_buffer_size)
             {
+                int dec_len;
                 int got_frame;
                 AVFrame *frame = av_frame_alloc();
                 AVPacket avp;
                 av_init_packet(&avp);
-                avp.data = pbuffer;
-                avp.size = pbuffer_size;
+                avp.data = parse_buffer + dec_pos;
+                avp.size = parse_buffer_size - dec_pos;
 
-                len = avcodec_decode_audio4(context, frame, &got_frame, &avp);
-                if (len > 0 && got_frame)
+                dec_len = avcodec_decode_audio4(context, frame, &got_frame, &avp);
+                if (dec_len < 0)
+                {
+                    break;
+                }
+                if (dec_len > 0 && got_frame)
                 {
                     info->rate_base          = 1;
                     // libavcoded doesn't consistently set frame->sample_rate
@@ -768,8 +775,9 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     ret = 1;
                     break;
                 }
+                dec_pos += dec_len;
             }
-            pos += len;
+            parse_pos += parse_len;
         }
         buf = buf->next;
     }
