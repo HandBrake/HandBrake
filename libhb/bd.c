@@ -253,11 +253,14 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     char * p_cur, * p_last = d->path;
     for( p_cur = d->path; *p_cur; p_cur++ )
     {
-        if( p_cur[0] == '/' && p_cur[1] )
+        if( IS_DIR_SEP(p_cur[0]) && p_cur[1] )
         {
             p_last = &p_cur[1];
         }
     }
+    char *dot_term = strrchr(p_last, '.');
+    if (dot_term)
+        *dot_term = '\0';
     snprintf( title->name, sizeof( title->name ), "%s", p_last );
     strncpy( title->path, d->path, 1024 );
     title->path[1023] = 0;

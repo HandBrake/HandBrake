@@ -626,6 +626,27 @@ struct dirent * hb_readdir(HB_DIR *dir)
 #endif
 }
 
+void hb_rewinddir(HB_DIR *dir)
+{
+#ifdef SYS_MINGW
+    _wrewinddir(dir->wdir);
+#else
+    return rewinddir(dir);
+#endif
+}
+
+char * hb_strr_dir_sep(const char *path)
+{
+#ifdef SYS_MINGW
+    char *sep = strrchr(path, '/');
+    if (sep == NULL)
+        sep = strrchr(path, '\\');
+    return sep;
+#else
+    return strrchr(path, '/');
+#endif
+}
+
 /************************************************************************
  * hb_mkdir
  ************************************************************************

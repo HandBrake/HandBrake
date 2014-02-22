@@ -187,11 +187,14 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
         char * p_cur, * p_last = d->path;
         for( p_cur = d->path; *p_cur; p_cur++ )
         {
-            if( p_cur[0] == '/' && p_cur[1] )
+            if( IS_DIR_SEP(p_cur[0]) && p_cur[1] )
             {
                 p_last = &p_cur[1];
             }
         }
+        char *dot_term = strrchr(p_last, '.');
+        if (dot_term)
+            *dot_term = '\0';
         snprintf( title->name, sizeof( title->name ), "%s", p_last );
     }
 

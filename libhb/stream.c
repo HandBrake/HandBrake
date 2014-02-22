@@ -1042,7 +1042,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     title->index = 1;
 
     // Copy part of the stream path to the title name
-    char *sep = strrchr(stream->path, '/');
+    char *sep = hb_strr_dir_sep(stream->path);
     if (sep)
         strcpy(title->name, sep+1);
     char *dot_term = strrchr(title->name, '.');
@@ -5361,7 +5361,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->index = 1;
 
     // Copy part of the stream path to the title name
-    char *sep = strrchr(stream->path, '/');
+    char *sep = hb_strr_dir_sep(stream->path);
     if (sep)
         strcpy(title->name, sep+1);
     char *dot_term = strrchr(title->name, '.');
