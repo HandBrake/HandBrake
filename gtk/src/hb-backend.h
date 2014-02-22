@@ -171,5 +171,6 @@ void ghb_audio_samplerate_opts_set(GtkComboBox *combo);
 int ghb_lookup_audio_lang(const GValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
 void ghb_update_display_aspect_label(signal_user_data_t *ud);
+gchar* ghb_create_title_label(hb_title_t *title);
 
 #endif // _HBBACKEND_H_

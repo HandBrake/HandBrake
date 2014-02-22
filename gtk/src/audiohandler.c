@@ -1596,7 +1596,8 @@ static void audio_def_update_widgets(GtkWidget *row, GValue *adict)
     block_updates = FALSE;
 }
 
-GtkListBoxRow * ghb_audio_settings_get_row(GtkWidget *widget)
+static GtkListBoxRow*
+audio_settings_get_row(GtkWidget *widget)
 {
     while (widget != NULL && G_OBJECT_TYPE(widget) != GTK_TYPE_LIST_BOX_ROW)
     {
@@ -1959,7 +1960,7 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
 static void
 audio_def_setting_update(signal_user_data_t *ud, GtkWidget *widget)
 {
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
     GValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
@@ -2061,7 +2062,7 @@ static void audio_quality_update_limits(GtkWidget *widget, int encoder)
 
 void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget)
 {
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
     GValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
@@ -2148,7 +2149,7 @@ audio_def_quality_enable_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     audio_def_setting_update(ud, widget);
 
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
     GValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
@@ -2164,7 +2165,7 @@ audio_def_quality_changed_cb(GtkWidget *widget, gdouble quality, signal_user_dat
 {
     audio_def_setting_update(ud, widget);
 
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
     GtkWidget *quality_label = find_widget(GTK_WIDGET(row),
                                            "AudioTrackQualityValue");
     gint index = gtk_list_box_row_get_index(row);
@@ -2192,7 +2193,7 @@ audio_def_gain_changed_cb(GtkWidget *widget, gdouble gain, signal_user_data_t *u
 {
     audio_def_setting_update(ud, widget);
 
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
     GtkWidget *gain_label = find_widget(GTK_WIDGET(row), "AudioTrackGainValue");
     char *s_gain;
     if ( gain >= 21.0 )
@@ -2209,7 +2210,7 @@ audio_def_drc_changed_cb(GtkWidget *widget, gdouble drc, signal_user_data_t *ud)
 {
     audio_def_setting_update(ud, widget);
 
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
     GtkWidget *drc_label = find_widget(GTK_WIDGET(row), "AudioTrackDRCValue");
 
     char *s_drc;
@@ -2225,7 +2226,7 @@ audio_def_drc_changed_cb(GtkWidget *widget, gdouble drc, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 audio_def_setting_add_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
 
     GValue *adict;
     GValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
@@ -2257,7 +2258,7 @@ audio_def_setting_add_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 audio_def_setting_remove_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkListBoxRow *row = ghb_audio_settings_get_row(widget);
+    GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
     GValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
@@ -2279,16 +2280,6 @@ audio_def_encode_setting_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     audio_def_setting_update(ud, widget);
     audio_def_set_limits(ud, widget);
     ghb_clear_presets_selection(ud);
-}
-
-static void container_empty_cb(GtkWidget *widget, gpointer data)
-{
-    gtk_widget_destroy(widget);
-}
-
-void ghb_container_empty(GtkContainer *c)
-{
-    gtk_container_foreach(c, container_empty_cb, NULL);
 }
 
 GtkListBoxRow* ghb_find_lang_row(GtkListBox *list_box, int lang_idx)

@@ -77,6 +77,8 @@
         <integer>0</integer>
         <key>title</key>
         <string>none</string>
+        <key>title_selected</key>
+        <false />
         <key>volume_label</key>
         <string>New Video</string>
         <key>audio_list</key>

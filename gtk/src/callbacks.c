@@ -1866,22 +1866,6 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     ud->settings = ghb_array_get_nth(ud->settings_array, titleindex);
 }
 
-void
-ghb_add_all_titles(signal_user_data_t *ud)
-{
-    gint ii;
-    gint count;
-
-    count = ghb_array_len(ud->settings_array);
-    for (ii = 0; ii < count; ii++)
-    {
-        GValue *settings;
-
-        settings = ghb_value_dup(ghb_array_get_nth(ud->settings_array, ii));
-        ghb_queue_add(ud, settings, ii);
-    }
-}
-
 static gboolean update_preview = FALSE;
 
 G_MODULE_EXPORT void
@@ -2908,8 +2892,8 @@ ghb_backend_events(signal_user_data_t *ud)
     GtkTreeView *treeview;
     GtkTreeStore *store;
     GtkTreeIter iter;
-    static gint prev_scan_state = 0;
-    static gint prev_queue_state = 0;
+    static gint prev_scan_state = -1;
+    static gint prev_queue_state = -1;
 
     ghb_track_status();
     ghb_get_status(&status);
@@ -5280,5 +5264,15 @@ window_configure_cb(
         }
     }
     return FALSE;
+}
+
+static void container_empty_cb(GtkWidget *widget, gpointer data)
+{
+    gtk_widget_destroy(widget);
+}
+
+void ghb_container_empty(GtkContainer *c)
+{
+    gtk_container_foreach(c, container_empty_cb, NULL);
 }
 

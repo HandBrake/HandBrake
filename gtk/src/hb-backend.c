@@ -2058,6 +2058,61 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
 
 static gchar **titles = NULL;
 
+gchar*
+ghb_create_title_label(hb_title_t *title)
+{
+    gchar *label;
+
+    if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
+    {
+        if (title->duration != 0)
+        {
+            char *tmp;
+            tmp  = g_strdup_printf ("%d - %02dh%02dm%02ds - %s",
+                title->index, title->hours, title->minutes, title->seconds,
+                title->name);
+            label = g_markup_escape_text(tmp, -1);
+            g_free(tmp);
+        }
+        else
+        {
+            char *tmp;
+            tmp  = g_strdup_printf ("%d - %s",
+                                    title->index, title->name);
+            label = g_markup_escape_text(tmp, -1);
+            g_free(tmp);
+        }
+    }
+    else if (title->type == HB_BD_TYPE)
+    {
+        if (title->duration != 0)
+        {
+            label = g_strdup_printf("%d (%05d.MPLS) - %02dh%02dm%02ds",
+                title->index, title->playlist, title->hours,
+                title->minutes, title->seconds);
+        }
+        else
+        {
+            label = g_strdup_printf("%d (%05d.MPLS) - Unknown Length",
+                title->index, title->playlist);
+        }
+    }
+    else
+    {
+        if (title->duration != 0)
+        {
+            label  = g_strdup_printf("%d - %02dh%02dm%02ds",
+                title->index, title->hours, title->minutes, title->seconds);
+        }
+        else
+        {
+            label  = g_strdup_printf("%d - Unknown Length",
+                                    title->index);
+        }
+    }
+    return label;
+}
+
 void
 title_opts_set(GtkBuilder *builder, const gchar *name)
 {
@@ -2111,53 +2166,8 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
     for (ii = 0; ii < count; ii++)
     {
         title = (hb_title_t*)hb_list_item(list, ii);
-        if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
-        {
-            if (title->duration != 0)
-            {
-                char *tmp;
-                tmp  = g_strdup_printf ("%d - %02dh%02dm%02ds - %s",
-                    title->index, title->hours, title->minutes, title->seconds,
-                    title->name);
-                titles[ii] = g_markup_escape_text(tmp, -1);
-                g_free(tmp);
-            }
-            else
-            {
-                char *tmp;
-                tmp  = g_strdup_printf ("%d - %s",
-                                        title->index, title->name);
-                titles[ii] = g_markup_escape_text(tmp, -1);
-                g_free(tmp);
-            }
-        }
-        else if (title->type == HB_BD_TYPE)
-        {
-            if (title->duration != 0)
-            {
-                titles[ii] = g_strdup_printf("%d (%05d.MPLS) - %02dh%02dm%02ds",
-                    title->index, title->playlist, title->hours,
-                    title->minutes, title->seconds);
-            }
-            else
-            {
-                titles[ii] = g_strdup_printf("%d (%05d.MPLS) - Unknown Length",
-                    title->index, title->playlist);
-            }
-        }
-        else
-        {
-            if (title->duration != 0)
-            {
-                titles[ii]  = g_strdup_printf("%d - %02dh%02dm%02ds",
-                    title->index, title->hours, title->minutes, title->seconds);
-            }
-            else
-            {
-                titles[ii]  = g_strdup_printf("%d - Unknown Length",
-                                        title->index);
-            }
-        }
+        titles[ii] = ghb_create_title_label(title);
+
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
                            0, titles[ii],
