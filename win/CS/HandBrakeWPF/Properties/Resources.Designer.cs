@@ -793,6 +793,60 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The full list of encoder parameters: 
+        ///{0}.
+        /// </summary>
+        public static string Video_EncoderExtraArgs {
+            get {
+                return ResourceManager.GetString("Video_EncoderExtraArgs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets and ensures compliance with the specified H.264 Levels. This will override all other settings..
+        /// </summary>
+        public static string Video_EncoderLevel {
+            get {
+                return ResourceManager.GetString("Video_EncoderLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjusts x264 settings to trade off compression efficiency against encoding speed.
+        ///
+        ///This establishes your default x264 settings. Tunes, profiles, levels and advanced options string will be applied to this.
+        ///
+        ///You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files..
+        /// </summary>
+        public static string Video_EncoderPreset {
+            get {
+                return ResourceManager.GetString("Video_EncoderPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit the H.264 profile of the output stream. This will override all other settings..
+        /// </summary>
+        public static string Video_EncoderProfile {
+            get {
+                return ResourceManager.GetString("Video_EncoderProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tune settings to optimise for common scenarios
+        ///
+        ///This can improve efficiency for particular source characteristics or set of characteristics of the output file.
+        ///
+        ///Changes will be applied after the preset but before all other parameters..
+        /// </summary>
+        public static string Video_EncoderTune {
+            get {
+                return ResourceManager.GetString("Video_EncoderTune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Higher Quality |.
         /// </summary>
         public static string Video_HigherQuality {
@@ -885,16 +939,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The full x264 list of parameters: 
-        ///{0}.
-        /// </summary>
-        public static string Video_x264ExtraArgs {
-            get {
-                return ResourceManager.GetString("Video_x264ExtraArgs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Reduce decoder CPU usage.
         ///
         ///Set this if your device is struggling to play the output. (i.e. dropped frames).
@@ -902,50 +946,6 @@ namespace HandBrakeWPF.Properties {
         public static string Video_x264FastDecode {
             get {
                 return ResourceManager.GetString("Video_x264FastDecode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sets and ensures compliance with the specified H.264 Levels. This will override all other settings..
-        /// </summary>
-        public static string Video_x264Level {
-            get {
-                return ResourceManager.GetString("Video_x264Level", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Adjusts x264 settings to trade off compression efficiency against encoding speed.
-        ///
-        ///This establishes your default x264 settings. Tunes, profiles, levels and advanced options string will be applied to this.
-        ///
-        ///You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files..
-        /// </summary>
-        public static string Video_x264Preset {
-            get {
-                return ResourceManager.GetString("Video_x264Preset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Limit the H.264 profile of the output stream. This will override all other settings..
-        /// </summary>
-        public static string Video_x264Profile {
-            get {
-                return ResourceManager.GetString("Video_x264Profile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tune settings to optimise for common scenarios
-        ///
-        ///This can improve efficiency for particular source characteristics or set of characteristics of the output file.
-        ///
-        ///Changes will be applied after the preset but before all other parameters..
-        /// </summary>
-        public static string Video_x264Tune {
-            get {
-                return ResourceManager.GetString("Video_x264Tune", resourceCulture);
             }
         }
         

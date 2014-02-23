@@ -11,20 +11,20 @@ namespace HandBrake.Interop.Model.Encoding
 {
     using System.Collections.Generic;
 
-	using HandBrake.Interop.Model;
+    using HandBrake.Interop.Model;
 
     /// <summary>
     /// The encoding profile.
     /// </summary>
     public class EncodingProfile
-	{
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodingProfile"/> class.
         /// </summary>
         public EncodingProfile()
-		{
-			this.Cropping = new Cropping();
-		}
+        {
+            this.Cropping = new Cropping();
+        }
 
         #region Destination and Output Settings
 
@@ -213,6 +213,26 @@ namespace HandBrake.Interop.Model.Encoding
         public List<string> X264Tunes { get; set; }
 
         /// <summary>
+        /// Gets or sets the x 265 profile.
+        /// </summary>
+        public string X265Profile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 265 preset.
+        /// </summary>
+        public string X265Preset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 265 tunes.
+        /// </summary>
+        public List<string> X265Tunes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 265 level.
+        /// </summary>
+        public List<string> X265Level { get; set; }
+
+        /// <summary>
         /// Gets or sets the qsv preset.
         /// </summary>
         public string QsvPreset { get; set; }
@@ -282,70 +302,70 @@ namespace HandBrake.Interop.Model.Encoding
         #endregion
 
         /// <summary>
-	    /// The clone.
-	    /// </summary>
-	    /// <returns>
-	    /// The <see cref="EncodingProfile"/>.
-	    /// </returns>
-	    public EncodingProfile Clone()
-		{
-			var profile = new EncodingProfile
-			{
-				ContainerName = this.ContainerName,
-				PreferredExtension = this.PreferredExtension,
-				IncludeChapterMarkers = this.IncludeChapterMarkers,
-				LargeFile = this.LargeFile,
-				Optimize = this.Optimize,
-				IPod5GSupport = this.IPod5GSupport,
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="EncodingProfile"/>.
+        /// </returns>
+        public EncodingProfile Clone()
+        {
+            var profile = new EncodingProfile
+            {
+                ContainerName = this.ContainerName,
+                PreferredExtension = this.PreferredExtension,
+                IncludeChapterMarkers = this.IncludeChapterMarkers,
+                LargeFile = this.LargeFile,
+                Optimize = this.Optimize,
+                IPod5GSupport = this.IPod5GSupport,
 
-				Width = this.Width,
-				Height = this.Height,
-				MaxWidth = this.MaxWidth,
-				MaxHeight = this.MaxHeight,
-				ScaleMethod = this.ScaleMethod,
-				CroppingType = this.CroppingType,
-				Cropping = this.Cropping.Clone(),
-				Anamorphic = this.Anamorphic,
-				UseDisplayWidth = this.UseDisplayWidth,
-				DisplayWidth = this.DisplayWidth,
-				KeepDisplayAspect = this.KeepDisplayAspect,
-				PixelAspectX = this.PixelAspectX,
-				PixelAspectY = this.PixelAspectY,
-				Modulus = this.Modulus,
+                Width = this.Width,
+                Height = this.Height,
+                MaxWidth = this.MaxWidth,
+                MaxHeight = this.MaxHeight,
+                ScaleMethod = this.ScaleMethod,
+                CroppingType = this.CroppingType,
+                Cropping = this.Cropping.Clone(),
+                Anamorphic = this.Anamorphic,
+                UseDisplayWidth = this.UseDisplayWidth,
+                DisplayWidth = this.DisplayWidth,
+                KeepDisplayAspect = this.KeepDisplayAspect,
+                PixelAspectX = this.PixelAspectX,
+                PixelAspectY = this.PixelAspectY,
+                Modulus = this.Modulus,
 
-				Deinterlace = this.Deinterlace,
-				CustomDeinterlace = this.CustomDeinterlace,
-				Decomb = this.Decomb,
-				CustomDecomb = this.CustomDecomb,
-				Detelecine = this.Detelecine,
-				CustomDetelecine = this.CustomDetelecine,
-				Denoise = this.Denoise,
-				CustomDenoise = this.CustomDenoise,
-				Deblock = this.Deblock,
-				Grayscale = this.Grayscale,
+                Deinterlace = this.Deinterlace,
+                CustomDeinterlace = this.CustomDeinterlace,
+                Decomb = this.Decomb,
+                CustomDecomb = this.CustomDecomb,
+                Detelecine = this.Detelecine,
+                CustomDetelecine = this.CustomDetelecine,
+                Denoise = this.Denoise,
+                CustomDenoise = this.CustomDenoise,
+                Deblock = this.Deblock,
+                Grayscale = this.Grayscale,
 
-				VideoEncoder = this.VideoEncoder,
-				X264Options = this.X264Options,
-				X264Profile = this.X264Profile,
-				X264Preset = this.X264Preset,
-				X264Tunes = this.X264Tunes,
-				QsvPreset = this.QsvPreset,
-				QsvDecode = this.QsvDecode,
-				H264Level = this.H264Level,
-				VideoEncodeRateType = this.VideoEncodeRateType,
-				Quality = this.Quality,
-				TargetSize = this.TargetSize,
-				VideoBitrate = this.VideoBitrate,
-				TwoPass = this.TwoPass,
-				TurboFirstPass = this.TurboFirstPass,
-				Framerate = this.Framerate,
-				ConstantFramerate = this.ConstantFramerate,
+                VideoEncoder = this.VideoEncoder,
+                X264Options = this.X264Options,
+                X264Profile = this.X264Profile,
+                X264Preset = this.X264Preset,
+                X264Tunes = this.X264Tunes,
+                QsvPreset = this.QsvPreset,
+                QsvDecode = this.QsvDecode,
+                H264Level = this.H264Level,
+                VideoEncodeRateType = this.VideoEncodeRateType,
+                Quality = this.Quality,
+                TargetSize = this.TargetSize,
+                VideoBitrate = this.VideoBitrate,
+                TwoPass = this.TwoPass,
+                TurboFirstPass = this.TurboFirstPass,
+                Framerate = this.Framerate,
+                ConstantFramerate = this.ConstantFramerate,
 
-				AudioEncodings = new List<AudioEncoding>(this.AudioEncodings),
-				AudioEncoderFallback = this.AudioEncoderFallback
-			};
+                AudioEncodings = new List<AudioEncoding>(this.AudioEncodings),
+                AudioEncoderFallback = this.AudioEncoderFallback
+            };
 
-			return profile;
-		}
-	}
+            return profile;
+        }
+    }
 }

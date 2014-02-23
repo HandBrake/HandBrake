@@ -151,6 +151,9 @@
     <Compile Include="HbLib\NativeConstants.cs" />
     <Compile Include="Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Helpers\InteropUtilities.cs" />
+    <Compile Include="Model\Encoding\x265\x265Preset.cs" />
+    <Compile Include="Model\Encoding\x265\x265Profile.cs" />
+    <Compile Include="Model\Encoding\x265\x265Tune.cs" />
     <Compile Include="Model\Language.cs" />
     <Compile Include="Helpers\Languages.cs" />
     <Compile Include="Helpers\MarshalingConstants.cs" />

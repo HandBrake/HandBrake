@@ -281,6 +281,10 @@ namespace HandBrake.ApplicationServices.Utilities
             AddEncodeElement(xmlWriter, "x264UseAdvancedOptions", "integer", parsed.ShowAdvancedTab ? "1" : "0");
             AddEncodeElement(xmlWriter, "qsvPreset", "string", parsed.QsvPreset.ToString().ToLower());
 
+            AddEncodeElement(xmlWriter, "h265Profile", "string", parsed.H265Profile.ToString().ToLower());
+            AddEncodeElement(xmlWriter, "x265Preset", "string", parsed.X265Preset.ToString().ToLower());
+            AddEncodeElement(xmlWriter, "x265Tune", "string", parsed.X265Tune.ToString().ToLower());
+
             int videoQualityType = 0;
             if (parsed.VideoBitrate != null) videoQualityType = 1;
             else if (parsed.Quality != null) videoQualityType = 2;

@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
+    using HandBrake.Interop.Model.Encoding.x265;
 
     /// <summary>
     /// A class to convert various things to native C# objects
@@ -296,6 +297,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return VideoEncoder.QuickSync;
                 case "theora":
                     return VideoEncoder.Theora;
+                case "hevc":
+                    return VideoEncoder.X265;
                 default:
                     return VideoEncoder.X264;
             }
@@ -324,6 +327,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "qsv_h264";
                 case VideoEncoder.Theora:
                     return "theora";
+                case VideoEncoder.X265:
+                    return "hevc";
                 default:
                     return "x264";
             }
@@ -429,6 +434,94 @@ namespace HandBrake.ApplicationServices.Utilities
 
         #endregion
 
+        #region x265
+
+        /// <summary>
+        /// Get the x265Preset from a cli parameter
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <returns>
+        /// The x265Preset enum value
+        /// </returns>
+        public static x265Preset Getx265PresetFromCli(string preset)
+        {
+            switch (preset)
+            {
+                case "ultrafast":
+                    return x265Preset.Ultrafast;
+                case "superfast":
+                    return x265Preset.Superfast;
+                case "veryfast":
+                    return x265Preset.VeryFast;
+                case "faster":
+                    return x265Preset.Faster;
+                case "fast":
+                    return x265Preset.Fast;
+                case "medium":
+                    return x265Preset.Medium;
+                case "slow":
+                    return x265Preset.Slow;
+                case "slower":
+                    return x265Preset.Slower;
+                case "veryslow":
+                    return x265Preset.VerySlow;
+                case "placebo":
+                    return x265Preset.Placebo;
+                default:
+                    return x265Preset.Faster;
+            }
+        }
+
+        /// <summary>
+        /// Get the x265 Profile from the cli
+        /// </summary>
+        /// <param name="profile">
+        /// The preset.
+        /// </param>
+        /// <returns>
+        /// The x265Profile enum value
+        /// </returns>
+        public static x265Profile Getx265ProfileFromCli(string profile)
+        {
+            switch (profile)
+            {
+                case "mainstillpicture":
+                    return x265Profile.Mainstillpicture;
+                case "main":
+                    return x265Profile.Main;
+                case "main10":
+                    return x265Profile.Main10;
+                default:
+                    return x265Profile.Main;
+            }
+        }
+
+        /// <summary>
+        /// Get x265Tune enum from a cli string
+        /// </summary>
+        /// <param name="tune">
+        /// The tune.
+        /// </param>
+        /// <returns>
+        /// The x265Tune enum value
+        /// </returns>
+        public static x265Tune Getx265TuneFromCli(string tune)
+        {
+            switch (tune)
+            {
+                case "psnr":
+                    return x265Tune.Psnr;
+                case "ssim":
+                    return x265Tune.Ssim;
+                default:
+                    return x265Tune.Psnr;
+            }
+        }
+
+        #endregion
+
         #region File Format
 
         /// <summary>
@@ -450,6 +543,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return OutputFormat.Mp4;
                 case "mkv":
                     return OutputFormat.Mkv;
+                case "x265":
+                    return OutputFormat.X265;
             }
         }
 
@@ -472,6 +567,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "m4v";
                 case OutputFormat.Mkv:
                     return "mkv";
+                case OutputFormat.X265:
+                    return "x265";
             }
         }
 

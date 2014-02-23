@@ -20,6 +20,7 @@ namespace HandBrake.ApplicationServices.Factories
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
+    using HandBrake.Interop.Model.Encoding.x265;
 
     /// <summary>
     /// A Factory to translate a Plist object into a Preset.
@@ -236,6 +237,15 @@ namespace HandBrake.ApplicationServices.Factories
                     break;
                 case "QsvPreset":
                     preset.Task.QsvPreset = EnumHelper<QsvPreset>.GetValue(kvp.Value, true);
+                    break;
+                case "h265Profile":
+                    preset.Task.H265Profile = EnumHelper<x265Profile>.GetValue(kvp.Value, true);
+                    break;
+                case "x265Tune":
+                    preset.Task.X265Tune = EnumHelper<x265Profile>.GetValue(kvp.Value, true);
+                    break;
+                case "x265Preset":
+                    preset.Task.X265Preset = EnumHelper<x265Preset>.GetValue(kvp.Value, true);
                     break;
 
                 // Chapter Markers Tab

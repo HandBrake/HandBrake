@@ -1,31 +1,28 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OutputFormat.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="x265Tune.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The Output format.
+//   Defines the x265Tune type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model.Encoding
+namespace HandBrake.Interop.Model.Encoding.x265
 {
-    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// The Output format.
+    /// The X265 Tune MOdel
     /// </summary>
-    public enum OutputFormat
+    public enum x265Tune
     {
-        [Description("MP4")]
-        Mp4,
+        [Display(Name = "None")]
+        None = 0,
 
-        [Description("M4V")]
-        M4V,
+        [Display(Name = "PSNR")]
+        Psnr,
 
-        [Description("MKV")]
-        Mkv,
-
-        [Description("X265")]
-        X265,
+        [Display(Name = "SSIM")]
+        Ssim,
     }
 }

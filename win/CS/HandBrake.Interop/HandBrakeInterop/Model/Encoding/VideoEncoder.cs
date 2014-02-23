@@ -35,6 +35,10 @@ namespace HandBrake.Interop.Model.Encoding
 
 		[Display(Name = "VP3 (Theora)")]
         [ShortName("theora")]
-		Theora
+		Theora,
+
+        [Display(Name = "H.265 (x265)")]
+        [ShortName("hvec")]
+        X265
 	}
 }

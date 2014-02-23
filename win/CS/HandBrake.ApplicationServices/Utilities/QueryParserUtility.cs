@@ -115,6 +115,9 @@ namespace HandBrake.ApplicationServices.Utilities
             Match x264Profile = Regex.Match(input, @"--x264-profile([=a-zA-Z0-9\s ]*)");
             Match h264Level = Regex.Match(input, @"--h264-level([=a-zA-Z0-9.\s ]*)");
 
+            Match x265Profile = Regex.Match(input, @"--x265-profile([=a-zA-Z0-9\s ]*)");
+            Match x265Tune = Regex.Match(input, @"--x265-tune([=,a-zA-Z0-9\s ]*)");
+            Match x265Preset = Regex.Match(input, @"--x265-preset([=a-zA-Z0-9\s ]*)");
             #endregion
 
             #region Set Varibles
@@ -476,7 +479,38 @@ namespace HandBrake.ApplicationServices.Utilities
 
                     parsed.X264Tune = Converters.Getx264TuneFromCli(tuneOptions);
                 }
-                  
+
+
+
+
+
+
+                if (x265Preset.Success)
+                    parsed.X265Preset =
+                        Converters.Getx265PresetFromCli(x265Preset.ToString().Replace("--x265-preset", string.Empty).Replace("=", string.Empty).Trim());
+
+                if (h264Profile.Success)
+                    parsed.H265Profile =
+                        Converters.Getx265ProfileFromCli(h264Profile.ToString().Replace("--h265-profile", string.Empty).Replace("=", string.Empty).Trim());
+
+                if (x265Profile.Success)
+                    parsed.H265Profile =
+                       Converters.Getx265ProfileFromCli(x265Profile.ToString().Replace("--x265-profile", string.Empty).Replace("=", string.Empty).Trim());
+
+                if (x265Tune.Success)
+                {
+                    string tuneOptions =
+                        x265Tune.ToString().Replace("--x265-tune", string.Empty).Replace("=", string.Empty).Trim();
+
+                    parsed.FastDecode = tuneOptions.Contains("fastdecode");
+
+                    // Remove these options. They are not in the dropdown.
+                    tuneOptions = tuneOptions.Replace("fastdecode", string.Empty).Replace(
+                        ",", string.Empty);
+
+                    parsed.X265Tune = Converters.Getx265TuneFromCli(tuneOptions);
+                }
+
                 #endregion
             }
             catch (Exception exc)

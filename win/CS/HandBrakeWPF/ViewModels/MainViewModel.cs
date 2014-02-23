@@ -1440,6 +1440,9 @@ namespace HandBrakeWPF.ViewModels
                     case ".m4v":
                         this.SelectedOutputFormat = OutputFormat.M4V;
                         break;
+                    case ".x265":
+                        this.SelectedOutputFormat = OutputFormat.X265;
+                        break;
                 }
 
                 this.NotifyOfPropertyChange(() => this.CurrentTask);

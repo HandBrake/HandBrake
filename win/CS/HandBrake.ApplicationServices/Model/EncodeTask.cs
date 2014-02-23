@@ -18,6 +18,7 @@ namespace HandBrake.ApplicationServices.Model
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
+    using HandBrake.Interop.Model.Encoding.x265;
 
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
@@ -55,6 +56,10 @@ namespace HandBrake.ApplicationServices.Model
             this.H264Profile = x264Profile.None;
             this.X264Tune = x264Tune.None;
             this.Modulus = 16;
+
+            this.H265Profile = x265Profile.None;
+            this.X265Preset = x265Preset.VeryFast;
+            this.X265Tune = x265Tune.None;
         }
 
         /// <summary>
@@ -137,11 +142,15 @@ namespace HandBrake.ApplicationServices.Model
             this.H264Level = task.H264Level;
             this.FastDecode = task.FastDecode;
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
-            
+
             this.PreviewStartAt = task.PreviewStartAt;
             this.PreviewDuration = task.PreviewDuration;
 
             this.ShowAdvancedTab = task.ShowAdvancedTab;
+
+            this.X265Preset = task.X265Preset;
+            this.X265Tune = task.X265Tune;
+            this.H265Profile = task.H265Profile;
         }
 
         #region Source
@@ -457,6 +466,21 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         public string ExtraAdvancedArguments { get; set; }
 
+        /// <summary>
+        /// Gets or sets x265Preset.
+        /// </summary>
+        public x265Preset X265Preset { get; set; }
+
+        /// <summary>
+        /// Gets or sets x265Profile.
+        /// </summary>
+        public x265Profile H265Profile { get; set; }
+
+        /// <summary>
+        /// Gets or sets X265Tune.
+        /// </summary>
+        public x265Tune X265Tune { get; set; }
+
         #endregion
 
         #region Preview
@@ -484,7 +508,7 @@ namespace HandBrake.ApplicationServices.Model
             {
                 if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4)
                 {
-                    bool audio = this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || 
+                    bool audio = this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough ||
                         item.Encoder == AudioEncoder.Ac3 || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);
 
                     bool subtitles = this.SubtitleTracks.Any(track => track.SubtitleType != SubtitleType.VobSub);

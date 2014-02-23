@@ -135,6 +135,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 case OutputFormat.Mkv:
                     profile.ContainerName = "av_mkv"; // TODO make part of enum.
                     break;
+                case OutputFormat.X265:
+                    profile.ContainerName = "x265"; // TODO make part of enum.
+                    break;
             }
 
             // Picture Settings
@@ -195,6 +198,10 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 profile.X264Tunes.Add("fastdecode");
             }
+
+            profile.X265Preset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
+            profile.X265Profile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
+            profile.X265Tunes = new List<string>();
 
             // Chapter Markers
             profile.IncludeChapterMarkers = work.IncludeChapterMarkers;

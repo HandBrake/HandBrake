@@ -22,6 +22,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
+    using HandBrake.Interop.Model.Encoding.x265;
 
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
@@ -435,6 +436,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 default:
                     query += " -e x264";
                     break;
+                case VideoEncoder.X265:
+                    query += " -e x265";
+                    break;
             }
 
             switch (task.VideoEncodeRateType)
@@ -455,6 +459,9 @@ namespace HandBrake.ApplicationServices.Utilities
                             query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.Theora:
+                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
+                            break;
+                        case VideoEncoder.X265:
                             query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                     }
@@ -928,6 +935,36 @@ namespace HandBrake.ApplicationServices.Utilities
                         }
 
                         query += string.Format(" --x264-tune=\"{0}\" ", tune);
+                    }
+
+                    if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
+                    {
+                        query += string.Format(" -x {0}", task.ExtraAdvancedArguments);
+                    }
+                }
+            }
+
+            // X265 Only
+            if (task.VideoEncoder == VideoEncoder.X265)
+            {
+                if (!task.ShowAdvancedTab)
+                {
+                    if (task.X265Preset != x265Preset.VeryFast)
+                    {
+                        query += string.Format(
+                            " --x265-preset={0} ", task.X265Preset.ToString().ToLower().Replace(" ", string.Empty));
+                    }
+
+                    if (task.X265Tune != x265Tune.None)
+                    {
+                        query += string.Format(
+                            " --x265-tune=\"{0}\" ", task.X265Tune.ToString().ToLower().Replace(" ", string.Empty));
+                    }
+
+                    if (task.H265Profile != x265Profile.None)
+                    {
+                        query += string.Format(
+                            " --h265-profile={0} ", task.H265Profile.ToString().ToLower().Replace(" ", string.Empty));
                     }
 
                     if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
