@@ -862,45 +862,6 @@ lookup_generic_option(combo_opts_t *opts, const GValue *gval)
 }
 
 static const hb_rate_t *
-lookup_video_framerate(const GValue *grate)
-{
-    gchar *str;
-    const hb_rate_t *rate;
-
-    str = ghb_value_string(grate);
-    for (rate = hb_video_framerate_get_next(NULL); rate != NULL;
-         rate = hb_video_framerate_get_next(rate))
-    {
-        if (strcmp(rate->name, str) == 0)
-        {
-            g_free(str);
-            return rate;
-        }
-    }
-    g_free(str);
-    // Default to "same as source"
-    return NULL;
-}
-
-static gint
-lookup_video_framerate_int(const GValue *grate)
-{
-    const hb_rate_t *rate = lookup_video_framerate(grate);
-    if (rate != NULL)
-        return rate->rate;
-    return 0;
-}
-
-static const gchar*
-lookup_video_framerate_option(const GValue *grate)
-{
-    const hb_rate_t *rate = lookup_video_framerate(grate);
-    if (rate != NULL)
-        return rate->name;
-    return "Same as source";
-}
-
-static const hb_rate_t *
 lookup_audio_samplerate(const GValue *grate)
 {
     const hb_rate_t *rate;
@@ -1489,17 +1450,54 @@ video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
     }
 }
 
-const hb_rate_t*
-ghb_lookup_framerte(const char *name)
+const hb_rate_t sas_rate =
 {
-    const hb_rate_t *rate;
-    for (rate = hb_video_framerate_get_next(NULL); rate != NULL;
-         rate = hb_video_framerate_get_next(rate))
+    .name = N_("Same as source"),
+    .rate = 0,
+};
+
+const hb_rate_t*
+ghb_lookup_video_framerate(const char *name)
+{
+    // Check for special "Same as source" value
+    if (!strncmp(name, "source", 8))
+        return &sas_rate;
+
+    // First find an enabled rate
+    int rate = hb_video_framerate_get_from_name(name);
+
+    // Now find the matching rate info
+    const hb_rate_t *hb_rate, *first;
+    for (first = hb_rate = hb_video_framerate_get_next(NULL); hb_rate != NULL;
+         hb_rate = hb_video_framerate_get_next(hb_rate))
     {
-        if (!strncmp(name, rate->name, 80))
-            return rate;
+        if (rate == hb_rate->rate)
+        {
+            return hb_rate;
+        }
     }
-    return NULL;
+    // Return a default rate if nothing matches
+    return first;
+}
+
+int
+ghb_lookup_video_framerate_rate(const char *name)
+{
+    return ghb_lookup_video_framerate(name)->rate;
+}
+
+int
+ghb_settings_video_framerate_rate(const GValue *settings, const char *name)
+{
+    const char *rate_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_video_framerate_rate(rate_id);
+}
+
+const hb_rate_t*
+ghb_settings_video_framerate(const GValue *settings, const char *name)
+{
+    const char *rate_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_video_framerate(rate_id);
 }
 
 static void
@@ -2530,8 +2528,6 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
         return lookup_audio_bitrate_int(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
         return lookup_audio_samplerate_int(gval);
-    else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_framerate_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else
@@ -2551,8 +2547,6 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
         return lookup_audio_bitrate_int(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
         return lookup_audio_samplerate_int(gval);
-    else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_framerate_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else
@@ -2572,8 +2566,6 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
         return lookup_audio_bitrate_option(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
         return lookup_audio_samplerate_option(gval);
-    else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_framerate_option(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else
@@ -2593,8 +2585,6 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
         return lookup_audio_bitrate_option(gval);
     else if (strcmp(name, "AudioSamplerate") == 0)
         return lookup_audio_samplerate_string(gval);
-    else if (strcmp(name, "VideoFramerate") == 0)
-        return lookup_video_framerate_option(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else
@@ -4624,7 +4614,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     }
 
     gint vrate;
-    gint vrate_base = ghb_settings_combo_int(js, "VideoFramerate");
+    gint vrate_base = ghb_settings_video_framerate_rate(js, "VideoFramerate");
     gint cfr;
     if (ghb_settings_get_boolean(js, "VideoFrameratePFR"))
         cfr = 2;

@@ -387,27 +387,28 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     const hb_encoder_t *video_encoder;
     video_encoder = ghb_settings_video_encoder(settings, "VideoEncoder");
 
-    XPRINT("<b>Video:</b> <small>%s</small>", video_encoder->name);
+    XPRINT("<b>Video:</b> <small>%s", video_encoder->name);
 
-    const char *fps;
-    fps = ghb_settings_get_const_string(settings, "VideoFramerate");
-    if (strcmp("source", fps) == 0)
+    const hb_rate_t *fps;
+    fps = ghb_settings_video_framerate(settings, "VideoFramerate");
+    if (fps->rate == 0)
     {
+        const char *rate_mode;
         if (ghb_settings_get_boolean(settings, "VideoFramerateCFR"))
-            fps = "Same As Source (constant)";
+            rate_mode = "(constant)";
         else
-            fps = "Same As Source (variable)";
-        XPRINT("<small>, Framerate: %s</small>", fps);
+            rate_mode = "(variable)";
+        XPRINT(", Framerate: %s %s", fps->name, rate_mode);
     }
     else
     {
         if (ghb_settings_get_boolean(settings, "VideoFrameratePFR"))
         {
-            XPRINT("<small>, Framerate: Peak %s (may be lower)</small>", fps);
+            XPRINT(", Framerate: Peak %s (may be lower)", fps->name);
         }
         else
         {
-            XPRINT("<small>, Framerate: %s (constant frame rate)</small>", fps);
+            XPRINT(", Framerate: %s (constant frame rate)", fps->name);
         }
     }
     const gchar *vq_desc = "Error";
@@ -419,7 +420,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         vqvalue = ghb_settings_get_int(settings, "VideoAvgBitrate");
         vq_desc = "Bitrate:";
         vq_units = "kbps";
-        XPRINT("<small>, %s %d%s</small>\n",
+        XPRINT(", %s %d%s",
                vq_desc, (int)vqvalue, vq_units);
     }
     else
@@ -428,9 +429,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
         vq_desc = "Constant Quality:";
         vq_units = hb_video_quality_get_name(video_encoder->codec);
-        XPRINT("<small>, %s %.4g(%s)</small>\n",
+        XPRINT(", %s %.4g(%s)",
                vq_desc, vqvalue, vq_units);
     }
+    XPRINT("</small>\n");
 
     // Next line in the display (Turbo setting)
     gboolean turbo;

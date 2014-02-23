@@ -1960,14 +1960,14 @@ framerate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
 
-    if (ghb_settings_combo_int(ud->settings, "VideoFramerate") != 0)
+    if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") != 0)
     {
         if (!ghb_settings_get_boolean(ud->settings, "VideoFrameratePFR"))
         {
             ghb_ui_update(ud, "VideoFramerateCFR", ghb_boolean_value(TRUE));
         }
     }
-    if (ghb_settings_combo_int(ud->settings, "VideoFramerate") == 0 &&
+    if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") == 0 &&
         ghb_settings_get_boolean(ud->settings, "VideoFrameratePFR"))
     {
         ghb_ui_update(ud, "VideoFramerateVFR", ghb_boolean_value(TRUE));
