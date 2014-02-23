@@ -384,12 +384,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     // Next line in the display (Video Encoder)
     // Video: Encoder, Framerate: fps, RF/Bitrate/QP
-    const char *vcodec_opt;
-    int vcodec;
-    vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
-    vcodec_opt = ghb_settings_combo_option(settings, "VideoEncoder");
+    const hb_encoder_t *video_encoder;
+    video_encoder = ghb_settings_video_encoder(settings, "VideoEncoder");
 
-    XPRINT("<b>Video:</b> <small>%s</small>", vcodec_opt);
+    XPRINT("<b>Video:</b> <small>%s</small>", video_encoder->name);
 
     const char *fps;
     fps = ghb_settings_get_const_string(settings, "VideoFramerate");
@@ -429,7 +427,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         // Constant quality
         vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
         vq_desc = "Constant Quality:";
-        vq_units = hb_video_quality_get_name(vcodec);
+        vq_units = hb_video_quality_get_name(video_encoder->codec);
         XPRINT("<small>, %s %.4g(%s)</small>\n",
                vq_desc, vqvalue, vq_units);
     }
@@ -444,7 +442,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     // Next line in the display (Video Encoder Options)
     // Video Options: Preset - Tune - Profile - Level
-    if (vcodec == HB_VCODEC_X264 &&
+    if (video_encoder->codec == HB_VCODEC_X264 &&
         !ghb_settings_get_boolean(settings, "x264UseAdvancedOptions"))
     {
         const gchar *preset_opt, *tune_opt;
@@ -498,7 +496,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             XPRINT("<b>Advanced Options:</b> <small>%s</small>\n", extra_opt);
         }
     }
-    else if (vcodec == HB_VCODEC_X264 || (vcodec | HB_VCODEC_FFMPEG_MASK))
+    else if (video_encoder->codec == HB_VCODEC_X264 ||
+             (video_encoder->codec | HB_VCODEC_FFMPEG_MASK))
     {
         // Next line in the display (Video Encoder Options)
         // Video Advanced Options: detailed settings
@@ -533,16 +532,16 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         const gchar *mix;
         GValue *asettings;
         gdouble sr;
-        const hb_encoder_t *encoder;
+        const hb_encoder_t *audio_encoder;
 
         asettings = ghb_array_get_nth(audio_list, ii);
 
-        encoder = ghb_settings_audio_encoder(asettings, "AudioEncoder");
+        audio_encoder = ghb_settings_audio_encoder(asettings, "AudioEncoder");
         double q = ghb_settings_get_double(asettings, "AudioTrackQuality");
         if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
             q != HB_INVALID_AUDIO_QUALITY)
         {
-            quality = ghb_format_quality("Quality: ", encoder->codec, q);
+            quality = ghb_format_quality("Quality: ", audio_encoder->codec, q);
         }
         else
         {
@@ -565,15 +564,16 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         if (count > 1)
             XPRINT("\t");
 
-        if (encoder->codec & HB_ACODEC_PASS_FLAG)
+        if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
         {
-            XPRINT("<small>%s, Encoder: %s</small>\n", track, encoder->name);
+            XPRINT("<small>%s, Encoder: %s</small>\n",
+                   track, audio_encoder->name);
         }
         else
         {
             XPRINT(
             "<small>%s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
-             track, encoder->name, mix, samplerate, quality);
+             track, audio_encoder->name, mix, samplerate, quality);
         }
         g_free(track);
         g_free(quality);

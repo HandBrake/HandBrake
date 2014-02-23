@@ -693,7 +693,8 @@ float
 ghb_vquality_default(signal_user_data_t *ud)
 {
     float quality;
-    gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+    gint vcodec;
+    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
 
     switch (vcodec)
     {
@@ -731,7 +732,8 @@ ghb_vquality_range(
     int *direction)
 {
     float min_step;
-    gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+    gint vcodec;
+    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
 
     *page = 10;
     *digits = 0;
@@ -1084,77 +1086,6 @@ lookup_audio_bitrate_option(const GValue *grate)
     }
 
     return "160";
-}
-
-static const hb_encoder_t *
-lookup_video_encoder_by_int(int ienc)
-{
-    const hb_encoder_t *enc;
-    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
-         enc = hb_video_encoder_get_next(enc))
-    {
-        if (enc->codec == ienc)
-        {
-            return enc;
-        }
-    }
-    return NULL;
-}
-
-static const hb_encoder_t *
-lookup_video_encoder(const GValue *genc)
-{
-    const hb_encoder_t *enc;
-
-    if (G_VALUE_TYPE(genc) == G_TYPE_STRING)
-    {
-        gchar *str = ghb_value_string(genc);
-        for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
-             enc = hb_video_encoder_get_next(enc))
-        {
-            if (strcmp(enc->name, str) == 0 ||
-                strcmp(enc->short_name, str) == 0)
-            {
-                g_free(str);
-                return enc;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(genc) == G_TYPE_INT ||
-             G_VALUE_TYPE(genc) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(genc) == G_TYPE_DOUBLE)
-    {
-        return lookup_video_encoder_by_int(ghb_value_int(genc));
-    }
-    return NULL;
-}
-
-static gint
-lookup_video_encoder_int(const GValue *genc)
-{
-    const hb_encoder_t *enc = lookup_video_encoder(genc);
-    if (enc != NULL)
-        return enc->codec;
-    return 0;
-}
-
-static const gchar*
-lookup_video_encoder_option(const GValue *genc)
-{
-    const hb_encoder_t *enc = lookup_video_encoder(genc);
-    if (enc != NULL)
-        return enc->name;
-    return NULL;
-}
-
-static const gchar*
-lookup_video_encoder_string(const GValue *genc)
-{
-    const hb_encoder_t *enc = lookup_video_encoder(genc);
-    if (enc != NULL)
-        return enc->short_name;
-    return NULL;
 }
 
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx)
@@ -1684,17 +1615,41 @@ video_encoder_opts_set(
 const hb_encoder_t*
 ghb_lookup_video_encoder(const char *name)
 {
-    const hb_encoder_t *enc;
-    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
+    // First find an enabled encoder
+    int codec = hb_video_encoder_get_from_name(name);
+
+    // Now find the matching encoder info
+    const hb_encoder_t *enc, *first;
+    for (first = enc = hb_video_encoder_get_next(NULL); enc != NULL;
          enc = hb_video_encoder_get_next(enc))
     {
-        if (!strncmp(name, enc->short_name, 80) ||
-            !strncmp(name, enc->name, 80))
+        if (codec == enc->codec)
         {
             return enc;
         }
     }
-    return NULL;
+    // Return a default encoder if nothing matches
+    return first;
+}
+
+int
+ghb_lookup_video_encoder_codec(const char *name)
+{
+    return ghb_lookup_video_encoder(name)->codec;
+}
+
+int
+ghb_settings_video_encoder_codec(const GValue *settings, const char *name)
+{
+    const char *encoder_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_video_encoder_codec(encoder_id);
+}
+
+const hb_encoder_t*
+ghb_settings_video_encoder(const GValue *settings, const char *name)
+{
+    const char *encoder_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_video_encoder(encoder_id);
 }
 
 void
@@ -2636,8 +2591,6 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
         return lookup_mixdown_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
-    else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_video_encoder_int(gval);
     else
     {
         return lookup_generic_int(find_combo_table(name), gval);
@@ -2661,8 +2614,6 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
         return lookup_mixdown_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
-    else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_video_encoder_int(gval);
     else
     {
         return lookup_generic_double(find_combo_table(name), gval);
@@ -2686,8 +2637,6 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
         return lookup_mixdown_option(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
-    else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_video_encoder_option(gval);
     else
     {
         return lookup_generic_option(find_combo_table(name), gval);
@@ -2711,8 +2660,6 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
         return lookup_mixdown_string(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
-    else if (strcmp(name, "VideoEncoder") == 0)
-        return lookup_video_encoder_string(gval);
     else
     {
         return lookup_generic_string(find_combo_table(name), gval);
@@ -2890,7 +2837,8 @@ init_ui_combo_boxes(GtkBuilder *builder)
 gchar*
 ghb_build_advanced_opts_string(GValue *settings)
 {
-    gint vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
+    gint vcodec;
+    vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
     switch (vcodec)
     {
         case HB_VCODEC_X264:
@@ -2907,7 +2855,7 @@ ghb_build_advanced_opts_string(GValue *settings)
 
 void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
 {
-    gint vcodec = ghb_settings_combo_int(js, "VideoEncoder");
+    gint vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
 
     switch (vcodec)
     {
@@ -4180,7 +4128,7 @@ ghb_validate_video(GValue *settings)
     mux_id = ghb_settings_get_const_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
+    vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
     if ((mux->format & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
@@ -4194,7 +4142,9 @@ ghb_validate_video(GValue *settings)
             return FALSE;
         }
         g_free(message);
-        ghb_settings_set_int(settings, "VideoEncoder", HB_VCODEC_FFMPEG_MPEG4);
+        vcodec = hb_video_encoder_get_default(mux->format);
+        ghb_settings_set_string(settings, "VideoEncoder",
+                                hb_video_encoder_get_short_name(vcodec));
     }
     return TRUE;
 }
@@ -4407,7 +4357,7 @@ ghb_validate_vquality(GValue *settings)
     gchar *message;
     gint min, max;
 
-    vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
+    vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
     gdouble vquality;
     vquality = ghb_settings_get_double(settings, "VideoQualitySlider");
     if (ghb_settings_get_boolean(settings, "vquality_type_constant"))
@@ -4714,7 +4664,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         g_free(filter_str);
     }
 
-    job->vcodec = ghb_settings_combo_int(js, "VideoEncoder");
+    job->vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
     if ((job->mux & HB_MUX_MASK_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.

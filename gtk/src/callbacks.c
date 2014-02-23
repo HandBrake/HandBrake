@@ -930,7 +930,7 @@ static void show_container_options(signal_user_data_t *ud)
     mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    gint enc = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+    gint enc = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
 
     gtk_widget_set_visible(w1, (mux->format == HB_MUX_MP4V2));
     gtk_widget_set_visible(w2, (mux->format & HB_MUX_MASK_MP4));
@@ -2023,8 +2023,9 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_ui_update(ud, "h264Profile", ghb_string_value("auto"));
     }
 
-    gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+    gint vcodec;
     gdouble step;
+    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
     if (vcodec == HB_VCODEC_X264)
     {
         step = ghb_settings_combo_double(ud->prefs, "VideoQualityGranularity");
@@ -4922,7 +4923,8 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 G_MODULE_EXPORT gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
-    gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+    gint vcodec;
+    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
     switch (vcodec)
     {
         case HB_VCODEC_X264:

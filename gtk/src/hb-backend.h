@@ -178,5 +178,10 @@ int ghb_lookup_audio_encoder_codec(const char *name);
 int ghb_settings_audio_encoder_codec(const GValue *settings, const char *name);
 const hb_encoder_t* ghb_settings_audio_encoder(
     const GValue *settings, const char *name);
+const hb_encoder_t* ghb_lookup_video_encoder(const char *name);
+int ghb_lookup_video_encoder_codec(const char *name);
+int ghb_settings_video_encoder_codec(const GValue *settings, const char *name);
+const hb_encoder_t* ghb_settings_video_encoder(
+    const GValue *settings, const char *name);
 
 #endif // _HBBACKEND_H_
