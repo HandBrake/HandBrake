@@ -4924,37 +4924,32 @@ G_MODULE_EXPORT gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
     gint vcodec;
+    const char *vqname;
+
     vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
+    vqname = hb_video_quality_get_name(vcodec);
     switch (vcodec)
     {
+        case HB_VCODEC_FFMPEG_MPEG4:
+        case HB_VCODEC_FFMPEG_MPEG2:
+        case HB_VCODEC_THEORA:
+        {
+            return g_strdup_printf("%s: %d", vqname, (int)val);
+        } break;
+
         case HB_VCODEC_X264:
         {
             if (val == 0.0)
             {
-                return g_strdup_printf(_("RF: %.4g (Warning: lossless)"), val);
+                return g_strdup_printf(_("%s: %.4g (Warning: lossless)"),
+                                       vqname, val);
             }
-            else
-            {
-                return g_strdup_printf("RF: %.4g", val);
-            }
-        } break;
-
-        case HB_VCODEC_FFMPEG_MPEG4:
-        case HB_VCODEC_FFMPEG_MPEG2:
-        {
-            return g_strdup_printf("QP: %d", (int)val);
-        } break;
-
-        case HB_VCODEC_THEORA:
-        {
-            return g_strdup_printf("QP: %d", (int)val);
-        } break;
-
+        } // Falls through to default
         default:
         {
+            return g_strdup_printf("%s: %.4g", vqname, val);
         } break;
     }
-    return g_strdup_printf("QP: %.4g", val);
 }
 
 static void
