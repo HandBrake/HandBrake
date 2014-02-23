@@ -530,20 +530,19 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     for (ii = 0; ii < count; ii++)
     {
         gchar *quality = NULL, *samplerate, *track;
-        const gchar *acodec_opt, *mix;
-        int acodec;
+        const gchar *mix;
         GValue *asettings;
         gdouble sr;
+        const hb_encoder_t *encoder;
 
         asettings = ghb_array_get_nth(audio_list, ii);
 
-        acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
-        acodec_opt = ghb_settings_combo_option(asettings, "AudioEncoder");
+        encoder = ghb_settings_audio_encoder(asettings, "AudioEncoder");
         double q = ghb_settings_get_double(asettings, "AudioTrackQuality");
         if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
             q != HB_INVALID_AUDIO_QUALITY)
         {
-            quality = ghb_format_quality("Quality: ", acodec, q);
+            quality = ghb_format_quality("Quality: ", encoder->codec, q);
         }
         else
         {
@@ -566,15 +565,15 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         if (count > 1)
             XPRINT("\t");
 
-        if (acodec & HB_ACODEC_PASS_FLAG)
+        if (encoder->codec & HB_ACODEC_PASS_FLAG)
         {
-            XPRINT("<small>%s, Encoder: %s</small>\n", track, acodec_opt);
+            XPRINT("<small>%s, Encoder: %s</small>\n", track, encoder->name);
         }
         else
         {
             XPRINT(
             "<small>%s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
-             track, acodec_opt, mix, samplerate, quality);
+             track, encoder->name, mix, samplerate, quality);
         }
         g_free(track);
         g_free(quality);

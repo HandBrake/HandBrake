@@ -154,7 +154,6 @@ const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
 gint ghb_find_closest_audio_samplerate(gint rate);
-GValue* ghb_lookup_audio_encoder_value(gint val);
 
 void ghb_init_lang_list_box(GtkListBox *list_box);
 
@@ -174,5 +173,10 @@ gchar* ghb_create_title_label(const hb_title_t *title);
 // libhb lookup helpers
 const hb_title_t* ghb_lookup_title(int title_id, int *index);
 const hb_container_t* ghb_lookup_container_by_name(const gchar *name);
+const hb_encoder_t* ghb_lookup_audio_encoder(const char *name);
+int ghb_lookup_audio_encoder_codec(const char *name);
+int ghb_settings_audio_encoder_codec(const GValue *settings, const char *name);
+const hb_encoder_t* ghb_settings_audio_encoder(
+    const GValue *settings, const char *name);
 
 #endif // _HBBACKEND_H_

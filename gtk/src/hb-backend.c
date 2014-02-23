@@ -1087,50 +1087,6 @@ lookup_audio_bitrate_option(const GValue *grate)
 }
 
 static const hb_encoder_t *
-lookup_audio_encoder_by_int(int ienc)
-{
-    const hb_encoder_t *enc;
-    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
-         enc = hb_audio_encoder_get_next(enc))
-    {
-        if (enc->codec == ienc)
-        {
-            return enc;
-        }
-    }
-    return NULL;
-}
-
-static const hb_encoder_t *
-lookup_audio_encoder(const GValue *genc)
-{
-    const hb_encoder_t *enc;
-
-    if (G_VALUE_TYPE(genc) == G_TYPE_STRING)
-    {
-        gchar *str = ghb_value_string(genc);
-        for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
-             enc = hb_audio_encoder_get_next(enc))
-        {
-            if (strcmp(enc->name, str) == 0 ||
-                strcmp(enc->short_name, str) == 0)
-            {
-                g_free(str);
-                return enc;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(genc) == G_TYPE_INT ||
-             G_VALUE_TYPE(genc) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(genc) == G_TYPE_DOUBLE)
-    {
-        return lookup_audio_encoder_by_int(ghb_value_int(genc));
-    }
-    return NULL;
-}
-
-static const hb_encoder_t *
 lookup_video_encoder_by_int(int ienc)
 {
     const hb_encoder_t *enc;
@@ -1175,15 +1131,6 @@ lookup_video_encoder(const GValue *genc)
 }
 
 static gint
-lookup_audio_encoder_int(const GValue *genc)
-{
-    const hb_encoder_t *enc = lookup_audio_encoder(genc);
-    if (enc != NULL)
-        return enc->codec;
-    return 0;
-}
-
-static gint
 lookup_video_encoder_int(const GValue *genc)
 {
     const hb_encoder_t *enc = lookup_video_encoder(genc);
@@ -1193,30 +1140,12 @@ lookup_video_encoder_int(const GValue *genc)
 }
 
 static const gchar*
-lookup_audio_encoder_option(const GValue *genc)
-{
-    const hb_encoder_t *enc = lookup_audio_encoder(genc);
-    if (enc != NULL)
-        return enc->name;
-    return "None";
-}
-
-static const gchar*
 lookup_video_encoder_option(const GValue *genc)
 {
     const hb_encoder_t *enc = lookup_video_encoder(genc);
     if (enc != NULL)
         return enc->name;
     return NULL;
-}
-
-static const gchar*
-lookup_audio_encoder_string(const GValue *genc)
-{
-    const hb_encoder_t *enc = lookup_audio_encoder(genc);
-    if (enc != NULL)
-        return enc->short_name;
-    return "none";
 }
 
 static const gchar*
@@ -1298,15 +1227,6 @@ lookup_audio_lang_option(const GValue *glang)
             return ghb_language_table[ii].eng_name;
     }
     return "Any";
-}
-
-GValue*
-ghb_lookup_audio_encoder_value(gint ienc)
-{
-    const hb_encoder_t *enc = lookup_audio_encoder_by_int(ienc);
-    if (enc != NULL)
-        return ghb_string_value_new(enc->short_name);
-    return ghb_string_value_new("none");
 }
 
 static GValue*
@@ -1537,10 +1457,7 @@ ghb_grey_combo_options(signal_user_data_t *ud)
         grey_builder_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
     }
 
-    widget = GHB_WIDGET (ud->builder, "AudioEncoder");
-    gval = ghb_widget_value(widget);
-    acodec = ghb_lookup_combo_int("AudioEncoder", gval);
-    ghb_value_free(gval);
+    acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
     gint64 layout = aconfig != NULL ? aconfig->in.channel_layout : ~0;
     fallback = ghb_select_fallback(ud->settings, acodec);
@@ -1817,17 +1734,41 @@ ghb_audio_encoder_opts_set_with_mask(
 const hb_encoder_t*
 ghb_lookup_audio_encoder(const char *name)
 {
-    const hb_encoder_t *enc;
-    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+    // First find an enabled encoder
+    int codec = hb_audio_encoder_get_from_name(name);
+
+    // Now find the matching encoder info
+    const hb_encoder_t *enc, *first;
+    for (first = enc = hb_audio_encoder_get_next(NULL); enc != NULL;
          enc = hb_audio_encoder_get_next(enc))
     {
-        if (!strncmp(name, enc->short_name, 80) ||
-            !strncmp(name, enc->name, 80))
+        if (codec == enc->codec)
         {
             return enc;
         }
     }
-    return NULL;
+    // Return a default encoder if nothing matches
+    return first;
+}
+
+int
+ghb_lookup_audio_encoder_codec(const char *name)
+{
+    return ghb_lookup_audio_encoder(name)->codec;
+}
+
+int
+ghb_settings_audio_encoder_codec(const GValue *settings, const char *name)
+{
+    const char *encoder_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_audio_encoder_codec(encoder_id);
+}
+
+const hb_encoder_t*
+ghb_settings_audio_encoder(const GValue *settings, const char *name)
+{
+    const char *encoder_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_audio_encoder(encoder_id);
 }
 
 static void
@@ -2697,10 +2638,6 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
         return lookup_audio_lang_int(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
         return lookup_video_encoder_int(gval);
-    else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_audio_encoder_int(gval);
-    else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_audio_encoder_int(gval);
     else
     {
         return lookup_generic_int(find_combo_table(name), gval);
@@ -2726,10 +2663,6 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
         return lookup_audio_lang_int(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
         return lookup_video_encoder_int(gval);
-    else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_audio_encoder_int(gval);
-    else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_audio_encoder_int(gval);
     else
     {
         return lookup_generic_double(find_combo_table(name), gval);
@@ -2755,10 +2688,6 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
         return lookup_audio_lang_option(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
         return lookup_video_encoder_option(gval);
-    else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_audio_encoder_option(gval);
-    else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_audio_encoder_option(gval);
     else
     {
         return lookup_generic_option(find_combo_table(name), gval);
@@ -2784,10 +2713,6 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
         return lookup_audio_lang_option(gval);
     else if (strcmp(name, "VideoEncoder") == 0)
         return lookup_video_encoder_string(gval);
-    else if (strcmp(name, "AudioEncoder") == 0)
-        return lookup_audio_encoder_string(gval);
-    else if (strcmp(name, "AudioEncoderFallback") == 0)
-        return lookup_audio_encoder_string(gval);
     else
     {
         return lookup_generic_string(find_combo_table(name), gval);
@@ -3162,7 +3087,7 @@ ghb_ac3_in_audio_list(const GValue *audio_list)
         gint acodec;
 
         asettings = ghb_array_get_nth(audio_list, ii);
-        acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
+        acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         if (acodec & HB_ACODEC_AC3)
             return TRUE;
     }
@@ -4352,7 +4277,6 @@ ghb_validate_audio(GValue *settings)
     gint title_id, titleindex;
     const hb_title_t * title;
     gchar *message;
-    GValue *value;
 
     title_id = ghb_settings_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -4378,10 +4302,11 @@ ghb_validate_audio(GValue *settings)
     {
         GValue *asettings;
         hb_audio_config_t *aconfig;
+        int track, codec;
 
         asettings = ghb_array_get_nth(audio_list, ii);
-        gint track = ghb_settings_combo_int(asettings, "AudioTrack");
-        gint codec = ghb_settings_combo_int(asettings, "AudioEncoder");
+        track = ghb_settings_combo_int(asettings, "AudioTrack");
+        codec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         if (codec == HB_ACODEC_AUTO_PASS)
             continue;
 
@@ -4415,8 +4340,8 @@ ghb_validate_audio(GValue *settings)
             {
                 codec = HB_ACODEC_FAAC;
             }
-            value = ghb_lookup_audio_encoder_value(codec);
-            ghb_settings_take_value(asettings, "AudioEncoder", value);
+            const char *name = hb_audio_encoder_get_short_name(codec);
+            ghb_settings_set_string(asettings, "AudioEncoder", name);
         }
         gchar *a_unsup = NULL;
         gchar *mux_s = NULL;
@@ -4442,8 +4367,8 @@ ghb_validate_audio(GValue *settings)
                 return FALSE;
             }
             g_free(message);
-            value = ghb_lookup_audio_encoder_value(codec);
-            ghb_settings_take_value(asettings, "AudioEncoder", value);
+            const char *name = hb_audio_encoder_get_short_name(codec);
+            ghb_settings_set_string(asettings, "AudioEncoder", name);
         }
 
         gint mix = ghb_settings_combo_int (asettings, "AudioMixdown");
@@ -4468,7 +4393,7 @@ ghb_validate_audio(GValue *settings)
             }
             g_free(message);
             mix = ghb_get_best_mix(aconfig, codec, mix);
-            value = lookup_mixdown_value(mix);
+            GValue *value = lookup_mixdown_value(mix);
             ghb_settings_take_value(asettings, "AudioMixdown", value);
         }
     }
@@ -4876,9 +4801,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
                                     title->list_audio, audio.in.track );
 
-        acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
+        acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
 
-        fallback = ghb_settings_combo_int(js, "AudioEncoderFallback");
+        fallback = ghb_settings_audio_encoder_codec(js, "AudioEncoderFallback");
         gint copy_mask = ghb_get_copy_mask(js);
         audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec, fallback, copy_mask);
 

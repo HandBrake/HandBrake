@@ -54,7 +54,7 @@ static void audio_deps(signal_user_data_t *ud, GValue *asettings, GtkWidget *wid
     if (widget != NULL)
         ghb_check_dependency(ud, widget, NULL);
 
-    gint track = -1, encoder = 0;
+    gint track = -1, codec = 0;
     hb_audio_config_t *aconfig = NULL;
     int title_id;
     gint titleindex;
@@ -66,16 +66,16 @@ static void audio_deps(signal_user_data_t *ud, GValue *asettings, GtkWidget *wid
     if (asettings != NULL)
     {
         track = ghb_settings_get_int(asettings, "AudioTrack");
-        encoder = ghb_settings_combo_int(asettings, "AudioEncoder");
+        codec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         aconfig = ghb_get_audio_info(title, track);
     }
 
-    gboolean is_passthru = (encoder & HB_ACODEC_PASS_FLAG);
+    gboolean is_passthru = (codec & HB_ACODEC_PASS_FLAG);
     gboolean enable_drc = TRUE;
     if (aconfig != NULL)
     {
         enable_drc = hb_audio_can_apply_drc(aconfig->in.codec,
-                                            aconfig->in.codec_param, encoder) &&
+                                            aconfig->in.codec_param, codec) &&
                      !is_passthru;
     }
 
@@ -86,8 +86,7 @@ static void audio_deps(signal_user_data_t *ud, GValue *asettings, GtkWidget *wid
     widget = GHB_WIDGET(ud->builder, "AudioTrackDRCValue");
     gtk_widget_set_sensitive(widget, enable_drc);
 
-    enable_quality_widget(ud, encoder);
-
+    enable_quality_widget(ud, codec);
 
     widget = GHB_WIDGET(ud->builder, "AudioBitrate");
     gtk_widget_set_sensitive(widget, !is_passthru);
@@ -197,7 +196,8 @@ int ghb_select_fallback(GValue *settings, int acodec)
             mux_id = ghb_settings_get_const_string(settings, "FileFormat");
             mux = ghb_lookup_container_by_name(mux_id);
 
-            fallback = ghb_settings_combo_int(settings, "AudioEncoderFallback");
+            fallback = ghb_settings_audio_encoder_codec(settings,
+                                                        "AudioEncoderFallback");
             return hb_autopassthru_get_encoder(acodec, 0, fallback, mux->format);
         }
     }
@@ -222,7 +222,7 @@ audio_sanitize_settings(GValue *settings, GValue *asettings)
     title_id = ghb_settings_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     track = ghb_settings_get_int(asettings, "AudioTrack");
-    acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
+    acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
     mix = ghb_settings_combo_int(asettings, "AudioMixdown");
     bitrate = ghb_settings_combo_int(asettings, "AudioBitrate");
     sr = ghb_settings_combo_int(asettings, "AudioSamplerate");
@@ -272,8 +272,8 @@ audio_sanitize_settings(GValue *settings, GValue *asettings)
     ghb_settings_set_string(asettings, "AudioBitrate",
         ghb_lookup_combo_string("AudioBitrate", ghb_int_value(bitrate)));
 
-    ghb_settings_take_value(asettings, "AudioEncoder",
-                            ghb_lookup_audio_encoder_value(select_acodec));
+    ghb_settings_set_string(asettings, "AudioEncoder",
+                            hb_audio_encoder_get_short_name(select_acodec));
 }
 
 void
@@ -302,10 +302,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     track = ghb_lookup_combo_int("AudioTrack", gval);
     ghb_value_free(gval);
 
-    widget = GHB_WIDGET(ud->builder, "AudioEncoder");
-    gval = ghb_widget_value(widget);
-    acodec = ghb_lookup_combo_int("AudioEncoder", gval);
-    ghb_value_free(gval);
+    acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
     widget = GHB_WIDGET(ud->builder, "AudioMixdown");
     gval = ghb_widget_value(widget);
@@ -371,13 +368,13 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     }
     ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(bitrate));
 
-    ghb_settings_take_value(ud->settings, "AudioEncoder",
-                            ghb_lookup_audio_encoder_value(select_acodec));
+    ghb_settings_set_string(ud->settings, "AudioEncoder",
+                            hb_audio_encoder_get_short_name(select_acodec));
     GValue *asettings = audio_get_selected_settings(ud, NULL);
     if (asettings)
     {
-        ghb_settings_take_value(asettings, "AudioEncoder",
-                            ghb_lookup_audio_encoder_value(select_acodec));
+        ghb_settings_set_string(asettings, "AudioEncoder",
+                            hb_audio_encoder_get_short_name(select_acodec));
     }
     ghb_audio_list_refresh_selected(ud);
 }
@@ -475,7 +472,7 @@ audio_add_track(
     ghb_settings_set_int(asettings, "AudioTrack", track);
 
     ghb_settings_set_string(asettings, "AudioEncoder",
-        ghb_lookup_combo_string("AudioEncoder", ghb_int_value(encoder)));
+                            hb_audio_encoder_get_short_name(encoder));
 
     ghb_settings_set_boolean(asettings,
                              "AudioTrackQualityEnable", enable_quality);
@@ -531,7 +528,7 @@ audio_select_and_add_track(
 
     audio = ghb_array_get_nth(pref_audio, pref_index);
 
-    acodec = ghb_settings_combo_int(audio, "AudioEncoder");
+    acodec = ghb_settings_audio_encoder_codec(audio, "AudioEncoder");
     fallback = ghb_select_fallback(settings, acodec);
 
     bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
@@ -598,7 +595,7 @@ static void set_pref_audio_with_lang(
             gboolean enable_quality;
 
             audio = ghb_array_get_nth(pref_audio, ii);
-            acodec = ghb_settings_combo_int(audio, "AudioEncoder");
+            acodec = ghb_settings_audio_encoder_codec(audio, "AudioEncoder");
             fallback = ghb_select_fallback(settings, acodec);
             copy_mask = ghb_get_copy_mask(settings);
             bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
@@ -761,13 +758,14 @@ audio_refresh_list_row_ui(
     info_src_2 = NULL;
     info_dst_2 = NULL;
 
-    const gchar *s_track, *s_codec, *s_mix;
+    const gchar *s_track, *s_mix;
     gchar *s_drc, *s_gain, *s_br_quality, *s_sr, *s_track_name;
     gdouble drc, gain;
     hb_audio_config_t *aconfig;
-    int titleindex, track, sr, codec;
+    int titleindex, track, sr;
     int title_id;
     const hb_title_t *title;
+    const hb_encoder_t *encoder;
 
     title_id = ghb_settings_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -780,14 +778,13 @@ audio_refresh_list_row_ui(
 
 
     s_track = ghb_settings_combo_option(settings, "AudioTrack");
-    codec = ghb_settings_combo_int(settings, "AudioEncoder");
-    s_codec = ghb_settings_combo_option(settings, "AudioEncoder");
+    encoder = ghb_settings_audio_encoder(settings, "AudioEncoder");
 
     double quality = ghb_settings_get_double(settings, "AudioTrackQuality");
     if (ghb_settings_get_boolean(settings, "AudioTrackQualityEnable") &&
         quality != HB_INVALID_AUDIO_QUALITY)
     {
-        s_br_quality = ghb_format_quality("Quality: ", codec, quality);
+        s_br_quality = ghb_format_quality("Quality: ", encoder->codec, quality);
     }
     else
     {
@@ -824,13 +821,13 @@ audio_refresh_list_row_ui(
             (double)aconfig->in.bitrate / 1000);
     }
 
-    if (ghb_audio_is_passthru(codec))
+    if (ghb_audio_is_passthru(encoder->codec))
     {
         info_dst = g_strdup_printf("Passthrough");
     }
     else
     {
-        info_dst = g_strdup_printf("%s (%s) (%s)", s_codec, s_mix, s_sr);
+        info_dst = g_strdup_printf("%s (%s) (%s)", encoder->name, s_mix, s_sr);
         if (s_track_name && s_track_name[0])
         {
             info_dst_2 = g_strdup_printf(
@@ -969,21 +966,21 @@ G_MODULE_EXPORT void
 audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     static gint prev_acodec = 0;
-    gint acodec_code;
+    gint acodec;
     GValue *asettings;
 
     ghb_widget_to_setting(ud->settings, widget);
-    acodec_code = ghb_settings_combo_int(ud->settings, "AudioEncoder");
+    acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
     if (block_updates)
     {
-        prev_acodec = acodec_code;
+        prev_acodec = acodec;
         return;
     }
 
     asettings = audio_get_selected_settings(ud, NULL);
-    if (ghb_audio_is_passthru (prev_acodec) &&
-        !ghb_audio_is_passthru (acodec_code))
+    if (ghb_audio_is_passthru(prev_acodec) &&
+        !ghb_audio_is_passthru(acodec))
     {
         // Transition from passthru to not, put some audio settings back to
         // pref settings
@@ -1022,13 +1019,13 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         {
             sr = aconfig ? aconfig->in.samplerate : 48000;
         }
-        mix_code = ghb_get_best_mix( aconfig, acodec_code, mix_code);
-        br = hb_audio_bitrate_get_best(acodec_code, br, sr, mix_code);
+        mix_code = ghb_get_best_mix( aconfig, acodec, mix_code);
+        br = hb_audio_bitrate_get_best(acodec, br, sr, mix_code);
         ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
 
         ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
     }
-    prev_acodec = acodec_code;
+    prev_acodec = acodec;
     if (asettings != NULL)
     {
         ghb_widget_to_setting(asettings, widget);
@@ -1039,8 +1036,8 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     float low, high, gran, defval;
     int dir;
-    hb_audio_quality_get_limits(acodec_code, &low, &high, &gran, &dir);
-    defval = hb_audio_quality_get_default(acodec_code);
+    hb_audio_quality_get_limits(acodec, &low, &high, &gran, &dir);
+    defval = hb_audio_quality_get_default(acodec);
     GtkScaleButton *sb;
     GtkAdjustment *adj;
     sb = GTK_SCALE_BUTTON(GHB_WIDGET(ud->builder, "AudioTrackQuality"));
@@ -1179,7 +1176,7 @@ quality_widget_changed_cb(GtkWidget *widget, gdouble quality, signal_user_data_t
     ghb_check_dependency(ud, widget, NULL);
     float low, high, gran;
     int dir;
-    int codec = ghb_settings_combo_int(ud->settings, "AudioEncoder");
+    int codec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
     hb_audio_quality_get_limits(codec, &low, &high, &gran, &dir);
     if (dir)
     {
@@ -2119,22 +2116,23 @@ void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget)
 
     GValue *adict = ghb_array_get_nth(alist, index);
 
-    int encoder = ghb_settings_combo_int(adict, "AudioEncoder");
-    int fallback = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
+    int codec = ghb_settings_audio_encoder_codec(adict, "AudioEncoder");
+    int fallback = ghb_settings_audio_encoder_codec(ud->settings,
+                                                    "AudioEncoderFallback");
     // Allow quality settings if the current encoder supports quality
     // or if the encoder is auto-passthru and the fallback encoder
     // supports quality.
     gboolean sensitive =
-        hb_audio_quality_get_default(encoder) != HB_INVALID_AUDIO_QUALITY ||
-        (encoder == HB_ACODEC_AUTO_PASS &&
+        hb_audio_quality_get_default(codec) != HB_INVALID_AUDIO_QUALITY ||
+        (codec == HB_ACODEC_AUTO_PASS &&
          hb_audio_quality_get_default(fallback) != HB_INVALID_AUDIO_QUALITY);
     audio_def_settings_quality_set_sensitive(GTK_WIDGET(row), sensitive);
 
     int enc;
     if (sensitive)
     {
-        enc = encoder;
-        if (hb_audio_quality_get_default(encoder) == HB_INVALID_AUDIO_QUALITY)
+        enc = codec;
+        if (hb_audio_quality_get_default(codec) == HB_INVALID_AUDIO_QUALITY)
         {
             enc = fallback;
         }
@@ -2142,7 +2140,7 @@ void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget)
                                                 "AudioTrackQuality"), enc);
     }
 
-    enc = encoder;
+    enc = codec;
     if (enc & HB_ACODEC_PASS_FLAG)
     {
         enc = ghb_select_fallback(ud->settings, enc);
@@ -2219,7 +2217,7 @@ audio_def_quality_changed_cb(GtkWidget *widget, gdouble quality, signal_user_dat
 
     GValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
     GValue *adict = ghb_array_get_nth(alist, index);
-    int codec = ghb_settings_combo_int(adict, "AudioEncoder");
+    int codec = ghb_settings_audio_encoder_codec(adict, "AudioEncoder");
 
     float low, high, gran;
     int dir;
