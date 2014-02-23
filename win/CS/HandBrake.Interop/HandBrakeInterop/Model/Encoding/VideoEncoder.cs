@@ -38,7 +38,7 @@ namespace HandBrake.Interop.Model.Encoding
 		Theora,
 
         [Display(Name = "H.265 (x265)")]
-        [ShortName("hvec")]
+        [ShortName("x265")]
         X265
 	}
 }

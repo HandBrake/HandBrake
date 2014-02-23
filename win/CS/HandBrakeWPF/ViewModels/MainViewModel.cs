@@ -615,7 +615,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new List<OutputFormat>
                     {
-                         OutputFormat.Mp4, OutputFormat.Mkv
+                         OutputFormat.Mp4, OutputFormat.Mkv, OutputFormat.X265
                     };
             }
         }
