@@ -224,7 +224,7 @@ subtitle_add_to_settings(GValue *settings, GValue *subsettings)
     GValue *subtitle_list;
     gint count;
     gboolean burned, forced, def;
-    gint source, mux;
+    gint source;
 
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
     if (subtitle_list == NULL)
@@ -234,7 +234,12 @@ subtitle_add_to_settings(GValue *settings, GValue *subsettings)
     }
 
     // Validate some settings
-    mux = ghb_settings_combo_int(settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     source = ghb_settings_get_int(subsettings, "SubtitleSource");
     burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
     if (burned && !hb_subtitle_can_burn(source))
@@ -242,7 +247,7 @@ subtitle_add_to_settings(GValue *settings, GValue *subsettings)
         burned = FALSE;
         ghb_settings_set_boolean(subsettings, "SubtitleBurned", burned);
     }
-    if (!burned && !hb_subtitle_can_pass(source, mux))
+    if (!burned && !hb_subtitle_can_pass(source, mux->format))
     {
         burned = TRUE;
         ghb_settings_set_boolean(subsettings, "SubtitleBurned", burned);
@@ -410,7 +415,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
 
     const GValue *lang_list;
     gint lang_count, sub_count, ii;
-    int behavior, mux;
+    int behavior;
 
     behavior = ghb_settings_combo_int(settings,
                                       "SubtitleTrackSelectionBehavior");
@@ -429,7 +434,11 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         return;
     }
 
-    mux = ghb_settings_combo_int(settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
 
     // Check to see if we need to add a subtitle track for foreign audio
     // language films. A subtitle track will be added if:
@@ -468,7 +477,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         if (track > 0)
         {
             used[track] = TRUE;
-            subtitle_add_track(ud, settings, title, track, mux,
+            subtitle_add_track(ud, settings, title, track, mux->format,
                                TRUE, FALSE, &one_burned);
         }
     }
@@ -477,7 +486,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         (audio_lang != NULL && !strncmp(audio_lang, pref_lang, 4)))
     {
         // Add search for foreign audio segments
-        subtitle_add_track(ud, settings, title, -1, mux,
+        subtitle_add_track(ud, settings, title, -1, mux->format,
                            TRUE, FALSE, &one_burned);
     }
 
@@ -496,7 +505,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
                 if (!used[track])
                 {
                     used[track] = TRUE;
-                    subtitle_add_track(ud, settings, title, track, mux,
+                    subtitle_add_track(ud, settings, title, track, mux->format,
                                        FALSE, FALSE, &one_burned);
                 }
                 next_track = track + 1;
@@ -524,7 +533,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         if (track < sub_count && !used[track])
         {
             used[track] = TRUE;
-            subtitle_add_track(ud, settings, title, track, mux,
+            subtitle_add_track(ud, settings, title, track, mux->format,
                                FALSE, FALSE, &one_burned);
         }
     }
@@ -629,7 +638,12 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GValue *subsettings)
         // Update widgets with subsettings
         gboolean burn, force, def;
 
-        int mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+        const char *mux_id;
+        const hb_container_t *mux;
+
+        mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+        mux = ghb_lookup_container_by_name(mux_id);
+
         int source = ghb_settings_get_int(subsettings, "SubtitleSource");
 
         ghb_ui_update_from_settings(ud, "SubtitleTrack", subsettings);
@@ -648,12 +662,13 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GValue *subsettings)
         }
 
         widget = GHB_WIDGET(ud->builder, "SubtitleBurned");
-        gtk_widget_set_sensitive(widget,
-            hb_subtitle_can_burn(source) && hb_subtitle_can_pass(source, mux));
+        gtk_widget_set_sensitive(widget, hb_subtitle_can_burn(source) &&
+                                    hb_subtitle_can_pass(source, mux->format));
         widget = GHB_WIDGET(ud->builder, "SubtitleForced");
         gtk_widget_set_sensitive(widget, hb_subtitle_can_force(source));
         widget = GHB_WIDGET(ud->builder, "SubtitleDefaultTrack");
-        gtk_widget_set_sensitive(widget, hb_subtitle_can_pass(source, mux));
+        gtk_widget_set_sensitive(widget,
+                                    hb_subtitle_can_pass(source, mux->format));
 
         burn = ghb_settings_get_int(subsettings, "SubtitleBurned");
         force = ghb_settings_get_int(subsettings, "SubtitleForced");
@@ -667,7 +682,7 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GValue *subsettings)
         {
             force = FALSE;
         }
-        if (!hb_subtitle_can_pass(source, mux))
+        if (!hb_subtitle_can_pass(source, mux->format))
         {
             def = FALSE;
             burn = TRUE;
@@ -1046,7 +1061,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     // Add the current subtitle settings to the list.
     GValue *subsettings, *backup;
     gboolean one_burned;
-    gint track, mux;
+    gint track;
 
     int title_id, titleindex;
     const hb_title_t *title;
@@ -1063,19 +1078,24 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 ghb_settings_get_value(ud->settings, "subtitle_list"));
 
     one_burned = subtitle_is_one_burned(ud->settings);
-    mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
 
     int count = hb_list_count(title->list_subtitle);
     for (subsettings = NULL, track = 0;
          subsettings == NULL && track < count; track++)
     {
-        subsettings = subtitle_add_track(ud, ud->settings, title, track, mux,
-                                FALSE, FALSE, &one_burned);
+        subsettings = subtitle_add_track(ud, ud->settings, title, track,
+                                mux->format, FALSE, FALSE, &one_burned);
     }
     if (subsettings == NULL)
     {
-        subsettings = subtitle_add_track(ud, ud->settings, title, 0, mux,
-                                FALSE, TRUE, &one_burned);
+        subsettings = subtitle_add_track(ud, ud->settings, title, 0,
+                                mux->format, FALSE, TRUE, &one_burned);
     }
     ghb_add_subtitle_to_ui(ud, subsettings);
 
@@ -1108,7 +1128,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     // Add the current subtitle settings to the list.
     gboolean one_burned = FALSE;
-    gint track, mux;
+    gint track;
 
     const hb_title_t *title;
     int title_id, titleindex;
@@ -1122,12 +1142,16 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     ghb_clear_subtitle_list_settings(ud->settings);
     ghb_clear_subtitle_list_ui(ud->builder);
 
-    mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
 
     int count = hb_list_count(title->list_subtitle);
     for (track = 0; track < count; track++)
     {
-        subtitle_add_track(ud, ud->settings, title, track, mux,
+        subtitle_add_track(ud, ud->settings, title, track, mux->format,
                            FALSE, FALSE, &one_burned);
     }
     subtitle_refresh_list_ui(ud);
@@ -1157,7 +1181,11 @@ ghb_subtitle_prune(signal_user_data_t *ud)
     if (subtitle_list == NULL)
         return;
 
-    int mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
 
     for (ii = 0; ii < ghb_array_len(subtitle_list); )
     {
@@ -1167,7 +1195,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
         subsettings = ghb_array_get_nth(subtitle_list, ii);
         burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
         source = ghb_settings_get_boolean(subsettings, "SubtitleSource");
-        burned = burned || !hb_subtitle_can_pass(source, mux);
+        burned = burned || !hb_subtitle_can_pass(source, mux->format);
         if (burned && one_burned)
         {
             GValue *gsub = ghb_array_get_nth(subtitle_list, ii);

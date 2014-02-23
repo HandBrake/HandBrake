@@ -1317,76 +1317,6 @@ lookup_mixdown_value(gint imix)
         return ghb_string_value_new(mix->short_name);
     return NULL;
 }
-static const hb_container_t *
-lookup_container_by_int(int imux)
-{
-    const hb_container_t *mux;
-    for (mux = hb_container_get_next(NULL); mux != NULL;
-         mux = hb_container_get_next(mux))
-    {
-        if (mux->format == imux)
-        {
-            return mux;
-        }
-    }
-    return NULL;
-}
-
-static const hb_container_t *
-lookup_container(const GValue *gmux)
-{
-    const hb_container_t *mux;
-
-    if (G_VALUE_TYPE(gmux) == G_TYPE_STRING)
-    {
-        gchar *str = ghb_value_string(gmux);
-        for (mux = hb_container_get_next(NULL); mux != NULL;
-             mux = hb_container_get_next(mux))
-        {
-            if (strcmp(mux->name, str) == 0 ||
-                strcmp(mux->short_name, str) == 0)
-            {
-                g_free(str);
-                return mux;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(gmux) == G_TYPE_INT ||
-             G_VALUE_TYPE(gmux) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(gmux) == G_TYPE_DOUBLE)
-    {
-        return lookup_container_by_int(ghb_value_int(gmux));
-    }
-    return NULL;
-}
-
-static gint
-lookup_container_int(const GValue *gmux)
-{
-    const hb_container_t *mux = lookup_container(gmux);
-    if (mux != NULL)
-        return mux->format;
-    return 0;
-}
-
-static const gchar*
-lookup_container_option(const GValue *gmux)
-{
-    const hb_container_t *mux = lookup_container(gmux);
-    if (mux != NULL)
-        return mux->name;
-    return 0;
-}
-
-static const gchar*
-lookup_container_string(const GValue *gmux)
-{
-    const hb_container_t *mux = lookup_container(gmux);
-    if (mux != NULL)
-        return mux->short_name;
-    return 0;
-}
 
 // Handle for libhb.  Gets set by ghb_backend_init()
 static hb_handle_t * h_scan = NULL;
@@ -1528,7 +1458,7 @@ void
 ghb_grey_combo_options(signal_user_data_t *ud)
 {
     GtkWidget *widget;
-    gint mux, track, title_id, titleindex, acodec, fallback;
+    gint track, title_id, titleindex, acodec, fallback;
     const hb_title_t *title;
     hb_audio_config_t *aconfig = NULL;
     GValue *gval;
@@ -1543,10 +1473,12 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     track = ghb_lookup_combo_int("AudioTrack", gval);
     ghb_value_free(gval);
     aconfig = ghb_get_audio_info(title, track);
-    widget = GHB_WIDGET (ud->builder, "FileFormat");
-    gval = ghb_widget_value(widget);
-    mux = ghb_lookup_combo_int("FileFormat", gval);
-    ghb_value_free(gval);
+
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
 
     grey_builder_combo_box_item(ud->builder, "x264_analyse", 4, TRUE);
 
@@ -1554,7 +1486,7 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
          enc = hb_audio_encoder_get_next(enc))
     {
-        if (!(mux & enc->muxers))
+        if (!(mux->format & enc->muxers))
         {
             grey_builder_combo_box_item(ud->builder, "AudioEncoder",
                 enc->codec, TRUE);
@@ -1572,7 +1504,7 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
          enc = hb_video_encoder_get_next(enc))
     {
-        if (!(mux & enc->muxers))
+        if (!(mux->format & enc->muxers))
         {
             grey_builder_combo_box_item(ud->builder, "VideoEncoder",
                 enc->codec, TRUE);
@@ -1613,7 +1545,8 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     gint64 layout = aconfig != NULL ? aconfig->in.channel_layout : ~0;
     fallback = ghb_select_fallback(ud->settings, acodec);
     gint copy_mask = ghb_get_copy_mask(ud->settings);
-    acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
+    acodec = ghb_select_audio_codec(mux->format, aconfig, acodec,
+                                    fallback, copy_mask);
     grey_mix_opts(ud, acodec, layout);
 }
 
@@ -2037,20 +1970,24 @@ container_opts_set(
     }
 }
 
-const hb_container_t *
-ghb_lookup_container(const gchar *name)
+const hb_container_t*
+ghb_lookup_container_by_name(const gchar *name)
 {
-    const hb_container_t *mux;
-    for (mux = hb_container_get_next(NULL); mux != NULL;
+    // First find an enabled muxer
+    int format = hb_container_get_from_name(name);
+
+    // Now find the matching muxer info
+    const hb_container_t *mux, *first;
+    for (first = mux = hb_container_get_next(NULL); mux != NULL;
          mux = hb_container_get_next(mux))
     {
-        if (!strncmp(mux->short_name, name, 80) ||
-            !strncmp(mux->name, name, 80))
+        if (format == mux->format)
         {
             return mux;
         }
     }
-    return NULL;
+    // Return a default container if nothing matches
+    return first;
 }
 
 static void
@@ -2764,8 +2701,6 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
         return lookup_audio_encoder_int(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
         return lookup_audio_encoder_int(gval);
-    else if (strcmp(name, "FileFormat") == 0)
-        return lookup_container_int(gval);
     else
     {
         return lookup_generic_int(find_combo_table(name), gval);
@@ -2795,8 +2730,6 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
         return lookup_audio_encoder_int(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
         return lookup_audio_encoder_int(gval);
-    else if (strcmp(name, "FileFormat") == 0)
-        return lookup_container_int(gval);
     else
     {
         return lookup_generic_double(find_combo_table(name), gval);
@@ -2826,8 +2759,6 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
         return lookup_audio_encoder_option(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
         return lookup_audio_encoder_option(gval);
-    else if (strcmp(name, "FileFormat") == 0)
-        return lookup_container_option(gval);
     else
     {
         return lookup_generic_option(find_combo_table(name), gval);
@@ -2857,8 +2788,6 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
         return lookup_audio_encoder_string(gval);
     else if (strcmp(name, "AudioEncoderFallback") == 0)
         return lookup_audio_encoder_string(gval);
-    else if (strcmp(name, "FileFormat") == 0)
-        return lookup_container_string(gval);
     else
     {
         return lookup_generic_string(find_combo_table(name), gval);
@@ -2866,54 +2795,6 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
     g_warning("ghb_lookup_combo_int() couldn't find %s", name);
     return NULL;
 }
-
-#if 0
-static gboolean acodec_list_box_filter(GtkListBoxRow *row, gpointer data)
-{
-    GValue *settings = (GValue*)data;
-
-    int mux = ghb_settings_combo_int(settings, "FileFormat");
-
-    GtkWidget *label = gtk_bin_get_child(GTK_BIN(row));
-    int codec = (intptr_t)g_object_get_data(G_OBJECT(label), "codec");
-
-    const hb_encoder_t *enc;
-    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
-         enc = hb_audio_encoder_get_next(enc))
-    {
-        if (enc->codec == codec && (mux & enc->muxers))
-        {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-void ghb_update_acodec_list_box(GtkListBox *list_box)
-{
-    gtk_list_box_invalidate_filter(list_box);
-}
-
-void ghb_init_acodec_list_box(GtkListBox *list_box, GValue *settings)
-{
-    int mux = ghb_settings_combo_int(settings, "FileFormat");
-
-    const hb_encoder_t *enc;
-    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
-         enc = hb_audio_encoder_get_next(enc))
-    {
-        if (mux & enc->muxers)
-        {
-            GtkWidget *label = gtk_label_new(enc->name);
-            g_object_set_data(G_OBJECT(label), "codec", (gpointer)(intptr_t)enc->codec);
-            gtk_widget_show(label);
-            gtk_list_box_insert(list_box, label, -1);
-        }
-    }
-    gtk_list_box_set_filter_func(list_box, acodec_list_box_filter,
-                                 settings, NULL);
-}
-#endif
 
 void ghb_init_lang_list_box(GtkListBox *list_box)
 {
@@ -4366,12 +4247,16 @@ ghb_validate_filters(GValue *settings)
 gboolean
 ghb_validate_video(GValue *settings)
 {
-    gint vcodec, mux;
+    gint vcodec;
     gchar *message;
+    const char *mux_id;
+    const hb_container_t *mux;
 
-    mux = ghb_settings_combo_int(settings, "FileFormat");
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
-    if ((mux & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
+    if ((mux->format & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
     {
         // mp4/theora combination is not supported.
         message = g_strdup_printf(
@@ -4477,7 +4362,12 @@ ghb_validate_audio(GValue *settings)
         g_message("No title found.\n");
         return FALSE;
     }
-    gint mux = ghb_settings_combo_int(settings, "FileFormat");
+
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
 
     const GValue *audio_list;
     gint count, ii;
@@ -4517,7 +4407,7 @@ ghb_validate_audio(GValue *settings)
             {
                 codec = HB_ACODEC_AC3;
             }
-            else if (mux & HB_MUX_MASK_MKV)
+            else if (mux->format & HB_MUX_MASK_MKV)
             {
                 codec = HB_ACODEC_LAME;
             }
@@ -4530,7 +4420,7 @@ ghb_validate_audio(GValue *settings)
         }
         gchar *a_unsup = NULL;
         gchar *mux_s = NULL;
-        if (mux & HB_MUX_MASK_MP4)
+        if (mux->format & HB_MUX_MASK_MP4)
         {
             mux_s = "MP4";
             // mp4/vorbis|DTS combination is not supported.
@@ -4697,7 +4587,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         job->pts_to_stop = ghb_settings_get_int(prefs, "live_duration") * 90000LL;
     }
 
-    job->mux = ghb_settings_combo_int(js, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(js, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
+    job->mux = mux->format;
     if (job->mux & HB_MUX_MASK_MP4)
     {
         job->largeFileSize = ghb_settings_get_boolean(js, "Mp4LargeFile");

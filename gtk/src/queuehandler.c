@@ -156,12 +156,14 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     gchar *preset;
     gboolean markers;
     gboolean preset_modified;
-    gint mux;
     const GValue *path;
 
-    const gchar *container;
-    container = ghb_settings_combo_option(settings, "FileFormat");
-    mux = ghb_settings_combo_int(settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
     path = ghb_settings_get_value(settings, "preset");
     preset = ghb_preset_path_string(path);
@@ -179,12 +181,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     // Next line in the display (Container type)
     // Format: XXX Container
-    XPRINT("<b>Format:</b> <small>%s Container</small>\n", container);
+    XPRINT("<b>Format:</b> <small>%s Container</small>\n", mux->name);
 
     // Next line in the display (Container options)
     // Container Options: - Chapter Markers
     gboolean ipod = FALSE, http = FALSE, large = FALSE;
-    if (mux & HB_MUX_MASK_MP4)
+    if (mux->format & HB_MUX_MASK_MP4)
     {
         ipod = ghb_settings_get_boolean(settings, "Mp4iPodCompatible");
         http = ghb_settings_get_boolean(settings, "Mp4HttpOptimize");

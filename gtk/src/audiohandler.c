@@ -191,9 +191,14 @@ int ghb_select_fallback(GValue *settings, int acodec)
 
         default:
         {
-            int mux = ghb_settings_combo_int(settings, "FileFormat");
+            const char *mux_id;
+            const hb_container_t *mux;
+
+            mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+            mux = ghb_lookup_container_by_name(mux_id);
+
             fallback = ghb_settings_combo_int(settings, "AudioEncoderFallback");
-            return hb_autopassthru_get_encoder(acodec, 0, fallback, mux);
+            return hb_autopassthru_get_encoder(acodec, 0, fallback, mux->format);
         }
     }
 }
@@ -205,12 +210,15 @@ audio_sanitize_settings(GValue *settings, GValue *asettings)
     gint titleindex, track, acodec, select_acodec, mix;
     const hb_title_t *title;
     hb_audio_config_t *aconfig;
-    gint mux;
     gint bitrate;
     gint sr;
 
-    g_debug("ghb_santiize_audio ()");
-    mux = ghb_settings_combo_int(settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     title_id = ghb_settings_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     track = ghb_settings_get_int(asettings, "AudioTrack");
@@ -226,7 +234,7 @@ audio_sanitize_settings(GValue *settings, GValue *asettings)
     }
     gint fallback = ghb_select_fallback(settings, acodec);
     gint copy_mask = ghb_get_copy_mask(settings);
-    select_acodec = ghb_select_audio_codec(mux, aconfig, acodec,
+    select_acodec = ghb_select_audio_codec(mux->format, aconfig, acodec,
                                            fallback, copy_mask);
     if (ghb_audio_is_passthru (select_acodec))
     {
@@ -277,12 +285,15 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     hb_audio_config_t *aconfig;
     GtkWidget *widget;
     GValue *gval;
-    gint mux;
     gint bitrate;
     gint sr = 48000;
 
-    g_debug("ghb_adjust_audio_rate_combos ()");
-    mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     title_id = ghb_settings_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
@@ -318,7 +329,8 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     }
     gint fallback = ghb_select_fallback(ud->settings, acodec);
     gint copy_mask = ghb_get_copy_mask(ud->settings);
-    select_acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
+    select_acodec = ghb_select_audio_codec(mux->format, aconfig, acodec,
+                                           fallback, copy_mask);
     gboolean codec_defined_bitrate = FALSE;
     if (ghb_audio_is_passthru (select_acodec))
     {
@@ -504,12 +516,17 @@ audio_select_and_add_track(
     GValue *audio, *asettings = NULL;
     gdouble drc, gain, quality;
     gboolean enable_quality;
-    gint track, mux, acodec, bitrate, samplerate, mix;
+    gint track, acodec, bitrate, samplerate, mix;
 
     gint select_acodec;
     gint fallback;
 
-    mux = ghb_settings_combo_int(settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     gint copy_mask = ghb_get_copy_mask(settings);
 
     audio = ghb_array_get_nth(pref_audio, pref_index);
@@ -535,7 +552,7 @@ audio_select_and_add_track(
         hb_audio_config_t *aconfig;
         aconfig = hb_list_audio_config_item(title->list_audio, track);
         select_acodec = ghb_select_audio_codec(
-                            mux, aconfig, acodec, fallback, copy_mask);
+                            mux->format, aconfig, acodec, fallback, copy_mask);
 
         asettings = audio_add_track(settings, title, track, select_acodec,
                                     enable_quality, quality, bitrate,
@@ -554,11 +571,15 @@ static void set_pref_audio_with_lang(
 {
     const GValue *pref_audio, *audio_list;
     int count, ii, track, track_count, audio_count;
-    gint mux;
 
     audio_list = ghb_settings_get_value(settings, "audio_list");
 
-    mux = ghb_settings_combo_int(settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     pref_audio = ghb_settings_get_value(settings, "AudioList");
     audio_count = hb_list_count(title->list_audio);
     count = ghb_array_len(pref_audio);
@@ -596,7 +617,7 @@ static void set_pref_audio_with_lang(
             hb_audio_config_t *aconfig;
             aconfig = hb_list_audio_config_item(title->list_audio, track);
             select_acodec = ghb_select_audio_codec(
-                                mux, aconfig, acodec, fallback, copy_mask);
+                            mux->format, aconfig, acodec, fallback, copy_mask);
 
             // Was the source track already encoded
             // with the selected encode settings.

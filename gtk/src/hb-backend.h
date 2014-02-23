@@ -170,6 +170,9 @@ int ghb_lookup_audio_lang(const GValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
 void ghb_update_display_aspect_label(signal_user_data_t *ud);
 gchar* ghb_create_title_label(const hb_title_t *title);
+
+// libhb lookup helpers
 const hb_title_t* ghb_lookup_title(int title_id, int *index);
+const hb_container_t* ghb_lookup_container_by_name(const gchar *name);
 
 #endif // _HBBACKEND_H_

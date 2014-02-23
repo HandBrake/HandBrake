@@ -548,19 +548,18 @@ ghb_cache_volnames(signal_user_data_t *ud)
 static const gchar*
 get_extension(signal_user_data_t *ud, GValue *settings)
 {
-    int container;
-    const gchar *extension;
+    const char *mux_id;
+    const hb_container_t *mux;
 
-    container = ghb_settings_combo_int(settings, "FileFormat");
-    if ((container & HB_MUX_MASK_MP4) &&
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
+    if ((mux->format & HB_MUX_MASK_MP4) &&
         ghb_settings_get_boolean(ud->prefs, "UseM4v"))
     {
         return "m4v";
     }
-    extension = hb_container_get_default_extension(container);
-    if (extension == NULL)
-        extension = "error";
-    return extension;
+    return mux->default_extension;
 }
 
 static void
@@ -925,12 +924,18 @@ static void show_container_options(signal_user_data_t *ud)
     w2 = GHB_WIDGET(ud->builder, "Mp4HttpOptimize");
     w3 = GHB_WIDGET(ud->builder, "Mp4iPodCompatible");
 
-    gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
     gint enc = ghb_settings_combo_int(ud->settings, "VideoEncoder");
 
-    gtk_widget_set_visible(w1, (mux == HB_MUX_MP4V2));
-    gtk_widget_set_visible(w2, (mux & HB_MUX_MASK_MP4));
-    gtk_widget_set_visible(w3, (mux & HB_MUX_MASK_MP4) && (enc == HB_VCODEC_X264));
+    gtk_widget_set_visible(w1, (mux->format == HB_MUX_MP4V2));
+    gtk_widget_set_visible(w2, (mux->format & HB_MUX_MASK_MP4));
+    gtk_widget_set_visible(w3, (mux->format & HB_MUX_MASK_MP4) &&
+                               (enc == HB_VCODEC_X264));
 }
 
 static void
