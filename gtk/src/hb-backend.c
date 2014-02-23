@@ -880,36 +880,6 @@ ghb_find_closest_audio_samplerate(gint irate)
     return result;
 }
 
-int ghb_custom_bitrate = 0;
-gchar *ghb_custom_bitrate_str = NULL;
-
-static gint
-lookup_audio_bitrate_int(const GValue *grate)
-{
-    return ghb_value_int(grate);
-}
-
-static const gchar*
-lookup_audio_bitrate_option(const GValue *grate)
-{
-    int rate = ghb_value_int(grate);
-
-    if (rate == ghb_custom_bitrate && ghb_custom_bitrate_str != NULL)
-        return ghb_custom_bitrate_str;
-
-    const hb_rate_t *hbrate;
-    for (hbrate = hb_audio_bitrate_get_next(NULL); hbrate != NULL;
-         hbrate = hb_audio_bitrate_get_next(hbrate))
-    {
-        if (rate == hbrate->rate)
-        {
-            return hbrate->name;
-        }
-    }
-
-    return "160";
-}
-
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx)
 {
     return &ghb_language_table[idx];
@@ -2496,8 +2466,6 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
 {
     if (gval == NULL)
         return 0;
-    if (strcmp(name, "AudioBitrate") == 0)
-        return lookup_audio_bitrate_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else
@@ -2513,8 +2481,6 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
 {
     if (gval == NULL)
         return 0;
-    if (strcmp(name, "AudioBitrate") == 0)
-        return lookup_audio_bitrate_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else
@@ -2530,8 +2496,6 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
 {
     if (gval == NULL)
         return NULL;
-    if (strcmp(name, "AudioBitrate") == 0)
-        return lookup_audio_bitrate_option(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else
@@ -2547,8 +2511,6 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
 {
     if (gval == NULL)
         return NULL;
-    if (strcmp(name, "AudioBitrate") == 0)
-        return lookup_audio_bitrate_option(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else
@@ -2933,6 +2895,13 @@ ghb_ac3_in_audio_list(const GValue *audio_list)
     return FALSE;
 }
 
+static char custom_audio_bitrate_str[8];
+static hb_rate_t custom_audio_bitrate =
+{
+    .name = custom_audio_bitrate_str,
+    .rate = 0
+};
+
 static void
 audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 {
@@ -2944,32 +2913,28 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 
     if (rate >= 0 && rate < 8) return;
 
-    if (ghb_custom_bitrate_str != NULL)
-    {
-        g_free(ghb_custom_bitrate_str);
-    }
-    ghb_custom_bitrate = rate;
+    custom_audio_bitrate.rate = rate;
     if (rate < 0)
     {
-        ghb_custom_bitrate_str = g_strdup_printf("N/A");
+        snprintf(custom_audio_bitrate_str, 8, "N/A");
     }
     else
     {
-        ghb_custom_bitrate_str = g_strdup_printf("%d", rate);
+        snprintf(custom_audio_bitrate_str, 8, "%d", rate);
     }
 
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
     {
-        str = g_strdup_printf ("<small>%s</small>", ghb_custom_bitrate_str);
+        str = g_strdup_printf ("<small>%s</small>", custom_audio_bitrate.name);
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
                            0, str,
                            1, TRUE,
-                           2, ghb_custom_bitrate_str,
+                           2, custom_audio_bitrate.name,
                            3, (gdouble)rate,
-                           4, ghb_custom_bitrate_str,
+                           4, custom_audio_bitrate.name,
                            -1);
         g_free(str);
     }
@@ -3045,9 +3010,8 @@ audio_bitrate_opts_update(
     }
     else
     {
-        g_free(ghb_custom_bitrate_str);
-        ghb_custom_bitrate_str = NULL;
-        ghb_custom_bitrate = 0;
+        custom_audio_bitrate.rate = 0;
+        custom_audio_bitrate_str[0] = 0;
     }
 }
 
@@ -3077,16 +3041,16 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo, gboolean extra)
                            -1);
         g_free(str);
     }
-    if (extra && ghb_custom_bitrate_str != NULL)
+    if (extra && custom_audio_bitrate.rate != 0)
     {
         gtk_list_store_append(store, &iter);
-        str = g_strdup_printf ("<small>%s</small>", ghb_custom_bitrate_str);
+        str = g_strdup_printf ("<small>%s</small>", custom_audio_bitrate.name);
         gtk_list_store_set(store, &iter,
                            0, str,
                            1, TRUE,
-                           2, ghb_custom_bitrate_str,
-                           3, (gdouble)ghb_custom_bitrate,
-                           4, ghb_custom_bitrate_str,
+                           2, custom_audio_bitrate.name,
+                           3, (gdouble)custom_audio_bitrate.rate,
+                           4, custom_audio_bitrate.name,
                            -1);
         g_free(str);
     }
@@ -3107,6 +3071,63 @@ ghb_set_bitrate_opts(
     gint extra_rate)
 {
     audio_bitrate_opts_update(builder, "AudioBitrate", first_rate, last_rate, extra_rate);
+}
+
+const char*
+ghb_audio_bitrate_get_short_name(int rate)
+{
+    if (rate == custom_audio_bitrate.rate)
+    {
+        return custom_audio_bitrate.name;
+    }
+
+    const hb_rate_t *hb_rate, *first;
+    for (first = hb_rate = hb_audio_bitrate_get_next(NULL); hb_rate != NULL;
+         hb_rate = hb_audio_bitrate_get_next(hb_rate))
+    {
+        if (rate == hb_rate->rate)
+        {
+            return hb_rate->name;
+        }
+    }
+    return first->name;
+}
+
+const hb_rate_t*
+ghb_lookup_audio_bitrate(const char *name)
+{
+    // Now find the matching rate info
+    const hb_rate_t *hb_rate, *first;
+    for (first = hb_rate = hb_audio_bitrate_get_next(NULL); hb_rate != NULL;
+         hb_rate = hb_audio_bitrate_get_next(hb_rate))
+    {
+        if (!strncmp(name, hb_rate->name, 8))
+        {
+            return hb_rate;
+        }
+    }
+    // Return a default rate if nothing matches
+    return first;
+}
+
+int
+ghb_lookup_audio_bitrate_rate(const char *name)
+{
+    return ghb_lookup_audio_bitrate(name)->rate;
+}
+
+int
+ghb_settings_audio_bitrate_rate(const GValue *settings, const char *name)
+{
+    const char *rate_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_audio_bitrate_rate(rate_id);
+}
+
+const hb_rate_t*
+ghb_settings_audio_bitrate(const GValue *settings, const char *name)
+{
+    const char *rate_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_audio_bitrate(rate_id);
 }
 
 static ghb_status_t hb_status;
@@ -4684,7 +4705,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
             {
                 audio.out.quality = HB_INVALID_AUDIO_QUALITY;
                 audio.out.bitrate =
-                    ghb_settings_combo_int(asettings, "AudioBitrate");
+                    ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
 
                 audio.out.bitrate = hb_audio_bitrate_get_best(
                     audio.out.codec, audio.out.bitrate,

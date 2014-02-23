@@ -200,5 +200,11 @@ int ghb_settings_audio_samplerate_rate(
 const hb_rate_t* ghb_settings_audio_samplerate(
     const GValue *settings, const char *name);
 const char* ghb_audio_samplerate_get_short_name(int rate);
+const hb_rate_t* ghb_lookup_audio_bitrate(const char *name);
+int ghb_lookup_audio_bitrate_rate(const char *name);
+int ghb_settings_audio_bitrate_rate(const GValue *settings, const char *name);
+const hb_rate_t* ghb_settings_audio_bitrate(
+    const GValue *settings, const char *name);
+const char* ghb_audio_bitrate_get_short_name(int rate);
 
 #endif // _HBBACKEND_H_

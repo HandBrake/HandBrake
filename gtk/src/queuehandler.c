@@ -545,10 +545,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         else
         {
-            char *br;
-            br = ghb_settings_get_string(asettings, "AudioBitrate");
-            quality = g_strdup_printf("Bitrate: %s", br);
-            g_free(br);
+            int br = ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
+            quality = g_strdup_printf("Bitrate: %d", br);
         }
         const hb_rate_t *sr;
         sr = ghb_settings_audio_samplerate(asettings, "AudioSamplerate");
