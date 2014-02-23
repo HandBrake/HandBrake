@@ -861,76 +861,6 @@ lookup_generic_option(combo_opts_t *opts, const GValue *gval)
     return result;
 }
 
-static const hb_mixdown_t *
-lookup_mixdown_by_int(int imix)
-{
-    const hb_mixdown_t *mix;
-    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
-         mix = hb_mixdown_get_next(mix))
-    {
-        if (mix->amixdown == imix)
-        {
-            return mix;
-        }
-    }
-    return NULL;
-}
-
-static const hb_mixdown_t *
-lookup_mixdown(const GValue *gmix)
-{
-    const hb_mixdown_t *mix;
-
-    if (G_VALUE_TYPE(gmix) == G_TYPE_STRING)
-    {
-        gchar * str = ghb_value_string(gmix);
-        for (mix = hb_mixdown_get_next(NULL); mix != NULL;
-             mix = hb_mixdown_get_next(mix))
-        {
-            if (strcmp(mix->short_name, str) == 0)
-            {
-                g_free(str);
-                return mix;
-            }
-        }
-        g_free(str);
-    }
-    else if (G_VALUE_TYPE(gmix) == G_TYPE_INT ||
-             G_VALUE_TYPE(gmix) == G_TYPE_INT64 ||
-             G_VALUE_TYPE(gmix) == G_TYPE_DOUBLE)
-    {
-        return lookup_mixdown_by_int(ghb_value_int(gmix));
-    }
-    return NULL;
-}
-
-static gint
-lookup_mixdown_int(const GValue *gmix)
-{
-    const hb_mixdown_t *mix = lookup_mixdown(gmix);
-    if (mix != NULL)
-        return mix->amixdown;
-    return 0;
-}
-
-static const gchar*
-lookup_mixdown_option(const GValue *gmix)
-{
-    const hb_mixdown_t *mix = lookup_mixdown(gmix);
-    if (mix != NULL)
-        return mix->name;
-    return "None";
-}
-
-static const gchar*
-lookup_mixdown_string(const GValue *gmix)
-{
-    const hb_mixdown_t *mix = lookup_mixdown(gmix);
-    if (mix != NULL)
-        return mix->short_name;
-    return "none";
-}
-
 static const hb_rate_t *
 lookup_video_framerate(const GValue *grate)
 {
@@ -1158,15 +1088,6 @@ lookup_audio_lang_option(const GValue *glang)
             return ghb_language_table[ii].eng_name;
     }
     return "Any";
-}
-
-static GValue*
-lookup_mixdown_value(gint imix)
-{
-    const hb_mixdown_t *mix = lookup_mixdown_by_int(imix);
-    if (mix != NULL)
-        return ghb_string_value_new(mix->short_name);
-    return NULL;
 }
 
 // Handle for libhb.  Gets set by ghb_backend_init()
@@ -1407,7 +1328,7 @@ ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
     if (mix == HB_AMIXDOWN_NONE)
         mix = HB_INVALID_AMIXDOWN;
 
-    return hb_mixdown_get_best( acodec, layout, mix );
+    return hb_mixdown_get_best(acodec, layout, mix);
 }
 
 // Set up the model for the combo box
@@ -1812,19 +1733,43 @@ ghb_mix_opts_set(GtkComboBox *combo)
 }
 
 const hb_mixdown_t*
-ghb_lookup_mix(const char *name)
+ghb_lookup_mixdown(const char *name)
 {
-    const hb_mixdown_t *mix;
-    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
-         mix = hb_mixdown_get_next(mix))
+    // First find an enabled mixdown
+    int mix = hb_mixdown_get_from_name(name);
+
+    // Now find the matching mixdown info
+    const hb_mixdown_t *mixdown, *first;
+    for (first = mixdown = hb_mixdown_get_next(NULL); mixdown != NULL;
+         mixdown = hb_mixdown_get_next(mixdown))
     {
-        if (!strncmp(name, mix->short_name, 80) ||
-            !strncmp(name, mix->name, 80))
+        if (mix == mixdown->amixdown)
         {
-            return mix;
+            return mixdown;
         }
     }
-    return NULL;
+    // Return a default mixdown if nothing matches
+    return first;
+}
+
+int
+ghb_lookup_mixdown_mix(const char *name)
+{
+    return ghb_lookup_mixdown(name)->amixdown;
+}
+
+int
+ghb_settings_mixdown_mix(const GValue *settings, const char *name)
+{
+    const char *mixdown_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_mixdown_mix(mixdown_id);
+}
+
+const hb_mixdown_t*
+ghb_settings_mixdown(const GValue *settings, const char *name)
+{
+    const char *mixdown_id = ghb_settings_get_const_string(settings, name);
+    return ghb_lookup_mixdown(mixdown_id);
 }
 
 static void
@@ -2587,8 +2532,6 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
         return lookup_audio_samplerate_int(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
         return lookup_video_framerate_int(gval);
-    else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mixdown_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else
@@ -2610,8 +2553,6 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
         return lookup_audio_samplerate_int(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
         return lookup_video_framerate_int(gval);
-    else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mixdown_int(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_int(gval);
     else
@@ -2633,8 +2574,6 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
         return lookup_audio_samplerate_option(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
         return lookup_video_framerate_option(gval);
-    else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mixdown_option(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else
@@ -2656,8 +2595,6 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
         return lookup_audio_samplerate_string(gval);
     else if (strcmp(name, "VideoFramerate") == 0)
         return lookup_video_framerate_option(gval);
-    else if (strcmp(name, "AudioMixdown") == 0)
-        return lookup_mixdown_string(gval);
     else if (strcmp(name, "SrtLanguage") == 0)
         return lookup_audio_lang_option(gval);
     else
@@ -4321,14 +4258,13 @@ ghb_validate_audio(GValue *settings)
             ghb_settings_set_string(asettings, "AudioEncoder", name);
         }
 
-        gint mix = ghb_settings_combo_int (asettings, "AudioMixdown");
+        const hb_mixdown_t *mix;
+        mix = ghb_settings_mixdown(asettings, "AudioMixdown");
 
         const gchar *mix_unsup = NULL;
-        if (!hb_mixdown_is_supported(mix, codec, aconfig->in.channel_layout))
+        if (!hb_mixdown_is_supported(mix->amixdown, codec, aconfig->in.channel_layout))
         {
-            const hb_mixdown_t *hb_mix = lookup_mixdown_by_int(mix);
-            if (hb_mix != NULL)
-                mix_unsup = hb_mix->name;
+            mix_unsup = mix->name;
         }
         if (mix_unsup)
         {
@@ -4342,9 +4278,9 @@ ghb_validate_audio(GValue *settings)
                 return FALSE;
             }
             g_free(message);
-            mix = ghb_get_best_mix(aconfig, codec, mix);
-            GValue *value = lookup_mixdown_value(mix);
-            ghb_settings_take_value(asettings, "AudioMixdown", value);
+            int amixdown = ghb_get_best_mix(aconfig, codec, mix->amixdown);
+            ghb_settings_set_string(asettings, "AudioMixdown",
+                                    hb_mixdown_get_short_name(amixdown));
         }
     }
     return TRUE;
@@ -4772,7 +4708,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         }
         else
         {
-            audio.out.mixdown = ghb_settings_combo_int(asettings, "AudioMixdown");
+            audio.out.mixdown = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
             // Make sure the mixdown is valid and pick a new one if not.
             audio.out.mixdown = ghb_get_best_mix(aconfig, audio.out.codec,
                                                     audio.out.mixdown);

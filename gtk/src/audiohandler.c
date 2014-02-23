@@ -223,7 +223,7 @@ audio_sanitize_settings(GValue *settings, GValue *asettings)
     title = ghb_lookup_title(title_id, &titleindex);
     track = ghb_settings_get_int(asettings, "AudioTrack");
     acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
-    mix = ghb_settings_combo_int(asettings, "AudioMixdown");
+    mix = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
     bitrate = ghb_settings_combo_int(asettings, "AudioBitrate");
     sr = ghb_settings_combo_int(asettings, "AudioSamplerate");
 
@@ -243,18 +243,18 @@ audio_sanitize_settings(GValue *settings, GValue *asettings)
             bitrate = aconfig->in.bitrate / 1000;
 
             // Set the values for bitrate and samplerate to the input rates
-            mix = 0;
+            mix = HB_AMIXDOWN_NONE;
             ghb_settings_set_string(asettings, "AudioMixdown",
-                ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
+                                    hb_mixdown_get_short_name(mix));
             select_acodec &= aconfig->in.codec | HB_ACODEC_PASS_FLAG;
             ghb_settings_set_string(asettings, "AudioSamplerate",
                 ghb_lookup_combo_string("AudioSamplerate", ghb_int_value(0)));
         }
         else
         {
-            mix = 0;
+            mix = HB_AMIXDOWN_NONE;
             ghb_settings_set_string(asettings, "AudioMixdown",
-                ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
+                                    hb_mixdown_get_short_name(mix));
             ghb_settings_set_string(asettings, "AudioSamplerate",
                 ghb_lookup_combo_string("AudioSamplerate", ghb_int_value(0)));
             bitrate = 448;
@@ -263,11 +263,11 @@ audio_sanitize_settings(GValue *settings, GValue *asettings)
     }
     else
     {
-        if (mix == 0)
-            mix = ghb_get_best_mix( aconfig, select_acodec, 0);
+        if (mix == HB_AMIXDOWN_NONE)
+            mix = ghb_get_best_mix(aconfig, select_acodec, mix);
         bitrate = hb_audio_bitrate_get_best(select_acodec, bitrate, sr, mix);
         ghb_settings_set_string(asettings, "AudioMixdown",
-            ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
+                                hb_mixdown_get_short_name(mix));
     }
     ghb_settings_set_string(asettings, "AudioBitrate",
         ghb_lookup_combo_string("AudioBitrate", ghb_int_value(bitrate)));
@@ -303,11 +303,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     ghb_value_free(gval);
 
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
-
-    widget = GHB_WIDGET(ud->builder, "AudioMixdown");
-    gval = ghb_widget_value(widget);
-    mix = ghb_lookup_combo_int("AudioMixdown", gval);
-    ghb_value_free(gval);
+    mix = ghb_settings_mixdown_mix(ud->settings, "AudioMixdown");
 
     widget = GHB_WIDGET(ud->builder, "AudioBitrate");
     gval = ghb_widget_value(widget);
@@ -337,8 +333,9 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 
             // Set the values for bitrate and samplerate to the input rates
             ghb_set_bitrate_opts (ud->builder, bitrate, bitrate, bitrate);
-            mix = 0;
-            ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
+            mix = HB_AMIXDOWN_NONE;
+            ghb_ui_update(ud, "AudioMixdown",
+                          ghb_string_value(hb_mixdown_get_short_name(mix)));
             select_acodec &= aconfig->in.codec | HB_ACODEC_PASS_FLAG;
             codec_defined_bitrate = TRUE;
             ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
@@ -346,18 +343,20 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
         else
         {
             ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
-            mix = 0;
-            ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
+            mix = HB_AMIXDOWN_NONE;
+            ghb_ui_update(ud, "AudioMixdown",
+                          ghb_string_value(hb_mixdown_get_short_name(mix)));
             bitrate = 448;
         }
         ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_double_value(0));
     }
     else
     {
-        if (mix == 0)
-            mix = ghb_get_best_mix( aconfig, select_acodec, 0);
+        if (mix == HB_AMIXDOWN_NONE)
+            mix = ghb_get_best_mix( aconfig, select_acodec, mix);
         bitrate = hb_audio_bitrate_get_best(select_acodec, bitrate, sr, mix);
-        ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
+        ghb_ui_update(ud, "AudioMixdown",
+                      ghb_string_value(hb_mixdown_get_short_name(mix)));
     }
     if (!codec_defined_bitrate)
     {
@@ -489,7 +488,7 @@ audio_add_track(
         mix = ghb_get_best_mix(aconfig, encoder, mix);
     }
     ghb_settings_set_string(asettings, "AudioMixdown",
-        ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
+                            hb_mixdown_get_short_name(mix));
 
     ghb_settings_set_double(asettings, "AudioTrackDRCSlider", drc);
 
@@ -533,7 +532,7 @@ audio_select_and_add_track(
 
     bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
     samplerate = ghb_settings_combo_int(audio, "AudioSamplerate");
-    mix = ghb_settings_combo_int(audio, "AudioMixdown");
+    mix = ghb_settings_mixdown_mix(audio, "AudioMixdown");
     drc = ghb_settings_get_double(audio, "AudioTrackDRCSlider");
     gain = ghb_settings_get_double(audio, "AudioTrackGainSlider");
     enable_quality = ghb_settings_get_boolean(audio, "AudioTrackQualityEnable");
@@ -600,7 +599,7 @@ static void set_pref_audio_with_lang(
             copy_mask = ghb_get_copy_mask(settings);
             bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
             samplerate = ghb_settings_combo_int(audio, "AudioSamplerate");
-            mix = ghb_settings_combo_int(audio, "AudioMixdown");
+            mix = ghb_settings_mixdown_mix(audio, "AudioMixdown");
             drc = ghb_settings_get_double(audio, "AudioTrackDRCSlider");
             gain = ghb_settings_get_double(audio, "AudioTrackGainSlider");
             enable_quality = ghb_settings_get_boolean(audio,
@@ -758,7 +757,7 @@ audio_refresh_list_row_ui(
     info_src_2 = NULL;
     info_dst_2 = NULL;
 
-    const gchar *s_track, *s_mix;
+    const gchar *s_track;
     gchar *s_drc, *s_gain, *s_br_quality, *s_sr, *s_track_name;
     gdouble drc, gain;
     hb_audio_config_t *aconfig;
@@ -799,7 +798,8 @@ audio_refresh_list_row_ui(
     }
     s_sr = g_strdup_printf("%.4gkHz", (double)sr/1000);
 
-    s_mix = ghb_settings_combo_option(settings, "AudioMixdown");
+    const hb_mixdown_t *mix;
+    mix = ghb_settings_mixdown(settings, "AudioMixdown");
     gain = ghb_settings_get_double(settings, "AudioTrackGainSlider");
     s_gain = g_strdup_printf("%ddB", (int)gain);
 
@@ -827,7 +827,8 @@ audio_refresh_list_row_ui(
     }
     else
     {
-        info_dst = g_strdup_printf("%s (%s) (%s)", encoder->name, s_mix, s_sr);
+        info_dst = g_strdup_printf("%s (%s) (%s)",
+                                   encoder->name, mix->name, s_sr);
         if (s_track_name && s_track_name[0])
         {
             info_dst_2 = g_strdup_printf(
@@ -988,7 +989,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         const hb_title_t *title;
         gint titleindex;
         gint track;
-        gint br, sr, mix_code;
+        gint br, sr, mix;
 
         title_id = ghb_settings_get_int(ud->settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
@@ -997,13 +998,13 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         {
             br = ghb_settings_get_int(asettings, "AudioBitrate");
             sr = ghb_settings_combo_int(asettings, "AudioSamplerate");
-            mix_code = ghb_settings_combo_int(asettings, "AudioMixdown");
+            mix = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
         }
         else
         {
             br = 160;
             sr = 0;
-            mix_code = 0;
+            mix = HB_AMIXDOWN_NONE;
         }
 
         track = ghb_settings_get_int(ud->settings, "AudioTrack");
@@ -1019,11 +1020,12 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         {
             sr = aconfig ? aconfig->in.samplerate : 48000;
         }
-        mix_code = ghb_get_best_mix( aconfig, acodec, mix_code);
-        br = hb_audio_bitrate_get_best(acodec, br, sr, mix_code);
+        mix = ghb_get_best_mix( aconfig, acodec, mix);
+        br = hb_audio_bitrate_get_best(acodec, br, sr, mix);
         ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
 
-        ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
+        ghb_ui_update(ud, "AudioMixdown",
+                      ghb_string_value(hb_mixdown_get_short_name(mix)));
     }
     prev_acodec = acodec;
     if (asettings != NULL)
@@ -2150,7 +2152,7 @@ void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget)
     {
         sr = 48000;
     }
-    int mix = ghb_settings_combo_int(adict, "AudioMixdown");
+    int mix = ghb_settings_mixdown_mix(adict, "AudioMixdown");
     int low, high;
     hb_audio_bitrate_get_limits(enc, sr, mix, &low, &high);
     GtkWidget *w = find_widget(GTK_WIDGET(row), "AudioBitrate");

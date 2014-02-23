@@ -183,5 +183,10 @@ int ghb_lookup_video_encoder_codec(const char *name);
 int ghb_settings_video_encoder_codec(const GValue *settings, const char *name);
 const hb_encoder_t* ghb_settings_video_encoder(
     const GValue *settings, const char *name);
+const hb_mixdown_t* ghb_lookup_mixdown(const char *name);
+int ghb_lookup_mixdown_mix(const char *name);
+int ghb_settings_mixdown_mix(const GValue *settings, const char *name);
+const hb_mixdown_t* ghb_settings_mixdown(
+    const GValue *settings, const char *name);
 
 #endif // _HBBACKEND_H_

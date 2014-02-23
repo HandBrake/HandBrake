@@ -529,7 +529,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     for (ii = 0; ii < count; ii++)
     {
         gchar *quality = NULL, *samplerate, *track;
-        const gchar *mix;
         GValue *asettings;
         gdouble sr;
         const hb_encoder_t *audio_encoder;
@@ -560,7 +559,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             samplerate = g_strdup_printf("%.4g", sr);
         }
         track = ghb_settings_get_string(asettings, "AudioTrackDescription");
-        mix = ghb_settings_combo_option(asettings, "AudioMixdown");
+        const hb_mixdown_t *mix;
+        mix = ghb_settings_mixdown(asettings, "AudioMixdown");
         if (count > 1)
             XPRINT("\t");
 
@@ -573,7 +573,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         {
             XPRINT(
             "<small>%s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
-             track, audio_encoder->name, mix, samplerate, quality);
+             track, audio_encoder->name, mix->name, samplerate, quality);
         }
         g_free(track);
         g_free(quality);
