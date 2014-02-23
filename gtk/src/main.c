@@ -1002,7 +1002,7 @@ main(int argc, char *argv[])
     GtkWidget *presetSlider = GHB_WIDGET(ud->builder, "x264PresetSlider");
     const char * const *x264_presets;
     int count = 0;
-    x264_presets = hb_x264_presets();
+    x264_presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
     while (x264_presets && x264_presets[count]) count++;
     gtk_range_set_range(GTK_RANGE(presetSlider), 0, count-1);
 

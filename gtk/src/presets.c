@@ -1047,12 +1047,13 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
         ghb_dict_remove(settings, "x264Option");
     }
 
-    const char * const *x264preset = hb_x264_presets();
+    const char * const *x264presets;
+    x264presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
     char *x264Preset = ghb_settings_get_string(settings, "x264Preset");
     int ii;
-    for (ii = 0; x264preset[ii]; ii++)
+    for (ii = 0; x264presets[ii]; ii++)
     {
-        if (!strcasecmp(x264Preset, x264preset[ii]))
+        if (!strcasecmp(x264Preset, x264presets[ii]))
         {
             ghb_settings_set_int(settings, "x264PresetSlider", ii);
         }

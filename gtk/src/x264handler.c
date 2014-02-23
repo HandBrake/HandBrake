@@ -91,7 +91,8 @@ x264_setting_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
 
     int x264Preset = ghb_settings_get_int(ud->settings, "x264PresetSlider");
-    const char * preset = hb_x264_presets()[x264Preset];
+    const char *preset;
+    preset = hb_video_encoder_get_presets(HB_VCODEC_X264)[x264Preset];
     ghb_settings_set_string(ud->settings, "x264Preset", preset);
 
     if (!ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
@@ -1255,7 +1256,7 @@ format_x264_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     const char * const *x264_presets;
     const char *preset = "medium";
 
-    x264_presets = hb_x264_presets();
+    x264_presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
 
     preset = x264_presets[(int)val];
 
