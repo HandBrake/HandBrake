@@ -27,8 +27,7 @@
 
 #include "settings.h"
 
-void ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud);
-void ghb_set_pref_subtitle_settings(signal_user_data_t *ud, hb_title_t *title, GValue *settings);
+void ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, GValue *settings);
 void ghb_set_subtitle(signal_user_data_t *ud, gint track, GValue *settings);
 void ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);

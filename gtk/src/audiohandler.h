@@ -28,8 +28,8 @@
 #include "settings.h"
 
 void ghb_adjust_audio_rate_combos(signal_user_data_t *ud);
-void ghb_set_pref_audio_settings(gint titleindex, GValue *settings);
-const gchar* ghb_get_user_audio_lang(GValue *settings, hb_title_t *title, gint track);
+void ghb_set_pref_audio_settings(GValue *settings);
+const gchar* ghb_get_user_audio_lang(GValue *settings, const hb_title_t *title, gint track);
 void ghb_audio_list_refresh_selected(signal_user_data_t *ud);
 gint ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint fallback_acodec, gint copy_mask);
 int ghb_select_fallback( GValue *settings, int acodec );

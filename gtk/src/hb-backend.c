@@ -369,12 +369,6 @@ combo_opts_t subtitle_opts =
     NULL
 };
 
-combo_opts_t title_opts =
-{
-    0,
-    NULL
-};
-
 combo_opts_t audio_track_opts =
 {
     0,
@@ -412,7 +406,6 @@ combo_name_map_t combo_name_map[] =
     {"x264_analyse", &analyse_opts},
     {"x264_trellis", &trellis_opts},
     {"SubtitleTrack", &subtitle_opts},
-    {"title", &title_opts},
     {"AudioTrack", &audio_track_opts},
     {NULL, NULL}
 };
@@ -1422,22 +1415,19 @@ ghb_hb_cleanup(gboolean partial)
 gint
 ghb_subtitle_track_source(GValue *settings, gint track)
 {
-    gint titleindex;
+    gint title_id, titleindex;
+    const hb_title_t *title;
 
     if (track == -2)
         return SRTSUB;
     if (track < 0)
         return VOBSUB;
-    titleindex = ghb_settings_combo_int(settings, "title");
-    if (titleindex < 0)
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    if (title == NULL)
         return VOBSUB;
 
-    hb_title_t * title;
     hb_subtitle_t * sub;
-
-    if (h_scan == NULL) return VOBSUB;
-    title = ghb_get_title_info( titleindex );
-    if (title == NULL) return VOBSUB;   // Bad titleindex
     sub = hb_list_item( title->list_subtitle, track);
     if (sub != NULL)
         return sub->source;
@@ -1448,13 +1438,11 @@ ghb_subtitle_track_source(GValue *settings, gint track)
 const gchar*
 ghb_subtitle_track_lang(GValue *settings, gint track)
 {
-    gint titleindex;
-    hb_title_t * title;
+    gint title_id, titleindex;
+    const hb_title_t * title;
 
-    titleindex = ghb_settings_combo_int(settings, "title");
-    if (titleindex < 0)
-        goto fail;
-    title = ghb_get_title_info(titleindex);
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)  // Bad titleindex
         goto fail;
     if (track == -1)
@@ -1469,40 +1457,6 @@ ghb_subtitle_track_lang(GValue *settings, gint track)
 
 fail:
     return "und";
-}
-
-gint
-ghb_get_title_number(gint titleindex)
-{
-    hb_title_t * title;
-
-    title = ghb_get_title_info( titleindex );
-    if (title == NULL) return 1;    // Bad titleindex
-    return title->index;
-}
-
-static hb_audio_config_t*
-get_hb_audio(hb_handle_t *h, gint titleindex, gint track)
-{
-    hb_list_t  * list;
-    hb_title_t * title;
-    hb_audio_config_t *audio = NULL;
-
-    if (h == NULL) return NULL;
-    list = hb_get_titles( h );
-    if( !hb_list_count( list ) )
-    {
-        /* No valid title, stop right there */
-        return NULL;
-    }
-    title = hb_list_item( list, titleindex );
-    if (title == NULL) return NULL; // Bad titleindex
-    if (!hb_list_count(title->list_audio))
-    {
-        return NULL;
-    }
-    audio = (hb_audio_config_t *)hb_list_audio_config_item(title->list_audio, track);
-    return audio;
 }
 
 static gint
@@ -1574,19 +1528,21 @@ void
 ghb_grey_combo_options(signal_user_data_t *ud)
 {
     GtkWidget *widget;
-    gint mux, track, titleindex, acodec, fallback;
+    gint mux, track, title_id, titleindex, acodec, fallback;
+    const hb_title_t *title;
     hb_audio_config_t *aconfig = NULL;
     GValue *gval;
 
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     widget = GHB_WIDGET (ud->builder, "title");
     gval = ghb_widget_value(widget);
-    titleindex = ghb_lookup_combo_int("title", gval);
     ghb_value_free(gval);
     widget = GHB_WIDGET (ud->builder, "AudioTrack");
     gval = ghb_widget_value(widget);
     track = ghb_lookup_combo_int("AudioTrack", gval);
     ghb_value_free(gval);
-    aconfig = get_hb_audio(h_scan, titleindex, track);
+    aconfig = ghb_get_audio_info(title, track);
     widget = GHB_WIDGET (ud->builder, "FileFormat");
     gval = ghb_widget_value(widget);
     mux = ghb_lookup_combo_int("FileFormat", gval);
@@ -1759,6 +1715,19 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
     }
 }
 
+const hb_rate_t*
+ghb_lookup_samplerate(const char *name)
+{
+    const hb_rate_t *rate;
+    for (rate = hb_audio_samplerate_get_next(NULL); rate != NULL;
+         rate = hb_audio_samplerate_get_next(rate))
+    {
+        if (!strncmp(name, rate->name, 80))
+            return rate;
+    }
+    return NULL;
+}
+
 static void
 audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name)
 {
@@ -1818,6 +1787,19 @@ video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
     }
 }
 
+const hb_rate_t*
+ghb_lookup_framerte(const char *name)
+{
+    const hb_rate_t *rate;
+    for (rate = hb_video_framerate_get_next(NULL); rate != NULL;
+         rate = hb_video_framerate_get_next(rate))
+    {
+        if (!strncmp(name, rate->name, 80))
+            return rate;
+    }
+    return NULL;
+}
+
 static void
 video_encoder_opts_set(
     GtkBuilder *builder,
@@ -1847,6 +1829,22 @@ video_encoder_opts_set(
                            -1);
         g_free(str);
     }
+}
+
+const hb_encoder_t*
+ghb_lookup_video_encoder(const char *name)
+{
+    const hb_encoder_t *enc;
+    for (enc = hb_video_encoder_get_next(NULL); enc != NULL;
+         enc = hb_video_encoder_get_next(enc))
+    {
+        if (!strncmp(name, enc->short_name, 80) ||
+            !strncmp(name, enc->name, 80))
+        {
+            return enc;
+        }
+    }
+    return NULL;
 }
 
 void
@@ -1881,6 +1879,22 @@ ghb_audio_encoder_opts_set_with_mask(
             g_free(str);
         }
     }
+}
+
+const hb_encoder_t*
+ghb_lookup_audio_encoder(const char *name)
+{
+    const hb_encoder_t *enc;
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
+    {
+        if (!strncmp(name, enc->short_name, 80) ||
+            !strncmp(name, enc->name, 80))
+        {
+            return enc;
+        }
+    }
+    return NULL;
 }
 
 static void
@@ -1968,6 +1982,22 @@ ghb_mix_opts_set(GtkComboBox *combo)
     }
 }
 
+const hb_mixdown_t*
+ghb_lookup_mix(const char *name)
+{
+    const hb_mixdown_t *mix;
+    for (mix = hb_mixdown_get_next(NULL); mix != NULL;
+         mix = hb_mixdown_get_next(mix))
+    {
+        if (!strncmp(name, mix->short_name, 80) ||
+            !strncmp(name, mix->name, 80))
+        {
+            return mix;
+        }
+    }
+    return NULL;
+}
+
 static void
 mix_opts_set(GtkBuilder *builder, const gchar *name)
 {
@@ -2005,6 +2035,22 @@ container_opts_set(
                            -1);
         g_free(str);
     }
+}
+
+const hb_container_t *
+ghb_lookup_container(const gchar *name)
+{
+    const hb_container_t *mux;
+    for (mux = hb_container_get_next(NULL); mux != NULL;
+         mux = hb_container_get_next(mux))
+    {
+        if (!strncmp(mux->short_name, name, 80) ||
+            !strncmp(mux->name, name, 80))
+        {
+            return mux;
+        }
+    }
+    return NULL;
 }
 
 static void
@@ -2062,10 +2108,26 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
     }
 }
 
-static gchar **titles = NULL;
+const iso639_lang_t*
+ghb_lookup_lang(const char *name)
+{
+    int ii;
+    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
+    {
+        if (!strncmp(name, ghb_language_table[ii].iso639_2, 4) ||
+            !strncmp(name, ghb_language_table[ii].iso639_1, 4) ||
+            !strncmp(name, ghb_language_table[ii].iso639_2b, 4) ||
+            !strncmp(name, ghb_language_table[ii].native_name, 4) ||
+            !strncmp(name, ghb_language_table[ii].eng_name, 4))
+        {
+            return &ghb_language_table[ii];
+        }
+    }
+    return NULL;
+}
 
 gchar*
-ghb_create_title_label(hb_title_t *title)
+ghb_create_title_label(const hb_title_t *title)
 {
     gchar *label;
 
@@ -2125,9 +2187,10 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
     GtkTreeIter iter;
     GtkListStore *store;
     hb_list_t  * list = NULL;
-    hb_title_t * title = NULL;
+    const hb_title_t * title = NULL;
     gint ii;
     gint count = 0;
+
 
     g_debug("title_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
@@ -2137,20 +2200,6 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
     {
         list = hb_get_titles( h_scan );
         count = hb_list_count( list );
-    }
-    if (titles) g_strfreev(titles);
-    if (title_opts.map) g_free(title_opts.map);
-    if (count > 0)
-    {
-        title_opts.count = count;
-        title_opts.map = g_malloc(count*sizeof(options_map_t));
-        titles = g_malloc((count+1) * sizeof(gchar*));
-    }
-    else
-    {
-        title_opts.count = 1;
-        title_opts.map = g_malloc(sizeof(options_map_t));
-        titles = NULL;
     }
     if( count <= 0 )
     {
@@ -2163,31 +2212,89 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
                            3, -1.0,
                            4, "none",
                            -1);
-        title_opts.map[0].option = "No Titles";
-        title_opts.map[0].shortOpt = "none";
-        title_opts.map[0].ivalue = -1;
-        title_opts.map[0].svalue = "none";
         return;
     }
     for (ii = 0; ii < count; ii++)
     {
-        title = (hb_title_t*)hb_list_item(list, ii);
-        titles[ii] = ghb_create_title_label(title);
+        char *title_opt, *title_index;
+
+        title = hb_list_item(list, ii);
+        title_opt = ghb_create_title_label(title);
+        title_index = g_strdup_printf("%d", title->index);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           0, titles[ii],
+                           0, title_opt,
                            1, TRUE,
-                           2, titles[ii],
-                           3, (gdouble)ii,
-                           4, titles[ii],
+                           2, title_index,
+                           3, (gdouble)title->index,
+                           4, title_index,
                            -1);
-        title_opts.map[ii].option = titles[ii];
-        title_opts.map[ii].shortOpt = titles[ii];
-        title_opts.map[ii].ivalue = ii;
-        title_opts.map[ii].svalue = titles[ii];
+        g_free(title_opt);
+        g_free(title_index);
     }
-    titles[ii] = NULL;
+}
+
+static int
+lookup_title_index(hb_handle_t *h, int title_id)
+{
+    if (h == NULL)
+        return -1;
+
+    hb_list_t *list;
+    const hb_title_t *title;
+    int count, ii;
+
+    list = hb_get_titles(h);
+    count = hb_list_count(list);
+    for (ii = 0; ii < count; ii++)
+    {
+        title = hb_list_item(list, ii);
+        if (title_id == title->index)
+        {
+            return ii;
+        }
+    }
+    return -1;
+}
+
+const hb_title_t*
+lookup_title(hb_handle_t *h, int title_id, int *index)
+{
+    int ii = lookup_title_index(h, title_id);
+
+    if (index != NULL)
+        *index = ii;
+    if (ii < 0)
+        return NULL;
+
+    hb_list_t *list;
+    list = hb_get_titles(h);
+    return hb_list_item(list, ii);
+}
+
+int
+ghb_lookup_title_index(int title_id)
+{
+    return lookup_title_index(h_scan, title_id);
+}
+
+const hb_title_t*
+ghb_lookup_title(int title_id, int *index)
+{
+    return lookup_title(h_scan, title_id, index);
+}
+
+int
+ghb_lookup_queue_title_index(int title_id)
+{
+    return lookup_title_index(h_queue, title_id);
+}
+
+const hb_title_t*
+ghb_lookup_queue_title(int title_id, int *index)
+{
+    return lookup_title(h_queue, title_id, index);
 }
 
 static void
@@ -2289,12 +2396,6 @@ h264_level_opts_set(GtkBuilder *builder, const gchar *name)
     }
 }
 
-int
-ghb_get_title_count()
-{
-    return title_opts.count;
-}
-
 static gboolean
 find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 {
@@ -2317,11 +2418,10 @@ find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 }
 
 void
-audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
+audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *title)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    hb_title_t * title = NULL;
     hb_audio_config_t * audio;
     gint ii;
     gint count = 0;
@@ -2331,7 +2431,6 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
-    title = ghb_get_title_info(titleindex);
     if (title != NULL)
     {
         count = hb_list_count( title->list_audio );
@@ -2399,30 +2498,11 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     gtk_combo_box_set_active (combo, 0);
 }
 
-const gchar*
-ghb_audio_track_description(gint track, int titleindex)
-{
-    hb_title_t * title = NULL;
-    hb_audio_config_t * audio;
-    gchar * desc = "Unknown";
-
-    g_debug("ghb_audio_track_description ()\n");
-
-    title = ghb_get_title_info( titleindex );
-    if (title == NULL) return desc;
-    if (track >= hb_list_count( title->list_audio )) return desc;
-
-    audio = hb_list_audio_config_item(title->list_audio, track);
-    if (audio == NULL) return desc;
-    return audio->lang.description;
-}
-
 void
-subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
+subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *title)
 {
     GtkTreeIter iter;
     GtkListStore *store;
-    hb_title_t * title = NULL;
     hb_subtitle_t * subtitle;
     gint ii, count = 0;
     static char ** options = NULL;
@@ -2431,7 +2511,6 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
-    title = ghb_get_title_info(titleindex);
     if (title != NULL)
     {
         count = hb_list_count( title->list_subtitle );
@@ -2499,35 +2578,26 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     gtk_combo_box_set_active (combo, 0);
 }
 
+// Get title id of feature or longest title
 gint
 ghb_longest_title()
 {
     hb_title_set_t * title_set;
-    hb_title_t * title;
-    gint ii;
+    const hb_title_t * title;
     gint count = 0;
-    gint feature;
 
     g_debug("ghb_longest_title ()\n");
     if (h_scan == NULL) return 0;
     title_set = hb_get_title_set( h_scan );
     count = hb_list_count( title_set->list_title );
     if (count < 1) return 0;
-    title = (hb_title_t*)hb_list_item(title_set->list_title, 0);
-    feature = title_set->feature;
-    for (ii = 0; ii < count; ii++)
-    {
-        title = (hb_title_t*)hb_list_item(title_set->list_title, ii);
-        if (title->index == feature)
-        {
-            return ii;
-        }
-    }
-    return 0;
+    title = hb_list_item(title_set->list_title, 0);
+    (void)title; // Silence "unused variable" warning
+    return title_set->feature;
 }
 
 const gchar*
-ghb_get_source_audio_lang(hb_title_t *title, gint track)
+ghb_get_source_audio_lang(const hb_title_t *title, gint track)
 {
     hb_audio_config_t * audio;
     const gchar *lang = "und";
@@ -2547,7 +2617,7 @@ ghb_get_source_audio_lang(hb_title_t *title, gint track)
 }
 
 gint
-ghb_find_audio_track(hb_title_t *title, const gchar *lang, int start)
+ghb_find_audio_track(const hb_title_t *title, const gchar *lang, int start)
 {
     hb_audio_config_t * audio;
     gint ii, count = 0;
@@ -2584,7 +2654,7 @@ ghb_find_pref_subtitle_track(const gchar *lang)
 }
 
 gint
-ghb_find_subtitle_track(hb_title_t * title, const gchar * lang, int start)
+ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start)
 {
     hb_subtitle_t * subtitle;
     gint count, ii;
@@ -2872,7 +2942,7 @@ void
 ghb_update_ui_combo_box(
     signal_user_data_t *ud,
     const gchar *name,
-    gint user_data,
+    const void *user_data,
     gboolean all)
 {
     GtkComboBox *combo = NULL;
@@ -3105,15 +3175,13 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
 }
 
 void
-ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
+ghb_part_duration(const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
 {
-    hb_title_t * title;
     hb_chapter_t * chapter;
     gint count, c;
     gint64 duration;
 
     *hh = *mm = *ss = 0;
-    title = ghb_get_title_info( tt );
     if (title == NULL) return;
 
     *hh = title->hours;
@@ -3140,14 +3208,11 @@ ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
 }
 
 gint64
-ghb_get_chapter_duration(gint ti, gint chap)
+ghb_get_chapter_duration(const hb_title_t *title, gint chap)
 {
-    hb_title_t * title;
     hb_chapter_t * chapter;
     gint count;
 
-    g_debug("ghb_get_chapter_duration (title = %d)\n", ti);
-    title = ghb_get_title_info( ti );
     if (title == NULL) return 0;
     count = hb_list_count( title->list_chapter );
     if (chap >= count) return 0;
@@ -3157,15 +3222,12 @@ ghb_get_chapter_duration(gint ti, gint chap)
 }
 
 gint64
-ghb_get_chapter_start(gint ti, gint chap)
+ghb_get_chapter_start(const hb_title_t *title, gint chap)
 {
-    hb_title_t * title;
     hb_chapter_t * chapter;
     gint count, ii;
     gint64 start = 0;
 
-    g_debug("ghb_get_chapter_start (title = %d)\n", ti);
-    title = ghb_get_title_info( ti );
     if (title == NULL) return 0;
     count = hb_list_count( title->list_chapter );
     if (chap > count) return chap = count;
@@ -3178,17 +3240,14 @@ ghb_get_chapter_start(gint ti, gint chap)
 }
 
 GValue*
-ghb_get_chapters(gint titleindex)
+ghb_get_chapters(const hb_title_t *title)
 {
-    hb_title_t * title;
     hb_chapter_t * chapter;
     gint count, ii;
     GValue *chapters = NULL;
 
-    g_debug("ghb_get_chapters (title = %d)\n", titleindex);
     chapters = ghb_array_value_new(0);
 
-    title = ghb_get_title_info( titleindex );
     if (title == NULL) return chapters;
     count = hb_list_count( title->list_chapter );
     for (ii = 0; ii < count; ii++)
@@ -3413,7 +3472,7 @@ ghb_combo_init(signal_user_data_t *ud)
     // Set up the list model for the combos
     init_ui_combo_boxes(ud->builder);
     // Populate all the combos
-    ghb_update_ui_combo_box(ud, NULL, 0, TRUE);
+    ghb_update_ui_combo_box(ud, NULL, NULL, TRUE);
 }
 
 void
@@ -3681,15 +3740,15 @@ ghb_track_status()
     }
 }
 
-hb_title_t *
-ghb_get_title_info(gint titleindex)
+hb_audio_config_t*
+ghb_get_audio_info(const hb_title_t *title, gint track)
 {
-    hb_list_t  * list;
-
-    if (h_scan == NULL) return NULL;
-    list = hb_get_titles( h_scan );
-    if (list == NULL) return NULL;
-    return hb_list_item( list, titleindex );
+    if (title == NULL) return NULL;
+    if (!hb_list_count(title->list_audio))
+    {
+        return NULL;
+    }
+    return hb_list_audio_config_item(title->list_audio, track);
 }
 
 hb_list_t *
@@ -3697,15 +3756,6 @@ ghb_get_title_list()
 {
     if (h_scan == NULL) return NULL;
     return hb_get_titles( h_scan );
-}
-
-hb_audio_config_t*
-ghb_get_scan_audio_info(gint titleindex, gint audioindex)
-{
-    hb_audio_config_t *aconfig;
-
-    aconfig = get_hb_audio(h_scan, titleindex, audioindex);
-    return aconfig;
 }
 
 gboolean
@@ -3793,7 +3843,6 @@ ghb_limit_rational( gint *num, gint *den, gint limit )
 void
 ghb_set_scale_settings(GValue *settings, gint mode)
 {
-    hb_title_t * title;
     hb_job_t   * job;
     gboolean keep_aspect;
     gint pic_par;
@@ -3822,13 +3871,14 @@ ghb_set_scale_settings(GValue *settings, gint mode)
         ghb_settings_set_boolean(settings, "PictureKeepRatio", TRUE);
     }
 
-    gint titleindex;
+    int title_id, titleindex;
+    const hb_title_t * title;
 
-    titleindex = ghb_settings_combo_int(settings, "title");
-    title = ghb_get_title_info (titleindex);
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL) return;
 
-    job = hb_job_init( title );
+    job = hb_job_init( (hb_title_t*)title );
     if (job == NULL) return;
 
     // First configure widgets
@@ -4342,13 +4392,12 @@ ghb_validate_video(GValue *settings)
 gboolean
 ghb_validate_subtitles(GValue *settings)
 {
-    hb_title_t * title;
+    gint title_id, titleindex;
+    const hb_title_t * title;
     gchar *message;
 
-    gint titleindex;
-
-    titleindex = ghb_settings_combo_int(settings, "title");
-    title = ghb_get_title_info(titleindex);
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
     {
         /* No valid title, stop right there */
@@ -4415,14 +4464,13 @@ ghb_validate_subtitles(GValue *settings)
 gboolean
 ghb_validate_audio(GValue *settings)
 {
-    hb_title_t * title;
+    gint title_id, titleindex;
+    const hb_title_t * title;
     gchar *message;
     GValue *value;
 
-    gint titleindex;
-
-    titleindex = ghb_settings_combo_int(settings, "title");
-    title = ghb_get_title_info( titleindex );
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
     {
         /* No valid title, stop right there */
@@ -4613,10 +4661,10 @@ ghb_validate_vquality(GValue *settings)
 }
 
 static void
-add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
+add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
 {
     hb_list_t  * list;
-    hb_title_t * title;
+    const hb_title_t * title;
     hb_job_t   * job;
     gint sub_id = 0;
     hb_filter_object_t * filter;
@@ -4637,7 +4685,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     if (title == NULL) return;
 
     /* Set job settings */
-    job = hb_job_init( title );
+    job = hb_job_init( (hb_title_t*)title );
     if (job == NULL) return;
 
     prefs = ghb_settings_get_value(js, "Preferences");
@@ -5228,7 +5276,12 @@ ghb_add_job(GValue *js, gint unique_id)
 void
 ghb_add_live_job(GValue *js, gint unique_id)
 {
-    gint titleindex = ghb_settings_combo_int(js, "title");
+    int title_id, titleindex;
+    const hb_title_t *title;
+
+    title_id = ghb_settings_get_int(js, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    (void)title; // Silence "unused variable" warning
     add_job(h_scan, js, unique_id, titleindex);
 }
 
@@ -5391,19 +5444,17 @@ hash_pixbuf(
 
 GdkPixbuf*
 ghb_get_preview_image(
-    gint titleindex,
+    const hb_title_t *title,
     gint index,
     signal_user_data_t *ud,
     gint *out_width,
     gint *out_height)
 {
-    hb_title_t *title;
     hb_job_t *job;
 
-    title = ghb_get_title_info( titleindex );
     if( title == NULL ) return NULL;
 
-    job = hb_job_init( title );
+    job = hb_job_init( (hb_title_t*)title );
     if (job == NULL) return NULL;
 
     set_preview_job_settings(ud, job, ud->settings);

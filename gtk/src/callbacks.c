@@ -870,19 +870,21 @@ static void break_duration(gint64 duration, gint *hh, gint *mm, gint *ss)
 static void
 update_title_duration(signal_user_data_t *ud)
 {
-    gint ti;
     gint hh, mm, ss, start, end;
     gchar *text;
     GtkWidget *widget;
+    int title_id, titleindex;
+    const hb_title_t *title;
 
-    ti = ghb_settings_combo_int(ud->settings, "title");
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     widget = GHB_WIDGET (ud->builder, "title_duration");
 
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
         start = ghb_settings_get_int(ud->settings, "start_point");
         end = ghb_settings_get_int(ud->settings, "end_point");
-        ghb_part_duration(ti, start, end, &hh, &mm, &ss);
+        ghb_part_duration(title, start, end, &hh, &mm, &ss);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
     {
@@ -895,7 +897,6 @@ update_title_duration(signal_user_data_t *ud)
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
-        hb_title_t * title = ghb_get_title_info (ti);
         if (title != NULL)
         {
             gint64 frames;
@@ -985,13 +986,16 @@ scale_configure(
 void
 ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
 {
-    int titleindex = ghb_settings_combo_int(settings, "title");
-    hb_title_t * title = ghb_get_title_info(titleindex);
+    int title_id, titleindex;
+    const hb_title_t * title;
     double val;
 
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+
     // Reconfigure the UI combo boxes
-    ghb_update_ui_combo_box(ud, "AudioTrack", titleindex, FALSE);
-    ghb_update_ui_combo_box(ud, "SubtitleTrack", titleindex, FALSE);
+    ghb_update_ui_combo_box(ud, "AudioTrack", title, FALSE);
+    ghb_update_ui_combo_box(ud, "SubtitleTrack", title, FALSE);
 
     if (title != NULL)
     {
@@ -1155,7 +1159,7 @@ static void
 start_scan(
     signal_user_data_t *ud,
     const gchar *path,
-    gint titlenum,
+    gint title_id,
     gint preview_count)
 {
     GtkWidget *widget;
@@ -1174,7 +1178,7 @@ start_scan(
     gtk_widget_set_sensitive(widget, FALSE);
     widget = GHB_WIDGET(ud->builder, "source_title_open");
     gtk_widget_set_sensitive(widget, FALSE);
-    ghb_backend_scan(path, titlenum, preview_count,
+    ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_settings_get_int64(ud->prefs, "MinTitleDuration"));
 }
 
@@ -1195,24 +1199,31 @@ void
 ghb_do_scan(
     signal_user_data_t *ud,
     const gchar *filename,
-    gint titlenum,
+    gint title_id,
     gboolean force)
 {
+    int titleindex;
+    const hb_title_t *title;
+
+    (void)title; // Silence "unused variable" warning
+
     g_debug("ghb_do_scan()");
     if (!force && last_scan_file != NULL &&
         strcmp(last_scan_file, filename) == 0)
     {
         if (ghb_queue_edit_settings != NULL)
         {
-            int titleindex = ghb_settings_get_int(ghb_queue_edit_settings, "title_no");
-            ghb_array_replace(ud->settings_array, titleindex, ghb_queue_edit_settings);
+            title_id = ghb_settings_get_int(ghb_queue_edit_settings, "title");
+            title = ghb_lookup_title(title_id, &titleindex);
+            ghb_array_replace(ud->settings_array, titleindex,
+                              ghb_queue_edit_settings);
             ud->settings = ghb_queue_edit_settings;
             ghb_load_settings(ud);
             ghb_queue_edit_settings = NULL;
         }
         else
         {
-            int titleindex = ghb_settings_get_int(ud->settings, "title_no");
+            title = ghb_lookup_title(title_id, &titleindex);
             load_all_titles(ud, titleindex);
         }
         return;
@@ -1234,7 +1245,7 @@ ghb_do_scan(
             prune_logs(ud);
 
             preview_count = ghb_settings_get_int(ud->prefs, "preview_count");
-            start_scan(ud, path, titlenum, preview_count);
+            start_scan(ud, path, title_id, preview_count);
             g_free(path);
         }
         else
@@ -1286,13 +1297,13 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
         filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
         if (filename != NULL)
         {
-            gint titlenum;
+            gint title_id;
 
             if (single)
-                titlenum = ghb_settings_get_int(ud->settings, "single_title");
+                title_id = ghb_settings_get_int(ud->settings, "single_title");
             else
-                titlenum = 0;
-            ghb_do_scan(ud, filename, titlenum, TRUE);
+                title_id = 0;
+            ghb_do_scan(ud, filename, title_id, TRUE);
             if (strcmp(sourcename, filename) != 0)
             {
                 ghb_settings_set_string(ud->prefs, "default_source", filename);
@@ -1632,11 +1643,11 @@ update_crop_info(signal_user_data_t *ud)
     GtkWidget *widget;
     gchar *text;
     gint width, height, crop[4] = {0,};
-    gint titleindex;
-    hb_title_t *title;
+    gint title_id, titleindex;
+    const hb_title_t *title;
 
-    titleindex = ghb_settings_combo_int(ud->settings, "title");
-    title = ghb_get_title_info(titleindex);
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title != NULL)
     {
         crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
@@ -1678,8 +1689,11 @@ ghb_update_title_info(signal_user_data_t *ud)
     GtkWidget *widget;
     gchar *text;
 
-    int titleindex = ghb_settings_get_int(ud->settings, "title_no");
-    hb_title_t * title = ghb_get_title_info(titleindex);
+    int title_id, titleindex;
+    const hb_title_t * title;
+
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
         return;
 
@@ -1721,12 +1735,14 @@ ghb_update_title_info(signal_user_data_t *ud)
 }
 
 void
-set_title_settings(signal_user_data_t *ud, GValue *settings, gint titleindex)
+set_title_settings(signal_user_data_t *ud, GValue *settings)
 {
-    ghb_settings_set_int(settings, "title", titleindex);
-    ghb_settings_set_int(settings, "title_no", titleindex);
+    int title_id, titleindex;
+    const hb_title_t * title;
 
-    hb_title_t * title = ghb_get_title_info(titleindex);
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+
     if (title != NULL)
     {
         gint num_chapters = hb_list_count(title->list_chapter);
@@ -1804,7 +1820,7 @@ set_title_settings(signal_user_data_t *ud, GValue *settings, gint titleindex)
         ghb_set_pref_subtitle_settings(ud, title, settings);
     }
     update_chapter_list_settings(settings);
-    ghb_set_pref_audio_settings(titleindex, settings);
+    ghb_set_pref_audio_settings(settings);
 
     set_destination_settings(ud, settings);
     ghb_settings_set_value(settings, "dest_dir",
@@ -1825,8 +1841,7 @@ set_title_settings(signal_user_data_t *ud, GValue *settings, gint titleindex)
 void
 ghb_set_current_title_settings(signal_user_data_t *ud)
 {
-    int titleindex = ghb_settings_get_int(ud->settings, "title_no");
-    set_title_settings(ud, ud->settings, titleindex);
+    set_title_settings(ud, ud->settings);
 }
 
 static void
@@ -1835,6 +1850,7 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     gint ii, count;
     GValue *preset, *preset_path;
     GValue *settings_array;
+    const hb_title_t *title;
 
     hb_list_t *list = ghb_get_title_list();
     count = hb_list_count(list);
@@ -1848,12 +1864,17 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     preset_path = ghb_get_current_preset_path(ud);
     for (ii = 0; ii < count; ii++)
     {
+        int index;
         GValue *settings = ghb_settings_new();
+
+        title = hb_list_item(list, ii);
+        index = (title != NULL) ? title->index : -1;
 
         ghb_settings_init(settings, "Initialization");
         ghb_preset_to_settings(settings, preset);
         ghb_settings_set_value(settings, "preset", preset_path);
-        set_title_settings(ud, settings, ii);
+        ghb_settings_set_int(settings, "title", index);
+        set_title_settings(ud, settings);
         ghb_array_append(settings_array, settings);
     }
     ghb_value_free(preset_path);
@@ -1871,21 +1892,18 @@ static gboolean update_preview = FALSE;
 G_MODULE_EXPORT void
 title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    gint titleindex, count;
-    GValue *wval;
+    gint title_id, titleindex, count;
+    const hb_title_t * title;
 
     g_debug("title_changed_cb ()");
-
-    wval = ghb_widget_value(widget);
-    titleindex = ghb_lookup_combo_int("title", wval);
-    ghb_value_free(wval);
+    title_id = ghb_widget_int(widget);
+    title = ghb_lookup_title(title_id, &titleindex);
 
     count = ghb_array_len(ud->settings_array);
     int idx = (titleindex >= 0 && titleindex < count) ? titleindex : 0;
     ud->settings = ghb_array_get_nth(ud->settings_array, idx);
     ghb_load_settings(ud);
 
-    hb_title_t * title = ghb_get_title_info(titleindex);
     ghb_audio_title_change(ud, title != NULL);
     ghb_subtitle_title_change(ud, title != NULL);
     ghb_grey_combo_options(ud);
@@ -1900,15 +1918,15 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    gint ti;
-    hb_title_t * title;
+    gint title_id, titleindex;
+    const hb_title_t * title;
 
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
 
-    ti = ghb_settings_combo_int(ud->settings, "title");
-    title = ghb_get_title_info(ti);
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
         return;
 
@@ -2571,7 +2589,7 @@ static void
 queue_scan(signal_user_data_t *ud, GValue *js)
 {
     gchar *path;
-    gint titlenum;
+    gint title_id;
     time_t  _now;
     struct tm *now;
     gchar *log_path, *pos, *destname, *basename, *dest_dir;
@@ -2617,8 +2635,8 @@ queue_scan(signal_user_data_t *ud, GValue *js)
     g_free(log_path);
 
     path = ghb_settings_get_string( js, "source");
-    titlenum = ghb_settings_get_int(js, "titlenum");
-    ghb_backend_queue_scan(path, titlenum);
+    title_id = ghb_settings_get_int(js, "title");
+    ghb_backend_queue_scan(path, title_id);
     g_free(path);
 }
 
@@ -2886,7 +2904,6 @@ ghb_backend_events(signal_user_data_t *ud)
     gchar *status_str;
     GtkProgressBar *progress;
     GtkLabel       *work_status;
-    gint titleindex;
     GValue *js;
     gint index;
     GtkTreeView *treeview;
@@ -2976,21 +2993,23 @@ ghb_backend_events(signal_user_data_t *ud)
         gtk_progress_bar_set_fraction (scan_prog, 1.0);
         gtk_widget_hide(GTK_WIDGET(scan_prog));
 
-        ghb_update_ui_combo_box(ud, "title", 0, FALSE);
-
-        titleindex = ghb_longest_title();
+        int title_id, titleindex;
+        const hb_title_t *title;
+        title_id = ghb_longest_title();
+        title = ghb_lookup_title(title_id, &titleindex);
+        ghb_update_ui_combo_box(ud, "title", NULL, FALSE);
         load_all_titles(ud, titleindex);
 
         label = GTK_LABEL(GHB_WIDGET (ud->builder, "volume_label"));
+
         // Are there really any titles.
-        hb_title_t * title = ghb_get_title_info(titleindex);
         if (title == NULL)
         {
             gtk_label_set_text(label, _("No Title Found"));
         }
         ghb_clear_scan_state(GHB_STATE_SCANDONE);
 
-        ghb_ui_update(ud, "title", ghb_int64_value(titleindex));
+        ghb_ui_update(ud, "title", ghb_int64_value(title->index));
 
         if (ghb_queue_edit_settings != NULL)
         {
@@ -2999,7 +3018,8 @@ ghb_backend_events(signal_user_data_t *ud)
                 ghb_settings_get_value(ghb_queue_edit_settings, "title"));
 
             // The above should cause the current title index to update
-            int titleindex = ghb_settings_get_int(ud->settings, "title_no");
+            title_id = ghb_settings_get_int(ud->settings, "title");
+            title = ghb_lookup_title(title_id, &titleindex);
             ghb_array_replace(ud->settings_array, titleindex,
                               ghb_queue_edit_settings);
             ud->settings = ghb_queue_edit_settings;
@@ -3613,7 +3633,7 @@ chapter_refresh_list_row_ui(
     GtkTreeModel *tm,
     GtkTreeIter *ti,
     GValue *chapter_list,
-    int titleindex,
+    const hb_title_t *title,
     int index)
 {
     gchar *chapter, *s_duration, *s_start;
@@ -3623,10 +3643,10 @@ chapter_refresh_list_row_ui(
     // Update row with settings data
     g_debug("Updating chapter row ui");
     chapter = ghb_value_string(ghb_array_get_nth(chapter_list, index));
-    duration = ghb_get_chapter_duration(titleindex, index) / 90000;
+    duration = ghb_get_chapter_duration(title, index) / 90000;
     break_duration(duration, &hh, &mm, &ss);
     s_duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
-    start = ghb_get_chapter_start(titleindex, index) / 90000;
+    start = ghb_get_chapter_start(title, index) / 90000;
     break_duration(start, &hh, &mm, &ss);
     s_start = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
     gtk_list_store_set(GTK_LIST_STORE(tm), ti,
@@ -3660,14 +3680,16 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
     GtkTreeView  *tv;
     GtkTreeModel *tm;
     GtkTreeIter   ti;
-    int titleindex;
+    int title_id, titleindex;
+    const hb_title_t *title;
 
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
     tm = gtk_tree_view_get_model(tv);
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
 
-    titleindex = ghb_settings_combo_int(ud->settings, "title");
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     chapter_list = ghb_settings_get_value(ud->settings, "chapter_list");
     count = ghb_array_len(chapter_list);
     if (count != tm_count)
@@ -3681,7 +3703,7 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
     for (ii = 0; ii < count; ii++)
     {
         gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
-        chapter_refresh_list_row_ui(tm, &ti, chapter_list, titleindex, ii);
+        chapter_refresh_list_row_ui(tm, &ti, chapter_list, title, ii);
     }
 }
 
@@ -3695,11 +3717,13 @@ static void
 update_chapter_list_settings(GValue *settings)
 {
     GValue *chapters;
-    gint titleindex;
+    gint title_id, titleindex;
+    const hb_title_t *title;
 
     g_debug("update_chapter_list_settings ()");
-    titleindex = ghb_settings_get_int(settings, "title_no");
-    chapters = ghb_get_chapters(titleindex);
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    chapters = ghb_get_chapters(title);
     if (chapters)
         ghb_settings_take_value(settings, "chapter_list", chapters);
 }

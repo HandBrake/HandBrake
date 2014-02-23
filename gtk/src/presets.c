@@ -956,7 +956,7 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
     init_settings_from_dict(settings, preset, NULL, TRUE);
 
     // Fix up all the internal settings that are derived from preset values.
-    ghb_settings_set_boolean(settings, "PictureDeinterlaceDecomb", 
+    ghb_settings_set_boolean(settings, "PictureDeinterlaceDecomb",
         !ghb_settings_get_boolean(settings, "PictureDecombDeinterlace"));
 
     ghb_settings_set_value(settings, "scale_height",

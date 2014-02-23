@@ -55,7 +55,7 @@ AM_CPPFLAGS = \
 
 AM_CFLAGS = -Wall -g
 
-bin_PROGRAMS = ghb 
+bin_PROGRAMS = ghb
 
 # Dummy file, not built.  Forces g++ linking
 nodist_EXTRA_ghb_SOURCES = dummy.cpp
@@ -129,13 +129,13 @@ resources.plist: create_resources resources.list $(icons_dep) internal_defaults.
 CREATE_RES.c = \
 	create_resources.c \
 	plist.c \
-	values.c 
+	values.c
 
 CREATE_RES.c.o = $(patsubst %.c,%-native.o,$(CREATE_RES.c))
 
 create_resources: $(CREATE_RES.c.o)
 	$(CC_FOR_BUILD) -o $@ $^ $(GHB_TOOLS_LIBS)
- 
+
 $(CREATE_RES.c.o): %-native.o: %.c
 	$(CC_FOR_BUILD) $(GHB_TOOLS_CFLAGS) -c -o $@ $<
 

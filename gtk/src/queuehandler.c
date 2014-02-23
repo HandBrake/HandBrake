@@ -84,7 +84,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     // Collect information for first line in the display
     // Volume (Title X, Chapters Y through Z, N Video Passes) --> Destination
-    title = ghb_settings_get_int(settings, "titlenum");
+    title = ghb_settings_get_int(settings, "title");
     start_point = ghb_settings_get_int(settings, "start_point");
     end_point = ghb_settings_get_int(settings, "end_point");
     vol_name = ghb_settings_get_const_string(settings, "volume_label");
@@ -656,10 +656,12 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
     // already in the queue
     gchar *message, *dest;
     gint count, ii;
-    gint titleindex;
+    gint title_id, titleindex;
+    const hb_title_t *title;
 
-    titleindex = ghb_settings_combo_int(settings, "title");
-    if (titleindex < 0) return FALSE;
+    title_id = ghb_settings_get_int(settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    if (title == NULL) return FALSE;
     dest = ghb_settings_get_string(settings, "destination");
     count = ghb_array_len(ud->queue);
     for (ii = 0; ii < count; ii++)
@@ -804,9 +806,6 @@ static gboolean
 queue_add(signal_user_data_t *ud, GValue *settings, gint batch)
 {
     // Add settings to the queue
-    gint titleindex;
-    gint titlenum;
-
     g_debug("queue_add ()");
     if (!validate_settings(ud, settings, batch))
     {
@@ -824,9 +823,7 @@ queue_add(signal_user_data_t *ud, GValue *settings, gint batch)
     // Make a copy of current settings to be used for the new job
     ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
     ghb_settings_set_int(settings, "job_unique_id", 0);
-    titleindex = ghb_settings_combo_int(settings, "title");
-    titlenum = ghb_get_title_number(titleindex);
-    ghb_settings_set_int(settings, "titlenum", titlenum);
+
     ghb_array_append(ud->queue, settings);
     add_to_queue_list(ud, settings, NULL);
     ghb_save_queue(ud->queue);
@@ -1314,8 +1311,8 @@ queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         GtkEntry *entry;
         GtkFileChooser *chooser;
         gchar *title_label, *dest_dir, *dest_file;
-        int titleindex;
-        hb_title_t *title;
+        int title_id, titleindex;
+        const hb_title_t *title;
 
         row = title_create_row(ud);
         label = GTK_LABEL(find_widget(row, "title_label"));
@@ -1323,8 +1320,8 @@ queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         chooser = GTK_FILE_CHOOSER(find_widget(row, "title_dir"));
 
         settings = ghb_array_get_nth(ud->settings_array, ii);
-        titleindex = ghb_settings_get_int(settings, "title_no");
-        title = ghb_get_title_info(titleindex);
+        title_id = ghb_settings_get_int(settings, "title");
+        title = ghb_lookup_title(title_id, &titleindex);
         if (title != NULL)
         {
             int len;
@@ -1666,12 +1663,14 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 {
     GtkWidget *widget;
     gint queue_count;
-    gint titleindex;
+    gint title_id, titleindex;
+    const hb_title_t *title;
     gint queue_state, scan_state;
     gboolean show_start, show_stop, paused;
 
     queue_count = ghb_array_len(ud->queue);
-    titleindex = ghb_settings_combo_int(ud->settings, "title");
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
 
     queue_state = ghb_get_queue_state();
     scan_state = ghb_get_scan_state();
@@ -1680,7 +1679,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
                 (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
                  GHB_STATE_SCANNING | GHB_STATE_MUXING);
     show_start = !(scan_state & GHB_STATE_SCANNING) &&
-                    (titleindex >= 0 || queue_count > 0);
+                    (title !=NULL || queue_count > 0);
 
 
     paused = queue_state & GHB_STATE_PAUSED;

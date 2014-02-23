@@ -111,6 +111,6 @@ def main():
                 deps.append(rec)
         top[ii.dep] = deps
     plistlib.writePlist(top, revfile)
-    
+
 main()
 

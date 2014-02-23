@@ -74,7 +74,7 @@ def start_element_handler(tag, attr):
         elif fname == None:
             print >> sys.stderr, ( "Error: No such string file %s" % fbase )
             sys.exit(1)
-        
+
     if val != None:
         if type(current) == types.DictType:
             current[key] = val

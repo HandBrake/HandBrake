@@ -309,7 +309,7 @@ subtitle_set_track_description(GValue *subsettings)
 static GValue*  subtitle_add_track(
     signal_user_data_t *ud,
     GValue *settings,
-    hb_title_t *title,
+    const hb_title_t *title,
     int track,
     int mux,
     gboolean default_track,
@@ -400,7 +400,7 @@ ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
 }
 
 void
-ghb_set_pref_subtitle_settings(signal_user_data_t *ud, hb_title_t *title, GValue *settings)
+ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, GValue *settings)
 {
     gint track;
     gboolean *used;
@@ -532,14 +532,12 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, hb_title_t *title, GValue
 }
 
 void
-ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
+ghb_set_pref_subtitle(const hb_title_t *title, signal_user_data_t *ud)
 {
-    hb_title_t *title;
     int sub_count;
     GtkWidget *widget;
 
     ghb_clear_subtitle_list_ui(ud->builder);
-    title = ghb_get_title_info(titleindex);
     if (title == NULL)
     {
         return;
@@ -1050,9 +1048,11 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gboolean one_burned;
     gint track, mux;
 
-    hb_title_t *title;
-    int titleindex = ghb_settings_combo_int(ud->settings, "title");
-    title = ghb_get_title_info(titleindex);
+    int title_id, titleindex;
+    const hb_title_t *title;
+
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
     {
         return;
@@ -1110,9 +1110,10 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gboolean one_burned = FALSE;
     gint track, mux;
 
-    hb_title_t *title;
-    int titleindex = ghb_settings_combo_int(ud->settings, "title");
-    title = ghb_get_title_info(titleindex);
+    const hb_title_t *title;
+    int title_id, titleindex;
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
     {
         return;
@@ -1136,8 +1137,12 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 subtitle_reset_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    int titleindex = ghb_settings_combo_int(ud->settings, "title");
-    ghb_set_pref_subtitle(titleindex, ud);
+    int title_id, titleindex;
+    const hb_title_t *title;
+
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    ghb_set_pref_subtitle(title, ud);
 }
 
 void
@@ -1187,13 +1192,15 @@ ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings)
     GValue *slist;
     GValue *subtitle;
     gint count, ii;
-    gint titleindex;
+    gint title_id, titleindex;
+    const hb_title_t *title;
 
     g_debug("ghb_reset_subtitles");
     ghb_clear_subtitle_list_settings(ud->settings);
     ghb_clear_subtitle_list_ui(ud->builder);
-    titleindex = ghb_settings_combo_int(ud->settings, "title");
-    if (titleindex < 0)
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    if (title == NULL)
         return;
 
     slist = ghb_settings_get_value(settings, "subtitle_list");

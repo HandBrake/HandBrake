@@ -919,12 +919,14 @@ ghb_set_preview_image(signal_user_data_t *ud)
     gint preview_width, preview_height, target_height, width, height;
 
     g_debug("set_preview_button_image ()");
-    gint titleindex;
+    gint title_id, titleindex;
+    const hb_title_t *title;
 
     live_preview_stop(ud);
 
-    titleindex = ghb_settings_combo_int(ud->settings, "title");
-    if (titleindex < 0) return;
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    if (title == NULL) return;
     widget = GHB_WIDGET (ud->builder, "preview_frame");
     ud->preview->frame = ghb_widget_int(widget) - 1;
     if (ud->preview->encoded[ud->preview->frame])
@@ -948,8 +950,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
         g_object_unref(ud->preview->pix);
 
     ud->preview->pix =
-        ghb_get_preview_image(titleindex, ud->preview->frame,
-                                ud, &width, &height);
+        ghb_get_preview_image(title, ud->preview->frame, ud, &width, &height);
     if (ud->preview->pix == NULL) return;
     preview_width = gdk_pixbuf_get_width(ud->preview->pix);
     preview_height = gdk_pixbuf_get_height(ud->preview->pix);
@@ -1149,14 +1150,16 @@ preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, si
 void
 ghb_preview_set_visible(signal_user_data_t *ud)
 {
-    gint titleindex;
+    gint title_id, titleindex;
+    const hb_title_t *title;
     GtkWidget *widget;
     gboolean settings_active;
 
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
     settings_active = ghb_settings_get_boolean(ud->globals, "show_picture");
     widget = GHB_WIDGET(ud->builder, "preview_window");
-    titleindex = ghb_settings_combo_int(ud->settings, "title");
-    if (settings_active && titleindex >= 0)
+    if (settings_active && title != NULL)
     {
         gint x, y;
         x = ghb_settings_get_int(ud->prefs, "preview_x");
