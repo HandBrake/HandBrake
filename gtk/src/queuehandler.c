@@ -104,12 +104,22 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     else if (ghb_settings_combo_int(settings, "PtoPType") == 2)
         points = _("Frames");
 
-    XPRINT("<big><b>%s</b></big> "
-            "<small>(Title %d, %s %d through %d, %d Video %s)"
-            " --> %s</small>",
-            escape2, title, points, start_point, end_point,
-            two_pass ? 2:1, two_pass ? "Passes":"Pass", escape
-    );
+    if (!vqtype && two_pass)
+    {
+        XPRINT("<big><b>%s</b></big> "
+                "<small>(Title %d, %s %d through %d, 2 Video Passes)"
+                " --> %s</small>",
+                escape2, title, points, start_point, end_point, escape
+        );
+    }
+    else
+    {
+        XPRINT("<big><b>%s</b></big> "
+                "<small>(Title %d, %s %d through %d)"
+                " --> %s</small>",
+                escape2, title, points, start_point, end_point, escape
+        );
+    }
     g_free(basename);
     g_free(escape);
     g_free(escape2);
@@ -228,12 +238,17 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     // Next line in the display (Picture settings)
     // Picture: Source: W x H, Output W x H (Animorphic), Display W x H
     int width, height, pic_par;
+    int crop[4];
     gboolean keep_aspect;
 
     width = ghb_settings_get_int(settings, "scale_width");
     height = ghb_settings_get_int(settings, "scale_height");
     pic_par = ghb_settings_get_int(settings, "PicturePAR");
     keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
+    crop[0] = ghb_settings_get_int(settings, "PictureTopCrop");
+    crop[1] = ghb_settings_get_int(settings, "PictureBottomCrop");
+    crop[2] = ghb_settings_get_int(settings, "PictureLeftCrop");
+    crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
 
     gchar *aspect_desc;
     switch (pic_par)
@@ -274,18 +289,19 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     gint source_width, source_height;
     source_width = ghb_settings_get_int(settings, "source_width");
     source_height = ghb_settings_get_int(settings, "source_height");
-    XPRINT(
-        "<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>",
-         source_width, source_height, width, height, aspect_desc);
+    XPRINT("<b>Picture:</b> <small>");
+    XPRINT("Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d",
+           source_width, source_height, width, height, aspect_desc,
+           crop[0], crop[1], crop[2], crop[3]);
     if (pic_par)
     {
         int display_width, display_height;
         display_width = ghb_settings_get_int(settings, "PictureDisplayWidth");
         display_height = ghb_settings_get_int(settings, "PictureDisplayHeight");
-        XPRINT("<small>, Display %d x %d</small>",
+        XPRINT(", Display %d x %d",
                 display_width, display_height);
     }
-    XPRINT("\n");
+    XPRINT("</small>\n");
 
     // Next line in the display (Filter settings)
     // Filters: - Deinterlace
