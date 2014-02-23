@@ -125,9 +125,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             logHeader.AppendLine(String.Format("HandBrake {0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion()));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
-            logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
-            logHeader.AppendLine(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
-            logHeader.AppendLine(String.Format("GPU Information:{0}{1}", Environment.NewLine, gpuBuilder.ToString().TrimEnd()));
+            logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
             logHeader.AppendLine(String.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
             logHeader.AppendLine(String.Format("Temp Dir: {0}", Path.GetTempPath()));
             logHeader.AppendLine(String.Format("Install Dir: {0}", Application.StartupPath));
