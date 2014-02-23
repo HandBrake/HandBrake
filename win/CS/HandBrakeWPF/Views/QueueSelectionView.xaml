@@ -48,7 +48,7 @@
                    Source="Images/AddToQueue_small.png" />
             <StackPanel VerticalAlignment="Center" Orientation="Vertical">
                 <TextBlock FontWeight="Bold" Text="Add to Queue" />
-                <TextBlock Text="*** Experimental ***" />
+                <TextBlock Text="Select multiple titles to add to the queue." />
             </StackPanel>
         </StackPanel>
 
@@ -114,10 +114,6 @@
 
         <!-- Checlist -->
         <StackPanel Orientation="Vertical" Grid.Row="3" Margin="10,10,10,0">
-            <TextBlock Text="{x:Static Properties:Resources.QueueSelection_AutoTrackSelectionWarning}"
-                       TextWrapping="Wrap" Visibility="{Binding IsAutomaticTrackSelectionEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" 
-                       Margin="0,0,0,10"/>
-
             <TextBlock Text="{x:Static Properties:Resources.QueueSelection_AutoNameWarning}"
                        TextWrapping="Wrap" Visibility="{Binding IsAutoNamingEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
         </StackPanel>

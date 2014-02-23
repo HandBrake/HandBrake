@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   TODO: Update summary.
+//   A model for the multiple selection window for adding to the queue.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

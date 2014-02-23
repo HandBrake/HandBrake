@@ -115,25 +115,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets a value indicating whether is automatic track selection enabled.
-        /// </summary>
-        public bool IsAutomaticTrackSelectionEnabled
-        {
-            get
-            {
-                // TODO decide what is the minimal requirement to hide the warning message.
-                //if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) != Constants.Any ||
-                //    this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) !=
-                //    Constants.Any)
-                //{
-                //    return true;
-                //}
-
-                return false;
-            }
-        }
-
-        /// <summary>
         /// The order by title.
         /// </summary>
         public void OrderByTitle()
@@ -234,7 +215,6 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.NotifyOfPropertyChange(() => this.IsAutoNamingEnabled);
-            this.NotifyOfPropertyChange(() => this.IsAutomaticTrackSelectionEnabled);
         }
     }
 }
