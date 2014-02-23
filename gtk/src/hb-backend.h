@@ -193,5 +193,12 @@ int ghb_lookup_video_framerate_rate(const char *name);
 int ghb_settings_video_framerate_rate(const GValue *settings, const char *name);
 const hb_rate_t* ghb_settings_video_framerate(
     const GValue *settings, const char *name);
+const hb_rate_t* ghb_lookup_audio_samplerate(const char *name);
+int ghb_lookup_audio_samplerate_rate(const char *name);
+int ghb_settings_audio_samplerate_rate(
+    const GValue *settings, const char *name);
+const hb_rate_t* ghb_settings_audio_samplerate(
+    const GValue *settings, const char *name);
+const char* ghb_audio_samplerate_get_short_name(int rate);
 
 #endif // _HBBACKEND_H_

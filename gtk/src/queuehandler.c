@@ -530,9 +530,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     }
     for (ii = 0; ii < count; ii++)
     {
-        gchar *quality = NULL, *samplerate, *track;
+        gchar *quality = NULL, *track;
         GValue *asettings;
-        gdouble sr;
         const hb_encoder_t *audio_encoder;
 
         asettings = ghb_array_get_nth(audio_list, ii);
@@ -551,15 +550,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             quality = g_strdup_printf("Bitrate: %s", br);
             g_free(br);
         }
-        sr = ghb_settings_get_double(asettings, "AudioSamplerate");
-        if ((int)sr == 0)
-        {
-            samplerate = g_strdup("Same As Source");
-        }
-        else
-        {
-            samplerate = g_strdup_printf("%.4g", sr);
-        }
+        const hb_rate_t *sr;
+        sr = ghb_settings_audio_samplerate(asettings, "AudioSamplerate");
         track = ghb_settings_get_string(asettings, "AudioTrackDescription");
         const hb_mixdown_t *mix;
         mix = ghb_settings_mixdown(asettings, "AudioMixdown");
@@ -575,11 +567,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         {
             XPRINT(
             "<small>%s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
-             track, audio_encoder->name, mix->name, samplerate, quality);
+             track, audio_encoder->name, mix->name, sr->name, quality);
         }
         g_free(track);
         g_free(quality);
-        g_free(samplerate);
     }
 
     // Next line in the display (Subtitle)
