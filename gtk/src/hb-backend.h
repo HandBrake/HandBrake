@@ -114,7 +114,6 @@ gint64 ghb_get_chapter_duration(const hb_title_t *title, gint chap);
 gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
 void ghb_part_duration(
     const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
-hb_audio_config_t* ghb_get_audio_info(const hb_title_t *title, gint track);
 gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
 gboolean ghb_ac3_in_audio_list(const GValue *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);
@@ -129,7 +128,6 @@ void ghb_update_ui_combo_box(
 const gchar* ghb_get_source_audio_lang(const hb_title_t *title, gint track);
 gint ghb_find_audio_track(const hb_title_t *title, const gchar *lang, int start);
 void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
-gint ghb_find_pref_subtitle_track(const gchar *lang);
 gint ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start);
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_longest_title(void);
@@ -206,5 +204,7 @@ int ghb_settings_audio_bitrate_rate(const GValue *settings, const char *name);
 const hb_rate_t* ghb_settings_audio_bitrate(
     const GValue *settings, const char *name);
 const char* ghb_audio_bitrate_get_short_name(int rate);
+hb_audio_config_t* ghb_get_audio_info(const hb_title_t *title, gint track);
+hb_subtitle_t* ghb_get_subtitle_info(const hb_title_t *title, gint track);
 
 #endif // _HBBACKEND_H_

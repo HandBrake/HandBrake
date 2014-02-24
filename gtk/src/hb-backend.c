@@ -52,25 +52,6 @@ typedef struct
     options_map_t *map;
 } combo_opts_t;
 
-static gchar **index_str = NULL;
-static gint index_str_size = 0;
-
-static void
-index_str_init(gint max_index)
-{
-    gint ii;
-
-    if (max_index+1 > index_str_size)
-    {
-        index_str = realloc(index_str, (max_index+1) * sizeof(char*));
-        for (ii = index_str_size; ii <= max_index; ii++)
-        {
-            index_str[ii] = g_strdup_printf("%d", ii);
-        }
-        index_str_size = max_index + 1;
-    }
-}
-
 static options_map_t d_subtitle_track_sel_opts[] =
 {
     {N_("None"),                                    "none",       0, "0"},
@@ -363,12 +344,6 @@ combo_opts_t trellis_opts =
     d_trellis_opts
 };
 
-combo_opts_t subtitle_opts =
-{
-    0,
-    NULL
-};
-
 typedef struct
 {
     const gchar *name;
@@ -399,7 +374,6 @@ combo_name_map_t combo_name_map[] =
     {"x264_subme", &subme_opts},
     {"x264_analyse", &analyse_opts},
     {"x264_trellis", &trellis_opts},
-    {"SubtitleTrack", &subtitle_opts},
     {NULL, NULL}
 };
 
@@ -2129,7 +2103,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *t
     hb_audio_config_t * audio;
     gint ii;
     gint count = 0;
-    gchar *str;
+    gchar *opt;
 
     g_debug("audio_track_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
@@ -2142,62 +2116,59 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *t
     if( count <= 0 )
     {
         // No audio. set some default
-        gtk_list_store_append(store, &iter);
+        opt = g_strdup_printf("<small>%s</small>", _("No Audio"));
 
-        str = g_strdup_printf("<small>%s</small>", _("No Audio"));
+        gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           0, str,
+                           0, opt,
                            1, TRUE,
                            2, "none",
                            3, -1.0,
                            4, "none",
                            -1);
-        g_free(str);
+        g_free(opt);
         return;
     }
     for (ii = 0; ii < count; ii++)
     {
-        gtk_list_store_append(store, &iter);
-
         char idx[4];
         audio = hb_list_audio_config_item(title->list_audio, ii);
-        str = g_strdup_printf("<small>%d - %s</small>",
+        opt = g_strdup_printf("<small>%d - %s</small>",
                               ii + 1, audio->lang.description);
         snprintf(idx, 4, "%d", ii);
+
+        gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           0, str,
+                           0, opt,
                            1, TRUE,
                            2, idx,
                            3, (gdouble)ii,
                            4, idx,
                            -1);
-        g_free(str);
+        g_free(opt);
     }
     gtk_combo_box_set_active (combo, 0);
 }
 
 void
-subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *title)
+subtitle_track_opts_set(
+    GtkBuilder *builder,
+    const gchar *name,
+    const hb_title_t *title)
 {
     GtkTreeIter iter;
     GtkListStore *store;
     hb_subtitle_t * subtitle;
     gint ii, count = 0;
-    static char ** options = NULL;
 
-    g_debug("subtitle_track_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
+
     if (title != NULL)
     {
         count = hb_list_count( title->list_subtitle );
     }
-    if (subtitle_opts.map) g_free(subtitle_opts.map);
-
-    subtitle_opts.count = count+1;
-    subtitle_opts.map = g_malloc((subtitle_opts.count)*sizeof(options_map_t));
-
     if (count > 0)
     {
         gtk_list_store_append(store, &iter);
@@ -2208,35 +2179,27 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t
                            3, -1.0,
                            4, "auto",
                            -1);
-        subtitle_opts.map[0].option = "Foreign Audio Search";
-        subtitle_opts.map[0].shortOpt = "-1";
-        subtitle_opts.map[0].ivalue = -1;
-        subtitle_opts.map[0].svalue = "auto";
 
-        if (options != NULL)
-            g_strfreev(options);
-        options = g_malloc((count+1)*sizeof(gchar*));
-        index_str_init(count-1);
         for (ii = 0; ii < count; ii++)
         {
-            subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
-            options[ii] = g_strdup_printf("%d - %s (%s)", ii+1,
-                subtitle->lang,
-                hb_subsource_name(subtitle->source));
-            subtitle_opts.map[ii+1].option = options[ii];
-            subtitle_opts.map[ii+1].shortOpt = index_str[ii];
-            subtitle_opts.map[ii+1].ivalue = ii;
-            subtitle_opts.map[ii+1].svalue = subtitle->iso639_2;
+            gchar *opt;
+            char idx[4];
+
+            subtitle = hb_list_item(title->list_subtitle, ii);
+            opt = g_strdup_printf("%d - %s (%s)", ii+1, subtitle->lang,
+                                  hb_subsource_name(subtitle->source));
+            snprintf(idx, 4, "%d", ii);
+
             gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter,
-                        0, options[ii],
+                        0, opt,
                         1, TRUE,
-                        2, index_str[ii],
+                        2, idx,
                         3, (gdouble)ii,
-                        4, subtitle->iso639_2,
+                        4, idx,
                         -1);
+            g_free(opt);
         }
-        options[count] = NULL;
     }
     else
     {
@@ -2248,10 +2211,6 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t
                            3, 0.0,
                            4, "none",
                            -1);
-        subtitle_opts.map[0].option = "None";
-        subtitle_opts.map[0].shortOpt = "0";
-        subtitle_opts.map[0].ivalue = 0;
-        subtitle_opts.map[0].svalue = "none";
     }
     gtk_combo_box_set_active (combo, 0);
 }
@@ -2324,21 +2283,6 @@ ghb_find_audio_track(const hb_title_t *title, const gchar *lang, int start)
         }
     }
     return -1;
-}
-
-gint
-ghb_find_pref_subtitle_track(const gchar *lang)
-{
-    gint ii, count;
-    count = subtitle_opts.count;
-    for (ii = 0; ii < count; ii++)
-    {
-        if (strcmp(lang, subtitle_opts.map[ii].svalue) == 0)
-        {
-            return subtitle_opts.map[ii].ivalue;
-        }
-    }
-    return -2;
 }
 
 gint
@@ -2642,6 +2586,7 @@ init_ui_combo_boxes(GtkBuilder *builder)
     init_combo_box(builder, "SrtCodeset");
     init_combo_box(builder, "title");
     init_combo_box(builder, "AudioTrack");
+    init_combo_box(builder, "SubtitleTrack");
     init_combo_box(builder, "VideoEncoder");
     init_combo_box(builder, "AudioEncoder");
     init_combo_box(builder, "AudioEncoderFallback");
@@ -3385,6 +3330,17 @@ ghb_get_audio_info(const hb_title_t *title, gint track)
         return NULL;
     }
     return hb_list_audio_config_item(title->list_audio, track);
+}
+
+hb_subtitle_t*
+ghb_get_subtitle_info(const hb_title_t *title, gint track)
+{
+    if (title == NULL) return NULL;
+    if (!hb_list_count(title->list_subtitle))
+    {
+        return NULL;
+    }
+    return hb_list_item(title->list_subtitle, track);
 }
 
 hb_list_t *
@@ -4765,7 +4721,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
             hb_subtitle_t * subt;
             hb_subtitle_config_t sub_config;
 
-            subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+            subt = hb_list_item(title->list_subtitle, subtitle);
             if (subt != NULL)
             {
                 sub_config = subt->config;

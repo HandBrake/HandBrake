@@ -538,11 +538,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     count = ghb_array_len(audio_list);
     if (count == 1)
     {
-        XPRINT("<b>Audio:</b> ");
+        XPRINT("<b>Audio:</b> <small>");
     }
     else if (count > 1)
     {
-        XPRINT("<b>Audio Tracks: %d</b>\n", count);
+        XPRINT("<b>Audio Tracks: %d</b><small>\n", count);
     }
     for (ii = 0; ii < count; ii++)
     {
@@ -574,18 +574,17 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
         if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
         {
-            XPRINT("<small>%s --> Encoder: %s</small>\n",
-                   track, audio_encoder->name);
+            XPRINT("%s --> Encoder: %s\n", track, audio_encoder->name);
         }
         else
         {
-            XPRINT(
-            "<small>%s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
+            XPRINT("%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s\n",
              track, audio_encoder->name, mix->name, sr->name, quality);
         }
         g_free(track);
         g_free(quality);
     }
+    XPRINT("</small>");
 
     // Next line in the display (Subtitle)
     // Subtitle Tracks: count

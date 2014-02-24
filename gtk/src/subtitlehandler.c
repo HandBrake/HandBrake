@@ -272,9 +272,9 @@ subtitle_add_to_settings(GValue *settings, GValue *subsettings)
 }
 
 static void
-subtitle_set_track_description(GValue *subsettings)
+subtitle_set_track_description(GValue *settings, GValue *subsettings)
 {
-    char *track;
+    char *desc;
 
     if (ghb_settings_get_int(subsettings, "SubtitleSource") == SRTSUB)
     {
@@ -290,25 +290,41 @@ subtitle_set_track_description(GValue *subsettings)
             gchar *basename;
 
             basename = g_path_get_basename(filename);
-            track = g_strdup_printf("%s (%s)(SRT)(%s)", lang, code, basename);
+            desc = g_strdup_printf("%s (%s)(SRT)(%s)", lang, code, basename);
             g_free(basename);
         }
         else
         {
-            track = g_strdup_printf("%s (%s)(SRT)", lang, code);
+            desc = g_strdup_printf("%s (%s)(SRT)", lang, code);
         }
         g_free(code);
     }
     else
     {
-        track = g_strdup(
-                    ghb_settings_combo_option(subsettings, "SubtitleTrack"));
+        int title_id, titleindex;
+        const hb_title_t *title;
+        int track;
+        hb_subtitle_t *subtitle;
+
+        title_id = ghb_settings_get_int(settings, "title");
+        title = ghb_lookup_title(title_id, &titleindex);
+        track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+        if (track < 0)
+        {
+            desc = g_strdup(_("Foreign Audio Search"));
+        }
+        else
+        {
+            subtitle = ghb_get_subtitle_info(title, track);
+            desc = g_strdup_printf("%d - %s (%s)", track + 1, subtitle->lang,
+                                   hb_subsource_name(subtitle->source));
+        }
     }
 
     ghb_settings_set_string(
-        subsettings, "SubtitleTrackDescription", track);
+        subsettings, "SubtitleTrackDescription", desc);
 
-    g_free(track);
+    g_free(desc);
 }
 
 static GValue*  subtitle_add_track(
@@ -360,7 +376,7 @@ static GValue*  subtitle_add_track(
 
     ghb_settings_set_int(subsettings, "SrtOffset", 0);
 
-    subtitle_set_track_description(subsettings);
+    subtitle_set_track_description(settings, subsettings);
 
     if (!hb_subtitle_can_pass(source, mux))
     {
@@ -746,7 +762,7 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         track = ghb_settings_get_int(subsettings, "SubtitleTrack");
         source = ghb_subtitle_track_source(ud->settings, track);
         ghb_settings_set_int(subsettings, "SubtitleSource", source);
-        subtitle_set_track_description(subsettings);
+        subtitle_set_track_description(ud->settings, subsettings);
         subtitle_update_dialog_widgets(ud, subsettings);
         ghb_subtitle_list_refresh_selected(ud);
         ghb_live_reset(ud);
@@ -822,7 +838,7 @@ subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
             source = ghb_subtitle_track_source(ud->settings, track);
             ghb_settings_set_int(subsettings, "SubtitleSource", source);
         }
-        subtitle_set_track_description(subsettings);
+        subtitle_set_track_description(ud->settings, subsettings);
         subtitle_update_dialog_widgets(ud, subsettings);
         ghb_subtitle_list_refresh_selected(ud);
         ghb_live_reset(ud);
@@ -881,7 +897,7 @@ srt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (subsettings != NULL)
     {
         ghb_widget_to_setting(subsettings, widget);
-        subtitle_set_track_description(subsettings);
+        subtitle_set_track_description(ud->settings, subsettings);
         ghb_subtitle_list_refresh_selected(ud);
         ghb_live_reset(ud);
     }
@@ -901,7 +917,7 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         gchar *filename, *dirname;
 
         ghb_widget_to_setting(subsettings, widget);
-        subtitle_set_track_description(subsettings);
+        subtitle_set_track_description(ud->settings, subsettings);
         ghb_subtitle_list_refresh_selected(ud);
         ghb_live_reset(ud);
 
@@ -934,7 +950,7 @@ srt_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (subsettings != NULL)
     {
         ghb_widget_to_setting(subsettings, widget);
-        subtitle_set_track_description(subsettings);
+        subtitle_set_track_description(ud->settings, subsettings);
         ghb_subtitle_list_refresh_selected(ud);
         ghb_live_reset(ud);
     }
