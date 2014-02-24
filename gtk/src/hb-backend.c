@@ -2302,16 +2302,26 @@ ghb_longest_title()
 {
     hb_title_set_t * title_set;
     const hb_title_t * title;
-    gint count = 0;
+    gint count = 0, ii, longest = -1;
+    int64_t duration = 0;
 
     g_debug("ghb_longest_title ()\n");
     if (h_scan == NULL) return 0;
     title_set = hb_get_title_set( h_scan );
     count = hb_list_count( title_set->list_title );
-    if (count < 1) return 0;
-    title = hb_list_item(title_set->list_title, 0);
-    (void)title; // Silence "unused variable" warning
-    return title_set->feature;
+    if (count < 1) return -1;
+
+    // Check that the feature title in the title_set exists in the list
+    // of titles.  If not, pick the longest.
+    for (ii = 0; ii < count; ii++)
+    {
+        title = hb_list_item(title_set->list_title, ii);
+        if (title->index == title_set->feature)
+            return title_set->feature;
+        if (title->duration > duration)
+            longest = title->index;
+    }
+    return longest;
 }
 
 const gchar*
