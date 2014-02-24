@@ -3008,14 +3008,17 @@ ghb_backend_events(signal_user_data_t *ud)
 
         label = GTK_LABEL(GHB_WIDGET (ud->builder, "volume_label"));
 
+        ghb_clear_scan_state(GHB_STATE_SCANDONE);
         // Are there really any titles.
         if (title == NULL)
         {
             gtk_label_set_text(label, _("No Title Found"));
+            ghb_ui_update(ud, "title", ghb_int64_value(-1));
         }
-        ghb_clear_scan_state(GHB_STATE_SCANDONE);
-
-        ghb_ui_update(ud, "title", ghb_int64_value(title->index));
+        else
+        {
+            ghb_ui_update(ud, "title", ghb_int64_value(title->index));
+        }
 
         if (ghb_queue_edit_settings != NULL)
         {
