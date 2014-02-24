@@ -574,7 +574,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
         if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
         {
-            XPRINT("<small>%s, Encoder: %s</small>\n",
+            XPRINT("<small>%s --> Encoder: %s</small>\n",
                    track, audio_encoder->name);
         }
         else

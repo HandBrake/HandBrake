@@ -283,8 +283,6 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     const hb_title_t *title;
     gint track, acodec, select_acodec, mix;
     hb_audio_config_t *aconfig;
-    GtkWidget *widget;
-    GValue *gval;
     gint bitrate;
     gint sr = 48000;
 
@@ -297,11 +295,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     title_id = ghb_settings_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
-    widget = GHB_WIDGET(ud->builder, "AudioTrack");
-    gval = ghb_widget_value(widget);
-    track = ghb_lookup_combo_int("AudioTrack", gval);
-    ghb_value_free(gval);
-
+    track = ghb_settings_get_int(ud->settings, "AudioTrack");
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
     mix = ghb_settings_mixdown_mix(ud->settings, "AudioMixdown");
     bitrate = ghb_settings_audio_bitrate_rate(ud->settings, "AudioBitrate");
@@ -759,8 +753,8 @@ audio_refresh_list_row_ui(
     gchar *s_drc, *s_gain, *s_br_quality, *s_sr, *s_track_name;
     gdouble drc, gain;
     hb_audio_config_t *aconfig;
-    int titleindex, track, sr;
-    int title_id;
+    int track, sr;
+    int title_id, titleindex;
     const hb_title_t *title;
     const hb_encoder_t *encoder;
 
@@ -774,7 +768,7 @@ audio_refresh_list_row_ui(
     }
 
 
-    s_track = ghb_settings_combo_option(settings, "AudioTrack");
+    s_track = aconfig->lang.description;
     encoder = ghb_settings_audio_encoder(settings, "AudioEncoder");
 
     double quality = ghb_settings_get_double(settings, "AudioTrackQuality");
@@ -809,9 +803,8 @@ audio_refresh_list_row_ui(
 
     s_track_name = ghb_settings_get_string(settings, "AudioTrackName");
 
-    info_src = g_strdup_printf("%s (%.4gkHz)",
-        s_track,
-        (double)aconfig->in.samplerate / 1000);
+    info_src = g_strdup_printf("%d - %s (%.4gkHz)",
+        track + 1, s_track, (double)aconfig->in.samplerate / 1000);
     if (aconfig->in.bitrate > 0)
     {
         info_src_2 = g_strdup_printf(
@@ -1068,14 +1061,29 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     asettings = audio_get_selected_settings(ud, NULL);
     if (asettings != NULL)
     {
-        const gchar *track;
-
         ghb_widget_to_setting(asettings, widget);
         audio_deps(ud, asettings, widget);
         ghb_audio_list_refresh_selected(ud);
-        track = ghb_settings_combo_option(asettings, "AudioTrack");
-        ghb_settings_set_string(asettings, "AudioTrackDescription", track);
         ghb_live_reset(ud);
+
+        // Update the track description used by the queue
+        int title_id, titleindex;
+        const hb_title_t *title;
+        int track;
+        hb_audio_config_t *aconfig;
+
+        title_id = ghb_settings_get_int(ud->settings, "title");
+        title = ghb_lookup_title(title_id, &titleindex);
+        track = ghb_settings_get_int(ud->settings, "AudioTrack");
+        aconfig = ghb_get_audio_info(title, track);
+        if (aconfig != NULL)
+        {
+            char *desc;
+            desc = g_strdup_printf("%d - %s", track + 1,
+                                   aconfig->lang.description);
+            ghb_settings_set_string(asettings, "AudioTrackDescription", desc);
+            g_free(desc);
+        }
     }
 }
 
@@ -1387,8 +1395,10 @@ audio_add_to_settings(GValue *settings, GValue *asettings)
     aconfig = ghb_get_audio_info(title, track);
     if (aconfig != NULL)
     {
-        ghb_settings_set_string(asettings, "AudioTrackDescription",
-                                aconfig->lang.description);
+        char *desc;
+        desc = g_strdup_printf("%d - %s", track + 1, aconfig->lang.description);
+        ghb_settings_set_string(asettings, "AudioTrackDescription", desc);
+        g_free(desc);
     }
 
     GValue *aname;

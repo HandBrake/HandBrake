@@ -369,12 +369,6 @@ combo_opts_t subtitle_opts =
     NULL
 };
 
-combo_opts_t audio_track_opts =
-{
-    0,
-    NULL
-};
-
 typedef struct
 {
     const gchar *name;
@@ -406,7 +400,6 @@ combo_name_map_t combo_name_map[] =
     {"x264_analyse", &analyse_opts},
     {"x264_trellis", &trellis_opts},
     {"SubtitleTrack", &subtitle_opts},
-    {"AudioTrack", &audio_track_opts},
     {NULL, NULL}
 };
 
@@ -1091,21 +1084,14 @@ grey_mix_opts(signal_user_data_t *ud, gint acodec, gint64 layout)
 void
 ghb_grey_combo_options(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
     gint track, title_id, titleindex, acodec, fallback;
     const hb_title_t *title;
     hb_audio_config_t *aconfig = NULL;
-    GValue *gval;
 
     title_id = ghb_settings_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    widget = GHB_WIDGET (ud->builder, "title");
-    gval = ghb_widget_value(widget);
-    ghb_value_free(gval);
-    widget = GHB_WIDGET (ud->builder, "AudioTrack");
-    gval = ghb_widget_value(widget);
-    track = ghb_lookup_combo_int("AudioTrack", gval);
-    ghb_value_free(gval);
+
+    track = ghb_settings_get_int(ud->settings, "AudioTrack");
     aconfig = ghb_get_audio_info(title, track);
 
     const char *mux_id;
@@ -2153,30 +2139,11 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *t
     {
         count = hb_list_count( title->list_audio );
     }
-    if (count > 100) count = 100;
-    if (audio_track_opts.map)
-    {
-        for (ii = 0; ii < audio_track_opts.count; ii++)
-        {
-            if (audio_track_opts.map[ii].option)
-                g_free(audio_track_opts.map[ii].option);
-        }
-        g_free(audio_track_opts.map);
-    }
-    if (count > 0)
-    {
-        audio_track_opts.count = count;
-        audio_track_opts.map = g_malloc(count*sizeof(options_map_t));
-    }
-    else
-    {
-        audio_track_opts.count = 1;
-        audio_track_opts.map = g_malloc(sizeof(options_map_t));
-    }
     if( count <= 0 )
     {
         // No audio. set some default
         gtk_list_store_append(store, &iter);
+
         str = g_strdup_printf("<small>%s</small>", _("No Audio"));
         gtk_list_store_set(store, &iter,
                            0, str,
@@ -2186,32 +2153,25 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *t
                            4, "none",
                            -1);
         g_free(str);
-        audio_track_opts.map[0].option = g_strdup("No Audio");
-        audio_track_opts.map[0].shortOpt = "none";
-        audio_track_opts.map[0].ivalue = -1;
-        audio_track_opts.map[0].svalue = "none";
         return;
     }
-    index_str_init(count-1);
     for (ii = 0; ii < count; ii++)
     {
-        audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, ii );
         gtk_list_store_append(store, &iter);
-        char *tmp = g_strdup_printf("%d - %s", ii + 1, audio->lang.description);
-        str = g_strdup_printf("<small>%s</small>", tmp);
+
+        char idx[4];
+        audio = hb_list_audio_config_item(title->list_audio, ii);
+        str = g_strdup_printf("<small>%d - %s</small>",
+                              ii + 1, audio->lang.description);
+        snprintf(idx, 4, "%d", ii);
         gtk_list_store_set(store, &iter,
                            0, str,
                            1, TRUE,
-                           2, index_str[ii],
+                           2, idx,
                            3, (gdouble)ii,
-                           4, index_str[ii],
+                           4, idx,
                            -1);
         g_free(str);
-        audio_track_opts.map[ii].option = g_strdup(tmp);
-        g_free(tmp);
-        audio_track_opts.map[ii].shortOpt = index_str[ii];
-        audio_track_opts.map[ii].ivalue = ii;
-        audio_track_opts.map[ii].svalue = index_str[ii];
     }
     gtk_combo_box_set_active (combo, 0);
 }
@@ -4177,7 +4137,7 @@ ghb_validate_audio(GValue *settings)
         int track, codec;
 
         asettings = ghb_array_get_nth(audio_list, ii);
-        track = ghb_settings_combo_int(asettings, "AudioTrack");
+        track = ghb_settings_get_int(asettings, "AudioTrack");
         codec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         if (codec == HB_ACODEC_AUTO_PASS)
             continue;

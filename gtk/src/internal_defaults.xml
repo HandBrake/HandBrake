@@ -17,6 +17,8 @@
         <string>192</string>
         <key>AudioEncoder</key>
         <string>copy:ac3</string>
+        <key>AudioTrack</key>
+        <integer>0</integer>
         <key>AudioTrackQualityEnable</key>
         <false />
         <key>AudioTrackQuality</key>
