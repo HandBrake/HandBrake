@@ -47,7 +47,8 @@ subtitle_refresh_list_row_ui(
     forced = ghb_settings_get_boolean(subsettings, "SubtitleForced");
     burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
     def = ghb_settings_get_boolean(subsettings, "SubtitleDefaultTrack");
-    info_src = ghb_settings_get_string(subsettings, "SubtitleTrackDescription");
+    info_src = g_strdup_printf("<small>%s</small>",
+        ghb_settings_get_const_string(subsettings, "SubtitleTrackDescription"));
     if (ghb_settings_get_int(subsettings, "SubtitleSource") == SRTSUB)
     {
         gint offset;
@@ -58,7 +59,7 @@ subtitle_refresh_list_row_ui(
         }
     }
 
-    GString *str = g_string_new("");
+    GString *str = g_string_new("<small>");
     g_string_append_printf(str, "%s ", burned ? "Burned Into Video" :
                                                 "Passthrough");
     if (forced)
@@ -69,6 +70,7 @@ subtitle_refresh_list_row_ui(
     {
         g_string_append_printf(str, "(Default)");
     }
+    g_string_append_printf(str, "</small>");
 
     info_dst = g_string_free(str, FALSE);
 

@@ -803,7 +803,7 @@ audio_refresh_list_row_ui(
 
     s_track_name = ghb_settings_get_string(settings, "AudioTrackName");
 
-    info_src = g_strdup_printf("%d - %s (%.4gkHz)",
+    info_src = g_strdup_printf("<small>%d - %s (%.4gkHz)</small>",
         track + 1, s_track, (double)aconfig->in.samplerate / 1000);
     if (aconfig->in.bitrate > 0)
     {
@@ -814,11 +814,11 @@ audio_refresh_list_row_ui(
 
     if (ghb_audio_is_passthru(encoder->codec))
     {
-        info_dst = g_strdup_printf("Passthrough");
+        info_dst = g_strdup_printf("<small>Passthrough</small>");
     }
     else
     {
-        info_dst = g_strdup_printf("%s (%s) (%s)",
+        info_dst = g_strdup_printf("<small>%s (%s) (%s)</small>",
                                    encoder->name, mix->name, s_sr);
         if (s_track_name && s_track_name[0])
         {

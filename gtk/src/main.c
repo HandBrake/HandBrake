@@ -343,7 +343,7 @@ bind_audio_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_spacing(column, 12);
     gtk_tree_view_column_set_title(column, _("Track Information"));
     gtk_tree_view_column_pack_start(column, source_cell, FALSE);
-    gtk_tree_view_column_add_attribute(column, source_cell, "text", 0);
+    gtk_tree_view_column_add_attribute(column, source_cell, "markup", 0);
     gtk_tree_view_column_add_attribute(column, source_cell, "yalign", 5);
     gtk_tree_view_column_pack_start(column, arrow_cell, FALSE);
     gtk_tree_view_column_add_attribute(column, arrow_cell, "text", 1);
@@ -352,6 +352,7 @@ bind_audio_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_add_attribute(column, output_cell, "yalign", 5);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
     gtk_tree_view_column_set_expand(column, TRUE);
+    gtk_tree_view_column_set_max_width(column, 400);
 
     column = gtk_tree_view_column_new_with_attributes(
                                     _(""), edit_cell, "icon-name", 3, NULL);
@@ -407,7 +408,7 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_spacing(column, 12);
     gtk_tree_view_column_set_title(column, _("Track Information"));
     gtk_tree_view_column_pack_start(column, source_cell, FALSE);
-    gtk_tree_view_column_add_attribute(column, source_cell, "text", 0);
+    gtk_tree_view_column_add_attribute(column, source_cell, "markup", 0);
     gtk_tree_view_column_add_attribute(column, source_cell, "yalign", 5);
     gtk_tree_view_column_pack_start(column, arrow_cell, FALSE);
     gtk_tree_view_column_add_attribute(column, arrow_cell, "text", 1);
