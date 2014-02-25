@@ -1,11 +1,7 @@
 #include "marshalers.h"
 #include "renderer_button.h"
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 #define MyGdkRectangle const GdkRectangle
-#else
-#define MyGdkRectangle GdkRectangle
-#endif
 
 /* Some boring function declarations: GObject type system stuff */
 static void     custom_cell_renderer_button_init       (CustomCellRendererButton      *cellprogress);

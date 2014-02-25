@@ -699,7 +699,6 @@ G_MODULE_EXPORT void x264_option_changed_cb(GtkWidget *widget, signal_user_data_
 G_MODULE_EXPORT void position_overlay_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_data_t *ud);
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 const gchar *MyCSS =
 "                                   \n\
 GtkRadioButton .button {                       \n\
@@ -777,41 +776,7 @@ GtkEntry {                          \n\
 }                                   \n\
 ";
 
-#else
-// Some style definitions for the preview window and hud
-const gchar *hud_rcstyle =
-"style \"ghb-entry\" {\n"
-"GtkEntry::inner-border = {2,2,1,1}\n"
-"}\n"
-"style \"ghb-combo\" {\n"
-"xthickness = 1\n"
-"ythickness = 1\n"
-"}\n"
-"style \"ghb-preview\" {\n"
-"bg[NORMAL]=\"black\"\n"
-"}\n"
-"style \"ghb-hud\" {\n"
-"bg[NORMAL]=\"gray18\"\n"
-"bg[ACTIVE]=\"gray32\"\n"
-"bg[PRELIGHT]=\"gray46\"\n"
-"bg[SELECTED]=\"black\"\n"
-"base[NORMAL]=\"gray40\"\n"
-"text[NORMAL]=\"white\"\n"
-"text[ACTIVE]=\"white\"\n"
-"fg[NORMAL]=\"white\"\n"
-"fg[ACTIVE]=\"white\"\n"
-"fg[PRELIGHT]=\"white\"\n"
-"}\n"
-"widget_class \"*.GtkComboBox.GtkToggleButton\" style \"ghb-combo\"\n"
-"widget_class \"*.GtkScaleButton\" style \"ghb-combo\"\n"
-"widget_class \"*.GtkEntry\" style \"ghb-entry\"\n"
-"widget \"preview_window.*.preview_hud.*\" style \"ghb-hud\"\n"
-"widget \"preview_window\" style \"ghb-preview\"\n";
-#endif
-
-#if GTK_CHECK_VERSION(2, 16, 0)
 extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
-#endif
 
 int
 main(int argc, char *argv[])
@@ -850,7 +815,6 @@ main(int argc, char *argv[])
 
     gtk_init(&argc, &argv);
 
-#if GTK_CHECK_VERSION(3, 0, 0)
     GtkCssProvider *css = gtk_css_provider_new();
     error = NULL;
     gtk_css_provider_load_from_data(css, MyCSS, -1, &error);
@@ -865,9 +829,6 @@ main(int argc, char *argv[])
         g_warning("%s: %s", G_STRFUNC, error->message);
         g_clear_error(&error);
     }
-#else
-    gtk_rc_parse_string(hud_rcstyle);
-#endif
 
 #if !defined(_WIN32)
     notify_init("HandBrake");
@@ -932,7 +893,7 @@ main(int argc, char *argv[])
     draw = GHB_WIDGET(ud->builder, "preview_image_align");
     hud = GHB_WIDGET(ud->builder, "preview_hud");
 
-#if 0 // wGTK_CHECK_VERSION(3, 0, 0)
+#if 0 // GTK_CHECK_VERSION(3, 0, 0)
     // This uses the new GtkOverlay widget.
     //
     // Unfortunately, GtkOverlay is broken in a couple of ways.
@@ -1113,40 +1074,14 @@ main(int argc, char *argv[])
     gtk_status_icon_set_visible(si,
             ghb_settings_get_boolean(ud->prefs, "show_status"));
 
-#if GTK_CHECK_VERSION(2, 16, 0)
     gtk_status_icon_set_has_tooltip(si, TRUE);
     g_signal_connect(si, "query-tooltip",
                     status_icon_query_tooltip_cb, ud);
-#else
-    gtk_status_icon_set_tooltip(si, "HandBrake");
-#endif
-#endif
-
-    // Ugly hack to keep subtitle table from bouncing around as I change
-    // which set of controls are visible
-    gint width, height;
-#if GTK_CHECK_VERSION(3, 0, 0)
-    GtkRequisition min_size, size;
-
-    widget = GHB_WIDGET(ud->builder, "SrtCodeset");
-    gtk_widget_get_preferred_size( widget, &min_size, &size );
-    height = MAX(min_size.height, size.height);
-    widget = GHB_WIDGET(ud->builder, "srt_code_label");
-    gtk_widget_get_preferred_size( widget, &min_size, &size );
-    height += MAX(min_size.height, size.height);
-#else
-    GtkRequisition size;
-
-    widget = GHB_WIDGET(ud->builder, "SrtCodeset");
-    gtk_widget_size_request( widget, &size );
-    height = size.height;
-    widget = GHB_WIDGET(ud->builder, "srt_code_label");
-    gtk_widget_size_request( widget, &size );
-    height += size.height;
 #endif
 
     widget = GHB_WIDGET(ud->builder, "hb_window");
 
+    gint width, height;
     GdkGeometry geo = {
         -1, -1, 1024, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
     };

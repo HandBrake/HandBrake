@@ -156,13 +156,8 @@ ghb_preview_init(signal_user_data_t *ud)
     ud->preview = g_malloc0(sizeof(preview_t));
     ud->preview->view = GHB_WIDGET(ud->builder, "preview_image");
     gtk_widget_realize(ud->preview->view);
-#if GTK_CHECK_VERSION(3, 0, 0)
     g_signal_connect(G_OBJECT(ud->preview->view), "draw",
                     G_CALLBACK(preview_expose_cb), ud);
-#else
-    g_signal_connect(G_OBJECT(ud->preview->view), "expose_event",
-                    G_CALLBACK(preview_expose_cb), ud);
-#endif
 
     ud->preview->pause = TRUE;
     ud->preview->encode_frame = -1;
@@ -174,7 +169,6 @@ ghb_preview_init(signal_user_data_t *ud)
     GstBus *bus;
     GstElement *xover;
 
-#if GTK_CHECK_VERSION(2,18,0)
     if (!gdk_window_ensure_native(gtk_widget_get_window(ud->preview->view)))
     {
         g_message("Couldn't create native window for GstXOverlay. Disabling live preview.");
@@ -184,7 +178,6 @@ ghb_preview_init(signal_user_data_t *ud)
         gtk_widget_hide (widget);
         return;
     }
-#endif
 
 #if !defined(_WIN32)
     ud->preview->xid = GDK_WINDOW_XID(gtk_widget_get_window(ud->preview->view));
@@ -1045,7 +1038,10 @@ delayed_expose_cb(signal_user_data_t *ud)
 #endif
 #endif
 
-#if GTK_CHECK_VERSION(3, 0, 0)
+#if 0 // GTK_CHECK_VERSION(3, 0, 0)
+//
+// Only needed if the problems with GtkOverlay are ever resolved
+//
 G_MODULE_EXPORT gboolean
 position_overlay_cb(
     GtkWidget *overlay,
@@ -1422,7 +1418,6 @@ preview_motion_cb(
     return FALSE;
 }
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 cairo_region_t*
 ghb_curved_rect_mask(gint width, gint height, gint radius)
 {
@@ -1471,54 +1466,6 @@ ghb_curved_rect_mask(gint width, gint height, gint radius)
 
     return shape;
 }
-#else
-GdkDrawable*
-ghb_curved_rect_mask(gint width, gint height, gint radius)
-{
-    GdkDrawable *shape;
-    cairo_t *cr;
-    double w, h;
-
-    if (!width || !height)
-        return NULL;
-
-    shape = (GdkDrawable *)gdk_pixmap_new (NULL, width, height, 1);
-
-    cr = gdk_cairo_create (shape);
-
-    w = width;
-    h = height;
-    if (radius > width / 2)
-        radius = width / 2;
-    if (radius > height / 2)
-        radius = height / 2;
-
-    // fill shape with black
-    cairo_save(cr);
-    cairo_rectangle (cr, 0, 0, width, height);
-    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-    cairo_fill (cr);
-    cairo_restore (cr);
-
-    cairo_move_to  (cr, 0, radius);
-    cairo_curve_to (cr, 0 , 0, 0 , 0, radius, 0);
-    cairo_line_to (cr, w - radius, 0);
-    cairo_curve_to (cr, w, 0, w, 0, w, radius);
-    cairo_line_to (cr, w , h - radius);
-    cairo_curve_to (cr, w, h, w, h, w - radius, h);
-    cairo_line_to (cr, 0 + radius, h);
-    cairo_curve_to (cr, 0, h, 0, h, 0, h - radius);
-
-    cairo_close_path(cr);
-
-    cairo_set_source_rgb(cr, 1, 1, 1);
-    cairo_fill(cr);
-
-    cairo_destroy(cr);
-
-    return shape;
-}
-#endif
 
 G_MODULE_EXPORT void
 preview_hud_size_alloc_cb(
@@ -1526,11 +1473,7 @@ preview_hud_size_alloc_cb(
     GtkAllocation *allocation,
     signal_user_data_t *ud)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
     cairo_region_t *shape;
-#else
-    GdkDrawable *shape;
-#endif
 
     //g_message("preview_hud_size_alloc_cb()");
     if (gtk_widget_get_visible(widget) && allocation->height > 50)
@@ -1539,13 +1482,8 @@ preview_hud_size_alloc_cb(
                                     allocation->height, allocation->height/4);
         if (shape != NULL)
         {
-#if GTK_CHECK_VERSION(3, 0, 0)
             gtk_widget_shape_combine_region(widget, shape);
             cairo_region_destroy(shape);
-#else
-            gtk_widget_shape_combine_mask(widget, shape, 0, 0);
-            gdk_pixmap_unref(shape);
-#endif
         }
     }
 }

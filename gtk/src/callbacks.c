@@ -1278,7 +1278,6 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
     dialog = GHB_WIDGET(ud->builder, "source_dialog");
     source_dialog_extra_widgets(ud, dialog);
 
-#if GTK_CHECK_VERSION(3, 0, 0)
     // gtk3 has a STUPID BUG!  If you select the "same_path" it ends
     // up selecting the "Recent Files" shortcut instead of taking you
     // to the directory and file THAT YOU ASKED FOR!!!  FUUUUK!!!
@@ -1287,12 +1286,12 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
     // optimal because if you are processing several files in the same
     // folder, you want the selection to return to where you were last
     // in the list, but there's not much else I can do at this point.
+    //gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
+
     gchar *dirname = g_path_get_dirname(sourcename);
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dirname);
     g_free(dirname);
-#else
-    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
-#endif
+
     response = gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_NO)
@@ -3092,12 +3091,6 @@ ghb_backend_events(signal_user_data_t *ud)
         gtk_label_set_text (label, status_str);
         if (ghb_settings_get_boolean(ud->prefs, "show_status"))
         {
-#if !GTK_CHECK_VERSION(2, 16, 0)
-            GtkStatusIcon *si;
-
-            si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-            gtk_status_icon_set_tooltip(si, status_str);
-#endif
 #if defined(_USE_APP_IND)
             char * ai_status_str= g_strdup_printf(
                 "%.2f%%",
@@ -3146,13 +3139,6 @@ ghb_backend_events(signal_user_data_t *ud)
                 100.0 * status.queue.progress);
             app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
             g_free(ai_status_str);
-#else
-#if !GTK_CHECK_VERSION(2, 16, 0)
-            GtkStatusIcon *si;
-
-            si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-            gtk_status_icon_set_tooltip(si, status_str);
-#endif
 #endif
         }
         gtk_label_set_text (work_status, status_str);
@@ -3235,13 +3221,6 @@ ghb_backend_events(signal_user_data_t *ud)
         ud->cancel_encode = GHB_CANCEL_NONE;
 #if defined(_USE_APP_IND)
         app_indicator_set_label( ud->ai, "", "99.99%");
-#else
-#if !GTK_CHECK_VERSION(2, 16, 0)
-        GtkStatusIcon *si;
-
-        si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-        gtk_status_icon_set_tooltip(si, "HandBrake");
-#endif
 #endif
     }
     else if (status.queue.state & GHB_STATE_MUXING)
@@ -3276,7 +3255,6 @@ ghb_backend_events(signal_user_data_t *ud)
     }
 }
 
-#if GTK_CHECK_VERSION(2, 16, 0)
 G_MODULE_EXPORT gboolean
 status_icon_query_tooltip_cb(
     GtkStatusIcon *si,
@@ -3304,7 +3282,6 @@ status_icon_query_tooltip_cb(
     g_free(status_str);
     return TRUE;
 }
-#endif
 
 G_MODULE_EXPORT gboolean
 ghb_timer_cb(gpointer data)

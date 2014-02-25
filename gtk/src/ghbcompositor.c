@@ -47,7 +47,6 @@ static void     ghb_compositor_realize       (GtkWidget      *widget);
 static void     ghb_compositor_unrealize     (GtkWidget      *widget);
 static void     ghb_compositor_size_allocate (GtkWidget      *widget,
                                              GtkAllocation   *allocation);
-#if GTK_CHECK_VERSION(3, 0, 0)
 static gboolean ghb_compositor_draw          (GtkWidget      *widget,
                                              cairo_t         *cr);
 static void ghb_compositor_get_preferred_width(GtkWidget      *widget,
@@ -56,12 +55,6 @@ static void ghb_compositor_get_preferred_width(GtkWidget      *widget,
 static void ghb_compositor_get_preferred_height(GtkWidget      *widget,
                                              gint            *minimum_size,
                                              gint            *natural_size);
-#else
-static gboolean ghb_compositor_expose        (GtkWidget      *widget,
-                                             GdkEventExpose  *event);
-static void     ghb_compositor_size_request  (GtkWidget      *widget,
-                                             GtkRequisition  *requisition);
-#endif
 static void     ghb_compositor_set_property  (GObject        *object,
                                              guint            prop_id,
                                              const GValue    *value,
@@ -104,14 +97,9 @@ ghb_compositor_class_init (GhbCompositorClass *class)
     gobject_class->set_property = ghb_compositor_set_property;
     gobject_class->get_property = ghb_compositor_get_property;
 
-#if GTK_CHECK_VERSION(3, 0, 0)
     widget_class->draw = ghb_compositor_draw;
     widget_class->get_preferred_width = ghb_compositor_get_preferred_width;
     widget_class->get_preferred_height = ghb_compositor_get_preferred_height;
-#else
-    widget_class->size_request = ghb_compositor_size_request;
-    widget_class->expose_event = ghb_compositor_expose;
-#endif
     widget_class->size_allocate = ghb_compositor_size_allocate;
 
     widget_class->realize = ghb_compositor_realize;
@@ -503,12 +491,7 @@ ghb_compositor_realize (GtkWidget *widget)
     GdkWindow *window;
     if (visible_window)
     {
-#if GTK_CHECK_VERSION(3, 0, 0)
         attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
-#else
-        attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-        attributes.colormap = gtk_widget_get_colormap (widget);
-#endif
         attributes.visual = gtk_widget_get_visual (widget);
         attributes.wclass = GDK_INPUT_OUTPUT;
 
@@ -524,14 +507,6 @@ ghb_compositor_realize (GtkWidget *widget)
         gtk_widget_set_window(widget, window);
         g_object_ref (window);
     }
-
-#if !GTK_CHECK_VERSION(3, 0, 0)
-    gtk_widget_style_attach(widget);
-
-    if (visible_window)
-        gtk_style_set_background(widget->style, window,
-                                GTK_STATE_NORMAL);
-#endif
 }
 
 static void
@@ -540,7 +515,6 @@ ghb_compositor_unrealize (GtkWidget *widget)
     GTK_WIDGET_CLASS (ghb_compositor_parent_class)->unrealize (widget);
 }
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static void
 ghb_compositor_get_preferred_width(
         GtkWidget *widget,
@@ -592,35 +566,6 @@ ghb_compositor_get_preferred_height(
     *minimum_size = height + gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2;
     *natural_size = height + gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2;
 }
-#else
-
-static void
-ghb_compositor_size_request(
-    GtkWidget      *widget,
-    GtkRequisition *requisition)
-{
-    GhbCompositor *compositor = GHB_COMPOSITOR (widget);
-    GList *link;
-    GhbCompositorChild *cc;
-    gint width = 0, height = 0;
-    GtkRequisition size;
-
-    for (link = compositor->children; link != NULL; link = link->next)
-    {
-        cc = (GhbCompositorChild*)link->data;
-        if (gtk_widget_get_visible(cc->widget))
-        {
-            //gtk_widget_size_request(cc->widget, NULL);
-            gtk_widget_size_request(cc->widget, &size);
-            width = MAX(size.width, width);
-            height = MAX(size.height, height);
-        }
-    }
-
-    requisition->width = width + gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2;
-    requisition->height = height + gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2;
-}
-#endif
 
 static void
 ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
@@ -687,7 +632,6 @@ static void showrects(cairo_region_t *region)
 }
 #endif
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static void
 ghb_compositor_blend (GtkWidget *widget, cairo_t *cr)
 {
@@ -753,62 +697,7 @@ ghb_compositor_blend (GtkWidget *widget, cairo_t *cr)
     }
     /* we're done */
 }
-#else
-static void
-ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
-{
-    GhbCompositor *compositor = GHB_COMPOSITOR (widget);
-    GList *link, *draw;
-    GdkRegion *region;
-    GtkWidget *child;
-    cairo_t *cr;
-    GhbCompositorChild *cc;
 
-    if (compositor->children == NULL) return;
-    /* create a cairo context to draw to the window */
-    cr = gdk_cairo_create (gtk_widget_get_window(widget));
-
-    for (link = compositor->children; link != NULL; link = link->next)
-    {
-
-        cc = (GhbCompositorChild*)link->data;
-        for (draw = cc->drawables; draw != NULL; draw = draw->next)
-        {
-            /* get our child */
-            child = GTK_WIDGET(draw->data);
-            if (!gtk_widget_get_visible(cc->widget) ||
-                !gtk_widget_get_visible(child))
-                continue;
-
-            /* the source data is the (composited) event box */
-            gdk_cairo_set_source_pixmap (cr, gtk_widget_get_window(child),
-                                        child->allocation.x,
-                                        child->allocation.y);
-            /* draw no more than our expose event intersects our child */
-            region = gdk_region_rectangle (&child->allocation);
-            gdk_region_intersect (region, event->region);
-
-            GdkRegion *dregion = gdk_drawable_get_visible_region(
-                                            gtk_widget_get_window(child));
-            gdk_region_offset(dregion, child->allocation.x, child->allocation.y);
-            gdk_region_intersect (region, dregion);
-            gdk_region_destroy(dregion);
-
-            gdk_cairo_region (cr, region);
-            gdk_region_destroy(region);
-            cairo_clip (cr);
-            /* composite, with an opacity */
-            cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-            cairo_paint_with_alpha (cr, cc->opacity);
-            gdk_cairo_reset_clip(cr, gtk_widget_get_window(widget));
-        }
-    }
-    /* we're done */
-    cairo_destroy (cr);
-}
-#endif
-
-#if GTK_CHECK_VERSION(3, 0, 0)
 static gboolean
 ghb_compositor_draw(GtkWidget *widget, cairo_t *cr)
 {
@@ -822,19 +711,3 @@ ghb_compositor_draw(GtkWidget *widget, cairo_t *cr)
 
     return FALSE;
 }
-#else
-static gboolean
-ghb_compositor_expose (GtkWidget *widget, GdkEventExpose *event)
-{
-    if (GTK_WIDGET_DRAWABLE (widget))
-    {
-        if (gtk_widget_get_has_window(widget))
-            ghb_compositor_blend (widget, event);
-
-        GTK_WIDGET_CLASS(
-            ghb_compositor_parent_class)->expose_event(widget, event);
-    }
-
-    return FALSE;
-}
-#endif

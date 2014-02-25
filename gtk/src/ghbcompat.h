@@ -4,31 +4,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
-#if !GTK_CHECK_VERSION(3, 0, 0)
-#include <gdk/gdkkeysyms.h>
-#endif
-
-#if !GTK_CHECK_VERSION(2, 22, 0)
-// Define any keys not defined by older GDK versions
-#define GDK_KEY_Delete GDK_Delete
-#define GDK_KEY_Return GDK_Return
-#define GDK_KEY_Down GDK_Down
-#define GDK_KEY_Up GDK_Up
-#endif
-
-#if !GTK_CHECK_VERSION(2, 20, 0)
-// Replace simple accessor functions added to newer gtk versions
-static inline void gtk_widget_set_realized(GtkWidget *widget, gboolean realized)
-{
-    GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
-}
-
-static inline gboolean gtk_widget_get_realized(GtkWidget *widget)
-{
-    return GTK_WIDGET_REALIZED(widget);
-}
-#endif
-
 static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
 {
     PangoFontDescription *font = NULL;
@@ -44,17 +19,10 @@ static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
 #else
     font = gtk_style_context_get_font(style, GTK_STATE_FLAG_NORMAL);
 #endif
-
-#else
-    font = gtk_widget_get_style(widget)->font_desc;
 #endif
 
     return font;
 }
-
-#if !GTK_CHECK_VERSION(3, 0, 0)
-#define gtk_widget_override_font gtk_widget_modify_font
-#endif
 
 #if !GTK_CHECK_VERSION(3, 10, 0)
 #define gtk_image_set_from_icon_name gtk_image_set_from_stock

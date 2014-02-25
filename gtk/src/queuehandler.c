@@ -1763,55 +1763,27 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     if (show_stop)
     {
         gtk_widget_set_sensitive (widget, TRUE);
-#if GTK_CHECK_VERSION(2, 16, 0)
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("S_top Queue"));
         gtk_widget_set_tooltip_text(widget, _("Stop Encoding"));
-#else
-        g_object_set_property(G_OBJECT(widget), "label",
-                                            ghb_string_value(_("S_top Queue")));
-        g_object_set_property(G_OBJECT(widget), "tooltip",
-                                            ghb_string_value(_("Stop Encoding")));
-#endif
     }
     else
     {
         gtk_widget_set_sensitive (widget, show_start);
-#if GTK_CHECK_VERSION(2, 16, 0)
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Start Queue"));
         gtk_widget_set_tooltip_text(widget, _("Start Encoding"));
-#else
-        g_object_set_property(G_OBJECT(widget), "label",
-                                            ghb_string_value(_("_Start Queue")));
-        g_object_set_property(G_OBJECT(widget), "tooltip",
-                                            ghb_string_value(_("Start Encoding")));
-#endif
     }
     widget = GHB_WIDGET (ud->builder, "queue_pause_menu");
     if (paused)
     {
         gtk_widget_set_sensitive (widget, show_start);
-#if GTK_CHECK_VERSION(2, 16, 0)
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), "_Resume Queue");
         gtk_widget_set_tooltip_text(widget, "Resume Encoding");
-#else
-        g_object_set_property(G_OBJECT(widget), "label",
-                                        ghb_string_value(_("_Resume Queue")));
-        g_object_set_property(G_OBJECT(widget), "tooltip",
-                                        ghb_string_value(_("Resume Encoding")));
-#endif
     }
     else
     {
         gtk_widget_set_sensitive (widget, show_stop);
-#if GTK_CHECK_VERSION(2, 16, 0)
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Pause Queue"));
         gtk_widget_set_tooltip_text(widget, _("Pause Encoding"));
-#else
-        g_object_set_property(G_OBJECT(widget), "label",
-                                        ghb_string_value(_("_Pause Queue")));
-        g_object_set_property(G_OBJECT(widget), "tooltip",
-                                        ghb_string_value(_("Pause Encoding")));
-#endif
     }
 }
 

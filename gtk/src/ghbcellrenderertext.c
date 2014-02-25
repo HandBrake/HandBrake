@@ -38,12 +38,7 @@
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 #define MyGdkRectangle  const GdkRectangle
-#else
-#define MyGdkRectangle  GdkRectangle
-#endif
-
 
 static void ghb_cell_renderer_text_finalize   (GObject                  *object);
 
@@ -62,23 +57,12 @@ static void ghb_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
                            gint                     *y_offset,
                            gint                     *width,
                            gint                     *height);
-#if GTK_CHECK_VERSION(3, 0, 0)
 static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
                            cairo_t                  *cr,
                            GtkWidget                *widget,
                            MyGdkRectangle           *background_area,
                            MyGdkRectangle           *cell_area,
                            GtkCellRendererState      flags);
-#else
-static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
-                           GdkWindow                *window,
-                           GtkWidget                *widget,
-                           MyGdkRectangle           *background_area,
-                           MyGdkRectangle           *cell_area,
-                           GdkRectangle             *expose_area,
-                           GtkCellRendererState      flags);
-#endif
-
 static GtkCellEditable *ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
                                   GdkEvent             *event,
                                   GtkWidget            *widget,
@@ -1635,7 +1619,6 @@ ghb_cell_renderer_text_get_size (GtkCellRenderer *cell,
         x_offset, y_offset, width, height);
 }
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static void ghb_cell_renderer_text_render(
     GtkCellRenderer          *cell,
     cairo_t                  *cr,
@@ -1713,98 +1696,6 @@ static void ghb_cell_renderer_text_render(
 
     g_object_unref (layout);
 }
-#else
-static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
-                           GdkWindow                *window,
-                           GtkWidget                *widget,
-                           MyGdkRectangle           *background_area,
-                           MyGdkRectangle           *cell_area,
-                           GdkRectangle             *expose_area,
-                           GtkCellRendererState      flags)
-{
-    GhbCellRendererText *celltext = (GhbCellRendererText *) cell;
-    PangoLayout *layout;
-    GtkStateType state;
-    gint x_offset;
-    gint y_offset;
-    GhbCellRendererTextPrivate *priv;
-
-    priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
-
-    layout = get_layout (celltext, widget, TRUE, flags);
-    get_size(cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
-
-    gboolean sensitive;
-    gint xpad, ypad;
-
-    sensitive = gtk_cell_renderer_get_sensitive(cell);
-    if (!sensitive)
-    {
-      state = GTK_STATE_INSENSITIVE;
-    }
-    else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
-    {
-        if (gtk_widget_has_focus (widget))
-            state = GTK_STATE_SELECTED;
-        else
-            state = GTK_STATE_ACTIVE;
-    }
-    else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
-       GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
-    {
-        state = GTK_STATE_PRELIGHT;
-    }
-    else
-    {
-        if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
-            state = GTK_STATE_INSENSITIVE;
-        else
-            state = GTK_STATE_NORMAL;
-    }
-
-    gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
-
-    if (celltext->background_set &&
-      (flags & GTK_CELL_RENDERER_SELECTED) == 0)
-    {
-        cairo_t *cr = gdk_cairo_create (window);
-
-        if (expose_area)
-        {
-            gdk_cairo_rectangle (cr, expose_area);
-            cairo_clip (cr);
-        }
-
-        gdk_cairo_rectangle (cr, background_area);
-        cairo_set_source_rgb (cr,
-                celltext->background.red / 65535.,
-                celltext->background.green / 65535.,
-                celltext->background.blue / 65535.);
-        cairo_fill (cr);
-
-        cairo_destroy (cr);
-    }
-
-    if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
-        pango_layout_set_width (layout,
-                (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
-    else if (priv->wrap_width == -1)
-        pango_layout_set_width (layout, -1);
-
-    gtk_paint_layout (widget->style,
-                      window,
-                      state,
-                      TRUE,
-                      expose_area,
-                      widget,
-                      "cellrenderertext",
-                      cell_area->x + x_offset + xpad,
-                      cell_area->y + y_offset + ypad,
-                      layout);
-
-    g_object_unref (layout);
-}
-#endif
 
 static gboolean
 ghb_cell_renderer_text_keypress(
