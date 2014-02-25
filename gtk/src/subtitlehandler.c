@@ -91,7 +91,7 @@ subtitle_refresh_list_row_ui(
         if (info_dst_2 == NULL)
             info_dst_2 = g_strdup("");
 
-        if(!gtk_tree_model_iter_children(tm, &cti, ti))
+        if (!gtk_tree_model_iter_children(tm, &cti, ti))
         {
             gtk_tree_store_append(GTK_TREE_STORE(tm), &cti, ti);
         }
@@ -104,7 +104,7 @@ subtitle_refresh_list_row_ui(
     }
     else
     {
-        if(gtk_tree_model_iter_children(tm, &cti, ti))
+        if (gtk_tree_model_iter_children(tm, &cti, ti))
         {
             gtk_tree_store_remove(GTK_TREE_STORE(tm), &cti);
         }
@@ -567,6 +567,8 @@ ghb_set_pref_subtitle(const hb_title_t *title, signal_user_data_t *ud)
     ghb_clear_subtitle_list_ui(ud->builder);
     if (title == NULL)
     {
+        // Clear the subtitle list
+        ghb_clear_subtitle_list_settings(ud->settings);
         return;
     }
     sub_count = hb_list_count(title->list_subtitle);
@@ -978,9 +980,14 @@ ghb_clear_subtitle_list_ui(GtkBuilder *builder)
 {
     GtkTreeView *tv;
     GtkTreeStore *ts;
+    GtkTreeSelection *tsel;
 
     tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "subtitle_list"));
     ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
+    // Clear tree selection so that updates are not triggered
+    // that cause a recursive attempt to clear the tree selection (crasher)
+    tsel = gtk_tree_view_get_selection(tv);
+    gtk_tree_selection_unselect_all(tsel);
     gtk_tree_store_clear(ts);
 }
 
