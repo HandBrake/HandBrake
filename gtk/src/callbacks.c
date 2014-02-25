@@ -1927,6 +1927,19 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+title_reset_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    int title_id, titleindex;
+    const hb_title_t *title;
+
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+    (void)title; // Silence "unused variable" warning
+    load_all_titles(ud, titleindex);
+    ghb_load_settings(ud);
+}
+
+G_MODULE_EXPORT void
 ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint title_id, titleindex;

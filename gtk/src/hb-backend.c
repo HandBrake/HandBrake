@@ -1178,6 +1178,8 @@ ghb_init_combo_box(GtkComboBox *combo)
     {
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(combo));
         cell = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
+        g_object_set(cell, "max-width-chars", 60, NULL);
+        g_object_set(cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
         gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), cell, TRUE);
         gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), cell,
             "markup", 0, "sensitive", 1, NULL);
