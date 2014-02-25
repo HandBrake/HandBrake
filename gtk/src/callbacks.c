@@ -1822,10 +1822,10 @@ set_title_settings(signal_user_data_t *ud, GValue *settings)
             ghb_settings_set_string(settings, "MetaLongDescription",
                     title->metadata->long_description);
         }
+        update_chapter_list_settings(settings);
+        ghb_set_pref_audio_settings(settings);
         ghb_set_pref_subtitle_settings(ud, title, settings);
     }
-    update_chapter_list_settings(settings);
-    ghb_set_pref_audio_settings(settings);
 
     set_destination_settings(ud, settings);
     ghb_settings_set_value(settings, "dest_dir",
@@ -1853,7 +1853,7 @@ static void
 load_all_titles(signal_user_data_t *ud, int titleindex)
 {
     gint ii, count;
-    GValue *preset, *preset_path;
+    GValue *preset, *preset_path = NULL;
     GValue *settings_array;
     const hb_title_t *title;
 
@@ -1866,7 +1866,14 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     settings_array = ghb_array_value_new(count);
 
     preset = ghb_get_current_preset(ud);
-    preset_path = ghb_get_current_preset_path(ud);
+    if (preset != NULL)
+    {
+        preset_path = ghb_get_current_preset_path(ud);
+    }
+    else
+    {
+        preset = ud->settings;
+    }
     for (ii = 0; ii < count; ii++)
     {
         int index;

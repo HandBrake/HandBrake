@@ -68,6 +68,8 @@
             <string>Regular</string>
             <string>Normal</string>
         </array>
+        <key>preset_modified</key>
+        <false />
         <key>preset_reload</key>
         <false />
         <key>preset_selection</key>

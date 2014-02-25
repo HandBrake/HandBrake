@@ -6924,7 +6924,7 @@ on the Video tab instead.</property>
                     <property name="tooltip_text" translatable="yes">Enable maximum width limit.</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                    <signal name="toggled" handler="preset_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">1</property>
@@ -6946,7 +6946,7 @@ Setting this to 0 means there is no maximum width.</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment32</property>
                     <property name="snap_to_ticks">True</property>
-                    <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
+                    <signal name="value-changed" handler="preset_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">1</property>
@@ -6965,7 +6965,7 @@ Setting this to 0 means there is no maximum width.</property>
                     <property name="tooltip_text" translatable="yes">Enable maximum height limit.</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                    <signal name="toggled" handler="preset_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">2</property>
@@ -6986,7 +6986,7 @@ Setting this to 0 means there is no maximum height.</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment33</property>
-                    <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
+                    <signal name="value-changed" handler="preset_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">2</property>

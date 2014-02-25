@@ -965,8 +965,6 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
     ghb_settings_set_value(settings, "scale_width",
         ghb_settings_get_value(settings, "PictureWidth"));
 
-    ghb_settings_set_boolean(settings, "preset_modified", FALSE);
-
     gboolean uses_max;
     gint uses_pic;
     gint vqtype;
@@ -3466,6 +3464,32 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_widget_destroy(dialog);
 }
 
+GValue*
+get_selected_path(signal_user_data_t *ud)
+{
+    GtkTreeView *treeview;
+    GtkTreeSelection *selection;
+    GtkTreeModel *store;
+    GtkTreeIter iter;
+
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    selection = gtk_tree_view_get_selection(treeview);
+    if (gtk_tree_selection_get_selected(selection, &store, &iter))
+    {
+        GtkTreePath *treepath;
+        gint *indices, len;
+        GValue *path;
+
+        treepath = gtk_tree_model_get_path(store, &iter);
+        indices = gtk_tree_path_get_indices(treepath);
+        len = gtk_tree_path_get_depth(treepath);
+
+        path = preset_path_from_indices(presetsPlist, indices, len);
+        return path;
+    }
+    return NULL;
+}
+
 G_MODULE_EXPORT void
 preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
@@ -3478,13 +3502,16 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gchar *filename;
 
     g_debug("preset_export_clicked_cb ()");
-    preset = ghb_settings_get_value (ud->settings, "preset_selection");
+    preset = get_selected_path(ud);
     if (preset == NULL)
         return;
 
     count = ghb_array_len(preset);
     if (count <= 0)
+    {
+        ghb_value_free(preset);
         return;
+    }
 
     name = g_value_get_string(ghb_array_get_nth(preset, count-1));
 
@@ -3507,7 +3534,10 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
     if (indices == NULL)
+    {
+        ghb_value_free(preset);
         return;
+    }
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
@@ -3550,6 +3580,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     }
     gtk_widget_destroy(dialog);
     g_free(indices);
+    ghb_value_free(preset);
 }
 
 G_MODULE_EXPORT void
@@ -3565,8 +3596,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gint count, *indices, len;
 
     g_debug("presets_new_folder_clicked_cb ()");
-    preset = ghb_settings_get_value(ud->settings, "preset_selection");
-
+    preset = get_selected_path(ud);
     count = ghb_array_len(preset);
     if (count > 0)
         name = g_value_get_string(ghb_array_get_nth(preset, count-1));
@@ -3615,6 +3645,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         ghb_value_free(dest);
     }
     g_free(indices);
+    ghb_value_free(preset);
 }
 
 G_MODULE_EXPORT void
@@ -3629,8 +3660,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gint count, *indices, len;
 
     g_debug("presets_save_clicked_cb ()");
-    preset = ghb_settings_get_value(ud->settings, "preset_selection");
-
+    preset = get_selected_path(ud);
     count = ghb_array_len(preset);
     if (count > 0)
         name = g_value_get_string(ghb_array_get_nth(preset, count-1));
@@ -3687,6 +3717,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         settings_save(ud, dest);
         ghb_value_free(dest);
     }
+    ghb_value_free(preset);
 }
 
 G_MODULE_EXPORT void
@@ -3733,7 +3764,6 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         path = gtk_tree_model_get_path(store, &iter);
         indices = gtk_tree_path_get_indices(path);
         len = gtk_tree_path_get_depth(path);
-        gtk_tree_path_free(path);
 
         folder = ghb_presets_get_folder(presetsPlist, indices, len);
         dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
@@ -3776,6 +3806,7 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 gtk_tree_path_free(path);
             }
         }
+        gtk_tree_path_free(path);
         g_free(preset);
     }
 }
@@ -4149,20 +4180,17 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
     {
         GtkTreePath *treepath;
         gint *indices, len;
-        GValue *path;
         gboolean folder;
 
         treepath = gtk_tree_model_get_path(store, &iter);
         indices = gtk_tree_path_get_indices(treepath);
         len = gtk_tree_path_get_depth(treepath);
 
-        path = preset_path_from_indices(presetsPlist, indices, len);
-        ghb_settings_take_value(ud->settings, "preset_selection", path);
-
         folder = ghb_presets_get_folder(presetsPlist, indices, len);
         if (!folder && !ghb_settings_get_boolean(ud->settings, "preset_reload"))
         {
             ghb_set_preset_settings_from_indices(ud, indices, len);
+            ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
             ghb_set_current_title_settings(ud);
             ghb_load_settings(ud);
         }
@@ -4219,7 +4247,7 @@ presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gint *indices, len;
 
     g_debug("presets_default_clicked_cb ()");
-    preset = ghb_settings_get_value(ud->settings, "preset_selection");
+    preset = get_selected_path(ud);
     indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
     if (indices)
     {
@@ -4231,6 +4259,7 @@ presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         }
         g_free(indices);
     }
+    ghb_value_free(preset);
 }
 
 G_MODULE_EXPORT void
@@ -4252,7 +4281,7 @@ preset_edited_cb(
     g_debug("path (%s)", path);
     g_debug("text (%s)", text);
 
-    preset = ghb_settings_get_value (ud->settings, "preset_selection");
+    preset = get_selected_path(ud);
     dest = ghb_array_value_new(MAX_NESTED_PRESET);
     count = ghb_array_len(preset);
     ghb_array_copy(dest, preset, count-1);
@@ -4263,6 +4292,7 @@ preset_edited_cb(
     {
         // Already exists
         g_free(indices);
+        ghb_value_free(preset);
         return;
     }
 
@@ -4278,5 +4308,12 @@ preset_edited_cb(
     ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(text));
     store_presets();
     gtk_tree_path_free (treepath);
+    ghb_value_free(preset);
+}
+
+G_MODULE_EXPORT void
+preset_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
 }
 
