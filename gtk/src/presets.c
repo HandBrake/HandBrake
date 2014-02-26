@@ -954,140 +954,6 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
         preset = internal;
 
     init_settings_from_dict(settings, preset, NULL, TRUE);
-
-    // Fix up all the internal settings that are derived from preset values.
-    ghb_settings_set_boolean(settings, "PictureDeinterlaceDecomb",
-        !ghb_settings_get_boolean(settings, "PictureDecombDeinterlace"));
-
-    ghb_settings_set_value(settings, "scale_height",
-        ghb_settings_get_value(settings, "PictureHeight"));
-
-    ghb_settings_set_value(settings, "scale_width",
-        ghb_settings_get_value(settings, "PictureWidth"));
-
-    gboolean uses_max;
-    gint uses_pic;
-    gint vqtype;
-
-    uses_max = ghb_settings_get_boolean(settings, "UsesMaxPictureSettings");
-    uses_pic = ghb_settings_get_int(settings, "UsesPictureSettings");
-    vqtype = ghb_settings_get_int(settings, "VideoQualityType");
-
-    // "Use max" or "strict anamorphic" imply autoscale
-    if (uses_max || uses_pic == 2)
-    {
-        ghb_settings_set_boolean(settings, "autoscale", TRUE);
-    }
-    else if (uses_pic == 1)
-    {
-        ghb_settings_set_boolean(settings, "autoscale", FALSE);
-    }
-
-    // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
-    // *note: target is no longer used
-    switch (vqtype)
-    {
-    case 0:
-    {
-        ghb_settings_set_boolean(settings, "vquality_type_bitrate", TRUE);
-        ghb_settings_set_boolean(settings, "vquality_type_constant", FALSE);
-    } break;
-    case 1:
-    {
-        ghb_settings_set_boolean(settings, "vquality_type_bitrate", TRUE);
-        ghb_settings_set_boolean(settings, "vquality_type_constant", FALSE);
-    } break;
-    case 2:
-    {
-        ghb_settings_set_boolean(settings, "vquality_type_bitrate", FALSE);
-        ghb_settings_set_boolean(settings, "vquality_type_constant", TRUE);
-    } break;
-    default:
-    {
-        ghb_settings_set_boolean(settings, "vquality_type_bitrate", FALSE);
-        ghb_settings_set_boolean(settings, "vquality_type_constant", TRUE);
-    } break;
-    }
-
-    gchar *mode = ghb_settings_get_string(settings, "VideoFramerateMode");
-    if (strcmp(mode, "cfr") == 0)
-    {
-        ghb_settings_set_boolean(settings, "VideoFramerateCFR", TRUE);
-        ghb_settings_set_boolean(settings, "VideoFrameratePFR", FALSE);
-        ghb_settings_set_boolean(settings, "VideoFramerateVFR", FALSE);
-    }
-    else if (strcmp(mode, "pfr") == 0)
-    {
-        ghb_settings_set_boolean(settings, "VideoFramerateCFR", FALSE);
-        ghb_settings_set_boolean(settings, "VideoFrameratePFR", TRUE);
-        ghb_settings_set_boolean(settings, "VideoFramerateVFR", FALSE);
-    }
-    else
-    {
-        ghb_settings_set_boolean(settings, "VideoFramerateCFR", FALSE);
-        ghb_settings_set_boolean(settings, "VideoFrameratePFR", FALSE);
-        ghb_settings_set_boolean(settings, "VideoFramerateVFR", TRUE);
-    }
-    g_free(mode);
-
-    if (ghb_settings_get_boolean(settings, "x264UseAdvancedOptions"))
-    {
-        // Force preset/tune/profile/level/opts to conform to option string
-        ghb_settings_set_string(settings, "x264Preset", "medium");
-        ghb_settings_set_string(settings, "x264Tune", "none");
-        ghb_settings_set_string(settings, "h264Profile", "auto");
-        ghb_settings_set_string(settings, "h264Level", "auto");
-        ghb_settings_set_value(settings, "x264OptionExtra",
-            ghb_settings_get_value(settings, "x264Option"));
-    }
-    else
-    {
-        ghb_dict_remove(settings, "x264Option");
-    }
-
-    const char * const *x264presets;
-    x264presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
-    char *x264Preset = ghb_settings_get_string(settings, "x264Preset");
-    int ii;
-    for (ii = 0; x264presets[ii]; ii++)
-    {
-        if (!strcasecmp(x264Preset, x264presets[ii]))
-        {
-            ghb_settings_set_int(settings, "x264PresetSlider", ii);
-        }
-    }
-    g_free(x264Preset);
-
-    char *x264Tune = ghb_settings_get_string(settings, "x264Tune");
-    char *tune = NULL;
-    char *saveptr;
-    char * tok = strtok_r(x264Tune, ",./-+", &saveptr);
-    while (tok != NULL)
-    {
-        if (!strcasecmp(tok, "fastdecode"))
-        {
-            ghb_settings_set_boolean(settings, "x264FastDecode", TRUE);
-        }
-        else if (!strcasecmp(tok, "zerolatency"))
-        {
-            ghb_settings_set_boolean(settings, "x264ZeroLatency", TRUE);
-        }
-        else if (tune == NULL)
-        {
-            tune = g_strdup(tok);
-        }
-        else
-        {
-            ghb_log("Superfluous tunes! %s", tok);
-        }
-        tok = strtok_r(NULL, ",./-+", &saveptr);
-    }
-    g_free(x264Tune);
-    if (tune != NULL)
-    {
-        ghb_settings_set_string(settings, "x264Tune", tune);
-        g_free(tune);
-    }
 }
 
 void
@@ -2716,6 +2582,139 @@ import_xlat_preset(GValue *user_preset)
 
     import_value_xlat(dict);
 
+    // Fix up all the internal settings that are derived from preset values.
+    ghb_settings_set_boolean(dict, "PictureDeinterlaceDecomb",
+        !ghb_settings_get_boolean(dict, "PictureDecombDeinterlace"));
+
+    ghb_settings_set_value(dict, "scale_height",
+        ghb_settings_get_value(dict, "PictureHeight"));
+
+    ghb_settings_set_value(dict, "scale_width",
+        ghb_settings_get_value(dict, "PictureWidth"));
+
+    gboolean uses_max;
+    gint uses_pic;
+    gint vqtype;
+
+    uses_max = ghb_settings_get_boolean(dict, "UsesMaxPictureSettings");
+    uses_pic = ghb_settings_get_int(dict, "UsesPictureSettings");
+    vqtype = ghb_settings_get_int(dict, "VideoQualityType");
+
+    // "Use max" or "strict anamorphic" imply autoscale
+    if (uses_max || uses_pic == 2)
+    {
+        ghb_settings_set_boolean(dict, "autoscale", TRUE);
+    }
+    else if (uses_pic == 1)
+    {
+        ghb_settings_set_boolean(dict, "autoscale", FALSE);
+    }
+
+    // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
+    // *note: target is no longer used
+    switch (vqtype)
+    {
+    case 0:
+    {
+        ghb_settings_set_boolean(dict, "vquality_type_bitrate", TRUE);
+        ghb_settings_set_boolean(dict, "vquality_type_constant", FALSE);
+    } break;
+    case 1:
+    {
+        ghb_settings_set_boolean(dict, "vquality_type_bitrate", TRUE);
+        ghb_settings_set_boolean(dict, "vquality_type_constant", FALSE);
+    } break;
+    case 2:
+    {
+        ghb_settings_set_boolean(dict, "vquality_type_bitrate", FALSE);
+        ghb_settings_set_boolean(dict, "vquality_type_constant", TRUE);
+    } break;
+    default:
+    {
+        ghb_settings_set_boolean(dict, "vquality_type_bitrate", FALSE);
+        ghb_settings_set_boolean(dict, "vquality_type_constant", TRUE);
+    } break;
+    }
+
+    gchar *mode = ghb_settings_get_string(dict, "VideoFramerateMode");
+    if (strcmp(mode, "cfr") == 0)
+    {
+        ghb_settings_set_boolean(dict, "VideoFramerateCFR", TRUE);
+        ghb_settings_set_boolean(dict, "VideoFrameratePFR", FALSE);
+        ghb_settings_set_boolean(dict, "VideoFramerateVFR", FALSE);
+    }
+    else if (strcmp(mode, "pfr") == 0)
+    {
+        ghb_settings_set_boolean(dict, "VideoFramerateCFR", FALSE);
+        ghb_settings_set_boolean(dict, "VideoFrameratePFR", TRUE);
+        ghb_settings_set_boolean(dict, "VideoFramerateVFR", FALSE);
+    }
+    else
+    {
+        ghb_settings_set_boolean(dict, "VideoFramerateCFR", FALSE);
+        ghb_settings_set_boolean(dict, "VideoFrameratePFR", FALSE);
+        ghb_settings_set_boolean(dict, "VideoFramerateVFR", TRUE);
+    }
+    g_free(mode);
+
+    if (ghb_settings_get_boolean(dict, "x264UseAdvancedOptions"))
+    {
+        // Force preset/tune/profile/level/opts to conform to option string
+        ghb_settings_set_string(dict, "x264Preset", "medium");
+        ghb_settings_set_string(dict, "x264Tune", "none");
+        ghb_settings_set_string(dict, "h264Profile", "auto");
+        ghb_settings_set_string(dict, "h264Level", "auto");
+        ghb_settings_set_value(dict, "x264OptionExtra",
+            ghb_settings_get_value(dict, "x264Option"));
+    }
+    else
+    {
+        ghb_dict_remove(dict, "x264Option");
+    }
+
+    const char * const *x264presets;
+    x264presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
+    char *x264Preset = ghb_settings_get_string(dict, "x264Preset");
+    int ii;
+    for (ii = 0; x264presets[ii]; ii++)
+    {
+        if (!strcasecmp(x264Preset, x264presets[ii]))
+        {
+            ghb_settings_set_int(dict, "x264PresetSlider", ii);
+        }
+    }
+    g_free(x264Preset);
+
+    char *x264Tune = ghb_settings_get_string(dict, "x264Tune");
+    char *tune = NULL;
+    char *saveptr;
+    char * tok = strtok_r(x264Tune, ",./-+", &saveptr);
+    while (tok != NULL)
+    {
+        if (!strcasecmp(tok, "fastdecode"))
+        {
+            ghb_settings_set_boolean(dict, "x264FastDecode", TRUE);
+        }
+        else if (!strcasecmp(tok, "zerolatency"))
+        {
+            ghb_settings_set_boolean(dict, "x264ZeroLatency", TRUE);
+        }
+        else if (tune == NULL)
+        {
+            tune = g_strdup(tok);
+        }
+        else
+        {
+            ghb_log("Superfluous tunes! %s", tok);
+        }
+        tok = strtok_r(NULL, ",./-+", &saveptr);
+    }
+    g_free(x264Tune);
+    if (tune != NULL)
+    {
+        ghb_settings_set_string(dict, "x264Tune", tune);
+        g_free(tune);
+    }
     return dict;
 }
 
@@ -2762,11 +2761,15 @@ export_xlat_preset(GValue *dict)
                 preset_dict_get_value(dict, "vquality_type_constant"));
 
     if (autoscale)
+    {
         ghb_dict_insert(dict, g_strdup("UsesPictureSettings"),
                         ghb_int_value_new(2));
+    }
     else
+    {
         ghb_dict_insert(dict, g_strdup("UsesPictureSettings"),
                         ghb_int_value_new(1));
+    }
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
@@ -3188,6 +3191,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
     );
 
     store_presets();
+
     ud->dont_clear_presets = TRUE;
     // Make the new preset the selected item
     ghb_select_preset2(ud->builder, indices, len);
@@ -3661,6 +3665,9 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     g_debug("presets_save_clicked_cb ()");
     preset = get_selected_path(ud);
+    if (preset == NULL)
+        preset = ghb_value_dup(ghb_settings_get_value(ud->settings, "preset"));
+
     count = ghb_array_len(preset);
     if (count > 0)
         name = g_value_get_string(ghb_array_get_nth(preset, count-1));
