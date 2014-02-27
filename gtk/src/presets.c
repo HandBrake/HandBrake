@@ -2592,16 +2592,14 @@ import_xlat_preset(GValue *user_preset)
     ghb_settings_set_value(dict, "scale_width",
         ghb_settings_get_value(dict, "PictureWidth"));
 
-    gboolean uses_max;
     gint uses_pic;
     gint vqtype;
 
-    uses_max = ghb_settings_get_boolean(dict, "UsesMaxPictureSettings");
     uses_pic = ghb_settings_get_int(dict, "UsesPictureSettings");
     vqtype = ghb_settings_get_int(dict, "VideoQualityType");
 
     // "Use max" or "strict anamorphic" imply autoscale
-    if (uses_max || uses_pic == 2)
+    if (uses_pic == 2)
     {
         ghb_settings_set_boolean(dict, "autoscale", TRUE);
     }

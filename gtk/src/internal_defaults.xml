@@ -39,8 +39,6 @@
         <integer>1</integer>
         <key>autoscale</key>
         <true />
-        <key>UsesMaxPictureSettings</key>
-        <false />
         <key>dest_dir</key>
         <string></string>
         <key>dest_file</key>
