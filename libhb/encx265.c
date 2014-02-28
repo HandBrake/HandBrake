@@ -15,7 +15,6 @@
 int  encx265Init (hb_work_object_t*, hb_job_t*);
 int  encx265Work (hb_work_object_t*, hb_buffer_t**, hb_buffer_t**);
 void encx265Close(hb_work_object_t*);
-void writeNALs   (hb_work_private_t*, const x265_nal*, int);
 
 hb_work_object_t hb_encx265 =
 {
@@ -42,13 +41,9 @@ struct hb_work_private_s
     hb_job_t     *job;
     x265_encoder *x265;
     x265_param   *param;
-    x265_picture  pic_in; // TODO: use x265_picture_alloc
-    x265_nal     *p_nal;
-    uint32_t      nal_count;
 
     int64_t  last_stop;
     uint32_t frames_in;
-    uint32_t frames_out;
 
     hb_list_t *delayed_chapters;
     int64_t next_chapter_pts;
@@ -83,9 +78,21 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     pv->delayed_chapters  = hb_list_init();
     pv->job               = job;
     w->private_data       = pv;
+    int i, vrate, vrate_base;
+    x265_nal *nal;
+    uint32_t nnal;
 
-    pv->fout = fopen(job->file, "wb");
-    fseek(pv->fout, 0, SEEK_SET);
+    if (job->mux == HB_MUX_X265)
+    {
+        pv->fout = fopen(job->file, "wb");
+        if (pv->fout == NULL || fseek(pv->fout, 0L, SEEK_SET) < 0)
+        {
+            hb_error("encx265: fopen failed.");
+            free(pv);
+            pv = NULL;
+            return 1;
+        }
+    }
 
     x265_param *param = pv->param = x265_param_alloc();
 
@@ -124,9 +131,11 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Some HandBrake-specific defaults; users can override them
      * using the encoder_options string.
      */
-    param->frameRate   = (int)((double)job->vrate / (double)job->vrate_base + 0.5); // yes, this is an int
-    param->keyframeMax = param->frameRate * 10;
-    param->keyframeMin = param->frameRate;
+    hb_reduce(&vrate, &vrate_base, job->vrate, job->vrate_base);
+    param->fpsNum      = vrate;
+    param->fpsDenom    = vrate_base;
+    param->keyframeMin = (int)((double)vrate / (double)vrate_base + 0.5);
+    param->keyframeMax = param->keyframeMin * 10;
 
     /* iterate through x265_opts and parse the options */
     hb_dict_entry_t *entry = NULL;
@@ -204,11 +213,47 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         pv = NULL;
         return 1;
     }
-    if (!x265_encoder_headers(pv->x265, &pv->p_nal, &pv->nal_count))
+
+    if (x265_encoder_headers(pv->x265, &nal, &nnal) < 0)
     {
-        writeNALs(pv, pv->p_nal, pv->nal_count);
+        hb_error("encx265: x265_encoder_headers failed.");
+        free(pv);
+        pv = NULL;
+        return 1;
     }
-    x265_picture_init(param, &pv->pic_in);
+
+    if (job->mux == HB_MUX_X265)
+    {
+        for (i = 0; i < nnal; i++)
+        {
+            fwrite(nal[i].payload, 1, nal[i].sizeBytes, pv->fout);
+        }
+        return 0;
+    }
+
+    /*
+     * x265's output (headers and bitstream) are in Annex B format.
+     *
+     * Write the header as is, and let the muxer reformat
+     * the extradata and output bitstream properly for us.
+     */
+    w->config->h265.headers_length = 0;
+    for (i = 0; i < nnal; i++)
+    {
+        if (w->config->h265.headers_length +
+            nal[i].sizeBytes > HB_CONFIG_MAX_SIZE)
+        {
+            hb_error("encx265: bitstream headers too large");
+            free(pv);
+            pv = NULL;
+            return 1;
+        }
+        memcpy(w->config->h265.headers +
+               w->config->h265.headers_length,
+               nal[i].payload, nal[i].sizeBytes);
+        w->config->h265.headers_length += nal[i].sizeBytes;
+    }
+
     return 0;
 }
 
@@ -243,85 +288,75 @@ static void save_frame_info(hb_work_private_t *pv, hb_buffer_t *in)
     int i = (in->s.start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
     pv->frame_info[i].duration = in->s.stop - in->s.start;
 }
-
-void writeNALs(hb_work_private_t * pv, const x265_nal* nal, int nalcount)
+static int64_t get_frame_duration(hb_work_private_t * pv, int64_t pts)
 {
-    int i;
-    for (i = 0; i < nalcount; i++)
-    {
-        fwrite((const char*)nal->payload, 1, nal->sizeBytes,  pv->fout);
-        nal++;
-    }
+    int i = (pts >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
+    return pv->frame_info[i].duration;
 }
 
-static hb_buffer_t *x265_encode(hb_work_object_t *w, hb_buffer_t *in)
+static hb_buffer_t* nal_encode(hb_work_object_t *w,
+                               x265_picture *pic_out,
+                               x265_nal *nal, uint32_t nnal)
 {
     hb_work_private_t *pv = w->private_data;
     hb_job_t *job         = pv->job;
-    x265_picture pic_out;
+    hb_buffer_t *buf      = NULL;
+    int i;
 
-    pv->pic_in.stride[0] = in->plane[0].stride;
-    pv->pic_in.stride[1] = in->plane[1].stride;
-    pv->pic_in.stride[2] = in->plane[2].stride;
-    pv->pic_in.planes[0] = in->plane[0].data;
-    pv->pic_in.planes[1] = in->plane[1].data;
-    pv->pic_in.planes[2] = in->plane[2].data;
-    pv->pic_in.poc       = pv->frames_in;
-    pv->pic_in.pts       = in->s.start;
-    pv->pic_in.bitDepth  = 8;
-
-    if (in->s.new_chap && job->chapter_markers)
+    if (nnal <= 0)
     {
-        /*
-         * Chapters have to start with an IDR frame so request that this frame be
-         * coded as IDR. Since there may be up to 16 frames currently buffered in
-         * the encoder, remember the timestamp so when this frame finally pops out
-         * of the encoder we'll mark its buffer as the start of a chapter.
-         */
-        pv->pic_in.sliceType = X265_TYPE_IDR;
-        if (pv->next_chapter_pts == AV_NOPTS_VALUE)
-        {
-            pv->next_chapter_pts = in->s.start;
-        }
-        /*
-         * Chapter markers are sometimes so close we can get a new one before
-         * the previous marker has been through the encoding queue.
-         *
-         * Dropping markers can cause weird side-effects downstream, including
-         * but not limited to missing chapters in the output, so we need to save
-         * it somehow.
-         */
-        struct chapter_s *item = malloc(sizeof(struct chapter_s));
-        if (item != NULL)
-        {
-            item->start = in->s.start;
-            item->index = in->s.new_chap;
-            hb_list_add(pv->delayed_chapters, item);
-        }
-        /* don't let 'work_loop' put a chapter mark on the wrong buffer */
-        in->s.new_chap = 0;
-    }
-    else
-    {
-        pv->pic_in.sliceType = X265_TYPE_AUTO;
+        return NULL;
     }
 
-    if (pv->last_stop != in->s.start)
+    buf = hb_video_buffer_init(job->width, job->height);
+    if (buf == NULL)
     {
-        hb_log("encx265 input continuity err: last stop %"PRId64"  start %"PRId64,
-               pv->last_stop, in->s.start);
+        return NULL;
     }
-    pv->last_stop = in->s.stop;
-    save_frame_info(pv, in);
 
-    x265_encoder_encode(pv->x265, &pv->p_nal, &pv->nal_count, &pv->pic_in, &pic_out);
-    if (pv->nal_count > 0)
+    buf->size = 0;
+    // copy the bitstream data
+    for (i = 0; i < nnal; i++)
     {
-        writeNALs(pv, pv->p_nal, pv->nal_count);
+        memcpy(buf->data + buf->size, nal[i].payload, nal[i].sizeBytes);
+        buf->size += nal[i].sizeBytes;
+    }
+
+    // use the pts to get the original frame's duration.
+    buf->s.duration     = get_frame_duration(pv, pic_out->pts);
+    buf->s.stop         = pic_out->pts + buf->s.duration;
+    buf->s.start        = pic_out->pts;
+    buf->s.renderOffset = pic_out->dts;
+    if (w->config->h264.init_delay == 0 && pic_out->dts < 0)
+    {
+        w->config->h264.init_delay -= pic_out->dts;
+    }
+
+    switch (pic_out->sliceType)
+    {
+        case X265_TYPE_IDR:
+            buf->s.frametype = HB_FRAME_IDR;
+            break;
+        case X265_TYPE_I:
+            buf->s.frametype = HB_FRAME_I;
+            break;
+        case X265_TYPE_P:
+            buf->s.frametype = HB_FRAME_P;
+            break;
+        case X265_TYPE_B:
+            buf->s.frametype = HB_FRAME_B;
+            break;
+        case X265_TYPE_BREF:
+            buf->s.frametype = HB_FRAME_BREF;
+            break;
+        default:
+            buf->s.frametype = 0;
+            break;
     }
 
     if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
-        pv->next_chapter_pts <= pic_out.pts)
+        pv->next_chapter_pts <= pic_out->pts   &&
+        pic_out->sliceType   == X265_TYPE_IDR)
     {
         // we're no longer looking for this chapter
         pv->next_chapter_pts = AV_NOPTS_VALUE;
@@ -345,47 +380,144 @@ static hb_buffer_t *x265_encode(hb_work_object_t *w, hb_buffer_t *in)
         }
     }
 
+    if (job->mux == HB_MUX_X265)
+    {
+        for (i = 0; i < nnal; i++)
+        {
+            fwrite(nal[i].payload, 1, nal[i].sizeBytes, pv->fout);
+        }
+        hb_buffer_close(&buf);
+        return NULL;
+    }
+
+    // discard empty buffers (no video)
+    if (buf->size <= 0)
+    {
+        hb_buffer_close(&buf);
+    }
+    return buf;
+}
+
+static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
+{
+    hb_work_private_t *pv = w->private_data;
+    hb_job_t *job         = pv->job;
+    x265_picture pic_in, pic_out;
+    x265_nal *nal;
+    uint32_t nnal;
+
+    x265_picture_init(pv->param, &pic_in);
+
+    pic_in.stride[0] = in->plane[0].stride;
+    pic_in.stride[1] = in->plane[1].stride;
+    pic_in.stride[2] = in->plane[2].stride;
+    pic_in.planes[0] = in->plane[0].data;
+    pic_in.planes[1] = in->plane[1].data;
+    pic_in.planes[2] = in->plane[2].data;
+    pic_in.poc       = pv->frames_in++;
+    pic_in.pts       = in->s.start;
+    pic_in.bitDepth  = 8;
+
+    if (in->s.new_chap && job->chapter_markers)
+    {
+        if (pv->next_chapter_pts == AV_NOPTS_VALUE)
+        {
+            pv->next_chapter_pts = in->s.start;
+        }
+        /*
+         * Chapter markers are sometimes so close we can get a new one before
+         * the previous marker has been through the encoding queue.
+         *
+         * Dropping markers can cause weird side-effects downstream, including
+         * but not limited to missing chapters in the output, so we need to save
+         * it somehow.
+         */
+        struct chapter_s *item = malloc(sizeof(struct chapter_s));
+        if (item != NULL)
+        {
+            item->start = in->s.start;
+            item->index = in->s.new_chap;
+            hb_list_add(pv->delayed_chapters, item);
+        }
+        /* don't let 'work_loop' put a chapter mark on the wrong buffer */
+        in->s.new_chap = 0;
+        /*
+         * Chapters have to start with an IDR frame so request that this frame be
+         * coded as IDR. Since there may be up to 16 frames currently buffered in
+         * the encoder, remember the timestamp so when this frame finally pops out
+         * of the encoder we'll mark its buffer as the start of a chapter.
+         */
+        pic_in.sliceType = X265_TYPE_IDR;
+    }
+    else
+    {
+        pic_in.sliceType = X265_TYPE_AUTO;
+    }
+
+    if (pv->last_stop != in->s.start)
+    {
+        hb_log("encx265 input continuity err: last stop %"PRId64"  start %"PRId64,
+               pv->last_stop, in->s.start);
+    }
+    pv->last_stop = in->s.stop;
+    save_frame_info(pv, in);
+
+    if (x265_encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out) > 0)
+    {
+        return nal_encode(w, &pic_out, nal, nnal);
+    }
     return NULL;
 }
 
 int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 {
     hb_work_private_t *pv = w->private_data;
-    hb_buffer_t *in       = *buf_in;
+    hb_buffer_t       *in = *buf_in;
 
-    *buf_out = NULL;
     if (in->size <= 0)
     {
-        x265_picture pic_out;
-        uint32_t i_nal;
+        uint32_t nnal;
         x265_nal *nal;
+        x265_picture pic_out;
         hb_buffer_t *last_buf = NULL;
-        while (1)
-        {
-            x265_encoder_encode(pv->x265, &nal, &i_nal, NULL, &pic_out);
-            if (i_nal <= 0)
-                break;
-            writeNALs(pv, nal, i_nal);
-        }
-        // Flushed everything - add the eof to the end of the chain.
-        if (last_buf == NULL)
-            *buf_out = in;
-        else
-            last_buf->next = in;
 
+        // flush delayed frames
+        while (x265_encoder_encode(pv->x265, &nal, &nnal, NULL, &pic_out) > 0)
+        {
+            hb_buffer_t *buf = nal_encode(w, &pic_out, nal, nnal);
+            if (buf != NULL)
+            {
+                if (last_buf == NULL)
+                {
+                    *buf_out = buf;
+                }
+                else
+                {
+                    last_buf->next = buf;
+                }
+                last_buf = buf;
+            }
+        }
+
+        // add the EOF to the end of the chain
+        if (last_buf == NULL)
+        {
+            *buf_out = in;
+        }
+        else
+        {
+            last_buf->next = in;
+        }
 
         *buf_in = NULL;
-
         return HB_WORK_DONE;
     }
 
-    ++pv->frames_in;
-    ++pv->frames_out;
     *buf_out = x265_encode(w, in);
     return HB_WORK_OK;
 }
 
-const char * hb_x265_encopt_name(const char *name)
+const char* hb_x265_encopt_name(const char *name)
 {
     int i;
     for (i = 0; hb_x265_encopt_synonyms[i][0] != NULL; i++)

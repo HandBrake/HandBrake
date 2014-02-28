@@ -372,6 +372,12 @@ union hb_esconfig_u
 
     struct
     {
+        uint8_t headers[HB_CONFIG_MAX_SIZE];
+        int     headers_length;
+    } h265;
+
+    struct
+    {
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
     } theora;
 

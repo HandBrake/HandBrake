@@ -307,6 +307,22 @@ static int avformatInit( hb_mux_object_t * m )
             }
         } break;
 
+        case HB_VCODEC_X265:
+            track->st->codec->codec_id = AV_CODEC_ID_HEVC;
+
+            if (job->config.h265.headers_length > 0)
+            {
+                priv_size = job->config.h265.headers_length;
+                priv_data = av_malloc(priv_size);
+                if (priv_data == NULL)
+                {
+                    hb_error("malloc failure");
+                    goto error;
+                }
+                memcpy(priv_data, job->config.h265.headers, priv_size);
+            }
+            break;
+
         default:
             hb_error("muxavformat: Unknown video codec: %x", job->vcodec);
             goto error;
