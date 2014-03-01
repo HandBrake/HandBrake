@@ -143,7 +143,7 @@ namespace HandBrake.ApplicationServices.Utilities
             query += AdvancedQuery(task);
 
             // Extra Settings
-            query += ExtraSettings(verbosity, disableLibDvdNav, disableQsvDecode, enableHwd, enableOpenCL);
+            query += ExtraSettings(verbosity, disableLibDvdNav, disableQsvDecode, enableHwd, enableOpenCL, task.VideoEncoder == VideoEncoder.QuickSync);
 
             return query;
         }
@@ -1025,10 +1025,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="enableOpenCL">
         /// The enable Open CL.
         /// </param>
+        /// <param name="isQsv">
+        /// The is Qsv.
+        /// </param>
         /// <returns>
         /// A Cli Query as a string
         /// </returns>
-        private static string ExtraSettings(int verbosity, bool disableLibdvdNav, bool disableQsvDecode, bool enableHwd, bool enableOpenCL)
+        private static string ExtraSettings(int verbosity, bool disableLibdvdNav, bool disableQsvDecode, bool enableHwd, bool enableOpenCL, bool isQsv)
         {
             string query = string.Empty;
 
@@ -1042,11 +1045,13 @@ namespace HandBrake.ApplicationServices.Utilities
             if (disableQsvDecode)
                 query += " --disable-qsv-decoding";
 
-            if (enableOpenCL)
+            if (enableOpenCL && !isQsv)
                 query += " -P ";
 
-            if (enableHwd)
+            if (enableHwd && !isQsv)
+            {
                 query += " -U ";
+            }
 
             return query;
         }
