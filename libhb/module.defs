@@ -35,10 +35,6 @@ LIBHB.out += $(LIBHB.a)
 
 ###############################################################################
 
-ifeq (1,$(FEATURE.fdk_aac))
-LIBHB.GCC.D += USE_FDK_AAC
-endif
-
 ifeq (1,$(FEATURE.hwd))
 LIBHB.GCC.D += USE_HWD
 endif

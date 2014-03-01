@@ -292,21 +292,23 @@ static int hb_audio_encoder_is_enabled(int encoder)
 
 #ifdef USE_LIBAV_AAC
         case HB_ACODEC_FFAAC:
-            return 1;
+            return avcodec_find_encoder_by_name("aac") != NULL;
 #endif
 
-#ifdef USE_FDK_AAC
         case HB_ACODEC_FDK_AAC:
         case HB_ACODEC_FDK_HAAC:
-            return 1;
-#endif
+            return avcodec_find_encoder_by_name("libfdk_aac") != NULL;
+
+        case HB_ACODEC_AC3:
+            return avcodec_find_encoder(AV_CODEC_ID_AC3) != NULL;
+
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
+            return avcodec_find_encoder(AV_CODEC_ID_FLAC) != NULL;
 
         // the following encoders are always enabled
         case HB_ACODEC_LAME:
         case HB_ACODEC_VORBIS:
-        case HB_ACODEC_AC3:
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FFFLAC24:
             return 1;
 
         default:
