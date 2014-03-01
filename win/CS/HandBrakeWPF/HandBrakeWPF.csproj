@@ -138,6 +138,7 @@
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
+    <Compile Include="Utilities\HandBrakeApp.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
     <Compile Include="Controls\SourceSelection.xaml.cs">

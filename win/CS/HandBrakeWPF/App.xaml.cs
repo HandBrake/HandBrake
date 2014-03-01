@@ -18,6 +18,7 @@ namespace HandBrakeWPF
 
     using HandBrake.ApplicationServices.Exceptions;
 
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -45,7 +46,7 @@ namespace HandBrakeWPF
         protected override void OnStartup(StartupEventArgs e)
         {
             OperatingSystem OS = Environment.OSVersion;
-            if ((OS.Platform == PlatformID.Win32NT) && (OS.Version.Major == 5 && OS.Version.Minor == 1 ))
+            if ((OS.Platform == PlatformID.Win32NT) && (OS.Version.Major == 5 && OS.Version.Minor == 1))
             {
                 MessageBox.Show("Windows XP support is currently broken. It is not known if or when it will be fixed.", "Notice", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();
@@ -56,6 +57,13 @@ namespace HandBrakeWPF
             {
                 AppArguments.IsInstantHandBrake = true;
                 MessageBox.Show("Instant HandBrake is just a prototype for toying with ideas. It may or may not work, or even be included in future builds.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            if (e.Args.Any(f => f.Equals("--reset")))
+            {
+                HandBrakeApp.ResetToDefaults();
+                Application.Current.Shutdown();
+                return;
             }
 
             base.OnStartup(e);
