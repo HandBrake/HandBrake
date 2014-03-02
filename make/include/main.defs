@@ -45,10 +45,6 @@ ifeq (1,$(FEATURE.fdk_aac))
     MODULES += contrib/fdk-aac
 endif
 
-ifeq (1,$(FEATURE.faac))
-    MODULES += contrib/faac
-endif
-
 ifeq (1,$(FEATURE.mp4v2))
     MODULES += contrib/mp4v2
 endif

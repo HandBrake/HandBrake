@@ -283,7 +283,6 @@
 		277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = supplemental.xcconfig; sourceTree = "<group>"; };
 		277EFE8F17ED7296001D4A6A /* libmp4v2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp4v2.a; path = external/contrib/lib/libmp4v2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		277EFE9017ED72A1001D4A6A /* libmkv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmkv.a; path = external/contrib/lib/libmkv.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		277EFE9117ED7749001D4A6A /* libfaac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfaac.a; path = external/contrib/lib/libfaac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		277EFE9217ED799E001D4A6A /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "../../../../Users/mike/Library/Developer/Xcode/DerivedData/HandBrake-anpxrfhxsejsxehiwuiaexjoygra/Build/Products/debug/external/contrib/lib/libfdk-aac.a"; sourceTree = "<group>"; };
 		27D6C72414B1019100B785E4 /* libhandbrake.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhandbrake.a; path = external/libhb/libhandbrake.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72814B102DA00B785E4 /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = external/contrib/lib/libass.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -688,7 +687,6 @@
 		277EFE8E17ED71A2001D4A6A /* Static Libraries (optional) */ = {
 			isa = PBXGroup;
 			children = (
-				277EFE9117ED7749001D4A6A /* libfaac.a */,
 				277EFE9217ED799E001D4A6A /* libfdk-aac.a */,
 				277EFE9017ED72A1001D4A6A /* libmkv.a */,
 				277EFE8F17ED7296001D4A6A /* libmp4v2.a */,

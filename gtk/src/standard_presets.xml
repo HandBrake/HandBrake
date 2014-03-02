@@ -24,7 +24,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -173,7 +173,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -306,7 +306,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -439,7 +439,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -572,7 +572,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -721,7 +721,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -870,7 +870,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -1019,7 +1019,7 @@
 						<key>AudioBitrate</key>
 						<string>128</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -1152,7 +1152,7 @@
 						<key>AudioBitrate</key>
 						<string>128</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -1285,7 +1285,7 @@
 						<key>AudioBitrate</key>
 						<string>128</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -1433,7 +1433,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
@@ -1566,7 +1566,7 @@
 						<key>AudioBitrate</key>
 						<string>160</string>
 						<key>AudioEncoder</key>
-						<string>AAC (faac)</string>
+						<string>AAC (avcodec)</string>
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>

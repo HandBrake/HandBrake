@@ -597,7 +597,6 @@ struct hb_job_s
 /* Audio starts here */
 /* Audio Codecs: Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/NativeConstants.cs when changing these consts */
 #define HB_ACODEC_MASK      0x00FFFF00
-#define HB_ACODEC_FAAC      0x00000100
 #define HB_ACODEC_LAME      0x00000200
 #define HB_ACODEC_VORBIS    0x00000400
 #define HB_ACODEC_AC3       0x00000800
@@ -1088,7 +1087,6 @@ extern hb_work_object_t hb_encx265;
 extern hb_work_object_t hb_decavcodeca;
 extern hb_work_object_t hb_decavcodecv;
 extern hb_work_object_t hb_declpcm;
-extern hb_work_object_t hb_encfaac;
 extern hb_work_object_t hb_enclame;
 extern hb_work_object_t hb_encvorbis;
 extern hb_work_object_t hb_muxer;

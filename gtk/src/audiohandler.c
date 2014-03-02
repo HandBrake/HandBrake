@@ -125,7 +125,7 @@ ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint f
             if ( mux & HB_MUX_MASK_MKV )
                 fallback = HB_ACODEC_LAME;
             else
-                fallback = HB_ACODEC_FAAC;
+                fallback = HB_ACODEC_FFAAC;
             break;
         }
     }
@@ -183,7 +183,7 @@ int ghb_select_fallback(GValue *settings, int acodec)
             return HB_ACODEC_LAME;
 
         case HB_ACODEC_AAC_PASS:
-            return HB_ACODEC_FAAC;
+            return HB_ACODEC_FFAAC;
 
         case HB_ACODEC_AC3_PASS:
             return HB_ACODEC_AC3;

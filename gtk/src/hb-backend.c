@@ -3369,7 +3369,7 @@ ghb_audio_can_passthru(gint acodec)
 gint
 ghb_get_default_acodec()
 {
-    return HB_ACODEC_FAAC;
+    return HB_ACODEC_FFAAC;
 }
 
 void
@@ -4128,7 +4128,7 @@ ghb_validate_audio(GValue *settings)
             }
             else
             {
-                codec = HB_ACODEC_FAAC;
+                codec = HB_ACODEC_FFAAC;
             }
             const char *name = hb_audio_encoder_get_short_name(codec);
             ghb_settings_set_string(asettings, "AudioEncoder", name);
@@ -4142,7 +4142,7 @@ ghb_validate_audio(GValue *settings)
             if (codec == HB_ACODEC_VORBIS)
             {
                 a_unsup = "Vorbis";
-                codec = HB_ACODEC_FAAC;
+                codec = HB_ACODEC_FFAAC;
             }
         }
         if (a_unsup)

@@ -302,7 +302,6 @@ static int MKVInit( hb_mux_object_t * m )
                 }
                 track->codecID = MK_ACODEC_FLAC;
                 break;
-            case HB_ACODEC_FAAC:
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
             case HB_ACODEC_CA_HAAC:

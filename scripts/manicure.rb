@@ -349,9 +349,7 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (faac)"
-          audioEncoders << "faac"
-        when "AAC (ffmpeg)", "AAC (avcodec)"
+        when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
           audioEncoders << "av_aac"
         when "AAC (FDK)"
           audioEncoders << "fdk_aac"
@@ -468,9 +466,7 @@ class Display
     case hash["AudioEncoderFallback"]
       when /AC3/
         audioEncoderFallback << "ac3"
-      when "AAC (faac)"
-        audioEncoderFallback << "faac"
-      when "AAC (ffmpeg)", "AAC (avcodec)"
+      when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
         audioEncoderFallback << "av_aac"
       when "AAC (FDK)"
         audioEncoderFallback << "fdk_aac"
@@ -757,9 +753,7 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (faac)"
-          audioEncoders << "faac"
-        when "AAC (ffmpeg)", "AAC (avcodec)"
+        when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
           audioEncoders << "av_aac"
         when "AAC (FDK)"
           audioEncoders << "fdk_aac"
@@ -876,9 +870,7 @@ class Display
     case hash["AudioEncoderFallback"]
       when /AC3/
         audioEncoderFallback << "ac3"
-      when "AAC (faac)"
-        audioEncoderFallback << "faac"
-      when "AAC (ffmpeg)", "AAC (avcodec)"
+      when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
         audioEncoderFallback << "av_aac"
       when "AAC (FDK)"
         audioEncoderFallback << "fdk_aac"
@@ -1171,9 +1163,7 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (faac)"
-          audioEncoders << "faac"
-        when "AAC (ffmpeg)", "AAC (avcodec)"
+        when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
           audioEncoders << "av_aac"
         when "AAC (FDK)"
           audioEncoders << "fdk_aac"
@@ -1308,9 +1298,7 @@ class Display
     case hash["AudioEncoderFallback"]
       when /AC3/
         audioEncoderFallback << "ac3"
-      when "AAC (faac)"
-        audioEncoderFallback << "faac"
-      when "AAC (ffmpeg)", "AAC (avcodec)"
+      when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
         audioEncoderFallback << "av_aac"
       when "AAC (FDK)"
         audioEncoderFallback << "fdk_aac"
@@ -1627,9 +1615,7 @@ class Display
           audioEncoders << "copy:dtshd"
         when /AAC Pass/
           audioEncoders << "copy:aac"
-        when "AAC (faac)"
-          audioEncoders << "faac"
-        when "AAC (ffmpeg)", "AAC (avcodec)"
+        when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
           audioEncoders << "av_aac"
         when "AAC (FDK)"
           audioEncoders << "fdk_aac"
@@ -1746,9 +1732,7 @@ class Display
     case hash["AudioEncoderFallback"]
       when /AC3/
         audioEncoderFallback << "ac3"
-      when "AAC (faac)"
-        audioEncoderFallback << "faac"
-      when "AAC (ffmpeg)", "AAC (avcodec)"
+      when "AAC (ffmpeg)", "AAC (avcodec)", "AAC (faac)"
         audioEncoderFallback << "av_aac"
       when "AAC (FDK)"
         audioEncoderFallback << "fdk_aac"

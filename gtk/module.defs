@@ -33,10 +33,6 @@ ifeq (1,$(FEATURE.fdk_aac))
 	GTK.CONFIGURE.extra += --enable-fdk-aac
 endif
 
-ifeq (1,$(FEATURE.faac))
-	GTK.CONFIGURE.extra += --enable-faac
-endif
-
 ifeq (1,$(FEATURE.mp4v2))
 	GTK.CONFIGURE.extra += --enable-mp4v2
 endif

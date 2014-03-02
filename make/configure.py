@@ -1218,10 +1218,6 @@ def createCLI():
     grp.add_option( '--enable-libav-aac', dest="enable_libav_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
     grp.add_option( '--disable-libav-aac', dest="enable_libav_aac", action='store_false' )
 
-    h = IfHost( 'enable use of faac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-faac', dest="enable_faac", default=False, action='store_true', help=h )
-    grp.add_option( '--disable-faac', dest="enable_faac", action='store_false' )
-
     h = IfHost( 'enable use of mp4v2 muxer', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-mp4v2', dest="enable_mp4v2", default=True, action='store_true', help=h )
     grp.add_option( '--disable-mp4v2', dest="enable_mp4v2", action='store_false' )
@@ -1683,7 +1679,6 @@ int main ()
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.libav_aac',  int( options.enable_libav_aac ))
-    doc.add( 'FEATURE.faac',       int( options.enable_faac ))
     doc.add( 'FEATURE.mp4v2',      int( options.enable_mp4v2 ))
     doc.add( 'FEATURE.libmkv',     int( options.enable_libmkv ))
     doc.add( 'FEATURE.avformat',   int( options.enable_avformat ))

@@ -186,7 +186,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -302,7 +302,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -407,7 +407,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -512,7 +512,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -618,7 +618,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -734,7 +734,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -850,7 +850,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -966,7 +966,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"128"                         forKey:@"AudioBitrate"];
@@ -1071,7 +1071,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"128"                         forKey:@"AudioBitrate"];
@@ -1176,7 +1176,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"128"                         forKey:@"AudioBitrate"];
@@ -1281,7 +1281,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];
@@ -1386,7 +1386,7 @@
     /* Track 1 */
     NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
     [audioTrack1Array setObject:[NSNumber numberWithInt:1]     forKey:@"AudioTrack"];
-    [audioTrack1Array setObject:@"AAC (faac)"                  forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"AAC (avcodec)"               forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"          forKey:@"AudioMixdown"];
     [audioTrack1Array setObject:@"Auto"                        forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160"                         forKey:@"AudioBitrate"];

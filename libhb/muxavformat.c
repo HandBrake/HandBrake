@@ -490,7 +490,6 @@ static int avformatInit( hb_mux_object_t * m )
                            audio->priv.config.extradata.length);
                 }
                 break;
-            case HB_ACODEC_FAAC:
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
             case HB_ACODEC_CA_HAAC:

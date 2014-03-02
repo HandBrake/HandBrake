@@ -396,7 +396,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                    [NSArray arrayWithObject:
                     [NSDictionary dictionaryWithObjectsAndKeys:
                      [NSNumber numberWithInt: 1],     @"AudioTrack",
-                     @"AAC (faac)",                   @"AudioEncoder",
+                     @"AAC (CoreAudio)",              @"AudioEncoder",
                      @"Dolby Pro Logic II",           @"AudioMixdown",
                      @"Auto",                         @"AudioSamplerate",
                      @"160",                          @"AudioBitrate",

@@ -60,10 +60,6 @@ AC_ARG_ENABLE(fdk-aac,
 	AS_HELP_STRING([--enable-fdk-aac], [enable fdk aac encoder]),
 	use_fdk_aac=yes, use_fdk_aac=no)
 
-AC_ARG_ENABLE(faac,
-	AS_HELP_STRING([--enable-faac], [enable faac encoder]),
-	use_faac=yes, use_faac=no)
-
 AC_ARG_ENABLE(mp4v2,
 	AS_HELP_STRING([--enable-mp4v2], [enable mp4v2 muxer]),
 	use_mp4v2=yes, use_mp4v2=no)
@@ -190,10 +186,6 @@ esac
 
 if test "x$use_fdk_aac" = "xyes" ; then
     HB_LIBS+=" -lfdk-aac"
-fi
-
-if test "x$use_faac" = "xyes" ; then
-    HB_LIBS+=" -lfaac"
 fi
 
 if test "x$use_mp4v2" = "xyes" ; then

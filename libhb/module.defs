@@ -1,4 +1,4 @@
-__deps__ := A52DEC BZIP2 FAAC FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
+__deps__ := A52DEC BZIP2 FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBMKV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
     MP4V2 PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX
 
@@ -41,9 +41,6 @@ endif
 
 ifeq (1,$(FEATURE.libav_aac))
 LIBHB.GCC.D += USE_LIBAV_AAC
-endif
-ifeq (1,$(FEATURE.faac))
-LIBHB.GCC.D += USE_FAAC
 endif
 ifeq (1,$(FEATURE.mp4v2))
 LIBHB.GCC.D += USE_MP4V2
@@ -124,10 +121,6 @@ LIBHB.dll.libs = $(foreach n, \
 
 ifeq (1,$(FEATURE.fdk_aac))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
-endif
-
-ifeq (1,$(FEATURE.faac))
-LIBHB.dll.libs += $(CONTRIB.build/)lib/libfaac.a
 endif
 
 ifeq (1,$(FEATURE.qsv))

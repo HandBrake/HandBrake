@@ -439,7 +439,6 @@ static int MP4Init( hb_mux_object_t * m )
                 }
             } break;
 
-            case HB_ACODEC_FAAC:
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
             case HB_ACODEC_CA_HAAC:
@@ -456,7 +455,6 @@ static int MP4Init( hb_mux_object_t * m )
 
                 switch ( audio->config.out.codec & HB_ACODEC_MASK )
                 {
-                    case HB_ACODEC_FAAC:
                     case HB_ACODEC_FFAAC:
                     case HB_ACODEC_CA_AAC:
                     case HB_ACODEC_CA_HAAC:

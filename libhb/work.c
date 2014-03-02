@@ -139,7 +139,6 @@ hb_work_object_t* hb_codec_encoder(int codec)
     switch (codec)
     {
         case HB_ACODEC_AC3:     return hb_get_work(WORK_ENCAVCODEC_AUDIO);
-        case HB_ACODEC_FAAC:    return hb_get_work(WORK_ENCFAAC);
         case HB_ACODEC_LAME:    return hb_get_work(WORK_ENCLAME);
         case HB_ACODEC_VORBIS:  return hb_get_work(WORK_ENCVORBIS);
         case HB_ACODEC_CA_AAC:  return hb_get_work(WORK_ENC_CA_AAC);

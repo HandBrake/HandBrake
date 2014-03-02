@@ -794,7 +794,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,copy:ac3");
+                        acodecs = strdup("ffaac,copy:ac3");
                     }
                     if( !abitrates )
                     {
@@ -864,7 +864,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac");
+                        acodecs = strdup("ffaac");
                     }
                     if( !abitrates )
                     {
@@ -930,7 +930,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac");
+                        acodecs = strdup("ffaac");
                     }
                     if( !abitrates )
                     {
@@ -1000,7 +1000,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac");
+                        acodecs = strdup("ffaac");
                     }
                     if( !abitrates )
                     {
@@ -1070,7 +1070,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,copy:ac3");
+                        acodecs = strdup("ffaac,copy:ac3");
                     }
                     if( !abitrates )
                     {
@@ -1144,7 +1144,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,copy:ac3");
+                        acodecs = strdup("ffaac,copy:ac3");
                     }
                     if( !abitrates )
                     {
@@ -1214,7 +1214,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,copy:ac3");
+                        acodecs = strdup("ffaac,copy:ac3");
                     }
                     if( !abitrates )
                     {
@@ -1285,7 +1285,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac");
+                        acodecs = strdup("ffaac");
                     }
                     if( !abitrates )
                     {
@@ -1353,7 +1353,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac");
+                        acodecs = strdup("ffaac");
                     }
                     if( !abitrates )
                     {
@@ -1421,7 +1421,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac");
+                        acodecs = strdup("ffaac");
                     }
                     if( !abitrates )
                     {
@@ -1487,7 +1487,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac");
+                        acodecs = strdup("ffaac");
                     }
                     if( !abitrates )
                     {
@@ -1553,7 +1553,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,copy:ac3");
+                        acodecs = strdup("ffaac,copy:ac3");
                     }
                     if( !abitrates )
                     {
@@ -3552,23 +3552,22 @@ static void ShowPresets()
     fprintf( stderr, "%s - %s - %s\n", HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
 
     printf("\n< Devices\n");
-    printf("\n   + Universal:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 720 -Y 576 --loose-anamorphic --modulus 2 -m --x264-preset fast --h264-profile baseline --h264-level 3.0\n");
-    printf("\n   + iPod:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -I -X 320 -Y 240 --modulus 2 -m --x264-preset medium --h264-profile baseline --h264-level 1.3\n");
-    printf("\n   + iPhone & iPod touch:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 960 -Y 640 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1\n");
-    printf("\n   + iPad:  -e x264  -q 20.0 -r 30 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1\n");
-    printf("\n   + AppleTV:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 960 -Y 720 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1 -x qpmin=4:cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
-    printf("\n   + AppleTV 2:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1\n");
-    printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1920 -Y 1080 --decomb=fast --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.0\n");
-    printf("\n   + Android:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 720 -Y 576 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.0\n");
-    printf("\n   + Android Tablet:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
-    printf("\n   + Windows Phone 8:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
+    printf("\n   + Universal:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E ffaac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 720 -Y 576 --loose-anamorphic --modulus 2 -m --x264-preset fast --h264-profile baseline --h264-level 3.0\n");
+    printf("\n   + iPod:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E ffaac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -I -X 320 -Y 240 --modulus 2 -m --x264-preset medium --h264-profile baseline --h264-level 1.3\n");
+    printf("\n   + iPhone & iPod touch:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E ffaac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 960 -Y 640 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1\n");
+    printf("\n   + iPad:  -e x264  -q 20.0 -r 30 --pfr  -a 1 -E ffaac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1\n");
+    printf("\n   + AppleTV:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E ffaac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 960 -Y 720 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1 -x qpmin=4:cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
+    printf("\n   + AppleTV 2:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E ffaac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 3.1\n");
+    printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E ffaac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 -X 1920 -Y 1080 --decomb=fast --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.0\n");
+    printf("\n   + Android:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E ffaac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 720 -Y 576 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.0\n");
+    printf("\n   + Android Tablet:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E ffaac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --loose-anamorphic --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
+    printf("\n   + Windows Phone 8:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E ffaac -B 128 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -X 1280 -Y 720 --modulus 2 --x264-preset medium --h264-profile main --h264-level 3.1\n");
 	printf("\n>\n");
     printf("\n< Regular\n");
-    printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 --loose-anamorphic --modulus 2 -m --x264-preset veryfast --h264-profile main --h264-level 4.0\n");
-    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 --decomb --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.1\n");
+    printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E ffaac -B 160 -6 dpl2 -R Auto -D 0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 --loose-anamorphic --modulus 2 -m --x264-preset veryfast --h264-profile main --h264-level 4.0\n");
+    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E ffaac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 --decomb --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.1\n");
     printf("\n>\n");
 }
-
 static char * hb_strndup( char * str, int len )
 {
     char * res;

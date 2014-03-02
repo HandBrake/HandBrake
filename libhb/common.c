@@ -244,6 +244,7 @@ hb_encoder_internal_t hb_audio_encoders[]  =
 {
     // legacy encoders, back to HB 0.9.4 whenever possible (disabled)
     { { "",                   "dts",        NULL,                          HB_ACODEC_DCA_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_DTS_PASS,   },
+    { { "AAC (faac)",         "faac",       NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC,        },
     { { "AAC (ffmpeg)",       "ffaac",      NULL,                          HB_ACODEC_FFAAC,       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC,        },
     { { "AC3 (ffmpeg)",       "ffac3",      NULL,                          HB_ACODEC_AC3,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AC3,        },
     { { "MP3 (lame)",         "lame",       NULL,                          HB_ACODEC_LAME,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_MP3,        },
@@ -253,7 +254,6 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     // actual encoders
     { { "AAC (CoreAudio)",    "ca_aac",     "AAC (Apple AudioToolbox)",    HB_ACODEC_CA_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (CoreAudio)", "ca_haac",    "HE-AAC (Apple AudioToolbox)", HB_ACODEC_CA_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
-    { { "AAC (faac)",         "faac",       "AAC (libfaac)",               HB_ACODEC_FAAC,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "AAC (avcodec)",      "av_aac",     "AAC (libavcodec)",            HB_ACODEC_FFAAC,       HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "AAC (FDK)",          "fdk_aac",    "AAC (libfdk_aac)",            HB_ACODEC_FDK_AAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (FDK)",       "fdk_haac",   "HE-AAC (libfdk_aac)",         HB_ACODEC_FDK_HAAC,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
@@ -282,11 +282,6 @@ static int hb_audio_encoder_is_enabled(int encoder)
 #ifdef __APPLE__
         case HB_ACODEC_CA_AAC:
         case HB_ACODEC_CA_HAAC:
-            return 1;
-#endif
-
-#ifdef USE_FAAC
-        case HB_ACODEC_FAAC:
             return 1;
 #endif
 
@@ -862,21 +857,6 @@ fail:
  * Encoder    1.0 channel    2.0 channels    5.1 channels    6.1 channels    7.1 channels
  * --------------------------------------------------------------------------------------
  *
- * faac
- * ----
- * supported samplerates: 8 - 48 kHz
- * libfaac/util.c defines the bitrate limits:
- * MinBitrate() -> 8000 bps (per channel, incl. LFE).
- * MaxBitrate() -> (6144 * samplerate / 1024) bps (per channel, incl. LFE).
- * But output bitrates don't go as high as the theoretical maximums:
- * 12 kHz        43  (72)        87 (144)      260  (432)      303  (504)      342  (576)
- * 24 kHz        87 (144)       174 (288)      514  (864)      595 (1008)      669 (1152)
- * 48 kHz       174 (288)       347 (576)      970 (1728)     1138 (2016)     1287 (2304)
- * Also, faac isn't a great encoder, so you don't want to allow too low a bitrate.
- * Limits: minimum of  32 Kbps per channel
- *         maximum of 192 Kbps per channel at 32-48 kHz, adjusted for sr_shift
- *
- *
  * ffaac
  * -----
  * supported samplerates: 8 - 48 kHz
@@ -1059,11 +1039,6 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
             *high = (nchannels - (nchannels > 2)) * (48 +
                                                      (16 *
                                                       (samplerate >= 22050)));
-            break;
-
-        case HB_ACODEC_FAAC:
-            *low  = (nchannels + lfe_count) * 32;
-            *high = (nchannels + lfe_count) * (192 >> sr_shift);
             break;
 
         case HB_ACODEC_FFAAC:
@@ -1500,7 +1475,6 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
         case HB_ACODEC_LAME:
             return (mixdown <= HB_AMIXDOWN_DOLBYPLII);
 
-        case HB_ACODEC_FAAC:
         case HB_ACODEC_CA_AAC:
         case HB_ACODEC_CA_HAAC:
             return ((mixdown <= HB_AMIXDOWN_5POINT1) ||
@@ -1894,8 +1868,7 @@ int hb_audio_encoder_get_default(int muxer)
     // Lame is better than our low-end AAC encoders
     // if the container is MKV, use the former
     // AAC is still used when the container is MP4 (for better compatibility)
-    if ((codec == HB_ACODEC_FAAC ||
-         codec == HB_ACODEC_FFAAC) && (muxer & HB_MUX_MASK_MKV) == muxer)
+    if (codec == HB_ACODEC_FFAAC && (muxer & HB_MUX_MASK_MKV) == muxer)
     {
         return HB_ACODEC_LAME;
     }
