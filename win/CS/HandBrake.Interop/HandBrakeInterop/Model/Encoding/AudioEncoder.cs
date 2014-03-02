@@ -18,10 +18,6 @@ namespace HandBrake.Interop.Model.Encoding
     /// </summary>
     public enum AudioEncoder
     {
-        [Display(Name = "AAC (faac)")]
-        [ShortName("faac")]
-        faac = 0,
-
         [Display(Name = "AAC (avcodec)")]
         [ShortName("av_aac")]
         ffaac,

@@ -14,7 +14,6 @@ namespace HandBrake.Interop.HbLib
 	{
 		// Audio encoders
 		public const uint HB_ACODEC_MASK = 0x00FFFF00;
-		public const uint HB_ACODEC_FAAC = 0x00000100;
 		public const uint HB_ACODEC_LAME = 0x00000200;
 		public const uint HB_ACODEC_VORBIS = 0x00000400;
 		public const uint HB_ACODEC_AC3 = 0x00000800;
