@@ -20,7 +20,7 @@ The following are the recommended specifications for building on @value{OS-linux
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit kernel
-@item Ubuntu 13.10, gcc 4.8, yasm 1.2.x
+@item Ubuntu 14.04, gcc 4.8, yasm 1.2.x
 @item Fedora 20, gcc 4.8, yasm 1.2.x
 @item gcc 4.5 or higher is reported to work
 @end itemize
@@ -29,9 +29,9 @@ The following are the recommended specifications for building on @value{OS-linux
 
 @include building/prerequisites.common.texi
 
-The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you will not need many of these packages installed:
+The @b{GTK UI} introduces some significant extra build requirements. GTK version 3.10+ is required to build the GTK UI. If you intend to disable building the GUI with @command{configure --disable-gtk} you will not need many of these packages installed:
 
-Ubuntu 13.10 packages:
+Ubuntu 14.04 packages:
 @itemize @bullet
 @item subversion (cli/gui)
 @item yasm (cli/gui)

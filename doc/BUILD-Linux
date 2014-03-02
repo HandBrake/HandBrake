@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn6017 (2014020701) on Linux
+Guide to Building HandBrake svn6092 (2014030201) on Linux
 *********************************************************
 
 1 Introduction
@@ -33,7 +33,7 @@ The following are the recommended specifications for building on Linux;
 but is not necessarily the only configuration that is possible:
 
    * Intel 32-bit or 64-bit kernel
-   * Ubuntu 13.10, gcc 4.8, yasm 1.2.x
+   * Ubuntu 14.04, gcc 4.8, yasm 1.2.x
    * Fedora 20, gcc 4.8, yasm 1.2.x
    * gcc 4.5 or higher is reported to work
 
@@ -57,11 +57,12 @@ recommended you use these versions or similar:
    * tar - GNU tar 1.26
    * wget - GNU Wget 1.13.4 (or curl)
 
-The GTK UI introduces some significant extra build requirements.  If you
-intend to disable building the GUI with 'configure --disable-gtk' you
-will not need many of these packages installed:
+The GTK UI introduces some significant extra build requirements.  GTK
+version 3.10+ is required to build the GTK UI. If you intend to disable
+building the GUI with 'configure --disable-gtk' you will not need many
+of these packages installed:
 
-Ubuntu 13.10 packages:
+Ubuntu 14.04 packages:
    * subversion (cli/gui)
    * yasm (cli/gui)
    * build-essential (cli/gui)
@@ -500,6 +501,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    6017
-     date:   2014-02-07 08:20:18 -0700
+     rev:    6092
+     date:   2014-03-02 06:18:36 -0700
      type:   developer
