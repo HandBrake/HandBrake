@@ -5359,11 +5359,11 @@ the user is using "Custom" settings by determining the sender*/
     float minValue, maxValue, granularity;
     hb_video_quality_get_limits((int)[[fVidEncoderPopUp selectedItem] tag],
                                 &minValue, &maxValue, &granularity, &direction);
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
+    if (granularity < 1.0f)
     {
         /*
-         * As x264 allows for qp/rf values that are fractional,
-         * we get the value from the preferences
+         * Encoders that allow fractional CQ values often have a low granularity
+         * which makes the slider hard to use, so use a value from preferences.
          */
         granularity = [[NSUserDefaults standardUserDefaults]
                        floatForKey:@"x264CqSliderFractional"];
@@ -5371,7 +5371,7 @@ the user is using "Custom" settings by determining the sender*/
     [fVidQualitySlider setMinValue:minValue];
     [fVidQualitySlider setMaxValue:maxValue];
     [fVidQualitySlider setNumberOfTickMarks:((maxValue - minValue) *
-                                             (1. / granularity)) + 1];
+                                             (1.0f / granularity)) + 1];
     
     /* check to see if we have changed slider scales */
     if (previousMaxValue != maxValue)
