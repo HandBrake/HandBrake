@@ -1008,8 +1008,8 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
         // Set the limits of cropping.  hb_set_anamorphic_size crashes if
         // you pass it a cropped width or height == 0.
         gint vbound, hbound;
-        vbound = title->height / 2 - 8;
-        hbound = title->width / 2 - 8;
+        vbound = title->height;
+        hbound = title->width;
 
         val = ghb_settings_get_int(ud->settings, "PictureTopCrop");
         spin_configure(ud, "PictureTopCrop", val, 0, vbound);

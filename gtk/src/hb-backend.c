@@ -3509,6 +3509,15 @@ ghb_set_scale_settings(GValue *settings, gint mode)
         crop[1] = ghb_settings_get_int(settings, "PictureBottomCrop");
         crop[2] = ghb_settings_get_int(settings, "PictureLeftCrop");
         crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
+        // Prevent manual crop from creating too small an image
+        if (title->height - crop[0] < crop[1] + 16)
+        {
+            crop[0] = title->height - crop[1] - 16;
+        }
+        if (title->width - crop[2] < crop[3] + 16)
+        {
+            crop[2] = title->width - crop[3] - 16;
+        }
     }
     if (noscale)
     {
@@ -3558,9 +3567,9 @@ ghb_set_scale_settings(GValue *settings, gint mode)
     g_debug("max_width %d, max_height %d\n", max_width, max_height);
 
     if (width < 16)
-        width = title->width - crop[2] - crop[3];
+        width = 16;
     if (height < 16)
-        height = title->height - crop[0] - crop[1];
+        height = 16;
 
     width = MOD_ROUND(width, mod);
     height = MOD_ROUND(height, mod);
