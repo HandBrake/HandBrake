@@ -794,6 +794,16 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             gop_ref_dist *= 2;
         }
+        /*
+         * XXX: B-pyramid + forced keyframes will cause visual artifacts,
+         *      force-disable B-pyramid until we insert keyframes properly
+         */
+        if (pv->param.gop.b_pyramid && job->chapter_markers)
+        {
+            pv->param.gop.b_pyramid = 0;
+            hb_log("encqsvInit: chapter markers enabled, disabling B-pyramid "
+                   "to work around a bug in our keyframe insertion code");
+        }
         if ((pv->param.gop.b_pyramid) &&
             (pv->param.videoParam->mfx.GopPicSize == 0 ||
              pv->param.videoParam->mfx.GopPicSize > gop_ref_dist))
@@ -1556,16 +1566,6 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                                   ((task->bs->TimeStamp -
                                                     task->bs->DecodeTimeStamp +
                                                     (duration / 2)) / duration));
-
-                    // When forcing an IDR for a chapter right after another IDR
-                    // selected by MSDK, we may end up with one more consecutive
-                    // B-reference frame than the original delay accounts for;
-                    // work around it by incrementing the delay in this case
-                    if (pv->bfrm_workaround && job->chapter_markers &&
-                        pv->bfrm_delay > 1)
-                    {
-                        pv->bfrm_delay++;
-                    }
                 }
 
                 if (!pv->bfrm_workaround)
