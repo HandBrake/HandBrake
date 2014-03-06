@@ -880,6 +880,11 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
+    char tool_string[80];
+    snprintf(tool_string, sizeof(tool_string), "HandBrake %s %i",
+             HB_PROJECT_VERSION, HB_PROJECT_BUILD);
+    av_dict_set(&m->oc->metadata, "encoding_tool", tool_string, 0);
+
     AVDictionary * av_opts = NULL;
     if (job->mp4_optimize && (job->mux & HB_MUX_MASK_MP4))
         av_dict_set( &av_opts, "movflags", "faststart", 0 );
