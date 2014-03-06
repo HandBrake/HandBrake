@@ -701,18 +701,19 @@ G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_da
 
 const gchar *MyCSS =
 "                                   \n\
-GtkRadioButton .button {                       \n\
-    border-width: 0px;                   \n\
+GtkRadioButton .button {            \n\
+    border-width: 0px;              \n\
     padding: 0px;                   \n\
 }                                   \n\
 GtkComboBox {                       \n\
     padding: 0px;                   \n\
 }                                   \n\
-GtkComboBox .button {                       \n\
+GtkComboBox .button {               \n\
     padding: 2px;                   \n\
+    border-width: 0px;              \n\
 }                                   \n\
 GtkEntry {                          \n\
-    padding: 0px 4px;                   \n\
+    padding: 4px 4px;               \n\
 }                                   \n\
                                     \n\
 @define-color black  #000000;       \n\

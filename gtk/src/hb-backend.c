@@ -1883,33 +1883,39 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
     }
     if( count <= 0 )
     {
+        char *opt;
+
         // No titles.  Fill in a default.
         gtk_list_store_append(store, &iter);
+        opt = g_strdup_printf("<small>%s</small>", _("No Titles"));
         gtk_list_store_set(store, &iter,
-                           0, _("No Titles"),
+                           0, opt,
                            1, TRUE,
                            2, "none",
                            3, -1.0,
                            4, "none",
                            -1);
+        g_free(opt);
         return;
     }
     for (ii = 0; ii < count; ii++)
     {
-        char *title_opt, *title_index;
+        char *title_opt, *title_index, *opt;
 
         title = hb_list_item(list, ii);
         title_opt = ghb_create_title_label(title);
+        opt = g_strdup_printf("<small>%s</small>", title_opt);
         title_index = g_strdup_printf("%d", title->index);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           0, title_opt,
+                           0, opt,
                            1, TRUE,
                            2, title_index,
                            3, (gdouble)title->index,
                            4, title_index,
                            -1);
+        g_free(opt);
         g_free(title_opt);
         g_free(title_index);
     }
@@ -2308,6 +2314,7 @@ ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start)
     return -1;
 }
 
+#if 0
 static void
 generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
 {
@@ -2332,6 +2339,7 @@ generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
                            -1);
     }
 }
+#endif
 
 static void
 small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
@@ -2505,20 +2513,20 @@ ghb_update_ui_combo_box(
         title_opts_set(ud->builder, "title");
         audio_track_opts_set(ud->builder, "AudioTrack", user_data);
         subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
-        generic_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
-        generic_opts_set(ud->builder, "SubtitleTrackSelectionBehavior", &subtitle_track_sel_opts);
-        generic_opts_set(ud->builder, "AudioTrackSelectionBehavior", &audio_track_sel_opts);
-        generic_opts_set(ud->builder, "PtoPType", &point_to_point_opts);
-        generic_opts_set(ud->builder, "WhenComplete", &when_complete_opts);
-        generic_opts_set(ud->builder, "PicturePAR", &par_opts);
-        generic_opts_set(ud->builder, "PictureModulus", &alignment_opts);
-        generic_opts_set(ud->builder, "LoggingLevel", &logging_opts);
-        generic_opts_set(ud->builder, "LogLongevity", &log_longevity_opts);
-        generic_opts_set(ud->builder, "check_updates", &appcast_update_opts);
-        generic_opts_set(ud->builder, "PictureDeinterlace", &deint_opts);
-        generic_opts_set(ud->builder, "PictureDetelecine", &detel_opts);
-        generic_opts_set(ud->builder, "PictureDecomb", &decomb_opts);
-        generic_opts_set(ud->builder, "PictureDenoise", &denoise_opts);
+        small_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
+        small_opts_set(ud->builder, "SubtitleTrackSelectionBehavior", &subtitle_track_sel_opts);
+        small_opts_set(ud->builder, "AudioTrackSelectionBehavior", &audio_track_sel_opts);
+        small_opts_set(ud->builder, "PtoPType", &point_to_point_opts);
+        small_opts_set(ud->builder, "WhenComplete", &when_complete_opts);
+        small_opts_set(ud->builder, "PicturePAR", &par_opts);
+        small_opts_set(ud->builder, "PictureModulus", &alignment_opts);
+        small_opts_set(ud->builder, "LoggingLevel", &logging_opts);
+        small_opts_set(ud->builder, "LogLongevity", &log_longevity_opts);
+        small_opts_set(ud->builder, "check_updates", &appcast_update_opts);
+        small_opts_set(ud->builder, "PictureDeinterlace", &deint_opts);
+        small_opts_set(ud->builder, "PictureDetelecine", &detel_opts);
+        small_opts_set(ud->builder, "PictureDecomb", &decomb_opts);
+        small_opts_set(ud->builder, "PictureDenoise", &denoise_opts);
         small_opts_set(ud->builder, "x264_direct", &direct_opts);
         small_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
         small_opts_set(ud->builder, "x264_bpyramid", &bpyramid_opts);
@@ -2567,7 +2575,7 @@ ghb_update_ui_combo_box(
         else if (strcmp(name, "FileFormat") == 0)
             container_opts_set(ud->builder, "FileFormat");
         else
-            generic_opts_set(ud->builder, name, find_combo_table(name));
+            small_opts_set(ud->builder, name, find_combo_table(name));
     }
     if (handler_id > 0)
     {

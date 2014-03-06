@@ -1076,6 +1076,7 @@ Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                                     <child>
                                       <object class="GtkComboBox" id="title">
                                         <property name="visible">True</property>
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="tooltip_text" translatable="yes">Set the title to encode.
@@ -1177,6 +1178,7 @@ This is often the feature title of a DVD.</property>
                                         <child>
                                           <object class="GtkComboBox" id="PtoPType">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="tooltip_text" translatable="yes">Range of title to encode. Can be chapters, seconds, or frames.</property>
                                             <signal name="changed" handler="ptop_widget_changed_cb" swapped="no"/>
@@ -1409,6 +1411,7 @@ This is often the feature title of a DVD.</property>
                                         <child>
                                           <object class="GtkComboBox" id="FileFormat">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="tooltip_text" translatable="yes">Format to mux encoded tracks to.</property>
                                             <signal name="changed" handler="container_changed_cb" swapped="no"/>
@@ -2139,6 +2142,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <child>
                                           <object class="GtkComboBox" id="VideoEncoder">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="tooltip_text" translatable="yes">Available video encoders.</property>
                                             <signal name="changed" handler="vcodec_changed_cb" swapped="no"/>
@@ -2168,6 +2172,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <child>
                                           <object class="GtkComboBox" id="VideoFramerate">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Output framerate.
@@ -2463,7 +2468,7 @@ Use at your own risk!</property>
                                         <signal name="toggled" handler="x264_use_advanced_options_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="expand">True</property>
+                                        <property name="expand">False</property>
                                         <property name="fill">True</property>
                                         <property name="padding">2</property>
                                         <property name="position">0</property>
@@ -2540,6 +2545,7 @@ settings will result in better quality or smaller files.</property>
                                         <child>
                                           <object class="GtkComboBox" id="x264Tune">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Tune settings to optimize for common scenarios.
@@ -2620,6 +2626,7 @@ this setting is of little value here.</property>
                                         <child>
                                           <object class="GtkComboBox" id="h264Profile">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Limit the H.264 profile of the output stream.
@@ -2652,6 +2659,7 @@ Overrides all other settings.</property>
                                         <child>
                                           <object class="GtkComboBox" id="h264Level">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Sets and ensures compliance with the specified H.264 level.
@@ -2690,7 +2698,6 @@ Overrides all other settings.</property>
                                             </child>
                                             <child>
                                               <object class="GtkScrolledWindow" id="scrolledwindow8">
-                                                <property name="height_request">60</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="shadow_type">etched-in</property>
@@ -2800,6 +2807,7 @@ Colon separated list of x264 options.</property>
                                         <child>
                                           <object class="GtkComboBox" id="AudioTrackSelectionBehavior">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <signal name="changed" handler="audio_def_widget_changed_cb" swapped="no"/>
                                           </object>
@@ -3120,6 +3128,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                                         <child>
                                           <object class="GtkComboBox" id="AudioEncoderFallback">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Set the audio codec to encode with when a suitable track can not be found for audio passthru.</property>
@@ -3465,6 +3474,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                                         <child>
                                           <object class="GtkComboBox" id="SubtitleTrackSelectionBehavior">
                                             <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <signal name="changed" handler="subtitle_def_widget_changed_cb" swapped="no"/>
                                           </object>
@@ -5886,6 +5896,7 @@ You can edit these and add additional options.</property>
                                 <property name="spacing">4</property>
                                 <child>
                                   <object class="GtkComboBox" id="check_updates">
+                                    <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <signal name="changed" handler="pref_changed_cb" swapped="no"/>
@@ -5935,6 +5946,7 @@ You can edit these and add additional options.</property>
                                 <child>
                                   <object class="GtkComboBox" id="WhenComplete">
                                     <property name="visible">True</property>
+                                    <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="can_focus">False</property>
                                     <signal name="changed" handler="pref_changed_cb" swapped="no"/>
                                   </object>
@@ -6276,6 +6288,7 @@ You can edit these and add additional options.</property>
                                     <property name="spacing">4</property>
                                     <child>
                                       <object class="GtkComboBox" id="VideoQualityGranularity">
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
                                         <property name="width_request">55</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -6359,6 +6372,7 @@ You can edit these and add additional options.</property>
                                             <property name="spacing">4</property>
                                             <child>
                                               <object class="GtkComboBox" id="LoggingLevel">
+                                                <property name="valign">GTK_ALIGN_CENTER</property>
                                                 <property name="width_request">55</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -6405,6 +6419,7 @@ You can edit these and add additional options.</property>
                                             <property name="spacing">4</property>
                                             <child>
                                               <object class="GtkComboBox" id="LogLongevity">
+                                                <property name="valign">GTK_ALIGN_CENTER</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <signal name="changed" handler="pref_changed_cb" swapped="no"/>
@@ -8188,6 +8203,7 @@ This will be the resolution that most closely matches the source resolution afte
                                     <child>
                                       <object class="GtkComboBox" id="PicturePAR">
                                         <property name="visible">True</property>
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_markup">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
@@ -8236,6 +8252,7 @@ Strict - Keep original source dimensions and pixel
                                     <child>
                                       <object class="GtkComboBox" id="PictureModulus">
                                         <property name="visible">True</property>
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">Align storage dimensions to multiples of this value.
@@ -8652,6 +8669,7 @@ If your source exhibits 'blockiness', this filter may help clean it up.</propert
                                 </child>
                                 <child>
                                   <object class="GtkComboBox" id="PictureDenoise">
+                                    <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -8747,6 +8765,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                 </child>
                                 <child>
                                   <object class="GtkComboBox" id="PictureDetelecine">
+                                    <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -8847,6 +8866,7 @@ Frames that are not interlaced will suffer some quality degradation.</property>
                                 </child>
                                 <child>
                                   <object class="GtkComboBox" id="PictureDecomb">
+                                    <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -8898,6 +8918,7 @@ ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity</property>
                                 </child>
                                 <child>
                                   <object class="GtkComboBox" id="PictureDeinterlace">
+                                    <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -9446,6 +9467,7 @@ YadifMode:YadifParity:McdintMode:McdeintQp</property>
                 </child>
                 <child>
                   <object class="GtkComboBox" id="SrtLanguage">
+                    <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9462,6 +9484,7 @@ YadifMode:YadifParity:McdintMode:McdeintQp</property>
                 </child>
                 <child>
                   <object class="GtkComboBox" id="SrtCodeset">
+                    <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="width_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -9548,6 +9571,7 @@ YadifMode:YadifParity:McdintMode:McdeintQp</property>
                 </child>
                 <child>
                   <object class="GtkComboBox" id="SubtitleTrack">
+                    <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9734,6 +9758,7 @@ in your output.</property>
             </child>
             <child>
               <object class="GtkComboBox" id="AudioTrack">
+                <property name="valign">GTK_ALIGN_CENTER</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
