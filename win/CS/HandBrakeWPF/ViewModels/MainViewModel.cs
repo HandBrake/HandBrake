@@ -636,8 +636,30 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                this.CurrentTask.Destination = value;
-                this.NotifyOfPropertyChange(() => this.Destination);
+                if (!object.Equals(this.CurrentTask.Destination, value))
+                {
+                    this.CurrentTask.Destination = value;
+                    this.NotifyOfPropertyChange(() => this.Destination);
+
+                    if (!string.IsNullOrEmpty(this.CurrentTask.Destination))
+                    {
+                        switch (Path.GetExtension(this.CurrentTask.Destination))
+                        {
+                            case ".mkv":
+                                this.SelectedOutputFormat = OutputFormat.Mkv;
+                                break;
+                            case ".mp4":
+                                this.SelectedOutputFormat = OutputFormat.Mp4;
+                                break;
+                            case ".m4v":
+                                this.SelectedOutputFormat = OutputFormat.Mp4;
+                                break;
+                            case ".x265":
+                                this.SelectedOutputFormat = OutputFormat.X265;
+                                break;
+                        }
+                    }
+                }
             }
         }
 
@@ -855,15 +877,18 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.selectedOutputFormat = value;
-                this.CurrentTask.OutputFormat = value;
-                this.NotifyOfPropertyChange(() => SelectedOutputFormat);
-                this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
-                this.NotifyOfPropertyChange(() => IsMkv);
-                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower()));
+                if (!object.Equals(this.selectedOutputFormat, value))
+                {
+                    this.selectedOutputFormat = value;
+                    this.CurrentTask.OutputFormat = value;
+                    this.NotifyOfPropertyChange(() => SelectedOutputFormat);
+                    this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
+                    this.NotifyOfPropertyChange(() => IsMkv);
+                    this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower()));
 
-                this.VideoViewModel.RefreshTask();
-                this.AudioViewModel.RefreshTask();
+                    this.VideoViewModel.RefreshTask();
+                    this.AudioViewModel.RefreshTask();
+                }
             }
         }
 
@@ -1144,7 +1169,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
-            
+
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
                 this.queueProcessor.Add(task);
@@ -1411,8 +1436,14 @@ namespace HandBrakeWPF.ViewModels
                     AddExtension = true,
                     DefaultExt = ".mp4",
                     OverwritePrompt = true,
-                    FilterIndex = this.CurrentTask.OutputFormat == OutputFormat.Mkv ? 1 : 0,
                 };
+
+            string extension = Path.GetExtension(this.CurrentTask.Destination);
+
+            saveFileDialog.FilterIndex = !string.IsNullOrEmpty(this.CurrentTask.Destination)
+                                         && !string.IsNullOrEmpty(extension)
+                                             ? (extension == ".mp4" || extension == ".m4v" ? 1 : 2)
+                                             : (this.CurrentTask.OutputFormat == OutputFormat.Mkv ? 2 : 0);
 
             if (this.CurrentTask != null && !string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
@@ -1423,29 +1454,32 @@ namespace HandBrakeWPF.ViewModels
                 saveFileDialog.FileName = Path.GetFileName(this.CurrentTask.Destination);
             }
 
-            saveFileDialog.ShowDialog();
-            this.Destination = saveFileDialog.FileName;
-
-            // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
-            if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+            bool? result = saveFileDialog.ShowDialog();
+            if (result.HasValue && result.Value)
             {
-                switch (Path.GetExtension(saveFileDialog.FileName))
-                {
-                    case ".mkv":
-                        this.SelectedOutputFormat = OutputFormat.Mkv;
-                        break;
-                    case ".mp4":
-                        this.SelectedOutputFormat = OutputFormat.Mp4;
-                        break;
-                    case ".m4v":
-                        this.SelectedOutputFormat = OutputFormat.M4V;
-                        break;
-                    case ".x265":
-                        this.SelectedOutputFormat = OutputFormat.X265;
-                        break;
-                }
+                this.Destination = saveFileDialog.FileName;
 
-                this.NotifyOfPropertyChange(() => this.CurrentTask);
+                // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
+                if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+                {
+                    switch (Path.GetExtension(saveFileDialog.FileName))
+                    {
+                        case ".mkv":
+                            this.SelectedOutputFormat = OutputFormat.Mkv;
+                            break;
+                        case ".mp4":
+                            this.SelectedOutputFormat = OutputFormat.Mp4;
+                            break;
+                        case ".m4v":
+                            this.SelectedOutputFormat = OutputFormat.M4V;
+                            break;
+                        case ".x265":
+                            this.SelectedOutputFormat = OutputFormat.X265;
+                            break;
+                    }
+
+                    this.NotifyOfPropertyChange(() => this.CurrentTask);
+                }
             }
         }
 

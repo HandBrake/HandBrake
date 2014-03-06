@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     public enum OutputFormat
     {
         [Description("MP4")]
-        Mp4,
+        Mp4 = 0,
 
         [Description("M4V")]
         M4V,
