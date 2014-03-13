@@ -1,6 +1,7 @@
 CONTRIB.build/    = $(BUILD/)contrib/
 CONTRIB.download/ = $(SRC/)download/
 CONTRIB.host      = $(if $(filter 1,$(BUILD.cross)),$(BUILD.spec))
+CONTRIB.spec      = $(if $(filter 1,$(BUILD.cross)),$(HOST.spec))
 
 ###############################################################################
 
@@ -71,6 +72,7 @@ define import.CONTRIB.defs
     $(1).CONFIGURE.bootstrap  =
     $(1).CONFIGURE.exe        = ./configure
     $(1).CONFIGURE.host       = $$(CONTRIB.host)
+    $(1).CONFIGURE.build      = $$(CONTRIB.spec)
     $(1).CONFIGURE.prefix     = $$(call fn.ABSOLUTE,$$(CONTRIB.build/))
     $(1).CONFIGURE.deps       = --disable-dependency-tracking
     $(1).CONFIGURE.shared     = --disable-shared
@@ -79,9 +81,10 @@ define import.CONTRIB.defs
 
     $(1).CONFIGURE.args.dir    = cd $$(1);
     $(1).CONFIGURE.args.host   = --host=$$(1)
+    $(1).CONFIGURE.args.build  = --build=$$(1)
     $(1).CONFIGURE.args.prefix = --prefix=$$(1)
 
-    $(1).CONFIGURE.args = !sete @dir !bootstrap !env !exe @host @prefix !deps !shared !static !extra
+    $(1).CONFIGURE.args = !sete @dir !bootstrap !env !exe @host @build @prefix !deps !shared !static !extra
 
     $(1).CONFIGURE.env.LOCAL_PATH =
     $(1).CONFIGURE.env.CC       = CC=$$($(1).GCC.gcc)
