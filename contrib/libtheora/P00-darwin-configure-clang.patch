@@ -1,0 +1,12 @@
+diff -ur libtheora-1.1.0.orig/configure libtheora-1.1.0/configure
+--- libtheora-1.1.0.orig/configure	2009-09-24 16:01:32.000000000 -0400
++++ libtheora-1.1.0/configure	2014-03-11 20:17:28.000000000 -0400
+@@ -11843,7 +11843,7 @@
+         case $host in
+         *)
+                 DEBUG="-g -Wall -Wno-parentheses -DDEBUG -D__NO_MATH_INLINES"
+-                CFLAGS="-Wall -Wno-parentheses -O3 -fforce-addr -fomit-frame-pointer -finline-functions -funroll-loops"
++                CFLAGS="-Wall -Wno-parentheses -O3 -fomit-frame-pointer -finline-functions -funroll-loops"
+                 PROFILE="-Wall -Wno-parentheses -pg -g -O3 -fno-inline-functions -DDEBUG";;
+         esac
+ fi

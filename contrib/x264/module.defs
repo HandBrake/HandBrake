@@ -9,7 +9,7 @@ X264.GCC.args.c_std =
 X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 
-X264.CONFIGURE.extra  = --enable-strip --bit-depth=8 --chroma-format=420
+X264.CONFIGURE.extra  = --bit-depth=8 --chroma-format=420
 X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-swscale --disable-gpac --disable-lsmash --disable-cli
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))

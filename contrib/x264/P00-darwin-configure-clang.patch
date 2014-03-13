@@ -1,0 +1,11 @@
+diff -ur x264.orig/configure x264/configure
+--- x264.orig/configure	2014-01-21 16:40:15.000000000 -0500
++++ x264/configure	2014-03-11 20:33:33.000000000 -0400
+@@ -467,7 +467,6 @@
+         ;;
+     darwin*)
+         SYS="MACOSX"
+-        CFLAGS="$CFLAGS -falign-loops=16"
+         libm="-lm"
+         if [ "$pic" = "no" ]; then
+             cc_check "" -mdynamic-no-pic && CFLAGS="$CFLAGS -mdynamic-no-pic"
