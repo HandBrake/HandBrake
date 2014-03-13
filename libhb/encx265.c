@@ -54,8 +54,6 @@ struct hb_work_private_s
     }
     frame_info[FRAME_INFO_SIZE];
 
-    FILE *fout;
-
     char csvfn[1024];
 };
 
@@ -81,18 +79,6 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     int i, vrate, vrate_base;
     x265_nal *nal;
     uint32_t nnal;
-
-    if (job->mux == HB_MUX_X265)
-    {
-        pv->fout = fopen(job->file, "wb");
-        if (pv->fout == NULL || fseek(pv->fout, 0L, SEEK_SET) < 0)
-        {
-            hb_error("encx265: fopen failed.");
-            free(pv);
-            pv = NULL;
-            return 1;
-        }
-    }
 
     x265_param *param = pv->param = x265_param_alloc();
 
@@ -222,15 +208,6 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         return 1;
     }
 
-    if (job->mux == HB_MUX_X265)
-    {
-        for (i = 0; i < nnal; i++)
-        {
-            fwrite(nal[i].payload, 1, nal[i].sizeBytes, pv->fout);
-        }
-        return 0;
-    }
-
     /*
      * x265's output (headers and bitstream) are in Annex B format.
      *
@@ -274,7 +251,6 @@ void encx265Close(hb_work_object_t *w)
 
     x265_param_free(pv->param);
     x265_encoder_close(pv->x265);
-    fclose(pv->fout);
     free(pv);
     w->private_data = NULL;
 }
@@ -378,16 +354,6 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
                 pv->next_chapter_pts = item->start;
             }
         }
-    }
-
-    if (job->mux == HB_MUX_X265)
-    {
-        for (i = 0; i < nnal; i++)
-        {
-            fwrite(nal[i].payload, 1, nal[i].sizeBytes, pv->fout);
-        }
-        hb_buffer_close(&buf);
-        return NULL;
     }
 
     // discard empty buffers (no video)

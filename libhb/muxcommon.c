@@ -475,10 +475,6 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
             mux->m = hb_mux_avformat_init( job );
             break;
 #endif
-#ifdef USE_X265
-        case HB_MUX_X265:
-            break;
-#endif
         default:
             hb_error( "No muxer selected, exiting" );
             *job->done_error = HB_ERROR_INIT;
