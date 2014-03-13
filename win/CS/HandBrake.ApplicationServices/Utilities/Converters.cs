@@ -543,8 +543,6 @@ namespace HandBrake.ApplicationServices.Utilities
                     return OutputFormat.Mp4;
                 case "mkv":
                     return OutputFormat.Mkv;
-                case "x265":
-                    return OutputFormat.X265;
             }
         }
 
@@ -567,8 +565,6 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "m4v";
                 case OutputFormat.Mkv:
                     return "mkv";
-                case OutputFormat.X265:
-                    return "x265";
             }
         }
 

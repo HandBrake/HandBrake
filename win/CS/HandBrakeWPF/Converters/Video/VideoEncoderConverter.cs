@@ -60,17 +60,6 @@ namespace HandBrakeWPF.Converters.Video
                     encoders.Remove(VideoEncoder.QuickSync);
                 }
 
-                if (task != null && task.OutputFormat != OutputFormat.X265)
-                {
-                    encoders.Remove(VideoEncoder.X265);
-                }
-
-                if (task != null && task.OutputFormat == OutputFormat.X265)
-                {
-                    encoders.Clear();
-                    encoders.Add(VideoEncoder.X265);
-                }
-
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(encoders);
             }
 

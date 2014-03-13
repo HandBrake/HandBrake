@@ -135,9 +135,6 @@ namespace HandBrake.ApplicationServices.Utilities
                 case OutputFormat.Mkv:
                     profile.ContainerName = "av_mkv"; // TODO make part of enum.
                     break;
-                case OutputFormat.X265:
-                    profile.ContainerName = "x265"; // TODO make part of enum.
-                    break;
             }
 
             // Picture Settings

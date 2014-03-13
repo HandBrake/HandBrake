@@ -615,7 +615,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new List<OutputFormat>
                     {
-                         OutputFormat.Mp4, OutputFormat.Mkv, OutputFormat.X265
+                         OutputFormat.Mp4, OutputFormat.Mkv
                     };
             }
         }
@@ -653,9 +653,6 @@ namespace HandBrakeWPF.ViewModels
                                 break;
                             case ".m4v":
                                 this.SelectedOutputFormat = OutputFormat.Mp4;
-                                break;
-                            case ".x265":
-                                this.SelectedOutputFormat = OutputFormat.X265;
                                 break;
                         }
                     }
@@ -1472,9 +1469,6 @@ namespace HandBrakeWPF.ViewModels
                             break;
                         case ".m4v":
                             this.SelectedOutputFormat = OutputFormat.M4V;
-                            break;
-                        case ".x265":
-                            this.SelectedOutputFormat = OutputFormat.X265;
                             break;
                     }
 
