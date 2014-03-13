@@ -5,16 +5,16 @@ X265.FETCH.url = http://download.handbrake.fr/contrib/x265-6321-8a84c10e5116.tar
 
 X265.CONFIGURE.exe         = cmake
 X265.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265.CONFIGURE.prefix)"
-X265.CONFIGURE.build       =
 X265.CONFIGURE.deps        =
 X265.CONFIGURE.static      =
 X265.CONFIGURE.shared      = -DENABLE_SHARED=OFF
 X265.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=OFF
 
 ifeq (1,$(BUILD.cross))
-    X265.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(X265.CONFIGURE.host)"
+    X265.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(X265.CONFIGURE.host)"
+    X265.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265.CONFIGURE.build)"
 else
-    X265.CONFIGURE.args.host = -DCMAKE_HOST_SYSTEM="$(X265.CONFIGURE.host)"
+    X265.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265.CONFIGURE.host)"
     ifeq (1,$(FEATURE.local_yasm))
         X265.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
         X265.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
