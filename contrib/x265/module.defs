@@ -5,6 +5,7 @@ X265.FETCH.url = http://download.handbrake.fr/contrib/x265-6321-8a84c10e5116.tar
 
 X265.CONFIGURE.exe         = cmake
 X265.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265.CONFIGURE.prefix)"
+X265.CONFIGURE.build       =
 X265.CONFIGURE.deps        =
 X265.CONFIGURE.static      =
 X265.CONFIGURE.shared      = -DENABLE_SHARED=OFF
