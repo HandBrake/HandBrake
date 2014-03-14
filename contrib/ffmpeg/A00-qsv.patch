@@ -1,5 +1,5 @@
 diff --git a/configure b/configure
-index 945a012..3fdc346 100755
+index c6789d5..d1a8661 100755
 --- a/configure
 +++ b/configure
 @@ -132,6 +132,7 @@ Component options:
@@ -10,7 +10,7 @@ index 945a012..3fdc346 100755
    --enable-vaapi           enable VAAPI code
    --enable-vda             enable VDA code
    --enable-vdpau           enable VDPAU code
-@@ -1137,6 +1138,7 @@ EXTERNAL_LIBRARY_LIST="
+@@ -1139,6 +1140,7 @@ EXTERNAL_LIBRARY_LIST="
  
  HWACCEL_LIST="
      dxva2
@@ -18,7 +18,7 @@ index 945a012..3fdc346 100755
      vaapi
      vda
      vdpau
-@@ -1797,6 +1799,7 @@ zmbv_encoder_deps="zlib"
+@@ -1800,6 +1802,7 @@ zmbv_encoder_deps="zlib"
  
  # hardware accelerators
  dxva2_deps="dxva2api_h"
@@ -26,7 +26,7 @@ index 945a012..3fdc346 100755
  vaapi_deps="va_va_h"
  vda_deps="VideoDecodeAcceleration_VDADecoder_h pthreads"
  vda_extralibs="-framework CoreFoundation -framework VideoDecodeAcceleration -framework QuartzCore"
-@@ -1808,6 +1811,8 @@ h263_vdpau_hwaccel_deps="vdpau"
+@@ -1811,6 +1814,8 @@ h263_vdpau_hwaccel_deps="vdpau"
  h263_vdpau_hwaccel_select="h263_decoder"
  h264_dxva2_hwaccel_deps="dxva2"
  h264_dxva2_hwaccel_select="h264_decoder"
@@ -35,7 +35,7 @@ index 945a012..3fdc346 100755
  h264_vaapi_hwaccel_deps="vaapi"
  h264_vaapi_hwaccel_select="h264_decoder"
  h264_vda_hwaccel_deps="vda"
-@@ -3853,6 +3858,7 @@ check_header dxva.h
+@@ -3861,6 +3866,7 @@ check_header dxva.h
  check_header dxva2api.h
  check_header io.h
  check_header malloc.h
@@ -44,7 +44,7 @@ index 945a012..3fdc346 100755
  check_header sys/mman.h
  check_header sys/param.h
 diff --git a/libavcodec/Makefile b/libavcodec/Makefile
-index 75426c4..87bbc81 100644
+index 9e4dd25..1fbee4a 100644
 --- a/libavcodec/Makefile
 +++ b/libavcodec/Makefile
 @@ -4,6 +4,7 @@ FFLIBS = avutil
@@ -63,7 +63,7 @@ index 75426c4..87bbc81 100644
  OBJS-$(CONFIG_RANGECODER)              += rangecoder.o
  RDFT-OBJS-$(CONFIG_HARDCODED_TABLES)   += sin_tables.o
  OBJS-$(CONFIG_RDFT)                    += rdft.o $(RDFT-OBJS-yes)
-@@ -198,6 +200,7 @@ OBJS-$(CONFIG_H264_DECODER)            += h264.o                               \
+@@ -199,6 +201,7 @@ OBJS-$(CONFIG_H264_DECODER)            += h264.o                               \
                                            h264_loopfilter.o h264_direct.o      \
                                            cabac.o h264_sei.o h264_ps.o         \
                                            h264_refs.o h264_cavlc.o h264_cabac.o
@@ -71,7 +71,7 @@ index 75426c4..87bbc81 100644
  OBJS-$(CONFIG_HEVC_DECODER)            += hevc.o hevc_mvs.o hevc_ps.o hevc_sei.o \
                                            hevc_cabac.o hevc_refs.o hevcpred.o    \
                                            hevcdsp.o hevc_filter.o cabac.o
-@@ -691,6 +694,7 @@ SKIPHEADERS                            += %_tablegen.h                  \
+@@ -692,6 +695,7 @@ SKIPHEADERS                            += %_tablegen.h                  \
  SKIPHEADERS-$(CONFIG_DXVA2)            += dxva2.h dxva2_internal.h
  SKIPHEADERS-$(CONFIG_LIBSCHROEDINGER)  += libschroedinger.h
  SKIPHEADERS-$(CONFIG_MPEG_XVMC_DECODER) += xvmc.h
@@ -80,10 +80,10 @@ index 75426c4..87bbc81 100644
  SKIPHEADERS-$(CONFIG_VDA)              += vda.h
  SKIPHEADERS-$(CONFIG_VDPAU)            += vdpau.h vdpau_internal.h
 diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
-index 2e56ec1..e9053ac 100644
+index b6c27c0..287b912 100644
 --- a/libavcodec/allcodecs.c
 +++ b/libavcodec/allcodecs.c
-@@ -154,6 +154,7 @@ void avcodec_register_all(void)
+@@ -155,6 +155,7 @@ void avcodec_register_all(void)
      REGISTER_DECODER(H263I,             h263i);
      REGISTER_ENCODER(H263P,             h263p);
      REGISTER_DECODER(H264,              h264);
