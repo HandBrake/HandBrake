@@ -320,7 +320,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
          * suffers from false positives instead. The latter is probably easier
          * and/or safer to sanitize for us, so use mode 1.
          */
-        if (HB_CHECK_MFX_VERSION(version, 1, 6))
+        if (HB_CHECK_MFX_VERSION(version, 1, 6) && info->codec_id == MFX_CODEC_AVC)
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
