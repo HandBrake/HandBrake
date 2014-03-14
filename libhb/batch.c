@@ -47,6 +47,7 @@ hb_batch_t * hb_batch_init( char * path )
         return NULL;
 
     // Count the total number of entries
+    count = 0;
     while ( (entry = hb_readdir( dir ) ) )
     {
         count++;
