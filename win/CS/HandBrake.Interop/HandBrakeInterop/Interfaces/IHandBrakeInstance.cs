@@ -163,7 +163,10 @@ namespace HandBrake.Interop.Interfaces
         /// <param name="jobToStart">
         /// The job to start.
         /// </param>
-        void StartEncode(EncodeJob jobToStart);
+        /// <param name="scanPreviewCount">
+        /// The scan Preview Count.
+        /// </param>
+        void StartEncode(EncodeJob jobToStart, int scanPreviewCount);
 
         /// <summary>
         /// Starts an encode with the given job.
@@ -184,8 +187,11 @@ namespace HandBrake.Interop.Interfaces
         /// The currently selected encode length. Used in preview
         /// for calculating bitrate when the target size would be wrong.
         /// </param>
+        /// <param name="scanPreviewCount">
+        /// The scan Preview Count.
+        /// </param>
         void StartEncode(
-            EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds);
+            EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount);
 
         /// <summary>
         /// Starts scanning the given path.

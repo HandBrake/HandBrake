@@ -127,7 +127,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 // We have to scan the source again but only the title so the HandBrake instance is initialised correctly. 
                 // Since the UI sends the crop params down, we don't have to do all the previews.
-                instance.StartScan(job.Task.Source, 1, job.Task.Title);
+                instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
 
                 instance.ScanCompleted += delegate
                     {
@@ -201,7 +201,7 @@ namespace HandBrake.ApplicationServices.Services
             EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
 
             // Start the Encode
-            instance.StartEncode(encodeJob);
+            instance.StartEncode(encodeJob, job.Configuration.PreviewScanCount);
 
             // Fire the Encode Started Event
             this.InvokeEncodeStarted(EventArgs.Empty);

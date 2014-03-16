@@ -428,22 +428,40 @@ namespace HandBrake.Interop
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
-        /// <param name="jobToStart">The job to start.</param>
-        public void StartEncode(EncodeJob jobToStart)
+        /// <param name="jobToStart">
+        /// The job to start.
+        /// </param>
+        /// <param name="scanPreviewCount">
+        /// The scan Preview Count.
+        /// </param>
+        public void StartEncode(EncodeJob jobToStart, int scanPreviewCount)
         {
-            this.StartEncode(jobToStart, false, 0, 0, 0);
+            this.StartEncode(jobToStart, false, 0, 0, 0, scanPreviewCount);
         }
 
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
-        /// <param name="job">The job to start.</param>
-        /// <param name="preview">True if this is a preview encode.</param>
-        /// <param name="previewNumber">The preview number to start the encode at (0-based).</param>
-        /// <param name="previewSeconds">The number of seconds in the preview.</param>
-        /// <param name="overallSelectedLengthSeconds">The currently selected encode length. Used in preview
-        /// for calculating bitrate when the target size would be wrong.</param>
-        public void StartEncode(EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds)
+        /// <param name="job">
+        /// The job to start.
+        /// </param>
+        /// <param name="preview">
+        /// True if this is a preview encode.
+        /// </param>
+        /// <param name="previewNumber">
+        /// The preview number to start the encode at (0-based).
+        /// </param>
+        /// <param name="previewSeconds">
+        /// The number of seconds in the preview.
+        /// </param>
+        /// <param name="overallSelectedLengthSeconds">
+        /// The currently selected encode length. Used in preview
+        /// for calculating bitrate when the target size would be wrong.
+        /// </param>
+        /// <param name="scanPreviewCount">
+        /// The scan Preview Count.
+        /// </param>
+        public void StartEncode(EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount)
         {
             EncodingProfile profile = job.EncodingProfile;
             if (job.ChosenAudioTracks == null)
@@ -451,6 +469,7 @@ namespace HandBrake.Interop
                 throw new ArgumentException("job.ChosenAudioTracks cannot be null.");
             }
 
+            this.previewCount = scanPreviewCount;
             this.currentJob = job;
 
             IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
