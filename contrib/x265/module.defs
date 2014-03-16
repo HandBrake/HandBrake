@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,X265,x265,YASM))
 $(eval $(call import.CONTRIB.defs,X265))
 
-X265.FETCH.url = http://download.handbrake.fr/contrib/x265-6321-8a84c10e5116.tar.bz2
+X265.FETCH.url = http://download.handbrake.fr/contrib/x265-6356-527d03c56d68-0.8.tar.bz2
 
 X265.CONFIGURE.exe         = cmake
 X265.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265.CONFIGURE.prefix)"
