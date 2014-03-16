@@ -831,12 +831,12 @@ skip_preview:
             title->rate_base = vid_info.rate_base;
             if( vid_info.rate_base == 900900 )
             {
-                if( pulldown_count >= npreviews / 4 )
+                if( npreviews >= 4 && pulldown_count >= npreviews / 4 )
                 {
                     title->rate_base = 1126125;
                     hb_deep_log( 2, "Pulldown detected, setting fps to 23.976" );
                 }
-                if( progressive_count >= npreviews / 2 )
+                if( npreviews >= 2 && progressive_count >= npreviews / 2 )
                 {
                     // We've already deduced that the frame rate is 23.976,
                     // so set it back again.
@@ -844,7 +844,7 @@ skip_preview:
                     hb_deep_log( 2, "Title's mostly NTSC Film, setting fps to 23.976" );
                 }
             }
-            if( doubled_frame_count >= 3 * npreviews / 4 )
+            if( npreviews >= 2 && doubled_frame_count >= 3 * npreviews / 4 )
             {
                 // We've detected that a significant number of the frames
                 // have been doubled in duration by repeat flags.
