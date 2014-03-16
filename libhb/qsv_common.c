@@ -1177,7 +1177,7 @@ const char* const* hb_qsv_preset_get_names()
     }
     else
     {
-        return hb_qsv_preset_names2;
+        return hb_qsv_preset_names1;
     }
 }
 
