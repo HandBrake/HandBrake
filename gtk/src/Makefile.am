@@ -11,33 +11,24 @@ icons =	\
 	hb-icon.16.png
 
 icons_dep =	\
-	hb-activity.32.png \
-	hb-activity.64.png \
-	hb-add-queue.32.png \
-	hb-add-queue.64.png \
-	hb-canceled.16.png \
+	hb-icon.svg \
+	hb-start.svg \
+	hb-pause.svg \
+	hb-stop.svg \
+	hb-add-queue.svg \
+	hb-showqueue.svg \
+	hb-picture.svg \
+	hb-activity.svg \
+	hb-source.svg \
+	hb-remove.svg \
 	hb-complete.16.png \
 	hb-status.32.png \
 	hb-status-empty.32.png \
-	hb-icon.128.png \
-	hb-icon.64.png \
-	hb-pause.32.png \
-	hb-pause.64.png \
-	hb-start.32.png \
-	hb-start.64.png \
 	hb-pref.32.png \
-	hb-showqueue.32.png \
-	hb-showqueue.64.png \
-	hb-remove.24.png \
-	hb-remove.48.png \
 	hb-queue-job.16.png \
 	hb-queue-pass1.16.png \
 	hb-queue-pass2.16.png \
 	hb-queue-subtitle.16.png \
-	hb-source.32.png \
-	hb-source.64.png \
-	hb-stop.32.png \
-	hb-stop.64.png \
 	hb-working0.16.png \
 	hb-working1.16.png \
 	hb-working2.16.png \
@@ -81,8 +72,6 @@ ghb_SOURCES = \
 	preview.c \
 	icons.c \
 	icons.h \
-	icon_tools.c \
-	icon_tools.h \
 	values.c \
 	values.h \
 	appcast.c \
@@ -134,10 +123,10 @@ CREATE_RES.c = \
 CREATE_RES.c.o = $(patsubst %.c,%-native.o,$(CREATE_RES.c))
 
 create_resources: $(CREATE_RES.c.o)
-	$(CC_FOR_BUILD) -o $@ $^ $(GHB_TOOLS_LIBS)
+	$(CC_FOR_BUILD) -g -o $@ $^ $(GHB_TOOLS_LIBS)
 
 $(CREATE_RES.c.o): %-native.o: %.c
-	$(CC_FOR_BUILD) $(GHB_TOOLS_CFLAGS) -c -o $@ $<
+	$(CC_FOR_BUILD) $(GHB_TOOLS_CFLAGS) -g -c -o $@ $<
 
 ghbcellrenderertext.$(OBJEXT): marshalers.h
 

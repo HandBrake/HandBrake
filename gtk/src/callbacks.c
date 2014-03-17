@@ -3193,7 +3193,7 @@ ghb_backend_events(signal_user_data_t *ud)
                     if (gtk_tree_model_get_iter_from_string(
                             GTK_TREE_MODEL(store), &iter, path))
                     {
-                        gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
+                        gtk_tree_store_set(store, &iter, 0, "hb-stop", -1);
                     }
                     g_free(path);
                 }
@@ -3207,7 +3207,7 @@ ghb_backend_events(signal_user_data_t *ud)
                     if (gtk_tree_model_get_iter_from_string(
                             GTK_TREE_MODEL(store), &iter, path))
                     {
-                        gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
+                        gtk_tree_store_set(store, &iter, 0, "hb-stop", -1);
                     }
                     g_free(path);
                 }

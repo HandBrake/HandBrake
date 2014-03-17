@@ -4,7 +4,6 @@
 #include <string.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include "icon_tools.h"
 #include "plist.h"
 #include "values.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -92,14 +91,14 @@ lookup_attr_value(
 }
 
 static GValue*
-read_string_from_file(const gchar *filename)
+read_string_from_file(const gchar *fname)
 {
     gchar *buffer;
     size_t size;
     GValue *gval;
     FILE *fd;
 
-    fd = g_fopen(filename, "r");
+    fd = g_fopen(fname, "r");
     if (fd == NULL)
         return NULL;
     fseek(fd, 0, SEEK_END);
@@ -112,6 +111,65 @@ read_string_from_file(const gchar *filename)
     g_value_take_string(gval, buffer);
     fclose(fd);
     return gval;
+}
+
+static void add_icon(GValue *dict, const char *fname)
+{
+    FILE *f;
+
+    GdkPixbufFormat *pbf;
+    int width, height;
+    gboolean svg;
+
+    pbf = gdk_pixbuf_get_file_info(fname, &width, &height);
+    svg = gdk_pixbuf_format_is_scalable(pbf);
+
+    f = fopen(fname, "rb");
+    if (f == NULL)
+    {
+        fprintf(stderr, "open failed: %s\n", fname);
+        return;
+    }
+
+    ghb_rawdata_t *rd;
+    rd = g_malloc(sizeof(ghb_rawdata_t));
+    fseek(f, 0, SEEK_END);
+    rd->size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+
+    rd->data = g_malloc(rd->size);
+    fread(rd->data, 1, rd->size, f);
+    
+    GValue *data = ghb_rawdata_value_new(rd);
+    ghb_dict_insert(dict, g_strdup("svg"), ghb_boolean_value_new(svg));
+    ghb_dict_insert(dict, g_strdup("data"), data);
+}
+
+static void insert_value(GValue *container, const char *key, GValue *element)
+{
+    GType gtype;
+
+    gtype = G_VALUE_TYPE(container);
+    if (gtype == ghb_array_get_type())
+    {
+        ghb_array_append(container, element);
+    }
+    else if (gtype == ghb_dict_get_type())
+    {
+        if (key == NULL)
+        {
+            g_warning("No key for dictionary item");
+            ghb_value_free(element);
+        }
+        else
+        {
+            ghb_dict_insert(container, g_strdup(key), element);
+        }
+    }
+    else
+    {
+        g_error("Invalid container type. This shouldn't happen");
+    }
 }
 
 static void
@@ -170,54 +228,20 @@ start_element(
         } break;
         case R_ICON:
         {
-            gchar *filename;
+            gchar *fname;
             const gchar *name;
 
             name = lookup_attr_value("file", attr_names, attr_values);
-            filename = find_file(inc_list, name);
+            fname = find_file(inc_list, name);
             name = lookup_attr_value("name", attr_names, attr_values);
-            if (filename && name)
+            if (fname && name)
             {
-                ghb_rawdata_t *rd;
-                GdkPixbuf *pb;
-                GError *err = NULL;
-
-                pb = gdk_pixbuf_new_from_file(filename, &err);
-                if (pb == NULL)
-                {
-                    g_warning("Failed to open icon file %s: %s", filename, err->message);
-                    break;
-                }
                 gval = ghb_dict_value_new();
-                int colorspace = gdk_pixbuf_get_colorspace(pb);
-                gboolean alpha = gdk_pixbuf_get_has_alpha(pb);
-                int width = gdk_pixbuf_get_width(pb);
-                int height = gdk_pixbuf_get_height(pb);
-                int bps = gdk_pixbuf_get_bits_per_sample(pb);
-                int rowstride = gdk_pixbuf_get_rowstride(pb);
+                add_icon(gval, fname);
 
-                ghb_dict_insert(gval, g_strdup("colorspace"),
-                                ghb_int_value_new(colorspace));
-                ghb_dict_insert(gval, g_strdup("alpha"),
-                                ghb_boolean_value_new(alpha));
-                ghb_dict_insert(gval, g_strdup("width"),
-                                ghb_int_value_new(width));
-                ghb_dict_insert(gval, g_strdup("height"),
-                                ghb_int_value_new(height));
-                ghb_dict_insert(gval, g_strdup("bps"),
-                                ghb_int_value_new(bps));
-                ghb_dict_insert(gval, g_strdup("rowstride"),
-                                ghb_int_value_new(rowstride));
-
-                rd = g_malloc(sizeof(ghb_rawdata_t));
-                rd->data = gdk_pixbuf_get_pixels(pb);
-                rd->size = height * rowstride * bps / 8;
-                GValue *data = ghb_rawdata_value_new(rd);
-                ghb_dict_insert(gval, g_strdup("data"), data);
-
-                if (pd->key) g_free(pd->key);
+                g_free(pd->key);
                 pd->key = g_strdup(name);
-                g_free(filename);
+                g_free(fname);
             }
             else
             {
@@ -227,18 +251,18 @@ start_element(
         } break;
         case R_PLIST:
         {
-            gchar *filename;
+            gchar *fname;
             const gchar *name;
 
             name = lookup_attr_value("file", attr_names, attr_values);
-            filename = find_file(inc_list, name);
+            fname = find_file(inc_list, name);
             name = lookup_attr_value("name", attr_names, attr_values);
-            if (filename && name)
+            if (fname && name)
             {
-                gval = ghb_plist_parse_file(filename);
+                gval = ghb_plist_parse_file(fname);
                 if (pd->key) g_free(pd->key);
                 pd->key = g_strdup(name);
-                g_free(filename);
+                g_free(fname);
             }
             else
             {
@@ -248,18 +272,18 @@ start_element(
         } break;
         case R_STRING:
         {
-            gchar *filename;
+            gchar *fname;
             const gchar *name;
 
             name = lookup_attr_value("file", attr_names, attr_values);
-            filename = find_file(inc_list, name);
+            fname = find_file(inc_list, name);
             name = lookup_attr_value("name", attr_names, attr_values);
-            if (filename && name)
+            if (fname && name)
             {
-                gval = read_string_from_file(filename);
+                gval = read_string_from_file(fname);
                 if (pd->key) g_free(pd->key);
                 pd->key = g_strdup(name);
-                g_free(filename);
+                g_free(fname);
             }
             else
             {
@@ -276,27 +300,7 @@ start_element(
             pd->plist = gval;
             return;
         }
-        gtype = G_VALUE_TYPE(current);
-        if (gtype == ghb_array_get_type())
-        {
-            ghb_array_append(current, gval);
-        }
-        else if (gtype == ghb_dict_get_type())
-        {
-            if (pd->key == NULL)
-            {
-                g_warning("No key for dictionary item");
-                ghb_value_free(gval);
-            }
-            else
-            {
-                ghb_dict_insert(current, g_strdup(pd->key), gval);
-            }
-        }
-        else
-        {
-            g_error("Invalid container type. This shouldn't happen");
-        }
+        insert_value(current, pd->key, gval);
     }
 }
 
@@ -358,27 +362,7 @@ end_element(
             pd->closed_top = TRUE;
             return;
         }
-        gtype = G_VALUE_TYPE(current);
-        if (gtype == ghb_array_get_type())
-        {
-            ghb_array_append(current, gval);
-        }
-        else if (gtype == ghb_dict_get_type())
-        {
-            if (pd->key == NULL)
-            {
-                g_warning("No key for dictionary item");
-                ghb_value_free(gval);
-            }
-            else
-            {
-                ghb_dict_insert(current, g_strdup(pd->key), gval);
-            }
-        }
-        else
-        {
-            g_error("Invalid container type. This shouldn't happen");
-        }
+        insert_value(current, pd->key, gval);
     }
     if (g_queue_is_empty(pd->tag_stack))
         pd->closed_top = TRUE;

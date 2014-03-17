@@ -15,7 +15,6 @@
 #include <string.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include "icon_tools.h"
 #include "plist.h"
 #include "values.h"
 

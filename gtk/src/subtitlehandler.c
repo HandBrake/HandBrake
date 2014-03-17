@@ -80,7 +80,7 @@ subtitle_refresh_list_row_ui(
         1, "-->",
         2, info_dst,
         3, "hb-edit",
-        4, "hb-queue-delete",
+        4, "hb-remove",
         5, 0.5,
         -1);
 

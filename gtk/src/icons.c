@@ -1,5 +1,4 @@
 #include "ghbcompat.h"
-#include "icon_tools.h"
 #include "values.h"
 #include "resources.h"
 
@@ -17,11 +16,10 @@ ghb_load_icons()
     while (g_hash_table_iter_next(
             &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
     {
-        gint colorspace, bps, width, height, rowstride;
-        gboolean alpha;
         ghb_rawdata_t *rd;
         gint size;
         GdkPixbuf *pb;
+        gboolean svg;
         char *name = g_strdup(key);
         char *pos;
 
@@ -29,20 +27,35 @@ ghb_load_icons()
         if (pos != NULL)
             *pos = '\0';
 
-        colorspace = ghb_value_int(ghb_dict_lookup(gval, "colorspace"));
-        alpha = ghb_value_boolean(ghb_dict_lookup(gval, "alpha"));
-        bps = ghb_value_int(ghb_dict_lookup(gval, "bps"));
-        width = ghb_value_int(ghb_dict_lookup(gval, "width"));
-        height = ghb_value_int(ghb_dict_lookup(gval, "height"));
-        rowstride = ghb_value_int(ghb_dict_lookup(gval, "rowstride"));
+        GInputStream *gis;
+        svg = ghb_value_boolean(ghb_dict_lookup(gval, "svg"));
         rd = g_value_get_boxed(ghb_dict_lookup(gval, "data"));
-        pb = gdk_pixbuf_new_from_data(
-                rd->data, colorspace, alpha, bps,
-                width, height, rowstride,
-                NULL, NULL);
-        size = gdk_pixbuf_get_height(pb);
-        gtk_icon_theme_add_builtin_icon(name, size, pb);
-        g_object_unref(pb);
+        if (svg)
+        {
+            int ii;
+            int sizes[] = {16, 22, 24, 32, 48, 64, 128, 256, 0};
+            for (ii = 0; sizes[ii]; ii++)
+            {
+                gis = g_memory_input_stream_new_from_data(rd->data, rd->size,
+                                                          NULL);
+                pb = gdk_pixbuf_new_from_stream_at_scale(gis,
+                                                         sizes[ii], sizes[ii],
+                                                         TRUE, NULL, NULL);
+                g_input_stream_close(gis, NULL, NULL);
+                size = gdk_pixbuf_get_height(pb);
+                gtk_icon_theme_add_builtin_icon(name, size, pb);
+                g_object_unref(pb);
+            }
+        }
+        else
+        {
+            gis = g_memory_input_stream_new_from_data(rd->data, rd->size, NULL);
+            pb = gdk_pixbuf_new_from_stream(gis, NULL, NULL);
+            g_input_stream_close(gis, NULL, NULL);
+            size = gdk_pixbuf_get_height(pb);
+            gtk_icon_theme_add_builtin_icon(name, size, pb);
+            g_object_unref(pb);
+        }
         g_free(name);
     }
 }
