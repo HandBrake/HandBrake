@@ -21,8 +21,8 @@ icons_dep =	\
 	hb-activity.svg \
 	hb-source.svg \
 	hb-remove.svg \
-	hb-complete.16.png \
-	hb-queue-job.16.png
+	hb-edit.svg \
+	hb-complete.svg
 
 hb_menu = ghb.desktop
 

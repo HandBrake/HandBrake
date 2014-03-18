@@ -10,9 +10,8 @@
         <icon name="hb-activity" file="hb-activity.svg" />
         <icon name="hb-source" file="hb-source.svg" />
         <icon name="hb-remove" file="hb-remove.svg" />
-        <icon name="hb-complete" file="hb-complete.16.png" />
-        <icon name="hb-queue-job" file="hb-queue-job.16.png" />
-        <icon name="hb-edit" file="hb-edit.32.png" />
+        <icon name="hb-complete" file="hb-complete.svg" />
+        <icon name="hb-edit" file="hb-edit.svg" />
     </section>
     <plist name="internal-defaults" file="internal_defaults.xml" />
     <plist name="standard-presets" file="standard_presets.xml" />
