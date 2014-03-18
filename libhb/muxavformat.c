@@ -1128,30 +1128,34 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     }
                     track->duration = pts;
                 }
-                uint8_t styleatom[2048];;
-                uint16_t stylesize = 0;
-                uint8_t buffer[2048];
-                uint16_t buffersize = 0;
+                if (track->st->codec->codec_id == AV_CODEC_ID_MOV_TEXT ||
+                    track->st->codec->codec_id == AV_CODEC_ID_TEXT)
+                {
+                    uint8_t styleatom[2048];;
+                    uint16_t stylesize = 0;
+                    uint8_t buffer[2048];
+                    uint16_t buffersize = 0;
 
-                *buffer = '\0';
+                    *buffer = '\0';
 
-                /*
-                 * Copy the subtitle into buffer stripping markup and creating
-                 * style atoms for them.
-                 */
-                hb_muxmp4_process_subtitle_style( buf->data,
-                                                  buffer,
-                                                  styleatom, &stylesize );
+                    /*
+                     * Copy the subtitle into buffer stripping markup and creating
+                     * style atoms for them.
+                     */
+                    hb_muxmp4_process_subtitle_style( buf->data,
+                                                      buffer,
+                                                      styleatom, &stylesize );
 
-                buffersize = strlen((char*)buffer);
+                    buffersize = strlen((char*)buffer);
 
-                /* Write the subtitle sample */
-                memcpy( tx3g_out + 2, buffer, buffersize );
-                memcpy( tx3g_out + 2 + buffersize, styleatom, stylesize);
-                tx3g_out[0] = ( buffersize >> 8 ) & 0xff;
-                tx3g_out[1] = buffersize & 0xff;
-                pkt.data = tx3g_out;
-                pkt.size = buffersize + stylesize + 2;
+                    /* Write the subtitle sample */
+                    memcpy( tx3g_out + 2, buffer, buffersize );
+                    memcpy( tx3g_out + 2 + buffersize, styleatom, stylesize);
+                    tx3g_out[0] = ( buffersize >> 8 ) & 0xff;
+                    tx3g_out[1] = buffersize & 0xff;
+                    pkt.data = tx3g_out;
+                    pkt.size = buffersize + stylesize + 2;
+                }
             }
             pkt.convergence_duration = pkt.duration;
 
