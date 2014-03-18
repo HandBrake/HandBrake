@@ -1,14 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 icons =	\
-	hb-icon.256.png \
-	hb-icon.128.png \
-	hb-icon.64.png \
-	hb-icon.48.png \
-	hb-icon.32.png \
-	hb-icon.24.png \
-	hb-icon.22.png \
-	hb-icon.16.png
+	hb-icon.svg
 
 icons_dep =	\
 	hb-icon.svg \
