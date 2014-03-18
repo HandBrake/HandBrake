@@ -144,9 +144,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         case GHB_QUEUE_CANCELED:
             status_icon = "hb-stop";
             break;
-        case GHB_QUEUE_RUNNING:
-            status_icon = "hb-working0";
-            break;
         case GHB_QUEUE_DONE:
             status_icon = "hb-complete";
             break;
@@ -155,8 +152,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             break;
     }
     // Set the status icon, job description, and delete icon button
-    gtk_tree_store_set(store, &iter, 0, status_icon, 1, str->str,
-                       2, "hb-remove", -1);
+    gtk_tree_store_set(store, &iter, 0, FALSE, 1, status_icon, 2, str->str,
+                       3, "hb-remove", -1);
 
     // Reset the string for the next line
     g_string_assign(str, "");
@@ -651,7 +648,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         str->str[str->len-1] = 0;
 
     gtk_tree_store_append(store, &citer, &iter);
-    gtk_tree_store_set(store, &citer, 1, str->str, -1);
+    gtk_tree_store_set(store, &citer, 2, str->str, -1);
 
     g_string_free(str, TRUE);
 }
@@ -1848,7 +1845,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     if (state == GHB_STATE_IDLE)
     {
         // Add the first pending queue item and start
-        ud->current_job = ghb_start_next_job(ud, TRUE);
+        ud->current_job = ghb_start_next_job(ud);
     }
 }
 

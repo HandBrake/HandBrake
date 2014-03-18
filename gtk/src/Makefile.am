@@ -22,19 +22,7 @@ icons_dep =	\
 	hb-source.svg \
 	hb-remove.svg \
 	hb-complete.16.png \
-	hb-status.32.png \
-	hb-status-empty.32.png \
-	hb-pref.32.png \
-	hb-queue-job.16.png \
-	hb-queue-pass1.16.png \
-	hb-queue-pass2.16.png \
-	hb-queue-subtitle.16.png \
-	hb-working0.16.png \
-	hb-working1.16.png \
-	hb-working2.16.png \
-	hb-working3.16.png \
-	hb-working4.16.png \
-	hb-working5.16.png
+	hb-queue-job.16.png
 
 hb_menu = ghb.desktop
 

@@ -11,20 +11,8 @@
         <icon name="hb-source" file="hb-source.svg" />
         <icon name="hb-remove" file="hb-remove.svg" />
         <icon name="hb-complete" file="hb-complete.16.png" />
-        <icon name="hb-status" file="hb-status.32.png" />
-        <icon name="hb-status-empty" file="hb-status-empty.32.png" />
-        <icon name="hb-pref" file="hb-pref.32.png" />
         <icon name="hb-queue-job" file="hb-queue-job.16.png" />
-        <icon name="hb-queue-pass1" file="hb-queue-pass1.16.png" />
-        <icon name="hb-queue-pass2" file="hb-queue-pass2.16.png" />
-        <icon name="hb-queue-subtitle" file="hb-queue-subtitle.16.png" />
         <icon name="hb-edit" file="hb-edit.32.png" />
-        <icon name="hb-working0" file="hb-working0.16.png" />
-        <icon name="hb-working1" file="hb-working1.16.png" />
-        <icon name="hb-working2" file="hb-working2.16.png" />
-        <icon name="hb-working3" file="hb-working3.16.png" />
-        <icon name="hb-working4" file="hb-working4.16.png" />
-        <icon name="hb-working5" file="hb-working5.16.png" />
     </section>
     <plist name="internal-defaults" file="internal_defaults.xml" />
     <plist name="standard-presets" file="standard_presets.xml" />

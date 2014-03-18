@@ -270,19 +270,24 @@ bind_queue_tree_model(signal_user_data_t *ud)
     g_debug("bind_queue_tree_model()\n");
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
     selection = gtk_tree_view_get_selection(treeview);
-    treestore = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    treestore = gtk_tree_store_new(5, G_TYPE_BOOLEAN, G_TYPE_STRING,
+                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
     gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
     column = gtk_tree_view_column_new();
     gtk_tree_view_column_set_title(column, _("Job Information"));
+    cell = gtk_cell_renderer_spinner_new();
+    gtk_tree_view_column_pack_start(column, cell, FALSE);
+    gtk_tree_view_column_add_attribute(column, cell, "active", 0);
+    gtk_tree_view_column_add_attribute(column, cell, "pulse", 4);
     cell = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start(column, cell, FALSE);
-    gtk_tree_view_column_add_attribute(column, cell, "icon-name", 0);
+    gtk_tree_view_column_add_attribute(column, cell, "icon-name", 1);
     textcell = gtk_cell_renderer_text_new();
     g_object_set(textcell, "wrap-mode", PANGO_WRAP_CHAR, NULL);
     g_object_set(textcell, "wrap-width", 500, NULL);
     gtk_tree_view_column_pack_start(column, textcell, TRUE);
-    gtk_tree_view_column_add_attribute(column, textcell, "markup", 1);
+    gtk_tree_view_column_add_attribute(column, textcell, "markup", 2);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_column_set_max_width(column, 550);
@@ -291,7 +296,7 @@ bind_queue_tree_model(signal_user_data_t *ud)
 
     cell = custom_cell_renderer_button_new();
     column = gtk_tree_view_column_new_with_attributes(
-                                    _(""), cell, "icon-name", 2, NULL);
+                                    _(""), cell, "icon-name", 3, NULL);
     gtk_tree_view_column_set_min_width(column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
