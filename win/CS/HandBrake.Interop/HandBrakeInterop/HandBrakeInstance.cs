@@ -531,7 +531,7 @@ namespace HandBrake.Interop
 
             nativeJob.indepth_scan = 0;
 
-            if (job.EncodingProfile.TwoPass)
+            if (job.EncodingProfile.VideoEncodeRateType != VideoEncodeRateType.ConstantQuality && job.EncodingProfile.TwoPass)
             {
                 // First pass. Apply turbo options if needed.
                 nativeJob.pass = 1;
@@ -873,7 +873,7 @@ namespace HandBrake.Interop
                     int pass = 1;
                     int rawJobNumber = state.param.working.job_cur;
 
-                    if (this.currentJob.EncodingProfile.TwoPass)
+                    if (this.currentJob.EncodingProfile.VideoEncodeRateType != VideoEncodeRateType.ConstantQuality && this.currentJob.EncodingProfile.TwoPass)
                     {
                         if (this.subtitleScan)
                         {

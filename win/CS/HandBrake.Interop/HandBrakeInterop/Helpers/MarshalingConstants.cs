@@ -15,13 +15,13 @@ namespace HandBrake.Interop.Helpers
     public static class MarshalingConstants
 	{
 #if X64
-		public const int JobPaddingBytes = 49264;
+		public const int JobPaddingBytes = 49272;
 		public const int AudioPaddingBytes = 49208;
 #else
-	    /// <summary>
+		/// <summary>
 	    /// Job Padding Bytes
 	    /// </summary>
-	    public const int JobPaddingBytes = 49216;
+		public const int JobPaddingBytes = 49220;
 
 	    /// <summary>
 	    /// Audio Padding Bytes
