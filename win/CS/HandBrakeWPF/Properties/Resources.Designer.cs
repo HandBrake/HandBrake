@@ -765,7 +765,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Read.
+        ///   Looks up a localized string similar to Ready.
         /// </summary>
         public static string State_Ready {
             get {
@@ -903,10 +903,10 @@ namespace HandBrakeWPF.Properties {
         ///The scale used by each video encoder is different.
         ///
         ///x264&apos;s scale is logarithmic and lower values correspond to higher quality. 
-        ///So small increases in value will result in progressively larger increases in the resulting file size. 
+        ///So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
         ///A value of 0 means lossless and will result in a file size that is larger than the original source, 
         ///unless the source was also lossless. 
-        ///Suggested values are: 18 to 20 for Standard Definition and 20 t [rest of string was truncated]&quot;;.
+        ///Suggested values are: 18 to 20 for Standard Definiti [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Video_QualitySlider {
             get {

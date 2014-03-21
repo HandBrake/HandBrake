@@ -267,7 +267,7 @@ Changes will be applied after the preset but before all other parameters.</value
 The scale used by each video encoder is different.
 
 x264's scale is logarithmic and lower values correspond to higher quality. 
-So small increases in value will result in progressively larger increases in the resulting file size. 
+So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
 A value of 0 means lossless and will result in a file size that is larger than the original source, 
 unless the source was also lossless. 
 Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition.
@@ -481,7 +481,7 @@ Your custom presets have not been updated so you may have to re-create these by 
     <value>Question</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>Read</value>
+    <value>Ready</value>
   </data>
   <data name="Updated" xml:space="preserve">
     <value>Updated</value>
