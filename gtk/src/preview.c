@@ -371,25 +371,20 @@ update_stream_info(signal_user_data_t *ud)
 static GList *
 get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
 {
-    GValueArray *info_arr = NULL;
+    GList *info_list = NULL, *link;
     GList *ret = NULL;
-    guint ii;
 
     if (play == NULL)
         return NULL;
 
-    g_object_get(play, "stream-info-value-array", &info_arr, NULL);
-    if (info_arr == NULL)
+    g_object_get(play, "stream-info", &info_list, NULL);
+    if (info_list == NULL)
         return NULL;
 
-    for (ii = 0; ii < info_arr->n_values; ++ii)
+    link = info_list;
+    while (link)
     {
-        GObject *info_obj;
-        GValue *val;
-
-        val = g_value_array_get_nth(info_arr, ii);
-        //val = &((GValue*)info_arr->values)[ii];
-        info_obj = g_value_get_object(val);
+        GObject *info_obj = (GObject*)link->data;
         if (info_obj)
         {
             GParamSpec *pspec;
@@ -410,8 +405,8 @@ get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
                 }
             }
         }
+        if (link) link = link->next;
     }
-    g_value_array_free (info_arr);
     return g_list_reverse (ret);
 }
 
@@ -764,6 +759,7 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         ghb_settings_set_string(js, "destination", name);
         ghb_settings_set_int(js, "start_frame", ud->preview->frame);
         ud->preview->live_id = 0;
+        ghb_settings_set_value(js, "Preferences", ud->prefs);
         ghb_add_live_job(js, ud->preview->live_id);
         ghb_start_live_encode();
         ghb_value_free(js);
