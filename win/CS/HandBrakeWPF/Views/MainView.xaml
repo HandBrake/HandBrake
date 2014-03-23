@@ -22,6 +22,8 @@
     </i:Interaction.Triggers>
 
     <UserControl.Resources>
+        <Converters:BooleanConverter x:Key="booleanConverter" />
+        
         <Style TargetType="Button">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,1" />
@@ -174,6 +176,7 @@
                      SnapsToDevicePixels="False"
                      ToolBar.OverflowMode="Never"
                      ToolBarTray.IsLocked="True"
+                     KeyboardNavigation.TabNavigation="Continue"
                      >
 
                 <Button Name="SelectSource"
@@ -333,7 +336,7 @@
         </StackPanel>
 
         <!--  Main Body  -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1"  IsEnabled="{Binding ShowSourceSelection, Converter={StaticResource booleanConverter}, ConverterParameter=true}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="700"/>
                 <ColumnDefinition Width="Auto" />
@@ -561,6 +564,7 @@
                              ToolBar.OverflowMode="Never" 
                              ToolBarTray.IsLocked="True"
                              Loaded="ToolBarLoaded"
+                             KeyboardNavigation.TabNavigation="Continue"
                              >
                         <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]" >
                             <Button.Content>

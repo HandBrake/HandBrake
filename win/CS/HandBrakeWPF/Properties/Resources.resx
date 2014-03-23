@@ -504,4 +504,7 @@ Do you wish to proceed?</value>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>You must first set the destination path for the output file before adding to the queue.</value>
   </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>The entered destination contained illegal characters. You must fix the path and filename before continuing.</value>
+  </data>
 </root>

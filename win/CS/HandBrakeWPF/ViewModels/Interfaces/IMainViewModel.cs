@@ -39,7 +39,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Add the current task to the queue.
         /// </summary>
-        void AddToQueue();
+        /// <returns>
+        /// True if added, false if error
+        /// </returns>
+        bool AddToQueue();
 
         /// <summary>
         /// File Scan

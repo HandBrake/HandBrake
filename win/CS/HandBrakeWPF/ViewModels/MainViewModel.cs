@@ -643,7 +643,17 @@ namespace HandBrakeWPF.ViewModels
 
                     if (!string.IsNullOrEmpty(this.CurrentTask.Destination))
                     {
-                        switch (Path.GetExtension(this.CurrentTask.Destination))
+                        string ext = string.Empty;
+                        try
+                        {
+                            ext = Path.GetExtension(this.CurrentTask.Destination);
+                        }
+                        catch (ArgumentException)
+                        {
+                            this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+
+                        switch (ext)
                         {
                             case ".mkv":
                                 this.SelectedOutputFormat = OutputFormat.Mkv;
@@ -1151,18 +1161,29 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Add the current task to the queue.
         /// </summary>
-        public void AddToQueue()
+        /// <returns>
+        /// True if added, false if error.
+        /// </returns>
+        public bool AddToQueue()
         {
             if (this.ScannedSource == null || string.IsNullOrEmpty(this.ScannedSource.ScanPath) || this.ScannedSource.Titles.Count == 0)
             {
                 this.errorService.ShowMessageBox(Resources.Main_ScanSourceFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                return false;
             }
 
             if (string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
                 this.errorService.ShowMessageBox(Resources.Main_SetDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                return false;
+            }
+
+            // Sanity check the filename
+            if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
+            {
+                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.NotifyOfPropertyChange(() => this.Destination);
+                return false;
             }
 
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
@@ -1180,6 +1201,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
             }
+
+            return true;
         }
 
         /// <summary>
@@ -1325,10 +1348,11 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Create the Queue Task and Start Processing
-            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
-            this.queueProcessor.Add(task);
-            this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
-            this.IsEncoding = true;
+            if (this.AddToQueue())
+            {
+                this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                this.IsEncoding = true;
+            }
         }
 
         /// <summary>

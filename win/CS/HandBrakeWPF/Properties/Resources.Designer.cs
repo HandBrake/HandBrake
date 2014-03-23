@@ -410,6 +410,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The entered destination contained illegal characters. You must fix the path and filename before continuing..
+        /// </summary>
+        public static string Main_InvalidDestination {
+            get {
+                return ResourceManager.GetString("Main_InvalidDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ,  Pending Jobs {5}.
         /// </summary>
         public static string Main_JobsPending_addon {
