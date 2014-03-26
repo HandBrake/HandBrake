@@ -196,7 +196,7 @@ ghb_get_setting_key(GtkWidget *widget)
     if (widget == NULL) return NULL;
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
 
-    if (name == NULL)
+    if (name == NULL || !strncmp(name, "Gtk", 3))
     {
         name = gtk_widget_get_name(widget);
     }
