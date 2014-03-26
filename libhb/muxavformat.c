@@ -143,6 +143,7 @@ static int avformatInit( hb_mux_object_t * m )
         goto error;
     }
 
+    AVDictionary * av_opts = NULL;
     switch (job->mux)
     {
         case HB_MUX_AV_MP4:
@@ -153,6 +154,10 @@ static int avformatInit( hb_mux_object_t * m )
             else
                 muxer_name = "mp4";
             meta_mux = META_MUX_MP4;
+
+            av_dict_set(&av_opts, "brand", "mp42", 0);
+            if (job->mp4_optimize)
+                av_dict_set( &av_opts, "movflags", "faststart", 0 );
             break;
 
         case HB_MUX_AV_MKV:
@@ -884,10 +889,6 @@ static int avformatInit( hb_mux_object_t * m )
     snprintf(tool_string, sizeof(tool_string), "HandBrake %s %i",
              HB_PROJECT_VERSION, HB_PROJECT_BUILD);
     av_dict_set(&m->oc->metadata, "encoding_tool", tool_string, 0);
-
-    AVDictionary * av_opts = NULL;
-    if (job->mp4_optimize && (job->mux & HB_MUX_MASK_MP4))
-        av_dict_set( &av_opts, "movflags", "faststart", 0 );
 
     ret = avformat_write_header(m->oc, &av_opts);
     if( ret < 0 )
