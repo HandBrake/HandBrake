@@ -1195,6 +1195,7 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 this.errorService.ShowMessageBox(Resources.Main_DuplicateDestinationOnQueue, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
             }
 
             if (!this.IsEncoding)
