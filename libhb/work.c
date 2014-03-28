@@ -311,16 +311,9 @@ void hb_display_job_info(hb_job_t *job)
             switch (job->vcodec)
             {
                 case HB_VCODEC_X264:
-                    hb_log("     + x264 preset: %s", job->encoder_preset);
-                    break;
                 case HB_VCODEC_X265:
-                    hb_log("     + x265 preset: %s", job->encoder_preset);
-                    break;
-#ifdef USE_QSV
                 case HB_VCODEC_QSV_H264:
-                    hb_log("     + QSV preset: %s", job->encoder_preset);
-                    break;
-#endif
+                    hb_log("     + preset:  %s", job->encoder_preset);
                 default:
                     break;
             }
@@ -330,11 +323,8 @@ void hb_display_job_info(hb_job_t *job)
             switch (job->vcodec)
             {
                 case HB_VCODEC_X264:
-                    hb_log("     + x264 tune: %s", job->encoder_tune);
-                    break;
                 case HB_VCODEC_X265:
-                    hb_log("     + x265 tune: %s", job->encoder_tune);
-                    break;
+                    hb_log("     + tune:    %s", job->encoder_tune);
                 default:
                     break;
             }
@@ -349,12 +339,9 @@ void hb_display_job_info(hb_job_t *job)
             switch (job->vcodec)
             {
                 case HB_VCODEC_X264:
-                case HB_VCODEC_QSV_H264:
-                    hb_log("     + H.264 profile: %s", job->encoder_profile);
-                    break;
                 case HB_VCODEC_X265:
-                    hb_log("     + H.265 profile: %s", job->encoder_profile);
-                    break;
+                case HB_VCODEC_QSV_H264:
+                    hb_log("     + profile: %s", job->encoder_profile);
                 default:
                     break;
             }
@@ -365,8 +352,7 @@ void hb_display_job_info(hb_job_t *job)
             {
                 case HB_VCODEC_X264:
                 case HB_VCODEC_QSV_H264:
-                    hb_log("     + H.264 level: %s", job->encoder_level);
-                    break;
+                    hb_log("     + level:   %s", job->encoder_level);
                 default:
                     break;
             }

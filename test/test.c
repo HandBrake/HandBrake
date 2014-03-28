@@ -171,7 +171,7 @@ static int  HandleEvents( hb_handle_t * h );
 static void str_vfree( char **strv );
 static char** str_split( char *str, char delem );
 
-static void print_preset_list(FILE *out, const char* const *list, const char *indent);
+static void print_string_list(FILE *out, const char* const *list, const char *prefix);
 
 #ifdef __APPLE_CC__
 static char* bsd_name_for_path(char *path);
@@ -3168,63 +3168,25 @@ static void ShowHelp()
     }
     fprintf(out, "                            (default: %s)\n", name);
     fprintf(out,
-    "        --x264-preset       When using x264, selects the x264 preset:\n"
-    "          <string>          ");
-    print_preset_list(out, hb_video_encoder_get_presets(HB_VCODEC_X264),
-    "                            ");
-#ifdef USE_X265
-    fprintf(out,
-    "        --x265-preset       When using x265, selects the x265 preset:\n"
-    "          <string>          ");
-    print_preset_list(out, hb_video_encoder_get_presets(HB_VCODEC_X265),
-    "                            ");
-#endif
-#ifdef USE_QSV
-    if (hb_qsv_available())
-    {
-        fprintf(out,
-        "        --qsv-preset        When using QSV, selects the QSV preset:\n"
-        "          <string>          ");
-        print_preset_list(out, hb_video_encoder_get_presets(HB_VCODEC_QSV_H264),
-        "                            ");
-    }
-#endif
-    fprintf( out,
-    "        --x264-tune         When using x264, selects the x264 tuning:\n"
-    "          <string>          ");
-    print_preset_list(out, hb_video_encoder_get_tunes(HB_VCODEC_X264),
-    "                            ");
-#ifdef USE_X265
-    fprintf(out,
-    "        --x265-tune         When using x265, selects the x265 tuning:\n"
-    "          <string>          ");
-    print_preset_list(out, hb_video_encoder_get_tunes(HB_VCODEC_X265),
-    "                            ");
-#endif
-    fprintf(out,
-    "    -x, --encopts <string>  Specify advanced encoder options in the\n"
-    "                            same style as mencoder (all except theora):\n"
+    "        --encoder-preset    Adjust video encoding settings for a particular\n"
+    "          <string>          speed/efficiency tradeoff (encoder-specific)\n"
+    "    --encoder-preset-list   List supported --encoder-preset values for the\n"
+    "          <string>          specified video encoder\n"
+    "        --encoder-tune      Adjust video encoding settings for a particular\n"
+    "          <string>          type of souce or situation (encoder-specific)\n"
+    "    --encoder-tune-list     List supported --encoder-tune values for the\n"
+    "          <string>          specified video encoder\n"
+    "    -x, --encopts <string>  Specify advanced encoding options in the same\n"
+    "                            style as mencoder (all encoders except theora):\n"
     "                            option1=value1:option2=value2\n"
-    "        --h264-profile      When using H.264, ensures compliance with the\n"
-    "          <string>          specified H.264 profile:\n"
-    "                            ");
-    print_preset_list(out, hb_video_encoder_get_profiles(HB_VCODEC_X264),
-    "                            ");
-#ifdef USE_X265
-    fprintf(out,
-    "        --h265-profile      When using H.265, ensures compliance with the\n"
-    "          <string>          specified H.265 profile:\n"
-    "                            ");
-    print_preset_list(out, hb_video_encoder_get_profiles(HB_VCODEC_X265),
-    "                            ");
-#endif
-    fprintf(out,
-    "        --h264-level        When using H.264, ensures compliance with the\n"
-    "          <string>          specified H.264 level:\n"
-    "                            ");
-    print_preset_list(out, hb_video_encoder_get_levels(HB_VCODEC_X264),
-    "                            ");
-    fprintf(out,
+    "        --encoder-profile   Ensures compliance with the requested codec\n"
+    "          <string>          profile (encoder-specific)\n"
+    "    --encoder-profile-list  List supported --encoder-profile values for the\n"
+    "          <string>          specified video encoder\n"
+    "        --encoder-level     Ensures compliance with the requested codec\n"
+    "          <string>          level (encoder-specific)\n"
+    "    --encoder-level-list    List supported --encoder-level values for the\n"
+    "          <string>          specified video encoder\n"
     "    -q, --quality <number>  Set video quality\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -2, --two-pass          Use two-pass mode\n"
@@ -3677,16 +3639,20 @@ static int ParseOptions( int argc, char ** argv )
     #define ALLOWED_AUDIO_COPY  280
     #define AUDIO_FALLBACK      281
     #define LOOSE_CROP          282
-    #define ENCODER_PRESET      283
-    #define ENCODER_TUNE        284
-    #define ENCODER_PROFILE     285
-    #define ENCODER_LEVEL       286
-    #define NO_OPENCL           287
-    #define NORMALIZE_MIX       288
-    #define AUDIO_DITHER        289
-    #define QSV_BASELINE        290
-    #define QSV_ASYNC_DEPTH     291
-    #define QSV_IMPLEMENTATION  292
+    #define ENCODER_PRESET       283
+    #define ENCODER_PRESET_LIST  284
+    #define ENCODER_TUNE         285
+    #define ENCODER_TUNE_LIST    286
+    #define ENCODER_PROFILE      287
+    #define ENCODER_PROFILE_LIST 288
+    #define ENCODER_LEVEL        289
+    #define ENCODER_LEVEL_LIST   290
+    #define NO_OPENCL            291
+    #define NORMALIZE_MIX        292
+    #define AUDIO_DITHER         293
+    #define QSV_BASELINE         294
+    #define QSV_ASYNC_DEPTH      295
+    #define QSV_IMPLEMENTATION   296
 
     for( ;; )
     {
@@ -3699,7 +3665,6 @@ static int ParseOptions( int argc, char ** argv )
             { "no-opencl",   no_argument,       NULL,    NO_OPENCL },
 
 #ifdef USE_QSV
-            { "qsv-preset",           required_argument, NULL,        ENCODER_PRESET,  },
             { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,    },
             { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH, },
             { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,               },
@@ -3761,6 +3726,28 @@ static int ParseOptions( int argc, char ** argv )
             { "crop",        required_argument, NULL,    'n' },
             { "loose-crop",  optional_argument, NULL, LOOSE_CROP },
 
+            // mapping of legacy option names for backwards compatibility
+            { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
+            { "x264-preset",          required_argument, NULL, ENCODER_PRESET,       },
+            { "x265-preset",          required_argument, NULL, ENCODER_PRESET,       },
+            { "x264-tune",            required_argument, NULL, ENCODER_TUNE,         },
+            { "x265-tune",            required_argument, NULL, ENCODER_TUNE,         },
+            { "x264-profile",         required_argument, NULL, ENCODER_PROFILE,      },
+            { "h264-profile",         required_argument, NULL, ENCODER_PROFILE,      },
+            { "h265-profile",         required_argument, NULL, ENCODER_PROFILE,      },
+            { "h264-level",           required_argument, NULL, ENCODER_LEVEL,        },
+            { "h265-level",           required_argument, NULL, ENCODER_LEVEL,        },
+            // encoder preset/tune/options/profile/level
+            { "encoder-preset",       required_argument, NULL, ENCODER_PRESET,       },
+            { "encoder-preset-list",  required_argument, NULL, ENCODER_PRESET_LIST,  },
+            { "encoder-tune",         required_argument, NULL, ENCODER_TUNE,         },
+            { "encoder-tune-list",    required_argument, NULL, ENCODER_TUNE_LIST,    },
+            { "encopts",              required_argument, NULL, 'x',                  },
+            { "encoder-profile",      required_argument, NULL, ENCODER_PROFILE,      },
+            { "encoder-profile-list", required_argument, NULL, ENCODER_PROFILE_LIST, },
+            { "encoder-level",        required_argument, NULL, ENCODER_LEVEL,        },
+            { "encoder-level-list",   required_argument, NULL, ENCODER_LEVEL_LIST,   },
+
             { "vb",          required_argument, NULL,    'b' },
             { "quality",     required_argument, NULL,    'q' },
             { "ab",          required_argument, NULL,    'B' },
@@ -3768,18 +3755,6 @@ static int ParseOptions( int argc, char ** argv )
             { "ac",          required_argument, NULL,    'C' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-            { "x264-preset", required_argument, NULL,    ENCODER_PRESET },
-            { "x264-tune",   required_argument, NULL,    ENCODER_TUNE },
-            { "encopts",     required_argument, NULL,    'x' },
-            { "x264-profile", required_argument, NULL,   ENCODER_PROFILE },
-            { "h264-profile", required_argument, NULL,   ENCODER_PROFILE },
-            { "h264-level",  required_argument, NULL,    ENCODER_LEVEL },
-#ifdef USE_X265
-            { "x265-preset",  required_argument, NULL,   ENCODER_PRESET },
-            { "x265-tune",    required_argument, NULL,   ENCODER_TUNE },
-            { "h265-profile", required_argument, NULL,   ENCODER_PROFILE },
-            { "h265-level",   required_argument, NULL,   ENCODER_LEVEL },
-#endif
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
             { "maxWidth",    required_argument, NULL,    'X' },
@@ -4222,6 +4197,34 @@ static int ParseOptions( int argc, char ** argv )
             case ENCODER_LEVEL:
                 h264_level = strdup( optarg );
                 break;
+            case ENCODER_PRESET_LIST:
+                fprintf(stderr, "Available --encoder-preset values for '%s' encoder:\n",
+                        hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(optarg)));
+                print_string_list(stderr,
+                                  hb_video_encoder_get_presets(hb_video_encoder_get_from_name(optarg)),
+                                  "    ");
+                exit(0);
+            case ENCODER_TUNE_LIST:
+                fprintf(stderr, "Available --encoder-tune values for '%s' encoder:\n",
+                        hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(optarg)));
+                print_string_list(stderr,
+                                  hb_video_encoder_get_tunes(hb_video_encoder_get_from_name(optarg)),
+                                  "    ");
+                exit(0);
+            case ENCODER_PROFILE_LIST:
+                fprintf(stderr, "Available --encoder-profile values for '%s' encoder:\n",
+                        hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(optarg)));
+                print_string_list(stderr,
+                                  hb_video_encoder_get_profiles(hb_video_encoder_get_from_name(optarg)),
+                                  "    ");
+                exit(0);
+            case ENCODER_LEVEL_LIST:
+                fprintf(stderr, "Available --encoder-level values for '%s' encoder:\n",
+                        hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(optarg)));
+                print_string_list(stderr,
+                                  hb_video_encoder_get_levels(hb_video_encoder_get_from_name(optarg)),
+                                  "    ");
+                exit(0);
             case 'T':
                 turbo_opts_enabled = 1;
                 break;
@@ -4428,30 +4431,20 @@ static int CheckOptions( int argc, char ** argv )
     return 0;
 }
 
-static void print_preset_list(FILE *out, const char* const *list, const char *indent)
+static void print_string_list(FILE *out, const char* const *list, const char *prefix)
 {
-    if (out != NULL && list != NULL && indent != NULL)
+    if (out != NULL && prefix != NULL)
     {
-        int len = 0;
-        char tmp[80];
-        tmp[0] = '\0';
-        while (list != NULL && *list != NULL)
+        if (list != NULL)
         {
-            strncat(tmp, *list++, sizeof(tmp) - 1  - len);
-            if (*list != NULL)
+            while (*list != NULL)
             {
-                strcat(tmp, "/");
-            }
-            if ((len = strlen(tmp)) > 40 && *list != NULL)
-            {
-                fprintf(out, "%s\n%s", tmp, indent);
-                tmp[0] = '\0';
-                len = 0;
+                fprintf(out, "%s%s\n", prefix, *list++);
             }
         }
-        if (len)
+        else
         {
-            fprintf(out, "%s\n", tmp);
+            fprintf(out, "%s" "Option not supported by encoder\n", prefix);
         }
     }
 }
