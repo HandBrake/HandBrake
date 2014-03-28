@@ -297,7 +297,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     return VideoEncoder.QuickSync;
                 case "theora":
                     return VideoEncoder.Theora;
-                case "hevc":
+                case "x265":
                     return VideoEncoder.X265;
                 default:
                     return VideoEncoder.X264;
@@ -328,7 +328,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 case VideoEncoder.Theora:
                     return "theora";
                 case VideoEncoder.X265:
-                    return "hevc";
+                    return "x265";
                 default:
                     return "x264";
             }
