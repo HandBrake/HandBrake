@@ -398,24 +398,26 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.rf = value;
 
-                double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
                 this.SetQualitySliderBounds();
                 switch (this.SelectedVideoEncoder)
                 {
                     case VideoEncoder.FFMpeg:
                     case VideoEncoder.FFMpeg2:
                         this.Task.Quality = (32 - value);
-                        break;
-                    case VideoEncoder.QuickSync:
+                        break;                 
                     case VideoEncoder.X264:
+                    case VideoEncoder.X265:
+                        double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
                         double rfValue = 51.0 - value * cqStep;
                         rfValue = Math.Round(rfValue, 2);
                         this.Task.Quality = rfValue;
+                        break;           
+                    case VideoEncoder.QuickSync:
+                        rfValue = 51.0 - value;
+                        rfValue = Math.Round(rfValue, 0);
+                        this.Task.Quality = rfValue;
                         break;
-                    case VideoEncoder.Theora:
-                        Task.Quality = value;
-                        break;
-                    case VideoEncoder.X265:
+                    case VideoEncoder.Theora:                 
                         Task.Quality = value;
                         break;
                 }
@@ -1090,7 +1092,7 @@ namespace HandBrakeWPF.ViewModels
                         this.RF = 32 - cq;
                     }
                     break;
-                case VideoEncoder.QuickSync:
+                case VideoEncoder.X265:
                 case VideoEncoder.X264:
 
                     double multiplier = 1.0 / cqStep;
@@ -1103,14 +1105,8 @@ namespace HandBrakeWPF.ViewModels
 
                     break;
 
-                case VideoEncoder.Theora:
-                    if (preset.Task.Quality.HasValue)
-                    {
-                        this.RF = (int)preset.Task.Quality.Value;
-                    }
-                    break;
-
-                case VideoEncoder.X265:
+                case VideoEncoder.Theora:              
+                case VideoEncoder.QuickSync:
                     if (preset.Task.Quality.HasValue)
                     {
                         this.RF = (int)preset.Task.Quality.Value;
@@ -1295,18 +1291,18 @@ namespace HandBrakeWPF.ViewModels
                     this.QualityMin = 1;
                     this.QualityMax = 31;
                     break;
-                case VideoEncoder.X264:
                 case VideoEncoder.QuickSync:
+                    this.QualityMin = 0;
+                    this.QualityMax = 51;
+                    break;
+                case VideoEncoder.X264:
+                case VideoEncoder.X265:
                     this.QualityMin = 0;
                     this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
                     break;
                 case VideoEncoder.Theora:
                     this.QualityMin = 0;
                     this.QualityMax = 63;
-                    break;
-                case VideoEncoder.X265:
-                    this.QualityMin = 0;
-                    this.QualityMax = 50;
                     break;
             }
         }
