@@ -3613,32 +3613,32 @@ static double parse_hhmmss_strtok()
 static int ParseOptions( int argc, char ** argv )
 {
     
-    #define PREVIEWS            257
-    #define START_AT_PREVIEW    258
-    #define START_AT            259
-    #define STOP_AT             260
-    #define ANGLE               261
-    #define DVDNAV              262
-    #define DISPLAY_WIDTH       263
-    #define PIXEL_ASPECT        264
-    #define MODULUS             265
-    #define KEEP_DISPLAY_ASPECT 266
-    #define SUB_BURNED          267
-    #define SUB_DEFAULT         268
-    #define NATIVE_DUB          269
-    #define SRT_FILE            270
-    #define SRT_CODESET         271
-    #define SRT_OFFSET          272
-    #define SRT_LANG            273
-    #define SRT_DEFAULT         274
-    #define ROTATE_FILTER       275
-    #define SCAN_ONLY           276
-    #define MAIN_FEATURE        277
-    #define MIN_DURATION        278
-    #define AUDIO_GAIN          279
-    #define ALLOWED_AUDIO_COPY  280
-    #define AUDIO_FALLBACK      281
-    #define LOOSE_CROP          282
+    #define PREVIEWS             257
+    #define START_AT_PREVIEW     258
+    #define START_AT             259
+    #define STOP_AT              260
+    #define ANGLE                261
+    #define DVDNAV               262
+    #define DISPLAY_WIDTH        263
+    #define PIXEL_ASPECT         264
+    #define MODULUS              265
+    #define KEEP_DISPLAY_ASPECT  266
+    #define SUB_BURNED           267
+    #define SUB_DEFAULT          268
+    #define NATIVE_DUB           269
+    #define SRT_FILE             270
+    #define SRT_CODESET          271
+    #define SRT_OFFSET           272
+    #define SRT_LANG             273
+    #define SRT_DEFAULT          274
+    #define ROTATE_FILTER        275
+    #define SCAN_ONLY            276
+    #define MAIN_FEATURE         277
+    #define MIN_DURATION         278
+    #define AUDIO_GAIN           279
+    #define ALLOWED_AUDIO_COPY   280
+    #define AUDIO_FALLBACK       281
+    #define LOOSE_CROP           282
     #define ENCODER_PRESET       283
     #define ENCODER_PRESET_LIST  284
     #define ENCODER_TUNE         285
