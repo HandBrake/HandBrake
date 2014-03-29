@@ -949,7 +949,7 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 if (!task.ShowAdvancedTab)
                 {
-                    if (task.X265Preset != x265Preset.VeryFast)
+                    if (task.X265Preset != x265Preset.Medium)
                     {
                         query += string.Format(
                             " --encoder-preset={0} ", task.X265Preset.ToString().ToLower().Replace(" ", string.Empty));
