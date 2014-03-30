@@ -99,14 +99,11 @@
     {
         subtitle = (hb_subtitle_t*)hb_list_item(fTitle->list_subtitle, i);
         
-        /* Subtitle source features */
-        int canBeBurnedIn       = hb_subtitle_can_burn(subtitle->source);
-        int supportsForcedFlags = hb_subtitle_can_force(subtitle->source);
         /* Human-readable representation of subtitle->source */
         NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
         NSString *subSourceName = [NSString stringWithUTF8String:hb_subsource_name(subtitle->source)];
         /* if the subtitle track can be forced, add its source name to the array */
-        if (supportsForcedFlags &&
+        if (hb_subtitle_can_force(subtitle->source) &&
             [forcedSourceNamesArray containsObject:subSourceName] == NO)
         {
             [forcedSourceNamesArray addObject:subSourceName];
@@ -120,10 +117,8 @@
                                            bitmapOrText,subSourceName]
                                    forKey:@"sourceTrackName"];
         /* Subtitle Source track number, type and features */
-        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:i]                   forKey:@"sourceTrackNum"];
-        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:subtitle->source]    forKey:@"sourceTrackType"];
-        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:canBeBurnedIn]       forKey:@"sourceTrackCanBeBurnedIn"];
-        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:supportsForcedFlags] forKey:@"sourceTrackSupportsForcedFlags"];
+        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:i]                forKey:@"sourceTrackNum"];
+        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:subtitle->source] forKey:@"sourceTrackType"];
         [subtitleSourceArray addObject:newSubtitleSourceTrack];
         [newSubtitleSourceTrack autorelease];
     }
@@ -188,10 +183,6 @@
     [newSubtitleTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackBurned"];
     /* Subtitle track default state */
     [newSubtitleTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackDefault"];
-    /* Subtitle Source track canBeBurnedIn */
-    [newSubtitleTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackCanBeBurnedIn"];
-    /* Subtitle Source track supportsForcedFlags */
-    [newSubtitleTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackSupportsForcedFlags"];
 
     [newSubtitleTrack autorelease];
     return newSubtitleTrack;
@@ -212,10 +203,6 @@
     [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"subtitleSourceTrackType"];
     /* Subtitle Source file path */
     [newSubtitleSourceTrack setObject:[fileURL path] forKey:@"sourceSrtFilePath"];
-    /* Subtitle Source track canBeBurnedIn */
-    [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackCanBeBurnedIn"];
-    /* Subtitle Source track supportsForcedFlags */
-    [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackSupportsForcedFlags"];
     
     [subtitleSourceArray addObject:newSubtitleSourceTrack];
     [newSubtitleSourceTrack autorelease];
@@ -247,10 +234,6 @@
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackBurned"];
     /* Subtitle track default state */
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackDefault"];
-    /* Subtitle Source track canBeBurnedIn */
-    [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackCanBeBurnedIn"];
-    /* Subtitle Source track supportsForcedFlags */
-    [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackSupportsForcedFlags"];
     
     /* now the srt only info, Language, Chart Code and offset */
     [newSubtitleSrtTrack setObject:[fileURL path] forKey:@"subtitleSourceSrtFilePath"];
@@ -314,10 +297,6 @@
             [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"subtitleSourceTrackType"];
             /* Subtitle Source file path */
             [newSubtitleSourceTrack setObject:filePath forKey:@"sourceSrtFilePath"];
-            /* Subtitle Source track canBeBurnedIn */
-            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackCanBeBurnedIn"];
-            /* Subtitle Source track supportsForcedFlags */
-            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackSupportsForcedFlags"];
             
             [subtitleSourceArray addObject:newSubtitleSourceTrack];
             [newSubtitleSourceTrack autorelease];
@@ -508,8 +487,6 @@
                 }
                 // now set the track type
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:subtitleTrackType] forKey:@"subtitleSourceTrackType"];
-                [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1]                 forKey:@"subtitleSourceTrackCanBeBurnedIn"];
-                [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1]                 forKey:@"subtitleSourceTrackSupportsForcedFlags"];
                 // foreign lang search is most useful when combined w/Forced Only - make it default
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1]                 forKey:@"subtitleTrackForced"];
             }
@@ -525,19 +502,15 @@
             {
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[[subtitleSourceArray objectAtIndex:sourceSubtitleIndex] objectForKey:@"sourceTrackType"]
                                                            forKey:@"subtitleSourceTrackType"];
-                [[subtitleArray objectAtIndex:rowIndex] setObject:[[subtitleSourceArray objectAtIndex:sourceSubtitleIndex] objectForKey:@"sourceTrackCanBeBurnedIn"]
-                                                           forKey:@"subtitleSourceTrackCanBeBurnedIn"];
-                [[subtitleArray objectAtIndex:rowIndex] setObject:[[subtitleSourceArray objectAtIndex:sourceSubtitleIndex] objectForKey:@"sourceTrackSupportsForcedFlags"]
-                                                           forKey:@"subtitleSourceTrackSupportsForcedFlags"];
             } 
             
-            if([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackCanBeBurnedIn"] intValue] == 0)
+            if (!hb_subtitle_can_burn([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue]))
             {
                 /* the source track cannot be burned in, so uncheck the widget */
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackBurned"];
             }
              
-            if([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackSupportsForcedFlags"] intValue] == 0)
+            if (!hb_subtitle_can_force([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue]))
             {
                 /* the source track does not support forced flags, so uncheck the widget */
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackForced"];
@@ -718,7 +691,7 @@
             [aCell setState:[[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleTrackForced"] intValue]];
             /* Disable the "Forced Only" checkbox if a) the track is "None" or b) the subtitle track doesn't support forced flags */
             if (![[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackNum"] intValue] ||
-                ![[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackSupportsForcedFlags"] intValue])
+                !hb_subtitle_can_force([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue]))
             {
                 [aCell setEnabled:NO];
             }
@@ -736,9 +709,9 @@
              * b) the subtitle track can't be burned in OR
              * c) the subtitle track can't be passed through (e.g. PGS w/MP4)
              */
+            int subtitleTrackType = [[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue];
             if (![[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackNum"] intValue] ||
-                ![[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackCanBeBurnedIn"] intValue] ||
-                !hb_subtitle_can_pass([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue], container))
+                !hb_subtitle_can_burn(subtitleTrackType) || !hb_subtitle_can_pass(subtitleTrackType, container))
             {
                 [aCell setEnabled:NO];
             }

@@ -94,6 +94,9 @@ struct s_write {
     unsigned char *enc_buffer; // Generic general purpose buffer
     unsigned enc_buffer_used;
     unsigned enc_buffer_capacity;
+
+    int clear_sub_needed;   // Indicates that we need to send a null
+                            // subtitle to clear the current subtitle
 };
 
 enum command_code

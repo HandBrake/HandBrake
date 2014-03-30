@@ -1,5 +1,5 @@
 /*
- * From ccextractor, leave this file as intact and close to the original as possible so that 
+ * From ccextractor, leave this file as intact and close to the original as possible so that
  * it is easy to patch in fixes - even though this file contains code that we don't need.
  *
  * Note that the SRT sub generation from CC could be useful for mkv subs.
@@ -15,13 +15,9 @@ static int trim_subs = 1;
 static int nofontcolor = 0;
 static enum encoding_type encoding = ENC_UTF_8;
 static int cc_channel = 1;
-static enum output_format write_format = OF_SRT;
 static int sentence_cap = 0;
 static int subs_delay = 0;
-static int64_t screens_to_process = -1;
-static int processed_enough = 0;
-static int gui_mode_reports = 0;
-static int norollup = 1;
+static int norollup = 0;
 static int direct_rollup = 0;
 
 /*
@@ -33,14 +29,13 @@ static int64_t get_fts(struct s_write *wb)
 }
 
 #define fatal(N, ...) // N
-#define XMLRPC_APPEND(N, ...) // N
 
 int     rowdata[] = {11,-1,1,2,3,4,12,13,14,15,5,6,7,8,9,10};
 // Relationship between the first PAC byte and the row number
 
 // The following enc_buffer is not used at the moment, if it does get used
 // we need to bring it into the swrite struct. Same for "str".
-#define INITIAL_ENC_BUFFER_CAPACITY		2048
+#define INITIAL_ENC_BUFFER_CAPACITY     2048
 
 unsigned char str[2048]; // Another generic general purpose buffer
 
@@ -51,7 +46,7 @@ unsigned char str[2048]; // Another generic general purpose buffer
 
 const unsigned char pac2_attribs[][3]= // Color, font, ident
 {
-    {COL_WHITE,     FONT_REGULAR,               0},  // 0x40 || 0x60 
+    {COL_WHITE,     FONT_REGULAR,               0},  // 0x40 || 0x60
     {COL_WHITE,     FONT_UNDERLINED,            0},  // 0x41 || 0x61
     {COL_GREEN,     FONT_REGULAR,               0},  // 0x42 || 0x62
     {COL_GREEN,     FONT_UNDERLINED,            0},  // 0x43 || 0x63
@@ -86,7 +81,7 @@ const unsigned char pac2_attribs[][3]= // Color, font, ident
 };
 
 // Preencoded strings
-unsigned char encoded_crlf[16]; 
+unsigned char encoded_crlf[16];
 unsigned int encoded_crlf_length;
 unsigned char encoded_br[16];
 unsigned int encoded_br_length;
@@ -94,19 +89,6 @@ unsigned int encoded_br_length;
 // Default color
 unsigned char usercolor_rgb[8]="";
 enum color_code default_color=COL_WHITE;
-
-const char *sami_header= // TODO: Revise the <!-- comments
-"<SAMI>\n\
-<HEAD>\n\
-<STYLE TYPE=\"text/css\">\n\
-<!--\n\
-P {margin-left: 16pt; margin-right: 16pt; margin-bottom: 16pt; margin-top: 16pt;\n\
-text-align: center; font-size: 18pt; font-family: arial; font-weight: bold; color: #f0f0f0;}\n\
-.UNKNOWNCC {Name:Unknown; lang:en-US; SAMIType:CC;}\n\
--->\n\
-</STYLE>\n\
-</HEAD>\n\n\
-<BODY>\n";
 
 const char *command_type[] =
 {
@@ -155,7 +137,7 @@ int general_608_init (struct s_write *wb)
 {
     if( !wb->enc_buffer )
     {
-        wb->enc_buffer=(unsigned char *) malloc (INITIAL_ENC_BUFFER_CAPACITY); 
+        wb->enc_buffer=(unsigned char *) malloc (INITIAL_ENC_BUFFER_CAPACITY);
         if (wb->enc_buffer==NULL)
             return -1;
         wb->enc_buffer_capacity=INITIAL_ENC_BUFFER_CAPACITY;
@@ -163,7 +145,7 @@ int general_608_init (struct s_write *wb)
 
     if( !wb->subline) {
         wb->subline = malloc(2048);
-    
+
         if (!wb->subline)
         {
             return -1;
@@ -207,8 +189,8 @@ void general_608_close (struct s_write *wb)
 void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
 {
     unsigned char c1='?';
-    if (c<0x80) 
-    {	
+    if (c<0x80)
+    {
         // Regular line-21 character set, mostly ASCII except these exceptions
         switch (c)
         {
@@ -220,7 +202,7 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
                 break;
             case 0x5e: // lowercase i, acute accent
                 c1=0xed;
-                break;			
+                break;
             case 0x5f: // lowercase o, acute accent
                 c1=0xf3;
                 break;
@@ -249,25 +231,25 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
     switch (c)
     {
         // THIS BLOCK INCLUDES THE 16 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x11 AND LOW BETWEEN 0x30 AND 0x3F		
+        // THAT COME FROM HI BYTE=0x11 AND LOW BETWEEN 0x30 AND 0x3F
         case 0x80: // Registered symbol (R)
             c1=0xae;
-            break;			
+            break;
         case 0x81: // degree sign
             c1=0xb0;
             break;
-        case 0x82: // 1/2 symbol			
+        case 0x82: // 1/2 symbol
             c1=0xbd;
             break;
-        case 0x83: // Inverted (open) question mark			
+        case 0x83: // Inverted (open) question mark
             c1=0xbf;
             break;
         case 0x84: // Trademark symbol (TM) - Does not exist in Latin 1
-            break;			
-        case 0x85: // Cents symbol			
+            break;
+        case 0x85: // Cents symbol
             c1=0xa2;
             break;
-        case 0x86: // Pounds sterling			
+        case 0x86: // Pounds sterling
             c1=0xa3;
             break;
         case 0x87: // Music note - Not in latin 1, so we use 'pilcrow'
@@ -277,7 +259,7 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
             c1=0xe0;
             break;
         case 0x89: // transparent space, we make it regular
-            c1=0x20;			
+            c1=0x20;
             break;
         case 0x8a: // lowercase e, grave accent
             c1=0xe8;
@@ -286,7 +268,7 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
             c1=0xe2;
             break;
         case 0x8c: // lowercase e, circumflex accent
-            c1=0xea;			
+            c1=0xea;
             break;
         case 0x8d: // lowercase i, circumflex accent
             c1=0xee;
@@ -318,19 +300,19 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
             c1=0xfc;
             break;
         case 0x96: // apostrophe
-            c1=0x27;			
+            c1=0x27;
             break;
-        case 0x97: // inverted exclamation mark			
+        case 0x97: // inverted exclamation mark
             c1=0xa1;
             break;
         case 0x98: // asterisk
-            c1=0x2a;			
+            c1=0x2a;
             break;
         case 0x99: // apostrophe (yes, duped). See CCADI source code.
-            c1=0x27;			
+            c1=0x27;
             break;
         case 0x9a: // hyphen-minus
-            c1=0x2d;			
+            c1=0x2d;
             break;
         case 0x9b: // copyright sign
             c1=0xa9;
@@ -341,17 +323,17 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
             c1=0x2e;
             break;
         case 0x9e: // Quoatation mark
-            c1=0x22;			
+            c1=0x22;
             break;
         case 0x9f: // Quoatation mark
-            c1=0x22;			
+            c1=0x22;
             break;
         case 0xa0: // uppercase A, grave accent
             c1=0xc0;
             break;
         case 0xa1: // uppercase A, circumflex
             c1=0xc2;
-            break;			
+            break;
         case 0xa2: // uppercase C with cedilla
             c1=0xc7;
             break;
@@ -427,7 +409,7 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
             c1=0x7b;
             break;
         case 0xba: // Closing curly brace
-            c1=0x7d;            
+            c1=0x7d;
             break;
         case 0xbb: // Backslash
             c1=0x5c;
@@ -438,17 +420,17 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
         case 0xbd: // Underscore
             c1=0x5f;
             break;
-        case 0xbe: // Pipe (broken bar)            
+        case 0xbe: // Pipe (broken bar)
             c1=0xa6;
             break;
         case 0xbf: // Tilde
-            c1=0x7e; 
+            c1=0x7e;
             break;
-        case 0xc0: // Uppercase A, umlaut            
+        case 0xc0: // Uppercase A, umlaut
             c1=0xc4;
             break;
         case 0xc1: // Lowercase A, umlaut
-            c1=0xe3; 
+            c1=0xe3;
             break;
         case 0xc2: // Uppercase O, umlaut
             c1=0xd6;
@@ -464,10 +446,10 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
             break;
         case 0xc6: // Currency symbol
             c1=0xa4;
-            break;            
+            break;
         case 0xc7: // Vertical bar
             c1=0x7c;
-            break;            
+            break;
         case 0xc8: // Uppercase A, ring
             c1=0xc5;
             break;
@@ -488,7 +470,7 @@ void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
             *buffer='?'; // I'll do it eventually, I promise
             break; // This are weird chars anyway
     }
-    *buffer=c1;	
+    *buffer=c1;
 }
 
 void get_char_in_unicode (unsigned char *buffer, unsigned char c)
@@ -496,7 +478,7 @@ void get_char_in_unicode (unsigned char *buffer, unsigned char c)
     unsigned char c1,c2;
     switch (c)
     {
-        case 0x84: // Trademark symbol (TM) 
+        case 0x84: // Trademark symbol (TM)
             c2=0x21;
             c1=0x22;
             break;
@@ -511,7 +493,7 @@ void get_char_in_unicode (unsigned char *buffer, unsigned char c)
         case 0xcc: // Upper left corner
             c2=0x23;
             c1=0x1c;
-            break;			
+            break;
         case 0xcd: // Upper right corner
             c2=0x23;
             c1=0x1d;
@@ -524,7 +506,7 @@ void get_char_in_unicode (unsigned char *buffer, unsigned char c)
             c2=0x23;
             c1=0x1f;
             break;
-        default: // Everything else, same as latin-1 followed by 00			
+        default: // Everything else, same as latin-1 followed by 00
             get_char_in_latin_1 (&c1,c);
             c2=0;
             break;
@@ -585,10 +567,10 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
     switch (c)
     {
         // THIS BLOCK INCLUDES THE 16 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x11 AND LOW BETWEEN 0x30 AND 0x3F		
+        // THAT COME FROM HI BYTE=0x11 AND LOW BETWEEN 0x30 AND 0x3F
         case 0x80: // Registered symbol (R)
             *buffer=0xc2;
-            *(buffer+1)=0xae;			
+            *(buffer+1)=0xae;
             return 2;
         case 0x81: // degree sign
             *buffer=0xc2;
@@ -615,7 +597,7 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *buffer=0xc2;
             *(buffer+1)=0xa3;
             return 2;
-        case 0x87: // Music note			
+        case 0x87: // Music note
             *buffer=0xe2;
             *(buffer+1)=0x99;
             *(buffer+2)=0xaa;
@@ -625,7 +607,7 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *(buffer+1)=0xa0;
             return 2;
         case 0x89: // transparent space, we make it regular
-            *buffer=0x20;			
+            *buffer=0x20;
             return 1;
         case 0x8a: // lowercase e, grave accent
             *buffer=0xc3;
@@ -678,38 +660,38 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *(buffer+1)=0xbc;
             return 2;
         case 0x96: // apostrophe
-            *buffer=0x27;			
+            *buffer=0x27;
             return 1;
         case 0x97: // inverted exclamation mark
             *buffer=0xc2;
             *(buffer+1)=0xa1;
             return 2;
         case 0x98: // asterisk
-            *buffer=0x2a;			
+            *buffer=0x2a;
             return 1;
         case 0x99: // apostrophe (yes, duped). See CCADI source code.
-            *buffer=0x27;			
+            *buffer=0x27;
             return 1;
         case 0x9a: // hyphen-minus
-            *buffer=0x2d;			
+            *buffer=0x2d;
             return 1;
         case 0x9b: // copyright sign
             *buffer=0xc2;
             *(buffer+1)=0xa9;
             return 2;
-        case 0x9c: // Service mark 
-            *buffer=0xe2;			
+        case 0x9c: // Service mark
+            *buffer=0xe2;
             *(buffer+1)=0x84;
             *(buffer+2)=0xa0;
             return 3;
         case 0x9d: // Full stop (.)
-            *buffer=0x2e;			
+            *buffer=0x2e;
             return 1;
         case 0x9e: // Quoatation mark
-            *buffer=0x22;			
+            *buffer=0x22;
             return 1;
         case 0x9f: // Quoatation mark
-            *buffer=0x22;			
+            *buffer=0x22;
             return 1;
         case 0xa0: // uppercase A, grave accent
             *buffer=0xc3;
@@ -817,7 +799,7 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *buffer=0x7b;
             return 1;
         case 0xba: // Closing curly brace
-            *buffer=0x7d;            
+            *buffer=0x7d;
             return 1;
         case 0xbb: // Backslash
             *buffer=0x5c;
@@ -829,26 +811,26 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *buffer=0x5f;
             return 1;
         case 0xbe: // Pipe (broken bar)
-            *buffer=0xc2; 
+            *buffer=0xc2;
             *(buffer+1)=0xa6;
             return 1;
         case 0xbf: // Tilde
             *buffer=0x7e; // Not sure
             return 1;
         case 0xc0: // Uppercase A, umlaut
-            *buffer=0xc3; 
+            *buffer=0xc3;
             *(buffer+1)=0x84;
             return 2;
         case 0xc1: // Lowercase A, umlaut
-            *buffer=0xc3; 
+            *buffer=0xc3;
             *(buffer+1)=0xa4;
             return 2;
         case 0xc2: // Uppercase O, umlaut
-            *buffer=0xc3; 
+            *buffer=0xc3;
             *(buffer+1)=0x96;
             return 2;
         case 0xc3: // Lowercase o, umlaut
-            *buffer=0xc3; 
+            *buffer=0xc3;
             *(buffer+1)=0xb6;
             return 2;
         case 0xc4: // Esszett (sharp S)
@@ -864,7 +846,7 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *(buffer+1)=0xa4;
             return 2;
         case 0xc7: // Vertical bar
-            *buffer=0x7c; 
+            *buffer=0x7c;
             return 1;
         case 0xc8: // Uppercase A, ring
             *buffer=0xc3;
@@ -902,7 +884,7 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *(buffer+1)=0x8c;
             *(buffer+2)=0x9f;
             return 3;
-        default: // 
+        default: //
             *buffer='?'; // I'll do it eventually, I promise
             return 1; // This are weird chars anyway
     }
@@ -919,35 +901,35 @@ unsigned char cctolower (unsigned char c)
         case 0x90: // capital letter A with acute
             return 0x2a;
         case 0x91: // capital letter E with acute
-            return 0x5c; 
+            return 0x5c;
         case 0x92: // capital letter O with acute
-            return 0x5f; 
+            return 0x5f;
         case 0x93: // capital letter U with acute
-            return 0x60; 
+            return 0x60;
         case 0xa2: // uppercase C with cedilla
-            return 0x7b; 
+            return 0x7b;
         case 0xa0: // uppercase A, grave accent
-            return 0x88; 
+            return 0x88;
         case 0xa3: // uppercase E, grave accent
-            return 0x8a; 
+            return 0x8a;
         case 0xa1: // uppercase A, circumflex
-            return 0x8b; 
+            return 0x8b;
         case 0xa4: // uppercase E, circumflex
-            return 0x8c; 
+            return 0x8c;
         case 0xa7: // uppercase I, circumflex
-            return 0x8d; 
+            return 0x8d;
         case 0xaa: // uppercase O, circumflex
-            return 0x8e; 
+            return 0x8e;
         case 0xad: // uppercase U, circumflex
-            return 0x8f; 
+            return 0x8f;
         case 0x94: // capital letter U with diaresis
-            return 0x95; 
+            return 0x95;
         case 0xa5: // capital letter E with diaresis
-            return 0xa6; 
+            return 0xa6;
         case 0xa8: // uppercase I, with diaresis
-            return 0xa9; 
+            return 0xa9;
         case 0xab: // uppercase U, grave accent
-            return 0xac; 
+            return 0xac;
         case 0xb0: // Uppercase A, tilde
             return 0xb1;
         case 0xb2: // Uppercase I, acute accent
@@ -1013,21 +995,21 @@ unsigned char cctoupper (unsigned char c)
         case 0xac: // lowercase u, grave accent
             return 0xab;
         case 0xb1: // Lowercase a, tilde
-            return 0xb0; 
+            return 0xb0;
         case 0xb4: // Lowercase i, grave accent
             return 0xb3;
         case 0xb6: // Lowercase o, grave accent
-            return 0xb5; 
-        case 0xb8: // Lowercase o, tilde	
+            return 0xb5;
+        case 0xb8: // Lowercase o, tilde
             return 0xb7;
-        case 0xc1: // Lowercase A, umlaut	
-            return 0xc0; 
+        case 0xc1: // Lowercase A, umlaut
+            return 0xc0;
         case 0xc3: // Lowercase o, umlaut
             return 0xc2;
         case 0xc9: // Lowercase A, ring
-            return 0xc8; 
+            return 0xc8;
         case 0xcb: // Lowercase o, slash
-            return 0xca; 
+            return 0xca;
     }
     return c;
 }
@@ -1035,12 +1017,12 @@ unsigned char cctoupper (unsigned char c)
 
 // Encodes a generic string. Note that since we use the encoders for closed caption
 // data, text would have to be encoded as CCs... so using special characters here
-// it's a bad idea. 
+// it's a bad idea.
 unsigned encode_line (unsigned char *buffer, unsigned char *text)
-{ 
+{
     unsigned bytes=0;
     while (*text)
-    {		
+    {
         switch (encoding)
         {
             case ENC_UTF_8:
@@ -1049,13 +1031,13 @@ unsigned encode_line (unsigned char *buffer, unsigned char *text)
                 bytes++;
                 buffer++;
                 break;
-        case ENC_UNICODE:				
-            *buffer=*text;				
+        case ENC_UNICODE:
+            *buffer=*text;
             *(buffer+1)=0;
-            bytes+=2;				
+            bytes+=2;
             buffer+=2;
             break;
-        }		
+        }
         text++;
     }
     return bytes;
@@ -1086,7 +1068,7 @@ void correct_case (int line_num, struct eia608_screen *data)
 /*             if (c-(char *) data->characters[line_num]+len==CC608_SCREEN_WIDTH) // End of line... */
 /*                 next=' '; // ... pretend we have a blank later */
 /*             else */
-/*                 next=*(c+len);			 */
+/*                 next=*(c+len);            */
 /*             if ( ISSEPARATOR(prev) && ISSEPARATOR(next)) */
 /*             { */
 /*                 memcpy (c,spell_correct[i],len); */
@@ -1105,10 +1087,10 @@ void capitalize (int line_num, struct eia608_screen *data, int *new_sentence)
     {
         switch (data->characters[line_num][i])
         {
-            case ' ': 
+            case ' ':
             case 0x89: // This is a transparent space
             case '-':
-                break; 
+                break;
             case '.': // Fallthrough
             case '?': // Fallthrough
             case '!':
@@ -1116,7 +1098,7 @@ void capitalize (int line_num, struct eia608_screen *data, int *new_sentence)
                 *new_sentence=1;
                 break;
             default:
-                if (*new_sentence)			
+                if (*new_sentence)
                     data->characters[line_num][i]=cctoupper (data->characters[line_num][i]);
                 else
                     data->characters[line_num][i]=cctolower (data->characters[line_num][i]);
@@ -1174,7 +1156,7 @@ unsigned get_decoder_line_basic (unsigned char *buffer, int line_num, struct eia
                 break;
             case ENC_UNICODE:
                 get_char_in_unicode (buffer,c);
-                bytes=2;				
+                bytes=2;
                 break;
         }
         buffer+=bytes;
@@ -1183,38 +1165,20 @@ unsigned get_decoder_line_basic (unsigned char *buffer, int line_num, struct eia
     return (unsigned) (buffer-orig); // Return length
 }
 
-unsigned get_decoder_line_encoded_for_gui (unsigned char *buffer, int line_num, struct eia608_screen *data)
-{
-    unsigned char *line = data->characters[line_num];	
-    unsigned char *orig=buffer; // Keep for debugging
-    int first=0, last=31;
-    int i;
-
-    find_limit_characters(line,&first,&last);
-    for (i=first;i<=last;i++)
-    {	
-        get_char_in_latin_1 (buffer,line[i]);
-        buffer++;
-    }
-    *buffer=0;
-    return (unsigned) (buffer-orig); // Return length
-
-}
-
 unsigned get_decoder_line_encoded (unsigned char *buffer, int line_num, struct eia608_screen *data)
 {
     int col = COL_WHITE;
     int underlined = 0;
-    int italics = 0;	
+    int italics = 0;
     int i;
 
-    unsigned char *line = data->characters[line_num];	
+    unsigned char *line = data->characters[line_num];
     unsigned char *orig=buffer; // Keep for debugging
     int first=0, last=31;
     if (trim_subs)
         find_limit_characters(line,&first,&last);
     for (i=first;i<=last;i++)
-    {	
+    {
         // Handle color
         int its_col = data->colors[line_num][i];
         if (its_col != col  && !nofontcolor)
@@ -1227,11 +1191,11 @@ unsigned get_decoder_line_encoded (unsigned char *buffer, int line_num, struct e
             buffer+=encode_line (buffer, (unsigned char*) color_text[its_col][1]);
             if (its_col==COL_USERDEFINED)
             {
-                // The previous sentence doesn't copy the whole 
+                // The previous sentence doesn't copy the whole
                 // <font> tag, just up to the quote before the color
                 buffer+=encode_line (buffer, (unsigned char*) usercolor_rgb);
                 buffer+=encode_line (buffer, (unsigned char*) "\">");
-            }			
+            }
 
             col = its_col;
         }
@@ -1244,10 +1208,10 @@ unsigned get_decoder_line_encoded (unsigned char *buffer, int line_num, struct e
         if (is_underlined==0 && underlined) // Close underline
         {
             buffer+=encode_line (buffer, (unsigned char *) "</u>");
-        } 
+        }
         underlined=is_underlined;
         // Handle italics
-        int has_ita = data->fonts[line_num][i] & FONT_ITALICS;		
+        int has_ita = data->fonts[line_num][i] & FONT_ITALICS;
         if (has_ita && italics==0) // Open italics
         {
             buffer+=encode_line (buffer, (unsigned char *) "<i>");
@@ -1255,7 +1219,7 @@ unsigned get_decoder_line_encoded (unsigned char *buffer, int line_num, struct e
         if (has_ita==0 && italics) // Close italics
         {
             buffer+=encode_line (buffer, (unsigned char *) "</i>");
-        } 
+        }
         italics=has_ita;
         int bytes=0;
         switch (encoding)
@@ -1269,10 +1233,10 @@ unsigned get_decoder_line_encoded (unsigned char *buffer, int line_num, struct e
                 break;
             case ENC_UNICODE:
                 get_char_in_unicode (buffer,line[i]);
-                bytes=2;				
+                bytes=2;
                 break;
         }
-        buffer+=bytes;        
+        buffer+=bytes;
     }
     if (italics)
     {
@@ -1299,10 +1263,10 @@ void delete_all_lines_but_current (struct eia608_screen *data, int row)
         if (i!=row)
         {
             memset(data->characters[i],' ',CC608_SCREEN_WIDTH);
-            data->characters[i][CC608_SCREEN_WIDTH]=0;		
-            memset (data->colors[i],default_color,CC608_SCREEN_WIDTH+1); 
-            memset (data->fonts[i],FONT_REGULAR,CC608_SCREEN_WIDTH+1); 
-            data->row_used[i]=0;        
+            data->characters[i][CC608_SCREEN_WIDTH]=0;
+            memset (data->colors[i],default_color,CC608_SCREEN_WIDTH+1);
+            memset (data->fonts[i],FONT_REGULAR,CC608_SCREEN_WIDTH+1);
+            data->row_used[i]=0;
         }
     }
 }
@@ -1314,10 +1278,10 @@ void clear_eia608_cc_buffer (struct eia608_screen *data)
     for (i=0;i<15;i++)
     {
         memset(data->characters[i],' ',CC608_SCREEN_WIDTH);
-        data->characters[i][CC608_SCREEN_WIDTH]=0;		
-        memset (data->colors[i],default_color,CC608_SCREEN_WIDTH+1); 
-        memset (data->fonts[i],FONT_REGULAR,CC608_SCREEN_WIDTH+1); 
-        data->row_used[i]=0;        
+        data->characters[i][CC608_SCREEN_WIDTH]=0;
+        memset (data->colors[i],default_color,CC608_SCREEN_WIDTH+1);
+        memset (data->fonts[i],FONT_REGULAR,CC608_SCREEN_WIDTH+1);
+        data->row_used[i]=0;
     }
     data->empty=1;
 }
@@ -1336,10 +1300,35 @@ void init_eia608 (struct eia608 *data)
     data->current_visible_start_ms=0;
     data->srt_counter=0;
     data->screenfuls_counter=0;
-    data->channel=1;	
+    data->channel=1;
     data->color=default_color;
     data->font=FONT_REGULAR;
     data->rollup_base_row=14;
+}
+
+struct eia608_screen *get_current_hidden_buffer(struct s_write *wb)
+{
+    struct eia608_screen *data;
+    if (wb->data608->visible_buffer == 1)
+        data = &wb->data608->buffer2;
+    else
+        data = &wb->data608->buffer1;
+    return data;
+}
+
+struct eia608_screen *get_current_visible_buffer(struct s_write *wb)
+{
+    struct eia608_screen *data;
+    if (wb->data608->visible_buffer == 1)
+        data = &wb->data608->buffer1;
+    else
+        data = &wb->data608->buffer2;
+    return data;
+}
+
+static void swap_visible_buffer(struct s_write *wb)
+{
+    wb->data608->visible_buffer = (wb->data608->visible_buffer == 1) ? 2 : 1;
 }
 
 struct eia608_screen *get_writing_buffer (struct s_write *wb)
@@ -1348,21 +1337,15 @@ struct eia608_screen *get_writing_buffer (struct s_write *wb)
     switch (wb->data608->mode)
     {
         case MODE_POPUP: // Write on the non-visible buffer
-            if (wb->data608->visible_buffer==1)
-                use_buffer = &wb->data608->buffer2;
-            else
-                use_buffer = &wb->data608->buffer1;
+            use_buffer = get_current_hidden_buffer(wb);
             break;
         case MODE_ROLLUP_2: // Write directly to screen
         case MODE_ROLLUP_3:
         case MODE_ROLLUP_4:
-            if (wb->data608->visible_buffer==1)
-                use_buffer = &wb->data608->buffer1;
-            else
-                use_buffer = &wb->data608->buffer2;
+            use_buffer = get_current_visible_buffer(wb);
             break;
         default:
-            fatal (EXIT_BUG_BUG, "Caption mode has an illegal value at get_writing_buffer(), this is a bug.\n");            
+            fatal (EXIT_BUG_BUG, "Caption mode has an illegal value at get_writing_buffer(), this is a bug.\n");
     }
     return use_buffer;
 }
@@ -1377,7 +1360,7 @@ void write_char (const unsigned char c, struct s_write *wb)
         wb->data608->cursor_row,wb->data608->cursor_column); */
         use_buffer->characters[wb->data608->cursor_row][wb->data608->cursor_column]=c;
         use_buffer->colors[wb->data608->cursor_row][wb->data608->cursor_column]=wb->data608->color;
-        use_buffer->fonts[wb->data608->cursor_row][wb->data608->cursor_column]=wb->data608->font;	
+        use_buffer->fonts[wb->data608->cursor_row][wb->data608->cursor_column]=wb->data608->font;
         use_buffer->row_used[wb->data608->cursor_row]=1;
         use_buffer->empty=0;
         if (wb->data608->cursor_column<31)
@@ -1427,25 +1410,6 @@ void mstotime (int64_t milli, unsigned *hours, unsigned *minutes,
     *hours=(int) milli;
 }
 
-void write_subtitle_file_footer (struct s_write *wb)
-{
-    switch (write_format)
-    {
-        case OF_SAMI:
-            sprintf ((char *) str,"</BODY></SAMI>\n");
-            if (debug_608 && encoding!=ENC_UNICODE)
-            {
-                hb_log ("\r%s\n", str);
-            }
-            wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
-            //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
-            XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-            break;
-        default: // Nothing to do. Only SAMI has a footer
-            break;
-    }
-}
-
 void fhb_log_encoded (FILE *fh, const char *string)
 {
     //GUARANTEE(wb, strlen (string)*3);
@@ -1453,135 +1417,7 @@ void fhb_log_encoded (FILE *fh, const char *string)
     //fwrite (wb->enc_buffer,wb->enc_buffer_used,1,fh);
 }
 
-void write_subtitle_file_header (struct s_write *wb)
-{
-    switch (write_format)
-    {
-        case OF_SRT: // Subrip subtitles have no header
-            break; 
-        case OF_SAMI: // This header brought to you by McPoodle's CCASDI  
-            //fhb_log_encoded (wb->fh, sami_header);
-            GUARANTEE(wb, strlen (sami_header)*3);
-            wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) sami_header);
-            //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
-            XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-            break;
-        case OF_RCWT: // Write header
-            //fwrite (rcwt_header, sizeof(rcwt_header),1,wb->fh);
-            break;
-        case OF_TRANSCRIPT: // No header. Fall thru
-        default:
-            break;
-    }
-}
-
-void write_cc_line_as_transcript (struct eia608_screen *data, struct s_write *wb, int line_number)
-{
-    hb_buffer_t *buffer;
-
-    if (sentence_cap)
-    {
-        capitalize(line_number,data, &wb->new_sentence);
-        correct_case(line_number,data);
-    }
-    int length = get_decoder_line_basic (wb->subline, line_number, data);
-    if (debug_608 && encoding!=ENC_UNICODE)
-    {
-        hb_log ("\r");
-        hb_log ("%s\n",wb->subline);
-    }
-    if (length>0)
-    {
-        //fwrite (wb->subline, 1, length, wb->fh);
-        /*
-         * Put this subtitle in a hb_buffer_t and shove it into the subtitle fifo
-         */
-        buffer = hb_buffer_init( length + 1 );
-        buffer->s.frametype = HB_FRAME_SUBTITLE;
-        buffer->s.start = wb->data608->current_visible_start_ms;
-        buffer->s.stop = get_fts(wb);
-        memcpy( buffer->data, wb->subline, length + 1 );
-        //hb_log("CC %"PRId64": %s", buffer->s.stop, wb->subline);
-
-        if (wb->hb_last_buffer) {
-            wb->hb_last_buffer->next = buffer;
-        } else {
-            wb->hb_buffer = buffer;
-        }
-        wb->hb_last_buffer = buffer;
-
-        XMLRPC_APPEND(wb->subline,length);
-        //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
-        XMLRPC_APPEND(encoded_crlf,encoded_crlf_length);    
-    }
-    // fhb_log (wb->fh,encoded_crlf);
-}
-
-int write_cc_buffer_as_transcript (struct eia608_screen *data, struct s_write *wb)
-{
-    int i;
-
-    int wrote_something = 0;
-    if (debug_608)
-    {
-        hb_log ("\n- - - TRANSCRIPT caption - - -\n");        
-    }
-    for (i=0;i<15;i++)
-    {
-        if (data->row_used[i])
-        {		
-            write_cc_line_as_transcript (data,wb, i);
-        }
-        wrote_something=1;
-    }
-    if (debug_608)
-    {
-        hb_log ("- - - - - - - - - - - -\r\n");
-    }
-    return wrote_something;
-}
-
-void write_cc_buffer_to_gui (struct eia608_screen *data, struct s_write *wb)
-{
-    unsigned h1,m1,s1,ms1;
-    unsigned h2,m2,s2,ms2;    
-    int i;
-
-    int64_t ms_start= wb->data608->current_visible_start_ms;
-
-    ms_start+=subs_delay;
-    if (ms_start<0) // Drop screens that because of subs_delay start too early
-        return;
-    int time_reported=0;    
-    for (i=0;i<15;i++)
-    {
-        if (data->row_used[i])
-        {
-            hb_log ("###SUBTITLE#");            
-            if (!time_reported)
-            {
-                int64_t ms_end = get_fts(wb)+subs_delay;		
-                mstotime (ms_start,&h1,&m1,&s1,&ms1);
-                mstotime (ms_end-1,&h2,&m2,&s2,&ms2); // -1 To prevent overlapping with next line.
-                // Note, only MM:SS here as we need to save space in the preview window
-                hb_log ("%02u:%02u#%02u:%02u#",
-                        h1*60+m1,s1, h2*60+m2,s2);
-                time_reported=1;
-            }
-            else
-                hb_log ("##");
-            
-            // We don't capitalize here because whatever function that was used
-            // before to write to file already took care of it.
-            int length = get_decoder_line_encoded_for_gui (wb->subline, i, data);
-            fwrite (wb->subline, 1, length, stderr);
-            fwrite ("\n",1,1,stderr);
-        }
-    }
-    fflush (stderr);
-}
-
-int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
+int write_cc_buffer_as_srt(struct eia608_screen *data, struct s_write *wb)
 {
     unsigned h1,m1,s1,ms1;
     unsigned h2,m2,s2,ms2;
@@ -1593,36 +1429,30 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     if (ms_start<0) // Drop screens that because of subs_delay start too early
         return 0;
 
-    int64_t ms_end = get_fts(wb)+subs_delay;		
+    int64_t ms_end = get_fts(wb)+subs_delay;
     mstotime (ms_start,&h1,&m1,&s1,&ms1);
     mstotime (ms_end-1,&h2,&m2,&s2,&ms2); // -1 To prevent overlapping with next line.
-    char timeline[128];   
+    char timeline[128];
     wb->data608->srt_counter++;
     sprintf (timeline,"%u\r\n",wb->data608->srt_counter);
-    //wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) timeline);
-    //fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
-    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-    //sprintf (timeline, "%02u:%02u:%02u,%03u --> %02u:%02u:%02u,%03u\r\n",
-    //      h1,m1,s1,ms1, h2,m2,s2,ms2);
-    //wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) timeline);
+
     if (debug_608)
     {
         hb_log ("\n- - - SRT caption - - -\n");
         hb_log ("%s", timeline);
     }
-    //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);		
-    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-    
+
     /*
      * Write all the lines into enc_buffer, and then write that out at the end
      * ensure that we only have two lines, insert a newline after the first one,
      * and have a big bottom line (strip spaces from any joined lines).
      */
+    wb->enc_buffer_used = 0;
     int line = 1;
     for (i=0;i<15;i++)
     {
         if (data->row_used[i])
-        {		
+        {
             if (sentence_cap)
             {
                 capitalize(i,data, &wb->new_sentence);
@@ -1633,18 +1463,18 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
              * here just in case..
              */
             if (line == 1) {
-                wb->enc_buffer_used = get_decoder_line_encoded (wb->enc_buffer, i, data);
+                wb->enc_buffer_used = get_decoder_line_encoded(wb->enc_buffer, i, data);
                 line = 2;
             } else {
                 if (line == 2) {
-                    wb->enc_buffer_used += encode_line (wb->enc_buffer+wb->enc_buffer_used,
-                                                        (unsigned char *) "\n");
+                    wb->enc_buffer_used += encode_line(wb->enc_buffer+wb->enc_buffer_used,
+                                                       (unsigned char *) "\n");
                     line = 3;
                 } else {
-                    wb->enc_buffer_used += encode_line (wb->enc_buffer+wb->enc_buffer_used,
-                                                        (unsigned char *) " "); 
+                    wb->enc_buffer_used += encode_line(wb->enc_buffer+wb->enc_buffer_used,
+                                                       (unsigned char *) " ");
                 }
-                wb->enc_buffer_used += get_decoder_line_encoded (wb->enc_buffer+wb->enc_buffer_used, i, data);
+                wb->enc_buffer_used += get_decoder_line_encoded(wb->enc_buffer+wb->enc_buffer_used, i, data);
             }
         }
     }
@@ -1661,126 +1491,40 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
             wb->hb_buffer = buffer;
         }
         wb->hb_last_buffer = buffer;
-        
+
         wrote_something=1;
+        wb->clear_sub_needed = 1;
+    }
+    else if (wb->clear_sub_needed)
+    {
+        hb_buffer_t *buffer = hb_buffer_init( 1 );
+        buffer->s.frametype = HB_FRAME_SUBTITLE;
+        buffer->s.start = ms_start;
+        buffer->s.stop = ms_start;
+        buffer->data[0] = 0;
+        if (wb->hb_last_buffer != NULL) {
+            wb->hb_last_buffer->next = buffer;
+        } else {
+            wb->hb_buffer = buffer;
+        }
+        wb->hb_last_buffer = buffer;
+        wb->clear_sub_needed = 0;
     }
     if (debug_608)
     {
         hb_log ("- - - - - - - - - - - -\r\n");
     }
-    // fhb_log (wb->fh, encoded_crlf);
-    //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
-    XMLRPC_APPEND(encoded_crlf,encoded_crlf_length);
     return wrote_something;
 }
 
-int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
-{
-    int wrote_something=0;
-    int64_t startms = wb->data608->current_visible_start_ms;
-    int i;
-
-    startms+=subs_delay;
-    if (startms<0) // Drop screens that because of subs_delay start too early
-        return 0; 
-
-    int64_t endms   = get_fts(wb)+subs_delay;
-    endms--; // To prevent overlapping with next line.
-    sprintf ((char *) str,"<SYNC start=\"%"PRId64"\"><P class=\"UNKNOWNCC\">\r\n",startms);
-    if (debug_608 && encoding!=ENC_UNICODE)
-    {
-        hb_log ("\r%s\n", str);
-    }
-    wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
-    fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);		
-    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-    for (i=0;i<15;i++)
-    {
-        if (data->row_used[i])
-        {				
-            int length = get_decoder_line_encoded (wb->subline, i, data);
-            if (debug_608 && encoding!=ENC_UNICODE)
-            {
-                hb_log ("\r");
-                hb_log ("%s\n",wb->subline);
-            }
-            fwrite (wb->subline, 1, length, wb->fh);
-            XMLRPC_APPEND(wb->subline,length);
-            wrote_something=1;
-            if (i!=14)
-            {
-                fwrite (encoded_br, 1, encoded_br_length,wb->fh);			
-                XMLRPC_APPEND(encoded_br, encoded_br_length);
-            }
-            fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
-            XMLRPC_APPEND(encoded_crlf, encoded_crlf_length);
-        }
-    }
-    sprintf ((char *) str,"</P></SYNC>\r\n");
-    if (debug_608 && encoding!=ENC_UNICODE)
-    {
-        hb_log ("\r%s\n", str);
-    }
-    wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
-    fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
-    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-    sprintf ((char *) str,"<SYNC start=\"%"PRId64"\"><P class=\"UNKNOWNCC\">&nbsp;</P></SYNC>\r\n\r\n",endms);
-    if (debug_608 && encoding!=ENC_UNICODE)
-    {
-        hb_log ("\r%s\n", str);
-    }
-    wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
-    fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
-    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-    return wrote_something;
-}
-
-struct eia608_screen *get_current_visible_buffer (struct s_write *wb)
-{
-    struct eia608_screen *data;
-    if (wb->data608->visible_buffer==1)
-        data = &wb->data608->buffer1;
-    else
-        data = &wb->data608->buffer2;
-    return data;
-}
-
-
-int write_cc_buffer (struct s_write *wb)
+int write_cc_buffer(struct s_write *wb)
 {
     struct eia608_screen *data;
     int wrote_something=0;
-    if (screens_to_process!=-1 && wb->data608->screenfuls_counter>=screens_to_process)
-    {
-        // We are done. 
-        processed_enough=1;
-        return 0;
-    }
-    if (wb->data608->visible_buffer==1)
-        data = &wb->data608->buffer1;
-    else
-        data = &wb->data608->buffer2;
 
-    if (!data->empty)
-    {
-        wb->new_sentence=1;
-        switch (write_format)
-        {
-            case OF_SRT:
-                wrote_something = write_cc_buffer_as_srt (data, wb);
-                break;
-            case OF_SAMI:
-                wrote_something = write_cc_buffer_as_sami (data,wb);
-                break;
-            case OF_TRANSCRIPT:
-                wrote_something = write_cc_buffer_as_transcript (data,wb);
-                break;
-        default: 
-                break;
-        }
-        if (wrote_something && gui_mode_reports)
-            write_cc_buffer_to_gui (data,wb);
-    }
+    data = get_current_visible_buffer(wb);
+    wb->new_sentence=1;
+    wrote_something = write_cc_buffer_as_srt (data, wb);
     return wrote_something;
 }
 
@@ -1789,10 +1533,7 @@ void roll_up(struct s_write *wb)
     struct eia608_screen *use_buffer;
     int i, j;
 
-    if (wb->data608->visible_buffer==1)
-        use_buffer = &wb->data608->buffer1;
-    else
-        use_buffer = &wb->data608->buffer2;
+    use_buffer = get_current_visible_buffer(wb);
     int keep_lines;
     switch (wb->data608->mode)
     {
@@ -1822,7 +1563,7 @@ void roll_up(struct s_write *wb)
             lastrow=i;
         }
     }
-    
+
     if (debug_608)
         hb_log ("\rIn roll-up: %d lines used, first: %d, last: %d\n", rows_now, firstrow, lastrow);
 
@@ -1841,7 +1582,7 @@ void roll_up(struct s_write *wb)
     }
     for (j=0;j<(1+wb->data608->cursor_row-keep_lines);j++)
     {
-        memset(use_buffer->characters[j],' ',CC608_SCREEN_WIDTH);			
+        memset(use_buffer->characters[j],' ',CC608_SCREEN_WIDTH);
         memset(use_buffer->colors[j],COL_WHITE,CC608_SCREEN_WIDTH);
         memset(use_buffer->fonts[j],FONT_REGULAR,CC608_SCREEN_WIDTH);
         use_buffer->characters[j][CC608_SCREEN_WIDTH]=0;
@@ -1853,7 +1594,7 @@ void roll_up(struct s_write *wb)
 
     use_buffer->characters[lastrow][CC608_SCREEN_WIDTH]=0;
     use_buffer->row_used[lastrow]=0;
-    
+
     // Sanity check
     rows_now=0;
     for (i=0;i<15;i++)
@@ -1869,17 +1610,11 @@ void erase_memory (struct s_write *wb, int displayed)
     struct eia608_screen *buf;
     if (displayed)
     {
-        if (wb->data608->visible_buffer==1)
-            buf=&wb->data608->buffer1;
-        else
-            buf=&wb->data608->buffer2;
+        buf = get_current_visible_buffer(wb);
     }
     else
     {
-        if (wb->data608->visible_buffer==1)
-            buf=&wb->data608->buffer2;
-        else
-            buf=&wb->data608->buffer1;
+        buf = get_current_hidden_buffer(wb);
     }
     clear_eia608_cc_buffer (buf);
 }
@@ -1889,10 +1624,7 @@ int is_current_row_empty (struct s_write *wb)
     struct eia608_screen *use_buffer;
     int i;
 
-    if (wb->data608->visible_buffer==1)
-        use_buffer = &wb->data608->buffer1;
-    else
-        use_buffer = &wb->data608->buffer2;
+    use_buffer = get_current_visible_buffer(wb);
     for (i=0;i<CC608_SCREEN_WIDTH;i++)
     {
         if (use_buffer->characters[wb->data608->rollup_base_row][i]!=' ')
@@ -1967,23 +1699,27 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             break;
         case COM_RESUMECAPTIONLOADING:
             wb->data608->mode=MODE_POPUP;
+            wb->data608->current_visible_start_ms = get_fts(wb);
             break;
         case COM_RESUMETEXTDISPLAY:
             wb->data608->mode=MODE_TEXT;
+            wb->data608->current_visible_start_ms = get_fts(wb);
             break;
-        case COM_ROLLUP2:            
+        case COM_ROLLUP2:
             if (wb->data608->mode==MODE_POPUP)
             {
-                if (write_cc_buffer (wb))
+                swap_visible_buffer(wb);
+                if (write_cc_buffer(wb))
                     wb->data608->screenfuls_counter++;
-                erase_memory (wb, 1);			
+                erase_memory (wb, 1);
             }
+            wb->data608->current_visible_start_ms = get_fts(wb);
             if (wb->data608->mode==MODE_ROLLUP_2 && !is_current_row_empty(wb))
             {
                 if (debug_608)
                     hb_log ("Two RU2, current line not empty. Simulating a CR\n");
                 handle_command(0x14, 0x2D, wb);
-            }   
+            }
             wb->data608->mode=MODE_ROLLUP_2;
             erase_memory (wb, 0);
             wb->data608->cursor_column=0;
@@ -1992,10 +1728,11 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
         case COM_ROLLUP3:
             if (wb->data608->mode==MODE_POPUP)
             {
-                if (write_cc_buffer (wb))
+                if (write_cc_buffer(wb))
                     wb->data608->screenfuls_counter++;
                 erase_memory (wb, 1);
             }
+            wb->data608->current_visible_start_ms = get_fts(wb);
             if (wb->data608->mode==MODE_ROLLUP_3 && !is_current_row_empty(wb))
             {
                 if (debug_608)
@@ -2010,17 +1747,18 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
         case COM_ROLLUP4:
             if (wb->data608->mode==MODE_POPUP)
             {
-                if (write_cc_buffer (wb))
+                if (write_cc_buffer(wb))
                     wb->data608->screenfuls_counter++;
-                erase_memory (wb, 1);			
+                erase_memory (wb, 1);
             }
+            wb->data608->current_visible_start_ms = get_fts(wb);
             if (wb->data608->mode==MODE_ROLLUP_4 && !is_current_row_empty(wb))
             {
                 if (debug_608)
                     hb_log ("Two RU4, current line not empty. Simulating a CR\n");
                 handle_command(0x14, 0x2D, wb);
             }
-            
+
             wb->data608->mode=MODE_ROLLUP_4;
             wb->data608->cursor_column=0;
             wb->data608->cursor_row=wb->data608->rollup_base_row;
@@ -2029,19 +1767,11 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
         case COM_CARRIAGERETURN:
             // In transcript mode, CR doesn't write the whole screen, to avoid
             // repeated lines.
-            if (write_format==OF_TRANSCRIPT)
-            {
-                write_cc_line_as_transcript(get_current_visible_buffer (wb), wb, wb->data608->cursor_row);
-            }
-            else
-            {
-                if (norollup)
-                    delete_all_lines_but_current (get_current_visible_buffer (wb), wb->data608->cursor_row);
-                if (write_cc_buffer(wb))
-                    wb->data608->screenfuls_counter++;
-            }
-            roll_up(wb);		
-            wb->data608->current_visible_start_ms=get_fts(wb);
+            if (norollup)
+                delete_all_lines_but_current(get_current_visible_buffer(wb), wb->data608->cursor_row);
+            if (write_cc_buffer(wb))
+                wb->data608->screenfuls_counter++;
+            roll_up(wb);
             wb->data608->cursor_column=0;
             break;
         case COM_ERASENONDISPLAYEDMEMORY:
@@ -2050,30 +1780,30 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
         case COM_ERASEDISPLAYEDMEMORY:
             // Write it to disk before doing this, and make a note of the new
             // time it became clear.
-            if (write_format==OF_TRANSCRIPT && 
-                (wb->data608->mode==MODE_ROLLUP_2 || wb->data608->mode==MODE_ROLLUP_3 ||
-                wb->data608->mode==MODE_ROLLUP_4))
-            {
-                // In transcript mode we just write the cursor line. The previous lines
-                // should have been written already, so writing everything produces
-                // duplicate lines.                
-                write_cc_line_as_transcript(get_current_visible_buffer (wb), wb, wb->data608->cursor_row);
-            }
-            else
-            {
-                if (write_cc_buffer (wb))
-                    wb->data608->screenfuls_counter++;
-            }
             erase_memory (wb,1);
-            wb->data608->current_visible_start_ms=get_fts(wb);
+            // Write "clear" subtitle if necessary
+            write_cc_buffer(wb);
             break;
         case COM_ENDOFCAPTION: // Switch buffers
             // The currently *visible* buffer is leaving, so now we know it's ending
             // time. Time to actually write it to file.
-            if (write_cc_buffer (wb))
+            if (wb->data608->mode == MODE_POPUP)
+            {
+                swap_visible_buffer(wb);
+                wb->data608->current_visible_start_ms = get_fts(wb);
+            }
+            if (write_cc_buffer(wb))
                 wb->data608->screenfuls_counter++;
-            wb->data608->visible_buffer = (wb->data608->visible_buffer==1) ? 2 : 1;
-            wb->data608->current_visible_start_ms=get_fts(wb);
+
+            if (wb->data608->mode != MODE_POPUP)
+                swap_visible_buffer(wb);
+            else if (wb->hb_last_buffer != NULL)
+            {
+                // POPUPs are displayed when ENDOFCAPTION is received.
+                // We do not know their stop time.  That is determined by
+                // ERASEDISPLAYEDMEMORY
+                wb->hb_last_buffer->s.stop = AV_NOPTS_VALUE;
+            }
             wb->data608->cursor_column=0;
             wb->data608->cursor_row=0;
             wb->data608->color=default_color;
@@ -2089,9 +1819,9 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
 }
 
 void handle_end_of_data (struct s_write *wb)
-{ 
+{
     // We issue a EraseDisplayedMemory here so if there's any captions pending
-    // they get written to file. 
+    // they get written to file.
     handle_command (0x14, 0x2c, wb); // EDM
 }
 
@@ -2113,7 +1843,7 @@ void handle_double (const unsigned char c1, const unsigned char c2, struct s_wri
 unsigned char handle_extended (unsigned char hi, unsigned char lo, struct s_write *wb)
 {
     // Handle channel change
-    if (wb->new_channel > 2) 
+    if (wb->new_channel > 2)
     {
         wb->new_channel -= 2;
         if (debug_608)
@@ -2139,11 +1869,11 @@ unsigned char handle_extended (unsigned char hi, unsigned char lo, struct s_writ
                 c=lo+0x90; // So if c>=0xb0 && c<=0xcf it comes from here
                 break;
         }
-        // This column change is because extended characters replace 
+        // This column change is because extended characters replace
         // the previous character (which is sent for basic decoders
         // to show something similar to the real char)
-        if (wb->data608->cursor_column>0)        
-            wb->data608->cursor_column--;        
+        if (wb->data608->cursor_column>0)
+            wb->data608->cursor_column--;
 
         write_char (c,wb);
     }
@@ -2154,7 +1884,7 @@ unsigned char handle_extended (unsigned char hi, unsigned char lo, struct s_writ
 void handle_pac (unsigned char c1, unsigned char c2, struct s_write *wb)
 {
     // Handle channel change
-    if (wb->new_channel > 2) 
+    if (wb->new_channel > 2)
     {
         wb->new_channel -= 2;
         if (debug_608)
@@ -2199,12 +1929,12 @@ void handle_pac (unsigned char c1, unsigned char c2, struct s_write *wb)
         wb->data608->cursor_row=row-1 ; // Since the array is 0 based
     }
     wb->data608->rollup_base_row=row-1;
-    wb->data608->cursor_column=indent;	
+    wb->data608->cursor_column=indent;
 }
 
 
 void handle_single (const unsigned char c1, struct s_write *wb)
-{	
+{
     if (c1<0x20 || wb->data608->channel!=cc_channel)
         return; // We don't allow special stuff here
     if (debug_608)
@@ -2217,25 +1947,25 @@ void handle_single (const unsigned char c1, struct s_write *wb)
 
 int check_channel (unsigned char c1, struct s_write *wb)
 {
-    if (c1==0x14) 
+    if (c1==0x14)
     {
         if (debug_608 && wb->data608->channel!=1)
             hb_log ("\nChannel change, now 1\n");
         return 1;
     }
-    if (c1==0x1c) 
+    if (c1==0x1c)
     {
         if (debug_608 && wb->data608->channel!=2)
             hb_log ("\nChannel change, now 2\n");
         return 2;
     }
-    if (c1==0x15) 
+    if (c1==0x15)
     {
         if (debug_608 && wb->data608->channel!=3)
             hb_log ("\nChannel change, now 3\n");
         return 3;
     }
-    if (c1==0x1d) 
+    if (c1==0x1d)
     {
         if (debug_608 && wb->data608->channel!=4)
             hb_log ("\nChannel change, now 4\n");
@@ -2325,14 +2055,12 @@ void process608 (const unsigned char *data, int length, struct s_write *wb)
         for (i=0;i<length;i=i+2)
         {
             unsigned char hi, lo;
-            int wrote_to_screen=0; 
+            int wrote_to_screen=0;
             hi = data[i] & 0x7F; // Get rid of parity bit
             lo = data[i+1] & 0x7F; // Get rid of parity bit
 
             if (hi==0 && lo==0) // Just padding
                 continue;
-            // hb_log ("\r[%02X:%02X]\n",hi,lo);
-
             if (hi>=0x01 && hi<=0x0E)
             {
                 // XDS crap - mode. Would be nice to support it eventually
@@ -2401,8 +2129,8 @@ void process608 (const unsigned char *data, int length, struct s_write *wb)
                 wb->data608->mode==MODE_ROLLUP_4))
             {
                 // We don't increase screenfuls_counter here.
-                write_cc_buffer (wb);
-                wb->data608->current_visible_start_ms=get_fts(wb);
+                write_cc_buffer(wb);
+                wb->data608->current_visible_start_ms = get_fts(wb);
             }
         }
     }
@@ -2474,6 +2202,7 @@ int decccInit( hb_work_object_t * w, hb_job_t * job )
                 {
                     retval = 1;
                 }
+                init_eia608(pv->cc608->data608);
             }
         }
     }
@@ -2507,17 +2236,17 @@ int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     pv->cc608->last_pts = in->s.start;
-
     process608(in->data, in->size, pv->cc608);
 
     /*
      * If there is one waiting then pass it on
      */
     *buf_out = pv->cc608->hb_buffer;
+
     pv->cc608->hb_buffer = NULL;
     pv->cc608->hb_last_buffer = NULL;
 
-    return HB_WORK_OK; 
+    return HB_WORK_OK;
 }
 
 void decccClose( hb_work_object_t * w )

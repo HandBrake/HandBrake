@@ -4704,8 +4704,17 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
             strncpy(sub_config.src_codeset, code, 39);
             sub_config.src_codeset[39] = 0;
             sub_config.force = 0;
-            sub_config.dest = PASSTHRUSUB;
             sub_config.default_track = def;
+            if (burned && !one_burned && hb_subtitle_can_burn(SRTSUB))
+            {
+                // Only allow one subtitle to be burned into the video
+                sub_config.dest = RENDERSUB;
+                one_burned = TRUE;
+            }
+            else
+            {
+                sub_config.dest = PASSTHRUSUB;
+            }
 
             hb_srt_add( job, &sub_config, lang);
 
@@ -4718,17 +4727,15 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
         if (subtitle == -1)
         {
-            if (!burned)
-            {
-                job->select_subtitle_config.dest = PASSTHRUSUB;
-            }
-            else if (burned)
+            if (burned && !one_burned)
             {
                 // Only allow one subtitle to be burned into the video
-                if (one_burned)
-                    continue;
                 job->select_subtitle_config.dest = RENDERSUB;
                 one_burned = TRUE;
+            }
+            else
+            {
+                job->select_subtitle_config.dest = PASSTHRUSUB;
             }
             job->select_subtitle_config.force = force;
             job->select_subtitle_config.default_track = def;
@@ -4744,17 +4751,15 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
             if (subt != NULL)
             {
                 sub_config = subt->config;
-                if (!burned)
-                {
-                    sub_config.dest = PASSTHRUSUB;
-                }
-                else if (burned && hb_subtitle_can_burn(subt->source))
+                if (burned && !one_burned && hb_subtitle_can_burn(subt->source))
                 {
                     // Only allow one subtitle to be burned into the video
-                    if (one_burned)
-                        continue;
                     sub_config.dest = RENDERSUB;
                     one_burned = TRUE;
+                }
+                else
+                {
+                    sub_config.dest = PASSTHRUSUB;
                 }
                 sub_config.force = force;
                 sub_config.default_track = def;

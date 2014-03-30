@@ -6,9 +6,10 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 #include "hb.h"
 #include "hbffmpeg.h"
+#include "colormap.h"
 #include <ass/ass.h>
 
 struct hb_filter_private_s
@@ -24,7 +25,14 @@ struct hb_filter_private_s
     ASS_Library     * ssa;
     ASS_Renderer    * renderer;
     ASS_Track       * ssaTrack;
+
+    // SRT
+    int               line;
+    hb_buffer_t     * current_sub;
 };
+
+static char* srt_markup_to_ssa(char *srt, int *len);
+static void srt_to_ssa(hb_buffer_t *srt_sub);
 
 // VOBSUB
 static int vobsub_init( hb_filter_object_t * filter, hb_filter_init_t * init );
@@ -44,6 +52,16 @@ static int ssa_work( hb_filter_object_t * filter,
                      hb_buffer_t ** buf_out );
 
 static void ssa_close( hb_filter_object_t * filter );
+
+
+// SRT
+static int textsub_init( hb_filter_object_t * filter, hb_filter_init_t * init );
+
+static int textsub_work( hb_filter_object_t * filter,
+                     hb_buffer_t ** buf_in,
+                     hb_buffer_t ** buf_out );
+
+static void textsub_close( hb_filter_object_t * filter );
 
 
 // PGS
@@ -119,7 +137,7 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
             /*
              * Merge the luminance and alpha with the picture
              */
-            y_out[left + xx] = 
+            y_out[left + xx] =
                 ( (uint16_t)y_out[left + xx] * ( 255 - alpha ) +
                      (uint16_t)y_in[xx] * alpha ) >> 8;
         }
@@ -335,7 +353,7 @@ static int vobsub_work( hb_filter_object_t * filter,
     ApplyVOBSubs( pv, in );
     *buf_in = NULL;
     *buf_out = in;
-    
+
     return HB_FILTER_OK;
 }
 
@@ -361,7 +379,7 @@ static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame
     unsigned b = ( frame->color >>  8 ) & 0xff;
 
     int yuv = hb_rgb2yuv((r << 16) | (g << 8) | b );
-    
+
     unsigned frameY = (yuv >> 16) & 0xff;
     unsigned frameV = (yuv >> 8 ) & 0xff;
     unsigned frameU = (yuv >> 0 ) & 0xff;
@@ -408,6 +426,7 @@ static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
 {
     ASS_Image *frameList;
     hb_buffer_t *sub;
+
     frameList = ass_render_frame( pv->renderer, pv->ssaTrack,
                                   buf->s.start / 90, NULL );
     if ( !frameList )
@@ -442,17 +461,17 @@ static int ssa_init( hb_filter_object_t * filter,
         hb_error( "decssasub: libass initialization failed\n" );
         return 1;
     }
-    
+
     // Redirect libass output to hb_log
     ass_set_message_cb( pv->ssa, ssa_log, NULL );
-    
+
     // Load embedded fonts
     hb_list_t * list_attachment = init->job->list_attachment;
     int i;
     for ( i = 0; i < hb_list_count(list_attachment); i++ )
     {
         hb_attachment_t * attachment = hb_list_item( list_attachment, i );
-        
+
         if ( attachment->type == FONT_TTF_ATTACH )
         {
             ass_add_font(
@@ -462,41 +481,41 @@ static int ssa_init( hb_filter_object_t * filter,
                 attachment->size );
         }
     }
-    
+
     ass_set_extract_fonts( pv->ssa, 1 );
     ass_set_style_overrides( pv->ssa, NULL );
-    
+
     pv->renderer = ass_renderer_init( pv->ssa );
     if ( !pv->renderer ) {
         hb_log( "decssasub: renderer initialization failed\n" );
         return 1;
     }
-    
+
     ass_set_use_margins( pv->renderer, 0 );
     ass_set_hinting( pv->renderer, ASS_HINTING_LIGHT ); // VLC 1.0.4 uses this
     ass_set_font_scale( pv->renderer, 1.0 );
     ass_set_line_spacing( pv->renderer, 1.0 );
-    
+
     // Setup default font family
-    // 
+    //
     // SSA v4.00 requires that "Arial" be the default font
     const char *font = NULL;
     const char *family = "Arial";
     // NOTE: This can sometimes block for several *seconds*.
     //       It seems that process_fontdata() for some embedded fonts is slow.
     ass_set_fonts( pv->renderer, font, family, /*haveFontConfig=*/1, NULL, 1 );
-    
+
     // Setup track state
     pv->ssaTrack = ass_new_track( pv->ssa );
     if ( !pv->ssaTrack ) {
         hb_log( "decssasub: ssa track initialization failed\n" );
         return 1;
     }
-    
+
     // NOTE: The codec extradata is expected to be in MKV format
     ass_process_codec_private( pv->ssaTrack,
         (char *)filter->subtitle->extradata, filter->subtitle->extradata_size );
-    
+
     int width = init->width - ( pv->crop[2] + pv->crop[3] );
     int height = init->height - ( pv->crop[0] + pv->crop[1] );
     ass_set_frame_size( pv->renderer, width, height);
@@ -552,12 +571,144 @@ static int ssa_work( hb_filter_object_t * filter,
         ass_process_chunk( pv->ssaTrack, (char*)sub->data, sub->size,
                            sub->s.start / 90,
                            (sub->s.stop - sub->s.start) / 90 );
+        hb_buffer_close(&sub);
     }
 
     ApplySSASubs( pv, in );
     *buf_in = NULL;
     *buf_out = in;
-    
+
+    return HB_FILTER_OK;
+}
+
+static int textsub_init( hb_filter_object_t * filter,
+                     hb_filter_init_t * init )
+{
+    const char * ssa_header =
+        "[Script Info]\r\n"
+        "ScriptType: v4.00+\r\n"
+        "Collisions: Normal\r\n"
+        "PlayResX: 1920\r\n"
+        "PlayResY: 1080\r\n"
+        "Timer: 100.0\r\n"
+        "WrapStyle: 0\r\n"
+        "\r\n"
+        "[V4+ Styles]\r\n"
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
+        "Style: Default,Arial,72,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,2,3,2,20,20,20,0\r\n";
+
+    filter->subtitle->extradata = (uint8_t*)ssa_header;
+    filter->subtitle->extradata_size = strlen(ssa_header);
+
+    int result = ssa_init(filter, init);
+
+    filter->subtitle->extradata = NULL;
+    filter->subtitle->extradata_size = 0;
+
+    return result;
+}
+
+static void textsub_close( hb_filter_object_t * filter )
+{
+    return ssa_close(filter);
+}
+
+static void process_sub(hb_filter_private_t *pv, hb_buffer_t *sub)
+{
+    char *ssa;
+    int len;
+    int64_t start, duration;
+
+    // Create SSA entry
+    ssa = hb_strdup_printf("%d,,Default,,0,0,0,,%s", ++pv->line, sub->data);
+    len = strlen(ssa);
+
+    // Parse MKV-SSA packet
+    // SSA subtitles always have an explicit stop time, so we
+    // do not need to do special processing for stop == AV_NOPTS_VALUE
+    start = sub->s.start / 90;
+    duration = (sub->s.stop - sub->s.start) / 90;
+    ass_process_chunk( pv->ssaTrack, ssa, len, start, duration);
+    free(ssa);
+}
+
+static int textsub_work(hb_filter_object_t * filter,
+                    hb_buffer_t ** buf_in,
+                    hb_buffer_t ** buf_out)
+{
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in;
+    hb_buffer_t * sub;
+
+    if (in->size <= 0)
+    {
+        *buf_in = NULL;
+        *buf_out = in;
+        return HB_FILTER_DONE;
+    }
+
+    // Get any pending subtitles and add them to the active
+    // subtitle list
+    while ((sub = hb_fifo_get(filter->subtitle->fifo_out)))
+    {
+        switch (pv->type)
+        {
+            case SRTSUB:
+            case UTF8SUB:
+            case TX3GSUB:
+                srt_to_ssa(sub);
+                break;
+            default:
+                break;
+        }
+        // Subtitle formats such as CC can have stop times
+        // that are not known until an "erase display" command
+        // is encountered in the stream.  For these formats
+        // current_sub is the currently active subtitle for which
+        // we do not yet know the stop time.  We do not currently
+        // support overlapping subtitles of this type.
+        if (pv->current_sub != NULL)
+        {
+            // Next sub start time tells us the stop time of the
+            // current sub when it is not known in advance.
+            pv->current_sub->s.stop = sub->s.start;
+            process_sub(pv, pv->current_sub);
+            hb_buffer_close(&pv->current_sub);
+        }
+        if (sub->s.start == sub->s.stop)
+        {
+            // Zero duration sub used to "clear" previous sub that had
+            // an unknown duration
+            hb_buffer_close(&sub);
+        }
+        else if (sub->s.stop == AV_NOPTS_VALUE)
+        {
+            // We don't know the duration of this sub.  So we will
+            // apply it to every video frame until we see a "clear" sub.
+            pv->current_sub = sub;
+        }
+        else
+        {
+            // Duration of this subtitle is known, so we can just
+            // process it normally.
+            process_sub(pv, sub);
+            hb_buffer_close(&sub);
+        }
+    }
+    if (pv->current_sub != NULL && pv->current_sub->s.start < in->s.start)
+    {
+        // We don't know the duration of this subtitle, but we know
+        // that it started before the current video frame and that
+        // it is still active.  So render it on this video frame.
+        pv->current_sub->s.start = in->s.start;
+        pv->current_sub->s.stop = in->s.start + 90;
+        process_sub(pv, pv->current_sub);
+    }
+
+    ApplySSASubs(pv, in);
+    *buf_in = NULL;
+    *buf_out = in;
+
     return HB_FILTER_OK;
 }
 
@@ -715,6 +866,14 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
             return ssa_init( filter, init );
         } break;
 
+        case SRTSUB:
+        case CC608SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        {
+            return textsub_init( filter, init );
+        } break;
+
         case PGSSUB:
         {
             return pgssub_init( filter, init );
@@ -745,6 +904,14 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
             return ssa_work( filter, buf_in, buf_out );
         } break;
 
+        case SRTSUB:
+        case CC608SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        {
+            return textsub_work( filter, buf_in, buf_out );
+        } break;
+
         case PGSSUB:
         {
             return pgssub_work( filter, buf_in, buf_out );
@@ -773,6 +940,14 @@ static void hb_rendersub_close( hb_filter_object_t * filter )
             ssa_close( filter );
         } break;
 
+        case SRTSUB:
+        case CC608SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        {
+            textsub_close( filter );
+        } break;
+
         case PGSSUB:
         {
             pgssub_close( filter );
@@ -783,5 +958,115 @@ static void hb_rendersub_close( hb_filter_object_t * filter )
             hb_error("rendersub: unsupported subtitle format %d", pv->type );
         } break;
     }
+}
+
+static char* srt_markup_to_ssa(char *srt, int *len)
+{
+    char terminator;
+    char color[40];
+    uint32_t rgb;
+
+    *len = 0;
+    if (srt[0] != '<' && srt[0] != '{')
+        return NULL;
+
+    if (srt[0] == '<')
+        terminator = '>';
+    else
+        terminator = '}';
+
+    if (srt[1] == 'i' && srt[2] == terminator)
+    {
+        *len = 3;
+        return hb_strdup_printf("{\\i1}");
+    }
+    else if (srt[1] == 'b' && srt[2] == terminator)
+    {
+        *len = 3;
+        return hb_strdup_printf("{\\b1}");
+    }
+    else if (srt[1] == 'u' && srt[2] == terminator)
+    {
+        *len = 3;
+        return hb_strdup_printf("{\\u1}");
+    }
+    else if (srt[1] == '/' && srt[2] == 'i' && srt[3] == terminator)
+    {
+        *len = 4;
+        return hb_strdup_printf("{\\i0}");
+    }
+    else if (srt[1] == '/' && srt[2] == 'b' && srt[3] == terminator)
+    {
+        *len = 4;
+        return hb_strdup_printf("{\\b0}");
+    }
+    else if (srt[1] == '/' && srt[2] == 'u' && srt[3] == terminator)
+    {
+        *len = 4;
+        return hb_strdup_printf("{\\u0}");
+    }
+    else if (srt[0] == '<' && !strncmp(srt + 1, "font", 4))
+    {
+        int match;
+        match = sscanf(srt + 1, "font color=\"%39[^\"]\">", color);
+        if (match != 1)
+        {
+            return NULL;
+        }
+        while (srt[*len] != '>') (*len)++;
+        (*len)++;
+        if (color[0] == '#')
+            rgb = strtol(color + 1, NULL, 16);
+        else
+            rgb = hb_rgb_lookup_by_name(color);
+        return hb_strdup_printf("{\\1c&H%X&}", HB_RGB_TO_BGR(rgb));
+    }
+    else if (srt[0] == '<' && srt[1] == '/' && !strncmp(srt + 2, "font", 4) &&
+             srt[6] == '>')
+    {
+        *len = 7;
+        return hb_strdup_printf("{\\1c&HFFFFFF&}");
+    }
+
+    return NULL;
+}
+
+static void srt_to_ssa(hb_buffer_t *sub_in)
+{
+    char * srt = (char*)sub_in->data;
+    // SSA markup expands a little over SRT, so allocate a bit of extra
+    // space.  More will be realloc'd if needed.
+    hb_buffer_t * sub = hb_buffer_init(sub_in->size + 20);
+    char * ssa, *ssa_markup;
+    int skip, len, pos, ii;
+
+    // Exchange data between input sub and new ssa_sub
+    // After this, sub_in contains ssa data
+    hb_buffer_swap_copy(sub_in, sub);
+    pos = 0;
+    ii = 0;
+    while (srt[ii] != '\0')
+    {
+        if ((ssa_markup = srt_markup_to_ssa(srt + ii, &skip)) != NULL)
+        {
+            len = strlen(ssa_markup);
+            hb_buffer_realloc(sub_in, pos + len + 1);
+            // After realloc, sub_in->data may change
+            ssa = (char*)sub_in->data;
+            snprintf(ssa + pos, len + 1, "%s", ssa_markup);
+            free(ssa_markup);
+            pos += len;
+            ii += skip;
+        }
+        else
+        {
+            hb_buffer_realloc(sub_in, pos + 2);
+            // After realloc, sub_in->data may change
+            ssa = (char*)sub_in->data;
+            ssa[pos++] = srt[ii++];
+        }
+    }
+    ssa[pos] = '\0';
+    hb_buffer_close(&sub);
 }
 

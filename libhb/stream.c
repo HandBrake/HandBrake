@@ -5228,9 +5228,12 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     strncpy( subtitle->iso639_2, language->iso639_2, 4 );
 
     // Copy the extradata for the subtitle track
-    subtitle->extradata = malloc( codec->extradata_size );
-    memcpy( subtitle->extradata, codec->extradata, codec->extradata_size );
-    subtitle->extradata_size = codec->extradata_size;
+    if (codec->extradata != NULL)
+    {
+        subtitle->extradata = malloc( codec->extradata_size );
+        memcpy( subtitle->extradata, codec->extradata, codec->extradata_size );
+        subtitle->extradata_size = codec->extradata_size;
+    }
 
     subtitle->track = id;
     hb_list_add(title->list_subtitle, subtitle);

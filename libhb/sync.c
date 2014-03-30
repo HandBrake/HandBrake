@@ -427,14 +427,23 @@ static hb_buffer_t * sanitizeSubtitle(
         sanitizer->last->s.stop = sub->s.start;
     }
 
-    if (sanitizer->last == NULL)
+    if (sub->s.start == sub->s.stop)
     {
-        sanitizer->list_current = sanitizer->last = sub;
+        // Used to indicate "clear" subtitles when the duration
+        // of subtitles is not encoded in the stream
+        hb_buffer_close(&sub);
     }
-    else
+    if (sub != NULL)
     {
-        sanitizer->last->next = sub;
-        sanitizer->last = sub;
+        if (sanitizer->last == NULL)
+        {
+            sanitizer->list_current = sanitizer->last = sub;
+        }
+        else
+        {
+            sanitizer->last->next = sub;
+            sanitizer->last = sub;
+        }
     }
     return mergeSubtitles(sanitizer, 0);
 }

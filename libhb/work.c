@@ -413,8 +413,9 @@ void hb_display_job_info(hb_job_t *job)
             else if( subtitle->source == SRTSUB )
             {
                 /* For SRT, print offset and charset too */
-                hb_log( " * subtitle track %d, %s (track %d, id 0x%x) Text [SRT] -> Passthrough%s, offset: %"PRId64", charset: %s",
+                hb_log( " * subtitle track %d, %s (track %d, id 0x%x) Text [SRT] -> %s%s, offset: %"PRId64", charset: %s",
                         subtitle->out_track, subtitle->lang, subtitle->track, subtitle->id,
+                        subtitle->config.dest == RENDERSUB ? "Render/Burn-in" : "Passthrough",
                         subtitle->config.default_track ? ", Default" : "",
                         subtitle->config.offset, subtitle->config.src_codeset );
             }

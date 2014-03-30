@@ -3587,10 +3587,21 @@ bool one_burned = FALSE;
                     strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 39);
                     sub_config.src_codeset[39] = 0;
                     
+                    if( !burned && hb_subtitle_can_pass( SRTSUB, job->mux ) )
+                    {
+                        sub_config.dest = PASSTHRUSUB;
+                    }
+                    else if( hb_subtitle_can_burn( SRTSUB ) )
+                    {
+                        // Only allow one subtitle to be burned into the video
+                        if( one_burned )
+                            continue;
+                        one_burned = TRUE;
+                        sub_config.dest = RENDERSUB;
+                    }
+
                     sub_config.force = 0;
-                    sub_config.dest = PASSTHRUSUB;
                     sub_config.default_track = def;
-                    
                     hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
                     continue;
                 }
@@ -4147,10 +4158,21 @@ bool one_burned = FALSE;
                     strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 39);
                     sub_config.src_codeset[39] = 0;
                     
+                    if( !burned && hb_subtitle_can_pass( SRTSUB, job->mux ) )
+                    {
+                        sub_config.dest = PASSTHRUSUB;
+                    }
+                    else if( hb_subtitle_can_burn( SRTSUB ) )
+                    {
+                        // Only allow one subtitle to be burned into the video
+                        if( one_burned )
+                            continue;
+                        one_burned = TRUE;
+                        sub_config.dest = RENDERSUB;
+                    }
+
                     sub_config.force = 0;
-                    sub_config.dest = PASSTHRUSUB;
                     sub_config.default_track = def;
-                    
                     hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
                     continue;
                 }

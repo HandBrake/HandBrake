@@ -3728,7 +3728,6 @@ int hb_srt_add( const hb_job_t * job,
         strncpy( subtitle->iso639_2, lang, 4 );
         
         subtitle->config = *subtitlecfg;
-        subtitle->config.dest = PASSTHRUSUB;
 
         hb_list_add(job->list_subtitle, subtitle);
         retval = 1;
@@ -3743,7 +3742,9 @@ int hb_subtitle_can_force( int source )
 
 int hb_subtitle_can_burn( int source )
 {
-    return source == VOBSUB || source == PGSSUB || source == SSASUB;
+    return source == VOBSUB  || source == PGSSUB   || source == SSASUB  ||
+           source == SRTSUB  || source == CC608SUB || source == UTF8SUB ||
+           source == TX3GSUB;
 }
 
 int hb_subtitle_can_pass( int source, int mux )
