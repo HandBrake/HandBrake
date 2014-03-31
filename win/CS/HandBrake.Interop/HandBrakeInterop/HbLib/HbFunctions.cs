@@ -373,6 +373,19 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_container_get_next", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_container_get_next(IntPtr last);
 
+		[DllImport("hb.dll", EntryPoint = "hb_video_encoder_get_presets", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_encoder_get_presets(int encoder);
+
+		[DllImport("hb.dll", EntryPoint = "hb_video_encoder_get_tunes", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_encoder_get_tunes(int encoder);
+
+		[DllImport("hb.dll", EntryPoint = "hb_video_encoder_get_profiles", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_encoder_get_profiles(int encoder);
+
+		[DllImport("hb.dll", EntryPoint = "hb_video_encoder_get_levels", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_video_encoder_get_levels(int encoder);
+
+
 		[DllImport("hb.dll", EntryPoint = "lang_get_next", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr lang_get_next(IntPtr last);
 

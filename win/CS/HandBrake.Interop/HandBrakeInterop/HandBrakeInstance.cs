@@ -245,7 +245,7 @@ namespace HandBrake.Interop
         {
             this.previewCount = previewCount;
 
-            IntPtr pathPtr = InteropUtilities.CreateUtf8Ptr(path);
+            IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
             HBFunctions.hb_scan(this.hbHandle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
 
@@ -280,7 +280,7 @@ namespace HandBrake.Interop
         public BitmapImage GetPreview(EncodeJob job, int previewNumber)
         {
             IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
-            var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
+            var nativeJob = InteropUtilities.ToStructureFromPtr<hb_job_s>(nativeJobPtr);
 
             List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
 
@@ -473,7 +473,7 @@ namespace HandBrake.Interop
             this.currentJob = job;
 
             IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
-            var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
+            var nativeJob = InteropUtilities.ToStructureFromPtr<hb_job_s>(nativeJobPtr);
 
             this.encodeAllocatedMemory = this.ApplyJob(ref nativeJob, job, preview, previewNumber, previewSeconds, overallSelectedLengthSeconds);
 
@@ -490,31 +490,31 @@ namespace HandBrake.Interop
                 }
             }
 
-            string x264Options = profile.X264Options ?? string.Empty;
-            IntPtr originalX264Options = Marshal.StringToHGlobalAnsi(x264Options);
-            this.encodeAllocatedMemory.Add(originalX264Options);
+            string videoOptions = profile.VideoOptions ?? string.Empty;
+            IntPtr originalVideoOptions = Marshal.StringToHGlobalAnsi(videoOptions);
+            this.encodeAllocatedMemory.Add(originalVideoOptions);
 
-            if (!string.IsNullOrEmpty(profile.X264Profile))
+            if (!string.IsNullOrEmpty(profile.VideoProfile))
             {
-                nativeJob.encoder_profile = Marshal.StringToHGlobalAnsi(profile.X264Profile);
+                nativeJob.encoder_profile = Marshal.StringToHGlobalAnsi(profile.VideoProfile);
                 this.encodeAllocatedMemory.Add(nativeJob.encoder_profile);
             }
 
-            if (!string.IsNullOrEmpty(profile.X264Preset))
+            if (!string.IsNullOrEmpty(profile.VideoPreset))
             {
-                nativeJob.encoder_preset = Marshal.StringToHGlobalAnsi(profile.X264Preset);
+                nativeJob.encoder_preset = Marshal.StringToHGlobalAnsi(profile.VideoPreset);
                 this.encodeAllocatedMemory.Add(nativeJob.encoder_preset);
             }
 
-            if (profile.X264Tunes != null && profile.X264Tunes.Count > 0)
+            if (profile.VideoTunes != null && profile.VideoTunes.Count > 0)
             {
-                nativeJob.encoder_tune = Marshal.StringToHGlobalAnsi(string.Join(",", profile.X264Tunes));
+                nativeJob.encoder_tune = Marshal.StringToHGlobalAnsi(string.Join(",", profile.VideoTunes));
                 this.encodeAllocatedMemory.Add(nativeJob.encoder_tune);
             }
 
-            if (!string.IsNullOrEmpty(job.EncodingProfile.H264Level))
+            if (!string.IsNullOrEmpty(job.EncodingProfile.VideoLevel))
             {
-                nativeJob.encoder_level = Marshal.StringToHGlobalAnsi(job.EncodingProfile.H264Level);
+                nativeJob.encoder_level = Marshal.StringToHGlobalAnsi(job.EncodingProfile.VideoLevel);
                 this.encodeAllocatedMemory.Add(nativeJob.encoder_level);
             }
 
@@ -535,7 +535,7 @@ namespace HandBrake.Interop
             {
                 // First pass. Apply turbo options if needed.
                 nativeJob.pass = 1;
-                string firstPassAdvancedOptions = x264Options;
+                string firstPassAdvancedOptions = videoOptions;
                 if (job.EncodingProfile.TurboFirstPass)
                 {
                     if (firstPassAdvancedOptions == string.Empty)
@@ -555,7 +555,7 @@ namespace HandBrake.Interop
 
                 // Second pass. Apply normal options.
                 nativeJob.pass = 2;
-                nativeJob.encoder_options = originalX264Options;
+                nativeJob.encoder_options = originalVideoOptions;
 
                 HBFunctions.hb_add(this.hbHandle, ref nativeJob);
             }
@@ -563,7 +563,7 @@ namespace HandBrake.Interop
             {
                 // One pass job.
                 nativeJob.pass = 0;
-                nativeJob.encoder_options = originalX264Options;
+                nativeJob.encoder_options = originalVideoOptions;
 
                 HBFunctions.hb_add(this.hbHandle, ref nativeJob);
             }
@@ -647,7 +647,7 @@ namespace HandBrake.Interop
             }
 
             IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(title));
-            var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
+            var nativeJob = InteropUtilities.ToStructureFromPtr<hb_job_s>(nativeJobPtr);
 
             List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
             InteropUtilities.FreeMemory(allocatedMemory);
@@ -825,8 +825,8 @@ namespace HandBrake.Interop
                 this.titles = new List<Title>();
 
                 IntPtr titleSetPtr = HBFunctions.hb_get_title_set(this.hbHandle);
-                hb_title_set_s titleSet = InteropUtilities.ReadStructure<hb_title_set_s>(titleSetPtr);
-                this.originalTitles = titleSet.list_title.ToList<hb_title_s>();
+                hb_title_set_s titleSet = InteropUtilities.ToStructureFromPtr<hb_title_set_s>(titleSetPtr);
+                this.originalTitles = titleSet.list_title.ToListFromHandBrakeList<hb_title_s>();
 
                 foreach (hb_title_s title in this.originalTitles)
                 {
@@ -1068,11 +1068,11 @@ namespace HandBrake.Interop
 
                             if (string.IsNullOrWhiteSpace(job.CustomChapterNames[i]))
                             {
-                                chapterNamePtr = InteropUtilities.CreateUtf8Ptr("Chapter " + (i + 1));
+                                chapterNamePtr = InteropUtilities.ToUtf8PtrFromString("Chapter " + (i + 1));
                             }
                             else
                             {
-                                chapterNamePtr = InteropUtilities.CreateUtf8Ptr(job.CustomChapterNames[i]);
+                                chapterNamePtr = InteropUtilities.ToUtf8PtrFromString(job.CustomChapterNames[i]);
                             }
 
                             HBFunctions.hb_chapter_set_title__ptr(nativeChapters[i], chapterNamePtr);
@@ -1398,7 +1398,7 @@ namespace HandBrake.Interop
 
             // areBframes
             // color_matrix
-            List<hb_audio_s> titleAudio = originalTitle.list_audio.ToList<hb_audio_s>();
+            List<hb_audio_s> titleAudio = originalTitle.list_audio.ToListFromHandBrakeList<hb_audio_s>();
 
             var audioList = new List<hb_audio_s>();
             int numTracks = 0;
@@ -1423,7 +1423,7 @@ namespace HandBrake.Interop
                 audioList.Add(this.ConvertAudioBack(outputTrack.Item1, titleAudio[outputTrack.Item2 - 1], numTracks++, allocatedMemory));
             }
 
-            NativeList nativeAudioList = InteropUtilities.ConvertListBack<hb_audio_s>(audioList);
+            NativeList nativeAudioList = InteropUtilities.ToHandBrakeListFromList<hb_audio_s>(audioList);
             nativeJob.list_audio = nativeAudioList.Ptr;
             allocatedMemory.AddRange(nativeAudioList.AllocatedMemory);
 
@@ -1431,7 +1431,7 @@ namespace HandBrake.Interop
             {
                 if (job.Subtitles.SourceSubtitles != null && job.Subtitles.SourceSubtitles.Count > 0)
                 {
-                    List<hb_subtitle_s> titleSubtitles = originalTitle.list_subtitle.ToList<hb_subtitle_s>();
+                    List<hb_subtitle_s> titleSubtitles = originalTitle.list_subtitle.ToListFromHandBrakeList<hb_subtitle_s>();
 
                     foreach (SourceSubtitle sourceSubtitle in job.Subtitles.SourceSubtitles)
                     {
@@ -1529,7 +1529,7 @@ namespace HandBrake.Interop
 			}
 			else
 			{
-				IntPtr outputPathPtr = InteropUtilities.CreateUtf8Ptr(job.OutputPath);
+				IntPtr outputPathPtr = InteropUtilities.ToUtf8PtrFromString(job.OutputPath);
 				allocatedMemory.Add(outputPathPtr);
 				nativeJob.file = outputPathPtr;
 			}
@@ -1618,7 +1618,7 @@ namespace HandBrake.Interop
         private void AddFilter(List<hb_filter_object_s> filterList, int filterType, string settings, List<IntPtr> allocatedMemory)
         {
             IntPtr settingsNativeString = Marshal.StringToHGlobalAnsi(settings);
-            hb_filter_object_s filter = InteropUtilities.ReadStructure<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
+            hb_filter_object_s filter = InteropUtilities.ToStructureFromPtr<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
             filter.settings = settingsNativeString;
 
             allocatedMemory.Add(settingsNativeString);
@@ -1647,7 +1647,7 @@ namespace HandBrake.Interop
                 filterPtrList.Add(filterPtr);
             }
 
-            NativeList filterListNative = InteropUtilities.CreateIntPtrList(filterPtrList);
+            NativeList filterListNative = InteropUtilities.ToHandBrakeListFromPtrList(filterPtrList);
             allocatedMemory.AddRange(filterListNative.AllocatedMemory);
 
             return filterListNative;
@@ -1831,7 +1831,7 @@ namespace HandBrake.Interop
             }
 
             int currentSubtitleTrack = 1;
-            List<hb_subtitle_s> subtitleList = title.list_subtitle.ToList<hb_subtitle_s>();
+            List<hb_subtitle_s> subtitleList = title.list_subtitle.ToListFromHandBrakeList<hb_subtitle_s>();
             foreach (hb_subtitle_s subtitle in subtitleList)
             {
                 var newSubtitle = new Subtitle
@@ -1888,7 +1888,7 @@ namespace HandBrake.Interop
             }
 
             int currentAudioTrack = 1;
-            List<hb_audio_s> audioList = title.list_audio.ToList<hb_audio_s>();
+            List<hb_audio_s> audioList = title.list_audio.ToListFromHandBrakeList<hb_audio_s>();
             foreach (hb_audio_s audio in audioList)
             {
                 var newAudio = new AudioTrack
@@ -1910,7 +1910,7 @@ namespace HandBrake.Interop
                 currentAudioTrack++;
             }
 
-            List<hb_chapter_s> chapterList = title.list_chapter.ToList<hb_chapter_s>();
+            List<hb_chapter_s> chapterList = title.list_chapter.ToListFromHandBrakeList<hb_chapter_s>();
             foreach (hb_chapter_s chapter in chapterList)
             {
                 var newChapter = new Chapter

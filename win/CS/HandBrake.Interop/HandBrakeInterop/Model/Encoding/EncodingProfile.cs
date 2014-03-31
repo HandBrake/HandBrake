@@ -193,59 +193,34 @@ namespace HandBrake.Interop.Model.Encoding
         public string VideoEncoder { get; set; }
 
         /// <summary>
-        /// Gets or sets the x 264 options.
+        /// Gets or sets the video encoder options.
         /// </summary>
-        public string X264Options { get; set; }
+        public string VideoOptions { get; set; }
 
         /// <summary>
-        /// Gets or sets the x 264 profile.
+        /// Gets or sets the video encoder profile name.
         /// </summary>
-        public string X264Profile { get; set; }
+        public string VideoProfile { get; set; }
 
         /// <summary>
-        /// Gets or sets the x 264 preset.
+        /// Gets or sets the video encoder preset name.
         /// </summary>
-        public string X264Preset { get; set; }
+        public string VideoPreset { get; set; }
 
         /// <summary>
-        /// Gets or sets the x 264 tunes.
+        /// Gets or sets the video encoder tunes.
         /// </summary>
-        public List<string> X264Tunes { get; set; }
+        public List<string> VideoTunes { get; set; }
+
+		/// <summary>
+		/// Gets or sets the video encoder level.
+		/// </summary>
+		public string VideoLevel { get; set; }
 
         /// <summary>
-        /// Gets or sets the x 265 profile.
-        /// </summary>
-        public string X265Profile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the x 265 preset.
-        /// </summary>
-        public string X265Preset { get; set; }
-
-        /// <summary>
-        /// Gets or sets the x 265 tunes.
-        /// </summary>
-        public List<string> X265Tunes { get; set; }
-
-        /// <summary>
-        /// Gets or sets the x 265 level.
-        /// </summary>
-        public List<string> X265Level { get; set; }
-
-        /// <summary>
-        /// Gets or sets the qsv preset.
-        /// </summary>
-        public string QsvPreset { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether qsv decode.
+        /// Gets or sets a value indicating whether to use QSV decoding.
         /// </summary>
         public bool QsvDecode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the h 264 level.
-        /// </summary>
-        public string H264Level { get; set; }
 
         /// <summary>
         /// Gets or sets the video encode rate type.
@@ -345,13 +320,12 @@ namespace HandBrake.Interop.Model.Encoding
                 Grayscale = this.Grayscale,
 
                 VideoEncoder = this.VideoEncoder,
-                X264Options = this.X264Options,
-                X264Profile = this.X264Profile,
-                X264Preset = this.X264Preset,
-                X264Tunes = this.X264Tunes,
-                QsvPreset = this.QsvPreset,
-                QsvDecode = this.QsvDecode,
-                H264Level = this.H264Level,
+				VideoOptions = this.VideoOptions,
+                VideoProfile = this.VideoProfile,
+                VideoPreset = this.VideoPreset,
+                VideoTunes = this.VideoTunes,
+				VideoLevel = this.VideoLevel,
+				QsvDecode = this.QsvDecode,
                 VideoEncodeRateType = this.VideoEncodeRateType,
                 Quality = this.Quality,
                 TargetSize = this.TargetSize,

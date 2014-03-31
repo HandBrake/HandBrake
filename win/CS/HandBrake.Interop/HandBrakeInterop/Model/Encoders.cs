@@ -76,7 +76,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (audioEncoders == null)
 				{
-					audioEncoders = InteropUtilities.GetListFromIterator<hb_encoder_s, HBAudioEncoder>(HBFunctions.hb_audio_encoder_get_next, Converters.NativeToAudioEncoder);
+					audioEncoders = InteropUtilities.ToListFromIterator<hb_encoder_s, HBAudioEncoder>(HBFunctions.hb_audio_encoder_get_next, Converters.NativeToAudioEncoder);
 				}
 
 				return audioEncoders;
@@ -92,7 +92,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (videoEncoders == null)
 				{
-					videoEncoders = InteropUtilities.GetListFromIterator<hb_encoder_s, HBVideoEncoder>(HBFunctions.hb_video_encoder_get_next, Converters.NativeToVideoEncoder);
+					videoEncoders = InteropUtilities.ToListFromIterator<hb_encoder_s, HBVideoEncoder>(HBFunctions.hb_video_encoder_get_next, Converters.NativeToVideoEncoder);
 				}
 
 				return videoEncoders;
@@ -108,7 +108,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (videoFramerates == null)
 				{
-					videoFramerates = InteropUtilities.GetListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_video_framerate_get_next, Converters.NativeToRate);
+					videoFramerates = InteropUtilities.ToListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_video_framerate_get_next, Converters.NativeToRate);
 				}
 
 				return videoFramerates;
@@ -124,7 +124,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (mixdowns == null)
 				{
-					mixdowns = InteropUtilities.GetListFromIterator<hb_mixdown_s, HBMixdown>(HBFunctions.hb_mixdown_get_next, Converters.NativeToMixdown);
+					mixdowns = InteropUtilities.ToListFromIterator<hb_mixdown_s, HBMixdown>(HBFunctions.hb_mixdown_get_next, Converters.NativeToMixdown);
 				}
 
 				return mixdowns;
@@ -140,7 +140,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (audioBitrates == null)
 				{
-					audioBitrates = InteropUtilities.GetListFromIterator<hb_rate_s, int>(HBFunctions.hb_audio_bitrate_get_next, b => b.rate);
+					audioBitrates = InteropUtilities.ToListFromIterator<hb_rate_s, int>(HBFunctions.hb_audio_bitrate_get_next, b => b.rate);
 				}
 
 				return audioBitrates;
@@ -156,7 +156,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (audioSampleRates == null)
 				{
-					audioSampleRates = InteropUtilities.GetListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_audio_samplerate_get_next, Converters.NativeToRate);
+					audioSampleRates = InteropUtilities.ToListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_audio_samplerate_get_next, Converters.NativeToRate);
 				}
 
 				return audioSampleRates;
@@ -172,7 +172,7 @@ namespace HandBrake.Interop.Model
 			{
 				if (containers == null)
 				{
-					containers = InteropUtilities.GetListFromIterator<hb_container_s, HBContainer>(HBFunctions.hb_container_get_next, Converters.NativeToContainer);
+					containers = InteropUtilities.ToListFromIterator<hb_container_s, HBContainer>(HBFunctions.hb_container_get_next, Converters.NativeToContainer);
 				}
 
 				return containers;

@@ -181,24 +181,30 @@ namespace HandBrake.ApplicationServices.Utilities
             profile.VideoEncodeRateType = work.VideoEncodeRateType;
             profile.VideoEncoder = Converters.GetVideoEncoder(work.VideoEncoder);
 
-            profile.H264Level = work.H264Level;
-            profile.X264Profile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty); // TODO change these away from strings.
-            profile.X264Preset = work.X264Preset.ToString().ToLower().Replace(" ", string.Empty);
-            profile.X264Tunes = new List<string>();
-
-            if (work.X264Tune != x264Tune.None)
+            if (work.VideoEncoder == VideoEncoder.X264)
             {
-                profile.X264Tunes.Add(work.X264Tune.ToString().ToLower().Replace(" ", string.Empty));
+                profile.VideoPreset = work.X264Preset.ToString().ToLower().Replace(" ", string.Empty);
+                profile.VideoTunes = new List<string>();
+
+                if (work.X264Tune != x264Tune.None)
+                {
+                    profile.VideoTunes.Add(work.X264Tune.ToString().ToLower().Replace(" ", string.Empty));
+                }
+
+                if (work.FastDecode)
+                {
+                    profile.VideoTunes.Add("fastdecode");
+                }
+            }
+            else if (work.VideoEncoder == VideoEncoder.X265)
+            {
+                profile.VideoPreset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
+                profile.VideoProfile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
+                profile.VideoTunes = new List<string>();
             }
 
-            if (work.FastDecode)
-            {
-                profile.X264Tunes.Add("fastdecode");
-            }
-
-            profile.X265Preset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
-            profile.X265Profile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
-            profile.X265Tunes = new List<string>();
+            profile.VideoLevel = work.H264Level;
+            profile.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty); // TODO change these away from strings.
 
             // Chapter Markers
             profile.IncludeChapterMarkers = work.IncludeChapterMarkers;
@@ -206,7 +212,7 @@ namespace HandBrake.ApplicationServices.Utilities
             job.UseDefaultChapterNames = work.IncludeChapterMarkers;
 
             // Advanced Settings
-            profile.X264Options = work.AdvancedEncoderOptions;
+            profile.VideoOptions = work.AdvancedEncoderOptions;
 
             // Subtitles
             job.Subtitles = new Subtitles { SourceSubtitles = new List<SourceSubtitle>(), SrtSubtitles = new List<SrtSubtitle>() };

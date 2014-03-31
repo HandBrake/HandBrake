@@ -192,8 +192,8 @@ namespace HandBrake.Interop.Converters
 		/// <returns>The converted structure.</returns>
 		public static Language NativeToLanguage(iso639_lang_t language)
 		{
-			string englishName = InteropUtilities.ReadUtf8Ptr(language.eng_name);
-			string nativeName = InteropUtilities.ReadUtf8Ptr(language.native_name);
+			string englishName = InteropUtilities.ToStringFromUtf8Ptr(language.eng_name);
+			string nativeName = InteropUtilities.ToStringFromUtf8Ptr(language.native_name);
 			return new Language
 				{
 					Code = language.iso639_2,

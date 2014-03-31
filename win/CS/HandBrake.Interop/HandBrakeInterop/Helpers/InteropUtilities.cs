@@ -28,7 +28,7 @@ namespace HandBrake.Interop.Helpers
 		/// <typeparam name="T">The type to convert the structure to.</typeparam>
 		/// <param name="structPtr">The pointer to the native structure.</param>
 		/// <returns>The converted structure.</returns>
-		public static T ReadStructure<T>(IntPtr structPtr)
+		public static T ToStructureFromPtr<T>(IntPtr structPtr)
 		{
 			return (T)Marshal.PtrToStructure(structPtr, typeof(T));
 		}
@@ -38,7 +38,7 @@ namespace HandBrake.Interop.Helpers
 		/// </summary>
 		/// <param name="stringPtr">The pointer to the string.</param>
 		/// <returns>The resulting string.</returns>
-		public static string ReadUtf8Ptr(IntPtr stringPtr)
+		public static string ToStringFromUtf8Ptr(IntPtr stringPtr)
 		{
 			var data = new List<byte>();
 			var ptr = stringPtr;
@@ -66,7 +66,7 @@ namespace HandBrake.Interop.Helpers
 		/// <returns>
 		/// The <see cref="IntPtr"/>.
 		/// </returns>
-		public static IntPtr CreateUtf8Ptr(string str)
+		public static IntPtr ToUtf8PtrFromString(string str)
 		{
 			byte[] bytes = Encoding.UTF8.GetBytes(str);
 			IntPtr stringPtr = Marshal.AllocHGlobal(bytes.Length + 1);
@@ -87,7 +87,7 @@ namespace HandBrake.Interop.Helpers
 		/// <typeparam name="T">The type of structure in the list.</typeparam>
 		/// <param name="listPtr">The pointer to the native list.</param>
 		/// <returns>The converted managed list.</returns>
-		public static List<T> ToList<T>(this IntPtr listPtr)
+		public static List<T> ToListFromHandBrakeList<T>(this IntPtr listPtr)
 		{
 			List<T> returnList = new List<T>();
 			NativeList nativeList = new NativeList(listPtr);
@@ -95,7 +95,7 @@ namespace HandBrake.Interop.Helpers
 			for (int i = 0; i < nativeList.Count; i++)
 			{
 				IntPtr itemPtr = nativeList[i];
-				returnList.Add(ReadStructure<T>(itemPtr));
+				returnList.Add(ToStructureFromPtr<T>(itemPtr));
 			}
 
 			return returnList;
@@ -127,14 +127,14 @@ namespace HandBrake.Interop.Helpers
 		/// <param name="arrayPtr">The pointer to the array.</param>
 		/// <param name="count">The number of items in the array.</param>
 		/// <returns>The converted collection.</returns>
-		public static IEnumerable<T> ConvertArray<T>(IntPtr arrayPtr, int count)
+		public static List<T> ToListFromNativeArray<T>(IntPtr arrayPtr, int count)
 		{
 			IntPtr currentItem = arrayPtr;
 
 			var result = new List<T>();
 			for (int i = 0; i < count; i++)
 			{
-				T nativeEncoder = ReadStructure<T>(currentItem);
+				T nativeEncoder = ToStructureFromPtr<T>(currentItem);
 				result.Add(nativeEncoder);
 
 				currentItem = IntPtr.Add(currentItem, Marshal.SizeOf(typeof(T)));
@@ -144,11 +144,45 @@ namespace HandBrake.Interop.Helpers
 		}
 
 		/// <summary>
+		/// Takes an array pointer and converts it into a list of strings.
+		/// </summary>
+		/// <param name="arrayPtr">A pointer to a raw list of strings.</param>
+		/// <returns>The list of strings.</returns>
+	    public static List<string> ToStringListFromArrayPtr(IntPtr arrayPtr)
+		{
+			if (arrayPtr == IntPtr.Zero)
+			{
+				return null;
+			}
+
+			return ToPtrListFromPtr(arrayPtr).Select(ptr => Marshal.PtrToStringAnsi(ptr)).ToList();
+		}
+
+	    /// <summary>
+		/// Finds all the pointers starting at the given location and puts them in a list. Stops when it finds zero for a pointer.
+		/// </summary>
+		/// <param name="arrayPtr">The address of the list of pointers.</param>
+		/// <returns>The list of pointers.</returns>
+	    public static List<IntPtr> ToPtrListFromPtr(IntPtr arrayPtr)
+	    {
+		    var result = new List<IntPtr>();
+		    int ptrSize = Marshal.SizeOf(typeof(IntPtr));
+		    IntPtr currentPtr = Marshal.ReadIntPtr(arrayPtr);
+			for (int i = 0; currentPtr != IntPtr.Zero; i++)
+			{
+				result.Add(currentPtr);
+			    currentPtr = Marshal.ReadIntPtr(arrayPtr, (i + 1) * ptrSize);
+		    }
+
+		    return result;
+	    }
+
+		/// <summary>
 		/// Creates a native HandBrake list from the given managed list of pointers.
 		/// </summary>
 		/// <param name="list">The managed list to convert.</param>
 		/// <returns>The converted native list.</returns>
-		public static NativeList CreateIntPtrList(List<IntPtr> list)
+		public static NativeList ToHandBrakeListFromPtrList(List<IntPtr> list)
 		{
 			NativeList returnList = NativeList.CreateList();
 
@@ -166,7 +200,7 @@ namespace HandBrake.Interop.Helpers
 		/// <typeparam name="T">The type of structures in the list.</typeparam>
 		/// <param name="list">The managed list to convert.</param>
 		/// <returns>The converted native list.</returns>
-		public static NativeList ConvertListBack<T>(List<T> list)
+		public static NativeList ToHandBrakeListFromList<T>(List<T> list)
 		{
 			NativeList returnList = NativeList.CreateList();
 			foreach (T item in list)
@@ -189,9 +223,9 @@ namespace HandBrake.Interop.Helpers
 		/// <param name="iterator">The iterator to use to build the list.</param>
 		/// <param name="converter">The converter to convert from the struct to the object.</param>
 		/// <returns>The list of objects.</returns>
-		public static List<T2> GetListFromIterator<T1, T2>(Func<IntPtr, IntPtr> iterator, Func<T1, T2> converter)
+		public static List<T2> ToListFromIterator<T1, T2>(Func<IntPtr, IntPtr> iterator, Func<T1, T2> converter)
 		{
-			return ReadStructureListFromIterator<T1>(iterator).Select(converter).ToList();
+			return ToListFromIterator<T1>(iterator).Select(converter).ToList();
 		} 
 
 		/// <summary>
@@ -200,7 +234,7 @@ namespace HandBrake.Interop.Helpers
 		/// <typeparam name="T">The type of the struct.</typeparam>
 		/// <param name="iterator">The iterator to use to build the list.</param>
 		/// <returns>The list of structs.</returns>
-		public static List<T> ReadStructureListFromIterator<T>(Func<IntPtr, IntPtr> iterator)
+		public static List<T> ToListFromIterator<T>(Func<IntPtr, IntPtr> iterator)
 		{
 			var structureList = new List<T>();
 			IntPtr current = IntPtr.Zero;
@@ -208,7 +242,7 @@ namespace HandBrake.Interop.Helpers
 			current = iterator(current);
 			while (current != IntPtr.Zero)
 			{
-				T encoder = ReadStructure<T>(current);
+				T encoder = ToStructureFromPtr<T>(current);
 				structureList.Add(encoder);
 
 				current = iterator(current);
