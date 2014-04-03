@@ -1781,6 +1781,12 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             // Write it to disk before doing this, and make a note of the new
             // time it became clear.
             erase_memory (wb,1);
+            if (wb->data608->mode == MODE_POPUP)
+            {
+                // If popup, the last pts is the time to remove the
+                // popup from the screen
+                wb->data608->current_visible_start_ms = get_fts(wb);
+            }
             // Write "clear" subtitle if necessary
             write_cc_buffer(wb);
             break;
