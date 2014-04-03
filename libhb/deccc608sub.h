@@ -97,6 +97,7 @@ struct s_write {
 
     int clear_sub_needed;   // Indicates that we need to send a null
                             // subtitle to clear the current subtitle
+    int rollup_cr;  // Flag indicates if CR command performed by rollup
 };
 
 enum command_code

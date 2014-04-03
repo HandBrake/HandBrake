@@ -1466,14 +1466,8 @@ int write_cc_buffer_as_srt(struct eia608_screen *data, struct s_write *wb)
                 wb->enc_buffer_used = get_decoder_line_encoded(wb->enc_buffer, i, data);
                 line = 2;
             } else {
-                if (line == 2) {
-                    wb->enc_buffer_used += encode_line(wb->enc_buffer+wb->enc_buffer_used,
+                wb->enc_buffer_used += encode_line(wb->enc_buffer+wb->enc_buffer_used,
                                                        (unsigned char *) "\n");
-                    line = 3;
-                } else {
-                    wb->enc_buffer_used += encode_line(wb->enc_buffer+wb->enc_buffer_used,
-                                                       (unsigned char *) " ");
-                }
                 wb->enc_buffer_used += get_decoder_line_encoded(wb->enc_buffer+wb->enc_buffer_used, i, data);
             }
         }
@@ -1483,7 +1477,7 @@ int write_cc_buffer_as_srt(struct eia608_screen *data, struct s_write *wb)
         hb_buffer_t *buffer = hb_buffer_init( wb->enc_buffer_used + 1 );
         buffer->s.frametype = HB_FRAME_SUBTITLE;
         buffer->s.start = ms_start;
-        buffer->s.stop = ms_end;
+        buffer->s.stop = AV_NOPTS_VALUE;
         memcpy( buffer->data, wb->enc_buffer, wb->enc_buffer_used + 1 );
         if (wb->hb_last_buffer) {
             wb->hb_last_buffer->next = buffer;
@@ -1713,13 +1707,14 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                     wb->data608->screenfuls_counter++;
                 erase_memory (wb, 1);
             }
-            wb->data608->current_visible_start_ms = get_fts(wb);
             if (wb->data608->mode==MODE_ROLLUP_2 && !is_current_row_empty(wb))
             {
                 if (debug_608)
                     hb_log ("Two RU2, current line not empty. Simulating a CR\n");
                 handle_command(0x14, 0x2D, wb);
+                wb->rollup_cr = 1;
             }
+            wb->data608->current_visible_start_ms = get_fts(wb);
             wb->data608->mode=MODE_ROLLUP_2;
             erase_memory (wb, 0);
             wb->data608->cursor_column=0;
@@ -1732,13 +1727,14 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                     wb->data608->screenfuls_counter++;
                 erase_memory (wb, 1);
             }
-            wb->data608->current_visible_start_ms = get_fts(wb);
             if (wb->data608->mode==MODE_ROLLUP_3 && !is_current_row_empty(wb))
             {
                 if (debug_608)
                     hb_log ("Two RU3, current line not empty. Simulating a CR\n");
                 handle_command(0x14, 0x2D, wb);
+                wb->rollup_cr = 1;
             }
+            wb->data608->current_visible_start_ms = get_fts(wb);
             wb->data608->mode=MODE_ROLLUP_3;
             erase_memory (wb, 0);
             wb->data608->cursor_column=0;
@@ -1751,14 +1747,14 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                     wb->data608->screenfuls_counter++;
                 erase_memory (wb, 1);
             }
-            wb->data608->current_visible_start_ms = get_fts(wb);
             if (wb->data608->mode==MODE_ROLLUP_4 && !is_current_row_empty(wb))
             {
                 if (debug_608)
                     hb_log ("Two RU4, current line not empty. Simulating a CR\n");
                 handle_command(0x14, 0x2D, wb);
+                wb->rollup_cr = 1;
             }
-
+            wb->data608->current_visible_start_ms = get_fts(wb);
             wb->data608->mode=MODE_ROLLUP_4;
             wb->data608->cursor_column=0;
             wb->data608->cursor_row=wb->data608->rollup_base_row;
@@ -1767,12 +1763,22 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
         case COM_CARRIAGERETURN:
             // In transcript mode, CR doesn't write the whole screen, to avoid
             // repeated lines.
+
+            // Skip initial CR if rollup has already done it
+            if (wb->rollup_cr && is_current_row_empty(wb))
+            {
+                wb->rollup_cr = 0;
+                wb->data608->current_visible_start_ms = get_fts(wb);
+                break;
+            }
+
             if (norollup)
                 delete_all_lines_but_current(get_current_visible_buffer(wb), wb->data608->cursor_row);
             if (write_cc_buffer(wb))
                 wb->data608->screenfuls_counter++;
             roll_up(wb);
             wb->data608->cursor_column=0;
+            wb->data608->current_visible_start_ms = get_fts(wb);
             break;
         case COM_ERASENONDISPLAYEDMEMORY:
             erase_memory (wb,0);
@@ -1803,13 +1809,6 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
 
             if (wb->data608->mode != MODE_POPUP)
                 swap_visible_buffer(wb);
-            else if (wb->hb_last_buffer != NULL)
-            {
-                // POPUPs are displayed when ENDOFCAPTION is received.
-                // We do not know their stop time.  That is determined by
-                // ERASEDISPLAYEDMEMORY
-                wb->hb_last_buffer->s.stop = AV_NOPTS_VALUE;
-            }
             wb->data608->cursor_column=0;
             wb->data608->cursor_row=0;
             wb->data608->color=default_color;
