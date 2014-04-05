@@ -3665,9 +3665,10 @@ static int ParseOptions( int argc, char ** argv )
             { "no-opencl",   no_argument,       NULL,    NO_OPENCL },
 
 #ifdef USE_QSV
-            { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,    },
-            { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH, },
-            { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,               },
+            { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,       },
+            { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH,    },
+            { "qsv-implementation",   required_argument, NULL,        QSV_IMPLEMENTATION, },
+            { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,                  },
 #endif
 
             { "format",      required_argument, NULL,    'f' },
