@@ -29,14 +29,16 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef USE_QSV
 
 #include "hb.h"
-#include "enc_qsv.h"
 #include "qsv_common.h"
 #include "qsv_memory.h"
 #include "h264_common.h"
 
-int  encqsvInit( hb_work_object_t *, hb_job_t * );
-int  encqsvWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
-void encqsvClose( hb_work_object_t * );
+int  nal_find_start_code(uint8_t**, size_t*);
+void parse_nalus        (uint8_t*,  size_t, hb_buffer_t*);
+
+int  encqsvInit (hb_work_object_t*, hb_job_t*);
+int  encqsvWork (hb_work_object_t*, hb_buffer_t**, hb_buffer_t**);
+void encqsvClose(hb_work_object_t*);
 
 hb_work_object_t hb_encqsv =
 {
@@ -258,13 +260,13 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
     }
 
     // setup surface allocation
-    qsv_encode->m_mfxVideoParam.IOPattern = (pv->is_sys_mem                 ?
-                                             MFX_IOPATTERN_IN_SYSTEM_MEMORY :
-                                             MFX_IOPATTERN_IN_OPAQUE_MEMORY);
+    pv->param.videoParam->IOPattern = (pv->is_sys_mem                 ?
+                                       MFX_IOPATTERN_IN_SYSTEM_MEMORY :
+                                       MFX_IOPATTERN_IN_OPAQUE_MEMORY);
     memset(&qsv_encode->request, 0, sizeof(mfxFrameAllocRequest) * 2);
     sts = MFXVideoENCODE_QueryIOSurf(qsv->mfx_session,
-                                     &qsv_encode->m_mfxVideoParam,
-                                     &qsv_encode->request);
+                                     pv->param.videoParam,
+                                     &qsv_encode->request[0]);
     if (sts < MFX_ERR_NONE) // ignore warnings
     {
         hb_error("qsv_enc_init: MFXVideoENCODE_QueryIOSurf failed (%d)", sts);
@@ -306,7 +308,7 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
         qsv_encode->ext_opaque_alloc.In.Surfaces     = in_space->p_surfaces;
         qsv_encode->ext_opaque_alloc.In.NumSurface   = in_space->surface_num;
         qsv_encode->ext_opaque_alloc.In.Type         = qsv_encode->request[0].Type;
-        qsv_encode->m_mfxVideoParam.ExtParam[qsv_encode->m_mfxVideoParam.NumExtParam++] = (mfxExtBuffer*)&qsv_encode->ext_opaque_alloc;
+        pv->param.videoParam->ExtParam[pv->param.videoParam->NumExtParam++] = (mfxExtBuffer*)&qsv_encode->ext_opaque_alloc;
     }
 
     // allocate sync points
@@ -322,7 +324,7 @@ int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
     }
 
     // initialize the encoder
-    sts = MFXVideoENCODE_Init(qsv->mfx_session, &qsv_encode->m_mfxVideoParam);
+    sts = MFXVideoENCODE_Init(qsv->mfx_session, pv->param.videoParam);
     if (sts < MFX_ERR_NONE) // ignore warnings
     {
         hb_error("qsv_enc_init: MFXVideoENCODE_Init failed (%d)", sts);
@@ -361,14 +363,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     w->private_data       = pv;
 
     pv->job                = job;
-    pv->is_sys_mem         = !hb_qsv_decode_is_enabled(job);
+    pv->is_sys_mem         = hb_qsv_decode_is_enabled(job) == 0;
     pv->qsv_info           = hb_qsv_info_get(job->vcodec);
     pv->delayed_processing = hb_list_init();
     pv->last_start         = INT64_MIN;
-    pv->frames_in          = 0;
-    pv->frames_out         = 0;
-    pv->init_done          = 0;
-    pv->is_vpp_present     = 0;
 
     // set up a re-usable mfxEncodeCtrl to force keyframes (e.g. for chapters)
     pv->force_keyframe.QP          = 0;
@@ -824,7 +822,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             pv->param.videoParam->mfx.GopPicSize = (pv->param.videoParam->mfx.GopPicSize /
                                                     pv->param.videoParam->mfx.GopRefDist *
                                                     pv->param.videoParam->mfx.GopRefDist);
-            if (pv->param.videoParam->mfx.NumRefFrame != 0)
+            if (pv->param.videoParam->mfx.NumRefFrame)
             {
                 pv->param.videoParam->mfx.NumRefFrame = FFMAX(pv->param.videoParam->mfx.NumRefFrame,
                                                               pv->param.videoParam->mfx.GopRefDist / 2);
@@ -886,7 +884,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxStatus err;
     mfxVersion version;
     mfxVideoParam videoParam;
-    mfxExtBuffer* ExtParamArray[3];
+    mfxExtBuffer *extParamArray[3];
     mfxSession session = (mfxSession)0;
     mfxExtCodingOption  option1_buf, *option1 = &option1_buf;
     mfxExtCodingOption2 option2_buf, *option2 = &option2_buf;
@@ -919,7 +917,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
     memset(&videoParam, 0, sizeof(mfxVideoParam));
-    videoParam.ExtParam = ExtParamArray;
+    videoParam.ExtParam = extParamArray;
     videoParam.NumExtParam = 0;
     // introduced in API 1.3
     memset(sps_pps, 0, sizeof(mfxExtCodingOptionSPSPPS));
@@ -1176,12 +1174,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     return 0;
 }
 
-void encqsvClose( hb_work_object_t * w )
+void encqsvClose(hb_work_object_t *w)
 {
     int i = 0;
-    hb_work_private_t * pv = w->private_data;
+    hb_work_private_t *pv = w->private_data;
 
-    hb_log( "enc_qsv done: frames: %u in, %u out", pv->frames_in, pv->frames_out );
+    hb_log("enc_qsv done: frames: %u in, %u out", pv->frames_in, pv->frames_out);
 
     // if using system memory (encode-only), free allocated surfaces too
     if (pv != NULL && pv->job != NULL && pv->job->qsv.ctx != NULL &&
@@ -1190,60 +1188,76 @@ void encqsvClose( hb_work_object_t * w )
 
         av_qsv_context *qsv = pv->job->qsv.ctx;
 
-        if(qsv && qsv->enc_space){
-        av_qsv_space* qsv_encode = qsv->enc_space;
-        if(qsv_encode->is_init_done){
-            if(pv->is_sys_mem){
-                if( qsv_encode && qsv_encode->surface_num > 0)
-                    for (i = 0; i < qsv_encode->surface_num; i++){
-                        if( qsv_encode->p_surfaces[i]->Data.Y){
-                            free(qsv_encode->p_surfaces[i]->Data.Y);
-                            qsv_encode->p_surfaces[i]->Data.Y = 0;
+        if (qsv != NULL && qsv->enc_space != NULL)
+        {
+            av_qsv_space *qsv_encode = qsv->enc_space;
+            if (qsv_encode->is_init_done)
+            {
+                if (pv->is_sys_mem)
+                {
+                    if (qsv_encode != NULL && qsv_encode->surface_num > 0)
+                    {
+                        for (i = 0; i < qsv_encode->surface_num; i++)
+                        {
+                            if (qsv_encode->p_surfaces[i]->Data.Y != NULL)
+                            {
+                                free(qsv_encode->p_surfaces[i]->Data.Y);
+                                qsv_encode->p_surfaces[i]->Data.Y = 0;
+                            }
+                            if (qsv_encode->p_surfaces[i]->Data.VU != NULL)
+                            {
+                                free(qsv_encode->p_surfaces[i]->Data.VU);
+                                qsv_encode->p_surfaces[i]->Data.VU = 0;
+                            }
+                            if (qsv_encode->p_surfaces[i] != NULL)
+                            {
+                                av_freep(qsv_encode->p_surfaces[i]);
+                            }
                         }
-                        if( qsv_encode->p_surfaces[i]->Data.VU){
-                            free(qsv_encode->p_surfaces[i]->Data.VU);
-                            qsv_encode->p_surfaces[i]->Data.VU = 0;
-                        }
-                        if(qsv_encode->p_surfaces[i])
-                            av_freep(qsv_encode->p_surfaces[i]);
                     }
+                    qsv_encode->surface_num = 0;
+
+                    sws_freeContext(pv->sws_context_to_nv12);
+                }
+
+                for (i = av_qsv_list_count(qsv_encode->tasks); i > 1; i--)
+                {
+                    av_qsv_task *task = av_qsv_list_item(qsv_encode->tasks, i - 1);
+                    if (task != NULL && task->bs != NULL)
+                    {
+                        av_freep(&task->bs->Data);
+                        av_freep(&task->bs);
+                        av_qsv_list_rem(qsv_encode->tasks, task);
+                    }
+                }
+                av_qsv_list_close(&qsv_encode->tasks);
+
+                for (i = 0; i < qsv_encode->surface_num; i++)
+                {
+                    av_freep(&qsv_encode->p_surfaces[i]);
+                }
                 qsv_encode->surface_num = 0;
 
-                sws_freeContext(pv->sws_context_to_nv12);
-            }
-
-            for (i = av_qsv_list_count(qsv_encode->tasks); i > 1; i--){
-                av_qsv_task* task = av_qsv_list_item(qsv_encode->tasks,i-1);
-                if(task && task->bs){
-                    av_freep(&task->bs->Data);
-                    av_freep(&task->bs);
-                    av_qsv_list_rem(qsv_encode->tasks,task);
-                }
-            }
-            av_qsv_list_close(&qsv_encode->tasks);
-
-            for (i = 0; i < qsv_encode->surface_num; i++){
-                av_freep(&qsv_encode->p_surfaces[i]);
-            }
-            qsv_encode->surface_num = 0;
-
-            for (i = 0; i < qsv_encode->sync_num; i++){
+                for (i = 0; i < qsv_encode->sync_num; i++)
+                {
                     av_freep(&qsv_encode->p_syncp[i]->p_sync);
                     av_freep(&qsv_encode->p_syncp[i]);
-            }
-            qsv_encode->sync_num = 0;
+                }
+                qsv_encode->sync_num = 0;
 
                 qsv_encode->is_init_done = 0;
-        }
+            }
         }
 
-        if(qsv){
-        // closing the commong stuff
-        av_qsv_context_clean(qsv);
+        if (qsv != NULL)
+        {
+            // closing the commong stuff
+            av_qsv_context_clean(qsv);
 
-        if(pv->is_sys_mem){
-            av_freep(&qsv);
-        }
+            if (pv->is_sys_mem)
+            {
+                av_freep(&qsv);
+            }
         }
     }
 
@@ -1271,32 +1285,36 @@ void encqsvClose( hb_work_object_t * w )
         }
     }
 
-    free( pv );
+    free(pv);
     w->private_data = NULL;
 }
 
-int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                  hb_buffer_t ** buf_out )
+int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 {
-    hb_work_private_t * pv = w->private_data;
-    hb_job_t * job = pv->job;
-    hb_buffer_t * in = *buf_in, *buf;
+    hb_work_private_t *pv = w->private_data;
+    hb_job_t *job = pv->job;
+    hb_buffer_t *in = *buf_in, *buf;
     av_qsv_context *qsv = job->qsv.ctx;
-    av_qsv_space* qsv_encode;
+    av_qsv_space *qsv_encode;
     hb_buffer_t *last_buf = NULL;
     mfxStatus sts = MFX_ERR_NONE;
     int is_end = 0;
-    av_qsv_list* received_item = 0;
-    av_qsv_stage* stage = 0;
+    av_qsv_list *received_item = NULL;
+    av_qsv_stage *stage = NULL;
 
-    while(1){
+    while (1)
+    {
         int ret = qsv_enc_init(qsv, pv);
         qsv = job->qsv.ctx;
         qsv_encode = qsv->enc_space;
-        if(ret >= 2)
+        if (ret >= 2)
+        {
             av_qsv_sleep(1);
+        }
         else
+        {
             break;
+        }
     }
     *buf_out = NULL;
 
@@ -1306,7 +1324,7 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if( in->size <= 0 )
+    if (in->size <= 0)
     {
         // do delayed frames yet
         *buf_in = NULL;
@@ -1315,7 +1333,6 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     // input from decode, as called - we always have some to proceed with
     while (1)
-    {
     {
         mfxEncodeCtrl    *work_control = NULL;
         mfxFrameSurface1 *work_surface = NULL;
@@ -1424,17 +1441,18 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              */
             work_surface->Info.PicStruct = pv->enc_space.m_mfxVideoParam.mfx.FrameInfo.PicStruct;
         }
-        else{
+        else
+        {
             work_surface = NULL;
             received_item = NULL;
         }
-        int sync_idx = av_qsv_get_free_sync( qsv_encode, qsv );
+        int sync_idx = av_qsv_get_free_sync(qsv_encode, qsv);
         if (sync_idx == -1)
         {
             hb_error("qsv: Not enough resources allocated for QSV encode");
             return 0;
         }
-        av_qsv_task *task = av_qsv_list_item( qsv_encode->tasks, pv->async_depth );
+        av_qsv_task *task = av_qsv_list_item(qsv_encode->tasks, pv->async_depth);
 
         for (;;)
         {
@@ -1443,27 +1461,36 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                                   work_control, work_surface, task->bs,
                                                   qsv_encode->p_syncp[sync_idx]->p_sync);
 
-            if (MFX_ERR_MORE_DATA == sts || (MFX_ERR_NONE <= sts && MFX_WRN_DEVICE_BUSY != sts))
-                if (work_surface && !pv->is_sys_mem)
+            if (sts == MFX_ERR_MORE_DATA || (sts >= MFX_ERR_NONE &&
+                                             sts != MFX_WRN_DEVICE_BUSY))
+            {
+                if (work_surface != NULL && !pv->is_sys_mem)
+                {
                     ff_qsv_atomic_dec(&work_surface->Data.Locked);
+                }
+            }
 
-            if( MFX_ERR_MORE_DATA == sts ){
+            if (sts == MFX_ERR_MORE_DATA)
+            {
                 ff_qsv_atomic_dec(&qsv_encode->p_syncp[sync_idx]->in_use);
-                if(work_surface && received_item)
+                if (work_surface != NULL && received_item != NULL)
+                {
                     hb_list_add(pv->delayed_processing, received_item);
+                }
                 break;
             }
 
             AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
-            if (MFX_ERR_NONE <= sts /*&& !syncpE*/) // repeat the call if warning and no output
+            if (sts >= MFX_ERR_NONE /*&& !syncpE*/) // repeat the call if warning and no output
             {
-                if (MFX_WRN_DEVICE_BUSY == sts){
+                if (sts == MFX_WRN_DEVICE_BUSY)
+                {
                     av_qsv_sleep(10); // wait if device is busy
                     continue;
                 }
 
-                av_qsv_stage* new_stage = av_qsv_stage_init();
+                av_qsv_stage *new_stage = av_qsv_stage_init();
                 new_stage->type = AV_QSV_ENCODE;
                 new_stage->in.p_surface = work_surface;
                 new_stage->out.sync = qsv_encode->p_syncp[sync_idx];
@@ -1473,22 +1500,28 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
                 pv->async_depth++;
 
-                if(received_item){
-                    av_qsv_add_stagee( &received_item, new_stage,HAVE_THREADS );
+                if (received_item != NULL)
+                {
+                    av_qsv_add_stagee(&received_item, new_stage, HAVE_THREADS);
                 }
-                else{
-                   // flushing the end
-                    int pipe_idx = av_qsv_list_add( qsv->pipes, av_qsv_list_init(HAVE_THREADS) );
-                    av_qsv_list* list_item = av_qsv_list_item( qsv->pipes, pipe_idx );
-                    av_qsv_add_stagee( &list_item, new_stage,HAVE_THREADS );
+                else
+                {
+                    // flushing the end
+                    int pipe_idx = av_qsv_list_add(qsv->pipes, av_qsv_list_init(HAVE_THREADS));
+                    av_qsv_list *list_item = av_qsv_list_item(qsv->pipes, pipe_idx);
+                    av_qsv_add_stagee(&list_item, new_stage, HAVE_THREADS);
                 }
 
                 int i = 0;
-                for(i=hb_list_count(pv->delayed_processing); i > 0;i--){
-                    hb_list_t *item = hb_list_item(pv->delayed_processing,i-1);
-                    if(item){
-                        hb_list_rem(pv->delayed_processing,item);
-                        av_qsv_flush_stages(qsv->pipes, &item);
+                for (i = hb_list_count(pv->delayed_processing); i > 0; i--)
+                {
+                    av_qsv_list *item = hb_list_item(pv->delayed_processing,
+                                                     i - 1);
+
+                    if (item != NULL)
+                    {
+                        hb_list_rem(pv->delayed_processing, item);
+                        av_qsv_flush_stages(qsv->pipes,    &item);
                     }
                 }
 
@@ -1497,281 +1530,317 @@ int encqsvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
             ff_qsv_atomic_dec(&qsv_encode->p_syncp[sync_idx]->in_use);
 
-            if (MFX_ERR_NOT_ENOUGH_BUFFER == sts)
+            if (sts == MFX_ERR_NOT_ENOUGH_BUFFER)
+            {
                 HB_DEBUG_ASSERT(1, "The bitstream buffer size is insufficient.");
+            }
 
             break;
         }
-    }
 
-    buf = NULL;
+        buf = NULL;
 
-    do{
+        do
+        {
+            if (pv->async_depth == 0) break;
 
-    if(pv->async_depth==0) break;
-
-    // working properly with sync depth approach of MediaSDK OR flushing, if at the end
-    if( (pv->async_depth >= pv->max_async_depth) || is_end ){
-
-        pv->async_depth--;
-
-        av_qsv_task *task = av_qsv_list_item( qsv_encode->tasks, 0 );
-        av_qsv_stage* stage = task->stage;
-        av_qsv_list*  this_pipe = av_qsv_pipe_by_stage(qsv->pipes,stage);
-        sts = MFX_ERR_NONE;
-
-        // only here we need to wait on operation been completed, therefore SyncOperation is used,
-        // after this step - we continue to work with bitstream, muxing ...
-        av_qsv_wait_on_sync( qsv,stage );
-
-        if(task->bs->DataLength>0){
-                av_qsv_flush_stages( qsv->pipes, &this_pipe );
-
-                // see nal_encode
-                buf = hb_video_buffer_init( job->width, job->height );
-                buf->size = 0;
-
-                // map Media SDK's FrameType to our internal representation
-                buf->s.frametype = hb_qsv_frametype_xlat(task->bs->FrameType,
-                                                         &buf->s.flags);
-
-                parse_nalus(task->bs->Data + task->bs->DataOffset,task->bs->DataLength, buf, pv->frames_out);
-
-                if ( last_buf == NULL )
-                    *buf_out = buf;
-                else
-                    last_buf->next = buf;
-                last_buf = buf;
-
-            // simple for now but check on TimeStampCalc from MSDK
-            int64_t duration  = ((double)pv->enc_space.m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD /
-                                 (double)pv->enc_space.m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN) * 90000.;
-
-            // start        -> PTS
-            // renderOffset -> DTS
-            buf->s.start    = buf->s.renderOffset = task->bs->TimeStamp;
-            buf->s.stop     = buf->s.start + duration;
-            buf->s.duration = duration;
-            if (pv->bfrm_delay)
+            // working properly with sync depth approach of MediaSDK OR flushing, if at the end
+            if (pv->async_depth >= pv->max_async_depth || is_end)
             {
-                if ((pv->frames_out == 0)                                  &&
-                    (pv->qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6) &&
-                    (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID))
-                {
-                    // with B-pyramid, the delay may be more than 1 frame,
-                    // so compute the actual delay based on the initial DTS
-                    // provided by MSDK; also, account for rounding errors
-                    // (e.g. 24000/1001 fps @ 90kHz -> 3753.75 ticks/frame)
-                    pv->bfrm_delay = HB_QSV_CLIP3(1, BFRM_DELAY_MAX,
-                                                  ((task->bs->TimeStamp -
-                                                    task->bs->DecodeTimeStamp +
-                                                    (duration / 2)) / duration));
-                }
+                pv->async_depth--;
 
-                if (!pv->bfrm_workaround)
+                av_qsv_task *task = av_qsv_list_item(qsv_encode->tasks, 0);
+                av_qsv_stage *stage = task->stage;
+                av_qsv_list *this_pipe = av_qsv_pipe_by_stage(qsv->pipes, stage);
+                sts = MFX_ERR_NONE;
+
+                // only here we need to wait on operation been completed, therefore SyncOperation is used,
+                // after this step - we continue to work with bitstream, muxing ...
+                av_qsv_wait_on_sync(qsv, stage);
+
+                if (task->bs->DataLength > 0)
                 {
-                    buf->s.renderOffset = task->bs->DecodeTimeStamp;
-                }
-                else
-                {
+                    av_qsv_flush_stages(qsv->pipes, &this_pipe);
+
+                    // see nal_encode
+                    buf = hb_video_buffer_init(job->width, job->height);
+                    buf->size = 0;
+
+                    // map Media SDK's FrameType to our internal representation
+                    buf->s.frametype = hb_qsv_frametype_xlat(task->bs->FrameType,
+                                                             &buf->s.flags);
+
                     /*
-                     * MSDK API < 1.6 or VFR
-                     *
-                     * Generate VFR-compatible output DTS based on input PTS.
-                     *
-                     * Depends on the B-frame delay:
-                     *
-                     * 0: ipts0,  ipts1, ipts2...
-                     * 1: ipts0 - ipts1, ipts1 - ipts1, ipts1,  ipts2...
-                     * 2: ipts0 - ipts2, ipts1 - ipts2, ipts2 - ipts2, ipts1...
-                     * ...and so on.
+                     * we need to convert the encoder's Annex B output
+                     * to an MP4-compatible format (ISO/IEC 14496-15).
                      */
-                    if (pv->frames_out <= pv->bfrm_delay)
+                    parse_nalus(task->bs->Data + task->bs->DataOffset,
+                                task->bs->DataLength, buf);
+
+                    if (last_buf == NULL)
                     {
-                        buf->s.renderOffset = (pv->init_pts[pv->frames_out] -
-                                               pv->init_pts[pv->bfrm_delay]);
+                        *buf_out = buf;
                     }
                     else
                     {
-                        buf->s.renderOffset = hb_qsv_pop_next_dts(pv->list_dts);
+                        last_buf->next = buf;
                     }
-                }
+                    last_buf = buf;
 
-                // check whether B-pyramid is used even though it's disabled
-                if ((pv->param.gop.b_pyramid == 0)          &&
-                    (task->bs->FrameType & MFX_FRAMETYPE_B) &&
-                    (task->bs->FrameType & MFX_FRAMETYPE_REF))
-                {
-                    hb_log("encqsvWork: BPyramid off not respected (delay: %d)",
-                           pv->bfrm_delay);
-                }
+                    // simple for now but check on TimeStampCalc from MSDK
+                    int64_t duration  = ((double)pv->enc_space.m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD /
+                                         (double)pv->enc_space.m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN) * 90000.;
 
-                // check for PTS < DTS
-                if (buf->s.start < buf->s.renderOffset)
-                {
-                    hb_log("encqsvWork: PTS %"PRId64" < DTS %"PRId64" for frame %d with type '%s' (bfrm_workaround: %d)",
-                           buf->s.start, buf->s.renderOffset, pv->frames_out + 1,
-                           hb_qsv_frametype_name(task->bs->FrameType),
-                           pv->bfrm_workaround);
-                }
-
-                /*
-                 * In the MP4 container, DT(0) = STTS(0) = 0.
-                 *
-                 * Which gives us:
-                 * CT(0) = CTTS(0) + STTS(0) = CTTS(0) = PTS(0) - DTS(0)
-                 * When DTS(0) < PTS(0), we then have:
-                 * CT(0) > 0 for video, but not audio (breaks A/V sync).
-                 *
-                 * This is typically solved by writing an edit list shifting
-                 * video samples by the initial delay, PTS(0) - DTS(0).
-                 *
-                 * See:
-                 * ISO/IEC 14496-12:2008(E), ISO base media file format
-                 *  - 8.6.1.2 Decoding Time to Sample Box
-                 */
-                if (w->config->h264.init_delay == 0 && buf->s.renderOffset < 0)
-                {
-                    w->config->h264.init_delay = -buf->s.renderOffset;
-                }
-            }
-
-            /*
-             * If we have a chapter marker pending and this frame's
-             * presentation time stamp is at or after the marker's time stamp,
-             * use this as the chapter start.
-             */
-            if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
-                pv->next_chapter_pts <= buf->s.start   &&
-                (task->bs->FrameType & MFX_FRAMETYPE_IDR))
-            {
-                // we're no longer looking for this chapter
-                pv->next_chapter_pts = AV_NOPTS_VALUE;
-
-                // get the chapter index from the list
-                struct chapter_s *item = hb_list_item(pv->delayed_chapters, 0);
-                if (item != NULL)
-                {
-                    // we're done with this chapter
-                    buf->s.new_chap = item->index;
-                    hb_list_rem(pv->delayed_chapters, item);
-                    free(item);
-
-                    // we may still have another pending chapter
-                    item = hb_list_item(pv->delayed_chapters, 0);
-                    if (item != NULL)
+                    // start        -> PTS
+                    // renderOffset -> DTS
+                    buf->s.start    = buf->s.renderOffset = task->bs->TimeStamp;
+                    buf->s.stop     = buf->s.start + duration;
+                    buf->s.duration = duration;
+                    if (pv->bfrm_delay)
                     {
-                        // we're looking for this one now
-                        // we still need it, don't remove it
-                        pv->next_chapter_pts = item->start;
+                        if ((pv->frames_out == 0)                                  &&
+                            (pv->qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6) &&
+                            (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID))
+                        {
+                            // with B-pyramid, the delay may be more than 1 frame,
+                            // so compute the actual delay based on the initial DTS
+                            // provided by MSDK; also, account for rounding errors
+                            // (e.g. 24000/1001 fps @ 90kHz -> 3753.75 ticks/frame)
+                            pv->bfrm_delay = HB_QSV_CLIP3(1, BFRM_DELAY_MAX,
+                                                          ((task->bs->TimeStamp -
+                                                            task->bs->DecodeTimeStamp +
+                                                            (duration / 2)) / duration));
+                        }
+
+                        if (!pv->bfrm_workaround)
+                        {
+                            buf->s.renderOffset = task->bs->DecodeTimeStamp;
+                        }
+                        else
+                        {
+                            /*
+                             * MSDK API < 1.6 or VFR
+                             *
+                             * Generate VFR-compatible output DTS based on input PTS.
+                             *
+                             * Depends on the B-frame delay:
+                             *
+                             * 0: ipts0,  ipts1, ipts2...
+                             * 1: ipts0 - ipts1, ipts1 - ipts1, ipts1,  ipts2...
+                             * 2: ipts0 - ipts2, ipts1 - ipts2, ipts2 - ipts2, ipts1...
+                             * ...and so on.
+                             */
+                            if (pv->frames_out <= pv->bfrm_delay)
+                            {
+                                buf->s.renderOffset = (pv->init_pts[pv->frames_out] -
+                                                       pv->init_pts[pv->bfrm_delay]);
+                            }
+                            else
+                            {
+                                buf->s.renderOffset = hb_qsv_pop_next_dts(pv->list_dts);
+                            }
+                        }
+
+                        // check whether B-pyramid is used even though it's disabled
+                        if ((pv->param.gop.b_pyramid == 0)          &&
+                            (task->bs->FrameType & MFX_FRAMETYPE_B) &&
+                            (task->bs->FrameType & MFX_FRAMETYPE_REF))
+                        {
+                            hb_log("encqsvWork: BPyramid off not respected (delay: %d)",
+                                   pv->bfrm_delay);
+                        }
+
+                        // check for PTS < DTS
+                        if (buf->s.start < buf->s.renderOffset)
+                        {
+                            hb_log("encqsvWork: PTS %"PRId64" < DTS %"PRId64" for frame %d with type '%s' (bfrm_workaround: %d)",
+                                   buf->s.start, buf->s.renderOffset, pv->frames_out + 1,
+                                   hb_qsv_frametype_name(task->bs->FrameType),
+                                   pv->bfrm_workaround);
+                        }
+
+                        /*
+                         * In the MP4 container, DT(0) = STTS(0) = 0.
+                         *
+                         * Which gives us:
+                         * CT(0) = CTTS(0) + STTS(0) = CTTS(0) = PTS(0) - DTS(0)
+                         * When DTS(0) < PTS(0), we then have:
+                         * CT(0) > 0 for video, but not audio (breaks A/V sync).
+                         *
+                         * This is typically solved by writing an edit list shifting
+                         * video samples by the initial delay, PTS(0) - DTS(0).
+                         *
+                         * See:
+                         * ISO/IEC 14496-12:2008(E), ISO base media file format
+                         *  - 8.6.1.2 Decoding Time to Sample Box
+                         */
+                        if (w->config->h264.init_delay == 0 && buf->s.renderOffset < 0)
+                        {
+                            w->config->h264.init_delay = -buf->s.renderOffset;
+                        }
                     }
-                }
-            }
 
-                // shift for fifo
-                if(pv->async_depth){
-                    av_qsv_list_rem(qsv_encode->tasks,task);
-                    av_qsv_list_add(qsv_encode->tasks,task);
-                }
+                    /*
+                     * If we have a chapter marker pending and this frame's
+                     * presentation time stamp is at or after the marker's time stamp,
+                     * use this as the chapter start.
+                     */
+                    if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
+                        pv->next_chapter_pts <= buf->s.start   &&
+                        (task->bs->FrameType & MFX_FRAMETYPE_IDR))
+                    {
+                        // we're no longer looking for this chapter
+                        pv->next_chapter_pts = AV_NOPTS_VALUE;
 
-                task->bs->DataLength    = 0;
-                task->bs->DataOffset    = 0;
-                task->bs->MaxLength = qsv_encode->p_buf_max_size;
-                task->stage        = 0;
-                pv->frames_out++;
+                        // get the chapter index from the list
+                        struct chapter_s *item = hb_list_item(pv->delayed_chapters, 0);
+                        if (item != NULL)
+                        {
+                            // we're done with this chapter
+                            buf->s.new_chap = item->index;
+                            hb_list_rem(pv->delayed_chapters, item);
+                            free(item);
+
+                            // we may still have another pending chapter
+                            item = hb_list_item(pv->delayed_chapters, 0);
+                            if (item != NULL)
+                            {
+                                // we're looking for this one now
+                                // we still need it, don't remove it
+                                pv->next_chapter_pts = item->start;
+                            }
+                        }
+                    }
+
+                    // shift for fifo
+                    if (pv->async_depth)
+                    {
+                        av_qsv_list_rem(qsv_encode->tasks, task);
+                        av_qsv_list_add(qsv_encode->tasks, task);
+                    }
+
+                    task->bs->DataLength = 0;
+                    task->bs->DataOffset = 0;
+                    task->bs->MaxLength  = qsv_encode->p_buf_max_size;
+                    task->stage          = NULL;
+                    pv->frames_out++;
+                }
             }
         }
-    }while(is_end);
+        while (is_end);
 
 
-    if(is_end){
-        if( !buf && MFX_ERR_MORE_DATA == sts )
+        if (is_end)
+        {
+            if (buf == NULL && sts == MFX_ERR_MORE_DATA)
+            {
+                break;
+            }
+        }
+        else
+        {
             break;
-
-    }
-    else
-        break;
+        }
 
     }
 
-    if(!is_end)
+    if (!is_end)
+    {
         ++pv->frames_in;
+    }
 
-    if(is_end){
-        *buf_in = NULL;
-        if(last_buf){
+    if (is_end)
+    {
+        if (last_buf != NULL)
+        {
             last_buf->next = in;
         }
         else
+        {
             *buf_out = in;
+        }
         return HB_WORK_DONE;
     }
-    else{
+    else
+    {
         return HB_WORK_OK;
     }
 }
 
-int nal_find_start_code(uint8_t** pb, size_t* size){
-    if ((int) *size < 4 )
-        return 0;
-
-    // find start code by MSDK , see ff_prefix_code[]
-    while ((4 <= *size) &&
-        ((0 != (*pb)[0]) ||
-         (0 != (*pb)[1]) ||
-         (1 != (*pb)[2]) ))
+int nal_find_start_code(uint8_t **pb, size_t *size)
+{
+    if ((int)*size < 4)
     {
-        *pb += 1;
+        return 0;
+    }
+
+    // find start code by MSDK, see ff_prefix_code[]
+    while ((4 <= *size) && ((*pb)[0] || (*pb)[1] || (*pb)[2] != 1))
+    {
+        *pb   += 1;
         *size -= 1;
     }
 
     if (4 <= *size)
-        return (((*pb)[0] << 24) | ((*pb)[1] << 16) | ((*pb)[2] << 8) | ((*pb)[3]));
+    {
+        return (((*pb)[0] << 24) |
+                ((*pb)[1] << 16) |
+                ((*pb)[2] <<  8) |
+                ((*pb)[3]));
+    }
 
     return 0;
 }
 
-void parse_nalus(uint8_t *nal_inits, size_t length, hb_buffer_t *buf, uint32_t frame_num){
+void parse_nalus(uint8_t *nal_inits, size_t length, hb_buffer_t *buf)
+{
     uint8_t *offset = nal_inits;
-    size_t size     = length;
+    size_t   size   = length;
 
-    if( nal_find_start_code(&offset,&size) == 0 )
+    if (!nal_find_start_code(&offset, &size))
+    {
         size = 0;
+    }
 
-    while( size > 0 ){
+    while (size > 0)
+    {
+        uint8_t *current_nal  = offset + sizeof(ff_prefix_code) - 1;
+        size_t   current_size = size   - sizeof(ff_prefix_code);
+        uint8_t *next_offset  = current_nal + 1;
+        size_t   next_size    = current_size;
 
-            uint8_t* current_nal = offset + sizeof(ff_prefix_code)-1;
-            uint8_t *next_offset = offset + sizeof(ff_prefix_code);
-            size_t next_size     = size - sizeof(ff_prefix_code);
-            size_t current_size  = next_size;
-            if( nal_find_start_code(&next_offset,&next_size) == 0 ){
-                size = 0;
+        if (!nal_find_start_code(&next_offset, &next_size))
+        {
+            size          = 0;
+            current_size += 1;
+        }
+        else
+        {
+            if (next_offset > 0 && *(next_offset - 1))
+            {
                 current_size += 1;
             }
-            else{
-                current_size -= next_size;
-                if( next_offset > 0 && *(next_offset-1) != 0  )
-                    current_size += 1;
-            }
-            {
-                char size_position[4] = {0,0,0,0};
-                size_position[1] = (current_size >> 24) & 0xFF;
-                size_position[1] = (current_size >> 16) & 0xFF;
-                size_position[2] = (current_size >> 8)  & 0xFF;
-                size_position[3] =  current_size        & 0xFF;
-
-                memcpy(buf->data + buf->size,&size_position ,sizeof(size_position));
-                buf->size += sizeof(size_position);
-
-                memcpy(buf->data + buf->size,current_nal ,current_size);
-                buf->size += current_size;
-            }
-
-            if(size){
-                size   = next_size;
-                offset = next_offset;
-            }
+            current_size -= next_size;
         }
+
+        char size_position[4];
+        size_position[1] = (current_size >> 24) & 0xFF;
+        size_position[1] = (current_size >> 16) & 0xFF;
+        size_position[2] = (current_size >>  8) & 0xFF;
+        size_position[3] = (current_size      ) & 0xFF;
+
+        memcpy(buf->data + buf->size, &size_position, sizeof(size_position));
+        buf->size += sizeof(size_position);
+
+        memcpy(buf->data + buf->size, current_nal, current_size);
+        buf->size += current_size;
+
+        if (size)
+        {
+            size   = next_size;
+            offset = next_offset;
+        }
+    }
 }
 
 #endif // USE_QSV

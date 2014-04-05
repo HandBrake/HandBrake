@@ -32,7 +32,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "hbffmpeg.h"
 #include "libavcodec/qsv.h"
 #include "qsv_filter.h"
-#include "enc_qsv.h"
 
 struct hb_filter_private_s
 {

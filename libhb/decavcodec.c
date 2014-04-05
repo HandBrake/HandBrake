@@ -48,7 +48,6 @@
 #endif
 
 #ifdef USE_QSV
-#include "enc_qsv.h"
 #include "qsv_common.h"
 #endif
 
