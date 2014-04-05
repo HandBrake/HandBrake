@@ -161,11 +161,12 @@ static const char* qsv_h264_level_xlat(int level)
     return NULL;
 }
 
-int qsv_enc_init(av_qsv_context *qsv, hb_work_private_t *pv)
+int qsv_enc_init(hb_work_private_t *pv)
 {
-    int i = 0;
+    av_qsv_context *qsv = pv->job->qsv.ctx;
+    hb_job_t       *job = pv->job;
     mfxStatus sts;
-    hb_job_t *job = pv->job;
+    int i;
 
     if (pv->init_done)
     {
@@ -1284,35 +1285,25 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     hb_work_private_t *pv = w->private_data;
     hb_job_t *job = pv->job;
     hb_buffer_t *in = *buf_in, *buf;
-    av_qsv_context *qsv = job->qsv.ctx;
-    av_qsv_space *qsv_encode;
     hb_buffer_t *last_buf = NULL;
     mfxStatus sts = MFX_ERR_NONE;
     int is_end = 0;
     av_qsv_list *received_item = NULL;
     av_qsv_stage *stage = NULL;
 
-    while (1)
+    while (qsv_enc_init(pv) >= 2)
     {
-        int ret = qsv_enc_init(qsv, pv);
-        qsv = job->qsv.ctx;
-        qsv_encode = qsv->enc_space;
-        if (ret >= 2)
-        {
-            av_qsv_sleep(1);
-        }
-        else
-        {
-            break;
-        }
+        av_qsv_sleep(1); // encoding not initialized, wait and repeat the call
     }
     *buf_out = NULL;
 
     if (*job->die)
     {
-        // unrecoverable error in qsv_enc_init
-        return HB_WORK_DONE;
+        return HB_WORK_DONE; // unrecoverable error, don't attempt to encode
     }
+
+    av_qsv_context *qsv        = job->qsv.ctx;
+    av_qsv_space   *qsv_encode = job->qsv.ctx->enc_space;
 
     if (in->size <= 0)
     {
