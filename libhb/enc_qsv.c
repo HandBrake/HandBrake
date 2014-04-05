@@ -33,6 +33,23 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "qsv_memory.h"
 #include "h264_common.h"
 
+/*
+ * The frame info struct remembers information about each frame across calls to
+ * the encoder. Since frames are uniquely identified by their timestamp, we use
+ * some bits of the timestamp as an index. The LSB is chosen so that two
+ * successive frames will have different values in the bits over any plausible
+ * range of frame rates (starting with bit 8 allows any frame rate slower than
+ * 352fps). The MSB determines the size of the array. It is chosen so that two
+ * frames can't use the same slot during the encoder's max frame delay so that,
+ * up to some minimum frame rate, frames are guaranteed to map to different
+ * slots (an MSB of 17 which is 2^(17-8+1) = 1024 slots guarantees no collisions
+ * down to a rate of 0.7 fps).
+ */
+#define FRAME_INFO_MAX2 (8)  // 2^8  = 256;  90000/256    = 352 frames/sec
+#define FRAME_INFO_MIN2 (17) // 2^17 = 128K; 90000/131072 = 0.7 frames/sec
+#define FRAME_INFO_SIZE (1 << (FRAME_INFO_MIN2 - FRAME_INFO_MAX2 + 1))
+#define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
+
 int  nal_find_start_code(uint8_t**, size_t*);
 void parse_nalus        (uint8_t*,  size_t, hb_buffer_t*);
 
@@ -66,10 +83,13 @@ struct hb_work_private_s
 
 #define BFRM_DELAY_MAX 16
     // for DTS generation (when MSDK API < 1.6 or VFR)
+    uint32_t      *init_delay;
     int            bfrm_delay;
     int            bfrm_workaround;
     int64_t        init_pts[BFRM_DELAY_MAX + 1];
     hb_list_t     *list_dts;
+
+    int64_t frame_duration[FRAME_INFO_SIZE];
 
     int async_depth;
     int max_async_depth;
@@ -86,6 +106,7 @@ struct hb_work_private_s
     int init_done;
 
     hb_list_t *delayed_processing;
+    hb_list_t *encoded_frames;
 };
 
 // used in delayed_chapters list
@@ -122,6 +143,18 @@ static int64_t hb_qsv_pop_next_dts(hb_list_t *list)
         }
     }
     return next_dts;
+}
+
+static void save_frame_duration(hb_work_private_t *pv, hb_buffer_t *buf)
+{
+    int i = (buf->s.start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
+    pv->frame_duration[i] = buf->s.stop - buf->s.start;
+}
+
+static int64_t get_frame_duration(hb_work_private_t *pv, hb_buffer_t *buf)
+{
+    int i = (buf->s.start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
+    return pv->frame_duration[i];
 }
 
 static const char* qsv_h264_profile_xlat(int profile)
@@ -370,6 +403,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->is_sys_mem         = hb_qsv_decode_is_enabled(job) == 0;
     pv->qsv_info           = hb_qsv_info_get(job->vcodec);
     pv->delayed_processing = hb_list_init();
+    pv->encoded_frames     = hb_list_init();
     pv->last_start         = INT64_MIN;
 
     // set up a re-usable mfxEncodeCtrl to force keyframes (e.g. for chapters)
@@ -987,36 +1021,24 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         MFXClose(session);
     }
 
-    // check whether B-frames are used
-    switch (videoParam.mfx.CodecProfile)
+    /* check whether B-frames are used */
+    if (videoParam.mfx.GopRefDist > 1 && videoParam.mfx.GopPicSize > 2)
     {
-        case MFX_PROFILE_AVC_BASELINE:
-        case MFX_PROFILE_AVC_CONSTRAINED_HIGH:
-        case MFX_PROFILE_AVC_CONSTRAINED_BASELINE:
-            pv->bfrm_delay = 0;
-            break;
-        default:
-            pv->bfrm_delay = 1;
-            break;
-    }
-    // sanitize
-    pv->bfrm_delay = FFMIN(pv->bfrm_delay, videoParam.mfx.GopRefDist - 1);
-    pv->bfrm_delay = FFMIN(pv->bfrm_delay, videoParam.mfx.GopPicSize - 2);
-    pv->bfrm_delay = FFMAX(pv->bfrm_delay, 0);
-    // let the muxer know whether to expect B-frames or not
-    job->areBframes = !!pv->bfrm_delay;
-    // check whether we need to generate DTS ourselves (MSDK API < 1.6 or VFR)
-    pv->bfrm_workaround = job->cfr != 1 || !(pv->qsv_info->capabilities &
-                                             HB_QSV_CAP_MSDK_API_1_6);
-    if (pv->bfrm_delay && pv->bfrm_workaround)
-    {
-        pv->bfrm_workaround = 1;
-        pv->list_dts        = hb_list_init();
-    }
-    else
-    {
-        pv->bfrm_workaround = 0;
-        pv->list_dts        = NULL;
+        /* the muxer needs to know to the init_delay */
+        switch (pv->qsv_info->codec_id)
+        {
+            case MFX_CODEC_AVC:
+                pv->init_delay = &w->config->h264.init_delay;
+                break;
+            default: // unreachable
+                break;
+        }
+
+        /* let the muxer know that it should expect B-frames */
+        job->areBframes = 1;
+
+        /* holds the PTS sequence in display order, used to generate DTS */
+        pv->list_dts = hb_list_init();
     }
 
     // log code path and main output settings
@@ -1275,19 +1297,311 @@ void encqsvClose(hb_work_object_t *w)
             }
             hb_list_close(&pv->delayed_chapters);
         }
+        if (pv->encoded_frames != NULL)
+        {
+            hb_buffer_t *item;
+            while ((item = hb_list_item(pv->encoded_frames, 0)) != NULL)
+            {
+                hb_list_rem(pv->encoded_frames, item);
+                hb_buffer_close(&item);
+            }
+            hb_list_close(&pv->encoded_frames);
+        }
     }
 
     free(pv);
     w->private_data = NULL;
 }
 
+static void save_chapter(hb_work_private_t *pv, hb_buffer_t *buf)
+{
+    /*
+     * Since there may be several frames buffered in the encoder, remember the
+     * timestamp so when this frame finally pops out of the encoder we'll mark
+     * its buffer as the start of a chapter.
+     */
+    if (pv->next_chapter_pts == AV_NOPTS_VALUE)
+    {
+        pv->next_chapter_pts = buf->s.start;
+    }
+
+    /*
+     * Chapter markers are sometimes so close we can get a new
+     * one before the previous goes through the encoding queue.
+     *
+     * Dropping markers can cause weird side-effects downstream,
+     * including but not limited to missing chapters in the
+     * output, so we need to save it somehow.
+     */
+    struct chapter_s *item = malloc(sizeof(struct chapter_s));
+
+    if (item != NULL)
+    {
+        item->start = buf->s.start;
+        item->index = buf->s.new_chap;
+        hb_list_add(pv->delayed_chapters, item);
+    }
+
+    /* don't let 'work_loop' put a chapter mark on the wrong buffer */
+    buf->s.new_chap = 0;
+}
+
+static void restore_chapter(hb_work_private_t *pv, hb_buffer_t *buf)
+{
+    /* we're no longer looking for this chapter */
+    pv->next_chapter_pts = AV_NOPTS_VALUE;
+
+    /* get the chapter index from the list */
+    struct chapter_s *item = hb_list_item(pv->delayed_chapters, 0);
+
+    if (item != NULL)
+    {
+        /* we're done with this chapter */
+        hb_list_rem(pv->delayed_chapters, item);
+        buf->s.new_chap = item->index;
+        free(item);
+
+        /* we may still have another pending chapter */
+        item = hb_list_item(pv->delayed_chapters, 0);
+
+        if (item != NULL)
+        {
+            /*
+             * we're looking for this chapter now
+             * we still need it, don't remove it
+             */
+            pv->next_chapter_pts = item->start;
+        }
+    }
+}
+
+static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
+{
+    if (pv->init_delay == NULL)
+    {
+        return; // not needed or already set
+    }
+
+    /*
+     * In the MP4 container, DT(0) = STTS(0) = 0.
+     *
+     * Which gives us:
+     * CT(0) = CTTS(0) + STTS(0) = CTTS(0) = PTS(0) - DTS(0)
+     * When DTS(0) < PTS(0), we then have:
+     * CT(0) > 0 for video, but not audio (breaks A/V sync).
+     *
+     * This is typically solved by writing an edit list shifting
+     * video samples by the initial delay, PTS(0) - DTS(0).
+     *
+     * See:
+     * ISO/IEC 14496-12:2008(E), ISO base media file format
+     *  - 8.6.1.2 Decoding Time to Sample Box
+     */
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6)
+    {
+        /* compute init_delay (in ticks) based on the DTS provided by MSDK. */
+        int64_t init_delay = bs->TimeStamp - bs->DecodeTimeStamp;
+
+        if (pv->job->cfr != 1)
+        {
+            /* variable frame rate video, so we need to generate our own DTS */
+            pv->bfrm_workaround = 1;
+
+            /*
+             * we also need to know the delay in frames to generate DTS.
+             *
+             * compute it based on the init_delay and average frame duration,
+             * and account for potential rounding errors due to the timebase.
+             */
+            double avg_frame_dur = ((double)pv->job->vrate_base /
+                                    (double)pv->job->vrate * 90000.);
+
+            pv->bfrm_delay = (init_delay + (avg_frame_dur / 2)) / avg_frame_dur;
+
+            if (pv->bfrm_delay < 1 || pv->bfrm_delay > BFRM_DELAY_MAX)
+            {
+                hb_log("compute_init_delay: "
+                       "invalid delay %d (PTS: %"PRIu64", DTS: %"PRId64")",
+                       pv->bfrm_delay, bs->TimeStamp, bs->DecodeTimeStamp);
+
+                /* we have B-frames, the frame delay should be at least 1 */
+                if (pv->bfrm_delay < 1)
+                {
+                    mfxStatus sts;
+                    mfxVideoParam videoParam;
+                    mfxSession session = pv->job->qsv.ctx->mfx_session;
+
+                    memset(&videoParam, 0, sizeof(mfxVideoParam));
+
+                    sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
+                    if (sts != MFX_ERR_NONE)
+                    {
+                        hb_log("compute_init_delay: "
+                               "MFXVideoENCODE_GetVideoParam failed (%d)", sts);
+                        pv->bfrm_delay = 1;
+                    }
+                    else
+                    {
+                        /* usually too large, but should cover all cases */
+                        pv->bfrm_delay = videoParam.mfx.GopRefDist - 1;
+                    }
+                }
+
+                pv->bfrm_delay = FFMIN(BFRM_DELAY_MAX, pv->bfrm_delay);
+            }
+
+            pv->init_delay[0] = pv->init_pts[pv->bfrm_delay] - pv->init_pts[0];
+        }
+        else
+        {
+            pv->init_delay[0] = init_delay;
+        }
+    }
+    else
+    {
+        /*
+         * we can't get the DTS from MSDK, so we need to generate our own.
+         *
+         * B-pyramid not possible here, so the delay in frames is always 1.
+         */
+        pv->bfrm_delay    = pv->bfrm_workaround = 1;
+        pv->init_delay[0] = pv->init_pts[1] - pv->init_pts[0];
+    }
+
+    /* The delay only needs to be set once. */
+    pv->init_delay = NULL;
+}
+
+static int qsv_frame_is_key(mfxU16 FrameType)
+{
+    return ((FrameType  & MFX_FRAMETYPE_IDR) ||
+            (FrameType == MFX_FRAMETYPE_UNKNOWN));
+}
+
+static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
+{
+    /* allocate additional data for parse_nalus */
+    hb_buffer_t *buf = hb_buffer_init(bs->DataLength * 2);
+    if (buf == NULL)
+    {
+        hb_error("encqsv: hb_buffer_init failed");
+        goto fail;
+    }
+    buf->size = 0;
+
+    /*
+     * we need to convert the encoder's Annex B output
+     * to an MP4-compatible format (ISO/IEC 14496-15).
+     */
+    parse_nalus(bs->Data + bs->DataOffset, bs->DataLength, buf);
+    bs->DataLength = bs->DataOffset = 0;
+    bs->MaxLength  = pv->job->qsv.ctx->enc_space->p_buf_max_size;
+
+    buf->s.frametype = hb_qsv_frametype_xlat(bs->FrameType, &buf->s.flags);
+    buf->s.start     = buf->s.renderOffset = bs->TimeStamp;
+    buf->s.stop      = buf->s.start + get_frame_duration(pv, buf);
+    buf->s.duration  = buf->s.stop  - buf->s.start;
+
+    /* compute the init_delay before setting the DTS */
+    compute_init_delay(pv, bs);
+
+    /*
+     * Generate VFR-compatible output DTS based on input PTS.
+     *
+     * Depends on the B-frame delay:
+     *
+     * 0: ipts0,  ipts1, ipts2...
+     * 1: ipts0 - ipts1, ipts1 - ipts1, ipts1,  ipts2...
+     * 2: ipts0 - ipts2, ipts1 - ipts2, ipts2 - ipts2, ipts1...
+     * ...and so on.
+     */
+    if (pv->bfrm_delay)
+    {
+        if (pv->frames_out <= pv->bfrm_delay)
+        {
+            buf->s.renderOffset = (pv->init_pts[pv->frames_out] -
+                                   pv->init_pts[pv->bfrm_delay]);
+        }
+        else
+        {
+            buf->s.renderOffset = hb_qsv_pop_next_dts(pv->list_dts);
+        }
+
+        /* if the DTS provided by MSDK is trustworthy, use it */
+        if (!pv->bfrm_workaround)
+        {
+            buf->s.renderOffset = bs->DecodeTimeStamp;
+        }
+    }
+
+    /* check if B-pyramid is used even though it's disabled */
+    if ((pv->param.gop.b_pyramid == 0)    &&
+        (bs->FrameType & MFX_FRAMETYPE_B) &&
+        (bs->FrameType & MFX_FRAMETYPE_REF))
+    {
+        hb_log("encqsv: BPyramid off not respected (delay: %d)",
+               pv->bfrm_delay);
+
+        /* don't pollute the log unnecessarily */
+        pv->param.gop.b_pyramid = 1;
+    }
+
+    /* check for PTS < DTS */
+    if (buf->s.start < buf->s.renderOffset)
+    {
+        hb_log("encqsv: PTS %"PRId64" < DTS %"PRId64" for "
+               "frame %d with type '%s' (bfrm_workaround: %d)",
+               buf->s.start, buf->s.renderOffset, pv->frames_out + 1,
+               hb_qsv_frametype_name(bs->FrameType), pv->bfrm_workaround);
+    }
+
+    /*
+     * If we have a chapter marker pending and this frame's PTS
+     * is at or after the marker's PTS, use it as the chapter start.
+     */
+    if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
+        pv->next_chapter_pts <= buf->s.start   &&
+        qsv_frame_is_key(bs->FrameType))
+    {
+        restore_chapter(pv, buf);
+    }
+
+    hb_list_add(pv->encoded_frames, buf);
+    pv->frames_out++;
+    return;
+
+fail:
+    *pv->job->done_error = HB_ERROR_UNKNOWN;
+    *pv->job->die        = 1;
+}
+
+static hb_buffer_t* link_buffer_list(hb_list_t *list)
+{
+    hb_buffer_t *buf, *prev = NULL, *out = NULL;
+
+    while ((buf = hb_list_item(list, 0)) != NULL)
+    {
+        hb_list_rem(list, buf);
+
+        if (prev == NULL)
+        {
+            prev = out = buf;
+        }
+        else
+        {
+            prev->next = buf;
+            prev       = buf;
+        }
+    }
+
+    return out;
+}
+
 int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 {
     hb_work_private_t *pv = w->private_data;
-    hb_job_t *job = pv->job;
-    hb_buffer_t *in = *buf_in;
-    hb_buffer_t *buf, *last_buf = NULL;
-    mfxStatus sts = MFX_ERR_NONE;
+    hb_buffer_t *in       = *buf_in;
+    hb_job_t *job         = pv->job;
 
     while (qsv_enc_init(pv) >= 2)
     {
@@ -1341,62 +1655,35 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
             av_qsv_dts_pop(qsv);
         }
 
-        work_surface->Data.TimeStamp = in->s.start;
-
         /*
          * Debugging code to check that the upstream modules have generated
          * a continuous, self-consistent frame stream.
          */
-        int64_t start = work_surface->Data.TimeStamp;
-        if (pv->last_start > start)
+        if (pv->last_start > in->s.start)
         {
-            hb_log("encqsv: input continuity error, last start %"PRId64" start %"PRId64"",
-                   pv->last_start, start);
+            hb_log("encqsv: input continuity error, "
+                   "last start %"PRId64" start %"PRId64"",
+                   pv->last_start, in->s.start);
         }
-        pv->last_start = start;
+        pv->last_start = in->s.start;
 
         /* for DTS generation (when MSDK API < 1.6 or VFR) */
-        if (pv->bfrm_delay && pv->bfrm_workaround)
+        if (pv->frames_in <= BFRM_DELAY_MAX)
         {
-            if (pv->frames_in <= BFRM_DELAY_MAX)
-            {
-                pv->init_pts[pv->frames_in] = work_surface->Data.TimeStamp;
-            }
-            if (pv->frames_in)
-            {
-                hb_qsv_add_new_dts(pv->list_dts,
-                                   work_surface->Data.TimeStamp);
-            }
+            pv->init_pts[pv->frames_in] = in->s.start;
+        }
+        if (pv->frames_in)
+        {
+            hb_qsv_add_new_dts(pv->list_dts, in->s.start);
         }
         pv->frames_in++;
 
         if (in->s.new_chap > 0 && job->chapter_markers)
         {
-            if (pv->next_chapter_pts == AV_NOPTS_VALUE)
-            {
-                pv->next_chapter_pts = work_surface->Data.TimeStamp;
-            }
+            save_chapter(pv, in);
 
             /* Chapters have to start with a keyframe, so request an IDR */
             work_control = &pv->force_keyframe;
-
-            /*
-             * Chapter markers are sometimes so close we can get a new
-             * one before the previous goes through the encoding queue.
-             *
-             * Dropping markers can cause weird side-effects downstream,
-             * including but not limited to missing chapters in the
-             * output, so we need to save it somehow.
-             */
-            struct chapter_s *item = malloc(sizeof(struct chapter_s));
-            if (item != NULL)
-            {
-                item->index = in->s.new_chap;
-                item->start = work_surface->Data.TimeStamp;
-                hb_list_add(pv->delayed_chapters, item);
-            }
-            /* don't let 'work_loop' put a chapter mark on the wrong buffer */
-            in->s.new_chap = 0;
         }
 
         /*
@@ -1408,8 +1695,12 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
          * progressive-flagged source using interlaced compression - he may
          * well have a good reason to do so; mis-flagged sources do exist).
          */
-        work_surface->Info.PicStruct = pv->enc_space.m_mfxVideoParam.mfx.FrameInfo.PicStruct;
+        work_surface->Info.PicStruct = pv->param.videoParam->mfx.FrameInfo.PicStruct;
+        work_surface->Data.TimeStamp = in->s.start;
+        save_frame_duration(pv, in);
     }
+
+    mfxStatus sts;
 
     do
     {
@@ -1496,8 +1787,6 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         }
         while (sts >= MFX_ERR_NONE);
 
-        buf = NULL;
-
         do
         {
             if (pv->async_depth == 0) break;
@@ -1516,143 +1805,8 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
                     av_qsv_list *pipe = av_qsv_pipe_by_stage(qsv->pipes, task->stage);
                     av_qsv_flush_stages(qsv->pipes, &pipe);
 
-                    /* allocate additional data for parse_nalus */
-                    buf = hb_buffer_init(task->bs->DataLength * 2);
-                    buf->size = 0;
-
-                    /*
-                     * we need to convert the encoder's Annex B output
-                     * to an MP4-compatible format (ISO/IEC 14496-15).
-                     */
-                    parse_nalus(task->bs->Data + task->bs->DataOffset,
-                                task->bs->DataLength, buf);
-                    task->bs->DataLength = task->bs->DataOffset = 0;
-                    task->bs->MaxLength  = qsv_encode->p_buf_max_size;
-
-                    /* frame duration (based on average frame rate) */
-                    int64_t duration  = ((double)job->vrate_base /
-                                         (double)job->vrate * 90000.);
-
-                    buf->s.frametype = hb_qsv_frametype_xlat(task->bs->FrameType, &buf->s.flags);
-                    buf->s.start     = buf->s.renderOffset = task->bs->TimeStamp;
-                    buf->s.stop      = buf->s.start + duration;
-                    buf->s.duration  = duration;
-
-                    if (pv->bfrm_delay)
-                    {
-                        if ((pv->frames_out == 0)                                  &&
-                            (pv->qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6) &&
-                            (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID))
-                        {
-                            // with B-pyramid, the delay may be more than 1 frame,
-                            // so compute the actual delay based on the initial DTS
-                            // provided by MSDK; also, account for rounding errors
-                            // (e.g. 24000/1001 fps @ 90kHz -> 3753.75 ticks/frame)
-                            pv->bfrm_delay = HB_QSV_CLIP3(1, BFRM_DELAY_MAX,
-                                                          ((task->bs->TimeStamp -
-                                                            task->bs->DecodeTimeStamp +
-                                                            (duration / 2)) / duration));
-                        }
-
-                        if (!pv->bfrm_workaround)
-                        {
-                            buf->s.renderOffset = task->bs->DecodeTimeStamp;
-                        }
-                        else
-                        {
-                            /*
-                             * MSDK API < 1.6 or VFR
-                             *
-                             * Generate VFR-compatible output DTS based on input PTS.
-                             *
-                             * Depends on the B-frame delay:
-                             *
-                             * 0: ipts0,  ipts1, ipts2...
-                             * 1: ipts0 - ipts1, ipts1 - ipts1, ipts1,  ipts2...
-                             * 2: ipts0 - ipts2, ipts1 - ipts2, ipts2 - ipts2, ipts1...
-                             * ...and so on.
-                             */
-                            if (pv->frames_out <= pv->bfrm_delay)
-                            {
-                                buf->s.renderOffset = (pv->init_pts[pv->frames_out] -
-                                                       pv->init_pts[pv->bfrm_delay]);
-                            }
-                            else
-                            {
-                                buf->s.renderOffset = hb_qsv_pop_next_dts(pv->list_dts);
-                            }
-                        }
-
-                        // check whether B-pyramid is used even though it's disabled
-                        if ((pv->param.gop.b_pyramid == 0)          &&
-                            (task->bs->FrameType & MFX_FRAMETYPE_B) &&
-                            (task->bs->FrameType & MFX_FRAMETYPE_REF))
-                        {
-                            hb_log("encqsv: BPyramid off not respected (delay: %d)",
-                                   pv->bfrm_delay);
-                        }
-
-                        // check for PTS < DTS
-                        if (buf->s.start < buf->s.renderOffset)
-                        {
-                            hb_log("encqsv: PTS %"PRId64" < DTS %"PRId64" for frame %d with type '%s' (bfrm_workaround: %d)",
-                                   buf->s.start, buf->s.renderOffset, pv->frames_out + 1,
-                                   hb_qsv_frametype_name(task->bs->FrameType),
-                                   pv->bfrm_workaround);
-                        }
-
-                        /*
-                         * In the MP4 container, DT(0) = STTS(0) = 0.
-                         *
-                         * Which gives us:
-                         * CT(0) = CTTS(0) + STTS(0) = CTTS(0) = PTS(0) - DTS(0)
-                         * When DTS(0) < PTS(0), we then have:
-                         * CT(0) > 0 for video, but not audio (breaks A/V sync).
-                         *
-                         * This is typically solved by writing an edit list shifting
-                         * video samples by the initial delay, PTS(0) - DTS(0).
-                         *
-                         * See:
-                         * ISO/IEC 14496-12:2008(E), ISO base media file format
-                         *  - 8.6.1.2 Decoding Time to Sample Box
-                         */
-                        if (w->config->h264.init_delay == 0 && buf->s.renderOffset < 0)
-                        {
-                            w->config->h264.init_delay = -buf->s.renderOffset;
-                        }
-                    }
-
-                    /*
-                     * If we have a chapter marker pending and this frame's
-                     * presentation time stamp is at or after the marker's time stamp,
-                     * use this as the chapter start.
-                     */
-                    if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
-                        pv->next_chapter_pts <= buf->s.start   &&
-                        (task->bs->FrameType & MFX_FRAMETYPE_IDR))
-                    {
-                        // we're no longer looking for this chapter
-                        pv->next_chapter_pts = AV_NOPTS_VALUE;
-
-                        // get the chapter index from the list
-                        struct chapter_s *item = hb_list_item(pv->delayed_chapters, 0);
-                        if (item != NULL)
-                        {
-                            // we're done with this chapter
-                            buf->s.new_chap = item->index;
-                            hb_list_rem(pv->delayed_chapters, item);
-                            free(item);
-
-                            // we may still have another pending chapter
-                            item = hb_list_item(pv->delayed_chapters, 0);
-                            if (item != NULL)
-                            {
-                                // we're looking for this one now
-                                // we still need it, don't remove it
-                                pv->next_chapter_pts = item->start;
-                            }
-                        }
-                    }
+                    /* get the encoded frame from the bitstream */
+                    qsv_bitstream_slurp(pv, task->bs);
 
                     /* shift for fifo */
                     if (pv->async_depth)
@@ -1661,17 +1815,6 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
                         av_qsv_list_add(qsv_encode->tasks, task);
                     }
                     task->stage = NULL;
-
-                    if (last_buf == NULL)
-                    {
-                        *buf_out = last_buf = buf;
-                    }
-                    else
-                    {
-                        last_buf->next = buf;
-                        last_buf       = buf;
-                    }
-                    pv->frames_out++;
                 }
             }
         }
@@ -1681,18 +1824,13 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 
     if (work_surface == NULL)
     {
-        if (last_buf != NULL)
-        {
-            last_buf->next = in;
-        }
-        else
-        {
-            *buf_out = in;
-        }
+        hb_list_add(pv->encoded_frames, in);
+        *buf_out = link_buffer_list(pv->encoded_frames);
         return HB_WORK_DONE;
     }
     else
     {
+        *buf_out = link_buffer_list(pv->encoded_frames);
         return HB_WORK_OK;
     }
 
