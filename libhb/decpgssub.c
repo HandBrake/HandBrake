@@ -379,7 +379,8 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     out->sequence = in->sequence;
                 }
                 out->s.renderOffset = AV_NOPTS_VALUE;
-                out->s.start = out->s.stop = pts;
+                out->s.stop         = AV_NOPTS_VALUE;
+                out->s.start        = pts;
             }
             else
             {
@@ -393,13 +394,14 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         out = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P,
                                                    rect->w, rect->h);
 
-                        out->s.frametype = HB_FRAME_SUBTITLE;
-                        out->s.id     = in->s.id;
-                        out->sequence = in->sequence;
-                        out->s.start  = pts;
-                        out->s.stop   = pts;
-                        out->f.x      = rect->x;
-                        out->f.y      = rect->y;
+                        out->s.frametype    = HB_FRAME_SUBTITLE;
+                        out->s.id           = in->s.id;
+                        out->sequence       = in->sequence;
+                        out->s.start        = pts;
+                        out->s.stop         = AV_NOPTS_VALUE;
+                        out->s.renderOffset = AV_NOPTS_VALUE;
+                        out->f.x            = rect->x;
+                        out->f.y            = rect->y;
 
                         uint8_t *lum     = out->plane[0].data;
                         uint8_t *chromaU = out->plane[1].data;

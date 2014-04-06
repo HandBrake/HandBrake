@@ -220,7 +220,11 @@ static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i )
         // Merge overlapping subtitles since mpv tx3g does not support them
         sync->subtitle_sanitizer[i].merge = 1;
     }
-    if (subtitle->config.dest == PASSTHRUSUB)
+    // PGS subtitles don't need to be linked because there are explicit
+    // "clear" subtitle packets that indicate the end time of the
+    // previous subtitle
+    if (subtitle->config.dest == PASSTHRUSUB &&
+        subtitle->source != PGSSUB)
     {
         // Fill in stop time when it is missing
         sync->subtitle_sanitizer[i].link = 1;
@@ -320,7 +324,7 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
         {
             b = a->next;
 
-            if (b != NULL && !sanitizer->merge)
+            if (!sanitizer->merge)
             {
                 sanitizer->list_current = a->next;
                 if (sanitizer->list_current == NULL)
@@ -406,6 +410,18 @@ static hb_buffer_t * sanitizeSubtitle(
 
     if (!sanitizer->link && !sanitizer->merge)
     {
+        if (sub != NULL)
+        {
+            if (sub->s.stop != AV_NOPTS_VALUE)
+                sub->s.duration = sub->s.stop - sub->s.start;
+            else
+                sub->s.duration = 0;
+            sub->s.start -= pv->common->video_pts_slip;
+            if (sub->s.stop != AV_NOPTS_VALUE)
+                sub->s.stop -= pv->common->video_pts_slip;
+            if (sub->s.renderOffset != AV_NOPTS_VALUE)
+                sub->s.renderOffset -= pv->common->video_pts_slip;
+        }
         return sub;
     }
 
