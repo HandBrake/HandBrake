@@ -830,16 +830,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             gop_ref_dist *= 2;
         }
-        /*
-         * XXX: B-pyramid + forced keyframes will cause visual artifacts,
-         *      force-disable B-pyramid until we insert keyframes properly
-         */
-        if (pv->param.gop.b_pyramid && job->chapter_markers)
-        {
-            pv->param.gop.b_pyramid = 0;
-            hb_log("encqsvInit: chapter markers enabled, disabling B-pyramid "
-                   "to work around a bug in our keyframe insertion code");
-        }
         if ((pv->param.gop.b_pyramid) &&
             (pv->param.videoParam->mfx.GopPicSize == 0 ||
              pv->param.videoParam->mfx.GopPicSize > gop_ref_dist))
@@ -1813,12 +1803,46 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     }
     pv->frames_in++;
 
+    /*
+     * Chapters have to start with a keyframe, so request one here.
+     *
+     * Using an mfxEncodeCtrl structure to force key frame generation is not
+     * possible when using a lookahead and frame reordering, so instead do
+     * the following before encoding the frame attached to the chapter:
+     *
+     * - flush the encoder to encode and retrieve any buffered frames
+     *
+     * - do a hard reset (MFXVideoENCODE_Close, then Init) of
+     *   the encoder to make sure the next frame is a keyframe
+     *
+     * The hard reset ensures encoding resumes with a clean state, avoiding
+     * miscellaneous hard-to-disagnose issues that may occur when resuming
+     * an encode after flushing the encoder or using MFXVideoENCODE_Reset.
+     */
     if (in->s.new_chap > 0 && job->chapter_markers)
     {
-        save_chapter(pv, in);
+        mfxStatus sts;
 
-        /* Chapters have to start with a keyframe, so request an IDR */
-        ctrl = &pv->force_keyframe;
+        if (encode_loop(pv, NULL, NULL) < 0)
+        {
+            goto fail;
+        }
+
+        sts = MFXVideoENCODE_Close(qsv_ctx->mfx_session);
+        if (sts != MFX_ERR_NONE)
+        {
+            hb_error("encqsv: MFXVideoENCODE_Close failed (%d)", sts);
+            goto fail;
+        }
+
+        sts = MFXVideoENCODE_Init(qsv_ctx->mfx_session, pv->param.videoParam);
+        if (sts < MFX_ERR_NONE)
+        {
+            hb_error("encqsv: MFXVideoENCODE_Init failed (%d)", sts);
+            goto fail;
+        }
+
+        save_chapter(pv, in);
     }
 
     /*
