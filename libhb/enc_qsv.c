@@ -29,6 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef USE_QSV
 
 #include "hb.h"
+#include "nal_units.h"
 #include "qsv_common.h"
 #include "qsv_memory.h"
 #include "h264_common.h"
@@ -49,9 +50,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define FRAME_INFO_MIN2 (17) // 2^17 = 128K; 90000/131072 = 0.7 frames/sec
 #define FRAME_INFO_SIZE (1 << (FRAME_INFO_MIN2 - FRAME_INFO_MAX2 + 1))
 #define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
-
-int  nal_find_start_code(uint8_t**, size_t*);
-void parse_nalus        (uint8_t*,  size_t, hb_buffer_t*);
 
 int  encqsvInit (hb_work_object_t*, hb_job_t*);
 int  encqsvWork (hb_work_object_t*, hb_buffer_t**, hb_buffer_t**);
@@ -1461,20 +1459,17 @@ static int qsv_frame_is_key(mfxU16 FrameType)
 
 static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
 {
-    /* allocate additional data for parse_nalus */
-    hb_buffer_t *buf = hb_buffer_init(bs->DataLength * 2);
-    if (buf == NULL)
-    {
-        hb_error("encqsv: hb_buffer_init failed");
-        goto fail;
-    }
-    buf->size = 0;
-
     /*
      * we need to convert the encoder's Annex B output
      * to an MP4-compatible format (ISO/IEC 14496-15).
      */
-    parse_nalus(bs->Data + bs->DataOffset, bs->DataLength, buf);
+    hb_buffer_t *buf = hb_nal_bitstream_annexb_to_mp4(bs->Data + bs->DataOffset,
+                                                      bs->DataLength);
+    if (buf == NULL)
+    {
+        hb_error("encqsv: hb_nal_bitstream_annexb_to_mp4 failed");
+        goto fail;
+    }
     bs->DataLength = bs->DataOffset = 0;
     bs->MaxLength  = pv->job->qsv.ctx->enc_space->p_buf_max_size;
 
@@ -1868,82 +1863,6 @@ fail:
     *job->die = 1;
     *buf_out  = NULL;
     return HB_WORK_ERROR;
-}
-
-int nal_find_start_code(uint8_t **pb, size_t *size)
-{
-    if ((int)*size < 4)
-    {
-        return 0;
-    }
-
-    // find start code by MSDK, see ff_prefix_code[]
-    while ((4 <= *size) && ((*pb)[0] || (*pb)[1] || (*pb)[2] != 1))
-    {
-        *pb   += 1;
-        *size -= 1;
-    }
-
-    if (4 <= *size)
-    {
-        return (((*pb)[0] << 24) |
-                ((*pb)[1] << 16) |
-                ((*pb)[2] <<  8) |
-                ((*pb)[3]));
-    }
-
-    return 0;
-}
-
-void parse_nalus(uint8_t *nal_inits, size_t length, hb_buffer_t *buf)
-{
-    uint8_t *offset = nal_inits;
-    size_t   size   = length;
-
-    if (!nal_find_start_code(&offset, &size))
-    {
-        size = 0;
-    }
-
-    while (size > 0)
-    {
-        uint8_t *current_nal  = offset + sizeof(ff_prefix_code) - 1;
-        size_t   current_size = size   - sizeof(ff_prefix_code);
-        uint8_t *next_offset  = current_nal + 1;
-        size_t   next_size    = current_size;
-
-        if (!nal_find_start_code(&next_offset, &next_size))
-        {
-            size          = 0;
-            current_size += 1;
-        }
-        else
-        {
-            if (next_offset > 0 && *(next_offset - 1))
-            {
-                current_size += 1;
-            }
-            current_size -= next_size;
-        }
-
-        char size_position[4];
-        size_position[1] = (current_size >> 24) & 0xFF;
-        size_position[1] = (current_size >> 16) & 0xFF;
-        size_position[2] = (current_size >>  8) & 0xFF;
-        size_position[3] = (current_size      ) & 0xFF;
-
-        memcpy(buf->data + buf->size, &size_position, sizeof(size_position));
-        buf->size += sizeof(size_position);
-
-        memcpy(buf->data + buf->size, current_nal, current_size);
-        buf->size += current_size;
-
-        if (size)
-        {
-            size   = next_size;
-            offset = next_offset;
-        }
-    }
 }
 
 #endif // USE_QSV
