@@ -1001,7 +1001,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* check whether B-frames are used */
-    if (videoParam.mfx.GopRefDist > 1 && videoParam.mfx.GopPicSize > 2)
+    int bframes = videoParam.mfx.GopRefDist > 1 && videoParam.mfx.GopPicSize > 2;
+    if (bframes)
     {
         /* the muxer needs to know to the init_delay */
         switch (pv->qsv_info->codec_id)
@@ -1030,16 +1031,16 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
     {
         hb_log("encqsvInit: BFrames %s BPyramid %s",
-               pv->bfrm_delay                            ? "on" : "off",
-               pv->bfrm_delay && pv->param.gop.b_pyramid ? "on" : "off");
+               bframes                            ? "on" : "off",
+               bframes && pv->param.gop.b_pyramid ? "on" : "off");
     }
     else
     {
-        hb_log("encqsvInit: BFrames %s", pv->bfrm_delay ? "on" : "off");
+        hb_log("encqsvInit: BFrames %s", bframes ? "on" : "off");
     }
     if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_IB_ADAPT)
     {
-        if (pv->bfrm_delay > 0)
+        if (bframes)
         {
             hb_log("encqsvInit: AdaptiveI %s AdaptiveB %s",
                    hb_qsv_codingoption_get_name(option2->AdaptiveI),
@@ -1515,8 +1516,7 @@ static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
         (bs->FrameType & MFX_FRAMETYPE_B) &&
         (bs->FrameType & MFX_FRAMETYPE_REF))
     {
-        hb_log("encqsv: BPyramid off not respected (delay: %d)",
-               pv->bfrm_delay);
+        hb_log("encqsv: BPyramid off not respected (delay: %d)", pv->bfrm_delay);
 
         /* don't pollute the log unnecessarily */
         pv->param.gop.b_pyramid = 1;
