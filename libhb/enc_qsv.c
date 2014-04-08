@@ -79,10 +79,8 @@ struct hb_work_private_s
     int64_t next_chapter_pts;
 
 #define BFRM_DELAY_MAX 16
-    // for DTS generation (when MSDK API < 1.6 or VFR)
     uint32_t      *init_delay;
     int            bfrm_delay;
-    int            bfrm_workaround;
     int64_t        init_pts[BFRM_DELAY_MAX + 1];
     hb_list_t     *list_dts;
 
@@ -113,7 +111,6 @@ struct chapter_s
     int64_t start;
 };
 
-// for DTS generation (when MSDK API < 1.6 or VFR)
 static void hb_qsv_add_new_dts(hb_list_t *list, int64_t new_dts)
 {
     if (list != NULL)
@@ -126,6 +123,7 @@ static void hb_qsv_add_new_dts(hb_list_t *list, int64_t new_dts)
         }
     }
 }
+
 static int64_t hb_qsv_pop_next_dts(hb_list_t *list)
 {
     int64_t next_dts = INT64_MIN;
@@ -1382,60 +1380,51 @@ static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
         /* compute init_delay (in ticks) based on the DTS provided by MSDK. */
         int64_t init_delay = bs->TimeStamp - bs->DecodeTimeStamp;
 
-        if (pv->job->cfr != 1)
+        /*
+         * we also need to know the delay in frames to generate DTS.
+         *
+         * compute it based on the init_delay and average frame duration,
+         * and account for potential rounding errors due to the timebase.
+         */
+        double avg_frame_dur = ((double)pv->job->vrate_base /
+                                (double)pv->job->vrate * 90000.);
+
+        pv->bfrm_delay = (init_delay + (avg_frame_dur / 2)) / avg_frame_dur;
+
+        if (pv->bfrm_delay < 1 || pv->bfrm_delay > BFRM_DELAY_MAX)
         {
-            /* variable frame rate video, so we need to generate our own DTS */
-            pv->bfrm_workaround = 1;
+            hb_log("compute_init_delay: "
+                   "invalid delay %d (PTS: %"PRIu64", DTS: %"PRId64")",
+                   pv->bfrm_delay, bs->TimeStamp, bs->DecodeTimeStamp);
 
-            /*
-             * we also need to know the delay in frames to generate DTS.
-             *
-             * compute it based on the init_delay and average frame duration,
-             * and account for potential rounding errors due to the timebase.
-             */
-            double avg_frame_dur = ((double)pv->job->vrate_base /
-                                    (double)pv->job->vrate * 90000.);
-
-            pv->bfrm_delay = (init_delay + (avg_frame_dur / 2)) / avg_frame_dur;
-
-            if (pv->bfrm_delay < 1 || pv->bfrm_delay > BFRM_DELAY_MAX)
+            /* we have B-frames, the frame delay should be at least 1 */
+            if (pv->bfrm_delay < 1)
             {
-                hb_log("compute_init_delay: "
-                       "invalid delay %d (PTS: %"PRIu64", DTS: %"PRId64")",
-                       pv->bfrm_delay, bs->TimeStamp, bs->DecodeTimeStamp);
+                mfxStatus sts;
+                mfxVideoParam videoParam;
+                mfxSession session = pv->job->qsv.ctx->mfx_session;
 
-                /* we have B-frames, the frame delay should be at least 1 */
-                if (pv->bfrm_delay < 1)
+                memset(&videoParam, 0, sizeof(mfxVideoParam));
+
+                sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
+                if (sts != MFX_ERR_NONE)
                 {
-                    mfxStatus sts;
-                    mfxVideoParam videoParam;
-                    mfxSession session = pv->job->qsv.ctx->mfx_session;
-
-                    memset(&videoParam, 0, sizeof(mfxVideoParam));
-
-                    sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
-                    if (sts != MFX_ERR_NONE)
-                    {
-                        hb_log("compute_init_delay: "
-                               "MFXVideoENCODE_GetVideoParam failed (%d)", sts);
-                        pv->bfrm_delay = 1;
-                    }
-                    else
-                    {
-                        /* usually too large, but should cover all cases */
-                        pv->bfrm_delay = videoParam.mfx.GopRefDist - 1;
-                    }
+                    hb_log("compute_init_delay: "
+                           "MFXVideoENCODE_GetVideoParam failed (%d)", sts);
+                    pv->bfrm_delay = 1;
                 }
-
-                pv->bfrm_delay = FFMIN(BFRM_DELAY_MAX, pv->bfrm_delay);
+                else
+                {
+                    /* usually too large, but should cover all cases */
+                    pv->bfrm_delay = FFMIN(pv->frames_in             - 1,
+                                           videoParam.mfx.GopRefDist - 1);
+                }
             }
 
-            pv->init_delay[0] = pv->init_pts[pv->bfrm_delay] - pv->init_pts[0];
+            pv->bfrm_delay = FFMIN(BFRM_DELAY_MAX, pv->bfrm_delay);
         }
-        else
-        {
-            pv->init_delay[0] = init_delay;
-        }
+
+        pv->init_delay[0] = pv->init_pts[pv->bfrm_delay] - pv->init_pts[0];
     }
     else
     {
@@ -1444,7 +1433,7 @@ static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
          *
          * B-pyramid not possible here, so the delay in frames is always 1.
          */
-        pv->bfrm_delay    = pv->bfrm_workaround = 1;
+        pv->bfrm_delay    = 1;
         pv->init_delay[0] = pv->init_pts[1] - pv->init_pts[0];
     }
 
@@ -1503,12 +1492,6 @@ static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
         {
             buf->s.renderOffset = hb_qsv_pop_next_dts(pv->list_dts);
         }
-
-        /* if the DTS provided by MSDK is trustworthy, use it */
-        if (!pv->bfrm_workaround)
-        {
-            buf->s.renderOffset = bs->DecodeTimeStamp;
-        }
     }
 
     /* check if B-pyramid is used even though it's disabled */
@@ -1525,10 +1508,9 @@ static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
     /* check for PTS < DTS */
     if (buf->s.start < buf->s.renderOffset)
     {
-        hb_log("encqsv: PTS %"PRId64" < DTS %"PRId64" for "
-               "frame %d with type '%s' (bfrm_workaround: %d)",
+        hb_log("encqsv: PTS %"PRId64" < DTS %"PRId64" for frame %d with type '%s'",
                buf->s.start, buf->s.renderOffset, pv->frames_out + 1,
-               hb_qsv_frametype_name(bs->FrameType), pv->bfrm_workaround);
+               hb_qsv_frametype_name(bs->FrameType));
     }
 
     /*
@@ -1778,7 +1760,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     }
     pv->last_start = in->s.start;
 
-    /* for DTS generation (when MSDK API < 1.6 or VFR) */
+    /* for DTS generation */
     if (pv->frames_in <= BFRM_DELAY_MAX)
     {
         pv->init_pts[pv->frames_in] = in->s.start;
