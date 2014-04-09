@@ -653,6 +653,7 @@ static int textsub_work(hb_filter_object_t * filter,
     {
         switch (pv->type)
         {
+            case CC608SUB:
             case SRTSUB:
             case UTF8SUB:
             case TX3GSUB:
@@ -1043,6 +1044,7 @@ static void srt_to_ssa(hb_buffer_t *sub_in)
     // Exchange data between input sub and new ssa_sub
     // After this, sub_in contains ssa data
     hb_buffer_swap_copy(sub_in, sub);
+    ssa = (char*)sub_in->data;
     pos = 0;
     ii = 0;
     while (srt[ii] != '\0')
