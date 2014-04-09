@@ -96,6 +96,7 @@ static char ** srtcodeset  = NULL;
 static char ** srtoffset   = NULL;
 static char ** srtlang     = NULL;
 static int     srtdefault  = -1;
+static int     srtburn     = -1;
 static int    subtitle_scan = 0;
 static int    width       = 0;
 static int    height      = 0;
@@ -2744,16 +2745,6 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
-            if ( sub_burned )
-            {
-                char * filter_str;
-                filter_str = hb_strdup_printf("%d:%d:%d:%d",
-                    job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
-                filter = hb_filter_init( HB_FILTER_RENDER_SUB );
-                hb_add_filter( job, filter, filter_str);
-                free( filter_str );
-            }
-
             if( srtfile )
             {
                 int i;
@@ -2765,6 +2756,23 @@ static int HandleEvents( hb_handle_t * h )
                     int64_t offset = 0;
                     char *lang = "und";
 
+                    if (srtburn == i + 1 && hb_subtitle_can_burn(SRTSUB))
+                    {
+                        // Only allow one subtitle to be burned into video
+                        if ( sub_burned )
+                        {
+                            fprintf( stderr, "Warning: Skipping SRT track %d, can't have more than one track burnt in\n", i+1 );
+                            continue;
+                        }
+                        sub_burned = 1;
+
+                        // Mark as burn-in
+                        sub_config.dest = RENDERSUB;
+                    }
+                    else
+                    {
+                        sub_config.dest = PASSTHRUSUB;
+                    }
                     if( srtcodeset && srtcodeset[i] )
                     {
                         codeset = srtcodeset[i];
@@ -2777,8 +2785,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         lang = srtlang[i];
                     }
-                    sub_config.default_track = 
-                           ( srtdefault != -1 ) && ( srtdefault == i + 1 );
+                    sub_config.default_track = srtdefault == i + 1;
                     sub_config.force = 0;
                     strncpy( sub_config.src_filename, srtfile[i], 255);
                     sub_config.src_filename[255] = 0;
@@ -2788,6 +2795,16 @@ static int HandleEvents( hb_handle_t * h )
 
                     hb_srt_add( job, &sub_config, lang);
                 }
+            }
+
+            if ( sub_burned )
+            {
+                char * filter_str;
+                filter_str = hb_strdup_printf("%d:%d:%d:%d",
+                    job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+                filter = hb_filter_init( HB_FILTER_RENDER_SUB );
+                hb_add_filter( job, filter, filter_str);
+                free( filter_str );
             }
 
             if( native_language )
@@ -3631,28 +3648,29 @@ static int ParseOptions( int argc, char ** argv )
     #define SRT_OFFSET           272
     #define SRT_LANG             273
     #define SRT_DEFAULT          274
-    #define ROTATE_FILTER        275
-    #define SCAN_ONLY            276
-    #define MAIN_FEATURE         277
-    #define MIN_DURATION         278
-    #define AUDIO_GAIN           279
-    #define ALLOWED_AUDIO_COPY   280
-    #define AUDIO_FALLBACK       281
-    #define LOOSE_CROP           282
-    #define ENCODER_PRESET       283
-    #define ENCODER_PRESET_LIST  284
-    #define ENCODER_TUNE         285
-    #define ENCODER_TUNE_LIST    286
-    #define ENCODER_PROFILE      287
-    #define ENCODER_PROFILE_LIST 288
-    #define ENCODER_LEVEL        289
-    #define ENCODER_LEVEL_LIST   290
-    #define NO_OPENCL            291
-    #define NORMALIZE_MIX        292
-    #define AUDIO_DITHER         293
-    #define QSV_BASELINE         294
-    #define QSV_ASYNC_DEPTH      295
-    #define QSV_IMPLEMENTATION   296
+    #define SRT_BURN             275
+    #define ROTATE_FILTER        276
+    #define SCAN_ONLY            277
+    #define MAIN_FEATURE         278
+    #define MIN_DURATION         279
+    #define AUDIO_GAIN           280
+    #define ALLOWED_AUDIO_COPY   281
+    #define AUDIO_FALLBACK       282
+    #define LOOSE_CROP           283
+    #define ENCODER_PRESET       284
+    #define ENCODER_PRESET_LIST  285
+    #define ENCODER_TUNE         286
+    #define ENCODER_TUNE_LIST    287
+    #define ENCODER_PROFILE      288
+    #define ENCODER_PROFILE_LIST 289
+    #define ENCODER_LEVEL        290
+    #define ENCODER_LEVEL_LIST   291
+    #define NO_OPENCL            292
+    #define NORMALIZE_MIX        293
+    #define AUDIO_DITHER         294
+    #define QSV_BASELINE         295
+    #define QSV_ASYNC_DEPTH      296
+    #define QSV_IMPLEMENTATION   297
 
     for( ;; )
     {
@@ -3701,7 +3719,8 @@ static int ParseOptions( int argc, char ** argv )
             { "srt-codeset", required_argument, NULL, SRT_CODESET },
             { "srt-offset",  required_argument, NULL, SRT_OFFSET },
             { "srt-lang",    required_argument, NULL, SRT_LANG },
-            { "srt-default",    optional_argument, NULL, SRT_DEFAULT },
+            { "srt-default", optional_argument, NULL, SRT_DEFAULT },
+            { "srt-burn",    optional_argument, NULL, SRT_BURN },
             { "native-language", required_argument, NULL,'N' },
             { "native-dub",  no_argument,       NULL,    NATIVE_DUB },
             { "encoder",     required_argument, NULL,    'e' },
@@ -3996,6 +4015,16 @@ static int ParseOptions( int argc, char ** argv )
                 else
                 {
                     srtdefault = 1 ;
+                }
+                break;
+            case SRT_BURN:
+                if( optarg != NULL )
+                {
+                    srtburn = atoi( optarg );
+                }
+                else
+                {
+                    srtburn = 1 ;
                 }
                 break;
             case '2':
