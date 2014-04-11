@@ -16,6 +16,7 @@ namespace HandBrake.Interop
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.EventArgs;
@@ -1501,6 +1502,48 @@ namespace HandBrake.Interop
                     this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_RENDER_SUB, string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}:{3}", crop.Top, crop.Bottom, crop.Left, crop.Right), allocatedMemory);
                 }
             }
+
+			// Rotate
+	        if (profile.FlipHorizontal || profile.FlipVertical || profile.Rotation != PictureRotation.None)
+	        {
+		        bool rotate90 = false;
+		        bool flipHorizontal = profile.FlipHorizontal;
+		        bool flipVertical = profile.FlipVertical;
+
+		        switch (profile.Rotation)
+		        {
+			        case PictureRotation.Clockwise90:
+				        rotate90 = true;
+				        break;
+			        case PictureRotation.Clockwise180:
+				        flipHorizontal = !flipHorizontal;
+				        flipVertical = !flipVertical;
+				        break;
+			        case PictureRotation.Clockwise270:
+				        rotate90 = true;
+				        flipHorizontal = !flipHorizontal;
+				        flipVertical = !flipVertical;
+				        break;
+		        }
+
+		        int rotateSetting = 0;
+				if (flipVertical)
+		        {
+			        rotateSetting |= 1;
+		        }
+
+				if (flipHorizontal)
+		        {
+			        rotateSetting |= 2;
+		        }
+
+				if (rotate90)
+		        {
+			        rotateSetting |= 4;
+		        }
+
+				this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_ROTATE, rotateSetting.ToString(CultureInfo.InvariantCulture), allocatedMemory);
+	        }
 
             // Construct final filter list
             nativeJob.list_filter = this.ConvertFilterListToNative(filterList, allocatedMemory).Ptr;

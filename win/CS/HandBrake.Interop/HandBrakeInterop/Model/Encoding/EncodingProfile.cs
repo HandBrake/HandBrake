@@ -130,6 +130,21 @@ namespace HandBrake.Interop.Model.Encoding
         /// Gets or sets the modulus.
         /// </summary>
         public int Modulus { get; set; }
+
+		/// <summary>
+		/// Gets or sets the rotation.
+		/// </summary>
+		public PictureRotation Rotation { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the picture should be flipped horizontally.
+		/// </summary>
+		public bool FlipHorizontal { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the picture should be flipped vertically.
+		/// </summary>
+		public bool FlipVertical { get; set; }
         #endregion
 
         #region Filters
@@ -180,7 +195,7 @@ namespace HandBrake.Interop.Model.Encoding
         public int Deblock { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether grayscale.
+        /// Gets or sets a value indicating whether the grayscale filter will be applied.
         /// </summary>
         public bool Grayscale { get; set; }
         #endregion
@@ -307,6 +322,9 @@ namespace HandBrake.Interop.Model.Encoding
                 PixelAspectX = this.PixelAspectX,
                 PixelAspectY = this.PixelAspectY,
                 Modulus = this.Modulus,
+				Rotation = this.Rotation,
+				FlipHorizontal = this.FlipHorizontal,
+				FlipVertical = this.FlipVertical,
 
                 Deinterlace = this.Deinterlace,
                 CustomDeinterlace = this.CustomDeinterlace,
