@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 #include "hb.h"
+#include "decssasub.h"
 
 #define MIN_BUFFERING (1024*1024*10)
 #define MAX_BUFFERING (1024*1024*50)
@@ -47,9 +48,9 @@ typedef struct
     uint32_t          allEof;     // valid bits in eof (all tracks)
     uint32_t          allRdy;     // valid bits in rdy (audio & video tracks)
     hb_track_t      * track[32];  // array of tracks to mux ('ntrack' elements)
-                                  // NOTE- this array could be dynamically 
-                                  // allocated but the eof & rdy logic has to 
-                                  // be changed to handle more than 32 tracks 
+                                  // NOTE- this array could be dynamically
+                                  // allocated but the eof & rdy logic has to
+                                  // be changed to handle more than 32 tracks
                                   // anyway so we keep it simple and fast.
     int               buffered_size;
 } hb_mux_t;
@@ -256,9 +257,9 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     int more = mux->rdy;
     // all tracks have at least 'interleave' ticks of data. Output
     // all that we can in 'interleave' size chunks.
-    while ( (( mux->rdy & mux->allRdy ) == mux->allRdy && 
+    while ( (( mux->rdy & mux->allRdy ) == mux->allRdy &&
             more && mux->buffered_size > MIN_BUFFERING ) ||
-            ( mux->eof == mux->allEof ) ) 
+            ( mux->eof == mux->allEof ) )
     {
         more = 0;
         for ( i = 0; i < mux->ntracks; ++i )
@@ -380,7 +381,7 @@ void muxClose( hb_work_object_t * w )
                 }
             }
         }
-    
+
         for( i = 0; i < mux->ntracks; ++i )
         {
             hb_buffer_t * b;
@@ -555,245 +556,154 @@ hb_work_object_t hb_muxer =
     muxClose
 };
 
-typedef struct stylerecord_s {
-    enum style_s {ITALIC, BOLD, UNDERLINE} style;
-    uint16_t start;
-    uint16_t stop;
-    struct stylerecord_s *next;
-} stylerecord;
+#define TX3G_STYLES (HB_STYLE_FLAG_BOLD   |   \
+                     HB_STYLE_FLAG_ITALIC |   \
+                     HB_STYLE_FLAG_UNDERLINE)
 
-static void hb_makestylerecord( stylerecord **stack,
-                                enum style_s style, int start )
+typedef struct style_context_s
 {
-    stylerecord *record = calloc( sizeof( stylerecord ), 1 );
+    uint8_t             * style_atoms;
+    int                   style_atom_count;
+    hb_subtitle_style_t   current_style;
+    int                   style_start;
+} style_context_t;
 
-    if( record )
-    {
-        record->style = style;
-        record->start = start;
-        record->next = *stack;
-        *stack = record;
-    }
+static void update_style_atoms(style_context_t *ctx, int stop)
+{
+    uint8_t *style_entry;
+    uint8_t face = 0;
+
+    style_entry = ctx->style_atoms + 10 + (12 * ctx->style_atom_count);
+
+    if (ctx->current_style.flags & HB_STYLE_FLAG_BOLD)
+        face |= 1;
+    if (ctx->current_style.flags & HB_STYLE_FLAG_ITALIC)
+        face |= 2;
+    if (ctx->current_style.flags & HB_STYLE_FLAG_UNDERLINE)
+        face |= 4;
+
+    style_entry[0]  = (ctx->style_start >> 8) & 0xff;   // startChar
+    style_entry[1]  = ctx->style_start & 0xff;
+    style_entry[2]  = (stop >> 8) & 0xff;               // endChar
+    style_entry[3]  = stop & 0xff;
+    style_entry[4]  = 0;    // font-ID msb
+    style_entry[5]  = 1;    // font-ID lsb
+    style_entry[6]  = face; // face-style-flags
+    style_entry[7]  = 24;   // font-size
+    style_entry[8]  = (ctx->current_style.fg_rgb >> 16) & 0xff; // r
+    style_entry[9]  = (ctx->current_style.fg_rgb >> 8)  & 0xff; // g
+    style_entry[10] = (ctx->current_style.fg_rgb)       & 0xff; // b
+    style_entry[11] = ctx->current_style.fg_alpha;              // a
+
+    ctx->style_atom_count++;
 }
 
-static void hb_makestyleatom( stylerecord *record, uint8_t *style)
+static void update_style(style_context_t *ctx,
+                         hb_subtitle_style_t *style, int pos)
 {
-    uint8_t face = 1;
-    hb_deep_log(3, "Made style '%s' from %d to %d",
-           record->style == ITALIC ? "Italic" : record->style == BOLD ? "Bold" : "Underline", record->start, record->stop);
-
-    switch( record->style )
+    if (ctx->style_start < pos)
     {
-    case ITALIC:
-        face = 2;
-        break;
-    case BOLD:
-        face = 1;
-        break;
-    case UNDERLINE:
-        face = 4;
-        break;
-    default:
-        face = 2;
-        break;
+        // do we need to add a style atom?
+        if (((ctx->current_style.flags  ^ style->flags) & TX3G_STYLES) ||
+            ctx->current_style.fg_rgb   != style->fg_rgb               ||
+            ctx->current_style.fg_alpha != style->fg_alpha)
+        {
+            update_style_atoms(ctx, pos - 1);
+        }
     }
+    ctx->current_style = *style;
+    ctx->style_start = pos;
+}
 
-    style[0] = (record->start >> 8) & 0xff; // startChar
-    style[1] = record->start & 0xff;
-    style[2] = (record->stop >> 8) & 0xff;   // endChar
-    style[3] = record->stop & 0xff;
-    style[4] = (1 >> 8) & 0xff;    // font-ID
-    style[5] = 1 & 0xff;
-    style[6] = face;   // face-style-flags: 1 bold; 2 italic; 4 underline
-    style[7] = 24;      // font-size
-    style[8] = 255;     // r
-    style[9] = 255;     // g
-    style[10] = 255;    // b
-    style[11] = 255;    // a
+static void style_context_init(style_context_t *ctx, uint8_t *style_atoms)
+{
+    memset(ctx, 0, sizeof(*ctx));
+    ctx->style_atoms = style_atoms;
+    ctx->style_start = INT_MAX;
 }
 
 /*
  * Copy the input to output removing markup and adding markup to the style
  * atom where appropriate.
  */
-void hb_muxmp4_process_subtitle_style( uint8_t *input,
-                                       uint8_t *output,
-                                       uint8_t *style, uint16_t *stylesize )
+void hb_muxmp4_process_subtitle_style(uint8_t *input,
+                                      uint8_t *output,
+                                      uint8_t *style_atoms, uint16_t *stylesize)
 {
-    uint8_t *reader = input;
-    uint8_t *writer = output;
-    uint8_t stylecount = 0;
     uint16_t utf8_count = 0;         // utf8 count from start of subtitle
-    stylerecord *stylestack = NULL;
-    stylerecord *oldrecord = NULL;
+    int consumed, in_pos = 0, out_pos = 0, len, ii, lines;
+    style_context_t ctx;
+    hb_subtitle_style_t style;
+    char *text, *tmp;
 
-    while(*reader != '\0') {
-        if( ( *reader & 0xc0 ) == 0x80 )
-        {
-            /*
-             * Track the utf8_count when doing markup so that we get the tx3g stops
-             * based on UTF8 chr counts rather than bytes.
-             */
-            utf8_count++;
-            hb_deep_log( 3, "MuxMP4: Counted %d UTF-8 chrs within subtitle so far",
-                             utf8_count);
-        }
-        if (*reader == '<') {
-            /*
-             * possible markup, peek at the next chr
-             */
-            switch(*(reader+1)) {
-            case 'i':
-                if (*(reader+2) == '>') {
-                    reader += 3;
-                    hb_makestylerecord(&stylestack, ITALIC, (writer - output - utf8_count));
-                } else {
-                    *writer++ = *reader++;
-                }
-                break;
-            case 'b':
-                if (*(reader+2) == '>') {
-                    reader += 3;
-                    hb_makestylerecord(&stylestack, BOLD, (writer - output - utf8_count));
-                } else {
-                    *writer++ = *reader++;
-                }
-                break;
-            case 'u':
-                if (*(reader+2) == '>') {
-                    reader += 3;
-                    hb_makestylerecord(&stylestack, UNDERLINE, (writer - output - utf8_count));
-                } else {
-                    *writer++ = *reader++;
-                }
-                break;
-            case '/':
-                switch(*(reader+2)) {
-                case 'i':
-                    if (*(reader+3) == '>') {
-                        /*
-                         * Check whether we then immediately start more markup of the same type, if so then
-                         * lets not close it now and instead continue this markup.
-                         */
-                        if ((*(reader+4) && *(reader+4) == '<') &&
-                            (*(reader+5) && *(reader+5) == 'i') &&
-                            (*(reader+6) && *(reader+6) == '>')) {
-                            /*
-                             * Opening italics right after, so don't close off these italics.
-                             */
-                            hb_deep_log(3, "Joining two sets of italics");
-                            reader += (4 + 3);
-                            continue;
-                        }
+    *stylesize = 0;
+    style_context_init(&ctx, style_atoms);
 
+    hb_ssa_style_init(&style);
 
-                        if ((*(reader+4) && *(reader+4) == ' ') &&
-                            (*(reader+5) && *(reader+5) == '<') &&
-                            (*(reader+6) && *(reader+6) == 'i') &&
-                            (*(reader+7) && *(reader+7) == '>')) {
-                            /*
-                             * Opening italics right after, so don't close off these italics.
-                             */
-                            hb_deep_log(3, "Joining two sets of italics (plus space)");
-                            reader += (4 + 4);
-                            *writer++ = ' ';
-                            continue;
-                        }
-                        if (stylestack && stylestack->style == ITALIC) {
-                            uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count;
-                            hb_makestyleatom(stylestack, style_record);
-
-                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
-                            stylecount++;
-
-                            oldrecord = stylestack;
-                            stylestack = stylestack->next;
-                            free(oldrecord);
-                        } else {
-                            hb_error("Mismatched Subtitle markup '%s'", input);
-                        }
-                        reader += 4;
-                    } else {
-                        *writer++ = *reader++;
-                    }
-                    break;
-                case 'b':
-                    if (*(reader+3) == '>') {
-                        if (stylestack && stylestack->style == BOLD) {
-                            uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count;
-                            hb_makestyleatom(stylestack, style_record);
-
-                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
-                            stylecount++;
-                            oldrecord = stylestack;
-                            stylestack = stylestack->next;
-                            free(oldrecord);
-                        } else {
-                            hb_error("Mismatched Subtitle markup '%s'", input);
-                        }
-
-                        reader += 4;
-                    } else {
-                        *writer++ = *reader++;
-                    }
-                    break;
-                case 'u':
-                    if (*(reader+3) == '>') {
-                        if (stylestack && stylestack->style == UNDERLINE) {
-                            uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count;
-                            hb_makestyleatom(stylestack, style_record);
-
-                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
-                            stylecount++;
-
-                            oldrecord = stylestack;
-                            stylestack = stylestack->next;
-                            free(oldrecord);
-                        } else {
-                            hb_error("Mismatched Subtitle markup '%s'", input);
-                        }
-                        reader += 4;
-                    } else {
-                        *writer++ = *reader++;
-                    }
-                    break;
-                default:
-                    *writer++ = *reader++;
-                    break;
-                }
-                break;
-            default:
-                *writer++ = *reader++;
-                break;
-            }
-        } else if (*reader == '\r') {
-            // skip '\r' and replace with '\n' if necessary
-            if (*(++reader) != '\n') {
-                *writer++ = '\n';
-            }
-        } else {
-            *writer++ = *reader++;
-        }
-    }
-    *writer = '\0';
-
-    if( stylecount )
+    // Skip past the SSA preamble
+    text = (char*)input;
+    for (ii = 0; ii < 8; ii++)
     {
-        *stylesize = 10 + ( stylecount * 12 );
-
-        memcpy( style + 4, "styl", 4);
-
-        style[0] = 0;
-        style[1] = 0;
-        style[2] = (*stylesize >> 8) & 0xff;
-        style[3] = *stylesize & 0xff;
-        style[8] = (stylecount >> 8) & 0xff;
-        style[9] = stylecount & 0xff;
-
+        tmp = strchr(text, ',');
+        if (tmp == NULL)
+            break;
+        text = tmp + 1;
     }
+    in_pos = text - (char*)input;
 
+    while (input[in_pos] != '\0')
+    {
+        lines = 1;
+        text = hb_ssa_to_text((char*)input + in_pos, &consumed, &style);
+        if (text == NULL)
+            break;
+
+        // count UTF8 characters, and get length of text
+        len = 0;
+        for (ii = 0; text[ii] != '\0'; ii++)
+        {
+            if ((text[ii] & 0xc0) == 0x80)
+            {
+                utf8_count++;
+                hb_deep_log( 3, "mux: Counted %d UTF-8 chrs within subtitle",
+                                 utf8_count);
+            }
+            // By default tx3g only supports 2 lines of text
+            // To support more lines, we must enable the virtical placement
+            // flag in the tx3g atom and add tbox atoms to the sample
+            // data to set the vertical placement for each subtitle.
+            // Although tbox defines a rectangle, the QT spec says
+            // that only the vertical placement is honored (bummer).
+            if (text[ii] == '\n')
+            {
+                lines++;
+                if (lines > 2)
+                    text[ii] = ' ';
+            }
+            len++;
+        }
+        strcpy((char*)output+out_pos, text);
+        free(text);
+        out_pos += len;
+        in_pos += consumed;
+        update_style(&ctx, &style, out_pos - utf8_count);
+    }
+    // null terminate output string
+    output[out_pos] = 0;
+
+    if (ctx.style_atom_count > 0)
+    {
+        *stylesize = 10 + (ctx.style_atom_count * 12);
+
+        memcpy(style_atoms + 4, "styl", 4);
+
+        style_atoms[0] = 0;
+        style_atoms[1] = 0;
+        style_atoms[2] = (*stylesize >> 8) & 0xff;
+        style_atoms[3] = *stylesize & 0xff;
+        style_atoms[8] = (ctx.style_atom_count >> 8) & 0xff;
+        style_atoms[9] = ctx.style_atom_count & 0xff;
+    }
 }
 

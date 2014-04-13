@@ -824,7 +824,7 @@ int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
             goto fail;
-    
+
         // 96, 224, 640 Kbps
         case HB_ACODEC_AC3:
             bitrate = (nchannels * 128) - (32 * (nchannels < 5));
@@ -1323,14 +1323,14 @@ void hb_audio_compression_get_limits(uint32_t codec, float *low, float *high,
             *high        = 12.;
             *low         = 0.;
             break;
-            
+
         case HB_ACODEC_LAME:
             *direction   = 1;
             *granularity = 1.;
             *high        = 9.;
             *low         = 0.;
             break;
-            
+
         default:
             *direction   = 0;
             *granularity = 1.;
@@ -2798,9 +2798,9 @@ void hb_error( char * log, ... )
         {
             hb_unlock( mutex );
             return;
-        } 
+        }
     }
-    
+
     /*
      * A new error, or the same one more than 10sec since the last one
      * did we have any of the same counted up?
@@ -2808,7 +2808,7 @@ void hb_error( char * log, ... )
     if( last_error_count > 0 )
     {
         /*
-         * Print out the last error to ensure context for the last 
+         * Print out the last error to ensure context for the last
          * repeated message.
          */
         if( error_handler )
@@ -2817,16 +2817,16 @@ void hb_error( char * log, ... )
         } else {
             hb_log( "%s", last_string );
         }
-        
+
         if( last_error_count > 1 )
         {
             /*
              * Only print out the repeat message for more than 2 of the
              * same, since we just printed out two of them already.
              */
-            snprintf( rep_string, 180, "Last error repeated %d times", 
+            snprintf( rep_string, 180, "Last error repeated %d times",
                       last_error_count - 1 );
-            
+
             if( error_handler )
             {
                 error_handler( rep_string );
@@ -2834,7 +2834,7 @@ void hb_error( char * log, ... )
                 hb_log( "%s", rep_string );
             }
         }
-        
+
         last_error_count = 0;
     }
 
@@ -2936,7 +2936,7 @@ void hb_title_close( hb_title_t ** _t )
         hb_subtitle_close( &subtitle );
     }
     hb_list_close( &t->list_subtitle );
-    
+
     while( ( attachment = hb_list_item( t->list_attachment, 0 ) ) )
     {
         hb_list_rem( t->list_attachment, attachment );
@@ -3565,7 +3565,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
 
     /* Set the job's "in track" to the value passed in audiocfg.
      * HandBrakeCLI assumes this value is preserved in the jobs
-     * audio list, but in.track in the title's audio list is not 
+     * audio list, but in.track in the title's audio list is not
      * required to be the same. */
     audio->config.in.track = audiocfg->in.track;
 
@@ -3687,6 +3687,39 @@ void hb_subtitle_close( hb_subtitle_t **sub )
  **********************************************************************
  *
  *********************************************************************/
+int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, int w, int h)
+{
+    // Free any pre-existing extradata
+    free(subtitle->extradata);
+
+    int fs = h * .066;
+
+    // SRT subtitles are represented internally as SSA
+    // Create an SSA header
+    const char * ssa_header =
+        "[Script Info]\r\n"
+        "ScriptType: v4.00+\r\n"
+        "Collisions: Normal\r\n"
+        "PlayResX: %d\r\n"
+        "PlayResY: %d\r\n"
+        "Timer: 100.0\r\n"
+        "WrapStyle: 0\r\n"
+        "\r\n"
+        "[V4+ Styles]\r\n"
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
+        "Style: Default,Arial,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,2,3,2,20,20,20,0\r\n";
+
+    subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, fs);
+    if (subtitle->extradata == NULL)
+    {
+        hb_error("hb_subtitle_add_ssa_header: malloc failed");
+        return 0;
+    }
+    subtitle->extradata_size = strlen((char*)subtitle->extradata) + 1;
+
+    return 1;
+}
+
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track)
 {
     hb_title_t *title = job->title;
@@ -3698,41 +3731,45 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
         /* We fail! */
         return 0;
     }
+
     subtitle->config = *subtitlecfg;
     subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);
     return 1;
 }
 
-int hb_srt_add( const hb_job_t * job, 
-                const hb_subtitle_config_t * subtitlecfg, 
+int hb_srt_add( const hb_job_t * job,
+                const hb_subtitle_config_t * subtitlecfg,
                 const char *lang )
 {
     hb_subtitle_t *subtitle;
     iso639_lang_t *language = NULL;
-    int retval = 0;
 
     subtitle = calloc( 1, sizeof( *subtitle ) );
-    
+    if (subtitle == NULL)
+    {
+        hb_error("hb_srt_add: malloc failed");
+        return 0;
+    }
+
     subtitle->id = (hb_list_count(job->list_subtitle) << 8) | 0xFF;
     subtitle->format = TEXTSUB;
     subtitle->source = SRTSUB;
     subtitle->codec = WORK_DECSRTSUB;
 
-    language = lang_for_code2( lang );
-
-    if( language )
+    language = lang_for_code2(lang);
+    if (language == NULL)
     {
-
-        strcpy( subtitle->lang, language->eng_name );
-        strncpy( subtitle->iso639_2, lang, 4 );
-        
-        subtitle->config = *subtitlecfg;
-
-        hb_list_add(job->list_subtitle, subtitle);
-        retval = 1;
+        hb_log("hb_srt_add: unknown language code (%s)", lang);
+        language = lang_for_code2("und");
     }
-    return retval;
+    strcpy(subtitle->lang, language->eng_name);
+    strcpy(subtitle->iso639_2, language->iso639_2);
+
+    subtitle->config = *subtitlecfg;
+    hb_list_add(job->list_subtitle, subtitle);
+
+    return 1;
 }
 
 int hb_subtitle_can_force( int source )
@@ -4062,7 +4099,7 @@ char * hb_strdup_printf( const char * fmt, ... )
     if ( str == NULL )
         return NULL;
 
-    while (1) 
+    while (1)
     {
         /* Try to print in the allocated space. */
         va_start( ap, fmt );
@@ -4204,15 +4241,15 @@ int hb_yuv2rgb(int yuv)
     r = 1.164 * (y - 16)                      + 1.596 * (Cr - 128);
     g = 1.164 * (y - 16) - 0.392 * (Cb - 128) - 0.813 * (Cr - 128);
     b = 1.164 * (y - 16) + 2.017 * (Cb - 128);
-    
+
     r = (r < 0) ? 0 : r;
     g = (g < 0) ? 0 : g;
     b = (b < 0) ? 0 : b;
-    
+
     r = (r > 255) ? 255 : r;
     g = (g > 255) ? 255 : g;
     b = (b > 255) ? 255 : b;
-    
+
     return (r << 16) | (g << 8) | b;
 }
 
@@ -4230,7 +4267,7 @@ int hb_rgb2yuv(int rgb)
 {
     double r, g, b;
     int y, Cr, Cb;
-    
+
     r = (rgb >> 16) & 0xff;
     g = (rgb >>  8) & 0xff;
     b = (rgb      ) & 0xff;
@@ -4238,15 +4275,15 @@ int hb_rgb2yuv(int rgb)
     y  =  16. + ( 0.257 * r) + (0.504 * g) + (0.098 * b);
     Cb = 128. + (-0.148 * r) - (0.291 * g) + (0.439 * b);
     Cr = 128. + ( 0.439 * r) - (0.368 * g) - (0.071 * b);
-    
+
     y = (y < 0) ? 0 : y;
     Cb = (Cb < 0) ? 0 : Cb;
     Cr = (Cr < 0) ? 0 : Cr;
-    
+
     y = (y > 255) ? 255 : y;
     Cb = (Cb > 255) ? 255 : Cb;
     Cr = (Cr > 255) ? 255 : Cr;
-    
+
     return (y << 16) | (Cr << 8) | Cb;
 }
 
@@ -4321,10 +4358,10 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
 int hb_gui_use_hwd_flag = 0;
 int hb_use_dxva( hb_title_t * title )
 {
-    return ( (title->video_codec_param == AV_CODEC_ID_MPEG2VIDEO 
+    return ( (title->video_codec_param == AV_CODEC_ID_MPEG2VIDEO
               || title->video_codec_param == AV_CODEC_ID_H264
-              || title->video_codec_param == AV_CODEC_ID_VC1 
-              || title->video_codec_param == AV_CODEC_ID_WMV3 
+              || title->video_codec_param == AV_CODEC_ID_VC1
+              || title->video_codec_param == AV_CODEC_ID_WMV3
               || title->video_codec_param == AV_CODEC_ID_MPEG4 )
              && title->opaque_priv );
 }

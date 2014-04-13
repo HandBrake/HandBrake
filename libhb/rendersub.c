@@ -9,7 +9,6 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "colormap.h"
 #include <ass/ass.h>
 
 struct hb_filter_private_s
@@ -25,14 +24,12 @@ struct hb_filter_private_s
     ASS_Library     * ssa;
     ASS_Renderer    * renderer;
     ASS_Track       * ssaTrack;
+    uint8_t           script_initialized;
 
     // SRT
     int               line;
     hb_buffer_t     * current_sub;
 };
-
-static char* srt_markup_to_ssa(char *srt, int *len);
-static void srt_to_ssa(hb_buffer_t *srt_sub);
 
 // VOBSUB
 static int vobsub_init( hb_filter_object_t * filter, hb_filter_init_t * init );
@@ -512,10 +509,6 @@ static int ssa_init( hb_filter_object_t * filter,
         return 1;
     }
 
-    // NOTE: The codec extradata is expected to be in MKV format
-    ass_process_codec_private( pv->ssaTrack,
-        (char *)filter->subtitle->extradata, filter->subtitle->extradata_size );
-
     int width = init->width - ( pv->crop[2] + pv->crop[3] );
     int height = init->height - ( pv->crop[0] + pv->crop[1] );
     ass_set_frame_size( pv->renderer, width, height);
@@ -554,6 +547,19 @@ static int ssa_work( hb_filter_object_t * filter,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * sub;
 
+    if (!pv->script_initialized)
+    {
+        // NOTE: The codec extradata is expected to be in MKV format
+        // I would like to initialize this in ssa_init, but when we are
+        // transcoding text subtitles to SSA, the extradata does not
+        // get initialized until the decoder is initialized.  Since
+        // decoder initialization happens after filter initialization,
+        // we need to postpone this.
+        ass_process_codec_private(pv->ssaTrack,
+                                  (char*)filter->subtitle->extradata,
+                                  filter->subtitle->extradata_size);
+        pv->script_initialized = 1;
+    }
     if ( in->size <= 0 )
     {
         *buf_in = NULL;
@@ -584,28 +590,15 @@ static int ssa_work( hb_filter_object_t * filter,
 static int textsub_init( hb_filter_object_t * filter,
                      hb_filter_init_t * init )
 {
-    const char * ssa_header =
-        "[Script Info]\r\n"
-        "ScriptType: v4.00+\r\n"
-        "Collisions: Normal\r\n"
-        "PlayResX: 1920\r\n"
-        "PlayResY: 1080\r\n"
-        "Timer: 100.0\r\n"
-        "WrapStyle: 0\r\n"
-        "\r\n"
-        "[V4+ Styles]\r\n"
-        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
-        "Style: Default,Arial,72,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,2,3,2,20,20,20,0\r\n";
+    hb_filter_private_t * pv = filter->private_data;
 
-    filter->subtitle->extradata = (uint8_t*)ssa_header;
-    filter->subtitle->extradata_size = strlen(ssa_header);
+    int width = init->width - pv->crop[2] - pv->crop[3];
+    int height = init->height - pv->crop[0] - pv->crop[1];
 
-    int result = ssa_init(filter, init);
-
-    filter->subtitle->extradata = NULL;
-    filter->subtitle->extradata_size = 0;
-
-    return result;
+    // Text subtitles for which we create a dummy ASS header need
+    // to have the header rewritten with the correct dimensions.
+    hb_subtitle_add_ssa_header(filter->subtitle, width, height);
+    return ssa_init(filter, init);
 }
 
 static void textsub_close( hb_filter_object_t * filter )
@@ -615,20 +608,24 @@ static void textsub_close( hb_filter_object_t * filter )
 
 static void process_sub(hb_filter_private_t *pv, hb_buffer_t *sub)
 {
-    char *ssa;
-    int len;
-    int64_t start, duration;
+    int64_t start, dur;
+    char *ssa, *tmp;
 
-    // Create SSA entry
-    ssa = hb_strdup_printf("%d,,Default,,0,0,0,,%s", ++pv->line, sub->data);
-    len = strlen(ssa);
+    // libass expects every chunk to have a unique sequence number
+    // since we are repeating subs in some cases, we need to replace
+    // the sequence number.
+    tmp = strchr((char*)sub->data, ',');
+    if (tmp == NULL)
+        return;
+
+    ssa = hb_strdup_printf("%d%s", ++pv->line, tmp);
 
     // Parse MKV-SSA packet
     // SSA subtitles always have an explicit stop time, so we
     // do not need to do special processing for stop == AV_NOPTS_VALUE
     start = sub->s.start / 90;
-    duration = (sub->s.stop - sub->s.start) / 90;
-    ass_process_chunk( pv->ssaTrack, ssa, len, start, duration);
+    dur = (sub->s.stop - sub->s.start) / 90;
+    ass_process_chunk(pv->ssaTrack, ssa, sub->size, start, dur);
     free(ssa);
 }
 
@@ -639,6 +636,14 @@ static int textsub_work(hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * sub;
+
+    if (!pv->script_initialized)
+    {
+        ass_process_codec_private(pv->ssaTrack,
+                                  (char*)filter->subtitle->extradata,
+                                  filter->subtitle->extradata_size);
+        pv->script_initialized = 1;
+    }
 
     if (in->size <= 0)
     {
@@ -651,17 +656,6 @@ static int textsub_work(hb_filter_object_t * filter,
     // subtitle list
     while ((sub = hb_fifo_get(filter->subtitle->fifo_out)))
     {
-        switch (pv->type)
-        {
-            case CC608SUB:
-            case SRTSUB:
-            case UTF8SUB:
-            case TX3GSUB:
-                srt_to_ssa(sub);
-                break;
-            default:
-                break;
-        }
         // Subtitle formats such as CC can have stop times
         // that are not known until an "erase display" command
         // is encountered in the stream.  For these formats
@@ -959,116 +953,5 @@ static void hb_rendersub_close( hb_filter_object_t * filter )
             hb_error("rendersub: unsupported subtitle format %d", pv->type );
         } break;
     }
-}
-
-static char* srt_markup_to_ssa(char *srt, int *len)
-{
-    char terminator;
-    char color[40];
-    uint32_t rgb;
-
-    *len = 0;
-    if (srt[0] != '<' && srt[0] != '{')
-        return NULL;
-
-    if (srt[0] == '<')
-        terminator = '>';
-    else
-        terminator = '}';
-
-    if (srt[1] == 'i' && srt[2] == terminator)
-    {
-        *len = 3;
-        return hb_strdup_printf("{\\i1}");
-    }
-    else if (srt[1] == 'b' && srt[2] == terminator)
-    {
-        *len = 3;
-        return hb_strdup_printf("{\\b1}");
-    }
-    else if (srt[1] == 'u' && srt[2] == terminator)
-    {
-        *len = 3;
-        return hb_strdup_printf("{\\u1}");
-    }
-    else if (srt[1] == '/' && srt[2] == 'i' && srt[3] == terminator)
-    {
-        *len = 4;
-        return hb_strdup_printf("{\\i0}");
-    }
-    else if (srt[1] == '/' && srt[2] == 'b' && srt[3] == terminator)
-    {
-        *len = 4;
-        return hb_strdup_printf("{\\b0}");
-    }
-    else if (srt[1] == '/' && srt[2] == 'u' && srt[3] == terminator)
-    {
-        *len = 4;
-        return hb_strdup_printf("{\\u0}");
-    }
-    else if (srt[0] == '<' && !strncmp(srt + 1, "font", 4))
-    {
-        int match;
-        match = sscanf(srt + 1, "font color=\"%39[^\"]\">", color);
-        if (match != 1)
-        {
-            return NULL;
-        }
-        while (srt[*len] != '>') (*len)++;
-        (*len)++;
-        if (color[0] == '#')
-            rgb = strtol(color + 1, NULL, 16);
-        else
-            rgb = hb_rgb_lookup_by_name(color);
-        return hb_strdup_printf("{\\1c&H%X&}", HB_RGB_TO_BGR(rgb));
-    }
-    else if (srt[0] == '<' && srt[1] == '/' && !strncmp(srt + 2, "font", 4) &&
-             srt[6] == '>')
-    {
-        *len = 7;
-        return hb_strdup_printf("{\\1c&HFFFFFF&}");
-    }
-
-    return NULL;
-}
-
-static void srt_to_ssa(hb_buffer_t *sub_in)
-{
-    char * srt = (char*)sub_in->data;
-    // SSA markup expands a little over SRT, so allocate a bit of extra
-    // space.  More will be realloc'd if needed.
-    hb_buffer_t * sub = hb_buffer_init(sub_in->size + 20);
-    char * ssa, *ssa_markup;
-    int skip, len, pos, ii;
-
-    // Exchange data between input sub and new ssa_sub
-    // After this, sub_in contains ssa data
-    hb_buffer_swap_copy(sub_in, sub);
-    ssa = (char*)sub_in->data;
-    pos = 0;
-    ii = 0;
-    while (srt[ii] != '\0')
-    {
-        if ((ssa_markup = srt_markup_to_ssa(srt + ii, &skip)) != NULL)
-        {
-            len = strlen(ssa_markup);
-            hb_buffer_realloc(sub_in, pos + len + 1);
-            // After realloc, sub_in->data may change
-            ssa = (char*)sub_in->data;
-            snprintf(ssa + pos, len + 1, "%s", ssa_markup);
-            free(ssa_markup);
-            pos += len;
-            ii += skip;
-        }
-        else
-        {
-            hb_buffer_realloc(sub_in, pos + 2);
-            // After realloc, sub_in->data may change
-            ssa = (char*)sub_in->data;
-            ssa[pos++] = srt[ii++];
-        }
-    }
-    ssa[pos] = '\0';
-    hb_buffer_close(&sub);
 }
 

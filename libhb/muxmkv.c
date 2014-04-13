@@ -410,20 +410,16 @@ static int MKVInit( hb_mux_object_t * m )
                 track->codecPrivateSize = 0;
                 track->codecID = MK_SUBTITLE_PGS;
                 break;
+            case CC608SUB:
+            case CC708SUB:
+            case TX3GSUB:
+            case UTF8SUB:
+            case SRTSUB:
             case SSASUB:
                 track->codecID = MK_SUBTITLE_SSA;
                 need_fonts = 1;
                 track->codecPrivate = subtitle->extradata;
                 track->codecPrivateSize = subtitle->extradata_size;
-                break;
-            case CC608SUB:
-            case CC708SUB:
-            case UTF8SUB:
-            case TX3GSUB:
-            case SRTSUB:
-                track->codecPrivate = NULL;
-                track->codecPrivateSize = 0;
-                track->codecID = MK_SUBTITLE_UTF8;
                 break;
             default:
                 continue;

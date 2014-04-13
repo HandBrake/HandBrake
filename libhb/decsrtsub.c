@@ -13,6 +13,8 @@
 #include <iconv.h>
 #include <errno.h>
 #include "hb.h"
+#include "colormap.h"
+#include "decsrtsub.h"
 
 struct start_and_end {
     unsigned long start, end;
@@ -56,17 +58,152 @@ struct hb_work_private_s
     hb_subtitle_t *subtitle;
     uint64_t start_time;              // In HB time
     uint64_t stop_time;               // In HB time
+
+    int line;   // SSA line number
 };
 
-static int 
+static char* srt_markup_to_ssa(char *srt, int *len)
+{
+    char terminator;
+    char color[40];
+    uint32_t rgb;
+
+    *len = 0;
+    if (srt[0] != '<' && srt[0] != '{')
+        return NULL;
+
+    if (srt[0] == '<')
+        terminator = '>';
+    else
+        terminator = '}';
+
+    if (srt[1] == 'i' && srt[2] == terminator)
+    {
+        *len = 3;
+        return hb_strdup_printf("{\\i1}");
+    }
+    else if (srt[1] == 'b' && srt[2] == terminator)
+    {
+        *len = 3;
+        return hb_strdup_printf("{\\b1}");
+    }
+    else if (srt[1] == 'u' && srt[2] == terminator)
+    {
+        *len = 3;
+        return hb_strdup_printf("{\\u1}");
+    }
+    else if (srt[1] == '/' && srt[2] == 'i' && srt[3] == terminator)
+    {
+        *len = 4;
+        return hb_strdup_printf("{\\i0}");
+    }
+    else if (srt[1] == '/' && srt[2] == 'b' && srt[3] == terminator)
+    {
+        *len = 4;
+        return hb_strdup_printf("{\\b0}");
+    }
+    else if (srt[1] == '/' && srt[2] == 'u' && srt[3] == terminator)
+    {
+        *len = 4;
+        return hb_strdup_printf("{\\u0}");
+    }
+    else if (srt[0] == '<' && !strncmp(srt + 1, "font", 4))
+    {
+        int match;
+        match = sscanf(srt + 1, "font color=\"%39[^\"]\">", color);
+        if (match != 1)
+        {
+            return NULL;
+        }
+        while (srt[*len] != '>') (*len)++;
+        (*len)++;
+        if (color[0] == '#')
+            rgb = strtol(color + 1, NULL, 16);
+        else
+            rgb = hb_rgb_lookup_by_name(color);
+        return hb_strdup_printf("{\\1c&H%X&}", HB_RGB_TO_BGR(rgb));
+    }
+    else if (srt[0] == '<' && srt[1] == '/' && !strncmp(srt + 2, "font", 4) &&
+             srt[6] == '>')
+    {
+        *len = 7;
+        return hb_strdup_printf("{\\1c&HFFFFFF&}");
+    }
+
+    return NULL;
+}
+
+void hb_srt_to_ssa(hb_buffer_t *sub_in, int line)
+{
+    if (sub_in->size == 0)
+        return;
+
+    // null terminate input if not already terminated
+    if (sub_in->data[sub_in->size-1] != 0)
+    {
+        hb_buffer_realloc(sub_in, ++sub_in->size);
+        sub_in->data[sub_in->size - 1] = 0;
+    }
+    char * srt = (char*)sub_in->data;
+    // SSA markup expands a little over SRT, so allocate a bit of extra
+    // space.  More will be realloc'd if needed.
+    hb_buffer_t * sub = hb_buffer_init(sub_in->size + 80);
+    char * ssa, *ssa_markup;
+    int skip, len, pos, ii;
+
+    // Exchange data between input sub and new ssa_sub
+    // After this, sub_in contains ssa data
+    hb_buffer_swap_copy(sub_in, sub);
+    ssa = (char*)sub_in->data;
+
+    sprintf((char*)sub_in->data, "%d,,Default,,0,0,0,,", line);
+    pos = strlen((char*)sub_in->data);
+
+    ii = 0;
+    while (srt[ii] != '\0')
+    {
+        if ((ssa_markup = srt_markup_to_ssa(srt + ii, &skip)) != NULL)
+        {
+            len = strlen(ssa_markup);
+            hb_buffer_realloc(sub_in, pos + len + 1);
+            // After realloc, sub_in->data may change
+            ssa = (char*)sub_in->data;
+            sprintf(ssa + pos, "%s", ssa_markup);
+            free(ssa_markup);
+            pos += len;
+            ii += skip;
+        }
+        else
+        {
+            hb_buffer_realloc(sub_in, pos + 4);
+            // After realloc, sub_in->data may change
+            ssa = (char*)sub_in->data;
+            if (srt[ii] == '\n')
+            {
+                ssa[pos++] = '\\';
+                ssa[pos++] = 'N';
+                ii++;
+            }
+            else
+            {
+                ssa[pos++] = srt[ii++];
+            }
+        }
+    }
+    ssa[pos] = '\0';
+    sub_in->size = pos + 1;
+    hb_buffer_close(&sub);
+}
+
+static int
 read_time_from_string( const char* timeString, struct start_and_end *result )
 {
     // for ex. 00:00:15,248 --> 00:00:16,545
-    
+
     long houres1, minutes1, seconds1, milliseconds1,
          houres2, minutes2, seconds2, milliseconds2;
     int scanned;
-    
+
     scanned = sscanf(timeString, "%ld:%ld:%ld,%ld --> %ld:%ld:%ld,%ld\n",
                     &houres1, &minutes1, &seconds1, &milliseconds1,
                     &houres2, &minutes2, &seconds2, &milliseconds2);
@@ -207,8 +344,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
     {
         return NULL;
     }
-    
-    while( reprocess || get_line( pv, line_buffer, sizeof( line_buffer ) ) ) 
+
+    while( reprocess || get_line( pv, line_buffer, sizeof( line_buffer ) ) )
     {
         reprocess = 0;
         switch (pv->current_state)
@@ -227,7 +364,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             }
             pv->current_entry.duration = timing.end - timing.start;
             pv->current_entry.offset = timing.start - pv->current_time;
-            
+
             pv->current_time = timing.end;
 
             pv->current_entry.start = timing.start;
@@ -276,7 +413,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 pv->current_state = k_state_potential_new_entry;
                 continue;
             }
-            
+
             q = pv->current_entry.text + pv->current_entry.pos;
             len = strlen( line_buffer );
             size = MIN(1024 - pv->current_entry.pos - 1, len );
@@ -329,9 +466,9 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 long length;
                 char *p, *q;
                 int  line = 1;
-                uint64_t start_time = ( pv->current_entry.start + 
+                uint64_t start_time = ( pv->current_entry.start +
                                         pv->subtitle->config.offset ) * 90;
-                uint64_t stop_time = ( pv->current_entry.stop + 
+                uint64_t stop_time = ( pv->current_entry.stop +
                                        pv->subtitle->config.offset ) * 90;
 
                 if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
@@ -396,7 +533,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 return buffer;
             }
             continue;
-        } 
+        }
         }
     }
 
@@ -406,9 +543,9 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
         long length;
         char *p, *q;
         int  line = 1;
-        uint64_t start_time = ( pv->current_entry.start + 
+        uint64_t start_time = ( pv->current_entry.start +
                                 pv->subtitle->config.offset ) * 90;
-        uint64_t stop_time = ( pv->current_entry.stop + 
+        uint64_t stop_time = ( pv->current_entry.stop +
                                pv->subtitle->config.offset ) * 90;
 
         if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
@@ -467,7 +604,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
     {
         return buffer;
     }
-    
+
     return NULL;
 }
 
@@ -488,7 +625,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 
         buffer = hb_buffer_init( 0 );
         hb_fifo_push( w->fifo_in, buffer);
-        
+
         pv->current_state = k_state_potential_new_entry;
         pv->number_of_entries = 0;
         pv->last_entry_number = 0;
@@ -540,14 +677,20 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 
             if( !pv->file )
             {
-                hb_error("Could not open the SRT subtitle file '%s'\n", 
+                hb_error("Could not open the SRT subtitle file '%s'\n",
                          w->subtitle->config.src_filename);
             } else {
                 retval = 0;
             }
         }
-    } 
-
+    }
+    if (!retval)
+    {
+        // Generate generic SSA Script Info.
+        int height = job->title->height - job->crop[0] - job->crop[1];
+        int width = job->title->width - job->crop[2] - job->crop[3];
+        hb_subtitle_add_ssa_header(w->subtitle, width, height);
+    }
     return retval;
 }
 
@@ -559,9 +702,10 @@ static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t * out = NULL;
 
     out = srt_read( pv );
-
     if( out )
     {
+        hb_srt_to_ssa(out, ++pv->line);
+
         /*
          * Keep a buffer in our input fifo so that we get run.
          */
@@ -573,7 +717,7 @@ static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_OK;
     }
 
-    return HB_WORK_OK;  
+    return HB_WORK_OK;
 }
 
 static void decsrtClose( hb_work_object_t * w )

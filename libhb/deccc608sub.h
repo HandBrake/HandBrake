@@ -1,25 +1,12 @@
 /*
- * From ccextractor, leave this file as intact and close to the original as possible so that 
- * it is easy to patch in fixes - even though this file contains code that we don't need.
- *
- * Note that the SRT sub generation from CC could be useful for mkv subs.
+ * From ccextractor...
  */
-#ifndef __deccc608sub_H__
-#define __deccc608sub_H__
+#ifndef __DECCC608SUB_H__
+#define __DECCC608SUB_H__
 
 #include "common.h"
 
 struct s_write;
-
-void handle_end_of_data (struct s_write *wb);
-void process608 (const unsigned char *data, int length, struct s_write *wb);
-void get_char_in_latin_1 (unsigned char *buffer, unsigned char c);
-void get_char_in_unicode (unsigned char *buffer, unsigned char c);
-int get_char_in_utf_8 (unsigned char *buffer, unsigned char c);
-unsigned char cctolower (unsigned char c);
-unsigned char cctoupper (unsigned char c);
-int general_608_init (struct s_write *wb);
-void general_608_close (struct s_write *wb);
 
 #define CC608_SCREEN_WIDTH  32
 
@@ -29,7 +16,7 @@ enum cc_modes
     MODE_ROLLUP_2 = 1,
     MODE_ROLLUP_3 = 2,
     MODE_ROLLUP_4 = 3,
-	MODE_TEXT = 4
+    MODE_TEXT = 4
 };
 
 enum color_code
@@ -41,7 +28,7 @@ enum color_code
     COL_RED = 4,
     COL_YELLOW = 5,
     COL_MAGENTA = 6,
-	COL_USERDEFINED = 7
+    COL_USERDEFINED = 7
 };
 
 
@@ -53,26 +40,26 @@ enum font_bits
     FONT_UNDERLINED_ITALICS = 3
 };
 
+#define FONT_STYLE_MASK FONT_UNDERLINED_ITALICS
 
 struct eia608_screen // A CC buffer
 {
-    unsigned char characters[15][33]; 
+    unsigned char characters[15][33];
     unsigned char colors[15][33];
     unsigned char fonts[15][33]; // Extra char at the end for a 0
     int row_used[15]; // Any data in row?
-    int empty; // Buffer completely empty?    	
+    int empty; // Buffer completely empty?
 };
 
 struct eia608
 {
     struct eia608_screen buffer1;
-    struct eia608_screen buffer2;  
+    struct eia608_screen buffer2;
     int cursor_row, cursor_column;
     int visible_buffer;
-    int srt_counter; // Number of subs currently written
+    int ssa_counter; // Number of subs currently written
     int screenfuls_counter; // Number of meaningful screenfuls written
     int64_t current_visible_start_ms; // At what time did the current visible buffer became so?
-    // unsigned current_visible_start_cc; // At what time did the current visible buffer became so?
     enum cc_modes mode;
     unsigned char last_c1, last_c2;
     int channel; // Currently selected channel
@@ -84,7 +71,7 @@ struct eia608
 struct s_write {
     struct eia608 *data608;
     FILE *fh;
-    unsigned char *subline; 
+    unsigned char *subline;
     int new_sentence;
     int new_channel;
     int in_xds_mode;
@@ -97,7 +84,12 @@ struct s_write {
 
     int clear_sub_needed;   // Indicates that we need to send a null
                             // subtitle to clear the current subtitle
+
     int rollup_cr;  // Flag indicates if CR command performed by rollup
+    int line;   // SSA line number
+    int width;
+    int height;
+    int crop[4];
 };
 
 enum command_code
@@ -115,7 +107,7 @@ enum command_code
     COM_CARRIAGERETURN = 10,
     COM_ERASENONDISPLAYEDMEMORY = 11,
     COM_BACKSPACE = 12,
-	COM_RESUMETEXTDISPLAY = 13
+    COM_RESUMETEXTDISPLAY = 13
 };
 
 enum encoding_type
@@ -127,11 +119,11 @@ enum encoding_type
 
 enum output_format
 {
-    OF_RAW	= 0,
-    OF_SRT	= 1,
+    OF_RAW  = 0,
+    OF_SRT  = 1,
     OF_SAMI = 2,
     OF_TRANSCRIPT = 3,
     OF_RCWT = 4
 };
 
-#endif
+#endif // __DECCC608SUB_H__

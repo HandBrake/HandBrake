@@ -672,6 +672,11 @@ static int avformatInit( hb_mux_object_t * m )
                 track->st->codec->codec_id = AV_CODEC_ID_HDMV_PGS_SUBTITLE;
             } break;
 
+            case CC608SUB:
+            case CC708SUB:
+            case TX3GSUB:
+            case SRTSUB:
+            case UTF8SUB:
             case SSASUB:
             {
                 if (job->mux == HB_MUX_AV_MP4)
@@ -695,18 +700,6 @@ static int avformatInit( hb_mux_object_t * m )
                         memcpy(priv_data, subtitle->extradata, priv_size);
                     }
                 }
-            } break;
-
-            case CC608SUB:
-            case CC708SUB:
-            case UTF8SUB:
-            case TX3GSUB:
-            case SRTSUB:
-            {
-                if (job->mux == HB_MUX_AV_MP4)
-                    track->st->codec->codec_id = AV_CODEC_ID_MOV_TEXT;
-                else
-                    track->st->codec->codec_id = AV_CODEC_ID_TEXT;
             } break;
 
             default:
@@ -974,7 +967,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     AVPacket pkt;
     int64_t dts, pts, duration = AV_NOPTS_VALUE;
     hb_job_t *job     = m->job;
-    uint8_t tx3g_out[2048];
+    uint8_t sub_out[2048];
 
     if (m->delay == AV_NOPTS_VALUE)
     {
@@ -1129,8 +1122,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     }
                     track->duration = pts;
                 }
-                if (track->st->codec->codec_id == AV_CODEC_ID_MOV_TEXT ||
-                    track->st->codec->codec_id == AV_CODEC_ID_TEXT)
+                if (track->st->codec->codec_id == AV_CODEC_ID_MOV_TEXT)
                 {
                     uint8_t styleatom[2048];;
                     uint16_t stylesize = 0;
@@ -1150,13 +1142,47 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     buffersize = strlen((char*)buffer);
 
                     /* Write the subtitle sample */
-                    memcpy( tx3g_out + 2, buffer, buffersize );
-                    memcpy( tx3g_out + 2 + buffersize, styleatom, stylesize);
-                    tx3g_out[0] = ( buffersize >> 8 ) & 0xff;
-                    tx3g_out[1] = buffersize & 0xff;
-                    pkt.data = tx3g_out;
+                    memcpy( sub_out + 2, buffer, buffersize );
+                    memcpy( sub_out + 2 + buffersize, styleatom, stylesize);
+                    sub_out[0] = ( buffersize >> 8 ) & 0xff;
+                    sub_out[1] = buffersize & 0xff;
+                    pkt.data = sub_out;
                     pkt.size = buffersize + stylesize + 2;
                 }
+            }
+            if (track->st->codec->codec_id == AV_CODEC_ID_SSA &&
+                job->mux == HB_MUX_AV_MKV)
+            {
+                // avformat requires the this additional information
+                // which it parses and then strips away
+                int start_hh, start_mm, stop_hh, stop_mm, layer;
+                float start_ss, stop_ss;
+                char *ssa;
+
+                start_hh = buf->s.start / (90000 * 60 * 60);
+                start_mm = (buf->s.start / (90000 * 60));
+                start_ss = ((float)buf->s.start / 90000) - start_mm * 60;
+                start_mm %= 60;
+                stop_hh = buf->s.stop / (90000 * 60 * 60);
+                stop_mm = (buf->s.stop / (90000 * 60));
+                stop_ss = ((float)buf->s.stop / 90000) - stop_mm * 60;
+                stop_mm %= 60;
+
+                // Skip the read-order field
+                ssa = strchr((char*)buf->data, ',');
+                if (ssa != NULL)
+                    ssa++;
+                // Skip the layer field
+                layer = strtol(ssa, NULL, 10);
+                ssa = strchr(ssa, ',');
+                if (ssa != NULL)
+                    ssa++;
+                sprintf((char*)sub_out,
+                    "Dialogue: %d,%d:%02d:%05.2f,%d:%02d:%05.2f,%s", layer,
+                    start_hh, start_mm, start_ss,
+                    stop_hh, stop_mm, stop_ss, ssa);
+                pkt.data = sub_out;
+                pkt.size = strlen((char*)sub_out) + 1;
             }
             pkt.convergence_duration = pkt.duration;
 

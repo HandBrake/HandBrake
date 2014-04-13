@@ -7,15 +7,12 @@
 #include "hb.h"
 #include "deccc608sub.h"
 
+#define SSA_PREAMBLE_LEN 24
 /*
  * ccextractor static configuration variables.
  */
 static int debug_608 = 0;
-static int trim_subs = 1;
-static int nofontcolor = 0;
-static enum encoding_type encoding = ENC_UTF_8;
 static int cc_channel = 1;
-static int sentence_cap = 0;
 static int subs_delay = 0;
 static int norollup = 0;
 static int direct_rollup = 0;
@@ -23,28 +20,21 @@ static int direct_rollup = 0;
 /*
  * Get the time of the last buffer that we have received.
  */
-static int64_t get_fts(struct s_write *wb)
+static int64_t get_last_pts(struct s_write *wb)
 {
     return wb->last_pts;
 }
 
 #define fatal(N, ...) // N
 
-int     rowdata[] = {11,-1,1,2,3,4,12,13,14,15,5,6,7,8,9,10};
+int rowdata[] = {11,-1,1,2,3,4,12,13,14,15,5,6,7,8,9,10};
 // Relationship between the first PAC byte and the row number
 
 // The following enc_buffer is not used at the moment, if it does get used
 // we need to bring it into the swrite struct. Same for "str".
 #define INITIAL_ENC_BUFFER_CAPACITY     2048
 
-unsigned char str[2048]; // Another generic general purpose buffer
-
-#define GUARANTEE(wb, length) if (length>wb->enc_buffer_capacity)            \
-{wb->enc_buffer_capacity*=2; wb->enc_buffer=(unsigned char*) realloc (wb->enc_buffer, wb->enc_buffer_capacity); \
-    if (wb->enc_buffer==NULL) { fatal (EXIT_NOT_ENOUGH_MEMORY, "Not enough memory, bailing out\n"); } \
-}
-
-const unsigned char pac2_attribs[][3]= // Color, font, ident
+static const unsigned char pac2_attribs[][3]= // Color, font, ident
 {
     {COL_WHITE,     FONT_REGULAR,               0},  // 0x40 || 0x60
     {COL_WHITE,     FONT_UNDERLINED,            0},  // 0x41 || 0x61
@@ -80,17 +70,10 @@ const unsigned char pac2_attribs[][3]= // Color, font, ident
     {COL_WHITE,     FONT_UNDERLINED,            28}  // 0x5f || 0x7f
 };
 
-// Preencoded strings
-unsigned char encoded_crlf[16];
-unsigned int encoded_crlf_length;
-unsigned char encoded_br[16];
-unsigned int encoded_br_length;
-
 // Default color
-unsigned char usercolor_rgb[8]="";
-enum color_code default_color=COL_WHITE;
+static enum color_code default_color=COL_WHITE;
 
-const char *command_type[] =
+static const char *command_type[] =
 {
     "Unknown",
     "EDM - EraseDisplayedMemory",
@@ -108,7 +91,7 @@ const char *command_type[] =
     "RTD - Resume Text Display"
 };
 
-const char *font_text[]=
+static const char *font_text[]=
 {
     "regular",
     "italics",
@@ -116,24 +99,19 @@ const char *font_text[]=
     "underlined italics"
 };
 
-const char *cc_modes_text[]=
+static const char *color_text[][2]=
 {
-    "Pop-Up captions"
+    {"white",       "&HFFFFFF&"},
+    {"green",       "&H00FF00&"},
+    {"blue",        "&HFF0000&"},
+    {"cyan",        "&HFFFF00&"},
+    {"red",         "&H0000FF&"},
+    {"yellow",      "&H00FFFF&"},
+    {"magenta",     "&HFF00FF&"},
+    {"userdefined", "&HFFFFFF&"}
 };
 
-const char *color_text[][2]=
-{
-    {"white",""},
-    {"green","<font color=\"#00ff00\">"},
-    {"blue","<font color=\"#0000ff\">"},
-    {"cyan","<font color=\"#00ffff\">"},
-    {"red","<font color=\"#ff0000\">"},
-    {"yellow","<font color=\"#ffff00\">"},
-    {"magenta","<font color=\"#ff00ff\">"},
-    {"userdefined","<font color=\""}
-};
-
-int general_608_init (struct s_write *wb)
+static int general_608_init (struct s_write *wb)
 {
     if( !wb->enc_buffer )
     {
@@ -167,7 +145,7 @@ int general_608_init (struct s_write *wb)
  * parallel encodes to fail - to be honest they will be stuffed anyway since
  * the CC's may be overwriting the buffers.
  */
-void general_608_close (struct s_write *wb)
+static void general_608_close (struct s_write *wb)
 {
     if( wb->enc_buffer ) {
         free(wb->enc_buffer);
@@ -186,1076 +164,501 @@ void general_608_close (struct s_write *wb)
 
 #include <ctype.h>
 
-void get_char_in_latin_1 (unsigned char *buffer, unsigned char c)
+// Returns number of bytes used
+static int get_char_in_utf8(unsigned char *buffer, unsigned char c)
 {
-    unsigned char c1='?';
-    if (c<0x80)
-    {
-        // Regular line-21 character set, mostly ASCII except these exceptions
-        switch (c)
-        {
-            case 0x2a: // lowercase a, acute accent
-                c1=0xe1;
-                break;
-            case 0x5c: // lowercase e, acute accent
-                c1=0xe9;
-                break;
-            case 0x5e: // lowercase i, acute accent
-                c1=0xed;
-                break;
-            case 0x5f: // lowercase o, acute accent
-                c1=0xf3;
-                break;
-            case 0x60: // lowercase u, acute accent
-                c1=0xfa;
-                break;
-            case 0x7b: // lowercase c with cedilla
-                c1=0xe7;
-                break;
-            case 0x7c: // division symbol
-                c1=0xf7;
-                break;
-            case 0x7d: // uppercase N tilde
-                c1=0xd1;
-                break;
-            case 0x7e: // lowercase n tilde
-                c1=0xf1;
-                break;
-            default:
-                c1=c;
-                break;
-        }
-        *buffer=c1;
-        return;
-    }
-    switch (c)
-    {
-        // THIS BLOCK INCLUDES THE 16 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x11 AND LOW BETWEEN 0x30 AND 0x3F
-        case 0x80: // Registered symbol (R)
-            c1=0xae;
-            break;
-        case 0x81: // degree sign
-            c1=0xb0;
-            break;
-        case 0x82: // 1/2 symbol
-            c1=0xbd;
-            break;
-        case 0x83: // Inverted (open) question mark
-            c1=0xbf;
-            break;
-        case 0x84: // Trademark symbol (TM) - Does not exist in Latin 1
-            break;
-        case 0x85: // Cents symbol
-            c1=0xa2;
-            break;
-        case 0x86: // Pounds sterling
-            c1=0xa3;
-            break;
-        case 0x87: // Music note - Not in latin 1, so we use 'pilcrow'
-            c1=0xb6;
-            break;
-        case 0x88: // lowercase a, grave accent
-            c1=0xe0;
-            break;
-        case 0x89: // transparent space, we make it regular
-            c1=0x20;
-            break;
-        case 0x8a: // lowercase e, grave accent
-            c1=0xe8;
-            break;
-        case 0x8b: // lowercase a, circumflex accent
-            c1=0xe2;
-            break;
-        case 0x8c: // lowercase e, circumflex accent
-            c1=0xea;
-            break;
-        case 0x8d: // lowercase i, circumflex accent
-            c1=0xee;
-            break;
-        case 0x8e: // lowercase o, circumflex accent
-            c1=0xf4;
-            break;
-        case 0x8f: // lowercase u, circumflex accent
-            c1=0xfb;
-            break;
-        // THIS BLOCK INCLUDES THE 32 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x12 AND LOW BETWEEN 0x20 AND 0x3F
-        case 0x90: // capital letter A with acute
-            c1=0xc1;
-            break;
-        case 0x91: // capital letter E with acute
-            c1=0xc9;
-            break;
-        case 0x92: // capital letter O with acute
-            c1=0xd3;
-            break;
-        case 0x93: // capital letter U with acute
-            c1=0xda;
-            break;
-        case 0x94: // capital letter U with diaresis
-            c1=0xdc;
-            break;
-        case 0x95: // lowercase letter U with diaeresis
-            c1=0xfc;
-            break;
-        case 0x96: // apostrophe
-            c1=0x27;
-            break;
-        case 0x97: // inverted exclamation mark
-            c1=0xa1;
-            break;
-        case 0x98: // asterisk
-            c1=0x2a;
-            break;
-        case 0x99: // apostrophe (yes, duped). See CCADI source code.
-            c1=0x27;
-            break;
-        case 0x9a: // hyphen-minus
-            c1=0x2d;
-            break;
-        case 0x9b: // copyright sign
-            c1=0xa9;
-            break;
-        case 0x9c: // Service Mark - not available in latin 1
-            break;
-        case 0x9d: // Full stop (.)
-            c1=0x2e;
-            break;
-        case 0x9e: // Quoatation mark
-            c1=0x22;
-            break;
-        case 0x9f: // Quoatation mark
-            c1=0x22;
-            break;
-        case 0xa0: // uppercase A, grave accent
-            c1=0xc0;
-            break;
-        case 0xa1: // uppercase A, circumflex
-            c1=0xc2;
-            break;
-        case 0xa2: // uppercase C with cedilla
-            c1=0xc7;
-            break;
-        case 0xa3: // uppercase E, grave accent
-            c1=0xc8;
-            break;
-        case 0xa4: // uppercase E, circumflex
-            c1=0xca;
-            break;
-        case 0xa5: // capital letter E with diaresis
-            c1=0xcb;
-            break;
-        case 0xa6: // lowercase letter e with diaresis
-            c1=0xeb;
-            break;
-        case 0xa7: // uppercase I, circumflex
-            c1=0xce;
-            break;
-        case 0xa8: // uppercase I, with diaresis
-            c1=0xcf;
-            break;
-        case 0xa9: // lowercase i, with diaresis
-            c1=0xef;
-            break;
-        case 0xaa: // uppercase O, circumflex
-            c1=0xd4;
-            break;
-        case 0xab: // uppercase U, grave accent
-            c1=0xd9;
-            break;
-        case 0xac: // lowercase u, grave accent
-            c1=0xf9;
-            break;
-        case 0xad: // uppercase U, circumflex
-            c1=0xdb;
-            break;
-        case 0xae: // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-            c1=0xab;
-            break;
-        case 0xaf: // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-            c1=0xbb;
-            break;
-        // THIS BLOCK INCLUDES THE 32 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x13 AND LOW BETWEEN 0x20 AND 0x3F
-        case 0xb0: // Uppercase A, tilde
-            c1=0xc3;
-            break;
-        case 0xb1: // Lowercase a, tilde
-            c1=0xe3;
-            break;
-        case 0xb2: // Uppercase I, acute accent
-            c1=0xcd;
-            break;
-        case 0xb3: // Uppercase I, grave accent
-            c1=0xcc;
-            break;
-        case 0xb4: // Lowercase i, grave accent
-            c1=0xec;
-            break;
-        case 0xb5: // Uppercase O, grave accent
-            c1=0xd2;
-            break;
-        case 0xb6: // Lowercase o, grave accent
-            c1=0xf2;
-            break;
-        case 0xb7: // Uppercase O, tilde
-            c1=0xd5;
-            break;
-        case 0xb8: // Lowercase o, tilde
-            c1=0xf5;
-            break;
-        case 0xb9: // Open curly brace
-            c1=0x7b;
-            break;
-        case 0xba: // Closing curly brace
-            c1=0x7d;
-            break;
-        case 0xbb: // Backslash
-            c1=0x5c;
-            break;
-        case 0xbc: // Caret
-            c1=0x5e;
-            break;
-        case 0xbd: // Underscore
-            c1=0x5f;
-            break;
-        case 0xbe: // Pipe (broken bar)
-            c1=0xa6;
-            break;
-        case 0xbf: // Tilde
-            c1=0x7e;
-            break;
-        case 0xc0: // Uppercase A, umlaut
-            c1=0xc4;
-            break;
-        case 0xc1: // Lowercase A, umlaut
-            c1=0xe3;
-            break;
-        case 0xc2: // Uppercase O, umlaut
-            c1=0xd6;
-            break;
-        case 0xc3: // Lowercase o, umlaut
-            c1=0xf6;
-            break;
-        case 0xc4: // Esszett (sharp S)
-            c1=0xdf;
-            break;
-        case 0xc5: // Yen symbol
-            c1=0xa5;
-            break;
-        case 0xc6: // Currency symbol
-            c1=0xa4;
-            break;
-        case 0xc7: // Vertical bar
-            c1=0x7c;
-            break;
-        case 0xc8: // Uppercase A, ring
-            c1=0xc5;
-            break;
-        case 0xc9: // Lowercase A, ring
-            c1=0xe5;
-            break;
-        case 0xca: // Uppercase O, slash
-            c1=0xd8;
-            break;
-        case 0xcb: // Lowercase o, slash
-            c1=0xf8;
-            break;
-        case 0xcc: // Upper left corner
-        case 0xcd: // Upper right corner
-        case 0xce: // Lower left corner
-        case 0xcf: // Lower right corner
-        default: // For those that don't have representation
-            *buffer='?'; // I'll do it eventually, I promise
-            break; // This are weird chars anyway
-    }
-    *buffer=c1;
-}
-
-void get_char_in_unicode (unsigned char *buffer, unsigned char c)
-{
-    unsigned char c1,c2;
-    switch (c)
-    {
-        case 0x84: // Trademark symbol (TM)
-            c2=0x21;
-            c1=0x22;
-            break;
-        case 0x87: // Music note
-            c2=0x26;
-            c1=0x6a;
-            break;
-        case 0x9c: // Service Mark
-            c2=0x21;
-            c1=0x20;
-            break;
-        case 0xcc: // Upper left corner
-            c2=0x23;
-            c1=0x1c;
-            break;
-        case 0xcd: // Upper right corner
-            c2=0x23;
-            c1=0x1d;
-            break;
-        case 0xce: // Lower left corner
-            c2=0x23;
-            c1=0x1e;
-            break;
-        case 0xcf: // Lower right corner
-            c2=0x23;
-            c1=0x1f;
-            break;
-        default: // Everything else, same as latin-1 followed by 00
-            get_char_in_latin_1 (&c1,c);
-            c2=0;
-            break;
-    }
-    *buffer=c1;
-    *(buffer+1)=c2;
-}
-
-int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number of bytes used
-{
-    if (c==0x00)
+    if (c == 0x00)
         return 0;
-    if (c<0x80) // Regular line-21 character set, mostly ASCII except these exceptions
+
+    // Regular line-21 character set, mostly ASCII except these exceptions
+    if (c < 0x80)
     {
         switch (c)
         {
         case 0x2a: // lowercase a, acute accent
-            *buffer=0xc3;
-            *(buffer+1)=0xa1;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa1;
             return 2;
         case 0x5c: // lowercase e, acute accent
-            *buffer=0xc3;
-            *(buffer+1)=0xa9;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa9;
             return 2;
         case 0x5e: // lowercase i, acute accent
-            *buffer=0xc3;
-            *(buffer+1)=0xad;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xad;
             return 2;
         case 0x5f: // lowercase o, acute accent
-            *buffer=0xc3;
-            *(buffer+1)=0xb3;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb3;
             return 2;
         case 0x60: // lowercase u, acute accent
-            *buffer=0xc3;
-            *(buffer+1)=0xba;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xba;
             return 2;
         case 0x7b: // lowercase c with cedilla
-            *buffer=0xc3;
-            *(buffer+1)=0xa7;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa7;
             return 2;
         case 0x7c: // division symbol
-            *buffer=0xc3;
-            *(buffer+1)=0xb7;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb7;
             return 2;
         case 0x7d: // uppercase N tilde
-            *buffer=0xc3;
-            *(buffer+1)=0x91;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x91;
             return 2;
         case 0x7e: // lowercase n tilde
-            *buffer=0xc3;
-            *(buffer+1)=0xb1;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb1;
             return 2;
         default:
-            *buffer=c;
+            *buffer = c;
             return 1;
         }
     }
     switch (c)
     {
         // THIS BLOCK INCLUDES THE 16 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x11 AND LOW BETWEEN 0x30 AND 0x3F
+        // THAT COME FROM HI BYTE = 0x11 AND LOW BETWEEN 0x30 AND 0x3F
         case 0x80: // Registered symbol (R)
-            *buffer=0xc2;
-            *(buffer+1)=0xae;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xae;
             return 2;
         case 0x81: // degree sign
-            *buffer=0xc2;
-            *(buffer+1)=0xb0;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xb0;
             return 2;
         case 0x82: // 1/2 symbol
-            *buffer=0xc2;
-            *(buffer+1)=0xbd;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xbd;
             return 2;
         case 0x83: // Inverted (open) question mark
-            *buffer=0xc2;
-            *(buffer+1)=0xbf;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xbf;
             return 2;
         case 0x84: // Trademark symbol (TM)
-            *buffer=0xe2;
-            *(buffer+1)=0x84;
-            *(buffer+2)=0xa2;
+            *buffer = 0xe2;
+            *(buffer+1) = 0x84;
+            *(buffer+2) = 0xa2;
             return 3;
         case 0x85: // Cents symbol
-            *buffer=0xc2;
-            *(buffer+1)=0xa2;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xa2;
             return 2;
         case 0x86: // Pounds sterling
-            *buffer=0xc2;
-            *(buffer+1)=0xa3;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xa3;
             return 2;
         case 0x87: // Music note
-            *buffer=0xe2;
-            *(buffer+1)=0x99;
-            *(buffer+2)=0xaa;
+            *buffer = 0xe2;
+            *(buffer+1) = 0x99;
+            *(buffer+2) = 0xaa;
             return 3;
         case 0x88: // lowercase a, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0xa0;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa0;
             return 2;
         case 0x89: // transparent space, we make it regular
-            *buffer=0x20;
+            *buffer = 0x20;
             return 1;
         case 0x8a: // lowercase e, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0xa8;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa8;
             return 2;
         case 0x8b: // lowercase a, circumflex accent
-            *buffer=0xc3;
-            *(buffer+1)=0xa2;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa2;
             return 2;
         case 0x8c: // lowercase e, circumflex accent
-            *buffer=0xc3;
-            *(buffer+1)=0xaa;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xaa;
             return 2;
         case 0x8d: // lowercase i, circumflex accent
-            *buffer=0xc3;
-            *(buffer+1)=0xae;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xae;
             return 2;
         case 0x8e: // lowercase o, circumflex accent
-            *buffer=0xc3;
-            *(buffer+1)=0xb4;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb4;
             return 2;
         case 0x8f: // lowercase u, circumflex accent
-            *buffer=0xc3;
-            *(buffer+1)=0xbb;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xbb;
             return 2;
         // THIS BLOCK INCLUDES THE 32 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x12 AND LOW BETWEEN 0x20 AND 0x3F
+        // THAT COME FROM HI BYTE = 0x12 AND LOW BETWEEN 0x20 AND 0x3F
         case 0x90: // capital letter A with acute
-            *buffer=0xc3;
-            *(buffer+1)=0x81;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x81;
             return 2;
         case 0x91: // capital letter E with acute
-            *buffer=0xc3;
-            *(buffer+1)=0x89;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x89;
             return 2;
         case 0x92: // capital letter O with acute
-            *buffer=0xc3;
-            *(buffer+1)=0x93;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x93;
             return 2;
         case 0x93: // capital letter U with acute
-            *buffer=0xc3;
-            *(buffer+1)=0x9a;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x9a;
             return 2;
         case 0x94: // capital letter U with diaresis
-            *buffer=0xc3;
-            *(buffer+1)=0x9c;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x9c;
             return 2;
         case 0x95: // lowercase letter U with diaeresis
-            *buffer=0xc3;
-            *(buffer+1)=0xbc;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xbc;
             return 2;
         case 0x96: // apostrophe
-            *buffer=0x27;
+            *buffer = 0x27;
             return 1;
         case 0x97: // inverted exclamation mark
-            *buffer=0xc2;
-            *(buffer+1)=0xa1;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xa1;
             return 2;
         case 0x98: // asterisk
-            *buffer=0x2a;
+            *buffer = 0x2a;
             return 1;
         case 0x99: // apostrophe (yes, duped). See CCADI source code.
-            *buffer=0x27;
+            *buffer = 0x27;
             return 1;
         case 0x9a: // hyphen-minus
-            *buffer=0x2d;
+            *buffer = 0x2d;
             return 1;
         case 0x9b: // copyright sign
-            *buffer=0xc2;
-            *(buffer+1)=0xa9;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xa9;
             return 2;
         case 0x9c: // Service mark
-            *buffer=0xe2;
-            *(buffer+1)=0x84;
-            *(buffer+2)=0xa0;
+            *buffer = 0xe2;
+            *(buffer+1) = 0x84;
+            *(buffer+2) = 0xa0;
             return 3;
         case 0x9d: // Full stop (.)
-            *buffer=0x2e;
+            *buffer = 0x2e;
             return 1;
         case 0x9e: // Quoatation mark
-            *buffer=0x22;
+            *buffer = 0x22;
             return 1;
         case 0x9f: // Quoatation mark
-            *buffer=0x22;
+            *buffer = 0x22;
             return 1;
         case 0xa0: // uppercase A, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0x80;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x80;
             return 2;
         case 0xa1: // uppercase A, circumflex
-            *buffer=0xc3;
-            *(buffer+1)=0x82;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x82;
             return 2;
         case 0xa2: // uppercase C with cedilla
-            *buffer=0xc3;
-            *(buffer+1)=0x87;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x87;
             return 2;
         case 0xa3: // uppercase E, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0x88;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x88;
             return 2;
         case 0xa4: // uppercase E, circumflex
-            *buffer=0xc3;
-            *(buffer+1)=0x8a;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x8a;
             return 2;
         case 0xa5: // capital letter E with diaresis
-            *buffer=0xc3;
-            *(buffer+1)=0x8b;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x8b;
             return 2;
         case 0xa6: // lowercase letter e with diaresis
-            *buffer=0xc3;
-            *(buffer+1)=0xab;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xab;
             return 2;
         case 0xa7: // uppercase I, circumflex
-            *buffer=0xc3;
-            *(buffer+1)=0x8e;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x8e;
             return 2;
         case 0xa8: // uppercase I, with diaresis
-            *buffer=0xc3;
-            *(buffer+1)=0x8f;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x8f;
             return 2;
         case 0xa9: // lowercase i, with diaresis
-            *buffer=0xc3;
-            *(buffer+1)=0xaf;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xaf;
             return 2;
         case 0xaa: // uppercase O, circumflex
-            *buffer=0xc3;
-            *(buffer+1)=0x94;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x94;
             return 2;
         case 0xab: // uppercase U, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0x99;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x99;
             return 2;
         case 0xac: // lowercase u, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0xb9;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb9;
             return 2;
         case 0xad: // uppercase U, circumflex
-            *buffer=0xc3;
-            *(buffer+1)=0x9b;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x9b;
             return 2;
         case 0xae: // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-            *buffer=0xc2;
-            *(buffer+1)=0xab;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xab;
             return 2;
         case 0xaf: // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-            *buffer=0xc2;
-            *(buffer+1)=0xbb;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xbb;
             return 2;
         // THIS BLOCK INCLUDES THE 32 EXTENDED (TWO-BYTE) LINE 21 CHARACTERS
-        // THAT COME FROM HI BYTE=0x13 AND LOW BETWEEN 0x20 AND 0x3F
+        // THAT COME FROM HI BYTE = 0x13 AND LOW BETWEEN 0x20 AND 0x3F
         case 0xb0: // Uppercase A, tilde
-            *buffer=0xc3;
-            *(buffer+1)=0x83;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x83;
             return 2;
         case 0xb1: // Lowercase a, tilde
-            *buffer=0xc3;
-            *(buffer+1)=0xa3;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa3;
             return 2;
         case 0xb2: // Uppercase I, acute accent
-            *buffer=0xc3;
-            *(buffer+1)=0x8d;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x8d;
             return 2;
         case 0xb3: // Uppercase I, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0x8c;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x8c;
             return 2;
         case 0xb4: // Lowercase i, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0xac;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xac;
             return 2;
         case 0xb5: // Uppercase O, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0x92;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x92;
             return 2;
         case 0xb6: // Lowercase o, grave accent
-            *buffer=0xc3;
-            *(buffer+1)=0xb2;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb2;
             return 2;
         case 0xb7: // Uppercase O, tilde
-            *buffer=0xc3;
-            *(buffer+1)=0x95;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x95;
             return 2;
         case 0xb8: // Lowercase o, tilde
-            *buffer=0xc3;
-            *(buffer+1)=0xb5;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb5;
             return 2;
         case 0xb9: // Open curly brace
-            *buffer=0x7b;
+            *buffer = 0x7b;
             return 1;
         case 0xba: // Closing curly brace
-            *buffer=0x7d;
+            *buffer = 0x7d;
             return 1;
         case 0xbb: // Backslash
-            *buffer=0x5c;
+            *buffer = 0x5c;
             return 1;
         case 0xbc: // Caret
-            *buffer=0x5e;
+            *buffer = 0x5e;
             return 1;
         case 0xbd: // Underscore
-            *buffer=0x5f;
+            *buffer = 0x5f;
             return 1;
         case 0xbe: // Pipe (broken bar)
-            *buffer=0xc2;
-            *(buffer+1)=0xa6;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xa6;
             return 1;
         case 0xbf: // Tilde
-            *buffer=0x7e; // Not sure
+            *buffer = 0x7e; // Not sure
             return 1;
         case 0xc0: // Uppercase A, umlaut
-            *buffer=0xc3;
-            *(buffer+1)=0x84;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x84;
             return 2;
         case 0xc1: // Lowercase A, umlaut
-            *buffer=0xc3;
-            *(buffer+1)=0xa4;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa4;
             return 2;
         case 0xc2: // Uppercase O, umlaut
-            *buffer=0xc3;
-            *(buffer+1)=0x96;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x96;
             return 2;
         case 0xc3: // Lowercase o, umlaut
-            *buffer=0xc3;
-            *(buffer+1)=0xb6;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb6;
             return 2;
         case 0xc4: // Esszett (sharp S)
-            *buffer=0xc3;
-            *(buffer+1)=0x9f;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x9f;
             return 2;
         case 0xc5: // Yen symbol
-            *buffer=0xc2;
-            *(buffer+1)=0xa5;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xa5;
             return 2;
         case 0xc6: // Currency symbol
-            *buffer=0xc2;
-            *(buffer+1)=0xa4;
+            *buffer = 0xc2;
+            *(buffer+1) = 0xa4;
             return 2;
         case 0xc7: // Vertical bar
-            *buffer=0x7c;
+            *buffer = 0x7c;
             return 1;
         case 0xc8: // Uppercase A, ring
-            *buffer=0xc3;
-            *(buffer+1)=0x85;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x85;
             return 2;
         case 0xc9: // Lowercase A, ring
-            *buffer=0xc3;
-            *(buffer+1)=0xa5;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xa5;
             return 2;
         case 0xca: // Uppercase O, slash
-            *buffer=0xc3;
-            *(buffer+1)=0x98;
+            *buffer = 0xc3;
+            *(buffer+1) = 0x98;
             return 2;
         case 0xcb: // Lowercase o, slash
-            *buffer=0xc3;
-            *(buffer+1)=0xb8;
+            *buffer = 0xc3;
+            *(buffer+1) = 0xb8;
             return 2;
         case 0xcc: // Upper left corner
-            *buffer=0xe2;
-            *(buffer+1)=0x8c;
-            *(buffer+2)=0x9c;
+            *buffer = 0xe2;
+            *(buffer+1) = 0x8c;
+            *(buffer+2) = 0x9c;
             return 3;
         case 0xcd: // Upper right corner
-            *buffer=0xe2;
-            *(buffer+1)=0x8c;
-            *(buffer+2)=0x9d;
+            *buffer = 0xe2;
+            *(buffer+1) = 0x8c;
+            *(buffer+2) = 0x9d;
             return 3;
         case 0xce: // Lower left corner
-            *buffer=0xe2;
-            *(buffer+1)=0x8c;
-            *(buffer+2)=0x9e;
+            *buffer = 0xe2;
+            *(buffer+1) = 0x8c;
+            *(buffer+2) = 0x9e;
             return 3;
         case 0xcf: // Lower right corner
-            *buffer=0xe2;
-            *(buffer+1)=0x8c;
-            *(buffer+2)=0x9f;
+            *buffer = 0xe2;
+            *(buffer+1) = 0x8c;
+            *(buffer+2) = 0x9f;
             return 3;
         default: //
-            *buffer='?'; // I'll do it eventually, I promise
+            *buffer = '?'; // I'll do it eventually, I promise
             return 1; // This are weird chars anyway
     }
 }
 
-unsigned char cctolower (unsigned char c)
+// Encodes a generic string. Note that since we use the encoders for closed
+// caption data, text would have to be encoded as CCs... so using special
+// characters here it's a bad idea.
+static unsigned encode_line(unsigned char *buffer, unsigned char *text)
 {
-    if (c>='A' && c<='Z')
-        return tolower(c);
-    switch (c)
-    {
-        case 0x7d: // uppercase N tilde
-            return 0x7e;
-        case 0x90: // capital letter A with acute
-            return 0x2a;
-        case 0x91: // capital letter E with acute
-            return 0x5c;
-        case 0x92: // capital letter O with acute
-            return 0x5f;
-        case 0x93: // capital letter U with acute
-            return 0x60;
-        case 0xa2: // uppercase C with cedilla
-            return 0x7b;
-        case 0xa0: // uppercase A, grave accent
-            return 0x88;
-        case 0xa3: // uppercase E, grave accent
-            return 0x8a;
-        case 0xa1: // uppercase A, circumflex
-            return 0x8b;
-        case 0xa4: // uppercase E, circumflex
-            return 0x8c;
-        case 0xa7: // uppercase I, circumflex
-            return 0x8d;
-        case 0xaa: // uppercase O, circumflex
-            return 0x8e;
-        case 0xad: // uppercase U, circumflex
-            return 0x8f;
-        case 0x94: // capital letter U with diaresis
-            return 0x95;
-        case 0xa5: // capital letter E with diaresis
-            return 0xa6;
-        case 0xa8: // uppercase I, with diaresis
-            return 0xa9;
-        case 0xab: // uppercase U, grave accent
-            return 0xac;
-        case 0xb0: // Uppercase A, tilde
-            return 0xb1;
-        case 0xb2: // Uppercase I, acute accent
-            return 0x5e;
-        case 0xb3: // Uppercase I, grave accent
-            return 0xb4;
-        case 0xb5: // Uppercase O, grave accent
-            return 0xb6;
-        case 0xb7: // Uppercase O, tilde
-            return 0xb8;
-        case 0xc0: // Uppercase A, umlaut
-            return 0xc1;
-        case 0xc2: // Uppercase O, umlaut
-            return 0xc3;
-        case 0xc8: // Uppercase A, ring
-            return 0xc9;
-        case 0xca: // Uppercase O, slash
-            return 0xcb;
-    }
-    return c;
-}
-
-unsigned char cctoupper (unsigned char c)
-{
-    if (c>='a' && c<='z')
-        return toupper(c);
-    switch (c)
-    {
-        case 0x7e: // lowercase n tilde
-            return 0x7d;
-        case 0x2a: // lowercase a, acute accent
-            return 0x90;
-        case 0x5c: // lowercase e, acute accent
-            return 0x91;
-        case 0x5e: // lowercase i, acute accent
-            return 0xb2;
-        case 0x5f: // lowercase o, acute accent
-            return 0x92;
-        case 0x60: // lowercase u, acute accent
-            return 0x93;
-        case 0x7b: // lowercase c with cedilla
-            return 0xa2;
-        case 0x88: // lowercase a, grave accent
-            return 0xa0;
-        case 0x8a: // lowercase e, grave accent
-            return 0xa3;
-        case 0x8b: // lowercase a, circumflex accent
-            return 0xa1;
-        case 0x8c: // lowercase e, circumflex accent
-            return 0xa4;
-        case 0x8d: // lowercase i, circumflex accent
-            return 0xa7;
-        case 0x8e: // lowercase o, circumflex accent
-            return 0xaa;
-        case 0x8f: // lowercase u, circumflex accent
-            return 0xad;
-        case 0x95: // lowercase letter U with diaeresis
-            return 0x94;
-        case 0xa6: // lowercase letter e with diaresis
-            return 0xa5;
-        case 0xa9: // lowercase i, with diaresis
-            return 0xa8;
-        case 0xac: // lowercase u, grave accent
-            return 0xab;
-        case 0xb1: // Lowercase a, tilde
-            return 0xb0;
-        case 0xb4: // Lowercase i, grave accent
-            return 0xb3;
-        case 0xb6: // Lowercase o, grave accent
-            return 0xb5;
-        case 0xb8: // Lowercase o, tilde
-            return 0xb7;
-        case 0xc1: // Lowercase A, umlaut
-            return 0xc0;
-        case 0xc3: // Lowercase o, umlaut
-            return 0xc2;
-        case 0xc9: // Lowercase A, ring
-            return 0xc8;
-        case 0xcb: // Lowercase o, slash
-            return 0xca;
-    }
-    return c;
-}
-
-
-// Encodes a generic string. Note that since we use the encoders for closed caption
-// data, text would have to be encoded as CCs... so using special characters here
-// it's a bad idea.
-unsigned encode_line (unsigned char *buffer, unsigned char *text)
-{
-    unsigned bytes=0;
+    unsigned bytes = 0;
     while (*text)
     {
-        switch (encoding)
-        {
-            case ENC_UTF_8:
-            case ENC_LATIN_1:
-                *buffer=*text;
-                bytes++;
-                buffer++;
-                break;
-        case ENC_UNICODE:
-            *buffer=*text;
-            *(buffer+1)=0;
-            bytes+=2;
-            buffer+=2;
-            break;
-        }
-        text++;
+        *buffer++ = *text++;
+        bytes++;
     }
     return bytes;
 }
 
-#define ISSEPARATOR(c) (c==' ' || c==0x89 || ispunct(c) \
-    || c==0x99) // This is the apostrofe. We get it here in CC encoding, not ASCII
-
-
-void correct_case (int line_num, struct eia608_screen *data)
-{
-/*     int i=0; */
-/*     while (i<spell_words) */
-/*     { */
-/*         char *c=(char *) data->characters[line_num]; */
-/*         size_t len=strlen (spell_correct[i]); */
-/*         while ((c=strstr (c,spell_lower[i]))!=NULL) */
-/*         { */
-/*             // Make sure it's a whole word (start of line or */
-/*             // preceded by space, and end of line or followed by */
-/*             // space) */
-/*             unsigned char prev; */
-/*             if (c==(char *) data->characters[line_num]) // Beginning of line... */
-/*                 prev=' '; // ...Pretend we had a blank before */
-/*             else */
-/*                 prev=*(c-1);              */
-/*             unsigned char next; */
-/*             if (c-(char *) data->characters[line_num]+len==CC608_SCREEN_WIDTH) // End of line... */
-/*                 next=' '; // ... pretend we have a blank later */
-/*             else */
-/*                 next=*(c+len);            */
-/*             if ( ISSEPARATOR(prev) && ISSEPARATOR(next)) */
-/*             { */
-/*                 memcpy (c,spell_correct[i],len); */
-/*             } */
-/*             c++; */
-/*         } */
-/*         i++; */
-/*     } */
-}
-
-void capitalize (int line_num, struct eia608_screen *data, int *new_sentence)
+static void find_limit_characters(unsigned char *line, int *first_non_blank,
+                                  int *last_non_blank)
 {
     int i;
 
-    for (i=0;i<CC608_SCREEN_WIDTH;i++)
+    *last_non_blank = -1;
+    *first_non_blank = -1;
+    for (i = 0; i < CC608_SCREEN_WIDTH; i++)
     {
-        switch (data->characters[line_num][i])
+        unsigned char c = line[i];
+        if (c != ' ' && c != 0x89)
         {
-            case ' ':
-            case 0x89: // This is a transparent space
-            case '-':
-                break;
-            case '.': // Fallthrough
-            case '?': // Fallthrough
-            case '!':
-            case ':':
-                *new_sentence=1;
-                break;
-            default:
-                if (*new_sentence)
-                    data->characters[line_num][i]=cctoupper (data->characters[line_num][i]);
-                else
-                    data->characters[line_num][i]=cctolower (data->characters[line_num][i]);
-                *new_sentence=0;
-                break;
+            if (*first_non_blank == -1)
+                *first_non_blank = i;
+            *last_non_blank = i;
         }
     }
 }
 
-void find_limit_characters (unsigned char *line, int *first_non_blank, int *last_non_blank)
+static unsigned get_decoder_line_encoded(unsigned char *buffer, int line_num,
+                                         struct eia608_screen *data)
 {
-    int i;
-
-    *last_non_blank=-1;
-    *first_non_blank=-1;
-    for (i=0;i<CC608_SCREEN_WIDTH;i++)
-    {
-        unsigned char c=line[i];
-        if (c!=' ' && c!=0x89)
-        {
-            if (*first_non_blank==-1)
-                *first_non_blank=i;
-            *last_non_blank=i;
-        }
-    }
-}
-
-unsigned get_decoder_line_basic (unsigned char *buffer, int line_num, struct eia608_screen *data)
-{
-    unsigned char *line = data->characters[line_num];
-    int last_non_blank=-1;
-    int first_non_blank=-1;
-    unsigned char *orig=buffer; // Keep for debugging
-    int i;
-    find_limit_characters (line, &first_non_blank, &last_non_blank);
-
-    if (first_non_blank==-1)
-    {
-        *buffer=0;
-        return 0;
-    }
-
-    int bytes=0;
-    for (i=first_non_blank;i<=last_non_blank;i++)
-    {
-        char c=line[i];
-        switch (encoding)
-        {
-            case ENC_UTF_8:
-                bytes=get_char_in_utf_8 (buffer,c);
-                break;
-            case ENC_LATIN_1:
-                get_char_in_latin_1 (buffer,c);
-                bytes=1;
-                break;
-            case ENC_UNICODE:
-                get_char_in_unicode (buffer,c);
-                bytes=2;
-                break;
-        }
-        buffer+=bytes;
-    }
-    *buffer=0;
-    return (unsigned) (buffer-orig); // Return length
-}
-
-unsigned get_decoder_line_encoded (unsigned char *buffer, int line_num, struct eia608_screen *data)
-{
-    int col = COL_WHITE;
-    int underlined = 0;
-    int italics = 0;
+    uint8_t font_style;
+    uint8_t prev_font_style = FONT_REGULAR;
+    uint8_t font_color;
+    uint8_t prev_font_color = COL_WHITE;
     int i;
 
     unsigned char *line = data->characters[line_num];
-    unsigned char *orig=buffer; // Keep for debugging
-    int first=0, last=31;
-    if (trim_subs)
-        find_limit_characters(line,&first,&last);
-    for (i=first;i<=last;i++)
+    unsigned char *orig = buffer; // Keep for debugging
+    int first = 0, last = 31;
+
+    find_limit_characters(line, &first, &last);
+    for (i = first; i <= last; i++)
     {
         // Handle color
-        int its_col = data->colors[line_num][i];
-        if (its_col != col  && !nofontcolor)
+        font_color = data->colors[line_num][i];
+        font_style = data->fonts[line_num][i];
+
+        // Handle reset to defaults
+        if ((font_style & FONT_STYLE_MASK) == 0 && font_color == COL_WHITE)
         {
-            if (col!=COL_WHITE) // We need to close the previous font tag
+            if (((font_style ^ prev_font_style) & FONT_STYLE_MASK) ||
+                (font_color != prev_font_color))
             {
-                buffer+= encode_line (buffer,(unsigned char *) "</font>");
+                buffer += encode_line(buffer, (uint8_t*)"{\\r}");
             }
-            // Add new font tag
-            buffer+=encode_line (buffer, (unsigned char*) color_text[its_col][1]);
-            if (its_col==COL_USERDEFINED)
+        }
+        else
+        {
+            // Open markup
+            if (((font_style ^ prev_font_style) & FONT_STYLE_MASK) ||
+                (font_color != prev_font_color))
             {
-                // The previous sentence doesn't copy the whole
-                // <font> tag, just up to the quote before the color
-                buffer+=encode_line (buffer, (unsigned char*) usercolor_rgb);
-                buffer+=encode_line (buffer, (unsigned char*) "\">");
+                // style changed
+                buffer += encode_line(buffer, (uint8_t*)"{");
             }
 
-            col = its_col;
+            // Handle underlined
+            if ((font_style ^ prev_font_style) & FONT_UNDERLINED)
+            {
+                int enable = !!(font_style & FONT_UNDERLINED);
+                buffer += encode_line(buffer, (uint8_t*)"\\u");
+                *buffer++ = enable + 0x30;
+            }
+
+            // Handle italics
+            if ((font_style ^ prev_font_style) & FONT_ITALICS)
+            {
+                int enable = !!(font_style & FONT_ITALICS);
+                buffer += encode_line(buffer, (uint8_t*)"\\i");
+                *buffer++ = enable + 0x30;
+            }
+
+            // Handle color
+            if (font_color != prev_font_color)
+            {
+                buffer += encode_line(buffer, (uint8_t*)"\\1c");
+                buffer += encode_line(buffer,
+                                      (uint8_t*)color_text[font_color][1]);
+            }
+
+            // Close markup
+            if (((font_style ^ prev_font_style) & FONT_STYLE_MASK) ||
+                (font_color != prev_font_color))
+            {
+                // style changed
+                buffer += encode_line(buffer, (uint8_t*)"}");
+            }
         }
-        // Handle underlined
-        int is_underlined = data->fonts[line_num][i] & FONT_UNDERLINED;
-        if (is_underlined && underlined==0) // Open underline
-        {
-            buffer+=encode_line (buffer, (unsigned char *) "<u>");
-        }
-        if (is_underlined==0 && underlined) // Close underline
-        {
-            buffer+=encode_line (buffer, (unsigned char *) "</u>");
-        }
-        underlined=is_underlined;
-        // Handle italics
-        int has_ita = data->fonts[line_num][i] & FONT_ITALICS;
-        if (has_ita && italics==0) // Open italics
-        {
-            buffer+=encode_line (buffer, (unsigned char *) "<i>");
-        }
-        if (has_ita==0 && italics) // Close italics
-        {
-            buffer+=encode_line (buffer, (unsigned char *) "</i>");
-        }
-        italics=has_ita;
-        int bytes=0;
-        switch (encoding)
-        {
-            case ENC_UTF_8:
-                bytes=get_char_in_utf_8 (buffer,line[i]);
-                break;
-            case ENC_LATIN_1:
-                get_char_in_latin_1 (buffer,line[i]);
-                bytes=1;
-                break;
-            case ENC_UNICODE:
-                get_char_in_unicode (buffer,line[i]);
-                bytes=2;
-                break;
-        }
-        buffer+=bytes;
+        prev_font_style = font_style;
+        prev_font_color = font_color;
+
+        int bytes = 0;
+        bytes = get_char_in_utf8(buffer, line[i]);
+        buffer += bytes;
     }
-    if (italics)
-    {
-        buffer+=encode_line (buffer, (unsigned char *) "</i>");
-    }
-    if (underlined)
-    {
-        buffer+=encode_line (buffer, (unsigned char *) "</u>");
-    }
-    if (col != COL_WHITE && !nofontcolor)
-    {
-        buffer+=encode_line (buffer, (unsigned char *) "</font>");
-    }
-    *buffer=0;
-    return (unsigned) (buffer-orig); // Return length
+    *buffer = 0;
+    return (unsigned) (buffer - orig); // Return length
 }
 
 
-void delete_all_lines_but_current (struct eia608_screen *data, int row)
+static void delete_all_lines_but_current (struct eia608_screen *data, int row)
 {
     int i;
     for (i=0;i<15;i++)
@@ -1271,7 +674,7 @@ void delete_all_lines_but_current (struct eia608_screen *data, int row)
     }
 }
 
-void clear_eia608_cc_buffer (struct eia608_screen *data)
+static void clear_eia608_cc_buffer (struct eia608_screen *data)
 {
     int i;
 
@@ -1286,27 +689,26 @@ void clear_eia608_cc_buffer (struct eia608_screen *data)
     data->empty=1;
 }
 
-void init_eia608 (struct eia608 *data)
+static void init_eia608 (struct eia608 *data)
 {
-    data->cursor_column=0;
-    data->cursor_row=0;
+    data->cursor_column = 0;
+    data->cursor_row = 0;
     clear_eia608_cc_buffer (&data->buffer1);
     clear_eia608_cc_buffer (&data->buffer2);
-    data->visible_buffer=1;
-    data->last_c1=0;
-    data->last_c2=0;
-    data->mode=MODE_POPUP;
-    // data->current_visible_start_cc=0;
-    data->current_visible_start_ms=0;
-    data->srt_counter=0;
-    data->screenfuls_counter=0;
-    data->channel=1;
-    data->color=default_color;
-    data->font=FONT_REGULAR;
-    data->rollup_base_row=14;
+    data->visible_buffer = 1;
+    data->last_c1 = 0;
+    data->last_c2 = 0;
+    data->mode = MODE_POPUP;
+    data->current_visible_start_ms = 0;
+    data->ssa_counter = 0;
+    data->screenfuls_counter = 0;
+    data->channel = 1;
+    data->color = default_color;
+    data->font = FONT_REGULAR;
+    data->rollup_base_row = 14;
 }
 
-struct eia608_screen *get_current_hidden_buffer(struct s_write *wb)
+static struct eia608_screen *get_current_hidden_buffer(struct s_write *wb)
 {
     struct eia608_screen *data;
     if (wb->data608->visible_buffer == 1)
@@ -1316,7 +718,7 @@ struct eia608_screen *get_current_hidden_buffer(struct s_write *wb)
     return data;
 }
 
-struct eia608_screen *get_current_visible_buffer(struct s_write *wb)
+static struct eia608_screen *get_current_visible_buffer(struct s_write *wb)
 {
     struct eia608_screen *data;
     if (wb->data608->visible_buffer == 1)
@@ -1331,7 +733,7 @@ static void swap_visible_buffer(struct s_write *wb)
     wb->data608->visible_buffer = (wb->data608->visible_buffer == 1) ? 2 : 1;
 }
 
-struct eia608_screen *get_writing_buffer (struct s_write *wb)
+static struct eia608_screen *get_writing_buffer(struct s_write *wb)
 {
     struct eia608_screen *use_buffer=NULL;
     switch (wb->data608->mode)
@@ -1350,27 +752,28 @@ struct eia608_screen *get_writing_buffer (struct s_write *wb)
     return use_buffer;
 }
 
-void write_char (const unsigned char c, struct s_write *wb)
+static void write_char(const unsigned char c, struct s_write *wb)
 {
-    if (wb->data608->mode!=MODE_TEXT)
+    if (wb->data608->mode != MODE_TEXT)
     {
-        struct eia608_screen * use_buffer=get_writing_buffer(wb);
+        struct eia608_screen * use_buffer = get_writing_buffer(wb);
         /* hb_log ("\rWriting char [%c] at %s:%d:%d\n",c,
         use_buffer == &wb->data608->buffer1?"B1":"B2",
         wb->data608->cursor_row,wb->data608->cursor_column); */
-        use_buffer->characters[wb->data608->cursor_row][wb->data608->cursor_column]=c;
-        use_buffer->colors[wb->data608->cursor_row][wb->data608->cursor_column]=wb->data608->color;
-        use_buffer->fonts[wb->data608->cursor_row][wb->data608->cursor_column]=wb->data608->font;
-        use_buffer->row_used[wb->data608->cursor_row]=1;
-        use_buffer->empty=0;
-        if (wb->data608->cursor_column<31)
+        use_buffer->characters[wb->data608->cursor_row][wb->data608->cursor_column] = c;
+        use_buffer->colors[wb->data608->cursor_row][wb->data608->cursor_column] = wb->data608->color;
+        use_buffer->fonts[wb->data608->cursor_row][wb->data608->cursor_column] = wb->data608->font;
+        use_buffer->row_used[wb->data608->cursor_row] = 1;
+        use_buffer->empty = 0;
+        if (wb->data608->cursor_column < 31)
             wb->data608->cursor_column++;
     }
 
 }
 
 /* Handle MID-ROW CODES. */
-void handle_text_attr (const unsigned char c1, const unsigned char c2, struct s_write *wb)
+static void handle_text_attr(const unsigned char c1, const unsigned char c2,
+                             struct s_write *wb)
 {
     // Handle channel change
     wb->data608->channel=wb->new_channel;
@@ -1389,56 +792,34 @@ void handle_text_attr (const unsigned char c1, const unsigned char c2, struct s_
         wb->data608->color=pac2_attribs[i][0];
         wb->data608->font=pac2_attribs[i][1];
         if (debug_608)
-            hb_log ("  --  Color: %s,  font: %s\n",
-            color_text[wb->data608->color][0],
-            font_text[wb->data608->font]);
+            hb_log("  --  Color: %s,  font: %s\n",
+                color_text[wb->data608->color][0],
+                font_text[wb->data608->font]);
         if (wb->data608->cursor_column<31)
             wb->data608->cursor_column++;
     }
 }
 
-void mstotime (int64_t milli, unsigned *hours, unsigned *minutes,
-               unsigned *seconds, unsigned *ms)
+static int write_cc_buffer_as_ssa(struct eia608_screen *data,
+                                  struct s_write *wb)
 {
-    // int64_t milli = (int64_t) ((ccblock*1000)/29.97);
-    *ms=(unsigned) (milli%1000); // milliseconds
-    milli=(milli-*ms)/1000;  // Remainder, in seconds
-    *seconds = (int) (milli%60);
-    milli=(milli-*seconds)/60; // Remainder, in minutes
-    *minutes = (int) (milli%60);
-    milli=(milli-*minutes)/60; // Remainder, in hours
-    *hours=(int) milli;
-}
-
-void fhb_log_encoded (FILE *fh, const char *string)
-{
-    //GUARANTEE(wb, strlen (string)*3);
-    //wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) string);
-    //fwrite (wb->enc_buffer,wb->enc_buffer_used,1,fh);
-}
-
-int write_cc_buffer_as_srt(struct eia608_screen *data, struct s_write *wb)
-{
-    unsigned h1,m1,s1,ms1;
-    unsigned h2,m2,s2,ms2;
     int wrote_something = 0;
-    int64_t ms_start= wb->data608->current_visible_start_ms;
     int i;
+    int64_t ms_start = wb->data608->current_visible_start_ms;
+    //int64_t ms_end = get_last_pts(wb) + subs_delay;
+    int row = -1, col = -1;
 
-    ms_start+=subs_delay;
+    ms_start += subs_delay;
     if (ms_start<0) // Drop screens that because of subs_delay start too early
         return 0;
 
-    int64_t ms_end = get_fts(wb)+subs_delay;
-    mstotime (ms_start,&h1,&m1,&s1,&ms1);
-    mstotime (ms_end-1,&h2,&m2,&s2,&ms2); // -1 To prevent overlapping with next line.
-    char timeline[128];
-    wb->data608->srt_counter++;
-    sprintf (timeline,"%u\r\n",wb->data608->srt_counter);
-
     if (debug_608)
     {
-        hb_log ("\n- - - SRT caption - - -\n");
+        char timeline[128];
+        wb->data608->ssa_counter++;
+        sprintf (timeline,"%u\r\n",wb->data608->ssa_counter);
+
+        hb_log ("\n- - - SSA caption - - -\n");
         hb_log ("%s", timeline);
     }
 
@@ -1447,58 +828,122 @@ int write_cc_buffer_as_srt(struct eia608_screen *data, struct s_write *wb)
      * ensure that we only have two lines, insert a newline after the first one,
      * and have a big bottom line (strip spaces from any joined lines).
      */
-    wb->enc_buffer_used = 0;
-    int line = 1;
-    for (i=0;i<15;i++)
+    int rows = 0, columns = 0;
+    for (i = 0; i < 15; i++)
     {
         if (data->row_used[i])
         {
-            if (sentence_cap)
+            int first, last;
+
+            rows++;
+            find_limit_characters(data->characters[i], &first, &last);
+            if (last - first + 1 > columns)
+                columns = last - first + 1;
+        }
+    }
+
+    wb->enc_buffer_used = 0;
+    int line = 1;
+    for (i = 0; i < 15; i++)
+    {
+        if (data->row_used[i])
+        {
+            // Get position for this CC
+            if (row == -1)
             {
-                capitalize(i,data, &wb->new_sentence);
-                correct_case(i,data);
+                int last, x, y, safe_zone, cell_width, cell_height;
+                int cropped_width, cropped_height, font_size;
+                char *pos;
+
+                row = i;
+                find_limit_characters(data->characters[i], &col, &last);
+
+                // CC grid is 16 rows by 62 colums
+                // Our SSA resolution is the title resolution
+                // Tranlate CC grid to SSA coordinates
+                // The numbers are tweaked to keep things off the very
+                // edges of the screen and in the "safe" zone
+                cropped_height = wb->height - wb->crop[0] - wb->crop[1];
+                cropped_width = wb->width - wb->crop[2] - wb->crop[3];
+                font_size = cropped_height * .066;
+                safe_zone = wb->height * 0.025;
+                cell_height = (wb->height - 2 * safe_zone) / 16;
+                cell_width = (wb->width - 2 * safe_zone) / 32;
+
+                // Calculate position assuming the position defines
+                // the baseline of the text which is lower left corner
+                // of bottom row of characters
+                y = cell_height * (row + 1 + rows) + safe_zone - wb->crop[0];
+                x = cell_width * col + safe_zone - wb->crop[2];
+                if (y < 0)
+                    y = (rows * font_size) + safe_zone;
+                if (x < 0)
+                    x = safe_zone;
+                if (y > cropped_height)
+                    y = cropped_height - safe_zone;
+                if (x + columns * cell_width > cropped_width)
+                    x = cropped_width - columns * cell_width - safe_zone;
+                pos = hb_strdup_printf("{\\a1\\pos(%d,%d)}", x, y);
+                wb->enc_buffer_used += encode_line(
+                        wb->enc_buffer + wb->enc_buffer_used, (uint8_t*)pos);
+                free(pos);
             }
+
             /*
-             * The intention was to use a newline but QT doesn't like it, old code still
-             * here just in case..
+             * The intention was to use a newline but QT doesn't like it,
+             * old code still here just in case..
              */
             if (line == 1) {
-                wb->enc_buffer_used = get_decoder_line_encoded(wb->enc_buffer, i, data);
+                wb->enc_buffer_used += get_decoder_line_encoded(
+                        wb->enc_buffer + wb->enc_buffer_used, i, data);
                 line = 2;
             } else {
-                wb->enc_buffer_used += encode_line(wb->enc_buffer+wb->enc_buffer_used,
-                                                       (unsigned char *) "\n");
-                wb->enc_buffer_used += get_decoder_line_encoded(wb->enc_buffer+wb->enc_buffer_used, i, data);
+                wb->enc_buffer_used += encode_line(
+                        wb->enc_buffer + wb->enc_buffer_used, (uint8_t*)"\\N");
+                wb->enc_buffer_used += get_decoder_line_encoded(
+                        wb->enc_buffer + wb->enc_buffer_used, i, data);
             }
         }
     }
-    if (wb->enc_buffer_used)
+    if (wb->enc_buffer_used && wb->enc_buffer[0] != 0)
     {
-        hb_buffer_t *buffer = hb_buffer_init( wb->enc_buffer_used + 1 );
+        hb_buffer_t *buffer;
+        int len;
+
+        // bump past null terminator
+        wb->enc_buffer_used++;
+        buffer = hb_buffer_init(wb->enc_buffer_used + SSA_PREAMBLE_LEN);
         buffer->s.frametype = HB_FRAME_SUBTITLE;
         buffer->s.start = ms_start;
         buffer->s.stop = AV_NOPTS_VALUE;
-        memcpy( buffer->data, wb->enc_buffer, wb->enc_buffer_used + 1 );
-        if (wb->hb_last_buffer) {
+        sprintf((char*)buffer->data, "%d,,Default,,0,0,0,,", ++wb->line);
+        len = strlen((char*)buffer->data);
+        memcpy(buffer->data + len, wb->enc_buffer, wb->enc_buffer_used);
+        if (wb->hb_last_buffer)
+        {
             wb->hb_last_buffer->next = buffer;
-        } else {
+        }
+        else
+        {
             wb->hb_buffer = buffer;
         }
         wb->hb_last_buffer = buffer;
-
         wrote_something=1;
         wb->clear_sub_needed = 1;
     }
     else if (wb->clear_sub_needed)
     {
-        hb_buffer_t *buffer = hb_buffer_init( 1 );
+        hb_buffer_t *buffer = hb_buffer_init(1);
         buffer->s.frametype = HB_FRAME_SUBTITLE;
         buffer->s.start = ms_start;
         buffer->s.stop = ms_start;
         buffer->data[0] = 0;
-        if (wb->hb_last_buffer != NULL) {
+        if (wb->hb_last_buffer != NULL)
+        {
             wb->hb_last_buffer->next = buffer;
-        } else {
+        }
+        else
+        {
             wb->hb_buffer = buffer;
         }
         wb->hb_last_buffer = buffer;
@@ -1511,18 +956,18 @@ int write_cc_buffer_as_srt(struct eia608_screen *data, struct s_write *wb)
     return wrote_something;
 }
 
-int write_cc_buffer(struct s_write *wb)
+static int write_cc_buffer(struct s_write *wb)
 {
     struct eia608_screen *data;
     int wrote_something=0;
 
     data = get_current_visible_buffer(wb);
     wb->new_sentence=1;
-    wrote_something = write_cc_buffer_as_srt (data, wb);
+    wrote_something = write_cc_buffer_as_ssa(data, wb);
     return wrote_something;
 }
 
-void roll_up(struct s_write *wb)
+static void roll_up(struct s_write *wb)
 {
     struct eia608_screen *use_buffer;
     int i, j;
@@ -1532,29 +977,29 @@ void roll_up(struct s_write *wb)
     switch (wb->data608->mode)
     {
         case MODE_ROLLUP_2:
-            keep_lines=2;
+            keep_lines = 2;
             break;
         case MODE_ROLLUP_3:
-            keep_lines=3;
+            keep_lines = 3;
             break;
         case MODE_ROLLUP_4:
-            keep_lines=4;
+            keep_lines = 4;
             break;
         default: // Shouldn't happen
-            keep_lines=0;
+            keep_lines = 0;
             break;
     }
-    int firstrow=-1, lastrow=-1;
+    int firstrow = -1, lastrow = -1;
     // Look for the last line used
-    int rows_now=0; // Number of rows in use right now
-    for (i=0;i<15;i++)
+    int rows_now = 0; // Number of rows in use right now
+    for (i = 0; i < 15; i++)
     {
         if (use_buffer->row_used[i])
         {
             rows_now++;
-            if (firstrow==-1)
-                firstrow=i;
-            lastrow=i;
+            if (firstrow == -1)
+                firstrow = i;
+            lastrow = i;
         }
     }
 
@@ -1564,37 +1009,37 @@ void roll_up(struct s_write *wb)
     if (lastrow==-1) // Empty screen, nothing to rollup
         return;
 
-    for (j=lastrow-keep_lines+1;j<lastrow; j++)
+    for (j = lastrow - keep_lines + 1; j < lastrow; j++)
     {
-        if (j>=0)
+        if (j >= 0)
         {
-            memcpy (use_buffer->characters[j],use_buffer->characters[j+1],CC608_SCREEN_WIDTH+1);
-            memcpy (use_buffer->colors[j],use_buffer->colors[j+1],CC608_SCREEN_WIDTH+1);
-            memcpy (use_buffer->fonts[j],use_buffer->fonts[j+1],CC608_SCREEN_WIDTH+1);
-            use_buffer->row_used[j]=use_buffer->row_used[j+1];
+            memcpy(use_buffer->characters[j], use_buffer->characters[j+1], CC608_SCREEN_WIDTH+1);
+            memcpy(use_buffer->colors[j], use_buffer->colors[j+1], CC608_SCREEN_WIDTH+1);
+            memcpy(use_buffer->fonts[j], use_buffer->fonts[j+1], CC608_SCREEN_WIDTH+1);
+            use_buffer->row_used[j] = use_buffer->row_used[j+1];
         }
     }
-    for (j=0;j<(1+wb->data608->cursor_row-keep_lines);j++)
+    for (j = 0; j < (1 + wb->data608->cursor_row - keep_lines); j++)
     {
-        memset(use_buffer->characters[j],' ',CC608_SCREEN_WIDTH);
-        memset(use_buffer->colors[j],COL_WHITE,CC608_SCREEN_WIDTH);
-        memset(use_buffer->fonts[j],FONT_REGULAR,CC608_SCREEN_WIDTH);
-        use_buffer->characters[j][CC608_SCREEN_WIDTH]=0;
-        use_buffer->row_used[j]=0;
+        memset(use_buffer->characters[j], ' ', CC608_SCREEN_WIDTH);
+        memset(use_buffer->colors[j], COL_WHITE, CC608_SCREEN_WIDTH);
+        memset(use_buffer->fonts[j], FONT_REGULAR, CC608_SCREEN_WIDTH);
+        use_buffer->characters[j][CC608_SCREEN_WIDTH] = 0;
+        use_buffer->row_used[j] = 0;
     }
-    memset(use_buffer->characters[lastrow],' ',CC608_SCREEN_WIDTH);
-    memset(use_buffer->colors[lastrow],COL_WHITE,CC608_SCREEN_WIDTH);
-    memset(use_buffer->fonts[lastrow],FONT_REGULAR,CC608_SCREEN_WIDTH);
+    memset(use_buffer->characters[lastrow], ' ', CC608_SCREEN_WIDTH);
+    memset(use_buffer->colors[lastrow], COL_WHITE, CC608_SCREEN_WIDTH);
+    memset(use_buffer->fonts[lastrow], FONT_REGULAR, CC608_SCREEN_WIDTH);
 
-    use_buffer->characters[lastrow][CC608_SCREEN_WIDTH]=0;
-    use_buffer->row_used[lastrow]=0;
+    use_buffer->characters[lastrow][CC608_SCREEN_WIDTH] = 0;
+    use_buffer->row_used[lastrow] = 0;
 
     // Sanity check
-    rows_now=0;
-    for (i=0;i<15;i++)
+    rows_now = 0;
+    for (i = 0; i < 15; i++)
         if (use_buffer->row_used[i])
             rows_now++;
-    if (rows_now>keep_lines)
+    if (rows_now > keep_lines)
         hb_log ("Bug in roll_up, should have %d lines but I have %d.\n",
             keep_lines, rows_now);
 }
@@ -1613,7 +1058,7 @@ void erase_memory (struct s_write *wb, int displayed)
     clear_eia608_cc_buffer (buf);
 }
 
-int is_current_row_empty (struct s_write *wb)
+static int is_current_row_empty (struct s_write *wb)
 {
     struct eia608_screen *use_buffer;
     int i;
@@ -1628,7 +1073,8 @@ int is_current_row_empty (struct s_write *wb)
 }
 
 /* Process GLOBAL CODES */
-void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct s_write *wb)
+static void handle_command(unsigned char c1, const unsigned char c2,
+                           struct s_write *wb)
 {
     // Handle channel change
     wb->data608->channel=wb->new_channel;
@@ -1674,7 +1120,7 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             if (wb->data608->cursor_column>0)
             {
                 wb->data608->cursor_column--;
-                get_writing_buffer(wb)->characters[wb->data608->cursor_row][wb->data608->cursor_column]=' ';
+                get_writing_buffer(wb)->characters[wb->data608->cursor_row][wb->data608->cursor_column] = ' ';
             }
             break;
         case COM_TABOFFSET1:
@@ -1693,11 +1139,11 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             break;
         case COM_RESUMECAPTIONLOADING:
             wb->data608->mode=MODE_POPUP;
-            wb->data608->current_visible_start_ms = get_fts(wb);
+            wb->data608->current_visible_start_ms = get_last_pts(wb);
             break;
         case COM_RESUMETEXTDISPLAY:
             wb->data608->mode=MODE_TEXT;
-            wb->data608->current_visible_start_ms = get_fts(wb);
+            wb->data608->current_visible_start_ms = get_last_pts(wb);
             break;
         case COM_ROLLUP2:
             if (wb->data608->mode==MODE_POPUP)
@@ -1714,11 +1160,11 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                 handle_command(0x14, 0x2D, wb);
                 wb->rollup_cr = 1;
             }
-            wb->data608->current_visible_start_ms = get_fts(wb);
+            wb->data608->current_visible_start_ms = get_last_pts(wb);
             wb->data608->mode=MODE_ROLLUP_2;
             erase_memory (wb, 0);
-            wb->data608->cursor_column=0;
-            wb->data608->cursor_row=wb->data608->rollup_base_row;
+            wb->data608->cursor_column = 0;
+            wb->data608->cursor_row = wb->data608->rollup_base_row;
             break;
         case COM_ROLLUP3:
             if (wb->data608->mode==MODE_POPUP)
@@ -1734,11 +1180,11 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                 handle_command(0x14, 0x2D, wb);
                 wb->rollup_cr = 1;
             }
-            wb->data608->current_visible_start_ms = get_fts(wb);
+            wb->data608->current_visible_start_ms = get_last_pts(wb);
             wb->data608->mode=MODE_ROLLUP_3;
             erase_memory (wb, 0);
-            wb->data608->cursor_column=0;
-            wb->data608->cursor_row=wb->data608->rollup_base_row;
+            wb->data608->cursor_column = 0;
+            wb->data608->cursor_row = wb->data608->rollup_base_row;
             break;
         case COM_ROLLUP4:
             if (wb->data608->mode==MODE_POPUP)
@@ -1754,10 +1200,10 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                 handle_command(0x14, 0x2D, wb);
                 wb->rollup_cr = 1;
             }
-            wb->data608->current_visible_start_ms = get_fts(wb);
-            wb->data608->mode=MODE_ROLLUP_4;
-            wb->data608->cursor_column=0;
-            wb->data608->cursor_row=wb->data608->rollup_base_row;
+            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->mode = MODE_ROLLUP_4;
+            wb->data608->cursor_column = 0;
+            wb->data608->cursor_row = wb->data608->rollup_base_row;
             erase_memory (wb, 0);
             break;
         case COM_CARRIAGERETURN:
@@ -1768,17 +1214,16 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             if (wb->rollup_cr && is_current_row_empty(wb))
             {
                 wb->rollup_cr = 0;
-                wb->data608->current_visible_start_ms = get_fts(wb);
+                wb->data608->current_visible_start_ms = get_last_pts(wb);
                 break;
             }
-
             if (norollup)
                 delete_all_lines_but_current(get_current_visible_buffer(wb), wb->data608->cursor_row);
             if (write_cc_buffer(wb))
                 wb->data608->screenfuls_counter++;
             roll_up(wb);
-            wb->data608->cursor_column=0;
-            wb->data608->current_visible_start_ms = get_fts(wb);
+            wb->data608->cursor_column = 0;
+            wb->data608->current_visible_start_ms = get_last_pts(wb);
             break;
         case COM_ERASENONDISPLAYEDMEMORY:
             erase_memory (wb,0);
@@ -1791,7 +1236,7 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             {
                 // If popup, the last pts is the time to remove the
                 // popup from the screen
-                wb->data608->current_visible_start_ms = get_fts(wb);
+                wb->data608->current_visible_start_ms = get_last_pts(wb);
             }
             // Write "clear" subtitle if necessary
             write_cc_buffer(wb);
@@ -1802,15 +1247,15 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             if (wb->data608->mode == MODE_POPUP)
             {
                 swap_visible_buffer(wb);
-                wb->data608->current_visible_start_ms = get_fts(wb);
+                wb->data608->current_visible_start_ms = get_last_pts(wb);
             }
             if (write_cc_buffer(wb))
                 wb->data608->screenfuls_counter++;
 
             if (wb->data608->mode != MODE_POPUP)
                 swap_visible_buffer(wb);
-            wb->data608->cursor_column=0;
-            wb->data608->cursor_row=0;
+            wb->data608->cursor_column = 0;
+            wb->data608->cursor_row = 0;
             wb->data608->color=default_color;
             wb->data608->font=FONT_REGULAR;
             break;
@@ -1823,14 +1268,15 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
     }
 }
 
-void handle_end_of_data (struct s_write *wb)
+static void handle_end_of_data(struct s_write *wb)
 {
     // We issue a EraseDisplayedMemory here so if there's any captions pending
     // they get written to file.
     handle_command (0x14, 0x2c, wb); // EDM
 }
 
-void handle_double (const unsigned char c1, const unsigned char c2, struct s_write *wb)
+static void handle_double(const unsigned char c1, const unsigned char c2,
+                          struct s_write *wb)
 {
     unsigned char c;
     if (wb->data608->channel!=cc_channel)
@@ -1845,7 +1291,8 @@ void handle_double (const unsigned char c1, const unsigned char c2, struct s_wri
 }
 
 /* Process EXTENDED CHARACTERS */
-unsigned char handle_extended (unsigned char hi, unsigned char lo, struct s_write *wb)
+static unsigned char handle_extended(unsigned char hi, unsigned char lo,
+                                     struct s_write *wb)
 {
     // Handle channel change
     if (wb->new_channel > 2)
@@ -1886,7 +1333,7 @@ unsigned char handle_extended (unsigned char hi, unsigned char lo, struct s_writ
 }
 
 /* Process PREAMBLE ACCESS CODES (PAC) */
-void handle_pac (unsigned char c1, unsigned char c2, struct s_write *wb)
+static void handle_pac(unsigned char c1, unsigned char c2, struct s_write *wb)
 {
     // Handle channel change
     if (wb->new_channel > 2)
@@ -1926,19 +1373,19 @@ void handle_pac (unsigned char c1, unsigned char c2, struct s_write *wb)
     int indent=pac2_attribs[c2][2];
     if (debug_608)
         hb_log ("  --  Position: %d:%d, color: %s,  font: %s\n",row,
-        indent,color_text[color][0],font_text[font]);
-    if (wb->data608->mode!=MODE_TEXT)
+            indent,color_text[color][0],font_text[font]);
+    if (wb->data608->mode != MODE_TEXT)
     {
         // According to Robson, row info is discarded in text mode
         // but column is accepted
-        wb->data608->cursor_row=row-1 ; // Since the array is 0 based
+        wb->data608->cursor_row = row - 1 ; // Since the array is 0 based
     }
-    wb->data608->rollup_base_row=row-1;
-    wb->data608->cursor_column=indent;
+    wb->data608->rollup_base_row = row - 1;
+    wb->data608->cursor_column = indent;
 }
 
 
-void handle_single (const unsigned char c1, struct s_write *wb)
+static void handle_single(const unsigned char c1, struct s_write *wb)
 {
     if (c1<0x20 || wb->data608->channel!=cc_channel)
         return; // We don't allow special stuff here
@@ -1950,7 +1397,7 @@ void handle_single (const unsigned char c1, struct s_write *wb)
     write_char (c1,wb);
 }
 
-int check_channel (unsigned char c1, struct s_write *wb)
+static int check_channel(unsigned char c1, struct s_write *wb)
 {
     if (c1==0x14)
     {
@@ -1984,7 +1431,7 @@ int check_channel (unsigned char c1, struct s_write *wb)
 /* Handle Command, special char or attribute and also check for
 * channel changes.
 * Returns 1 if something was written to screen, 0 otherwise */
-int disCommand (unsigned char hi, unsigned char lo, struct s_write *wb)
+static int disCommand(unsigned char hi, unsigned char lo, struct s_write *wb)
 {
     int wrote_to_screen=0;
 
@@ -2050,7 +1497,8 @@ int disCommand (unsigned char hi, unsigned char lo, struct s_write *wb)
     return wrote_to_screen;
 }
 
-void process608 (const unsigned char *data, int length, struct s_write *wb)
+static void process608(const unsigned char *data, int length,
+                       struct s_write *wb)
 {
     static int textprinted = 0;
     int i;
@@ -2125,7 +1573,7 @@ void process608 (const unsigned char *data, int length, struct s_write *wb)
 
             if ( debug_608 && !textprinted && wb->data608->channel==cc_channel )
             {   // Current FTS information after the characters are shown
-                //hb_log("Current FTS: %s\n", print_mstime(get_fts()));
+                //hb_log("Current FTS: %s\n", print_mstime(get_last_pts()));
             }
 
             if (wrote_to_screen && direct_rollup && // If direct_rollup is enabled and
@@ -2135,47 +1583,11 @@ void process608 (const unsigned char *data, int length, struct s_write *wb)
             {
                 // We don't increase screenfuls_counter here.
                 write_cc_buffer(wb);
-                wb->data608->current_visible_start_ms = get_fts(wb);
+                wb->data608->current_visible_start_ms = get_last_pts(wb);
             }
         }
     }
 }
-
-
-/* Return a pointer to a string that holds the printable characters
- * of the caption data block. FOR DEBUG PURPOSES ONLY! */
-unsigned char *debug_608toASC (unsigned char *cc_data, int channel)
-{
-    static unsigned char output[3];
-
-    unsigned char cc_valid = (cc_data[0] & 4) >>2;
-    unsigned char cc_type = cc_data[0] & 3;
-    unsigned char hi, lo;
-
-    output[0]=' ';
-    output[1]=' ';
-    output[2]='\x00';
-
-    if (cc_valid && cc_type==channel)
-    {
-        hi = cc_data[1] & 0x7F; // Get rid of parity bit
-        lo = cc_data[2] & 0x7F; // Get rid of parity bit
-        if (hi>=0x20)
-        {
-            output[0]=hi;
-            output[1]=(lo>=20 ? lo : '.');
-            output[2]='\x00';
-        }
-        else
-        {
-            output[0]='<';
-            output[1]='>';
-            output[2]='\x00';
-        }
-    }
-    return output;
-}
-
 
 struct hb_work_private_s
 {
@@ -2183,7 +1595,7 @@ struct hb_work_private_s
     struct s_write     * cc608;
 };
 
-int decccInit( hb_work_object_t * w, hb_job_t * job )
+static int decccInit( hb_work_object_t * w, hb_job_t * job )
 {
     int retval = 1;
     hb_work_private_t * pv;
@@ -2199,6 +1611,9 @@ int decccInit( hb_work_object_t * w, hb_job_t * job )
 
         if( pv->cc608 )
         {
+            pv->cc608->width = job->title->width;
+            pv->cc608->height = job->title->height;
+            memcpy(pv->cc608->crop, job->crop, sizeof(int[4]));
             retval = general_608_init(pv->cc608);
             if( !retval )
             {
@@ -2211,10 +1626,17 @@ int decccInit( hb_work_object_t * w, hb_job_t * job )
             }
         }
     }
+    if (!retval)
+    {
+        // Generate generic SSA Script Info.
+        int height = job->title->height - job->crop[0] - job->crop[1];
+        int width = job->title->width - job->crop[2] - job->crop[3];
+        hb_subtitle_add_ssa_header(w->subtitle, width, height);
+    }
     return retval;
 }
 
-int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
+static int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
@@ -2254,7 +1676,7 @@ int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-void decccClose( hb_work_object_t * w )
+static void decccClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     general_608_close( pv->cc608 );
