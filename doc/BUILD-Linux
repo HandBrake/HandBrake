@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn6092 (2014030201) on Linux
+Guide to Building HandBrake svn6163 (2014041401) on Linux
 *********************************************************
 
 1 Introduction
@@ -357,8 +357,8 @@ scoped targets:
 
 Contrib modules such as 'a52dec', 'bzip2', 'faac', 'faad2', 'ffmpeg',
 'fontconfig', 'freetype', 'fribidi', 'lame', 'libass', 'libbluray',
-'libdca', 'libdvdnav', 'libdvdread', 'libdvdread', 'libiconv', 'libmkv',
-'libogg', 'libsamplerate', 'libtheora', 'libvorbis', 'libxml2', 'mp4v2',
+'libdca', 'libdvdnav', 'libdvdread', 'libiconv', 'libmkv', 'libogg',
+'libsamplerate', 'libtheora', 'libvorbis', 'libxml2', 'mp4v2',
 'mpeg2dec', 'x264', 'yasm' and 'zlib' have the following scoped targets:
 
 'make MODULE.fetch'
@@ -501,6 +501,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    6092
-     date:   2014-03-02 06:18:36 -0700
+     rev:    6163
+     date:   2014-04-13 09:22:16 -0700
      type:   developer
