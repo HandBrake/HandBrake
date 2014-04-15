@@ -4234,6 +4234,7 @@ ghb_validate_vquality(GValue *settings)
             } break;
 
             case HB_VCODEC_THEORA:
+            case HB_VCODEC_FFMPEG_VP8:
             {
                 min = 0;
                 max = 63;

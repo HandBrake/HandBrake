@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		226268E01572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
 		226268E11572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
+		22DD2C4A177B94DB00EF50D3 /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
+		22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
 		273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
 		273F202614ADB8A40021BE6D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202514ADB8A40021BE6D /* libz.dylib */; };
 		273F202814ADB8BE0021BE6D /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202714ADB8BE0021BE6D /* libbz2.dylib */; };
@@ -192,6 +194,7 @@
 
 /* Begin PBXFileReference section */
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external//contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
 		271E74EF182F260C0077C311 /* osx109.i386.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.i386.xcconfig; sourceTree = "<group>"; };
 		271E74F0182F260C0077C311 /* osx109.x86_64.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.x86_64.xcconfig; sourceTree = "<group>"; };
@@ -348,6 +351,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
@@ -382,6 +386,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22DD2C4A177B94DB00EF50D3 /* libvpx.a in Frameworks */,
 				A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */,
 				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
 				273F21C214ADE7BC0021BE6D /* Sparkle.framework in Frameworks */,
@@ -458,6 +463,7 @@
 		273F1FDE14AD9DA40021BE6D = {
 			isa = PBXGroup;
 			children = (
+				22DD2C49177B94DB00EF50D3 /* libvpx.a */,
 				273F204114ADBC210021BE6D /* HandBrake */,
 				273F200214ADAE950021BE6D /* HandBrakeCLI */,
 				273F200014ADAE950021BE6D /* Products */,

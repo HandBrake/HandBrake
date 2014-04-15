@@ -1,0 +1,22 @@
+$(eval $(call import.MODULE.defs,LIBVPX,libvpx,YASM))
+$(eval $(call import.CONTRIB.defs,LIBVPX))
+
+LIBVPX.FETCH.url = http://download.handbrake.fr/contrib/libvpx-v1.3.0.tar.bz2
+
+LIBVPX.CONFIGURE.env.LD = LD=$(subst CC=,,$(LIBVPX.CONFIGURE.env.CC))
+
+LIBVPX.CONFIGURE.args.host =
+LIBVPX.CONFIGURE.deps  =
+LIBVPX.CONFIGURE.extra =  \
+    --enable-vp8-encoder  \
+    --disable-vp9         \
+    --disable-vp8-decoder \
+    --disable-examples    \
+    --disable-docs        \
+    --disable-unit-tests
+
+ifeq (1-i686,$(BUILD.cross)-$(BUILD.machine))
+    LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
+else ifeq (1-x86_64,$(BUILD.cross)-$(BUILD.machine))
+    LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
+endif

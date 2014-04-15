@@ -31,6 +31,9 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=flac \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
+    --enable-libvpx \
+    --enable-encoder=libvpx_vp8 \
+    --disable-decoder=libvpx_vp8 \
     --enable-zlib \
     --enable-bzlib \
     --cc="$(FFMPEG.GCC.gcc)" \

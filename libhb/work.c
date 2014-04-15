@@ -1248,6 +1248,10 @@ static void do_job(hb_job_t *job)
             w = hb_get_work( WORK_ENCAVCODEC );
             w->codec_param = AV_CODEC_ID_MPEG2VIDEO;
             break;
+        case HB_VCODEC_FFMPEG_VP8:
+            w = hb_get_work( WORK_ENCAVCODEC );
+            w->codec_param = AV_CODEC_ID_VP8;
+            break;
         case HB_VCODEC_X264:
             w = hb_get_work( WORK_ENCX264 );
             break;

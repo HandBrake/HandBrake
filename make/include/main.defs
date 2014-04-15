@@ -59,6 +59,7 @@ endif
 
 MODULES += contrib/lame
 MODULES += contrib/ffmpeg
+MODULES += contrib/libvpx
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray

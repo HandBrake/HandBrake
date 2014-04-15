@@ -77,6 +77,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             hb_log("encavcodecInit: MPEG-2 encoder");
         } break;
+        case AV_CODEC_ID_VP8:
+        {
+            hb_log("encavcodecInit: VP8 encoder");
+        } break;
         default:
         {
             hb_error("encavcodecInit: unsupported encoder!");
@@ -89,6 +93,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_log( "encavcodecInit: avcodec_find_encoder "
                 "failed" );
+        return 1;
     }
     context = avcodec_alloc_context3( codec );
 
@@ -192,8 +197,28 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // what was previously used
         context->flags |= CODEC_FLAG_QSCALE;
         context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
-        hb_log( "encavcodec: encoding at constant quantizer %d",
-                context->global_quality );
+        //Set constant quality for libvpx
+        if ( w->codec_param == AV_CODEC_ID_VP8 )
+        {
+            char quality[7];
+            snprintf(quality, 7, "%.2f", job->vquality);
+            av_dict_set( &av_opts, "crf", quality, 0 );
+            //Setting the deadline to good and cpu-used to 0
+            //causes the encoder to balance video quality and
+            //encode time, with a bias to video quality.
+            av_dict_set( &av_opts, "deadline", "good", 0);
+            av_dict_set( &av_opts, "cpu-used", "0", 0);
+            //This value was chosen to make the bitrate high enough
+            //for libvpx to "turn off" the maximum bitrate feature
+            //that is normally applied to constant quality.
+            context->bit_rate = job->width*job->height*( (double)fps.num / (double)fps.den );
+            hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
+        }
+        else
+        {
+            hb_log( "encavcodec: encoding at constant quantizer %d",
+                    context->global_quality );
+        }
     }
     context->width     = job->width;
     context->height    = job->height;
@@ -336,6 +361,63 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
     }
 }
 
+static uint8_t convert_pict_type( int pict_type, char pkt_flag_key, uint16_t* sflags )
+{
+    uint8_t retval = 0;
+    switch ( pict_type )
+    {
+        case AV_PICTURE_TYPE_P:
+        {
+            retval = HB_FRAME_P;
+        } break;
+
+        case AV_PICTURE_TYPE_B:
+        {
+            retval = HB_FRAME_B;
+        } break;
+
+        case AV_PICTURE_TYPE_S:
+        {
+            retval = HB_FRAME_P;
+        } break;
+
+        case AV_PICTURE_TYPE_SP:
+        {
+            retval = HB_FRAME_P;
+        } break;
+
+        case AV_PICTURE_TYPE_BI:
+        case AV_PICTURE_TYPE_SI:
+        case AV_PICTURE_TYPE_I:
+        {
+            *sflags |= HB_FRAME_REF;
+            if ( pkt_flag_key )
+            {
+                retval = HB_FRAME_IDR;
+            }
+            else
+            {
+                retval = HB_FRAME_I;
+            }
+        } break;
+
+        default:
+        {
+            if ( pkt_flag_key )
+            {
+                //buf->s.flags |= HB_FRAME_REF;
+                *sflags |= HB_FRAME_REF;
+                retval = HB_FRAME_KEY;
+            }
+            else
+            {
+                retval = HB_FRAME_REF;
+            }
+        } break;
+    }
+    return retval;
+}
+
 // Generate DTS by rearranging PTS in this sequence:
 // pts0 - delay, pts1 - delay, pts2 - delay, pts1, pts2, pts3...
 //
@@ -433,120 +515,98 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_job_t * job = pv->job;
     AVFrame  * frame;
     hb_buffer_t * in = *buf_in, * buf;
-
-    if ( in->size <= 0 )
+    char final_flushing_call = (in->size <= 0);
+    if ( final_flushing_call )
     {
+        //make a flushing call to encode for codecs that can encode out of order
         /* EOF on input - send it downstream & say we're done */
-        *buf_out = in;
         *buf_in = NULL;
-       return HB_WORK_DONE;
+        frame = NULL;
     }
+    else
+    {
+        frame              = av_frame_alloc();
+        frame->data[0]     = in->plane[0].data;
+        frame->data[1]     = in->plane[1].data;
+        frame->data[2]     = in->plane[2].data;
+        frame->linesize[0] = in->plane[0].stride;
+        frame->linesize[1] = in->plane[1].stride;
+        frame->linesize[2] = in->plane[2].stride;
 
-    frame              = av_frame_alloc();
-    frame->data[0]     = in->plane[0].data;
-    frame->data[1]     = in->plane[1].data;
-    frame->data[2]     = in->plane[2].data;
-    frame->linesize[0] = in->plane[0].stride;
-    frame->linesize[1] = in->plane[1].stride;
-    frame->linesize[2] = in->plane[2].stride;
+        // For constant quality, setting the quality in AVCodecContext 
+        // doesn't do the trick.  It must be set in the AVFrame.
+        frame->quality = pv->context->global_quality;
 
-    // For constant quality, setting the quality in AVCodecContext 
-    // doesn't do the trick.  It must be set in the AVFrame.
-    frame->quality = pv->context->global_quality;
+        // Remember info about this frame that we need to pass across
+        // the avcodec_encode_video call (since it reorders frames).
+        save_frame_info( pv, in );
+        compute_dts_offset( pv, in );
 
-    // Remember info about this frame that we need to pass across
-    // the avcodec_encode_video call (since it reorders frames).
-    save_frame_info( pv, in );
-    compute_dts_offset( pv, in );
-
-    // Bizarro ffmpeg appears to require the input AVFrame.pts to be
-    // set to a frame number.  Setting it to an actual pts causes
-    // jerky video.
-    // frame->pts = in->s.start;
-    frame->pts = pv->frameno_in++;
+        // Bizarro ffmpeg appears to require the input AVFrame.pts to be
+        // set to a frame number.  Setting it to an actual pts causes
+        // jerky video.
+        // frame->pts = in->s.start;
+        frame->pts = pv->frameno_in++;
+    }
 
     if ( pv->context->codec )
     {
         int ret;
         AVPacket pkt;
         int got_packet;
+        char still_flushing = final_flushing_call;
+        hb_buffer_t* buf_head = NULL;
+        hb_buffer_t* buf_last = NULL;
 
-        av_init_packet(&pkt);
-        /* Should be way too large */
-        buf = hb_video_buffer_init( job->width, job->height );
-        pkt.data = buf->data;
-        pkt.size = buf->alloc;
+        do
+        {
+            av_init_packet(&pkt);
+            /* Should be way too large */
+            buf = hb_video_buffer_init( job->width, job->height );
+            pkt.data = buf->data;
+            pkt.size = buf->alloc;
 
-        ret = avcodec_encode_video2( pv->context, &pkt, frame, &got_packet );
-        if ( ret < 0 || pkt.size <= 0 || !got_packet )
-        {
-            hb_buffer_close( &buf );
-        }
-        else
-        {
-            int64_t frameno = pkt.pts;
-            buf->size       = pkt.size;
-            buf->s.start    = get_frame_start( pv, frameno );
-            buf->s.duration = get_frame_duration( pv, frameno );
-            buf->s.stop     = buf->s.stop + buf->s.duration;
-            buf->s.flags   &= ~HB_FRAME_REF;
-            switch ( pv->context->coded_frame->pict_type )
+            ret = avcodec_encode_video2( pv->context, &pkt, frame, &got_packet );
+            if ( ret < 0 || pkt.size <= 0 || !got_packet )
             {
-                case AV_PICTURE_TYPE_P:
-                {
-                    buf->s.frametype = HB_FRAME_P;
-                } break;
-
-                case AV_PICTURE_TYPE_B:
-                {
-                    buf->s.frametype = HB_FRAME_B;
-                } break;
-
-                case AV_PICTURE_TYPE_S:
-                {
-                    buf->s.frametype = HB_FRAME_P;
-                } break;
-
-                case AV_PICTURE_TYPE_SP:
-                {
-                    buf->s.frametype = HB_FRAME_P;
-                } break;
-
-                case AV_PICTURE_TYPE_BI:
-                case AV_PICTURE_TYPE_SI:
-                case AV_PICTURE_TYPE_I:
-                {
-                    buf->s.flags |= HB_FRAME_REF;
-                    if ( pkt.flags & AV_PKT_FLAG_KEY )
-                    {
-                        buf->s.frametype = HB_FRAME_IDR;
-                    }
-                    else
-                    {
-                        buf->s.frametype = HB_FRAME_I;
-                    }
-                } break;
-
-                default:
-                {
-                    if ( pkt.flags & AV_PKT_FLAG_KEY )
-                    {
-                        buf->s.flags |= HB_FRAME_REF;
-                        buf->s.frametype = HB_FRAME_KEY;
-                    }
-                    else
-                    {
-                        buf->s.frametype = HB_FRAME_REF;
-                    }
-                } break;
+                hb_buffer_close( &buf );
+                still_flushing = 0;
             }
-            buf = process_delay_list( pv, buf );
-        }
+            else
+            {
+                int64_t frameno = pkt.pts;
+                buf->size       = pkt.size;
+                buf->s.start    = get_frame_start( pv, frameno );
+                buf->s.duration = get_frame_duration( pv, frameno );
+                buf->s.stop     = buf->s.stop + buf->s.duration;
+                buf->s.flags   &= ~HB_FRAME_REF;
+                buf->s.frametype = convert_pict_type( pv->context->coded_frame->pict_type, pkt.flags & AV_PKT_FLAG_KEY, &buf->s.flags );
+                buf = process_delay_list( pv, buf );
 
-        if( job->pass == 1 )
-        {
+                if (buf_head == NULL)
+                {
+                    buf_head = buf;
+                }
+                else
+                {
+                    buf_last->next = buf;
+                }
+                buf_last = buf;
+            }
             /* Write stats */
-            fprintf( pv->file, "%s", pv->context->stats_out );
+            if (job->pass == 1 && pv->context->stats_out != NULL)
+            {
+                fprintf( pv->file, "%s", pv->context->stats_out );
+            }
+        } while (still_flushing);
+        if (buf_last != NULL && final_flushing_call)
+        {
+            buf_last->next = in;
+            buf = buf_head;
+        }
+        else if (final_flushing_call)
+        {
+            buf = in;
         }
     }
     else
@@ -556,11 +616,11 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_error( "encavcodec: codec context has uninitialized codec; skipping frame" );
     }
 
-    av_frame_free(&frame);
+    av_frame_free( &frame );
 
     *buf_out = buf;
 
-    return HB_WORK_OK;
+    return final_flushing_call? HB_WORK_DONE : HB_WORK_OK;
 }
 
 

@@ -4892,6 +4892,7 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     {
         case HB_VCODEC_FFMPEG_MPEG4:
         case HB_VCODEC_FFMPEG_MPEG2:
+        case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_THEORA:
         {
             return g_strdup_printf("%s: %d", vqname, (int)val);

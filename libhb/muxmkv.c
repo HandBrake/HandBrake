@@ -180,6 +180,11 @@ static int MKVInit( hb_mux_object_t * m )
             if (job->areBframes)
                 track->minCache = 1;
             break;
+        case HB_VCODEC_FFMPEG_VP8:
+            track->codecID = "V_VP8";
+            track->codecPrivate = NULL;
+            track->codecPrivateSize = 0;
+            break;
         case HB_VCODEC_THEORA:
             {
                 int i;
