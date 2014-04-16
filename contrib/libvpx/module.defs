@@ -3,8 +3,6 @@ $(eval $(call import.CONTRIB.defs,LIBVPX))
 
 LIBVPX.FETCH.url = http://download.handbrake.fr/contrib/libvpx-v1.3.0.tar.bz2
 
-LIBVPX.CONFIGURE.env.LD = LD=$(subst CC=,,$(LIBVPX.CONFIGURE.env.CC))
-
 LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =
 LIBVPX.CONFIGURE.extra =  \
@@ -14,6 +12,11 @@ LIBVPX.CONFIGURE.extra =  \
     --disable-examples    \
     --disable-docs        \
     --disable-unit-tests
+
+ifeq (1,$(BUILD.cross))
+    LIBVPX.CONFIGURE.env.CROSS  = CROSS="$(BUILD.spec)-"
+    LIBVPX.CONFIGURE.args.build =
+endif
 
 ifeq (1-i686,$(BUILD.cross)-$(BUILD.machine))
     LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
