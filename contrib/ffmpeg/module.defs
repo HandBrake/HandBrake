@@ -1,8 +1,9 @@
+__deps__ := YASM BZIP2 ZLIB FDKAAC PTHREADW32 LIBMFX LIBVPX
 ifeq (1,$(FEATURE.qsv))
-$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC PTHREADW32 LIBMFX))
-else
-$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB FDKAAC))
+__deps__ += PTHREADW32 LIBMFX
 endif
+
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
 FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v10.tar.bz2
