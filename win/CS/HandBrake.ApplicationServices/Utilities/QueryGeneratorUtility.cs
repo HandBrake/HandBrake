@@ -15,11 +15,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Globalization;
     using System.IO;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
     using HandBrake.Interop.Model.Encoding.x265;
@@ -433,6 +430,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 case VideoEncoder.Theora:
                     query += " -e theora";
                     break;
+                case VideoEncoder.VP8:
+                    query += " -e VP8";
+                    break;
                 default:
                     query += " -e x264";
                     break;
@@ -448,23 +448,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         query += string.Format(" -b {0}", task.VideoBitrate.Value);
                     break;
                 case VideoEncodeRateType.ConstantQuality:
-                    switch (task.VideoEncoder)
-                    {
-                        case VideoEncoder.FFMpeg:
-                        case VideoEncoder.FFMpeg2:
-                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
-                            break;
-                        case VideoEncoder.X264:
-                        case VideoEncoder.QuickSync:
-                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
-                            break;
-                        case VideoEncoder.Theora:
-                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
-                            break;
-                        case VideoEncoder.X265:
-                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
-                            break;
-                    }
+                    query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                     break;
             }
 

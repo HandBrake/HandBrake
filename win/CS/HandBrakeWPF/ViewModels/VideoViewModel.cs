@@ -404,7 +404,10 @@ namespace HandBrakeWPF.ViewModels
                     case VideoEncoder.FFMpeg:
                     case VideoEncoder.FFMpeg2:
                         this.Task.Quality = (32 - value);
-                        break;                 
+                        break;    
+                    case VideoEncoder.VP8:
+                        this.Task.Quality = (63 - value);
+                        break;
                     case VideoEncoder.X264:
                     case VideoEncoder.X265:
                         double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
@@ -480,7 +483,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.SelectedVideoEncoder == VideoEncoder.X264 ? "RF" : "QP";
+                return this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder ==  VideoEncoder.X265 ? "RF" : "QP";
             }
         }
 
@@ -1092,6 +1095,14 @@ namespace HandBrakeWPF.ViewModels
                         this.RF = 32 - cq;
                     }
                     break;
+                case VideoEncoder.VP8:
+                    if (preset.Task.Quality.HasValue)
+                    {
+                        int cq;
+                        int.TryParse(preset.Task.Quality.Value.ToString(CultureInfo.InvariantCulture), out cq);
+                        this.RF = 63 - cq;
+                    }
+                    break;
                 case VideoEncoder.X265:
                 case VideoEncoder.X264:
 
@@ -1301,6 +1312,7 @@ namespace HandBrakeWPF.ViewModels
                     this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
                     break;
                 case VideoEncoder.Theora:
+                case VideoEncoder.VP8:
                     this.QualityMin = 0;
                     this.QualityMax = 63;
                     break;

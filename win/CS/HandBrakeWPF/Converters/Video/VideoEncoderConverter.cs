@@ -53,6 +53,7 @@ namespace HandBrakeWPF.Converters.Video
                 if (task != null && task.OutputFormat != OutputFormat.Mkv)
                 {
                     encoders.Remove(VideoEncoder.Theora);
+                    encoders.Remove(VideoEncoder.VP8);
                 }
 
                 if (!SystemInfo.IsQsvAvailable)

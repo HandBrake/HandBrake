@@ -25,20 +25,24 @@ namespace HandBrake.Interop.Model.Encoding
         [Display(Name = "H.264 (Intel QSV)")]
         QuickSync,
 
-		[Display(Name = "MPEG-4 (FFmpeg)")]
+		[Display(Name = "MPEG-4")]
         [ShortName("mpeg4")]
 		FFMpeg,
 
-		[Display(Name = "MPEG-2 (FFmpeg)")]
+		[Display(Name = "MPEG-2")]
         [ShortName("mpeg2")]
 		FFMpeg2,
 
-		[Display(Name = "VP3 (Theora)")]
+		[Display(Name = "Theora")]
         [ShortName("theora")]
 		Theora,
 
         [Display(Name = "H.265 (x265)")]
         [ShortName("x265")]
-        X265
+        X265,
+
+        [Display(Name = "VP8")]
+        [ShortName("vp8")]
+        VP8
 	}
 }

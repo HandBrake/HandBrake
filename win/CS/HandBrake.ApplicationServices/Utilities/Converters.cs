@@ -299,6 +299,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return VideoEncoder.Theora;
                 case "x265":
                     return VideoEncoder.X265;
+                case "VP8":
+                    return VideoEncoder.VP8;
                 default:
                     return VideoEncoder.X264;
             }
@@ -329,6 +331,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "theora";
                 case VideoEncoder.X265:
                     return "x265";
+                case VideoEncoder.VP8:
+                    return "VP8";
                 default:
                     return "x264";
             }
