@@ -414,7 +414,7 @@ namespace HandBrakeWPF.ViewModels
             this.SourceTracks = title.AudioTracks;
 
             // Only reset the audio tracks if we have none, or if the task is null.
-            if (this.Task == null || this.Task.AudioTracks.Count == 0)
+            if (this.Task == null)
             {
                 this.SetPreset(preset, task);
             }
