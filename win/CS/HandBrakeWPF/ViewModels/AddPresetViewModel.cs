@@ -86,12 +86,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets CustomWidth.
         /// </summary>
-        public int CustomWidth { get; set; }
+        public int? CustomWidth { get; set; }
 
         /// <summary>
         /// Gets or sets CustomHeight.
         /// </summary>
-        public int CustomHeight { get; set; }
+        public int? CustomHeight { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowCustomInputs.
@@ -181,6 +181,12 @@ namespace HandBrakeWPF.ViewModels
             if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && this.selectedTitle == null)
             {
                 this.errorService.ShowMessageBox("You must first scan a source to use the 'Source Maximum' Option.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (this.CustomWidth == null && this.CustomHeight == null)
+            {
+                this.errorService.ShowMessageBox("The Custom Width or Height fields must be filled in for the 'Custom' option.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
