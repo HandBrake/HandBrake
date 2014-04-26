@@ -184,7 +184,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            if (this.CustomWidth == null && this.CustomHeight == null)
+            if (this.CustomWidth == null && this.CustomHeight == null && this.SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
             {
                 this.errorService.ShowMessageBox("The Custom Width or Height fields must be filled in for the 'Custom' option.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
