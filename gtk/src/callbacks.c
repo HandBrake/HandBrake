@@ -571,50 +571,100 @@ set_destination_settings(signal_user_data_t *ud, GValue *settings)
     extension = get_extension(ud, settings);
 
     g_debug("set_destination_settings");
-    if (ghb_settings_get_boolean(ud->prefs, "use_source_name"))
+    if (ghb_settings_get_boolean(ud->prefs, "auto_name"))
     {
         GString *str = g_string_new("");
-        gchar *vol_name;
-        gint title;
+        gchar *p;
+        gchar *template;
 
-        vol_name = ghb_settings_get_string(settings, "volume_label");
-        g_string_append_printf(str, "%s", vol_name);
-        title = ghb_settings_get_int(settings, "title_no");
-        if (title >= 0)
+        p = template = ghb_settings_get_string(ud->prefs, "auto_name_template");
+        while (*p)
         {
-            if (ghb_settings_get_boolean(ud->prefs, "title_no_in_destination"))
+            if (!strncmp(p, "{source}", strlen("{source}")))
             {
-
-                g_string_append_printf(str, " - %d", title+1);
+                gchar *vol_name;
+                vol_name = ghb_settings_get_string(settings, "volume_label");
+                g_string_append_printf(str, "%s", vol_name);
+                g_free(vol_name);
+                p += strlen("{source}");
             }
-            if (ghb_settings_combo_int(settings, "PtoPType") == 0 &&
-                ghb_settings_get_boolean(ud->prefs, "chapters_in_destination"))
+            else if (!strncmp(p, "{title}", strlen("{title}")))
             {
-                gint start, end;
-
-                if (!ghb_settings_get_boolean(
-                        ud->prefs, "title_no_in_destination"))
+                gint title = ghb_settings_get_int(settings, "title_no");
+                if (title >= 0)
+                    g_string_append_printf(str, "%d", title+1);
+                p += strlen("{title}");
+            }
+            else if (!strncmp(p, "{chapters}", strlen("{chapters}")))
+            {
+                if (ghb_settings_combo_int(settings, "PtoPType") == 0)
                 {
-                    g_string_append_printf(str, " -");
+                    gint start, end;
+                    start = ghb_settings_get_int(settings, "start_point");
+                    end = ghb_settings_get_int(settings, "end_point");
+                    if (start == end)
+                        g_string_append_printf(str, "%d", start);
+                    else
+                        g_string_append_printf(str, "%d-%d", start, end);
                 }
-                start = ghb_settings_get_int(settings, "start_point");
-                end = ghb_settings_get_int(settings, "end_point");
-                if (start == end)
-                    g_string_append_printf(str, " Ch %d", start);
-                else
-                    g_string_append_printf(str, " Ch %d-%d", start, end);
+                p += strlen("{chapters}");
+            }
+            else if (!strncmp(p, "{time}", strlen("{time}")))
+            {
+                char st[6];
+                struct tm *lt;
+                time_t t = time(NULL);
+                lt = localtime(&t);
+                st[0] = 0;
+                strftime(st, 6, "%R", lt);
+                g_string_append_printf(str, "%s", st);
+                p += strlen("{time}");
+            }
+            else if (!strncmp(p, "{date}", strlen("{date}")))
+            {
+                char dt[11];
+                struct tm *lt;
+                time_t t = time(NULL);
+                lt = localtime(&t);
+                dt[0] = 0;
+                strftime(dt, 11, "%F", lt);
+                g_string_append_printf(str, "%s", dt);
+                p += strlen("{date}");
+            }
+            else if (!strncmp(p, "{quality}", strlen("{quality}")))
+            {
+                if (ghb_settings_get_boolean(settings, "vquality_type_constant"))
+                {
+                    gint vcodec;
+                    const char *vqname;
+                    double vquality;
+                    vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
+                    vqname = hb_video_quality_get_name(vcodec);
+                    vquality = ghb_settings_get_double(settings, "VideoQualitySlider");
+                    g_string_append_printf(str, "%s%.3g", vqname, vquality);
+                }
+                p += strlen("{quality}");
+            }
+            else if (!strncmp(p, "{bitrate}", strlen("{bitrate}")))
+            {
+                if (ghb_settings_get_boolean(settings, "vquality_type_bitrate"))
+                {
+                    int vbitrate;
+                    vbitrate = ghb_settings_get_int(settings, "VideoAvgBitrate");
+                    g_string_append_printf(str, "%dkbps", vbitrate);
+                }
+                p += strlen("{bitrate}");
+            }
+            else
+            {
+                g_string_append_printf(str, "%c", *p);
+                p++;
             }
         }
         g_string_append_printf(str, ".%s", extension);
         filename = g_string_free(str, FALSE);
         ghb_settings_set_string(settings, "dest_file", filename);
-        g_free(vol_name);
-        g_free(filename);
-    }
-    else
-    {
-        filename = g_strdup_printf("new_video.%s", extension);
-        ghb_settings_set_string(settings, "dest_file", filename);
+        g_free(template);
         g_free(filename);
     }
 }
@@ -2029,6 +2079,26 @@ chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+vquality_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+    set_destination(ud);
+}
+
+G_MODULE_EXPORT void
+vbitrate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+    set_destination(ud);
+}
+
+G_MODULE_EXPORT void
 vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
@@ -2056,6 +2126,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     gdouble val = gtk_range_get_value(GTK_RANGE(widget));
     val = ((int)((val + step / 2) / step)) * step;
     gtk_range_set_value(GTK_RANGE(widget), val);
+    set_destination(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2100,10 +2171,7 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         if (start > end)
             ghb_ui_update(ud, "end_point", ghb_int_value(start));
         ghb_check_dependency(ud, widget, NULL);
-        if (ghb_settings_get_boolean(ud->prefs, "chapters_in_destination"))
-        {
-            set_destination(ud);
-        }
+        set_destination(ud);
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         // End may have been changed above, get it again
         end = ghb_settings_get_int(ud->settings, "end_point");
@@ -2143,10 +2211,7 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         if (start > end)
             ghb_ui_update(ud, "start_point", ghb_int_value(end));
         ghb_check_dependency(ud, widget, NULL);
-        if (ghb_settings_get_boolean(ud->prefs, "chapters_in_destination"))
-        {
-            set_destination(ud);
-        }
+        set_destination(ud);
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         // Start may have been changed above, get it again
         start = ghb_settings_get_int(ud->settings, "start_point");

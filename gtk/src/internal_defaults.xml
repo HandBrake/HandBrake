@@ -149,14 +149,10 @@
         <true />
         <key>allow_tweaks</key>
         <false />
-        <key>title_no_in_destination</key>
-        <false />
         <key>last_update_check</key>
         <integer>0</integer>
         <key>check_updates</key>
         <string>weekly</string>
-        <key>chapters_in_destination</key>
-        <false />
         <key>default_source</key>
         <string>/dev/dvd</string>
         <key>ExportDirectory</key>
@@ -199,8 +195,10 @@
         <true />
         <key>UseM4v</key>
         <true />
-        <key>use_source_name</key>
+        <key>auto_name</key>
         <true />
+        <key>auto_name_template</key>
+        <string>{source}</string>
         <key>update_skip_version</key>
         <integer>0</integer>
         <key>VideoQualityGranularity</key>

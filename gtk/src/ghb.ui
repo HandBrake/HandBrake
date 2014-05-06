@@ -2324,7 +2324,7 @@ These encoders do not have a lossless mode.</property>
                                             <property name="xalign">0</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                                            <signal name="toggled" handler="vquality_type_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -2348,7 +2348,7 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">vquality_type_constant</property>
-                                            <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                                            <signal name="toggled" handler="vquality_type_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -2370,7 +2370,7 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
                                             <property name="primary_icon_activatable">False</property>
                                             <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment3</property>
-                                            <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
+                                            <signal name="value-changed" handler="vbitrate_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -5991,7 +5991,7 @@ You can edit these and add additional options.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="use_source_name">
+                                  <object class="GtkCheckButton" id="auto_name">
                                     <property name="label" translatable="yes">Use automatic naming (uses modified source name)</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -6012,20 +6012,20 @@ You can edit these and add additional options.</property>
                                     <property name="can_focus">False</property>
                                     <property name="left_padding">18</property>
                                     <child>
-                                      <object class="GtkBox" id="vbox29">
-                                        <property name="orientation">vertical</property>
+                                      <object class="GtkBox" id="autoname_box">
+                                        <property name="orientation">horizontal</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="spacing">4</property>
+                                        <property name="margin_right">8</property>
                                         <child>
-                                          <object class="GtkCheckButton" id="chapters_in_destination">
-                                            <property name="label" translatable="yes">Add chapters to destination name</property>
+                                          <object class="GtkLabel" id="auto_name_template_label">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="active">True</property>
-                                            <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">Auto-Name Template</property>
+                                            <property name="use_markup">True</property>
+
+                                            <property name="xalign">1</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -6034,15 +6034,17 @@ You can edit these and add additional options.</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkCheckButton" id="title_no_in_destination">
-                                            <property name="label" translatable="yes">Add title # to destination name</property>
+                                          <object class="GtkEntry" id="auto_name_template">
+                                            <property name="tooltip_text" translatable="yes">Available Options: {source} {title} {chapters} {date} {time} {quality} {bitrate}</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="active">True</property>
-                                            <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="activates_default">True</property>
+                                            <property name="width_chars">40</property>
+                                            <property name="truncate_multiline">True</property>
+                                            <property name="primary_icon_activatable">False</property>
+                                            <property name="secondary_icon_activatable">False</property>
+                                            <signal name="changed" handler="pref_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
