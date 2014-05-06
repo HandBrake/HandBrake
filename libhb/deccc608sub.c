@@ -851,7 +851,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
             // Get position for this CC
             if (row == -1)
             {
-                int last, x, y, safe_zone, cell_width, cell_height;
+                int last, x, y, top, safe_zone, cell_width, cell_height;
                 int cropped_width, cropped_height, font_size;
                 char *pos;
 
@@ -874,14 +874,15 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
                 // the baseline of the text which is lower left corner
                 // of bottom row of characters
                 y = cell_height * (row + 1 + rows) + safe_zone - wb->crop[0];
+                top = y - rows * font_size;
                 x = cell_width * col + safe_zone - wb->crop[2];
-                if (y < 0)
+                if (top < safe_zone)
                     y = (rows * font_size) + safe_zone;
-                if (x < 0)
+                if (x < safe_zone)
                     x = safe_zone;
-                if (y > cropped_height)
+                if (y > cropped_height - safe_zone)
                     y = cropped_height - safe_zone;
-                if (x + columns * cell_width > cropped_width)
+                if (x + columns * cell_width > cropped_width - safe_zone)
                     x = cropped_width - columns * cell_width - safe_zone;
                 pos = hb_strdup_printf("{\\a1\\pos(%d,%d)}", x, y);
                 wb->enc_buffer_used += encode_line(
