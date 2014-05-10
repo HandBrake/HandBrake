@@ -193,8 +193,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
 		271E74EF182F260C0077C311 /* osx109.i386.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.i386.xcconfig; sourceTree = "<group>"; };
 		271E74F0182F260C0077C311 /* osx109.x86_64.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.x86_64.xcconfig; sourceTree = "<group>"; };
@@ -284,28 +282,31 @@
 		277EFE8917ED4F5D001D4A6A /* osx108.i386.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx108.i386.xcconfig; sourceTree = "<group>"; };
 		277EFE8B17ED4F63001D4A6A /* osx108.x86_64.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx108.x86_64.xcconfig; sourceTree = "<group>"; };
 		277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = supplemental.xcconfig; sourceTree = "<group>"; };
-		277EFE8F17ED7296001D4A6A /* libmp4v2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp4v2.a; path = external/contrib/lib/libmp4v2.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		277EFE9017ED72A1001D4A6A /* libmkv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmkv.a; path = external/contrib/lib/libmkv.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		277EFE9217ED799E001D4A6A /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "../../../../Users/mike/Library/Developer/Xcode/DerivedData/HandBrake-anpxrfhxsejsxehiwuiaexjoygra/Build/Products/debug/external/contrib/lib/libfdk-aac.a"; sourceTree = "<group>"; };
 		27D6C72414B1019100B785E4 /* libhandbrake.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhandbrake.a; path = external/libhb/libhandbrake.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72814B102DA00B785E4 /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = external/contrib/lib/libass.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72914B102DA00B785E4 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = external/contrib/lib/libavcodec.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72A14B102DA00B785E4 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = external/contrib/lib/libavformat.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72B14B102DA00B785E4 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = external/contrib/lib/libavutil.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72C14B102DA00B785E4 /* libbluray.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbluray.a; path = external/contrib/lib/libbluray.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72E14B102DA00B785E4 /* libdvdnav.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdvdnav.a; path = external/contrib/lib/libdvdnav.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72F14B102DA00B785E4 /* libdvdread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdvdread.a; path = external/contrib/lib/libdvdread.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		277EFE9217ED799E001D4A6A /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "external/contrib/lib/libfdk-aac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73114B102DA00B785E4 /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = external/contrib/lib/libfontconfig.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73214B102DA00B785E4 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = external/contrib/lib/libfreetype.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73314B102DA00B785E4 /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = external/contrib/lib/libfribidi.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		277EFE9017ED72A1001D4A6A /* libmkv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmkv.a; path = external/contrib/lib/libmkv.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73614B102DA00B785E4 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = external/contrib/lib/libmp3lame.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		277EFE8F17ED7296001D4A6A /* libmp4v2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp4v2.a; path = external/contrib/lib/libmp4v2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73914B102DA00B785E4 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = external/contrib/lib/libogg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73A14B102DA00B785E4 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = external/contrib/lib/libsamplerate.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73B14B102DA00B785E4 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = external/contrib/lib/libswscale.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73C14B102DA00B785E4 /* libtheora.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtheora.a; path = external/contrib/lib/libtheora.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73D14B102DA00B785E4 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = external/contrib/lib/libvorbis.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73E14B102DA00B785E4 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = external/contrib/lib/libvorbisenc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73F14B102DA00B785E4 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = external/contrib/lib/libx264.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C74014B102DA00B785E4 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = external/contrib/lib/libxml2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		34FF2FC014EEC363004C2400 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
@@ -351,12 +352,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
-				273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
-				273F202A14ADB8D60021BE6D /* libiconv.dylib in Frameworks */,
+				273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */,
 				273F202814ADB8BE0021BE6D /* libbz2.dylib in Frameworks */,
+				273F202A14ADB8D60021BE6D /* libiconv.dylib in Frameworks */,
 				273F202614ADB8A40021BE6D /* libz.dylib in Frameworks */,
 				27D6C72614B1019100B785E4 /* libhandbrake.a in Frameworks */,
 				27D6C74414B102DA00B785E4 /* libass.a in Frameworks */,
@@ -377,6 +377,7 @@
 				27D6C76B14B102DA00B785E4 /* libtheora.a in Frameworks */,
 				27D6C76D14B102DA00B785E4 /* libvorbis.a in Frameworks */,
 				27D6C76F14B102DA00B785E4 /* libvorbisenc.a in Frameworks */,
+				22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */,
 				27D6C77114B102DA00B785E4 /* libx264.a in Frameworks */,
 				27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */,
 			);
@@ -386,16 +387,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22DD2C4A177B94DB00EF50D3 /* libvpx.a in Frameworks */,
-				A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */,
-				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
-				273F21C214ADE7BC0021BE6D /* Sparkle.framework in Frameworks */,
 				273F20C914ADC5150021BE6D /* AudioToolbox.framework in Frameworks */,
-				273F20C814ADC4FF0021BE6D /* QTKit.framework in Frameworks */,
-				273F20C614ADC4F50021BE6D /* IOKit.framework in Frameworks */,
 				273F203C14ADBC210021BE6D /* Cocoa.framework in Frameworks */,
-				273F20C314ADC4AE0021BE6D /* libiconv.dylib in Frameworks */,
+				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
+				273F20C614ADC4F50021BE6D /* IOKit.framework in Frameworks */,
+				273F20C814ADC4FF0021BE6D /* QTKit.framework in Frameworks */,
+				A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */,
+				273F21C214ADE7BC0021BE6D /* Sparkle.framework in Frameworks */,
 				273F20C414ADC4B60021BE6D /* libbz2.dylib in Frameworks */,
+				273F20C314ADC4AE0021BE6D /* libiconv.dylib in Frameworks */,
 				273F20C514ADC4BD0021BE6D /* libz.dylib in Frameworks */,
 				27D6C72514B1019100B785E4 /* libhandbrake.a in Frameworks */,
 				27D6C74314B102DA00B785E4 /* libass.a in Frameworks */,
@@ -416,6 +416,7 @@
 				27D6C76A14B102DA00B785E4 /* libtheora.a in Frameworks */,
 				27D6C76C14B102DA00B785E4 /* libvorbis.a in Frameworks */,
 				27D6C76E14B102DA00B785E4 /* libvorbisenc.a in Frameworks */,
+				22DD2C4A177B94DB00EF50D3 /* libvpx.a in Frameworks */,
 				27D6C77014B102DA00B785E4 /* libx264.a in Frameworks */,
 				27D6C77214B102DA00B785E4 /* libxml2.a in Frameworks */,
 			);
@@ -500,15 +501,15 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */,
-				273F20C714ADC4FF0021BE6D /* QTKit.framework */,
 				273F202F14ADB9790021BE6D /* AudioToolbox.framework */,
 				273F203B14ADBC210021BE6D /* Cocoa.framework */,
 				273F203214ADB9F00021BE6D /* CoreServices.framework */,
 				273F202214ADB8650021BE6D /* IOKit.framework */,
+				273F20C714ADC4FF0021BE6D /* QTKit.framework */,
+				A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */,
 				273F203D14ADBC210021BE6D /* Other Frameworks */,
-				273F202914ADB8D60021BE6D /* libiconv.dylib */,
 				273F202714ADB8BE0021BE6D /* libbz2.dylib */,
+				273F202914ADB8D60021BE6D /* libiconv.dylib */,
 				273F202514ADB8A40021BE6D /* libz.dylib */,
 			);
 			name = Frameworks;
@@ -696,6 +697,7 @@
 				277EFE9217ED799E001D4A6A /* libfdk-aac.a */,
 				277EFE9017ED72A1001D4A6A /* libmkv.a */,
 				277EFE8F17ED7296001D4A6A /* libmp4v2.a */,
+				22CC9E74191EBEA500C69D81 /* libx265.a */,
 			);
 			name = "Static Libraries (optional)";
 			sourceTree = "<group>";
