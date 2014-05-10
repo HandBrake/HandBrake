@@ -194,7 +194,7 @@
 
 /* Begin PBXFileReference section */
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external//contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
 		271E74EF182F260C0077C311 /* osx109.i386.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.i386.xcconfig; sourceTree = "<group>"; };
 		271E74F0182F260C0077C311 /* osx109.x86_64.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.x86_64.xcconfig; sourceTree = "<group>"; };
@@ -446,6 +446,7 @@
 				27D6C73C14B102DA00B785E4 /* libtheora.a */,
 				27D6C73D14B102DA00B785E4 /* libvorbis.a */,
 				27D6C73E14B102DA00B785E4 /* libvorbisenc.a */,
+				22DD2C49177B94DB00EF50D3 /* libvpx.a */,
 				27D6C73F14B102DA00B785E4 /* libx264.a */,
 				27D6C74014B102DA00B785E4 /* libxml2.a */,
 			);
@@ -463,7 +464,6 @@
 		273F1FDE14AD9DA40021BE6D = {
 			isa = PBXGroup;
 			children = (
-				22DD2C49177B94DB00EF50D3 /* libvpx.a */,
 				273F204114ADBC210021BE6D /* HandBrake */,
 				273F200214ADAE950021BE6D /* HandBrakeCLI */,
 				273F200014ADAE950021BE6D /* Products */,
