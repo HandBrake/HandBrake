@@ -151,6 +151,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 default:
                     this.SelectedPictureSettingMode = PresetPictureSettingsMode.Custom;
+                    if (title != null && title.Resolution != null)
+                    {
+                        this.CustomWidth = title.Resolution.Width;
+                        this.CustomHeight = title.Resolution.Height;
+                    }
                     break;
                 case Anamorphic.Strict:
                     this.SelectedPictureSettingMode = PresetPictureSettingsMode.SourceMaximum;
