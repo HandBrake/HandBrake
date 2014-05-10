@@ -343,6 +343,7 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
         {
             // we're done with this chapter
             hb_list_rem(pv->delayed_chapters, item);
+            buf->s.new_chap = item->index;
             free(item);
 
             // we may still have another pending chapter
