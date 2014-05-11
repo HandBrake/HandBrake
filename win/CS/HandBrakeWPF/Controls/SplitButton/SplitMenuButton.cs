@@ -128,6 +128,7 @@ namespace HandBrakeWPF.Controls.SplitButton
                 if (this.contextMenu != null)
                 {
                     // Add the ContextMenu as a logical child (for DataContext and RoutedCommands)
+                    this.contextMenu.Visibility = Visibility.Collapsed;
                     this.contextMenu.IsOpen = true;
                     DependencyObject current = this.contextMenu;
                     do
@@ -137,11 +138,11 @@ namespace HandBrakeWPF.Controls.SplitButton
                     }
                     while (null != current);
 
-                    this.contextMenu.IsOpen = false;
+                    this.contextMenu.IsOpen = false;     
                     this.AddLogicalChild(this.logicalChild);
 
                     this.contextMenu.Opened += this.ContextMenu_Opened;
-                    this.contextMenu.Closed += this.ContextMenu_Closed;
+                    this.contextMenu.Closed += this.ContextMenu_Closed;              
                 }
             }
         }
@@ -197,6 +198,7 @@ namespace HandBrakeWPF.Controls.SplitButton
             {
                 this.contextMenu.HorizontalOffset = 0;
                 this.contextMenu.VerticalOffset = 0;
+                this.contextMenu.Visibility = Visibility.Visible;
                 this.contextMenu.IsOpen = true;
             }
         }
