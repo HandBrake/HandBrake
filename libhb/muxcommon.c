@@ -19,6 +19,12 @@ struct hb_mux_object_s
 
 typedef struct
 {
+    int         size;   // Size in bits
+    uint32_t  * vec;
+} hb_bitvec_t;
+
+typedef struct
+{
     hb_buffer_t **fifo;
     uint32_t    in;     // number of bufs put into fifo
     uint32_t    out;    // number of bufs taken out of fifo
@@ -42,16 +48,13 @@ typedef struct
     hb_mux_object_t * m;
     double            pts;        // end time of next muxing chunk
     double            interleave; // size in 90KHz ticks of media chunks we mux
+    uint32_t          max_tracks; // total number of tracks allocated
     uint32_t          ntracks;    // total number of tracks we're muxing
-    uint32_t          eof;        // bitmask of track with eof
-    uint32_t          rdy;        // bitmask of tracks ready to output
-    uint32_t          allEof;     // valid bits in eof (all tracks)
-    uint32_t          allRdy;     // valid bits in rdy (audio & video tracks)
-    hb_track_t      * track[32];  // array of tracks to mux ('ntrack' elements)
-                                  // NOTE- this array could be dynamically
-                                  // allocated but the eof & rdy logic has to
-                                  // be changed to handle more than 32 tracks
-                                  // anyway so we keep it simple and fast.
+    hb_bitvec_t     * eof;        // bitmask of track with eof
+    hb_bitvec_t     * rdy;        // bitmask of tracks ready to output
+    hb_bitvec_t     * allEof;     // valid bits in eof (all tracks)
+    hb_bitvec_t     * allRdy;     // valid bits in rdy (audio & video tracks)
+    hb_track_t     ** track;      // tracks to mux 'max_tracks' elements
     int               buffered_size;
 } hb_mux_t;
 
@@ -61,6 +64,130 @@ struct hb_work_private_s
     int        track;
     hb_mux_t * mux;
 };
+
+
+static int hb_bitvec_add_bits(hb_bitvec_t *bv, int bits)
+{
+    int ii;
+    int words_cur = (bv->size + 31) >> 5;
+    int words = (bv->size + bits + 31) >> 5;
+    if (words > words_cur)
+    {
+        uint32_t *tmp = realloc(bv->vec, words * sizeof(uint32_t));
+        if (tmp == NULL)
+        {
+            return -1;
+        }
+        for (ii = words_cur; ii < words; ii++)
+            tmp[ii] = 0;
+        bv->vec = tmp;
+    }
+    bv->size += bits;
+    return 0;
+}
+
+static hb_bitvec_t* hb_bitvec_new(int size)
+{
+    hb_bitvec_t *bv = calloc(sizeof(hb_bitvec_t), 1);
+    hb_bitvec_add_bits(bv, size);
+    return bv;
+}
+
+static void hb_bitvec_free(hb_bitvec_t **_bv)
+{
+    hb_bitvec_t *bv = *_bv;
+    free(bv->vec);
+    free(bv);
+    *_bv = NULL;
+}
+
+static void hb_bitvec_set(hb_bitvec_t *bv, int n)
+{
+    if (n >= bv->size)
+        return; // Error.  Should never happen.
+
+    int word = n >> 5;
+    uint32_t bit = 1 << (n & 0x1F);
+    bv->vec[word] |= bit;
+}
+
+static void hb_bitvec_clr(hb_bitvec_t *bv, int n)
+{
+    if (n >= bv->size)
+        return; // Error.  Should never happen.
+
+    int word = n >> 5;
+    uint32_t bit = 1 << (n & 0x1F);
+    bv->vec[word] &= ~bit;
+}
+
+static void hb_bitvec_zero(hb_bitvec_t *bv)
+{
+    int words = (bv->size + 31) >> 5;
+    memset(bv->vec, 0, words * sizeof(uint32_t));
+}
+
+static int hb_bitvec_bit(hb_bitvec_t *bv, int n)
+{
+    if (n >= bv->size)
+        return 0; // Error.  Should never happen.
+
+    int word = n >> 5;
+    uint32_t bit = 1 << (n & 0x1F);
+    return !!(bv->vec[word] & bit);
+}
+
+static int hb_bitvec_any(hb_bitvec_t *bv)
+{
+    uint32_t result = 0;;
+    int ii;
+    int words = (bv->size + 31) >> 5;
+    for (ii = 0; ii < words; ii++)
+        result |= bv->vec[ii];
+
+    return !!result;
+}
+
+static int hb_bitvec_cmp(hb_bitvec_t *bv1, hb_bitvec_t *bv2)
+{
+    if (bv1->size != bv2->size)
+        return 0;
+
+    int ii;
+    int words = (bv1->size + 31) >> 5;
+    for (ii = 0; ii < words; ii++)
+        if (bv1->vec[ii] != bv2->vec[ii])
+            return 0;
+    return 1;
+}
+
+static int hb_bitvec_and_cmp(hb_bitvec_t *bv1, hb_bitvec_t *bv2, hb_bitvec_t *bv3)
+{
+    if (bv1->size != bv2->size)
+        return 0;
+
+    int ii;
+    int words = (bv1->size + 31) >> 5;
+    for (ii = 0; ii < words; ii++)
+        if ((bv1->vec[ii] & bv2->vec[ii]) != bv3->vec[ii])
+            return 0;
+    return 1;
+}
+
+static int hb_bitvec_cpy(hb_bitvec_t *bv1, hb_bitvec_t *bv2)
+{
+    if (bv1->size < bv2->size)
+    {
+        int result = hb_bitvec_add_bits(bv1, bv2->size - bv1->size);
+        if (result < 0)
+            return result;
+    }
+
+    int words = (bv1->size + 31) >> 5;
+    memcpy(bv1->vec, bv2->vec, words * sizeof(uint32_t));
+
+    return 0;
+}
 
 // The muxer handles two different kinds of media: Video and audio tracks
 // are continuous: once they start they generate continuous, consecutive
@@ -93,11 +220,19 @@ struct hb_work_private_s
 static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
                            int is_continuous )
 {
-    int max_tracks = sizeof(mux->track) / sizeof(*(mux->track));
-    if ( mux->ntracks >= max_tracks )
+    if ( mux->ntracks + 1 > mux->max_tracks )
     {
-        hb_error( "add_mux_track: too many tracks (>%d)", max_tracks );
-        return;
+        int max_tracks = mux->max_tracks ? mux->max_tracks * 2 : 32;
+        hb_track_t **tmp;
+        tmp = realloc(mux->track, max_tracks * sizeof(hb_track_t*));
+        if (tmp == NULL)
+        {
+            hb_error("add_mux_track: realloc failed, too many tracks (>%d)",
+                     max_tracks);
+            return;
+        }
+        mux->track = tmp;
+        mux->max_tracks = max_tracks;
     }
 
     hb_track_t *track = calloc( sizeof( hb_track_t ), 1 );
@@ -107,8 +242,11 @@ static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
 
     int t = mux->ntracks++;
     mux->track[t] = track;
-    mux->allEof |= 1 << t;
-    mux->allRdy |= is_continuous << t;
+    hb_bitvec_add_bits(mux->allEof, 1);
+    hb_bitvec_add_bits(mux->allRdy, 1);
+    hb_bitvec_set(mux->allEof, t);
+    if (is_continuous)
+        hb_bitvec_set(mux->allRdy, t);
 }
 
 static int mf_full( hb_track_t * track )
@@ -128,7 +266,7 @@ static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
     hb_buffer_reduce( buf, buf->size );
     if ( track->buffered_size > MAX_BUFFERING )
     {
-        mux->rdy = mux->allRdy;
+        hb_bitvec_cpy(mux->rdy, mux->allRdy);
     }
     if ( ( ( in + 1 ) & mask ) == ( track->mf.out & mask ) )
     {
@@ -195,7 +333,7 @@ static void MoveToInternalFifos( int tk, hb_mux_t *mux, hb_buffer_t * buf )
     {
         // buffer is past our next interleave point so
         // note that this track is ready to be output.
-        mux->rdy |= ( 1 << tk );
+        hb_bitvec_set(mux->rdy, tk);
     }
 }
 
@@ -234,11 +372,11 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         // EOF - mark this track as done
         hb_buffer_close( &buf );
-        mux->eof |= ( 1 << pv->track );
-        mux->rdy |= ( 1 << pv->track );
+        hb_bitvec_set(mux->eof, pv->track);
+        hb_bitvec_set(mux->rdy, pv->track);
     }
-    else if ( ( job->pass != 0 && job->pass != 2 ) ||
-              ( mux->eof & (1 << pv->track) ) )
+    else if ((job->pass != 0 && job->pass != 2) ||
+             hb_bitvec_bit(mux->eof, pv->track))
     {
         hb_buffer_close( &buf );
     }
@@ -248,20 +386,22 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     *buf_in = NULL;
 
-    if ( ( mux->rdy & mux->allRdy ) != mux->allRdy )
+    if (!hb_bitvec_and_cmp(mux->rdy, mux->allRdy, mux->allRdy))
     {
         hb_unlock( mux->mutex );
         return HB_WORK_OK;
     }
 
-    int more = mux->rdy;
+    hb_bitvec_t *more;
+    more = hb_bitvec_new(0);
+    hb_bitvec_cpy(more, mux->rdy);
     // all tracks have at least 'interleave' ticks of data. Output
     // all that we can in 'interleave' size chunks.
-    while ( (( mux->rdy & mux->allRdy ) == mux->allRdy &&
-            more && mux->buffered_size > MIN_BUFFERING ) ||
-            ( mux->eof == mux->allEof ) )
+    while ((hb_bitvec_and_cmp(mux->rdy, mux->allRdy, mux->allRdy) &&
+            hb_bitvec_any(more) && mux->buffered_size > MIN_BUFFERING ) ||
+           (hb_bitvec_cmp(mux->eof, mux->allEof)))
     {
-        more = 0;
+        hb_bitvec_zero(more);
         for ( i = 0; i < mux->ntracks; ++i )
         {
             track = mux->track[i];
@@ -270,29 +410,29 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 // If the track's fifo is still full, advance
                 // the currint interleave point and try again.
-                mux->rdy = mux->allRdy;
+                hb_bitvec_cpy(mux->rdy, mux->allRdy);
                 break;
             }
 
             // if the track is at eof or still has data that's past
             // our next interleave point then leave it marked as rdy.
             // Otherwise clear rdy.
-            if ( ( mux->eof & (1 << i) ) == 0 &&
-                 ( track->mf.out == track->mf.in ||
-                   track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->s.stop
-                     < mux->pts + mux->interleave ) )
+            if (hb_bitvec_bit(mux->eof, i) &&
+                (track->mf.out == track->mf.in ||
+                 track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->s.stop
+                     < mux->pts + mux->interleave))
             {
-                mux->rdy &=~ ( 1 << i );
+                hb_bitvec_clr(mux->rdy, i);
             }
             if ( track->mf.out != track->mf.in )
             {
-                more |= ( 1 << i );
+                hb_bitvec_set(more, i);
             }
         }
 
         // if all the tracks are at eof we're just purging their
         // remaining data -- keep going until all internal fifos are empty.
-        if ( mux->eof == mux->allEof )
+        if (hb_bitvec_cmp(mux->eof, mux->allEof))
         {
             for ( i = 0; i < mux->ntracks; ++i )
             {
@@ -310,6 +450,8 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         mux->pts += mux->interleave;
     }
+    hb_bitvec_free(&more);
+
     hb_unlock( mux->mutex );
     return HB_WORK_OK;
 }
@@ -399,6 +541,10 @@ void muxClose( hb_work_object_t * w )
         }
         hb_unlock( mux->mutex );
         hb_lock_close( &mux->mutex );
+        hb_bitvec_free(&mux->eof);
+        hb_bitvec_free(&mux->rdy);
+        hb_bitvec_free(&mux->allEof);
+        hb_bitvec_free(&mux->allRdy);
         free( mux );
     }
     else
@@ -446,6 +592,9 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     hb_mux_t    * mux = calloc( sizeof( hb_mux_t ), 1 );
     hb_work_object_t  * w;
     hb_work_object_t  * muxer;
+
+    mux->allRdy = hb_bitvec_new(0);
+    mux->allEof = hb_bitvec_new(0);
 
     mux->mutex = hb_lock_init();
 
@@ -500,6 +649,13 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     muxer->fifo_in = job->fifo_mpeg4;
     add_mux_track( mux, job->mux_data, 1 );
     muxer->done = &muxer->private_data->mux->done;
+
+    // The bit vectors must be allocated before hb_thread_init for the
+    // audio and subtitle muxer jobs below.
+    int bit_vec_size = mux->ntracks + hb_list_count(job->list_audio) +
+                                      hb_list_count(job->list_subtitle);
+    mux->rdy = hb_bitvec_new(bit_vec_size);
+    mux->eof = hb_bitvec_new(bit_vec_size);
 
     for( i = 0; i < hb_list_count( job->list_audio ); i++ )
     {

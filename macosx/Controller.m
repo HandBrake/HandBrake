@@ -13,11 +13,10 @@
 #import "HBPreviewController.h"
 #import "DockTextField.h"
 
-unsigned int maximumNumberOfAllowedAudioTracks = 24;
+unsigned int maximumNumberOfAllowedAudioTracks = 1024;
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
-NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
-NSString *keyTitleTag                          = @"keyTitleTag";
+NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";NSString *keyTitleTag                          = @"keyTitleTag";
 
 NSString *dragDropFiles                        = @"dragDropFiles";
 
