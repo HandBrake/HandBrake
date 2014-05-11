@@ -16,7 +16,8 @@
 unsigned int maximumNumberOfAllowedAudioTracks = 1024;
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
-NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";NSString *keyTitleTag                          = @"keyTitleTag";
+NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
+NSString *keyTitleTag                          = @"keyTitleTag";
 
 NSString *dragDropFiles                        = @"dragDropFiles";
 
