@@ -1,5 +1,5 @@
 diff --git a/configure b/configure
-index c6789d5..d1a8661 100755
+index 05acff5..e71aad5 100755
 --- a/configure
 +++ b/configure
 @@ -132,6 +132,7 @@ Component options:
