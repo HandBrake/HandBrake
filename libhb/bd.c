@@ -246,7 +246,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     hb_log( "bd: scanning title %d", tt );
 
     title = hb_title_init( d->path, tt );
-    title->demuxer = HB_MPEG_DEMUXER;
+    title->demuxer = HB_TS_DEMUXER;
     title->type = HB_BD_TYPE;
     title->reg_desc = STR4_TO_UINT32("HDMV");
 

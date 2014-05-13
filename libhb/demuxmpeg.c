@@ -102,7 +102,7 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
                           ((uint64_t)(d[pos+2] & 3) << 13) |
                           ((uint64_t)(d[pos+3]) << 5) |
                           (d[pos+4] >> 3);
-            check_mpeg_scr( state, scr, 300 );
+            check_mpeg_scr( state, scr, 700 );
         }
 
         pos += 9;                    /* pack_header */
@@ -245,7 +245,8 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
 // stripped off and buf has all the info gleaned from them: id is set,
 // start contains the pts (if any), renderOffset contains the dts (if any)
 // and stop contains the pcr (if it changed).
-void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
+void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
+                   hb_psdemux_t *state, int pcr_tolerance)
 {
     while ( buf )
     {
@@ -266,7 +267,7 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
             if ( buf->s.pcr >= 0 )
             {
                 // we have a new pcr
-                check_mpeg_scr( state, buf->s.pcr, 300 );
+                check_mpeg_scr( state, buf->s.pcr, pcr_tolerance );
                 buf->s.pcr = AV_NOPTS_VALUE;
                 // Some streams have consistantly bad PCRs or SCRs
                 // So filter out the offset
@@ -337,6 +338,19 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
     }
 }
 
+void hb_demux_ts(hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state)
+{
+    // Distance between PCRs in TS is up to 100ms, but we have seen
+    // streams that exceed this, so allow up to 300ms.
+    hb_demux_mpeg(buf, list_es, state, 300);
+}
+
+void hb_demux_ps(hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state)
+{
+    // Distance between SCRs in PS is up to 700ms
+    hb_demux_mpeg(buf, list_es, state, 700);
+}
+
 // "null" demuxer (makes a copy of input buf & returns it in list)
 // used when the reader for some format includes its own demuxer.
 // for example, ffmpeg.
@@ -370,4 +384,4 @@ void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state 
     }
 }
 
-const hb_muxer_t hb_demux[] = { hb_demux_dvd_ps, hb_demux_mpeg, hb_demux_null };
+const hb_muxer_t hb_demux[] = { hb_demux_dvd_ps, hb_demux_ts, hb_demux_ps, hb_demux_null };

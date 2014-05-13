@@ -897,7 +897,7 @@ struct hb_title_s
     int         rate;
     int         rate_base;
     int         crop[4];
-    enum { HB_DVD_DEMUXER, HB_MPEG_DEMUXER, HB_NULL_DEMUXER } demuxer;
+    enum {HB_DVD_DEMUXER, HB_TS_DEMUXER, HB_PS_DEMUXER, HB_NULL_DEMUXER} demuxer;
     int         detected_interlacing;
     int         pcr_pid;                /* PCR PID for TS streams */
     int         video_id;               /* demuxer stream id for video */

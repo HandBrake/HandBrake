@@ -1070,13 +1070,17 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     title->video_id = get_id( &stream->pes.list[idx] );
     title->video_codec = stream->pes.list[idx].codec;
     title->video_codec_param = stream->pes.list[idx].codec_param;
-    title->demuxer = HB_MPEG_DEMUXER;
 
     if (stream->hb_stream_type == transport)
     {
+        title->demuxer = HB_TS_DEMUXER;
 
         // make sure we're grabbing the PCR PID
         update_ts_streams( stream, stream->pmt_info.PCR_PID, 0, -1, P, NULL );
+    }
+    else
+    {
+        title->demuxer = HB_PS_DEMUXER;
     }
 
     // IDRs will be search for in hb_stream_duration
