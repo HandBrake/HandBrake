@@ -76,7 +76,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     pv->delayed_chapters  = hb_list_init();
     pv->job               = job;
     w->private_data       = pv;
-    int i, vrate, vrate_base;
+    int ret, vrate, vrate_base;
     x265_nal *nal;
     uint32_t nnal;
 
@@ -85,9 +85,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     if (x265_param_default_preset(param,
                                   job->encoder_preset, job->encoder_tune) < 0)
     {
-        free(pv);
-        pv = NULL;
-        return 1;
+        goto fail;
     }
 
     /* If the PSNR or SSIM tunes are in use, enable the relevant metric */
@@ -123,13 +121,56 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     param->keyframeMin = (int)((double)vrate / (double)vrate_base + 0.5);
     param->keyframeMax = param->keyframeMin * 10;
 
+    /*
+     * Video Signal Type (color description only).
+     *
+     * Use x265_param_parse (let x265 determine which bEnable
+     * flags, if any, should be set in the x265_param struct).
+     */
+    char colorprim[11], transfer[11], colormatrix[11];
+    switch (job->color_matrix_code)
+    {
+        case 1: // ITU BT.601 DVD or SD TV content (NTSC)
+            strcpy(colorprim,   "smpte170m");
+            strcpy(transfer,        "bt709");
+            strcpy(colormatrix, "smpte170m");
+            break;
+        case 2: // ITU BT.601 DVD or SD TV content (PAL)
+            strcpy(colorprim,     "bt470bg");
+            strcpy(transfer,        "bt709");
+            strcpy(colormatrix, "smpte170m");
+            break;
+        case 3: // ITU BT.709 HD content
+            strcpy(colorprim,   "bt709");
+            strcpy(transfer,    "bt709");
+            strcpy(colormatrix, "bt709");
+            break;
+        case 4: // custom
+            snprintf(colorprim,   sizeof(colorprim),   "%d", job->color_prim);
+            snprintf(transfer,    sizeof(transfer),    "%d", job->color_transfer);
+            snprintf(colormatrix, sizeof(colormatrix), "%d", job->color_matrix);
+            break;
+        default: // detected during scan
+            snprintf(colorprim,   sizeof(colorprim),   "%d", job->title->color_prim);
+            snprintf(transfer,    sizeof(transfer),    "%d", job->title->color_transfer);
+            snprintf(colormatrix, sizeof(colormatrix), "%d", job->title->color_matrix);
+            break;
+    }
+    if (x265_param_parse(param, "colorprim",   colorprim)   ||
+        x265_param_parse(param, "transfer",    transfer)    ||
+        x265_param_parse(param, "colormatrix", colormatrix))
+    {
+        hb_error("encx265: failed to set VUI color description");
+        goto fail;
+    }
+
     /* iterate through x265_opts and parse the options */
     hb_dict_entry_t *entry = NULL;
     hb_dict_t *x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
     while ((entry = hb_dict_next(x265_opts, entry)) != NULL)
     {
         // here's where the strings are passed to libx265 for parsing
-        int ret = x265_param_parse(param, entry->key, entry->value);
+        ret = x265_param_parse(param, entry->key, entry->value);
         // let x265 sanity check the options for us
         switch (ret)
         {
@@ -147,11 +188,36 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     hb_dict_free(&x265_opts);
 
     /*
+     * Reload colorimetry settings in case custom
+     * values were set in the encoder_options string.
+     */
+    job->color_matrix_code = 4;
+    job->color_prim        = param->vui.colorPrimaries;
+    job->color_transfer    = param->vui.transferCharacteristics;
+    job->color_matrix      = param->vui.matrixCoeffs;
+
+    /*
      * Settings which can't be overriden in the encodeer_options string
      * (muxer-specific settings, resolution, ratecontrol, etc.).
      */
-    param->sourceWidth  = job->width;
-    param->sourceHeight = job->height;
+    param->bRepeatHeaders = 0;
+    param->sourceWidth    = job->width;
+    param->sourceHeight   = job->height;
+    if (job->anamorphic.mode)
+    {
+        /*
+         * Let x265 determnine whether to use an aspect ratio
+         * index vs. the extended SAR index + SAR width/height.
+         */
+        char sar[22];
+        snprintf(sar, sizeof(sar), "%d:%d",
+                 job->anamorphic.par_width, job->anamorphic.par_height);
+        if (x265_param_parse(param, "sar", sar))
+        {
+            hb_error("encx265: failed to set SAR");
+            goto fail;
+        }
+    }
 
     if (job->vquality > 0)
     {
@@ -182,9 +248,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /* Apply profile and level settings last. */
     if (x265_param_apply_profile(param, job->encoder_profile) < 0)
     {
-        free(pv);
-        pv = NULL;
-        return 1;
+        goto fail;
     }
 
     /* we should now know whether B-frames are enabled */
@@ -195,17 +259,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     if (pv->x265 == NULL)
     {
         hb_error("encx265: x265_encoder_open failed.");
-        free(pv);
-        pv = NULL;
-        return 1;
-    }
-
-    if (x265_encoder_headers(pv->x265, &nal, &nnal) < 0)
-    {
-        hb_error("encx265: x265_encoder_headers failed.");
-        free(pv);
-        pv = NULL;
-        return 1;
+        goto fail;
     }
 
     /*
@@ -214,24 +268,26 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Write the header as is, and let the muxer reformat
      * the extradata and output bitstream properly for us.
      */
-    w->config->h265.headers_length = 0;
-    for (i = 0; i < nnal; i++)
+    ret = x265_encoder_headers(pv->x265, &nal, &nnal);
+    if (ret < 0)
     {
-        if (w->config->h265.headers_length +
-            nal[i].sizeBytes > HB_CONFIG_MAX_SIZE)
-        {
-            hb_error("encx265: bitstream headers too large");
-            free(pv);
-            pv = NULL;
-            return 1;
-        }
-        memcpy(w->config->h265.headers +
-               w->config->h265.headers_length,
-               nal[i].payload, nal[i].sizeBytes);
-        w->config->h265.headers_length += nal[i].sizeBytes;
+        hb_error("encx265: x265_encoder_headers failed (%d)", ret);
+        goto fail;
     }
+    if (ret > sizeof(w->config->h265.headers))
+    {
+        hb_error("encx265: bitstream headers too large (%d)", ret);
+        goto fail;
+    }
+    memcpy(w->config->h265.headers, nal->payload, ret);
+    w->config->h265.headers_length = ret;
 
     return 0;
+
+fail:
+    w->private_data = NULL;
+    free(pv);
+    return 1;
 }
 
 void encx265Close(hb_work_object_t *w)

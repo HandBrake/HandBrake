@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,X265,x265,YASM))
 $(eval $(call import.CONTRIB.defs,X265))
 
-X265.FETCH.url = http://download.handbrake.fr/contrib/x265-6356-527d03c56d68-0.8.tar.bz2
+X265.FETCH.url = http://download.handbrake.fr/contrib/x265-6801-cea97c4d7945-1.0.tar.bz2
 
 X265.CONFIGURE.exe         = cmake
 X265.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265.CONFIGURE.prefix)"
@@ -11,6 +11,9 @@ X265.CONFIGURE.shared      = -DENABLE_SHARED=OFF
 X265.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=OFF
 
 ifeq (1,$(BUILD.cross))
+    ifeq (mingw,$(BUILD.system))
+        X265.CONFIGURE.extra += -DWIN32=ON -DWINXP_SUPPORT=ON
+    endif
     X265.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(X265.CONFIGURE.host)"
     X265.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265.CONFIGURE.build)"
 else
