@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Model.Subtitle;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -179,6 +180,11 @@ namespace HandBrakeWPF.ViewModels
         /// The drives.
         /// </summary>
         private BindingList<SourceMenuItem> drives;
+
+        /// <summary>
+        /// The can pause.
+        /// </summary>
+        private bool canPause;
 
         #endregion
 
@@ -420,6 +426,26 @@ namespace HandBrakeWPF.ViewModels
         public int TitleSpecificScan { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the encode serivce supports pausing.
+        /// </summary>
+        public bool CanPause
+        {
+            get
+            {
+                return this.canPause;
+            }
+            set
+            {
+                if (value.Equals(this.canPause))
+                {
+                    return;
+                }
+                this.canPause = value;
+                this.NotifyOfPropertyChange(() => this.CanPause);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the Source Label
         /// This indicates the status of scans.
         /// </summary>
@@ -569,6 +595,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.isEncoding = value;
+                this.CanPause = value;
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
             }
         }
@@ -1320,8 +1347,13 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Check if we already have jobs, and if we do, just start the queue.
-            if (this.queueProcessor.Count != 0)
+            if (this.queueProcessor.Count != 0 || this.encodeService.IsPasued)
             {
+                if (this.encodeService.IsPasued)
+                {
+                    this.IsEncoding = true;
+                }
+
                 this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 return;
             }
@@ -1375,6 +1407,12 @@ namespace HandBrakeWPF.ViewModels
         public void PauseEncode()
         {
             this.queueProcessor.Pause();
+
+            if (this.encodeService.CanPause)
+            {
+                this.encodeService.Pause();
+                this.IsEncoding = false;
+            }
         }
 
         /// <summary>
@@ -2063,6 +2101,7 @@ namespace HandBrakeWPF.ViewModels
         private void QueueCompleted(object sender, EventArgs e)
         {
             this.IsEncoding = false;
+
 
             Execute.OnUIThread(
                 () =>

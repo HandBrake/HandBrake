@@ -232,6 +232,25 @@
                     </StackPanel>
                 </Button>
 
+                <Button Name="Pause"
+                        Micro:Message.Attach="[Event Click] = [Action PauseEncode]"
+                        Visibility="{Binding CanPause,
+                                             Converter={StaticResource boolToVisConverter},
+                                             ConverterParameter=false}"
+                        >
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="32"
+                               Height="32"
+                               SnapsToDevicePixels="True"
+                               Source="Images/Pause.png"
+                               />
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="Pause"
+                               />
+                    </StackPanel>
+                </Button>
+
                 <Menu Background="Transparent">
                     <MenuItem>
                         <MenuItem.Header>

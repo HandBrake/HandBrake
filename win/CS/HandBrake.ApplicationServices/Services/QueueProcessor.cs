@@ -447,6 +447,11 @@ namespace HandBrake.ApplicationServices.Services
             this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
 
+            if (this.EncodeService.CanPause && this.EncodeService.IsEncoding)
+            {
+                this.EncodeService.Resume();
+            }
+
             if (!this.EncodeService.IsEncoding)
             {
                 this.ProcessNextJob();

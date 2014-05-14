@@ -79,6 +79,11 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
+        /// Gets or sets IsPaused
+        /// </summary>
+        public bool IsPasued { get; private set; }
+
+        /// <summary>
         /// Start with a LibHb EncodeJob Object
         /// </summary>
         /// <param name="job">
@@ -148,6 +153,7 @@ namespace HandBrake.ApplicationServices.Services
             if (this.instance != null)
             {
                 this.instance.PauseEncode();
+                this.IsPasued = true;
             }
         }
 
@@ -159,6 +165,7 @@ namespace HandBrake.ApplicationServices.Services
             if (this.instance != null)
             {
                 this.instance.ResumeEncode();
+                this.IsPasued = false;
             }
         }
 

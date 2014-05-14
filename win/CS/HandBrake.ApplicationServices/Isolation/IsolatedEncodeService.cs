@@ -104,6 +104,11 @@ namespace HandBrake.ApplicationServices.Isolation
         }
 
         /// <summary>
+        /// Gets or sets IsPaused
+        /// </summary>
+        public bool IsPasued { get; private set; }
+
+        /// <summary>
         /// Gets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding

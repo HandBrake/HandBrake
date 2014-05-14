@@ -68,6 +68,11 @@ namespace HandBrake.ApplicationServices.Services
             }
         }
 
+        /// <summary>
+        /// Gets or sets IsPaused
+        /// </summary>
+        public bool IsPasued { get; private set; }
+
         #endregion
 
         #region Public Methods

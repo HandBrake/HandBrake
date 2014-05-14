@@ -77,6 +77,11 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         bool CanPause { get; }
 
         /// <summary>
+        /// Is Paused
+        /// </summary>
+        bool IsPasued { get; }
+
+        /// <summary>
         /// Start with a LibHb EncodeJob Object
         /// </summary>
         /// <param name="job">

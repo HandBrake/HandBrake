@@ -12,6 +12,7 @@
 namespace HandBrakeWPF.Services
 {
     using System;
+    using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Isolation;
@@ -141,6 +142,17 @@ namespace HandBrakeWPF.Services
             get
             {
                 return this.encodeService.CanPause;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets IsPaused
+        /// </summary>
+        public bool IsPasued
+        {
+            get
+            {
+                return this.encodeService.IsPasued;
             }
         }
 
