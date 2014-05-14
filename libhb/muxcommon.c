@@ -242,8 +242,6 @@ static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
 
     int t = mux->ntracks++;
     mux->track[t] = track;
-    hb_bitvec_add_bits(mux->allEof, 1);
-    hb_bitvec_add_bits(mux->allRdy, 1);
     hb_bitvec_set(mux->allEof, t);
     if (is_continuous)
         hb_bitvec_set(mux->allRdy, t);
@@ -329,7 +327,7 @@ static void MoveToInternalFifos( int tk, hb_mux_t *mux, hb_buffer_t * buf )
     // (b) we can control how data from multiple tracks is
     // interleaved in the output file.
     mf_push( mux, tk, buf );
-    if ( buf->s.stop >= mux->pts )
+    if ( buf->s.start >= mux->pts )
     {
         // buffer is past our next interleave point so
         // note that this track is ready to be output.
@@ -386,7 +384,8 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     *buf_in = NULL;
 
-    if (!hb_bitvec_and_cmp(mux->rdy, mux->allRdy, mux->allRdy))
+    if (!hb_bitvec_and_cmp(mux->rdy, mux->allRdy, mux->allRdy) &&
+        !hb_bitvec_and_cmp(mux->eof, mux->allEof, mux->allEof))
     {
         hb_unlock( mux->mutex );
         return HB_WORK_OK;
@@ -419,7 +418,7 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // Otherwise clear rdy.
             if (hb_bitvec_bit(mux->eof, i) &&
                 (track->mf.out == track->mf.in ||
-                 track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->s.stop
+                 track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->s.start
                      < mux->pts + mux->interleave))
             {
                 hb_bitvec_clr(mux->rdy, i);
@@ -593,8 +592,14 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     hb_work_object_t  * w;
     hb_work_object_t  * muxer;
 
-    mux->allRdy = hb_bitvec_new(0);
-    mux->allEof = hb_bitvec_new(0);
+    // The bit vectors must be allocated before hb_thread_init for the
+    // audio and subtitle muxer jobs below.
+    int bit_vec_size = 1 + hb_list_count(job->list_audio) +
+                           hb_list_count(job->list_subtitle);
+    mux->rdy = hb_bitvec_new(bit_vec_size);
+    mux->eof = hb_bitvec_new(bit_vec_size);
+    mux->allRdy = hb_bitvec_new(bit_vec_size);
+    mux->allEof = hb_bitvec_new(bit_vec_size);
 
     mux->mutex = hb_lock_init();
 
@@ -649,13 +654,6 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     muxer->fifo_in = job->fifo_mpeg4;
     add_mux_track( mux, job->mux_data, 1 );
     muxer->done = &muxer->private_data->mux->done;
-
-    // The bit vectors must be allocated before hb_thread_init for the
-    // audio and subtitle muxer jobs below.
-    int bit_vec_size = mux->ntracks + hb_list_count(job->list_audio) +
-                                      hb_list_count(job->list_subtitle);
-    mux->rdy = hb_bitvec_new(bit_vec_size);
-    mux->eof = hb_bitvec_new(bit_vec_size);
 
     for( i = 0; i < hb_list_count( job->list_audio ); i++ )
     {
