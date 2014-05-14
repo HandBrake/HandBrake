@@ -3244,6 +3244,11 @@ ghb_backend_events(signal_user_data_t *ud)
         ud->job_activity_log = NULL;
         if (js)
             ghb_settings_set_int(js, "job_status", qstatus);
+        if (ghb_settings_get_boolean(ud->prefs, "RemoveFinishedJobs") &&
+            status.queue.error == GHB_ERROR_NONE)
+        {
+            ghb_queue_remove_row(ud, index);
+        }
         if (ud->cancel_encode != GHB_CANCEL_ALL &&
             ud->cancel_encode != GHB_CANCEL_FINISH)
         {

@@ -1938,6 +1938,33 @@ find_pid:
     return FALSE;
 }
 
+void
+ghb_queue_remove_row(signal_user_data_t *ud, int row)
+{
+    GtkTreeView *treeview;
+    GtkTreeModel *store;
+    GtkTreeIter iter;
+
+    if (row < 0) return;
+    if (row >= ghb_array_len(ud->queue))
+        return;
+
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+    store = gtk_tree_view_get_model(treeview);
+
+    gchar *path = g_strdup_printf ("%d", row);
+    if (gtk_tree_model_get_iter_from_string(store, &iter, path))
+    {
+        gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
+    }
+    g_free(path);
+
+    GValue *old = ghb_array_get_nth(ud->queue, row);
+    ghb_value_free(old);
+    ghb_array_remove(ud->queue, row);
+    ghb_save_queue(ud->queue);
+}
+
 G_MODULE_EXPORT gboolean
 queue_key_press_cb(
     GtkWidget *widget,

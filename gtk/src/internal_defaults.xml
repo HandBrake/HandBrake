@@ -137,8 +137,10 @@
     </dict>
     <key>Preferences</key>
     <dict>
-        <key>HideAdvancedVideoSettings</key>
+        <key>RemoveFinishedJobs</key>
         <false />
+        <key>HideAdvancedVideoSettings</key>
+        <true />
         <key>AutoScan</key>
         <false />
         <key>AddCC</key>
@@ -374,7 +376,7 @@
         <key>h264Level</key>
         <string></string>
         <key>x264UseAdvancedOptions</key>
-        <true />
+        <false />
         <key>x264OptionExtra</key>
         <string></string>
     </dict>

@@ -6250,39 +6250,6 @@ You can edit these and add additional options.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="row_spacing">2</property>
                                 <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
                                   <object class="GtkBox" id="hbox6">
                                     <property name="orientation">horizontal</property>
                                     <property name="visible">True</property>
@@ -6512,6 +6479,25 @@ on the Video tab instead.</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">5</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="RemoveFinishedJobs">
+                                    <property name="label" translatable="yes">Delete completed jobs from queue</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
+Check this if you want the queue to clean itself up by deleting completed jobs.</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="advanced_video_changed_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">6</property>
                                     <property name="left_attach">0</property>
                                     <property name="width">1</property>
                                     <property name="height">1</property>
