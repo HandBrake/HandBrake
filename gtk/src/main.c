@@ -1208,6 +1208,23 @@ main(int argc, char *argv[])
     gtk_widget_override_font(GTK_WIDGET(textview), font_desc);
     pango_font_description_free(font_desc);
 
+    // Grrrr!  Gtk developers !!!hard coded!!! the width of the
+    // radio buttons in GtkStackSwitcher to 100!!!
+    //
+    // Thankfully, GtkStackSwitcher is a regular container object
+    // and we can access the buttons to change their width.
+    GList *stack_switcher_children, *link;
+    GtkContainer * stack_switcher = GTK_CONTAINER(
+                            GHB_WIDGET(ud->builder, "SettingsStackSwitcher"));
+    link = stack_switcher_children = gtk_container_get_children(stack_switcher);
+    while (link != NULL)
+    {
+        GtkWidget *widget = link->data;
+        gtk_widget_set_size_request(widget, -1, -1);
+        link = link->next;
+    }
+    g_list_free(stack_switcher_children);
+
     // Everything should be go-to-go.  Lets rock!
 
     gtk_main();
