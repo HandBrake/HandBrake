@@ -301,9 +301,9 @@ ghb_widget_value(GtkWidget *widget)
     }
     else if (type == GTK_TYPE_SPIN_BUTTON)
     {
-        gint ival;
-        ival = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-        value = ghb_int64_value_new(ival);
+        double val;
+        val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+        value = ghb_double_value_new(val);
     }
     else if (type == GTK_TYPE_SCALE)
     {

@@ -4338,15 +4338,15 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     }
     if (!job->start_at_preview)
     {
-        gint start, end;
         gint num_chapters = hb_list_count(title->list_chapter);
-        gint duration = title->duration / 90000;
+        double duration = title->duration / 90000;
         job->chapter_markers = FALSE;
         job->chapter_start = 1;
         job->chapter_end = num_chapters;
 
         if (ghb_settings_combo_int(js, "PtoPType") == 0)
         {
+            gint start, end;
             start = ghb_settings_get_int(js, "start_point");
             end = ghb_settings_get_int(js, "end_point");
             job->chapter_start = MIN( num_chapters, start );
@@ -4355,18 +4355,20 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         }
         if (ghb_settings_combo_int(js, "PtoPType") == 1)
         {
-            start = ghb_settings_get_int(js, "start_point");
-            end = ghb_settings_get_int(js, "end_point");
-            job->pts_to_start = (int64_t)MIN(duration-1, start) * 90000;
-            job->pts_to_stop = (int64_t)MAX(start+1, end) * 90000 -
-                                job->pts_to_start;
+            double start, end;
+            start = ghb_settings_get_double(js, "start_point");
+            end = ghb_settings_get_double(js, "end_point");
+            job->pts_to_start = (int64_t)(MIN(duration, start) * 90000);
+            job->pts_to_stop = (int64_t)(MAX(start, end) * 90000) -
+                                        job->pts_to_start;
         }
         if (ghb_settings_combo_int(js, "PtoPType") == 2)
         {
+            gint start, end;
             start = ghb_settings_get_int(js, "start_point");
             end = ghb_settings_get_int(js, "end_point");
             gint64 max_frames;
-            max_frames = (gint64)duration * title->rate / title->rate_base;
+            max_frames = (gint64)(duration * title->rate / title->rate_base);
             job->frame_to_start = (int64_t)MIN(max_frames-1, start-1);
             job->frame_to_stop = (int64_t)MAX(start, end-1) -
                                  job->frame_to_start;

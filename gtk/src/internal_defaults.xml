@@ -44,7 +44,7 @@
         <key>dest_file</key>
         <string>new_video.mp4</string>
         <key>end_point</key>
-        <integer>100</integer>
+        <real>100</real>
         <key>MetaName</key>
         <string></string>
         <key>MetaArtist</key>
@@ -88,7 +88,7 @@
         <key>single_title</key>
         <integer>1</integer>
         <key>start_point</key>
-        <integer>1</integer>
+        <real>1</real>
         <key>start_frame</key>
         <integer>-1</integer>
         <key>title_no</key>

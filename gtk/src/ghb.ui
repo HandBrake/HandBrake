@@ -1191,6 +1191,7 @@ This is often the feature title of a DVD.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="start_point">
+                                            <property name="width-chars">10</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1198,7 +1199,10 @@ This is often the feature title of a DVD.</property>
                                             <property name="primary_icon_activatable">False</property>
                                             <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment1</property>
+                                            <property name="numeric">True</property>
                                             <signal name="value-changed" handler="start_point_changed_cb" swapped="no"/>
+                                            <signal name="output" handler="ptop_output_cb" swapped="no"/>
+                                            <signal name="input" handler="ptop_input_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -1220,6 +1224,7 @@ This is often the feature title of a DVD.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="end_point">
+                                            <property name="width-chars">10</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1227,7 +1232,10 @@ This is often the feature title of a DVD.</property>
                                             <property name="primary_icon_activatable">False</property>
                                             <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment2</property>
+                                            <property name="numeric">True</property>
                                             <signal name="value-changed" handler="end_point_changed_cb" swapped="no"/>
+                                            <signal name="output" handler="ptop_output_cb" swapped="no"/>
+                                            <signal name="input" handler="ptop_input_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>

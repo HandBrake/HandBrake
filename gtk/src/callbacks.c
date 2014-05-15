@@ -1994,6 +1994,8 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
+    gboolean numeric = TRUE;
+    GtkSpinButton *spin;
 
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
@@ -2003,6 +2005,14 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
         return;
+
+    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
+        numeric = FALSE;
+
+    spin = GTK_SPIN_BUTTON(GHB_WIDGET(ud->builder, "start_point"));
+    gtk_spin_button_set_numeric(spin, numeric);
+    spin = GTK_SPIN_BUTTON(GHB_WIDGET(ud->builder, "end_point"));
+    gtk_spin_button_set_numeric(spin, numeric);
 
     gint duration = title->duration / 90000;
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
@@ -2156,6 +2166,55 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
     scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
                     step, page, digits, inverted);
+}
+
+G_MODULE_EXPORT gboolean
+ptop_input_cb(GtkWidget *widget, gdouble *val, signal_user_data_t *ud)
+{
+    if (ghb_settings_combo_int(ud->settings, "PtoPType") != 1)
+        return FALSE;
+
+    const gchar *text;
+    int result;
+    double ss = 0;
+    int hh = 0, mm = 0;
+
+    text = gtk_entry_get_text(GTK_ENTRY(widget));
+    result = sscanf(text, "%2d:%2d:%lf", &hh, &mm, &ss);
+    if (result <= 0)
+        return FALSE;
+    if (result == 1)
+    {
+        result = sscanf(text, "%lf", val);
+        return TRUE;
+    }
+    *val = hh * 3600 + mm * 60 + ss;
+    return TRUE;
+}
+
+G_MODULE_EXPORT gboolean
+ptop_output_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    if (ghb_settings_combo_int(ud->settings, "PtoPType") != 1)
+        return FALSE;
+
+    GtkAdjustment *adjustment;
+    gchar *text;
+    double value, ss;
+    int hh, mm;
+
+    adjustment = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
+    value = gtk_adjustment_get_value(adjustment);
+    hh = value / 3600;
+    value = value - hh * 3600;
+    mm = value / 60;
+    value = value - mm * 60;
+    ss = value;
+    text = g_strdup_printf ("%02d:%02d:%05.2f", hh, mm, ss);
+    gtk_entry_set_text(GTK_ENTRY(widget), text);
+    g_free (text);
+
+    return TRUE;
 }
 
 G_MODULE_EXPORT void
