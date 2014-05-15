@@ -1532,14 +1532,34 @@ This allows a player to initiate playback before downloading the entire file.</p
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment67">
+                  <object class="GtkStackSwitcher" id="SettingsStackSwitcher">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="left_padding">12</property>
-                    <property name="right_padding">12</property>
+                    <property name="stack">SettingsStack</property>
+                    <property name="hexpand">False</property>
+                    <property name="halign">GTK_ALIGN_CENTER</property>
+                    <property name="margin-left">12</property>
+                    <property name="margin-right">12</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment" id="SettingsStackAlign">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="margin-left">12</property>
+                    <property name="margin-right">12</property>
                     <child>
-                      <object class="GtkNotebook" id="SettingsNotebook">
+                      <object class="GtkStack" id="SettingsStack">
+                        <property name="homogeneous">True</property>
+                        <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
+                        <property name="transition-duration">400</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <child>
@@ -2082,15 +2102,9 @@ This allows a player to initiate playback before downloading the entire file.</p
                               </packing>
                             </child>
                           </object>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="picture_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Summary</property>
-                          </object>
                           <packing>
-                            <property name="tab_fill">False</property>
+                            <property name="name">picture_tab</property>
+                            <property name="title" translatable="yes">Summary</property>
                           </packing>
                         </child>
                         <child>
@@ -2757,17 +2771,8 @@ Colon separated list of x264 options.</property>
                           </object>
                           <packing>
                             <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="label65">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Video</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">video_tab</property>
+                            <property name="title" translatable="yes">Video</property>
                           </packing>
                         </child>
                         <child>
@@ -3294,17 +3299,8 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                           </object>
                           <packing>
                             <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="audio_defaults_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Audio Defaults</property>
-                          </object>
-                          <packing>
-                            <property name="position">2</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">audio_defaults_tab</property>
+                            <property name="title" translatable="yes">Audio Defaults</property>
                           </packing>
                         </child>
                         <child>
@@ -3424,17 +3420,8 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                           </object>
                           <packing>
                             <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="label48">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Audio List</property>
-                          </object>
-                          <packing>
-                            <property name="position">3</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">audio_list_tab</property>
+                            <property name="title" translatable="yes">Audio List</property>
                           </packing>
                         </child>
                         <child>
@@ -3692,17 +3679,8 @@ This search pass finds short sequences of foreign audio and provides subtitles f
                           </object>
                           <packing>
                             <property name="position">4</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="subtitle_defaults_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Subtitle Defaults</property>
-                          </object>
-                          <packing>
-                            <property name="position">4</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">subtitle_defaults_tab</property>
+                            <property name="title" translatable="yes">Subtitle Defaults</property>
                           </packing>
                         </child>
                         <child>
@@ -3822,17 +3800,8 @@ This search pass finds short sequences of foreign audio and provides subtitles f
                           </object>
                           <packing>
                             <property name="position">5</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="label9">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Subtitle List</property>
-                          </object>
-                          <packing>
-                            <property name="position">5</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">subtitle_list_tab</property>
+                            <property name="title" translatable="yes">Subtitle List</property>
                           </packing>
                         </child>
                         <child>
@@ -4905,17 +4874,8 @@ You can edit these and add additional options.</property>
                           </object>
                           <packing>
                             <property name="position">6</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="advanced_tab_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Advanced</property>
-                          </object>
-                          <packing>
-                            <property name="position">6</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">video_advanced_tab</property>
+                            <property name="title" translatable="yes">Advanced Video</property>
                           </packing>
                         </child>
                         <child>
@@ -4986,18 +4946,8 @@ You can edit these and add additional options.</property>
                           </object>
                           <packing>
                             <property name="position">7</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="chapters_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Chapters</property>
-                          </object>
-                          <packing>
-                            <property name="position">7</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">chapters_tab</property>
+                            <property name="title" translatable="yes">Chapters</property>
                           </packing>
                         </child>
                         <child>
@@ -5320,18 +5270,8 @@ You can edit these and add additional options.</property>
                           </object>
                           <packing>
                             <property name="position">8</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="metadata_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Tags</property>
-                          </object>
-                          <packing>
-                            <property name="position">8</property>
-                            <property name="tab_fill">False</property>
+                            <property name="name">metadata_tab</property>
+                            <property name="title" translatable="yes">Tags</property>
                           </packing>
                         </child>
                       </object>
@@ -5340,7 +5280,7 @@ You can edit these and add additional options.</property>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -5392,7 +5332,7 @@ You can edit these and add additional options.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -5414,7 +5354,7 @@ You can edit these and add additional options.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
@@ -7662,183 +7602,6 @@ Resets all queue jobs to pending and ready to run again.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
                                     <child>
                                       <object class="GtkSpinButton" id="PictureLeftCrop">
                                         <property name="visible">True</property>

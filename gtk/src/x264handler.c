@@ -38,12 +38,9 @@ void ghb_show_hide_advanced_video( signal_user_data_t *ud )
     }
 
     GtkWidget *widget;
-    GtkWidget *nb = GHB_WIDGET(ud->builder, "SettingsNotebook");
     GtkWidget *at = GHB_WIDGET(ud->builder, "advanced_tab");
-    int pgn = gtk_notebook_page_num(GTK_NOTEBOOK(nb), at);
 
-    widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(nb), pgn);
-    gtk_widget_set_visible(widget, !hide);
+    gtk_widget_set_visible(at, !hide);
     widget = GHB_WIDGET(ud->builder, "x264UseAdvancedOptions");
     gtk_widget_set_visible(widget, !hide);
 }

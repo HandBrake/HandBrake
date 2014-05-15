@@ -3950,7 +3950,9 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "container_box");
     gtk_widget_set_visible(widget, !hbfd);
-    widget = GHB_WIDGET(ud->builder, "SettingsNotebook");
+    widget = GHB_WIDGET(ud->builder, "SettingsStackSwitcher");
+    gtk_widget_set_visible(widget, !hbfd);
+    widget = GHB_WIDGET(ud->builder, "SettingsStackAlign");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "presets_save");
     gtk_widget_set_visible(widget, !hbfd);

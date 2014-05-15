@@ -1089,7 +1089,7 @@ main(int argc, char *argv[])
 
     gint width, height;
     GdkGeometry geo = {
-        -1, -1, 1024, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
+        -1, -1, 1920, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
     };
     GdkWindowHints geo_mask;
     geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
