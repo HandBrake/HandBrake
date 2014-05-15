@@ -3281,9 +3281,10 @@ ghb_backend_events(signal_user_data_t *ud)
                 qstatus = GHB_QUEUE_CANCELED;
                 status_icon = "hb-stop";
                 break;
+            case GHB_ERROR_FAIL:
             default:
                 gtk_label_set_text (work_status, _("Encode Failed."));
-                qstatus = GHB_QUEUE_CANCELED;
+                qstatus = GHB_QUEUE_FAIL;
                 status_icon = "hb-stop";
         }
         if (js != NULL)

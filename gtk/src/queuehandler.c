@@ -39,6 +39,8 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
     {
         GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_edit");
         gtk_widget_set_sensitive (widget, TRUE);
+        widget = GHB_WIDGET (ud->builder, "queue_reload");
+        gtk_widget_set_sensitive (widget, TRUE);
         if (gtk_tree_model_iter_parent (store, &piter, &iter))
         {
             GtkTreePath *path;
@@ -55,6 +57,8 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
     else
     {
         GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_edit");
+        gtk_widget_set_sensitive (widget, FALSE);
+        widget = GHB_WIDGET (ud->builder, "queue_reload");
         gtk_widget_set_sensitive (widget, FALSE);
     }
 }
@@ -141,6 +145,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         case GHB_QUEUE_PENDING:
             status_icon = "hb-source";
             break;
+        case GHB_QUEUE_FAIL:
         case GHB_QUEUE_CANCELED:
             status_icon = "hb-stop";
             break;
@@ -651,6 +656,106 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     gtk_tree_store_set(store, &citer, 2, str->str, -1);
 
     g_string_free(str, TRUE);
+}
+
+void
+ghb_update_status(signal_user_data_t *ud, int status, int index)
+{
+    const char *status_icon;
+    switch (status)
+    {
+        case GHB_QUEUE_PENDING:
+            status_icon = "hb-source";
+            break;
+        case GHB_QUEUE_FAIL:
+        case GHB_QUEUE_CANCELED:
+            status_icon = "hb-stop";
+            break;
+        case GHB_QUEUE_DONE:
+            status_icon = "hb-complete";
+            break;
+        default:
+            status_icon = "hb-source";
+            break;
+    }
+    int count = ghb_array_len(ud->queue);
+    if (index < 0 || index >= count)
+    {
+        // invalid index
+        return;
+    }
+
+    GValue *settings;
+    settings = ghb_array_get_nth(ud->queue, index);
+    if (settings == NULL) // should never happen
+        return;
+
+    if (ghb_settings_get_int(settings, "job_status") == GHB_QUEUE_RUNNING)
+        return; // Never change the status of currently running jobs
+
+    GtkTreeView *treeview;
+    GtkTreeModel *store;
+    GtkTreeIter iter;
+
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+    store = gtk_tree_view_get_model(treeview);
+    gchar *path = g_strdup_printf ("%d", index);
+    if (gtk_tree_model_get_iter_from_string(store, &iter, path))
+    {
+        gtk_tree_store_set(GTK_TREE_STORE(store), &iter, 1, status_icon, -1);
+    }
+    g_free(path);
+
+    ghb_settings_set_int(settings, "job_status", status);
+}
+
+void
+ghb_update_all_status(signal_user_data_t *ud, int status)
+{
+    int count, ii;
+
+    count = ghb_array_len(ud->queue);
+    for (ii = 0; ii < count; ii++)
+    {
+        ghb_update_status(ud, status, ii);
+    }
+}
+
+G_MODULE_EXPORT void
+queue_reload_all_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_update_all_status(ud, GHB_QUEUE_PENDING);
+}
+
+G_MODULE_EXPORT void
+queue_reload_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkTreeView *treeview;
+    GtkTreeSelection *selection;
+    GtkTreeModel *store;
+    GtkTreeIter iter;
+    gint row;
+    gint *indices;
+
+    g_debug("queue_key_press_cb ()");
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+    store = gtk_tree_view_get_model(treeview);
+    selection = gtk_tree_view_get_selection (treeview);
+    if (gtk_tree_selection_get_selected(selection, &store, &iter))
+    {
+        GtkTreePath *treepath;
+
+        treepath = gtk_tree_model_get_path (store, &iter);
+        // Find the entry in the queue
+        indices = gtk_tree_path_get_indices (treepath);
+        row = indices[0];
+        // Can only free the treepath After getting what I need from
+        // indices since this points into treepath somewhere.
+        gtk_tree_path_free (treepath);
+        if (row < 0) return;
+        if (row >= ghb_array_len(ud->queue)) return;
+        ghb_update_status(ud, GHB_QUEUE_PENDING, row);
+    }
 }
 
 static gboolean
