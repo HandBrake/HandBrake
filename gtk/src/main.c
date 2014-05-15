@@ -1221,6 +1221,8 @@ main(int argc, char *argv[])
     {
         GtkWidget *widget = link->data;
         gtk_widget_set_size_request(widget, -1, -1);
+        gtk_widget_set_hexpand(widget, TRUE);
+        gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
         link = link->next;
     }
     g_list_free(stack_switcher_children);
