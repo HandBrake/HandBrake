@@ -1264,5 +1264,4 @@ void
 ghb_x264_init(signal_user_data_t *ud)
 {
     ud->x264_priv = ghb_settings_new();
-    ghb_x264_parse_options(ud, "");
 }

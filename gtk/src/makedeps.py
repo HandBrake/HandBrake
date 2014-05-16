@@ -12,7 +12,6 @@ dep_map = (
     DepEntry("title", "preview_frame", "none", True, False),
     DepEntry("title", "picture_summary", "none", True, False),
     DepEntry("title", "picture_summary2", "none", True, False),
-    DepEntry("title", "chapters_label", "none", True, False),
     DepEntry("title", "chapters_tab", "none", True, False),
     DepEntry("title", "start_point", "none", True, False),
     DepEntry("title", "end_point", "none", True, False),

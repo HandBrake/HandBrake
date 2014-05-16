@@ -977,6 +977,9 @@ main(int argc, char *argv[])
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);
 
+    // Parsing x264 options "" initializes x264 widgets to proper defaults
+    ghb_x264_init(ud);
+
     // Load prefs before presets.  Some preset defaults may depend
     // on preference settings.
     // First load default values
@@ -1011,9 +1014,6 @@ main(int argc, char *argv[])
     gchar *source = ghb_settings_get_string(ud->prefs, "default_source");
     ghb_dvd_set_current(source, ud);
     g_free(source);
-
-    // Parsing x264 options "" initializes x264 widgets to proper defaults
-    ghb_x264_init(ud);
 
     // Populate the presets tree view
     ghb_presets_list_init(ud, NULL, 0);
