@@ -29,8 +29,13 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
             <!-- Size Panel-->
-            <StackPanel Name="SizePanel" Orientation="Vertical" VerticalAlignment="Top" Grid.Column="0" >
+            <StackPanel Name="SizePanel" Orientation="Vertical" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Grid.RowSpan="1" >
                 <Label Content="Size" FontWeight="Bold" />
 
                 <!-- Row 1-->
@@ -99,24 +104,10 @@
                                              IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
                 </Grid>
 
-                <!-- Row 5-->
-                <Grid Margin="5,15,5,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-
-                    <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
-                       Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
-                </Grid>
             </StackPanel>
 
             <!-- Crop Panel -->
-            <StackPanel Name="CropPanel" Margin="50,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Column="1">
+            <StackPanel Name="CropPanel" Margin="15,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
                 <Label Content="Cropping" FontWeight="Bold" />
                 <RadioButton Content="Automatic" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"/>
                 <RadioButton Content="Custom" IsChecked="{Binding IsCustomCrop}" Margin="10,5,0,0" />
@@ -157,6 +148,29 @@
 
                 </Grid>
 
+            </StackPanel>
+
+            <!-- Preview Panel -->
+            <StackPanel Name="PreviewPanel" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
+                <Label Content="Output" FontWeight="Bold" />
+
+                <Grid Margin="5,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,5"
+                       Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
+
+                    <Button Content="Preview" Grid.Row="1" Margin="5,0,0,0"
+                            cal:Message.Attach="[Event Click] = [Action PreviewImage]" HorizontalAlignment="Left" />
+                </Grid>
+                
             </StackPanel>
         </Grid>
     </Border>

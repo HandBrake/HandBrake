@@ -690,6 +690,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Output: {0}.
+        /// </summary>
+        public static string PictureSettings_OutputResolution {
+            get {
+                return ResourceManager.GetString("PictureSettings_OutputResolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preset Version.
         /// </summary>
         public static string Preset_OldVersion_Header {
@@ -743,6 +752,24 @@ namespace HandBrakeWPF.Properties {
         public static string Presets_ResetHeader {
             get {
                 return ResourceManager.GetString("Presets_ResetHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Still Preview.
+        /// </summary>
+        public static string Preview {
+            get {
+                return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Still Preview (Scaled).
+        /// </summary>
+        public static string Preview_Scaled {
+            get {
+                return ResourceManager.GetString("Preview_Scaled", resourceCulture);
             }
         }
         

@@ -2,12 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
-             Title="Still Preview">
+             WindowStartupLocation="CenterScreen"
+             cal:Message.Attach="[Event SizeChanged] = [Action PreviewSizeChanged($eventArgs)]"       
+             Title="{Binding Title}">
     <Grid>
-        
+
         <Image Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" />
         <Slider Maximum="{Binding TotalPreviews}" Minimum="0" 
                 Value="{Binding SelectedPreviewImage}"
@@ -15,6 +18,6 @@
                 HorizontalAlignment="Center"
                 Margin="0,0,0,20" Width="150" 
                 Background="Transparent" 
-                /> 
+                />
     </Grid>
 </Window>

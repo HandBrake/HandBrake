@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Windows;
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Model;
@@ -22,6 +23,12 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class StaticPreviewViewModel : ViewModelBase, IStaticPreviewViewModel
     {
+        /*
+         * TODO
+         * - Screen needs to be made DPI Aware
+         * - Integrate Video Preview panel.
+         */
+
         #region Fields
 
         /// <summary>
@@ -63,6 +70,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
+            this.Title = Properties.Resources.Preview;
         }
 
         #endregion
@@ -172,11 +180,18 @@ namespace HandBrakeWPF.ViewModels
 
         #region Public Methods and Operators
 
+        /// <summary>
+        /// The update preview frame.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
         public void UpdatePreviewFrame(EncodeTask task)
         {
             this.Task = task;
             this.UpdatePreviewFrame();
             this.DisplayName = "Picture Preview";
+            this.Title = Properties.Resources.Preview;
         }
 
         /// <summary>
@@ -191,6 +206,28 @@ namespace HandBrakeWPF.ViewModels
                 this.Width = (int)Math.Ceiling(image.Width);
                 this.Height = (int)Math.Ceiling(image.Height);
                 this.PreviewImage = image;
+            }
+        }
+
+        /// <summary>
+        /// The preview size changed.
+        /// </summary>
+        /// <param name="ea">
+        /// The ea.
+        /// </param>
+        public void PreviewSizeChanged(SizeChangedEventArgs ea)
+        {
+            Rect workArea = SystemParameters.WorkArea;
+            if (ea.NewSize.Width > workArea.Width)
+            {
+                this.Width = (int)Math.Round(workArea.Width, 0) - 20;
+                this.Title = Properties.Resources.Preview_Scaled;
+            }
+
+            if (ea.NewSize.Height > workArea.Height)
+            {
+                this.Height = (int)Math.Round(workArea.Height, 0) - 20;
+                this.Title = Properties.Resources.Preview_Scaled;
             }
         }
         #endregion

@@ -507,4 +507,13 @@ Do you wish to proceed?</value>
   <data name="Main_InvalidDestination" xml:space="preserve">
     <value>The entered destination contained illegal characters. You must fix the path and filename before continuing.</value>
   </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Still Preview</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Still Preview (Scaled)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Output: {0}</value>
+  </data>
 </root>

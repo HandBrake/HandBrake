@@ -1049,7 +1049,7 @@ namespace HandBrakeWPF.ViewModels
                 double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
 
                 this.DisplaySize = this.sourceResolution.IsEmpty
-                                     ? string.Empty
+                                     ? string.Format(Properties.Resources.PictureSettings_OutputResolution, "None")
                                      : string.Format("Output: {0}x{1}, Anamorphic: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
             }
             else
