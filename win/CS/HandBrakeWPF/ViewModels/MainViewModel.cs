@@ -2102,7 +2102,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.IsEncoding = false;
 
-
             Execute.OnUIThread(
                 () =>
                 {

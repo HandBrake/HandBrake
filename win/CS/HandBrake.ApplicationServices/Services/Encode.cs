@@ -69,7 +69,7 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// Gets or sets IsPaused
+        /// Gets a value indicating whether is pasued.
         /// </summary>
         public bool IsPasued { get; private set; }
 

@@ -516,4 +516,15 @@ Do you wish to proceed?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Output: {0}</value>
   </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
+
+Live Update Options: {source} {title} {chapters} 
+Non-Live Options: {date} {time} {quality} {bitrate}  (These only change if you scan a new source, change title or chapters)</value>
+  </data>
+  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
+    <value>Available additional Options: {source_path} or {source_folder_name} 
+
+Not both at the same time!</value>
+  </data>
 </root>

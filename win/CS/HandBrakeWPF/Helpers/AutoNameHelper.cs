@@ -18,7 +18,6 @@ namespace HandBrakeWPF.Helpers
     using HandBrake.ApplicationServices.Extensions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Interfaces;
@@ -97,10 +96,12 @@ namespace HandBrakeWPF.Helpers
                     if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                     {
                         destinationFilename = destinationFilename.Replace(Constants.Quality, task.Quality.ToString());
+                        destinationFilename = destinationFilename.Replace(Constants.Bitrate, string.Empty);
                     }
                     else
                     {
                         destinationFilename = destinationFilename.Replace(Constants.Bitrate, task.VideoBitrate.ToString());
+                        destinationFilename = destinationFilename.Replace(Constants.Quality, string.Empty);
                     }
                 }
                 else

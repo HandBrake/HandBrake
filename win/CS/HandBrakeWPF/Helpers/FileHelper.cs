@@ -42,7 +42,6 @@ namespace HandBrakeWPF.Helpers
                     {
                         return true;
                     }
-
                 }
                 catch (ArgumentException)
                 {

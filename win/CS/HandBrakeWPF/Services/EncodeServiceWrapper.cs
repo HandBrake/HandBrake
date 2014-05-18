@@ -146,7 +146,7 @@ namespace HandBrakeWPF.Services
         }
 
         /// <summary>
-        /// Gets or sets IsPaused
+        /// Gets a value indicating whether is pasued.
         /// </summary>
         public bool IsPasued
         {

@@ -160,7 +160,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         /// <summary>
         /// Gets or sets the subtitle behaviours.
         /// </summary>
@@ -264,7 +263,6 @@ namespace HandBrakeWPF.ViewModels
                                             : LanguageUtilities.GetLanguageCodes(
                                                 this.SubtitleBehaviours.SelectedLangauges.ToArray());
                                  
-
             List<Subtitle> availableTracks =
                 this.SourceTracks.Where(subtitle => iso6392Codes.Contains(subtitle.LanguageCodeClean)).ToList();
 
@@ -288,7 +286,6 @@ namespace HandBrakeWPF.ViewModels
                     // Check if we are already using this language
                     bool foundLanguage = false;
                     Subtitle track = sourceTrack;
-
 
                     foreach (var item in this.Task.SubtitleTracks)
                     {
@@ -606,7 +603,11 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            this.Task.SubtitleTracks.Add(track);
+            var encodeTask = this.Task;
+            if (encodeTask != null)
+            {
+                encodeTask.SubtitleTracks.Add(track);
+            }
         }
 
         /// <summary>

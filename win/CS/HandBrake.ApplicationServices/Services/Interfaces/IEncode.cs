@@ -77,7 +77,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         bool CanPause { get; }
 
         /// <summary>
-        /// Is Paused
+        /// Gets a value indicating whether is pasued.
         /// </summary>
         bool IsPasued { get; }
 

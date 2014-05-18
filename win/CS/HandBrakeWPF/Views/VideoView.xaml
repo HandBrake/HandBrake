@@ -15,20 +15,6 @@
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <Converters:InverseBooleanConverter x:Key="inverseConverter" />
         <Video:VideoEncoderConverter x:Key="videoEncoderConverter" />
-
-        <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
-            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
-        </Style>
-
-        <Style TargetType="ToolTip">
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock TextWrapping="Wrap" Width="450" Text="{Binding}" />
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
 
     <Grid Margin="10,5,0,0">

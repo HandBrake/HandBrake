@@ -109,11 +109,6 @@ namespace HandBrakeWPF.ViewModels
         private int qsvPresetValue;
 
         /// <summary>
-        /// The extra arguments.
-        /// </summary>
-        private string extraArguments;
-
-        /// <summary>
         /// The can clear tracker.
         /// </summary>
         private bool canClear;
@@ -483,7 +478,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder ==  VideoEncoder.X265 ? "RF" : "QP";
+                return this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X265 ? "RF" : "QP";
             }
         }
 
@@ -964,7 +959,6 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
         }
-
 
         /// <summary>
         /// Gets or sets H265Profile.

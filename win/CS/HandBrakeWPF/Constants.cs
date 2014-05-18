@@ -29,12 +29,10 @@ namespace HandBrakeWPF
         /// </summary>
         public const string AppcastUnstable32 = "http://handbrake.fr/appcast_unstable.i386.xml";
 
-
         /// <summary>
         /// The appcast 32.
         /// </summary>
         public const string AppcastUnstable64 = "http://handbrake.fr/appcast_unstable.x86_64.xml";
-
 
         /// <summary>
         /// The any.

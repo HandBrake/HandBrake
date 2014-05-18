@@ -54,7 +54,6 @@ namespace HandBrake.ApplicationServices.Utilities
             // Output Settings
             Match format = Regex.Match(input, @"-f ([a-zA-Z0-9]+)");
             Match grayscale = Regex.Match(input, @" -g");
-            Match largerMp4 = Regex.Match(input, @" -4");
             Match ipodAtom = Regex.Match(input, @" -I");
 
             // Picture Settings Tab
@@ -479,11 +478,6 @@ namespace HandBrake.ApplicationServices.Utilities
 
                     parsed.X264Tune = Converters.Getx264TuneFromCli(tuneOptions);
                 }
-
-
-
-
-
 
                 if (x265Preset.Success)
                     parsed.X265Preset =
