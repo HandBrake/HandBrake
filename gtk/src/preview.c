@@ -1145,58 +1145,30 @@ ghb_preview_set_visible(signal_user_data_t *ud)
     gint title_id, titleindex;
     const hb_title_t *title;
     GtkWidget *widget;
-    gboolean settings_active;
+    gboolean active;
 
     title_id = ghb_settings_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    settings_active = ghb_settings_get_boolean(ud->globals, "show_picture");
+    active = ghb_settings_get_boolean(ud->globals, "show_preview") &&
+             title != NULL;
     widget = GHB_WIDGET(ud->builder, "preview_window");
-    if (settings_active && title != NULL)
+    gtk_widget_set_visible(widget, active);
+    if (active)
     {
         gint x, y;
         x = ghb_settings_get_int(ud->prefs, "preview_x");
         y = ghb_settings_get_int(ud->prefs, "preview_y");
         if (x >= 0 && y >= 0)
             gtk_window_move(GTK_WINDOW(widget), x, y);
-        gtk_widget_set_visible(widget,
-                    ghb_settings_get_boolean(ud->prefs, "show_preview"));
     }
-    else
-    {
-        gtk_widget_set_visible(widget, FALSE);
-    }
-}
-
-G_MODULE_EXPORT void
-preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-    g_debug("preview_button_clicked_cb()");
-    ghb_widget_to_setting (ud->prefs, xwidget);
-    ghb_preview_set_visible(ud);
-    ghb_check_dependency(ud, xwidget, NULL);
-    const gchar *name = ghb_get_setting_key(xwidget);
-    ghb_pref_save(ud->prefs, name);
 }
 
 G_MODULE_EXPORT void
 picture_settings_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    GtkWidget *widget;
-    gboolean active, hide_settings;
-    gint x, y;
-
     g_debug("picture_settings_clicked_cb()");
     ghb_widget_to_setting(ud->globals, xwidget);
 
-    hide_settings = ghb_settings_get_boolean(ud->globals, "hide_settings");
-
-    active = ghb_settings_get_boolean(ud->globals, "show_picture");
-    widget = GHB_WIDGET (ud->builder, "settings_window");
-    x = ghb_settings_get_int(ud->prefs, "settings_x");
-    y = ghb_settings_get_int(ud->prefs, "settings_y");
-    if (x >= 0 && y >= 0)
-        gtk_window_move(GTK_WINDOW(widget), x, y);
-    gtk_widget_set_visible(widget, active && !hide_settings);
     ghb_preview_set_visible(ud);
 }
 
@@ -1207,7 +1179,7 @@ picture_settings_alt_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gboolean active;
 
     g_debug("picture_settings_alt_clicked_cb()");
-    toggle = GHB_WIDGET (ud->builder, "show_picture");
+    toggle = GHB_WIDGET (ud->builder, "show_preview");
     active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggle));
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(toggle), !active);
 }
@@ -1255,34 +1227,6 @@ fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-    GtkWidget *toggle;
-    gboolean active;
-    GtkWidget *window;
-
-    g_debug("picture_settings_alt2_clicked_cb()");
-    ghb_widget_to_setting(ud->globals, xwidget);
-    active = ghb_settings_get_boolean(ud->globals, "hide_settings");
-
-    toggle = GHB_WIDGET(ud->builder, "hide_settings");
-    window = GHB_WIDGET(ud->builder, "settings_window");
-    if (!active)
-    {
-        gtk_button_set_label(GTK_BUTTON(toggle), _("Hide Settings"));
-        gtk_widget_set_tooltip_text(toggle,
-            _("Hide the picture settings window while "
-            "leaving the preview visible."));
-    }
-    else
-    {
-        gtk_button_set_label(GTK_BUTTON(toggle), _("Show Settings"));
-        gtk_widget_set_tooltip_text(toggle, _("Show picture settings."));
-    }
-    gtk_widget_set_visible(window, !active);
-}
-
-G_MODULE_EXPORT void
 preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     if (ud->preview->live_id >= 0)
@@ -1301,21 +1245,8 @@ preview_window_delete_cb(
     signal_user_data_t *ud)
 {
     live_preview_stop(ud);
-    widget = GHB_WIDGET(ud->builder, "show_picture");
+    widget = GHB_WIDGET(ud->builder, "show_preview");
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
-    return TRUE;
-}
-
-G_MODULE_EXPORT gboolean
-settings_window_delete_cb(
-    GtkWidget *widget,
-    GdkEvent *event,
-    signal_user_data_t *ud)
-{
-    live_preview_stop(ud);
-    widget = GHB_WIDGET(ud->builder, "show_picture");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
-
     return TRUE;
 }
 
@@ -1500,27 +1431,6 @@ preview_configure_cb(
         ghb_settings_set_int(ud->prefs, "preview_y", y);
         ghb_pref_set(ud->prefs, "preview_x");
         ghb_pref_set(ud->prefs, "preview_y");
-        ghb_prefs_store();
-    }
-    return FALSE;
-}
-
-G_MODULE_EXPORT gboolean
-settings_configure_cb(
-    GtkWidget *widget,
-    GdkEventConfigure *event,
-    signal_user_data_t *ud)
-{
-    gint x, y;
-
-    //g_message("settings_configure_cb()");
-    if (gtk_widget_get_visible(widget))
-    {
-        gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
-        ghb_settings_set_int(ud->prefs, "settings_x", x);
-        ghb_settings_set_int(ud->prefs, "settings_y", y);
-        ghb_pref_set(ud->prefs, "settings_x");
-        ghb_pref_set(ud->prefs, "settings_y");
         ghb_prefs_store();
     }
     return FALSE;

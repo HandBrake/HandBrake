@@ -3345,16 +3345,6 @@ update_subtitle_presets(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-presets_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-    GtkMenu *menu;
-
-    menu = GTK_MENU(GHB_WIDGET(ud->builder, "presets_menu"));
-    gtk_menu_popup(menu, NULL, NULL, NULL, NULL, 1,
-                    gtk_get_current_event_time());
-}
-
-G_MODULE_EXPORT void
 preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     GtkWidget *dialog;

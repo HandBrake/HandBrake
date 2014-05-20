@@ -3216,12 +3216,8 @@ ghb_backend_events(signal_user_data_t *ud)
     }
     else if (status.queue.state & GHB_STATE_SEARCHING)
     {
-        GtkLabel *label;
         gchar *status_str;
 
-        status_str = searching_status_string(ud, &status.queue);
-        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
-        gtk_label_set_text (label, status_str);
         if (ghb_settings_get_boolean(ud->prefs, "show_status"))
         {
 #if defined(_USE_APP_IND)
@@ -3232,18 +3228,15 @@ ghb_backend_events(signal_user_data_t *ud)
             g_free(ai_status_str);
 #endif
         }
+        status_str = searching_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction (progress, status.queue.progress);
         g_free(status_str);
     }
     else if (status.queue.state & GHB_STATE_WORKING)
     {
-        GtkLabel *label;
         gchar *status_str;
 
-        status_str = working_status_string(ud, &status.queue);
-        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
-        gtk_label_set_text (label, status_str);
         if (ghb_settings_get_boolean(ud->prefs, "show_status"))
         {
 #if defined(_USE_APP_IND)
@@ -3254,6 +3247,7 @@ ghb_backend_events(signal_user_data_t *ud)
             g_free(ai_status_str);
 #endif
         }
+        status_str = working_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction (progress, status.queue.progress);
         g_free(status_str);
@@ -3679,27 +3673,22 @@ hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
-    gtk_widget_set_visible(widget, gtk_toggle_tool_button_get_active(
-                        GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+    GtkWidget *widget;
+    GtkStack *stack;
+
+    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
+    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(xwidget)))
+        widget = GHB_WIDGET(ud->builder, "queue_tab");
+    else
+        widget = GHB_WIDGET(ud->builder, "settings_tab");
+    gtk_stack_set_visible_child(stack, widget);
 }
 
 G_MODULE_EXPORT void
 show_queue_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
-    gtk_widget_set_visible(widget, TRUE);
-    widget = GHB_WIDGET (ud->builder, "show_queue");
+    GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
-}
-
-G_MODULE_EXPORT gboolean
-queue_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
-{
-    gtk_widget_set_visible(xwidget, FALSE);
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "show_queue");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
-    return TRUE;
 }
 
 G_MODULE_EXPORT void

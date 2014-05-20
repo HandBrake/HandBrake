@@ -44,9 +44,9 @@ dep_map = (
     DepEntry("PictureAutoCrop", "PictureBottomCrop", "FALSE", False, False),
     DepEntry("PictureAutoCrop", "PictureLeftCrop", "FALSE", False, False),
     DepEntry("PictureAutoCrop", "PictureRightCrop", "FALSE", False, False),
-    DepEntry("VideoEncoder", "x264_tab", "x264", False, True),
+    DepEntry("VideoEncoder", "x264_box", "x264", False, True),
     DepEntry("VideoEncoder", "x264VideoSettings", "x264", False, True),
-    DepEntry("VideoEncoder", "lavc_mpeg4_tab", "mpeg4|mpeg2", False, True),
+    DepEntry("VideoEncoder", "lavc_mpeg4_box", "mpeg4|mpeg2", False, True),
     DepEntry("AudioTrackQualityEnable", "AudioBitrate", "TRUE", True, True),
     DepEntry("AudioTrackQualityEnable", "AudioTrackQualityBox", "FALSE", True, True),
     DepEntry("AudioEncoder", "AudioBitrateLabel", "copy:mp3|copy:aac|copy:ac3|copy:dts|copy:dtshd", True, False),
@@ -65,7 +65,7 @@ dep_map = (
     DepEntry("x264_subme", "x264_psy_trell", "<6", True, False),
     DepEntry("x264_trellis", "x264_psy_trell", "0", True, False),
     DepEntry("x264UseAdvancedOptions", "x264VideoSettingsTable", "TRUE", True, False),
-    DepEntry("x264UseAdvancedOptions", "x264_tab", "FALSE", True, False),
+    DepEntry("x264UseAdvancedOptions", "x264_box", "FALSE", True, False),
     DepEntry("auto_name", "autoname_box", "TRUE", False, False),
     )
 

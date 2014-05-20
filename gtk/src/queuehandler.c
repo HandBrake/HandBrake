@@ -1815,37 +1815,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Start Encoding"));
     }
-    widget = GHB_WIDGET (ud->builder, "queue_start2");
-    if (show_stop)
-    {
-        gtk_widget_set_sensitive (widget, TRUE);
-        gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop"));
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Encoding"));
-    }
-    else
-    {
-        gtk_widget_set_sensitive (widget, show_start);
-        gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start"));
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Start Encoding"));
-    }
     widget = GHB_WIDGET (ud->builder, "queue_pause1");
-    if (paused)
-    {
-        gtk_widget_set_sensitive (widget, show_stop);
-        gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Resume"));
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Resume Encoding"));
-    }
-    else
-    {
-        gtk_widget_set_sensitive (widget, show_stop);
-        gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-pause");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Pause"));
-        gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Pause Encoding"));
-    }
-    widget = GHB_WIDGET (ud->builder, "queue_pause2");
     if (paused)
     {
         gtk_widget_set_sensitive (widget, show_stop);
@@ -2001,11 +1971,8 @@ find_pid:
                     "Would you like to reload them?"), unfinished);
         if (ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("No"), _("Yes")))
         {
-            GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
-            gtk_widget_show (widget);
-            widget = GHB_WIDGET (ud->builder, "show_queue");
+            GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
             gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
-
             ud->queue = queue;
             // First get rid of any old items we don't want
             for (ii = count-1; ii >= 0; ii--)
@@ -2180,6 +2147,9 @@ queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         source = ghb_settings_get_string(ghb_queue_edit_settings, "source");
         ghb_do_scan(ud, source, 0, FALSE);
         g_free(source);
+
+        GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
     }
 }
 

@@ -38,7 +38,7 @@ void ghb_show_hide_advanced_video( signal_user_data_t *ud )
     }
 
     GtkWidget *widget;
-    GtkWidget *at = GHB_WIDGET(ud->builder, "advanced_tab");
+    GtkWidget *at = GHB_WIDGET(ud->builder, "advanced_video_tab");
 
     gtk_widget_set_visible(at, !hide);
     widget = GHB_WIDGET(ud->builder, "x264UseAdvancedOptions");

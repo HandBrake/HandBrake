@@ -733,8 +733,7 @@ GtkEntry {                          \n\
 #preview_event_box,                 \n\
 #live_preview_play,                 \n\
 #live_duration,                     \n\
-#preview_fullscreen,                \n\
-#hide_settings                      \n\
+#preview_fullscreen                 \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray18;      \n\
@@ -757,24 +756,21 @@ GtkEntry {                          \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:prelight,       \n\
-#hide_settings:prelight             \n\
+#preview_fullscreen:prelight        \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:active,         \n\
-#hide_settings:selected:focused     \n\
+#preview_fullscreen:active          \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:active,         \n\
-#hide_settings:active               \n\
+#preview_fullscreen:active          \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
@@ -886,7 +882,6 @@ main(int argc, char *argv[])
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_duration"), "live_duration");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_show_crop"), "preview_show_crop");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_fullscreen"), "preview_fullscreen");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "hide_settings"), "hide_settings");
     widget = GHB_WIDGET(ud->builder, "preview_hud");
     gtk_widget_set_name(widget, "preview_hud");
     widget = GHB_WIDGET(ud->builder, "preview_window");
@@ -1085,19 +1080,18 @@ main(int argc, char *argv[])
                     status_icon_query_tooltip_cb, ud);
 #endif
 
-    widget = GHB_WIDGET(ud->builder, "hb_window");
+    GtkWidget *ghb_window = GHB_WIDGET(ud->builder, "hb_window");
 
-    gint width, height;
+    gint window_width, window_height;
     GdkGeometry geo = {
         -1, -1, 1920, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
     };
     GdkWindowHints geo_mask;
     geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
-    gtk_window_set_geometry_hints( GTK_WINDOW(widget), widget, &geo, geo_mask);
-    width = ghb_settings_get_int(ud->prefs, "window_width");
-    height = ghb_settings_get_int(ud->prefs, "window_height");
-    gtk_window_resize(GTK_WINDOW(widget), width, height);
-    gtk_widget_show(widget);
+    gtk_window_set_geometry_hints(GTK_WINDOW(ghb_window), ghb_window,
+                                  &geo, geo_mask);
+    window_width = ghb_settings_get_int(ud->prefs, "window_width");
+    window_height = ghb_settings_get_int(ud->prefs, "window_height");
 
     /*
      * Filter objects in GtkBuilder xml
@@ -1226,6 +1220,9 @@ main(int argc, char *argv[])
         link = link->next;
     }
     g_list_free(stack_switcher_children);
+
+    gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
+    gtk_widget_show(ghb_window);
 
     // Everything should be go-to-go.  Lets rock!
 

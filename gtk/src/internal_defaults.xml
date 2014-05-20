@@ -4,9 +4,7 @@
 <dict>
     <key>Globals</key>
     <dict>
-        <key>hide_settings</key>
-        <false />
-        <key>show_picture</key>
+        <key>show_preview</key>
         <false />
         <key>scan_source</key>
         <string></string>
@@ -187,13 +185,7 @@
         <integer>-1</integer>
         <key>preview_y</key>
         <integer>-1</integer>
-        <key>settings_x</key>
-        <integer>-1</integer>
-        <key>settings_y</key>
-        <integer>-1</integer>
         <key>show_presets</key>
-        <true />
-        <key>show_preview</key>
         <true />
         <key>UseM4v</key>
         <true />
