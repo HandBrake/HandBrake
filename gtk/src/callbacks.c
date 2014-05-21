@@ -562,6 +562,20 @@ get_extension(signal_user_data_t *ud, GValue *settings)
     return mux->default_extension;
 }
 
+static gboolean
+check_name_template(signal_user_data_t *ud, const char *str)
+{
+    if (ghb_settings_get_boolean(ud->prefs, "auto_name"))
+    {
+        gchar *template;
+
+        template = ghb_settings_get_string(ud->prefs, "auto_name_template");
+        if (strstr(template, str) != NULL)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 static void
 set_destination_settings(signal_user_data_t *ud, GValue *settings)
 {
@@ -2095,7 +2109,9 @@ vquality_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
-    set_destination(ud);
+    if (check_name_template(ud, "{quality}") ||
+        check_name_template(ud, "{bitrate}"))
+        set_destination(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2105,7 +2121,8 @@ vbitrate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
-    set_destination(ud);
+    if (check_name_template(ud, "{bitrate}"))
+        set_destination(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2136,7 +2153,8 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     gdouble val = gtk_range_get_value(GTK_RANGE(widget));
     val = ((int)((val + step / 2) / step)) * step;
     gtk_range_set_value(GTK_RANGE(widget), val);
-    set_destination(ud);
+    if (check_name_template(ud, "{quality}"))
+        set_destination(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2230,7 +2248,8 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         if (start > end)
             ghb_ui_update(ud, "end_point", ghb_int_value(start));
         ghb_check_dependency(ud, widget, NULL);
-        set_destination(ud);
+        if (check_name_template(ud, "{chapters}"))
+            set_destination(ud);
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         // End may have been changed above, get it again
         end = ghb_settings_get_int(ud->settings, "end_point");
@@ -2270,7 +2289,8 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         if (start > end)
             ghb_ui_update(ud, "start_point", ghb_int_value(end));
         ghb_check_dependency(ud, widget, NULL);
-        set_destination(ud);
+        if (check_name_template(ud, "{chapters}"))
+            set_destination(ud);
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         // Start may have been changed above, get it again
         start = ghb_settings_get_int(ud->settings, "start_point");
