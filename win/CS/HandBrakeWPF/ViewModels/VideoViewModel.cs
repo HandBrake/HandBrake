@@ -1099,7 +1099,12 @@ namespace HandBrakeWPF.ViewModels
                     break;
                 case VideoEncoder.X265:
                 case VideoEncoder.X264:
+                case VideoEncoder.QuickSync:
 
+                    if (this.SelectedVideoEncoder == VideoEncoder.QuickSync)
+                    {
+                        cqStep = 1;
+                    }
                     double multiplier = 1.0 / cqStep;
                     if (preset.Task.Quality.HasValue)
                     {
@@ -1111,7 +1116,7 @@ namespace HandBrakeWPF.ViewModels
                     break;
 
                 case VideoEncoder.Theora:              
-                case VideoEncoder.QuickSync:
+              
                     if (preset.Task.Quality.HasValue)
                     {
                         this.RF = (int)preset.Task.Quality.Value;
