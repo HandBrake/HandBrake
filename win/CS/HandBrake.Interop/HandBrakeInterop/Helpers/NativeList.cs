@@ -11,6 +11,7 @@ namespace HandBrake.Interop.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.HbLib;
@@ -45,8 +46,9 @@ namespace HandBrake.Interop.Helpers
 		public int Count
 		{
 			get
-			{
-				return HBFunctions.hb_list_count(this.Ptr);
+            {
+                Debug.WriteLine("Got a Zero Pointer in the NativeList");
+                return this.Ptr == IntPtr.Zero ? 0 : HBFunctions.hb_list_count(this.Ptr);
 			}
 		}
 
