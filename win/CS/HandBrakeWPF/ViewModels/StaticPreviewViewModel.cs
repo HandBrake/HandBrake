@@ -195,6 +195,11 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is open.
+        /// </summary>
+        public bool IsOpen { get; set; }
+
+        /// <summary>
         ///     The update preview frame.
         /// </summary>
         public void UpdatePreviewFrame()

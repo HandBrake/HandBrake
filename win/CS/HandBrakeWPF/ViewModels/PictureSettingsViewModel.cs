@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Windows;
     using System.Windows.Media.Imaging;
 
     using Caliburn.Micro;
@@ -825,6 +826,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(this.Task.Source))
             {
+                this.StaticPreviewViewModel.IsOpen = true;
                 this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task);
                 this.WindowManager.ShowWindow(this.StaticPreviewViewModel);
             }
@@ -1197,7 +1199,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void UpdatePreviewImage()
         {
-            if (delayedPreviewprocessor != null && this.Task != null)
+            if (delayedPreviewprocessor != null && this.Task != null && this.StaticPreviewViewModel != null && this.StaticPreviewViewModel.IsOpen)
             {
                 delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task), 800);
             }

@@ -23,5 +23,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The task.
         /// </param>
         void UpdatePreviewFrame(EncodeTask task);
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is open.
+        /// </summary>
+        bool IsOpen { get; set; }
     }
 }
