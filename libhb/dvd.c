@@ -192,10 +192,10 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
                 p_last = &p_cur[1];
             }
         }
-        char *dot_term = strrchr(p_last, '.');
+        snprintf( title->name, sizeof( title->name ), "%s", p_last );
+        char *dot_term = strrchr(title->name, '.');
         if (dot_term)
             *dot_term = '\0';
-        snprintf( title->name, sizeof( title->name ), "%s", p_last );
     }
 
     /* VTS which our title is in */

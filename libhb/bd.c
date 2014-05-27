@@ -258,12 +258,10 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             p_last = &p_cur[1];
         }
     }
-    char *dot_term = strrchr(p_last, '.');
+    snprintf( title->name, sizeof( title->name ), "%s", p_last );
+    char *dot_term = strrchr(title->name, '.');
     if (dot_term)
         *dot_term = '\0';
-    snprintf( title->name, sizeof( title->name ), "%s", p_last );
-    strncpy( title->path, d->path, 1024 );
-    title->path[1023] = 0;
 
     title->vts = 0;
     title->ttn = 0;
