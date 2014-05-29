@@ -86,6 +86,7 @@ struct hb_work_private_s
     AVCodecContext  *context;
     AVCodecParserContext *parser;
     AVFrame         *frame;
+    hb_buffer_t     *palette;
     int             threads;
     int             video_codec_opened;
     hb_list_t       *list;
@@ -1175,6 +1176,18 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
     avp.size = size;
     avp.pts  = pts;
     avp.dts  = dts;
+
+    if (pv->palette != NULL)
+    {
+        uint8_t * palette;
+        int size;
+        palette = av_packet_new_side_data(&avp, AV_PKT_DATA_PALETTE,
+                                          AVPALETTE_SIZE);
+        size = MIN(pv->palette->size, AVPALETTE_SIZE);
+        memcpy(palette, pv->palette->data, size);
+        hb_buffer_close(&pv->palette);
+    }
+
     /*
      * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
      * for some codecs. For example, sequence of PNG in a mov container.
@@ -1882,6 +1895,11 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->dxva2->input_dts = dts;
     }
 #endif
+    if (in->palette != NULL)
+    {
+        pv->palette = in->palette;
+        in->palette = NULL;
+    }
     decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
     hb_buffer_close( &in );
     *buf_out = link_buf_list( pv );

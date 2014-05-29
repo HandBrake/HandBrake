@@ -554,13 +554,20 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
         else if (data->stream)
         {
-          /* we start reading streams at zero rather than 1/11 because
-           * short streams may have only one sequence header in the entire
-           * file and we need it to decode any previews. */
-          if (!hb_stream_seek(data->stream, (float) i / ( data->preview_count + 1.0 ) ) )
-          {
-              continue;
-          }
+            /* we start reading streams at zero rather than 1/11 because
+             * short streams may have only one sequence header in the entire
+             * file and we need it to decode any previews.
+             *
+             * Also, seeking to position 0 loses the palette of avi files
+             * so skip initial seek */
+            if (i != 0)
+            {
+                if (!hb_stream_seek(data->stream,
+                                    (float)i / (data->preview_count + 1.0)))
+                {
+                    continue;
+                }
+            }
         }
 
         hb_deep_log( 2, "scan: preview %d", i + 1 );

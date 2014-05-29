@@ -5639,6 +5639,16 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         }
         buf = hb_buffer_init( stream->ffmpeg_pkt->size );
         memcpy( buf->data, stream->ffmpeg_pkt->data, stream->ffmpeg_pkt->size );
+
+        const uint8_t *palette;
+        int size;
+        palette = av_packet_get_side_data(stream->ffmpeg_pkt,
+                                          AV_PKT_DATA_PALETTE, &size);
+        if (palette != NULL)
+        {
+            buf->palette = hb_buffer_init( size );
+            memcpy( buf->palette->data, palette, size );
+        }
     }
     buf->s.id = stream->ffmpeg_pkt->stream_index;
 

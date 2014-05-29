@@ -130,6 +130,10 @@ struct hb_buffer_s
         enum { HOST, DEVICE } buffer_location;
     } cl;
 
+    // libav may attach AV_PKT_DATA_PALETTE side data to some AVPackets
+    // Store this data here when read and pass to decoder.
+    hb_buffer_t * palette;
+
     // PICTURESUB subtitle packets:
 
     // Video packets (after processing by the hb_sync_video work-object):
