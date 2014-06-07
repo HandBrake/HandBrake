@@ -13,16 +13,6 @@
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
-    <Style TargetType="ToolTip">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <TextBlock TextWrapping="Wrap" Width="450" Text="{Binding}" />
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style x:Key="whiteUserControlStyle" TargetType="UserControl">
         <Style.Triggers>
             <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
