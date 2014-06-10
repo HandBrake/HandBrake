@@ -913,6 +913,305 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
 }
 
 /**
+ * Calculates destination width and height for anamorphic content
+ *
+ * Returns calculated geometry
+ * @param source_geometry - Pointer to source geometry info
+ * @param ui_geometry     - Pointer to requested destination parameters
+ */
+void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
+                             hb_ui_geometry_t *ui_geo,
+                             hb_geometry_t *result)
+{
+    hb_rational_t in_par, out_par;
+    int keep_display_aspect = !!(ui_geo->keep & HB_KEEP_DISPLAY_ASPECT);
+    int keep_height         = !!(ui_geo->keep & HB_KEEP_HEIGHT);
+
+    /* Set up some variables to make the math easier to follow. */
+    int cropped_width = src_geo->width - ui_geo->crop[2] - ui_geo->crop[3];
+    int cropped_height = src_geo->height - ui_geo->crop[0] - ui_geo->crop[1];
+    double storage_aspect = (double)cropped_width / cropped_height;
+    int mod = ui_geo->modulus ? EVEN(ui_geo->modulus) : 16;
+
+    // Use 64 bits to avoid overflow till the final hb_reduce() call
+    hb_reduce(&in_par.num, &in_par.den, ui_geo->par.num, ui_geo->par.den);
+    int64_t dst_par_num = in_par.num;
+    int64_t dst_par_den = in_par.den;
+
+    hb_rational_t src_par = src_geo->par;
+
+    /* If a source was really NTSC or PAL and the user specified ITU PAR
+       values, replace the standard PAR values with the ITU broadcast ones. */
+    if (src_geo->width == 720 && ui_geo->itu_par)
+    {
+        // convert aspect to a scaled integer so we can test for 16:9 & 4:3
+        // aspect ratios ignoring insignificant differences in the LSBs of
+        // the floating point representation.
+        int iaspect = src_geo->width * src_par.num * 9. /
+                      (src_geo->height * src_par.den);
+
+        /* Handle ITU PARs */
+        if (src_geo->height == 480)
+        {
+            /* It's NTSC */
+            if (iaspect == 16)
+            {
+                /* It's widescreen */
+                dst_par_num = 40;
+                dst_par_den = 33;
+            }
+            else if (iaspect == 12)
+            {
+                /* It's 4:3 */
+                dst_par_num = 10;
+                dst_par_den = 11;
+            }
+        }
+        else if (src_geo->height == 576)
+        {
+            /* It's PAL */
+            if (iaspect == 16)
+            {
+                /* It's widescreen */
+                dst_par_num = 16;
+                dst_par_den = 11;
+            }
+            else if (iaspect == 12)
+            {
+                /* It's 4:3 */
+                dst_par_num = 12;
+                dst_par_den = 11;
+            }
+        }
+    }
+
+    /*
+       3 different ways of deciding output dimensions:
+        - 1: Strict anamorphic, preserve source dimensions
+        - 2: Loose anamorphic, round to mod16 and preserve storage aspect ratio
+        - 3: Power user anamorphic, specify everything
+    */
+    int width, height;
+    int maxWidth, maxHeight;
+
+    maxWidth = MULTIPLE_MOD_DOWN(ui_geo->maxWidth, mod);
+    maxHeight = MULTIPLE_MOD_DOWN(ui_geo->maxHeight, mod);
+    if (maxWidth && maxWidth < 32)
+        maxWidth = 32;
+    if (maxHeight && maxHeight < 32)
+        maxHeight = 32;
+
+    switch (ui_geo->mode)
+    {
+        case HB_ANAMORPHIC_NONE:
+        {
+            double par, cropped_sar, dar;
+            par = (double)src_geo->par.num / src_geo->par.den;
+            cropped_sar = (double)cropped_width / cropped_height;
+            dar = par * cropped_sar;
+
+            /* "None" anamorphic. a.k.a. non-anamorphic
+             *  - Uses mod-compliant dimensions, set by user
+             *  - Allows users to set the either width *or* height
+             */
+            if (keep_display_aspect)
+            {
+                if (!keep_height)
+                {
+                    width = ui_geo->width;
+                    height = MULTIPLE_MOD((int)(width / dar), mod);
+                }
+                else
+                {
+                    height = ui_geo->height;
+                    width = MULTIPLE_MOD((int)(height * dar), mod);
+                }
+            }
+            else
+            {
+                width = ui_geo->width;
+                height = ui_geo->height;
+            }
+            if (maxWidth && (width > maxWidth))
+            {
+                width  = maxWidth;
+                height = MULTIPLE_MOD((int)(width / dar), mod);
+            }
+            if (maxHeight && (height > maxHeight))
+            {
+                height  = maxHeight;
+                width = MULTIPLE_MOD((int)(height * dar), mod);
+            }
+            dst_par_num = dst_par_den = 1;
+        } break;
+
+        default:
+        case HB_ANAMORPHIC_STRICT:
+        {
+            /* "Strict" anamorphic.
+             *  - Uses mod2-compliant dimensions,
+             *  - Forces title - crop dimensions
+             */
+            width  = MULTIPLE_MOD(cropped_width, 2);
+            height = MULTIPLE_MOD(cropped_height, 2);
+
+            /* Adjust the output PAR for new width/height
+             * Film AR is the source display width / cropped source height.
+             * Output display width is the output height * film AR.
+             * Output PAR is the output display width / output storage width.
+             *
+             * i.e.
+             * source_display_width = cropped_width * source PAR
+             * AR = source_display_width / cropped_height;
+             * output_display_width = height * AR;
+             * par = output_display_width / width;
+             *
+             * When these terms are reduced, you get the following...
+             */
+            dst_par_num = (int64_t)height * cropped_width  * src_par.num;
+            dst_par_den = (int64_t)width  * cropped_height * src_par.den;
+        } break;
+
+        case HB_ANAMORPHIC_LOOSE:
+        {
+            /* "Loose" anamorphic.
+             *  - Uses mod-compliant dimensions, set by user
+             *  - Allows users to set the either width *or* height
+             */
+            if (!keep_height)
+            {
+                width = MULTIPLE_MOD(ui_geo->width, mod);
+                height = MULTIPLE_MOD((int)(width / storage_aspect + 0.5), mod);
+            }
+            else
+            {
+                height = MULTIPLE_MOD(ui_geo->height, mod);
+                width = MULTIPLE_MOD((int)(height * storage_aspect + 0.5), mod);
+            }
+
+            if (maxWidth && (maxWidth < width))
+            {
+                width = maxWidth;
+                height = MULTIPLE_MOD((int)(width / storage_aspect + 0.5), mod);
+            }
+
+            if (maxHeight && (maxHeight < height))
+            {
+                height = maxHeight;
+                width = MULTIPLE_MOD((int)(height * storage_aspect + 0.5), mod);
+            }
+
+            /* Adjust the output PAR for new width/height
+               See comment in HB_ANAMORPHIC_STRICT */
+            dst_par_num = (int64_t)height * cropped_width  * src_par.num;
+            dst_par_den = (int64_t)width  * cropped_height * src_par.den;
+        } break;
+
+        case HB_ANAMORPHIC_CUSTOM:
+        {
+            /* Anamorphic 3: Power User Jamboree
+               - Set everything based on specified values */
+
+            /* Use specified storage dimensions */
+            storage_aspect = (double)ui_geo->width / ui_geo->height;
+            width = ui_geo->width;
+            height = ui_geo->height;
+
+            /* Time to get picture dimensions that divide cleanly.*/
+            width  = MULTIPLE_MOD(width, mod);
+            height = MULTIPLE_MOD(height, mod);
+
+            /* Bind to max dimensions */
+            if (maxWidth && width > maxWidth)
+            {
+                width = maxWidth;
+                // If we are keeping the display aspect, then we are going
+                // to be modifying the PAR anyway.  So it's preferred
+                // to let the width/height stray some from the original
+                // requested storage aspect.
+                //
+                // But otherwise, PAR and DAR will change the least
+                // if we stay as close as possible to the requested
+                // storage aspect.
+                if (!keep_display_aspect)
+                {
+                    height = width / storage_aspect + 0.5;
+                    height = MULTIPLE_MOD(height, mod);
+                }
+            }
+            if (maxHeight && height > maxHeight)
+            {
+                height = maxHeight;
+                // Ditto, see comment above
+                if (!keep_display_aspect)
+                {
+                    width = height * storage_aspect + 0.5;
+                    width  = MULTIPLE_MOD(width, mod);
+                }
+            }
+
+            /* That finishes the storage dimensions. On to display. */
+            if (ui_geo->dar.num && ui_geo->dar.den)
+            {
+                /* We need to adjust the PAR to produce this aspect. */
+                dst_par_num = (int64_t)height * ui_geo->dar.num /
+                                                ui_geo->dar.den;
+                dst_par_den = width;
+            }
+            else
+            {
+                if (keep_display_aspect)
+                {
+                    /* We can ignore the possibility of a PAR change
+                     * Adjust the output PAR for new width/height
+                     * See comment in HB_ANAMORPHIC_STRICT
+                     */
+                    dst_par_num = (int64_t)height * cropped_width  *
+                                           src_par.num;
+                    dst_par_den = (int64_t)width  * cropped_height *
+                                           src_par.den;
+                }
+                else
+                {
+                    /* If the dimensions were changed by the modulus
+                     * or by maxWidth/maxHeight, we also change the
+                     * output PAR so that the DAR is unchanged.
+                     *
+                     * PAR is the requested output display width / storage width
+                     * requested output display width is the original
+                     * requested width * original requested PAR
+                     */
+                    dst_par_num = ui_geo->width * dst_par_num;
+                    dst_par_den = width * dst_par_den;
+                }
+            }
+        } break;
+    }
+
+    /* Pass the results back to the caller */
+    result->width = width;
+    result->height = height;
+
+    /* While x264 is smart enough to reduce fractions on its own, libavcodec
+     * needs some help with the math, so lose superfluous factors. */
+    hb_limit_rational64(&dst_par_num, &dst_par_den,
+                        dst_par_num, dst_par_den, 65535);
+
+    /* If the user is directling updating PAR, don't override his values */
+    hb_reduce(&out_par.num, &out_par.den, dst_par_num, dst_par_den);
+    if (ui_geo->mode == HB_ANAMORPHIC_CUSTOM && !keep_display_aspect &&
+        out_par.num == in_par.num && out_par.den == in_par.den)
+    {
+        result->par.num = ui_geo->par.num;
+        result->par.den = ui_geo->par.den;
+    }
+    else
+    {
+        hb_reduce(&result->par.num, &result->par.den, dst_par_num, dst_par_den);
+    }
+}
+
+/**
  * Calculates job width and height for anamorphic content,
  *
  * @param job Handle to hb_job_t
@@ -925,218 +1224,37 @@ void hb_set_anamorphic_size( hb_job_t * job,
         int *output_width, int *output_height,
         int *output_par_width, int *output_par_height )
 {
-    /* Set up some variables to make the math easier to follow. */
-    hb_title_t * title = job->title;
-    int cropped_width = title->width - job->crop[2] - job->crop[3] ;
-    int cropped_height = title->height - job->crop[0] - job->crop[1] ;
-    double storage_aspect = (double)cropped_width / (double)cropped_height;
-    int mod = job->modulus ? job->modulus : 16;
-    double aspect = title->aspect;
-    
-    int64_t pixel_aspect_width  = job->anamorphic.par_width;
-    int64_t pixel_aspect_height = job->anamorphic.par_height;
+    hb_geometry_t result;
+    hb_geometry_t src;
+    hb_ui_geometry_t ui_geo;
 
-    /* If a source was really NTSC or PAL and the user specified ITU PAR
-       values, replace the standard PAR values with the ITU broadcast ones. */
-    if( title->width == 720 && job->anamorphic.itu_par )
-    {
-        // convert aspect to a scaled integer so we can test for 16:9 & 4:3
-        // aspect ratios ignoring insignificant differences in the LSBs of
-        // the floating point representation.
-        int iaspect = aspect * 9.;
+    src.width = job->title->width;
+    src.height = job->title->height;
+    src.par.num = job->title->pixel_aspect_width;
+    src.par.den = job->title->pixel_aspect_height;
 
-        /* Handle ITU PARs */
-        if (title->height == 480)
-        {
-            /* It's NTSC */
-            if (iaspect == 16)
-            {
-                /* It's widescreen */
-                pixel_aspect_width = 40;
-                pixel_aspect_height = 33;
-            }
-            else if (iaspect == 12)
-            {
-                /* It's 4:3 */
-                pixel_aspect_width = 10;
-                pixel_aspect_height = 11;
-            }
-        }
-        else if (title->height == 576)
-        {
-            /* It's PAL */
-            if(iaspect == 16)
-            {
-                /* It's widescreen */
-                pixel_aspect_width = 16;
-                pixel_aspect_height = 11;
-            }
-            else if (iaspect == 12)
-            {
-                /* It's 4:3 */
-                pixel_aspect_width = 12;
-                pixel_aspect_height = 11;
-            }
-        }
-    }
+    ui_geo.width = job->width;
+    ui_geo.height = job->height;
+    ui_geo.par.num = job->anamorphic.par_width;
+    ui_geo.par.den = job->anamorphic.par_height;
 
-    /* Figure out what width the source would display at. */
-    int source_display_width = cropped_width * (double)pixel_aspect_width /
-                               (double)pixel_aspect_height ;
+    ui_geo.modulus = job->modulus;
+    memcpy(ui_geo.crop, job->crop, sizeof(int[4]));
+    ui_geo.maxWidth = job->maxWidth;
+    ui_geo.maxHeight = job->maxHeight;
+    ui_geo.mode = job->anamorphic.mode;
+    ui_geo.keep = 0;
+    if (job->anamorphic.keep_display_aspect)
+        ui_geo.keep = HB_KEEP_DISPLAY_ASPECT;
+    ui_geo.itu_par = job->anamorphic.itu_par;
+    ui_geo.dar.num = job->anamorphic.dar_width;
+    ui_geo.dar.den = job->anamorphic.dar_height;
 
-    /*
-       3 different ways of deciding output dimensions:
-        - 1: Strict anamorphic, preserve source dimensions
-        - 2: Loose anamorphic, round to mod16 and preserve storage aspect ratio
-        - 3: Power user anamorphic, specify everything
-    */
-    int width, height;
-    int maxWidth, maxHeight;
-
-    maxWidth = MULTIPLE_MOD_DOWN( job->maxWidth, mod );
-    maxHeight = MULTIPLE_MOD_DOWN( job->maxHeight, mod );
-
-    switch( job->anamorphic.mode )
-    {
-        case 1:
-            /* Strict anamorphic */
-            *output_width  = MULTIPLE_MOD( cropped_width, 2 );
-            *output_height = MULTIPLE_MOD( cropped_height, 2 );
-            // adjust the source PAR for new width/height
-            // new PAR = source PAR * ( old width / new_width ) * ( new_height / old_height )
-            pixel_aspect_width = (int64_t)title->pixel_aspect_width * cropped_width * (*output_height);            
-            pixel_aspect_height = (int64_t)title->pixel_aspect_height * (*output_width) * cropped_height;
-        break;
-
-        case 2:
-            /* "Loose" anamorphic.
-                - Uses mod16-compliant dimensions,
-                - Allows users to set the width
-            */
-            width = job->width;
-            // height: Gets set later, ignore user job->height value
-
-            /* Gotta handle bounding dimensions.
-               If the width is too big, just reset it with no rescaling.
-               Instead of using the aspect-scaled job height,
-               we need to see if the job width divided by the storage aspect
-               is bigger than the max. If so, set it to the max (this is sloppy).
-               If not, set job height to job width divided by storage aspect.
-            */
-
-            /* Time to get picture width that divide cleanly.*/
-            width  = MULTIPLE_MOD( width, mod);
-
-            if ( maxWidth && (maxWidth < job->width) )
-                width = maxWidth;
-
-            /* Verify these new dimensions don't violate max height and width settings */
-            height = ((double)width / storage_aspect) + 0.5;
-
-            /* Time to get picture height that divide cleanly.*/
-            height = MULTIPLE_MOD( height, mod);
-            
-            if ( maxHeight && (maxHeight < height) )
-            {
-                height = maxHeight;
-                width = ((double)height * storage_aspect) + 0.5;
-                width  = MULTIPLE_MOD( width, mod);
-            }
-
-            /* The film AR is the source's display width / cropped source height.
-               The output display width is the output height * film AR.
-               The output PAR is the output display width / output storage width. */
-            pixel_aspect_width = (int64_t)height * cropped_width * pixel_aspect_width;
-            pixel_aspect_height = (int64_t)width * cropped_height * pixel_aspect_height;
-
-            /* Pass the results back to the caller */
-            *output_width = width;
-            *output_height = height;
-        break;
-            
-        case 3:
-            /* Anamorphic 3: Power User Jamboree
-               - Set everything based on specified values */
-            
-            /* Use specified storage dimensions */
-            storage_aspect = (double)job->width / (double)job->height;
-            width = job->width;
-            height = job->height;
-            
-            /* Time to get picture dimensions that divide cleanly.*/
-            width  = MULTIPLE_MOD( width, mod);
-            height = MULTIPLE_MOD( height, mod);
-            
-            /* Bind to max dimensions */
-            if( maxWidth && width > maxWidth )
-            {
-                width = maxWidth;
-                // If we are keeping the display aspect, then we are going
-                // to be modifying the PAR anyway.  So it's preferred
-                // to let the width/height stray some from the original
-                // requested storage aspect.
-                //
-                // But otherwise, PAR and DAR will change the least
-                // if we stay as close as possible to the requested
-                // storage aspect.
-                if ( !job->anamorphic.keep_display_aspect )
-                {
-                    height = ((double)width / storage_aspect) + 0.5;
-                    height = MULTIPLE_MOD( height, mod);
-                }
-            }
-            if( maxHeight && height > maxHeight )
-            {
-                height = maxHeight;
-                // Ditto, see comment above
-                if ( !job->anamorphic.keep_display_aspect )
-                {
-                    width = ((double)height * storage_aspect) + 0.5;
-                    width  = MULTIPLE_MOD( width, mod);
-                }
-            }
-            
-            /* That finishes the storage dimensions. On to display. */            
-            if( job->anamorphic.dar_width && job->anamorphic.dar_height )
-            {
-                /* We need to adjust the PAR to produce this aspect. */
-                pixel_aspect_width = (int64_t)height * job->anamorphic.dar_width / job->anamorphic.dar_height;
-                pixel_aspect_height = width;
-            }
-            else
-            {
-                /* If we're doing ana 3 and not specifying a DAR, care needs to be taken.
-                   This indicates a PAR is potentially being set by the interface. But
-                   this is an output PAR, to correct a source, and it should not be assumed
-                   that it properly creates a display aspect ratio when applied to the source,
-                   which could easily be stored in a different resolution. */
-                if( job->anamorphic.keep_display_aspect )
-                {
-                    /* We can ignore the possibility of a PAR change */
-                    pixel_aspect_width = (int64_t)height * ( (double)source_display_width / (double)cropped_height );
-                    pixel_aspect_height = width;
-                }
-                else
-                {
-                    int output_display_width = width * (double)pixel_aspect_width /
-                        (double)pixel_aspect_height;
-                    pixel_aspect_width = output_display_width;
-                    pixel_aspect_height = width;
-                }
-            }
-            
-            /* Back to caller */
-            *output_width = width;
-            *output_height = height;
-        break;
-    }
-    
-    /* While x264 is smart enough to reduce fractions on its own, libavcodec
-     * needs some help with the math, so lose superfluous factors. */
-    hb_limit_rational64( &pixel_aspect_width, &pixel_aspect_height,
-                        pixel_aspect_width, pixel_aspect_height, 65535 );
-    hb_reduce( output_par_width, output_par_height,
-               pixel_aspect_width, pixel_aspect_height );
+    hb_set_anamorphic_size2(&src, &ui_geo, &result);
+    *output_width = result.width;
+    *output_height = result.height;
+    *output_par_width = result.par.num;
+    *output_par_height = result.par.den;
 }
 
 /**

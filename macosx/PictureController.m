@@ -46,24 +46,8 @@
     IBOutlet NSTextField     * fParWidthLabel;
     IBOutlet NSTextField     * fParHeightLabel;
 
-    /* for now we setup some values to remember our pars and dars
-     * from scan
-     */
-    int titleParWidth;
-    int titleParHeight;
-    float dar;
-
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
     IBOutlet NSTextField     * fSizeInfoField;
-
-    int output_width, output_height, output_par_width, output_par_height;
-    int display_width;
-
-    /* used to track the previous state of the keep aspect
-     ratio checkbox when turning anamorphic on, so it can be
-     returned to the previous state when anamorphic is turned
-     off */
-    BOOL    keepAspectRatioPreviousState;
 
     /* Video Filters */
     IBOutlet NSBox           * fDetelecineBox;
@@ -208,35 +192,49 @@
 
     fTitle = title;
 
-    [fWidthStepper      setMaxValue: title->width];
-    [fWidthStepper      setIntValue: job->width];
-    [fWidthField        setIntValue: job->width];
-    [fHeightStepper     setMaxValue: title->height];
-    [fHeightStepper     setIntValue: job->height];
-    [fHeightField       setIntValue: job->height];
-    [fRatioCheck        setState:    job->keep_ratio ? NSOnState : NSOffState];
-    [fCropTopStepper    setMaxValue: title->height/2-2];
-    [fCropBottomStepper setMaxValue: title->height/2-2];
-    [fCropLeftStepper   setMaxValue: title->width/2-2];
-    [fCropRightStepper  setMaxValue: title->width/2-2];
-
     [fAnamorphicPopUp selectItemAtIndex: job->anamorphic.mode];
+    if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT)
+    {
+        [fWidthStepper  setEnabled: NO];
+        [fHeightStepper setEnabled: NO];
+    }
+    else
+    {
+        [fWidthStepper  setEnabled: YES];
+        [fHeightStepper setEnabled: YES];
+    }
+    if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT ||
+        job->anamorphic.mode == HB_ANAMORPHIC_LOOSE)
+    {
+        job->anamorphic.keep_display_aspect = 1;
+        [fRatioCheck    setState:   NSOnState];
+        [fRatioCheck    setEnabled: NO];
+    }
+    else
+    {
+        [fRatioCheck    setEnabled: YES];
+        [fRatioCheck setState:   job->anamorphic.keep_display_aspect ?
+                                                        NSOnState : NSOffState];
+    }
+    [fParWidthField setEnabled:     !job->anamorphic.keep_display_aspect];
+    [fParHeightField setEnabled:    !job->anamorphic.keep_display_aspect];
+    [fDisplayWidthField setEnabled: !job->anamorphic.keep_display_aspect];
 
     if (job->modulus)
     {
         [fModulusPopUp selectItemWithTitle: [NSString stringWithFormat:@"%d",job->modulus]];
+        [fWidthStepper  setIncrement: job->modulus];
+        [fHeightStepper setIncrement: job->modulus];
     }
     else
     {
         [fModulusPopUp selectItemAtIndex: 0];
+        [fWidthStepper  setIncrement: 16];
+        [fHeightStepper setIncrement: 16];
     }
-
-    /* We initially set the previous state of keep ar to on */
-    keepAspectRatioPreviousState = 1;
-	if (!self.autoCrop)
-	{
+    if (!self.autoCrop)
+    {
         [fCropMatrix  selectCellAtRow: 1 column:0];
-        /* If auto, lets set the crop steppers according to current job->crop values */
         [fCropTopStepper    setIntValue: job->crop[0]];
         [fCropTopField      setIntValue: job->crop[0]];
         [fCropBottomStepper setIntValue: job->crop[1]];
@@ -245,11 +243,47 @@
         [fCropLeftField     setIntValue: job->crop[2]];
         [fCropRightStepper  setIntValue: job->crop[3]];
         [fCropRightField    setIntValue: job->crop[3]];
-	}
-	else
-	{
+    }
+    else
+    {
         [fCropMatrix  selectCellAtRow: 0 column:0];
-	}
+
+        [fCropTopStepper    setEnabled: !self.autoCrop];
+        [fCropBottomStepper setEnabled: !self.autoCrop];
+        [fCropLeftStepper   setEnabled: !self.autoCrop];
+        [fCropRightStepper  setEnabled: !self.autoCrop];
+
+        /* If auto, lets set the crop steppers according to
+         * current fTitle->crop values */
+        memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
+        [fCropTopStepper    setIntValue: fTitle->crop[0]];
+        [fCropTopField      setIntValue: fTitle->crop[0]];
+        [fCropBottomStepper setIntValue: fTitle->crop[1]];
+        [fCropBottomField   setIntValue: fTitle->crop[1]];
+        [fCropLeftStepper   setIntValue: fTitle->crop[2]];
+        [fCropLeftField     setIntValue: fTitle->crop[2]];
+        [fCropRightStepper  setIntValue: fTitle->crop[3]];
+        [fCropRightField    setIntValue: fTitle->crop[3]];
+    }
+    [fWidthStepper      setMaxValue: title->width - job->crop[2] - job->crop[3]];
+    [fWidthStepper      setIntValue: job->width];
+    [fWidthField        setIntValue: job->width];
+    [fHeightStepper     setMaxValue: title->height - job->crop[0] - job->crop[1]];
+    [fHeightStepper     setIntValue: job->height];
+    [fHeightField       setIntValue: job->height];
+    [fCropTopStepper    setMaxValue: title->height/2-2];
+    [fCropBottomStepper setMaxValue: title->height/2-2];
+    [fCropLeftStepper   setMaxValue: title->width/2-2];
+    [fCropRightStepper  setMaxValue: title->width/2-2];
+
+    [fParWidthField     setIntValue: job->anamorphic.par_width];
+    [fParHeightField    setIntValue: job->anamorphic.par_height];
+
+    int display_width;
+    display_width = job->width * job->anamorphic.par_width /
+                                 job->anamorphic.par_height;
+    [fDisplayWidthField setIntValue: display_width];
+
 
     /* Set filters widgets according to the filters struct */
     [fDetelecinePopUp selectItemAtIndex:self.detelecine];
@@ -260,9 +294,6 @@
     [fGrayscaleCheck setState:self.grayscale];
 
     [self deblockSliderChanged: nil];
-
-    titleParWidth = job->anamorphic.par_width;
-    titleParHeight = job->anamorphic.par_height;
 
     [fPreviewController setTitle:title];
 
@@ -334,8 +365,8 @@
     NSSize pictureCropBoxSize = [fPictureCropBox frame].size;
     NSPoint fPictureCropBoxOrigin = [fPictureCropBox frame].origin;
 
-    if ([fAnamorphicPopUp indexOfSelectedItem] == 3) // custom / power user jamboree
-    {
+    if ([fAnamorphicPopUp indexOfSelectedItem] == HB_ANAMORPHIC_CUSTOM)
+    {   // custom / power user jamboree
         pictureSizingBoxSize.width = 350;
 
         /* Set visibility of capuj widgets */
@@ -360,13 +391,16 @@
     }
 
     /* Check to see if we have changed the size from current */
-    if (pictureSizingBoxSize.height != [fPictureSizeBox frame].size.height || pictureSizingBoxSize.width != [fPictureSizeBox frame].size.width)
+    if (pictureSizingBoxSize.height != [fPictureSizeBox frame].size.height ||
+        pictureSizingBoxSize.width != [fPictureSizeBox frame].size.width)
     {
         /* Get our delta for the change in picture size box height */
-        CGFloat deltaYSizeBoxShift = pictureSizingBoxSize.height - [fPictureSizeBox frame].size.height;
+        CGFloat deltaYSizeBoxShift = pictureSizingBoxSize.height -
+                                     [fPictureSizeBox frame].size.height;
         fPictureSizeBoxOrigin.y -= deltaYSizeBoxShift;
         /* Get our delta for the change in picture size box width */
-        CGFloat deltaXSizeBoxShift = pictureSizingBoxSize.width - [fPictureSizeBox frame].size.width;
+        CGFloat deltaXSizeBoxShift = pictureSizingBoxSize.width -
+                                     [fPictureSizeBox frame].size.width;
         //fPictureSizeBoxOrigin.x += deltaXSizeBoxShift;
         /* set our new Picture size box size */
         [fPictureSizeBox setFrameSize:pictureSizingBoxSize];
@@ -582,409 +616,174 @@
         return;
 
     hb_job_t * job = fTitle->job;
+    int keep = 0, dar_updated = 0;
 
-    /* if we are anything but strict anamorphic */
-    if ([fAnamorphicPopUp indexOfSelectedItem] != 1)
+    if (sender == fAnamorphicPopUp)
     {
-        [fModulusLabel setHidden:NO];
-        [fModulusPopUp setHidden:NO];
-        if (sender == fModulusPopUp)
+        job->anamorphic.mode = (int)[fAnamorphicPopUp indexOfSelectedItem];
+        if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT)
         {
-            /* do a dry run with hb_fix aspect to get new modulus */
-            job->modulus = [[fModulusPopUp titleOfSelectedItem] intValue];
-            job->keep_ratio  = 1;
-            hb_fix_aspect( job, HB_KEEP_WIDTH );
-            if( job->height > fTitle->height )
-            {
-                job->height = fTitle->height;
-                hb_fix_aspect( job, HB_KEEP_HEIGHT );
-            }
-            [fWidthStepper      setIntValue: job->width];
-            [fWidthField        setIntValue: job->width];
-            if( [fAnamorphicPopUp indexOfSelectedItem] != 2) // if we are not loose or custom
-            {
-                [fHeightStepper     setIntValue: job->height];
-                [fHeightField       setIntValue: job->height];
-            }
+            [fModulusLabel  setHidden:  YES];
+            [fModulusPopUp  setHidden:  YES];
+            [fWidthStepper  setEnabled: NO];
+            [fHeightStepper setEnabled: NO];
+        }
+        else
+        {
+            [fModulusLabel  setHidden:  NO];
+            [fModulusPopUp  setHidden:  NO];
+            [fWidthStepper  setEnabled: YES];
+            [fHeightStepper setEnabled: YES];
+        }
+        if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT ||
+            job->anamorphic.mode == HB_ANAMORPHIC_LOOSE)
+        {
+            job->anamorphic.keep_display_aspect = 1;
+            [fRatioCheck setState: NSOnState];
+            [fRatioCheck setEnabled: NO];
+        }
+        else
+        {
+            [fRatioCheck setEnabled: YES];
+            [fRatioCheck setState:   job->anamorphic.keep_display_aspect ?
+                                                        NSOnState : NSOffState];
         }
     }
-    else
+    else if (sender == fModulusPopUp)
     {
-        /* we are strict so hide the mod popup since libhb uses mod 2 for strict anamorphic*/
-        [fModulusLabel setHidden:YES];
-        [fModulusPopUp setHidden:YES];
+        job->modulus = [[fModulusPopUp titleOfSelectedItem] intValue];
+        [fWidthStepper  setIncrement: job->modulus];
+        [fHeightStepper setIncrement: job->modulus];
     }
 
-    job->modulus = [[fModulusPopUp titleOfSelectedItem] intValue];
-
-    [fWidthStepper  setIncrement: job->modulus];
-    [fHeightStepper setIncrement: job->modulus];
-
-    /* Since custom anamorphic allows for a height setting > fTitle->height
-     * check to make sure it is returned to fTitle->height for all other modes
-     */
-    [fHeightStepper setMaxValue: fTitle->height];
-
-    self.autoCrop = ( [fCropMatrix selectedRow] == 0 );
-    [fCropTopStepper    setEnabled: !self.autoCrop];
-    [fCropBottomStepper setEnabled: !self.autoCrop];
-    [fCropLeftStepper   setEnabled: !self.autoCrop];
-    [fCropRightStepper  setEnabled: !self.autoCrop];
-
-    if( self.autoCrop )
+    if (sender == fRatioCheck)
     {
-        memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
+        job->anamorphic.keep_display_aspect = [fRatioCheck  state] == NSOnState;
+        [fParWidthField setEnabled:     !job->anamorphic.keep_display_aspect];
+        [fParHeightField setEnabled:    !job->anamorphic.keep_display_aspect];
+        [fDisplayWidthField setEnabled: !job->anamorphic.keep_display_aspect];
     }
-    else
+
+    if (sender == fHeightStepper)
+    {
+        keep |= HB_KEEP_HEIGHT;
+        job->height = [fHeightStepper intValue];
+    }
+
+    if (sender == fWidthStepper)
+    {
+        keep |= HB_KEEP_WIDTH;
+        job->width = [fWidthStepper intValue];
+    }
+
+    if (sender == fParWidthField || sender == fParHeightField)
+    {
+        job->anamorphic.par_width = [fParWidthField intValue];
+        job->anamorphic.par_height = [fParHeightField intValue];
+    }
+
+    if (sender == fDisplayWidthField)
+    {
+        dar_updated = 1;
+        job->anamorphic.dar_width = [fDisplayWidthField intValue];
+        job->anamorphic.dar_height = [fHeightStepper intValue];
+    }
+
+    if (sender == fCropMatrix)
+    {
+        if (self.autoCrop != ( [fCropMatrix selectedRow] == 0 ))
+        {
+            self.autoCrop = !self.autoCrop;
+            if (self.autoCrop)
+            {
+                /* If auto, lets set the crop steppers according to
+                 * current fTitle->crop values */
+                memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
+                [fCropTopStepper    setIntValue: fTitle->crop[0]];
+                [fCropTopField      setIntValue: fTitle->crop[0]];
+                [fCropBottomStepper setIntValue: fTitle->crop[1]];
+                [fCropBottomField   setIntValue: fTitle->crop[1]];
+                [fCropLeftStepper   setIntValue: fTitle->crop[2]];
+                [fCropLeftField     setIntValue: fTitle->crop[2]];
+                [fCropRightStepper  setIntValue: fTitle->crop[3]];
+                [fCropRightField    setIntValue: fTitle->crop[3]];
+            }
+            [fCropTopStepper    setEnabled: !self.autoCrop];
+            [fCropBottomStepper setEnabled: !self.autoCrop];
+            [fCropLeftStepper   setEnabled: !self.autoCrop];
+            [fCropRightStepper  setEnabled: !self.autoCrop];
+        }
+    }
+    if (sender == fCropTopStepper)
     {
         job->crop[0] = [fCropTopStepper    intValue];
+        [fCropTopField setIntValue: job->crop[0]];
+        [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+    }
+    if (sender == fCropBottomStepper)
+    {
         job->crop[1] = [fCropBottomStepper intValue];
+        [fCropBottomField setIntValue: job->crop[1]];
+        [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+    }
+    if (sender == fCropLeftStepper)
+    {
         job->crop[2] = [fCropLeftStepper   intValue];
+        [fCropLeftField setIntValue: job->crop[2]];
+        [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+    }
+    if (sender == fCropRightStepper)
+    {
         job->crop[3] = [fCropRightStepper  intValue];
+        [fCropRightField setIntValue: job->crop[3]];
+        [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
     }
 
-    [fRatioCheck setEnabled: YES];
+    keep |= !!job->anamorphic.keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
 
-    [fParWidthField setEnabled: NO];
-    [fParHeightField setEnabled: NO];
-    [fDisplayWidthField setEnabled: NO];
+    hb_geometry_t srcGeo, resultGeo;
+    hb_ui_geometry_t uiGeo;
 
-    /* If we are not custom anamorphic, make sure we retain the orginal par */
-    if( [fAnamorphicPopUp indexOfSelectedItem] != 3 )
+    srcGeo.width = fTitle->width;
+    srcGeo.height = fTitle->height;
+    srcGeo.par.num = fTitle->pixel_aspect_width;
+    srcGeo.par.den = fTitle->pixel_aspect_height;
+
+    uiGeo.mode = job->anamorphic.mode;
+    uiGeo.keep = keep;
+    uiGeo.itu_par = 0;
+    uiGeo.modulus = job->modulus;
+    memcpy(uiGeo.crop, job->crop, sizeof(int[4]));
+    uiGeo.width = job->width;
+    uiGeo.height =  job->height;
+    uiGeo.maxWidth = fTitle->width - job->crop[2] - job->crop[3];
+    uiGeo.maxHeight = fTitle->height - job->crop[0] - job->crop[1];
+    uiGeo.par.num = job->anamorphic.par_width;
+    uiGeo.par.den = job->anamorphic.par_height;
+    uiGeo.dar.num = 0;
+    uiGeo.dar.den = 0;
+    if (job->anamorphic.mode == HB_ANAMORPHIC_CUSTOM && dar_updated)
     {
-        job->anamorphic.par_width = titleParWidth;
-        job->anamorphic.par_height = titleParHeight;
-        [fRatioLabel setHidden: NO];
+        uiGeo.dar.num = job->anamorphic.dar_width;
+        uiGeo.dar.den = job->anamorphic.dar_height;
     }
+    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
 
-	if( [fAnamorphicPopUp indexOfSelectedItem] > 0 )
-	{
-        if ([fAnamorphicPopUp indexOfSelectedItem] == 1) // strict
-        {
-            [fWidthStepper      setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
-            [fWidthField        setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
+    job->width = resultGeo.width;
+    job->height = resultGeo.height;
+    job->anamorphic.par_width = resultGeo.par.num;
+    job->anamorphic.par_height = resultGeo.par.den;
 
-            /* This will show correct anamorphic height values, but
-             show distorted preview picture ratio */
-            [fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-            [fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-            job->width       = [fWidthStepper  intValue];
-            job->height      = [fHeightStepper intValue];
+    int display_width;
+    display_width = resultGeo.width * resultGeo.par.num / resultGeo.par.den;
 
-            job->anamorphic.mode = 1;
-            [fWidthStepper setEnabled: NO];
-            [fWidthField setEnabled: NO];
-            [fHeightStepper setEnabled: NO];
-            [fHeightField setEnabled: NO];
-            [fRatioCheck setEnabled: NO];
-        }
-        else if ([fAnamorphicPopUp indexOfSelectedItem] == 2) // Loose anamorphic
-        {
-            job->anamorphic.mode = 2;
-            [fWidthStepper setEnabled: YES];
-            [fWidthField setEnabled: YES];
-            [fRatioCheck setEnabled: NO];
-            [fHeightStepper setEnabled: NO];
-            [fHeightField setEnabled: NO];
-            /* We set job->width and call hb_set_anamorphic_size in libhb to do a "dry run" to get
-             * the values to be used by libhb for loose anamorphic
-             */
-            /* if the sender is the anamorphic popup, then we know that loose anamorphic has just
-             * been turned on, so snap the width to full width for the source.
-             */
-            if (sender == fAnamorphicPopUp)
-            {
-                [fWidthStepper      setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
-                [fWidthField        setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
-            }
-            job->width       = [fWidthStepper  intValue];
-            hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
-            [fHeightStepper      setIntValue: output_height];
-            [fHeightField        setIntValue: output_height];
-            job->height      = [fHeightStepper intValue];
-
-        }
-        else if ([fAnamorphicPopUp indexOfSelectedItem] == 3) // custom / power user jamboree
-        {
-            job->anamorphic.mode = 3;
-
-            /* Set the status of our custom ana only widgets accordingly */
-            [fModulusPopUp setEnabled:YES];
-
-            [fWidthStepper setEnabled: YES];
-            [fWidthField setEnabled: YES];
-
-            [fHeightStepper setEnabled: YES];
-            /* for capuj the storage field is immaterial */
-            [fHeightField setEnabled: YES];
-
-            [fRatioCheck setEnabled: YES];
-            if (sender == fRatioCheck)
-            {
-                if ([fRatioCheck  state] == NSOnState)
-                {
-                    [fParWidthField setEnabled: NO];
-                    [fParHeightField setEnabled: NO];
-                }
-                else
-                {
-                    [fParWidthField setEnabled: YES];
-                    [fParHeightField setEnabled: YES];
-                }
-            }
-
-            [fParWidthField setEnabled: YES];
-            [fParHeightField setEnabled: YES];
-
-            [fDisplayWidthField setEnabled: YES];
-
-
-            /* If we are coming into custom anamorphic we reset the par to original
-             * which gives us a way back if things get hosed up.
-             */
-
-            if (sender == fAnamorphicPopUp)
-            {
-                /* When entering custom anamorphic, we start with keep ar on */
-                [fRatioCheck  setState: NSOnState];
-                /*
-                 KEEPING ASPECT RATIO
-                 Disable editing: PIXEL WIDTH, PIXEL HEIGHT
-                 */
-                [fParWidthField setEnabled: NO];
-                [fParHeightField setEnabled: NO];
-
-                job->width = [fWidthStepper intValue];
-                job->height = [fHeightStepper intValue];
-
-                /* make sure our par is set back to original */
-                job->anamorphic.par_width = titleParWidth;
-                job->anamorphic.par_height = titleParHeight;
-
-                [fParWidthField   setIntValue: titleParWidth];
-                [fParHeightField   setIntValue: titleParHeight];
-
-                /* modify our par dims from our storage dims */
-                hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
-                float par_display_width = (float)output_width * (float)output_par_width / (float)output_par_height;
-
-                /* go ahead and mod the display dims */
-                [fDisplayWidthField   setStringValue: [NSString stringWithFormat:@"%.2f", par_display_width]];
-
-                job->anamorphic.dar_width = [fDisplayWidthField floatValue];
-                job->anamorphic.dar_height = (float)[fHeightStepper intValue];
-
-                /* Set our dar here assuming we are just coming into capuj mode */
-                dar = [fDisplayWidthField floatValue] / (float)[fHeightField intValue];
-
-            }
-
-            /* For capuj we disable these fields if we are keeping the dispay aspect */
-            if ([fRatioCheck  state] == NSOnState)
-            {
-                /*
-                 KEEPING ASPECT RATIO
-                 DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification) */
-                /*Disable editing: PIXEL WIDTH, PIXEL HEIGHT */
-
-                [fParWidthField setEnabled: NO];
-                [fParHeightField setEnabled: NO];
-
-                /* Changing DISPLAY WIDTH: */
-                if (sender == fDisplayWidthField)
-                {
-                    job->anamorphic.dar_width = [fDisplayWidthField floatValue];
-                    /* Changes HEIGHT to keep DAR */
-                    /* calculate the height to retain the dar  */
-                    int raw_calulated_height = (int)((int)[fDisplayWidthField floatValue] / dar);
-                    /*  now use the modulus to go lower if there is a remainder  */
-                    /* Note to me, raw_calulated_height % [[fModulusPopUp titleOfSelectedItem] intValue]
-                     * gives me the remainder we are not mod (whatever our modulus is) subtract that from
-                     * the actual calculated value derived from the dar to round down to the nearest mod value.
-                     * This should be desireable over rounding up to the next mod value
-                     */
-                    int modulus_height = raw_calulated_height - (raw_calulated_height % [[fModulusPopUp titleOfSelectedItem] intValue]);
-                    if (modulus_height > fTitle->height)
-                    {
-                        [fHeightStepper setMaxValue: modulus_height];
-                    }
-                    [fHeightStepper setIntValue: modulus_height];
-                    job->anamorphic.dar_height = (float)[fHeightStepper intValue];
-                    job->height = [fHeightStepper intValue];
-
-                    /* Changes PIXEL WIDTH to new DISPLAY WIDTH */
-                    [fParWidthField setIntValue: [fDisplayWidthField intValue]];
-                    job->anamorphic.par_width = [fParWidthField intValue];
-                    /* Changes PIXEL HEIGHT to STORAGE WIDTH */
-                    [fParHeightField  setIntValue: [fWidthField intValue]];
-                    job->anamorphic.par_height = [fParHeightField intValue];
-
-                }
-                /* Changing HEIGHT: */
-                if (sender == fHeightStepper)
-                {
-                    job->anamorphic.dar_height = (float)[fHeightStepper intValue];
-                    job->height = [fHeightStepper intValue];
-
-                    /* Changes DISPLAY WIDTH to keep DAR*/
-                    [fDisplayWidthField setStringValue: [NSString stringWithFormat: @"%.2f",[fHeightStepper intValue] * dar]];
-                    job->anamorphic.dar_width = [fDisplayWidthField floatValue];
-                    /* Changes PIXEL WIDTH to new DISPLAY WIDTH */
-                    [fParWidthField setIntValue: [fDisplayWidthField intValue]];
-                    job->anamorphic.par_width = [fParWidthField intValue];
-                    /* Changes PIXEL HEIGHT to STORAGE WIDTH */
-                    [fParHeightField  setIntValue: [fWidthField intValue]];
-                    job->anamorphic.par_height = [fParHeightField intValue];
-                }
-                /* Changing STORAGE_WIDTH: */
-                if (sender == fWidthStepper)
-                {
-                    job->width = [fWidthStepper intValue];
-
-                    job->anamorphic.dar_width = [fDisplayWidthField floatValue];
-                    job->anamorphic.dar_height = [fHeightStepper floatValue];
-
-                    /* Changes PIXEL WIDTH to DISPLAY WIDTH */
-                    [fParWidthField setIntValue: [fDisplayWidthField intValue]];
-                    job->anamorphic.par_width = [fParWidthField intValue];
-                    /* Changes PIXEL HEIGHT to new STORAGE WIDTH */
-                    [fParHeightField  setIntValue: [fWidthStepper intValue]];
-                    job->anamorphic.par_height = [fParHeightField intValue];
-                }
-            }
-            else if ([fRatioCheck  state] == NSOffState)
-            {
-                /* Changing STORAGE_WIDTH: */
-                if (sender == fWidthStepper)
-                {
-                    job->width = [fWidthStepper intValue];
-                    /* changes DISPLAY WIDTH to STORAGE WIDTH * PIXEL WIDTH / PIXEL HEIGHT */
-                    [fDisplayWidthField setStringValue: [NSString stringWithFormat: @"%.2f",(float)[fWidthStepper intValue] * [fParWidthField intValue] / [fParHeightField intValue]]];
-                    job->anamorphic.dar_width = [fDisplayWidthField floatValue];
-                }
-                /* Changing PIXEL dimensions */
-                if (sender == fParWidthField || sender == fParHeightField)
-                {
-                    job->anamorphic.par_width = [fParWidthField intValue];
-                    job->anamorphic.par_height = [fParHeightField intValue];
-                    /* changes DISPLAY WIDTH to STORAGE WIDTH * PIXEL WIDTH / PIXEL HEIGHT */
-                    [fDisplayWidthField setStringValue: [NSString stringWithFormat: @"%.2f",(float)[fWidthStepper intValue] * [fParWidthField intValue] / [fParHeightField intValue]]];
-                    job->anamorphic.dar_width = [fDisplayWidthField floatValue];
-                }
-                /* Changing DISPLAY WIDTH: */
-                if (sender == fDisplayWidthField)
-                {
-                    job->anamorphic.dar_width = [fDisplayWidthField floatValue];
-                    job->anamorphic.dar_height = (float)[fHeightStepper intValue];
-                    /* changes PIXEL WIDTH to DISPLAY WIDTH and PIXEL HEIGHT to STORAGE WIDTH */
-                    [fParWidthField setIntValue: [fDisplayWidthField intValue]];
-                    job->anamorphic.par_width = [fParWidthField intValue];
-
-                    [fParHeightField  setIntValue: [fWidthField intValue]];
-                    job->anamorphic.par_height = [fParHeightField intValue];
-                    hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
-                }
-                /* Changing HEIGHT: */
-                if (sender == fHeightStepper)
-                {
-                    /* just....changes the height.*/
-                    job->anamorphic.dar_height = [fHeightStepper intValue];
-                    job->height = [fHeightStepper intValue];
-                }
-
-            }
-        }
-
-        /* if the sender is the Anamorphic checkbox, record the state
-         of KeepAspect Ratio so it can be reset if Anamorphic is unchecked again */
-        if (sender == fAnamorphicPopUp)
-        {
-            keepAspectRatioPreviousState = [fRatioCheck state];
-        }
-        if ([fAnamorphicPopUp indexOfSelectedItem] != 3)
-        {
-            [fRatioCheck setState:NSOffState];
-        }
-
-    }
-    else
-	{
-        job->width       = [fWidthStepper  intValue];
-        job->height      = [fHeightStepper intValue];
-        job->anamorphic.mode = 0;
-        [fWidthStepper setEnabled: YES];
-        [fWidthField setEnabled: YES];
-        [fHeightStepper setEnabled: YES];
-        [fHeightField setEnabled: YES];
-        [fRatioCheck setEnabled: YES];
-        /* if the sender is the Anamorphic checkbox, we return the
-         keep AR checkbox to its previous state */
-        if (sender == fAnamorphicPopUp)
-        {
-            [fRatioCheck setState:keepAspectRatioPreviousState];
-        }
-	}
-
-    if ([fAnamorphicPopUp indexOfSelectedItem] != 3)
-    {
-        job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
-        if( job->keep_ratio )
-        {
-            if( sender == fWidthStepper || sender == fRatioCheck ||
-               sender == fCropTopStepper || sender == fCropBottomStepper||
-               sender == fCropMatrix || sender == nil  )
-            {
-                hb_fix_aspect( job, HB_KEEP_WIDTH );
-                if( job->height > fTitle->height )
-                {
-                    job->height = fTitle->height;
-                    hb_fix_aspect( job, HB_KEEP_HEIGHT );
-                }
-            }
-            else
-            {
-                hb_fix_aspect( job, HB_KEEP_HEIGHT );
-                if( job->width > fTitle->width )
-                {
-                    job->width = fTitle->width;
-                    hb_fix_aspect( job, HB_KEEP_WIDTH );
-                }
-            }
-
-        }
-    }
-
-    // hb_get_preview can't handle sizes that are larger than the original title
-    if ([fAnamorphicPopUp indexOfSelectedItem] != 3)
-    {
-        // dimensions
-        if( job->width > fTitle->width )
-        {
-            job->width = fTitle->width;
-        }
-
-        if( job->height > fTitle->height )
-        {
-            job->height = fTitle->height;
-        }
-    }
-
-    [fWidthStepper      setIntValue: job->width];
-    [fWidthField        setIntValue: job->width];
-    if( [fAnamorphicPopUp indexOfSelectedItem] != 2) // if we are not loose or custom
-    {
-        [fHeightStepper     setIntValue: job->height];
-        [fHeightField       setIntValue: job->height];
-    }
-
-    [fCropTopStepper    setIntValue: job->crop[0]];
-    [fCropTopField      setIntValue: job->crop[0]];
-    [fCropBottomStepper setIntValue: job->crop[1]];
-    [fCropBottomField   setIntValue: job->crop[1]];
-    [fCropLeftStepper   setIntValue: job->crop[2]];
-    [fCropLeftField     setIntValue: job->crop[2]];
-    [fCropRightStepper  setIntValue: job->crop[3]];
-    [fCropRightField    setIntValue: job->crop[3]];
+    [fWidthStepper      setIntValue: resultGeo.width];
+    [fWidthField        setIntValue: resultGeo.width];
+    [fHeightStepper     setIntValue: resultGeo.height];
+    [fHeightField       setIntValue: resultGeo.height];
+    [fParWidthField     setIntValue: resultGeo.par.num];
+    [fParHeightField    setIntValue: resultGeo.par.den];
+    [fDisplayWidthField setIntValue: display_width];
 
     /*
      * Sanity-check here for previews < 16 pixels to avoid crashing

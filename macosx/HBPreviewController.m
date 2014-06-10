@@ -54,8 +54,9 @@
 #endif
 
 #define BORDER_SIZE 2.0
-#define MIN_WIDTH 480.0
-#define MIN_HEIGHT 360.0
+// make min width and height of preview window large enough for hud
+#define MIN_WIDTH 460.0
+#define MIN_HEIGHT 128.0
 
 #define ANIMATION_DUR 0.2
 
@@ -356,13 +357,14 @@ typedef enum ViewMode : NSUInteger {
  */
 - (void) resizeWindowForViewSize: (NSSize) viewSize
 {
-    // Figure out the deltas for the new frame area
     NSSize currentSize = [[[self window] contentView] frame].size;
-    CGFloat deltaX = viewSize.width - currentSize.width;
-    CGFloat deltaY = viewSize.height - currentSize.height;
-
-    // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
+
+    // Calculate border around content region of the frame
+    int borderX = frame.size.width - currentSize.width;
+    int borderY = frame.size.height - currentSize.height;
+
+    // Make sure the frame is smaller than the screen
     NSSize maxSize = [[[self window] screen] visibleFrame].size;
 
     /* if we are not Scale To Screen, put an 10% of visible screen on the window */
@@ -372,39 +374,21 @@ typedef enum ViewMode : NSUInteger {
         maxSize.height = maxSize.height * 0.90;
     }
 
-    /* Set our min size to the storage size */
-    NSSize minSize;
-    minSize.width = self.title->width / self.backingScaleFactor;
-    minSize.height = self.title->height / self.backingScaleFactor;
+    // Set the new frame size
+    // Add the border to the new frame size so that the content region
+    // of the frame is large enough to accomodate the preview image
+    frame.size.width = viewSize.width + borderX;
+    frame.size.height = viewSize.height + borderY;
 
-    frame.size.width += deltaX;
-    frame.size.height += deltaY;
-    if( frame.size.width < minSize.width )
-    {
-        frame.size.width = minSize.width;
-        deltaX = frame.size.width - currentSize.width;
-    }
-    if( frame.size.height < minSize.height )
-    {
-        frame.size.height = minSize.height;
-        //deltaY = frame.size.height - currentSize.height;
-    }
     /* compare frame to max size of screen */
-
     if( frame.size.width > maxSize.width )
     {
         frame.size.width = maxSize.width;
     }
-
     if( frame.size.height > maxSize.height )
     {
         frame.size.height = maxSize.height;
     }
-
-    // But now the sheet is off-center, so also shift the origin to center it and
-    // keep the top aligned.
-    if (frame.size.width != [[self window] frame].size.width)
-        frame.origin.x -= (deltaX / 2.0);
 
     /* Since upon launch we can open up the preview window if it was open
      * the last time we quit (and at the size it was) we want to make
@@ -414,14 +398,6 @@ typedef enum ViewMode : NSUInteger {
      */
     NSSize screenSize = [[[self window] screen] visibleFrame].size;
     NSPoint screenOrigin = [[[self window] screen] visibleFrame].origin;
-    if (screenSize.height < frame.size.height)
-    {
-        frame.size.height = screenSize.height;
-    }
-    if (screenSize.width < frame.size.width)
-    {
-        frame.size.width = screenSize.width;
-    }
 
     /* our origin is off the screen to the left*/
     if (frame.origin.x < screenOrigin.x)
@@ -643,58 +619,36 @@ typedef enum ViewMode : NSUInteger {
     NSString *sizeInfoString;
 
     /* Set the picture size display fields below the Preview Picture*/
-    int output_width, output_height, output_par_width, output_par_height;
     int display_width;
+    display_width = title->job->width * title->job->anamorphic.par_width / title->job->anamorphic.par_height;
     if( title->job->anamorphic.mode == 1 ) // Original PAR Implementation
     {
-        output_width = title->width-title->job->crop[2]-title->job->crop[3];
-        output_height = title->height-title->job->crop[0]-title->job->crop[1];
-        display_width = output_width * title->job->anamorphic.par_width / title->job->anamorphic.par_height;
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
-                          title->width, title->height, output_width, output_height, display_width, output_height];
-
-        displaySize.width = display_width;
-        displaySize.height = title->height;
-        imageScaledSize.width = display_width;
-        imageScaledSize.height = output_height;
+                          title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
     }
     else if (title->job->anamorphic.mode == 2) // Loose Anamorphic
     {
-        hb_set_anamorphic_size(title->job, &output_width, &output_height, &output_par_width, &output_par_height);
-        display_width = output_width * output_par_width / output_par_height;
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
-                          title->width, title->height, output_width, output_height, display_width, output_height];
-
-        displaySize.width = display_width;
-        displaySize.height = title->height;
-        imageScaledSize.width = display_width;
-        imageScaledSize.height = output_height;
+                          title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
     }
     else if (title->job->anamorphic.mode == 3) // Custom Anamorphic
     {
-        hb_set_anamorphic_size(title->job, &output_width, &output_height, &output_par_width, &output_par_height);
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",
-                          title->width, title->height, output_width, output_height, title->job->anamorphic.dar_width, title->job->anamorphic.dar_height];
-
-        displaySize.width = title->job->anamorphic.dar_width + title->job->crop[2] + title->job->crop[3] ;
-        displaySize.height = title->job->anamorphic.dar_height + title->job->crop[0] + title->job->crop[1];
-        imageScaledSize.width = (int)title->job->anamorphic.dar_width;
-        imageScaledSize.height = (int)title->job->height;
+                          title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
     }
     else // No Anamorphic
     {
         sizeInfoString = [NSString stringWithFormat:
-                          @"Source: %dx%d, Output: %dx%d", title->width, title->height,
-                          title->job->width, title->job->height];
-
-        displaySize.width = title->width;
-        displaySize.height = title->height;
-        imageScaledSize.width = title->job->width;
-        imageScaledSize.height = title->job->height;
+                          @"Source: %dx%d, Output: %dx%d",
+                          title->width, title->height, title->job->width, title->job->height];
     }
+    displaySize.width = display_width;
+    displaySize.height = title->job->height;
+    imageScaledSize.width = display_width;
+    imageScaledSize.height = title->job->height;
 
     if (self.backingScaleFactor != 1.0)
     {

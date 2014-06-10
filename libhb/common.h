@@ -78,6 +78,9 @@ typedef struct hb_dither_s hb_dither_t;
 typedef struct hb_mixdown_s hb_mixdown_t;
 typedef struct hb_encoder_s hb_encoder_t;
 typedef struct hb_container_s hb_container_t;
+typedef struct hb_rational_s hb_rational_t;
+typedef struct hb_geometry_s hb_geometry_t;
+typedef struct hb_ui_geometry_s hb_ui_geometry_t;
 typedef struct hb_job_s  hb_job_t;
 typedef struct hb_title_set_s hb_title_set_t;
 typedef struct hb_title_s hb_title_t;
@@ -133,8 +136,9 @@ void hb_reduce( int *x, int *y, int num, int den );
 void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den );
 void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int64_t limit );
 
-#define HB_KEEP_WIDTH  0
-#define HB_KEEP_HEIGHT 1
+#define HB_KEEP_WIDTH           0x01
+#define HB_KEEP_HEIGHT          0x02
+#define HB_KEEP_DISPLAY_ASPECT  0x04
 void hb_fix_aspect( hb_job_t * job, int keep );
 
 void hb_job_set_encoder_preset (hb_job_t *job, const char *preset);
@@ -230,6 +234,34 @@ struct hb_container_s
     const char *long_name;
     const char *default_extension;
     int         format;
+};
+
+struct hb_rational_s
+{
+    int num;
+    int den;
+};
+
+struct hb_geometry_s
+{
+    int width;
+    int height;
+    hb_rational_t par;
+};
+
+struct hb_ui_geometry_s
+{
+    int mode;                   // Anamorphic mode, see job struct anamorphic
+    int keep;                   // Specifies settings that shouldn't be changed
+    int itu_par;                // use dvd dimensions to determine PAR
+    int modulus;                // pixel alignment for loose anamorphic
+    int crop[4];                // Pixels cropped from source before scaling
+    int width;                  // destination storage width
+    int height;                 // destination storage height
+    int maxWidth;               // max destination storage width
+    int maxHeight;              // max destination storage height
+    hb_rational_t par;          // Pixel aspect used in custom anamorphic
+    hb_rational_t dar;          // Display aspect used in custom anamorphic
 };
 
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_subtitle_config_s.cs when changing this struct
@@ -379,6 +411,14 @@ struct hb_title_set_s
 
 extern int hb_gui_use_hwd_flag;
 
+typedef enum
+{
+    HB_ANAMORPHIC_NONE,
+    HB_ANAMORPHIC_STRICT,
+    HB_ANAMORPHIC_LOOSE,
+    HB_ANAMORPHIC_CUSTOM
+} hb_anamorphic_mode_t;
+
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
  * Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_job_s.cs when changing this struct
@@ -422,13 +462,13 @@ struct hb_job_s
 
     struct
     {
-        int             mode;
-        int             itu_par;
-        int             par_width;
-        int             par_height;
-        int             dar_width;  // 0 if normal
-        int             dar_height; // 0 if normal
-        int             keep_display_aspect;
+        hb_anamorphic_mode_t  mode;
+        int                   itu_par;
+        int                   par_width;
+        int                   par_height;
+        int                   dar_width;  // 0 if normal
+        int                   dar_height; // 0 if normal
+        int                   keep_display_aspect;
     } anamorphic;
 
     int             modulus;
