@@ -14,17 +14,20 @@ namespace HandBrake.Interop.Model
     /// </summary>
     public class SrtSubtitle
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the character code.
         /// </summary>
         public string CharacterCode { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether default.
+        /// Gets or sets a value indicating whether the subtitle track should be marked as default.
         /// </summary>
         public bool Default { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating the subtitle track should be burned in.
+		/// </summary>
+		public bool BurnedIn { get; set; }
 
         /// <summary>
         /// Gets or sets the file name.
@@ -41,10 +44,6 @@ namespace HandBrake.Interop.Model
         /// </summary>
         public int Offset { get; set; }
 
-        #endregion
-
-        #region Public Methods
-
         /// <summary>
         /// The clone.
         /// </summary>
@@ -55,14 +54,13 @@ namespace HandBrake.Interop.Model
         {
             return new SrtSubtitle
                        {
-                           Default = this.Default, 
+                           Default = this.Default,
+						   BurnedIn = this.BurnedIn,
                            FileName = this.FileName, 
                            LanguageCode = this.LanguageCode, 
                            CharacterCode = this.CharacterCode, 
                            Offset = this.Offset
                        };
         }
-
-        #endregion
     }
 }

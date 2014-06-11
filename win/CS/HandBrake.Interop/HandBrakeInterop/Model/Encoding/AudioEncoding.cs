@@ -37,6 +37,11 @@ namespace HandBrake.Interop.Model.Encoding
 		public string Encoder { get; set; }
 
 		/// <summary>
+		/// Will pass through the track if it maches the codec type.
+		/// </summary>
+		public bool PassthroughIfPossible { get; set; }
+
+		/// <summary>
 		/// Gets or sets the encode rate type (bitrate or quality).
 		/// </summary>
 		public AudioEncodeRateType EncodeRateType { get; set; }

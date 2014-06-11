@@ -17,7 +17,7 @@ namespace HandBrake.Interop.Model
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether burned in.
+        /// Gets or sets a value indicating whether the subtitle track should be burned in.
         /// </summary>
         public bool BurnedIn { get; set; }
 

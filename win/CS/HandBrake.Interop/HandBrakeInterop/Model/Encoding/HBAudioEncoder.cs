@@ -49,7 +49,7 @@ namespace HandBrake.Interop.Model.Encoding
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether is passthrough.
+        /// Gets a value indicating whether the encoder is passthrough.
         /// </summary>
         public bool IsPassthrough
         {
@@ -70,7 +70,7 @@ namespace HandBrake.Interop.Model.Encoding
         public string ShortName { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether supports compression.
+        /// Gets a value indicating whether the encoder supports compression.
         /// </summary>
         public bool SupportsCompression
         {
@@ -81,7 +81,7 @@ namespace HandBrake.Interop.Model.Encoding
         }
 
         /// <summary>
-        /// Gets a value indicating whether supports quality.
+        /// Gets a value indicating whether the encoder supports quality.
         /// </summary>
         public bool SupportsQuality
         {

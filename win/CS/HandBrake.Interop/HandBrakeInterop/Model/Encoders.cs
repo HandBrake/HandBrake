@@ -177,7 +177,18 @@ namespace HandBrake.Interop.Model
 
 				return containers;
 			}
-		} 
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether SRT subtitles can be burnt in.
+		/// </summary>
+		public static bool CanBurnSrt
+		{
+			get
+			{
+				return HBFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.SRTSUB) > 0;
+			}
+		}
 
 		/// <summary>
 		/// Gets the audio encoder with the specified short name.

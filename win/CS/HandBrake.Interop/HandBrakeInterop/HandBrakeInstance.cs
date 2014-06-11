@@ -11,6 +11,7 @@ namespace HandBrake.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -1284,6 +1285,8 @@ namespace HandBrake.Interop
                     nativeJob.maxWidth = profile.MaxWidth;
                     nativeJob.maxHeight = profile.MaxHeight;
 
+		            nativeJob.modulus = 2;
+
                     break;
                 case Anamorphic.Strict:
                     nativeJob.anamorphic.mode = 1;
@@ -1421,7 +1424,10 @@ namespace HandBrake.Interop
 
             foreach (Tuple<AudioEncoding, int> outputTrack in outputTrackList)
             {
-                audioList.Add(this.ConvertAudioBack(outputTrack.Item1, titleAudio[outputTrack.Item2 - 1], numTracks++, allocatedMemory));
+	            AudioEncoding encoding = outputTrack.Item1;
+	            int trackNumber = outputTrack.Item2;
+
+				audioList.Add(this.ConvertAudioBack(encoding, titleAudio[trackNumber - 1], numTracks++, allocatedMemory));
             }
 
             NativeList nativeAudioList = InteropUtilities.ToHandBrakeListFromList<hb_audio_s>(audioList);
@@ -1483,6 +1489,7 @@ namespace HandBrake.Interop
                     {
                         var subtitleConfig = new hb_subtitle_config_s();
 
+	                    subtitleConfig.dest = srtSubtitle.BurnedIn ? hb_subtitle_config_s_subdest.RENDERSUB : hb_subtitle_config_s_subdest.PASSTHRUSUB;
                         subtitleConfig.src_codeset = srtSubtitle.CharacterCode;
                         subtitleConfig.src_filename = srtSubtitle.FileName;
                         subtitleConfig.offset = srtSubtitle.Offset;
@@ -1766,13 +1773,24 @@ namespace HandBrake.Interop
 				throw new InvalidOperationException("Could not find audio encoder " + encoding.Name);
 			}
 
+	        bool isPassthrough = encoder.IsPassthrough;
+
+	        uint outputCodec = (uint)encoder.Id;
+	        if (encoding.PassthroughIfPossible && 
+				encoder.Id == baseStruct.config.input.codec && 
+				(encoder.Id & NativeConstants.HB_ACODEC_PASS_MASK) > 0)
+	        {
+		        outputCodec |= NativeConstants.HB_ACODEC_PASS_FLAG;
+		        isPassthrough = true;
+	        }
+
             nativeAudio.config.output.track = outputTrack;
-            nativeAudio.config.output.codec = (uint)encoder.Id;
+			nativeAudio.config.output.codec = outputCodec;
             nativeAudio.config.output.compression_level = -1;
             nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
             nativeAudio.config.output.dither_method = -1;
 
-            if (!encoder.IsPassthrough)
+			if (!isPassthrough)
             {
                 if (encoding.SampleRateRaw != 0)
                 {
@@ -1824,7 +1842,10 @@ namespace HandBrake.Interop
                 allocatedMemory.Add(encodingNamePtr);
             }
 
-            nativeAudio.padding = new byte[MarshalingConstants.AudioPaddingBytes];
+	        if (nativeAudio.padding == null)
+	        {
+				nativeAudio.padding = new byte[MarshalingConstants.AudioPaddingBytes];
+	        }
 
             return nativeAudio;
         }
