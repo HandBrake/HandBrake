@@ -386,27 +386,54 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 if (!clear_subtitle)
                 {
-                    unsigned ii;
+                    unsigned ii, x0, y0, x1, y1, w, h;
+
+                    x0 = subtitle.rects[0]->x;
+                    y0 = subtitle.rects[0]->y;
+                    x1 = subtitle.rects[0]->x + subtitle.rects[0]->w;
+                    y1 = subtitle.rects[0]->y + subtitle.rects[0]->h;
+
+                    // First, find total bounding rectangle
+                    for (ii = 1; ii < subtitle.num_rects; ii++)
+                    {
+                        if (subtitle.rects[ii]->x < x0)
+                            x0 = subtitle.rects[ii]->x;
+                        if (subtitle.rects[ii]->y < y0)
+                            y0 = subtitle.rects[ii]->y;
+                        if (subtitle.rects[ii]->x + subtitle.rects[ii]->w > x1)
+                            x1 = subtitle.rects[ii]->x + subtitle.rects[ii]->w;
+                        if (subtitle.rects[ii]->y + subtitle.rects[ii]->h > y1)
+                            y1 = subtitle.rects[ii]->y + subtitle.rects[ii]->h;
+                    }
+                    w = x1 - x0;
+                    h = y1 - y0;
+
+                    out = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, w, h);
+                    memset(out->data, 0, out->size);
+
+                    out->s.frametype    = HB_FRAME_SUBTITLE;
+                    out->s.id           = in->s.id;
+                    out->sequence       = in->sequence;
+                    out->s.start        = pts;
+                    out->s.stop         = AV_NOPTS_VALUE;
+                    out->s.renderOffset = AV_NOPTS_VALUE;
+                    out->f.x            = x0;
+                    out->f.y            = y0;
                     for (ii = 0; ii < subtitle.num_rects; ii++)
                     {
                         AVSubtitleRect *rect = subtitle.rects[ii];
 
-                        out = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P,
-                                                   rect->w, rect->h);
-
-                        out->s.frametype    = HB_FRAME_SUBTITLE;
-                        out->s.id           = in->s.id;
-                        out->sequence       = in->sequence;
-                        out->s.start        = pts;
-                        out->s.stop         = AV_NOPTS_VALUE;
-                        out->s.renderOffset = AV_NOPTS_VALUE;
-                        out->f.x            = rect->x;
-                        out->f.y            = rect->y;
-
+                        int off_x = rect->x - x0;
+                        int off_y = rect->y - y0;
                         uint8_t *lum     = out->plane[0].data;
                         uint8_t *chromaU = out->plane[1].data;
                         uint8_t *chromaV = out->plane[2].data;
                         uint8_t *alpha   = out->plane[3].data;
+
+                        lum     += off_y * out->plane[0].stride + off_x;
+                        alpha   += off_y * out->plane[3].stride + off_x;
+                        chromaU += (off_y >> 1) * out->plane[1].stride + (off_x >> 1);
+                        chromaV += (off_y >> 1) * out->plane[2].stride + (off_x >> 1);
 
                         int xx, yy;
                         for (yy = 0; yy < rect->h; yy++)
@@ -438,18 +465,17 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                             }
                             alpha += out->plane[3].stride;
                         }
-
-                        if ( pv->list_buffer == NULL )
-                        {
-                            pv->list_buffer = pv->last_buffer = out;
-                        }
-                        else
-                        {
-                            pv->last_buffer->next = out;
-                            pv->last_buffer = out;
-                        }
-                        out = NULL;
                     }
+                    if ( pv->list_buffer == NULL )
+                    {
+                        pv->list_buffer = pv->last_buffer = out;
+                    }
+                    else
+                    {
+                        pv->last_buffer->next = out;
+                        pv->last_buffer = out;
+                    }
+                    out = NULL;
                 }
                 else
                 {
