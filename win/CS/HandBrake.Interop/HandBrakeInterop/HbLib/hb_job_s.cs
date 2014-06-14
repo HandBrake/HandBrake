@@ -10,85 +10,85 @@
 
 namespace HandBrake.Interop.HbLib
 {
-	using System;
-	using System.Runtime.InteropServices;
+    using System;
+    using System.Runtime.InteropServices;
 
-	using HandBrake.Interop.Helpers;
+    using HandBrake.Interop.Helpers;
 
     [StructLayout(LayoutKind.Sequential)]
-	public struct hb_job_s
-	{
-		/// int
-		public int sequence_id;
+    public struct hb_job_s
+    {
+        /// int
+        public int sequence_id;
 
-		/// hb_title_t*
-		public IntPtr title;
+        /// hb_title_t*
+        public IntPtr title;
 
-		public int feature;
+        public int feature;
 
-		/// int
-		public int chapter_start;
+        /// int
+        public int chapter_start;
 
-		/// int
-		public int chapter_end;
+        /// int
+        public int chapter_end;
 
-		/// int
-		public int chapter_markers;
+        /// int
+        public int chapter_markers;
 
-		/// int[4]
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
-		public int[] crop;
+        /// int[4]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
+        public int[] crop;
 
-		/// int
-		public int deinterlace;
+        /// int
+        public int deinterlace;
 
-		/// hb_list_t*
-		public IntPtr list_filter;
+        /// hb_list_t*
+        public IntPtr list_filter;
 
-		/// int
-		public int width;
+        /// int
+        public int width;
 
-		/// int
-		public int height;
+        /// int
+        public int height;
 
-		/// int
-		public int keep_ratio;
+        /// int
+        public int keep_ratio;
 
-		/// int
-		public int grayscale;
+        /// int
+        public int grayscale;
 
-		public hb_anamorphic_substruct anamorphic;
+        public hb_anamorphic_substruct anamorphic;
 
-		public int modulus;
+        public int modulus;
 
-		/// int
-		public int maxWidth;
+        /// int
+        public int maxWidth;
 
-		/// int
-		public int maxHeight;
+        /// int
+        public int maxHeight;
 
-		/// int
-		public int vcodec;
+        /// int
+        public int vcodec;
 
-		/// float
-		public float vquality;
+        /// float
+        public float vquality;
 
-		/// int
-		public int vbitrate;
+        /// int
+        public int vbitrate;
 
-		/// int
-		public int vrate;
+        /// int
+        public int vrate;
 
-		/// int
-		public int vrate_base;
+        /// int
+        public int vrate_base;
 
-		/// int
-		public int cfr;
+        /// int
+        public int cfr;
 
-		/// int
-		public int pass;
+        /// int
+        public int pass;
 
-		public int fastfirstpass;
+        public int fastfirstpass;
 
         public IntPtr encoder_preset;
 
@@ -100,136 +100,144 @@ namespace HandBrake.Interop.HbLib
 
         public IntPtr encoder_level;
 
-		/// int
-		public int areBframes;
+        /// int
+        public int areBframes;
 
-		public int color_matrix_code;
+        public int color_matrix_code;
 
-		public int color_prim;
+        public int color_prim;
 
-		public int color_transfer;
+        public int color_transfer;
 
-		/// int
-		public int color_matrix;
+        /// int
+        public int color_matrix;
 
-		public IntPtr list_chapter;
+        public IntPtr list_chapter;
 
-		/// hb_list_t*
-		public IntPtr list_audio;
+        /// hb_list_t*
+        public IntPtr list_audio;
 
-		public int acodec_copy_mask;
-		public int acodec_fallback;
+        public int acodec_copy_mask;
+        public int acodec_fallback;
 
-		/// hb_list_t*
-		public IntPtr list_subtitle;
+        /// hb_list_t*
+        public IntPtr list_subtitle;
 
-		public IntPtr list_attachment;
+        public IntPtr list_attachment;
 
-		public IntPtr metadata;
+        public IntPtr metadata;
 
-		/// int
-		public int mux;
+        /// int
+        public int mux;
 
-		/// char*
-		/// UTF-8 encoded
-		public IntPtr file;
+        /// char*
+        /// UTF-8 encoded
+        public IntPtr file;
 
-		/// int
-		public int largeFileSize;
+        /// int
+        public int largeFileSize;
 
-		/// int
-		public int mp4_optimize;
+        /// int
+        public int mp4_optimize;
 
-		/// int
-		public int ipod_atom;
+        /// int
+        public int ipod_atom;
 
-		/// int
-		public int indepth_scan;
+        /// int
+        public int indepth_scan;
 
-		/// hb_subtitle_config_t->hb_subtitle_config_s
-		public hb_subtitle_config_s select_subtitle_config;
+        /// hb_subtitle_config_t->hb_subtitle_config_s
+        public hb_subtitle_config_s select_subtitle_config;
 
-		/// int
-		public int angle;
+        /// int
+        public int angle;
 
-		public int frame_to_start;
+        public int frame_to_start;
 
-		public long pts_to_start;
+        public long pts_to_start;
 
-		/// int
-		public int frame_to_stop;
+        /// int
+        public int frame_to_stop;
 
-		/// int64_t->int
-		public long pts_to_stop;
+        /// int64_t->int
+        public long pts_to_stop;
 
-		/// int
-		public int start_at_preview;
+        /// int
+        public int start_at_preview;
 
-		/// int
-		public int seek_points;
+        /// int
+        public int seek_points;
 
-		/// uint32_t->unsigned int
-		public uint frames_to_skip;
+        /// uint32_t->unsigned int
+        public uint frames_to_skip;
 
-		public int use_opencl;
+        public int use_opencl;
 
-		public int use_hwd;
+        public int use_hwd;
 
-		public int use_decomb;
+        public int use_decomb;
 
-		public int use_detelecine;
+        public int use_detelecine;
 
-		public qsv_s qsv;
+        public qsv_s qsv;
 
-		// Padding for the part of the struct we don't care about marshaling.
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = MarshalingConstants.JobPaddingBytes, ArraySubType = UnmanagedType.U1)]
-		public byte[] padding;
-	}
+        // Padding for the part of the struct we don't care about marshaling.
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = MarshalingConstants.JobPaddingBytes, ArraySubType = UnmanagedType.U1)]
+        public byte[] padding;
+    }
 
-	[StructLayout(LayoutKind.Sequential)]
-	public struct hb_anamorphic_substruct
-	{
-		/// int
-		public int mode;
+    public enum hb_anamorphic_mode_t
+    {
+        HB_ANAMORPHIC_NONE,
+        HB_ANAMORPHIC_STRICT,
+        HB_ANAMORPHIC_LOOSE,
+        HB_ANAMORPHIC_CUSTOM
+    } ;
 
-		/// int
-		public int itu_par;
+    [StructLayout(LayoutKind.Sequential)]
+    public struct hb_anamorphic_substruct
+    {
+        /// int
+        public hb_anamorphic_mode_t mode;
 
-		/// int
-		public int par_width;
+        /// int
+        public int itu_par;
 
-		/// int
-		public int par_height;
+        /// int
+        public int par_width;
 
-		/// int
-		public int dar_width;
+        /// int
+        public int par_height;
 
-		/// int
-		public int dar_height;
+        /// int
+        public int dar_width;
 
-		/// int
-		public int keep_display_aspect;
-	}
+        /// int
+        public int dar_height;
 
-	[StructLayout(LayoutKind.Sequential)]
-	public struct qsv_enc_info_s
-	{
-		public int pic_struct;
-		public int align_width;
-		public int align_height;
-		public int is_init_done;
-	}
+        /// int
+        public int keep_display_aspect;
+    }
 
-	[StructLayout(LayoutKind.Sequential)]
-	public struct qsv_s
-	{
-		public int decode;
+    [StructLayout(LayoutKind.Sequential)]
+    public struct qsv_enc_info_s
+    {
+        public int pic_struct;
+        public int align_width;
+        public int align_height;
+        public int is_init_done;
+    }
 
-		public int async_depth;
+    [StructLayout(LayoutKind.Sequential)]
+    public struct qsv_s
+    {
+        public int decode;
 
-		/// av_qsv_context* 
-		public IntPtr ctx;
+        public int async_depth;
 
-		public qsv_enc_info_s enc_info;
-	} 
+        /// av_qsv_context* 
+        public IntPtr ctx;
+
+        public qsv_enc_info_s enc_info;
+    }
 }
