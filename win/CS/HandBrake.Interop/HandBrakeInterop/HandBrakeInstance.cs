@@ -1289,13 +1289,13 @@ namespace HandBrake.Interop
 
                     break;
                 case Anamorphic.Strict:
-                    nativeJob.anamorphic.mode = 1;
+                    nativeJob.anamorphic.mode = hb_anamorphic_mode_t.HB_ANAMORPHIC_STRICT;
 
                     nativeJob.anamorphic.par_width = title.ParVal.Width;
                     nativeJob.anamorphic.par_height = title.ParVal.Height;
                     break;
                 case Anamorphic.Loose:
-                    nativeJob.anamorphic.mode = 2;
+                    nativeJob.anamorphic.mode = hb_anamorphic_mode_t.HB_ANAMORPHIC_LOOSE;
 
                     nativeJob.modulus = profile.Modulus;
 
@@ -1307,7 +1307,7 @@ namespace HandBrake.Interop
                     nativeJob.anamorphic.par_height = title.ParVal.Height;
                     break;
                 case Anamorphic.Custom:
-                    nativeJob.anamorphic.mode = 3;
+                    nativeJob.anamorphic.mode = hb_anamorphic_mode_t.HB_ANAMORPHIC_CUSTOM;
 
                     nativeJob.modulus = profile.Modulus;
 
