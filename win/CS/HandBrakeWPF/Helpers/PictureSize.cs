@@ -177,7 +177,7 @@ namespace HandBrakeWPF.Helpers
                                                      par_width = job.ParW,
                                                      par_height = job.ParH,
                                                      itu_par = 0,
-                                                     mode = (int)job.AnamorphicMode,
+                                                     mode = (hb_anamorphic_mode_t)job.AnamorphicMode,
                                                      dar_width = 0,
                                                      dar_height = 0,
                                                      keep_display_aspect = job.KeepDisplayAspect ? 1 : 0
