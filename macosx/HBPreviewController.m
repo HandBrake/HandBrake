@@ -621,19 +621,19 @@ typedef enum ViewMode : NSUInteger {
     /* Set the picture size display fields below the Preview Picture*/
     int display_width;
     display_width = title->job->width * title->job->anamorphic.par_width / title->job->anamorphic.par_height;
-    if( title->job->anamorphic.mode == 1 ) // Original PAR Implementation
+    if (title->job->anamorphic.mode == HB_ANAMORPHIC_STRICT) // Original PAR Implementation
     {
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
                           title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
     }
-    else if (title->job->anamorphic.mode == 2) // Loose Anamorphic
+    else if (title->job->anamorphic.mode == HB_ANAMORPHIC_LOOSE) // Loose Anamorphic
     {
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
                           title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
     }
-    else if (title->job->anamorphic.mode == 3) // Custom Anamorphic
+    else if (title->job->anamorphic.mode == HB_ANAMORPHIC_CUSTOM) // Custom Anamorphic
     {
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",

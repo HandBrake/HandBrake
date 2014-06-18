@@ -1140,7 +1140,7 @@
     [preset setObject:[NSNumber numberWithInt:720]  forKey:@"PictureHeight"];
     [preset setObject:[NSNumber numberWithInt:0]    forKey:@"PicturePAR"]; //None
     [preset setObject:[NSNumber numberWithInt:2]    forKey:@"PictureModulus"];
-    [preset setObject:[NSNumber numberWithInt:0]    forKey:@"PictureKeepRatio"]; //set to 0 for Loose (FIXME: why?)
+    [preset setObject:[NSNumber numberWithInt:1]    forKey:@"PictureKeepRatio"];
     
     /* Picture filters */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];

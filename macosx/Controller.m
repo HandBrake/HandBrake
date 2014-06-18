@@ -2720,24 +2720,11 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
+	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
     [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
-    /* if we are custom anamorphic, store the exact storage, par and display dims */
-    if (fTitle->job->anamorphic.mode == 3)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PicturePARModulus"];
-        
-        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PicturePARStorageWidth"];
-        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PicturePARStorageHeight"];
-        
-        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_width] forKey:@"PicturePARPixelWidth"];
-        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_height] forKey:@"PicturePARPixelHeight"];
-        
-        [queueFileJob setObject:[NSNumber numberWithFloat:fTitle->job->anamorphic.dar_width] forKey:@"PicturePARDisplayWidth"];
-        [queueFileJob setObject:[NSNumber numberWithFloat:fTitle->job->anamorphic.dar_height] forKey:@"PicturePARDisplayHeight"];
-
-    }
+    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_width] forKey:@"PicturePARPixelWidth"];
+    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_height] forKey:@"PicturePARPixelHeight"];
 
     /* Text summaries of various settings */
     [queueFileJob setObject:[NSString stringWithString:[self pictureSettingsSummary]]
@@ -2808,23 +2795,6 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInteger:[fVidRatePopUp indexOfSelectedItem]] forKey:@"JobIndexVideoFramerate"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->rate]                         forKey:@"JobVrate"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->rate_base]                    forKey:@"JobVrateBase"];
-	
-    /* Picture Sizing */
-	/* Use Max Picture settings for whatever the dvd is.*/
-	[queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
-    
-    /* Set crop settings here */
-	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
-    [queueFileJob setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    [queueFileJob setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
-    
-    
 
     /* we need to auto relase the queueFileJob and return it */
     [queueFileJob autorelease];
@@ -3226,47 +3196,14 @@ fWorkingCount = 0;
         job->crop[3] = AutoCropRight;
         
     }
-    
-    job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
-    
-    /*
-     * if the preset specifies neither max. width nor height
-     * (both are 0), use the max. picture size
-     *
-     * if the specified non-zero dimensions exceed those of the
-     * source, also use the max. picture size (no upscaling)
-     */
-    if (([[queueToApply objectForKey:@"PictureWidth"]  intValue] <= 0 &&
-         [[queueToApply objectForKey:@"PictureHeight"] intValue] <= 0)              ||
-        ([[queueToApply objectForKey:@"PictureWidth"]  intValue] >  fTitle->width &&
-         [[queueToApply objectForKey:@"PictureHeight"] intValue] >  fTitle->height) ||
-        ([[queueToApply objectForKey:@"PictureHeight"] intValue] <= 0 &&
-         [[queueToApply objectForKey:@"PictureWidth"]  intValue] >  fTitle->width)  ||
-        ([[queueToApply objectForKey:@"PictureWidth"]  intValue] <= 0 &&
-         [[queueToApply objectForKey:@"PictureHeight"] intValue] >  fTitle->height))
-    {
-        /* use the source's width/height to avoid upscaling */
-        [self revertPictureSizeToMax:nil];
-    }
-    else // source width/height is >= preset width/height
-    {
-        /* use the preset values for width/height */
-        job->width  = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
-        job->height = [[queueToApply objectForKey:@"PictureHeight"] intValue];
-    }
-    job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
-    if (job->keep_ratio == 1)
-    {
-        hb_fix_aspect( job, HB_KEEP_WIDTH );
-        if( job->height > fTitle->height )
-        {
-            job->height = fTitle->height;
-            hb_fix_aspect( job, HB_KEEP_HEIGHT );
-        }
-    }
+
     job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
     job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
-    
+    job->maxWidth = job->maxHeight = 0;
+    job->anamorphic.keep_display_aspect = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
+    job->width  = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
+    job->height  = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
+
     /* Filters */
     
     /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key. */
@@ -4004,30 +3941,18 @@ bool one_burned = FALSE;
                                    [[queueToApply objectForKey:@"lavcOption"]
                                     UTF8String]);
     }
-    
-    
+
     /* Picture Size Settings */
     job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
     job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
-    
-    job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
+
+    job->anamorphic.keep_display_aspect = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
     job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
     job->modulus = [[queueToApply objectForKey:@"PictureModulus"] intValue];
-    if ([[queueToApply objectForKey:@"PicturePAR"]  intValue] == 3)
-    {
-        /* insert our custom values here for capuj */
-        job->width = [[queueToApply objectForKey:@"PicturePARStorageWidth"]  intValue];
-        job->height = [[queueToApply objectForKey:@"PicturePARStorageHeight"]  intValue];
-        
-        job->modulus = [[queueToApply objectForKey:@"PicturePARModulus"] intValue];
-        
-        job->anamorphic.par_width = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
-        job->anamorphic.par_height = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
-        
-        job->anamorphic.dar_width = [[queueToApply objectForKey:@"PicturePARDisplayWidth"]  floatValue];
-        job->anamorphic.dar_height = [[queueToApply objectForKey:@"PicturePARDisplayHeight"]  floatValue];
-    }
-    
+    job->anamorphic.par_width = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
+    job->anamorphic.par_height = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
+    job->anamorphic.dar_width = job->anamorphic.dar_height = 0;
+
     /* Here we use the crop values saved at the time the preset was saved */
     job->crop[0] = [[queueToApply objectForKey:@"PictureTopCrop"]  intValue];
     job->crop[1] = [[queueToApply objectForKey:@"PictureBottomCrop"]  intValue];
@@ -4896,10 +4821,6 @@ bool one_burned = FALSE;
 	AutoCropLeft = title->crop[2];
 	AutoCropRight = title->crop[3];
 
-	/* Reset the new title in fPictureController &&  fPreviewController*/
-    [fPictureController setTitle:title];
-
-        
     /* Update Subtitle Table */
     [fSubtitlesDelegate resetWithTitle:title];
     [fSubtitlesTable reloadData];
@@ -4917,9 +4838,6 @@ bool one_burned = FALSE;
 											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
 											nil]]];
     [fVidRatePopUp selectItemAtIndex: 0];
-
-    /* we run the picture size values through calculatePictureSizing to get all picture setting	information*/
-	[self calculatePictureSizing:nil];
 
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
     [self selectPreset:nil];
@@ -5865,11 +5783,6 @@ the user is using "Custom" settings by determining the sender*/
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) calculatePictureSizing: (id) sender
 {
-    if (fTitle->job->anamorphic.mode > 0)
-    {
-        fTitle->job->keep_ratio = 0;
-    }
-    
     // align picture settings and video filters in the UI using tabs
     [fPictureSettingsField setStringValue:[NSString stringWithFormat:@"Picture Settings:  \t %@",
                                            [self pictureSettingsSummary]]];
@@ -5892,7 +5805,7 @@ the user is using "Custom" settings by determining the sender*/
     if (fPictureController && fTitle && fTitle->job)
     {
         [summary appendString:[fPictureController pictureSizeInfoString]];
-        if (fTitle->job->anamorphic.mode != 1)
+        if (fTitle->job->anamorphic.mode != HB_ANAMORPHIC_STRICT)
         {
             // anamorphic is not Strict, show the modulus
             [summary appendFormat:@", Modulus: %d", fTitle->job->modulus];
@@ -6505,6 +6418,8 @@ return YES;
 {
     if (YES == [self hasValidPresetSelected])
     {
+        hb_job_t * job = fTitle->job;
+
         // for mapping names via libhb
         int         intValue;
         const char *strValue;
@@ -6748,14 +6663,15 @@ return YES;
          * height, width, keep ar, anamorphic and crop settings.
          * picture filters are handled separately below.
          */
+        int maxWidth = fTitle->width - job->crop[2] - job->crop[3];
+        int maxHeight = fTitle->height - job->crop[0] - job->crop[1];
+        job->maxWidth = job->maxHeight = 0;
         /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None" 
          * ( 2 is use max for source and 1 is use exact size when the preset was created ) and the 
          * preset completely ignores any picture sizing values in the preset.
          */
         if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
         {
-            hb_job_t * job = fTitle->job;
-            
             /* If Cropping is set to custom, then recall all four crop values from
              when the preset was created and apply them */
             if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
@@ -6780,6 +6696,10 @@ return YES;
                 
             }
             
+            /* crop may have changed, reset maxWidth/maxHeight */
+            maxWidth = fTitle->width - job->crop[2] - job->crop[3];
+            maxHeight = fTitle->height - job->crop[0] - job->crop[1];
+
             /* Set modulus */
             if ([chosenPreset objectForKey:@"PictureModulus"])
             {
@@ -6789,29 +6709,22 @@ return YES;
             {
                 job->modulus = 16;
             }
-             
+
+            /*
+             * Assume max picture settings initially
+             */
+            job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+            job->width = fTitle->width - job->crop[2] - job->crop[3];
+            job->height = fTitle->height - job->crop[0] - job->crop[1];
+            job->anamorphic.keep_display_aspect = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+
             /* Check to see if the objectForKey:@"UsesPictureSettings" is 2,
-             * which means "Use max. picture size for the source" */
-            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]    intValue] == 2 ||
-                [[chosenPreset objectForKey:@"UsesMaxPictureSettings"] intValue] == 1)
-            {
-                /* Use Max Picture settings for whatever the dvd is.*/
-                [self revertPictureSizeToMax:nil];
-                job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-                if (job->keep_ratio == 1)
-                {
-                    hb_fix_aspect( job, HB_KEEP_WIDTH );
-                    if( job->height > fTitle->height )
-                    {
-                        job->height = fTitle->height;
-                        hb_fix_aspect( job, HB_KEEP_HEIGHT );
-                    }
-                }
-                job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-            }
-            /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings" is 1,
-             * which means "Use the picture size specified in the preset" */
-            else
+             * which means "Use max. picture size for source"
+             * If not 2 it must be 1 here which means "Use the picture
+             * size specified in the preset"
+             */
+            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]    intValue] != 2 &&
+                [[chosenPreset objectForKey:@"UsesMaxPictureSettings"] intValue] != 1)
             {
                 /*
                  * if the preset specifies neither max. width nor height
@@ -6820,62 +6733,35 @@ return YES;
                  * if the specified non-zero dimensions exceed those of the
                  * source, also use the max. picture size (no upscaling)
                  */
-                if (([[chosenPreset objectForKey:@"PictureWidth"]  intValue] <= 0 &&
-                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] <= 0)              ||
-                    ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] >  fTitle->width &&
-                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] >  fTitle->height) ||
-                    ([[chosenPreset objectForKey:@"PictureHeight"] intValue] <= 0 &&
-                     [[chosenPreset objectForKey:@"PictureWidth"]  intValue] >  fTitle->width)  ||
-                    ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] <= 0 &&
-                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] >  fTitle->height))
+                if ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] > 0)
                 {
-                    /* use the source's width/height to avoid upscaling */
-                    [self revertPictureSizeToMax:nil];
+                    job->maxWidth  = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
                 }
-                else // source width/height is >= preset width/height
+                if ([[chosenPreset objectForKey:@"PictureHeight"]  intValue] > 0)
                 {
-                    /* use the preset values for width/height */
-                    job->width  = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-                    job->height = [[chosenPreset objectForKey:@"PictureHeight"] intValue];
+                    job->maxHeight  = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
                 }
-                job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-                if (job->keep_ratio == 1)
-                {
-                    int height = fTitle->height;
-
-                    if ( job->height && job->height < fTitle->height )
-                        height = job->height;
-
-                    hb_fix_aspect( job, HB_KEEP_WIDTH );
-                    // Make sure the resulting height is less than
-                    // the title height and less than the height
-                    // requested in the preset.
-                    if( job->height > height )
-                    {
-                        job->height = height;
-                        hb_fix_aspect( job, HB_KEEP_HEIGHT );
-                    }
-                }
-                job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-                if ( job->anamorphic.mode > 0 )
-                {
-                    int w, h, par_w, par_h;
-
-                    job->anamorphic.par_width = fTitle->pixel_aspect_width;
-                    job->anamorphic.par_height = fTitle->pixel_aspect_height;
-                    job->maxWidth = job->width;
-                    job->maxHeight = job->height;
-                    hb_set_anamorphic_size( job, &w, &h, &par_w, &par_h );
-                    job->maxWidth = 0;
-                    job->maxHeight = 0;
-                    job->width = w;
-                    job->height = h;
-                }
-                
             }
-            
-            
         }
+        /* Modulus added to maxWidth/maxHeight to allow a small amount of
+         * upscaling to the next mod boundary. This does not apply to 
+         * explicit limits set for device compatibility.  It only applies
+         * when limiting to cropped title dimensions.
+         */
+        maxWidth += job->modulus - 1;
+        maxHeight += job->modulus - 1;
+        if (job->maxWidth == 0 || job->maxWidth > maxWidth)
+            job->maxWidth = maxWidth;
+        if (job->maxHeight == 0 || job->maxHeight > maxHeight)
+            job->maxHeight = maxHeight;
+
+        int width, height, par_width, par_height;
+        hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
+        job->width = width;
+        job->height = height;
+        job->anamorphic.par_width = par_width;
+        job->anamorphic.par_height = par_height;
+
         /* If the preset has an objectForKey:@"UsesPictureFilters", and handle the filters here */
         if ([chosenPreset objectForKey:@"UsesPictureFilters"] && [[chosenPreset objectForKey:@"UsesPictureFilters"]  intValue] > 0)
         {
@@ -6968,10 +6854,10 @@ return YES;
                 [fPictureController setGrayscale:0];
             }
         }
-        /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-        [fPictureController setTitle:fTitle];
-        [self calculatePictureSizing:nil];
     }
+    /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
+    [fPictureController setTitle:fTitle];
+    [self calculatePictureSizing:nil];
 }
 
 
@@ -7078,7 +6964,7 @@ return YES;
     [fPresetNewPicSettingsPopUp removeAllItems];
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"None"];
     [[fPresetNewPicSettingsPopUp lastItem] setTag: 0];
-    if (fTitle->job->anamorphic.mode != 1)
+    if (fTitle->job->anamorphic.mode != HB_ANAMORPHIC_STRICT)
     {
         // not Strict, Custom is applicable
         [fPresetNewPicSettingsPopUp addItemWithTitle:@"Custom"];
@@ -7090,7 +6976,7 @@ return YES;
      * Default to Source Maximum for anamorphic Strict
      * Default to Custom for all other anamorphic modes
      */
-    [fPresetNewPicSettingsPopUp selectItemWithTag: (1 + (fTitle->job->anamorphic.mode == 1))];
+    [fPresetNewPicSettingsPopUp selectItemWithTag: (1 + (fTitle->job->anamorphic.mode == HB_ANAMORPHIC_STRICT))];
     /* Save the current filters in the preset by default */
     [fPresetNewPicFiltersCheck setState:NSOnState];
     // fPresetNewFolderCheck
@@ -7292,10 +7178,10 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
         [preset setObject:[NSNumber numberWithInt:[fPresetNewPicWidth intValue]] forKey:@"PictureWidth"];
         [preset setObject:[NSNumber numberWithInt:[fPresetNewPicHeight intValue]] forKey:@"PictureHeight"];
-        [preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
+        [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
-        
+
         /* Set crop settings here */
         [preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
         [preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];

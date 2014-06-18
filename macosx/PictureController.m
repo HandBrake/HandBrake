@@ -756,8 +756,11 @@
     memcpy(uiGeo.crop, job->crop, sizeof(int[4]));
     uiGeo.width = job->width;
     uiGeo.height =  job->height;
-    uiGeo.maxWidth = fTitle->width - job->crop[2] - job->crop[3];
-    uiGeo.maxHeight = fTitle->height - job->crop[0] - job->crop[1];
+    /* Modulus added to maxWidth/maxHeight to allow a small amount of
+     * upscaling to the next mod boundary.
+     */
+    uiGeo.maxWidth = fTitle->width - job->crop[2] - job->crop[3] + job->modulus - 1;
+    uiGeo.maxHeight = fTitle->height - job->crop[0] - job->crop[1] + job->modulus - 1;
     uiGeo.par.num = job->anamorphic.par_width;
     uiGeo.par.den = job->anamorphic.par_height;
     uiGeo.dar.num = 0;

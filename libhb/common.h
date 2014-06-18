@@ -139,7 +139,6 @@ void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int6
 #define HB_KEEP_WIDTH           0x01
 #define HB_KEEP_HEIGHT          0x02
 #define HB_KEEP_DISPLAY_ASPECT  0x04
-void hb_fix_aspect( hb_job_t * job, int keep );
 
 void hb_job_set_encoder_preset (hb_job_t *job, const char *preset);
 void hb_job_set_encoder_tune   (hb_job_t *job, const char *tune);
@@ -444,7 +443,6 @@ struct hb_job_s
          deinterlace:         0 or 1
          width:               must be a multiple of 2
          height:              must be a multiple of 2
-         keep_ratio:          used by UIs
          grayscale:           black and white encoding
          pixel_ratio:         store pixel aspect ratio in the video
          pixel_aspect_width:  numerator for pixel aspect ratio
@@ -457,7 +455,6 @@ struct hb_job_s
     hb_list_t     * list_filter;
     int             width;
     int             height;
-    int             keep_ratio;
     int             grayscale;
 
     struct

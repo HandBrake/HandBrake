@@ -2332,74 +2332,6 @@ void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int6
 }
 
 /**********************************************************************
- * hb_fix_aspect
- **********************************************************************
- * Given the output width (if HB_KEEP_WIDTH) or height
- * (HB_KEEP_HEIGHT) and the current crop values, calculates the
- * correct height or width in order to respect the DVD aspect ratio
- *********************************************************************/
-void hb_fix_aspect( hb_job_t * job, int keep )
-{
-    hb_title_t * title = job->title;
-    int          i;
-    int  min_width;
-    int min_height;
-    int    modulus;
-
-    /* don't do anything unless the title has complete size info */
-    if ( title->height == 0 || title->width == 0 || title->aspect == 0 )
-    {
-        hb_log( "hb_fix_aspect: incomplete info for title %d: "
-                "height = %d, width = %d, aspect = %.3f",
-                title->index, title->height, title->width, title->aspect );
-        return;
-    }
-
-    // min_width and min_height should be multiples of modulus
-    min_width    = 32;
-    min_height   = 32;
-    modulus      = job->modulus ? job->modulus : 16;
-
-    for( i = 0; i < 4; i++ )
-    {
-        // Sanity check crop values are zero or positive multiples of 2
-        if( i < 2 )
-        {
-            // Top, bottom
-            job->crop[i] = MIN( EVEN( job->crop[i] ), EVEN( ( title->height / 2 ) - ( min_height / 2 ) ) );
-            job->crop[i] = MAX( 0, job->crop[i] );
-        }
-        else
-        {
-            // Left, right
-            job->crop[i] = MIN( EVEN( job->crop[i] ), EVEN( ( title->width / 2 ) - ( min_width / 2 ) ) );
-            job->crop[i] = MAX( 0, job->crop[i] );
-        }
-    }
-
-    double par = (double)title->width / ( (double)title->height * title->aspect );
-    double cropped_sar = (double)( title->height - job->crop[0] - job->crop[1] ) /
-                         (double)( title->width - job->crop[2] - job->crop[3] );
-    double ar = par * cropped_sar;
-
-    // Dimensions must be greater than minimum and multiple of modulus
-    if( keep == HB_KEEP_WIDTH )
-    {
-        job->width  = MULTIPLE_MOD( job->width, modulus );
-        job->width  = MAX( min_width, job->width );
-        job->height = MULTIPLE_MOD( (uint64_t)( (double)job->width * ar ), modulus );
-        job->height = MAX( min_height, job->height );
-    }
-    else
-    {
-        job->height = MULTIPLE_MOD( job->height, modulus );
-        job->height = MAX( min_height, job->height );
-        job->width  = MULTIPLE_MOD( (uint64_t)( (double)job->height / ar ), modulus );
-        job->width  = MAX( min_width, job->width );
-    }
-}
-
-/**********************************************************************
  * hb_list implementation
  **********************************************************************
  * Basic and slow, but enough for what we need
@@ -3036,14 +2968,15 @@ static void job_setup( hb_job_t * job, hb_title_t * title )
     }
 
     job->width = title->width - job->crop[2] - job->crop[3];
-    hb_fix_aspect( job, HB_KEEP_WIDTH );
-    if( job->height > title->height - job->crop[0] - job->crop[1] )
-    {
-        job->height = title->height - job->crop[0] - job->crop[1];
-        hb_fix_aspect( job, HB_KEEP_HEIGHT );
-    }
+    job->height = title->height - job->crop[0] - job->crop[1];
+    job->anamorphic.keep_display_aspect = 1;
 
-    job->keep_ratio = 1;
+    int width, height, par_width, par_height;
+    hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
+    job->width = width;
+    job->height = height;
+    job->anamorphic.par_width = par_width;
+    job->anamorphic.par_height = par_height;
 
     job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
     job->vquality   = -1.0;

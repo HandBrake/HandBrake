@@ -1721,10 +1721,14 @@ static int HandleEvents( hb_handle_t * h )
                 job->use_hwd = use_hwd;
             }
 
+            job->anamorphic.mode = anamorphic_mode;
             switch( anamorphic_mode )
             {
                 case 0: // Non-anamorphic
+                {
+                    hb_ui_geometry_t ui_geo;
 
+                    ui_geo.keep = 0;
                     if (modulus)
                     {
                         job->modulus = modulus;
@@ -1734,43 +1738,65 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         job->width  = width;
                         job->height = height;
+                        ui_geo.keep |= HB_KEEP_WIDTH;
                     }
                     else if( width )
                     {
                         job->width = width;
+                        ui_geo.keep |= HB_KEEP_WIDTH;
                         // do not exceed source dimensions by default
                         if( !maxHeight )
                             job->maxHeight = title->height;
-                        hb_fix_aspect( job, HB_KEEP_WIDTH );
                     }
                     else if( height )
                     {
                         job->height = height;
+                        ui_geo.keep |= HB_KEEP_HEIGHT;
                         // do not exceed source dimensions by default
                         if( !maxWidth )
                             job->maxWidth = title->width;
-                        hb_fix_aspect( job, HB_KEEP_HEIGHT );
                     }
-                    else if( !width && !height )
+                    else // if( !width && !height )
                     {
                         /* Default to cropped width when one isn't specified
                          * avoids rounding to mod 16 regardless of modulus */
                         job->width = title->width - job->crop[2] - job->crop[3];
+                        ui_geo.keep |= HB_KEEP_WIDTH;
                         // do not exceed source dimensions by default
                         if( !maxHeight )
                             job->maxHeight = title->height;
-                        hb_fix_aspect( job, HB_KEEP_WIDTH );
                     }
+                    hb_geometry_t result;
+                    hb_geometry_t src;
 
+                    src.width = title->width;
+                    src.height = title->height;
+                    src.par.num = title->pixel_aspect_width;
+                    src.par.den = title->pixel_aspect_height;
+
+                    ui_geo.width = job->width;
+                    ui_geo.height = job->height;
+
+                    ui_geo.modulus = job->modulus;
+                    memcpy(ui_geo.crop, job->crop, sizeof(int[4]));
+                    ui_geo.maxWidth = job->maxWidth;
+                    ui_geo.maxHeight = job->maxHeight;
+                    ui_geo.mode = anamorphic_mode;
+                    if (keep_display_aspect)
+                        ui_geo.keep |= HB_KEEP_DISPLAY_ASPECT;
+
+                    hb_set_anamorphic_size2(&src, &ui_geo, &result);
+                    job->width = result.width;
+                    job->height = result.height;
+                    job->anamorphic.par_width = result.par.num;
+                    job->anamorphic.par_height = result.par.den;
+                }
                 break;
                 
                 case 1: // Strict anammorphic
-                    job->anamorphic.mode = anamorphic_mode;
                 break;
                 
                 case 2: // Loose anamorphic
-                    job->anamorphic.mode = 2;
-                    
                     if (modulus)
                     {
                         job->modulus = modulus;
@@ -1794,8 +1820,6 @@ static int HandleEvents( hb_handle_t * h )
                 break;
                 
                 case 3: // Custom Anamorphic 3: Power User Jamboree 
-                    job->anamorphic.mode = 3;
-                    
                     if (modulus)
                     {
                         job->modulus = modulus;

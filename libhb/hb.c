@@ -1303,119 +1303,12 @@ void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * se
  */
 void hb_validate_size( hb_job_t * job )
 {
-    if ( job->anamorphic.mode )
-    {
-        hb_set_anamorphic_size( job, &job->width, &job->height,
-            &job->anamorphic.par_width, &job->anamorphic.par_height );
-    }
-    else
-    {
-        if ( job->maxHeight && ( job->height > job->maxHeight )  )
-        {
-            job->height = job->maxHeight;
-            hb_fix_aspect( job, HB_KEEP_HEIGHT );
-            hb_log( "Height out of bounds, scaling down to %i",
-                    job->maxHeight );
-            hb_log( "New dimensions %i * %i", job->width, job->height );
-        }
-        if ( job->maxWidth && ( job->width > job->maxWidth )  )
-        {
-            job->width = job->maxWidth;
-            hb_fix_aspect( job, HB_KEEP_WIDTH );
-            hb_log( "Width out of bounds, scaling down to %i",
-                    job->maxWidth );
-            hb_log( "New dimensions %i * %i", job->width, job->height );
-        }
-    }
-}
-
-/**
- * Calculates job width, height, and cropping parameters.
- * @param job Handle to hb_job_t.
- * @param aspect Desired aspect ratio. Value of -1 uses title aspect.
- * @param pixels Maximum desired pixel count.
- */
-void hb_set_size( hb_job_t * job, double aspect, int pixels )
-{
-    hb_title_t * title = job->title;
-
-    int croppedWidth  = title->width - title->crop[2] - title->crop[3];
-    int croppedHeight = title->height - title->crop[0] - title->crop[1];
-    double croppedAspect = title->aspect * title->height * croppedWidth /
-                           croppedHeight / title->width;
-    int addCrop;
-    int i, w, h;
-
-    if( aspect <= 0 )
-    {
-        /* Keep the best possible aspect ratio */
-        aspect = croppedAspect;
-    }
-
-    /* Crop if necessary to obtain the desired ratio */
-    memcpy( job->crop, title->crop, 4 * sizeof( int ) );
-    if( aspect < croppedAspect )
-    {
-        /* Need to crop on the left and right */
-        addCrop = croppedWidth - aspect * croppedHeight * title->width /
-                    title->aspect / title->height;
-        if( addCrop & 3 )
-        {
-            addCrop = ( addCrop + 1 ) / 2;
-            job->crop[2] += addCrop;
-            job->crop[3] += addCrop;
-        }
-        else if( addCrop & 2 )
-        {
-            addCrop /= 2;
-            job->crop[2] += addCrop - 1;
-            job->crop[3] += addCrop + 1;
-        }
-        else
-        {
-            addCrop /= 2;
-            job->crop[2] += addCrop;
-            job->crop[3] += addCrop;
-        }
-    }
-    else if( aspect > croppedAspect )
-    {
-        /* Need to crop on the top and bottom */
-        addCrop = croppedHeight - croppedWidth * title->aspect *
-            title->height / aspect / title->width;
-        if( addCrop & 3 )
-        {
-            addCrop = ( addCrop + 1 ) / 2;
-            job->crop[0] += addCrop;
-            job->crop[1] += addCrop;
-        }
-        else if( addCrop & 2 )
-        {
-            addCrop /= 2;
-            job->crop[0] += addCrop - 1;
-            job->crop[1] += addCrop + 1;
-        }
-        else
-        {
-            addCrop /= 2;
-            job->crop[0] += addCrop;
-            job->crop[1] += addCrop;
-        }
-    }
-
-    /* Compute a resolution from the number of pixels and aspect */
-    for( i = 0;; i++ )
-    {
-        w = 16 * i;
-        h = MULTIPLE_16( (int)( (double)w / aspect ) );
-        if( w * h > pixels )
-        {
-            break;
-        }
-    }
-    i--;
-    job->width  = 16 * i;
-    job->height = MULTIPLE_16( (int)( (double)job->width / aspect ) );
+    int width, height, par_width, par_height;
+    hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
+    job->width = width;
+    job->height = height;
+    job->anamorphic.par_width = par_width;
+    job->anamorphic.par_height = par_height;
 }
 
 /**

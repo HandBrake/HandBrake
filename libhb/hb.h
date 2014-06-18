@@ -71,7 +71,6 @@ int           hb_save_preview( hb_handle_t * h, int title, int preview,
 hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview );
 void          hb_get_preview( hb_handle_t *, hb_job_t *, int,
                               uint8_t * );
-void          hb_set_size( hb_job_t *, double ratio, int pixels );
 void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                       hb_ui_geometry_t *ui_geo,
                                       hb_geometry_t *result);
