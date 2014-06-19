@@ -1210,6 +1210,7 @@ enum
     // Filters that must operate on the original source image are next
     HB_FILTER_DEBLOCK,
     HB_FILTER_DENOISE,
+    HB_FILTER_NLMEANS,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
 

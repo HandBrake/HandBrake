@@ -3247,6 +3247,10 @@ hb_filter_object_t * hb_filter_init( int filter_id )
             filter = &hb_filter_denoise;
             break;
 
+        case HB_FILTER_NLMEANS:
+            filter = &hb_filter_nlmeans;
+            break;
+
         case HB_FILTER_RENDER_SUB:
             filter = &hb_filter_render_sub;
             break;
