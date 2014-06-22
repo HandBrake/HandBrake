@@ -15,7 +15,6 @@
 #include <time.h>
 #include <unistd.h>
 #include <inttypes.h>
-#include <regex.h>
 
 #if defined( __MINGW32__ )
 #include <windows.h>
