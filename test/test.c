@@ -15,6 +15,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <inttypes.h>
+#include <regex.h>
 
 #if defined( __MINGW32__ )
 #include <windows.h>
@@ -4133,7 +4134,7 @@ static int ParseOptions( int argc, char ** argv )
                 denoise = 1;
                 break;
             case FILTER_NLMEANS:
-                if(optarg != NULL)
+                if (optarg != NULL)
                 {
                     free(nlmeans_opt);
                     nlmeans_opt = strdup(optarg);
@@ -4141,19 +4142,10 @@ static int ParseOptions( int argc, char ** argv )
                 nlmeans = 1;
                 break;
             case FILTER_NLMEANS_TUNE:
-                if (!strcmp(optarg, "none") ||
-                    !strcmp(optarg, "film") ||
-                    !strcmp(optarg, "grain") ||
-                    !strcmp(optarg, "highmotion") ||
-                    !strcmp(optarg, "animation"))
+                if (optarg != NULL)
                 {
                     free(nlmeans_tune_opt);
                     nlmeans_tune_opt = strdup(optarg);
-                }
-                else
-                {
-                    fprintf(stderr, "invalid nlmeans tune (%s)\n", optarg);
-                    return -1;
                 }
                 break;
             case '9':
@@ -4605,6 +4597,11 @@ static int ParseOptions( int argc, char ** argv )
                     strength[0] = 10; strength[1] = 8;
                 }
             }
+            else
+            {
+                fprintf(stderr, "Unrecognized nlmeans tune (%s).\n", nlmeans_tune_opt);
+                return -1;
+            }
 
             sprintf(opt, "%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d",
                     strength[0], origin_tune[0], patch_size[0], range[0], frames[0], prefilter[0],
@@ -4613,6 +4610,20 @@ static int ParseOptions( int argc, char ** argv )
             free(nlmeans_opt);
             nlmeans_opt = strdup(opt);
 
+        }
+        else
+        {
+            if (nlmeans_tune_opt != NULL)
+            {
+                fprintf(stdout, "Custom nlmeans parameters specified; ignoring nlmeans tune (%s).\n", nlmeans_tune_opt);
+            }
+        }
+    }
+    else if (nlmeans == 1 && nlmeans_opt == NULL)
+    {
+        if (nlmeans_tune_opt != NULL)
+        {
+            fprintf(stdout, "Default nlmeans parameters specified; ignoring nlmeans tune (%s).\n", nlmeans_tune_opt);
         }
     }
 
