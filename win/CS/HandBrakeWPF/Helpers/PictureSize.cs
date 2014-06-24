@@ -184,7 +184,6 @@ namespace HandBrakeWPF.Helpers
                                                  },
                                          maxWidth = title.Width,
                                          maxHeight = title.Height,
-                                         keep_ratio = job.KeepDisplayAspect ? 1 : 0,
                                          width = job.Width,
                                          height = job.Height,
                                          crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right }

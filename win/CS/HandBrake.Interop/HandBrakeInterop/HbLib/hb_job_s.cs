@@ -52,9 +52,6 @@ namespace HandBrake.Interop.HbLib
         public int height;
 
         /// int
-        public int keep_ratio;
-
-        /// int
         public int grayscale;
 
         public hb_anamorphic_substruct anamorphic;
