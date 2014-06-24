@@ -57,6 +57,10 @@ typedef struct
     ghb_instance_status_t queue;
 } ghb_status_t;
 
+#define MOD_ROUND(v,m) ((m==1)?v:(m * ((v + (m>>1)) / m)))
+#define MOD_DOWN(v,m)  (m * (v / m))
+#define MOD_UP(v,m)    (m * ((v + m - 1) / m))
+
 #define GHB_PIC_KEEP_WIDTH          0x01
 #define GHB_PIC_KEEP_HEIGHT         0x02
 #define GHB_PIC_KEEP_DISPLAY_WIDTH  0x04

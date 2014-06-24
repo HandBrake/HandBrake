@@ -18,10 +18,6 @@
 
 #define GHB_PREVIEW_MAX 60
 
-#define MOD_ROUND(v,m) ((m==1)?v:(m * ((v + (m>>1)) / m)))
-#define MOD_DOWN(v,m)  (m * (v / m))
-#define MOD_UP(v,m)    (m * ((v + m - 1) / m))
-
 void ghb_preview_init(signal_user_data_t *ud);
 void ghb_set_preview_image(signal_user_data_t *ud);
 void ghb_live_preview_progress(signal_user_data_t *ud);

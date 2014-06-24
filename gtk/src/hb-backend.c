@@ -3390,20 +3390,21 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     GtkWidget *widget;
 
     pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
-    enable_keep_aspect = (pic_par != 1 && pic_par != 2);
+    enable_keep_aspect = (pic_par != HB_ANAMORPHIC_STRICT &&
+                          pic_par != HB_ANAMORPHIC_LOOSE);
     keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
     autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
 
-    enable_scale_width = !autoscale && (pic_par != 1);
-    enable_scale_height = !autoscale && (pic_par != 1);
-    enable_disp_width = (pic_par == 3) && !keep_aspect;
-    enable_par = (pic_par == 3) && !keep_aspect;
+    enable_scale_width = enable_scale_height =
+                         !autoscale && (pic_par != HB_ANAMORPHIC_STRICT);
+    enable_disp_width = (pic_par == HB_ANAMORPHIC_CUSTOM) && !keep_aspect;
+    enable_par = (pic_par == HB_ANAMORPHIC_CUSTOM) && !keep_aspect;
     enable_disp_height = FALSE;
 
     widget = GHB_WIDGET(ud->builder, "PictureModulus");
-    gtk_widget_set_sensitive(widget, pic_par != 1);
+    gtk_widget_set_sensitive(widget, pic_par != HB_ANAMORPHIC_STRICT);
     widget = GHB_WIDGET(ud->builder, "PictureLooseCrop");
-    gtk_widget_set_sensitive(widget, pic_par != 1);
+    gtk_widget_set_sensitive(widget, pic_par != HB_ANAMORPHIC_STRICT);
     widget = GHB_WIDGET(ud->builder, "scale_width");
     gtk_widget_set_sensitive(widget, enable_scale_width);
     widget = GHB_WIDGET(ud->builder, "scale_height");
@@ -3419,7 +3420,7 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
     widget = GHB_WIDGET(ud->builder, "PictureKeepRatio");
     gtk_widget_set_sensitive(widget, enable_keep_aspect);
     widget = GHB_WIDGET(ud->builder, "autoscale");
-    gtk_widget_set_sensitive(widget, pic_par != 1);
+    gtk_widget_set_sensitive(widget, pic_par != HB_ANAMORPHIC_STRICT);
 }
 
 void
@@ -3445,14 +3446,12 @@ ghb_limit_rational( gint *num, gint *den, gint limit )
 void
 ghb_set_scale_settings(GValue *settings, gint mode)
 {
-    hb_job_t   * job;
     gboolean keep_aspect;
     gint pic_par;
-    gboolean autocrop, autoscale, noscale;
+    gboolean autocrop, autoscale, loosecrop;
     gint crop[4] = {0,};
-    gint width, height, par_width, par_height;
+    gint width, height;
     gint crop_width, crop_height;
-    gint aspect_n, aspect_d;
     gboolean keep_width = (mode & GHB_PIC_KEEP_WIDTH);
     gboolean keep_height = (mode & GHB_PIC_KEEP_HEIGHT);
     gint mod;
@@ -3462,13 +3461,13 @@ ghb_set_scale_settings(GValue *settings, gint mode)
     g_debug("ghb_set_scale ()\n");
 
     pic_par = ghb_settings_combo_int(settings, "PicturePAR");
-    if (pic_par == 1)
+    if (pic_par == HB_ANAMORPHIC_STRICT)
     {
         ghb_settings_set_boolean(settings, "autoscale", TRUE);
         ghb_settings_set_int(settings, "PictureModulus", 2);
         ghb_settings_set_boolean(settings, "PictureLooseCrop", TRUE);
     }
-    if (pic_par == 1 || pic_par == 2)
+    if (pic_par == HB_ANAMORPHIC_STRICT || pic_par == HB_ANAMORPHIC_LOOSE)
     {
         ghb_settings_set_boolean(settings, "PictureKeepRatio", TRUE);
     }
@@ -3480,8 +3479,13 @@ ghb_set_scale_settings(GValue *settings, gint mode)
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL) return;
 
-    job = hb_job_init( (hb_title_t*)title );
-    if (job == NULL) return;
+    hb_geometry_t srcGeo, resultGeo;
+    hb_ui_geometry_t uiGeo;
+
+    srcGeo.width   = title->width;
+    srcGeo.height  = title->height;
+    srcGeo.par.num = title->pixel_aspect_width;
+    srcGeo.par.den = title->pixel_aspect_height;
 
     // First configure widgets
     mod = ghb_settings_combo_int(settings, "PictureModulus");
@@ -3490,7 +3494,7 @@ ghb_set_scale_settings(GValue *settings, gint mode)
     autoscale = ghb_settings_get_boolean(settings, "autoscale");
     // "Noscale" is a flag that says we prefer to crop extra to satisfy
     // alignment constraints rather than scaling to satisfy them.
-    noscale = ghb_settings_get_boolean(settings, "PictureLooseCrop");
+    loosecrop = ghb_settings_get_boolean(settings, "PictureLooseCrop");
     // Align dimensions to either 16 or 2 pixels
     // The scaler crashes if the dimensions are not divisible by 2
     // x264 also will not accept dims that are not multiple of 2
@@ -3527,7 +3531,7 @@ ghb_set_scale_settings(GValue *settings, gint mode)
             crop[2] = title->width - crop[3] - 16;
         }
     }
-    if (noscale)
+    if (loosecrop)
     {
         gint need1, need2;
 
@@ -3537,11 +3541,11 @@ ghb_set_scale_settings(GValue *settings, gint mode)
         width = MOD_DOWN(crop_width, mod);
         height = MOD_DOWN(crop_height, mod);
 
-        need1 = (crop_height - height) / 2;
+        need1 = EVEN((crop_height - height) / 2);
         need2 = crop_height - height - need1;
         crop[0] += need1;
         crop[1] += need2;
-        need1 = (crop_width - width) / 2;
+        need1 = EVEN((crop_width - width) / 2);
         need2 = crop_width - width - need1;
         crop[2] += need1;
         crop[3] += need2;
@@ -3550,9 +3554,11 @@ ghb_set_scale_settings(GValue *settings, gint mode)
         ghb_settings_set_int(settings, "PictureLeftCrop", crop[2]);
         ghb_settings_set_int(settings, "PictureRightCrop", crop[3]);
     }
-    hb_reduce(&aspect_n, &aspect_d,
-                title->width * title->pixel_aspect_width,
-                title->height * title->pixel_aspect_height);
+    uiGeo.crop[0] = crop[0];
+    uiGeo.crop[1] = crop[1];
+    uiGeo.crop[2] = crop[2];
+    uiGeo.crop[3] = crop[3];
+
     crop_width = title->width - crop[2] - crop[3];
     crop_height = title->height - crop[0] - crop[1];
     if (autoscale)
@@ -3582,130 +3588,65 @@ ghb_set_scale_settings(GValue *settings, gint mode)
     width = MOD_ROUND(width, mod);
     height = MOD_ROUND(height, mod);
 
-    job->anamorphic.mode = pic_par;
-    if (pic_par)
+    uiGeo.mode = pic_par;
+    uiGeo.keep = 0;
+    if (keep_width)
+        uiGeo.keep |= HB_KEEP_WIDTH;
+    if (keep_height)
+        uiGeo.keep |= HB_KEEP_HEIGHT;
+    if (keep_aspect)
+        uiGeo.keep |= HB_KEEP_DISPLAY_ASPECT;
+    uiGeo.itu_par = 0;
+    uiGeo.modulus = mod;
+    uiGeo.width = width;
+    uiGeo.height = height;
+    uiGeo.maxWidth = max_width;
+    uiGeo.maxHeight = max_height;
+    uiGeo.par.num = title->pixel_aspect_width;
+    uiGeo.par.den = title->pixel_aspect_height;
+    uiGeo.dar.num = 0;
+    uiGeo.dar.den = 0;
+    if (pic_par != HB_ANAMORPHIC_NONE)
     {
-        // The scaler crashes if the dimensions are not divisible by 2
-        // Align mod 2.  And so does something in x264_encoder_headers()
-        job->modulus = mod;
-        job->anamorphic.par_width = title->pixel_aspect_width;
-        job->anamorphic.par_height = title->pixel_aspect_height;
-        job->anamorphic.dar_width = 0;
-        job->anamorphic.dar_height = 0;
-
-        if (keep_height && pic_par == 2)
+        if (pic_par == HB_ANAMORPHIC_CUSTOM && !keep_aspect)
         {
-            width = ((double)height * crop_width / crop_height);
-            width = MOD_ROUND(width, mod);
-        }
-        job->width = width;
-        job->height = height;
-        job->maxWidth = max_width;
-        job->maxHeight = max_height;
-        job->crop[0] = crop[0];
-        job->crop[1] = crop[1];
-        job->crop[2] = crop[2];
-        job->crop[3] = crop[3];
-        if (job->anamorphic.mode == 3 && !keep_aspect)
-        {
-            job->anamorphic.keep_display_aspect = 0;
             if (mode & GHB_PIC_KEEP_PAR)
             {
-                job->anamorphic.par_width =
+                uiGeo.par.num =
                     ghb_settings_get_int(settings, "PicturePARWidth");
-                job->anamorphic.par_height =
+                uiGeo.par.den =
                     ghb_settings_get_int(settings, "PicturePARHeight");
             }
-            else
+            else if (mode & (GHB_PIC_KEEP_DISPLAY_HEIGHT |
+                             GHB_PIC_KEEP_DISPLAY_WIDTH))
             {
-                job->anamorphic.dar_width =
-                    ghb_settings_get_int(settings, "PictureDisplayWidth");
-                job->anamorphic.dar_height = height;
+                uiGeo.dar.num =
+                     ghb_settings_get_int(settings, "PictureDisplayWidth");
+                uiGeo.dar.den = height;
             }
         }
         else
         {
-            job->anamorphic.keep_display_aspect = 1;
-        }
-        // hb_set_anamorphic_size will adjust par, dar, and width/height
-        // to conform to job parameters that have been set, including
-        // maxWidth and maxHeight
-        hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
-        if (job->anamorphic.mode == 3 && !keep_aspect &&
-            mode & GHB_PIC_KEEP_PAR)
-        {
-            // hb_set_anamorphic_size reduces the par, which we
-            // don't want in this case because the user is
-            // explicitely specifying it.
-            par_width = ghb_settings_get_int(settings, "PicturePARWidth");
-            par_height = ghb_settings_get_int(settings, "PicturePARHeight");
+            uiGeo.keep |= HB_KEEP_DISPLAY_ASPECT;
         }
     }
-    else
-    {
-        // Adjust dims according to max values
-        if (max_height) height = MIN(height, max_height);
-        if (max_width) width = MIN(width, max_width);
+    // hb_set_anamorphic_size will adjust par, dar, and width/height
+    // to conform to job parameters that have been set, including
+    // maxWidth and maxHeight
+    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
 
-        if (keep_aspect)
-        {
-            gdouble par;
-            gint new_width, new_height;
-
-            // Compute pixel aspect ration.
-            par = (gdouble)(title->height * aspect_n) / (title->width * aspect_d);
-            // Must scale so that par becomes 1:1
-            // Try to keep largest dimension
-            new_height = (crop_height * ((gdouble)width/crop_width) / par);
-            new_width = (crop_width * ((gdouble)height/crop_height) * par);
-
-            if (max_width && new_width > max_width)
-            {
-                height = new_height;
-            }
-            else if (max_height && new_height > max_height)
-            {
-                width = new_width;
-            }
-            else if (keep_width)
-            {
-                height = new_height;
-            }
-            else if (keep_height)
-            {
-                width = new_width;
-            }
-            else if (width > new_width)
-            {
-                height = new_height;
-            }
-            else
-            {
-                width = new_width;
-            }
-            g_debug("new w %d h %d\n", width, height);
-        }
-        width = MOD_ROUND(width, mod);
-        height = MOD_ROUND(height, mod);
-        if (max_height)
-            height = MIN(height, max_height);
-        if (max_width)
-            width = MIN(width, max_width);
-        par_width = par_height = 1;
-    }
-    ghb_settings_set_int(settings, "scale_width", width);
-    ghb_settings_set_int(settings, "scale_height", height);
+    ghb_settings_set_int(settings, "scale_width", resultGeo.width);
+    ghb_settings_set_int(settings, "scale_height", resultGeo.height);
 
     gint disp_width;
 
-    disp_width = ((gdouble)par_width / par_height) * width + 0.5;
-    ghb_limit_rational(&par_width, &par_height, 65535);
+    disp_width = ((gdouble)resultGeo.par.num / resultGeo.par.den) *
+                 resultGeo.width + 0.5;
 
-    ghb_settings_set_int(settings, "PicturePARWidth", par_width);
-    ghb_settings_set_int(settings, "PicturePARHeight", par_height);
+    ghb_settings_set_int(settings, "PicturePARWidth", resultGeo.par.num);
+    ghb_settings_set_int(settings, "PicturePARHeight", resultGeo.par.den);
     ghb_settings_set_int(settings, "PictureDisplayWidth", disp_width);
-    ghb_settings_set_int(settings, "PictureDisplayHeight", height);
-    hb_job_close( &job );
+    ghb_settings_set_int(settings, "PictureDisplayHeight", resultGeo.height);
 }
 
 void
@@ -3758,8 +3699,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 
     // "Noscale" is a flag that says we prefer to crop extra to satisfy
     // alignment constraints rather than scaling to satisfy them.
-    gboolean noscale = ghb_settings_get_boolean(ud->settings, "PictureLooseCrop");
-    if (noscale)
+    gboolean loosecrop = ghb_settings_get_boolean(ud->settings, "PictureLooseCrop");
+    if (loosecrop)
     {
         widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
         gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
@@ -3804,67 +3745,46 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 }
 
 static void
-set_preview_job_settings(signal_user_data_t *ud, hb_job_t *job, GValue *settings)
+get_preview_geometry(signal_user_data_t *ud, const hb_title_t *title,
+                     hb_geometry_t *srcGeo, hb_ui_geometry_t *uiGeo)
 {
-    job->crop[0] = ghb_settings_get_int(settings, "PictureTopCrop");
-    job->crop[1] = ghb_settings_get_int(settings, "PictureBottomCrop");
-    job->crop[2] = ghb_settings_get_int(settings, "PictureLeftCrop");
-    job->crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
+    srcGeo->width = title->width;
+    srcGeo->height = title->height;
+    srcGeo->par.num = title->pixel_aspect_width;
+    srcGeo->par.den = title->pixel_aspect_height;
 
-    job->anamorphic.mode = ghb_settings_combo_int(settings, "PicturePAR");
-    job->modulus =
-        ghb_settings_combo_int(settings, "PictureModulus");
-    job->width = ghb_settings_get_int(settings, "scale_width");
-    job->height = ghb_settings_get_int(settings, "scale_height");
+    uiGeo->mode = ghb_settings_combo_int(ud->settings, "PicturePAR");
+    uiGeo->keep = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio") ||
+                                        uiGeo->mode == HB_ANAMORPHIC_STRICT  ||
+                                        uiGeo->mode == HB_ANAMORPHIC_LOOSE;
+    uiGeo->itu_par = 0;
+    uiGeo->modulus = ghb_settings_combo_int(ud->settings, "PictureModulus");
+    uiGeo->crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+    uiGeo->crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+    uiGeo->crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+    uiGeo->crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+    uiGeo->width = ghb_settings_get_int(ud->settings, "scale_width");
+    uiGeo->height = ghb_settings_get_int(ud->settings, "scale_height");
+    uiGeo->maxWidth = 0;
+    uiGeo->maxHeight = 0;
+    uiGeo->par.num = ghb_settings_get_int(ud->settings, "PicturePARWidth");
+    uiGeo->par.den = ghb_settings_get_int(ud->settings, "PicturePARHeight");
+    uiGeo->dar.num = 0;
+    uiGeo->dar.den = 0;
     if (ghb_settings_get_boolean(ud->prefs, "preview_show_crop"))
     {
-        gdouble xscale = (gdouble)job->width /
-            (gdouble)(job->title->width - job->crop[2] - job->crop[3]);
-        gdouble yscale = (gdouble)job->height /
-            (gdouble)(job->title->height - job->crop[0] - job->crop[1]);
+        gdouble xscale = (gdouble)uiGeo->width /
+                          (title->width - uiGeo->crop[2] - uiGeo->crop[3]);
+        gdouble yscale = (gdouble)uiGeo->height /
+                          (title->height - uiGeo->crop[0] - uiGeo->crop[1]);
 
-        job->width += xscale * (job->crop[2] + job->crop[3]);
-        job->height += yscale * (job->crop[0] + job->crop[1]);
-        job->crop[0] = 0;
-        job->crop[1] = 0;
-        job->crop[2] = 0;
-        job->crop[3] = 0;
-        job->modulus = 2;
-    }
-
-    gboolean decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
-    if (decomb_deint)
-    {
-        gint decomb = ghb_settings_combo_int(settings, "PictureDecomb");
-        job->deinterlace = (decomb == 0) ? 0 : 1;
-    }
-    else
-    {
-        gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
-        job->deinterlace = (deint == 0) ? 0 : 1;
-    }
-
-    gboolean keep_aspect;
-    keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
-    if (job->anamorphic.mode)
-    {
-        job->anamorphic.par_width = job->title->pixel_aspect_width;
-        job->anamorphic.par_height = job->title->pixel_aspect_height;
-        job->anamorphic.dar_width = 0;
-        job->anamorphic.dar_height = 0;
-
-        if (job->anamorphic.mode == 3 && !keep_aspect)
-        {
-            job->anamorphic.keep_display_aspect = 0;
-            job->anamorphic.par_width =
-                ghb_settings_get_int(settings, "PicturePARWidth");
-            job->anamorphic.par_height =
-                ghb_settings_get_int(settings, "PicturePARHeight");
-        }
-        else
-        {
-            job->anamorphic.keep_display_aspect = 1;
-        }
+        uiGeo->width += xscale * (uiGeo->crop[2] + uiGeo->crop[3]);
+        uiGeo->height += yscale * (uiGeo->crop[0] + uiGeo->crop[1]);
+        uiGeo->crop[0] = 0;
+        uiGeo->crop[1] = 0;
+        uiGeo->crop[2] = 0;
+        uiGeo->crop[3] = 0;
+        uiGeo->modulus = 2;
     }
 }
 
@@ -4416,28 +4336,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         job->deinterlace = 0;
     job->grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
 
-    gboolean keep_aspect;
-    keep_aspect = ghb_settings_get_boolean(js, "PictureKeepRatio");
     job->anamorphic.mode = ghb_settings_combo_int(js, "PicturePAR");
     job->modulus = ghb_settings_combo_int(js, "PictureModulus");
-    if (job->anamorphic.mode)
-    {
-        job->anamorphic.par_width =
-            ghb_settings_get_int(js, "PicturePARWidth");
-        job->anamorphic.par_height =
-            ghb_settings_get_int(js, "PicturePARHeight");
-        job->anamorphic.dar_width = 0;
-        job->anamorphic.dar_height = 0;
-
-        if (job->anamorphic.mode == 3 && !keep_aspect)
-        {
-            job->anamorphic.keep_display_aspect = 0;
-        }
-        else
-        {
-            job->anamorphic.keep_display_aspect = 1;
-        }
-    }
+    job->anamorphic.par_width = ghb_settings_get_int(js, "PicturePARWidth");
+    job->anamorphic.par_height = ghb_settings_get_int(js, "PicturePARHeight");
+    job->anamorphic.dar_width = job->anamorphic.dar_height = 0;
+    job->anamorphic.keep_display_aspect =
+                            ghb_settings_get_boolean(js, "PictureKeepRatio");
 
     int width, height, crop[4];
     width = ghb_settings_get_int(js, "scale_width");
@@ -5087,63 +4992,71 @@ ghb_get_preview_image(
     gint *out_width,
     gint *out_height)
 {
-    hb_job_t *job;
+    hb_geometry_t srcGeo, resultGeo;
+    hb_ui_geometry_t uiGeo;
 
     if( title == NULL ) return NULL;
 
-    job = hb_job_init( (hb_title_t*)title );
-    if (job == NULL) return NULL;
-
-    set_preview_job_settings(ud, job, ud->settings);
+    gboolean deinterlace;
+    if (ghb_settings_get_boolean(ud->settings, "PictureDecombDeinterlace"))
+    {
+        deinterlace = ghb_settings_combo_int(ud->settings, "PictureDecomb")
+                      == 0 ? 0 : 1;
+    }
+    else
+    {
+        deinterlace = ghb_settings_combo_int(ud->settings, "PictureDeinterlace")
+                      == 0 ? 0 : 1;
+    }
+    // Get the geometry settings for the preview.  This will disable
+    // cropping if the setting to show the cropped region is enabled.
+    get_preview_geometry(ud, title, &srcGeo, &uiGeo);
 
     // hb_get_preview doesn't compensate for anamorphic, so lets
     // calculate scale factors
-    gint width, height, par_width = 1, par_height = 1;
-    gint pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
-    if (pic_par)
-    {
-        hb_set_anamorphic_size( job, &width, &height,
-                                &par_width, &par_height );
-    }
+    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
+
+    // Rescale preview dimensions to adjust for screen PAR and settings PAR
+    ghb_par_scale(ud, &uiGeo.width, &uiGeo.height,
+                      resultGeo.par.num, resultGeo.par.den);
+    uiGeo.par.num = 1;
+    uiGeo.par.den = 1;
+
+    // Populate job with things needed by hb_get_preview
+    hb_job_t *job = hb_job_init((hb_title_t*)title);
+    job->width = uiGeo.width;
+    job->height = uiGeo.height;
+    job->deinterlace = deinterlace;
+    memcpy(job->crop, uiGeo.crop, sizeof(int[4]));
 
     // Make sure we have a big enough buffer to receive the image from libhb
-    gint dstWidth = job->width;
-    gint dstHeight= job->height;
+    guint8 *buffer = g_malloc(uiGeo.width * uiGeo.height * 4);
 
-    static guint8 *buffer = NULL;
-    static gint bufferSize = 0;
-    gint newSize;
-
-    newSize = dstWidth * dstHeight * 4;
-    if( bufferSize < newSize )
-    {
-        bufferSize = newSize;
-        buffer     = (guint8*) g_realloc( buffer, bufferSize );
-    }
     hb_get_preview( h_scan, job, index, buffer );
     hb_job_close( &job );
 
     // Create an GdkPixbuf and copy the libhb image into it, converting it from
     // libhb's format something suitable.
-
     // The image data returned by hb_get_preview is 4 bytes per pixel,
     // BGRA format. Alpha is ignored.
+    GdkPixbuf *preview;
+    preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
+                             uiGeo.width, uiGeo.height);
+    guint8 *pixels = gdk_pixbuf_get_pixels(preview);
 
-    GdkPixbuf *preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, dstWidth, dstHeight);
-    guint8 *pixels = gdk_pixbuf_get_pixels (preview);
-
-    guint32 *src = (guint32*)buffer;
+    guint8 *src_line = buffer;
     guint8 *dst = pixels;
 
     gint ii, jj;
-    gint channels = gdk_pixbuf_get_n_channels (preview);
-    gint stride = gdk_pixbuf_get_rowstride (preview);
+    gint channels = gdk_pixbuf_get_n_channels(preview);
+    gint stride = gdk_pixbuf_get_rowstride(preview);
     guint8 *tmp;
 
-    for (ii = 0; ii < dstHeight; ii++)
+    for (ii = 0; ii < uiGeo.height; ii++)
     {
+        guint32 *src = (guint32*)src_line;
         tmp = dst;
-        for (jj = 0; jj < dstWidth; jj++)
+        for (jj = 0; jj < uiGeo.width; jj++)
         {
             tmp[0] = src[0] >> 16;
             tmp[1] = src[0] >> 8;
@@ -5151,11 +5064,12 @@ ghb_get_preview_image(
             tmp += channels;
             src++;
         }
+        src_line += uiGeo.width * 4;
         dst += stride;
     }
     gint w = ghb_settings_get_int(ud->settings, "scale_width");
     gint h = ghb_settings_get_int(ud->settings, "scale_height");
-    ghb_par_scale(ud, &w, &h, par_width, par_height);
+    ghb_par_scale(ud, &w, &h, resultGeo.par.num, resultGeo.par.den);
 
     gint c0, c1, c2, c3;
     c0 = ghb_settings_get_int(ud->settings, "PictureTopCrop");
@@ -5166,14 +5080,17 @@ ghb_get_preview_image(
     gdouble xscale = (gdouble)w / (gdouble)(title->width - c2 - c3);
     gdouble yscale = (gdouble)h / (gdouble)(title->height - c0 - c1);
 
-    ghb_par_scale(ud, &dstWidth, &dstHeight, par_width, par_height);
     *out_width = w;
     *out_height = h;
+
+    int previewWidth = uiGeo.width;
+    int previewHeight = uiGeo.height;
+
+    // If the preview is too large to fit the screen, reduce it's size.
     if (ghb_settings_get_boolean(ud->prefs, "reduce_hd_preview"))
     {
         GdkScreen *ss;
         gint s_w, s_h;
-        gint orig_w, orig_h;
         gint factor = 80;
 
         if (ghb_settings_get_boolean(ud->prefs, "preview_fullscreen"))
@@ -5183,26 +5100,34 @@ ghb_get_preview_image(
         ss = gdk_screen_get_default();
         s_w = gdk_screen_get_width(ss);
         s_h = gdk_screen_get_height(ss);
-        orig_w = dstWidth;
-        orig_h = dstHeight;
 
-        if (dstWidth > s_w * factor / 100)
+        if (previewWidth > s_w * factor / 100 ||
+            previewHeight > s_h * factor / 100)
         {
-            dstWidth = s_w * factor / 100;
-            dstHeight = dstHeight * dstWidth / orig_w;
+            GdkPixbuf *scaled_preview;
+            int orig_w = previewWidth;
+            int orig_h = previewHeight;
+
+            if (previewWidth > s_w * factor / 100)
+            {
+                previewWidth = s_w * factor / 100;
+                previewHeight = previewHeight * previewWidth / orig_w;
+            }
+            if (previewHeight > s_h * factor / 100)
+            {
+                previewHeight = s_h * factor / 100;
+                previewWidth = orig_w * previewHeight / orig_h;
+            }
+            xscale *= (gdouble)previewWidth / orig_w;
+            yscale *= (gdouble)previewHeight / orig_h;
+            w *= (gdouble)previewWidth / orig_w;
+            h *= (gdouble)previewHeight / orig_h;
+            scaled_preview = gdk_pixbuf_scale_simple(preview,
+                            previewWidth, previewHeight, GDK_INTERP_HYPER);
+            g_object_unref(preview);
+            preview = scaled_preview;
         }
-        if (dstHeight > s_h * factor / 100)
-        {
-            dstHeight = s_h * factor / 100;
-            dstWidth = orig_w * dstHeight / orig_h;
-        }
-        xscale *= (gdouble)dstWidth / orig_w;
-        yscale *= (gdouble)dstHeight / orig_h;
-        w *= (gdouble)dstWidth / orig_w;
-        h *= (gdouble)dstHeight / orig_h;
     }
-    GdkPixbuf *scaled_preview;
-    scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
     if (ghb_settings_get_boolean(ud->prefs, "preview_show_crop"))
     {
         c0 *= yscale;
@@ -5210,16 +5135,15 @@ ghb_get_preview_image(
         c2 *= xscale;
         c3 *= xscale;
         // Top
-        hash_pixbuf(scaled_preview, c2, 0, w, c0, 32, 0);
+        hash_pixbuf(preview, c2, 0, w, c0, 32, 0);
         // Bottom
-        hash_pixbuf(scaled_preview, c2, dstHeight-c1, w, c1, 32, 0);
+        hash_pixbuf(preview, c2, previewHeight-c1, w, c1, 32, 0);
         // Left
-        hash_pixbuf(scaled_preview, 0, c0, c2, h, 32, 1);
+        hash_pixbuf(preview, 0, c0, c2, h, 32, 1);
         // Right
-        hash_pixbuf(scaled_preview, dstWidth-c3, c0, c3, h, 32, 1);
+        hash_pixbuf(preview, previewWidth-c3, c0, c3, h, 32, 1);
     }
-    g_object_unref (preview);
-    return scaled_preview;
+    return preview;
 }
 
 static void

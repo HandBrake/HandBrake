@@ -137,8 +137,11 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
     gint64 num, den;
 
     ghb_screen_par(ud, &disp_par_n, &disp_par_d);
-    if (disp_par_n < 1) disp_par_n = 1;
-    if (disp_par_d < 1) disp_par_d = 1;
+    if (disp_par_n < 1 || disp_par_d < 1)
+    {
+        disp_par_n = 1;
+        disp_par_d = 1;
+    }
     num = par_n * disp_par_d;
     den = par_d * disp_par_n;
 
