@@ -1922,17 +1922,22 @@ class Display
   
 end
 
-# First grab the specified CLI options
-options = readOptions
+# CLI invocation only
+if __FILE__ == $0
 
-# Only run if one of the useful CLI flags have been passed
-if options.cliraw == true || options.cliparse == true || options.api == true || options.apilist == true
-  # This line is the ignition -- generates hashes of
-  # presets and then displays them to the screen
-  # with the options the user selects on the CLI. 
-  Display.new( Presets.new.hashMasterList, options )
-else
-  # Direct the user to the help
-  puts "\n\tUsage: manicure.rb [options]"
-  puts "\tSee help with -h or --help"
+  # First grab the specified CLI options
+  options = readOptions
+
+  # Only run if one of the useful CLI flags have been passed
+  if options.cliraw == true || options.cliparse == true || options.api == true || options.apilist == true
+    # This line is the ignition -- generates hashes of
+    # presets and then displays them to the screen
+    # with the options the user selects on the CLI. 
+    Display.new( Presets.new.hashMasterList, options )
+  else
+    # Direct the user to the help
+    puts "\n\tUsage: manicure.rb [options]"
+    puts "\tSee help with -h or --help"
+  end
+
 end
