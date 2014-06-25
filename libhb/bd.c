@@ -19,7 +19,7 @@ struct hb_bd_s
     BLURAY       * bd;
     int            title_count;
     BLURAY_TITLE_INFO  ** title_info;
-    uint64_t       pkt_count;
+    int64_t        duration;
     hb_stream_t  * stream;
     int            chapter;
     int            next_chap;
@@ -586,7 +586,7 @@ int hb_bd_start( hb_bd_t * d, hb_title_t *title )
 {
     BD_EVENT event;
 
-    d->pkt_count = title->block_count;
+    d->duration  = title->duration;
 
     // Calling bd_get_event initializes libbluray event queue.
     bd_select_title( d->bd, d->title_info[title->index - 1]->idx );
@@ -617,9 +617,9 @@ void hb_bd_stop( hb_bd_t * d )
  **********************************************************************/
 int hb_bd_seek( hb_bd_t * d, float f )
 {
-    uint64_t packet = f * d->pkt_count;
+    uint64_t pos = f * d->duration;
 
-    bd_seek(d->bd, packet * 192);
+    bd_seek_time(d->bd, pos);
     d->next_chap = bd_get_current_chapter( d->bd ) + 1;
     hb_ts_stream_reset(d->stream);
     return 1;
