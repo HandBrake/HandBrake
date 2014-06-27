@@ -68,8 +68,8 @@
 
 #define NLMEANS_PREFILTER_MODE_MEAN3X3       1
 #define NLMEANS_PREFILTER_MODE_MEAN5X5       2
-#define NLMEANS_PREFILTER_MODE_RESERVED4     4 // Reserved
-#define NLMEANS_PREFILTER_MODE_RESERVED8     8 // Reserved
+#define NLMEANS_PREFILTER_MODE_MEDIAN3X3     4
+#define NLMEANS_PREFILTER_MODE_MEDIAN5X5     8
 #define NLMEANS_PREFILTER_MODE_RESERVED16   16 // Reserved
 #define NLMEANS_PREFILTER_MODE_RESERVED32   32 // Reserved
 #define NLMEANS_PREFILTER_MODE_RESERVED64   64 // Reserved
@@ -78,6 +78,9 @@
 #define NLMEANS_PREFILTER_MODE_REDUCE50    512
 #define NLMEANS_PREFILTER_MODE_EDGEBOOST  1024
 #define NLMEANS_PREFILTER_MODE_PASSTHRU   2048
+
+#define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
+#define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
 
 #define NLMEANS_FRAMES_MAX 32
 #define NLMEANS_EXPSIZE    128
@@ -241,6 +244,104 @@ static void nlmeans_filter_mean(uint8_t *src,
 
 }
 
+static uint8_t nlmeans_filter_median_opt(uint8_t *pixels, int size)
+{
+
+    // Optimized sorting networks
+    if (size == 3)
+    {
+        /* opt_med9() via Nicolas Devillard
+         * http://ndevilla.free.fr/median/median.pdf
+         */
+        NLMEANS_SORT(pixels[1], pixels[2]); NLMEANS_SORT(pixels[4], pixels[5]); NLMEANS_SORT(pixels[7], pixels[8]);
+        NLMEANS_SORT(pixels[0], pixels[1]); NLMEANS_SORT(pixels[3], pixels[4]); NLMEANS_SORT(pixels[6], pixels[7]);
+        NLMEANS_SORT(pixels[1], pixels[2]); NLMEANS_SORT(pixels[4], pixels[5]); NLMEANS_SORT(pixels[7], pixels[8]);
+        NLMEANS_SORT(pixels[0], pixels[3]); NLMEANS_SORT(pixels[5], pixels[8]); NLMEANS_SORT(pixels[4], pixels[7]);
+        NLMEANS_SORT(pixels[3], pixels[6]); NLMEANS_SORT(pixels[1], pixels[4]); NLMEANS_SORT(pixels[2], pixels[5]);
+        NLMEANS_SORT(pixels[4], pixels[7]); NLMEANS_SORT(pixels[4], pixels[2]); NLMEANS_SORT(pixels[6], pixels[4]);
+        NLMEANS_SORT(pixels[4], pixels[2]);
+        return pixels[4];
+    }
+    else if (size == 5)
+    {
+        /* opt_med25() via Nicolas Devillard
+         * http://ndevilla.free.fr/median/median.pdf
+         */
+        NLMEANS_SORT(pixels[0],  pixels[1]);  NLMEANS_SORT(pixels[3],  pixels[4]);  NLMEANS_SORT(pixels[2],  pixels[4]);
+        NLMEANS_SORT(pixels[2],  pixels[3]);  NLMEANS_SORT(pixels[6],  pixels[7]);  NLMEANS_SORT(pixels[5],  pixels[7]);
+        NLMEANS_SORT(pixels[5],  pixels[6]);  NLMEANS_SORT(pixels[9],  pixels[10]); NLMEANS_SORT(pixels[8],  pixels[10]);
+        NLMEANS_SORT(pixels[8],  pixels[9]);  NLMEANS_SORT(pixels[12], pixels[13]); NLMEANS_SORT(pixels[11], pixels[13]);
+        NLMEANS_SORT(pixels[11], pixels[12]); NLMEANS_SORT(pixels[15], pixels[16]); NLMEANS_SORT(pixels[14], pixels[16]);
+        NLMEANS_SORT(pixels[14], pixels[15]); NLMEANS_SORT(pixels[18], pixels[19]); NLMEANS_SORT(pixels[17], pixels[19]);
+        NLMEANS_SORT(pixels[17], pixels[18]); NLMEANS_SORT(pixels[21], pixels[22]); NLMEANS_SORT(pixels[20], pixels[22]);
+        NLMEANS_SORT(pixels[20], pixels[21]); NLMEANS_SORT(pixels[23], pixels[24]); NLMEANS_SORT(pixels[2],  pixels[5]);
+        NLMEANS_SORT(pixels[3],  pixels[6]);  NLMEANS_SORT(pixels[0],  pixels[6]);  NLMEANS_SORT(pixels[0],  pixels[3]);
+        NLMEANS_SORT(pixels[4],  pixels[7]);  NLMEANS_SORT(pixels[1],  pixels[7]);  NLMEANS_SORT(pixels[1],  pixels[4]);
+        NLMEANS_SORT(pixels[11], pixels[14]); NLMEANS_SORT(pixels[8],  pixels[14]); NLMEANS_SORT(pixels[8],  pixels[11]);
+        NLMEANS_SORT(pixels[12], pixels[15]); NLMEANS_SORT(pixels[9],  pixels[15]); NLMEANS_SORT(pixels[9],  pixels[12]);
+        NLMEANS_SORT(pixels[13], pixels[16]); NLMEANS_SORT(pixels[10], pixels[16]); NLMEANS_SORT(pixels[10], pixels[13]);
+        NLMEANS_SORT(pixels[20], pixels[23]); NLMEANS_SORT(pixels[17], pixels[23]); NLMEANS_SORT(pixels[17], pixels[20]);
+        NLMEANS_SORT(pixels[21], pixels[24]); NLMEANS_SORT(pixels[18], pixels[24]); NLMEANS_SORT(pixels[18], pixels[21]);
+        NLMEANS_SORT(pixels[19], pixels[22]); NLMEANS_SORT(pixels[8],  pixels[17]); NLMEANS_SORT(pixels[9],  pixels[18]);
+        NLMEANS_SORT(pixels[0],  pixels[18]); NLMEANS_SORT(pixels[0],  pixels[9]);  NLMEANS_SORT(pixels[10], pixels[19]);
+        NLMEANS_SORT(pixels[1],  pixels[19]); NLMEANS_SORT(pixels[1],  pixels[10]); NLMEANS_SORT(pixels[11], pixels[20]);
+        NLMEANS_SORT(pixels[2],  pixels[20]); NLMEANS_SORT(pixels[2],  pixels[11]); NLMEANS_SORT(pixels[12], pixels[21]);
+        NLMEANS_SORT(pixels[3],  pixels[21]); NLMEANS_SORT(pixels[3],  pixels[12]); NLMEANS_SORT(pixels[13], pixels[22]);
+        NLMEANS_SORT(pixels[4],  pixels[22]); NLMEANS_SORT(pixels[4],  pixels[13]); NLMEANS_SORT(pixels[14], pixels[23]);
+        NLMEANS_SORT(pixels[5],  pixels[23]); NLMEANS_SORT(pixels[5],  pixels[14]); NLMEANS_SORT(pixels[15], pixels[24]);
+        NLMEANS_SORT(pixels[6],  pixels[24]); NLMEANS_SORT(pixels[6],  pixels[15]); NLMEANS_SORT(pixels[7],  pixels[16]);
+        NLMEANS_SORT(pixels[7],  pixels[19]); NLMEANS_SORT(pixels[13], pixels[21]); NLMEANS_SORT(pixels[15], pixels[23]);
+        NLMEANS_SORT(pixels[7],  pixels[13]); NLMEANS_SORT(pixels[7],  pixels[15]); NLMEANS_SORT(pixels[1],  pixels[9]);
+        NLMEANS_SORT(pixels[3],  pixels[11]); NLMEANS_SORT(pixels[5],  pixels[17]); NLMEANS_SORT(pixels[11], pixels[17]);
+        NLMEANS_SORT(pixels[9],  pixels[17]); NLMEANS_SORT(pixels[4],  pixels[10]); NLMEANS_SORT(pixels[6],  pixels[12]);
+        NLMEANS_SORT(pixels[7],  pixels[14]); NLMEANS_SORT(pixels[4],  pixels[6]);  NLMEANS_SORT(pixels[4],  pixels[7]);
+        NLMEANS_SORT(pixels[12], pixels[14]); NLMEANS_SORT(pixels[10], pixels[14]); NLMEANS_SORT(pixels[6],  pixels[7]);
+        NLMEANS_SORT(pixels[10], pixels[12]); NLMEANS_SORT(pixels[6],  pixels[10]); NLMEANS_SORT(pixels[6],  pixels[17]);
+        NLMEANS_SORT(pixels[12], pixels[17]); NLMEANS_SORT(pixels[7],  pixels[17]); NLMEANS_SORT(pixels[7],  pixels[10]);
+        NLMEANS_SORT(pixels[12], pixels[18]); NLMEANS_SORT(pixels[7],  pixels[12]); NLMEANS_SORT(pixels[10], pixels[18]);
+        NLMEANS_SORT(pixels[12], pixels[20]); NLMEANS_SORT(pixels[10], pixels[20]); NLMEANS_SORT(pixels[10], pixels[12]);
+        return pixels[12];
+    }
+
+    // Network for size not implemented
+    return pixels[(int)((size * size)/2)];
+
+}
+
+static void nlmeans_filter_median(uint8_t *src,
+                                  uint8_t *dst,
+                                  int w,
+                                  int h,
+                                  int border,
+                                  int size)
+{
+
+    // Median filter
+    int iw = w - 2*border;
+    int ih = h - 2*border;
+    int offset_min = -((size - 1) /2);
+    int offset_max =   (size + 1) /2;
+    int index;
+    uint8_t pixels[size * size];
+    for (int y = 0; y < ih; y++)
+    {
+        for (int x = 0; x < iw; x++)
+        {
+            index = 0;
+            for (int k = offset_min; k < offset_max; k++)
+            {
+                for (int j = offset_min; j < offset_max; j++)
+                {
+                    pixels[index] = *(src + w*(y+j) + (x+k));
+                    index++;
+                }
+            }
+            *(dst + w*y + x) = nlmeans_filter_median_opt(pixels, size);
+        }
+    }
+
+}
+
 static void nlmeans_filter_edgeboost(uint8_t *src,
                                      uint8_t *dst,
                                      int w,
@@ -308,8 +409,10 @@ static void nlmeans_prefilter(BorderedPlane *src,
                               int filter_type)
 {
 
-    if (filter_type & NLMEANS_PREFILTER_MODE_MEAN3X3 ||
-        filter_type & NLMEANS_PREFILTER_MODE_MEAN5X5)
+    if (filter_type & NLMEANS_PREFILTER_MODE_MEAN3X3   ||
+        filter_type & NLMEANS_PREFILTER_MODE_MEAN5X5   ||
+        filter_type & NLMEANS_PREFILTER_MODE_MEDIAN3X3 ||
+        filter_type & NLMEANS_PREFILTER_MODE_MEDIAN5X5)
     {
 
         // Source image
@@ -328,7 +431,17 @@ static void nlmeans_prefilter(BorderedPlane *src,
         }
 
         // Filter plane; should already have at least 2px extra border on each side
-        if (filter_type & NLMEANS_PREFILTER_MODE_MEAN5X5)
+        if (filter_type & NLMEANS_PREFILTER_MODE_MEDIAN5X5)
+        {
+            // Median 5x5
+            nlmeans_filter_median(image, image_pre, w, h, border, 5);
+        }
+        else if (filter_type & NLMEANS_PREFILTER_MODE_MEDIAN3X3)
+        {
+            // Median 3x3
+            nlmeans_filter_median(image, image_pre, w, h, border, 3);
+        }
+        else if (filter_type & NLMEANS_PREFILTER_MODE_MEAN5X5)
         {
             // Mean 5x5
             nlmeans_filter_mean(image, image_pre, w, h, border, 5);
