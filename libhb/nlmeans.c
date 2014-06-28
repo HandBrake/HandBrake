@@ -357,14 +357,15 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
     int kernel[3][3] = {{-31, 0, 31},
                         {-44, 0, 44},
                         {-31, 0, 31}};
-    double kernel_coef = 1.0 / 27.0;
+    double kernel_coef = 1.0 / 126.42;
 
     // Detect edges
     int offset_min = -((kernel_size - 1) /2);
     int offset_max =   (kernel_size + 1) /2;
     uint16_t pixel1;
     uint16_t pixel2;
-    uint8_t *mask = malloc(iw * ih * sizeof(uint8_t));
+    uint8_t *mask_mem = calloc(w * h, sizeof(uint8_t));
+    uint8_t *mask = mask_mem + border + w*border;
     for (int y = 0; y < ih; y++)
     {
         for (int x = 0; x < iw; x++)
@@ -383,25 +384,66 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
             pixel2 = pixel2 > 0 ? pixel2 : -pixel2;
             pixel1 = (uint16_t)(((double)pixel1 * kernel_coef) + 128);
             pixel2 = (uint16_t)(((double)pixel2 * kernel_coef) + 128);
-            *(mask + iw*y + x) = (uint8_t)(pixel1 + pixel2);
-            if (*(mask + iw*y + x) > 160)
+            *(mask + w*y + x) = (uint8_t)(pixel1 + pixel2);
+            if (*(mask + w*y + x) > 160)
             {
-                *(dst + w*y + x) = (3 * *(src + w*y + x) + 1 * *(dst + w*y + x)) /4;
-                //*(dst + w*y + x) = 235;
+                *(mask + w*y + x) = 235;
             }
-            else if (*(mask + iw*y + x) > 88)
+            else if (*(mask + w*y + x) > 16)
             {
-                *(dst + w*y + x) = (2 * *(src + w*y + x) + 3 * *(dst + w*y + x)) /5;
-                //*(dst + w*y + x) = 128;
+                *(mask + w*y + x) = 128;
             }
             else
             {
-                //*(dst + w*y + x) = 16;
+                *(mask + w*y + x) = 16;
             }
         }
     }
 
-    free(mask);
+    // Post-process and output
+    int pixels;
+    for (int y = 0; y < ih; y++)
+    {
+        for (int x = 0; x < iw; x++)
+        {
+            if (*(mask + w*y + x) > 16)
+            {
+                // Count nearby edge pixels
+                pixels = 0;
+                for (int k = offset_min; k < offset_max; k++)
+                {
+                    for (int j = offset_min; j < offset_max; j++)
+                    {
+                        if (*(mask + w*(y+j) + (x+k)) > 16)
+                        {
+                            pixels++;
+                        }
+                    }
+                }
+                // Remove false positive
+                if (pixels < 3)
+                {
+                    *(mask + w*y + x) = 16;
+                }
+                // Filter output
+                if (*(mask + w*y + x) > 16)
+                {
+                    if (*(mask + w*y + x) == 235)
+                    {
+                        *(dst + w*y + x) = (3 * *(src + w*y + x) + 1 * *(dst + w*y + x)) /4;
+                    }
+                    else
+                    {
+                        *(dst + w*y + x) = (2 * *(src + w*y + x) + 3 * *(dst + w*y + x)) /5;
+                    }
+                    //*(dst + w*y + x) = *(mask + w*y + x); // Overlay mask
+                }
+            }
+            //*(dst + w*y + x) = *(mask + w*y + x); // Full mask
+        }
+    }
+
+    free(mask_mem);
 
 }
 
