@@ -3,11 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" mc:Ignorable="d" >
+             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:filters="clr-namespace:HandBrakeWPF.Converters.Filters"
+             mc:Ignorable="d" >
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="boolComboConverter" />
         <Converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
+        <filters:DenoisePresetConverter x:Key="DenoisePresetConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -45,7 +48,7 @@
                 <ComboBox Width="120" Grid.Row="0" ItemsSource="{Binding DetelecineOptions, Converter={StaticResource boolComboConverter}}" 
                           SelectedItem="{Binding SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
                           HorizontalAlignment="Left"/>
-                <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDetelecine}"
+                <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDetelecine}" HorizontalAlignment="Left"
                          Visibility="{Binding ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
 
                 <TextBlock Text="{Binding DeinterlaceControlText}" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" VerticalAlignment="Top"/>
@@ -53,7 +56,7 @@
                     <StackPanel Orientation="Horizontal">
                         <RadioButton GroupName="Interlace" Content="Deinterlace" IsChecked="{Binding IsDeinterlaceMode}" />
                         <RadioButton GroupName="Interlace" Content="Decomb" Margin="10,0,0,0" IsChecked="{Binding IsDeinterlaceMode, Converter={StaticResource inverseBooleanConverter}}" />
-                    </StackPanel> 
+                    </StackPanel>
 
                     <ComboBox Width="120" ItemsSource="{Binding DecombOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left"
                           SelectedItem="{Binding SelectedDecomb, Converter={StaticResource boolComboConverter}}" Margin="0,0,0,10"
@@ -64,18 +67,42 @@
                               Visibility="{Binding IsDeinterlaceMode, Converter={StaticResource boolToVisConverter}}" />
                 </StackPanel>
 
-                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Text="{Binding CustomDecomb}" VerticalAlignment="Top"
+                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Text="{Binding CustomDecomb}" VerticalAlignment="Top" HorizontalAlignment="Left"
                          Visibility="{Binding ShowDecombCustom, Converter={StaticResource boolToVisConverter}}" />
 
-                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Text="{Binding CustomDeinterlace}" VerticalAlignment="Top"
+                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Text="{Binding CustomDeinterlace}" VerticalAlignment="Top" HorizontalAlignment="Left"
                          Visibility="{Binding ShowDeinterlaceCustom, Converter={StaticResource boolToVisConverter}}" />
 
                 <TextBlock Text="Denoise:" Grid.Row="3" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="3" ItemsSource="{Binding DenoiseOptions, Converter={StaticResource boolComboConverter}}" 
-                          SelectedItem="{Binding SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
-                          HorizontalAlignment="Left"/>
-                <TextBox Width="120" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDenoise}"
-                         Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}" />
+                          SelectedItem="{Binding SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
+                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" />
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" 
+                            Visibility="{Binding ShowDenoiseOptions, Converter={StaticResource boolToVisConverter}}">
+                    <TextBlock Text="Preset: " Margin="5,0,5,0" />
+                    <ComboBox SelectedItem="{Binding SelectedDenoisePreset}" 
+                              MinWidth="100"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ComboBox.ItemsSource>
+                            <MultiBinding Converter="{StaticResource DenoisePresetConverter}">
+                                <Binding Path="DenoisePresets" />
+                                <Binding Path="SelectedDenoise" />
+                            </MultiBinding>
+                        </ComboBox.ItemsSource>
+                    </ComboBox>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}">
+                        <TextBlock Text="Tune: " Margin="5,0,5,0" />
+                        <ComboBox ItemsSource="{Binding DenoiseTunes}" SelectedItem="{Binding SelectedDenoiseTune}" MinWidth="100"
+                          Visibility="{Binding ShowDenoiseTunes, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}">
+                        <TextBlock Text="Custom: " Margin="5,0,5,0" />
+                        <TextBox Width="120" Margin="0" Text="{Binding CustomDenoise}" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                </StackPanel>
 
                 <TextBlock Text="Deblock:" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
                 <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"
@@ -86,6 +113,6 @@
             </Grid>
 
         </StackPanel>
-        
+
     </Grid>
 </UserControl>

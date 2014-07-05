@@ -77,6 +77,8 @@ namespace HandBrake.ApplicationServices.Utilities
             Match decombValue = Regex.Match(input, @" --decomb=([a-zA-Z0-9.:""\\]*)");
             Match deinterlace = Regex.Match(input, @"--deinterlace=\""([a-zA-Z0-9.:]*)\""");
             Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z0-9.:]*)\""");
+            Match nlmeans = Regex.Match(input, @"--nlmeans=\""([a-zA-Z0-9.:]*)\""");
+            Match nlmeansTune = Regex.Match(input, @"--nlmeans-tune=\""([a-zA-Z0-9.:]*)\""");
             Match deblock = Regex.Match(input, @"--deblock=([0-9:]*)");
             Match detelecine = Regex.Match(input, @"--detelecine");
             Match detelecineValue = Regex.Match(input, @" --detelecine=\""([a-zA-Z0-9.:]*)\""");
@@ -273,21 +275,61 @@ namespace HandBrake.ApplicationServices.Utilities
                 parsed.Denoise = Denoise.Off;
                 if (denoise.Success)
                 {
+                    parsed.Denoise = Denoise.hqdn3d;
                     switch (denoise.ToString().Replace("--denoise=", string.Empty).Replace("\"", string.Empty))
                     {
                         case "weak":
-                            parsed.Denoise = Denoise.Weak;
+                            parsed.DenoisePreset = DenoisePreset.Weak;
                             break;
                         case "medium":
-                            parsed.Denoise = Denoise.Medium;
+                            parsed.DenoisePreset = DenoisePreset.Medium;
                             break;
                         case "strong":
-                            parsed.Denoise = Denoise.Strong;
+                            parsed.DenoisePreset = DenoisePreset.Strong;
                             break;
                         default:
-                            parsed.Denoise = Denoise.Custom;
+                            parsed.DenoisePreset = DenoisePreset.Custom;
                             parsed.CustomDenoise = denoise.ToString().Replace("--denoise=", string.Empty).Replace("\"", string.Empty);
                             break;
+                    }
+                }
+
+                if (nlmeans.Success)
+                {
+                    parsed.Denoise = Denoise.NlMeans;
+                    switch (nlmeans.ToString().Replace("--nlmeans=", string.Empty).Replace("\"", string.Empty))
+                    {
+                        case "ultralight":
+                            parsed.DenoisePreset = DenoisePreset.Ultralight;
+                            break;
+                        case "light":
+                            parsed.DenoisePreset = DenoisePreset.Light;
+                            break;
+                        case "medium":
+                            parsed.DenoisePreset = DenoisePreset.Medium;
+                            break;
+                        case "strong":
+                            parsed.DenoisePreset = DenoisePreset.Strong;
+                            break;
+                    }
+
+                    if (nlmeansTune.Success)
+                    {
+                        switch (nlmeansTune.ToString().Replace("--nlmeans-tune=", string.Empty).Replace("\"", string.Empty))
+                        {
+                            case "animation":
+                                parsed.DenoiseTune = DenoiseTune.Animation;
+                                break;
+                            case "film":
+                                parsed.DenoiseTune = DenoiseTune.Film;
+                                break;
+                            case "grain":
+                                parsed.DenoiseTune = DenoiseTune.Grain;
+                                break;
+                            case "highmotion":
+                                parsed.DenoiseTune = DenoiseTune.HighMotion;
+                                break;
+                        }                      
                     }
                 }
 

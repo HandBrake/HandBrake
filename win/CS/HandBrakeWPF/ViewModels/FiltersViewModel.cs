@@ -10,12 +10,12 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
+    using System.Globalization;
 
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
@@ -145,7 +145,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.DeblockValue == 4 ? "Off" : this.DeblockValue.ToString();
+                return this.DeblockValue == 4 ? "Off" : this.DeblockValue.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -295,8 +295,13 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedDenoise);
 
                 // Show / Hide the Custom Control
-                this.ShowDenoiseCustom = this.CurrentTask.Denoise == Denoise.Custom;
+                this.ShowDenoiseCustom = this.CurrentTask.Denoise == Denoise.hqdn3d && this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
+
+                this.SelectedDenoisePreset = this.CurrentTask.Denoise == Denoise.hqdn3d ? DenoisePreset.Weak : DenoisePreset.Ultralight; // Default so we don't have an invalid preset.
+
+                this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
+                this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
             }
         }
 
@@ -378,6 +383,90 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public string DeinterlaceControlText { get; set; }
 
+        /// <summary>
+        /// Gets or sets the selected denoise tune.
+        /// </summary>
+        public DenoiseTune SelectedDenoiseTune
+        {
+            get
+            {
+                return this.CurrentTask.DenoiseTune;
+            }
+
+            set
+            {
+                this.CurrentTask.DenoiseTune = value;
+                this.NotifyOfPropertyChange(() => this.SelectedDenoiseTune);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected denoise preset.
+        /// </summary>
+        public DenoisePreset SelectedDenoisePreset
+        {
+            get
+            {
+                return this.CurrentTask.DenoisePreset;
+            }
+
+            set
+            {
+                this.CurrentTask.DenoisePreset = value;
+                this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
+
+                // Show / Hide the Custom Control
+                this.ShowDenoiseCustom = this.CurrentTask.Denoise == Denoise.hqdn3d && this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
+                this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
+                this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
+                this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
+            }
+        }
+
+        /// <summary>
+        /// Gets the denoise presets.
+        /// </summary>
+        public IEnumerable<DenoisePreset> DenoisePresets
+        {
+            get
+            {
+                return EnumHelper<DenoisePreset>.GetEnumList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the denoise tunes.
+        /// </summary>
+        public IEnumerable<DenoiseTune> DenoiseTunes
+        {
+            get
+            {
+                return EnumHelper<DenoiseTune>.GetEnumList();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether show denoise options.
+        /// </summary>
+        public bool ShowDenoiseOptions
+        {
+            get
+            {
+                return this.SelectedDenoise != Denoise.Off;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether show denoise tune.
+        /// </summary>
+        public bool ShowDenoiseTune
+        {
+            get
+            {
+                return this.SelectedDenoise == Denoise.NlMeans;
+            }
+        }
+
         #endregion
 
         #region Implemented Interfaces
@@ -406,6 +495,8 @@ namespace HandBrakeWPF.ViewModels
                 this.SelectedDetelecine = preset.Task.Detelecine;
                 this.Grayscale = preset.Task.Grayscale;
                 this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
+                this.SelectedDenoisePreset = preset.Task.DenoisePreset;
+                this.SelectedDenoiseTune = preset.Task.DenoiseTune;
 
                 // Custom Values
                 this.CustomDecomb = preset.Task.CustomDecomb;

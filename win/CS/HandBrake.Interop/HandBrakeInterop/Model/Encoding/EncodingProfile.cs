@@ -185,6 +185,16 @@ namespace HandBrake.Interop.Model.Encoding
         public Denoise Denoise { get; set; }
 
         /// <summary>
+        /// Gets or sets the denoise preset.
+        /// </summary>
+        public DenoisePreset DenoisePreset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the denoise tune.
+        /// </summary>
+        public DenoiseTune DenoiseTune { get; set; }
+
+        /// <summary>
         /// Gets or sets the custom denoise.
         /// </summary>
         public string CustomDenoise { get; set; }

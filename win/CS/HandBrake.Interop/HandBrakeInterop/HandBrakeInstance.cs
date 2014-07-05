@@ -1213,24 +1213,26 @@ namespace HandBrake.Interop
             if (profile.Denoise != Denoise.Off)
             {
                 string settings = null;
-                switch (profile.Denoise)
+                switch (profile.DenoisePreset)
                 {
-                    case Denoise.Weak:
+                    case DenoisePreset.Weak:
                         settings = "2:1:1:2:3:3";
                         break;
-                    case Denoise.Medium:
+                    case DenoisePreset.Medium:
                         settings = "3:2:2:2:3:3";
                         break;
-                    case Denoise.Strong:
+                    case DenoisePreset.Strong:
                         settings = "7:7:7:5:5:5";
                         break;
-                    case Denoise.Custom:
+                    case DenoisePreset.Custom:
                         settings = profile.CustomDenoise;
                         break;
+                        // TODO Add new Presets.
                     default:
                         break;
                 }
 
+                // TODO Add Tunes
                 this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_DENOISE, settings, allocatedMemory);
             }
 

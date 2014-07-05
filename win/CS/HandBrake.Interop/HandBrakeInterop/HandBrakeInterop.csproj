@@ -50,6 +50,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -173,6 +174,8 @@
     <Compile Include="HbLib\NativeConstants.cs" />
     <Compile Include="Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Helpers\InteropUtilities.cs" />
+    <Compile Include="Model\Encoding\DenoisePreset.cs" />
+    <Compile Include="Model\Encoding\DenoiseTune.cs" />
     <Compile Include="Model\Encoding\PictureRotation.cs" />
     <Compile Include="Model\Encoding\x265\x265Preset.cs" />
     <Compile Include="Model\Encoding\x265\x265Profile.cs" />

@@ -372,23 +372,65 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
             }
 
-            switch (task.Denoise) // Denoise
+            if (task.Denoise == Denoise.hqdn3d)
             {
-                case Denoise.Weak:
-                    query += " --denoise=\"weak\"";
-                    break;
-                case Denoise.Medium:
-                    query += " --denoise=\"medium\"";
-                    break;
-                case Denoise.Strong:
-                    query += " --denoise=\"strong\"";
-                    break;
-                case Denoise.Custom:
-                    query += string.Format(" --denoise=\"{0}\"", task.CustomDenoise);
-                    break;
-                default:
-                    query += string.Empty;
-                    break;
+                switch (task.DenoisePreset) // Denoise
+                {
+                    case DenoisePreset.Weak:
+                        query += " --denoise=\"weak\"";
+                        break;
+                    case DenoisePreset.Medium:
+                        query += " --denoise=\"medium\"";
+                        break;
+                    case DenoisePreset.Strong:
+                        query += " --denoise=\"strong\"";
+                        break;
+                    case DenoisePreset.Custom:
+                        query += string.Format(" --denoise=\"{0}\"", task.CustomDenoise);
+                        break;
+                }
+            }
+
+            // NL Means
+            if (task.Denoise == Denoise.NlMeans)
+            {
+                switch (task.DenoisePreset) // Denoise
+                {
+                    case DenoisePreset.Light:
+                        query += " --nlmeans=\"light\"";
+                        break;
+                    case DenoisePreset.Ultralight:
+                        query += " --nlmeans=\"ultralight\"";
+                        break;
+                    case DenoisePreset.Medium:
+                        query += " --nlmeans=\"medium\"";
+                        break;
+                    case DenoisePreset.Strong:
+                        query += " --nlmeans=\"strong\"";
+                        break;
+                    default:
+                        query += string.Empty;
+                        break;
+                }
+
+                switch (task.DenoiseTune)
+                {
+                    case DenoiseTune.Animation:
+                        query += " --nlmeans-tune=\"animation\"";
+                        break;
+                    case DenoiseTune.Film:
+                        query += " --nlmeans-tune=\"film\"";
+                        break;
+                    case DenoiseTune.Grain:
+                        query += " --nlmeans-tune=\"grain\"";
+                        break;
+                    case DenoiseTune.HighMotion:
+                        query += " --nlmeans-tune=\"highmotion\"";
+                        break;
+                    default:
+                        query += string.Empty;
+                        break;
+                }
             }
 
             if (task.Deblock > 4)

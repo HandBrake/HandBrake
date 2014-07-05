@@ -98,6 +98,8 @@ namespace HandBrake.ApplicationServices.Model
             this.Decomb = task.Decomb;
             this.Deinterlace = task.Deinterlace;
             this.Denoise = task.Denoise;
+            this.DenoisePreset = task.DenoisePreset;
+            this.DenoiseTune = task.DenoiseTune;
             this.Destination = task.Destination;
             this.Detelecine = task.Detelecine;
             this.DisplayWidth = task.DisplayWidth;
@@ -312,6 +314,16 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets Denoise.
         /// </summary>
         public Denoise Denoise { get; set; }
+
+        /// <summary>
+        /// Gets or sets the denoise preset.
+        /// </summary>
+        public DenoisePreset DenoisePreset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the denoise tune.
+        /// </summary>
+        public DenoiseTune DenoiseTune { get; set; }
 
         /// <summary>
         /// Gets or sets CustomDenoise.

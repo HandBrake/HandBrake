@@ -199,28 +199,67 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
             }
 
-            switch (parsed.Denoise)
+
+            if (parsed.Denoise == Denoise.hqdn3d)
             {
-                case Denoise.Off:
-                    AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "0");
-                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                    break;
-                case Denoise.Weak:
-                    AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "2");
-                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                    break;
-                case Denoise.Medium:
-                    AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "3");
-                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                    break;
-                case Denoise.Strong:
-                    AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "4");
-                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                    break;
-                case Denoise.Custom:
-                    AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "1");
-                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.CustomDenoise);
-                    break;
+                switch (parsed.DenoisePreset)
+                {
+                    case DenoisePreset.Weak:
+                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "2");
+                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
+                        break;
+                    case DenoisePreset.Medium:
+                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "3");
+                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
+                        break;
+                    case DenoisePreset.Strong:
+                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "4");
+                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
+                        break;
+                    case DenoisePreset.Custom:
+                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "1");
+                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.CustomDenoise);
+                        break;
+                }
+            }
+
+            // These keys are still TBD.   TODO Update these
+            if (parsed.Denoise == Denoise.NlMeans)
+            {
+                switch (parsed.DenoisePreset)
+                {
+                    case DenoisePreset.Ultralight:
+                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "1");
+                        break;
+                    case DenoisePreset.Light:
+                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "2");
+                        break;
+                    case DenoisePreset.Medium:
+                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "3");
+                        break;
+                    case DenoisePreset.Strong:
+                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "4");
+                        break;
+                }
+
+                switch (parsed.DenoiseTune)
+                {
+                    case DenoiseTune.None:
+                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "0");
+                        break;
+                    case DenoiseTune.Animation:
+                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "1");
+                        break;
+                    case DenoiseTune.Film:
+                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "2");
+                        break;
+                    case DenoiseTune.Grain:
+                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "3");
+                        break;
+                    case DenoiseTune.HighMotion:
+                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "4");
+                        break;
+                }
             }
 
             int detelecine = 0;

@@ -15,9 +15,7 @@ namespace HandBrake.Interop.Model.Encoding
     public enum Denoise
 	{
 		Off = 0,
-		Weak = 2,
-		Medium = 3,
-		Strong = 4,
-		Custom = 1
+        hqdn3d = 1,
+		NlMeans = 2,
 	}
 }

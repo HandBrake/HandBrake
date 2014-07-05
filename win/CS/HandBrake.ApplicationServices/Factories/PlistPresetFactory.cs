@@ -161,6 +161,12 @@ namespace HandBrake.ApplicationServices.Factories
                 case "PictureDenoise":
                     preset.Task.Denoise = (Denoise)kvp.Value;
                     break;
+                case "DenoisePreset":
+                    preset.Task.DenoisePreset = (DenoisePreset)kvp.Value; // TODO to be confirmed.
+                    break;
+                case "DenoiseTune":
+                    preset.Task.DenoiseTune = (DenoiseTune)kvp.Value; // TODO to be confirmed.
+                    break;
                 case "PictureDenoiseCustom":
                     preset.Task.CustomDenoise = kvp.Value;
                     break;
