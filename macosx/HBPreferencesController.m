@@ -20,12 +20,17 @@
  * preference settings are added that cannot be handled with Cocoa bindings).
  */
 
-@interface HBPreferencesController (Private)
+@interface HBPreferencesController () <NSTokenFieldDelegate>
 
 - (void) setPrefView: (id) sender;
 - (NSToolbarItem *)toolbarItemWithIdentifier: (NSString *)identifier
                                        label: (NSString *)label
                                        image: (NSImage *)image;
+
+@property (assign) IBOutlet NSTokenField *formatTokenField;
+@property (assign) IBOutlet NSTokenField *builtInTokenField;
+@property (readonly, nonatomic) NSArray *buildInFormatTokens;
+@property (retain, nonatomic) NSArray *matches;
 
 @end
 
@@ -64,6 +69,8 @@
         @"YES",             @"AlertBuiltInPresetUpdate",
         @"MetaX",           @"SendCompletedEncodeToApp",
         @"NO",              @"ShowAdvancedOptsForAutoPassthru",
+
+        @[@"{Source}", @" ", @"{Title}"],       @"HBAutoNamingFormat",
         nil]];
 }
 
@@ -97,6 +104,14 @@
     [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
     [toolbar setSizeMode: NSToolbarSizeModeRegular];
     [[self window] setToolbar: toolbar];
+
+    // Format token field initialization
+    [self.formatTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
+    [self.formatTokenField setCompletionDelay:0.2];
+
+    _buildInFormatTokens = [@[@"{Source}", @"{Title}", @"{Date}", @"{Time}", @"{Chapters}", @"{Quality/Bitrate}"] retain];
+    [self.builtInTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
+    [self.builtInTokenField setStringValue:[self.buildInFormatTokens componentsJoinedByString:@"%%"]];
 
     [toolbar setSelectedItemIdentifier: TOOLBAR_GENERAL];
     [self setPrefView:nil];
@@ -192,10 +207,70 @@
     }
 }
 
+#pragma mark - Format Token Field Delegate
 
-@end
+- (NSString *)tokenField:(NSTokenField *)tokenField displayStringForRepresentedObject:(id)representedObject
+{
+    if ([representedObject rangeOfString: @"{"].location == 0)
+    {
+        return [(NSString *)representedObject substringWithRange:NSMakeRange(1, [(NSString*)representedObject length]-2)];
+    }
 
-@implementation HBPreferencesController (Private)
+    return representedObject;
+}
+
+- (NSTokenStyle)tokenField:(NSTokenField *)tokenField styleForRepresentedObject:(id)representedObject
+{
+    if ([representedObject rangeOfString: @"{"].location == 0)
+    {
+        return NSRoundedTokenStyle;
+    }
+    else
+    {
+        return NSPlainTextTokenStyle;
+    }
+}
+
+- (id)tokenField:(NSTokenField *)tokenField representedObjectForEditingString:(NSString *)editingString
+{
+    return editingString;
+}
+
+- (NSArray *)tokenField:(NSTokenField *)tokenField completionsForSubstring:(NSString *)substring indexOfToken:(NSInteger)tokenIndex
+    indexOfSelectedItem:(NSInteger *)selectedIndex
+{
+    self.matches = [self.buildInFormatTokens filteredArrayUsingPredicate:
+                    [NSPredicate predicateWithFormat:@"SELF beginswith[cd] %@", substring]];
+    return self.matches;
+}
+
+- (NSString *)tokenField:(NSTokenField *)tokenField editingStringForRepresentedObject:(id)representedObject
+{
+    if ([representedObject rangeOfString: @"{"].location == 0)
+    {
+        return [NSString stringWithFormat:@"%%%@%%", representedObject];
+    }
+    else
+    {
+        return representedObject;
+    }
+}
+
+- (NSArray *)tokenField:(NSTokenField *)tokenField shouldAddObjects:(NSArray *)tokens atIndex:(NSUInteger)index
+{
+    return tokens;
+}
+
+- (BOOL)tokenField:(NSTokenField *)tokenField writeRepresentedObjects:(NSArray *)objects toPasteboard:(NSPasteboard *)pboard
+{
+    NSString *format = [objects componentsJoinedByString:@"%%"];
+    [pboard setString:format forType:NSPasteboardTypeString];
+
+    return YES;
+}
+
+
+#pragma mark - Private methods
 
 - (void) setPrefView: (id) sender
 {

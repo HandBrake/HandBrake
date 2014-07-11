@@ -12,6 +12,7 @@
 #import "HBPresets.h"
 #import "HBPreviewController.h"
 #import "DockTextField.h"
+#import "HBUtilities.h"
 
 unsigned int maximumNumberOfAllowedAudioTracks = 1024;
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
@@ -4729,6 +4730,32 @@ bool one_burned = FALSE;
 #pragma mark -
 #pragma mark GUI Controls Changed Methods
 
+- (void)updateFileName
+{
+    if (!SuccessfulScan)
+    {
+        return;
+    }
+
+    hb_list_t  *list  = hb_get_titles(fHandle);
+    hb_title_t *title = (hb_title_t *)
+    hb_list_item(list, (int)[fSrcTitlePopUp indexOfSelectedItem]);
+
+    // Generate a new file name
+    NSString *fileName = [HBUtilities automaticNameForSource:[browsedSourceDisplayName stringByDeletingPathExtension]
+                                                       title: title->index
+                                                    chapters:NSMakeRange([fSrcChapterStartPopUp indexOfSelectedItem] + 1, [fSrcChapterEndPopUp indexOfSelectedItem] + 1)
+                                                     quality:[[fVidQualityMatrix selectedCell] tag] ? [fVidQualityRFField stringValue] : nil
+                                                     bitrate:![[fVidQualityMatrix selectedCell] tag] ? [fVidBitrateField stringValue] : nil
+                                                  videoCodec:(int)[[fVidEncoderPopUp selectedItem] tag]];
+
+    // Swap the old one with the new one
+    [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@/%@.%@",
+                                     [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
+                                     fileName,
+                                     [[fDstFile2Field stringValue] pathExtension]]];
+}
+
 - (IBAction) titlePopUpChanged: (id) sender
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
@@ -4757,20 +4784,9 @@ bool one_burned = FALSE;
     [fSrcFrameStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 1]];
     //[fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", ((title->hours * 3600) + (title->minutes * 60) + (title->seconds)) * 24]];
     [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->rate / title->rate_base)]];    
-    
-    /* If Auto Naming is on. We create an output filename of dvd name - title number */
-    if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0 && ( hb_list_count( list ) > 1 ) )
-	{
-		[fDstFile2Field setStringValue: [NSString stringWithFormat:
-			@"%@/%@-%d.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
-			[browsedSourceDisplayName stringByDeletingPathExtension],
-            title->index,
-			[[fDstFile2Field stringValue] pathExtension]]];	
-	}
+
     /* Update encode start / stop variables */
-     
-    
-    
+
     /* Update chapter popups */
     [fSrcChapterStartPopUp removeAllItems];
     [fSrcChapterEndPopUp   removeAllItems];
@@ -4838,6 +4854,12 @@ bool one_burned = FALSE;
 											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
 											nil]]];
     [fVidRatePopUp selectItemAtIndex: 0];
+
+    /* If Auto Naming is on. We create an output filename of dvd name - title number */
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+	{
+        [self updateFileName];
+	}
 
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
     [self selectPreset:nil];
@@ -4925,7 +4947,15 @@ bool one_burned = FALSE;
     
     /* We're changing the chapter range - we may need to flip the m4v/mp4 extension */
     if ([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4)
+    {
         [self autoSetM4vExtension:sender];
+    }
+
+    /* If Auto Naming is on it might need to be update if it includes the chapters range */
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+	{
+        [self updateFileName];
+	}
 }
 
 - (IBAction) startEndSecValueChanged: (id) sender
@@ -5367,6 +5397,12 @@ the user is using "Custom" settings by determining the sender*/
     }
     
     [self customSettingUsed: sender];
+
+    /* If Auto Naming is on it might need to be update if it includes the quality token */
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+	{
+        [self updateFileName];
+	}
 }
 
 
@@ -5400,7 +5436,12 @@ the user is using "Custom" settings by determining the sender*/
     
     /* Audio goes here */
 	[fAudioDelegate prepareAudioForJob: job];
-       
+
+    // Updates bitrate in the file name
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+	{
+        [self updateFileName];
+	}
 }
 
 #pragma mark -
