@@ -349,7 +349,7 @@ void ReadLoop( void * _w )
     hb_work_object_t * w = _w;
     hb_work_private_t  * r = w->private_data;
     hb_fifo_t   ** fifos;
-    hb_buffer_t  * buf;
+    hb_buffer_t  * buf = NULL;
     hb_list_t    * list;
     int            n;
     int            chapter = -1;
@@ -456,7 +456,11 @@ void ReadLoop( void * _w )
             r->start_found = 2;
             r->duration -= r->job->pts_to_start;
             r->job->pts_to_start = pts_to_start;
+            hb_buffer_close(&buf);
         }
+        // hb_stream_seek_ts does nothing for TS streams and will return
+        // an error.  In this case, the current buf remains valid and
+        // gets processed below.
     } 
     else if( r->stream )
     {
@@ -503,28 +507,32 @@ void ReadLoop( void * _w )
             break;
         }
 
-        if (r->bd)
+        if (buf == NULL)
         {
-          if( (buf = hb_bd_read( r->bd )) == NULL )
-          {
-              break;
-          }
+            if (r->bd)
+            {
+                if( (buf = hb_bd_read( r->bd )) == NULL )
+                {
+                    break;
+                }
+            }
+            else if (r->dvd)
+            {
+                if( (buf = hb_dvd_read( r->dvd )) == NULL )
+                {
+                    break;
+                }
+            }
+            else if (r->stream)
+            {
+                if ( (buf = hb_stream_read( r->stream )) == NULL )
+                {
+                  break;
+                }
+            }
         }
-        else if (r->dvd)
+        if (r->stream && r->start_found == 2 )
         {
-          if( (buf = hb_dvd_read( r->dvd )) == NULL )
-          {
-              break;
-          }
-        }
-        else if (r->stream)
-        {
-          if ( (buf = hb_stream_read( r->stream )) == NULL )
-          {
-            break;
-          }
-          if ( r->start_found == 2 )
-          {
             // We will inspect the timestamps of each frame in sync
             // to skip from this seek point to the timestamp we
             // want to start at.
@@ -537,7 +545,6 @@ void ReadLoop( void * _w )
                 r->job->pts_to_start = 0;
             }
             r->start_found = 1;
-          }
         }
 
         (hb_demux[r->title->demuxer])( buf, list, &r->demux );
@@ -623,11 +630,20 @@ void ReadLoop( void * _w )
                         break;
                     }
 
-                    if ( !r->start_found &&
-                        start >= r->pts_to_start )
+                    if (!r->start_found && start >= r->pts_to_start)
                     {
                         // pts_to_start point found
                         r->start_found = 1;
+                        if (r->stream)
+                        {
+                            // libav multi-threaded decoders can get into
+                            // a bad state if the initial data is not
+                            // decodable.  So try to improve the chances of
+                            // a good start by waiting for an initial iframe
+                            hb_stream_set_need_keyframe(r->stream, 1);
+                            hb_buffer_close( &buf );
+                            continue;
+                        }
                     }
                     // This log is handy when you need to debug timing problems
                     //hb_log("id %x scr_offset %"PRId64
@@ -677,6 +693,7 @@ void ReadLoop( void * _w )
                     push_buf( r, fifos[n], buf_copy );
                 }
                 push_buf( r, fifos[0], buf );
+                buf = NULL;
             }
             else
             {

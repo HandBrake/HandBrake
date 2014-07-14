@@ -4872,6 +4872,30 @@ static hb_buffer_t * hb_ts_stream_decode( hb_stream_t *stream )
     return NULL;
 }
 
+void hb_stream_set_need_keyframe(hb_stream_t *stream, int need_keyframe)
+{
+    if ( stream->hb_stream_type == transport )
+    {
+        // Only wait for a keyframe if the stream is known to have IDRs
+        if ( stream->has_IDRs )
+        {
+            stream->need_keyframe = need_keyframe;
+        }
+    }
+    else if ( stream->hb_stream_type == program )
+    {
+        // Only wait for a keyframe if the stream is known to have IDRs
+        if ( stream->has_IDRs )
+        {
+            stream->need_keyframe = need_keyframe;
+        }
+    }
+    else
+    {
+        stream->need_keyframe = need_keyframe;
+    }
+}
+
 void hb_ts_stream_reset(hb_stream_t *stream)
 {
     int i;

@@ -344,6 +344,7 @@ int          hb_stream_seek_chapter( hb_stream_t *, int );
 int          hb_stream_chapter( hb_stream_t * );
 
 hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt );
+void hb_stream_set_need_keyframe( hb_stream_t *stream, int need_keyframe );
 
 
 #define STR4_TO_UINT32(p) \
