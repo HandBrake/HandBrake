@@ -6,13 +6,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HBAdvancedController : NSObject
+/**
+ *  HBAdvancedController
+ */
+@interface HBAdvancedController : NSViewController
 {
     /* Advanced Tab for opts fX264optView*/
-    NSBox                       * fOptionsBox;
+    IBOutlet NSBox              * fOptionsBox;
     
     IBOutlet NSView             * fX264optView;
-    IBOutlet NSView             * fEmptyView;
+    IBOutlet NSView             * fFFmpegView;
     IBOutlet NSTextField        * fX264optViewTitleLabel;
     IBOutlet NSTextField        * fDisplayX264OptionsLabel;
     IBOutlet NSTextField        * fDisplayX264Options;
@@ -61,8 +64,7 @@
 }
 
 // x264 Advanced Panel Methods
-- (void) setView: (NSBox *) box;
-- (BOOL) loadMyNibFile;
+
 - (NSString *) optionsString;
 - (NSString *) optionsStringLavc;
 - (void) setOptions: (NSString *)string;

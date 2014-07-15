@@ -1,21 +1,38 @@
-/* $Id: HBSubtitles.m,v 1.35 2005/08/01 14:29:50 titer Exp $
+/* $Id: HBSubtitles.m
 
-   This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License. */
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
-#import "HBSubtitles.h"
-#include "lang.h"
+#import "HBSubtitlesController.h"
+#import "Controller.h"
 #include "hb.h"
+#include "lang.h"
 
-@implementation HBSubtitles
-- (id)init 
+@interface HBSubtitlesController () <NSTableViewDataSource, NSTableViewDelegate>
 {
+    NSMutableArray               *subtitleArray; // contains the output subtitle track info
+    NSMutableArray               *subtitleSourceArray;// contains the source subtitle track info
+    NSString                     *foreignAudioSearchTrackName;
+    NSMutableArray               *languagesArray; // array of languages taken from lang.c
+    NSInteger                     languagesArrayDefIndex;
+    NSMutableArray               *charCodeArray; // array of character codes
+    int                           charCodeArrayDefIndex;
+    int                           container;
+}
 
-    if( self = [super init] )
+@property (assign) IBOutlet NSButton *fBrowseSrtFileButton;
+@property (assign) IBOutlet NSTableView *fTableView;
+
+@end
+
+@implementation HBSubtitlesController
+
+- (instancetype)init
+{
+    self = [super initWithNibName:@"Subtitles" bundle:nil];
+    if (self)
     {
-        fTitle = NULL;
-
         /* setup our array of languages */
         const iso639_lang_t *lang;
         languagesArray = [[NSMutableArray alloc] init];
@@ -68,97 +85,114 @@
         [charCodeArray addObject:@"UTF-32"];
         [charCodeArray addObject:@"UTF-32LE"];
         [charCodeArray addObject:@"UTF-32BE"];
-        
+
         charCodeArrayDefIndex = 11;
+
+        [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(containerChanged:) name: HBContainerChangedNotification object: nil];
+        [[NSNotificationCenter defaultCenter]  addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object: nil];
     }
-    
+
     return self;
 }
 
-
-- (void)resetWithTitle:(hb_title_t *)title
+- (void)titleChanged:(NSNotification *)aNotification
 {
-    if (!title)
+    NSDictionary *notDict = [aNotification userInfo];
+    NSData *theData = [notDict objectForKey: keyTitleTag];
+    hb_title_t *title = NULL;
+
+    [theData getBytes: &title length: sizeof(title)];
+    if (title)
     {
-        return;
-    }
-    fTitle = title;
-    
-    /* reset the subtitle source array */
-    if (subtitleSourceArray)
-    {
-        [subtitleSourceArray release];
-    }
-    subtitleSourceArray = [[NSMutableArray alloc] init];
-    
-    /* now populate the array with the source subtitle track info */
-    int i;
-    hb_subtitle_t *subtitle;
-    NSMutableArray *forcedSourceNamesArray = [[NSMutableArray alloc] init];
-    for (i = 0; i < hb_list_count(fTitle->list_subtitle); i++)
-    {
-        subtitle = (hb_subtitle_t*)hb_list_item(fTitle->list_subtitle, i);
-        
-        /* Human-readable representation of subtitle->source */
-        NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
-        NSString *subSourceName = [NSString stringWithUTF8String:hb_subsource_name(subtitle->source)];
-        /* if the subtitle track can be forced, add its source name to the array */
-        if (hb_subtitle_can_force(subtitle->source) &&
-            [forcedSourceNamesArray containsObject:subSourceName] == NO)
+        /* reset the subtitle source array */
+        if (subtitleSourceArray)
         {
-            [forcedSourceNamesArray addObject:subSourceName];
+            [subtitleSourceArray release];
         }
-        
-        /* create a dictionary of source subtitle information to store in our array */
-        NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
-        /* Subtitle Source track name */
-        [newSubtitleSourceTrack setObject:[NSString stringWithFormat:@"%d - %@ - (%@) (%@)",
-                                           i, [NSString stringWithUTF8String:subtitle->lang],
-                                           bitmapOrText,subSourceName]
-                                   forKey:@"sourceTrackName"];
-        /* Subtitle Source track number, type and features */
-        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:i]                forKey:@"sourceTrackNum"];
-        [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:subtitle->source] forKey:@"sourceTrackType"];
-        [subtitleSourceArray addObject:newSubtitleSourceTrack];
-        [newSubtitleSourceTrack autorelease];
-    }
-    
-    /* now set the name of the Foreign Audio Search track */
-    if ([forcedSourceNamesArray count])
-    {
-        [forcedSourceNamesArray sortUsingComparator:^(id obj1, id obj2)
-         {
-             return [((NSString*)obj1) compare:((NSString*)obj2)];
-         }];
-        NSString *tempString;
-        NSString *tempList       = @"";
-        NSEnumerator *enumerator = [forcedSourceNamesArray objectEnumerator];
-        while (tempString = (NSString*)[enumerator nextObject])
+        subtitleSourceArray = [[NSMutableArray alloc] init];
+
+        /* now populate the array with the source subtitle track info */
+        int i;
+        hb_subtitle_t *subtitle;
+        NSMutableArray *forcedSourceNamesArray = [[NSMutableArray alloc] init];
+        for (i = 0; i < hb_list_count(title->list_subtitle); i++)
         {
-            if ([tempList length])
+            subtitle = (hb_subtitle_t*)hb_list_item(title->list_subtitle, i);
+
+            /* Human-readable representation of subtitle->source */
+            NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
+            NSString *subSourceName = [NSString stringWithUTF8String:hb_subsource_name(subtitle->source)];
+            /* if the subtitle track can be forced, add its source name to the array */
+            if (hb_subtitle_can_force(subtitle->source) &&
+                [forcedSourceNamesArray containsObject:subSourceName] == NO)
             {
-                tempList = [tempList stringByAppendingString:@", "];
+                [forcedSourceNamesArray addObject:subSourceName];
             }
-            tempList = [tempList stringByAppendingString:tempString];
+
+            /* create a dictionary of source subtitle information to store in our array */
+            NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
+            /* Subtitle Source track name */
+            [newSubtitleSourceTrack setObject:[NSString stringWithFormat:@"%d - %@ - (%@) (%@)",
+                                               i, [NSString stringWithUTF8String:subtitle->lang],
+                                               bitmapOrText,subSourceName]
+                                       forKey:@"sourceTrackName"];
+            /* Subtitle Source track number, type and features */
+            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:i]                forKey:@"sourceTrackNum"];
+            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:subtitle->source] forKey:@"sourceTrackType"];
+            [subtitleSourceArray addObject:newSubtitleSourceTrack];
+            [newSubtitleSourceTrack autorelease];
         }
-        [foreignAudioSearchTrackName release];
-        foreignAudioSearchTrackName = [[NSString stringWithFormat:@"Foreign Audio Search - (Bitmap) (%@)", tempList]
-                                       retain];
+
+        /* now set the name of the Foreign Audio Search track */
+        if ([forcedSourceNamesArray count])
+        {
+            [forcedSourceNamesArray sortUsingComparator:^(id obj1, id obj2)
+             {
+                 return [((NSString*)obj1) compare:((NSString*)obj2)];
+             }];
+            NSString *tempString;
+            NSString *tempList       = @"";
+            NSEnumerator *enumerator = [forcedSourceNamesArray objectEnumerator];
+            while (tempString = (NSString*)[enumerator nextObject])
+            {
+                if ([tempList length])
+                {
+                    tempList = [tempList stringByAppendingString:@", "];
+                }
+                tempList = [tempList stringByAppendingString:tempString];
+            }
+            [foreignAudioSearchTrackName release];
+            foreignAudioSearchTrackName = [[NSString stringWithFormat:@"Foreign Audio Search - (Bitmap) (%@)", tempList]
+                                           retain];
+        }
+        else
+        {
+            [foreignAudioSearchTrackName release];
+            foreignAudioSearchTrackName = @"Foreign Audio Search - (Bitmap)";
+        }
+        [forcedSourceNamesArray release];
+        
+        /* reset the subtitle output array */
+        if (subtitleArray)
+        {
+            [subtitleArray release];
+        }
+        subtitleArray = [[NSMutableArray alloc] init];
+        [self addSubtitleTrack];
     }
     else
     {
-        [foreignAudioSearchTrackName release];
-        foreignAudioSearchTrackName = @"Foreign Audio Search - (Bitmap)";
+        [subtitleArray removeAllObjects];
+        [subtitleSourceArray removeAllObjects];
     }
-    [forcedSourceNamesArray release];
-    
-    /* reset the subtitle output array */
-    if (subtitleArray)
-    {
-        [subtitleArray release];
-    }
-    subtitleArray = [[NSMutableArray alloc] init];
-    [self addSubtitleTrack];
+
+    [self.fTableView reloadData];    
+}
+
+- (void)enableUI:(BOOL)b
+{
+    [self.fBrowseSrtFileButton setEnabled:b];
+    [self.fTableView setEnabled:b];
 }
 
 #pragma mark -
@@ -203,16 +237,16 @@
     [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"subtitleSourceTrackType"];
     /* Subtitle Source file path */
     [newSubtitleSourceTrack setObject:[fileURL path] forKey:@"sourceSrtFilePath"];
-    
+
     [subtitleSourceArray addObject:newSubtitleSourceTrack];
     [newSubtitleSourceTrack autorelease];
-    
-    /* Now create a new srt subtitle dictionary assuming the user wants to add it to their list 
+
+    /* Now create a new srt subtitle dictionary assuming the user wants to add it to their list
      * Note: the subtitle array always has last entry for "None", so we need to replace its
      * position in the array and tack a "None" track back on the end of the list */
     [subtitleArray removeObjectAtIndex:[subtitleArray count] - 1];
-    
-    
+
+
     NSMutableDictionary *newSubtitleSrtTrack = [[NSMutableDictionary alloc] init];
     /* Subtitle Source track popup index */
     if ([subtitleArray count] == 0) // we now have an empty array so this will be our first track
@@ -223,7 +257,7 @@
     {
         [newSubtitleSrtTrack setObject:[NSNumber numberWithInteger:[subtitleSourceArray count]] forKey:@"subtitleSourceTrackNum"];
     }
-    
+
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"sourceTrackType"];
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"subtitleSourceTrackType"];
     /* Subtitle Source track popup language */
@@ -234,50 +268,51 @@
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackBurned"];
     /* Subtitle track default state */
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackDefault"];
-    
+
     /* now the srt only info, Language, Chart Code and offset */
     [newSubtitleSrtTrack setObject:[fileURL path] forKey:@"subtitleSourceSrtFilePath"];
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInteger:languagesArrayDefIndex] forKey:@"subtitleTrackSrtLanguageIndex"];
     [newSubtitleSrtTrack setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:0] forKey:@"subtitleTrackSrtLanguageLong"];
     [newSubtitleSrtTrack setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:1] forKey:@"subtitleTrackSrtLanguageIso3"];
-    
+
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:charCodeArrayDefIndex] forKey:@"subtitleTrackSrtCharCodeIndex"];
     [newSubtitleSrtTrack setObject:[charCodeArray objectAtIndex:charCodeArrayDefIndex] forKey:@"subtitleTrackSrtCharCode"];
-                    
+
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackSrtOffset"];
-    
-    
+
+
     [subtitleArray addObject:newSubtitleSrtTrack];
     [newSubtitleSrtTrack release];
-    
+
     /* now add back the none track to the end of the array */
     [self addSubtitleTrack];
-    
-    
 }
 
 /* used to return the current subtitleArray to controller.m */
-- (NSMutableArray*) getSubtitleArray
+- (NSMutableArray *) subtitleArray
 {
     return subtitleArray;
 }
 
-- (void)containerChanged:(int) newContainer
+// This gets called whenever the video container changes.
+- (void) containerChanged: (NSNotification *) aNotification
+
 {
-    container = newContainer;
+    NSDictionary *notDict = [aNotification userInfo];
+
+    container = [[notDict objectForKey: keyContainerTag] intValue];
+    [self.fTableView reloadData];
 }
 
-- (void)setNewSubtitles:(NSMutableArray*) newSubtitleArray
+- (void)addTracksFromQueue:(NSMutableArray *)newSubtitleArray
 {
     /* Note: we need to look for external subtitles so it can be added to the source array track.
      * Remember the source container subs are already loaded with resetTitle which is already called
      * so any external sub sources need to be added to our source subs here
      */
-    
+
     int i = 0;
-    NSEnumerator *enumerator = [newSubtitleArray objectEnumerator];
-    id tempObject;
-    while ( tempObject = [enumerator nextObject] )  
+    for ( id tempObject in newSubtitleArray )
     {
         /* We have an srt track */
         if ([[tempObject objectForKey:@"subtitleSourceTrackType"] intValue] == SRTSUB)
@@ -297,19 +332,57 @@
             [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:SRTSUB] forKey:@"subtitleSourceTrackType"];
             /* Subtitle Source file path */
             [newSubtitleSourceTrack setObject:filePath forKey:@"sourceSrtFilePath"];
-            
+
             [subtitleSourceArray addObject:newSubtitleSourceTrack];
             [newSubtitleSourceTrack autorelease];
             /* END replicate the add new srt code above */
         }
         i++;
     }
-    
-    
+
     /*Set the subtitleArray to the newSubtitleArray */
     [subtitleArray setArray:newSubtitleArray];
+    [self.fTableView reloadData];
 }
-   
+
+#pragma mark - Srt import
+
+- (IBAction)browseImportSrtFile:(id)sender
+{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setCanChooseFiles:YES];
+    [panel setCanChooseDirectories:NO];
+
+    NSURL *sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastSrtImportDirectoryURL"])
+	{
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastSrtImportDirectoryURL"];
+	}
+	else
+	{
+		sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
+	}
+
+    /* we open up the browse srt sheet here and call for browseImportSrtFileDone after the sheet is closed */
+    NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"srt", nil];
+    [panel setDirectoryURL:sourceDirectory];
+    [panel setAllowedFileTypes:fileTypes];
+    [panel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
+        if (result == NSOKButton)
+        {
+            NSURL *importSrtFileURL = [panel URL];
+            NSURL *importSrtDirectory = [importSrtFileURL URLByDeletingLastPathComponent];
+            [[NSUserDefaults standardUserDefaults] setURL:importSrtDirectory forKey:@"LastSrtImportDirectoryURL"];
+
+            /* now pass the string off to fSubtitlesDelegate to add the srt file to the dropdown */
+            [self createSubtitleSrtTrack:importSrtFileURL];
+
+            [self.fTableView reloadData];
+        }
+    }];
+}
+
 #pragma mark -
 #pragma mark Subtitle Table Delegate Methods
 /* Table View delegate methods */
@@ -318,23 +391,16 @@
  * specified as we always keep one track set to "None" which is ignored
  * for setting up tracks, but is used to add tracks.
  */
-- (NSUInteger)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-    if( fTitle == NULL || ![subtitleArray count])
-    {
-        return 0;
-    }
-    else
-    {
-        return [subtitleArray count];
-    }
+    return [subtitleArray count];
 }
 
 /* Used to tell the Table view which information is to be displayed per item */
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     NSString *cellEntry = @"__DATA ERROR__";
-    
+
     /* we setup whats displayed given the column identifier */
     if ([[aTableColumn identifier] isEqualToString:@"track"])
     {
@@ -344,13 +410,13 @@
         /* Set the Popups properties */
         [cellTrackPopup setControlSize:NSSmallControlSize];
         [cellTrackPopup setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
-        
-        
+
+
         /* Add our initial "None" track which we use to add source tracks or remove tracks.
          * "None" is always index 0.
          */
         [[cellTrackPopup menu] addItemWithTitle: @"None" action: NULL keyEquivalent: @""];
-        
+
         /* Foreign Audio Search (index 1 in the popup) is only available for the first track */
         if (rowIndex == 0)
         {
@@ -359,16 +425,16 @@
                                              action:NULL
                                       keyEquivalent:@""];
         }
-        
+
         int i;
         for(i = 0; i < [subtitleSourceArray count]; i++ )
         {
-            [[cellTrackPopup menu] addItemWithTitle: [[subtitleSourceArray objectAtIndex:i] objectForKey: @"sourceTrackName"] action: NULL keyEquivalent: @""]; 
+            [[cellTrackPopup menu] addItemWithTitle: [[subtitleSourceArray objectAtIndex:i] objectForKey: @"sourceTrackName"] action: NULL keyEquivalent: @""];
         }
-        
-        
+
+
         [aTableColumn setDataCell:cellTrackPopup];
-        
+
     }
     else if ([[aTableColumn identifier] isEqualToString:@"forced"])
     {
@@ -379,7 +445,7 @@
         [cellForcedCheckBox setImagePosition:NSImageOnly];
         [cellForcedCheckBox setAllowsMixedState:NO];
         [aTableColumn setDataCell:cellForcedCheckBox];
-        
+
     }
     else if ([[aTableColumn identifier] isEqualToString:@"burned"])
     {
@@ -413,9 +479,9 @@
         int i;
         for(i = 0; i < [languagesArray count]; i++ )
         {
-            [[cellSrtLangPopup menu] addItemWithTitle: [[languagesArray objectAtIndex:i] objectAtIndex:0] action: NULL keyEquivalent: @""]; 
+            [[cellSrtLangPopup menu] addItemWithTitle: [[languagesArray objectAtIndex:i] objectAtIndex:0] action: NULL keyEquivalent: @""];
         }
-        [aTableColumn setDataCell:cellSrtLangPopup]; 
+        [aTableColumn setDataCell:cellSrtLangPopup];
     }
     else if ([[aTableColumn identifier] isEqualToString:@"srt_charcode"])
     {
@@ -426,14 +492,14 @@
         [cellSrtCharCodePopup setControlSize:NSSmallControlSize];
         [cellSrtCharCodePopup setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
         /* list our character codes, as per charCodeArray */
-        
+
         int i;
         for(i = 0; i < [charCodeArray count]; i++ )
         {
-            [[cellSrtCharCodePopup menu] addItemWithTitle: [charCodeArray objectAtIndex:i] action: NULL keyEquivalent: @""]; 
+            [[cellSrtCharCodePopup menu] addItemWithTitle: [charCodeArray objectAtIndex:i] action: NULL keyEquivalent: @""];
         }
         [aTableColumn setDataCell:cellSrtCharCodePopup];
-        
+
     }
     else if ([[aTableColumn identifier] isEqualToString:@"srt_offset"])
     {
@@ -448,17 +514,17 @@
     }
     else
     {
-        cellEntry = nil;    
+        cellEntry = nil;
     }
-    
+
     return cellEntry;
 }
 
-/* Called whenever a widget in the table is edited or changed, we use it to record the change in the controlling array 
+/* Called whenever a widget in the table is edited or changed, we use it to record the change in the controlling array
  * including removing and adding new tracks via the "None" ("track" index of 0) */
 - (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
-    
+
     if ([[aTableColumn identifier] isEqualToString:@"track"])
     {
         [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:[anObject intValue]] forKey:@"subtitleSourceTrackNum"];
@@ -467,7 +533,7 @@
         {
             /* The first row has an additional track (Foreign Audio Search) */
             int sourceSubtitleIndex = [anObject intValue] - 1 - (rowIndex == 0);
-            
+
             if(rowIndex == 0 && [anObject intValue] == 1)
             {
                 /*
@@ -502,14 +568,14 @@
             {
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[[subtitleSourceArray objectAtIndex:sourceSubtitleIndex] objectForKey:@"sourceTrackType"]
                                                            forKey:@"subtitleSourceTrackType"];
-            } 
-            
+            }
+
             if (!hb_subtitle_can_burn([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue]))
             {
                 /* the source track cannot be burned in, so uncheck the widget */
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackBurned"];
             }
-             
+
             if (!hb_subtitle_can_force([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] intValue]))
             {
                 /* the source track does not support forced flags, so uncheck the widget */
@@ -519,7 +585,7 @@
     }
     else if ([[aTableColumn identifier] isEqualToString:@"forced"])
     {
-        [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:[anObject intValue]] forKey:@"subtitleTrackForced"];   
+        [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:[anObject intValue]] forKey:@"subtitleTrackForced"];
     }
     else if ([[aTableColumn identifier] isEqualToString:@"burned"])
     {
@@ -535,7 +601,7 @@
             int i = 0;
             NSEnumerator *enumerator = [subtitleArray objectEnumerator];
             id tempObject;
-            while ( tempObject = [enumerator nextObject] )  
+            while ( tempObject = [enumerator nextObject] )
             {
                 if (i != rowIndex )
                 {
@@ -552,14 +618,14 @@
         {
             /* Burned In and Default are mutually exclusive */
             [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackBurned"];
-        }   
+        }
         /* now we need to make sure no other tracks are set to default */
         if ([anObject intValue] == 1)
         {
             int i = 0;
             NSEnumerator *enumerator = [subtitleArray objectEnumerator];
             id tempObject;
-            while ( tempObject = [enumerator nextObject] )  
+            while ( tempObject = [enumerator nextObject] )
             {
                 if (i != rowIndex)
                 {
@@ -568,16 +634,16 @@
                 i++;
             }
         }
-        
+
     }
     /* These next three columns only apply to srt's. they are disabled for source subs */
     else if ([[aTableColumn identifier] isEqualToString:@"srt_lang"])
     {
-        
+
         [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:[anObject intValue]] forKey:@"subtitleTrackSrtLanguageIndex"];
         [[subtitleArray objectAtIndex:rowIndex] setObject:[[languagesArray objectAtIndex:[anObject intValue]] objectAtIndex:0] forKey:@"subtitleTrackSrtLanguageLong"];
         [[subtitleArray objectAtIndex:rowIndex] setObject:[[languagesArray objectAtIndex:[anObject intValue]] objectAtIndex:1] forKey:@"subtitleTrackSrtLanguageIso3"];
-        
+
     }
     else if ([[aTableColumn identifier] isEqualToString:@"srt_charcode"])
     {
@@ -587,17 +653,17 @@
     }
     else if ([[aTableColumn identifier] isEqualToString:@"srt_offset"])
     {
-        [[subtitleArray objectAtIndex:rowIndex] setObject:anObject forKey:@"subtitleTrackSrtOffset"];  
-    } 
-    
-    
+        [[subtitleArray objectAtIndex:rowIndex] setObject:anObject forKey:@"subtitleTrackSrtOffset"];
+    }
+
+
     /* now lets do a bit of logic to add / remove tracks as necessary via the "None" track (index 0) */
     if ([[aTableColumn identifier] isEqualToString:@"track"])
     {
-        
+
         /* Since currently no quicktime based playback devices support soft vobsubs in mp4, we make sure "burned in" is specified
          * by default to avoid massive confusion and anarchy. However we also want to guard against multiple burned in subtitle tracks
-         * as libhb would ignore all but the first one anyway. Plus it would probably be stupid. 
+         * as libhb would ignore all but the first one anyway. Plus it would probably be stupid.
          */
         if ((container & HB_MUX_MASK_MP4) && ([anObject intValue] != 0))
         {
@@ -607,7 +673,7 @@
                 NSEnumerator *enumerator = [subtitleArray objectEnumerator];
                 id tempObject;
                 BOOL subtrackBurnedInFound = NO;
-                while ( tempObject = [enumerator nextObject] )  
+                while ( tempObject = [enumerator nextObject] )
                 {
                     if ([[tempObject objectForKey:@"subtitleTrackBurned"] intValue] == 1)
                     {
@@ -623,16 +689,16 @@
                 }
             }
         }
-        
+
         /* We use the track popup index number (presumes index 0 is "None" which is ignored and only used to remove tracks if need be)
          * to determine whether to 1 modify an existing track, 2. add a new empty "None" track or 3. remove an existing track.
          */
-        
+
         if ([anObject intValue] != 0 && rowIndex == [subtitleArray count] - 1) // if we have a last track which != "None"
         {
             /* add a new empty None track */
             [self addSubtitleTrack];
-            
+
         }
         else if ([anObject intValue] == 0 && rowIndex != ([subtitleArray count] -1))// if this track is set to "None" and not the last track displayed
         {
@@ -647,13 +713,13 @@
                 [[subtitleArray objectAtIndex: 1] setObject:[NSNumber numberWithInt:trackOneSelectedIndex + 1] forKey:@"subtitleSourceTrackNum"];
             }
             /* now that we have made the adjustment for track one (index 0) go ahead and delete the track */
-            [subtitleArray removeObjectAtIndex: rowIndex]; 
+            [subtitleArray removeObjectAtIndex: rowIndex];
         }
-        
-        
-        
+
+
+
     }
-    
+
     [aTableView reloadData];
 }
 
@@ -668,11 +734,11 @@
         [aCell selectItemAtIndex:[[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackNum"] intValue]];
         /* now that we have actually selected our track, we can grok the titleOfSelectedItem for that track */
         [[subtitleArray objectAtIndex:rowIndex] setObject:[[aTableColumn dataCellForRow:rowIndex] titleOfSelectedItem] forKey:@"subtitleSourceTrackName"];
-        
+
     }
     else
     {
-        
+
         [aCell setAlignment:NSCenterTextAlignment];
         /* If the Track is None, we disable the other cells as None is an empty track */
         if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackNum"] intValue] == 0)
@@ -685,7 +751,7 @@
             /* Since we have a valid track, we go ahead and enable the rest of the widgets and set them according to the controlling array */
             [aCell setEnabled:YES];
         }
-        
+
         if ([[aTableColumn identifier] isEqualToString:@"forced"])
         {
             [aCell setState:[[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleTrackForced"] intValue]];
@@ -756,13 +822,13 @@
                     [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInteger:languagesArrayDefIndex] forKey:@"subtitleTrackSrtLanguageIndex"];
                     [[subtitleArray objectAtIndex:rowIndex] setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:0] forKey:@"subtitleTrackSrtLanguageLong"];
                     [[subtitleArray objectAtIndex:rowIndex] setObject:[[languagesArray objectAtIndex:languagesArrayDefIndex] objectAtIndex:1] forKey:@"subtitleTrackSrtLanguageIso3"];
-                    
+
                 }
             }
             else
             {
                 [aCell setEnabled:NO];
-            }  
+            }
         }
         else if ([[aTableColumn identifier] isEqualToString:@"srt_charcode"])
         {
@@ -784,7 +850,7 @@
             else
             {
                 [aCell setEnabled:NO];
-            }   
+            }
         }
         else if ([[aTableColumn identifier] isEqualToString:@"srt_offset"])
         {
@@ -797,7 +863,7 @@
                 [aCell setEnabled:NO];
             }
         }
-        
+
         /*
          * Let's check whether any subtitles in the list cannot be passed through.
          * Set the first of any such subtitles to burned-in, remove the others.
@@ -858,6 +924,5 @@
         [tracksToDelete release];
     }
 }
-
 
 @end

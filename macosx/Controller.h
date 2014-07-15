@@ -9,15 +9,19 @@
 
 #include "hb.h"
 
-#import "ChapterTitles.h"
-#import "HBSubtitles.h"
 #import "PictureController.h"
 #import "HBPreviewController.h"
+
 #import "HBQueueController.h"
+
+#import "HBVideoController.h"
+#import "HBAudioController.h"
+#import "HBSubtitlesController.h"
 #import "HBAdvancedController.h"
+#import "HBChapterTitlesController.h"
+
 #import "HBPreferencesController.h"
 #import "HBPresets.h"
-#import "HBAudioController.h"
 
 extern NSString *HBContainerChangedNotification;
 extern NSString *keyContainerTag;
@@ -41,6 +45,22 @@ BOOL                        fIsDragging;
     NSImage                      * fApplicationIcon;
     IBOutlet NSWindow            * fWindow;
 
+    /* Video view controller */
+    HBVideoController       * fVideoController;
+    IBOutlet NSView         * fVideoView;
+
+    /* Subtitles view controller */
+	HBSubtitlesController   * fSubtitlesViewController;
+    IBOutlet NSView         * fSubtitlesView;
+
+	/* Audio view controller */
+	HBAudioController       * fAudioController;
+    IBOutlet NSView         * fAudioView;
+
+	/* Chapters view controller */
+	HBChapterTitlesController    * fChapterTitlesController;
+    IBOutlet NSView              * fChaptersTitlesView;
+
     /* Main Menu Outlets */
     NSMenuItem                   * fOpenSourceTitleMMenu;
     
@@ -52,35 +72,11 @@ BOOL                        fIsDragging;
     IBOutlet NSButton             * fScanSrcTitleCancelButton;
     IBOutlet NSButton             * fScanSrcTitleOpenButton;
 
-    
     /* Picture Settings */
     HBPictureController            * fPictureController;
     
     /* Picture Preview */
     HBPreviewController            * fPreviewController;
-    
-    /* x264 Presets Box */
-    NSArray                      * fX264PresetNames;
-    NSUInteger                     fX264MediumPresetIndex;
-    IBOutlet NSButton            * fX264UseAdvancedOptionsCheck;
-    IBOutlet NSBox               * fX264PresetsBox;
-    IBOutlet NSSlider            * fX264PresetsSlider;
-    IBOutlet NSTextField         * fX264PresetSliderLabel;
-    IBOutlet NSTextField         * fX264PresetSelectedTextField;
-    IBOutlet NSPopUpButton       * fX264TunePopUp;
-    IBOutlet NSTextField         * fX264TunePopUpLabel;
-    IBOutlet NSPopUpButton       * fX264ProfilePopUp;
-    IBOutlet NSTextField         * fX264ProfilePopUpLabel;
-    IBOutlet NSPopUpButton       * fX264LevelPopUp;
-    IBOutlet NSTextField         * fX264LevelPopUpLabel;
-    IBOutlet NSButton            * fX264FastDecodeCheck;
-    IBOutlet NSTextField         * fDisplayX264PresetsAdditonalOptionsTextField;
-    IBOutlet NSTextField         * fDisplayX264PresetsAdditonalOptionsLabel;
-    // Text Field to show the expanded opts from unparse()
-    IBOutlet NSTextField         * fDisplayX264PresetsUnparseTextField;
-    char                         * fX264PresetsUnparsedUTF8String;
-    NSUInteger                     fX264PresetsHeightForUnparse;
-    NSUInteger                     fX264PresetsWidthForUnparse;
     
     /* Advanced options tab */
     HBAdvancedController         * fAdvancedOptions;
@@ -118,7 +114,6 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fSrcFrameStartEncodingField;
     IBOutlet NSTextField         * fSrcFrameEndEncodingField;
     
-    IBOutlet NSTextField         * fSrcChapterField;
     IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
     IBOutlet NSTextField         * fSrcChapterToField;
     IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
@@ -141,73 +136,13 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fDstMp4HttpOptFileCheck;
     // Creates iPod compatible mp4's (add ipod uuid atom)
     IBOutlet NSButton            * fDstMp4iPodFileCheck;
-	
-    /* Video box */
-    
-    /* Framerate */
-    /* Radio Button Framerate Controls */
-    IBOutlet NSMatrix            * fFramerateMatrix;
-    IBOutlet NSButtonCell        * fFramerateVfrPfrCell;
-    IBOutlet NSButtonCell        * fFramerateCfrCell;
-    
-    /* Video Encoder */
-    IBOutlet NSTextField         * fVidRateField;
-    IBOutlet NSPopUpButton       * fVidRatePopUp;
-    IBOutlet NSTextField         * fVidEncoderField;
-    IBOutlet NSPopUpButton       * fVidEncoderPopUp;
-    IBOutlet NSTextField         * fVidQualityField;
-    IBOutlet NSTextField         * fVidQualityRFLabel;
-    IBOutlet NSTextField         * fVidQualityRFField;
-    IBOutlet NSMatrix            * fVidQualityMatrix;
-    IBOutlet NSButtonCell        * fVidBitrateCell;
-    IBOutlet NSTextField         * fVidBitrateField;
-    IBOutlet NSButtonCell        * fVidConstantCell;
-    IBOutlet NSSlider            * fVidQualitySlider;
-    IBOutlet NSButton            * fVidTwoPassCheck;
-    IBOutlet NSButton            * fVidTurboPassCheck;
-	
-    /* Status read out fields for picture settings and video filters */
-    IBOutlet NSTextField         * fPictureSettingsField;
-    IBOutlet NSTextField         * fPictureFiltersField;
-	
+
 	/* Picture variables */
-	int                        PicOrigOutputWidth;
-	int                        PicOrigOutputHeight;
 	int                        AutoCropTop;
 	int                        AutoCropBottom;
 	int                        AutoCropLeft;
 	int                        AutoCropRight;
-    /* Subtitles box */
-    IBOutlet NSTextField         * fSubField;
-    IBOutlet NSPopUpButton       * fSubPopUp;
-	IBOutlet NSButton            * fSubForcedCheck;
-    
-    
-    IBOutlet NSTableView         * fSubtitlesTable;
-	HBSubtitles                  * fSubtitlesDelegate;
-    IBOutlet NSButton            * fBrowseSrtFileButton;
-    
-	/* New Audio box */
-	IBOutlet HBAudioController   * fAudioDelegate;
-    
-    /* New Audio Auto Passthru box */
-    IBOutlet NSBox               * fAudioAutoPassthruBox;
-    IBOutlet NSButton            * fAudioAllowAACPassCheck;
-    IBOutlet NSButton            * fAudioAllowAC3PassCheck;
-    IBOutlet NSButton            * fAudioAllowDTSHDPassCheck;
-    IBOutlet NSButton            * fAudioAllowDTSPassCheck;
-    IBOutlet NSButton            * fAudioAllowMP3PassCheck;
-    IBOutlet NSPopUpButton       * fAudioFallbackPopUp;
-    
-    	    
-    /* Chapters box */
-    IBOutlet NSButton            * fCreateChapterMarkers;
-    IBOutlet NSTableView         * fChapterTable;
-	IBOutlet NSButton            * fLoadChaptersButton;
-	IBOutlet NSButton            * fSaveChaptersButton;
-	IBOutlet NSTableColumn       * fChapterTableNameColumn;
-	ChapterTitles                * fChapterTitlesDelegate;
-	
+
     /* Bottom */
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fRipIndicator;
@@ -251,7 +186,6 @@ BOOL                        fIsDragging;
     IBOutlet HBPresetsOutlineView * fPresetsOutlineView;
     IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;
-    IBOutlet NSPopUpButton       * fPresetsActionButton;
 
     hb_handle_t                  * fHandle;
     
@@ -304,11 +238,7 @@ BOOL                        fIsDragging;
 - (IBAction) cancelScanning:(id)sender;
 
 - (void)     updateUI:                                 (NSTimer*) timer;
-- (void)     enableUI:                                 (bool)     enable;
-- (IBAction)     setupX264PresetsWidgets:                  (id)       sender;
-- (void)     enableX264Widgets:                        (bool)     enable;
-- (IBAction) updateX264Widgets:                        (id)       sender;
-- (IBAction) x264PresetsChangedDisplayExpandedOptions: (id)       sender;
+- (void)     enableUI:                                 (BOOL)     enable;
 
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
 
@@ -320,28 +250,16 @@ BOOL                        fIsDragging;
 
 
 - (IBAction) formatPopUpChanged: (id) sender;
-- (IBAction) videoEncoderPopUpChanged: (id) sender;
 - (IBAction) autoSetM4vExtension: (id) sender;
-- (IBAction) twoPassCheckboxChanged: (id) sender;
-- (IBAction) videoFrameRateChanged: (id) sender;
+
 - (void) prepareJob;
 - (IBAction) browseFile: (id) sender;
 - (void)     browseFileDone: (NSSavePanel *) sheet
                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
-- (IBAction) videoMatrixChanged: (id) sender;
-
-- (IBAction) qualitySliderChanged: (id) sender;
-- (void) setupQualitySlider;
-
-- (IBAction) browseImportSrtFile: (id) sender;
-- (void) browseImportSrtFileDone: (NSSavePanel *) sheet
-                     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-
 - (IBAction) showPicturePanel: (id) sender;
 - (IBAction) showPreviewWindow: (id) sender;
 - (void)pictureSettingsDidChange;
-- (IBAction) calculatePictureSizing: (id) sender;
 - (IBAction) openMainWindow: (id) sender;
 
 /* Text summaries of various settings */
@@ -395,9 +313,6 @@ BOOL                        fIsDragging;
 - (void) doCancelCurrentJobAndStop;
 - (IBAction) Pause: (id) sender;
 
-- (IBAction) calculateBitrate: (id) sender;
-- (void) controlTextDidChange: (NSNotification *) notification;
-
 - (IBAction) openHomepage: (id) sender;
 - (IBAction) openForums:   (id) sender;
 - (IBAction) openUserGuide:   (id) sender;
@@ -443,8 +358,6 @@ BOOL                        fIsDragging;
 - (IBAction) closeAddPresetPanel: (id) sender;
 - (NSDictionary *)createPreset;
 
-- (IBAction) revertPictureSizeToMax:(id)sender;
-
 - (IBAction)setDefaultPreset:(id)sender;
 - (IBAction)selectDefaultPreset:(id)sender;
 - (void) savePreset;
@@ -471,17 +384,7 @@ BOOL                        fIsDragging;
 
 - (int) hbInstances;
 
-// Chapter files methods
-- (IBAction) browseForChapterFile: (id) sender;
-- (void)     browseForChapterFileDone: (NSOpenPanel *) sheet
-                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-
-- (IBAction) browseForChapterFileSave: (id) sender;
-- (void)     browseForChapterFileSaveDone: (NSSavePanel *) sheet
-                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-
 + (unsigned int) maximumNumberOfAllowedAudioTracks;
-- (IBAction) addAllAudioTracks: (id) sender;
 
 // Drag & Drop methods
 - (void)openFiles:(NSArray*)filenames;
@@ -491,19 +394,4 @@ BOOL                        fIsDragging;
 
 - (void) updateDockIcon:(double)progress withETA:(NSString*)etaStr;
 
-// x264 system methods
-- (NSString*) x264Preset;
-- (NSString*) x264Tune;
-- (NSString*) x264OptionExtra;
-- (NSString*) h264Profile;
-- (NSString*) h264Level;
-- (void)      setX264Preset:            (NSString*) x264Preset;
-- (void)      setX264Tune:              (NSString*) x264Tune;
-- (void)      setX264OptionExtra:       (NSString*) x264OptionExtra;
-- (void)      setH264Profile:           (NSString*) h264Profile;
-- (void)      setH264Level:             (NSString*) h264Level;
-- (IBAction)  x264PresetsSliderChanged: (id)        sender;
-
-
 @end
-

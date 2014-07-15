@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment version="1060" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBAudioController">
+            <connections>
+                <outlet property="fAddAllTracksButton" destination="RrJ-Eh-L2L" id="BCF-iF-18K"/>
+                <outlet property="fAudioAutoPassthruBox" destination="a33-g2-ZGw" id="5hu-Ft-LJh"/>
+                <outlet property="fAudioFallbackPopUp" destination="99G-ev-xSL" id="QJV-Hh-29K"/>
+                <outlet property="fTableView" destination="LlC-ua-mth" id="NvM-yh-c0L"/>
+                <outlet property="view" destination="LOv-5G-86T" id="qyT-Z6-lCU"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application"/>
+        <arrayController id="iWY-gv-3ab" userLabel="Audio Inputs">
+            <declaredKeys>
+                <string>keyAudioTrackName</string>
+            </declaredKeys>
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="masterTrackArray" id="vVy-cS-D4a"/>
+            </connections>
+        </arrayController>
+        <arrayController preservesSelection="NO" avoidsEmptySelection="NO" id="rzb-Si-Kpf" userLabel="Audios">
+            <declaredKeys>
+                <string>tracks</string>
+                <string>tracks.keyAudioTrackName</string>
+                <string>track</string>
+                <string>enabled</string>
+                <string>mixdownEnabled</string>
+                <string>drc</string>
+                <string>codecs</string>
+                <string>codecs.keyAudioCodecName</string>
+                <string>codec</string>
+                <string>mixdowns</string>
+                <string>mixdowns.keyAudioMixdownName</string>
+                <string>mixdown</string>
+                <string>sampleRates</string>
+                <string>sampleRates.keyAudioSampleRateName</string>
+                <string>sampleRate</string>
+                <string>bitRates</string>
+                <string>bitRates.keyAudioBitrateName</string>
+                <string>bitRate</string>
+                <string>DRCEnabled</string>
+                <string>gain</string>
+                <string>PassThruEnabled</string>
+                <string>PassThruDisabled</string>
+                <string>bitrateEnabled</string>
+            </declaredKeys>
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="audioArray" id="Rfp-6S-XXq"/>
+            </connections>
+        </arrayController>
+        <view id="LOv-5G-86T">
+            <rect key="frame" x="0.0" y="0.0" width="926" height="322"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="uE3-SE-Oss">
+                    <rect key="frame" x="20" y="20" width="886" height="258"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <clipView key="contentView" id="RfG-9v-Rts">
+                        <rect key="frame" x="1" y="17" width="884" height="240"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="GLD-lI-qeh" id="LlC-ua-mth">
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="240"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn identifier="track" editable="NO" width="323" minWidth="40" maxWidth="1000" id="gRu-la-4i7">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Track">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Oa8-0K-PPX" id="xWU-Pf-IHv">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="Uir-S5-yLw">
+                                                <items>
+                                                    <menuItem title="Pop Up" state="on" id="Oa8-0K-PPX"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="iWY-gv-3ab" name="content" keyPath="arrangedObjects" id="Ie2-Do-VdN"/>
+                                            <binding destination="iWY-gv-3ab" name="contentValues" keyPath="arrangedObjects.keyAudioTrackName" previousBinding="Ie2-Do-VdN" id="oTn-J8-yoY"/>
+                                            <binding destination="rzb-Si-Kpf" name="selectedObject" keyPath="arrangedObjects.track" previousBinding="oTn-J8-yoY" id="fh6-LS-cAe"/>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="codec" width="141" minWidth="10" maxWidth="3.4028229999999999e+38" id="dI5-Bu-m9C">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Codec">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="YpG-KX-KsI" id="S5G-sn-g3u">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="7Cr-sT-Iwx">
+                                                <items>
+                                                    <menuItem title="Pop Up" state="on" id="YpG-KX-KsI"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="selectedObject" keyPath="arrangedObjects.codec" previousBinding="XJw-aT-etB" id="S7r-tN-wM2"/>
+                                            <binding destination="rzb-Si-Kpf" name="content" keyPath="arrangedObjects.codecs" id="Rhu-Z1-dOp"/>
+                                            <binding destination="rzb-Si-Kpf" name="contentValues" keyPath="arrangedObjects.codecs.keyAudioCodecName" previousBinding="Rhu-Z1-dOp" id="XJw-aT-etB"/>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.enabled" id="3q0-x0-5zx"/>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="mixdown" width="129" minWidth="10" maxWidth="3.4028229999999999e+38" id="3wx-Uv-5Uc">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Mixdown">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="6KP-up-v0L" id="iPl-mc-59p">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="ThG-6I-ogh">
+                                                <items>
+                                                    <menuItem title="Pop Up" state="on" id="6KP-up-v0L"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="selectedObject" keyPath="arrangedObjects.mixdown" previousBinding="eLm-QG-NGR" id="LOT-t7-LWV">
+                                                <dictionary key="options">
+                                                    <bool key="NSCreatesSortDescriptor" value="NO"/>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.mixdownEnabled" id="IBK-Ut-O6Y"/>
+                                            <binding destination="rzb-Si-Kpf" name="content" keyPath="arrangedObjects.mixdowns" id="Cfe-Wx-NFu"/>
+                                            <binding destination="rzb-Si-Kpf" name="contentValues" keyPath="arrangedObjects.mixdowns.keyAudioMixdownName" previousBinding="Cfe-Wx-NFu" id="eLm-QG-NGR"/>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="samplerate" width="73" minWidth="10" maxWidth="3.4028229999999999e+38" id="4ge-RO-Qjs">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Samplerate">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="HX0-fQ-k4C" id="LWh-ZT-m8J">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="bfn-7j-zra">
+                                                <items>
+                                                    <menuItem title="Pop Up" state="on" id="HX0-fQ-k4C"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.mixdownEnabled" id="1Ce-Kl-47e"/>
+                                            <binding destination="rzb-Si-Kpf" name="selectedObject" keyPath="arrangedObjects.sampleRate" previousBinding="ErN-GC-Ge9" id="4uH-KH-1V7">
+                                                <dictionary key="options">
+                                                    <bool key="NSCreatesSortDescriptor" value="NO"/>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="rzb-Si-Kpf" name="content" keyPath="arrangedObjects.sampleRates" id="92M-oG-NTY"/>
+                                            <binding destination="rzb-Si-Kpf" name="contentValues" keyPath="arrangedObjects.sampleRates.keyAudioSampleRateName" previousBinding="92M-oG-NTY" id="ErN-GC-Ge9"/>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="bitrate" width="72" minWidth="10" maxWidth="3.4028229999999999e+38" id="icy-WJ-qjH">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Bitrate">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="ScK-9X-Gvn" id="YmG-Il-WGI">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="cPd-Hx-eHs">
+                                                <items>
+                                                    <menuItem title="Pop Up" state="on" id="ScK-9X-Gvn"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="selectedObject" keyPath="arrangedObjects.bitRate" previousBinding="aJi-it-rd3" id="JLj-Mg-gQL">
+                                                <dictionary key="options">
+                                                    <bool key="NSCreatesSortDescriptor" value="NO"/>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="rzb-Si-Kpf" name="content" keyPath="arrangedObjects.bitRates" id="wpG-YB-fxH"/>
+                                            <binding destination="rzb-Si-Kpf" name="contentValues" keyPath="arrangedObjects.bitRates.keyAudioBitrateName" previousBinding="wpG-YB-fxH" id="aJi-it-rd3"/>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.bitrateEnabled" id="eNf-Cc-xL3"/>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="gain" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="psI-ue-Jsr">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Gain">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" tickMarkPosition="above" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="3XQ-vq-IRV"/>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.PassThruDisabled" id="AY4-98-DiI"/>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="duy-eI-ylW">
+                                                <dictionary key="options">
+                                                    <bool key="NSCreatesSortDescriptor" value="NO"/>
+                                                </dictionary>
+                                            </binding>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="gainText" width="25" minWidth="10" maxWidth="3.4028234663852886e+38" id="fy5-z6-TRg">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="Vbk-Fc-rCj">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.PassThruDisabled" id="L5Z-ZJ-Zjq"/>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="5rW-UE-Okz"/>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="drc" width="35" minWidth="10" maxWidth="3.4028229999999999e+38" id="whw-Me-VIU">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="DRC">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="4" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="jVw-iZ-yhL"/>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.DRCEnabled" id="uRE-B4-yzg"/>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.drc" id="sNI-Mo-CR4"/>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="drctext" editable="NO" width="27" minWidth="10" maxWidth="3.4028229999999999e+38" id="ASp-Mc-vG6">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Text" id="Qw5-9v-GFf">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.DRCEnabled" id="7a1-p0-bgX"/>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.drc" id="YWG-sr-noG">
+                                                <dictionary key="options">
+                                                    <bool key="NSConditionallySetsEditable" value="YES"/>
+                                                </dictionary>
+                                            </binding>
+                                        </connections>
+                                    </tableColumn>
+                                </tableColumns>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="1Fp-Pd-fdH">
+                        <rect key="frame" x="-100" y="-100" width="685" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="5LV-7H-phB">
+                        <rect key="frame" x="-100" y="-100" width="15" height="206"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <tableHeaderView key="headerView" id="GLD-lI-qeh">
+                        <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </tableHeaderView>
+                </scrollView>
+                <button verticalHuggingPriority="750" id="RrJ-Eh-L2L">
+                    <rect key="frame" x="19" y="286" width="116" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Add All Tracks" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pea-7O-Egc">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="miniSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="addAllAudioTracks:" target="-2" id="NRm-JM-JdU"/>
+                    </connections>
+                </button>
+                <box autoresizesSubviews="NO" title="Auto Passthru" borderType="line" titlePosition="noTitle" id="a33-g2-ZGw">
+                    <rect key="frame" x="355" y="283" width="554" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="552" height="29"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button id="Lnr-Em-Qds">
+                                <rect key="frame" x="85" y="8" width="41" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="MP3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="9TA-KC-mKS">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="allowMP3PassCheck" id="IPJ-MO-N8F"/>
+                                </connections>
+                            </button>
+                            <button id="gvb-gb-zkx">
+                                <rect key="frame" x="130" y="8" width="47" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="AAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="IZd-DC-Dgb">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="allowAACPassCheck" id="UuF-C6-vAP"/>
+                                </connections>
+                            </button>
+                            <button id="hnY-nd-77u">
+                                <rect key="frame" x="179" y="8" width="47" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="PcA-Yj-Whc">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="allowAC3PassCheck" id="bQl-JB-ZXP"/>
+                                </connections>
+                            </button>
+                            <button id="bi9-FH-BU2">
+                                <rect key="frame" x="226" y="8" width="48" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="DTS" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="rxe-CG-Ey2">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="allowDTSPassCheck" id="qKH-AD-3yn"/>
+                                </connections>
+                            </button>
+                            <button id="iUD-cU-Knx">
+                                <rect key="frame" x="271" y="8" width="58" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="DTS-HD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="PmO-7W-pdS">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="allowDTSHDPassCheck" id="aZw-P3-f2B"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="750" id="99G-ev-xSL">
+                                <rect key="frame" x="442" y="8" width="100" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="AC3 (ffmpeg)" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="qzR-fg-NCZ" id="2Vr-5R-7Hv">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                    <menu key="menu" title="OtherViews" id="XzU-yN-JEw">
+                                        <items>
+                                            <menuItem title="AC3 (ffmpeg)" state="on" id="qzR-fg-NCZ"/>
+                                            <menuItem title="Item 2" id="6IV-I9-V13"/>
+                                            <menuItem title="Item 3" id="yQk-cI-cGz"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <textField verticalHuggingPriority="750" id="VwW-C9-yo0">
+                                <rect key="frame" x="2" y="-7" width="78" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Auto Passthru:" id="a6J-IC-jTh">
+                                    <font key="font" metaFont="miniSystem"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" id="1wu-8Y-6ed">
+                                <rect key="frame" x="354" y="7" width="86" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Passthru Fallback:" id="zhf-eR-FDa">
+                                    <font key="font" metaFont="miniSystem"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <binding destination="ee3-5O-TtC" name="hidden" keyPath="values.ShowAdvancedOptsForAutoPassthru" id="v2a-z2-nLA">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </box>
+            </subviews>
+        </view>
+        <userDefaultsController representsSharedInstance="YES" id="ee3-5O-TtC"/>
+    </objects>
+</document>

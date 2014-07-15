@@ -8,31 +8,21 @@
 
 @implementation HBAdvancedController
 
-- (id)init
+- (instancetype)init
 {
-    if( self = [super init] )
+    self = [super initWithNibName:@"AdvancedView" bundle:nil];
+    if (self)
     {
-        [self loadMyNibFile];
+
     }
 
     return self;
 }
 
-- (void) setView: (NSBox *) box
+- (void)loadView
 {
-    fOptionsBox = box;
-    [fOptionsBox setContentView:fX264optView];
-}
-
-- (BOOL) loadMyNibFile
-{
-    if(![NSBundle loadNibNamed:@"AdvancedView" owner:self])
-    {
-        NSLog(@"Warning! Could not load myNib file.\n");
-        return NO;
-    }
-    
-    return YES;
+    [super loadView];
+    [self setHidden:NO];
 }
 
 - (NSString *) optionsString
@@ -60,7 +50,7 @@
 {
     if(hide)
     {
-        [fOptionsBox setContentView:fEmptyView];
+        [fOptionsBox setContentView:fFFmpegView];
     }
     else
     {

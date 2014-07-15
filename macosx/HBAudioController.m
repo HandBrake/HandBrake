@@ -20,9 +20,27 @@ NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
 NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 
-@interface HBAudioController ()
+@interface HBAudioController () {
+    /* New Audio Auto Passthru box */
+    IBOutlet NSBox               * fAudioAutoPassthruBox;
+    IBOutlet NSPopUpButton       * fAudioFallbackPopUp;
+
+    IBOutlet NSTableView         * fTableView;
+    IBOutlet NSButton            * fAddAllTracksButton;
+
+    id                             myController;
+    NSMutableArray               * audioArray;        // the configured audio information
+    NSArray                      * masterTrackArray;  // the master list of audio tracks from the title
+    NSDictionary                 * noneTrack;         // this represents no audio track selection
+    NSNumber                     * videoContainerTag; // initially is the default HB_MUX_MP4
+}
 
 @property (nonatomic, readwrite, retain) NSArray *masterTrackArray;
+@property (nonatomic, retain) NSNumber *videoContainerTag;
+
+- (void) addAllTracksFromPreset: (NSMutableDictionary *) aPreset;
+- (IBAction) addAllAudioTracks: (id) sender;
+- (void) addNewAudioTrack;
 
 @end // interface HBAudioController
 
@@ -36,10 +54,30 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 @synthesize noneTrack;
 @synthesize videoContainerTag;
 
-- (id) init
-
+- (NSString *)audioEncoderFallback
 {
-    if (self = [super init])
+    return [[fAudioFallbackPopUp selectedItem] title];
+}
+
+- (void)setAudioEncoderFallback:(NSString *)string
+{
+    [fAudioFallbackPopUp selectItemWithTitle:string];
+}
+
+- (NSInteger)audioEncoderFallbackTag
+{
+    return [[fAudioFallbackPopUp selectedItem] tag];
+}
+
+- (void)setAudioEncoderFallbackTag:(NSInteger)tag
+{
+    [fAudioFallbackPopUp selectItemWithTag:tag];
+}
+
+- (instancetype)init
+{
+    self = [super initWithNibName:@"Audio" bundle:nil];
+    if (self)
     {
         [self setVideoContainerTag: [NSNumber numberWithInt: HB_MUX_MP4]];
         audioArray = [[NSMutableArray alloc] init];
@@ -76,6 +114,20 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [self removeObjectFromAudioArrayAtIndex: 0];
     }
+}
+
+
+- (IBAction) addAllAudioTracks: (id) sender
+{
+    [self addAllTracksFromPreset:[myController selectedPreset]];
+    return;
+}
+
+- (void)enableUI:(BOOL)b
+{
+    [fTableView setEnabled:b];
+    [fAddAllTracksButton setEnabled:b];
+    [fAudioFallbackPopUp setEnabled:b];
 }
 
 #pragma mark -
@@ -134,7 +186,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     }
 }
 
-- (void) prepareAudioForJob: (hb_job_t *) aJob
+- (void) prepareAudioForJobPreview: (hb_job_t *) aJob
 
 {
     unsigned int i;
@@ -577,6 +629,38 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [audioObject setVideoContainerTag: [self videoContainerTag]];
     }
+
+    /* Update the Auto Passthru Fallback Codec Popup */
+    /* lets get the tag of the currently selected item first so we might reset it later */
+
+    int selectedAutoPassthruFallbackEncoderTag = (int)[[fAudioFallbackPopUp selectedItem] tag];
+
+    [fAudioFallbackPopUp removeAllItems];
+    for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
+         audio_encoder != NULL;
+         audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
+    {
+        if ((audio_encoder->codec  & HB_ACODEC_PASS_FLAG) == 0 &&
+            (audio_encoder->muxers & [[self videoContainerTag] integerValue]))
+        {
+            NSMenuItem *menuItem = [[fAudioFallbackPopUp menu] addItemWithTitle:[NSString stringWithUTF8String:audio_encoder->name]
+                                                                         action:nil
+                                                                  keyEquivalent:@""];
+            [menuItem setTag:audio_encoder->codec];
+        }
+    }
+
+    /* if we have a previously selected auto passthru fallback encoder tag, then try to select it */
+    if (selectedAutoPassthruFallbackEncoderTag)
+    {
+        selectedAutoPassthruFallbackEncoderTag = [fAudioFallbackPopUp selectItemWithTag:selectedAutoPassthruFallbackEncoderTag];
+    }
+    /* if we had no previous fallback selected OR if selection failed
+     * select the default fallback encoder (AC3) */
+    if (!selectedAutoPassthruFallbackEncoderTag)
+    {
+        [fAudioFallbackPopUp selectItemWithTag:HB_ACODEC_AC3];
+    }
 }
 
 - (void) titleChanged: (NSNotification *) aNotification
@@ -616,6 +700,10 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                                        nil]];
         }
         self.masterTrackArray = newTrackArray;
+    }
+    else
+    {
+        self.masterTrackArray = nil;
     }
 
     // Reinitialize the configured list of audio tracks

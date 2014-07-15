@@ -19,29 +19,35 @@ extern NSString *HBMixdownChangedNotification;
 
 @class HBAudio;
 
-@interface HBAudioController : NSObject
-
-{
-    id                             myController;
-    NSMutableArray               * audioArray;        // the configured audio information
-    NSArray                      * masterTrackArray;  // the master list of audio tracks from the title
-    NSDictionary                 * noneTrack;         // this represents no audio track selection
-    NSNumber                     * videoContainerTag; // initially is the default HB_MUX_MP4
-}
+/**
+ *  HBAudioController
+ *
+ *  Responds to HBContainerChangedNotification and HBTitleChangedNotification notifications.
+ */
+@interface HBAudioController : NSViewController
 
 @property (nonatomic, readonly, retain) NSArray *masterTrackArray;
 @property (nonatomic, readonly) NSDictionary *noneTrack;
-@property (nonatomic, retain) NSNumber *videoContainerTag;
 
+@property(nonatomic, readwrite) BOOL allowAACPassCheck;
+@property(nonatomic, readwrite) BOOL allowAC3PassCheck;
+@property(nonatomic, readwrite) BOOL allowDTSHDPassCheck;
+@property(nonatomic, readwrite) BOOL allowDTSPassCheck;
+@property(nonatomic, readwrite) BOOL allowMP3PassCheck;
+
+@property(nonatomic, readwrite, assign) NSString *audioEncoderFallback;
+@property(nonatomic, readwrite) NSInteger audioEncoderFallbackTag;
+
+- (void) enableUI: (BOOL) b;
 - (void) setHBController: (id) aController;
+
 - (void) prepareAudioForQueueFileJob: (NSMutableDictionary *) aDict;
-- (void) prepareAudioForJob: (hb_job_t *) aJob;
+- (void) prepareAudioForJobPreview: (hb_job_t *) aJob;
 - (void) prepareAudioForPreset: (NSMutableArray *) anArray;
 - (void) addTracksFromQueue: (NSMutableDictionary *) aQueue;
 - (void) addTracksFromPreset: (NSMutableDictionary *) aPreset;
-- (void) addAllTracksFromPreset: (NSMutableDictionary *) aPreset;
+
 - (BOOL) anyCodecMatches: (int) aCodecValue;
-- (void) addNewAudioTrack;
 - (void) settingTrackToNone: (HBAudio *) newNoneTrack;
 - (void) switchingTrackFromNone: (HBAudio *) noLongerNoneTrack;
 
