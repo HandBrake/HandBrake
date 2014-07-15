@@ -369,11 +369,49 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
     ghb_audio_list_refresh_selected(ud);
 }
 
+static char * get_drc_string(gdouble drc)
+{
+    char *s_drc;
+    if (drc < 0.99)
+        s_drc = g_strdup(_("Off"));
+    else
+        s_drc = g_strdup_printf("%.1f", drc);
+    return s_drc;
+}
+
+static char * get_gain_string(gdouble gain)
+{
+    char *s_gain;
+    if ( gain >= 21.0 )
+        s_gain = g_strdup_printf("*11*");
+    else
+        s_gain = g_strdup_printf("%ddB", (int)gain);
+    return s_gain;
+}
+
+static char * get_quality_string(GValue *settings, gdouble quality)
+{
+    float low, high, gran;
+    int dir;
+    int codec = ghb_settings_audio_encoder_codec(settings, "AudioEncoder");
+    hb_audio_quality_get_limits(codec, &low, &high, &gran, &dir);
+    if (dir)
+    {
+        // Quality values are inverted
+        quality = high - quality + low;
+    }
+    char *s_quality = ghb_format_quality("", codec, quality);
+    return s_quality;
+}
+
 static void
 audio_update_dialog_widgets(signal_user_data_t *ud, GValue *asettings)
 {
     if (asettings != NULL)
     {
+        double gain, drc, quality;
+        char *s_gain, *s_drc, *s_quality;
+
         block_updates = TRUE;
         ghb_ui_update(ud, "AudioTrack",
                       ghb_settings_get_value(asettings, "AudioTrack"));
@@ -389,10 +427,20 @@ audio_update_dialog_widgets(signal_user_data_t *ud, GValue *asettings)
                       ghb_settings_get_value(asettings, "AudioMixdown"));
         ghb_ui_update(ud, "AudioTrackDRCSlider",
                       ghb_settings_get_value(asettings, "AudioTrackDRCSlider"));
+        drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+        s_drc = get_drc_string(drc);
+        ghb_ui_update(ud, "AudioTrackDRCValue", ghb_string_value(s_drc));
         ghb_ui_update(ud, "AudioTrackGainSlider",
                       ghb_settings_get_value(asettings, "AudioTrackGainSlider"));
+        gain = ghb_settings_get_double(asettings, "AudioTrackGainSlider");
+        s_gain = get_gain_string(gain);
+        ghb_ui_update(ud, "AudioTrackGainValue", ghb_string_value(s_gain));
+
         ghb_ui_update(ud, "AudioTrackQuality",
                       ghb_settings_get_value(asettings, "AudioTrackQuality"));
+        quality = ghb_settings_get_double(asettings, "AudioTrackQualitySlider");
+        s_quality = get_quality_string(asettings, quality);
+        ghb_ui_update(ud, "AudioTrackQualityValue", ghb_string_value(s_quality));
         ghb_ui_update(ud, "AudioTrackQualityEnable",
                   ghb_settings_get_value(asettings, "AudioTrackQualityEnable"));
         block_updates = FALSE;
@@ -1185,16 +1233,7 @@ quality_widget_changed_cb(GtkWidget *widget, gdouble quality, signal_user_data_t
     g_debug("quality_widget_changed_cb ()");
 
     ghb_check_dependency(ud, widget, NULL);
-    float low, high, gran;
-    int dir;
-    int codec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
-    hb_audio_quality_get_limits(codec, &low, &high, &gran, &dir);
-    if (dir)
-    {
-        // Quality values are inverted
-        quality = high - quality + low;
-    }
-    char *s_quality = ghb_format_quality("", codec, quality);
+    char *s_quality = get_quality_string(ud->settings, quality);
     ghb_ui_update( ud, "AudioTrackQualityValue", ghb_string_value(s_quality));
     g_free(s_quality);
 
@@ -1222,11 +1261,7 @@ drc_widget_changed_cb(GtkWidget *widget, gdouble drc, signal_user_data_t *ud)
         return;
     }
 
-    char *s_drc;
-    if (drc < 0.99)
-        s_drc = g_strdup(_("Off"));
-    else
-        s_drc = g_strdup_printf("%.1f", drc);
+    char *s_drc = get_drc_string(drc);
     ghb_ui_update( ud, "AudioTrackDRCValue", ghb_string_value(s_drc));
     g_free(s_drc);
 
@@ -1260,12 +1295,7 @@ gain_widget_changed_cb(GtkWidget *widget, gdouble gain, signal_user_data_t *ud)
     {
         return;
     }
-
-    char *s_gain;
-    if ( gain >= 21.0 )
-        s_gain = g_strdup_printf("*11*");
-    else
-        s_gain = g_strdup_printf("%ddB", (int)gain);
+    char *s_gain = get_gain_string(gain);
     ghb_ui_update( ud, "AudioTrackGainValue", ghb_string_value(s_gain));
     g_free(s_gain);
 
@@ -2235,17 +2265,7 @@ audio_def_quality_changed_cb(GtkWidget *widget, gdouble quality, signal_user_dat
 
     GValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
     GValue *adict = ghb_array_get_nth(alist, index);
-    int codec = ghb_settings_audio_encoder_codec(adict, "AudioEncoder");
-
-    float low, high, gran;
-    int dir;
-    hb_audio_quality_get_limits(codec, &low, &high, &gran, &dir);
-    if (dir)
-    {
-        // Quality values are inverted
-        quality = high - quality + low;
-    }
-    char *s_quality = ghb_format_quality("", codec, quality);
+    char *s_quality = get_quality_string(adict, quality);
     ghb_update_widget(quality_label, ghb_string_value(s_quality));
     g_free(s_quality);
     ghb_clear_presets_selection(ud);
@@ -2258,11 +2278,7 @@ audio_def_gain_changed_cb(GtkWidget *widget, gdouble gain, signal_user_data_t *u
 
     GtkListBoxRow *row = audio_settings_get_row(widget);
     GtkWidget *gain_label = find_widget(GTK_WIDGET(row), "AudioTrackGainValue");
-    char *s_gain;
-    if ( gain >= 21.0 )
-        s_gain = g_strdup_printf("*11*");
-    else
-        s_gain = g_strdup_printf("%ddB", (int)gain);
+    char *s_gain = get_gain_string(gain);
     ghb_update_widget(gain_label, ghb_string_value(s_gain));
     g_free(s_gain);
     ghb_clear_presets_selection(ud);
@@ -2276,11 +2292,7 @@ audio_def_drc_changed_cb(GtkWidget *widget, gdouble drc, signal_user_data_t *ud)
     GtkListBoxRow *row = audio_settings_get_row(widget);
     GtkWidget *drc_label = find_widget(GTK_WIDGET(row), "AudioTrackDRCValue");
 
-    char *s_drc;
-    if (drc < 0.99)
-        s_drc = g_strdup(_("Off"));
-    else
-        s_drc = g_strdup_printf("%.1f", drc);
+    char *s_drc = get_drc_string(drc);
     ghb_update_widget(drc_label, ghb_string_value(s_drc));
     g_free(s_drc);
     ghb_clear_presets_selection(ud);
