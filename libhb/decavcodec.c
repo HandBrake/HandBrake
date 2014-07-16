@@ -99,7 +99,8 @@ struct hb_work_private_s
     uint32_t        nframes;
     uint32_t        ndrops;
     uint32_t        decode_errors;
-    int             brokenByMicrosoft; // video stream may contain packed b-frames
+    int64_t         prev_pts;
+    int             brokenTS; // video stream may contain packed b-frames
     hb_buffer_t*    delayq[HEAP_SIZE];
     int             queue_primed;
     pts_heap_t      pts_heap;
@@ -1284,6 +1285,13 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         else
         {
             pts = pv->frame->pkt_pts;
+            // Detect streams with broken out of order timestamps
+            if (!pv->brokenTS && pv->frame->pkt_pts < pv->prev_pts)
+            {
+                hb_log("Broken timestamps detected.  Reordering.");
+                pv->brokenTS = 1;
+            }
+            pv->prev_pts = pv->frame->pkt_pts;
         }
 
         pv->pts_next = pts + frame_dur;
@@ -1366,7 +1374,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
 
         // if we're doing a scan or this content couldn't have been broken
         // by Microsoft we don't worry about timestamp reordering
-        if ( ! pv->job || ! pv->brokenByMicrosoft )
+        if ( ! pv->job || ! pv->brokenTS )
         {
             buf = copy_frame( pv );
             av_frame_unref(pv->frame);
@@ -1419,7 +1427,6 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         {
             pv->queue_primed = 1;
             buf->s.start = heap_pop( &pv->pts_heap );
-
             if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
                 buf->s.new_chap = pv->new_chap;
@@ -1660,7 +1667,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         //     info externally. We should patch ffmpeg to add a flag to the
         //     codec context for this but until then we mark all ffmpeg streams
         //     as suspicious.
-        pv->brokenByMicrosoft = 1;
+        pv->brokenTS = 1;
     }
     else
     {
