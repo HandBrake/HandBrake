@@ -1002,16 +1002,23 @@ static void do_job(hb_job_t *job)
             audio->priv.fifo_out  = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
             audio->priv.fifo_in   = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
 
-            /* Passthru audio, nothing to sanitize here */
+            /* Passthru audio */
             if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+            {
+                // Muxer needs these to be set correctly in order to
+                // set audio track MP4 time base.
+                audio->config.out.samples_per_frame =
+                                        audio->config.in.samples_per_frame;
+                audio->config.out.samplerate = audio->config.in.samplerate;
                 continue;
+            }
 
             /* Vorbis language information */
             if (audio->config.out.codec == HB_ACODEC_VORBIS)
                 audio->priv.config.vorbis.language = audio->config.lang.simple;
 
             /* sense-check the requested samplerate */
-            if (audio->config.out.samplerate < 0)
+            if (audio->config.out.samplerate <= 0)
             {
                 // if not specified, set to same as input
                 audio->config.out.samplerate = audio->config.in.samplerate;

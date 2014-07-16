@@ -2001,7 +2001,6 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
                 hb_audio_close(&audio);
                 continue;
             }
-            audio->config.out.samplerate = audio->config.in.samplerate;
             if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
             {
                 if (audio->config.out.codec == job->acodec_fallback)
@@ -2014,15 +2013,65 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
                     hb_log("Auto Passthru: passthru and fallback not possible for track %d, using default encoder",
                            audio->config.out.track);
                 }
-                audio->config.out.mixdown =
-                    hb_mixdown_get_default(audio->config.out.codec,
-                                           audio->config.in.channel_layout);
-                audio->config.out.bitrate =
-                    hb_audio_bitrate_get_default(audio->config.out.codec,
+                if (audio->config.out.mixdown <= 0)
+                {
+                    audio->config.out.mixdown =
+                        hb_mixdown_get_default(audio->config.out.codec,
+                                               audio->config.in.channel_layout);
+                }
+                else
+                {
+                    audio->config.out.mixdown =
+                        hb_mixdown_get_best(audio->config.out.codec,
+                                            audio->config.in.channel_layout,
+                                            audio->config.out.mixdown);
+                }
+                if (audio->config.out.samplerate <= 0)
+                    audio->config.out.samplerate = audio->config.in.samplerate;
+                audio->config.out.samplerate =
+                    hb_audio_samplerate_get_best(audio->config.out.codec,
+                                                 audio->config.out.samplerate,
+                                                 NULL);
+                int quality_not_allowed =
+                    hb_audio_quality_get_default(audio->config.out.codec)
+                            == HB_INVALID_AUDIO_QUALITY;
+                if (audio->config.out.bitrate > 0)
+                {
+                    // Use best bitrate
+                    audio->config.out.bitrate =
+                        hb_audio_bitrate_get_best(audio->config.out.codec,
+                                                  audio->config.out.bitrate,
+                                                  audio->config.out.samplerate,
+                                                  audio->config.out.mixdown);
+                }
+                else if (quality_not_allowed ||
+                         audio->config.out.quality != HB_INVALID_AUDIO_QUALITY)
+                {
+                    // Use default bitrate
+                    audio->config.out.bitrate =
+                        hb_audio_bitrate_get_default(audio->config.out.codec,
                                                  audio->config.out.samplerate,
                                                  audio->config.out.mixdown);
-                audio->config.out.compression_level =
-                    hb_audio_compression_get_default(audio->config.out.codec);
+                }
+                else
+                {
+                    // Use best quality
+                    audio->config.out.quality =
+                        hb_audio_quality_get_best(audio->config.out.codec,
+                                                  audio->config.out.quality);
+                }
+                if (audio->config.out.compression_level < 0)
+                {
+                    audio->config.out.compression_level =
+                        hb_audio_compression_get_default(
+                                        audio->config.out.codec);
+                }
+                else
+                {
+                    audio->config.out.compression_level =
+                        hb_audio_compression_get_best(audio->config.out.codec,
+                                        audio->config.out.compression_level);
+                }
             }
             else
             {

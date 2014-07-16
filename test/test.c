@@ -2528,14 +2528,6 @@ static int HandleEvents( hb_handle_t * h )
                             "%s requested and input codec is not compatible for track %d, using %s encoder\n",
                             hb_audio_encoder_get_name(requested_passthru), audio->out.track,
                             hb_audio_encoder_get_name(audio->out.codec));
-                    // we didn't drop the track, set the mixdown and bitrate from libhb defaults
-                    audio->out.mixdown =
-                        hb_mixdown_get_default(audio->out.codec,
-                                               audio->in.channel_layout);
-                    audio->out.bitrate =
-                        hb_audio_bitrate_get_default(audio->out.codec,
-                                                     audio->out.samplerate,
-                                                     audio->out.mixdown);
                 }
                 // we didn't drop the track
                 i++;
