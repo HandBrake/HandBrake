@@ -31,7 +31,7 @@
 		273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
 		273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A014ADBE670021BE6D /* HBPreferencesController.m */; };
 		273F20B614ADBE670021BE6D /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A214ADBE670021BE6D /* HBPresets.m */; };
-		273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A414ADBE670021BE6D /* HBPreviewController.m */; };
+		273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A414ADBE670021BE6D /* HBPreviewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A614ADBE670021BE6D /* HBQueueController.mm */; };
 		273F20BA14ADBE670021BE6D /* PictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20AA14ADBE670021BE6D /* PictureController.m */; };
 		273F20BE14ADC09F0021BE6D /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 273F20BD14ADC09F0021BE6D /* main.mm */; };
@@ -121,6 +121,7 @@
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
 		A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AA44791970664A00D7DEFC /* HBUtilities.m */; };
+		A9B34D75197696FE00871B7D /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9B34D74197696FE00871B7D /* DiskArbitration.framework */; };
 		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
 		A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */; };
 		A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC6C54196F0517002AE6B4 /* Subtitles.xib */; };
@@ -323,6 +324,7 @@
 		A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		A9AA447C1970726500D7DEFC /* HBQueueController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueController.h; sourceTree = "<group>"; };
 		A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewGenerator.h; sourceTree = "<group>"; };
+		A9B34D74197696FE00871B7D /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
 		A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesController.h; sourceTree = SOURCE_ROOT; };
 		A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesController.m; sourceTree = SOURCE_ROOT; };
@@ -401,6 +403,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9B34D75197696FE00871B7D /* DiskArbitration.framework in Frameworks */,
 				273F20C914ADC5150021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F203C14ADBC210021BE6D /* Cocoa.framework in Frameworks */,
 				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
@@ -515,6 +518,7 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9B34D74197696FE00871B7D /* DiskArbitration.framework */,
 				273F202F14ADB9790021BE6D /* AudioToolbox.framework */,
 				273F203B14ADBC210021BE6D /* Cocoa.framework */,
 				273F203214ADB9F00021BE6D /* CoreServices.framework */,
@@ -542,28 +546,7 @@
 		273F204114ADBC210021BE6D /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				273F208E14ADBE670021BE6D /* Controller.h */,
-				273F208F14ADBE670021BE6D /* Controller.m */,
-				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
-				273F20A614ADBE670021BE6D /* HBQueueController.mm */,
-				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
-				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
-				A93E0ED01972957000FD67FB /* HBVideoController.h */,
-				A93E0ED11972957000FD67FB /* HBVideoController.m */,
-				273F209114ADBE670021BE6D /* HBAudio.h */,
-				273F209214ADBE670021BE6D /* HBAudio.m */,
-				A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */,
-				273F209014ADBE670021BE6D /* HBAdvancedController.m */,
-				273F209314ADBE670021BE6D /* HBAudioController.h */,
-				273F209414ADBE670021BE6D /* HBAudioController.m */,
-				A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */,
-				A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */,
-				A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */,
-				A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */,
-				273F20A914ADBE670021BE6D /* PictureController.h */,
-				273F20AA14ADBE670021BE6D /* PictureController.m */,
-				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
-				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
+				A9B34D6F197683FE00871B7D /* Controllers */,
 				A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */,
 				A9D1E41618262364002F6424 /* HBPreviewGenerator.m */,
 				273F20A114ADBE670021BE6D /* HBPresets.h */,
@@ -572,14 +555,9 @@
 				A9AA44791970664A00D7DEFC /* HBUtilities.m */,
 				273F209714ADBE670021BE6D /* HBDVDDetector.h */,
 				273F209814ADBE670021BE6D /* HBDVDDetector.m */,
-				46AB433315F98A2B009C0961 /* DockTextField.h */,
-				46AB433415F98A2B009C0961 /* DockTextField.m */,
-				273F209914ADBE670021BE6D /* HBImageAndTextCell.h */,
-				273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */,
-				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
-				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
 				273F209D14ADBE670021BE6D /* HBOutputRedirect.h */,
 				273F209E14ADBE670021BE6D /* HBOutputRedirect.m */,
+				A9B34D711976844500871B7D /* UI Views */,
 				273F20BD14ADC09F0021BE6D /* main.mm */,
 			);
 			name = HandBrake;
@@ -732,6 +710,56 @@
 				277EFE8E17ED71A2001D4A6A /* Static Libraries (optional) */,
 			);
 			name = "Products (external)";
+			sourceTree = "<group>";
+		};
+		A9B34D6F197683FE00871B7D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				273F208E14ADBE670021BE6D /* Controller.h */,
+				273F208F14ADBE670021BE6D /* Controller.m */,
+				A9B34D701976841800871B7D /* Main Window View Controllers */,
+				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
+				273F20A614ADBE670021BE6D /* HBQueueController.mm */,
+				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
+				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
+				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
+				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
+				273F20A914ADBE670021BE6D /* PictureController.h */,
+				273F20AA14ADBE670021BE6D /* PictureController.m */,
+				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
+				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		A9B34D701976841800871B7D /* Main Window View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A93E0ED01972957000FD67FB /* HBVideoController.h */,
+				A93E0ED11972957000FD67FB /* HBVideoController.m */,
+				273F209114ADBE670021BE6D /* HBAudio.h */,
+				273F209214ADBE670021BE6D /* HBAudio.m */,
+				A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */,
+				273F209014ADBE670021BE6D /* HBAdvancedController.m */,
+				273F209314ADBE670021BE6D /* HBAudioController.h */,
+				273F209414ADBE670021BE6D /* HBAudioController.m */,
+				A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */,
+				A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */,
+				A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */,
+				A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */,
+			);
+			name = "Main Window View Controllers";
+			sourceTree = "<group>";
+		};
+		A9B34D711976844500871B7D /* UI Views */ = {
+			isa = PBXGroup;
+			children = (
+				46AB433315F98A2B009C0961 /* DockTextField.h */,
+				46AB433415F98A2B009C0961 /* DockTextField.m */,
+				273F209914ADBE670021BE6D /* HBImageAndTextCell.h */,
+				273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */,
+			);
+			name = "UI Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

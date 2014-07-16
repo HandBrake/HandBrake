@@ -11,6 +11,10 @@
 
 #import "hb.h"
 
+void SigHandler( int signal );
+void hb_error_handler( const char *errmsg );
+char * str_printf(const char *fmt, ...);
+
 void SigHandler( int signal )
 {
     [NSApp terminate: NULL];
@@ -22,11 +26,9 @@ void SigHandler( int signal )
  * Change this to display a dialog box - and maybe move it somewhere else,
  * this is the only place I could find that looked like C :)
 ****************************************************************************/
-extern "C" {
-    void hb_error_handler( const char *errmsg )
-    {
-         fprintf(stderr, "GUI ERROR dialog: %s\n", errmsg );
-    }
+void hb_error_handler( const char *errmsg )
+{
+    fprintf(stderr, "GUI ERROR dialog: %s\n", errmsg );
 }
 
 char * str_printf(const char *fmt, ...)
