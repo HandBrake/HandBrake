@@ -931,7 +931,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     int cropped_width = src_geo->width - ui_geo->crop[2] - ui_geo->crop[3];
     int cropped_height = src_geo->height - ui_geo->crop[0] - ui_geo->crop[1];
     double storage_aspect = (double)cropped_width / cropped_height;
-    int mod = ui_geo->modulus ? EVEN(ui_geo->modulus) : 16;
+    int mod = ui_geo->modulus ? EVEN(ui_geo->modulus) : 2;
 
     // Use 64 bits to avoid overflow till the final hb_reduce() call
     hb_reduce(&in_par.num, &in_par.den, ui_geo->par.num, ui_geo->par.den);
@@ -1018,19 +1018,19 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             {
                 if (!keep_height)
                 {
-                    width = ui_geo->width;
+                    width = MULTIPLE_MOD_UP(ui_geo->width, mod);
                     height = MULTIPLE_MOD((int)(width / dar), mod);
                 }
                 else
                 {
-                    height = ui_geo->height;
+                    height = MULTIPLE_MOD_UP(ui_geo->height, mod);
                     width = MULTIPLE_MOD((int)(height * dar), mod);
                 }
             }
             else
             {
-                width = ui_geo->width;
-                height = ui_geo->height;
+                width = MULTIPLE_MOD_UP(ui_geo->width, mod);
+                height = MULTIPLE_MOD_UP(ui_geo->height, mod);
             }
             if (maxWidth && (width > maxWidth))
             {
@@ -1052,8 +1052,8 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
              *  - Uses mod2-compliant dimensions,
              *  - Forces title - crop dimensions
              */
-            width  = MULTIPLE_MOD(cropped_width, 2);
-            height = MULTIPLE_MOD(cropped_height, 2);
+            width  = MULTIPLE_MOD_UP(cropped_width, 2);
+            height = MULTIPLE_MOD_UP(cropped_height, 2);
 
             /* Adjust the output PAR for new width/height
              * Film AR is the source display width / cropped source height.
@@ -1080,13 +1080,13 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
              */
             if (!keep_height)
             {
-                width = MULTIPLE_MOD(ui_geo->width, mod);
-                height = MULTIPLE_MOD((int)(width / storage_aspect + 0.5), mod);
+                width = MULTIPLE_MOD_UP(ui_geo->width, mod);
+                height = MULTIPLE_MOD_UP((int)(width / storage_aspect + 0.5), mod);
             }
             else
             {
-                height = MULTIPLE_MOD(ui_geo->height, mod);
-                width = MULTIPLE_MOD((int)(height * storage_aspect + 0.5), mod);
+                height = MULTIPLE_MOD_UP(ui_geo->height, mod);
+                width = MULTIPLE_MOD_UP((int)(height * storage_aspect + 0.5), mod);
             }
 
             if (maxWidth && (maxWidth < width))
@@ -1114,12 +1114,10 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
 
             /* Use specified storage dimensions */
             storage_aspect = (double)ui_geo->width / ui_geo->height;
-            width = ui_geo->width;
-            height = ui_geo->height;
 
             /* Time to get picture dimensions that divide cleanly.*/
-            width  = MULTIPLE_MOD(width, mod);
-            height = MULTIPLE_MOD(height, mod);
+            width  = MULTIPLE_MOD_UP(ui_geo->width, mod);
+            height = MULTIPLE_MOD_UP(ui_geo->height, mod);
 
             /* Bind to max dimensions */
             if (maxWidth && width > maxWidth)

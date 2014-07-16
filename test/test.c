@@ -1663,17 +1663,16 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
-            if( crop[0] >= 0 && crop[1] >= 0 &&
-                crop[2] >= 0 && crop[3] >= 0 )
+            if (crop[0] < 0 || crop[1] < 0 || crop[2] < 0 || crop[3] < 0)
             {
-                memcpy( job->crop, crop, 4 * sizeof( int ) );
+                memcpy(crop, title->crop, sizeof(int[4]));
             }
 
             if( loose_crop >= 0 )
             {
-                int mod = modulus > 0 ? modulus : 16;
-                apply_loose_crop(title->height, &job->crop[0], &job->crop[1], mod, loose_crop);
-                apply_loose_crop(title->width, &job->crop[2], &job->crop[3], mod, loose_crop);
+                int mod = modulus > 0 ? modulus : 2;
+                apply_loose_crop(title->height, &crop[0], &crop[1], mod, loose_crop);
+                apply_loose_crop(title->width, &crop[2], &crop[3], mod, loose_crop);
             }
 
             job->deinterlace = deinterlace;
@@ -1721,211 +1720,77 @@ static int HandleEvents( hb_handle_t * h )
                 hb_add_filter( job, filter, rotate_opt);
             }
 
+            hb_geometry_t srcGeo, resultGeo;
+            hb_ui_geometry_t uiGeo;
 
-            if (maxWidth)
-                job->maxWidth = maxWidth;
-            if (maxHeight)
-                job->maxHeight = maxHeight;
-            if (use_hwd)
+            srcGeo.width = title->width;
+            srcGeo.height = title->height;
+            srcGeo.par.num = title->pixel_aspect_width;
+            srcGeo.par.den = title->pixel_aspect_height;
+
+            uiGeo.mode = job->anamorphic.mode = anamorphic_mode;
+            job->anamorphic.keep_display_aspect = keep_display_aspect;
+            uiGeo.keep = !!keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
+            uiGeo.itu_par = job->anamorphic.itu_par = itu_par;
+            uiGeo.modulus = job->modulus = modulus;
+            memcpy(uiGeo.crop, crop, sizeof(int[4]));
+            if (width == 0)
             {
-                job->use_hwd = use_hwd;
+                uiGeo.width = title->width - crop[2] - crop[3];
             }
-
-            job->anamorphic.mode = anamorphic_mode;
-            switch( anamorphic_mode )
+            else
             {
-                case 0: // Non-anamorphic
+                uiGeo.keep |= HB_KEEP_WIDTH;
+                uiGeo.width = width;
+            }
+            if (height == 0)
+            {
+                uiGeo.height = title->height - crop[0] - crop[1];
+            }
+            else
+            {
+                uiGeo.keep |= HB_KEEP_HEIGHT;
+                uiGeo.height = height;
+            }
+            uiGeo.maxWidth = maxWidth;
+            uiGeo.maxHeight = maxHeight;
+            uiGeo.dar.num = 0;
+            uiGeo.dar.den = 0;
+            if( par_width && par_height )
+            {
+                uiGeo.par.num = par_width;
+                uiGeo.par.den = par_height;
+            }
+            else if (display_width != 0 && width != 0)
+            {
+                if (height != 0)
                 {
-                    hb_ui_geometry_t ui_geo;
-
-                    ui_geo.keep = 0;
-                    if (modulus)
-                    {
-                        job->modulus = modulus;
-                    }
-                    
-                    if( width && height )
-                    {
-                        job->width  = width;
-                        job->height = height;
-                        ui_geo.keep |= HB_KEEP_WIDTH;
-                    }
-                    else if( width )
-                    {
-                        job->width = width;
-                        ui_geo.keep |= HB_KEEP_WIDTH;
-                        // do not exceed source dimensions by default
-                        if( !maxHeight )
-                            job->maxHeight = title->height;
-                    }
-                    else if( height )
-                    {
-                        job->height = height;
-                        ui_geo.keep |= HB_KEEP_HEIGHT;
-                        // do not exceed source dimensions by default
-                        if( !maxWidth )
-                            job->maxWidth = title->width;
-                    }
-                    else // if( !width && !height )
-                    {
-                        /* Default to cropped width when one isn't specified
-                         * avoids rounding to mod 16 regardless of modulus */
-                        job->width = title->width - job->crop[2] - job->crop[3];
-                        ui_geo.keep |= HB_KEEP_WIDTH;
-                        // do not exceed source dimensions by default
-                        if( !maxHeight )
-                            job->maxHeight = title->height;
-                    }
-                    hb_geometry_t result;
-                    hb_geometry_t src;
-
-                    src.width = title->width;
-                    src.height = title->height;
-                    src.par.num = title->pixel_aspect_width;
-                    src.par.den = title->pixel_aspect_height;
-
-                    ui_geo.width = job->width;
-                    ui_geo.height = job->height;
-
-                    ui_geo.modulus = job->modulus;
-                    memcpy(ui_geo.crop, job->crop, sizeof(int[4]));
-                    ui_geo.maxWidth = job->maxWidth;
-                    ui_geo.maxHeight = job->maxHeight;
-                    ui_geo.mode = anamorphic_mode;
-                    if (keep_display_aspect)
-                        ui_geo.keep |= HB_KEEP_DISPLAY_ASPECT;
-
-                    hb_set_anamorphic_size2(&src, &ui_geo, &result);
-                    job->width = result.width;
-                    job->height = result.height;
-                    job->anamorphic.par_width = result.par.num;
-                    job->anamorphic.par_height = result.par.den;
+                    fprintf(stderr, "display_width (%d), width (%d), and height (%d) can not all be specified, ignoring height", display_width, width, height);
                 }
-                break;
-                
-                case 1: // Strict anammorphic
-                break;
-                
-                case 2: // Loose anamorphic
-                    if (modulus)
-                    {
-                        job->modulus = modulus;
-                    }
-                    
-                    if( itu_par )
-                    {
-                        job->anamorphic.itu_par = itu_par;
-                    }
-                    
-                    if( width )
-                    {
-                        job->width = width;
-                    }
-                    else if( !width && !height )
-                    {
-                        /* Default to full width when one isn't specified for loose anamorphic */
-                        job->width = title->width - job->crop[2] - job->crop[3];
-                    }
-                    
-                break;
-                
-                case 3: // Custom Anamorphic 3: Power User Jamboree 
-                    if (modulus)
-                    {
-                        job->modulus = modulus;
-                    }
-                    
-                    if( itu_par )
-                    {
-                        job->anamorphic.itu_par = itu_par;
-                    }
-                    
-                    if( par_width && par_height )
-                    {
-                        job->anamorphic.par_width = par_width;
-                        job->anamorphic.par_height = par_height;
-                    }
-                    
-                    if( keep_display_aspect )
-                    {
-                        job->anamorphic.keep_display_aspect = 1;
-                        
-                        /* First, what *is* the display aspect? */
-                        int cropped_width = title->width - job->crop[2] - job->crop[3];
-                        int cropped_height = title->height - job->crop[0] - job->crop[1];
-                        
-                        /* XXX -- I'm assuming people want to keep the source
-                           display AR even though they might have already
-                           asked for ITU values instead. */
-                        float source_display_width = (float)cropped_width *
-                            (float)title->pixel_aspect_width / (float)title->pixel_aspect_height;
-                        float display_aspect = source_display_width / (float)cropped_height;
-                        /* When keeping display aspect, we have to rank some values
-                           by priority in order to consistently handle situations
-                           when more than one might be specified by default.
-                           
-                           * First off, PAR gets ignored. (err make this reality)
-                           * Height will be respected over all other settings,
-                           * If it isn't set, display_width will be followed.
-                           * If it isn't set, width will be followed.          */
-                        if( height )
-                        {
-                            /* We scale the display width to the new height */
-                            display_width = (int)( (double)height * display_aspect );
-                        }
-                        else if( display_width )
-                        {
-                            /* We scale the height to the new display width */
-                            height = (int)( (double)display_width / display_aspect );
-                        }
-                    }
-                    
-                    if( display_width )
-                    {
-                        /* Adjust the PAR to create the new display width
-                           from the default job width. */
-                        job->anamorphic.dar_width = display_width;
-                        
-                        job->anamorphic.dar_height = height ?
-                                                        height :
-                                                        title->height - job->crop[0] - job->crop[1];
-                    }
-                    
-                    if( width && height )
-                    {
-                        /* Use these storage dimensions */
-                        job->width  = width;
-                        job->height = height;
-                    }
-                    else if( width )
-                    {
-                        /* Use just this storage width */
-                        job->width = width;
-                        job->height = title->height - job->crop[0] - job->crop[1];
-                    }
-                    else if( height )
-                    {
-                        /* Use just this storage height. */
-                        job->height = height;
-                        job->width = title->width - job->crop[2] - job->crop[3];
-                    }
-                    else if( !width && !height )
-                    {
-                        /* Assume source dimensions after cropping. */
-                        job->width = title->width - job->crop[2] - job->crop[3];
-                        job->height = title->height - job->crop[0] - job->crop[1];
-                    }
-                    
-                break;
+                uiGeo.par.num = display_width;
+                uiGeo.par.den = width;
             }
-            // Validate and adjust job picture dimensions
-            hb_validate_size( job );
+            else if (display_width != 0)
+            {
+                uiGeo.dar.num = display_width;
+                uiGeo.dar.den = uiGeo.height;
+            }
+            else
+            {
+                uiGeo.par = srcGeo.par;
+            }
+
+            hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
+            job->width = resultGeo.width;
+            job->height = resultGeo.height;
+            job->anamorphic.par_width = resultGeo.par.num;
+            job->anamorphic.par_height = resultGeo.par.den;
+            memcpy(job->crop, crop, sizeof(int[4]));
 
             // Add filter that does cropping and scaling
             char * filter_str;
             filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
-                job->width, job->height, 
-                job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+                job->width, job->height, crop[0], crop[1], crop[2], crop[3] );
                     
             filter = hb_filter_init( HB_FILTER_CROP_SCALE );
             hb_add_filter( job, filter, filter_str );
@@ -2835,7 +2700,7 @@ static int HandleEvents( hb_handle_t * h )
             {
                 char * filter_str;
                 filter_str = hb_strdup_printf("%d:%d:%d:%d",
-                    job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+                    crop[0], crop[1], crop[2], crop[3] );
                 filter = hb_filter_init( HB_FILTER_RENDER_SUB );
                 hb_add_filter( job, filter, filter_str);
                 free( filter_str );
