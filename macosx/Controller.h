@@ -168,7 +168,6 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fPresetNewFolderCheck;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
 	
-	NSString                     * AppSupportDirectory;
 	NSString                     * UserPresetsFile;
 	NSMutableArray               * UserPresets;
 	NSMutableArray               * UserPresetssortedArray;
@@ -225,7 +224,6 @@ BOOL                        fIsDragging;
 - (int) getPidnum;
 - (IBAction) showAboutPanel:(id)sender;
 
-- (void) writeToActivityLog:(const char *) format, ...;
 - (IBAction) browseSources: (id) sender;
 - (void) browseSourcesDone: (NSOpenPanel *) sheet
                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;

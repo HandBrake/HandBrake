@@ -9,7 +9,20 @@
 @interface HBUtilities : NSObject
 
 /**
- *  Genetares a file name automatically based on the inputs,
+ *  Returns the path of the current <user>/Library/Application Support/HandBrake folder.
+ */
++ (NSString *)appSupportPath;
+
+/**
+ *  Writes a message to standard error.
+ *  The message will show up in the output panel and in the activity log.
+ *
+ *  @param format a standard c format string with varargs.
+ */
++ (void)writeToActivityLog:(const char *)format, ...;
+
+/**
+ *  Generates a file name automatically based on the inputs,
  *  it can be configured with NSUserDefaults.
  *
  *  @param sourceName    the name of the source file

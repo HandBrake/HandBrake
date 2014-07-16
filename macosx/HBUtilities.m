@@ -9,6 +9,35 @@
 
 @implementation HBUtilities
 
++ (NSString *)appSupportPath
+{
+    NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,
+                                                                     NSUserDomainMask,
+                                                                     YES) firstObject] stringByAppendingPathComponent:@"HandBrake"];
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:appSupportPath])
+        [fileManager createDirectoryAtPath:appSupportPath withIntermediateDirectories:YES attributes:nil error:NULL];
+
+    return appSupportPath;
+}
+
++ (void)writeToActivityLog:(const char *)format, ...
+{
+    va_list args;
+    va_start(args, format);
+    if (format != nil)
+    {
+        char str[1024];
+        vsnprintf(str, 1024, format, args);
+
+        time_t _now = time(NULL);
+        struct tm *now  = localtime(&_now);
+        fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, str);
+    }
+    va_end(args);
+}
+
 + (NSString *)automaticNameForSource:(NSString *)sourceName
                                title:(NSUInteger)title
                             chapters:(NSRange)chaptersRange

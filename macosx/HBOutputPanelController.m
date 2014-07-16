@@ -7,6 +7,7 @@
 
 #import "HBOutputPanelController.h"
 #import "HBOutputRedirect.h"
+#import "HBUtilities.h"
 
 /// Maximum amount of characters that can be shown in the view.
 // Original value used by cleaner
@@ -48,8 +49,7 @@
          * default with the users text editor instead of the .log default Console.app, should
          * create less confusion for less experienced users when we ask them to paste the log for support
          */
-        outputLogFile = @"~/Library/Application Support/HandBrake/HandBrake-activitylog.txt";
-        outputLogFile = [[outputLogFile stringByExpandingTildeInPath]retain];
+        outputLogFile = [[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"HandBrake-activitylog.txt"] retain];
 
         /* We check for an existing output log file here */
         if( [fileManager fileExistsAtPath:outputLogFile] == 0 )
@@ -131,10 +131,7 @@
     }
     else // if we are putting it in the default ~/Libraries/Application Support/HandBrake/EncodeLogs logs directory
     {
-        NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
-                                                                    NSUserDomainMask,
-                                                                    YES ) objectAtIndex:0];
-        NSString *encodeLogDirectory = [[[libraryDir stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"HandBrake"] stringByAppendingPathComponent:@"EncodeLogs"];
+        NSString *encodeLogDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"EncodeLogs"];
         if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
         {
             [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory
@@ -252,10 +249,7 @@
 - (IBAction)openEncodeLogDirectory:(id)sender
 {
     /* Opens the activity window log file in the users default text editor */
-    NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
-                                                                NSUserDomainMask,
-                                                                YES ) objectAtIndex:0];
-    NSString *encodeLogDirectory = [[[libraryDir stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"HandBrake"] stringByAppendingPathComponent:@"EncodeLogs"];
+    NSString *encodeLogDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"EncodeLogs"];
     if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
     {
         [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory

@@ -47,23 +47,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 + (unsigned int) maximumNumberOfAllowedAudioTracks	{	return maximumNumberOfAllowedAudioTracks;	}
 
-- (NSString *)appSupportPath
-{
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *appSupportPath = nil;
-
-    NSArray *allPaths = NSSearchPathForDirectoriesInDomains( NSApplicationSupportDirectory,
-                                                             NSUserDomainMask,
-                                                             YES );
-    if( [allPaths count] )
-        appSupportPath = [[allPaths objectAtIndex:0] stringByAppendingPathComponent:@"HandBrake"];
-
-    if( ![fileManager fileExistsAtPath:appSupportPath] )
-        [fileManager createDirectoryAtPath:appSupportPath withIntermediateDirectories:YES attributes:nil error:NULL];
-
-    return appSupportPath;
-}
-
 - (id)init
 {
     self = [super init];
@@ -80,12 +63,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     fQueueEncodeLibhb = NULL;
-    /* Check for check for the app support directory here as
-     * outputPanel needs it right away, as may other future methods
-     */
-    AppSupportDirectory = [self appSupportPath];
+
     /* Check for and create the App Support Preview directory if necessary */
-    NSString *PreviewDirectory = [AppSupportDirectory stringByAppendingPathComponent:@"Previews"];
+    NSString *PreviewDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Previews"];
     if( ![[NSFileManager defaultManager] fileExistsAtPath:PreviewDirectory] )
     {
         [[NSFileManager defaultManager] createDirectoryAtPath:PreviewDirectory
@@ -104,7 +84,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     fPreferencesController = [[HBPreferencesController alloc] init];
     /* Lets report the HandBrake version number here to the activity log and text log file */
     NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
-    [self writeToActivityLog: "%s", [versionStringFull UTF8String]];
+    [HBUtilities writeToActivityLog: "%s", [versionStringFull UTF8String]];
     
     /* Load the dockTile and instiante initial text fields */
     dockTile = [[NSApplication sharedApplication] dockTile];
@@ -274,8 +254,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      * preview encode is initiated. */
     if (hbInstanceNum == 1)
     {
-        NSString *PreviewDirectory = [NSString stringWithFormat:@"~/Library/Application Support/HandBrake/Previews"];
-        PreviewDirectory = [PreviewDirectory stringByExpandingTildeInPath];
+        NSString *PreviewDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Previews"];
         NSError *error;
         NSArray *files = [ [NSFileManager defaultManager]  contentsOfDirectoryAtPath: PreviewDirectory error: &error ];
         for( NSString *file in files ) 
@@ -286,7 +265,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 if( error ) 
                 { 
                     //an error occurred
-                    [self writeToActivityLog: "Could not remove existing preview at : %s",[file UTF8String] ];
+                    [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s",[file UTF8String] ];
                 }
             }    
         }
@@ -454,7 +433,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     NSRunningApplication *thisInstance = [NSRunningApplication currentApplication];
     NSString *thisInstanceAppPath = [[NSBundle mainBundle] bundlePath];
-    [self writeToActivityLog: "hbInstances path to this instance: %s", [thisInstanceAppPath UTF8String]];
+    [HBUtilities writeToActivityLog: "hbInstances path to this instance: %s", [thisInstanceAppPath UTF8String]];
     
     int hbInstances = 0;
     NSString *runningInstanceAppPath;
@@ -465,16 +444,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /*Report the path to each active instances app path */
         runningInstancePidNum =  [runningInstance processIdentifier];
         runningInstanceAppPath = [[runningInstance bundleURL] path];
-        [self writeToActivityLog: "hbInstance found instance pidnum: %d at path: %s", runningInstancePidNum, [runningInstanceAppPath UTF8String]];
+        [HBUtilities writeToActivityLog: "hbInstance found instance pidnum: %d at path: %s", runningInstancePidNum, [runningInstanceAppPath UTF8String]];
         /* see if this is us*/
         if ([runningInstance isEqual: thisInstance])
         {
             /* If so this is our pidnum */
-            [self writeToActivityLog: "hbInstance MATCH FOUND, our pidnum is: %d", runningInstancePidNum];
+            [HBUtilities writeToActivityLog: "hbInstance MATCH FOUND, our pidnum is: %d", runningInstancePidNum];
             /* Get the PID number for this hb instance, used in multi instance encoding */
             pidNum = runningInstancePidNum;
             /* Report this pid to the activity log */
-            [self writeToActivityLog: "Pid for this instance: %d", pidNum];
+            [HBUtilities writeToActivityLog: "Pid for this instance: %d", pidNum];
             /* Tell fQueueController what our pidNum is */
             [fQueueController setPidNum:pidNum];
         }
@@ -536,10 +515,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
     
-    [self writeToActivityLog: "didDimissReloadQueue number of hb instances:%d", hbInstanceNum];
+    [HBUtilities writeToActivityLog: "didDimissReloadQueue number of hb instances:%d", hbInstanceNum];
     if (returnCode == NSAlertOtherReturn)
     {
-        [self writeToActivityLog: "didDimissReloadQueue NSAlertOtherReturn Chosen"];
+        [HBUtilities writeToActivityLog: "didDimissReloadQueue NSAlertOtherReturn Chosen"];
         [self clearQueueAllItems];
         
         /* We show whichever open source window specified in LaunchSourceBehavior preference key */
@@ -555,7 +534,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
-        [self writeToActivityLog: "didDimissReloadQueue First Button Chosen"];
+        [HBUtilities writeToActivityLog: "didDimissReloadQueue First Button Chosen"];
         if (hbInstanceNum == 1)
         {
             
@@ -859,7 +838,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fScanIndicator setDoubleValue: 0.0];
             [fScanIndicator setHidden: YES];
             [fScanHorizontalLine setHidden: NO];
-			[self writeToActivityLog:"ScanDone state received from fHandle"];
+			[HBUtilities writeToActivityLog:"ScanDone state received from fHandle"];
             [self showNewScan:nil];
             [[fWindow toolbar] validateVisibleItems];
             
@@ -940,7 +919,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
-			[self writeToActivityLog:"ScanDone state received from fQueueEncodeLibhb"];
+			[HBUtilities writeToActivityLog:"ScanDone state received from fQueueEncodeLibhb"];
             [self processNewQueueEncode];
             [[fWindow toolbar] validateVisibleItems];
             
@@ -1236,23 +1215,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [filesList release];
         }
     }
-}
-
-/* We use this to write messages to stderr from the macgui which show up in the activity window and log*/
-- (void) writeToActivityLog:(const char *) format, ...
-{
-    va_list args;
-    va_start(args, format);
-    if (format != nil)
-    {
-        char str[1024];
-        vsnprintf( str, 1024, format, args );
-
-        time_t _now = time( NULL );
-        struct tm * now  = localtime( &_now );
-        fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, str );
-    }
-    va_end(args);
 }
 
 #pragma mark -
@@ -1613,7 +1575,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         NSString *sendToApp = [[NSUserDefaults standardUserDefaults] objectForKey: @"SendCompletedEncodeToApp"];
         if (![sendToApp isEqualToString:@"None"])
         {
-            [self writeToActivityLog: "trying to send encode to: %s", [sendToApp UTF8String]];
+            [HBUtilities writeToActivityLog: "trying to send encode to: %s", [sendToApp UTF8String]];
             NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@%@%@", @"tell application \"",sendToApp,@"\" to open (POSIX file \"", filePath, @"\")"]];
             [myScript executeAndReturnError: nil];
             [myScript release];
@@ -1763,11 +1725,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* We check to see if the chosen file at path is a package */
             if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:[url path]])
             {
-                [self writeToActivityLog: "trying to open a package at: %s", [[url path] UTF8String]];
+                [HBUtilities writeToActivityLog: "trying to open a package at: %s", [[url path] UTF8String]];
                 /* We check to see if this is an .eyetv package */
                 if ([[url pathExtension] isEqualToString: @"eyetv"])
                 {
-                    [self writeToActivityLog:"trying to open eyetv package"];
+                    [HBUtilities writeToActivityLog:"trying to open eyetv package"];
                     /* We're looking at an EyeTV package - try to open its enclosed
                      .mpg media file */
                      browsedSourceDisplayName = [[[url URLByDeletingPathExtension] lastPathComponent] retain];
@@ -1780,13 +1742,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     {
                         /* Found an mpeg inside the eyetv package, make it our scan path 
                         and call performScan on the enclosed mpeg */
-                        [self writeToActivityLog:"found mpeg in eyetv package"];
+                        [HBUtilities writeToActivityLog:"found mpeg in eyetv package"];
                         [self performScan:mpgname scanTitleNum:0];
                     }
                     else
                     {
                         /* We did not find an mpeg file in our package, so we do not call performScan */
-                        [self writeToActivityLog:"no valid mpeg in eyetv package"];
+                        [HBUtilities writeToActivityLog:"no valid mpeg in eyetv package"];
                     }
                 }
                 /* We check to see if this is a .dvdmedia package */
@@ -1794,13 +1756,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 {
                     /* path IS a package - but dvdmedia packages can be treaded like normal directories */
                     browsedSourceDisplayName = [[[url URLByDeletingPathExtension] lastPathComponent] retain];
-                    [self writeToActivityLog:"trying to open dvdmedia package"];
+                    [HBUtilities writeToActivityLog:"trying to open dvdmedia package"];
                     [self performScan:[url path] scanTitleNum:0];
                 }
                 else
                 {
                     /* The package is not an eyetv package, so we do not call performScan */
-                    [self writeToActivityLog:"unable to open package"];
+                    [HBUtilities writeToActivityLog:"unable to open package"];
                 }
             }
             else // path is not a package, so we treat it as a dvd parent folder or VIDEO_TS folder
@@ -1808,13 +1770,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 /* path is not a package, so we call perform scan directly on our file */
                 if ([[url lastPathComponent] isEqualToString: @"VIDEO_TS"])
                 {
-                    [self writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
+                    [HBUtilities writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
                     /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name*/
                     browsedSourceDisplayName = [[[url URLByDeletingLastPathComponent] lastPathComponent] retain];
                 }
                 else
                 {
-                    [self writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
+                    [HBUtilities writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
                     /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
                     /* make sure we remove any path extension as this can also be an '.mpg' file */
                     browsedSourceDisplayName = [[url lastPathComponent] retain];
@@ -1895,7 +1857,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
         path = [detector devicePath];
-        [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
+        [HBUtilities writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
         
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -1910,7 +1872,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
-            [self writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
+            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
             NSInteger status;
             status = NSRunAlertPanel(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function.",
                                      @"Videolan.org provides libdvdcss if you are not currently using another solution.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
@@ -1924,27 +1886,27 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             else if (status == NSAlertAlternateReturn)
             {
                 /* User chose to cancel the scan */
-                [self writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
+                [HBUtilities writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
             }
             else
             {
                 /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
                 cancelScanDecrypt = 0;
-                [self writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
+                [HBUtilities writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
             }
             
         }
         else if (dvdcss != NULL)
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
-            [self writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
+            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
             dlclose(dvdcss);
         }
         else
         {
             /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
             cancelScanDecrypt = 0;
-            [self writeToActivityLog:"Copy-protection warning disabled in preferences - trying to open physical dvd without decryption"];
+            [HBUtilities writeToActivityLog:"Copy-protection warning disabled in preferences - trying to open physical dvd without decryption"];
         }
     }
     
@@ -1966,13 +1928,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         if (scanTitleNum > 0)
         {
-            [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
+            [HBUtilities writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
         else
         {
             // minimum title duration doesn't apply to title-specific scan
             // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
-            [self writeToActivityLog: "scanning titles with a duration of %d seconds or more", min_title_duration_seconds];
+            [HBUtilities writeToActivityLog: "scanning titles with a duration of %d seconds or more", min_title_duration_seconds];
         }
         
         hb_system_sleep_prevent(fHandle);
@@ -2023,16 +1985,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if (applyQueueToScan == YES)
             {
                 /* we are a rescan of an existing queue item and need to apply the queued settings to the scan */
-                [self writeToActivityLog: "showNewScan: This is a queued item rescan"];
+                [HBUtilities writeToActivityLog: "showNewScan: This is a queued item rescan"];
                 
             }
             else if (applyQueueToScan == NO)
             {
-                [self writeToActivityLog: "showNewScan: This is a new source item scan"];
+                [HBUtilities writeToActivityLog: "showNewScan: This is a new source item scan"];
             }
             else
             {
-                [self writeToActivityLog: "showNewScan: cannot grok scan status"];
+                [HBUtilities writeToActivityLog: "showNewScan: cannot grok scan status"];
             }
             
               /* We increment the successful scancount here by one,
@@ -2140,7 +2102,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if (applyQueueToScan == YES)
             {
                 /* we are a rescan of an existing queue item and need to apply the queued settings to the scan */
-                [self writeToActivityLog: "showNewScan: calling applyQueueSettingsToMainWindow"];
+                [HBUtilities writeToActivityLog: "showNewScan: calling applyQueueSettingsToMainWindow"];
                 [self applyQueueSettingsToMainWindow:nil];
                 
             }
@@ -2226,7 +2188,7 @@ static void queueFSEventStreamCallback(
     /* Define variables and create a CFArray object containing
      CFString objects containing paths to watch.
     */
-    CFStringRef mypath = (CFStringRef) [[self appSupportPath] stringByAppendingPathComponent:@"Queue"];
+    CFStringRef mypath = (CFStringRef) [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Queue"];
     CFArrayRef pathsToWatch = CFArrayCreate(NULL, (const void **)&mypath, 1, NULL);
 
     FSEventStreamContext callbackCtx;
@@ -2266,7 +2228,7 @@ static void queueFSEventStreamCallback(
 {
 	/* We declare the default NSFileManager into fileManager */
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *appSupportPath = [self appSupportPath];
+    NSString *appSupportPath = [HBUtilities appSupportPath];
 
 	/* We define the location of the user presets file */
     QueueFile = [[appSupportPath stringByAppendingPathComponent:@"Queue/Queue.plist"] retain];
@@ -2301,7 +2263,7 @@ static void queueFSEventStreamCallback(
 
 - (void)reloadQueue
 {
-    [self writeToActivityLog:"Queue reloaded"];
+    [HBUtilities writeToActivityLog:"Queue reloaded"];
 
     NSMutableArray * tempQueueArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
     [QueueFileArray setArray:tempQueueArray];
@@ -2414,7 +2376,7 @@ fWorkingCount = 0;
         {
 			nextPendingFound = YES;
             nextPendingIndex = [QueueFileArray indexOfObject: tempObject];
-            [self writeToActivityLog: "getNextPendingQueueIndex next pending encode index is:%d", nextPendingIndex];
+            [HBUtilities writeToActivityLog: "getNextPendingQueueIndex next pending encode index is:%d", nextPendingIndex];
 		}
         i++;
 	}
@@ -2732,7 +2694,7 @@ fWorkingCount = 0;
         currentQueueEncodeIndex = newQueueItemIndex;
         /* now we mark the queue item as Status = 1 ( being encoded ) so another instance can not come along and try to scan it while we are scanning */
         [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
-        [self writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
+        [HBUtilities writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
         [self saveQueueFileItem];
         /* now we can go ahead and scan the new pending queue item */
         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
@@ -2740,7 +2702,7 @@ fWorkingCount = 0;
     }
     else
     {
-        [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
+        [HBUtilities writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
         /* Done encoding, allow system sleep for the encode handle */
         hb_system_sleep_allow(fQueueEncodeLibhb);
         /*
@@ -2782,7 +2744,7 @@ fWorkingCount = 0;
         }
         if (scanTitleNum > 0)
         {
-            [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
+            [HBUtilities writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
         /*
          * Only scan 10 previews before an encode - additional previews are
@@ -2803,12 +2765,12 @@ fWorkingCount = 0;
     
     if( !hb_list_count( list ) )
     {
-        [self writeToActivityLog: "processNewQueueEncode WARNING nothing found in the title list"];
+        [HBUtilities writeToActivityLog: "processNewQueueEncode WARNING nothing found in the title list"];
     }
     
     NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-    [self writeToActivityLog: "Preset: %s", [[queueToApply objectForKey:@"PresetName"] UTF8String]];
-    [self writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
+    [HBUtilities writeToActivityLog: "Preset: %s", [[queueToApply objectForKey:@"PresetName"] UTF8String]];
+    [HBUtilities writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
     hb_job_set_file(job, [[queueToApply objectForKey:@"DestinationPath"] UTF8String]);
     [self prepareJob];
     
@@ -2887,7 +2849,7 @@ fWorkingCount = 0;
 - (void)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (NSUInteger) scanTitleNum selectedQueueItem: (NSUInteger) selectedQueueItem
 {
     fqueueEditRescanItemNum = selectedQueueItem;
-    [self writeToActivityLog: "rescanQueueItemToMainWindow: Re-scanning queue item at index:%d",fqueueEditRescanItemNum];
+    [HBUtilities writeToActivityLog: "rescanQueueItemToMainWindow: Re-scanning queue item at index:%d",fqueueEditRescanItemNum];
     applyQueueToScan = YES;
     /* Make sure we release the display name before reassigning it */
     [browsedSourceDisplayName release];
@@ -2907,7 +2869,7 @@ fWorkingCount = 0;
     hb_job_t * job = fTitle->job;
     if (queueToApply)
     {
-        [self writeToActivityLog: "applyQueueSettingsToMainWindow: queue item found"];
+        [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: queue item found"];
     }
     /* Set title number and chapters */
     /* since the queue only scans a single title, its already been selected in showNewScan
@@ -3103,7 +3065,7 @@ fWorkingCount = 0;
     //applyQueueToScan = NO;
     
     /* Not that source is loaded and settings applied, delete the queue item from the queue */
-    [self writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d",fqueueEditRescanItemNum];
+    [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d",fqueueEditRescanItemNum];
     [self removeQueueFileItem:fqueueEditRescanItemNum];
 }
 
@@ -3171,7 +3133,7 @@ bool one_burned = FALSE;
                  * Commented out but left in for initial commit. */
                 
                 
-                [self writeToActivityLog: "Foreign Language Search: %d", 1];
+                [HBUtilities writeToActivityLog: "Foreign Language Search: %d", 1];
                 
                 job->indepth_scan = 1;
                 
@@ -3458,14 +3420,14 @@ bool one_burned = FALSE;
     if([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 0)
     {
         /* Chapter selection */
-        [self writeToActivityLog: "Start / Stop set to chapters"];
+        [HBUtilities writeToActivityLog: "Start / Stop set to chapters"];
         job->chapter_start = [[queueToApply objectForKey:@"JobChapterStart"] intValue];
         job->chapter_end   = [[queueToApply objectForKey:@"JobChapterEnd"] intValue];
     }
     else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 1)
     {
         /* we are pts based start / stop */
-        [self writeToActivityLog: "Start / Stop set to seconds…"];
+        [HBUtilities writeToActivityLog: "Start / Stop set to seconds…"];
         
         /* Point A to Point B. Time to time in seconds.*/
         /* get the start seconds from the start seconds field */
@@ -3479,7 +3441,7 @@ bool one_burned = FALSE;
     else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 2)
     {
         /* we are frame based start / stop */
-        [self writeToActivityLog: "Start / Stop set to frames…"];
+        [HBUtilities writeToActivityLog: "Start / Stop set to frames…"];
         
         /* Point A to Point B. Frame to frame */
         /* get the start frame from the start frame field */
@@ -3725,7 +3687,7 @@ bool one_burned = FALSE;
             /* if we are on the first track and using "Foreign Audio Search" */ 
             if (i == 0 && subtitle == 1)
             {
-                [self writeToActivityLog: "Foreign Language Search: %d", 1];
+                [HBUtilities writeToActivityLog: "Foreign Language Search: %d", 1];
                 
                 job->indepth_scan = 1;
                 
@@ -3995,7 +3957,7 @@ bool one_burned = FALSE;
     hb_add_filter(job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
                                  fps_mode, fps_num, fps_den] UTF8String]);
 
-    [self writeToActivityLog: "prepareJob exiting"];
+    [HBUtilities writeToActivityLog: "prepareJob exiting"];
 }
 
 
@@ -4089,7 +4051,7 @@ bool one_burned = FALSE;
 */
 - (IBAction) Rip: (id) sender
 {
-    [self writeToActivityLog: "Rip: Pending queue count is %d", fPendingCount];
+    [HBUtilities writeToActivityLog: "Rip: Pending queue count is %d", fPendingCount];
     /* Rip or Cancel ? */
     hb_state_t s;
     hb_get_state2( fQueueEncodeLibhb, &s );
@@ -4306,7 +4268,7 @@ bool one_burned = FALSE;
         currentQueueEncodeIndex = newQueueItemIndex;
         /* now we mark the queue item as Status = 1 ( being encoded ) so another instance can not come along and try to scan it while we are scanning */
         [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
-        [self writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
+        [HBUtilities writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
         [self saveQueueFileItem];
         /* now we can go ahead and scan the new pending queue item */
         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
@@ -4314,7 +4276,7 @@ bool one_burned = FALSE;
     }
     else
     {
-        [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
+        [HBUtilities writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
     }
 }
 
@@ -4338,7 +4300,7 @@ bool one_burned = FALSE;
     [self saveQueueFileItem];
     // so now lets move to 
     currentQueueEncodeIndex++ ;
-    [self writeToActivityLog: "cancelling current job and stopping the queue"];
+    [HBUtilities writeToActivityLog: "cancelling current job and stopping the queue"];
 }
 - (IBAction) Pause: (id) sender
 {
@@ -5675,8 +5637,7 @@ return YES;
     /* We declare the default NSFileManager into fileManager */
     NSFileManager * fileManager = [NSFileManager defaultManager];
     /* We define the location of the user presets file */
-    UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-    UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+    UserPresetsFile = [[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"] retain];
     /* We check for the presets.plist */
     if ([fileManager fileExistsAtPath:UserPresetsFile] == 0)
     {
@@ -6405,7 +6366,7 @@ return YES;
         i++;
     }
     /* report the built in preset updating to the activity log */
-    [self writeToActivityLog: "built in presets updated to build number: %d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
+    [HBUtilities writeToActivityLog: "built in presets updated to build number: %d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
     
     [self sortPresets];
     [self addPreset];

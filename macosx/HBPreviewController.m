@@ -6,6 +6,7 @@
 
 #import "HBPreviewController.h"
 #import "HBPreviewGenerator.h"
+#import "HBUtilities.h"
 #import "Controller.h"
 #import <QTKit/QTKit.h>
 
@@ -821,7 +822,7 @@ typedef enum ViewMode : NSUInteger {
 
 		if (!movie)
         {
-            [self.delegate writeToActivityLog: "showMoviePreview: Unable to open movie"];
+            [HBUtilities writeToActivityLog: "showMoviePreview: Unable to open movie"];
             [self switchViewToMode:ViewModePicturePreview];
 		}
         else

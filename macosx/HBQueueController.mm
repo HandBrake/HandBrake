@@ -7,6 +7,7 @@
 #import "HBQueueController.h"
 #import "Controller.h"
 #import "HBImageAndTextCell.h"
+#import "HBUtilities.h"
 
 #define HB_ROW_HEIGHT_TITLE_ONLY           17.0
 #define HB_ROW_HEIGHT_FULL_DESCRIPTION           200.0
@@ -243,7 +244,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (void)setPidNum: (int)myPidnum
 {
     pidNum = myPidnum;
-    [fHBController writeToActivityLog: "HBQueueController : My Pidnum is %d", pidNum];
+    [HBUtilities writeToActivityLog: "HBQueueController : My Pidnum is %d", pidNum];
 }
 
 #pragma mark -
