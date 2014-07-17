@@ -86,7 +86,7 @@
     DASessionRef session = DASessionCreate(kCFAllocatorDefault);
     DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault,
                                                 session,
-                                                (__bridge CFURLRef)volumeURL);
+                                                (CFURLRef)volumeURL);
 
     if ( disk )
     {
