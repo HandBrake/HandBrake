@@ -10,7 +10,7 @@
 #include <IOKit/IOKitLib.h>
 #include <IOKit/storage/IOMedia.h>
 #include <IOKit/storage/IODVDMedia.h>
-#include <DiskArbitration/DiskArbitration.h>
+#include <sys/mount.h>
 
 #import "HBDVDDetector.h"
 
@@ -80,29 +80,17 @@
         return bsdName;
     }
 
-    NSURL *volumeURL = [NSURL fileURLWithPath:path];
+    struct statfs s;
+    statfs([path fileSystemRepresentation], &s);
 
-    // Create a DADiskRef
-    DASessionRef session = DASessionCreate(kCFAllocatorDefault);
-    DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault,
-                                                session,
-                                                (CFURLRef)volumeURL);
+    bsdName = [NSString stringWithUTF8String:s.f_mntfromname];
 
-    if ( disk )
+    if ([bsdName hasPrefix:@"/dev/"])
     {
-        CFDictionaryRef desc = DADiskCopyDescription(disk);
-        if ( desc )
-        {
-            // Get the bsd name from it
-            bsdName = [(NSString *)CFDictionaryGetValue(desc, kDADiskDescriptionMediaBSDNameKey) retain];
-            CFRelease(desc);
-        }
-        CFRelease(disk);
+        bsdName = [bsdName stringByReplacingCharactersInRange:NSMakeRange(0, 5) withString:@""];
     }
 
-    CFRelease(session);
-
-    return bsdName;
+    return [bsdName retain];
 }
 
 
