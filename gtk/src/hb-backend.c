@@ -222,16 +222,42 @@ combo_opts_t deint_opts =
 
 static options_map_t d_denoise_opts[] =
 {
-    {N_("Off"),    "off",    0, ""},
-    {N_("Custom"), "custom", 1, ""},
-    {N_("Weak"),   "weak",   2, "2:1:1:2:3:3"},
-    {N_("Medium"), "medium", 3, "3:2:2:2:3:3"},
-    {N_("Strong"), "strong", 4, "7:7:7:5:5:5"},
+    {N_("Off"),     "off",     0, ""},
+    {N_("NLMeans"), "nlmeans", 1, ""},
+    {N_("HQDN3D"),  "hqdn3d",  2, ""},
 };
 combo_opts_t denoise_opts =
 {
     sizeof(d_denoise_opts)/sizeof(options_map_t),
     d_denoise_opts
+};
+
+static options_map_t d_denoise_preset_opts[] =
+{
+    {N_("Custom"),     "custom",     1, ""},
+    {N_("Ultralight"), "ultralight", 5, ""},
+    {N_("Light"),      "light",      2, ""},
+    {N_("Medium"),     "medium",     3, ""},
+    {N_("Strong"),     "strong",     4, ""},
+};
+combo_opts_t denoise_preset_opts =
+{
+    sizeof(d_denoise_preset_opts)/sizeof(options_map_t),
+    d_denoise_preset_opts
+};
+
+static options_map_t d_nlmeans_tune_opts[] =
+{
+    {N_("None"),        "none",       0, ""},
+    {N_("Film"),        "film",       1, ""},
+    {N_("Grain"),       "grain",      2, ""},
+    {N_("High Motion"), "highmotion", 3, ""},
+    {N_("Animation"),   "animation",  4, ""},
+};
+combo_opts_t nlmeans_tune_opts =
+{
+    sizeof(d_nlmeans_tune_opts)/sizeof(options_map_t),
+    d_nlmeans_tune_opts
 };
 
 static options_map_t d_direct_opts[] =
@@ -365,7 +391,9 @@ combo_name_map_t combo_name_map[] =
     {"PictureDeinterlace", &deint_opts},
     {"PictureDecomb", &decomb_opts},
     {"PictureDetelecine", &detel_opts},
-    {"PictureDenoise", &denoise_opts},
+    {"PictureDenoiseFilter", &denoise_opts},
+    {"PictureDenoisePreset", &denoise_preset_opts},
+    {"PictureDenoiseTune", &nlmeans_tune_opts},
     {"x264_direct", &direct_opts},
     {"x264_b_adapt", &badapt_opts},
     {"x264_bpyramid", &bpyramid_opts},
@@ -2526,7 +2554,9 @@ ghb_update_ui_combo_box(
         small_opts_set(ud->builder, "PictureDeinterlace", &deint_opts);
         small_opts_set(ud->builder, "PictureDetelecine", &detel_opts);
         small_opts_set(ud->builder, "PictureDecomb", &decomb_opts);
-        small_opts_set(ud->builder, "PictureDenoise", &denoise_opts);
+        small_opts_set(ud->builder, "PictureDenoiseFilter", &denoise_opts);
+        small_opts_set(ud->builder, "PictureDenoisePreset", &denoise_preset_opts);
+        small_opts_set(ud->builder, "PictureDenoiseTune", &nlmeans_tune_opts);
         small_opts_set(ud->builder, "x264_direct", &direct_opts);
         small_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
         small_opts_set(ud->builder, "x264_bpyramid", &bpyramid_opts);
@@ -3874,23 +3904,8 @@ ghb_validate_filters(GValue *settings)
         }
         g_free(str);
     }
-    // denois
-    index = ghb_settings_combo_int(settings, "PictureDenoise");
-    if (index == 1)
-    {
-        str = ghb_settings_get_string(settings, "PictureDenoiseCustom");
-        if (!ghb_validate_filter_string(str, -1))
-        {
-            message = g_strdup_printf(
-                        _("Invalid Denoise Settings:\n\n%s\n"),
-                        str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
-            g_free(str);
-            g_free(message);
-            return FALSE;
-        }
-        g_free(str);
-    }
+    // denoise
+    // TODO
     return TRUE;
 }
 
@@ -4403,20 +4418,29 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         hb_add_filter( job, filter, filter_str );
         g_free(filter_str);
     }
-    gint denoise = ghb_settings_combo_int(js, "PictureDenoise");
-    if( denoise )
+    if (strcmp(ghb_settings_get_const_string(js, "PictureDenoiseFilter"), "off"))
     {
-        filter_str = NULL;
-        if (denoise != 1)
+        int filter_id = HB_FILTER_HQDN3D;
+        if (!strcmp(ghb_settings_get_const_string(js, "PictureDenoiseFilter"), "nlmeans"))
+            filter_id = HB_FILTER_NLMEANS;
+
+        if (!strcmp(ghb_settings_get_const_string(js, "PictureDenoisePreset"), "custom"))
         {
-            if (denoise_opts.map[denoise].svalue != NULL)
-                filter_str = g_strdup(denoise_opts.map[denoise].svalue);
+            const char *filter_str;
+            filter_str = ghb_settings_get_const_string(js, "PictureDenoiseCustom");
+            filter = hb_filter_init(filter_id);
+            hb_add_filter( job, filter, filter_str );
         }
         else
-            filter_str = ghb_settings_get_string(js, "PictureDenoiseCustom");
-        filter = hb_filter_init(HB_FILTER_DENOISE);
-        hb_add_filter( job, filter, filter_str );
-        g_free(filter_str);
+        {
+            const char *preset, *tune;
+            preset = ghb_settings_get_const_string(js, "PictureDenoisePreset");
+            tune = ghb_settings_get_const_string(js, "PictureDenoiseTune");
+            filter_str = hb_generate_filter_settings(filter_id, preset, tune);
+            filter = hb_filter_init(filter_id);
+            hb_add_filter( job, filter, filter_str );
+            g_free(filter_str);
+        }
     }
     gint deblock = ghb_settings_get_int(js, "PictureDeblock");
     if( deblock >= 5 )

@@ -248,8 +248,12 @@
         <string>off</string>
         <key>PictureDeinterlaceCustom</key>
         <string></string>
-        <key>PictureDenoise</key>
+        <key>PictureDenoiseFilter</key>
         <string>off</string>
+        <key>PictureDenoisePreset</key>
+        <string>medium</string>
+        <key>PictureDenoiseTune</key>
+        <string>none</string>
         <key>PictureDenoiseCustom</key>
         <string></string>
         <key>PictureDetelecine</key>

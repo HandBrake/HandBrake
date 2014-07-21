@@ -308,8 +308,9 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     // Next line in the display (Filter settings)
     // Filters: - Deinterlace
     gint decomb, detel, deint, deblock, denoise;
-    const gchar *detel_cust, *deint_cust, *decomb_cust, *denoise_cust;
-    const gchar *deint_opt, *decomb_opt, *denoise_opt;
+    const gchar *detel_cust, *deint_cust, *decomb_cust;
+    const gchar *deint_opt, *decomb_opt;
+    const gchar *denoise_opt, *denoise_preset, *denoise_tune, *denoise_cust;
     gboolean decomb_deint;
     gboolean grayscale;
     gboolean filters;
@@ -327,8 +328,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     detel_cust = ghb_settings_get_const_string(settings,
                                                "PictureDetelecineCustom");
     deblock = ghb_settings_get_int(settings, "PictureDeblock");
-    denoise = ghb_settings_combo_int(settings, "PictureDenoise");
-    denoise_opt = ghb_settings_combo_option(settings, "PictureDenoise");
+    denoise = ghb_settings_combo_int(settings, "PictureDenoiseFilter");
+    denoise_opt = ghb_settings_combo_option(settings, "PictureDenoiseFilter");
+    denoise_preset = ghb_settings_combo_option(settings, "PictureDenoisePreset");
+    denoise_tune = ghb_settings_combo_option(settings, "PictureDenoiseTune");
     denoise_cust = ghb_settings_get_const_string(settings,
                                                  "PictureDenoiseCustom");
     grayscale = ghb_settings_get_boolean(settings, "VideoGrayScale");
@@ -376,14 +379,18 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         if (denoise)
         {
-            XPRINT("%sDenoise", prefix);
-            if (denoise == 1)
+            XPRINT("%sDenoise Filter %s:", prefix, denoise_opt);
+            if (ghb_settings_combo_int(settings, "PictureDenoisePreset") == 1)
             {
-                XPRINT(": %s", denoise_cust);
+                XPRINT(" %s", denoise_cust);
             }
             else
             {
-                XPRINT(": %s", denoise_opt);
+                XPRINT(" %s", denoise_preset);
+                if (denoise == 1 && strcmp(denoise_tune, "None"))
+                {
+                    XPRINT(",%s", denoise_tune);
+                }
             }
             prefix = " - ";
         }

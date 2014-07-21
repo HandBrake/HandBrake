@@ -1927,9 +1927,10 @@ value_map_t denoise_xlat[] =
 {
     {"0", "off"},
     {"1", "custom"},
-    {"2", "weak"},
+    {"2", "light"},
     {"3", "medium"},
     {"4", "strong"},
+    {"5", "ultralight"},
     {NULL, NULL}
 };
 
@@ -2178,11 +2179,13 @@ export_value_xlat(GValue *dict)
     gval = export_value_xlat2(deint_xlat, lin_val, G_TYPE_INT);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
-    key = "PictureDenoise";
+#if 0
+    key = "PictureDenoisePreset";
     lin_val = ghb_dict_lookup(dict, key);
     gval = export_value_xlat2(denoise_xlat, lin_val, G_TYPE_INT);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
+#endif
 
     gint count, ii;
     GValue *alist;
@@ -2429,7 +2432,7 @@ import_value_xlat(GValue *dict)
     gval = import_value_xlat2(defaults, deint_xlat, key, mac_val);
     if (gval)
         ghb_dict_insert(dict, g_strdup(key), gval);
-    key = "PictureDenoise";
+    key = "PictureDenoisePreset";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_xlat2(defaults, denoise_xlat, key, mac_val);
     if (gval)

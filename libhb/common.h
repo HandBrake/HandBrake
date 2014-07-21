@@ -1210,6 +1210,7 @@ enum
     // Filters that must operate on the original source image are next
     HB_FILTER_DEBLOCK,
     HB_FILTER_DENOISE,
+    HB_FILTER_HQDN3D = HB_FILTER_DENOISE,
     HB_FILTER_NLMEANS,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
@@ -1228,6 +1229,8 @@ hb_filter_object_t * hb_filter_init( int filter_id );
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter );
 hb_list_t *hb_filter_list_copy(const hb_list_t *src);
 void hb_filter_close( hb_filter_object_t ** );
+char * hb_generate_filter_settings(int filter_id, const char *preset,
+                                                  const char *tune);
 
 typedef void hb_error_handler_t( const char *errmsg );
 
