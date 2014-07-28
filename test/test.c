@@ -1728,6 +1728,7 @@ static int HandleEvents( hb_handle_t * h )
             srcGeo.par.num = title->pixel_aspect_width;
             srcGeo.par.den = title->pixel_aspect_height;
 
+            keep_display_aspect |= anamorphic_mode != HB_ANAMORPHIC_CUSTOM;
             uiGeo.mode = job->anamorphic.mode = anamorphic_mode;
             job->anamorphic.keep_display_aspect = keep_display_aspect;
             uiGeo.keep = !!keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
