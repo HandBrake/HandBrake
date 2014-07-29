@@ -5046,18 +5046,8 @@ ghb_get_preview_image(
     uiGeo.par.num = 1;
     uiGeo.par.den = 1;
 
-    // Populate job with things needed by hb_get_preview
-    hb_job_t *job = hb_job_init((hb_title_t*)title);
-    job->width = uiGeo.width;
-    job->height = uiGeo.height;
-    job->deinterlace = deinterlace;
-    memcpy(job->crop, uiGeo.crop, sizeof(int[4]));
-
-    // Make sure we have a big enough buffer to receive the image from libhb
-    guint8 *buffer = g_malloc(uiGeo.width * uiGeo.height * 4);
-
-    hb_get_preview( h_scan, job, index, buffer );
-    hb_job_close( &job );
+    hb_image_t *image;
+    image = hb_get_preview2(h_scan, title->index, index, &uiGeo, deinterlace);
 
     // Create an GdkPixbuf and copy the libhb image into it, converting it from
     // libhb's format something suitable.
@@ -5065,10 +5055,10 @@ ghb_get_preview_image(
     // BGRA format. Alpha is ignored.
     GdkPixbuf *preview;
     preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
-                             uiGeo.width, uiGeo.height);
+                             image->width, image->height);
     guint8 *pixels = gdk_pixbuf_get_pixels(preview);
 
-    guint8 *src_line = buffer;
+    guint8 *src_line = image->data;
     guint8 *dst = pixels;
 
     gint ii, jj;
@@ -5076,11 +5066,11 @@ ghb_get_preview_image(
     gint stride = gdk_pixbuf_get_rowstride(preview);
     guint8 *tmp;
 
-    for (ii = 0; ii < uiGeo.height; ii++)
+    for (ii = 0; ii < image->height; ii++)
     {
         guint32 *src = (guint32*)src_line;
         tmp = dst;
-        for (jj = 0; jj < uiGeo.width; jj++)
+        for (jj = 0; jj < image->width; jj++)
         {
             tmp[0] = src[0] >> 16;
             tmp[1] = src[0] >> 8;
@@ -5088,7 +5078,7 @@ ghb_get_preview_image(
             tmp += channels;
             src++;
         }
-        src_line += uiGeo.width * 4;
+        src_line += image->plane[0].stride;
         dst += stride;
     }
     gint w = ghb_settings_get_int(ud->settings, "scale_width");
@@ -5107,8 +5097,8 @@ ghb_get_preview_image(
     *out_width = w;
     *out_height = h;
 
-    int previewWidth = uiGeo.width;
-    int previewHeight = uiGeo.height;
+    int previewWidth = image->width;
+    int previewHeight = image->height;
 
     // If the preview is too large to fit the screen, reduce it's size.
     if (ghb_settings_get_boolean(ud->prefs, "reduce_hd_preview"))
@@ -5167,6 +5157,7 @@ ghb_get_preview_image(
         // Right
         hash_pixbuf(preview, previewWidth-c3, c0, c3, h, 32, 1);
     }
+    hb_image_close(&image);
     return preview;
 }
 

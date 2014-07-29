@@ -81,6 +81,7 @@ typedef struct hb_container_s hb_container_t;
 typedef struct hb_rational_s hb_rational_t;
 typedef struct hb_geometry_s hb_geometry_t;
 typedef struct hb_ui_geometry_s hb_ui_geometry_t;
+typedef struct hb_image_s hb_image_t;
 typedef struct hb_job_s  hb_job_t;
 typedef struct hb_title_set_s hb_title_set_t;
 typedef struct hb_title_s hb_title_t;
@@ -262,6 +263,26 @@ struct hb_ui_geometry_s
     hb_rational_t par;          // Pixel aspect used in custom anamorphic
     hb_rational_t dar;          // Display aspect used in custom anamorphic
 };
+
+struct hb_image_s
+{
+    int format;
+    int width;
+    int height;
+    uint8_t *data;
+
+    struct image_plane
+    {
+        uint8_t *data;
+        int width;
+        int height;
+        int stride;
+        int height_stride;
+        int size;
+    } plane[4];
+};
+
+void hb_image_close(hb_image_t **_image);
 
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_subtitle_config_s.cs when changing this struct
 struct hb_subtitle_config_s

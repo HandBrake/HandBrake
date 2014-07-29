@@ -106,7 +106,7 @@ struct hb_buffer_s
         int           fmt;
     } f;
 
-    struct plane
+    struct buffer_plane
     {
         uint8_t     * data;
         int           stride;
@@ -163,6 +163,7 @@ hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src );
 int           hb_buffer_copy( hb_buffer_t * dst, const hb_buffer_t * src );
 void          hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst );
 void          hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src );
+hb_image_t  * hb_buffer_to_image(hb_buffer_t *buf);
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 int           hb_fifo_size( hb_fifo_t * );

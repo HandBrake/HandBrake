@@ -68,9 +68,12 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
 // JJJ: title->job?
 int           hb_save_preview( hb_handle_t * h, int title, int preview, 
                                hb_buffer_t *buf );
-hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview );
+hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
+                               int preview );
 void          hb_get_preview( hb_handle_t *, hb_job_t *, int,
                               uint8_t * );
+hb_image_t  * hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
+                              hb_ui_geometry_t *ui_geo, int deinterlace);
 void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                       hb_ui_geometry_t *ui_geo,
                                       hb_geometry_t *result);
@@ -83,12 +86,13 @@ void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
 
 /* Handling jobs */
 int           hb_count( hb_handle_t * );
-hb_job_t *    hb_job( hb_handle_t *, int );
+hb_job_t    * hb_job( hb_handle_t *, int );
 void          hb_add( hb_handle_t *, hb_job_t * );
 void          hb_rem( hb_handle_t *, hb_job_t * );
 
-hb_job_t *    hb_job_init_by_index( hb_handle_t *h, int title_index );
-hb_job_t *    hb_job_init( hb_title_t * title );
+hb_title_t  * hb_find_title_by_index( hb_handle_t *h, int title_index );
+hb_job_t    * hb_job_init_by_index( hb_handle_t *h, int title_index );
+hb_job_t    * hb_job_init( hb_title_t * title );
 void          hb_job_reset( hb_job_t * job );
 void          hb_job_close( hb_job_t ** job );
 

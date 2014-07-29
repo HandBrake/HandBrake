@@ -3119,6 +3119,22 @@ static void job_clean( hb_job_t * job )
     }
 }
 
+hb_title_t * hb_find_title_by_index( hb_handle_t *h, int title_index )
+{
+    hb_title_set_t *title_set = hb_get_title_set( h );
+    int ii;
+
+    for (ii = 0; ii < hb_list_count(title_set->list_title); ii++)
+    {
+        hb_title_t *title = hb_list_item(title_set->list_title, ii);
+        if (title_index == title->index)
+        {
+            return title;
+        }
+    }
+    return NULL;
+}
+
 /*
  * Create a pristine job structure from a title
  * title_index is 1 based

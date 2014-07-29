@@ -681,6 +681,58 @@ void hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src )
 
 }
 
+hb_image_t * hb_buffer_to_image(hb_buffer_t *buf)
+{
+    hb_image_t *image = calloc(1, sizeof(hb_image_t));
+
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
+    image->data  = malloc( buf->size );
+#elif defined( SYS_CYGWIN )
+    /* FIXME */
+    image->data  = malloc( buf->size + 17 );
+#else
+    image->data  = memalign( 16, buf->size );
+#endif
+    if (image->data == NULL)
+    {
+        free(image);
+        return NULL;
+    }
+
+    image->format = buf->f.fmt;
+    image->width = buf->f.width;
+    image->height = buf->f.height;
+    memcpy(image->data, buf->data, buf->size);
+
+    int p;
+    uint8_t *data = image->data;
+    for (p = 0; p < 4; p++)
+    {
+        image->plane[p].data = data;
+        image->plane[p].width = buf->plane[p].width;
+        image->plane[p].height = buf->plane[p].height;
+        image->plane[p].stride = buf->plane[p].stride;
+        image->plane[p].height_stride = buf->plane[p].height_stride;
+        image->plane[p].size = buf->plane[p].size;
+        data += image->plane[p].size;
+    }
+    return image;
+}
+
+void hb_image_close(hb_image_t **_image)
+{
+    if (_image == NULL)
+        return;
+
+    hb_image_t * image = *_image;
+    if (image != NULL)
+    {
+        free(image->data);
+        free(image);
+        *_image = NULL;
+    }
+}
+
 hb_fifo_t * hb_fifo_init( int capacity, int thresh )
 {
     hb_fifo_t * f;

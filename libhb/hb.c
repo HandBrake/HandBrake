@@ -671,62 +671,122 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
     return 0;
 }
 
-hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
+hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
 {
     FILE * file;
     char   filename[1024];
-    hb_title_set_t *title_set;
 
-    hb_title_t * title = NULL;
-
-    title_set = hb_get_title_set(h);
-
-    int ii;
-    for (ii = 0; ii < hb_list_count(title_set->list_title); ii++)
-    {
-        title = hb_list_item( title_set->list_title, ii);
-        if (title != NULL && title->index == title_idx)
-        {
-            break;
-        }
-        title = NULL;
-    }
-    if (title == NULL)
-    {
-        hb_error( "hb_read_preview: invalid title (%d)", title_idx );
-        return NULL;
-    }
-
-    hb_get_tempory_filename( h, filename, "%d_%d_%d",
-                             hb_get_instance_id(h), title_idx, preview );
+    hb_get_tempory_filename(h, filename, "%d_%d_%d",
+                            hb_get_instance_id(h), title->index, preview);
 
     file = hb_fopen(filename, "rb");
-    if( !file )
+    if (!file)
     {
         hb_error( "hb_read_preview: fopen failed (%s)", filename );
         return NULL;
     }
 
     hb_buffer_t * buf;
-    buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P, title->width, title->height );
+    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P, title->width, title->height);
 
     int pp, hh;
-    for( pp = 0; pp < 3; pp++ )
+    for (pp = 0; pp < 3; pp++)
     {
         uint8_t *data = buf->plane[pp].data;
         int stride = buf->plane[pp].stride;
         int w = buf->plane[pp].width;
         int h = buf->plane[pp].height;
 
-        for( hh = 0; hh < h; hh++ )
+        for (hh = 0; hh < h; hh++)
         {
-            fread( data, w, 1, file );
+            fread(data, w, 1, file);
             data += stride;
         }
     }
-    fclose( file );
+    fclose(file);
 
     return buf;
+}
+
+hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
+                            hb_ui_geometry_t *ui_geo, int deinterlace)
+{
+    char                 filename[1024];
+    hb_buffer_t        * in_buf, * deint_buf = NULL, * preview_buf;
+    uint32_t             swsflags;
+    AVPicture            pic_in, pic_preview, pic_deint, pic_crop;
+    struct SwsContext  * context;
+
+    int width = ui_geo->width * ui_geo->par.num / ui_geo->par.den;
+    int height = ui_geo->height;
+
+    swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
+
+    preview_buf = hb_frame_buffer_init(AV_PIX_FMT_RGB32, width, height);
+    hb_avpicture_fill( &pic_preview, preview_buf );
+
+    // Allocate the AVPicture frames and fill in
+
+    memset( filename, 0, 1024 );
+
+    hb_title_t * title;
+    title = hb_find_title_by_index(h, title_idx);
+    if (title == NULL)
+    {
+        hb_error( "hb_get_preview2: invalid title (%d)", title_idx );
+        return NULL;
+    }
+
+    in_buf = hb_read_preview( h, title, picture );
+    if ( in_buf == NULL )
+    {
+        return NULL;
+    }
+
+    hb_avpicture_fill( &pic_in, in_buf );
+
+    if (deinterlace)
+    {
+        // Deinterlace and crop
+        deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
+                                          title->width, title->height );
+        hb_deinterlace(deint_buf, in_buf);
+        hb_avpicture_fill( &pic_deint, deint_buf );
+
+        av_picture_crop(&pic_crop, &pic_deint, AV_PIX_FMT_YUV420P,
+                        ui_geo->crop[0], ui_geo->crop[2] );
+    }
+    else
+    {
+        // Crop
+        av_picture_crop(&pic_crop, &pic_in, AV_PIX_FMT_YUV420P,
+                        ui_geo->crop[0], ui_geo->crop[2] );
+    }
+
+    // Get scaling context
+    context = hb_sws_get_context(
+                        title->width  - (ui_geo->crop[2] + ui_geo->crop[3]),
+                        title->height - (ui_geo->crop[0] + ui_geo->crop[1]),
+                        AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32,
+                        swsflags);
+
+    // Scale
+    sws_scale(context,
+              (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
+              0, title->height - (ui_geo->crop[0] + ui_geo->crop[1]),
+              pic_preview.data, pic_preview.linesize);
+
+    // Free context
+    sws_freeContext( context );
+
+    hb_image_t *image = hb_buffer_to_image(preview_buf);
+
+    // Clean up
+    hb_buffer_close( &in_buf );
+    hb_buffer_close( &deint_buf );
+    hb_buffer_close( &preview_buf );
+
+    return image;
 }
 
 /**
@@ -759,7 +819,7 @@ void hb_get_preview( hb_handle_t * h, hb_job_t * job, int picture,
 
     memset( filename, 0, 1024 );
 
-    in_buf = hb_read_preview( h, title->index, picture );
+    in_buf = hb_read_preview( h, title, picture );
     if ( in_buf == NULL )
     {
         return;
