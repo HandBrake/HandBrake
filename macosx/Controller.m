@@ -2613,7 +2613,7 @@ fWorkingCount = 0;
     [fAudioController prepareAudioForQueueFileJob: queueFileJob];
     
 	/* Subtitles */
-    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesViewController subtitleArray] copyItems:YES];
+    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesViewController subtitles] copyItems:YES];
     [queueFileJob setObject:[NSArray arrayWithArray: subtitlesArray] forKey:@"SubtitleList"];
     [subtitlesArray autorelease];
 
@@ -3097,131 +3097,95 @@ fWorkingCount = 0;
     [fVideoController prepareVideoForJobPreview:job andTitle:title];
 
     /* Subtitle settings */
-    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:fSubtitlesViewController.subtitleArray copyItems:YES];
-    
-int subtitle;
-int force;
-int burned;
-int def;
-bool one_burned = FALSE;
-
+    BOOL one_burned = NO;
     int i = 0;
-    NSEnumerator *enumerator = [subtitlesArray objectEnumerator];
-    id tempObject;
-    while (tempObject = [enumerator nextObject])
+
+    for (id subtitleDict in fSubtitlesViewController.subtitles)
     {
-        
-        subtitle = [[tempObject objectForKey:@"subtitleSourceTrackNum"] intValue];
-        force = [[tempObject objectForKey:@"subtitleTrackForced"] intValue];
-        burned = [[tempObject objectForKey:@"subtitleTrackBurned"] intValue];
-        def = [[tempObject objectForKey:@"subtitleTrackDefault"] intValue];
-        
-        /* since the subtitleSourceTrackNum 0 is "None" in our array of the subtitle popups,
-         * we want to ignore it for display as well as encoding.
-         */
-        if (subtitle > 0)
+        int subtitle = [subtitleDict[keySubTrackIndex] intValue];
+        int force = [subtitleDict[keySubTrackForced] intValue];
+        int burned = [subtitleDict[keySubTrackBurned] intValue];
+        int def = [subtitleDict[keySubTrackDefault] intValue];
+
+        // if i is 0, then we are in the first item of the subtitles which we need to
+        // check for the "Foreign Audio Search" which would be keySubTrackIndex of -1
+
+        /* if we are on the first track and using "Foreign Audio Search" */
+        if (i == 0 && subtitle == -1)
         {
-            /* if i is 0, then we are in the first item of the subtitles which we need to 
-             * check for the "Foreign Audio Search" which would be subtitleSourceTrackNum of 1
-             * bearing in mind that for all tracks subtitleSourceTrackNum of 0 is None.
-             */
-            
-            /* if we are on the first track and using "Foreign Audio Search" */ 
-            if (i == 0 && subtitle == 1)
+            [HBUtilities writeToActivityLog: "Foreign Language Search: %d", 1];
+
+            job->indepth_scan = 1;
+
+            if (burned != 1)
             {
-                /* NOTE: Currently foreign language search is borked for preview.
-                 * Commented out but left in for initial commit. */
-                
-                
-                [HBUtilities writeToActivityLog: "Foreign Language Search: %d", 1];
-                
-                job->indepth_scan = 1;
-                
-                if (burned != 1)
-                {
-                    job->select_subtitle_config.dest = PASSTHRUSUB;
-                }
-                else
-                {
-                    job->select_subtitle_config.dest = RENDERSUB;
-                }
-                
-                job->select_subtitle_config.force = force;
-                job->select_subtitle_config.default_track = def;
+                job->select_subtitle_config.dest = PASSTHRUSUB;
             }
             else
             {
-                /* if we are getting the subtitles from an external srt file */
-                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] intValue] == SRTSUB)
-                {
-                    hb_subtitle_config_t sub_config;
-                    
-                    sub_config.offset = [[tempObject objectForKey:@"subtitleTrackSrtOffset"] intValue];
-                    
-                    /* we need to srncpy file path and char code */
-                    strncpy(sub_config.src_filename, [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String], 255);
-                    sub_config.src_filename[255] = 0;
-                    strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 39);
-                    sub_config.src_codeset[39] = 0;
-                    
-                    if( !burned && hb_subtitle_can_pass( SRTSUB, job->mux ) )
-                    {
-                        sub_config.dest = PASSTHRUSUB;
-                    }
-                    else if( hb_subtitle_can_burn( SRTSUB ) )
-                    {
-                        // Only allow one subtitle to be burned into the video
-                        if( one_burned )
-                            continue;
-                        one_burned = TRUE;
-                        sub_config.dest = RENDERSUB;
-                    }
+                job->select_subtitle_config.dest = RENDERSUB;
+            }
 
-                    sub_config.force = 0;
-                    sub_config.default_track = def;
-                    hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
-                    continue;
-                }
-                
-                /* for the actual source tracks, we must subtract the non source entries so 
-                 * that the menu index matches the source subtitle_list index for convenience */
-                if( i == 0 )
+            job->select_subtitle_config.force = force;
+            job->select_subtitle_config.default_track = def;
+        }
+        else
+        {
+            /* if we are getting the subtitles from an external srt file */
+            if ([subtitleDict[keySubTrackType] intValue] == SRTSUB)
+            {
+                hb_subtitle_config_t sub_config;
+
+                sub_config.offset = [subtitleDict[keySubTrackSrtOffset] intValue];
+
+                /* we need to srncpy file name and codeset */
+                strncpy(sub_config.src_filename, [subtitleDict[keySubTrackSrtFilePath] UTF8String], 255);
+                sub_config.src_filename[255] = 0;
+                strncpy(sub_config.src_codeset, [subtitleDict[keySubTrackSrtCharCode] UTF8String], 39);
+                sub_config.src_codeset[39] = 0;
+
+                if( !burned && hb_subtitle_can_pass( SRTSUB, job->mux ) )
                 {
-                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
-                     * Foreign Language Search is 1) so subtract 2 */
-                    subtitle = subtitle - 2;
+                    sub_config.dest = PASSTHRUSUB;
                 }
-                else
+                else if( hb_subtitle_can_burn( SRTSUB ) )
                 {
-                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
-                     * so subtract 1. */
-                    subtitle = subtitle - 1;
+                    // Only allow one subtitle to be burned into the video
+                    if( one_burned )
+                        continue;
+                    one_burned = TRUE;
+                    sub_config.dest = RENDERSUB;
                 }
-                
-                /* We are setting a source subtitle so access the source subtitle info */  
-                hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item( title->list_subtitle, subtitle );
-                
-                if( subt != NULL )
+
+                sub_config.force = 0;
+                sub_config.default_track = def;
+                hb_srt_add( job, &sub_config, [subtitleDict[keySubTrackLanguageIsoCode] UTF8String]);
+                continue;
+            }
+
+            /* We are setting a source subtitle so access the source subtitle info */
+            hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item( title->list_subtitle, subtitle );
+
+            if( subt != NULL )
+            {
+                hb_subtitle_config_t sub_config = subt->config;
+
+                if( !burned && hb_subtitle_can_pass( subt->source, job->mux ) )
                 {
-                    hb_subtitle_config_t sub_config = subt->config;
-                    
-                    if( !burned && hb_subtitle_can_pass( subt->source, job->mux ) )
-                    {
-                        sub_config.dest = PASSTHRUSUB;
-                    }
-                    else if( hb_subtitle_can_burn( subt->source ) )
-                    {
-                        // Only allow one subtitle to be burned into the video
-                        if( one_burned )
-                            continue;
-                        one_burned = TRUE;
-                        sub_config.dest = RENDERSUB;
-                    }
-                    
-                    sub_config.force = force;
-                    sub_config.default_track = def;
-                    hb_subtitle_add( job, &sub_config, subtitle );
+                    sub_config.dest = PASSTHRUSUB;
                 }
+                else if( hb_subtitle_can_burn( subt->source ) )
+                {
+                    // Only allow one subtitle to be burned into the video
+                    if( one_burned )
+                        continue;
+                    one_burned = TRUE;
+                    sub_config.dest = RENDERSUB;
+                }
+
+                sub_config.force = force;
+                sub_config.default_track = def;
+                hb_subtitle_add( job, &sub_config, subtitle );
             }
         }
         i++;
@@ -3230,15 +3194,10 @@ bool one_burned = FALSE;
     {
         filter = hb_filter_init( HB_FILTER_RENDER_SUB );
         hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d",
-                                  job->crop[0], job->crop[1],
-                                  job->crop[2], job->crop[3]] UTF8String] );
+                                      job->crop[0], job->crop[1],
+                                      job->crop[2], job->crop[3]] UTF8String] );
     }
-   
-    
-    
-[subtitlesArray autorelease];
-    
-    
+
     /* Auto Passthru */
     job->acodec_copy_mask = 0;
     if (fAudioController.allowAACPassCheck)
@@ -3641,141 +3600,100 @@ bool one_burned = FALSE;
         job->vbitrate = 0;
         
     }
-    
+
     job->grayscale = [[queueToApply objectForKey:@"VideoGrayScale"] intValue];
-    
 
-
-#pragma mark -
-#pragma mark Process Subtitles to libhb
-
-/* Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
- * which means that we need to account for the offset of non source language settings in from
- * the NSPopUpCell menu. For all of the objects in the SubtitleList array this means 0 is "None"
- * from the popup menu, additionally the first track has "Foreign Audio Search" at 1. So we use
- * an int to offset the index number for the objectForKey:@"subtitleSourceTrackNum" to map that
- * to the source tracks position in title->list_subtitle.
- */
-
-int subtitle;
-int force;
-int burned;
-int def;
-bool one_burned = FALSE;
-
+    // Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
+    BOOL one_burned = NO;
     int i = 0;
-    NSEnumerator *enumerator = [[queueToApply objectForKey:@"SubtitleList"] objectEnumerator];
-    id tempObject;
-    while (tempObject = [enumerator nextObject])
+
+    NSArray *subtitles = [queueToApply objectForKey:@"SubtitleList"];
+    for (id subtitleDict in subtitles)
     {
-        
-        subtitle = [[tempObject objectForKey:@"subtitleSourceTrackNum"] intValue];
-        force = [[tempObject objectForKey:@"subtitleTrackForced"] intValue];
-        burned = [[tempObject objectForKey:@"subtitleTrackBurned"] intValue];
-        def = [[tempObject objectForKey:@"subtitleTrackDefault"] intValue];
-        
-        /* since the subtitleSourceTrackNum 0 is "None" in our array of the subtitle popups,
-         * we want to ignore it for display as well as encoding.
-         */
-        if (subtitle > 0)
+        int subtitle = [subtitleDict[keySubTrackIndex] intValue];
+        int force = [subtitleDict[keySubTrackForced] intValue];
+        int burned = [subtitleDict[keySubTrackBurned] intValue];
+        int def = [subtitleDict[keySubTrackDefault] intValue];
+
+        // if i is 0, then we are in the first item of the subtitles which we need to
+        // check for the "Foreign Audio Search" which would be keySubTrackIndex of -1
+
+        // if we are on the first track and using "Foreign Audio Search"
+        if (i == 0 && subtitle == -1)
         {
-            /* if i is 0, then we are in the first item of the subtitles which we need to 
-             * check for the "Foreign Audio Search" which would be subtitleSourceTrackNum of 1
-             * bearing in mind that for all tracks subtitleSourceTrackNum of 0 is None.
-             */
-            
-            /* if we are on the first track and using "Foreign Audio Search" */ 
-            if (i == 0 && subtitle == 1)
+            [HBUtilities writeToActivityLog: "Foreign Language Search: %d", 1];
+
+            job->indepth_scan = 1;
+
+            if (burned != 1)
             {
-                [HBUtilities writeToActivityLog: "Foreign Language Search: %d", 1];
-                
-                job->indepth_scan = 1;
-                
-                if (burned != 1)
-                {
-                    job->select_subtitle_config.dest = PASSTHRUSUB;
-                }
-                else
-                {
-                    job->select_subtitle_config.dest = RENDERSUB;
-                }
-                
-                job->select_subtitle_config.force = force;
-                job->select_subtitle_config.default_track = def;
+                job->select_subtitle_config.dest = PASSTHRUSUB;
             }
             else
             {
-                /* if we are getting the subtitles from an external srt file */
-                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] intValue] == SRTSUB)
-                {
-                    hb_subtitle_config_t sub_config;
-                    
-                    sub_config.offset = [[tempObject objectForKey:@"subtitleTrackSrtOffset"] intValue];
-                    
-                    /* we need to srncpy file name and codeset */
-                    strncpy(sub_config.src_filename, [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String], 255);
-                    sub_config.src_filename[255] = 0;
-                    strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 39);
-                    sub_config.src_codeset[39] = 0;
-                    
-                    if( !burned && hb_subtitle_can_pass( SRTSUB, job->mux ) )
-                    {
-                        sub_config.dest = PASSTHRUSUB;
-                    }
-                    else if( hb_subtitle_can_burn( SRTSUB ) )
-                    {
-                        // Only allow one subtitle to be burned into the video
-                        if( one_burned )
-                            continue;
-                        one_burned = TRUE;
-                        sub_config.dest = RENDERSUB;
-                    }
+                job->select_subtitle_config.dest = RENDERSUB;
+            }
 
-                    sub_config.force = 0;
-                    sub_config.default_track = def;
-                    hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
-                    continue;
-                }
-                
-                /* for the actual source tracks, we must subtract the non source entries so 
-                 * that the menu index matches the source subtitle_list index for convenience */
-                if( i == 0 )
+            job->select_subtitle_config.force = force;
+            job->select_subtitle_config.default_track = def;
+        }
+        else
+        {
+            // if we are getting the subtitles from an external srt file
+            if ([subtitleDict[keySubTrackType] intValue] == SRTSUB)
+            {
+                hb_subtitle_config_t sub_config;
+
+                sub_config.offset = [subtitleDict[keySubTrackSrtOffset] intValue];
+
+                // we need to srncpy file name and codeset
+                strncpy(sub_config.src_filename, [subtitleDict[keySubTrackSrtFilePath] UTF8String], 255);
+                sub_config.src_filename[255] = 0;
+                strncpy(sub_config.src_codeset, [subtitleDict[keySubTrackSrtCharCode] UTF8String], 39);
+                sub_config.src_codeset[39] = 0;
+
+                if( !burned && hb_subtitle_can_pass( SRTSUB, job->mux ) )
                 {
-                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
-                     * Foreign Language Search is 1) so subtract 2 */
-                    subtitle = subtitle - 2;
+                    sub_config.dest = PASSTHRUSUB;
                 }
-                else
+                else if( hb_subtitle_can_burn( SRTSUB ) )
                 {
-                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
-                     * so subtract 1. */
-                    subtitle = subtitle - 1;
+                    // Only allow one subtitle to be burned into the video
+                    if( one_burned )
+                        continue;
+                    one_burned = TRUE;
+                    sub_config.dest = RENDERSUB;
                 }
-                
-                /* We are setting a source subtitle so access the source subtitle info */  
-                hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item( title->list_subtitle, subtitle );
-                
-                if( subt != NULL )
+
+                sub_config.force = 0;
+                sub_config.default_track = def;
+                hb_srt_add( job, &sub_config, [subtitleDict[keySubTrackLanguageIsoCode] UTF8String]);
+                continue;
+            }
+
+            /* We are setting a source subtitle so access the source subtitle info */
+            hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item( title->list_subtitle, subtitle );
+
+            if( subt != NULL )
+            {
+                hb_subtitle_config_t sub_config = subt->config;
+
+                if( !burned && hb_subtitle_can_pass( subt->source, job->mux ) )
                 {
-                    hb_subtitle_config_t sub_config = subt->config;
-                    
-                    if( !burned && hb_subtitle_can_pass( subt->source, job->mux ) )
-                    {
-                        sub_config.dest = PASSTHRUSUB;
-                    }
-                    else if( hb_subtitle_can_burn( subt->source ) )
-                    {
-                        // Only allow one subtitle to be burned into the video
-                        if( one_burned )
-                            continue;
-                        one_burned = TRUE;
-                        sub_config.dest = RENDERSUB;
-                    }
-                    
-                    sub_config.force = force;
-                    sub_config.default_track = def;
-                    hb_subtitle_add( job, &sub_config, subtitle );
+                    sub_config.dest = PASSTHRUSUB;
                 }
+                else if( hb_subtitle_can_burn( subt->source ) )
+                {
+                    // Only allow one subtitle to be burned into the video
+                    if( one_burned )
+                        continue;
+                    one_burned = TRUE;
+                    sub_config.dest = RENDERSUB;
+                }
+
+                sub_config.force = force;
+                sub_config.default_track = def;
+                hb_subtitle_add( job, &sub_config, subtitle );
             }
         }
         i++;
@@ -3787,8 +3705,6 @@ bool one_burned = FALSE;
                                   job->crop[0], job->crop[1],
                                   job->crop[2], job->crop[3]] UTF8String] );
     }
-
-#pragma mark -
 
     /* Auto Passthru */
     job->acodec_copy_mask = 0;
@@ -5410,11 +5326,8 @@ return YES;
         [fAudioController addTracksFromPreset: chosenPreset];
         
         /*Subtitles*/
-        // To be fixed in the automatic subtitles changes 
-        //[fSubPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Subtitles"]];
-        /* Forced Subtitles */
-        //[fSubForcedCheck setState:[[chosenPreset objectForKey:@"SubtitlesForced"] intValue]];
-        
+        [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
+
         /* Picture Settings */
         /* Note: objectForKey:@"UsesPictureSettings" refers to picture size, which encompasses:
          * height, width, keep ar, anamorphic and crop settings.
@@ -5901,13 +5814,8 @@ return YES;
         [preset setObject:[NSMutableArray arrayWithArray: audioListArray] forKey:@"AudioList"];
         [audioListArray release];
 
-        
-        /* Temporarily remove subtitles from creating a new preset as it has to be converted over to use the new
-         * subititle array code. */
-        /* Subtitles*/
-        //[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
-        /* Forced Subtitles */
-        //[preset setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
+        /* Subtitles */
+        [fSubtitlesViewController prepareSubtitlesForPreset:preset];
     }
     [preset autorelease];
     return preset;

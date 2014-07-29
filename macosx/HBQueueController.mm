@@ -896,7 +896,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         
         NSString * passesString = @"";
         /* check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan */
-        if ([item objectForKey:@"SubtitleList"] && [[[[item objectForKey:@"SubtitleList"] objectAtIndex:0] objectForKey:@"subtitleSourceTrackNum"] intValue] == 1)
+        if ([[item objectForKey:@"SubtitleList"] count] && [[[[item objectForKey:@"SubtitleList"] objectAtIndex:0] objectForKey:@"keySubTrackIndex"] intValue] == -1)
         {
           passesString = [passesString stringByAppendingString:@"1 Foreign Language Search Pass - "];
         }
@@ -1204,28 +1204,22 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         id tempObject;
         while (tempObject = [enumerator nextObject])
         {
-            /* since the subtitleSourceTrackNum 0 is "None" in our array of the subtitle popups,
-             * we want to ignore it for display as well as encoding.
-             */
-            if ([[tempObject objectForKey:@"subtitleSourceTrackNum"] intValue] > 0)
-            { 
-                /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
-                [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
-                [finalString appendString: [tempObject objectForKey:@"subtitleSourceTrackName"] withAttributes:detailAttr];
-                if ([[tempObject objectForKey:@"subtitleTrackForced"] intValue] == 1)
-                {
-                    [finalString appendString: @" - Forced Only" withAttributes:detailAttr];
-                }
-                if ([[tempObject objectForKey:@"subtitleTrackBurned"] intValue] == 1)
-                {
-                    [finalString appendString: @" - Burned In" withAttributes:detailAttr];
-                }
-                if ([[tempObject objectForKey:@"subtitleTrackDefault"] intValue] == 1)
-                {
-                    [finalString appendString: @" - Default" withAttributes:detailAttr];
-                }
-                [finalString appendString:@"\n" withAttributes:detailAttr];
+            /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
+            [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
+            [finalString appendString: [tempObject objectForKey:@"keySubTrackName"] withAttributes:detailAttr];
+            if ([[tempObject objectForKey:@"keySubTrackForced"] intValue] == 1)
+            {
+                [finalString appendString: @" - Forced Only" withAttributes:detailAttr];
             }
+            if ([[tempObject objectForKey:@"keySubTrackBurned"] intValue] == 1)
+            {
+                [finalString appendString: @" - Burned In" withAttributes:detailAttr];
+            }
+            if ([[tempObject objectForKey:@"keySubTrackDefault"] intValue] == 1)
+            {
+                [finalString appendString: @" - Default" withAttributes:detailAttr];
+            }
+            [finalString appendString:@"\n" withAttributes:detailAttr];
             i++;
         }
 

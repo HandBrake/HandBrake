@@ -119,9 +119,11 @@
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
+		A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */; };
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
 		A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AA44791970664A00D7DEFC /* HBUtilities.m */; };
 		A9B34D75197696FE00871B7D /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9B34D74197696FE00871B7D /* DiskArbitration.framework */; };
+		A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9C0DB83197E7B0000DF55B3 /* SubtitlesDefaults.xib */; };
 		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
 		A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */; };
 		A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC6C54196F0517002AE6B4 /* Subtitles.xib */; };
@@ -131,6 +133,8 @@
 		A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467E16BC2AD800C307BC /* play-p.pdf */; };
 		A9E1468316BC2AD800C307BC /* prev-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467F16BC2AD800C307BC /* prev-p.pdf */; };
 		A9F2EB6F196F12C800066546 /* Audio.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9F2EB6D196F12C800066546 /* Audio.xib */; };
+		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
+		A9F4728D1976BAA70009EC65 /* HBSubtitlesSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F4728C1976BAA70009EC65 /* HBSubtitlesSettings.m */; };
 		D2BCB10916F5152C0084604C /* activity.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB0F616F515230084604C /* activity.png */; };
 		D2BCB10A16F5152C0084604C /* activity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB0F716F515230084604C /* activity@2x.png */; };
 		D2BCB10B16F5152C0084604C /* addqueue.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB0F816F515240084604C /* addqueue.png */; };
@@ -318,6 +322,8 @@
 		A93E0ED01972957000FD67FB /* HBVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBVideoController.h; sourceTree = "<group>"; };
 		A93E0ED11972957000FD67FB /* HBVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBVideoController.m; sourceTree = "<group>"; };
 		A93E0ED61972958C00FD67FB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Video.xib; sourceTree = "<group>"; };
+		A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBLanguagesSelection.h; sourceTree = "<group>"; };
+		A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBLanguagesSelection.m; sourceTree = "<group>"; };
 		A9935212196F38A70069C6B7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ChaptersTitles.xib; sourceTree = "<group>"; };
 		A9AA44781970664A00D7DEFC /* HBUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBUtilities.h; sourceTree = "<group>"; };
 		A9AA44791970664A00D7DEFC /* HBUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBUtilities.m; sourceTree = "<group>"; };
@@ -325,6 +331,7 @@
 		A9AA447C1970726500D7DEFC /* HBQueueController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueController.h; sourceTree = "<group>"; };
 		A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewGenerator.h; sourceTree = "<group>"; };
 		A9B34D74197696FE00871B7D /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
+		A9C0DB84197E7B0000DF55B3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = SubtitlesDefaults.xib; sourceTree = "<group>"; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
 		A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesController.h; sourceTree = SOURCE_ROOT; };
 		A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesController.m; sourceTree = SOURCE_ROOT; };
@@ -335,6 +342,10 @@
 		A9E1467E16BC2AD800C307BC /* play-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "play-p.pdf"; sourceTree = "<group>"; };
 		A9E1467F16BC2AD800C307BC /* prev-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "prev-p.pdf"; sourceTree = "<group>"; };
 		A9F2EB6E196F12C800066546 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Audio.xib; sourceTree = "<group>"; };
+		A9F472861976B7F30009EC65 /* HBSubtitlesDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesDefaultsController.h; sourceTree = "<group>"; };
+		A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesDefaultsController.m; sourceTree = "<group>"; };
+		A9F4728B1976BAA70009EC65 /* HBSubtitlesSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesSettings.h; sourceTree = "<group>"; };
+		A9F4728C1976BAA70009EC65 /* HBSubtitlesSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesSettings.m; sourceTree = "<group>"; };
 		D2BCB0F616F515230084604C /* activity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = activity.png; sourceTree = "<group>"; };
 		D2BCB0F716F515230084604C /* activity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "activity@2x.png"; sourceTree = "<group>"; };
 		D2BCB0F816F515240084604C /* addqueue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addqueue.png; sourceTree = "<group>"; };
@@ -547,10 +558,9 @@
 			isa = PBXGroup;
 			children = (
 				A9B34D6F197683FE00871B7D /* Controllers */,
+				A98C29C51977C00000AF5DED /* Model */,
 				A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */,
 				A9D1E41618262364002F6424 /* HBPreviewGenerator.m */,
-				273F20A114ADBE670021BE6D /* HBPresets.h */,
-				273F20A214ADBE670021BE6D /* HBPresets.m */,
 				A9AA44781970664A00D7DEFC /* HBUtilities.h */,
 				A9AA44791970664A00D7DEFC /* HBUtilities.m */,
 				273F209714ADBE670021BE6D /* HBDVDDetector.h */,
@@ -648,6 +658,7 @@
 				A93E0ED51972958C00FD67FB /* Video.xib */,
 				A9F2EB6D196F12C800066546 /* Audio.xib */,
 				A9DC6C54196F0517002AE6B4 /* Subtitles.xib */,
+				A9C0DB83197E7B0000DF55B3 /* SubtitlesDefaults.xib */,
 				273F217A14ADDDA10021BE6D /* AdvancedView.xib */,
 				A9935211196F38A70069C6B7 /* ChaptersTitles.xib */,
 				273F218014ADDDA10021BE6D /* OutputPanel.xib */,
@@ -712,6 +723,19 @@
 			name = "Products (external)";
 			sourceTree = "<group>";
 		};
+		A98C29C51977C00000AF5DED /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				273F20A114ADBE670021BE6D /* HBPresets.h */,
+				273F20A214ADBE670021BE6D /* HBPresets.m */,
+				A9F4728B1976BAA70009EC65 /* HBSubtitlesSettings.h */,
+				A9F4728C1976BAA70009EC65 /* HBSubtitlesSettings.m */,
+				A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */,
+				A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		A9B34D6F197683FE00871B7D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -737,14 +761,15 @@
 			children = (
 				A93E0ED01972957000FD67FB /* HBVideoController.h */,
 				A93E0ED11972957000FD67FB /* HBVideoController.m */,
-				273F209114ADBE670021BE6D /* HBAudio.h */,
-				273F209214ADBE670021BE6D /* HBAudio.m */,
 				A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */,
 				273F209014ADBE670021BE6D /* HBAdvancedController.m */,
+				273F209114ADBE670021BE6D /* HBAudio.h */,
+				273F209214ADBE670021BE6D /* HBAudio.m */,
 				273F209314ADBE670021BE6D /* HBAudioController.h */,
 				273F209414ADBE670021BE6D /* HBAudioController.m */,
 				A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */,
 				A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */,
+				A9F472851976B7AA0009EC65 /* Subtitles Defaults */,
 				A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */,
 				A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */,
 			);
@@ -760,6 +785,15 @@
 				273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */,
 			);
 			name = "UI Views";
+			sourceTree = "<group>";
+		};
+		A9F472851976B7AA0009EC65 /* Subtitles Defaults */ = {
+			isa = PBXGroup;
+			children = (
+				A9F472861976B7F30009EC65 /* HBSubtitlesDefaultsController.h */,
+				A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */,
+			);
+			name = "Subtitles Defaults";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -892,6 +926,7 @@
 				D2BCB10B16F5152C0084604C /* addqueue.png in Resources */,
 				D2BCB10C16F5152C0084604C /* addqueue@2x.png in Resources */,
 				D2BCB10D16F5152C0084604C /* advanced.png in Resources */,
+				A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */,
 				D2BCB10E16F5152C0084604C /* advanced@2x.png in Resources */,
 				D2BCB10F16F5152C0084604C /* audio.png in Resources */,
 				D2BCB11016F5152C0084604C /* audio@2x.png in Resources */,
@@ -936,6 +971,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
 				A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */,
 				273F20AC14ADBE670021BE6D /* Controller.m in Sources */,
 				273F20AD14ADBE670021BE6D /* HBAdvancedController.m in Sources */,
@@ -947,6 +983,8 @@
 				273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */,
 				273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */,
 				A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */,
+				A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */,
+				A9F4728D1976BAA70009EC65 /* HBSubtitlesSettings.m in Sources */,
 				A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */,
 				273F20B614ADBE670021BE6D /* HBPresets.m in Sources */,
 				273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */,
@@ -1055,6 +1093,14 @@
 			name = ChaptersTitles.xib;
 			sourceTree = "<group>";
 		};
+		A9C0DB83197E7B0000DF55B3 /* SubtitlesDefaults.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9C0DB84197E7B0000DF55B3 /* English */,
+			);
+			name = SubtitlesDefaults.xib;
+			sourceTree = "<group>";
+		};
 		A9DC6C54196F0517002AE6B4 /* Subtitles.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1096,10 +1142,12 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
 				);
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1123,10 +1171,12 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
 				);
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";
 				STRIP_INSTALLED_PRODUCT = YES;
 			};
