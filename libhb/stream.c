@@ -1359,7 +1359,7 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int len )
     }
     if ( pes->stream_type == 0x10 || pes->codec_param == AV_CODEC_ID_MPEG4 )
     {
-        // we have an vc1 stream
+        // we have an mpeg4 stream
         for (ii = 0; ii < len-1; ii++)
         {
             strid = (strid << 8) | buf[ii];
