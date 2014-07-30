@@ -1357,6 +1357,21 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int len )
         // didn't find an I-frame
         return 0;
     }
+    if ( pes->stream_type == 0x10 || pes->codec_param == AV_CODEC_ID_MPEG4 )
+    {
+        // we have an vc1 stream
+        for (ii = 0; ii < len-1; ii++)
+        {
+            strid = (strid << 8) | buf[ii];
+            if ( strid == 0x1b6 )
+            {
+                if ((buf[ii+1] & 0xC0) == 0)
+                    return 1;
+            }
+        }
+        // didn't find an I-frame
+        return 0;
+    }
 
     // we don't understand the stream type so just say "yes" otherwise
     // we'll discard all the video.
