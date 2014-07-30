@@ -5046,14 +5046,21 @@ ghb_get_preview_image(
     uiGeo.par.num = 1;
     uiGeo.par.den = 1;
 
+    GdkPixbuf *preview;
     hb_image_t *image;
     image = hb_get_preview2(h_scan, title->index, index, &uiGeo, deinterlace);
+
+    if (image == NULL)
+    {
+        preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
+                                 title->width, title->height);
+        return preview;
+    }
 
     // Create an GdkPixbuf and copy the libhb image into it, converting it from
     // libhb's format something suitable.
     // The image data returned by hb_get_preview is 4 bytes per pixel,
     // BGRA format. Alpha is ignored.
-    GdkPixbuf *preview;
     preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
                              image->width, image->height);
     guint8 *pixels = gdk_pixbuf_get_pixels(preview);
