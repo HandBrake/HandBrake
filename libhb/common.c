@@ -4363,7 +4363,6 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
         else
             ascii[(ii & 0x0f) + 1] = '.';
     }
-    ascii[ii] = 0;
     if( p != line )
     {
         hb_deep_log( level, "    %-50s%20s", line, ascii );
