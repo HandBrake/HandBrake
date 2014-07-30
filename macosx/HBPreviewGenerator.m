@@ -100,6 +100,8 @@ typedef enum EncodeState : NSUInteger {
                             title: (hb_title_t *) title
                       deinterlace: (BOOL) deinterlace
 {
+    NSImage *img = nil;
+
     hb_ui_geometry_t geo;
     geo.width = title->job->width;
     geo.height = title->job->height;
@@ -112,42 +114,45 @@ typedef enum EncodeState : NSUInteger {
     hb_image_t *image;
     image = hb_get_preview2(handle, title->index, (int)pictureIndex, &geo, deinterlace);
 
-    // Create an NSBitmapImageRep and copy the libhb image into it, converting it from
-    // libhb's format to one suitable for NSImage.
-
-    // The image data returned by hb_get_preview2 is 4 bytes per pixel, BGRA format.
-    // Alpha is ignored.
-    NSBitmapImageRep *imgrep = [[[NSBitmapImageRep alloc]
-                                  initWithBitmapDataPlanes:nil
-                                  pixelsWide:image->width
-                                  pixelsHigh:image->height
-                                  bitsPerSample:8
-                                  samplesPerPixel:3   // ignore alpha
-                                  hasAlpha:NO
-                                  isPlanar:NO
-                                  colorSpaceName:NSCalibratedRGBColorSpace
-                                  bitmapFormat:NSAlphaFirstBitmapFormat
-                                  bytesPerRow:image->width * 4
-                                  bitsPerPixel:32] autorelease];
-
-    UInt8 *src_line = image->data;
-    UInt32 *dst = (UInt32 *)[imgrep bitmapData];
-    for (int r = 0; r < image->height; r++)
+    if (image)
     {
-        UInt32 *src = (UInt32 *)src_line;
-        for (int c = 0; c < image->width; c++)
-        {
-#if TARGET_RT_LITTLE_ENDIAN
-            *dst++ = Endian32_Swap(*src++);
-#else
-            *dst++ = *src++;
-#endif
-        }
-        src_line += image->plane[0].stride;
-    }
+        // Create an NSBitmapImageRep and copy the libhb image into it, converting it from
+        // libhb's format to one suitable for NSImage.
 
-    NSImage *img = [[[NSImage alloc] initWithSize: NSMakeSize(image->width, image->height)] autorelease];
-    [img addRepresentation:imgrep];
+        // The image data returned by hb_get_preview2 is 4 bytes per pixel, BGRA format.
+        // Alpha is ignored.
+        NSBitmapImageRep *imgrep = [[[NSBitmapImageRep alloc]
+                                     initWithBitmapDataPlanes:nil
+                                     pixelsWide:image->width
+                                     pixelsHigh:image->height
+                                     bitsPerSample:8
+                                     samplesPerPixel:3   // ignore alpha
+                                     hasAlpha:NO
+                                     isPlanar:NO
+                                     colorSpaceName:NSCalibratedRGBColorSpace
+                                     bitmapFormat:NSAlphaFirstBitmapFormat
+                                     bytesPerRow:image->width * 4
+                                     bitsPerPixel:32] autorelease];
+
+        UInt8 *src_line = image->data;
+        UInt32 *dst = (UInt32 *)[imgrep bitmapData];
+        for (int r = 0; r < image->height; r++)
+        {
+            UInt32 *src = (UInt32 *)src_line;
+            for (int c = 0; c < image->width; c++)
+            {
+#if TARGET_RT_LITTLE_ENDIAN
+                *dst++ = Endian32_Swap(*src++);
+#else
+                *dst++ = *src++;
+#endif
+            }
+            src_line += image->plane[0].stride;
+        }
+
+        img = [[[NSImage alloc] initWithSize: NSMakeSize(image->width, image->height)] autorelease];
+        [img addRepresentation:imgrep];
+    }
 
     hb_image_close(&image);
 
