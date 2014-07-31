@@ -41,7 +41,9 @@
         const iso639_lang_t *lang = lang_get_next(NULL);
         for (lang = lang_get_next(lang); lang != NULL; lang = lang_get_next(lang))
         {
-            HBLang *item = [[[HBLang alloc] initWithLanguage:@(lang->eng_name)
+            NSString *nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
+
+            HBLang *item = [[[HBLang alloc] initWithLanguage:nativeLanguage
                                                 iso639_2code:@(lang->iso639_2)] autorelease];
             if ([languages containsObject:item.iso639_2])
             {

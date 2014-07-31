@@ -124,11 +124,15 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
                 [forcedSourceNamesArray addObject:subSourceName];
             }
 
+            // Use the native language name if available
+            iso639_lang_t *language = lang_for_code2(subtitle->iso639_2);
+            NSString *nativeLanguage = strlen(language->native_name) ? @(language->native_name) : @(language->eng_name);
+
             /* create a dictionary of source subtitle information to store in our array */
-            [self.subtitleSourceArray addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, @(subtitle->lang), bitmapOrText, subSourceName],
+            [self.subtitleSourceArray addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, nativeLanguage, bitmapOrText, subSourceName],
                                                   keySubTrackIndex: @(i),
                                                   keySubTrackType: @(subtitle->source),
-                                                  keySubTrackLanguage: @(subtitle->lang),
+                                                  keySubTrackLanguage: nativeLanguage,
                                                   keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }
 
