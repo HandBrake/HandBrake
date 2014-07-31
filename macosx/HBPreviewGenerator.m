@@ -6,6 +6,7 @@
 //
 
 #import "HBPreviewGenerator.h"
+#import "HBUtilities.h"
 #import "Controller.h"
 
 typedef enum EncodeState : NSUInteger {
@@ -162,26 +163,9 @@ typedef enum EncodeState : NSUInteger {
 #pragma mark -
 #pragma mark Preview movie
 
-+ (NSString *) appSupportPath
-{
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *appSupportPath = nil;
-
-    NSArray *allPaths = NSSearchPathForDirectoriesInDomains( NSApplicationSupportDirectory,
-                                                            NSUserDomainMask,
-                                                            YES );
-    if ([allPaths count])
-        appSupportPath = [[allPaths objectAtIndex:0] stringByAppendingPathComponent:@"HandBrake"];
-
-    if (![fileManager fileExistsAtPath:appSupportPath])
-        [fileManager createDirectoryAtPath:appSupportPath withIntermediateDirectories:YES attributes:nil error:NULL];
-
-    return appSupportPath;
-}
-
 + (NSURL *) generateFileURLForType:(NSString *) type
 {
-    NSString *previewDirectory = [NSString stringWithFormat:@"%@/Previews/%d", [HBPreviewGenerator appSupportPath], getpid()];
+    NSString *previewDirectory = [NSString stringWithFormat:@"%@/Previews/%d", [HBUtilities appSupportPath], getpid()];
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:previewDirectory])
     {
