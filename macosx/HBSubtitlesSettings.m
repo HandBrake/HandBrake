@@ -58,4 +58,10 @@
     preset[@"SubtitleAddForeignAudioSubtitle"] = @(self.addForeignAudioSubtitle);
 }
 
+- (void)dealloc
+{
+    [_trackSelectionLanguages release];
+    [super dealloc];
+}
+
 @end
