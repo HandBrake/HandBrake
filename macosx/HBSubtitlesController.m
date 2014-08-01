@@ -34,8 +34,12 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 @interface HBSubtitlesController () <NSTableViewDataSource, NSTableViewDelegate>
 
 // IBOutles
-@property (assign) IBOutlet NSPopUpButton *actionsPopUp;
 @property (assign) IBOutlet NSTableView *fTableView;
+
+@property (assign) IBOutlet NSPopUpButton *trackPopUp;
+@property (assign) IBOutlet NSButton *configureDefaults;
+@property (assign) IBOutlet NSButton *reloadDefaults;
+
 @property (nonatomic, readwrite) BOOL enabled;
 
 // Subtitles arrays
@@ -90,7 +94,9 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 - (void)enableUI:(BOOL)b
 {
-    [self.actionsPopUp setEnabled:b];
+    [self.trackPopUp setEnabled:b];
+    [self.configureDefaults setEnabled:b];
+    [self.reloadDefaults setEnabled:b];
     [self.fTableView setEnabled:b];
     self.enabled = b;
 }

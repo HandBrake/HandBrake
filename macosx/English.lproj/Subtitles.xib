@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A299l" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
+        <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
             <connections>
-                <outlet property="actionsPopUp" destination="2Tb-KC-Ugi" id="VMz-bu-7bQ"/>
+                <outlet property="configureDefaults" destination="QsM-28-Pya" id="AbY-A5-kzy"/>
                 <outlet property="fTableView" destination="0yM-wE-D2x" id="0vq-y5-Ubi"/>
+                <outlet property="reloadDefaults" destination="Vxx-gk-9kY" id="9fr-kb-QiD"/>
+                <outlet property="trackPopUp" destination="2Tb-KC-Ugi" id="kwx-uG-p4q"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -153,14 +155,14 @@
                     </tableHeaderView>
                 </scrollView>
                 <popUpButton verticalHuggingPriority="750" id="2Tb-KC-Ugi">
-                    <rect key="frame" x="17" y="291" width="89" height="22"/>
+                    <rect key="frame" x="17" y="291" width="88" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" title="Actions" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="8ZD-D6-TLA">
+                    <popUpButtonCell key="cell" type="push" title="Track" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="8ZD-D6-TLA">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="Fr7-eG-NuL">
                             <items>
-                                <menuItem title="Actions" state="on" hidden="YES" id="TJO-RZ-jgb"/>
+                                <menuItem title="Track" state="on" hidden="YES" id="TJO-RZ-jgb"/>
                                 <menuItem title="Add All" id="4PX-In-DpF">
                                     <connections>
                                         <action selector="addAll:" target="-2" id="tuS-uF-dje"/>
@@ -177,21 +179,32 @@
                                         <action selector="removeAll:" target="-2" id="QsA-lb-0rD"/>
                                     </connections>
                                 </menuItem>
-                                <menuItem isSeparatorItem="YES" id="ndj-S4-hj5"/>
-                                <menuItem title="Reload Defaults" id="Zlj-4G-jKI">
-                                    <connections>
-                                        <action selector="addTracksFromDefaults:" target="-2" id="7WM-Xh-1NG"/>
-                                    </connections>
-                                </menuItem>
-                                <menuItem title="Configure Defaults…" id="1LC-qX-pjQ">
-                                    <connections>
-                                        <action selector="showSettingsSheet:" target="-2" id="jqh-lz-3rr"/>
-                                    </connections>
-                                </menuItem>
                             </items>
                         </menu>
                     </popUpButtonCell>
                 </popUpButton>
+                <button appearanceType="aqua" verticalHuggingPriority="750" id="QsM-28-Pya">
+                    <rect key="frame" x="113" y="288" width="130" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Configure Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxg-bs-1si">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="showSettingsSheet:" target="-2" id="OAA-S8-tfS"/>
+                    </connections>
+                </button>
+                <button appearanceType="aqua" verticalHuggingPriority="750" id="Vxx-gk-9kY">
+                    <rect key="frame" x="241" y="288" width="116" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Reload Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jG8-uo-1tv">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="addTracksFromDefaults:" target="-2" id="GOz-FT-Atg"/>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <menu id="KgC-dn-Hq2">
