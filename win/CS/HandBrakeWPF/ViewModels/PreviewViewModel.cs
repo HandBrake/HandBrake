@@ -403,7 +403,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void encodeService_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
         {
-            this.Percentage = string.Format("{0} %", e.PercentComplete.ToString(CultureInfo.InvariantCulture));
+            this.Percentage = string.Format("{0} %", Math.Round(e.PercentComplete, 2).ToString(CultureInfo.InvariantCulture));
             this.PercentageValue = e.PercentComplete;
         }
 
