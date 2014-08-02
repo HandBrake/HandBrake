@@ -46,9 +46,9 @@ namespace HandBrakeWPF
         protected override void OnStartup(StartupEventArgs e)
         {
             OperatingSystem OS = Environment.OSVersion;
-            if ((OS.Platform == PlatformID.Win32NT) && (OS.Version.Major == 5 && OS.Version.Minor == 1))
+            if ((OS.Platform == PlatformID.Win32NT) && (OS.Version.Major == 5 && OS.Version.Minor <= 1))
             {
-                MessageBox.Show("Windows XP support is currently broken. It is not known if or when it will be fixed.", "Notice", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Windows XP and earlier are no longer supported. Version 0.9.9 was the last version to support these versions. ", "Notice", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();
                 return;
             }
@@ -64,6 +64,11 @@ namespace HandBrakeWPF
                 HandBrakeApp.ResetToDefaults();
                 Application.Current.Shutdown();
                 return;
+            }
+
+            if (e.Args.Any(f => f.Equals("--enable-libhb")))
+            {
+                AppArguments.EnableLibHB = true;
             }
 
             base.OnStartup(e);

@@ -256,6 +256,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
 
+        /// <summary>
+        /// The enable static preview.
+        /// </summary>
+        public const string EnableStaticPreview = "EnableStaticPreview";
+
         #endregion
     }
 }

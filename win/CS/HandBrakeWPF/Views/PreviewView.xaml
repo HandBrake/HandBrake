@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="{Binding Title}"
-        Width="380"
+        Width="390"
         Style="{StaticResource windowStyle}"
         ResizeMode="NoResize"
         SizeToContent="Height"
@@ -64,18 +64,16 @@
                       SelectedItem="{Binding Duration}" />
         </StackPanel>
 
-        <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
-            <ProgressBar Width="310"
-                         Height="22"
-                         Maximum="100"
-                         Minimum="0"
-                         Value="{Binding PercentageValue}" />
-            <TextBlock Margin="5,0,0,0" Text="{Binding Percentage}" />
-        </StackPanel>
+        <Grid Margin="10,10,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" MinWidth="50" />
+            </Grid.ColumnDefinitions>
+            <ProgressBar MinHeight="22" Maximum="100" Minimum="0" Value="{Binding PercentageValue}" Grid.Column="0" />
+            <TextBlock Margin="5,0,0,0" Text="{Binding Percentage}" Grid.Column="1" />
+        </Grid>
 
-        <StackPanel Width="360"
-                    Margin="10,10,0,10"
-                    Orientation="Horizontal">
+        <StackPanel Margin="10,10,0,10" Orientation="Horizontal">
             <CheckBox VerticalAlignment="Center"
                       Content="Use system default player"
                       IsChecked="{Binding UseSystemDefaultPlayer}" />

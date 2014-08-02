@@ -611,6 +611,17 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether is picture preview enabled.
+        /// </summary>
+        public bool IsPicturePreviewEnabled
+        {
+            get
+            {
+                return this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableStaticPreview);
+            }
+        }
+
         #endregion
 
         #region Public Methods
