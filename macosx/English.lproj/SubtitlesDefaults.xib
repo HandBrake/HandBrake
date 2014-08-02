@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A299l" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -138,6 +138,8 @@
                                     </tableColumns>
                                     <connections>
                                         <binding destination="ZBe-aP-wvq" name="content" keyPath="arrangedObjects" id="ak7-UG-Fqe"/>
+                                        <outlet property="dataSource" destination="ZBe-aP-wvq" id="bDe-Wj-fNO"/>
+                                        <outlet property="delegate" destination="ZBe-aP-wvq" id="Tgj-bB-hZ2"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -155,7 +157,7 @@
                     <button verticalHuggingPriority="750" id="QAt-5X-NBT">
                         <rect key="frame" x="161" y="93" width="71" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" title="Show All" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" state="on" borderStyle="border" inset="3" id="PiQ-bA-7P1">
+                        <buttonCell key="cell" type="smallSquare" title="Show All" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" borderStyle="border" inset="3" id="PiQ-bA-7P1">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -187,6 +189,7 @@ DQ
             </declaredKeys>
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="languagesList.languagesArray" id="vKV-y3-Zbg"/>
+                <outlet property="tableView" destination="Of7-71-Ci6" id="QIg-ml-iKO"/>
             </connections>
         </arrayController>
     </objects>

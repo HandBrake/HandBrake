@@ -47,4 +47,11 @@
  */
 @property (nonatomic, readwrite) BOOL showSelectedOnly;
 
+/**
+ *  Set whether the user can drag the table view's elements.
+ */
+@property (nonatomic, readwrite) BOOL isDragginEnabled;
+
+@property (assign) IBOutlet NSTableView *tableView;
+
 @end

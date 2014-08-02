@@ -8,6 +8,8 @@
 #import "HBSubtitlesSettings.h"
 #import "HBLanguagesSelection.h"
 
+static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
+
 @interface HBSubtitlesDefaultsController ()
 
 @property (nonatomic, readonly) HBSubtitlesSettings *settings;
@@ -33,10 +35,25 @@
 
 - (void)windowDidLoad
 {
+    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBSubtitlesDefaultsContex];
+
     if (self.settings.trackSelectionLanguages.count)
     {
         self.tableController.showSelectedOnly = YES;
-        [self.showAllButton setState:NSOffState];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBSubtitlesDefaultsContex) {
+        if ([keyPath isEqualToString:@"tableController.showSelectedOnly"])
+        {
+            [self.showAllButton setState:!self.tableController.showSelectedOnly];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 
@@ -61,8 +78,13 @@
 
 - (void)dealloc
 {
-    [super dealloc];
     [_settings release];
+
+    @try {
+        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
+    } @catch (NSException * __unused exception) {}
+
+    [super dealloc];
 }
 
 @end
