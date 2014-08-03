@@ -444,6 +444,12 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_filter_init", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_filter_init(int filter_id);
 
+		[DllImport("hb.dll", EntryPoint = "hb_generate_filter_settings", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr hb_generate_filter_settings(
+			int filter_id,
+			[In] [MarshalAs(UnmanagedType.LPStr)] string preset,
+			[In] [MarshalAs(UnmanagedType.LPStr)] string tune);
+
 		[DllImport("hb.dll", EntryPoint = "hb_x264_encopt_name", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_x264_encopt_name(IntPtr name);
 

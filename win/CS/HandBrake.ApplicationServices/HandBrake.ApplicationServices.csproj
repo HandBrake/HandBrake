@@ -114,6 +114,8 @@
     <Compile Include="LibHb\AudioVideoHelpers.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
     <Compile Include="Model\Audio\AudioBehaviours.cs" />
+    <Compile Include="Model\Encoding\DenoisePreset.cs" />
+    <Compile Include="Model\Encoding\DenoiseTune.cs" />
     <Compile Include="Model\HBConfiguration.cs" />
     <Compile Include="Model\Subtitle\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitle\SubtitleBehaviours.cs" />

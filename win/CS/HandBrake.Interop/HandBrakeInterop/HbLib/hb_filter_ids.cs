@@ -17,7 +17,8 @@ namespace HandBrake.Interop.HbLib
 		HB_FILTER_VFR,
 		// Filters that must operate on the original source image are next
 		HB_FILTER_DEBLOCK,
-		HB_FILTER_DENOISE,
+		HB_FILTER_HQDN3D,
+		HB_FILTER_NLMEANS,
 		HB_FILTER_RENDER_SUB,
 		HB_FILTER_CROP_SCALE,
 		// Finally filters that don't care what order they are in,

@@ -185,14 +185,20 @@ namespace HandBrake.Interop.Model.Encoding
         public Denoise Denoise { get; set; }
 
         /// <summary>
-        /// Gets or sets the denoise preset.
+        /// Gets or sets the denoise preset name.
         /// </summary>
-        public DenoisePreset DenoisePreset { get; set; }
+        public string DenoisePreset { get; set; }
 
         /// <summary>
-        /// Gets or sets the denoise tune.
+        /// Gets or sets the denoise tune name.
         /// </summary>
-        public DenoiseTune DenoiseTune { get; set; }
+        public string DenoiseTune { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether we should use the provided
+		/// custom denoise string or we should use the preset and tune.
+		/// </summary>
+		public bool UseCustomDenoise { get; set; }
 
         /// <summary>
         /// Gets or sets the custom denoise.
@@ -343,6 +349,9 @@ namespace HandBrake.Interop.Model.Encoding
                 Detelecine = this.Detelecine,
                 CustomDetelecine = this.CustomDetelecine,
                 Denoise = this.Denoise,
+				DenoisePreset = this.DenoisePreset,
+				DenoiseTune = this.DenoiseTune,
+				UseCustomDenoise = this.UseCustomDenoise,
                 CustomDenoise = this.CustomDenoise,
                 Deblock = this.Deblock,
                 Grayscale = this.Grayscale,

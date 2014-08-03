@@ -1212,28 +1212,9 @@ namespace HandBrake.Interop
             // Denoise
             if (profile.Denoise != Denoise.Off)
             {
-                string settings = null;
-                switch (profile.DenoisePreset)
-                {
-                    case DenoisePreset.Weak:
-                        settings = "2:1:1:2:3:3";
-                        break;
-                    case DenoisePreset.Medium:
-                        settings = "3:2:2:2:3:3";
-                        break;
-                    case DenoisePreset.Strong:
-                        settings = "7:7:7:5:5:5";
-                        break;
-                    case DenoisePreset.Custom:
-                        settings = profile.CustomDenoise;
-                        break;
-                        // TODO Add new Presets.
-                    default:
-                        break;
-                }
+	            int filterType = profile.Denoise == Denoise.hqdn3d ? (int)hb_filter_ids.HB_FILTER_HQDN3D : (int)hb_filter_ids.HB_FILTER_NLMEANS;
 
-                // TODO Add Tunes
-                this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_DENOISE, settings, allocatedMemory);
+				this.AddFilterFromPreset(filterList, filterType, profile.DenoisePreset, profile.DenoiseTune);
             }
 
             // Crop/scale
@@ -1279,7 +1260,9 @@ namespace HandBrake.Interop
                     width = outputSize.Width;
                     height = outputSize.Height;
 
-                    nativeJob.anamorphic.keep_display_aspect = profile.KeepDisplayAspect ? 1 : 0;
+                    nativeJob.anamorphic.keep_display_aspect = 0;
+					nativeJob.anamorphic.par_width = 1;
+					nativeJob.anamorphic.par_height = 1;
 
                     nativeJob.width = width;
                     nativeJob.height = height;
@@ -1677,6 +1660,23 @@ namespace HandBrake.Interop
             filterList.Add(filter);
         }
 
+		/// <summary>
+		/// Adds a filter to the given filter list with the provided preset and tune.
+		/// </summary>
+		/// <param name="filterList">The list to add the filter to.</param>
+		/// <param name="filterType">The type of filter.</param>
+		/// <param name="preset">The preset name.</param>
+		/// <param name="tune">The tune name.</param>
+	    private void AddFilterFromPreset(List<hb_filter_object_s> filterList, int filterType, string preset, string tune)
+	    {
+		    IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings(filterType, preset, tune);
+
+			hb_filter_object_s filter = InteropUtilities.ToStructureFromPtr<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
+		    filter.settings = settingsPtr;
+
+			filterList.Add(filter);
+	    }
+
         /// <summary>
         /// Converts the given filter list to a native list.
         /// </summary>
@@ -1777,12 +1777,16 @@ namespace HandBrake.Interop
 
 	        bool isPassthrough = encoder.IsPassthrough;
 
+	        HBAudioEncoder inputCodec = Encoders.GetAudioEncoder((int)baseStruct.config.input.codec);
+
 	        uint outputCodec = (uint)encoder.Id;
 	        if (encoding.PassthroughIfPossible && 
-				encoder.Id == baseStruct.config.input.codec && 
-				(encoder.Id & NativeConstants.HB_ACODEC_PASS_MASK) > 0)
+				(encoder.Id == baseStruct.config.input.codec || 
+					inputCodec != null && (inputCodec.ShortName.ToLowerInvariant().Contains("aac") && encoder.ShortName.ToLowerInvariant().Contains("aac") ||
+					inputCodec.ShortName.ToLowerInvariant().Contains("mp3") && encoder.ShortName.ToLowerInvariant().Contains("mp3"))) &&
+				(inputCodec.Id & NativeConstants.HB_ACODEC_PASS_MASK) > 0)
 	        {
-		        outputCodec |= NativeConstants.HB_ACODEC_PASS_FLAG;
+				outputCodec = baseStruct.config.input.codec | NativeConstants.HB_ACODEC_PASS_FLAG;
 		        isPassthrough = true;
 	        }
 

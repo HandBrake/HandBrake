@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model.Encoding
+namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System.ComponentModel.DataAnnotations;
 

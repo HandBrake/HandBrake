@@ -201,6 +201,16 @@ namespace HandBrake.Interop.Model
 		}
 
 		/// <summary>
+		/// Gets the audio encoder with the specified codec ID.
+		/// </summary>
+		/// <param name="codecId">The ID of the audio encoder.</param>
+		/// <returns>The requested audio encoder.</returns>
+		public static HBAudioEncoder GetAudioEncoder(int codecId)
+		{
+			return AudioEncoders.SingleOrDefault(e => e.Id == codecId);
+		}
+
+		/// <summary>
 		/// Gets the video encoder with the specified short name.
 		/// </summary>
 		/// <param name="shortName">The name of the video encoder.</param>
@@ -273,6 +283,16 @@ namespace HandBrake.Interop.Model
 		public static bool CanApplyDrc(AudioTrack track, HBAudioEncoder encoder)
 		{
 			return HBFunctions.hb_audio_can_apply_drc(track.CodecId, track.CodecParam, encoder.Id) > 0;
+		}
+
+		/// <summary>
+		/// Determines if the given input audio codec can be passed through.
+		/// </summary>
+		/// <param name="codecId">The input codec to consider.</param>
+		/// <returns>True if the codec can be passed through.</returns>
+		public static bool CanPassthroughAudio(int codecId)
+		{
+			return (codecId & NativeConstants.HB_ACODEC_PASS_MASK) > 0;
 		}
 
 		/// <summary>

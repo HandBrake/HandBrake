@@ -174,8 +174,6 @@
     <Compile Include="HbLib\NativeConstants.cs" />
     <Compile Include="Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Helpers\InteropUtilities.cs" />
-    <Compile Include="Model\Encoding\DenoisePreset.cs" />
-    <Compile Include="Model\Encoding\DenoiseTune.cs" />
     <Compile Include="Model\Encoding\PictureRotation.cs" />
     <Compile Include="Model\Encoding\x265\x265Preset.cs" />
     <Compile Include="Model\Encoding\x265\x265Profile.cs" />
