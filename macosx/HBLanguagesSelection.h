@@ -40,7 +40,7 @@
 /**
  *  HBLanguageArrayController
  */
-@interface HBLanguageArrayController : NSArrayController
+@interface HBLanguageArrayController : NSArrayController <NSTableViewDelegate>
 
 /**
  *  Set whether to show only the selected languages or all languages

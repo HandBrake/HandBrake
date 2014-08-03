@@ -45,7 +45,8 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBSubtitlesDefaultsContex) {
+    if (context == HBSubtitlesDefaultsContex)
+    {
         if ([keyPath isEqualToString:@"tableController.showSelectedOnly"])
         {
             [self.showAllButton setState:!self.tableController.showSelectedOnly];

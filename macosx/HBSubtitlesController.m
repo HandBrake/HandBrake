@@ -277,6 +277,10 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
  */
 - (IBAction)addTracksFromDefaults:(id)sender
 {
+    // Keeps a set of the indexes of the added track
+    // so we don't add the same track twice.
+    NSMutableIndexSet *tracksAdded = [NSMutableIndexSet indexSet];
+
     [self.subtitleArray removeAllObjects];
 
     // Add the foreign audio search pass
@@ -285,35 +289,28 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
         [self addTrack:[self trackFromSourceTrackIndex:-1]];
     }
 
-    // If the languages list contains the "(Any)" language, remove all the others
-    NSArray *languages = nil;
-    if ([self.settings.trackSelectionLanguages containsObject:@"und"])
-    {
-        languages = @[@"und"];
-    }
-    else
-    {
-        languages = self.settings.trackSelectionLanguages;
-    }
-
     // Add the tracks for the selected languages
     if (self.settings.trackSelectionBehavior != HBSubtitleTrackSelectionBehaviorNone)
     {
-        for (NSString *lang in languages)
+        for (NSString *lang in self.settings.trackSelectionLanguages)
         {
-            NSInteger sourceIndex = 0;
             for (NSDictionary *track in self.subtitleSourceArray)
             {
                 if ([lang isEqualToString:@"und"] || [track[keySubTrackLanguageIsoCode] isEqualToString:lang])
                 {
-                    [self addTrack:[self trackFromSourceTrackIndex:sourceIndex]];
+                    NSInteger sourceIndex = [track[keySubTrackIndex] intValue];
+
+                    if (![tracksAdded containsIndex:sourceIndex])
+                    {
+                        [self addTrack:[self trackFromSourceTrackIndex:sourceIndex]];
+                    }
+                    [tracksAdded addIndex:sourceIndex];
 
                     if (self.settings.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
                     {
                         break;
                     }
                 }
-                sourceIndex++;
             }
         }
     }
@@ -321,19 +318,27 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     // Add the closed captions track if there is one.
     if (self.settings.addCC)
     {
-        NSInteger sourceIndex = 0;
         for (NSDictionary *track in self.subtitleSourceArray)
         {
             if ([track[keySubTrackType] intValue] == CC608SUB)
             {
-                [self addTrack:[self trackFromSourceTrackIndex:sourceIndex]];
-                break;
+                NSInteger sourceIndex = [track[keySubTrackIndex] intValue];
+                if (![tracksAdded containsIndex:sourceIndex])
+                {
+                    [self addTrack:[self trackFromSourceTrackIndex:sourceIndex]];
+                }
+
+                if (self.settings.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
+                {
+                    break;
+                }
             }
-            sourceIndex++;
         }
     }
 
+    // Add an empty track
     [self.subtitleArray addObject:[self createSubtitleTrack]];
+
     [self validatePassthru];
     [self.fTableView reloadData];
 }
