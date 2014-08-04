@@ -2981,6 +2981,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <child>
                                           <object class="GtkScale" id="PictureDeblock">
                                             <property name="visible">True</property>
+                                            <property name="width_request">100</property>
                                             <property name="can_focus">True</property>
                                             <property name="tooltip_text" translatable="yes">The deblocking filter removes a common type of compression artifact.
         If your source exhibits 'blockiness', this filter may help clean it up.</property>
