@@ -276,7 +276,7 @@ subtitle_add_to_settings(GValue *settings, GValue *subsettings)
 static void
 subtitle_set_track_description(GValue *settings, GValue *subsettings)
 {
-    char *desc;
+    char *desc = NULL;
 
     if (ghb_settings_get_int(subsettings, "SubtitleSource") == SRTSUB)
     {
@@ -318,13 +318,25 @@ subtitle_set_track_description(GValue *settings, GValue *subsettings)
         else
         {
             subtitle = ghb_get_subtitle_info(title, track);
-            desc = g_strdup_printf("%d - %s (%s)", track + 1, subtitle->lang,
-                                   hb_subsource_name(subtitle->source));
+            if (subtitle != NULL)
+            {
+                desc = g_strdup_printf("%d - %s (%s)", track + 1,
+                                       subtitle->lang,
+                                       hb_subsource_name(subtitle->source));
+            }
         }
     }
 
-    ghb_settings_set_string(
-        subsettings, "SubtitleTrackDescription", desc);
+    if (desc != NULL)
+    {
+        ghb_settings_set_string(
+            subsettings, "SubtitleTrackDescription", desc);
+    }
+    else
+    {
+        ghb_settings_set_string(
+            subsettings, "SubtitleTrackDescription", "Error!");
+    }
 
     g_free(desc);
 }
@@ -420,6 +432,15 @@ ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
     gtk_widget_set_sensitive(w, show);
     w = GHB_WIDGET(ud->builder, "subtitle_reset");
     gtk_widget_set_sensitive(w, show);
+
+    int title_id, titleindex;
+    title_id = ghb_settings_get_int(ud->settings, "title");
+    const hb_title_t *title = ghb_lookup_title(title_id, &titleindex);
+    if (title != NULL)
+    {
+        w = GHB_WIDGET(ud->builder, "SubtitleSrtDisable");
+        gtk_widget_set_sensitive(w, !!hb_list_count(title->list_subtitle));
+    }
 }
 
 void
