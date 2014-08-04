@@ -22,8 +22,10 @@
 
 - (void)dealloc
 {
-    [super dealloc];
     [_language release];
+    [_iso639_2 release];
+
+    [super dealloc];
 }
 
 @end
@@ -43,8 +45,8 @@
         {
             NSString *nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
 
-            HBLang *item = [[[HBLang alloc] initWithLanguage:nativeLanguage
-                                                iso639_2code:@(lang->iso639_2)] autorelease];
+            HBLang *item = [[HBLang alloc] initWithLanguage:nativeLanguage
+                                                iso639_2code:@(lang->iso639_2)];
             if ([languages containsObject:item.iso639_2])
             {
                 item.isSelected = YES;
@@ -54,6 +56,8 @@
             {
                 [internal addObject:item];
             }
+            
+            [item release];
         }
 
         // Add the (Any) item.
@@ -97,8 +101,9 @@
 
 - (void)dealloc
 {
-    [super dealloc];
     [_languagesArray release];
+
+    [super dealloc];
 }
 
 @end
@@ -170,7 +175,7 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
             NSUInteger currentIndex = [rowIndexes firstIndex];
             while (currentIndex != NSNotFound)
             {
-                NSUInteger newIndex = [unfilteredArray indexOfObject:[filteredArray objectAtIndex:currentIndex]];
+                NSUInteger newIndex = [unfilteredArray indexOfObject:filteredArray[currentIndex]];
                 [unfilteredIndexes addIndex:newIndex];
                 currentIndex = [rowIndexes indexGreaterThanIndex:currentIndex];
             }
@@ -183,7 +188,7 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
             data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
         }
 
-        [pboard declareTypes:[NSArray arrayWithObject:kHBLanguagesDragRowsType] owner:self];
+        [pboard declareTypes:@[kHBLanguagesDragRowsType] owner:self];
         [pboard setData:data forType:kHBLanguagesDragRowsType];
     }
     

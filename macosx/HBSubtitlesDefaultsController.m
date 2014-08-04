@@ -80,6 +80,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 - (void)dealloc
 {
     [_settings release];
+    [_languagesList release];
 
     @try {
         [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
