@@ -382,8 +382,6 @@ BOOL                        fIsDragging;
 
 - (int) hbInstances;
 
-+ (unsigned int) maximumNumberOfAllowedAudioTracks;
-
 // Drag & Drop methods
 - (void)openFiles:(NSArray*)filenames;
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames;

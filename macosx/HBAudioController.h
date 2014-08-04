@@ -6,7 +6,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "hb.h"
 
 extern NSString *keyAudioTrackIndex;
 extern NSString *keyAudioTrackName;
@@ -32,12 +31,12 @@ extern NSString *HBMixdownChangedNotification;
 
 @property(nonatomic, readonly) HBAudioSettings *settings;
 
+// Get the list of audio tracks
+@property (readonly, nonatomic, copy) NSArray *audioTracks;
+
 - (void) enableUI: (BOOL) b;
 
-- (void)applySettingsFromPreset:(NSDictionary *)preset;
-
-- (void) prepareAudioForQueueFileJob: (NSMutableDictionary *) aDict;
-- (void) prepareAudioForJobPreview: (hb_job_t *) aJob;
+- (void) applySettingsFromPreset:(NSDictionary *)preset;
 - (void) addTracksFromQueue: (NSMutableDictionary *) aQueue;
 
 - (BOOL) anyCodecMatches: (int) aCodecValue;

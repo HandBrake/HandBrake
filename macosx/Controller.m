@@ -16,7 +16,6 @@
 
 #import "HBAudioSettings.h"
 
-unsigned int maximumNumberOfAllowedAudioTracks = 1024;
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
 NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
@@ -46,8 +45,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
  * HBController implementation *
  *******************************/
 @implementation HBController
-
-+ (unsigned int) maximumNumberOfAllowedAudioTracks	{	return maximumNumberOfAllowedAudioTracks;	}
 
 - (id)init
 {
@@ -2611,14 +2608,16 @@ fWorkingCount = 0;
     [queueFileJob setObject:@(hb_audio_encoder_get_name((int)fAudioController.settings.encoderFallback)) forKey: @"AudioEncoderFallback"];
     // actual fallback encoder
     [queueFileJob setObject:@(fAudioController.settings.encoderFallback) forKey: @"JobAudioEncoderFallback"];
-    
+
     /* Audio */
-    [fAudioController prepareAudioForQueueFileJob: queueFileJob];
-    
+    NSMutableArray *audioArray = [[NSMutableArray alloc] initWithArray:[fAudioController audioTracks] copyItems:YES];
+    [queueFileJob setObject:[NSArray arrayWithArray: audioArray] forKey:@"AudioList"];
+    [audioArray release];
+
 	/* Subtitles */
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesViewController subtitles] copyItems:YES];
     [queueFileJob setObject:[NSArray arrayWithArray: subtitlesArray] forKey:@"SubtitleList"];
-    [subtitlesArray autorelease];
+    [subtitlesArray release];
 
     /* Now we go ahead and set the "job->values in the plist for passing right to fQueueEncodeLibhb */
      
@@ -3225,11 +3224,36 @@ fWorkingCount = 0;
     }
     job->acodec_fallback = fAudioController.settings.encoderFallback;
 
-    /* Audio tracks and mixdowns */
-	[fAudioController prepareAudioForJobPreview: job];
+    // First clear out any audio tracks in the job currently
+    int audiotrack_count = hb_list_count(job->list_audio);
+    for (i = 0; i < audiotrack_count; i++)
+    {
+        hb_audio_t *temp_audio = (hb_audio_t *) hb_list_item(job->list_audio, 0);
+        hb_list_rem(job->list_audio, temp_audio);
+    }
 
-    
-    
+    /* Audio tracks and mixdowns */
+    for (NSDictionary *audioDict in fAudioController.audioTracks)
+    {
+        hb_audio_config_t *audio = (hb_audio_config_t *)calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [audioDict[@"Track"] intValue];
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track                     = audio->in.track;
+        audio->out.codec                     = [audioDict[@"JobEncoder"] intValue];
+        audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
+        audio->out.mixdown                   = [audioDict[@"JobMixdown"] intValue];
+        audio->out.normalize_mix_level       = 0;
+        audio->out.bitrate                   = [audioDict[@"JobBitrate"] intValue];
+        audio->out.samplerate                = [audioDict[@"JobSamplerate"] intValue];
+        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] intValue];
+        audio->out.gain                      = [audioDict[@"TrackGainSlider"] intValue];
+        audio->out.dither_method             = hb_audio_dither_get_default();
+
+        hb_audio_add(job, audio);
+        free(audio);
+    }
+
     /* Filters */
     
     /* Though Grayscale is not really a filter, per se
@@ -3370,7 +3394,7 @@ fWorkingCount = 0;
 - (void) prepareJob
 {
     
-    NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
+    NSDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
     hb_list_t  * list  = hb_get_titles( fQueueEncodeLibhb );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
@@ -3732,35 +3756,30 @@ fWorkingCount = 0;
         job->acodec_copy_mask |= HB_ACODEC_MP3;
     }
     job->acodec_fallback = [[queueToApply objectForKey: @"JobAudioEncoderFallback"] intValue];
-    
+
     /* Audio tracks and mixdowns */
     /* Now lets add our new tracks to the audio list here */
-    for (unsigned int counter = 0; counter < maximumNumberOfAllowedAudioTracks; counter++)
+    for (NSDictionary *audioDict in [queueToApply objectForKey:@"AudioList"])
     {
-        NSString *prefix    = [NSString stringWithFormat:@"Audio%d",    counter + 1];
-        NSString *jobPrefix = [NSString stringWithFormat:@"JobAudio%d", counter + 1];
-        if ([[queueToApply objectForKey:[prefix stringByAppendingString:@"Track"]] intValue] > 0)
-        {
-            audio           = (hb_audio_config_t*)calloc(1, sizeof(*audio));
-            hb_audio_config_init(audio);
-            audio->in.track = [[queueToApply objectForKey:[prefix stringByAppendingString:@"Track"]] intValue] - 1;
-            /* We go ahead and assign values to our audio->out.<properties> */
-            audio->out.track                     = audio->in.track;
-            audio->out.codec                     = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Encoder"]]           intValue];
-            audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
-            audio->out.mixdown                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Mixdown"]]           intValue];
-            audio->out.normalize_mix_level       = 0;
-            audio->out.bitrate                   = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Bitrate"]]           intValue];
-            audio->out.samplerate                = [[queueToApply objectForKey:[jobPrefix stringByAppendingString:@"Samplerate"]]        intValue];
-            audio->out.dynamic_range_compression = [[queueToApply objectForKey:[prefix    stringByAppendingString:@"TrackDRCSlider"]]  floatValue];
-            audio->out.gain                      = [[queueToApply objectForKey:[prefix    stringByAppendingString:@"TrackGainSlider"]] floatValue];
-            audio->out.dither_method             = hb_audio_dither_get_default();
-            
-            hb_audio_add(job, audio);
-            free(audio);
-        }
+        audio           = (hb_audio_config_t *)calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [audioDict[@"Track"] intValue];
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track                     = audio->in.track;
+        audio->out.codec                     = [audioDict[@"JobEncoder"] intValue];
+        audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
+        audio->out.mixdown                   = [audioDict[@"JobMixdown"] intValue];
+        audio->out.normalize_mix_level       = 0;
+        audio->out.bitrate                   = [audioDict[@"JobBitrate"] intValue];
+        audio->out.samplerate                = [audioDict[@"JobSamplerate"] intValue];
+        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] intValue];
+        audio->out.gain                      = [audioDict[@"TrackGainSlider"] intValue];
+        audio->out.dither_method             = hb_audio_dither_get_default();
+
+        hb_audio_add(job, audio);
+        free(audio);
     }
-    
+
     /* Now lets call the filters if applicable.
      * The order of the filters is critical
      */

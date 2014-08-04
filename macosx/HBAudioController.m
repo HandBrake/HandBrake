@@ -112,136 +112,86 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 #pragma mark -
 #pragma mark HBController Support
 
-- (void) prepareAudioForQueueFileJob: (NSMutableDictionary *) aDict
+- (NSArray *)audioTracks
 
 {
+    NSMutableArray *tracksArray = [NSMutableArray array];
+
     NSUInteger audioArrayCount = [self countOfAudioArray];
     for (NSUInteger counter = 0; counter < audioArrayCount; counter++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: counter];
         if ([anAudio enabled])
         {
-            NSString *prefix = [NSString stringWithFormat: @"Audio%lu", counter + 1];
-            NSNumber *sampleRateToUse = ([[[anAudio sampleRate] objectForKey: keyAudioSamplerate] intValue] == 0 ?
-                                         [[anAudio track] objectForKey: keyAudioInputSampleRate] :
-                                         [[anAudio sampleRate] objectForKey: keyAudioSamplerate]);
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            NSNumber *sampleRateToUse = ([anAudio.sampleRate[keyAudioSamplerate] intValue] == 0 ?
+                                         anAudio.track[keyAudioInputSampleRate] :
+                                         anAudio.sampleRate[keyAudioSamplerate]);
 
-            [aDict setObject: [[anAudio track] objectForKey: keyAudioTrackIndex] forKey: [prefix stringByAppendingString: @"Track"]];
-            [aDict setObject: [[anAudio track] objectForKey: keyAudioTrackName] forKey: [prefix stringByAppendingString: @"TrackDescription"]];
-            [aDict setObject: [[anAudio codec] objectForKey: keyAudioCodecName] forKey: [prefix stringByAppendingString: @"Encoder"]];
-            [aDict setObject: [[anAudio mixdown] objectForKey: keyAudioMixdownName] forKey: [prefix stringByAppendingString: @"Mixdown"]];
-            [aDict setObject: [[anAudio sampleRate] objectForKey: keyAudioSampleRateName] forKey: [prefix stringByAppendingString: @"Samplerate"]];
-            [aDict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrateName] forKey: [prefix stringByAppendingString: @"Bitrate"]];
+            dict[@"Track"]            = @([anAudio.track[keyAudioTrackIndex] intValue] -1);
+            dict[@"TrackDescription"] = anAudio.track[keyAudioTrackName];
+            dict[@"Encoder"]          = anAudio.codec[keyAudioCodecName];
+            dict[@"Mixdown"]          = anAudio.mixdown[keyAudioMixdownName];
+            dict[@"Samplerate"]       = anAudio.sampleRate[keyAudioSampleRateName];
+            dict[@"Bitrate"]          = anAudio.bitRate[keyAudioBitrateName];
 
             // output is not passthru so apply gain
-            if (!([[[anAudio codec] objectForKey: keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG))
+            if (!([[anAudio codec][keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG))
             {
-                [aDict setObject: [anAudio gain] forKey: [prefix stringByAppendingString: @"TrackGainSlider"]];
+                dict[@"TrackGainSlider"] = anAudio.gain;
             }
             else
             {
                 // output is passthru - the Gain dial is disabled so don't apply its value
-                [aDict setObject: [NSNumber numberWithInt:0] forKey: [prefix stringByAppendingString: @"TrackGainSlider"]];
+                dict[@"TrackGainSlider"] = @0;
             }
 
-            if (hb_audio_can_apply_drc([[[anAudio track] objectForKey: keyAudioInputCodec] intValue],
-                                       [[[anAudio track] objectForKey: keyAudioInputCodecParam] intValue],
-                                       [[[anAudio codec] objectForKey: keyAudioCodec] intValue]))
+            if (hb_audio_can_apply_drc([anAudio.track[keyAudioInputCodec] intValue],
+                                       [anAudio.track[keyAudioInputCodecParam] intValue],
+                                       [anAudio.codec[keyAudioCodec] intValue]))
             {
-                [aDict setObject: [anAudio drc] forKey: [prefix stringByAppendingString: @"TrackDRCSlider"]];
+                dict[@"TrackDRCSlider"] = anAudio.drc;
             }
             else
             {
                 // source isn't AC3 or output is passthru - the DRC dial is disabled so don't apply its value
-                [aDict setObject: [NSNumber numberWithInt:0] forKey: [prefix stringByAppendingString: @"TrackDRCSlider"]];
+                dict[@"TrackDRCSlider"] = @0;
             }
 
-            prefix = [NSString stringWithFormat: @"JobAudio%lu", counter + 1];
-            [aDict setObject: [[anAudio codec] objectForKey: keyAudioCodec] forKey: [prefix stringByAppendingString: @"Encoder"]];
-            [aDict setObject: [[anAudio mixdown] objectForKey: keyAudioMixdown] forKey: [prefix stringByAppendingString: @"Mixdown"]];
-            [aDict setObject: sampleRateToUse forKey: [prefix stringByAppendingString: @"Samplerate"]];
-            [aDict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrate] forKey: [prefix stringByAppendingString: @"Bitrate"]];
+            dict[@"JobEncoder"]    = anAudio.codec[keyAudioCodec];
+            dict[@"JobMixdown"]    = anAudio.mixdown[keyAudioMixdown];
+            dict[@"JobSamplerate"] = sampleRateToUse;
+            dict[@"JobBitrate"]    = anAudio.bitRate[keyAudioBitrate];
+
+            [tracksArray addObject:dict];
         }
     }
-}
 
-- (void) prepareAudioForJobPreview: (hb_job_t *) aJob
-
-{
-    unsigned int i;
-
-    // First clear out any audio tracks in the job currently
-    int audiotrack_count = hb_list_count(aJob->list_audio);
-    for(i = 0; i < audiotrack_count; i++)
-
-    {
-        hb_audio_t *temp_audio = (hb_audio_t *) hb_list_item(aJob->list_audio, 0);
-        hb_list_rem(aJob->list_audio, temp_audio);
-    }
-
-    // Now add audio tracks based on the current settings
-    NSUInteger audioArrayCount = [self countOfAudioArray];
-    for (i = 0; i < audioArrayCount; i++)
-    {
-        HBAudio *anAudio = [self objectInAudioArrayAtIndex:i];
-        if ([anAudio enabled])
-        {
-            NSNumber *sampleRateToUse = ([[[anAudio sampleRate] objectForKey:keyAudioSamplerate] intValue] == 0 ?
-                                         [[anAudio track]       objectForKey:keyAudioInputSampleRate] :
-                                         [[anAudio sampleRate]  objectForKey:keyAudioSamplerate]);
-
-            hb_audio_config_t *audio = (hb_audio_config_t*)calloc(1, sizeof(*audio));
-            hb_audio_config_init(audio);
-            audio->in.track          = [[[anAudio track] objectForKey:keyAudioTrackIndex] intValue] - 1;
-            /* We go ahead and assign values to our audio->out.<properties> */
-            audio->out.track                     = audio->in.track;
-            audio->out.codec                     = [[[anAudio codec]   objectForKey:keyAudioCodec]   intValue];
-            audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
-            audio->out.mixdown                   = [[[anAudio mixdown] objectForKey:keyAudioMixdown] intValue];
-            audio->out.normalize_mix_level       = 0;
-            audio->out.bitrate                   = [[[anAudio bitRate] objectForKey:keyAudioBitrate] intValue];
-            audio->out.samplerate                = [sampleRateToUse  intValue];
-            audio->out.dynamic_range_compression = [[anAudio drc]  floatValue];
-            audio->out.gain                      = [[anAudio gain] floatValue];
-            audio->out.dither_method             = hb_audio_dither_get_default();
-
-            hb_audio_add(aJob, audio);
-            free(audio);
-        }
-    }
+    return tracksArray;
 }
 
 - (void) addTracksFromQueue: (NSMutableDictionary *) aQueue
 
 {
-    NSString *base;
-    int value;
-    int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
-
     // Reinitialize the configured list of audio tracks
     [self _clearAudioArray];
 
     // The following is the pattern to follow, but with Audio%dTrack being the key to seek...
     // Can we assume that there will be no skip in the data?
-    for (unsigned int i = 1; i <= maximumNumberOfAllowedAudioTracks; i++)
+    for (NSDictionary *audioDict in [aQueue objectForKey:@"AudioList"])
     {
-        base = [NSString stringWithFormat: @"Audio%d", i];
-        value = [[aQueue objectForKey: [base stringByAppendingString: @"Track"]] intValue];
-        if (0 < value)
-        {
-            HBAudio *newAudio = [[HBAudio alloc] init];
-            [newAudio setController: self];
-            [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
-            [newAudio setVideoContainerTag: [self videoContainerTag]];
-            [newAudio setTrackFromIndex: value];
-            [newAudio setCodecFromName: [aQueue objectForKey: [base stringByAppendingString: @"Encoder"]]];
-            [newAudio setMixdownFromName: [aQueue objectForKey: [base stringByAppendingString: @"Mixdown"]]];
-            [newAudio setSampleRateFromName: [aQueue objectForKey: [base stringByAppendingString: @"Samplerate"]]];
-            [newAudio setBitRateFromName: [aQueue objectForKey: [base stringByAppendingString: @"Bitrate"]]];
-            [newAudio setDrc: [aQueue objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]]];
-            [newAudio setGain: [aQueue objectForKey: [base stringByAppendingString: @"TrackGainSlider"]]];
-            [newAudio release];
-        }
+        HBAudio *newAudio = [[HBAudio alloc] init];
+        [newAudio setController: self];
+        [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
+        [newAudio setVideoContainerTag: [self videoContainerTag]];
+        [newAudio setTrackFromIndex: audioDict[@"Track"]];
+        [newAudio setCodecFromName: audioDict[@"Encoder"]];
+        [newAudio setMixdownFromName: audioDict[@"Mixdown"]];
+        [newAudio setSampleRateFromName: audioDict[@"Samplerate"]];
+        [newAudio setBitRateFromName: audioDict[@"Bitrate"]];
+        [newAudio setDrc: audioDict[@"TrackDRCSlider"]];
+        [newAudio setGain: audioDict[@"TrackGainSlider"]];
+        [newAudio release];
     }
 
     [self switchingTrackFromNone: nil]; // see if we need to add one to the list
@@ -274,82 +224,77 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 - (void) _processPresetAudioArray: (NSArray *) templateAudioArray forTrack: (NSUInteger) trackIndex firstOnly: (BOOL) firstOnly
 
 {
-    int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
-
     for (HBAudioTrackPreset *preset in templateAudioArray)
     {
-        if ([self countOfAudioArray] < maximumNumberOfAllowedAudioTracks)
+        BOOL fallenBack = NO;
+        HBAudio *newAudio = [[HBAudio alloc] init];
+        [newAudio setController: self];
+        [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
+        [newAudio setVideoContainerTag: [self videoContainerTag]];
+        [newAudio setTrackFromIndex: (int)trackIndex];
+        
+        const char *name = hb_audio_encoder_get_name(preset.encoder);
+        NSString *audioEncoder = nil;
+        
+        // Check if we need to use a fallback
+        if (name)
         {
-            BOOL fallenBack = NO;
-            HBAudio *newAudio = [[HBAudio alloc] init];
-            [newAudio setController: self];
-            [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
-            [newAudio setVideoContainerTag: [self videoContainerTag]];
-            [newAudio setTrackFromIndex: (int)trackIndex];
-
-            const char *name = hb_audio_encoder_get_name(preset.encoder);
-            NSString *audioEncoder = nil;
-
-            // Check if we need to use a fallback
-            if (name)
+            audioEncoder = @(name);
+            if (preset.encoder & HB_ACODEC_PASS_FLAG &&
+                ![newAudio setCodecFromName:audioEncoder])
             {
-                 audioEncoder = @(name);
-                if (preset.encoder & HB_ACODEC_PASS_FLAG &&
-                    ![newAudio setCodecFromName:audioEncoder])
+                int passthru, fallback;
+                fallenBack = YES;
+                passthru   = hb_audio_encoder_get_from_name([audioEncoder UTF8String]);
+                fallback   = hb_audio_encoder_get_fallback_for_passthru(passthru);
+                name       = hb_audio_encoder_get_name(fallback);
+                
+                // If we couldn't find an encoder for the passthru format
+                // fall back to the selected encoder fallback
+                if (name == NULL)
                 {
-                    int passthru, fallback;
-                    fallenBack = YES;
-                    passthru   = hb_audio_encoder_get_from_name([audioEncoder UTF8String]);
-                    fallback   = hb_audio_encoder_get_fallback_for_passthru(passthru);
-                    name       = hb_audio_encoder_get_name(fallback);
-
-                    // If we couldn't find an encoder for the passthru format
-                    // fall back to the selected encoder fallback
-                    if (name == NULL)
-                    {
-                        name = hb_audio_encoder_get_name(self.settings.encoderFallback);
-                    }
+                    name = hb_audio_encoder_get_name(self.settings.encoderFallback);
                 }
-                else
-                {
-                    name = hb_audio_encoder_sanitize_name([audioEncoder UTF8String]);
-                }
-                audioEncoder = @(name);
-            }
-
-            // If our preset wants us to support a codec that the track does not support, instead
-            // of changing the codec we remove the audio instead.
-            if ([newAudio setCodecFromName:audioEncoder])
-            {
-                const char *mixdown = hb_mixdown_get_name(preset.mixdown);
-                if (mixdown)
-                {
-                    [newAudio setMixdownFromName: @(mixdown)];
-                }
-
-                const char *sampleRateName = hb_audio_samplerate_get_name(preset.sampleRate);
-                if (!sampleRateName)
-                {
-                    [newAudio setSampleRateFromName: @"Auto"];
-                }
-                else
-                {
-                    [newAudio setSampleRateFromName: @(sampleRateName)];
-                }
-                if (!fallenBack)
-                {
-                    [newAudio setBitRateFromName: [NSString stringWithFormat:@"%d", preset.bitRate]];
-                }
-                [newAudio setDrc: @(preset.drc)];
-                [newAudio setGain: @(preset.gain)];
             }
             else
             {
-                [self removeObjectFromAudioArrayAtIndex: [self countOfAudioArray] - 1];
+                name = hb_audio_encoder_sanitize_name([audioEncoder UTF8String]);
             }
-            [newAudio release];
+            audioEncoder = @(name);
         }
-
+        
+        // If our preset wants us to support a codec that the track does not support, instead
+        // of changing the codec we remove the audio instead.
+        if ([newAudio setCodecFromName:audioEncoder])
+        {
+            const char *mixdown = hb_mixdown_get_name(preset.mixdown);
+            if (mixdown)
+            {
+                [newAudio setMixdownFromName: @(mixdown)];
+            }
+            
+            const char *sampleRateName = hb_audio_samplerate_get_name(preset.sampleRate);
+            if (!sampleRateName)
+            {
+                [newAudio setSampleRateFromName: @"Auto"];
+            }
+            else
+            {
+                [newAudio setSampleRateFromName: @(sampleRateName)];
+            }
+            if (!fallenBack)
+            {
+                [newAudio setBitRateFromName: [NSString stringWithFormat:@"%d", preset.bitRate]];
+            }
+            [newAudio setDrc: @(preset.drc)];
+            [newAudio setGain: @(preset.gain)];
+        }
+        else
+        {
+            [self removeObjectFromAudioArrayAtIndex: [self countOfAudioArray] - 1];
+        }
+        [newAudio release];
+        
         if (firstOnly)
         {
             break;
@@ -500,23 +445,19 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     NSUInteger count = [self countOfAudioArray];
     BOOL needToAdd = NO;
-    int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
 
-    // If there is no last track that is None and we are less than our maximum number of permitted tracks, we add one.
-    if (count < maximumNumberOfAllowedAudioTracks)
+    // If there is no last track that is None we add one.
+    if (0 < count)
     {
-        if (0 < count)
-        {
-            HBAudio *lastAudio = [self objectInAudioArrayAtIndex: count - 1];
-            if ([lastAudio enabled])
-            {
-                needToAdd = YES;
-            }
-        }
-        else
+        HBAudio *lastAudio = [self objectInAudioArrayAtIndex: count - 1];
+        if ([lastAudio enabled])
         {
             needToAdd = YES;
         }
+    }
+    else
+    {
+        needToAdd = YES;
     }
 
     if (needToAdd)
@@ -534,10 +475,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self setVideoContainerTag: [notDict objectForKey: keyContainerTag]];
 
     // Update each of the instances because this value influences possible settings.
-    NSEnumerator *enumerator = [audioArray objectEnumerator];
-    HBAudio *audioObject;
-
-    while (nil != (audioObject = [enumerator nextObject]))
+    for (HBAudio *audioObject in audioArray)
     {
         [audioObject setVideoContainerTag: [self videoContainerTag]];
     }

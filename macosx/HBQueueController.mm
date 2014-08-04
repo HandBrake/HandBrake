@@ -936,40 +936,32 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         /* Third Line  (Format Summary) */
         NSString * audioCodecSummary = @"";	//	This seems to be set by the last track we have available...
         /* Lets also get our audio track detail since we are going through the logic for use later */
-		unsigned int ourMaximumNumberOfAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
-		NSMutableArray *audioDetails = [NSMutableArray arrayWithCapacity: ourMaximumNumberOfAudioTracks];
-		NSString *base;
-		NSString *detailString;
-		NSNumber *drc;
-        NSNumber *gain;
+
+		NSMutableArray *audioDetails = [NSMutableArray arrayWithCapacity: [item[@"AudioList"] count]];
         BOOL autoPassthruPresent = NO;
-		for (unsigned int i = 1; i <= ourMaximumNumberOfAudioTracks; i++) {
-			base = [NSString stringWithFormat: @"Audio%d", i];
-			if (0 < [[item objectForKey: [base stringByAppendingString: @"Track"]] intValue])
+
+        for (NSDictionary *audioTrack in item[@"AudioList"])
+        {
+            audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack[@"Encoder"]];
+            NSNumber *drc = audioTrack[@"TrackDRCSlider"];
+            NSNumber *gain = audioTrack[@"TrackGainSlider"];
+            NSString *detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
+                            audioTrack[@"TrackDescription"],
+                            audioTrack[@"Encoder"],
+                            audioTrack[@"Mixdown"],
+                            audioTrack[@"Samplerate"],
+                            audioTrack[@"Bitrate"],
+                            (0.0 < [drc floatValue]) ? (NSObject *)drc : (NSObject *)@"Off",
+                            (0.0 != [gain floatValue]) ? (NSObject *)gain : (NSObject *)@"Off"
+                            ];
+            [audioDetails addObject: detailString];
+            // check if we have an Auto Passthru output track
+            if ([audioTrack[@"Encoder"] isEqualToString: @"Auto Passthru"])
             {
-				audioCodecSummary = [NSString stringWithFormat: @"%@", [item objectForKey: [base stringByAppendingString: @"Encoder"]]];
-				drc = [item objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]];
-                gain = [item objectForKey: [base stringByAppendingString: @"TrackGainSlider"]];
-				detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
-								[item objectForKey: [base stringByAppendingString: @"TrackDescription"]],
-								[item objectForKey: [base stringByAppendingString: @"Encoder"]],
-								[item objectForKey: [base stringByAppendingString: @"Mixdown"]],
-								[item objectForKey: [base stringByAppendingString: @"Samplerate"]],
-								[item objectForKey: [base stringByAppendingString: @"Bitrate"]],
-                                (0.0 < [drc floatValue]) ? (NSObject *)drc : (NSObject *)@"Off",
-								(0.0 != [gain floatValue]) ? (NSObject *)gain : (NSObject *)@"Off"
-								]
-                                ;
-				[audioDetails addObject: detailString];
-                // check if we have an Auto Passthru output track
-                if ([[item objectForKey: [NSString stringWithFormat: @"Audio%dEncoder", i]] isEqualToString: @"Auto Passthru"])
-                {
-                    autoPassthruPresent = YES;
-                }
-			}
-		}
-        
-        
+                autoPassthruPresent = YES;
+            }
+        }
+
         NSString * jobFormatInfo;
         if ([[item objectForKey:@"ChapterMarkers"] intValue] == 1)
             jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video  %@ Audio, Chapter Markers\n", [item objectForKey:@"FileFormat"], [item objectForKey:@"VideoEncoder"], audioCodecSummary];
