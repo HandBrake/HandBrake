@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment defaultVersion="1090" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBAudioDefaultsController">
+            <connections>
+                <outlet property="TracksController" destination="I6S-EX-Dvu" id="kKd-rp-1eh"/>
+                <outlet property="showAllButton" destination="QAt-5X-NBT" id="3IW-6r-piX"/>
+                <outlet property="tableController" destination="ZBe-aP-wvq" id="HBN-Z2-bbo"/>
+                <outlet property="tracksController" destination="I6S-EX-Dvu" id="oEz-8a-ef7"/>
+                <outlet property="window" destination="kwM-lz-5lG" id="rob-Fo-JhL"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="175" y="825" width="813" height="442"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
+            <value key="minSize" type="size" width="813" height="397"/>
+            <value key="maxSize" type="size" width="813" height="600"/>
+            <view key="contentView" id="ZP2-Cp-K5w">
+                <rect key="frame" x="0.0" y="0.0" width="813" height="442"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="fPg-3n-1TN">
+                        <rect key="frame" x="10" y="406" width="145" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track Selection Behavior:" id="GbM-vm-RC2">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Jsz-Er-bsF">
+                        <rect key="frame" x="10" y="382" width="145" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Languages:" id="mAT-Jp-SG1">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Hqz-Lw-gAu">
+                        <rect key="frame" x="430" y="261" width="115" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NJl-q3-zXL">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton verticalHuggingPriority="750" id="oiD-QI-wly">
+                        <rect key="frame" x="158" y="401" width="252" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="mvw-Hg-JFM" id="21e-KY-8TR">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" title="OtherViews" id="Kwy-lU-VuU">
+                                <items>
+                                    <menuItem title="None" state="on" id="mvw-Hg-JFM"/>
+                                    <menuItem title="First Matching Selected Languages" id="jDd-Ji-7Sm"/>
+                                    <menuItem title="All Matching Selected Languages" id="GZP-q7-SYy"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <binding destination="-2" name="selectedIndex" keyPath="self.settings.trackSelectionBehavior" id="sKn-Mr-Hce"/>
+                            <outlet property="nextKeyView" destination="Of7-71-Ci6" id="jgQ-nK-YLu"/>
+                        </connections>
+                    </popUpButton>
+                    <button id="uF5-6E-EIe">
+                        <rect key="frame" x="548" y="259" width="255" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Only the primary audio track will be encoded with the full encoder list. All other secondary audio output tracks will be encoded with first encoder only.</string>
+                        <buttonCell key="cell" type="check" title="Use only first encoder for secondary audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.secondaryEncoderMode" id="Umc-CV-pJy"/>
+                            <outlet property="nextKeyView" destination="r4m-GO-aN3" id="nUp-Ow-ZFS"/>
+                        </connections>
+                    </button>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="aTC-39-h6S">
+                        <rect key="frame" x="161" y="261" width="246" height="135"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <clipView key="contentView" id="TdE-Sh-NcS">
+                            <rect key="frame" x="1" y="1" width="244" height="133"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" id="Of7-71-Ci6">
+                                    <rect key="frame" x="0.0" y="0.0" width="244" height="133"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="checkBox" width="20" minWidth="20" maxWidth="20" id="G44-XP-6xE">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" lineBreakMode="truncatingMiddle" inset="2" id="6by-yL-8VC">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                            </buttonCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="ZBe-aP-wvq" name="value" keyPath="arrangedObjects.isSelected" id="fRp-oC-H6C"/>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="name" width="210" minWidth="10" maxWidth="2000" id="IJ6-jx-Nba">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingMiddle" alignment="left" title="Text Cell" id="lY3-CN-AmZ">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="ZBe-aP-wvq" name="value" keyPath="arrangedObjects.language" id="y6d-Rn-DIv"/>
+                                            </connections>
+                                        </tableColumn>
+                                    </tableColumns>
+                                    <connections>
+                                        <binding destination="ZBe-aP-wvq" name="content" keyPath="arrangedObjects" id="ak7-UG-Fqe"/>
+                                        <outlet property="dataSource" destination="ZBe-aP-wvq" id="Xy6-f7-IyO"/>
+                                        <outlet property="delegate" destination="ZBe-aP-wvq" id="Q25-uc-GVY"/>
+                                    </connections>
+                                </tableView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
+                            <rect key="frame" x="1" y="118" width="244" height="16"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <connections>
+                            <outlet property="nextKeyView" destination="QAt-5X-NBT" id="u00-fZ-W1s"/>
+                        </connections>
+                    </scrollView>
+                    <button verticalHuggingPriority="750" id="QAt-5X-NBT">
+                        <rect key="frame" x="161" y="231" width="71" height="23"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="smallSquare" title="Show All" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" borderStyle="border" inset="3" id="PiQ-bA-7P1">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="edit:" target="-2" id="13y-nD-hEj"/>
+                            <outlet property="nextKeyView" destination="vUx-OV-W5T" id="fma-A5-pRA"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="sC2-52-liU">
+                        <rect key="frame" x="744" y="14" width="54" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="done:" target="-2" id="Rdg-PN-7l6"/>
+                            <outlet property="nextKeyView" destination="oiD-QI-wly" id="1gO-sY-HNE"/>
+                        </connections>
+                    </button>
+                    <button id="vUx-OV-W5T">
+                        <rect key="frame" x="548" y="404" width="151" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="MP3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="sdZ-Rx-JoG">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowMP3Passthru" id="rVF-G7-BYA"/>
+                            <outlet property="nextKeyView" destination="fzd-MO-xaB" id="1fb-a1-B25"/>
+                        </connections>
+                    </button>
+                    <button id="fzd-MO-xaB">
+                        <rect key="frame" x="548" y="386" width="151" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="AAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="cUX-iP-UAs">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowAACPassthru" id="nsQ-cP-JyI"/>
+                            <outlet property="nextKeyView" destination="fgl-Ev-ELt" id="Exn-Wt-M4D"/>
+                        </connections>
+                    </button>
+                    <button id="fgl-Ev-ELt">
+                        <rect key="frame" x="548" y="368" width="151" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="VnE-3R-bUf">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowAC3Passthru" id="Aig-Ok-RyG"/>
+                            <outlet property="nextKeyView" destination="E93-Md-aWa" id="Yv5-Xs-mbs"/>
+                        </connections>
+                    </button>
+                    <button id="E93-Md-aWa">
+                        <rect key="frame" x="548" y="350" width="151" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="DTS" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="8mC-Wx-myL">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowDTSPassthru" id="IWX-ek-0Bd"/>
+                            <outlet property="nextKeyView" destination="IxI-o9-jMs" id="sBB-lF-vtE"/>
+                        </connections>
+                    </button>
+                    <button id="IxI-o9-jMs">
+                        <rect key="frame" x="548" y="332" width="151" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="DTS-HD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="LX6-kc-5vq">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowDTSHDPassthru" id="w77-9v-vIh"/>
+                            <outlet property="nextKeyView" destination="LdN-Cx-ZJY" id="rAA-cB-Ma5"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" id="l4i-pd-Cbk">
+                        <rect key="frame" x="430" y="406" width="115" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Auto Passthru:" id="s6s-EH-5CB">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton toolTip="Set the audio codec to encode with when a suitable track can not be found for audio passthru." verticalHuggingPriority="750" id="LdN-Cx-ZJY">
+                        <rect key="frame" x="548" y="285" width="152" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="Item" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UJy-A2-Bb1" id="OqD-Tf-29c">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" title="OtherViews" id="PtB-Wp-B9X">
+                                <items>
+                                    <menuItem title="Item" state="on" id="UJy-A2-Bb1"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <binding destination="-2" name="content" keyPath="self.settings.audioEncoderFallbacks" id="cP2-Bo-45S"/>
+                            <binding destination="-2" name="selectedValue" keyPath="self.settings.encoderFallback" previousBinding="cP2-Bo-45S" id="njJ-qO-UAy">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">HBEncoderTrasformer</string>
+                                </dictionary>
+                            </binding>
+                            <outlet property="nextKeyView" destination="uF5-6E-EIe" id="gaK-Cr-XA9"/>
+                        </connections>
+                    </popUpButton>
+                    <textField verticalHuggingPriority="750" id="Tth-IR-7cU">
+                        <rect key="frame" x="430" y="290" width="115" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Passthru Fallback:" id="AQe-Sg-Qgh">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="dWE-zD-izv">
+                        <rect key="frame" x="20" y="46" width="773" height="144"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <clipView key="contentView" id="ocp-4z-kPU">
+                            <rect key="frame" x="1" y="17" width="771" height="126"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="X9E-z1-8Hv" id="r4m-GO-aN3">
+                                    <rect key="frame" x="0.0" y="0.0" width="771" height="126"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="codec" width="275" minWidth="10" maxWidth="3.4028229999999999e+38" id="LuF-er-YPm">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Codec">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <popUpButtonCell key="dataCell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="eC3-fz-8ff">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" title="OtherViews" id="vJx-U4-Kqn">
+                                                    <items>
+                                                        <menuItem title="Pop Up" id="L04-Mv-X9t"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="selectedValue" keyPath="arrangedObjects.encoder" previousBinding="3FH-yz-dQp" id="fdo-7w-Lke">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">HBEncoderTrasformer</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="content" keyPath="arrangedObjects.encoders" id="3FH-yz-dQp"/>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="mixdown" width="146" minWidth="10" maxWidth="3.4028229999999999e+38" id="569-7O-ycq">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Mixdown">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="JZe-ew-UW6" id="U3S-VF-Osh">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" title="OtherViews" id="iFd-Xx-1fd">
+                                                    <items>
+                                                        <menuItem title="Pop Up" state="on" id="JZe-ew-UW6"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="selectedValue" keyPath="arrangedObjects.mixdown" previousBinding="M17-dt-S1h" id="jRj-iF-7Dx">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">HBMixdownTrasformer</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.mixdownEnabled" id="QcL-GI-fNW"/>
+                                                <binding destination="I6S-EX-Dvu" name="content" keyPath="arrangedObjects.mixdowns" id="M17-dt-S1h"/>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="samplerate" width="110" minWidth="10" maxWidth="3.4028229999999999e+38" id="NfI-qX-NGY">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Samplerate">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="kkp-zN-T9L" id="XOK-j0-7l5">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" title="OtherViews" id="IMI-0m-Flq">
+                                                    <items>
+                                                        <menuItem title="Pop Up" state="on" id="kkp-zN-T9L"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.mixdownEnabled" id="yMS-bS-lfu"/>
+                                                <binding destination="I6S-EX-Dvu" name="selectedValue" keyPath="arrangedObjects.sampleRate" previousBinding="ynD-oN-CKW" id="4g4-Uc-Hrq">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">HBSampleRateTrasformer</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="content" keyPath="arrangedObjects.samplerates" id="ynD-oN-CKW">
+                                                    <dictionary key="options">
+                                                        <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                        <string key="NSNoSelectionPlaceholder">Auto</string>
+                                                        <string key="NSNullPlaceholder">Auto</string>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="bitrate" width="97" minWidth="10" maxWidth="3.4028229999999999e+38" id="hKf-1o-HNE">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Bitrate">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="EO9-ri-g0o" id="Fzr-Fz-SdB">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <menu key="menu" title="OtherViews" id="6Qt-Y4-vCG">
+                                                    <items>
+                                                        <menuItem title="Pop Up" state="on" id="EO9-ri-g0o"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="selectedValue" keyPath="arrangedObjects.bitRate" previousBinding="Soq-ZJ-4KR" id="tw7-Kl-He8">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">HBIntegerTrasformer</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.bitrateEnabled" id="31K-Op-hHw"/>
+                                                <binding destination="I6S-EX-Dvu" name="content" keyPath="arrangedObjects.bitrates" id="Soq-ZJ-4KR">
+                                                    <dictionary key="options">
+                                                        <string key="NSNoSelectionPlaceholder">None</string>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="gain" width="34" minWidth="10" maxWidth="3.4028234663852886e+38" id="sef-2z-RiQ">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Gain">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" tickMarkPosition="above" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="nEH-R2-7WW"/>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.gain" id="8lj-8n-vWu">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.passThruDisabled" id="RnT-tA-tlH"/>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="gainText" width="25" minWidth="10" maxWidth="3.4028234663852886e+38" id="8iJ-ka-Oti">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="OHv-wE-adq">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.gain" id="3I5-Lc-Tqe">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">HBIntegerTrasformer</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.passThruDisabled" id="JZi-cA-lcC"/>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="drc" width="35" minWidth="10" maxWidth="3.4028229999999999e+38" id="wPN-ex-1CZ">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="DRC">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="4" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="say-2a-x5G"/>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.drc" id="4cX-g9-eBy">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.passThruDisabled" id="q8u-5E-Adj"/>
+                                            </connections>
+                                        </tableColumn>
+                                        <tableColumn identifier="drctext" editable="NO" width="25" minWidth="10" maxWidth="3.4028229999999999e+38" id="eLM-kL-FjB">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" controlSize="small" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Text" id="a4J-LK-c3P">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.drc" id="KdR-3K-LXL">
+                                                    <dictionary key="options">
+                                                        <bool key="NSConditionallySetsEditable" value="YES"/>
+                                                        <string key="NSValueTransformerName">HBIntegerTrasformer</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.passThruDisabled" id="IIO-pS-nND"/>
+                                            </connections>
+                                        </tableColumn>
+                                    </tableColumns>
+                                    <connections>
+                                        <binding destination="I6S-EX-Dvu" name="content" keyPath="arrangedObjects" id="let-yi-XDX"/>
+                                        <binding destination="I6S-EX-Dvu" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="let-yi-XDX" id="zy7-Dz-cEh"/>
+                                    </connections>
+                                </tableView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="MQZ-cv-4yN">
+                            <rect key="frame" x="-100" y="-100" width="685" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="F0o-6a-EMC">
+                            <rect key="frame" x="-100" y="-100" width="15" height="206"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <tableHeaderView key="headerView" id="X9E-z1-8Hv">
+                            <rect key="frame" x="0.0" y="0.0" width="771" height="17"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </tableHeaderView>
+                        <connections>
+                            <outlet property="nextKeyView" destination="N4q-sT-WgW" id="6gC-Nj-s8x"/>
+                        </connections>
+                    </scrollView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="RtZ-Cz-5mG">
+                        <rect key="frame" x="18" y="198" width="205" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio Encoder Settings:" id="007-WM-RmC">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <segmentedControl appearanceType="aqua" verticalHuggingPriority="750" id="N4q-sT-WgW">
+                        <rect key="frame" x="18" y="19" width="54" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="momentary" id="otA-K4-TxM">
+                            <font key="font" metaFont="smallSystem"/>
+                            <segments>
+                                <segment image="NSAddTemplate" width="24">
+                                    <nil key="label"/>
+                                </segment>
+                                <segment image="NSRemoveTemplate" width="23" tag="1">
+                                    <nil key="label"/>
+                                </segment>
+                            </segments>
+                        </segmentedCell>
+                        <connections>
+                            <action selector="addTrack:" target="-2" id="vsd-5z-3e3"/>
+                            <outlet property="nextKeyView" destination="sC2-52-liU" id="mmR-bd-cFG"/>
+                        </connections>
+                    </segmentedControl>
+                </subviews>
+            </view>
+            <connections>
+                <outlet property="initialFirstResponder" destination="oiD-QI-wly" id="Vxi-xi-P0d"/>
+            </connections>
+        </window>
+        <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Languages Table Controller" customClass="HBLanguageArrayController">
+            <declaredKeys>
+                <string>language</string>
+                <string>isSelected</string>
+            </declaredKeys>
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="languagesList.languagesArray" id="vKV-y3-Zbg"/>
+                <outlet property="tableView" destination="Of7-71-Ci6" id="IBV-kN-tPc"/>
+            </connections>
+        </arrayController>
+        <arrayController objectClassName="HBAudioTrackPreset" id="I6S-EX-Dvu" userLabel="Tracks Controller">
+            <declaredKeys>
+                <string>encoder</string>
+                <string>mixdown</string>
+                <string>sampleRate</string>
+                <string>bitRate</string>
+                <string>gain</string>
+                <string>drc</string>
+            </declaredKeys>
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.settings.tracksArray" id="oDO-aQ-oZJ"/>
+            </connections>
+        </arrayController>
+    </objects>
+    <resources>
+        <image name="NSAddTemplate" width="8" height="8"/>
+        <image name="NSRemoveTemplate" width="8" height="8"/>
+    </resources>
+</document>

@@ -15,10 +15,11 @@ extern NSString *keyAudioInputSampleRate;
 extern NSString *keyAudioInputCodec;
 extern NSString *keyAudioInputCodecParam;
 extern NSString *keyAudioInputChannelLayout;
+
 extern NSString *HBMixdownChangedNotification;
 
 @class HBAudio;
-
+@class HBAudioSettings;
 /**
  *  HBAudioController
  *
@@ -29,23 +30,15 @@ extern NSString *HBMixdownChangedNotification;
 @property (nonatomic, readonly, retain) NSArray *masterTrackArray;
 @property (nonatomic, readonly) NSDictionary *noneTrack;
 
-@property(nonatomic, readwrite) BOOL allowAACPassCheck;
-@property(nonatomic, readwrite) BOOL allowAC3PassCheck;
-@property(nonatomic, readwrite) BOOL allowDTSHDPassCheck;
-@property(nonatomic, readwrite) BOOL allowDTSPassCheck;
-@property(nonatomic, readwrite) BOOL allowMP3PassCheck;
-
-@property(nonatomic, readwrite, assign) NSString *audioEncoderFallback;
-@property(nonatomic, readwrite) NSInteger audioEncoderFallbackTag;
+@property(nonatomic, readonly) HBAudioSettings *settings;
 
 - (void) enableUI: (BOOL) b;
-- (void) setHBController: (id) aController;
+
+- (void)applySettingsFromPreset:(NSDictionary *)preset;
 
 - (void) prepareAudioForQueueFileJob: (NSMutableDictionary *) aDict;
 - (void) prepareAudioForJobPreview: (hb_job_t *) aJob;
-- (void) prepareAudioForPreset: (NSMutableArray *) anArray;
 - (void) addTracksFromQueue: (NSMutableDictionary *) aQueue;
-- (void) addTracksFromPreset: (NSMutableDictionary *) aPreset;
 
 - (BOOL) anyCodecMatches: (int) aCodecValue;
 - (void) settingTrackToNone: (HBAudio *) newNoneTrack;

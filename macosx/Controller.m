@@ -14,6 +14,8 @@
 #import "DockTextField.h"
 #import "HBUtilities.h"
 
+#import "HBAudioSettings.h"
+
 unsigned int maximumNumberOfAllowedAudioTracks = 1024;
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
@@ -207,7 +209,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 	// setup the audio controller
     fAudioController = [[HBAudioController alloc] init];
-    [fAudioController setHBController: self];
 	[fAudioView addSubview: [fAudioController view]];
 
     // make sure we automatically resize the controller's view to the current window size
@@ -231,6 +232,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // make sure we automatically resize the controller's view to the current window size
 	[[fVideoController view] setFrame: [fVideoView bounds]];
     [[fVideoController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    [fWindow recalculateKeyViewLoop];
 
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(autoSetM4vExtension:) name: HBMixdownChangedNotification object: nil];
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(updateMp4Checkboxes:) name: HBVideoEncoderChangedNotification object: nil];
@@ -2599,15 +2602,15 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInteger:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
     
     /* Auto Passthru */
-    [queueFileJob setObject:@(fAudioController.allowAACPassCheck) forKey: @"AudioAllowAACPass"];
-    [queueFileJob setObject:@(fAudioController.allowAC3PassCheck) forKey: @"AudioAllowAC3Pass"];
-    [queueFileJob setObject:@(fAudioController.allowDTSHDPassCheck) forKey: @"AudioAllowDTSHDPass"];
-    [queueFileJob setObject:@(fAudioController.allowDTSPassCheck) forKey: @"AudioAllowDTSPass"];
-    [queueFileJob setObject:@(fAudioController.allowMP3PassCheck) forKey: @"AudioAllowMP3Pass"];
+    [queueFileJob setObject:@(fAudioController.settings.allowAACPassthru) forKey: @"AudioAllowAACPass"];
+    [queueFileJob setObject:@(fAudioController.settings.allowAC3Passthru) forKey: @"AudioAllowAC3Pass"];
+    [queueFileJob setObject:@(fAudioController.settings.allowDTSHDPassthru) forKey: @"AudioAllowDTSHDPass"];
+    [queueFileJob setObject:@(fAudioController.settings.allowDTSPassthru) forKey: @"AudioAllowDTSPass"];
+    [queueFileJob setObject:@(fAudioController.settings.allowMP3Passthru) forKey: @"AudioAllowMP3Pass"];
     // just in case we need it for display purposes
-    [queueFileJob setObject:fAudioController.audioEncoderFallback forKey: @"AudioEncoderFallback"];
+    [queueFileJob setObject:@(hb_audio_encoder_get_name((int)fAudioController.settings.encoderFallback)) forKey: @"AudioEncoderFallback"];
     // actual fallback encoder
-    [queueFileJob setObject:@(fAudioController.audioEncoderFallbackTag) forKey: @"JobAudioEncoderFallback"];
+    [queueFileJob setObject:@(fAudioController.settings.encoderFallback) forKey: @"JobAudioEncoderFallback"];
     
     /* Audio */
     [fAudioController prepareAudioForQueueFileJob: queueFileJob];
@@ -2900,12 +2903,12 @@ fWorkingCount = 0;
     [fVideoController applyVideoSettingsFromQueue:queueToApply];
 
     /* Auto Passthru */
-    fAudioController.allowAACPassCheck = [[queueToApply objectForKey:@"AudioAllowAACPass"] boolValue];
-    fAudioController.allowAC3PassCheck = [[queueToApply objectForKey:@"AudioAllowAC3Pass"] boolValue];
-    fAudioController.allowDTSHDPassCheck = [[queueToApply objectForKey:@"AudioAllowDTSHDPass"] boolValue];
-    fAudioController.allowDTSPassCheck = [[queueToApply objectForKey:@"AudioAllowDTSPass"] boolValue];
-    fAudioController.allowMP3PassCheck = [[queueToApply objectForKey:@"AudioAllowMP3Pass"] boolValue];
-    fAudioController.audioEncoderFallback = [queueToApply objectForKey:@"AudioEncoderFallback"];
+    fAudioController.settings.allowAACPassthru = [[queueToApply objectForKey:@"AudioAllowAACPass"] boolValue];
+    fAudioController.settings.allowAC3Passthru = [[queueToApply objectForKey:@"AudioAllowAC3Pass"] boolValue];
+    fAudioController.settings.allowDTSHDPassthru = [[queueToApply objectForKey:@"AudioAllowDTSHDPass"] boolValue];
+    fAudioController.settings.allowDTSPassthru = [[queueToApply objectForKey:@"AudioAllowDTSPass"] boolValue];
+    fAudioController.settings.allowMP3Passthru = [[queueToApply objectForKey:@"AudioAllowMP3Pass"] boolValue];
+    fAudioController.settings.encoderFallback = [queueToApply objectForKey:@"AudioEncoderFallback"];
 
     /* Audio */
     /* Now lets add our new tracks to the audio list here */
@@ -3200,28 +3203,28 @@ fWorkingCount = 0;
 
     /* Auto Passthru */
     job->acodec_copy_mask = 0;
-    if (fAudioController.allowAACPassCheck)
+    if (fAudioController.settings.allowAACPassthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_FFAAC;
     }
-    if (fAudioController.allowAC3PassCheck)
+    if (fAudioController.settings.allowAC3Passthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_AC3;
     }
-    if (fAudioController.allowDTSHDPassCheck)
+    if (fAudioController.settings.allowDTSHDPassthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_DCA_HD;
     }
-    if (fAudioController.allowDTSPassCheck)
+    if (fAudioController.settings.allowDTSPassthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_DCA;
     }
-    if (fAudioController.allowMP3PassCheck)
+    if (fAudioController.settings.allowMP3Passthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_MP3;
     }
-    job->acodec_fallback = (int)fAudioController.audioEncoderFallbackTag;
-    
+    job->acodec_fallback = fAudioController.settings.encoderFallback;
+
     /* Audio tracks and mixdowns */
 	[fAudioController prepareAudioForJobPreview: job];
 
@@ -5264,66 +5267,8 @@ return YES;
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
         [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
 
-        /* Video quality */
-        
-        
-        /* Auto Passthru: if the preset has Auto Passthru fields, use them.
-         * Otherwise assume every passthru is allowed and the fallback is AC3 */
-
-        id tempObject;
-        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowAACPass"]) != nil)
-        {
-            fAudioController.allowAACPassCheck = [tempObject boolValue];
-        }
-        else
-        {
-            fAudioController.allowAACPassCheck = YES;
-        }
-        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowAC3Pass"]) != nil)
-        {
-            fAudioController.allowAC3PassCheck = [tempObject boolValue];
-        }
-        else
-        {
-            fAudioController.allowAC3PassCheck = YES;
-        }
-        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowDTSHDPass"]) != nil)
-        {
-            fAudioController.allowDTSHDPassCheck = [tempObject boolValue];
-        }
-        else
-        {
-            fAudioController.allowDTSHDPassCheck = YES;
-        }
-        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowDTSPass"]) != nil)
-        {
-            fAudioController.allowDTSPassCheck= [tempObject boolValue];
-        }
-        else
-        {
-            fAudioController.allowDTSPassCheck = YES;
-        }
-        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowMP3Pass"]) != nil)
-        {
-            fAudioController.allowMP3PassCheck = [tempObject boolValue];
-        }
-        else
-        {
-            fAudioController.allowAACPassCheck = YES;
-        }
-        if ((tempObject = [chosenPreset objectForKey:@"AudioEncoderFallback"]) != nil)
-        {
-            // map legacy encoder names via libhb
-            strValue = hb_audio_encoder_sanitize_name([tempObject UTF8String]);
-            fAudioController.audioEncoderFallback = [NSString stringWithFormat:@"%s", strValue];
-        }
-        else
-        {
-            fAudioController.audioEncoderFallbackTag = HB_ACODEC_AC3;
-        }
-        
         /* Audio */
-        [fAudioController addTracksFromPreset: chosenPreset];
+        [fAudioController applySettingsFromPreset: chosenPreset];
         
         /*Subtitles*/
         [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
@@ -5798,21 +5743,8 @@ return YES;
         [preset setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
         [preset setObject:[NSNumber numberWithInteger:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
 
-        /* Auto Pasthru */
-        [preset setObject:@(fAudioController.allowAACPassCheck) forKey: @"AudioAllowAACPass"];
-        [preset setObject:@(fAudioController.allowAC3PassCheck) forKey: @"AudioAllowAC3Pass"];
-        [preset setObject:@(fAudioController.allowDTSHDPassCheck) forKey: @"AudioAllowDTSHDPass"];
-        [preset setObject:@(fAudioController.allowDTSPassCheck) forKey: @"AudioAllowDTSPass"];
-        [preset setObject:@(fAudioController.allowMP3PassCheck) forKey: @"AudioAllowMP3Pass"];
-        [preset setObject:fAudioController.audioEncoderFallback forKey: @"AudioEncoderFallback"];
-
         /* Audio */
-        NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
-		[fAudioController prepareAudioForPreset: audioListArray];
-        
-        
-        [preset setObject:[NSMutableArray arrayWithArray: audioListArray] forKey:@"AudioList"];
-        [audioListArray release];
+        [fAudioController.settings prepareAudioForPreset:preset];
 
         /* Subtitles */
         [fSubtitlesViewController prepareSubtitlesForPreset:preset];

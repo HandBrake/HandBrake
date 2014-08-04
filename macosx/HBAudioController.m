@@ -8,7 +8,11 @@
 #import "HBAudioController.h"
 #import "Controller.h"
 #import "HBAudio.h"
+#import "HBAudioSettings.h"
+#import "HBAudioDefaultsController.h"
+#import "HBAudioTrackPreset.h"
 #import "hb.h"
+#include "lang.h"
 
 NSString *keyAudioTrackIndex = @"keyAudioTrackIndex";
 NSString *keyAudioTrackName = @"keyAudioTrackName";
@@ -17,33 +21,32 @@ NSString *keyAudioInputSampleRate = @"keyAudioInputSampleRate";
 NSString *keyAudioInputCodec = @"keyAudioInputCodec";
 NSString *keyAudioInputCodecParam = @"keyAudioInputCodecParam";
 NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
+NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
+
 NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 
 @interface HBAudioController () {
-    /* New Audio Auto Passthru box */
-    IBOutlet NSBox               * fAudioAutoPassthruBox;
-    IBOutlet NSPopUpButton       * fAudioFallbackPopUp;
-
     IBOutlet NSTableView         * fTableView;
-    IBOutlet NSButton            * fAddAllTracksButton;
 
-    id                             myController;
     NSMutableArray               * audioArray;        // the configured audio information
     NSArray                      * masterTrackArray;  // the master list of audio tracks from the title
     NSDictionary                 * noneTrack;         // this represents no audio track selection
-    NSNumber                     * videoContainerTag; // initially is the default HB_MUX_MP4
 }
 
+@property (assign) IBOutlet NSPopUpButton *trackPopup;
+@property (assign) IBOutlet NSButton *configureDefaults;
+@property (assign) IBOutlet NSButton *reloadDefaults;
+@property (nonatomic, readwrite) BOOL enabled;
+
 @property (nonatomic, readwrite, retain) NSArray *masterTrackArray;
-@property (nonatomic, retain) NSNumber *videoContainerTag;
+@property (nonatomic, retain) NSNumber *videoContainerTag; // initially is the default HB_MUX_MP4
 
-- (void) addAllTracksFromPreset: (NSMutableDictionary *) aPreset;
-- (IBAction) addAllAudioTracks: (id) sender;
-- (void) addNewAudioTrack;
+// Defaults
+@property (nonatomic, readwrite, retain) HBAudioDefaultsController *defaultsController;
+@property (nonatomic, readwrite, retain) HBAudioSettings *settings;
 
-@end // interface HBAudioController
-
+@end
 
 @implementation HBAudioController
 
@@ -54,26 +57,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 @synthesize noneTrack;
 @synthesize videoContainerTag;
 
-- (NSString *)audioEncoderFallback
-{
-    return [[fAudioFallbackPopUp selectedItem] title];
-}
-
-- (void)setAudioEncoderFallback:(NSString *)string
-{
-    [fAudioFallbackPopUp selectItemWithTitle:string];
-}
-
-- (NSInteger)audioEncoderFallbackTag
-{
-    return [[fAudioFallbackPopUp selectedItem] tag];
-}
-
-- (void)setAudioEncoderFallbackTag:(NSInteger)tag
-{
-    [fAudioFallbackPopUp selectItemWithTag:tag];
-}
-
 - (instancetype)init
 {
     self = [super initWithNibName:@"Audio" bundle:nil];
@@ -81,6 +64,11 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [self setVideoContainerTag: [NSNumber numberWithInt: HB_MUX_MP4]];
         audioArray = [[NSMutableArray alloc] init];
+
+        /* register that we are interested in changes made to the video container */
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserver: self selector: @selector(containerChanged:) name: HBContainerChangedNotification object: nil];
+        [center addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object: nil];
     }
     return self;
 }
@@ -96,38 +84,29 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [super dealloc];
 }
 
-- (void) setHBController: (id) aController
-
+- (IBAction)addAllAudioTracks:(id)sender
 {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    myController = aController;
-
-    /* register that we are interested in changes made to the video container */
-    [center addObserver: self selector: @selector(containerChanged:) name: HBContainerChangedNotification object: aController];
-    [center addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object: aController];
+    [self addTracksFromDefaults:YES];
 }
 
-- (void) _clearAudioArray
-
+- (IBAction)removeAll:(id)sender
 {
-    while (0 < [self countOfAudioArray])
-    {
-        [self removeObjectFromAudioArrayAtIndex: 0];
-    }
-}
-
-
-- (IBAction) addAllAudioTracks: (id) sender
-{
-    [self addAllTracksFromPreset:[myController selectedPreset]];
-    return;
+    [self _clearAudioArray];
+    [self switchingTrackFromNone:nil];
 }
 
 - (void)enableUI:(BOOL)b
 {
+    self.enabled = b;
     [fTableView setEnabled:b];
-    [fAddAllTracksButton setEnabled:b];
-    [fAudioFallbackPopUp setEnabled:b];
+    [self.trackPopup setEnabled:b];
+    [self.configureDefaults setEnabled:b];
+    [self.reloadDefaults setEnabled:b];
+}
+
+- (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
+{
+    return self.enabled;
 }
 
 #pragma mark -
@@ -232,32 +211,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     }
 }
 
-- (void) prepareAudioForPreset: (NSMutableArray *) anArray
-
-{
-    NSUInteger audioArrayCount = [self countOfAudioArray];
-    NSUInteger i;
-
-    for (i = 0; i < audioArrayCount; i++)
-    {
-        HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
-        if ([anAudio enabled])
-        {
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity: 7];
-            [dict setObject: [[anAudio track] objectForKey: keyAudioTrackIndex] forKey: @"AudioTrack"];
-            [dict setObject: [[anAudio track] objectForKey: keyAudioTrackName] forKey: @"AudioTrackDescription"];
-            [dict setObject: [[anAudio codec] objectForKey: keyAudioCodecName] forKey: @"AudioEncoder"];
-            [dict setObject: [[anAudio mixdown] objectForKey: keyAudioMixdownName] forKey: @"AudioMixdown"];
-            [dict setObject: [[anAudio sampleRate] objectForKey: keyAudioSampleRateName] forKey: @"AudioSamplerate"];
-            [dict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrateName] forKey: @"AudioBitrate"];
-            [dict setObject: [anAudio drc] forKey: @"AudioTrackDRCSlider"];
-            [dict setObject: [anAudio gain] forKey: @"AudioTrackGainSlider"];
-            [anArray addObject: dict];
-            [dict release];
-        }
-    }
-}
-
 - (void) addTracksFromQueue: (NSMutableDictionary *) aQueue
 
 {
@@ -294,52 +247,37 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self switchingTrackFromNone: nil]; // see if we need to add one to the list
 }
 
-// This routine takes the preset and will return the value for the key AudioList
-// if it exists, otherwise it creates an array from the data in the present.
-- (NSArray *) _presetAudioArrayFromPreset: (NSMutableDictionary *) aPreset
-
+- (void)applySettingsFromPreset:(NSDictionary *)preset
 {
-    NSArray *retval = [aPreset objectForKey: @"AudioList"];
+    self.settings = [[[HBAudioSettings alloc] init] autorelease];
+    [self.settings applySettingsFromPreset:preset];
+    [self.settings validateEncoderFallbackForVideoContainer:[self.videoContainerTag intValue]];
 
-    if (!retval)
-    {
-        int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
-        NSString *base;
-        NSMutableArray *whatToUse = [NSMutableArray array];
-        for (unsigned int i = 1; i <= maximumNumberOfAllowedAudioTracks; i++)
-        {
-            base = [NSString stringWithFormat: @"Audio%d", i];
-            if (nil != [aPreset objectForKey: [base stringByAppendingString: @"Track"]])
-            {
-                [whatToUse addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [aPreset objectForKey: [base stringByAppendingString: @"Encoder"]], @"AudioEncoder",
-                                       [aPreset objectForKey: [base stringByAppendingString: @"Mixdown"]], @"AudioMixdown",
-                                       [aPreset objectForKey: [base stringByAppendingString: @"Samplerate"]], @"AudioSamplerate",
-                                       [aPreset objectForKey: [base stringByAppendingString: @"Bitrate"]], @"AudioBitrate",
-                                       [aPreset objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]], @"AudioTrackDRCSlider",
-                                       [aPreset objectForKey: [base stringByAppendingString: @"TrackGainSlider"]], @"AudioTrackGainSlider",
-                                       nil]];
-            }
-        }
-        retval = whatToUse;
-    }
-    return retval;
+    [self addTracksFromDefaults:NO];
 }
 
-// This uses the templateAudioArray from the preset to create the audios for the specified trackIndex
-- (void) _processPresetAudioArray: (NSArray *) templateAudioArray forTrack: (unsigned int) trackIndex andType: (int) aType
+- (void) _clearAudioArray
+{
+    while (0 < [self countOfAudioArray])
+    {
+        [self removeObjectFromAudioArrayAtIndex: 0];
+    }
+}
+
+/**
+ *  Uses the templateAudioArray from the preset to create the audios for the specified trackIndex.
+ *
+ *  @param templateAudioArray the track template.
+ *  @param trackIndex         the index of the source track.
+ *  @param firstOnly          use only the first track of the template or all.
+ */
+- (void) _processPresetAudioArray: (NSArray *) templateAudioArray forTrack: (NSUInteger) trackIndex firstOnly: (BOOL) firstOnly
 
 {
-    NSEnumerator *enumerator = [templateAudioArray objectEnumerator];
-    NSMutableDictionary *dict;
-    NSString *key;
     int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
 
-    while (nil != (dict = [enumerator nextObject]))
+    for (HBAudioTrackPreset *preset in templateAudioArray)
     {
-        // copy the dictionary since we may need to alter it
-        dict = [NSMutableDictionary dictionaryWithDictionary:dict];
-
         if ([self countOfAudioArray] < maximumNumberOfAllowedAudioTracks)
         {
             BOOL fallenBack = NO;
@@ -347,62 +285,63 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [newAudio setController: self];
             [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
             [newAudio setVideoContainerTag: [self videoContainerTag]];
-            [newAudio setTrackFromIndex: trackIndex];
+            [newAudio setTrackFromIndex: (int)trackIndex];
 
-            // map legacy encoder names via libhb
-            key = [dict objectForKey:@"AudioEncoder"];
-            if (key != nil)
+            const char *name = hb_audio_encoder_get_name(preset.encoder);
+            NSString *audioEncoder = nil;
+
+            // Check if we need to use a fallback
+            if (name)
             {
-                const char *name;
-                // passthru fallbacks
-                if ([key hasSuffix:@"Passthru"] &&
-                    ![newAudio setCodecFromName:key])
+                 audioEncoder = @(name);
+                if (preset.encoder & HB_ACODEC_PASS_FLAG &&
+                    ![newAudio setCodecFromName:audioEncoder])
                 {
                     int passthru, fallback;
                     fallenBack = YES;
-                    passthru   = hb_audio_encoder_get_from_name([key UTF8String]);
+                    passthru   = hb_audio_encoder_get_from_name([audioEncoder UTF8String]);
                     fallback   = hb_audio_encoder_get_fallback_for_passthru(passthru);
                     name       = hb_audio_encoder_get_name(fallback);
+
+                    // If we couldn't find an encoder for the passthru format
+                    // fall back to the selected encoder fallback
+                    if (name == NULL)
+                    {
+                        name = hb_audio_encoder_get_name(self.settings.encoderFallback);
+                    }
                 }
                 else
                 {
-                    name = hb_audio_encoder_sanitize_name([key UTF8String]);
+                    name = hb_audio_encoder_sanitize_name([audioEncoder UTF8String]);
                 }
-                [dict setObject:[NSString stringWithFormat:@"%s", name]
-                         forKey:@"AudioEncoder"];
-            }
-
-            // If our preset does not contain a drc or gain value set it to a default of 0.0
-            if (![dict objectForKey: @"AudioTrackDRCSlider"])
-            {
-                [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
-            }
-            if (![dict objectForKey: @"AudioTrackGainSlider"])
-            {
-                [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackGainSlider"];
-            }
-
-            // map legacy mixdowns via libhb
-            key = [dict objectForKey: @"AudioMixdown"];
-            if (key != nil)
-            {
-                [dict setObject:[NSString stringWithFormat:@"%s",
-                                 hb_mixdown_sanitize_name([key UTF8String])]
-                         forKey:@"AudioMixdown"];
+                audioEncoder = @(name);
             }
 
             // If our preset wants us to support a codec that the track does not support, instead
             // of changing the codec we remove the audio instead.
-            if ([newAudio setCodecFromName: [dict objectForKey: @"AudioEncoder"]])
+            if ([newAudio setCodecFromName:audioEncoder])
             {
-                [newAudio setMixdownFromName: [dict objectForKey: @"AudioMixdown"]];
-                [newAudio setSampleRateFromName: [dict objectForKey: @"AudioSamplerate"]];
+                const char *mixdown = hb_mixdown_get_name(preset.mixdown);
+                if (mixdown)
+                {
+                    [newAudio setMixdownFromName: @(mixdown)];
+                }
+
+                const char *sampleRateName = hb_audio_samplerate_get_name(preset.sampleRate);
+                if (!sampleRateName)
+                {
+                    [newAudio setSampleRateFromName: @"Auto"];
+                }
+                else
+                {
+                    [newAudio setSampleRateFromName: @(sampleRateName)];
+                }
                 if (!fallenBack)
                 {
-                    [newAudio setBitRateFromName: [dict objectForKey: @"AudioBitrate"]];
+                    [newAudio setBitRateFromName: [NSString stringWithFormat:@"%d", preset.bitRate]];
                 }
-                [newAudio setDrc: [dict objectForKey: @"AudioTrackDRCSlider"]];
-                [newAudio setGain: [dict objectForKey: @"AudioTrackGainSlider"]];
+                [newAudio setDrc: @(preset.drc)];
+                [newAudio setGain: @(preset.gain)];
             }
             else
             {
@@ -410,130 +349,103 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             }
             [newAudio release];
         }
+
+        if (firstOnly)
+        {
+            break;
+        }
     }
 }
 
-// This matches the FIRST track with the specified prefix, otherwise it uses the defaultIfNotFound value
-- (unsigned int) _trackWithTitlePrefix: (NSString *) prefix defaultIfNotFound: (unsigned int) defaultIfNotFound
-
+/**
+ *  Matches the source audio tracks with the specific language iso code.
+ *
+ *  @param isoCode         the iso code to match.
+ *  @param selectOnlyFirst whether to match only the first track for the iso code.
+ *
+ *  @return a NSIndexSet with the index of the matched tracks.
+ */
+- (NSIndexSet *) _tracksWithISOCode: (NSString *) isoCode selectOnlyFirst: (BOOL) selectOnlyFirst
 {
-    unsigned int retval = defaultIfNotFound;
-    NSUInteger count = [masterTrackArray count];
-    NSString *languageTitle;
-    BOOL found = NO;
-
+    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+    
     // We search for the prefix noting that our titles have the format %d: %s where the %s is the prefix
-    for (unsigned int i = 1; i < count && !found; i++) // Note that we skip the "None" track
-    {
-        languageTitle = [[masterTrackArray objectAtIndex: i] objectForKey: keyAudioTrackName];
-        if ([[languageTitle substringFromIndex: [languageTitle rangeOfString: @" "].location + 1] hasPrefix: prefix])
+    [masterTrackArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if (idx) // Note that we skip the "None" track
         {
-            retval = i;
-            found = YES;
+            if ([isoCode isEqualToString:@"und"] ||  [obj[keyAudioTrackLanguageIsoCode] isEqualToString:isoCode])
+            {
+                [indexes addIndex:idx];
+                
+                if (selectOnlyFirst)
+                {
+                    *stop = YES;
+                }
+            }
         }
-    }
-    return retval;
+    }];
+
+    return indexes;
 }
 
-// When we add a track and we do not have a preset to use for the track we use
-// this bogus preset to do the dirty work.
-- (NSMutableDictionary *) _defaultPreset
-
+- (void) _processPresetAudioArray: (NSArray *) templateAudioArray forTracks: (NSIndexSet *) trackIndexes firstOnly: (BOOL) firstOnly
 {
-    static NSMutableDictionary *retval = nil;
-
-    if (!retval)
-    {
-        retval = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
-                   [NSArray arrayWithObject:
-                    [NSDictionary dictionaryWithObjectsAndKeys:
-                     [NSNumber numberWithInt: 1],     @"AudioTrack",
-                     @"AAC (CoreAudio)",              @"AudioEncoder",
-                     @"Dolby Pro Logic II",           @"AudioMixdown",
-                     @"Auto",                         @"AudioSamplerate",
-                     @"160",                          @"AudioBitrate",
-                     [NSNumber numberWithFloat: 0.0], @"AudioTrackDRCSlider",
-                     [NSNumber numberWithFloat: 0.0], @"AudioTrackGainSlider",
-                     nil]], @"AudioList", nil] retain];
-    }
-    return retval;
+    __block BOOL firsTrack = firstOnly;
+    [trackIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        // Add the track
+        [self _processPresetAudioArray: self.settings.tracksArray forTrack:idx firstOnly:firsTrack];
+        firsTrack = self.settings.secondaryEncoderMode ? YES : NO;
+    }];
 }
 
-- (void) addTracksFromPreset: (NSMutableDictionary *) aPreset allTracks: (BOOL) allTracks
+- (void) addTracksFromDefaults: (BOOL) allTracks
 
 {
-    id whatToUse = [self _presetAudioArrayFromPreset: aPreset];
-    NSMutableArray *tracksToAdd = [[NSMutableArray alloc] init];
+    BOOL firstTrack = NO;
+    NSMutableIndexSet *tracksAdded = [NSMutableIndexSet indexSet];
+    NSMutableIndexSet *tracksToAdd = [NSMutableIndexSet indexSet];
 
-    NSArray* preferredLanguages = [NSArray arrayWithObjects: 
-                          [[NSUserDefaults standardUserDefaults] stringForKey: @"DefaultLanguage"],
-                          [[NSUserDefaults standardUserDefaults] stringForKey: @"AlternateLanguage"],
-                          nil];
+    // Reinitialize the configured list of audio tracks
+    [self _clearAudioArray];
 
-    // Add tracks of Default and Alternate Language by name
-    for(id languageName in preferredLanguages)
+    if (self.settings.trackSelectionBehavior != HBAudioTrackSelectionBehaviorNone)
     {
-        int trackNumber = [self _trackWithTitlePrefix: languageName defaultIfNotFound: 0];
-        
-        if(trackNumber > 0 && [tracksToAdd indexOfObject:[NSNumber numberWithInt:trackNumber]] == NSNotFound)
+        // Add tracks of Default and Alternate Language by name
+        for (NSString *languageISOCode in self.settings.trackSelectionLanguages)
         {
-            [tracksToAdd addObject:[NSNumber numberWithInt:trackNumber]];
+            NSMutableIndexSet *tracksIndexes = [[self _tracksWithISOCode: languageISOCode
+                                                 selectOnlyFirst: self.settings.trackSelectionBehavior == HBAudioTrackSelectionBehaviorFirst] mutableCopy];
+            [tracksIndexes removeIndexes:tracksAdded];
+            if (tracksIndexes.count)
+            {
+                [self _processPresetAudioArray:self.settings.tracksArray forTracks:tracksIndexes firstOnly:firstTrack];
+                firstTrack = self.settings.secondaryEncoderMode ? YES : NO;
+                [tracksAdded addIndexes:tracksIndexes];
+            }
+            [tracksIndexes release];
         }
-    }
 
-    // If no preferred Language was found, add standard track 1
-    if([tracksToAdd count] == 0)
-    {
-        [tracksToAdd addObject:[NSNumber numberWithInt:1]];
+        // If no preferred Language was found, add standard track 1
+        if (tracksAdded.count == 0 && masterTrackArray.count > 1)
+        {
+            [tracksToAdd addIndex:1];
+        }
     }
 
     // If all tracks should be added, add all track numbers that are not yet processed
     if (allTracks)
     {
-        NSUInteger count = [masterTrackArray count];
-        for (unsigned int i = 1; i < count; i++)
-        {
-            NSNumber *trackNumber = [NSNumber numberWithInt:i];
-            if([tracksToAdd indexOfObject:trackNumber] == NSNotFound)
-            {
-               [tracksToAdd addObject:trackNumber];
-            }
-        }
+        [tracksToAdd addIndexesInRange:NSMakeRange(1, masterTrackArray.count - 1)];
+        [tracksToAdd removeIndexes:tracksAdded];
     }
-         
-    // Reinitialize the configured list of audio tracks
-    [self _clearAudioArray];
 
-    for(id trackNumber in tracksToAdd)
+    if (tracksToAdd.count)
     {
-        [self _processPresetAudioArray: whatToUse forTrack:[trackNumber intValue] andType: [[aPreset objectForKey: @"Type"] intValue]];
+        [self _processPresetAudioArray:self.settings.tracksArray forTracks:tracksToAdd firstOnly:firstTrack];
     }
-    [tracksToAdd release];
-}
 
-- (void) _ensureAtLeastOneNonEmptyTrackExists
-
-{
-    NSUInteger count = [self countOfAudioArray];
-    if (0 == count || ![[self objectInAudioArrayAtIndex: 0] enabled])
-    {
-        [self addTracksFromPreset: [self _defaultPreset] allTracks: NO];
-    }
-    [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
-}
-
-- (void) addTracksFromPreset: (NSMutableDictionary *) aPreset
-
-{
-    [self addTracksFromPreset: aPreset allTracks: NO];
-    [self _ensureAtLeastOneNonEmptyTrackExists];
-}
-
-- (void) addAllTracksFromPreset: (NSMutableDictionary *) aPreset
-
-{
-    [self addTracksFromPreset: aPreset allTracks: YES];
-    [self _ensureAtLeastOneNonEmptyTrackExists];
+    // Add an None item
+    [self switchingTrackFromNone: nil];
 }
 
 - (BOOL) anyCodecMatches: (int) aCodecValue
@@ -630,37 +542,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         [audioObject setVideoContainerTag: [self videoContainerTag]];
     }
 
-    /* Update the Auto Passthru Fallback Codec Popup */
-    /* lets get the tag of the currently selected item first so we might reset it later */
-
-    int selectedAutoPassthruFallbackEncoderTag = (int)[[fAudioFallbackPopUp selectedItem] tag];
-
-    [fAudioFallbackPopUp removeAllItems];
-    for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
-         audio_encoder != NULL;
-         audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
-    {
-        if ((audio_encoder->codec  & HB_ACODEC_PASS_FLAG) == 0 &&
-            (audio_encoder->muxers & [[self videoContainerTag] integerValue]))
-        {
-            NSMenuItem *menuItem = [[fAudioFallbackPopUp menu] addItemWithTitle:[NSString stringWithUTF8String:audio_encoder->name]
-                                                                         action:nil
-                                                                  keyEquivalent:@""];
-            [menuItem setTag:audio_encoder->codec];
-        }
-    }
-
-    /* if we have a previously selected auto passthru fallback encoder tag, then try to select it */
-    if (selectedAutoPassthruFallbackEncoderTag)
-    {
-        selectedAutoPassthruFallbackEncoderTag = [fAudioFallbackPopUp selectItemWithTag:selectedAutoPassthruFallbackEncoderTag];
-    }
-    /* if we had no previous fallback selected OR if selection failed
-     * select the default fallback encoder (AC3) */
-    if (!selectedAutoPassthruFallbackEncoderTag)
-    {
-        [fAudioFallbackPopUp selectItemWithTag:HB_ACODEC_AC3];
-    }
+    // Update the Auto Passthru Fallback Codec Popup
+    // lets get the tag of the currently selected item first so we might reset it later
+    [self.settings validateEncoderFallbackForVideoContainer:[self.videoContainerTag intValue]];
 }
 
 - (void) titleChanged: (NSNotification *) aNotification
@@ -670,6 +554,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     NSData *theData = [notDict objectForKey: keyTitleTag];
     hb_title_t *title = NULL;
 
+    // Reinitialize the configured list of audio tracks
+    [self _clearAudioArray];
+    
     [theData getBytes: &title length: sizeof(title)];
     if (title)
     {
@@ -697,22 +584,41 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                                        [NSNumber numberWithInt: audio->in.codec], keyAudioInputCodec,
                                        [NSNumber numberWithInt: audio->in.codec_param], keyAudioInputCodecParam,
                                        [NSNumber numberWithUnsignedLongLong: audio->in.channel_layout], keyAudioInputChannelLayout,
+                                       @(audio->lang.iso639_2), keyAudioTrackLanguageIsoCode,
                                        nil]];
         }
         self.masterTrackArray = newTrackArray;
+        [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
     }
     else
     {
         self.masterTrackArray = nil;
     }
 
-    // Reinitialize the configured list of audio tracks
-    [self _clearAudioArray];
+}
 
-    if (![myController hasValidPresetSelected])
-    {
-        [self _ensureAtLeastOneNonEmptyTrackExists];
-    }
+#pragma mark - Defaults
+
+- (IBAction)showSettingsSheet:(id)sender
+{
+    self.defaultsController = [[[HBAudioDefaultsController alloc] initWithSettings:self.settings] autorelease];
+    self.defaultsController.delegate = self;
+
+	[NSApp beginSheet:[self.defaultsController window]
+       modalForWindow:[[self view] window]
+        modalDelegate:self
+       didEndSelector:NULL
+          contextInfo:NULL];
+}
+
+- (void)sheetDidEnd
+{
+    self.defaultsController = nil;
+}
+
+- (IBAction)reloadDefaults:(id)sender
+{
+    [self addTracksFromDefaults:NO];
 }
 
 #pragma mark -

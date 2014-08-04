@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
+        <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioController">
             <connections>
-                <outlet property="fAddAllTracksButton" destination="RrJ-Eh-L2L" id="BCF-iF-18K"/>
-                <outlet property="fAudioAutoPassthruBox" destination="a33-g2-ZGw" id="5hu-Ft-LJh"/>
-                <outlet property="fAudioFallbackPopUp" destination="99G-ev-xSL" id="QJV-Hh-29K"/>
+                <outlet property="configureDefaults" destination="vFP-nq-IQg" id="EFe-IR-Cyn"/>
                 <outlet property="fTableView" destination="LlC-ua-mth" id="NvM-yh-c0L"/>
+                <outlet property="reloadDefaults" destination="wcL-rL-aYS" id="R78-R5-U0p"/>
+                <outlet property="trackPopup" destination="jrP-M5-2Rq" id="Avl-Cd-Th2"/>
                 <outlet property="view" destination="LOv-5G-86T" id="qyT-Z6-lCU"/>
             </connections>
         </customObject>
@@ -59,20 +59,20 @@
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="uE3-SE-Oss">
-                    <rect key="frame" x="20" y="20" width="886" height="258"/>
+                    <rect key="frame" x="20" y="20" width="886" height="266"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="RfG-9v-Rts">
-                        <rect key="frame" x="1" y="17" width="884" height="240"/>
+                        <rect key="frame" x="1" y="17" width="884" height="248"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="GLD-lI-qeh" id="LlC-ua-mth">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="240"/>
+                                <rect key="frame" x="0.0" y="0.0" width="887" height="248"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="track" editable="NO" width="323" minWidth="40" maxWidth="1000" id="gRu-la-4i7">
+                                    <tableColumn identifier="track" editable="NO" width="322" minWidth="40" maxWidth="1000" id="gRu-la-4i7">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Track">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -198,7 +198,7 @@
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.bitrateEnabled" id="eNf-Cc-xL3"/>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="gain" width="32" minWidth="10" maxWidth="3.4028234663852886e+38" id="psI-ue-Jsr">
+                                    <tableColumn identifier="gain" width="36" minWidth="10" maxWidth="3.4028234663852886e+38" id="psI-ue-Jsr">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Gain">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -208,9 +208,10 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.PassThruDisabled" id="AY4-98-DiI"/>
-                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="duy-eI-ylW">
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="T1e-LK-znD">
                                                 <dictionary key="options">
                                                     <bool key="NSCreatesSortDescriptor" value="NO"/>
+                                                    <bool key="NSValidatesImmediately" value="YES"/>
                                                 </dictionary>
                                             </binding>
                                         </connections>
@@ -229,7 +230,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.PassThruDisabled" id="L5Z-ZJ-Zjq"/>
-                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="5rW-UE-Okz"/>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="gkE-Na-A2j"/>
                                         </connections>
                                     </tableColumn>
                                     <tableColumn identifier="drc" width="35" minWidth="10" maxWidth="3.4028229999999999e+38" id="whw-Me-VIU">
@@ -242,7 +243,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.DRCEnabled" id="uRE-B4-yzg"/>
-                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.drc" id="sNI-Mo-CR4"/>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.drc" id="Not-zD-uE1">
+                                                <dictionary key="options">
+                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                </dictionary>
+                                            </binding>
                                         </connections>
                                     </tableColumn>
                                     <tableColumn identifier="drctext" editable="NO" width="27" minWidth="10" maxWidth="3.4028229999999999e+38" id="ASp-Mc-vG6">
@@ -267,6 +272,9 @@
                                         </connections>
                                     </tableColumn>
                                 </tableColumns>
+                                <connections>
+                                    <outlet property="menu" destination="hyy-qd-qpe" id="e5W-aS-mPB"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -280,130 +288,85 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="GLD-lI-qeh">
-                        <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
+                        <rect key="frame" x="0.0" y="0.0" width="887" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
-                <button verticalHuggingPriority="750" id="RrJ-Eh-L2L">
-                    <rect key="frame" x="19" y="286" width="116" height="16"/>
+                <button appearanceType="aqua" verticalHuggingPriority="750" id="vFP-nq-IQg">
+                    <rect key="frame" x="113" y="288" width="130" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="push" title="Add All Tracks" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pea-7O-Egc">
+                    <buttonCell key="cell" type="push" title="Configure Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aYF-d5-Ya6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="miniSystem"/>
+                        <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <action selector="addAllAudioTracks:" target="-2" id="NRm-JM-JdU"/>
+                        <action selector="showSettingsSheet:" target="-2" id="D9K-M3-zHd"/>
                     </connections>
                 </button>
-                <box autoresizesSubviews="NO" title="Auto Passthru" borderType="line" titlePosition="noTitle" id="a33-g2-ZGw">
-                    <rect key="frame" x="355" y="283" width="554" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <view key="contentView">
-                        <rect key="frame" x="1" y="1" width="552" height="29"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button id="Lnr-Em-Qds">
-                                <rect key="frame" x="85" y="8" width="41" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="MP3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="9TA-KC-mKS">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="allowMP3PassCheck" id="IPJ-MO-N8F"/>
-                                </connections>
-                            </button>
-                            <button id="gvb-gb-zkx">
-                                <rect key="frame" x="130" y="8" width="47" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="AAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="IZd-DC-Dgb">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="allowAACPassCheck" id="UuF-C6-vAP"/>
-                                </connections>
-                            </button>
-                            <button id="hnY-nd-77u">
-                                <rect key="frame" x="179" y="8" width="47" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="PcA-Yj-Whc">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="allowAC3PassCheck" id="bQl-JB-ZXP"/>
-                                </connections>
-                            </button>
-                            <button id="bi9-FH-BU2">
-                                <rect key="frame" x="226" y="8" width="48" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="DTS" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="rxe-CG-Ey2">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="allowDTSPassCheck" id="qKH-AD-3yn"/>
-                                </connections>
-                            </button>
-                            <button id="iUD-cU-Knx">
-                                <rect key="frame" x="271" y="8" width="58" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="DTS-HD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="PmO-7W-pdS">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="allowDTSHDPassCheck" id="aZw-P3-f2B"/>
-                                </connections>
-                            </button>
-                            <popUpButton verticalHuggingPriority="750" id="99G-ev-xSL">
-                                <rect key="frame" x="442" y="8" width="100" height="15"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="AC3 (ffmpeg)" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="qzR-fg-NCZ" id="2Vr-5R-7Hv">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <menu key="menu" title="OtherViews" id="XzU-yN-JEw">
-                                        <items>
-                                            <menuItem title="AC3 (ffmpeg)" state="on" id="qzR-fg-NCZ"/>
-                                            <menuItem title="Item 2" id="6IV-I9-V13"/>
-                                            <menuItem title="Item 3" id="yQk-cI-cGz"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                            </popUpButton>
-                            <textField verticalHuggingPriority="750" id="VwW-C9-yo0">
-                                <rect key="frame" x="2" y="-7" width="78" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Auto Passthru:" id="a6J-IC-jTh">
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" id="1wu-8Y-6ed">
-                                <rect key="frame" x="354" y="7" width="86" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Passthru Fallback:" id="zhf-eR-FDa">
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                        </subviews>
-                    </view>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                <button appearanceType="aqua" verticalHuggingPriority="750" id="wcL-rL-aYS">
+                    <rect key="frame" x="241" y="288" width="116" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Reload Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="q2P-Tg-cBJ">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
                     <connections>
-                        <binding destination="ee3-5O-TtC" name="hidden" keyPath="values.ShowAdvancedOptsForAutoPassthru" id="v2a-z2-nLA">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
+                        <action selector="reloadDefaults:" target="-2" id="k9I-I9-T2U"/>
                     </connections>
-                </box>
+                </button>
+                <popUpButton appearanceType="aqua" verticalHuggingPriority="750" id="jrP-M5-2Rq">
+                    <rect key="frame" x="17" y="291" width="88" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="Track" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="AoT-G9-aA4">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="Vxo-66-Mrx">
+                            <items>
+                                <menuItem title="Track" state="on" hidden="YES" id="Pfh-Bc-83k"/>
+                                <menuItem title="Add All" id="AMA-Ul-v2f">
+                                    <connections>
+                                        <action selector="addAllAudioTracks:" target="-2" id="8LO-bD-Fjy"/>
+                                    </connections>
+                                </menuItem>
+                                <menuItem isSeparatorItem="YES" id="CCk-3A-ULa"/>
+                                <menuItem title="Remove All" id="YlA-ue-5oE">
+                                    <connections>
+                                        <action selector="removeAll:" target="-2" id="Hbr-n5-nOt"/>
+                                    </connections>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                </popUpButton>
             </subviews>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="ee3-5O-TtC"/>
+        <menu id="hyy-qd-qpe">
+            <items>
+                <menuItem title="Add All" id="HM0-a4-pm5">
+                    <attributedString key="attributedTitle"/>
+                    <connections>
+                        <action selector="addAllAudioTracks:" target="-2" id="V4d-pG-lsJ"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="fKl-2Z-8aX"/>
+                <menuItem title="Remove All" id="fqs-Q8-hNY">
+                    <connections>
+                        <action selector="removeAll:" target="-2" id="E7c-dN-4dY"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="CjR-R1-IBg"/>
+                <menuItem title="Reload Defaults" id="sq7-Ux-T6D">
+                    <connections>
+                        <action selector="reloadDefaults:" target="-2" id="7JX-ub-E5y"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Configure Defaults…" id="TK6-fY-4Sk">
+                    <connections>
+                        <action selector="showSettingsSheet:" target="-2" id="Q8y-a8-pV6"/>
+                    </connections>
+                </menuItem>
+            </items>
+        </menu>
     </objects>
 </document>
