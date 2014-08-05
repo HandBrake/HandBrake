@@ -20,21 +20,6 @@ extern NSString *keyAudioBitrate;
 
 @interface HBAudio : NSObject
 
-{
-    NSDictionary                 * track;
-    NSDictionary                 * codec;
-    NSDictionary                 * mixdown;
-    NSDictionary                 * sampleRate;
-    NSDictionary                 * bitRate;
-    NSNumber                     * drc;
-    NSNumber                     * gain;
-    NSNumber                     * videoContainerTag;
-    HBAudioController            * controller;
-    NSMutableArray               * codecs;
-    NSMutableArray               * mixdowns;
-    NSMutableArray               * bitRates;
-}
-
 @property (nonatomic, retain) NSDictionary *track;
 @property (nonatomic, retain) NSDictionary *codec;
 @property (nonatomic, retain) NSDictionary *mixdown;

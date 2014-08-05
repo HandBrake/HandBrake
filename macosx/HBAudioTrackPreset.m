@@ -24,34 +24,29 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
         _sampleRate = 0;
         _bitRate = 160;
         _mixdown = HB_AMIXDOWN_DOLBYPLII;
-
-        // add a serie of observers to keep the tracks properties in a valid state.
-        [self addObserver:self forKeyPath:@"encoder" options:0 context:HBAudioEncoderContex];
-        [self addObserver:self forKeyPath:@"mixdown" options:0 context:HBAudioEncoderContex];
-        [self addObserver:self forKeyPath:@"sampleRate" options:0 context:HBAudioEncoderContex];
     }
     return self;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+#pragma mark - Setters override
+
+- (void)setEncoder:(int)encoder
 {
-    if (context == HBAudioEncoderContex)
-    {
-        // Validate the settings
-        if ([keyPath isEqualToString:@"encoder"])
-        {
-            [self validateMixdown];
-            [self validateBitrate];
-        }
-        else if ([keyPath isEqualToString:@"mixdown"] || [keyPath isEqualToString:@"sampleRate"])
-        {
-            [self validateBitrate];
-        }
-    }
-    else
-    {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
+    _encoder = encoder;
+    [self validateMixdown];
+    [self validateBitrate];
+}
+
+- (void)setMixdown:(int)mixdown
+{
+    _mixdown = mixdown;
+    [self validateBitrate];
+}
+
+- (void)setSampleRate:(int)sampleRate
+{
+    _sampleRate = sampleRate;
+    [self validateBitrate];
 }
 
 #pragma mark -
@@ -153,16 +148,6 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     }
 
     return retval;
-}
-
-- (void)dealloc
-{
-    // Remove the KVO observers before deallocing the instance.
-    [self removeObserver:self forKeyPath:@"encoder"];
-    [self removeObserver:self forKeyPath:@"mixdown"];
-    [self removeObserver:self forKeyPath:@"sampleRate"];
-
-    [super dealloc];
 }
 
 #pragma mark - Options

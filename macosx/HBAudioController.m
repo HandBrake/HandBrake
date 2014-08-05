@@ -62,7 +62,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     self = [super initWithNibName:@"Audio" bundle:nil];
     if (self)
     {
-        [self setVideoContainerTag: [NSNumber numberWithInt: HB_MUX_MP4]];
+        [self setVideoContainerTag: @HB_MUX_MP4];
         audioArray = [[NSMutableArray alloc] init];
 
         /* register that we are interested in changes made to the video container */
@@ -178,13 +178,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
     // The following is the pattern to follow, but with Audio%dTrack being the key to seek...
     // Can we assume that there will be no skip in the data?
-    for (NSDictionary *audioDict in [aQueue objectForKey:@"AudioList"])
+    for (NSDictionary *audioDict in aQueue[@"AudioList"])
     {
         HBAudio *newAudio = [[HBAudio alloc] init];
         [newAudio setController: self];
         [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
         [newAudio setVideoContainerTag: [self videoContainerTag]];
-        [newAudio setTrackFromIndex: audioDict[@"Track"]];
+        [newAudio setTrackFromIndex: [audioDict[@"Track"] intValue] + 1];
         [newAudio setCodecFromName: audioDict[@"Encoder"]];
         [newAudio setMixdownFromName: audioDict[@"Mixdown"]];
         [newAudio setSampleRateFromName: audioDict[@"Samplerate"]];
@@ -401,7 +401,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     for (NSUInteger i = 0; i < audioArrayCount && !retval; i++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
-        if ([anAudio enabled] && aCodecValue == [[[anAudio codec] objectForKey: keyAudioCodec] intValue])
+        if ([anAudio enabled] && aCodecValue == [[anAudio codec][keyAudioCodec] intValue])
         {
             retval = YES;
         }
@@ -417,8 +417,8 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
     [newAudio setVideoContainerTag: [self videoContainerTag]];
     [newAudio setTrack: noneTrack];
-    [newAudio setDrc: [NSNumber numberWithFloat: 0.0]];
-    [newAudio setGain: [NSNumber numberWithFloat: 0.0]];
+    [newAudio setDrc: @0.0f];
+    [newAudio setGain: @0.0f];
     [newAudio release];
 }
 
@@ -472,7 +472,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     NSDictionary *notDict = [aNotification userInfo];
 
-    [self setVideoContainerTag: [notDict objectForKey: keyContainerTag]];
+    [self setVideoContainerTag: notDict[keyContainerTag]];
 
     // Update each of the instances because this value influences possible settings.
     for (HBAudio *audioObject in audioArray)
@@ -489,7 +489,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
     NSDictionary *notDict = [aNotification userInfo];
-    NSData *theData = [notDict objectForKey: keyTitleTag];
+    NSData *theData = notDict[keyTitleTag];
     hb_title_t *title = NULL;
 
     // Reinitialize the configured list of audio tracks
@@ -505,25 +505,21 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         // Reinitialize the master list of available audio tracks from this title
         NSMutableArray *newTrackArray = [NSMutableArray array];
         [noneTrack release];
-        noneTrack = [[NSDictionary dictionaryWithObjectsAndKeys:
-                      [NSNumber numberWithInt: 0], keyAudioTrackIndex,
-                      NSLocalizedString(@"None", @"None"), keyAudioTrackName,
-                      [NSNumber numberWithInt: 0], keyAudioInputCodec,
-                      nil] retain];
+        noneTrack = [@{keyAudioTrackIndex: @0,
+                       keyAudioTrackName: NSLocalizedString(@"None", @"None"),
+                       keyAudioInputCodec: @0} retain];
         [newTrackArray addObject: noneTrack];
         for (i = 0; i < count; i++)
         {
             audio = (hb_audio_config_t *) hb_list_audio_config_item(list, i);
-            [newTrackArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: i + 1], keyAudioTrackIndex,
-                                       [NSString stringWithFormat: @"%d: %s", i, audio->lang.description], keyAudioTrackName,
-                                       [NSNumber numberWithInt: audio->in.bitrate / 1000], keyAudioInputBitrate,
-                                       [NSNumber numberWithInt: audio->in.samplerate], keyAudioInputSampleRate,
-                                       [NSNumber numberWithInt: audio->in.codec], keyAudioInputCodec,
-                                       [NSNumber numberWithInt: audio->in.codec_param], keyAudioInputCodecParam,
-                                       [NSNumber numberWithUnsignedLongLong: audio->in.channel_layout], keyAudioInputChannelLayout,
-                                       @(audio->lang.iso639_2), keyAudioTrackLanguageIsoCode,
-                                       nil]];
+            [newTrackArray addObject: @{keyAudioTrackIndex: @(i + 1),
+                                        keyAudioTrackName: [NSString stringWithFormat: @"%d: %s", i, audio->lang.description],
+                                        keyAudioInputBitrate: @(audio->in.bitrate / 1000),
+                                        keyAudioInputSampleRate: @(audio->in.samplerate),
+                                        keyAudioInputCodec: [NSNumber numberWithUnsignedInteger: audio->in.codec],
+                                        keyAudioInputCodecParam: [NSNumber numberWithUnsignedInteger: audio->in.codec_param],
+                                        keyAudioInputChannelLayout: @(audio->in.channel_layout),
+                                        keyAudioTrackLanguageIsoCode: @(audio->lang.iso639_2)}];
         }
         self.masterTrackArray = newTrackArray;
         [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
@@ -571,7 +567,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 - (HBAudio *) objectInAudioArrayAtIndex: (NSUInteger) index
 
 {
-    return [audioArray objectAtIndex: index];
+    return audioArray[index];
 }
 
 - (void) insertObject: (HBAudio *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
