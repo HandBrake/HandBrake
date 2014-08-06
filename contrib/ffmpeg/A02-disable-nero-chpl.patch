@@ -1,0 +1,65 @@
+From 189f0b725a268374647d251f8732b51dd29d4b15 Mon Sep 17 00:00:00 2001
+From: John Stebbins <stebbins@jetheaddev.com>
+Date: Mon, 4 Aug 2014 08:32:56 -0700
+Subject: [PATCH] movenc: Add option to disable nero chapters
+
+And add flag to muxer documentation.
+Nero chapters break some taggers (mp3tag and iTunes).
+---
+ doc/muxers.texi      | 5 +++++
+ libavformat/movenc.c | 3 ++-
+ libavformat/movenc.h | 1 +
+ 3 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/doc/muxers.texi b/doc/muxers.texi
+index 0ca8d3f..54109c7 100644
+--- a/doc/muxers.texi
++++ b/doc/muxers.texi
+@@ -330,6 +330,11 @@ This option is implicitly set when writing ismv (Smooth Streaming) files.
+ Run a second pass moving the index (moov atom) to the beginning of the file.
+ This operation can take a while, and will not work in various situations such
+ as fragmented output, thus it is not enabled by default.
++@item -movflags disable_chpl
++Disable Nero chapter markers (chpl atom).  Normally, both Nero chapters
++and a QuickTime chapter track are written to the file. With this option
++set, only the QuickTime chapter track will be written. Nero chapters can
++cause failures when the file is reprocessed with certain tagging programs.
+ @end table
+ 
+ Smooth Streaming content can be pushed in real time to a publishing
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index f16e851..73a78d8 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -57,6 +57,7 @@ static const AVOption options[] = {
+     { "isml", "Create a live smooth streaming feed (for pushing to a publishing point)", 0, AV_OPT_TYPE_CONST, {.i64 = FF_MOV_FLAG_ISML}, INT_MIN, INT_MAX, AV_OPT_FLAG_ENCODING_PARAM, "movflags" },
+     { "faststart", "Run a second pass to put the index (moov atom) at the beginning of the file", 0, AV_OPT_TYPE_CONST, {.i64 = FF_MOV_FLAG_FASTSTART}, INT_MIN, INT_MAX, AV_OPT_FLAG_ENCODING_PARAM, "movflags" },
+     { "omit_tfhd_offset", "Omit the base data offset in tfhd atoms", 0, AV_OPT_TYPE_CONST, {.i64 = FF_MOV_FLAG_OMIT_TFHD_OFFSET}, INT_MIN, INT_MAX, AV_OPT_FLAG_ENCODING_PARAM, "movflags" },
++    { "disable_chpl", "Disable Nero chapter atom", 0, AV_OPT_TYPE_CONST, {.i64 = FF_MOV_FLAG_DISABLE_CHPL}, INT_MIN, INT_MAX, AV_OPT_FLAG_ENCODING_PARAM, "movflags" },
+     FF_RTP_FLAG_OPTS(MOVMuxContext, rtp_flags),
+     { "skip_iods", "Skip writing iods atom.", offsetof(MOVMuxContext, iods_skip), AV_OPT_TYPE_INT, {.i64 = 0}, 0, 1, AV_OPT_FLAG_ENCODING_PARAM},
+     { "iods_audio_profile", "iods audio profile atom.", offsetof(MOVMuxContext, iods_audio_profile), AV_OPT_TYPE_INT, {.i64 = -1}, -1, 255, AV_OPT_FLAG_ENCODING_PARAM},
+@@ -2076,7 +2077,7 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+         mov_write_meta_tag(pb_buf, mov, s);
+     }
+ 
+-    if (s->nb_chapters)
++    if (s->nb_chapters && !(mov->flags & FF_MOV_FLAG_DISABLE_CHPL))
+         mov_write_chpl_tag(pb_buf, s);
+ 
+     if ((size = avio_close_dyn_buf(pb_buf, &buf)) > 0) {
+diff --git a/libavformat/movenc.h b/libavformat/movenc.h
+index 35be781..0d3eb34 100644
+--- a/libavformat/movenc.h
++++ b/libavformat/movenc.h
+@@ -175,6 +175,7 @@ typedef struct MOVMuxContext {
+ #define FF_MOV_FLAG_ISML 64
+ #define FF_MOV_FLAG_FASTSTART 128
+ #define FF_MOV_FLAG_OMIT_TFHD_OFFSET 256
++#define FF_MOV_FLAG_DISABLE_CHPL 512
+ 
+ int ff_mov_write_packet(AVFormatContext *s, AVPacket *pkt);
+ 
+-- 
+1.9.3
+
