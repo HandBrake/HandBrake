@@ -576,7 +576,14 @@ static int avformatInit( hb_mux_object_t * m )
         {
             name = audio->config.out.name;
         }
+        // Set audio track title
         av_dict_set(&track->st->metadata, "title", name, 0);
+        if (job->mux == HB_MUX_AV_MP4)
+        {
+            // Some software (MPC, mediainfo) use hdlr description
+            // for track title
+            av_dict_set(&track->st->metadata, "handler", name, 0);
+        }
     }
 
     char * subidx_fmt =
