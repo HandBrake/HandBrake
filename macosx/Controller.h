@@ -21,7 +21,6 @@
 #import "HBChapterTitlesController.h"
 
 #import "HBPreferencesController.h"
-#import "HBPresets.h"
 
 extern NSString *HBContainerChangedNotification;
 extern NSString *keyContainerTag;
@@ -29,16 +28,9 @@ extern NSString *HBTitleChangedNotification;
 extern NSString *keyTitleTag;
 
 @class HBOutputPanelController;
+@class HBPresetsViewController;
+@class HBPresetsManager;
 @class DockTextField;
-
-/* We subclass NSView so that our drags show both the icon as well as PresetName columns */
-@interface HBPresetsOutlineView : NSOutlineView
-{
-
-BOOL                        fIsDragging;
-
-}
-@end
 
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSToolbarDelegate, NSDrawerDelegate>
 {
@@ -155,7 +147,9 @@ BOOL                        fIsDragging;
     NSInteger                      currentQueueEncodeIndex; // Used to track the currently encoding queueu item
     
 	/* User Preset variables here */
-	HBPresets                    * fPresetsBuiltin;
+	HBPresetsManager             * presetManager;
+    HBPresetsViewController * fPresetsView;
+
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
 	IBOutlet NSTextField         * fPresetNewDesc;
@@ -163,28 +157,11 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fPresetNewPicWidth;
     IBOutlet NSTextField         * fPresetNewPicHeight;
     IBOutlet NSBox               * fPresetNewPicWidthHeightBox;
-    
+
     IBOutlet NSButton            * fPresetNewPicFiltersCheck;
-    IBOutlet NSButton            * fPresetNewFolderCheck;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
-	
-	NSString                     * UserPresetsFile;
-	NSMutableArray               * UserPresets;
-	NSMutableArray               * UserPresetssortedArray;
-	NSMutableDictionary          * chosenPreset;
-	 
-	NSMutableDictionary          *presetHbDefault; // this is 1 in "Default" preset key
-	NSMutableDictionary          *presetUserDefault;// this is 2 in "Default" preset key
-    NSMutableDictionary          *presetUserDefaultParent;
-    NSMutableDictionary          *presetUserDefaultParentParent;
-    int                           presetCurrentBuiltInCount; // keeps track of the current number of built in presets
+
     IBOutlet NSPanel             * fAddPresetPanel;
-	
-    /* NSOutline View for the presets */
-    NSArray                      *fDraggedNodes;
-    IBOutlet HBPresetsOutlineView * fPresetsOutlineView;
-    IBOutlet NSButton            * fPresetsAdd;
-	IBOutlet NSButton            * fPresetsDelete;
 
     hb_handle_t                  * fHandle;
     
@@ -316,57 +293,23 @@ BOOL                        fIsDragging;
 - (IBAction) openUserGuide:   (id) sender;
 
 // Preset Methods Here
-    
-/* These are required by the NSOutlineView Datasource Delegate */
-/* We use this to deterimine children of an item */
-- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(NSInteger)index ofItem:(id)item;
-/* We use this to determine if an item should be expandable */
-- (BOOL)outlineView:(NSOutlineView *)fPresetsOutlineView isItemExpandable:(id)item;
-/* used to specify the number of levels to show for each item */
-- (NSInteger)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item;
-/* Used to tell the outline view which information is to be displayed per item */
-- (id)outlineView:(NSOutlineView *)fPresetsOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
-/* Use to customize the font and display characteristics of the title cell */
-- (void)outlineView:(NSOutlineView *)fPresetsOutlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item;
-/* We use this to edit the name field in the outline view */
-- (void)outlineView:(NSOutlineView *)fPresetsOutlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
-/* We use this to provide tooltips for the items in the presets outline view */
-- (NSString *)outlineView:(NSOutlineView *)fPresetsOutlineView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc item:(id)item mouseLocation:(NSPoint)mouseLocation;
-- (void) checkBuiltInsForUpdates;
-/* We use this to actually select the preset and act accordingly */
-- (IBAction)selectPreset:(id)sender;
-
-@property (nonatomic, readonly) BOOL hasValidPresetSelected;
-- (id)selectedPreset;
+- (void)applyPreset;
 
 /* Export / Import Presets */
 - (IBAction) browseExportPresetFile: (id) sender;
-- (void) browseExportPresetFileDone: (NSSavePanel *) sheet
-             returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-             
 - (IBAction) browseImportPresetFile: (id) sender;
-- (void) browseImportPresetDone: (NSSavePanel *) sheet
-                   returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 /* Manage User presets */    
-- (void) loadPresets;
 - (IBAction) customSettingUsed: (id) sender;
 - (IBAction) showAddPresetPanel: (id) sender;
 - (IBAction) addPresetPicDropdownChanged: (id) sender;
 - (IBAction) closeAddPresetPanel: (id) sender;
 - (NSDictionary *)createPreset;
 
-- (IBAction)setDefaultPreset:(id)sender;
 - (IBAction)selectDefaultPreset:(id)sender;
-- (void) savePreset;
-- (void)sortPresets;
 - (IBAction)addFactoryPresets:(id)sender;
 - (IBAction)deleteFactoryPresets:(id)sender;
 - (IBAction)addUserPreset:(id)sender;
-- (void)addPreset;
-- (IBAction)insertPreset:(id)sender;
-- (IBAction)deletePreset:(id)sender;
-- (IBAction)getDefaultPresets:(id)sender;
 
 -(void)sendToMetaX:(NSString *) filePath;
 // Growl methods
@@ -377,8 +320,6 @@ BOOL                        fIsDragging;
 
 - (void) prepareJobForPreview;
 - (void) remindUserOfSleepOrShutdown;
-
-- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 
 - (int) hbInstances;
 

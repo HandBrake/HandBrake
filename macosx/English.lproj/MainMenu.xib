@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A299l" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -88,7 +88,7 @@
                     <textField verticalHuggingPriority="750" id="1538">
                         <rect key="frame" x="20" y="530" width="45" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Source:" id="4905">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Source:" id="4905">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -104,11 +104,11 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="1541">
-                        <rect key="frame" x="55" y="501" width="323" height="15"/>
+                        <rect key="frame" x="53" y="496" width="332" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1543" id="4908">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1543" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="1542">
                                 <items>
                                     <menuItem state="on" id="1543"/>
@@ -120,11 +120,11 @@
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="5513">
-                        <rect key="frame" x="483" y="500" width="77" height="15"/>
+                        <rect key="frame" x="512" y="496" width="84" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="5515"/>
                         </popUpButtonCell>
                         <connections>
@@ -132,7 +132,7 @@
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="5180">
-                        <rect key="frame" x="385" y="498" width="46" height="17"/>
+                        <rect key="frame" x="410" y="501" width="46" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Angle:" id="5185">
                             <font key="font" metaFont="smallSystem"/>
@@ -141,11 +141,11 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="5181">
-                        <rect key="frame" x="433" y="500" width="41" height="15"/>
+                        <rect key="frame" x="456" y="496" width="44" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="5183">
                                 <items>
                                     <menuItem state="on" id="5184"/>
@@ -163,7 +163,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="1553">
-                        <rect key="frame" x="751" y="501" width="57" height="14"/>
+                        <rect key="frame" x="784" y="501" width="65" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
                             <font key="font" metaFont="smallSystem"/>
@@ -172,9 +172,9 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="1554">
-                        <rect key="frame" x="808" y="501" width="79" height="14"/>
+                        <rect key="frame" x="849" y="501" width="99" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="4915">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="00:00:00" id="4915">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="0.76630436999999996" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
@@ -224,7 +224,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="1539">
-                        <rect key="frame" x="70" y="530" width="309" height="14.00000018353732"/>
+                        <rect key="frame" x="70" y="530" width="341" height="14.00000018353732"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
                             <font key="font" metaFont="smallSystem"/>
@@ -241,11 +241,11 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="5491">
-                        <rect key="frame" x="571" y="485" width="54" height="16"/>
+                    <textField hidden="YES" verticalHuggingPriority="750" id="5491">
+                        <rect key="frame" x="601" y="482" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5492">
-                            <font key="font" metaFont="miniSystem"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5492">
+                            <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -253,11 +253,11 @@
                             <action selector="startEndSecValueChanged:" target="240" id="5528"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="5521">
-                        <rect key="frame" x="628" y="485" width="54" height="16"/>
+                    <textField hidden="YES" verticalHuggingPriority="750" id="5521">
+                        <rect key="frame" x="658" y="482" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5522">
-                            <font key="font" metaFont="miniSystem"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5522">
+                            <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -265,11 +265,11 @@
                             <action selector="startEndFrameValueChanged:" target="240" id="5530"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="5493">
-                        <rect key="frame" x="686" y="485" width="54" height="16"/>
+                    <textField hidden="YES" verticalHuggingPriority="750" id="5493">
+                        <rect key="frame" x="716" y="482" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
-                            <font key="font" metaFont="miniSystem"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
+                            <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -277,11 +277,11 @@
                             <action selector="startEndSecValueChanged:" target="240" id="5529"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="5523">
-                        <rect key="frame" x="748" y="485" width="54" height="16"/>
+                    <textField hidden="YES" verticalHuggingPriority="750" id="5523">
+                        <rect key="frame" x="778" y="482" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
-                            <font key="font" metaFont="miniSystem"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
+                            <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -333,18 +333,18 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3205">
-                        <rect key="frame" x="386" y="533" width="560" height="5"/>
+                        <rect key="frame" x="417" y="533" width="529" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="bar" id="3203">
-                        <rect key="frame" x="385" y="532.00000018353728" width="562" height="12"/>
+                        <rect key="frame" x="417" y="532.00000018353728" width="530" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <button toolTip="This rearranges the header of the MP4 file to optimize it for streaming across the web." id="4579">
-                        <rect key="frame" x="396" y="391" width="102" height="18"/>
+                        <rect key="frame" x="269" y="391" width="102" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Web optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4927">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -355,7 +355,7 @@
                         </connections>
                     </button>
                     <button id="2364">
-                        <rect key="frame" x="283" y="391" width="96" height="18"/>
+                        <rect key="frame" x="513" y="391" width="96" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Caution: This option will likely break device compatiblity with all but the AppleTV Take 2. Checking this box enables a 64 bit mp4 file which can be over 4 GB.</string>
                         <buttonCell key="cell" type="check" title="Large file size" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4926">
@@ -367,7 +367,7 @@
                         </connections>
                     </button>
                     <button toolTip="This option adds an atom to the MP4 file which allows older iPods (5th Generation classic style) to play the file." id="4967">
-                        <rect key="frame" x="515" y="391" width="108" height="18"/>
+                        <rect key="frame" x="388" y="391" width="108" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="iPod 5G support" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4968">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -378,7 +378,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="5505">
-                        <rect key="frame" x="627" y="500" width="56" height="15"/>
+                        <rect key="frame" x="657" y="500" width="56" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="through" id="5506">
                             <font key="font" metaFont="smallSystem"/>
@@ -387,11 +387,11 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="1545">
-                        <rect key="frame" x="570" y="500" width="57" height="15"/>
+                        <rect key="frame" x="598" y="496" width="60" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="1546">
                                 <items>
                                     <menuItem state="on" id="1547"/>
@@ -403,11 +403,11 @@
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="1548">
-                        <rect key="frame" x="685" y="500" width="57" height="15"/>
+                        <rect key="frame" x="713" y="496" width="60" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="miniSystem"/>
+                            <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="1549">
                                 <items>
                                     <menuItem state="on" id="1550"/>
@@ -649,23 +649,18 @@
                 <menuItem title="Presets" id="1948">
                     <menu key="submenu" title="Presets" id="1949">
                         <items>
-                            <menuItem title="Update Built-in Presets" id="1950">
-                                <connections>
-                                    <action selector="addFactoryPresets:" target="240" id="1952"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Delete Built-in Presets" id="1951">
-                                <connections>
-                                    <action selector="deleteFactoryPresets:" target="240" id="1953"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1954">
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                            </menuItem>
                             <menuItem title="New Preset…" keyEquivalent="n" id="1955">
                                 <connections>
                                     <action selector="showAddPresetPanel:" target="240" id="1956"/>
                                 </connections>
+                            </menuItem>
+                            <menuItem title="Select Default Preset" id="2421">
+                                <connections>
+                                    <action selector="selectDefaultPreset:" target="240" id="2422"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="1954">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Export…" id="5188">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -679,9 +674,17 @@
                                     <action selector="browseImportPresetFile:" target="240" id="5193"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Select Default Preset" id="2421">
+                            <menuItem isSeparatorItem="YES" id="5qo-64-GYU">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Update Built-in Presets" id="1950">
                                 <connections>
-                                    <action selector="selectDefaultPreset:" target="240" id="2422"/>
+                                    <action selector="addFactoryPresets:" target="240" id="1952"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete Built-in Presets" id="1951">
+                                <connections>
+                                    <action selector="deleteFactoryPresets:" target="240" id="1953"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -806,116 +809,17 @@ DQ
             <size key="minContentSize" width="100" height="50"/>
             <size key="maxContentSize" width="280" height="550"/>
             <connections>
-                <outlet property="contentView" destination="1843" id="1844"/>
                 <outlet property="parentWindow" destination="21" id="1842"/>
             </connections>
         </drawer>
-        <customView id="1843" userLabel="PresetsView">
-            <rect key="frame" x="0.0" y="0.0" width="270" height="550"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <subviews>
-                <popUpButton verticalHuggingPriority="750" id="5130">
-                    <rect key="frame" x="59" y="1" width="33" height="23"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="5131">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
-                        <menu key="menu" title="Presets Action Menu" id="5132">
-                            <items>
-                                <menuItem state="on" image="NSActionTemplate" hidden="YES" id="5133"/>
-                                <menuItem title="Make Default" id="5134">
-                                    <connections>
-                                        <action selector="setDefaultPreset:" target="240" id="5138"/>
-                                    </connections>
-                                </menuItem>
-                                <menuItem title="Update Built-in Presets" id="5135">
-                                    <connections>
-                                        <action selector="addFactoryPresets:" target="240" id="5139"/>
-                                    </connections>
-                                </menuItem>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                </popUpButton>
-                <button verticalHuggingPriority="750" id="4322">
-                    <rect key="frame" x="4" y="1" width="24" height="23"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="3" id="4933">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="systemBold"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="showAddPresetPanel:" target="240" id="4325"/>
-                    </connections>
-                </button>
-                <button verticalHuggingPriority="750" id="4317">
-                    <rect key="frame" x="27" y="1" width="24" height="23"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="left" borderStyle="border" inset="3" id="4932">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="systemBold"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="deletePreset:" target="240" id="4321"/>
-                    </connections>
-                </button>
-                <scrollView horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="4179">
-                    <rect key="frame" x="4" y="31" width="260" height="508"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <clipView key="contentView" id="R2Z-Tc-0TS">
-                        <rect key="frame" x="1" y="1" width="244" height="506"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" indentationPerLevel="12" autoresizesOutlineColumn="YES" outlineTableColumn="4183" id="4182" customClass="HBPresetsOutlineView">
-                                <rect key="frame" x="0.0" y="0.0" width="244" height="506"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <size key="intercellSpacing" width="3" height="2"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                <tableColumns>
-                                    <tableColumn identifier="PresetName" width="241" minWidth="40" maxWidth="1000" id="4183">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Presets">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
-                                        </tableHeaderCell>
-                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="4186">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                        <sortDescriptor key="sortDescriptorPrototype" selector="compare:" sortKey="PresetName"/>
-                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
-                                    </tableColumn>
-                                </tableColumns>
-                                <connections>
-                                    <action selector="selectPreset:" target="240" id="4312"/>
-                                    <outlet property="dataSource" destination="240" id="4188"/>
-                                    <outlet property="delegate" destination="240" id="4189"/>
-                                </connections>
-                            </outlineView>
-                        </subviews>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="4961">
-                        <rect key="frame" x="-100" y="-100" width="183" height="15"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </scroller>
-                    <scroller key="verticalScroller" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="4960">
-                        <rect key="frame" x="245" y="1" width="14" height="506"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </scroller>
-                </scrollView>
-            </subviews>
-        </customView>
         <window title="Create A New Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1867" userLabel="AddPresetPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="421" y="536" width="338" height="308"/>
+            <rect key="contentRect" x="421" y="536" width="338" height="281"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <value key="minSize" type="size" width="338" height="232"/>
             <view key="contentView" id="1868">
-                <rect key="frame" x="0.0" y="0.0" width="338" height="308"/>
+                <rect key="frame" x="0.0" y="0.0" width="338" height="281"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" id="1870">
@@ -947,7 +851,7 @@ Gw
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="1872">
-                        <rect key="frame" x="20" y="256" width="298" height="19"/>
+                        <rect key="frame" x="20" y="229" width="298" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="4936">
                             <font key="font" metaFont="smallSystem"/>
@@ -974,7 +878,7 @@ Gw
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="2670">
-                        <rect key="frame" x="17" y="279" width="303" height="14"/>
+                        <rect key="frame" x="17" y="252" width="303" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Preset Name:" id="4938">
                             <font key="font" metaFont="smallSystem"/>
@@ -1022,14 +926,6 @@ Gw
                         <rect key="frame" x="128" y="132" width="24" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="4943">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                    </button>
-                    <button hidden="YES" id="5153">
-                        <rect key="frame" x="17" y="230" width="303" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Preset Folder ( if checked disregard below )" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="5154">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -1218,7 +1114,6 @@ DQ
                 <outlet property="fOpenSourceTitleMMenu" destination="2698" id="2700"/>
                 <outlet property="fPresetDrawer" destination="1841" id="1889"/>
                 <outlet property="fPresetNewDesc" destination="2673" id="2674"/>
-                <outlet property="fPresetNewFolderCheck" destination="5153" id="5155"/>
                 <outlet property="fPresetNewName" destination="1872" id="1875"/>
                 <outlet property="fPresetNewPicFiltersCheck" destination="2837" id="2841"/>
                 <outlet property="fPresetNewPicHeight" destination="5551" id="5669"/>
@@ -1226,9 +1121,6 @@ DQ
                 <outlet property="fPresetNewPicWidth" destination="5549" id="5668"/>
                 <outlet property="fPresetNewPicWidthHeightBox" destination="5670" id="5671"/>
                 <outlet property="fPresetSelectedDisplay" destination="1882" id="1883"/>
-                <outlet property="fPresetsAdd" destination="4322" id="4324"/>
-                <outlet property="fPresetsDelete" destination="4317" id="4319"/>
-                <outlet property="fPresetsOutlineView" destination="4182" id="4187"/>
                 <outlet property="fQueueStatus" destination="2006" id="2007"/>
                 <outlet property="fRipIndicator" destination="1373" id="1374"/>
                 <outlet property="fScanHorizontalLine" destination="3205" id="6004"/>
@@ -1264,8 +1156,5 @@ DQ
     </objects>
     <resources>
         <image name="HandBrake.icns" width="128" height="128"/>
-        <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>

@@ -9,10 +9,12 @@
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
 #import "HBDVDDetector.h"
-#import "HBPresets.h"
+#import "HBPresetsManager.h"
 #import "HBPreviewController.h"
 #import "DockTextField.h"
 #import "HBUtilities.h"
+
+#import "HBPresetsViewController.h"
 
 #import "HBAudioSettings.h"
 
@@ -22,8 +24,6 @@ NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
 NSString *keyTitleTag                          = @"keyTitleTag";
 
 NSString *dragDropFiles                        = @"dragDropFiles";
-
-#define DragDropSimplePboardType                 @"MyCustomOutlineViewPboardType"
 
 NSString *dockTilePercentFormat                = @"%2.1f%%";
 // DockTile update freqency in total percent increment
@@ -40,6 +40,8 @@ static NSString *        ShowPreviewIdentifier              = @"Show Preview Win
 static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
 static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
+@interface HBController () <HBPresetsViewControllerDelegate>
+@end
 
 /*******************************
  * HBController implementation *
@@ -75,11 +77,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[HBPictureController alloc] init];
     fQueueController = [[HBQueueController alloc] init];
-    /* we init the HBPresets class which currently is only used
-     * for updating built in presets, may move more functionality
-     * there in the future
-     */
-    fPresetsBuiltin = [[HBPresets alloc] init];
+
+    /* we init the HBPresetsManager class */
+    NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
+    presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
+
     fPreferencesController = [[HBPreferencesController alloc] init];
     /* Lets report the HandBrake version number here to the activity log and text log file */
     NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
@@ -103,6 +105,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [iv addSubview:timeField];
     
     [self updateDockIcon:-1.0 withETA:@""];
+    
+    /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
+    int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+    fHandle = hb_init(loggingLevel, 0);
+    /* Optional dvd nav UseDvdNav*/
+    hb_dvd_set_dvdnav([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]);
+    /* Init a separate instance of libhb for user scanning and setting up jobs */
+    fQueueEncodeLibhb = hb_init(loggingLevel, 0);
 
     return self;
 }
@@ -171,14 +181,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
-    /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
-    int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
-    fHandle = hb_init(loggingLevel, 0);
-    /* Optional dvd nav UseDvdNav*/
-    hb_dvd_set_dvdnav([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]);
-    /* Init a separate instance of libhb for user scanning and setting up jobs */
-    fQueueEncodeLibhb = hb_init(loggingLevel, 0);
-    
 	// Set the Growl Delegate
     [GrowlApplicationBridge setGrowlDelegate: self];
     /* Init others controllers */
@@ -188,55 +190,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fQueueController   setHandle: fQueueEncodeLibhb];
     [fQueueController   setHBController: self];
 
-    // Set up the chapters title view
-    fChapterTitlesController = [[HBChapterTitlesController alloc] init];
-    [fChaptersTitlesView addSubview: [fChapterTitlesController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fChapterTitlesController view] setFrame: [fChaptersTitlesView bounds]];
-    [[fChapterTitlesController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
-
-    // setup the subtitles view
-    fSubtitlesViewController = [[HBSubtitlesController alloc] init];
-	[fSubtitlesView addSubview: [fSubtitlesViewController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fSubtitlesViewController view] setFrame: [fSubtitlesView bounds]];
-    [[fSubtitlesViewController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
-
-	// setup the audio controller
-    fAudioController = [[HBAudioController alloc] init];
-	[fAudioView addSubview: [fAudioController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fAudioController view] setFrame: [fAudioView bounds]];
-    [[fAudioController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
-
-    // setup the advanced view controller
-    fAdvancedOptions = [[HBAdvancedController alloc] init];
-	[fAdvancedView addSubview: [fAdvancedOptions view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fAudioController view] setFrame: [fAudioView bounds]];
-    [[fAudioController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
-
-    // setup the video view controller
-    fVideoController = [[HBVideoController alloc] init];
-    fVideoController.fAdvancedOptions = fAdvancedOptions;
-    fVideoController.fHBController = self;
-	[fVideoView addSubview: [fVideoController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fVideoController view] setFrame: [fVideoView bounds]];
-    [[fVideoController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
-
-    [fWindow recalculateKeyViewLoop];
-
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(autoSetM4vExtension:) name: HBMixdownChangedNotification object: nil];
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(updateMp4Checkboxes:) name: HBVideoEncoderChangedNotification object: nil];
-
-    [fPresetsOutlineView setAutosaveName:@"Presets View"];
-    [fPresetsOutlineView setAutosaveExpandedItems:YES];
     
     dockIconProgress = 0;
     
@@ -587,7 +542,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // When the application is closed and we still have some files in the dragDropFiles array
     // it's highly probable that the user throw a lot of files and just want to reset this
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
-    
+
+    [presetManager savePresets];
+
     [self closeQueueFSEvent];
     [currentQueueEncodeNameString release];
     [browsedSourceDisplayName release];
@@ -608,19 +565,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     [fWindow center];
     [fWindow setExcludedFromWindowsMenu:NO];
-
-    /* lets setup our presets drawer for drag and drop here */
-    [fPresetsOutlineView registerForDraggedTypes: [NSArray arrayWithObject:DragDropSimplePboardType] ];
-    [fPresetsOutlineView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
-    [fPresetsOutlineView setVerticalMotionCanBeginDrag: YES];
     
     /* Initialize currentScanCount so HB can use it to
      evaluate successive scans */
 	currentScanCount = 0;
-    
-    
-    /* Init UserPresets .plist */
-	[self loadPresets];
+
+    [self checkBuiltInsForUpdates];
 	
     fRipIndicatorShown = NO;  // initially out of view in the nib
     
@@ -696,13 +646,62 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
 	[self setupToolbar];
 
-	/* lets get our default prefs here */
-	[self getDefaultPresets:nil];
 	/* lets initialize the current successful scancount here to 0 */
 	currentSuccessfulScanCount = 0;
-    
+
     /* Register HBController's Window as a receiver for files/folders drag & drop operations */
     [fWindow registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+
+    // Set up the preset drawer
+    fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
+    [fPresetDrawer setContentView:[fPresetsView view]];
+    fPresetsView.delegate = self;
+
+    [[fPresetDrawer contentView] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    // Set up the chapters title view
+    fChapterTitlesController = [[HBChapterTitlesController alloc] init];
+    [fChaptersTitlesView addSubview: [fChapterTitlesController view]];
+
+    // make sure we automatically resize the controller's view to the current window size
+	[[fChapterTitlesController view] setFrame: [fChaptersTitlesView bounds]];
+    [[fChapterTitlesController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    // setup the subtitles view
+    fSubtitlesViewController = [[HBSubtitlesController alloc] init];
+	[fSubtitlesView addSubview: [fSubtitlesViewController view]];
+
+    // make sure we automatically resize the controller's view to the current window size
+	[[fSubtitlesViewController view] setFrame: [fSubtitlesView bounds]];
+    [[fSubtitlesViewController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+	// setup the audio controller
+    fAudioController = [[HBAudioController alloc] init];
+	[fAudioView addSubview: [fAudioController view]];
+
+    // make sure we automatically resize the controller's view to the current window size
+	[[fAudioController view] setFrame: [fAudioView bounds]];
+    [[fAudioController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    // setup the advanced view controller
+    fAdvancedOptions = [[HBAdvancedController alloc] init];
+	[fAdvancedView addSubview: [fAdvancedOptions view]];
+
+    // make sure we automatically resize the controller's view to the current window size
+	[[fAudioController view] setFrame: [fAudioView bounds]];
+    [[fAudioController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    // setup the video view controller
+    fVideoController = [[HBVideoController alloc] init];
+    fVideoController.fAdvancedOptions = fAdvancedOptions;
+    fVideoController.fHBController = self;
+	[fVideoView addSubview: [fVideoController view]];
+
+    // make sure we automatically resize the controller's view to the current window size
+	[[fVideoController view] setFrame: [fVideoView bounds]];
+    [[fVideoController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    [fWindow recalculateKeyViewLoop];
 }
 
 - (void) enableUI: (BOOL) b
@@ -713,8 +712,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fSrcChapterStartPopUp, fSrcChapterToField,
         fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
         fDstFormatField, fDstFormatPopUp, fDstFile1Field, fDstFile2Field,
-        fDstBrowseButton, fPresetsAdd, fPresetsDelete, fSrcAngleLabel,
-        fSrcAnglePopUp, fDstMp4LargeFileCheck, fPresetsOutlineView,
+        fDstBrowseButton, fSrcAngleLabel,
+        fSrcAnglePopUp, fDstMp4LargeFileCheck,
         fDstMp4HttpOptFileCheck, fDstMp4iPodFileCheck,
         fEncodeStartStopPopUp, fSrcTimeStartEncodingField,
         fSrcTimeEndEncodingField, fSrcFrameStartEncodingField,
@@ -743,11 +742,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected ??? */
         [self pictureSettingsDidChange];
     }
-    else 
-    {
-		[fPresetsOutlineView setEnabled: NO];
-    }
 
+    [fPresetsView setEnabled:b];
     [fVideoController enableUI:b];
     [fChapterTitlesController enableUI:b];
     [fSubtitlesViewController enableUI:b];
@@ -1491,7 +1487,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 return [fWindow attachedSheet] == nil;
         }
         if (action == @selector(selectDefaultPreset:))
-            return [fPresetsOutlineView selectedRow] >= 0 && [fWindow attachedSheet] == nil;
+            return [fWindow attachedSheet] == nil;
         if (action == @selector(Pause:))
         {
             if (s.state == HB_STATE_WORKING)
@@ -1526,10 +1522,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             else
                 return NO;
         }
-    }
-    if( action == @selector(setDefaultPreset:) )
-    {
-        return [fPresetsOutlineView selectedRow] != -1;
     }
 
     return YES;
@@ -2521,8 +2513,8 @@ fWorkingCount = 0;
     
     /* Lets get the preset info if there is any */
     [queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
-    
+    [queueFileJob setObject:[NSNumber numberWithInteger:fPresetsView.indexOfSelectedItem] forKey:@"PresetIndexNum"];
+
     [queueFileJob setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
     /* Chapter Markers*/
     /* If we are encoding by chapters and we have only one chapter or a title without chapters, set chapter markers to off.
@@ -3041,24 +3033,15 @@ fWorkingCount = 0;
     /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
     [fPictureController setTitle:fTitle];
     [self pictureSettingsDidChange];
-    
-    /* somehow we need to figure out a way to tie the queue item to a preset if it used one */
-    //[queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
-    //[queueFileJob setObject:[NSNumber numberWithInt:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
+
     if ([queueToApply objectForKey:@"PresetIndexNum"]) // This item used a preset so insert that info
 	{
-		/* Deselect the currently selected Preset if there is one*/
-        //[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[queueToApply objectForKey:@"PresetIndexNum"] intValue]] byExtendingSelection:NO];
-        //[self selectPreset:nil];
-		
-        //[fPresetsOutlineView selectRow:[[queueToApply objectForKey:@"PresetIndexNum"] intValue]];
-		/* Change UI to show "Custom" settings are being used */
-		//[fPresetSelectedDisplay setStringValue: [[queueToApply objectForKey:@"PresetName"] stringValue]];
+        /* somehow we need to figure out a way to tie the queue item to a preset if it used one */
 	}
     else
     {
         /* Deselect the currently selected Preset if there is one*/
-		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
+        [fPresetsView deselect];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
     }
@@ -4422,7 +4405,7 @@ fWorkingCount = 0;
 	}
 
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
-    [self selectPreset:nil];
+    [self applyPreset];
 }
 
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
@@ -4636,7 +4619,7 @@ the user is using "Custom" settings by determining the sender*/
 	if ([sender stringValue])
 	{
 		/* Deselect the currently selected Preset if there is one*/
-		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
+        [fPresetsView deselect];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
 	}
@@ -4911,337 +4894,17 @@ the user is using "Custom" settings by determining the sender*/
 	[fPictureController showPreviewWindow:sender];
 }
 
-#pragma mark -
-#pragma mark Preset Outline View Methods
-#pragma mark - Required
-/* These are required by the NSOutlineView Datasource Delegate */
+#pragma mark - Preset  Methods
 
-
-/* used to specify the number of levels to show for each item */
-- (NSInteger)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item
+- (void)applyPreset
 {
-    /* currently use no levels to test outline view viability */
-    if (item == nil) // for an outline view the root level of the hierarchy is always nil
-    {
-        return [UserPresets count];
-    }
-    else
-    {
-        /* we need to return the count of the array in ChildrenArray for this folder */
-        NSArray *children = nil;
-        children = [item objectForKey:@"ChildrenArray"];
-        if ([children count] > 0)
-        {
-            return [children count];
-        }
-        else
-        {
-            return 0;
-        }
-    }
-}
-
-/* We use this to deterimine children of an item */
-- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(NSInteger)index ofItem:(id)item
-{
-    
-    /* we need to return the count of the array in ChildrenArray for this folder */
-    NSArray *children = nil;
-    if (item == nil)
-    {
-        children = UserPresets;
-    }
-    else
-    {
-        if ([item objectForKey:@"ChildrenArray"])
-        {
-            children = [item objectForKey:@"ChildrenArray"];
-        }
-    }   
-    if ((children == nil) || ( [children count] <= (NSUInteger) index))
-    {
-        return nil;
-    }
-    else
-    {
-        return [children objectAtIndex:index];
-    }
-    
-    
-    // We are only one level deep, so we can't be asked about children
-    //NSAssert (NO, @"Presets View outlineView:child:ofItem: currently can't handle nested items.");
-    //return nil;
-}
-
-/* We use this to determine if an item should be expandable */
-- (BOOL)outlineView:(NSOutlineView *)fPresetsOutlineView isItemExpandable:(id)item
-{
-    /* To deterimine if an item should show a disclosure triangle
-     * we could do it by the children count as so:
-     * if ([children count] < 1)
-     * However, lets leave the triangle show even if there are no
-     * children to help indicate a folder, just like folder in the
-     * finder can show a disclosure triangle even when empty
-     */
-    
-    /* We need to determine if the item is a folder */
-    if ([[item objectForKey:@"Folder"] intValue] == 1)
-    {
-        return YES;
-    }
-    else
-    {
-        return NO;
-    }
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item
-{
-    // Our outline view has no levels, but we can still expand every item. Doing so
-    // just makes the row taller. See heightOfRowByItem below.
-//return ![(HBQueueOutlineView*)outlineView isDragging];
-
-return YES;
-}
-
-
-/* Used to tell the outline view which information is to be displayed per item */
-- (id)outlineView:(NSOutlineView *)fPresetsOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
-{
-	/* We have two columns right now, icon and PresetName */
-	
-    if ([[tableColumn identifier] isEqualToString:@"PresetName"])
-    {
-        return [item objectForKey:@"PresetName"];
-    }
-    else
-    {
-        //return @"";
-        return nil;
-    }
-}
-
-- (id)outlineView:(NSOutlineView *)outlineView itemForPersistentObject:(id)object
-{
-    return [NSKeyedUnarchiver unarchiveObjectWithData:object];
-}
-- (id)outlineView:(NSOutlineView *)outlineView persistentObjectForItem:(id)item
-{
-    return [NSKeyedArchiver archivedDataWithRootObject:item];
-}
-
-#pragma mark - Added Functionality (optional)
-/* Use to customize the font and display characteristics of the title cell */
-- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
-{
-    if ([[tableColumn identifier] isEqualToString:@"PresetName"])
-    {
-        NSFont *txtFont;
-        NSColor *fontColor;
-        txtFont = [NSFont systemFontOfSize: [NSFont smallSystemFontSize]];
-        /*check to see if its a selected row */
-        if ([fPresetsOutlineView selectedRow] == [fPresetsOutlineView rowForItem:item])
-        {
-            fontColor = [NSColor blackColor];
-        }
-        else
-        {
-            if ([[item objectForKey:@"Type"] intValue] == 0)
-            {
-                fontColor = [NSColor blueColor];
-            }
-            else // User created preset, use a black font
-            {
-                fontColor = [NSColor blackColor];
-            }
-            /* check to see if its a folder */
-            //if ([[item objectForKey:@"Folder"] intValue] == 1)
-            //{
-            //fontColor = [NSColor greenColor];
-            //}
-            
-            
-        }
-        /* We use bold text for the default preset */
-        if (presetUserDefault == nil &&                    // no User default found
-            [[item objectForKey:@"Default"] intValue] == 1)// 1 is HB default
-        {
-            txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
-        }
-        if ([[item objectForKey:@"Default"] intValue] == 2)// 2 is User default
-        {
-            txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
-        }
-        
-        
-        [cell setTextColor:fontColor];
-        [cell setFont:txtFont];
-        
-    }
-}
-
-/* We use this to edit the name field in the outline view */
-- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
-{
-    if ([[tableColumn identifier] isEqualToString:@"PresetName"])
-    {
-        id theRecord;
-        
-        theRecord = item;
-        [theRecord setObject:object forKey:@"PresetName"];
-        
-        [self sortPresets];
-        
-        [fPresetsOutlineView reloadData];
-        /* We save all of the preset data here */
-        [self savePreset];
-    }
-}
-/* We use this to provide tooltips for the items in the presets outline view */
-- (NSString *)outlineView:(NSOutlineView *)fPresetsOutlineView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc item:(id)item mouseLocation:(NSPoint)mouseLocation
-{
-    //if ([[tc identifier] isEqualToString:@"PresetName"])
-    //{
-        /* initialize the tooltip contents variable */
-        NSString *loc_tip;
-        /* if there is a description for the preset, we show it in the tooltip */
-        if ([item objectForKey:@"PresetDescription"])
-        {
-            loc_tip = [item objectForKey:@"PresetDescription"];
-            return (loc_tip);
-        }
-        else
-        {
-            loc_tip = @"No description available";
-        }
-        return (loc_tip);
-    //}
-}
-
-- (void) outlineViewSelectionDidChange: (NSNotification *) ignored
-
-{
-	[self willChangeValueForKey: @"hasValidPresetSelected"];
-	[self didChangeValueForKey: @"hasValidPresetSelected"];
-	return;
-}
-
-#pragma mark -
-#pragma mark Preset Outline View Methods (dragging related)
-
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
-{
-	// Dragging is only allowed for custom presets.
-    //[[[self selectedPreset] objectForKey:@"Default"] intValue] != 1
-    if ([[[self selectedPreset] objectForKey:@"Type"] intValue] == 0) // 0 is built in preset
-    {
-        return NO;
-    }
-    // Don't retain since this is just holding temporaral drag information, and it is
-    //only used during a drag!  We could put this in the pboard actually.
-    fDraggedNodes = items;
-    // Provide data for our custom type, and simple NSStrings.
-    [pboard declareTypes:[NSArray arrayWithObjects: DragDropSimplePboardType, nil] owner:self];
-    
-    // the actual data doesn't matter since DragDropSimplePboardType drags aren't recognized by anyone but us!.
-    [pboard setData:[NSData data] forType:DragDropSimplePboardType]; 
-    
-    return YES;
-}
-
-- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
-{
-	
-	// Don't allow dropping ONTO an item since they can't really contain any children.
-    
-    BOOL isOnDropTypeProposal = index == NSOutlineViewDropOnItemIndex;
-    if (isOnDropTypeProposal)
-        return NSDragOperationNone;
-    
-    // Don't allow dropping INTO an item since they can't really contain any children as of yet.
-	if (item != nil)
-	{
-		index = [fPresetsOutlineView rowForItem: item] + 1;
-		item = nil;
-	}
-    
-    // Don't allow dropping into the Built In Presets.
-    if (index < presetCurrentBuiltInCount)
-    {
-        return NSDragOperationNone;
-        index = MAX (index, presetCurrentBuiltInCount);
-	}    
-	
-    [outlineView setDropItem:item dropChildIndex:index];
-    return NSDragOperationGeneric;
-}
-
-
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
-{
-    /* first, lets see if we are dropping into a folder */
-    if ([[fPresetsOutlineView itemAtRow:index] objectForKey:@"Folder"] && [[[fPresetsOutlineView itemAtRow:index] objectForKey:@"Folder"] intValue] == 1) // if its a folder
-	{
-        NSMutableArray *childrenArray = [[fPresetsOutlineView itemAtRow:index] objectForKey:@"ChildrenArray"];
-        [childrenArray addObject:item];
-        [[fPresetsOutlineView itemAtRow:index] setObject:[NSMutableArray arrayWithArray: childrenArray] forKey:@"ChildrenArray"];
-    }
-    else // We are not, so we just move the preset into the existing array 
-    {
-        NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
-        id obj;
-        NSEnumerator *enumerator = [fDraggedNodes objectEnumerator];
-        while (obj = [enumerator nextObject])
-        {
-            [moveItems addIndex:[UserPresets indexOfObject:obj]];
-        }
-        // Successful drop, lets rearrange the view and save it all
-        [self moveObjectsInPresetsArray:UserPresets fromIndexes:moveItems toIndex: index];
-    }
-    [fPresetsOutlineView reloadData];
-    [self savePreset];
-    return YES;
-}
-
-- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex
-{
-    NSUInteger index = [indexSet lastIndex];
-    NSUInteger aboveInsertIndexCount = 0;
-    
-    NSUInteger removeIndex;
-
-    if (index >= insertIndex)
-    {
-        removeIndex = index + aboveInsertIndexCount;
-        aboveInsertIndexCount++;
-    }
-    else
-    {
-        removeIndex = index;
-        insertIndex--;
-    }
-
-    id object = [[array objectAtIndex:removeIndex] retain];
-    [array removeObjectAtIndex:removeIndex];
-    [array insertObject:object atIndex:insertIndex];
-    [object release];
-}
-
-
-
-#pragma mark - Functional Preset NSOutlineView Methods
-
-- (IBAction)selectPreset:(id)sender
-{
-    if (YES == [self hasValidPresetSelected])
+    if (fPresetsView.selectedPreset != nil)
     {
         hb_job_t * job = fTitle->job;
 
         // for mapping names via libhb
         const char *strValue;
-        chosenPreset = [self selectedPreset];
+        NSDictionary *chosenPreset = [fPresetsView.selectedPreset content];
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
 
         if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
@@ -5494,81 +5157,32 @@ return YES;
     [self pictureSettingsDidChange];
 }
 
+#pragma mark - Presets View Controller Delegate
 
-- (BOOL)hasValidPresetSelected
+- (void)selectionDidChange
 {
-    return ([fPresetsOutlineView selectedRow] >= 0 && [[[self selectedPreset] objectForKey:@"Folder"] intValue] != 1);
+    [self applyPreset];
 }
-
-
-- (id)selectedPreset
-{
-    return [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
-}
-
 
 #pragma mark -
 #pragma mark Manage Presets
 
-- (void) loadPresets {
-    /* We declare the default NSFileManager into fileManager */
-    NSFileManager * fileManager = [NSFileManager defaultManager];
-    /* We define the location of the user presets file */
-    UserPresetsFile = [[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"] retain];
-    /* We check for the presets.plist */
-    if ([fileManager fileExistsAtPath:UserPresetsFile] == 0)
-    {
-        [fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
-    }
-
-    UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
-    if (nil == UserPresets)
-    {
-        UserPresets = [[NSMutableArray alloc] init];
-        [self addFactoryPresets:nil];
-    }
-    [fPresetsOutlineView reloadData];
-    
-    [self checkBuiltInsForUpdates];
-}
-
-- (void) checkBuiltInsForUpdates {
-    
-    BOOL updateBuiltInPresets = NO;
-    int i = 0;
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-    id tempObject;
-    while (tempObject = [enumerator nextObject])
-    {
-        /* iterate through the built in presets to see if any have an old build number */
-        NSMutableDictionary *thisPresetDict = tempObject;
-        /*Key Type == 0 is built in, and key PresetBuildNumber is the build number it was created with */
-        if ([[thisPresetDict objectForKey:@"Type"] intValue] == 0)		
-        {
-			if (![thisPresetDict objectForKey:@"PresetBuildNumber"] || [[thisPresetDict objectForKey:@"PresetBuildNumber"] intValue] < [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue])
-            {
-                updateBuiltInPresets = YES;
-            }	
-		}
-        i++;
-    }
+- (void) checkBuiltInsForUpdates
+{
     /* if we have built in presets to update, then do so AlertBuiltInPresetUpdate*/
-    if ( updateBuiltInPresets == YES)
+    if ([presetManager checkBuiltInsForUpdates])
     {
         if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertBuiltInPresetUpdate"] == YES)
         {
             /* Show an alert window that built in presets will be updated */
             /*On Screen Notification*/
-            NSBeep();
             NSRunAlertPanel(@"HandBrake has determined your built in presets are out of date…",@"HandBrake will now update your built-in presets.", @"OK", nil, nil);
             [NSApp requestUserAttention:NSCriticalRequest];
         }
         /* when alert is dismissed, go ahead and update the built in presets */
-        [self addFactoryPresets:nil];
+        [presetManager generateBuiltInPresets];
     }
-    
 }
-
 
 - (IBAction) addPresetPicDropdownChanged: (id) sender
 {
@@ -5584,9 +5198,6 @@ return YES;
 
 - (IBAction) showAddPresetPanel: (id) sender
 {
-    /* Deselect the currently selected Preset if there is one*/
-    [fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
-
     /*
      * Populate the preset picture settings popup.
      *
@@ -5612,8 +5223,6 @@ return YES;
     [fPresetNewPicSettingsPopUp selectItemWithTag: (1 + (fTitle->job->anamorphic.mode == HB_ANAMORPHIC_STRICT))];
     /* Save the current filters in the preset by default */
     [fPresetNewPicFiltersCheck setState:NSOnState];
-    // fPresetNewFolderCheck
-    [fPresetNewFolderCheck setState:NSOffState];
     /* Erase info from the input fields*/
 	[fPresetNewName setStringValue: @""];
 	[fPresetNewDesc setStringValue: @""];
@@ -5636,54 +5245,16 @@ return YES;
 - (IBAction)addUserPreset:(id)sender
 {
     if (![[fPresetNewName stringValue] length])
+    {
             NSRunAlertPanel(@"Warning!", @"You need to insert a name for the preset.", @"OK", nil , nil);
+    }
     else
     {
         /* Here we create a custom user preset */
-        [UserPresets addObject:[self createPreset]];
-        [self addPreset];
+        [presetManager addPreset:[self createPreset]];
 
         [self closeAddPresetPanel:nil];
     }
-}
-- (void)addPreset
-{
-
-	
-	/* We Reload the New Table data for presets */
-    [fPresetsOutlineView reloadData];
-   /* We save all of the preset data here */
-    [self savePreset];
-}
-
-- (void)sortPresets
-{
-
-	
-	/* We Sort the Presets By Factory or Custom */
-	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
-                                                    ascending:YES] autorelease];
-	/* We Sort the Presets Alphabetically by name  We do not use this now as we have drag and drop*/
-	/*
-    NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
-                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	//NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
-    
-    */
-    /* Since we can drag and drop our custom presets, lets just sort by type and not name */
-    NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,nil];
-	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
-	[UserPresets setArray:sortedArray];
-	
-
-}
-
-- (IBAction)insertPreset:(id)sender
-{
-    NSInteger index = [fPresetsOutlineView selectedRow];
-    [UserPresets insertObject:[self createPreset] atIndex:index];
-    [fPresetsOutlineView reloadData];
-    [self savePreset];
 }
 
 - (NSDictionary *)createPreset
@@ -5695,142 +5266,75 @@ return YES;
 	/* Get the New Preset Name from the field in the AddPresetPanel */
     [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
     /* Set whether or not this is to be a folder fPresetNewFolderCheck*/
-    [preset setObject:[NSNumber numberWithBool:[fPresetNewFolderCheck state]] forKey:@"Folder"];
+    [preset setObject:[NSNumber numberWithBool:NO] forKey:@"Folder"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
-    if ([fPresetNewFolderCheck state] == YES)
-    {
-        /* initialize and set an empty array for children here since we are a new folder */
-        NSMutableArray *childrenArray = [[NSMutableArray alloc] init];
-        [preset setObject:[NSMutableArray arrayWithArray: childrenArray] forKey:@"ChildrenArray"];
-        [childrenArray autorelease];
-    }
-    else // we are not creating a preset folder, so we go ahead with the rest of the preset info
-    {
-        /*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
-        [preset setObject:[NSNumber numberWithInteger:[[fPresetNewPicSettingsPopUp selectedItem] tag]] forKey:@"UsesPictureSettings"];
-        /* Get whether or not to use the current Picture Filter settings for the preset */
-        [preset setObject:[NSNumber numberWithInteger:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
 
-        /* Get New Preset Description from the field in the AddPresetPanel*/
-        [preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
-        /* File Format */
-        [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
-        /* Chapter Markers fCreateChapterMarkers*/
-        [preset setObject:@(fChapterTitlesController.createChapterMarkers) forKey:@"ChapterMarkers"];
-        /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-        [preset setObject:[NSNumber numberWithInteger:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
-        /* Mux mp4 with http optimization */
-        [preset setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
-        /* Add iPod uuid atom */
-        [preset setObject:[NSNumber numberWithInteger:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
-        
-        /* Codecs */
-        /* Video encoder */
-        [fVideoController prepareVideoForPreset:preset];
+    /*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
+    [preset setObject:[NSNumber numberWithInteger:[[fPresetNewPicSettingsPopUp selectedItem] tag]] forKey:@"UsesPictureSettings"];
+    /* Get whether or not to use the current Picture Filter settings for the preset */
+    [preset setObject:[NSNumber numberWithInteger:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
 
-        /*Picture Settings*/
-        hb_job_t * job = fTitle->job;
-        
-        /* Picture Sizing */
-        [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
-        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicWidth intValue]] forKey:@"PictureWidth"];
-        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicHeight intValue]] forKey:@"PictureHeight"];
-        [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
-        [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
-        [preset setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
+    /* Get New Preset Description from the field in the AddPresetPanel*/
+    [preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
+    /* File Format */
+    [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
+    /* Chapter Markers fCreateChapterMarkers*/
+    [preset setObject:@(fChapterTitlesController.createChapterMarkers) forKey:@"ChapterMarkers"];
+    /* Allow Mpeg4 64 bit formatting +4GB file sizes */
+    [preset setObject:[NSNumber numberWithInteger:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
+    /* Mux mp4 with http optimization */
+    [preset setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
+    /* Add iPod uuid atom */
+    [preset setObject:[NSNumber numberWithInteger:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
+    
+    /* Codecs */
+    /* Video encoder */
+    [fVideoController prepareVideoForPreset:preset];
 
-        /* Set crop settings here */
-        [preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
-        [preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-        [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-        [preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-        [preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
-        
-        /* Picture Filters */
-        [preset setObject:[NSNumber numberWithInteger:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
-        [preset setObject:[NSNumber numberWithInteger:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
-        [preset setObject:[fPictureController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
-        [preset setObject:[NSNumber numberWithInteger:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-        [preset setObject:[fPictureController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
-        [preset setObject:[NSNumber numberWithInteger:[fPictureController denoise]] forKey:@"PictureDenoise"];
-        [preset setObject:[fPictureController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
-        [preset setObject:[NSNumber numberWithInteger:[fPictureController deblock]] forKey:@"PictureDeblock"];
-        [preset setObject:[NSNumber numberWithInteger:[fPictureController decomb]] forKey:@"PictureDecomb"];
-        [preset setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
-        [preset setObject:[NSNumber numberWithInteger:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
+    /*Picture Settings*/
+    hb_job_t * job = fTitle->job;
+    
+    /* Picture Sizing */
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
+    [preset setObject:[NSNumber numberWithInt:[fPresetNewPicWidth intValue]] forKey:@"PictureWidth"];
+    [preset setObject:[NSNumber numberWithInt:[fPresetNewPicHeight intValue]] forKey:@"PictureHeight"];
+    [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
+    [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
+    [preset setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
 
-        /* Audio */
-        [fAudioController.settings prepareAudioForPreset:preset];
+    /* Set crop settings here */
+    [preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
+    [preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
+    [preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
+    [preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+    
+    /* Picture Filters */
+    [preset setObject:[NSNumber numberWithInteger:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
+    [preset setObject:[NSNumber numberWithInteger:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
+    [preset setObject:[fPictureController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
+    [preset setObject:[NSNumber numberWithInteger:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+    [preset setObject:[fPictureController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
+    [preset setObject:[NSNumber numberWithInteger:[fPictureController denoise]] forKey:@"PictureDenoise"];
+    [preset setObject:[fPictureController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
+    [preset setObject:[NSNumber numberWithInteger:[fPictureController deblock]] forKey:@"PictureDeblock"];
+    [preset setObject:[NSNumber numberWithInteger:[fPictureController decomb]] forKey:@"PictureDecomb"];
+    [preset setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
+    [preset setObject:[NSNumber numberWithInteger:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
 
-        /* Subtitles */
-        [fSubtitlesViewController prepareSubtitlesForPreset:preset];
-    }
+    /* Audio */
+    [fAudioController.settings prepareAudioForPreset:preset];
+
+    /* Subtitles */
+    [fSubtitlesViewController prepareSubtitlesForPreset:preset];
+
     [preset autorelease];
     return preset;
     
 }
-
-- (void)savePreset
-{
-    [UserPresets writeToFile:UserPresetsFile atomically:YES];
-	/* We get the default preset in case it changed */
-	[self getDefaultPresets:nil];
-
-}
-
-- (IBAction)deletePreset:(id)sender
-{
-    
-    
-    if ( [fPresetsOutlineView numberOfSelectedRows] == 0 )
-    {
-        return;
-    }
-    /* Alert user before deleting preset */
-    NSInteger status;
-    status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
-
-    if ( status == NSAlertDefaultReturn )
-    {
-        NSInteger presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
-        NSDictionary *presetToMod = [self selectedPreset];
-        NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
-
-        NSEnumerator *enumerator;
-        NSMutableArray *presetsArrayToMod;
-        NSMutableArray *tempArray;
-        id tempObject;
-        /* If we are a root level preset, we are modding the UserPresets array */
-        if (presetToModLevel == 0)
-        {
-            presetsArrayToMod = UserPresets;
-        }
-        else // We have a parent preset, so we modify the chidren array object for key
-        {
-            presetsArrayToMod = [presetToModParent objectForKey:@"ChildrenArray"]; 
-        }
-        
-        enumerator = [presetsArrayToMod objectEnumerator];
-        tempArray = [NSMutableArray array];
-        
-        while (tempObject = [enumerator nextObject]) 
-        {
-            NSDictionary *thisPresetDict = tempObject;
-            if (thisPresetDict == presetToMod)
-            {
-                [tempArray addObject:tempObject];
-            }
-        }
-        
-        [presetsArrayToMod removeObjectsInArray:tempArray];
-        [fPresetsOutlineView reloadData];
-        [self savePreset];   
-    }
-}
-
 
 #pragma mark -
 #pragma mark Import Export Preset(s)
@@ -5838,56 +5342,49 @@ return YES;
 - (IBAction) browseExportPresetFile: (id) sender
 {
     /* Open a panel to let the user choose where and how to save the export file */
-    NSSavePanel * panel = [NSSavePanel savePanel];
+    NSSavePanel *panel = [NSSavePanel savePanel];
 	/* We get the current file name and path from the destination field here */
     NSString *defaultExportDirectory = [NSString stringWithFormat: @"%@/Desktop/", NSHomeDirectory()];
     [panel setDirectoryURL:[NSURL fileURLWithPath:defaultExportDirectory]];
     [panel setNameFieldStringValue:@"HB_Export.plist"];
     [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
-        [self browseExportPresetFileDone:panel returnCode: (int)result contextInfo:sender];
+        if( result == NSOKButton )
+        {
+            NSURL *exportPresetsFile = [panel URL];
+            NSURL *presetExportDirectory = [exportPresetsFile URLByDeletingLastPathComponent];
+            [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
+
+            /* We check for the presets.plist */
+            if ([[NSFileManager defaultManager] fileExistsAtPath:[exportPresetsFile path]] == 0)
+            {
+                [[NSFileManager defaultManager] createFileAtPath:[exportPresetsFile path] contents:nil attributes:nil];
+            }
+
+            NSMutableArray *presetsToExport = [[[NSMutableArray alloc] initWithContentsOfURL:exportPresetsFile] autorelease];
+            if (presetsToExport == nil)
+            {
+                presetsToExport = [[NSMutableArray alloc] init];
+                /* now get and add selected presets to export */
+            }
+            if (fPresetsView.selectedPreset != nil)
+            {
+                [presetsToExport addObject:[fPresetsView.selectedPreset content]];
+                [presetsToExport writeToURL:exportPresetsFile atomically:YES];
+            }
+        }
     }];
 }
 
-- (void) browseExportPresetFileDone: (NSSavePanel *) sheet
-                   returnCode: (int) returnCode contextInfo: (void *) contextInfo
+- (IBAction)browseImportPresetFile:(id)sender
 {
-    if( returnCode == NSOKButton )
-    {
-        NSURL *exportPresetsFile = [sheet URL];
-        NSURL *presetExportDirectory = [exportPresetsFile URLByDeletingLastPathComponent];
-        [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
+    NSOpenPanel *panel;
 
-        /* We check for the presets.plist */
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[exportPresetsFile path]] == 0)
-        {
-            [[NSFileManager defaultManager] createFileAtPath:[exportPresetsFile path] contents:nil attributes:nil];
-        }
-
-        NSMutableArray *presetsToExport = [[[NSMutableArray alloc] initWithContentsOfURL:exportPresetsFile] autorelease];
-        if (presetsToExport == nil)
-        {
-            presetsToExport = [[NSMutableArray alloc] init];
-            /* now get and add selected presets to export */
-
-        }
-        if ([self hasValidPresetSelected])
-        {
-            [presetsToExport addObject:[self selectedPreset]];
-            [presetsToExport writeToURL:exportPresetsFile atomically:YES];
-        }
-    }
-}
-
-
-- (IBAction) browseImportPresetFile: (id) sender
-{
-
-    NSOpenPanel * panel;
-	
     panel = [NSOpenPanel openPanel];
-    [panel setAllowsMultipleSelection: NO];
-    [panel setCanChooseFiles: YES];
-    [panel setCanChooseDirectories: NO ];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setCanChooseFiles:YES];
+    [panel setCanChooseDirectories:NO];
+    [panel setAllowedFileTypes:@[@"plist", @"xml"]];
+
     NSURL *sourceDirectory;
 	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"])
 	{
@@ -5901,366 +5398,52 @@ return YES;
         * to evaluate whether we want to specify a title, we pass the sender in the contextInfo variable
         */
     /* set this for allowed file types, not sure if we should allow xml or not */
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"xml", nil];
     [panel setDirectoryURL:sourceDirectory];
-    [panel setAllowedFileTypes:fileTypes];
-    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
-        [self browseImportPresetDone:panel returnCode:(int)result contextInfo:sender];
-    }];
-}
-
-- (void) browseImportPresetDone: (NSSavePanel *) sheet
-                     returnCode: (int) returnCode contextInfo: (void *) contextInfo
-{
-    if( returnCode == NSOKButton )
+    [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result)
     {
-        NSURL *importPresetsFile = [sheet URL];
+        NSURL *importPresetsFile = [panel URL];
         NSURL *importPresetsDirectory = nil;//[importPresetsFile URLByDeletingLastPathComponent];
         [[NSUserDefaults standardUserDefaults] setURL:importPresetsDirectory forKey:@"LastPresetImportDirectoryURL"];
 
         /* NOTE: here we need to do some sanity checking to verify we do not hose up our presets file   */
         NSMutableArray * presetsToImport = [[NSMutableArray alloc] initWithContentsOfURL:importPresetsFile];
         /* iterate though the new array of presets to import and add them to our presets array */
-        int i = 0;
-        NSEnumerator *enumerator = [presetsToImport objectEnumerator];
-        id tempObject;
-        while (tempObject = [enumerator nextObject])
+        for (id tempObject in presetsToImport)
         {
             /* make any changes to the incoming preset we see fit */
             /* make sure the incoming preset is not tagged as default */
             [tempObject setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
             /* prepend "(imported) to the name of the incoming preset for clarification since it can be changed */
-            NSString * prependedName = [@"(import) " stringByAppendingString:[tempObject objectForKey:@"PresetName"]] ;
+            NSString *prependedName = [@"(import) " stringByAppendingString:[tempObject objectForKey:@"PresetName"]] ;
             [tempObject setObject:prependedName forKey:@"PresetName"];
             
             /* actually add the new preset to our presets array */
-            [UserPresets addObject:tempObject];
-            i++;
+            [presetManager addPreset:tempObject];
         }
         [presetsToImport autorelease];
-        [self sortPresets];
-        [self addPreset];
-        
-    }
+    }];
 }
 
 #pragma mark -
 #pragma mark Manage Default Preset
 
-- (IBAction)getDefaultPresets:(id)sender
-{
-	presetHbDefault = nil;
-    presetUserDefault = nil;
-    presetUserDefaultParent = nil;
-    presetUserDefaultParentParent = nil;
-    NSMutableDictionary *presetHbDefaultParent = nil;
-    NSMutableDictionary *presetHbDefaultParentParent = nil;
-    
-    int i = 0;
-    BOOL userDefaultFound = NO;
-    presetCurrentBuiltInCount = 0;
-    /* First we iterate through the root UserPresets array to check for defaults */
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-	id tempObject;
-	while (tempObject = [enumerator nextObject])
-	{
-		NSMutableDictionary *thisPresetDict = tempObject;
-		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
-		{
-			presetHbDefault = thisPresetDict;	
-		}
-		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
-		{
-			presetUserDefault = thisPresetDict;
-            userDefaultFound = YES;
-        }
-        if ([[thisPresetDict objectForKey:@"Type"] intValue] == 0) // Type 0 is a built in preset		
-        {
-			presetCurrentBuiltInCount++; // <--increment the current number of built in presets	
-		}
-		i++;
-        
-        /* if we run into a folder, go to level 1 and iterate through the children arrays for the default */
-        if ([thisPresetDict objectForKey:@"ChildrenArray"])
-        {
-            NSMutableDictionary *thisPresetDictParent = thisPresetDict;
-            NSEnumerator *enumerator = [[thisPresetDict objectForKey:@"ChildrenArray"] objectEnumerator];
-            id tempObject;
-            while (tempObject = [enumerator nextObject])
-            {
-                NSMutableDictionary *thisPresetDict = tempObject;
-                if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
-                {
-                    presetHbDefault = thisPresetDict;
-                    presetHbDefaultParent = thisPresetDictParent;
-                }
-                if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
-                {
-                    presetUserDefault = thisPresetDict;
-                    presetUserDefaultParent = thisPresetDictParent;
-                    userDefaultFound = YES;
-                }
-                
-                /* if we run into a folder, go to level 2 and iterate through the children arrays for the default */
-                if ([thisPresetDict objectForKey:@"ChildrenArray"])
-                {
-                    NSMutableDictionary *thisPresetDictParentParent = thisPresetDict;
-                    NSEnumerator *enumerator = [[thisPresetDict objectForKey:@"ChildrenArray"] objectEnumerator];
-                    id tempObject;
-                    while (tempObject = [enumerator nextObject])
-                    {
-                        NSMutableDictionary *thisPresetDict = tempObject;
-                        if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
-                        {
-                            presetHbDefault = thisPresetDict;
-                            presetHbDefaultParent = thisPresetDictParent;
-                            presetHbDefaultParentParent = thisPresetDictParentParent;	
-                        }
-                        if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
-                        {
-                            presetUserDefault = thisPresetDict;
-                            presetUserDefaultParent = thisPresetDictParent;
-                            presetUserDefaultParentParent = thisPresetDictParentParent;
-                            userDefaultFound = YES;	
-                        }
-                        
-                    }
-                }
-            }
-        }
-        
-	}
-    /* check to see if a user specified preset was found, if not then assign the parents for
-     * the presetHbDefault so that we can open the parents for the nested presets
-     */
-    if (userDefaultFound == NO)
-    {
-        presetUserDefaultParent = presetHbDefaultParent;
-        presetUserDefaultParentParent = presetHbDefaultParentParent;
-    }
-}
-
-- (IBAction)setDefaultPreset:(id)sender
-{
-/* We need to determine if the item is a folder */
-   if ([[[self selectedPreset] objectForKey:@"Folder"] intValue] == 1)
-   {
-   return;
-   }
-
-    int i = 0;
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-    id tempObject;
-    /* First make sure the old user specified default preset is removed */
-    while (tempObject = [enumerator nextObject])
-    {
-        NSMutableDictionary *thisPresetDict = tempObject;
-        if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
-        {
-            [[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
-        }
-		
-        /* if we run into a folder, go to level 1 and iterate through the children arrays for the default */
-        if ([thisPresetDict objectForKey:@"ChildrenArray"])
-        {
-            NSEnumerator *enumerator = [[thisPresetDict objectForKey:@"ChildrenArray"] objectEnumerator];
-            id tempObject;
-            int ii = 0;
-            while (tempObject = [enumerator nextObject])
-            {
-                NSMutableDictionary *thisPresetDict1 = tempObject;
-                if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
-                {
-                    [[[thisPresetDict objectForKey:@"ChildrenArray"] objectAtIndex:ii] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
-                }
-                /* if we run into a folder, go to level 2 and iterate through the children arrays for the default */
-                if ([thisPresetDict1 objectForKey:@"ChildrenArray"])
-                {
-                    NSEnumerator *enumerator = [[thisPresetDict1 objectForKey:@"ChildrenArray"] objectEnumerator];
-                    id tempObject;
-                    int iii = 0;
-                    while (tempObject = [enumerator nextObject])
-                    {
-                        if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
-                        {
-                            [[[thisPresetDict1 objectForKey:@"ChildrenArray"] objectAtIndex:iii] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
-                        }
-                        iii++;
-                    }
-                }
-                ii++;
-            }
-
-        }
-        i++;
-	}
-
-
-    NSInteger presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
-    NSDictionary *presetToMod = [self selectedPreset];
-    NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
-
-
-    NSMutableArray *presetsArrayToMod;
-
-    /* If we are a root level preset, we are modding the UserPresets array */
-    if (presetToModLevel == 0)
-    {
-        presetsArrayToMod = UserPresets;
-    }
-    else // We have a parent preset, so we modify the chidren array object for key
-    {
-        presetsArrayToMod = [presetToModParent objectForKey:@"ChildrenArray"]; 
-    }
-    
-    enumerator = [presetsArrayToMod objectEnumerator];
-    int iiii = 0;
-    while (tempObject = [enumerator nextObject]) 
-    {
-        NSDictionary *thisPresetDict = tempObject;
-        if (thisPresetDict == presetToMod)
-        {
-            if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 2
-            {
-                [[presetsArrayToMod objectAtIndex:iiii] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];	
-            }
-        }
-     iiii++;
-     }
-    
-    
-    /* We save all of the preset data here */
-    [self savePreset];
-    /* We Reload the New Table data for presets */
-    [fPresetsOutlineView reloadData];
-}
-
 - (IBAction)selectDefaultPreset:(id)sender
 {
-	NSMutableDictionary *presetToMod;
-    /* if there is a user specified default, we use it */
-	if (presetUserDefault)
-	{
-        presetToMod = presetUserDefault;
-    }
-	else if (presetHbDefault) //else we use the built in default presetHbDefault
-	{
-        presetToMod = presetHbDefault;
-	}
-    else
-    {
-    return;
-    }
-    
-    if (presetUserDefaultParent != nil)
-    {
-        [fPresetsOutlineView expandItem:presetUserDefaultParent];
-        
-    }
-    if (presetUserDefaultParentParent != nil)
-    {
-        [fPresetsOutlineView expandItem:presetUserDefaultParentParent];
-        
-    }
-    
-    [fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[fPresetsOutlineView rowForItem: presetToMod]] byExtendingSelection:NO];
-	[self selectPreset:nil];
+	[fPresetsView selectDefaultPreset];
 }
-
 
 #pragma mark -
 #pragma mark Manage Built In Presets
 
-
 - (IBAction)deleteFactoryPresets:(id)sender
 {
-    //int status;
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-	id tempObject;
-    
-	//NSNumber *index;
-    NSMutableArray *tempArray;
-
-
-        tempArray = [NSMutableArray array];
-        /* we look here to see if the preset is we move on to the next one */
-        while ( tempObject = [enumerator nextObject] )  
-		{
-			/* if the preset is "Factory" then we put it in the array of
-			presets to delete */
-			if ([[tempObject objectForKey:@"Type"] intValue] == 0)
-			{
-				[tempArray addObject:tempObject];
-			}
-        }
-        
-        [UserPresets removeObjectsInArray:tempArray];
-        [fPresetsOutlineView reloadData];
-        [self savePreset];   
-
+    [presetManager deleteBuiltInPresets];
 }
 
    /* We use this method to recreate new, updated factory presets */
 - (IBAction)addFactoryPresets:(id)sender
 {
-    
-    /* First, we delete any existing built in presets */
-    [self deleteFactoryPresets: sender];
-    /* Then we generate new built in presets programmatically with fPresetsBuiltin
-     * which is all setup in HBPresets.h and  HBPresets.m*/
-    [fPresetsBuiltin generateBuiltinPresets:UserPresets];
-    /* update build number for built in presets */
-    /* iterate though the new array of presets to import and add them to our presets array */
-    int i = 0;
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-    id tempObject;
-    while (tempObject = [enumerator nextObject])
-    {
-        /* Record the apps current build number in the PresetBuildNumber key */
-        if ([[tempObject objectForKey:@"Type"] intValue] == 0) // Type 0 is a built in preset		
-        {
-            /* Preset build number */
-            [[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:[[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]] forKey:@"PresetBuildNumber"];
-        }
-        i++;
-    }
-    /* report the built in preset updating to the activity log */
-    [HBUtilities writeToActivityLog: "built in presets updated to build number: %d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
-    
-    [self sortPresets];
-    [self addPreset];
-    
+    [presetManager generateBuiltInPresets];
 }
 
-@end
-
-/*******************************
- * Subclass of the HBPresetsOutlineView *
- *******************************/
-
-@implementation HBPresetsOutlineView
-- (NSImage *)dragImageForRowsWithIndexes:(NSIndexSet *)dragRows tableColumns:(NSArray *)tableColumns event:(NSEvent*)dragEvent offset:(NSPointPointer)dragImageOffset
-{
-    fIsDragging = YES;
-
-    // By default, NSTableView only drags an image of the first column. Change this to
-    // drag an image of the queue's icon and PresetName columns.
-    NSArray * cols = [NSArray arrayWithObjects: [self tableColumnWithIdentifier:@"PresetName"], nil];
-    return [super dragImageForRowsWithIndexes:dragRows tableColumns:cols event:dragEvent offset:dragImageOffset];
-}
-
-
-
-- (void) mouseDown:(NSEvent *)theEvent
-{
-    [super mouseDown:theEvent];
-	fIsDragging = NO;
-}
-
-
-
-- (BOOL) isDragging;
-{
-    return fIsDragging;
-}
 @end

@@ -30,7 +30,7 @@
 		273F20B314ADBE670021BE6D /* HBOutputPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209C14ADBE670021BE6D /* HBOutputPanelController.m */; };
 		273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
 		273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A014ADBE670021BE6D /* HBPreferencesController.m */; };
-		273F20B614ADBE670021BE6D /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A214ADBE670021BE6D /* HBPresets.m */; };
+		273F20B614ADBE670021BE6D /* HBPresetsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A214ADBE670021BE6D /* HBPresetsManager.m */; };
 		273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A414ADBE670021BE6D /* HBPreviewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A614ADBE670021BE6D /* HBQueueController.mm */; };
 		273F20BA14ADBE670021BE6D /* PictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20AA14ADBE670021BE6D /* PictureController.m */; };
@@ -127,6 +127,9 @@
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
 		A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AA44791970664A00D7DEFC /* HBUtilities.m */; };
 		A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9C0DB83197E7B0000DF55B3 /* SubtitlesDefaults.xib */; };
+		A9CF25F11990D62C0023F727 /* Presets.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9CF25EF1990D62C0023F727 /* Presets.xib */; };
+		A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F31990D64E0023F727 /* HBPreset.m */; };
+		A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F61990D6820023F727 /* HBPresetsViewController.m */; };
 		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
 		A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */; };
 		A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC6C54196F0517002AE6B4 /* Subtitles.xib */; };
@@ -246,8 +249,8 @@
 		273F209E14ADBE670021BE6D /* HBOutputRedirect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputRedirect.m; sourceTree = "<group>"; };
 		273F209F14ADBE670021BE6D /* HBPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreferencesController.h; sourceTree = "<group>"; };
 		273F20A014ADBE670021BE6D /* HBPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreferencesController.m; sourceTree = "<group>"; };
-		273F20A114ADBE670021BE6D /* HBPresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresets.h; sourceTree = "<group>"; };
-		273F20A214ADBE670021BE6D /* HBPresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresets.m; sourceTree = "<group>"; };
+		273F20A114ADBE670021BE6D /* HBPresetsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresetsManager.h; sourceTree = "<group>"; };
+		273F20A214ADBE670021BE6D /* HBPresetsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsManager.m; sourceTree = "<group>"; };
 		273F20A314ADBE670021BE6D /* HBPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewController.h; sourceTree = "<group>"; };
 		273F20A414ADBE670021BE6D /* HBPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewController.m; sourceTree = "<group>"; };
 		273F20A614ADBE670021BE6D /* HBQueueController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = HBQueueController.mm; sourceTree = "<group>"; };
@@ -324,6 +327,7 @@
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
 		A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBChapterTitlesController.h; sourceTree = "<group>"; };
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
+		A919C7AC199369180049E6A3 /* HBViewValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBViewValidation.h; sourceTree = "<group>"; };
 		A932E26B1988334B0047D13E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AudioDefaults.xib; sourceTree = "<group>"; };
 		A932E26D198833920047D13E /* HBAudioDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaultsController.h; sourceTree = "<group>"; };
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
@@ -342,6 +346,11 @@
 		A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewGenerator.h; sourceTree = "<group>"; };
 		A9B34D74197696FE00871B7D /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
 		A9C0DB84197E7B0000DF55B3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = SubtitlesDefaults.xib; sourceTree = "<group>"; };
+		A9CF25F01990D62C0023F727 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Presets.xib; sourceTree = "<group>"; };
+		A9CF25F21990D64E0023F727 /* HBPreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreset.h; sourceTree = "<group>"; };
+		A9CF25F31990D64E0023F727 /* HBPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreset.m; sourceTree = "<group>"; };
+		A9CF25F51990D6820023F727 /* HBPresetsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresetsViewController.h; sourceTree = "<group>"; };
+		A9CF25F61990D6820023F727 /* HBPresetsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsViewController.m; sourceTree = "<group>"; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
 		A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesController.h; sourceTree = SOURCE_ROOT; };
 		A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesController.m; sourceTree = SOURCE_ROOT; };
@@ -664,6 +673,7 @@
 			children = (
 				273F217C14ADDDA10021BE6D /* InfoPlist.strings */,
 				273F217E14ADDDA10021BE6D /* MainMenu.xib */,
+				A9CF25EF1990D62C0023F727 /* Presets.xib */,
 				A93E0ED51972958C00FD67FB /* Video.xib */,
 				A9F2EB6D196F12C800066546 /* Audio.xib */,
 				A932E26A1988334B0047D13E /* AudioDefaults.xib */,
@@ -745,8 +755,10 @@
 		A98C29C51977C00000AF5DED /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				273F20A114ADBE670021BE6D /* HBPresets.h */,
-				273F20A214ADBE670021BE6D /* HBPresets.m */,
+				273F20A114ADBE670021BE6D /* HBPresetsManager.h */,
+				273F20A214ADBE670021BE6D /* HBPresetsManager.m */,
+				A9CF25F21990D64E0023F727 /* HBPreset.h */,
+				A9CF25F31990D64E0023F727 /* HBPreset.m */,
 				A932E271198834130047D13E /* HBAudioSettings.h */,
 				A932E272198834130047D13E /* HBAudioSettings.m */,
 				A9F4728B1976BAA70009EC65 /* HBSubtitlesSettings.h */,
@@ -782,6 +794,8 @@
 		A9B34D701976841800871B7D /* Main Window View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A9CF25F51990D6820023F727 /* HBPresetsViewController.h */,
+				A9CF25F61990D6820023F727 /* HBPresetsViewController.m */,
 				A93E0ED01972957000FD67FB /* HBVideoController.h */,
 				A93E0ED11972957000FD67FB /* HBVideoController.m */,
 				A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */,
@@ -796,6 +810,7 @@
 				A9F472851976B7AA0009EC65 /* Subtitles Defaults */,
 				A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */,
 				A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */,
+				A919C7AC199369180049E6A3 /* HBViewValidation.h */,
 			);
 			name = "Main Window View Controllers";
 			sourceTree = "<group>";
@@ -926,6 +941,7 @@
 				273F215B14ADCBF80021BE6D /* JobPassFirstSmall.png in Resources */,
 				273F215D14ADCBF80021BE6D /* JobPassSecondSmall.png in Resources */,
 				273F215F14ADCBF80021BE6D /* JobPassSubtitleSmall.png in Resources */,
+				A9CF25F11990D62C0023F727 /* Presets.xib in Resources */,
 				273F216014ADCBF80021BE6D /* JobPassUnknownSmall.png in Resources */,
 				273F216114ADCBF80021BE6D /* JobSmall.png in Resources */,
 				273F216714ADCBF80021BE6D /* Reveal.png in Resources */,
@@ -1010,14 +1026,16 @@
 				273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */,
 				A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */,
 				A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */,
+				A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */,
 				A9F4728D1976BAA70009EC65 /* HBSubtitlesSettings.m in Sources */,
 				A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */,
-				273F20B614ADBE670021BE6D /* HBPresets.m in Sources */,
+				273F20B614ADBE670021BE6D /* HBPresetsManager.m in Sources */,
 				273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */,
 				A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */,
 				A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */,
 				273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */,
 				273F20BA14ADBE670021BE6D /* PictureController.m in Sources */,
+				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
 				273F20BE14ADC09F0021BE6D /* main.mm in Sources */,
 				A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */,
 				A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */,
@@ -1135,6 +1153,14 @@
 				A9C0DB84197E7B0000DF55B3 /* English */,
 			);
 			name = SubtitlesDefaults.xib;
+			sourceTree = "<group>";
+		};
+		A9CF25EF1990D62C0023F727 /* Presets.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9CF25F01990D62C0023F727 /* English */,
+			);
+			name = Presets.xib;
 			sourceTree = "<group>";
 		};
 		A9DC6C54196F0517002AE6B4 /* Subtitles.xib */ = {
