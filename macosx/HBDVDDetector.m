@@ -83,11 +83,11 @@
     struct statfs s;
     statfs([path fileSystemRepresentation], &s);
 
-    bsdName = [NSString stringWithUTF8String:s.f_mntfromname];
+    bsdName = @(s.f_mntfromname);
 
     if ([bsdName hasPrefix:@"/dev/"])
     {
-        bsdName = [bsdName stringByReplacingCharactersInRange:NSMakeRange(0, 5) withString:@""];
+        bsdName = [bsdName substringFromIndex:5];
     }
 
     return [bsdName retain];
