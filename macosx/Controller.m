@@ -503,7 +503,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
     hb_state_t s;
-    hb_get_state( fQueueEncodeLibhb, &s );
+    hb_get_state2( fQueueEncodeLibhb, &s );
     
     if ( s.state != HB_STATE_IDLE )
     {
@@ -565,10 +565,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     [fWindow center];
     [fWindow setExcludedFromWindowsMenu:NO];
-    
-    /* Initialize currentScanCount so HB can use it to
-     evaluate successive scans */
-	currentScanCount = 0;
 
     [self checkBuiltInsForUpdates];
 	
@@ -645,9 +641,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fStatusField setStringValue: @""];
     
 	[self setupToolbar];
-
-	/* lets initialize the current successful scancount here to 0 */
-	currentSuccessfulScanCount = 0;
 
     /* Register HBController's Window as a receiver for files/folders drag & drop operations */
     [fWindow registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
@@ -778,28 +771,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void) updateUI: (NSTimer *) timer
 {
-    
     /* Update UI for fHandle (user scanning instance of libhb ) */
-
-    /* check to see if there has been a new scan done
-     this bypasses the constraints of HB_STATE_WORKING
-     not allowing setting a newly scanned source */
-	int checkScanCount = hb_get_scancount( fHandle );
-	if( checkScanCount > currentScanCount )
-	{
-		currentScanCount = checkScanCount;
-        [fScanIndicator setIndeterminate: NO];
-        [fScanIndicator setDoubleValue: 0.0];
-        [fScanIndicator setHidden: YES];
-        [fScanHorizontalLine setHidden: NO];
-        [[fWindow toolbar] validateVisibleItems];
-
-		[self showNewScan:nil];
-	}
-    
     hb_state_t s;
     hb_get_state( fHandle, &s );
-    
+
     switch( s.state )
     {
         case HB_STATE_IDLE:
@@ -866,24 +841,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             break;
         }
     }
-    
-    
+
     /* Update UI for fQueueEncodeLibhb */
-    // hb_list_t  * list;
-    // list = hb_get_titles( fQueueEncodeLibhb ); //fQueueEncodeLibhb
-    /* check to see if there has been a new scan done
-     this bypasses the constraints of HB_STATE_WORKING
-     not allowing setting a newly scanned source */
-	
-    checkScanCount = hb_get_scancount( fQueueEncodeLibhb );
-	if( checkScanCount > currentScanCount )
-	{
-		currentScanCount = checkScanCount;
-	}
-    
-    //hb_state_t s;
     hb_get_state( fQueueEncodeLibhb, &s );
-    
+
     switch( s.state )
     {
         case HB_STATE_IDLE:
@@ -1171,7 +1132,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // Finally after all UI updates, we look for a next dragDropItem to scan
     // fWillScan will signal that a scan will be launched, so we need to wait
     // the next idle cycle after the scan
-    hb_get_state( fHandle, &s );
+    hb_get_state2( fHandle, &s );
     if (s.state == HB_STATE_IDLE && !fWillScan)
     {
         // Continue to loop on the other drag & drop files if any
@@ -1351,7 +1312,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         hb_state_t s;
         
-        hb_get_state( fHandle, &s );
+        hb_get_state2( fHandle, &s );
         if (s.state == HB_STATE_SCANNING)
         {
             
@@ -1623,7 +1584,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     
     hb_state_t s;
-    hb_get_state( fHandle, &s );
+    hb_get_state2( fHandle, &s );
     if (s.state == HB_STATE_SCANNING)
     {
         [self cancelScanning:nil];
@@ -1666,6 +1627,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* User selected a file to open */
 	if( returnCode == NSOKButton )
     {
+        // We started a new scan, so set SuccessfulScan to no for now.
+        SuccessfulScan = NO;
+
             /* Free display name allocated previously by this code */
         [browsedSourceDisplayName release];
        
@@ -1753,8 +1717,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 }
                 else
                 {
-                    /* The package is not an eyetv package, so we do not call performScan */
-                    [HBUtilities writeToActivityLog:"unable to open package"];
+                    /* The package is not an eyetv package, try to open it anyway */
+                    browsedSourceDisplayName = [[url lastPathComponent] retain];
+                    [HBUtilities writeToActivityLog:"not a known to package"];
+                    [self performScan:[url path] scanTitleNum:0];
                 }
             }
             else // path is not a package, so we treat it as a dvd parent folder or VIDEO_TS folder
@@ -1988,13 +1954,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             {
                 [HBUtilities writeToActivityLog: "showNewScan: cannot grok scan status"];
             }
-            
-              /* We increment the successful scancount here by one,
-             which we use at the end of this function to tell the gui
-             if this is the first successful scan since launch and whether
-             or not we should set all settings to the defaults */
-            currentSuccessfulScanCount++;
-            
+
             [[fWindow toolbar] validateVisibleItems];
             
             [fSrcTitlePopUp removeAllItems];
@@ -2075,22 +2035,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             SuccessfulScan = YES;
             [self enableUI: YES];
 
-            /* if its the initial successful scan after awakeFromNib */
-            if (currentSuccessfulScanCount == 1)
-            {
-                [self encodeStartStopPopUpChanged:nil];
+            [self encodeStartStopPopUpChanged:nil];
+
+            // Open preview window now if it was visible when HB was closed
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
+                [self showPreviewWindow:nil];
+
+            // Open picture sizing window now if it was visible when HB was closed
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureSizeWindowIsOpen"])
+                [self showPicturePanel:nil];
                 
-                [self selectDefaultPreset:nil];
-                
-                // Open preview window now if it was visible when HB was closed
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
-                    [self showPreviewWindow:nil];
-                
-                // Open picture sizing window now if it was visible when HB was closed
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureSizeWindowIsOpen"])
-                    [self showPicturePanel:nil];
-                
-            }
+
             if (applyQueueToScan == YES)
             {
                 /* we are a rescan of an existing queue item and need to apply the queued settings to the scan */

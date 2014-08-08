@@ -183,8 +183,6 @@ extern NSString *keyTitleTag;
     /* integer to set to determine the previous state
 		of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
-	int                            currentScanCount;
-	int                            currentSuccessfulScanCount;
     BOOL                           SuccessfulScan;
     BOOL                           applyQueueToScan;
 	NSString                      * currentSource;
