@@ -34,7 +34,6 @@ extern NSString *keyTitleTag;
 
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSToolbarDelegate, NSDrawerDelegate>
 {
-    NSImage                      * fApplicationIcon;
     IBOutlet NSWindow            * fWindow;
 
     /* Video view controller */
@@ -197,7 +196,6 @@ extern NSString *keyTitleTag;
     DockTextField                 * timeField;
 }
 - (int) getPidnum;
-- (IBAction) showAboutPanel:(id)sender;
 
 - (IBAction) browseSources: (id) sender;
 - (void) browseSourcesDone: (NSOpenPanel *) sheet

@@ -56,11 +56,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         return nil;
     }
 
-    fApplicationIcon = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"HandBrake.icns"]];
-
-    if( fApplicationIcon != nil )
-        [NSApp setApplicationIconImage:fApplicationIcon];
-    
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     fQueueEncodeLibhb = NULL;
@@ -552,7 +547,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[fQueueController release];
     [fPreviewController release];
     [fPictureController release];
-    [fApplicationIcon release];
 
     hb_close(&fHandle);
     hb_close(&fQueueEncodeLibhb);
@@ -1746,15 +1740,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
 
     }
-}
-
-- (IBAction)showAboutPanel:(id)sender
-{
-    NSMutableDictionary* d = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-        fApplicationIcon, @"ApplicationIcon",
-        nil ];
-    [NSApp orderFrontStandardAboutPanelWithOptions:d];
-    [d release];
 }
 
 /* Here we open the title selection sheet where we can specify an exact title to be scanned */

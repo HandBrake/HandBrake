@@ -432,7 +432,7 @@
                             <menuItem title="About HandBrake" id="58">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="showAboutPanel:" target="240" id="5245"/>
+                                    <action selector="orderFrontStandardAboutPanel:" target="-2" id="W6s-9y-dwJ"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Check for Updates…" id="4964">
