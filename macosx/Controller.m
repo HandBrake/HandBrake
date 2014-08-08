@@ -2244,9 +2244,7 @@ fWorkingCount = 0;
      */
 
 	int i = 0;
-    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
-	id tempObject;
-	while (tempObject = [enumerator nextObject])
+	for (id tempObject in QueueFileArray)
 	{
 		NSDictionary *thisQueueDict = tempObject;
 		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 0) // Completed
@@ -2298,10 +2296,7 @@ fWorkingCount = 0;
     /* initialize nextPendingIndex to -1, this value tells incrementQueueItemDone that there are no pending items in the queue */
     NSInteger nextPendingIndex = -1;
 	BOOL nextPendingFound = NO;
-    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
-	id tempObject;
-    NSInteger i = 0;
-	while (tempObject = [enumerator nextObject])
+	for (id tempObject in QueueFileArray)
 	{
 		NSDictionary *thisQueueDict = tempObject;
         if ([[thisQueueDict objectForKey:@"Status"] intValue] == 2 && nextPendingFound == NO) // pending		
@@ -2310,23 +2305,19 @@ fWorkingCount = 0;
             nextPendingIndex = [QueueFileArray indexOfObject: tempObject];
             [HBUtilities writeToActivityLog: "getNextPendingQueueIndex next pending encode index is:%d", nextPendingIndex];
 		}
-        i++;
 	}
     return nextPendingIndex;
 }
-
 
 /* This method will set any item marked as encoding back to pending
  * currently used right after a queue reload
  */
 - (void) setQueueEncodingItemsAsPending
 {
-    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
-	id tempObject;
     NSMutableArray *tempArray;
     tempArray = [NSMutableArray array];
     /* we look here to see if the preset is we move on to the next one */
-    while ( tempObject = [enumerator nextObject] )  
+    for (id tempObject in QueueFileArray)
     {
         /* We want to keep any queue item that is pending or was previously being encoded */
         if ([[tempObject objectForKey:@"Status"] intValue] == 1 || [[tempObject objectForKey:@"Status"] intValue] == 2)
@@ -2352,12 +2343,10 @@ fWorkingCount = 0;
  * this includes both successfully completed encodes as well as cancelled encodes */
 - (void) clearQueueEncodedItems
 {
-    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
-	id tempObject;
     NSMutableArray *tempArray;
     tempArray = [NSMutableArray array];
     /* we look here to see if the preset is we move on to the next one */
-    while ( tempObject = [enumerator nextObject] )  
+    for (id tempObject in QueueFileArray)
     {
         /* If the queue item is either completed (0) or cancelled (3) from the
          * last session, then we put it in tempArray to be deleted from QueueFileArray.
@@ -2379,12 +2368,10 @@ fWorkingCount = 0;
 /* This method will clear the queue of all encodes. effectively creating an empty queue */
 - (void) clearQueueAllItems
 {
-    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
-	id tempObject;
     NSMutableArray *tempArray;
     tempArray = [NSMutableArray array];
     /* we look here to see if the preset is we move on to the next one */
-    while ( tempObject = [enumerator nextObject] )  
+    for (id tempObject in QueueFileArray)
     {
         [tempArray addObject:tempObject];
     }
@@ -3404,11 +3391,9 @@ fWorkingCount = 0;
          * chapters just come out 001, 002, etc. etc.
          */
          
-        NSMutableArray *ChapterNamesArray = [queueToApply objectForKey:@"ChapterNames"];
+        NSArray *chapterNamesArray = [queueToApply objectForKey:@"ChapterNames"];
         int i = 0;
-        NSEnumerator *enumerator = [ChapterNamesArray objectEnumerator];
-        id tempObject;
-        while (tempObject = [enumerator nextObject])
+        for (id tempObject in chapterNamesArray)
         {
             hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( job->list_chapter, i );
             if( chapter != NULL )
@@ -3849,17 +3834,13 @@ fWorkingCount = 0;
     }
     
     /* We now run through the queue and make sure we are not overwriting an exisiting queue item */
-    int i = 0;
-    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
-	id tempObject;
-	while (tempObject = [enumerator nextObject])
+	for (id tempObject in QueueFileArray)
 	{
 		NSDictionary *thisQueueDict = tempObject;
 		if ([[thisQueueDict objectForKey:@"DestinationPath"] isEqualToString: [fDstFile2Field stringValue]])
 		{
 			fileExistsInQueue = YES;	
 		}
-        i++;
 	}
 
 	if(fileExists == YES)
