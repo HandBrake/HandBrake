@@ -304,8 +304,16 @@
 
 	if (!item)
 	{
-		// no item to drop on
-		result = NSDragOperationGeneric;
+        if (index == 0)
+        {
+            // don't allow to drop on top
+            result = NSDragOperationNone;
+        }
+        else
+        {
+            // no item to drop on
+            result = NSDragOperationGeneric;
+        }
 	}
 	else
 	{
