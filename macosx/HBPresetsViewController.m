@@ -1,10 +1,8 @@
-//
-//  HBPresetsViewController.m
-//  PresetsView
-//
-//  Created by Damiano Galassi on 14/07/14.
-//  Copyright (c) 2014 Damiano Galassi. All rights reserved.
-//
+/*  HBPresetsViewController.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBPresetsViewController.h"
 #import "HBPresetsManager.h"
@@ -114,6 +112,8 @@
 {
     if ([self.treeController canRemove])
     {
+        // Save the current selection path and apply it again after the deletion
+        NSIndexPath *currentSelection = [self.treeController selectionIndexPath];
         /* Alert user before deleting preset */
         NSAlert *alert = [NSAlert alertWithMessageText:@"Warning!"
                                          defaultButton:@"OK"
@@ -128,6 +128,7 @@
         {
             [self.presets deletePresetAtIndexPath:[self.treeController selectionIndexPath]];
         }
+        [self.treeController setSelectionIndexPath:currentSelection];
     }
 }
 
@@ -136,7 +137,7 @@
     NSIndexPath *selectionIndexPath = [self.treeController selectionIndexPath];
     if (!selectionIndexPath)
     {
-        selectionIndexPath = [NSIndexPath indexPathWithIndex:self.presets.contents.count];
+        selectionIndexPath = [NSIndexPath indexPathWithIndex:self.presets.root.children.count];
     }
 
     HBPreset *selectedNode = [[self.treeController selectedObjects] firstObject];
@@ -162,9 +163,9 @@
     [self.treeController setSelectionIndexPath:nil];
 }
 
-- (void)selectDefaultPreset
+- (void)selectPreset:(HBPreset *)preset
 {
-    NSIndexPath *idx = [self.presets indexPathOfPreset:self.presets.defaultPreset];
+    NSIndexPath *idx = [self.presets indexPathOfPreset:preset];
 
     if (idx)
     {
@@ -338,6 +339,13 @@
 	for (idx = ([newNodes count] - 1); idx >= 0; idx--)
 	{
 		[self.treeController moveNode:newNodes[idx] toIndexPath:indexPath];
+
+        // Call manually this because the NSTreeController doesn't call
+        // the KVC accessors method for the root node.
+        if (indexPath.length == 1)
+        {
+            [self.presets performSelector:@selector(nodeDidChange)];
+        }
 	}
 
 	// keep the moved nodes selected
@@ -375,7 +383,7 @@
 	{
 		// drop at the top root level
 		if (index == -1)	// drop area might be ambibuous (not at a particular location)
-			indexPath = [NSIndexPath indexPathWithIndex:self.presets.contents.count]; // drop at the end of the top level
+			indexPath = [NSIndexPath indexPathWithIndex:self.presets.root.children.count]; // drop at the end of the top level
 		else
 			indexPath = [NSIndexPath indexPathWithIndex:index]; // drop at a particular place at the top level
 	}

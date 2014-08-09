@@ -1,4 +1,4 @@
-/*  HBPresets.h $
+/*  HBPresetsManager.h $
  
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
@@ -9,15 +9,20 @@
 @class HBPreset;
 
 /**
+ *  Posted when a preset is changed/added/deleted.
+ */
+extern NSString *HBPresetsChangedNotification;
+
+/**
  *  HBPresetManager
  *  Manages the load/save of presets to an in memory tree.
  */
 @interface HBPresetsManager : NSObject
 
 /**
- *  The root array of presets.
+ *  The root of the presets tree.
  */
-@property (nonatomic, readonly, retain) NSMutableArray *contents;
+@property (nonatomic, readonly) HBPreset *root;
 
 /**
  *  defaultPreset and its index path in the tree
@@ -68,7 +73,9 @@
  */
 - (NSIndexPath *)indexPathOfPreset:(HBPreset *)preset;
 
+/**
+ *  Adds back the built in presets.
+ */
 - (void)generateBuiltInPresets;
-- (void)deleteBuiltInPresets;
 
 @end

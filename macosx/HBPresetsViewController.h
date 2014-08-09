@@ -1,10 +1,8 @@
-//
-//  HBPresetsViewController.h
-//  PresetsView
-//
-//  Created by Damiano Galassi on 14/07/14.
-//  Copyright (c) 2014 Damiano Galassi. All rights reserved.
-//
+/*  HBPresetsViewController.h $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
 #import "HBViewValidation.h"
@@ -26,7 +24,9 @@
 @property (nonatomic, readwrite, assign) id<HBPresetsViewControllerDelegate> delegate;
 
 - (void)deselect;
-- (void)selectDefaultPreset;
+- (void)selectPreset:(HBPreset *)preset;
+
+- (IBAction)insertFolder:(id)sender;
 
 @property (nonatomic, readonly) HBPreset *selectedPreset;
 @property (nonatomic, readonly) NSUInteger indexOfSelectedItem;

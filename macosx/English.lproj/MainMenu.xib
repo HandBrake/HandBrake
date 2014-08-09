@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -12,7 +12,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="21" userLabel="MainWindow">
+        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="21" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" unifiedTitleAndToolbar="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="966" height="558"/>
@@ -224,7 +224,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="1539">
-                        <rect key="frame" x="70" y="530" width="341" height="14.00000018353732"/>
+                        <rect key="frame" x="70" y="530" width="330" height="14.000000183415764"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
                             <font key="font" metaFont="smallSystem"/>
@@ -333,14 +333,14 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3205">
-                        <rect key="frame" x="417" y="533" width="529" height="5"/>
+                        <rect key="frame" x="406" y="533" width="540" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="bar" id="3203">
-                        <rect key="frame" x="417" y="532.00000018353728" width="530" height="12"/>
+                        <rect key="frame" x="406" y="532.00000017881393" width="541" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <button toolTip="This rearranges the header of the MP4 file to optimize it for streaming across the web." id="4579">
@@ -448,6 +448,12 @@
                                     <action selector="showPreferencesWindow:" target="240" id="2517"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="bDt-OE-wyf">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Services" id="XcG-Aw-Gdb">
+                                <menu key="submenu" title="Services" systemMenu="services" id="0te-ai-fgD"/>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="1900">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
@@ -507,10 +513,13 @@
                                     <action selector="addToQueue:" target="240" id="2447"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Add All Titles To Queue…" keyEquivalent="b" id="5897">
+                            <menuItem title="Add All Titles To Queue…" keyEquivalent="B" id="5897">
                                 <connections>
                                     <action selector="addAllTitlesToQueue:" target="240" id="5899"/>
                                 </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Kee-pg-bfk">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Start Encoding" keyEquivalent="s" id="2444">
                                 <connections>
@@ -649,43 +658,46 @@
                 <menuItem title="Presets" id="1948">
                     <menu key="submenu" title="Presets" id="1949">
                         <items>
-                            <menuItem title="New Preset…" keyEquivalent="n" id="1955">
+                            <menuItem title="New Preset…" tag="-1" keyEquivalent="n" id="1955">
                                 <connections>
-                                    <action selector="showAddPresetPanel:" target="240" id="1956"/>
+                                    <action selector="showAddPresetPanel:" target="-1" id="iWH-6U-rv2"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Select Default Preset" id="2421">
+                            <menuItem title="New Folder" tag="-1" keyEquivalent="N" id="wvb-60-cWL">
+                                <connections>
+                                    <action selector="insertFolder:" target="-1" id="HpS-UY-h3l"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" tag="-1" id="1954">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Select Default Preset" tag="-1" id="2421">
                                 <connections>
                                     <action selector="selectDefaultPreset:" target="240" id="2422"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1954">
+                            <menuItem isSeparatorItem="YES" tag="-1" id="CQW-qW-5C5">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Export…" id="5188">
+                            <menuItem title="Export…" tag="-1" id="5188">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="browseExportPresetFile:" target="240" id="5191"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Import…" id="5192">
+                            <menuItem title="Import…" tag="-1" id="5192">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="browseImportPresetFile:" target="240" id="5193"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="5qo-64-GYU">
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                            </menuItem>
-                            <menuItem title="Update Built-in Presets" id="1950">
+                            <menuItem title="Update Built-in Presets" tag="-1" id="1950">
                                 <connections>
                                     <action selector="addFactoryPresets:" target="240" id="1952"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Delete Built-in Presets" id="1951">
-                                <connections>
-                                    <action selector="deleteFactoryPresets:" target="240" id="1953"/>
-                                </connections>
+                            <menuItem isSeparatorItem="YES" tag="-1" id="wgI-bc-Ors">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                         </items>
                     </menu>
@@ -766,44 +778,6 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="Panel" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="434" userLabel="DonePanel" customClass="NSPanel">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="57" y="765" width="300" height="233"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
-            <value key="minSize" type="size" width="213" height="107"/>
-            <view key="contentView" id="435">
-                <rect key="frame" x="0.0" y="0.0" width="300" height="233"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <imageView id="436">
-                        <rect key="frame" x="83" y="82" width="134" height="134"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="HandBrake.icns" id="4928"/>
-                    </imageView>
-                    <button verticalHuggingPriority="750" id="437">
-                        <rect key="frame" x="202" y="12" width="84" height="32"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Ahuh !" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="4929">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                        </buttonCell>
-                    </button>
-                    <textField verticalHuggingPriority="750" id="438">
-                        <rect key="frame" x="82" y="60" width="134" height="17"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Rip done !" id="4930">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                </subviews>
-            </view>
-        </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
             <size key="minContentSize" width="100" height="50"/>
@@ -1149,12 +1123,10 @@ DQ
                 <outlet property="fSubtitlesView" destination="5195" id="Ngb-0O-f4g"/>
                 <outlet property="fVideoView" destination="1478" id="M6c-3U-STI"/>
                 <outlet property="fWindow" destination="21" id="350"/>
+                <outlet property="presetsMenu" destination="1949" id="bkm-2h-uFI"/>
             </connections>
         </customObject>
         <customObject id="4963" customClass="SUUpdater"/>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
     </objects>
-    <resources>
-        <image name="HandBrake.icns" width="128" height="128"/>
-    </resources>
 </document>

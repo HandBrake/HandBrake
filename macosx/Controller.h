@@ -147,7 +147,8 @@ extern NSString *keyTitleTag;
     
 	/* User Preset variables here */
 	HBPresetsManager             * presetManager;
-    HBPresetsViewController * fPresetsView;
+    HBPresetsViewController      * fPresetsView;
+    IBOutlet NSMenu              * presetsMenu;
 
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
@@ -304,7 +305,6 @@ extern NSString *keyTitleTag;
 
 - (IBAction)selectDefaultPreset:(id)sender;
 - (IBAction)addFactoryPresets:(id)sender;
-- (IBAction)deleteFactoryPresets:(id)sender;
 - (IBAction)addUserPreset:(id)sender;
 
 -(void)sendToMetaX:(NSString *) filePath;

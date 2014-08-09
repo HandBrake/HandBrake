@@ -1,19 +1,19 @@
-//
-//  HBBaseNode.h
-//  PresetsView
-//
-//  Created by Damiano Galassi on 14/07/14.
-//  Copyright (c) 2014 Damiano Galassi. All rights reserved.
-//
+/*  HBPreset.h $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import "HBTreeNode.h"
 
 /**
  *  HBPreset
- *  Stores a preset dictionary
- *  and implements the requited methods to work with a NSTreeController.
+ *  Stores a preset dictionary.
+ *
+ *  An instance of HBPreset can be an actual preset or a folder.
  */
-@interface HBPreset : NSObject <NSCopying>
+@interface HBPreset : HBTreeNode <NSCopying>
 
 - (instancetype)initWithName:(NSString *)title content:(NSDictionary *)content builtIn:(BOOL)builtIn;
 - (instancetype)initWithFolderName:(NSString *)title builtIn:(BOOL)builtIn;
@@ -24,16 +24,5 @@
 
 @property (nonatomic, readwrite) BOOL isDefault;
 @property (nonatomic, readonly) BOOL isBuiltIn;
-
-// NSTreeController required properties
-@property (nonatomic, retain) NSMutableArray *children;
-@property (nonatomic) BOOL isLeaf;
-
-/**
- *  Executes a given block using each object in the tree, starting with the root object and continuing through the tree to the last object.
- *
- *  @param block The block to apply to elements in the tree.
- */
-- (void)enumerateObjectsUsingBlock:(void (^)(id obj, NSIndexPath *idx, BOOL *stop))block;
 
 @end

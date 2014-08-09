@@ -10,6 +10,7 @@
 #import "HBPreferencesController.h"
 #import "HBDVDDetector.h"
 #import "HBPresetsManager.h"
+#import "HBPreset.h"
 #import "HBPreviewController.h"
 #import "DockTextField.h"
 #import "HBUtilities.h"
@@ -560,8 +561,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fWindow center];
     [fWindow setExcludedFromWindowsMenu:NO];
 
-    [self checkBuiltInsForUpdates];
-	
     fRipIndicatorShown = NO;  // initially out of view in the nib
     
     /* For 64 bit builds, the threaded animation in the progress
@@ -577,21 +576,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
     [fScanIndicator setUsesThreadedAnimation:NO];
     [fRipIndicator setUsesThreadedAnimation:NO];
-  
-    
-    
+
+    [fPresetDrawer setDelegate:self];
+    NSSize drawerSize = NSSizeFromString([[NSUserDefaults standardUserDefaults]
+                                           stringForKey:@"Drawer Size"]);
+    if (drawerSize.width)
+        [fPresetDrawer setContentSize: drawerSize];
+
 	/* Show/Dont Show Presets drawer upon launch based
      on user preference DefaultPresetsDrawerShow*/
-	if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0 )
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"])
 	{
-        [fPresetDrawer setDelegate:self];
-        NSSize drawerSize = NSSizeFromString( [[NSUserDefaults standardUserDefaults]
-                                               stringForKey:@"Drawer Size"] );
-        if( drawerSize.width )
-            [fPresetDrawer setContentSize: drawerSize];
 		[fPresetDrawer open];
 	}
-    
+
     /* Initially set the dvd angle widgets to hidden (dvdnav only) */
     [fSrcAngleLabel setHidden:YES];
     [fSrcAnglePopUp setHidden:YES];
@@ -689,6 +687,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [[fVideoController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
 
     [fWindow recalculateKeyViewLoop];
+
+    // Presets initialization
+    [self checkBuiltInsForUpdates];
+    [self buildPresetsMenu];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildPresetsMenu) name:HBPresetsChangedNotification object:nil];
 }
 
 - (void) enableUI: (BOOL) b
@@ -2080,11 +2083,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) openMainWindow: (id) sender
 {
     [fWindow  makeKeyAndOrderFront:nil];
-}
-
-- (BOOL) windowShouldClose: (id) sender
-{
-    return YES;
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
@@ -5346,19 +5344,73 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 #pragma mark -
-#pragma mark Manage Default Preset
+#pragma mark Preset Menu
 
 - (IBAction)selectDefaultPreset:(id)sender
 {
-	[fPresetsView selectDefaultPreset];
+	[fPresetsView selectPreset:presetManager.defaultPreset];
 }
 
-#pragma mark -
-#pragma mark Manage Built In Presets
-
-- (IBAction)deleteFactoryPresets:(id)sender
+- (IBAction)insertFolder:(id)sender
 {
-    [presetManager deleteBuiltInPresets];
+    [fPresetsView insertFolder:sender];
+}
+
+- (IBAction)selectPresetFromMenu:(id)sender
+{
+    __block HBPreset *preset = nil;
+    __block NSInteger i = -1;
+
+    NSInteger tag = [sender tag];
+
+    [presetManager.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
+    {
+        if (i == tag)
+        {
+            preset = obj;
+            *stop = YES;
+        }
+        i++;
+    }];
+
+    [fPresetsView selectPreset:preset];
+}
+
+/**
+ *  Adds the presets list to the menu.
+ */
+- (void)buildPresetsMenu
+{
+    NSArray *menuItems = [presetsMenu.itemArray copy];
+
+    for (NSMenuItem *item in menuItems)
+    {
+        if (item.tag != -1)
+        {
+            [presetsMenu removeItem:item];
+        }
+    }
+    [menuItems release];
+
+    __block NSUInteger i = 0;
+    [presetManager.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
+    {
+        if (idx.length)
+        {
+            NSMenuItem *item = [[NSMenuItem alloc] init];
+            item.title = [obj name];
+            item.tag = i++;
+
+            if ([obj isLeaf])
+            {
+                item.action = @selector(selectPresetFromMenu:);
+            }
+            item.indentationLevel = idx.length - 1;
+
+            [presetsMenu addItem:item];
+            [item release];
+        }
+    }];
 }
 
    /* We use this method to recreate new, updated factory presets */

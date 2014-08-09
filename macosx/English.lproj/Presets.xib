@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
@@ -18,7 +18,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="uad-bt-uKD">
-                    <rect key="frame" x="4" y="33" width="224" height="285"/>
+                    <rect key="frame" x="3" y="33" width="224" height="285"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="Rcx-jI-nnq">
                         <rect key="frame" x="1" y="1" width="222" height="283"/>
@@ -71,7 +71,7 @@
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="RAh-Ad-miy">
-                        <rect key="frame" x="1" y="1" width="0.0" height="16"/>
+                        <rect key="frame" x="-100" y="-100" width="222" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="xU9-j2-UAo">
@@ -80,7 +80,7 @@
                     </scroller>
                 </scrollView>
                 <popUpButton verticalHuggingPriority="750" id="Ybq-Zt-sta">
-                    <rect key="frame" x="59" y="3" width="35" height="23"/>
+                    <rect key="frame" x="58" y="3" width="35" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="2JY-O9-FR6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -109,7 +109,7 @@
                     </popUpButtonCell>
                 </popUpButton>
                 <button verticalHuggingPriority="750" id="kfi-wq-mgV">
-                    <rect key="frame" x="4" y="3" width="24" height="23"/>
+                    <rect key="frame" x="3" y="3" width="24" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="3" id="OJ3-1k-3DY">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -121,7 +121,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="b3V-8w-euU">
-                    <rect key="frame" x="27" y="3" width="24" height="23"/>
+                    <rect key="frame" x="26" y="3" width="24" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="left" borderStyle="border" inset="3" id="Kb1-6u-550">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -142,7 +142,7 @@
                 <string>isDefault</string>
             </declaredKeys>
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="presets.contents" id="9w3-Oi-cf0"/>
+                <binding destination="-2" name="contentArray" keyPath="presets.root.children" id="A8P-Hb-YE9"/>
             </connections>
         </treeController>
     </objects>

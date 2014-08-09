@@ -1,10 +1,8 @@
-//
-//  HBBaseNode.m
-//  PresetsView
-//
-//  Created by Damiano Galassi on 14/07/14.
-//  Copyright (c) 2014 Damiano Galassi. All rights reserved.
-//
+/*  HBPreset.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBPreset.h"
 
@@ -30,7 +28,7 @@
     {
         _name = [title copy];
         _isBuiltIn = builtIn;
-        _isLeaf = NO;
+        self.isLeaf = NO;
     }
     return self;
 }
@@ -40,10 +38,9 @@
     self = [super init];
     if (self)
     {
-        _children = [[NSMutableArray alloc] init];
         _name = @"New Preset";
-        _isLeaf = YES;
         _presetDescription = @"";
+        self.isLeaf = YES;
     }
     return self;
 }
@@ -53,20 +50,19 @@
     [_name release];
     [_content release];
     [_presetDescription release];
-    [_children release];
 
     [super dealloc];
 }
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    HBPreset *node = [[HBPreset alloc] init];
+    HBPreset *node = [[self class] allocWithZone:zone];
     node->_name = [self.name copy];
     node->_content = [self.content copy];
     node->_presetDescription = [self.presetDescription copy];
     for (HBPreset *children in self.children)
     {
-        [node->_children addObject:[[children copy] autorelease]];
+        [node.children addObject:[[children copy] autorelease]];
     }
 
     return node;
@@ -75,6 +71,14 @@
 - (NSUInteger)hash
 {
     return self.name.hash + self.isBuiltIn + self.isLeaf;
+}
+
+- (void)setName:(NSString *)name
+{
+    [_name autorelease];
+    _name = [name copy];
+
+    [self.delegate nodeDidChange];
 }
 
 #pragma mark - KVC
@@ -95,47 +99,6 @@
     }
 
     return YES;
-}
-
-#pragma mark - Enumeration
-
-- (void)enumerateObjectsUsingBlock:(void (^)(id obj, NSIndexPath *idx, BOOL *stop))block
-{
-    BOOL stop = NO;
-    NSMutableArray *queue = [[NSMutableArray alloc] init];
-    NSMutableArray *indexesQueue = [[NSMutableArray alloc] init];
-
-    [queue addObject:self];
-    [indexesQueue addObject:[[[NSIndexPath alloc] init] autorelease]];
-
-    HBPreset *node = nil;
-    while ((node = [queue lastObject]) != nil)
-    {
-        // Get the index path of the current object
-        NSIndexPath *indexPath = [indexesQueue lastObject];
-
-        // Call the block
-        block(node, indexPath, &stop);
-
-        if (stop)
-        {
-            break;
-        }
-
-        [indexesQueue removeLastObject];
-
-        for (int i = 0; i < node.children.count; i++)
-        {
-            [indexesQueue addObject:[indexPath indexPathByAddingIndex:i]];
-        }
-
-        [queue removeLastObject];
-        [queue addObjectsFromArray:node.children];
-
-    }
-
-    [queue release];
-    [indexesQueue release];
 }
 
 @end

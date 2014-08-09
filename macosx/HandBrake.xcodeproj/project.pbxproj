@@ -131,6 +131,7 @@
 		A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F31990D64E0023F727 /* HBPreset.m */; };
 		A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F61990D6820023F727 /* HBPresetsViewController.m */; };
 		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
+		A9D488A51996270300E9B1BA /* HBTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D488A41996270300E9B1BA /* HBTreeNode.m */; };
 		A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */; };
 		A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC6C54196F0517002AE6B4 /* Subtitles.xib */; };
 		A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */; };
@@ -352,6 +353,8 @@
 		A9CF25F51990D6820023F727 /* HBPresetsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresetsViewController.h; sourceTree = "<group>"; };
 		A9CF25F61990D6820023F727 /* HBPresetsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsViewController.m; sourceTree = "<group>"; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
+		A9D488A31996270300E9B1BA /* HBTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTreeNode.h; sourceTree = "<group>"; };
+		A9D488A41996270300E9B1BA /* HBTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTreeNode.m; sourceTree = "<group>"; };
 		A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesController.h; sourceTree = SOURCE_ROOT; };
 		A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesController.m; sourceTree = SOURCE_ROOT; };
 		A9DC6C55196F0517002AE6B4 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Subtitles.xib; sourceTree = "<group>"; };
@@ -759,6 +762,8 @@
 				273F20A214ADBE670021BE6D /* HBPresetsManager.m */,
 				A9CF25F21990D64E0023F727 /* HBPreset.h */,
 				A9CF25F31990D64E0023F727 /* HBPreset.m */,
+				A9D488A31996270300E9B1BA /* HBTreeNode.h */,
+				A9D488A41996270300E9B1BA /* HBTreeNode.m */,
 				A932E271198834130047D13E /* HBAudioSettings.h */,
 				A932E272198834130047D13E /* HBAudioSettings.m */,
 				A9F4728B1976BAA70009EC65 /* HBSubtitlesSettings.h */,
@@ -1040,6 +1045,7 @@
 				A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */,
 				A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */,
 				46AB433515F98A2B009C0961 /* DockTextField.m in Sources */,
+				A9D488A51996270300E9B1BA /* HBTreeNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

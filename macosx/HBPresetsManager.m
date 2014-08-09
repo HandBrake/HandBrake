@@ -9,11 +9,11 @@
 
 #import "HBUtilities.h"
 
-@interface HBPresetsManager ()
+NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
+
+@interface HBPresetsManager () <HBTreeNodeDelegate>
 
 @property (nonatomic, readonly, copy) NSURL *fileURL;
-
-@property (nonatomic, readonly, retain) HBPreset *root;
 
 /* Dictionaries for individual presets ("Devices" folder) */
 - (NSDictionary *)createUniversalPreset;
@@ -42,6 +42,7 @@
     {
         // Init the root of the tree, it won't never be shown in the UI
         _root = [[HBPreset alloc] initWithFolderName:@"Root" builtIn:YES];
+        _root.delegate = self;
     }
     return self;
 }
@@ -67,11 +68,6 @@
     [super dealloc];
 }
 
-- (NSMutableArray *)contents
-{
-    return self.root.children;
-}
-
 - (NSIndexPath *)indexPathOfPreset:(HBPreset *)preset
 {
     __block NSIndexPath *retValue = nil;
@@ -87,6 +83,13 @@
     }];
 
     return [retValue autorelease];
+}
+
+#pragma mark - HBTreeNode delegate
+
+- (void)nodeDidChange
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
 }
 
 #pragma mark - Load/Save
@@ -121,7 +124,7 @@
 {
     NSMutableArray *presetsArray = [[[NSMutableArray alloc] init] autorelease];
 
-    for (HBPreset *node in self.contents)
+    for (HBPreset *node in self.root.children)
     {
         [presetsArray addObject:[self convertToDict:node]];
     }
@@ -165,6 +168,11 @@
         {
             self.defaultPreset = node;
         }
+    }
+
+    if (!node.isBuiltIn)
+    {
+        node.delegate = self;
     }
 
     return node;
@@ -226,7 +234,8 @@
     HBPreset *presetNode = [[HBPreset alloc] initWithName:preset[@"PresetName"]
                                                    content:preset
                                                    builtIn:NO];
-    [self insertObject:presetNode inContentsAtIndex:[self countOfContents]];
+
+    [self.root insertObject:presetNode inChildrenAtIndex:[self.root countOfChildren]];
     [presetNode release];
 
     [self savePresets];
@@ -234,9 +243,7 @@
 
 - (void)deletePresetAtIndexPath:(NSIndexPath *)idx
 {
-    [self willChangeValueForKey:@"contents"];
-
-    NSMutableArray *parentArray = self.contents;
+    HBPreset *parentNode = self.root;
 
     // Find the preset parent array
     // and delete it.
@@ -246,29 +253,27 @@
     {
         currIdx = [idx indexAtPosition:i];
 
-        if (parentArray.count > currIdx)
+        if (parentNode.children.count > currIdx)
         {
-            parentArray = [(HBPreset *)[parentArray objectAtIndex:currIdx] children];
+            parentNode = [parentNode.children objectAtIndex:currIdx];
         }
     }
 
     currIdx = [idx indexAtPosition:i];
 
-    if (parentArray.count > currIdx)
+    if (parentNode.children.count > currIdx)
     {
-        if ([[parentArray objectAtIndex:currIdx] isDefault])
+        if ([[parentNode.children objectAtIndex:currIdx] isDefault])
         {
-            [parentArray removeObjectAtIndex:currIdx];
+            [parentNode removeObjectFromChildrenAtIndex:currIdx];
             // Try to select a new default preset
             [self selectNewDefault];
         }
         else
         {
-            [parentArray removeObjectAtIndex:currIdx];
+            [parentNode removeObjectFromChildrenAtIndex:currIdx];
         }
     }
-
-    [self didChangeValueForKey:@"contents"];
 }
 
 /**
@@ -323,29 +328,6 @@
     }
 }
 
-#pragma mark -
-#pragma mark KVC
-
-- (NSUInteger)countOfContents
-{
-    return [self.contents count];
-}
-
-- (HBPreset *)objectInContentsAtIndex:(NSUInteger)index
-{
-    return [self.contents objectAtIndex:index];
-}
-
-- (void)insertObject:(HBPreset *)presetObject inContentsAtIndex:(NSUInteger)index;
-{
-    [self.contents insertObject:presetObject atIndex:index];
-}
-
-- (void)removeObjectFromContentsAtIndex:(NSUInteger)index
-{
-    [self.contents removeObjectAtIndex: index];
-}
-
 #pragma mark - Built In Generation
 
 - (void)loadPresetsForType:(NSString *)type fromSel:(SEL[])selArray length:(int)len
@@ -363,7 +345,7 @@
         [presetNode release];
     }
 
-    [self.contents insertObject:folderNode atIndex:0];
+    [self.root insertObject:folderNode inChildrenAtIndex:0];
     [folderNode release];
 }
 
@@ -392,17 +374,8 @@
     SEL regularPresets[] = { @selector(createNormalPreset),
         @selector(createHighProfilePreset)};
     
-    [self willChangeValueForKey:@"contents"];
-    NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc] init];
-    [self.contents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isBuiltIn])
-        {
-            [indexes addIndex:idx];
-        }
-    }];
-    [self.contents removeObjectsAtIndexes:indexes];
-    [indexes release];
-    
+    [self deleteBuiltInPresets];
+
     [self loadPresetsForType:@"Regular" fromSel:regularPresets length:2];
     [self loadPresetsForType:@"Devices" fromSel:devicesPresets length:10];
 
@@ -411,25 +384,24 @@
         [self selectNewDefault];
     }
 
-    [self didChangeValueForKey:@"contents"];
 
     [HBUtilities writeToActivityLog: "built in presets updated to build number: %d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
 }
 
 - (void)deleteBuiltInPresets
 {
-    [self willChangeValueForKey:@"contents"];
+    [self willChangeValueForKey:@"root"];
     NSMutableArray *nodeToRemove = [[NSMutableArray alloc] init];
-    for (HBPreset *node in self.contents)
+    for (HBPreset *node in self.root.children)
     {
         if (node.isBuiltIn)
         {
             [nodeToRemove addObject:node];
         }
     }
-    [self.contents removeObjectsInArray:nodeToRemove];
+    [self.root.children removeObjectsInArray:nodeToRemove];
     [nodeToRemove release];
-    [self didChangeValueForKey:@"contents"];
+    [self didChangeValueForKey:@"root"];
 }
 
 #pragma mark -
