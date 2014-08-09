@@ -325,6 +325,8 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         }
         defaultPreset.isDefault = YES;
         _defaultPreset = [defaultPreset retain];
+
+        [self nodeDidChange];
     }
 }
 

@@ -5381,8 +5381,9 @@ the user is using "Custom" settings by determining the sender*/
  */
 - (void)buildPresetsMenu
 {
+    // First we remove all the preset menu items
+    // inserted previosly
     NSArray *menuItems = [presetsMenu.itemArray copy];
-
     for (NSMenuItem *item in menuItems)
     {
         if (item.tag != -1)
@@ -5393,6 +5394,7 @@ the user is using "Custom" settings by determining the sender*/
     [menuItems release];
 
     __block NSUInteger i = 0;
+    __block BOOL builtInEnded = NO;
     [presetManager.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
     {
         if (idx.length)
@@ -5401,10 +5403,27 @@ the user is using "Custom" settings by determining the sender*/
             item.title = [obj name];
             item.tag = i++;
 
+            // Set an action only to the actual presets,
+            // not on the folders.
             if ([obj isLeaf])
             {
                 item.action = @selector(selectPresetFromMenu:);
             }
+            // Make the default preset font bold.
+            if ([obj isDefault])
+            {
+                NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:[obj name]
+                                                                               attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];
+                [item setAttributedTitle:newTitle];
+                [newTitle release];
+            }
+            // Add a separator line after the last builtIn preset
+            if ([obj isBuiltIn] == NO && builtInEnded == NO)
+            {
+                [presetsMenu addItem:[NSMenuItem separatorItem]];
+                builtInEnded = YES;
+            }
+
             item.indentationLevel = idx.length - 1;
 
             [presetsMenu addItem:item];
