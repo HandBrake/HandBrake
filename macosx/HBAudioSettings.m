@@ -115,12 +115,21 @@
     for (NSDictionary *track in preset[@"AudioList"])
     {
         HBAudioTrackPreset *newTrack = [[HBAudioTrackPreset alloc] init];
-        newTrack.encoder = hb_audio_encoder_get_from_name([track[@"AudioEncoder"] UTF8String]);
-        newTrack.mixdown = hb_mixdown_get_from_name([track[@"AudioMixdown"] UTF8String]);
-        newTrack.sampleRate = [track[@"AudioSamplerate"] intValue];
+        if ([track[@"AudioEncoder"] isKindOfClass:[NSString class]])
+        {
+            newTrack.encoder = hb_audio_encoder_get_from_name([track[@"AudioEncoder"] UTF8String]);
+        }
+        if ([track[@"AudioMixdown"] isKindOfClass:[NSString class]])
+        {
+            newTrack.mixdown = hb_mixdown_get_from_name([track[@"AudioMixdown"] UTF8String]);
+        }
+        if ([track[@"AudioSamplerate"] isKindOfClass:[NSString class]])
+        {
+            newTrack.sampleRate = hb_audio_samplerate_get_from_name([track[@"AudioSamplerate"] UTF8String]);
+        }
         newTrack.bitRate = [track[@"AudioBitrate"] intValue];
 
-        newTrack.drc = [track[@"AudioTrackDRCSlider"] intValue];
+        newTrack.drc = [track[@"AudioTrackDRCSlider"] floatValue];
         newTrack.gain = [track[@"AudioTrackGainSlider"] intValue];
         [self.tracksArray addObject:newTrack];
         [newTrack release];
@@ -159,9 +168,14 @@
 
     for (HBAudioTrackPreset *track in self.tracksArray)
     {
+        NSString *sampleRate = @"Auto";
+        if (hb_audio_samplerate_get_name(track.sampleRate))
+        {
+            sampleRate = @(hb_audio_samplerate_get_name(track.sampleRate));
+        }
         NSDictionary *newTrack = @{@"AudioEncoder": @(hb_audio_encoder_get_name(track.encoder)),
                                    @"AudioMixdown": @(hb_mixdown_get_name(track.mixdown)),
-                                   @"AudioSamplerate": @(track.sampleRate),
+                                   @"AudioSamplerate": sampleRate,
                                    @"AudioBitrate": @(track.bitRate),
                                    @"AudioTrackDRCSlider": @(track.drc),
                                    @"AudioTrackGainSlider": @(track.gain)};
