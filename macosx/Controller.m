@@ -725,21 +725,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         [controls[i] setEnabled: b];
     }
-   
-    
-	if (b) 
-    {
-        /* we also call calculatePictureSizing here to sense check if we already have vfr selected ??? */
-        [self pictureSettingsDidChange];
-    }
 
-    [fPresetsView setEnabled:b];
-    [fVideoController enableUI:b];
-    [fChapterTitlesController enableUI:b];
-    [fSubtitlesViewController enableUI:b];
-    [fAudioController enableUI:b];
+    [fPresetsView setUIEnabled:b];
+    [fVideoController setUIEnabled:b];
+    [fAudioController setUIEnabled:b];
+    [fSubtitlesViewController setUIEnabled:b];
+    [fChapterTitlesController setUIEnabled:b];
 }
-
 
 /***********************************************************************
  * updateDockIcon

@@ -95,13 +95,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self switchingTrackFromNone:nil];
 }
 
-- (void)enableUI:(BOOL)b
+- (void)setUIEnabled:(BOOL)flag
 {
-    self.enabled = b;
-    [fTableView setEnabled:b];
-    [self.trackPopup setEnabled:b];
-    [self.configureDefaults setEnabled:b];
-    [self.reloadDefaults setEnabled:b];
+    self.enabled = flag;
+    [fTableView setEnabled:flag];
+    [self.trackPopup setEnabled:flag];
+    [self.configureDefaults setEnabled:flag];
+    [self.reloadDefaults setEnabled:flag];
 }
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem

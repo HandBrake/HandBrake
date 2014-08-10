@@ -85,9 +85,9 @@
 
 #pragma mark - HBViewValidation methods
 
-- (void)setEnabled:(BOOL)enabled
+- (void)setUIEnabled:(BOOL)flag
 {
-    _enabled = enabled;
+    self.enabled = flag;
 }
 
 #pragma mark - UI Methods
@@ -135,18 +135,14 @@
 - (IBAction)insertFolder:(id)sender
 {
     NSIndexPath *selectionIndexPath = [self.treeController selectionIndexPath];
-    if (!selectionIndexPath)
+    if (!selectionIndexPath || [[[self.treeController selectedObjects] firstObject] isBuiltIn])
     {
         selectionIndexPath = [NSIndexPath indexPathWithIndex:self.presets.root.children.count];
     }
 
-    HBPreset *selectedNode = [[self.treeController selectedObjects] firstObject];
-    if (!selectedNode.isBuiltIn)
-    {
-        HBPreset *node = [[HBPreset alloc] initWithFolderName:@"New Folder" builtIn:NO];
-        [self.treeController insertObject:node atArrangedObjectIndexPath:selectionIndexPath];
-        [node autorelease];
-    }
+    HBPreset *node = [[HBPreset alloc] initWithFolderName:@"New Folder" builtIn:NO];
+    [self.treeController insertObject:node atArrangedObjectIndexPath:selectionIndexPath];
+    [node autorelease];
 }
 
 - (IBAction)setDefault:(id)sender

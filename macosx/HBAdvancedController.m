@@ -76,7 +76,7 @@
     return;
 }
 
- - (void) enableUI: (bool) b
+ - (void)setUIEnabled:(BOOL)flag
 {
     unsigned i;
     NSControl * controls[] =
@@ -97,16 +97,16 @@
             NSTextField * tf = (NSTextField *) controls[i];
             if( ![tf isBezeled] )
             {
-                [tf setTextColor: b ? [NSColor controlTextColor] :
+                [tf setTextColor: flag ? [NSColor controlTextColor] :
                     [NSColor disabledControlTextColor]];
                 continue;
             }
         }
-        [controls[i] setEnabled: b];
+        [controls[i] setEnabled: flag];
 
     }
     
-    [fX264optView setWantsLayer:YES];
+    //[fX264optView setWantsLayer:YES];
 }
 
 - (void)dealloc

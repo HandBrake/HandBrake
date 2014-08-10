@@ -120,8 +120,8 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
          * avoids an invalid free
          */
         fX264PresetsUnparsedUTF8String = NULL;
-        _pictureFiltersField = @"Pictures Filters:";
-        _pictureSettingsField = @"Pictures Settings:";
+        _pictureFiltersField = @"Picture Filters:";
+        _pictureSettingsField = @"Picture Settings:";
 
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 
@@ -187,7 +187,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
 	[fVidTurboPassCheck setState: NSOffState];
 }
 
-- (void)enableUI:(BOOL)b {
+- (void)setUIEnabled:(BOOL)flag {
     NSControl *controls[] =
     {
         fFramerateMatrix,
@@ -214,17 +214,17 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
             NSTextField *tf = (NSTextField *)controls[i];
             if (![tf isBezeled])
             {
-                [tf setTextColor: (b ?
+                [tf setTextColor: (flag ?
                                    [NSColor controlTextColor] :
                                    [NSColor disabledControlTextColor])];
                 continue;
             }
         }
-        [controls[i] setEnabled: b];
+        [controls[i] setEnabled:flag];
     }
 
     [self videoMatrixChanged:nil];
-    [self enableX264Widgets:b];
+    [self enableX264Widgets:flag];
 }
 
 - (void)containerChanged:(NSNotification *)aNotification
@@ -1065,7 +1065,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
 
     // enable/disable the checkbox and advanced panel
     [fX264UseAdvancedOptionsCheck setEnabled:enable];
-    [self.fAdvancedOptions enableUI:enable_advanced_panel];
+    [self.fAdvancedOptions setUIEnabled:enable_advanced_panel];
 
     // enable/disable the x264 preset system controls
     for (unsigned i = 0; i < (sizeof(controls) / sizeof(NSControl*)); i++)

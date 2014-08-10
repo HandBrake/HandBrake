@@ -6,6 +6,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "HBViewValidation.h"
 
 extern NSString *keyAudioTrackIndex;
 extern NSString *keyAudioTrackName;
@@ -24,7 +25,7 @@ extern NSString *HBMixdownChangedNotification;
  *
  *  Responds to HBContainerChangedNotification and HBTitleChangedNotification notifications.
  */
-@interface HBAudioController : NSViewController
+@interface HBAudioController : NSViewController <HBViewValidation>
 
 @property (nonatomic, readonly, retain) NSArray *masterTrackArray;
 @property (nonatomic, readonly) NSDictionary *noneTrack;
@@ -33,8 +34,6 @@ extern NSString *HBMixdownChangedNotification;
 
 // Get the list of audio tracks
 @property (readonly, nonatomic, copy) NSArray *audioTracks;
-
-- (void) enableUI: (BOOL) b;
 
 - (void) applySettingsFromPreset:(NSDictionary *)preset;
 - (void) addTracksFromQueue: (NSMutableDictionary *) aQueue;

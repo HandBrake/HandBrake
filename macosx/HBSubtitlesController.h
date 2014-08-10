@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import "HBViewValidation.h"
 
 extern NSString *keySubTrackName;
 extern NSString *keySubTrackIndex;
@@ -24,9 +25,8 @@ extern NSString *keySubTrackSrtCharCode;
  *  HBSubtitlesController
  *  Responds to HBContainerChangedNotification and HBTitleChangedNotification notifications.
  */
-@interface HBSubtitlesController : NSViewController
+@interface HBSubtitlesController : NSViewController <HBViewValidation>
 
-- (void)enableUI:(BOOL)b;
 - (void)addTracksFromQueue:(NSMutableArray *)newSubtitleArray;
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;

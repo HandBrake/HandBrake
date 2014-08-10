@@ -5,11 +5,12 @@
     It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import "HBViewValidation.h"
 
 /**
  *  HBAdvancedController
  */
-@interface HBAdvancedController : NSViewController
+@interface HBAdvancedController : NSViewController <HBViewValidation>
 {
     /* Advanced Tab for opts fX264optView*/
     IBOutlet NSBox              * fOptionsBox;
@@ -69,7 +70,6 @@
 - (NSString *) optionsStringLavc;
 - (void) setOptions: (NSString *)string;
 - (void) setLavcOptions: (NSString *)string;
-- (void) enableUI: (bool) b;
 - (void) setHidden: (BOOL) hide;
 - (void) setLavcOptsEnabled: (BOOL) lavc;
 - (IBAction) X264AdvancedOptionsAnimate: (id) sender;

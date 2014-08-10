@@ -92,13 +92,13 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     return self;
 }
 
-- (void)enableUI:(BOOL)b
+- (void)setUIEnabled:(BOOL)flag
 {
-    [self.trackPopUp setEnabled:b];
-    [self.configureDefaults setEnabled:b];
-    [self.reloadDefaults setEnabled:b];
-    [self.fTableView setEnabled:b];
-    self.enabled = b;
+    [self.trackPopUp setEnabled:flag];
+    [self.configureDefaults setEnabled:flag];
+    [self.reloadDefaults setEnabled:flag];
+    [self.fTableView setEnabled:flag];
+    self.enabled = flag;
 }
 
 - (void)titleChanged:(NSNotification *)aNotification

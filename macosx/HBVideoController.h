@@ -5,6 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import "HBViewValidation.h"
+
 #include "hb.h"
 
 @class HBController;
@@ -17,9 +19,7 @@ extern NSString *HBVideoEncoderChangedNotification;
  *
  *  Responds to HBContainerChangedNotification and HBTitleChangedNotification notifications.
  */
-@interface HBVideoController : NSViewController
-
-- (void)enableUI:(BOOL)b;
+@interface HBVideoController : NSViewController <HBViewValidation>
 
 // Methods to apply the settings to the controller
 - (void)applyVideoSettingsFromQueue:(NSDictionary *)queueToApply;

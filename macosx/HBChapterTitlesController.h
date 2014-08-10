@@ -4,15 +4,15 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include <Cocoa/Cocoa.h>
+#import <Cocoa/Cocoa.h>
+#import "HBViewValidation.h"
 
 /**
  *  HBChapterTitlesController
  *  Responds to HBTitleChangedNotification notifications.
  */
-@interface HBChapterTitlesController : NSViewController
+@interface HBChapterTitlesController : NSViewController <HBViewValidation>
 
-- (void)enableUI:(BOOL)b;
 - (void)addChaptersFromQueue:(NSMutableArray *)newChaptersArray;
 
 /**

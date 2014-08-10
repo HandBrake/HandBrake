@@ -83,12 +83,12 @@
     [fChapterTable reloadData];
 }
 
-- (void)enableUI:(BOOL)b
+- (void)setUIEnabled:(BOOL)flag
 {
-    [fCreateChaptersMarkers setEnabled:b];
-    [fChapterTable setEnabled:b];
-    [fLoadChaptersButton setEnabled:b];
-    [fSaveChaptersButton setEnabled:b];
+    [fCreateChaptersMarkers setEnabled:flag];
+    [fChapterTable setEnabled:flag];
+    [fLoadChaptersButton setEnabled:flag];
+    [fSaveChaptersButton setEnabled:flag];
 }
 
 - (NSArray *)chapterTitlesArray
