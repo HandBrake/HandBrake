@@ -3154,8 +3154,8 @@ fWorkingCount = 0;
         audio->out.normalize_mix_level       = 0;
         audio->out.bitrate                   = [audioDict[@"JobBitrate"] intValue];
         audio->out.samplerate                = [audioDict[@"JobSamplerate"] intValue];
-        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] intValue];
-        audio->out.gain                      = [audioDict[@"TrackGainSlider"] intValue];
+        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] floatValue];
+        audio->out.gain                      = [audioDict[@"TrackGainSlider"] floatValue];
         audio->out.dither_method             = hb_audio_dither_get_default();
 
         hb_audio_add(job, audio);
@@ -5441,7 +5441,9 @@ the user is using "Custom" settings by determining the sender*/
     }];
 }
 
-   /* We use this method to recreate new, updated factory presets */
+/**
+ * We use this method to recreate new, updated factory presets
+ */
 - (IBAction)addFactoryPresets:(id)sender
 {
     [presetManager generateBuiltInPresets];

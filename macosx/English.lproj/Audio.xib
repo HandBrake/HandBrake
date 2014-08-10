@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -230,7 +230,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.PassThruDisabled" id="L5Z-ZJ-Zjq"/>
-                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="gkE-Na-A2j"/>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.gain" id="AwB-52-7Cm">
+                                                <dictionary key="options">
+                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                </dictionary>
+                                            </binding>
                                         </connections>
                                     </tableColumn>
                                     <tableColumn identifier="drc" width="35" minWidth="10" maxWidth="3.4028229999999999e+38" id="whw-Me-VIU">
@@ -243,11 +247,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.DRCEnabled" id="uRE-B4-yzg"/>
-                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.drc" id="Not-zD-uE1">
-                                                <dictionary key="options">
-                                                    <bool key="NSValidatesImmediately" value="YES"/>
-                                                </dictionary>
-                                            </binding>
+                                            <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.drc" id="nOq-9s-eHF"/>
                                         </connections>
                                     </tableColumn>
                                     <tableColumn identifier="drctext" editable="NO" width="27" minWidth="10" maxWidth="3.4028229999999999e+38" id="ASp-Mc-vG6">

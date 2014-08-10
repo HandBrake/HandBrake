@@ -448,36 +448,21 @@ static NSMutableArray *masterBitRateArray = nil;
 #pragma mark -
 #pragma mark Validation
 
-// Because we have indicated that the binding for the drc validates immediately we can implement the
-// key value binding method to ensure the drc stays in our accepted range.
-- (BOOL) validateDrc: (id *) ioValue error: (NSError *) outError
-
-{
-    BOOL retval = YES;
-
-    if (nil != *ioValue)
-    {
-        if (0.0 < [*ioValue floatValue] && 1.0 > [*ioValue floatValue])
-        {
-            *ioValue = @1.0f;
-        }
-    }
-
-    return retval;
-}
-
 // Because we have indicated that the binding for the gain validates immediately we can implement the
 // key value binding method to ensure the gain stays in our accepted range.
-
-- (BOOL) validateGain: (id *) ioValue error: (NSError *) outError
+- (BOOL)validateGain:(id *)ioValue error:(NSError *)outError
 {
     BOOL retval = YES;
-    
+
     if (nil != *ioValue)
     {
-        if (0.0 < [*ioValue floatValue] && 1.0 > [*ioValue floatValue])
+        if ([*ioValue intValue] < -20)
         {
-            *ioValue = @0.0f;
+            *ioValue = @(-20);
+        }
+        else if ([*ioValue intValue] > 20)
+        {
+            *ioValue = @20;
         }
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -441,8 +441,9 @@ DQ
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.gain" id="3I5-Lc-Tqe">
+                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.gain" id="vWH-Cd-dKZ">
                                                     <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
                                                         <string key="NSValueTransformerName">HBIntegerTrasformer</string>
                                                     </dictionary>
                                                 </binding>
@@ -458,12 +459,8 @@ DQ
                                             <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="4" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="say-2a-x5G"/>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.drc" id="4cX-g9-eBy">
-                                                    <dictionary key="options">
-                                                        <bool key="NSValidatesImmediately" value="YES"/>
-                                                    </dictionary>
-                                                </binding>
                                                 <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.passThruDisabled" id="q8u-5E-Adj"/>
+                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.drc" id="3lI-ks-4a5"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn identifier="drctext" editable="NO" width="25" minWidth="10" maxWidth="3.4028229999999999e+38" id="eLM-kL-FjB">
@@ -479,10 +476,9 @@ DQ
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.drc" id="KdR-3K-LXL">
+                                                <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.drc" id="TKR-FO-JR4">
                                                     <dictionary key="options">
                                                         <bool key="NSConditionallySetsEditable" value="YES"/>
-                                                        <string key="NSValueTransformerName">HBIntegerTrasformer</string>
                                                     </dictionary>
                                                 </binding>
                                                 <binding destination="I6S-EX-Dvu" name="enabled" keyPath="arrangedObjects.passThruDisabled" id="IIO-pS-nND"/>
