@@ -11,11 +11,14 @@ namespace HandBrake.ApplicationServices.Factories
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Model.Subtitle;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
@@ -28,6 +31,20 @@ namespace HandBrake.ApplicationServices.Factories
     public class PlistPresetFactory
     {
         /// <summary>
+        /// The lang list.
+        /// </summary>
+        private static IDictionary<string, string> langList;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="PlistPresetFactory"/> class. 
+        /// </summary>
+        static PlistPresetFactory()
+        {
+            IDictionary<string, string> langMap = LanguageUtilities.MapLanguages();
+            langList = (from entry in langMap select entry).ToDictionary(pair => pair.Value, pair => pair.Key);
+        }
+
+        /// <summary>
         /// The create preset.
         /// </summary>
         /// <param name="plist">
@@ -38,7 +55,13 @@ namespace HandBrake.ApplicationServices.Factories
         /// </returns>
         public static Preset CreatePreset(PList plist)
         {
-            Preset preset = new Preset { Task = new EncodeTask(), Category = PresetService.UserPresetCatgoryName };
+            Preset preset = new Preset
+                                {
+                                    Task = new EncodeTask(),
+                                    Category = PresetService.UserPresetCatgoryName,
+                                    AudioTrackBehaviours = new AudioBehaviours(),
+                                    SubtitleTrackBehaviours = new SubtitleBehaviours()
+                                };
 
             // Parse the settings out.
             foreach (var item in plist)
@@ -256,7 +279,7 @@ namespace HandBrake.ApplicationServices.Factories
 
                 // Chapter Markers Tab
                 case "ChapterMarkers":
-                    preset.Task.IncludeChapterMarkers = kvp.Value == 1;
+                    preset.Task.IncludeChapterMarkers = kvp.Value == true;
                     break;
 
                 // Advanced x264 tab
@@ -299,22 +322,54 @@ namespace HandBrake.ApplicationServices.Factories
 
                 // Allowed Passthru
                 case "AudioAllowAACPass":
-                    preset.Task.AllowedPassthruOptions.AudioAllowAACPass = kvp.Value == 1;
+                    preset.Task.AllowedPassthruOptions.AudioAllowAACPass = kvp.Value == true;
                     break;
                 case "AudioAllowAC3Pass":
-                    preset.Task.AllowedPassthruOptions.AudioAllowAC3Pass = kvp.Value == 1;
+                    preset.Task.AllowedPassthruOptions.AudioAllowAC3Pass = kvp.Value == true;
                     break;
                 case "AudioAllowDTSHDPass":
-                    preset.Task.AllowedPassthruOptions.AudioAllowDTSHDPass = kvp.Value == 1;
+                    preset.Task.AllowedPassthruOptions.AudioAllowDTSHDPass = kvp.Value == true;
                     break;
                 case "AudioAllowDTSPass":
-                    preset.Task.AllowedPassthruOptions.AudioAllowDTSPass = kvp.Value == 1;
+                    preset.Task.AllowedPassthruOptions.AudioAllowDTSPass = kvp.Value == true;
                     break;
                 case "AudioAllowMP3Pass":
-                    preset.Task.AllowedPassthruOptions.AudioAllowMP3Pass = kvp.Value == 1;
+                    preset.Task.AllowedPassthruOptions.AudioAllowMP3Pass = kvp.Value == true;
                     break;
                 case "AudioEncoderFallback":
                     preset.Task.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(kvp.Value);
+                    break;
+
+                // Audio Defaults
+                case "AudioLanguageList":
+                    preset.AudioTrackBehaviours.SelectedLangauges = new BindingList<string>(ParseLangaugeCodeList(kvp.Value));
+                    break;
+                case "AudioSecondaryEncoderMode":
+                    break;
+                case "AudioTrackSelectionBehavior":
+                    preset.AudioTrackBehaviours.SelectedBehaviour = kvp.Value == "all"
+                                                                        ? AudioBehaviourModes.AllMatching
+                                                                        : kvp.Value == "first"
+                                                                              ? AudioBehaviourModes.FirstMatch
+                                                                              : AudioBehaviourModes.None;
+                    break;
+
+                // Subtitle Defaults
+                case "SubtitleAddForeignAudioSearch":
+                    preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = kvp.Value == true;
+                    break;
+                case "SubtitleAddCC":
+                    preset.SubtitleTrackBehaviours.AddClosedCaptions = kvp.Value == true;
+                    break;
+                case "SubtitleLanguageList":
+                    preset.SubtitleTrackBehaviours.SelectedLangauges = new BindingList<string>(ParseLangaugeCodeList(kvp.Value));
+                    break;
+                case "SubtitleTrackSelectionBehavior":
+                    preset.SubtitleTrackBehaviours.SelectedBehaviour = kvp.Value == "all"
+                                                                     ? SubtitleBehaviourModes.AllMatching
+                                                                     : kvp.Value == "first"
+                                                                           ? SubtitleBehaviourModes.FirstMatch
+                                                                           : SubtitleBehaviourModes.None;
                     break;
             }
         }
@@ -334,6 +389,30 @@ namespace HandBrake.ApplicationServices.Factories
         }
 
         /// <summary>
+        /// The parse langauge code list.
+        /// </summary>
+        /// <param name="languages">
+        /// The languages.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        private static IEnumerable<string> ParseLangaugeCodeList(IEnumerable<object> languages)
+        {
+            List<string> languageCodesList = new List<string>();
+            foreach (var item in languages)
+            {
+                string language;
+                if (langList.TryGetValue(item.ToString(), out language))
+                {
+                    languageCodesList.Add(language);
+                }            
+            }
+
+            return languageCodesList;
+        }
+
+        /// <summary>
         /// Parse an audio track's parameters.
         /// </summary>
         /// <param name="audioTrack">
@@ -350,7 +429,7 @@ namespace HandBrake.ApplicationServices.Factories
                 switch (item.Key)
                 {
                     case "AudioBitrate":
-                        track.Bitrate = int.Parse(item.Value);
+                        track.Bitrate = item.Value;
                         break;
                     case "AudioEncoder":
                         track.Encoder = Converters.GetAudioEncoder(item.Value.Trim());
@@ -359,16 +438,16 @@ namespace HandBrake.ApplicationServices.Factories
                         track.MixDown = Converters.GetAudioMixDown(item.Value.Trim());
                         break;
                     case "AudioSamplerate":
-                        track.SampleRate = item.Value == "Auto" ? 0 : double.Parse(item.Value, CultureInfo.InvariantCulture);
+                        track.SampleRate = item.Value == "Auto" ? 0 : double.Parse(item.Value);
                         break;
                     case "AudioTrack":
                         // track.SourceTrack = value; We don't do anything with this one.
                         break;
                     case "AudioTrackDRCSlider":
-                        track.DRC = double.Parse(item.Value.ToString(), CultureInfo.InvariantCulture);
+                        track.DRC = item.Value;
                         break;
                     case "AudioTrackGainSlider":
-                        track.Gain = int.Parse(item.Value.ToString(), CultureInfo.InvariantCulture);
+                        track.Gain = item.Value;
                         break;
                 }
             }

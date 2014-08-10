@@ -212,14 +212,16 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             switch (audioEnc)
             {
-                case "AAC (faac)":
-                case "AAC (CoreAudio)":
+                case "AAC (faac)":         
                 case "AAC (ffmpeg)":
                 case "AAC (avcodec)":
                     return AudioEncoder.ffaac;
                 case "AAC (FDK)":
+                case "AAC (CoreAudio)":
                     return AudioEncoder.fdkaac;
                 case "HE-AAC (FDK)":
+                case "HE-AAC (CoreAudio)":
+                case "HE-AAC":
                     return AudioEncoder.fdkheaac;
                 case "MP3 (lame)":
                 case "MP3":

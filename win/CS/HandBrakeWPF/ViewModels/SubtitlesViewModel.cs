@@ -494,8 +494,6 @@ namespace HandBrakeWPF.ViewModels
 
         #region Implemented Interfaces
 
-        #region ITabInterface
-
         /// <summary>
         /// Setup this tab for the specified preset.
         /// </summary>
@@ -554,8 +552,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.AutomaticSubtitleSelection();
         }
-
-        #endregion
 
         #endregion
 

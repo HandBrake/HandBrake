@@ -355,8 +355,6 @@ namespace HandBrakeWPF.ViewModels
 
         #region Implemented Interfaces
 
-        #region ITabInterface
-
         /// <summary>
         /// Setup this tab for the specified preset.
         /// </summary>
@@ -376,9 +374,9 @@ namespace HandBrakeWPF.ViewModels
 
             if (preset != null && preset.Task != null)
             {
-                this.SetupTracks();
-
                 this.Task.AllowedPassthruOptions = new AllowedPassthru(preset.Task.AllowedPassthruOptions);
+
+                this.SetupTracks();
             }
 
             this.NotifyOfPropertyChange(() => this.Task);
@@ -432,8 +430,6 @@ namespace HandBrakeWPF.ViewModels
             // Force UI Updates
             this.NotifyOfPropertyChange(() => this.Task);
         }
-
-        #endregion
 
         #endregion
 
