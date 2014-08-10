@@ -4796,6 +4796,15 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) toggleDrawer:(id)sender
 {
+    if ([fPresetDrawer state] == NSDrawerClosedState)
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"DefaultPresetsDrawerShow"];
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"DefaultPresetsDrawerShow"];
+    }
+
     [fPresetDrawer toggle:self];
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -35,7 +35,7 @@
         </window>
         <userDefaultsController representsSharedInstance="YES" id="61" userLabel="Shared Defaults"/>
         <customView id="233" userLabel="General">
-            <rect key="frame" x="0.0" y="0.0" width="500" height="399"/>
+            <rect key="frame" x="0.0" y="0.0" width="500" height="376"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <popUpButton verticalHuggingPriority="750" id="374">
@@ -121,7 +121,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="275">
-                    <rect key="frame" x="18" y="366" width="103" height="14"/>
+                    <rect key="frame" x="18" y="343" width="103" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="At launch:" id="307">
                         <font key="font" metaFont="smallSystem"/>
@@ -169,17 +169,6 @@
                     </buttonCell>
                     <connections>
                         <binding destination="61" name="value" keyPath="values.DefaultAutoNaming" id="262"/>
-                    </connections>
-                </button>
-                <button id="238">
-                    <rect key="frame" x="124" y="364" width="133" height="18"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <buttonCell key="cell" type="check" title="Show Presets Drawer" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="301">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="61" name="value" keyPath="values.DefaultPresetsDrawerShow" id="260"/>
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="448">
