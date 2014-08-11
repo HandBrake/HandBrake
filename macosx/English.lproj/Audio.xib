@@ -66,7 +66,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="GLD-lI-qeh" id="LlC-ua-mth">
-                                <rect key="frame" x="0.0" y="0.0" width="887" height="248"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -94,7 +94,7 @@
                                             <binding destination="rzb-Si-Kpf" name="selectedObject" keyPath="arrangedObjects.track" previousBinding="oTn-J8-yoY" id="fh6-LS-cAe"/>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="codec" width="141" minWidth="10" maxWidth="3.4028229999999999e+38" id="dI5-Bu-m9C">
+                                    <tableColumn identifier="codec" width="140" minWidth="140" maxWidth="3.4028229999999999e+38" id="dI5-Bu-m9C">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Codec">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -117,7 +117,7 @@
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.enabled" id="3q0-x0-5zx"/>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="mixdown" width="129" minWidth="10" maxWidth="3.4028229999999999e+38" id="3wx-Uv-5Uc">
+                                    <tableColumn identifier="mixdown" width="128" minWidth="128" maxWidth="3.4028229999999999e+38" id="3wx-Uv-5Uc">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Mixdown">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -144,7 +144,7 @@
                                             <binding destination="rzb-Si-Kpf" name="contentValues" keyPath="arrangedObjects.mixdowns.keyAudioMixdownName" previousBinding="Cfe-Wx-NFu" id="eLm-QG-NGR"/>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="samplerate" width="73" minWidth="10" maxWidth="3.4028229999999999e+38" id="4ge-RO-Qjs">
+                                    <tableColumn identifier="samplerate" width="72" minWidth="72" maxWidth="3.4028229999999999e+38" id="4ge-RO-Qjs">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Samplerate">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -171,7 +171,7 @@
                                             <binding destination="rzb-Si-Kpf" name="contentValues" keyPath="arrangedObjects.sampleRates.keyAudioSampleRateName" previousBinding="92M-oG-NTY" id="ErN-GC-Ge9"/>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="bitrate" width="72" minWidth="10" maxWidth="3.4028229999999999e+38" id="icy-WJ-qjH">
+                                    <tableColumn identifier="bitrate" width="72" minWidth="72" maxWidth="3.4028229999999999e+38" id="icy-WJ-qjH">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Bitrate">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -198,7 +198,7 @@
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.bitrateEnabled" id="eNf-Cc-xL3"/>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="gain" width="36" minWidth="10" maxWidth="3.4028234663852886e+38" id="psI-ue-Jsr">
+                                    <tableColumn identifier="gain" width="36" minWidth="36" maxWidth="3.4028234663852886e+38" id="psI-ue-Jsr">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Gain">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -216,7 +216,7 @@
                                             </binding>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="gainText" width="25" minWidth="10" maxWidth="3.4028234663852886e+38" id="fy5-z6-TRg">
+                                    <tableColumn identifier="gainText" width="25" minWidth="25" maxWidth="3.4028234663852886e+38" id="fy5-z6-TRg">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -237,7 +237,7 @@
                                             </binding>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="drc" width="35" minWidth="10" maxWidth="3.4028229999999999e+38" id="whw-Me-VIU">
+                                    <tableColumn identifier="drc" width="35" minWidth="35" maxWidth="3.4028229999999999e+38" id="whw-Me-VIU">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="DRC">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -250,7 +250,7 @@
                                             <binding destination="rzb-Si-Kpf" name="value" keyPath="arrangedObjects.drc" id="nOq-9s-eHF"/>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="drctext" editable="NO" width="27" minWidth="10" maxWidth="3.4028229999999999e+38" id="ASp-Mc-vG6">
+                                    <tableColumn identifier="drctext" editable="NO" width="27" minWidth="27" maxWidth="3.4028229999999999e+38" id="ASp-Mc-vG6">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -288,7 +288,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="GLD-lI-qeh">
-                        <rect key="frame" x="0.0" y="0.0" width="887" height="17"/>
+                        <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
