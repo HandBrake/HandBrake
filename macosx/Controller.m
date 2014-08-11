@@ -1420,22 +1420,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (BOOL) validateMenuItem: (NSMenuItem *) menuItem
 {
     SEL action = [menuItem action];
-    
+
     hb_state_t s;
-    hb_get_state2( fHandle, &s );
-    
-    if (fHandle)
+    hb_get_state2( fQueueEncodeLibhb, &s );
+
+    if (fQueueEncodeLibhb)
     {
         if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
             return SuccessfulScan && [fWindow attachedSheet] == nil;
         
-        if (action == @selector(browseSources:))
-        {
-            if (s.state == HB_STATE_SCANNING)
-                return NO;
-            else
-                return [fWindow attachedSheet] == nil;
-        }
         if (action == @selector(selectDefaultPreset:))
             return [fWindow attachedSheet] == nil;
         if (action == @selector(Pause:))
@@ -1471,6 +1464,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             else
                 return NO;
+        }
+        if (action == @selector(browseSources:))
+        {
+            hb_get_state2( fHandle, &s );
+
+            if (s.state == HB_STATE_SCANNING)
+                return NO;
+            else
+                return [fWindow attachedSheet] == nil;
         }
     }
 
