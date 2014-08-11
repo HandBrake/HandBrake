@@ -491,17 +491,58 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     }
 
     /* Chapters */
-    for ( ii = 0; ii < ti->chapter_count; ii++ )
+    for ( ii = 0, jj = 0; ii < ti->chapter_count; ii++ )
     {
         char chapter_title[80];
+
+        // Sanity check start time of this chapter.
+        // If it is beyond the end of the title, drop it.
+        if (ti->chapters[ii].start > ti->duration)
+        {
+            hb_log("bd: chapter %d invalid start %ld, dropping", ii+1,
+                   ti->chapters[ii].start);
+            continue;
+        }
+
         chapter = calloc( sizeof( hb_chapter_t ), 1 );
 
-        chapter->index = ii + 1;
+        chapter->index = ++jj;
         sprintf( chapter_title, "Chapter %d", chapter->index );
         hb_chapter_set_title( chapter, chapter_title );
 
         chapter->duration = ti->chapters[ii].duration;
         chapter->block_start = ti->chapters[ii].offset;
+
+        // Sanity check chapter duration and start times
+        // Have seen some invalid durations in the wild
+        if (ii < ti->chapter_count - 1)
+        {
+            // Validate start time
+            if (ti->chapters[ii+1].start < ti->chapters[ii].start)
+            {
+                hb_log("bd: chapter %d invalid start %ld", ii+1,
+                       ti->chapters[ii+1].start);
+                ti->chapters[ii+1].start = ti->chapters[ii].start +
+                                           chapter->duration;
+            }
+            if (ti->chapters[ii+1].start - ti->chapters[ii].start !=
+                chapter->duration)
+            {
+                hb_log("bd: chapter %d invalid duration %ld", ii+1,
+                       chapter->duration);
+                chapter->duration = ti->chapters[ii+1].start -
+                                    ti->chapters[ii].start;
+            }
+        }
+        else
+        {
+            if (ti->duration - ti->chapters[ii].start != chapter->duration)
+            {
+                hb_log("bd: chapter %d invalid duration %ld", ii+1,
+                       chapter->duration);
+                chapter->duration = ti->duration - ti->chapters[ii].start;
+            }
+        }
 
         int seconds      = ( chapter->duration + 45000 ) / 90000;
         chapter->hours   = ( seconds / 3600 );
