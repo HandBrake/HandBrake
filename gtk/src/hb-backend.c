@@ -3519,6 +3519,8 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 
     // First configure widgets
     mod = ghb_settings_combo_int(settings, "PictureModulus");
+    if (mod <= 0)
+        mod = 16;
     keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
     autocrop = ghb_settings_get_boolean(settings, "PictureAutoCrop");
     autoscale = ghb_settings_get_boolean(settings, "autoscale");
