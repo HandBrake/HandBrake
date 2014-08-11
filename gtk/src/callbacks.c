@@ -604,9 +604,9 @@ set_destination_settings(signal_user_data_t *ud, GValue *settings)
             }
             else if (!strncmp(p, "{title}", strlen("{title}")))
             {
-                gint title = ghb_settings_get_int(settings, "title_no");
+                gint title = ghb_settings_get_int(settings, "title");
                 if (title >= 0)
-                    g_string_append_printf(str, "%d", title+1);
+                    g_string_append_printf(str, "%d", title);
                 p += strlen("{title}");
             }
             else if (!strncmp(p, "{chapters}", strlen("{chapters}")))
