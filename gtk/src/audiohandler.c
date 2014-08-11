@@ -438,7 +438,7 @@ audio_update_dialog_widgets(signal_user_data_t *ud, GValue *asettings)
 
         ghb_ui_update(ud, "AudioTrackQuality",
                       ghb_settings_get_value(asettings, "AudioTrackQuality"));
-        quality = ghb_settings_get_double(asettings, "AudioTrackQualitySlider");
+        quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
         s_quality = get_quality_string(asettings, quality);
         ghb_ui_update(ud, "AudioTrackQualityValue", ghb_string_value(s_quality));
         ghb_ui_update(ud, "AudioTrackQualityEnable",
@@ -1012,6 +1012,21 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
+    float low, high, gran, defval;
+    int dir;
+    hb_audio_quality_get_limits(acodec, &low, &high, &gran, &dir);
+    defval = hb_audio_quality_get_default(acodec);
+    GtkScaleButton *sb;
+    GtkAdjustment *adj;
+    sb = GTK_SCALE_BUTTON(GHB_WIDGET(ud->builder, "AudioTrackQuality"));
+    adj = gtk_scale_button_get_adjustment(sb);
+    if (dir)
+    {
+        // Quality values are inverted
+        defval = high - defval + low;
+    }
+    gtk_adjustment_configure (adj, defval, low, high, gran, gran * 10, 0);
+
     if (block_updates)
     {
         prev_acodec = acodec;
@@ -1077,21 +1092,6 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_audio_list_refresh_selected(ud);
         ghb_live_reset(ud);
     }
-
-    float low, high, gran, defval;
-    int dir;
-    hb_audio_quality_get_limits(acodec, &low, &high, &gran, &dir);
-    defval = hb_audio_quality_get_default(acodec);
-    GtkScaleButton *sb;
-    GtkAdjustment *adj;
-    sb = GTK_SCALE_BUTTON(GHB_WIDGET(ud->builder, "AudioTrackQuality"));
-    adj = gtk_scale_button_get_adjustment(sb);
-    if (dir)
-    {
-        // Quality values are inverted
-        defval = high - defval + low;
-    }
-    gtk_adjustment_configure (adj, defval, low, high, gran, gran * 10, 0);
 }
 
 G_MODULE_EXPORT void
@@ -1229,8 +1229,6 @@ G_MODULE_EXPORT void
 quality_widget_changed_cb(GtkWidget *widget, gdouble quality, signal_user_data_t *ud)
 {
     GValue *asettings;
-
-    g_debug("quality_widget_changed_cb ()");
 
     ghb_check_dependency(ud, widget, NULL);
     char *s_quality = get_quality_string(ud->settings, quality);
