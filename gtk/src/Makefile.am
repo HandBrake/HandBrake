@@ -37,6 +37,8 @@ ghb_SOURCES = \
 	callbacks.h \
 	queuehandler.c \
 	queuehandler.h \
+	videohandler.c \
+	videohandler.h \
 	audiohandler.c \
 	audiohandler.h \
 	subtitlehandler.c \

@@ -700,7 +700,7 @@ watch_volumes(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
-G_MODULE_EXPORT void x264_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
+G_MODULE_EXPORT void video_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void position_overlay_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_data_t *ud);
 
@@ -943,9 +943,9 @@ main(int argc, char *argv[])
     buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
 
-    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
     buffer = gtk_text_view_get_buffer(textview);
-    g_signal_connect(buffer, "changed", (GCallback)x264_option_changed_cb, ud);
+    g_signal_connect(buffer, "changed", (GCallback)video_option_changed_cb, ud);
 
     ghb_combo_init(ud);
 
@@ -961,13 +961,6 @@ main(int argc, char *argv[])
     // I wrote my own connector so that I could pass user data
     // to the callbacks.  Builder's standard autoconnect doesn't all this.
     gtk_builder_connect_signals_full(ud->builder, MyConnect, ud);
-
-    GtkWidget *presetSlider = GHB_WIDGET(ud->builder, "x264PresetSlider");
-    const char * const *x264_presets;
-    int count = 0;
-    x264_presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
-    while (x264_presets && x264_presets[count]) count++;
-    gtk_range_set_range(GTK_RANGE(presetSlider), 0, count-1);
 
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);

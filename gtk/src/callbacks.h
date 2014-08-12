@@ -82,6 +82,10 @@ void ghb_chapter_list_refresh_all(signal_user_data_t *ud);
 void ghb_load_settings(signal_user_data_t * ud);
 void ghb_set_current_title_settings(signal_user_data_t *ud);
 void ghb_container_empty(GtkContainer *c);
+void ghb_show_container_options(signal_user_data_t *ud);
+void ghb_scale_configure(signal_user_data_t *ud, char *name, double val,
+                         double min, double max, double step, double page,
+                         int digits, gboolean inverted);
 
 #endif // _CALLBACKS_H_
 

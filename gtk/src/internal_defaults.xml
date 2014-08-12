@@ -126,7 +126,7 @@
         <true />
         <key>PictureDeinterlaceDecomb</key>
         <false />
-        <key>x264PresetSlider</key>
+        <key>VideoPresetSlider</key>
         <integer>0</integer>
         <key>x264ZeroLatency</key>
         <false />
@@ -359,21 +359,19 @@
         <integer>2</integer>
         <key>VideoQualitySlider</key>
         <real>0.60</real>
-        <key>lavcOption</key>
-        <string></string>
         <key>x264Option</key>
         <string></string>
-        <key>x264Preset</key>
+        <key>VideoPreset</key>
         <string>custom</string>
-        <key>x264Tune</key>
+        <key>VideoTune</key>
         <string></string>
-        <key>h264Profile</key>
+        <key>VideoProfile</key>
         <string></string>
-        <key>h264Level</key>
+        <key>VideoLevel</key>
         <string></string>
         <key>x264UseAdvancedOptions</key>
         <false />
-        <key>x264OptionExtra</key>
+        <key>VideoOptionExtra</key>
         <string></string>
     </dict>
 </dict>

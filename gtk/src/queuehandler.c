@@ -472,49 +472,58 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     if (video_encoder->codec == HB_VCODEC_X264 &&
         !ghb_settings_get_boolean(settings, "x264UseAdvancedOptions"))
     {
-        const gchar *preset_opt, *tune_opt;
-        const gchar *profile_opt, *level_opt, *extra_opt;
-        gboolean fastdecode, zerolatency;
+        const gchar *extra_opt;
 
-        preset_opt = ghb_settings_get_const_string(settings, "x264Preset");
-        tune_opt = ghb_settings_get_const_string(settings, "x264Tune");
-        fastdecode = ghb_settings_get_boolean(settings, "x264FastDecode");
-        zerolatency = ghb_settings_get_boolean(settings, "x264ZeroLatency");
-        profile_opt = ghb_settings_get_const_string(settings, "h264Profile");
-        level_opt = ghb_settings_get_const_string(settings, "h264Level");
-        extra_opt = ghb_settings_get_const_string(settings, "x264OptionExtra");
+        // If the encoder supports presets...
+        if (hb_video_encoder_get_presets(video_encoder->codec) != NULL)
+        {
+            const gchar *preset_opt, *tune_opt;
+            const gchar *profile_opt, *level_opt;
+            gboolean fastdecode, zerolatency;
 
-        XPRINT("<b>Video Options:</b> <small>Preset: %s</small>", preset_opt);
-        if ((tune_opt != NULL && tune_opt[0] != 0) || zerolatency || fastdecode)
-        {
-            const char *prefix = "";
-            XPRINT("<small> - Tune: ");
-            if (tune_opt != NULL && tune_opt[0] != 0)
+            preset_opt = ghb_settings_get_const_string(settings, "VideoPreset");
+            tune_opt = ghb_settings_get_const_string(settings, "VideoTune");
+            fastdecode = ghb_settings_get_boolean(settings, "x264FastDecode");
+            zerolatency = ghb_settings_get_boolean(settings, "x264ZeroLatency");
+            profile_opt = ghb_settings_get_const_string(settings, "VideoProfile");
+            level_opt = ghb_settings_get_const_string(settings, "VideoLevel");
+            extra_opt = ghb_settings_get_const_string(settings, "VideoOptionExtra");
+
+            XPRINT("<b>Video Options:</b> <small>Preset: %s</small>", preset_opt);
+            if ((tune_opt != NULL && tune_opt[0] != 0) || zerolatency || fastdecode)
             {
-                XPRINT("%s%s", prefix, tune_opt);
-                prefix = ",";
+                const char *prefix = "";
+                XPRINT("<small> - Tune: ");
+                if (tune_opt != NULL && tune_opt[0] != 0)
+                {
+                    XPRINT("%s%s", prefix, tune_opt);
+                    prefix = ",";
+                }
+                if (video_encoder->codec == HB_VCODEC_X264)
+                {
+                    if (fastdecode)
+                    {
+                        XPRINT("%sfastdecode", prefix);
+                        prefix = ",";
+                    }
+                    if (zerolatency)
+                    {
+                        XPRINT("%szerolatency", prefix);
+                        prefix = ",";
+                    }
+                }
+                XPRINT("</small>");
             }
-            if (fastdecode)
+            if (profile_opt != NULL && profile_opt[0] != 0)
             {
-                XPRINT("%sfastdecode", prefix);
-                prefix = ",";
+                XPRINT("<small> - Profile: %s</small>", profile_opt);
             }
-            if (zerolatency)
+            if (level_opt != NULL && level_opt[0] != 0)
             {
-                XPRINT("%szerolatency", prefix);
-                prefix = ",";
+                XPRINT("<small> - Level: %s</small>", level_opt);
             }
-            XPRINT("</small>");
+            XPRINT("\n");
         }
-        if (profile_opt != NULL && profile_opt[0] != 0)
-        {
-            XPRINT("<small> - Profile: %s</small>", profile_opt);
-        }
-        if (level_opt != NULL && level_opt[0] != 0)
-        {
-            XPRINT("<small> - Level: %s</small>", level_opt);
-        }
-        XPRINT("\n");
 
         // Next line in the display (Video Encoder Options)
         // Video Advanced Options: detailed settings
@@ -523,8 +532,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             XPRINT("<b>Advanced Options:</b> <small>%s</small>\n", extra_opt);
         }
     }
-    else if (video_encoder->codec == HB_VCODEC_X264 ||
-             (video_encoder->codec | HB_VCODEC_FFMPEG_MASK))
+    else if (video_encoder->codec == HB_VCODEC_X264)
     {
         // Next line in the display (Video Encoder Options)
         // Video Advanced Options: detailed settings

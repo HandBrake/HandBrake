@@ -137,19 +137,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.0</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>baseline</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>fast</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -270,19 +268,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>1.3</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>baseline</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -403,19 +399,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.1</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>high</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -536,19 +530,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.1</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>high</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -685,19 +677,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.1</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>high</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string>qpmin=4:cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500</string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -834,19 +824,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.1</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>high</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -983,19 +971,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>4.0</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>high</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -1116,19 +1102,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.0</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>main</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -1249,19 +1233,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.1</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>main</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -1382,19 +1364,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>3.1</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>main</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -1530,19 +1510,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>4.0</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>main</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>veryfast</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>
@@ -1679,19 +1657,17 @@
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
-				<key>h264Level</key>
+				<key>VideoLevel</key>
 				<string>4.1</string>
-				<key>h264Profile</key>
+				<key>VideoProfile</key>
 				<string>high</string>
-				<key>lavcOption</key>
-				<string></string>
 				<key>x264Option</key>
 				<string></string>
-				<key>x264OptionExtra</key>
+				<key>VideoOptionExtra</key>
 				<string></string>
-				<key>x264Preset</key>
+				<key>VideoPreset</key>
 				<string>medium</string>
-				<key>x264Tune</key>
+				<key>VideoTune</key>
 				<string></string>
 				<key>x264UseAdvancedOptions</key>
 				<integer>0</integer>

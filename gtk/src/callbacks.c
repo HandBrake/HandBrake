@@ -981,7 +981,7 @@ update_title_duration(signal_user_data_t *ud)
     g_free(text);
 }
 
-static void show_container_options(signal_user_data_t *ud)
+void ghb_show_container_options(signal_user_data_t *ud)
 {
     GtkWidget *w1, *w2, *w3;
     w1 = GHB_WIDGET(ud->builder, "Mp4LargeFile");
@@ -1029,8 +1029,8 @@ spin_configure(signal_user_data_t *ud, char *name, double val, double min, doubl
     adjustment_configure(adj, val, min, max, step, page, page_sz);
 }
 
-static void
-scale_configure(
+void
+ghb_scale_configure(
     signal_user_data_t *ud,
     char *name,
     double val, double min, double max,
@@ -1122,8 +1122,8 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
 
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
     val = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
-    scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
-                    step, page, digits, inverted);
+    ghb_scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
+                        step, page, digits, inverted);
 }
 
 static void
@@ -1191,7 +1191,7 @@ ghb_load_settings(signal_user_data_t * ud)
 
     ghb_set_widget_ranges(ud, ud->settings);
     ghb_check_all_depencencies(ud);
-    show_container_options(ud);
+    ghb_show_container_options(ud);
     check_chapter_markers(ud);
 
     ghb_settings_to_ui(ud, ud->settings);
@@ -1634,7 +1634,7 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     g_debug("container_changed_cb ()");
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
-    show_container_options(ud);
+    ghb_show_container_options(ud);
     update_acodec(ud);
     ghb_update_destination_extension(ud);
     ghb_clear_presets_selection(ud);
@@ -2136,7 +2136,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     double vquality = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
     if (vquality < 1.0)
     {
-        ghb_ui_update(ud, "h264Profile", ghb_string_value("auto"));
+        ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
     }
 
     gint vcodec;
@@ -2166,24 +2166,6 @@ http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_live_reset(ud);
     // AC3 is not allowed when Web optimized
     ghb_grey_combo_options (ud);
-}
-
-G_MODULE_EXPORT void
-vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    float val, vqmin, vqmax, step, page;
-    int inverted, digits;
-
-    ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
-    show_container_options(ud);
-    ghb_clear_presets_selection(ud);
-    ghb_live_reset(ud);
-
-    val = ghb_vquality_default(ud);
-    ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
-    scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
-                    step, page, digits, inverted);
 }
 
 G_MODULE_EXPORT gboolean
@@ -4063,8 +4045,8 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
     val = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
-    scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
-                    step, page, digits, inverted);
+    ghb_scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
+                        step, page, digits, inverted);
 }
 
 G_MODULE_EXPORT void

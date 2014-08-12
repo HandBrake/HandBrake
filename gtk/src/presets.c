@@ -31,6 +31,7 @@
 #include "presets.h"
 #include "values.h"
 #include "lang.h"
+#include "videohandler.h"
 
 #define MAX_NESTED_PRESET 3
 
@@ -2661,11 +2662,11 @@ import_xlat_preset(GValue *user_preset)
     if (ghb_settings_get_boolean(dict, "x264UseAdvancedOptions"))
     {
         // Force preset/tune/profile/level/opts to conform to option string
-        ghb_settings_set_string(dict, "x264Preset", "medium");
-        ghb_settings_set_string(dict, "x264Tune", "none");
-        ghb_settings_set_string(dict, "h264Profile", "auto");
-        ghb_settings_set_string(dict, "h264Level", "auto");
-        ghb_settings_set_value(dict, "x264OptionExtra",
+        ghb_settings_set_string(dict, "VideoPreset", "medium");
+        ghb_settings_set_string(dict, "VideoTune", "none");
+        ghb_settings_set_string(dict, "VideoProfile", "auto");
+        ghb_settings_set_string(dict, "VideoLevel", "auto");
+        ghb_settings_set_value(dict, "VideoOptionExtra",
             ghb_settings_get_value(dict, "x264Option"));
     }
     else
@@ -2673,23 +2674,35 @@ import_xlat_preset(GValue *user_preset)
         ghb_dict_remove(dict, "x264Option");
     }
 
-    const char * const *x264presets;
-    x264presets = hb_video_encoder_get_presets(HB_VCODEC_X264);
-    char *x264Preset = ghb_settings_get_string(dict, "x264Preset");
+    int encoder = ghb_get_video_encoder(dict);
+    const char * const *videoPresets;
+    videoPresets = hb_video_encoder_get_presets(encoder);
+    const char *videoPreset;
+    if (ghb_dict_lookup(user_preset, "x264Preset") != NULL)
+        videoPreset = ghb_settings_get_const_string(dict, "x264Preset");
+    else
+        videoPreset = ghb_settings_get_const_string(dict, "VideoPreset");
     int ii;
-    for (ii = 0; x264presets[ii]; ii++)
+    for (ii = 0; videoPreset && videoPresets && videoPresets[ii]; ii++)
     {
-        if (!strcasecmp(x264Preset, x264presets[ii]))
+        if (!strcasecmp(videoPreset, videoPresets[ii]))
         {
-            ghb_settings_set_int(dict, "x264PresetSlider", ii);
+            ghb_settings_set_int(dict, "VideoPresetSlider", ii);
         }
     }
-    g_free(x264Preset);
+    if (videoPreset != NULL)
+        ghb_settings_set_string(dict, "VideoPreset", videoPreset);
 
-    char *x264Tune = ghb_settings_get_string(dict, "x264Tune");
+    char *videoTune;
+    if (ghb_dict_lookup(user_preset, "x264Tune") != NULL)
+        videoTune = ghb_settings_get_string(dict, "x264Tune");
+    else
+        videoTune = ghb_settings_get_string(dict, "VideoTune");
     char *tune = NULL;
     char *saveptr;
-    char * tok = strtok_r(x264Tune, ",./-+", &saveptr);
+    char * tok = strtok_r(videoTune, ",./-+", &saveptr);
+    ghb_settings_set_boolean(dict, "x264FastDecode", FALSE);
+    ghb_settings_set_boolean(dict, "x264ZeroLatency", FALSE);
     while (tok != NULL)
     {
         if (!strcasecmp(tok, "fastdecode"))
@@ -2710,12 +2723,29 @@ import_xlat_preset(GValue *user_preset)
         }
         tok = strtok_r(NULL, ",./-+", &saveptr);
     }
-    g_free(x264Tune);
+    g_free(videoTune);
     if (tune != NULL)
     {
-        ghb_settings_set_string(dict, "x264Tune", tune);
+        ghb_settings_set_string(dict, "VideoTune", tune);
         g_free(tune);
     }
+
+    char *videoProfile;
+    if (ghb_dict_lookup(user_preset, "x264Profile") != NULL)
+        videoProfile = ghb_settings_get_string(dict, "x264Profile");
+    else
+        videoProfile = ghb_settings_get_string(dict, "VideoProfile");
+    if (videoProfile != NULL)
+        ghb_settings_set_string(dict, "VideoProfile", videoProfile);
+
+    char *videoLevel;
+    if (ghb_dict_lookup(user_preset, "x264Level") != NULL)
+        videoLevel = ghb_settings_get_string(dict, "x264Level");
+    else
+        videoLevel = ghb_settings_get_string(dict, "VideoLevel");
+    if (videoLevel != NULL)
+        ghb_settings_set_string(dict, "VideoLevel", videoLevel);
+
     return dict;
 }
 
@@ -2827,13 +2857,13 @@ export_xlat_preset(GValue *dict)
 
     if (ghb_value_boolean(preset_dict_get_value(dict, "x264UseAdvancedOptions")))
     {
-        ghb_dict_remove(dict, "x264Preset");
-        ghb_dict_remove(dict, "x264Tune");
-        ghb_dict_remove(dict, "h264Profile");
-        ghb_dict_remove(dict, "h264Level");
-        ghb_dict_remove(dict, "x264OptionExtra");
+        ghb_dict_remove(dict, "VideoPreset");
+        ghb_dict_remove(dict, "VideoTune");
+        ghb_dict_remove(dict, "VideoProfile");
+        ghb_dict_remove(dict, "VideoLevel");
+        ghb_dict_remove(dict, "VideoOptionExtra");
     }
-    const char *tune = dict_get_string(dict, "x264Tune");
+    const char *tune = dict_get_string(dict, "VideoTune");
     if (tune != NULL)
     {
         GString *str = g_string_new("");
@@ -2849,7 +2879,7 @@ export_xlat_preset(GValue *dict)
             g_string_append_printf(str, ",%s", "zerolatency");
         }
         tunes = g_string_free(str, FALSE);
-        ghb_dict_insert(dict, g_strdup("x264Tune"),
+        ghb_dict_insert(dict, g_strdup("VideoTune"),
                         ghb_string_value_new(tunes));
 
         g_free(tunes);

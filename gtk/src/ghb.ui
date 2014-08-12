@@ -1378,6 +1378,7 @@ This is often the feature title of a DVD.</property>
                           <object class="GtkGrid" id="table4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin-bottom">6</property>
                             <child>
                               <object class="GtkLabel" id="label18">
                                 <property name="visible">True</property>
@@ -3726,7 +3727,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                 <property name="left_padding">24</property>
                                 <property name="right_padding">24</property>
                                 <child>
-                                  <object class="GtkBox" id="x264VideoSettings">
+                                  <object class="GtkBox" id="VideoSettings">
                                     <property name="orientation">vertical</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -3753,25 +3754,19 @@ This allows a player to initiate playback before downloading the entire file.</p
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkGrid" id="x264VideoSettingsTable">
+                                      <object class="GtkGrid" id="VideoSettingsTable">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="column_spacing">5</property>
                                         <property name="row_spacing">2</property>
                                         <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="x264PresetLabel">
+                                          <object class="GtkLabel" id="VideoPresetLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">x264 Preset:</property>
+                                            <property name="label" translatable="yes">Preset:</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">0</property>
@@ -3781,7 +3776,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkScale" id="x264PresetSlider">
+                                          <object class="GtkScale" id="VideoPresetSlider">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3791,12 +3786,12 @@ This allows a player to initiate playback before downloading the entire file.</p
         Tunes, profiles, levels and advanced option string will be applied to this.
         You should generally set this option to the slowest you can bear since slower
         settings will result in better quality or smaller files.</property>
-                                            <property name="adjustment">x264PresetRange</property>
+                                            <property name="adjustment">VideoPresetRange</property>
                                             <property name="digits">0</property>
                                             <property name="value_pos">right</property>
                                             <property name="hexpand">True</property>
-                                            <signal name="format-value" handler="format_x264_preset_cb" swapped="no"/>
-                                            <signal name="value-changed" handler="x264_setting_changed_cb" swapped="no"/>
+                                            <signal name="format-value" handler="format_video_preset_cb" swapped="no"/>
+                                            <signal name="value-changed" handler="video_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">0</property>
@@ -3806,12 +3801,14 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="x264TuneLabel">
+                                          <object class="GtkLabel" id="VideoTuneLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">x264 Tune:</property>
+                                            <property name="label" translatable="yes">Tune:</property>
+                                            <property name="margin_top">8</property>
+                                            <property name="margin_bottom">8</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -3821,7 +3818,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBox" id="x264Tune">
+                                          <object class="GtkComboBox" id="VideoTune">
                                             <property name="visible">True</property>
                                             <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
@@ -3831,7 +3828,7 @@ This allows a player to initiate playback before downloading the entire file.</p
         This can improve effeciency for particular source characteristics or set
         characteristics of the output file.  Changes will be applied after the
         preset but before all other parameters.</property>
-                                            <signal name="changed" handler="x264_setting_changed_cb" swapped="no"/>
+                                            <signal name="changed" handler="video_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -3851,9 +3848,9 @@ This allows a player to initiate playback before downloading the entire file.</p
 
         Set this if your device is struggling to play the output (dropped frames).</property>
                                             <property name="xalign">0</property>
-                                            <property name="margin_left">20</property>
+                                            <property name="margin_left">2</property>
                                             <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="x264_setting_changed_cb" swapped="no"/>
+                                            <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -3864,6 +3861,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         </child>
                                         <child>
                                           <object class="GtkCheckButton" id="x264ZeroLatency">
+                                            <property name="visible">False</property>
                                             <property name="label" translatable="yes">Zero Latency</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
@@ -3875,9 +3873,9 @@ This allows a player to initiate playback before downloading the entire file.</p
         Since HandBrake is not suitable for live stream broadcast purposes,
         this setting is of little value here.</property>
                                             <property name="xalign">0</property>
-                                            <property name="margin_left">20</property>
+                                            <property name="margin_left">2</property>
                                             <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="x264_setting_changed_cb" swapped="no"/>
+                                            <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -3887,12 +3885,14 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="h264ProfileLabel">
+                                          <object class="GtkLabel" id="VideoProfileLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">H.264 Profile:</property>
+                                            <property name="label" translatable="yes">Profile:</property>
+                                            <property name="margin_top">8</property>
+                                            <property name="margin_bottom">8</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -3902,7 +3902,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBox" id="h264Profile">
+                                          <object class="GtkComboBox" id="VideoProfile">
                                             <property name="visible">True</property>
                                             <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
@@ -3910,7 +3910,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <property name="tooltip_text" translatable="yes">Limit the H.264 profile of the output stream.
 
         Overrides all other settings.</property>
-                                            <signal name="changed" handler="x264_setting_changed_cb" swapped="no"/>
+                                            <signal name="changed" handler="video_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -3920,12 +3920,14 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="h264LevelLabel">
+                                          <object class="GtkLabel" id="VideoLevelLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">H.264 Level:</property>
+                                            <property name="label" translatable="yes">Level:</property>
+                                            <property name="margin_top">8</property>
+                                            <property name="margin_bottom">8</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">3</property>
@@ -3935,7 +3937,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBox" id="h264Level">
+                                          <object class="GtkComboBox" id="VideoLevel">
                                             <property name="visible">True</property>
                                             <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
@@ -3943,7 +3945,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <property name="tooltip_text" translatable="yes">Sets and ensures compliance with the specified H.264 level.
 
         Overrides all other settings.</property>
-                                            <signal name="changed" handler="x264_setting_changed_cb" swapped="no"/>
+                                            <signal name="changed" handler="video_setting_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="top_attach">3</property>
@@ -3960,7 +3962,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="spacing">5</property>
                                             <child>
-                                              <object class="GtkLabel" id="x264OptionExtraLabel">
+                                              <object class="GtkLabel" id="VideoOptionExtraLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3975,13 +3977,13 @@ This allows a player to initiate playback before downloading the entire file.</p
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkScrolledWindow" id="scrolledwindow8">
+                                              <object class="GtkScrolledWindow" id="VideoOptionExtraWindow">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="shadow_type">etched-in</property>
                                                 <property name="hexpand">True</property>
                                                 <child>
-                                                  <object class="GtkTextView" id="x264OptionExtra">
+                                                  <object class="GtkTextView" id="VideoOptionExtra">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="tooltip_text" translatable="yes">Additional x264 settings.
@@ -6044,87 +6046,6 @@ This allows a player to initiate playback before downloading the entire file.</p
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="lavc_mpeg4_box">
-                                <property name="orientation">vertical</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <child>
-                                  <object class="GtkBox" id="hbox86">
-                                    <property name="orientation">horizontal</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="spacing">2</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkFrame" id="frame18">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label_xalign">0</property>
-                                    <property name="shadow_type">none</property>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment33">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="top_padding">6</property>
-                                        <property name="bottom_padding">2</property>
-                                        <property name="left_padding">12</property>
-                                        <property name="right_padding">2</property>
-                                        <child>
-                                          <object class="GtkScrolledWindow" id="scrolledwindow7">
-                                            <property name="height_request">40</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="shadow_type">etched-in</property>
-                                            <child>
-                                              <object class="GtkTextView" id="lavcOption">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="tooltip_text" translatable="yes">Your selected options will appear here.
-        You can edit these and add additional options.</property>
-                                                <property name="wrap_mode">char</property>
-                                                <property name="accepts_tab">False</property>
-                                                <signal name="focus-out-event" handler="lavc_focus_out_cb" swapped="no"/>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child type="label">
-                                      <object class="GtkLabel" id="label75">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Current FFMpeg Advanced Option String&lt;/b&gt;&lt;/small&gt;</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="padding">2</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
@@ -9883,7 +9804,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
       <action-widget response="0">update_remind</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkAdjustment" id="x264PresetRange">
+  <object class="GtkAdjustment" id="VideoPresetRange">
     <property name="upper">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
