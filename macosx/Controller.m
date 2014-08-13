@@ -267,29 +267,28 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
          * fWorkingCount = 0;
          */
         
-        /*On Screen Notification*/
-        NSString * alertTitle;
-        
-        /* We check to see if there is already another instance of hb running.
+        /* On Screen Notification
+         * We check to see if there is already another instance of hb running.
          * Note: hbInstances == 1 means we are the only instance of HandBrake.app
          */
         if (hbInstanceNum > 1)
         {
-            alertTitle = [NSString stringWithFormat:
-                          NSLocalizedString(@"There is already an instance of HandBrake running.", @"")];
-            NSBeginCriticalAlertSheet(
-                                      alertTitle,
-                                      NSLocalizedString(@"Reload Queue", nil),
-                                      nil,
-                                      nil,
-                                      fWindow, self,
-                                      nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
-                                      NSLocalizedString(@" HandBrake will now load up the existing queue.", nil));    
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:NSLocalizedString(@"There is already an instance of HandBrake running.", @"")];
+            [alert setInformativeText:NSLocalizedString(@"HandBrake will now load up the existing queue.", nil)];
+            [alert addButtonWithTitle:NSLocalizedString(@"Reload Queue", nil)];
+            [alert beginSheetModalForWindow:fWindow
+                              modalDelegate:self
+                             didEndSelector:@selector(didDimissReloadQueue:returnCode:contextInfo:)
+                                contextInfo:nil];
+            [alert release];
         }
         else
         {
             if (fWorkingCount > 0 || fPendingCount > 0)
             {
+                NSString *alertTitle;
+
                 if (fWorkingCount > 0)
                 {
                     alertTitle = [NSString stringWithFormat:
@@ -302,16 +301,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                   NSLocalizedString(@"HandBrake Has Detected %d Pending Item(s) In Your Queue.", @""),
                                   fPendingCount];
                 }
-                
-                NSBeginCriticalAlertSheet(
-                                          alertTitle,
-                                          NSLocalizedString(@"Reload Queue", nil),
-                                          nil,
-                                          NSLocalizedString(@"Empty Queue", nil),
-                                          fWindow, self,
-                                          nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
-                                          NSLocalizedString(@" Do you want to reload them ?", nil));
-                
+
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:alertTitle];
+                [alert setInformativeText:NSLocalizedString(@"Do you want to reload them ?", nil)];
+                [alert addButtonWithTitle:NSLocalizedString(@"Reload Queue", nil)];
+                [alert addButtonWithTitle:NSLocalizedString(@"Empty Queue", nil)];
+                [alert setAlertStyle:NSCriticalAlertStyle];
+                [alert beginSheetModalForWindow:fWindow
+                                  modalDelegate:self
+                                 didEndSelector:@selector(didDimissReloadQueue:returnCode:contextInfo:)
+                                    contextInfo:nil];
+                [alert release];
+
                 // After handling the previous queue (reload or empty), if there is files waiting for scanning
                 // we will process them
                 if (dragDropFilesId)
@@ -467,9 +469,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     
     [HBUtilities writeToActivityLog: "didDimissReloadQueue number of hb instances:%d", hbInstanceNum];
-    if (returnCode == NSAlertOtherReturn)
+    if (returnCode == NSAlertSecondButtonReturn)
     {
-        [HBUtilities writeToActivityLog: "didDimissReloadQueue NSAlertOtherReturn Chosen"];
+        [HBUtilities writeToActivityLog: "didDimissReloadQueue NSAlertSecondButtonReturn Chosen"];
         [self clearQueueAllItems];
         
         /* We show whichever open source window specified in LaunchSourceBehavior preference key */
@@ -485,7 +487,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
-        [HBUtilities writeToActivityLog: "didDimissReloadQueue First Button Chosen"];
+        [HBUtilities writeToActivityLog: "didDimissReloadQueue NSAlertFirstButtonReturn Chosen"];
         if (hbInstanceNum == 1)
         {
             
@@ -499,37 +501,51 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
     hb_state_t s;
-    hb_get_state2( fQueueEncodeLibhb, &s );
-    
-    if ( s.state != HB_STATE_IDLE )
+    hb_get_state2(fQueueEncodeLibhb, &s);
+
+    if (s.state != HB_STATE_IDLE)
     {
-        NSInteger result = NSRunCriticalAlertPanel(
-                                             NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
-                                             NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", nil),
-                                             NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil, @"A movie" );
-        
-        if (result == NSAlertDefaultReturn)
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil)];
+        [alert setInformativeText:NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", nil)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        NSInteger result = [alert runModal];
+        [alert release];
+
+        if (result == NSAlertFirstButtonReturn)
         {
             return NSTerminateNow;
         }
         else
+        {
             return NSTerminateCancel;
+        }
     }
-    
+
     // Warn if items still in the queue
-    else if ( fPendingCount > 0 )
+    else if (fPendingCount > 0)
     {
-        NSInteger result = NSRunCriticalAlertPanel(
-                                             NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
-                                             NSLocalizedString(@"There are pending encodes in your queue. Do you want to quit anyway?",nil),
-                                             NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil);
-        
-        if ( result == NSAlertDefaultReturn )
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil)];
+        [alert setInformativeText:NSLocalizedString(@"There are pending encodes in your queue. Do you want to quit anyway?",nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", nil)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        NSInteger result = [alert runModal];
+        [alert release];
+        if (result == NSAlertFirstButtonReturn)
+        {
             return NSTerminateNow;
+        }
         else
+        {
             return NSTerminateCancel;
+        }
     }
-    
+
     return NSTerminateNow;
 }
 
@@ -1541,10 +1557,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
     {
         /*On Screen Notification*/
-        NSRunAlertPanel(@"Put down that cocktail…",@"Your HandBrake queue is done!", @"OK", nil, nil);
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Put down that cocktail…"];
+        [alert setInformativeText:@"Your HandBrake queue is done!"];
         [NSApp requestUserAttention:NSCriticalRequest];
+        [alert runModal];
+        [alert release];
     }
-    
+
     /* If sleep has been selected */
     if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"] )
     {
@@ -1814,16 +1834,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             cancelScanDecrypt = 1;
             [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
             NSInteger status;
-            status = NSRunAlertPanel(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function.",
-                                     @"Videolan.org provides libdvdcss if you are not currently using another solution.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function."];
+            [alert setInformativeText:@"Videolan.org provides libdvdcss if you are not currently using another solution."];
+            [alert addButtonWithTitle:@"Get libdvdcss.pkg"];
+            [alert addButtonWithTitle:@"Cancel Scan"];
+            [alert addButtonWithTitle:@"Attempt Scan Anyway"];
             [NSApp requestUserAttention:NSCriticalRequest];
-            
-            if (status == NSAlertDefaultReturn)
+            status = [alert runModal];
+            [alert release];
+
+            if (status == NSAlertFirstButtonReturn)
             {
                 /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
                 [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
             }
-            else if (status == NSAlertAlternateReturn)
+            else if (status == NSAlertSecondButtonReturn)
             {
                 /* User chose to cancel the scan */
                 [HBUtilities writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
@@ -3809,7 +3835,11 @@ fWorkingCount = 0;
 	/* We check for a valid destination here */
 	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
 	{
-		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Warning!"];
+        [alert setInformativeText:@"This is not a valid destination directory!"];
+        [alert runModal];
+        [alert release];
         return;
 	}
     
@@ -3915,7 +3945,11 @@ fWorkingCount = 0;
     NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
     if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
     {
-        NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Warning!"];
+        [alert setInformativeText:@"This is not a valid destination directory!"];
+        [alert runModal];
+        [alert release];
         return;
     }
     
@@ -3973,33 +4007,45 @@ fWorkingCount = 0;
 
 - (void) remindUserOfSleepOrShutdown
 {
-       if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
-       {
-               /*Warn that computer will sleep after encoding*/
-               NSInteger reminduser;
-               NSBeep();
-               reminduser = NSRunAlertPanel(@"The computer will sleep after encoding is done.",@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"OK", @"Preferences…", nil);
-               [NSApp requestUserAttention:NSCriticalRequest];
-               if ( reminduser == NSAlertAlternateReturn )
-               {
-                       [self showPreferencesWindow:nil];
-               }
-       }
-       else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
-       {
-               /*Warn that computer will shut down after encoding*/
-               NSInteger reminduser;
-               NSBeep();
-               reminduser = NSRunAlertPanel(@"The computer will shut down after encoding is done.",@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"OK", @"Preferences…", nil);
-               [NSApp requestUserAttention:NSCriticalRequest];
-               if ( reminduser == NSAlertAlternateReturn )
-               {
-                       [self showPreferencesWindow:nil];
-               }
-       }
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
+    {
+        /*Warn that computer will sleep after encoding*/
+        NSBeep();
+        [NSApp requestUserAttention:NSCriticalRequest];
+
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"The computer will sleep after encoding is done."];
+        [alert setInformativeText:@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences."];
+        [alert addButtonWithTitle:@"OK"];
+        [alert addButtonWithTitle:@"Preferences…"];
+
+        NSInteger reminduser = [alert runModal];
+        [alert release];
+        if (reminduser == NSAlertSecondButtonReturn)
+        {
+            [self showPreferencesWindow:nil];
+        }
+    }
+    else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
+    {
+        /*Warn that computer will shut down after encoding*/
+        NSBeep();
+        [NSApp requestUserAttention:NSCriticalRequest];
+
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"The computer will shut down after encoding is done."];
+        [alert setInformativeText:@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences."];
+        [alert addButtonWithTitle:@"OK"];
+        [alert addButtonWithTitle:@"Preferences…"];
+
+        NSInteger reminduser = [alert runModal];
+        if (reminduser == NSAlertSecondButtonReturn)
+        {
+            [self showPreferencesWindow:nil];
+        }
+    }
 
 }
-
 
 - (void) doRip
 {
@@ -4024,40 +4070,44 @@ fWorkingCount = 0;
      * (which will take care of it) or resume right away
      */
     hb_pause(fQueueEncodeLibhb);
-    
-    NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"You are currently encoding. What would you like to do ?", nil)];
-   
+
     // Which window to attach the sheet to?
     NSWindow * docWindow;
     if ([sender respondsToSelector: @selector(window)])
+    {
         docWindow = [sender window];
+    }
     else
+    {
         docWindow = fWindow;
-        
-    NSBeginCriticalAlertSheet(
-            alertTitle,
-            NSLocalizedString(@"Continue Encoding", nil),
-            NSLocalizedString(@"Cancel Current and Stop", nil),
-            NSLocalizedString(@"Cancel Current and Continue", nil),
-            docWindow, self,
-            nil, @selector(didDimissCancel:returnCode:contextInfo:), nil,
-            NSLocalizedString(@"Your encode will be cancelled if you don't continue encoding.", nil));
-    
-    // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
+    }
+
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert setMessageText:NSLocalizedString(@"You are currently encoding. What would you like to do ?", nil)];
+    [alert setInformativeText:NSLocalizedString(@"Your encode will be cancelled if you don't continue encoding.", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Stop", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Continue", nil)];
+    [alert setAlertStyle:NSCriticalAlertStyle];
+    [alert beginSheetModalForWindow:docWindow
+                      modalDelegate:self
+                     didEndSelector:@selector(didDimissCancel:returnCode:contextInfo:)
+                        contextInfo:nil];
+    [alert release];
 }
 
 - (void) didDimissCancel: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
     /* No need to prevent system sleep here as we didn't allow it in Cancel: */
     hb_resume(fQueueEncodeLibhb);
-    
-    if (returnCode == NSAlertOtherReturn)
-    {
-        [self doCancelCurrentJob];  // <- this also stops libhb
-    }
-    else if (returnCode == NSAlertAlternateReturn)
+
+    if (returnCode == NSAlertSecondButtonReturn)
     {
         [self doCancelCurrentJobAndStop];
+    }
+    else if (returnCode == NSAlertThirdButtonReturn)
+    {
+        [self doCancelCurrentJob];  // <- this also stops libhb
     }
 }
 
@@ -5098,8 +5148,12 @@ the user is using "Custom" settings by determining the sender*/
         {
             /* Show an alert window that built in presets will be updated */
             /*On Screen Notification*/
-            NSRunAlertPanel(@"HandBrake has determined your built in presets are out of date…",@"HandBrake will now update your built-in presets.", @"OK", nil, nil);
             [NSApp requestUserAttention:NSCriticalRequest];
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:@"HandBrake has determined your built in presets are out of date…"];
+            [alert setInformativeText:@"HandBrake will now update your built-in presets."];
+            [alert runModal];
+            [alert release];
         }
         /* when alert is dismissed, go ahead and update the built in presets */
         [presetManager generateBuiltInPresets];
@@ -5168,7 +5222,11 @@ the user is using "Custom" settings by determining the sender*/
 {
     if (![[fPresetNewName stringValue] length])
     {
-            NSRunAlertPanel(@"Warning!", @"You need to insert a name for the preset.", @"OK", nil , nil);
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Warning!"];
+        [alert setInformativeText:@"You need to insert a name for the preset."];
+        [alert runModal];
+        [alert release];
     }
     else
     {
