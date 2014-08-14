@@ -1,0 +1,57 @@
+diff --git a/libavcodec/pthread_frame.c b/libavcodec/pthread_frame.c
+index a658f3e..c3846bb 100644
+--- a/libavcodec/pthread_frame.c
++++ b/libavcodec/pthread_frame.c
+@@ -298,6 +298,7 @@ static int submit_packet(PerThreadContext *p, AVPacket *avpkt)
+     FrameThreadContext *fctx = p->parent;
+     PerThreadContext *prev_thread = fctx->prev_thread;
+     const AVCodec *codec = p->avctx->codec;
++    int err = 0;
+ 
+     if (!avpkt->size && !(codec->capabilities & CODEC_CAP_DELAY)) return 0;
+ 
+@@ -306,7 +307,6 @@ static int submit_packet(PerThreadContext *p, AVPacket *avpkt)
+     release_delayed_buffers(p);
+ 
+     if (prev_thread) {
+-        int err;
+         if (prev_thread->state == STATE_SETTING_UP) {
+             pthread_mutex_lock(&prev_thread->progress_mutex);
+             while (prev_thread->state == STATE_SETTING_UP)
+@@ -315,10 +315,6 @@ static int submit_packet(PerThreadContext *p, AVPacket *avpkt)
+         }
+ 
+         err = update_context_from_thread(p->avctx, prev_thread->avctx, 0);
+-        if (err) {
+-            pthread_mutex_unlock(&p->mutex);
+-            return err;
+-        }
+     }
+ 
+     av_packet_unref(&p->avpkt);
+@@ -358,7 +354,7 @@ FF_ENABLE_DEPRECATION_WARNINGS
+     fctx->prev_thread = p;
+     fctx->next_decoding++;
+ 
+-    return 0;
++    return err;
+ }
+ 
+ int ff_thread_decode_frame(AVCodecContext *avctx,
+@@ -374,6 +370,7 @@ int ff_thread_decode_frame(AVCodecContext *avctx,
+      * Submit a packet to the next decoding thread.
+      */
+ 
++    if (fctx->next_decoding >= avctx->thread_count) fctx->next_decoding = 0;
+     p = &fctx->threads[fctx->next_decoding];
+     err = update_context_from_user(p->avctx, avctx);
+     if (err) return err;
+@@ -426,8 +423,6 @@ int ff_thread_decode_frame(AVCodecContext *avctx,
+ 
+     update_context_from_thread(avctx, p->avctx, 1);
+ 
+-    if (fctx->next_decoding >= avctx->thread_count) fctx->next_decoding = 0;
+-
+     fctx->next_finished = finished;
+ 
+     /* return the size of the consumed packet if no error occurred */
