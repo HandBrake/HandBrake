@@ -694,6 +694,7 @@ ghb_vquality_default(signal_user_data_t *ud)
 
     switch (vcodec)
     {
+    case HB_VCODEC_X265:
     case HB_VCODEC_X264:
         return 20;
     case HB_VCODEC_THEORA:
@@ -4159,82 +4160,6 @@ ghb_validate_audio(GValue *settings)
             int amixdown = ghb_get_best_mix(aconfig, codec, mix->amixdown);
             ghb_settings_set_string(asettings, "AudioMixdown",
                                     hb_mixdown_get_short_name(amixdown));
-        }
-    }
-    return TRUE;
-}
-
-gboolean
-ghb_validate_vquality(GValue *settings)
-{
-    gint vcodec;
-    gchar *message;
-    gint min, max;
-
-    vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
-    gdouble vquality;
-    vquality = ghb_settings_get_double(settings, "VideoQualitySlider");
-    if (ghb_settings_get_boolean(settings, "vquality_type_constant"))
-    {
-        switch (vcodec)
-        {
-            case HB_VCODEC_X264:
-            {
-                min = 16;
-                max = 30;
-            } break;
-
-            case HB_VCODEC_FFMPEG_MPEG2:
-            case HB_VCODEC_FFMPEG_MPEG4:
-            {
-                min = 1;
-                max = 8;
-            } break;
-
-            case HB_VCODEC_THEORA:
-            case HB_VCODEC_FFMPEG_VP8:
-            {
-                min = 0;
-                max = 63;
-            } break;
-
-            default:
-            {
-                min = 48;
-                max = 62;
-            } break;
-        }
-        if (vcodec == HB_VCODEC_X264 && vquality == 0.0)
-        {
-            message = g_strdup_printf(
-                        _("Warning: lossless h.264 selected\n\n"
-                        "Lossless h.264 is not well supported by\n"
-                        "many players and editors.\n\n"
-                        "It will produce enormous output files.\n\n"
-                        "Are you sure you wish to use this setting?"));
-            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message,
-                                    _("Cancel"), _("Continue")))
-            {
-                g_free(message);
-                return FALSE;
-            }
-            g_free(message);
-            ghb_settings_set_string(settings, "VideoProfile", "auto");
-        }
-        else if (vquality < min || vquality > max)
-        {
-            message = g_strdup_printf(
-                        _("Interesting video quality choice: %d\n\n"
-                        "Typical values range from %d to %d.\n\n"
-                        "Are you sure you wish to use this setting?"),
-                        (gint)vquality, min, max);
-            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message,
-                                    _("Cancel"), _("Continue")))
-            {
-                g_free(message);
-                return FALSE;
-            }
-            g_free(message);
         }
     }
     return TRUE;

@@ -898,11 +898,6 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
         g_unlink(dest);
     }
     g_free(dest);
-    // Validate video quality is in a reasonable range
-    if (!ghb_validate_vquality(settings))
-    {
-        return FALSE;
-    }
     // Validate audio settings
     if (!ghb_validate_audio(settings))
     {
