@@ -3780,9 +3780,9 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Adjusts x264 settings to trade off compression efficiency against encoding speed.
+                                            <property name="tooltip_text" translatable="yes">Adjusts encoder settings to trade off compression efficiency against encoding speed.
 
-        This establishes your default x264 settings.
+        This establishes your default encoder settings.
         Tunes, profiles, levels and advanced option string will be applied to this.
         You should generally set this option to the slowest you can bear since slower
         settings will result in better quality or smaller files.</property>
@@ -3907,7 +3907,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Limit the H.264 profile of the output stream.
+                                            <property name="tooltip_text" translatable="yes">Sets and ensures compliance with the specified profile.
 
         Overrides all other settings.</property>
                                             <signal name="changed" handler="video_setting_changed_cb" swapped="no"/>
@@ -3942,7 +3942,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Sets and ensures compliance with the specified H.264 level.
+                                            <property name="tooltip_text" translatable="yes">Sets and ensures compliance with the specified level.
 
         Overrides all other settings.</property>
                                             <signal name="changed" handler="video_setting_changed_cb" swapped="no"/>
@@ -3986,9 +3986,9 @@ This allows a player to initiate playback before downloading the entire file.</p
                                                   <object class="GtkTextView" id="VideoOptionExtra">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
-                                                    <property name="tooltip_text" translatable="yes">Additional x264 settings.
+                                                    <property name="tooltip_text" translatable="yes">Additional encoder settings.
 
-        Colon separated list of x264 options.</property>
+        Colon separated list of encoder options.</property>
                                                     <property name="wrap_mode">char</property>
                                                     <property name="accepts_tab">False</property>
                                                   </object>
