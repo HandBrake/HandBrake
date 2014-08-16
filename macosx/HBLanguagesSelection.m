@@ -20,6 +20,17 @@
     return self;
 }
 
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBLang *lang = [[self class] allocWithZone:zone];
+
+    lang->_isSelected = self.isSelected;
+    lang->_language = [self.language retain];
+    lang->_iso639_2 = [self.iso639_2 retain];
+
+    return lang;
+}
+
 - (void)dealloc
 {
     [_language release];
@@ -28,9 +39,20 @@
     [super dealloc];
 }
 
+- (NSString *)description
+{
+    return self.language;
+}
+
 @end
 
 @implementation HBLanguagesSelection
+
+- (instancetype)init
+{
+    self = [self initWithLanguages:nil];
+    return self;
+}
 
 - (instancetype)initWithLanguages:(NSArray *)languages
 {

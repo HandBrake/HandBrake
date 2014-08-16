@@ -55,6 +55,22 @@
     return [fallbacks autorelease];
 }
 
+- (NSString *)isoCodeForNativeLang:(NSString *)language
+{
+    const iso639_lang_t *lang = lang_get_next(NULL);
+    for (lang = lang_get_next(lang); lang != NULL; lang = lang_get_next(lang))
+    {
+        NSString *nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
+
+        if ([language isEqualToString:nativeLanguage])
+        {
+            return @(lang->iso639_2);
+        }
+    }
+
+    return nil;
+}
+
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
     // Track selection behavior
@@ -85,13 +101,19 @@
         {
             if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"])
             {
-                iso639_lang_t *lang = lang_for_english([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"] UTF8String]);
-                [self.trackSelectionLanguages addObject:@(lang->iso639_2)];
+                NSString *lang = [self isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"]];
+                if (lang)
+                {
+                    [self.trackSelectionLanguages addObject:lang];
+                }
             }
             if ([[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"])
             {
-                iso639_lang_t *lang = lang_for_english([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"] UTF8String]);
-                [self.trackSelectionLanguages addObject:@(lang->iso639_2)];
+                NSString *lang = [self isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"]];
+                if (lang)
+                {
+                    [self.trackSelectionLanguages addObject:lang];
+                }
             }
         }
     }

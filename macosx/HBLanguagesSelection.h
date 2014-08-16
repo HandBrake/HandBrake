@@ -15,7 +15,7 @@
 /**
  *  HBLang
  */
-@interface HBLang : NSObject
+@interface HBLang : NSObject <NSCopying>
 
 @property (nonatomic, readwrite) BOOL isSelected;
 @property (nonatomic, readonly) NSString *language;
