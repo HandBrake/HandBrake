@@ -4,6 +4,8 @@
  */
 
 #import "HBPreferencesController.h"
+#import "HBLanguagesSelection.h"
+
 #define TOOLBAR_GENERAL     @"TOOLBAR_GENERAL"
 #define TOOLBAR_PICTURE     @"TOOLBAR_PICTURE"
 #define TOOLBAR_AUDIO       @"TOOLBAR_AUDIO"
@@ -31,6 +33,8 @@
 @property (assign) IBOutlet NSTokenField *builtInTokenField;
 @property (readonly, nonatomic) NSArray *buildInFormatTokens;
 @property (retain, nonatomic) NSArray *matches;
+
+@property (retain, nonatomic) HBLanguagesSelection *languages;
 
 @end
 
@@ -85,8 +89,16 @@
     if (self = [super initWithWindowNibName:@"Preferences"])
     {
         NSAssert([self window], @"[HBPreferencesController init] window outlet is not connected in Preferences.nib");
+        _languages = [[HBLanguagesSelection alloc] init];
+
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_languages release];
+    [super dealloc];
 }
 
 /**
