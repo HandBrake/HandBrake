@@ -42,6 +42,10 @@ static NSString *        ShowActivityIdentifier             = @"Debug Output Ite
 static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
 @interface HBController () <HBPresetsViewControllerDelegate>
+
+// The current selected preset.
+@property (nonatomic, retain) HBPreset *selectedPreset;
+
 @end
 
 /*******************************
@@ -77,6 +81,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* we init the HBPresetsManager class */
     NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
     presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
+    _selectedPreset = presetManager.defaultPreset;
 
     fPreferencesController = [[HBPreferencesController alloc] init];
     /* Lets report the HandBrake version number here to the activity log and text log file */
@@ -4043,6 +4048,7 @@ fWorkingCount = 0;
         {
             [self showPreferencesWindow:nil];
         }
+        [alert release];
     }
 
 }
@@ -4368,7 +4374,7 @@ fWorkingCount = 0;
 	}
 
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
-    [self applyPreset];
+    [self applyPreset:self.selectedPreset];
 }
 
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
@@ -4868,15 +4874,15 @@ the user is using "Custom" settings by determining the sender*/
 
 #pragma mark - Preset  Methods
 
-- (void)applyPreset
+- (void)applyPreset:(HBPreset *)preset
 {
-    if (fPresetsView.selectedPreset != nil)
+    if (preset != nil)
     {
         hb_job_t * job = fTitle->job;
 
         // for mapping names via libhb
         const char *strValue;
-        NSDictionary *chosenPreset = [fPresetsView.selectedPreset content];
+        NSDictionary *chosenPreset = preset.content;
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
 
         if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
@@ -5133,7 +5139,11 @@ the user is using "Custom" settings by determining the sender*/
 
 - (void)selectionDidChange
 {
-    [self applyPreset];
+    self.selectedPreset = fPresetsView.selectedPreset;
+    if (SuccessfulScan)
+    {
+        [self applyPreset:self.selectedPreset];
+    }
 }
 
 #pragma mark -

@@ -290,8 +290,6 @@ extern NSString *keyTitleTag;
 - (IBAction) openUserGuide:   (id) sender;
 
 // Preset Methods Here
-- (void)applyPreset;
-
 /* Export / Import Presets */
 - (IBAction) browseExportPresetFile: (id) sender;
 - (IBAction) browseImportPresetFile: (id) sender;
