@@ -148,6 +148,12 @@
         if ([track[@"AudioSamplerate"] isKindOfClass:[NSString class]])
         {
             newTrack.sampleRate = hb_audio_samplerate_get_from_name([track[@"AudioSamplerate"] UTF8String]);
+
+            // Set to "Auto" if we didn't find a valid sample rate.
+            if (newTrack.sampleRate == -1)
+            {
+                newTrack.sampleRate = 0;
+            }
         }
         newTrack.bitRate = [track[@"AudioBitrate"] intValue];
 

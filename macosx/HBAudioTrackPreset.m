@@ -311,7 +311,12 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 - (id)reverseTransformedValue:(id)value
 {
-    return @(hb_audio_samplerate_get_from_name([value UTF8String]));
+    int sampleRate = hb_audio_samplerate_get_from_name([value UTF8String]);
+    if (sampleRate < 0)
+    {
+        sampleRate = 0;
+    }
+    return @(sampleRate);
 }
 
 @end
