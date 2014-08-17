@@ -24,7 +24,7 @@
 @property (nonatomic, readwrite, assign) id<HBPresetsViewControllerDelegate> delegate;
 
 - (void)deselect;
-- (void)selectPreset:(HBPreset *)preset;
+- (void)setSelection:(HBPreset *)preset;
 
 - (IBAction)insertFolder:(id)sender;
 

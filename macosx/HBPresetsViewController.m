@@ -65,7 +65,7 @@
     // Re-expand the items
     [self expandNodes:[self.treeController.arrangedObjects childNodes]];
 
-    [self deselect];
+    [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.presets.defaultPreset]];
 }
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
@@ -94,7 +94,7 @@
 
 - (IBAction)clicked:(id)sender
 {
-    if (self.delegate && [[self.treeController.selectedObjects firstObject] isLeaf] && self.enabled)
+    if (self.delegate && [[self.treeController.selectedObjects firstObject] isLeaf])
     {
         [self.delegate selectionDidChange];
     }
@@ -159,14 +159,13 @@
     [self.treeController setSelectionIndexPath:nil];
 }
 
-- (void)selectPreset:(HBPreset *)preset
+- (void)setSelection:(HBPreset *)preset
 {
     NSIndexPath *idx = [self.presets indexPathOfPreset:preset];
 
     if (idx)
     {
         [self.treeController setSelectionIndexPath:idx];
-        [self clicked:self];
     }
 }
 

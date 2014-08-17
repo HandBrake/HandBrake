@@ -2043,12 +2043,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 /* if not then select the main feature title */
                 [fSrcTitlePopUp selectItemAtIndex: feature_title];
             }
-            [self titlePopUpChanged:nil];
-            
-            SuccessfulScan = YES;
-            [self enableUI: YES];
 
+            SuccessfulScan = YES;
+
+            [self titlePopUpChanged:nil];
             [self encodeStartStopPopUpChanged:nil];
+
+            [self enableUI: YES];
 
             // Open preview window now if it was visible when HB was closed
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
@@ -4876,7 +4877,9 @@ the user is using "Custom" settings by determining the sender*/
 
 - (void)applyPreset:(HBPreset *)preset
 {
-    if (preset != nil)
+    self.selectedPreset = preset;
+
+    if (preset != nil && SuccessfulScan)
     {
         hb_job_t * job = fTitle->job;
 
@@ -5139,11 +5142,7 @@ the user is using "Custom" settings by determining the sender*/
 
 - (void)selectionDidChange
 {
-    self.selectedPreset = fPresetsView.selectedPreset;
-    if (SuccessfulScan)
-    {
-        [self applyPreset:self.selectedPreset];
-    }
+    [self applyPreset:fPresetsView.selectedPreset];
 }
 
 #pragma mark -
@@ -5419,7 +5418,8 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction)selectDefaultPreset:(id)sender
 {
-	[fPresetsView selectPreset:presetManager.defaultPreset];
+    [self applyPreset:presetManager.defaultPreset];
+    [fPresetsView setSelection:_selectedPreset];
 }
 
 - (IBAction)insertFolder:(id)sender
@@ -5444,7 +5444,8 @@ the user is using "Custom" settings by determining the sender*/
         i++;
     }];
 
-    [fPresetsView selectPreset:preset];
+    [self applyPreset:preset];
+    [fPresetsView setSelection:_selectedPreset];
 }
 
 /**
