@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn6163 (2014041401) on Linux
+Guide to Building HandBrake svn6308 (2014081801) on Linux
 *********************************************************
 
 1 Introduction
@@ -79,6 +79,8 @@ Ubuntu 14.04 packages:
    * libfreetype6-dev (cli/gui)
    * libfontconfig1-dev (cli/gui)
    * libass-dev (cli/gui)
+   * libmp3lame-dev (cli/gui)
+   * libx264-dev (cli/gui)
    * intltool (gui)
    * libglib2.0-dev (gui)
    * libdbus-glib-1-dev (gui)
@@ -94,9 +96,10 @@ To install these packages:
      sudo apt-get install subversion yasm build-essential autoconf libtool \
      zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
      libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
-     libfontconfig1-dev libass-dev intltool libglib2.0-dev libdbus-glib-1-dev \
-     libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev libnotify-dev \
-     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libappindicator-dev
+     libfontconfig1-dev libass-dev libmp3lame-dev intltool libglib2.0-dev \
+     libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev \
+     libnotify-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+     libappindicator-dev
 
 Fedora 20 package groups:
    * Development Tools
@@ -121,6 +124,8 @@ Additional Fedora packages:
    * freetype-devel (cli/gui)
    * fontconfig-devel (cli/gui)
    * libass-devel (cli/gui)
+   * lame-devel (cli/gui)
+   * x264-devel (cli/gui)
    * dbus-glib-devel (gui)
    * libgudev1-devel (gui)
    * webkitgtk3-devel (gui)
@@ -131,7 +136,7 @@ Additional Fedora packages:
 To install these packages:
      sudo yum install yasm zlib-devel bzip2-devel libogg-devel libtheora-devel \
      libvorbis-devel libsamplerate-devel libxml2-devel fribidi-devel \
-     freetype-devel fontconfig-devel libass-devel dbus-glib-devel \
+     freetype-devel fontconfig-devel libass-devel lame-devel dbus-glib-devel \
      libgudev1-devel webkitgtk3-devel libnotify-devel \
      gstreamer1-devel gstreamer1-plugins-base-devel
 
@@ -501,6 +506,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    6163
-     date:   2014-04-13 09:22:16 -0700
+     rev:    6308
+     date:   2014-08-18 10:05:00 -0700
      type:   developer

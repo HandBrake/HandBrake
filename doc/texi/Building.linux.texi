@@ -49,6 +49,8 @@ Ubuntu 14.04 packages:
 @item libfreetype6-dev (cli/gui)
 @item libfontconfig1-dev (cli/gui)
 @item libass-dev (cli/gui)
+@item libmp3lame-dev (cli/gui)
+@item libx264-dev (cli/gui)
 @item intltool (gui)
 @item libglib2.0-dev (gui)
 @item libdbus-glib-1-dev (gui)
@@ -66,9 +68,10 @@ To install these packages:
 sudo apt-get install subversion yasm build-essential autoconf libtool \
 zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
 libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
-libfontconfig1-dev libass-dev intltool libglib2.0-dev libdbus-glib-1-dev \
-libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev libnotify-dev \
-libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libappindicator-dev
+libfontconfig1-dev libass-dev libmp3lame-dev intltool libglib2.0-dev \
+libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev \
+libnotify-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+libappindicator-dev
 @end example
 
 Fedora 20 package groups:
@@ -99,6 +102,8 @@ Additional Fedora packages:
 @item freetype-devel (cli/gui)
 @item fontconfig-devel (cli/gui)
 @item libass-devel (cli/gui)
+@item lame-devel (cli/gui)
+@item x264-devel (cli/gui)
 @item dbus-glib-devel (gui)
 @item libgudev1-devel (gui)
 @item webkitgtk3-devel (gui)
@@ -111,7 +116,7 @@ To install these packages:
 @example
 sudo yum install yasm zlib-devel bzip2-devel libogg-devel libtheora-devel \
 libvorbis-devel libsamplerate-devel libxml2-devel fribidi-devel \
-freetype-devel fontconfig-devel libass-devel dbus-glib-devel \
+freetype-devel fontconfig-devel libass-devel lame-devel dbus-glib-devel \
 libgudev1-devel webkitgtk3-devel libnotify-devel \
 gstreamer1-devel gstreamer1-plugins-base-devel
 @end example

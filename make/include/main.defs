@@ -39,6 +39,8 @@ ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/libvorbis
     MODULES += contrib/libtheora
     MODULES += contrib/libsamplerate
+    MODULES += contrib/lame
+    MODULES += contrib/x264
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))
@@ -49,7 +51,6 @@ ifeq (1,$(FEATURE.x265))
     MODULES += contrib/x265
 endif
 
-MODULES += contrib/lame
 MODULES += contrib/ffmpeg
 MODULES += contrib/libvpx
 MODULES += contrib/libdvdread
@@ -65,8 +66,6 @@ endif
 ifeq (1,$(FEATURE.qsv))
     MODULES += contrib/libmfx
 endif
-
-MODULES += contrib/x264
 
 ifneq (,$(filter $(BUILD.system),cygwin mingw))
 ifneq ($(HAS.iconv),1)
