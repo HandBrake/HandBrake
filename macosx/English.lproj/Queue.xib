@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -10,7 +10,6 @@
                 <outlet property="fOutlineView" destination="2597" id="2601"/>
                 <outlet property="fProgressTextField" destination="2646" id="2648"/>
                 <outlet property="fQueueCountField" destination="2511" id="2564"/>
-                <outlet property="fQueuePane" destination="2547" id="2561"/>
                 <outlet property="window" destination="2576" id="2645"/>
             </connections>
         </customObject>
@@ -26,124 +25,74 @@
                 <rect key="frame" x="0.0" y="0.0" width="574" height="423"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView id="2547">
-                        <rect key="frame" x="0.0" y="0.0" width="574" height="358"/>
+                    <scrollView horizontalLineScroll="19" horizontalPageScroll="0.0" verticalLineScroll="19" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="2596">
+                        <rect key="frame" x="20" y="20" width="534" height="338"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button verticalHuggingPriority="750" id="2622">
-                                <rect key="frame" x="6" y="-25" width="159" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" title="quick way to intercept delete key" bezelStyle="smallSquare" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="2642">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <string key="keyEquivalent"></string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="removeSelectedQueueItem:" target="-2" id="2623"/>
-                                </connections>
-                            </button>
-                            <textField hidden="YES" verticalHuggingPriority="750" id="2615">
-                                <rect key="frame" x="245" y="1" width="46" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Spacing" id="2641">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField hidden="YES" verticalHuggingPriority="750" id="2614">
-                                <rect key="frame" x="17" y="0.0" width="38" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Indent" id="2640">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <slider hidden="YES" verticalHuggingPriority="750" id="2611">
-                                <rect key="frame" x="296" y="2" width="80" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="10" doubleValue="3" tickMarkPosition="above" numberOfTickMarks="11" allowsTickMarkValuesOnly="YES" sliderType="linear" id="2639">
-                                    <font key="font" size="12" name="Helvetica"/>
-                                </sliderCell>
-                            </slider>
-                            <slider hidden="YES" verticalHuggingPriority="750" id="2610">
-                                <rect key="frame" x="60" y="1" width="180" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="30" doubleValue="2" tickMarkPosition="above" numberOfTickMarks="31" allowsTickMarkValuesOnly="YES" sliderType="linear" id="2638">
-                                    <font key="font" size="12" name="Helvetica"/>
-                                </sliderCell>
-                            </slider>
-                            <scrollView horizontalLineScroll="19" horizontalPageScroll="0.0" verticalLineScroll="19" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="2596">
-                                <rect key="frame" x="20" y="20" width="534" height="338"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <clipView key="contentView" id="B5m-TR-ErO">
-                                    <rect key="frame" x="1" y="1" width="532" height="336"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="2624" id="2597" customClass="HBQueueOutlineView">
-                                            <rect key="frame" x="0.0" y="0.0" width="532" height="336"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <size key="intercellSpacing" width="3" height="2"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                            <tableColumns>
-                                                <tableColumn identifier="icon" width="38" minWidth="38" maxWidth="38" id="2624">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageAlignment="topRight" imageScaling="proportionallyDown" id="2625"/>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                </tableColumn>
-                                                <tableColumn identifier="desc" editable="NO" width="465" minWidth="40" maxWidth="5000" id="2599">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="2609" customClass="HBImageAndTextCell">
-                                                        <font key="font" metaFont="cellTitle"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        <connections>
-                                                            <outlet property="menu" destination="2649" id="2653"/>
-                                                        </connections>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
-                                                </tableColumn>
-                                                <tableColumn identifier="action" editable="NO" width="20" minWidth="8" maxWidth="20" id="2604">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <buttonCell key="dataCell" type="square" bezelStyle="shadowlessSquare" image="Delete" imagePosition="above" alignment="center" inset="2" id="2605">
-                                                        <behavior key="behavior" lightByContents="YES"/>
-                                                        <font key="font" metaFont="cellTitle"/>
-                                                    </buttonCell>
-                                                </tableColumn>
-                                            </tableColumns>
-                                            <connections>
-                                                <outlet property="dataSource" destination="-2" id="2602"/>
-                                                <outlet property="delegate" destination="-2" id="2603"/>
-                                            </connections>
-                                        </outlineView>
-                                    </subviews>
-                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="2644">
-                                    <rect key="frame" x="-100" y="-100" width="282" height="15"/>
+                        <clipView key="contentView" id="B5m-TR-ErO">
+                            <rect key="frame" x="1" y="1" width="532" height="336"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="2624" id="2597" customClass="HBQueueOutlineView">
+                                    <rect key="frame" x="0.0" y="0.0" width="532" height="336"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="2643">
-                                    <rect key="frame" x="517" y="1" width="16" height="336"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                            </scrollView>
-                        </subviews>
-                    </customView>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="icon" width="38" minWidth="38" maxWidth="38" id="2624">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageAlignment="topRight" imageScaling="proportionallyDown" id="2625"/>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        </tableColumn>
+                                        <tableColumn identifier="desc" editable="NO" width="465" minWidth="40" maxWidth="5000" id="2599">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="2609" customClass="HBImageAndTextCell">
+                                                <font key="font" metaFont="cellTitle"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <connections>
+                                                    <outlet property="menu" destination="2649" id="2653"/>
+                                                </connections>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
+                                        </tableColumn>
+                                        <tableColumn identifier="action" editable="NO" width="20" minWidth="8" maxWidth="20" id="2604">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="square" bezelStyle="shadowlessSquare" image="Delete" imagePosition="above" alignment="center" inset="2" id="2605">
+                                                <behavior key="behavior" lightByContents="YES"/>
+                                                <font key="font" metaFont="cellTitle"/>
+                                            </buttonCell>
+                                        </tableColumn>
+                                    </tableColumns>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-2" id="2602"/>
+                                        <outlet property="delegate" destination="-2" id="2603"/>
+                                    </connections>
+                                </outlineView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="2644">
+                            <rect key="frame" x="-100" y="-100" width="282" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="2643">
+                            <rect key="frame" x="517" y="1" width="16" height="336"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
                     <textField verticalHuggingPriority="750" id="2511">
                         <rect key="frame" x="17" y="399" width="540" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
@@ -164,6 +113,27 @@
                     </textField>
                 </subviews>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="609C5CFE-D854-4567-9CC2-70E109CBA332" explicitItemIdentifier="HBQueueStartCancelToolbarIdentifier" label="Start" paletteLabel="Start/Cancel" toolTip="Start Encoding" tag="-1" image="encode" id="SX6-mq-Hck">
+                        <connections>
+                            <action selector="toggleStartCancel:" target="-2" id="ABS-fA-RwJ"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="7DB01500-5492-42BC-BDEE-55E9EF3765A1" explicitItemIdentifier="HBQueuePauseResumeToolbarIdentifier" label="Pause" paletteLabel="Pause/Resume" toolTip="Pause Encoding" tag="-1" image="pauseencode" id="s7o-pK-heI">
+                        <connections>
+                            <action selector="togglePauseResume:" target="-2" id="bmr-hx-loD"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="rHN-a0-oZQ"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="QuV-M8-cet"/>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="SX6-mq-Hck"/>
+                    <toolbarItem reference="s7o-pK-heI"/>
+                    <toolbarItem reference="QuV-M8-cet"/>
+                </defaultToolbarItems>
+            </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="2579"/>
             </connections>
@@ -193,5 +163,7 @@
     </objects>
     <resources>
         <image name="Delete" width="16" height="16"/>
+        <image name="encode" width="24" height="24"/>
+        <image name="pauseencode" width="24" height="24"/>
     </resources>
 </document>

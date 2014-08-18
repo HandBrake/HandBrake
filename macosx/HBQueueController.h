@@ -10,12 +10,6 @@
 
 @class HBController;
 
-
-#define HB_QUEUE_DRAGGING 0             // <--- NOT COMPLETELY FUNCTIONAL YET
-#define HB_OUTLINE_METRIC_CONTROLS 0    // for tweaking the outline cell spacings
-
-
-
 //------------------------------------------------------------------------------------
 // As usual, we need to subclass NSOutlineView to handle a few special cases:
 //
@@ -35,103 +29,18 @@
 // drag an image of the queue's icon and desc columns.
 
 @interface HBQueueOutlineView : NSOutlineView
-{
 
-BOOL                        fIsDragging;
-
-}
-
-- (BOOL) isDragging;
+@property (nonatomic, readonly) BOOL isDragging;
 
 @end
 
-
-
-
 @interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate>
-{
-    hb_handle_t                  *fQueueEncodeLibhb;              // reference to libhb
-    HBController                 *fHBController;        // reference to HBController
-    NSMutableArray               *fJobGroups;           // mirror image of the queue array from controller.mm
-    
-    int                          pidNum;                // Records the PID number from HBController for this instance
-    int                          fEncodingQueueItem;    // corresponds to the index of fJobGroups encoding item
-    int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
-    int                          fCompletedCount;
-    int                          fCanceledCount;
-    int                          fWorkingCount;
-    BOOL                         fJobGroupCountsNeedUpdating;
-
-    BOOL                         fCurrentJobPaneShown;  // NO when fCurrentJobPane has been shifted out of view (see showCurrentJobPane)
-    NSMutableIndexSet            *fSavedExpandedItems;  // used by save/restoreOutlineViewState to preserve which items are expanded
-    NSMutableIndexSet            *fSavedSelectedItems;  // used by save/restoreOutlineViewState to preserve which items are selected
-#if HB_QUEUE_DRAGGING
-    NSArray                      *fDraggedNodes;
-#endif
-    NSTimer                      *fAnimationTimer;      // animates the icon of the current job in the queue outline view
-    int                          fAnimationIndex;       // used to generate name of image used to animate the current job in the queue outline view
-
-    //  +------------------window-------------------+
-    //  |+-------------fCurrentJobPane-------------+|
-    //  ||                                         ||
-    //  ||                                         ||
-    //  ||                                         ||
-    //  |+-----------------------------------------+|
-    //  |+---------------fQueuePane----------------+|
-    //  ||                                         ||
-    //  ||                                         ||
-    //  ||                                         ||
-    //  ||                                         ||
-    //  ||                                         ||
-    //  ||                                         ||
-    //  ||                                         ||
-    //  |+-----------------------------------------+|
-    //  +-------------------------------------------+
-
-    // fCurrentJobPane - visible only when processing a job
-    IBOutlet NSView              *fCurrentJobPane;
-    IBOutlet NSImageView         *fJobIconView;
-    IBOutlet NSTextField         *fJobDescTextField;
-    IBOutlet NSProgressIndicator *fProgressBar;
-    IBOutlet NSTextField         *fProgressTextField;
-
-    // fQueuePane - always visible; fills entire window when fCurrentJobPane is hidden
-    IBOutlet NSView              *fQueuePane;
-    IBOutlet HBQueueOutlineView  *fOutlineView;
-    IBOutlet NSTextField         *fQueueCountField;
-    NSArray                      *fDraggedNodes;
-    BOOL                          fIsDragging;
-#if HB_OUTLINE_METRIC_CONTROLS
-    IBOutlet NSSlider            *fIndentation; // debug
-    IBOutlet NSSlider            *fSpacing;     // debug
-#endif
-
-    // Text Styles
-    NSMutableParagraphStyle *ps;
-    NSDictionary            *detailAttr;
-    NSDictionary            *detailBoldAttr;
-    NSDictionary            *titleAttr;
-    NSDictionary            *shortHeightAttr;
-}
 
 - (void)setPidNum: (int)myPidnum;
 - (void)setHandle: (hb_handle_t *)handle;
 - (void)setHBController: (HBController *)controller;
 
-- (void)setupToolbar;
-
 - (void)setQueueArray: (NSMutableArray *)QueueFileArray;
-- (id)outlineView:(NSOutlineView *)fOutlineView child:(NSInteger)index ofItem:(id)item;
-
-- (BOOL)outlineView:(NSOutlineView *)fOutlineView isItemExpandable:(id)item;
-
-- (BOOL)outlineView:(NSOutlineView *)fOutlineView shouldExpandItem:(id)item;
-
-- (NSInteger)outlineView:(NSOutlineView *)fOutlineView numberOfChildrenOfItem:(id)item;
-
-- (id)outlineView:(NSOutlineView *)fOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
-
-- (void)outlineView:(NSOutlineView *)fOutlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item;
 
 /* Animate the icon for the current encode */
 - (void) animateWorkingEncodeIconInQueue;
@@ -141,19 +50,9 @@ BOOL                        fIsDragging;
 
 - (IBAction)showQueueWindow: (id)sender;
 
-
 /* control encodes in the window */
 - (IBAction)removeSelectedQueueItem: (id)sender;
 - (IBAction)revealSelectedQueueItem: (id)sender;
 - (IBAction)editSelectedQueueItem: (id)sender;
-
-#if HB_OUTLINE_METRIC_CONTROLS
-- (IBAction)imageSpacingChanged: (id)sender;
-- (IBAction)indentChanged: (id)sender;
-#endif
-
-
-
-
 
 @end
