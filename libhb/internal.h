@@ -284,11 +284,6 @@ void hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
 extern const hb_muxer_t hb_demux[];
 
 /***********************************************************************
- * decmetadata.c
- **********************************************************************/
-extern int decmetadata( hb_title_t *title );
-
-/***********************************************************************
  * batch.c
  **********************************************************************/
 typedef struct hb_batch_s hb_batch_t;

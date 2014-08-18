@@ -614,22 +614,10 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     {
         switch( job->mux )
         {
-#ifdef USE_MP4V2
-        case HB_MUX_MP4V2:
-            mux->m = hb_mux_mp4_init( job );
-            break;
-#endif
-#ifdef USE_LIBMKV
-        case HB_MUX_LIBMKV:
-            mux->m = hb_mux_mkv_init( job );
-            break;
-#endif
-#ifdef USE_AVFORMAT
         case HB_MUX_AV_MP4:
         case HB_MUX_AV_MKV:
             mux->m = hb_mux_avformat_init( job );
             break;
-#endif
         default:
             hb_error( "No muxer selected, exiting" );
             *job->done_error = HB_ERROR_INIT;

@@ -7,8 +7,6 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#if defined(USE_AVFORMAT)
-
 #include <ogg/ogg.h>
 #include "libavformat/avformat.h"
 #include "libavutil/avstring.h"
@@ -1323,5 +1321,3 @@ hb_mux_object_t * hb_mux_avformat_init( hb_job_t * job )
     m->job       = job;
     return m;
 }
-
-#endif // USE_AVFORMAT

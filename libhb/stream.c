@@ -5523,11 +5523,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     /*
      * Fill the metadata.
      */
-    // JJJ: is this necessary? can we just get this metadata from libav api's?
-    if (!decmetadata( title ))
-    {
-        ffmpeg_decmetadata( ic->metadata, title );
-    }
+    ffmpeg_decmetadata( ic->metadata, title );
 
     if( hb_list_count( title->list_chapter ) == 0 )
     {

@@ -33,14 +33,6 @@ ifeq (1,$(FEATURE.fdk_aac))
 	GTK.CONFIGURE.extra += --enable-fdk-aac
 endif
 
-ifeq (1,$(FEATURE.mp4v2))
-	GTK.CONFIGURE.extra += --enable-mp4v2
-endif
-
-ifeq (1,$(FEATURE.libmkv))
-	GTK.CONFIGURE.extra += --enable-libmkv
-endif
-
 ifeq (1,$(FEATURE.x265))
 	GTK.CONFIGURE.extra += --enable-x265
 endif

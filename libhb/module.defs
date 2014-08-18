@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
-    LIBDVDREAD LIBDVDNAV LIBICONV LIBMKV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
-    MP4V2 PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX
+    LIBDVDREAD LIBDVDNAV LIBICONV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
+    PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -41,15 +41,6 @@ endif
 
 ifeq (1,$(FEATURE.libav_aac))
 LIBHB.GCC.D += USE_LIBAV_AAC
-endif
-ifeq (1,$(FEATURE.mp4v2))
-LIBHB.GCC.D += USE_MP4V2
-endif
-ifeq (1,$(FEATURE.libmkv))
-LIBHB.GCC.D += USE_LIBMKV
-endif
-ifeq (1,$(FEATURE.avformat))
-LIBHB.GCC.D += USE_AVFORMAT
 endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
@@ -129,14 +120,6 @@ endif
 
 ifeq (1,$(FEATURE.x265))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libx265.a
-endif
-
-ifeq (1,$(FEATURE.mp4v2))
-LIBHB.dll.libs += $(CONTRIB.build/)lib/libmp4v2.a
-endif
-
-ifeq (1,$(FEATURE.libmkv))
-LIBHB.dll.libs += $(CONTRIB.build/)lib/libmkv.a
 endif
 
 ifneq ($(HAS.iconv),1)

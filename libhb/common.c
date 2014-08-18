@@ -339,16 +339,8 @@ static int hb_container_is_enabled(int format)
 {
     switch (format)
     {
-#ifdef USE_MP4V2
-        case HB_MUX_MP4V2:
-#endif
-#ifdef USE_LIBMKV
-        case HB_MUX_LIBMKV:
-#endif
-#ifdef USE_AVFORMAT
         case HB_MUX_AV_MP4:
         case HB_MUX_AV_MKV:
-#endif
             return 1;
 
         default:

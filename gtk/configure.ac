@@ -60,14 +60,6 @@ AC_ARG_ENABLE(fdk-aac,
 	AS_HELP_STRING([--enable-fdk-aac], [enable fdk aac encoder]),
 	use_fdk_aac=yes, use_fdk_aac=no)
 
-AC_ARG_ENABLE(mp4v2,
-	AS_HELP_STRING([--enable-mp4v2], [enable mp4v2 muxer]),
-	use_mp4v2=yes, use_mp4v2=no)
-
-AC_ARG_ENABLE(libmkv,
-	AS_HELP_STRING([--enable-libmkv], [enable libmkv muxer]),
-	use_libmkv=yes, use_libmkv=no)
-
 AC_ARG_ENABLE(x265,
 	AS_HELP_STRING([--enable-x265], [enable x265 encoder]),
 	use_x265=yes, use_x265=no)
@@ -187,14 +179,6 @@ esac
 
 if test "x$use_fdk_aac" = "xyes" ; then
     HB_LIBS+=" -lfdk-aac"
-fi
-
-if test "x$use_mp4v2" = "xyes" ; then
-    HB_LIBS+=" -lmp4v2"
-fi
-
-if test "x$use_libmkv" = "xyes" ; then
-    HB_LIBS+=" -lmkv"
 fi
 
 if test "x$use_x265" = "xyes" ; then

@@ -45,14 +45,6 @@ ifeq (1,$(FEATURE.fdk_aac))
     MODULES += contrib/fdk-aac
 endif
 
-ifeq (1,$(FEATURE.mp4v2))
-    MODULES += contrib/mp4v2
-endif
-
-ifeq (1,$(FEATURE.libmkv))
-    MODULES += contrib/libmkv
-endif
-
 ifeq (1,$(FEATURE.x265))
     MODULES += contrib/x265
 endif

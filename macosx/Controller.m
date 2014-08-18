@@ -4507,8 +4507,6 @@ fWorkingCount = 0;
     [fDstMp4iPodFileCheck    setHidden:YES];
     switch (videoContainer)
     {
-        case HB_MUX_MP4V2:
-            [fDstMp4LargeFileCheck   setHidden:NO];
         case HB_MUX_AV_MP4:
             [fDstMp4HttpOptFileCheck setHidden:NO];
             [fDstMp4iPodFileCheck    setHidden:NO];

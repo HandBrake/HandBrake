@@ -47,7 +47,6 @@ FFMPEG.CONFIGURE.extra += \
     --enable-encoder=libfdk_aac
 endif
 
-ifeq (1,$(FEATURE.avformat))
 FFMPEG.CONFIGURE.extra += \
     --enable-muxer=matroska \
     --enable-muxer=webm \
@@ -55,7 +54,6 @@ FFMPEG.CONFIGURE.extra += \
     --enable-muxer=mp4 \
     --enable-muxer=psp \
     --enable-muxer=ipod
-endif
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag
 ifeq (0-cygwin,$(BUILD.cross)-$(BUILD.system))
