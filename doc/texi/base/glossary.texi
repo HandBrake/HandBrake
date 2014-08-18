@@ -5,4 +5,4 @@
 @set OS-solaris  Solaris
 @set OS-unix     unix
 @set OS-windows  Windows
-@set OS-mingw    MinGW
+@set OS-mingw    MinGW-W64

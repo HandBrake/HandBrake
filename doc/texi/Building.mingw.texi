@@ -20,7 +20,7 @@ The following are the recommended specifications for building on @value{OS-mingw
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit hardware
-@item @value{OS-mingw} on Fedora 17+, Ubuntu 12+ or Debian, gcc 4.6+
+@item @value{OS-mingw} on Fedora 17+, Ubuntu 12+ or Debian using gcc 4.6+
 @item yasm 1.2.x (for i386 or x86_64 architectures)
 @end itemize
 
@@ -30,11 +30,11 @@ The following are the recommended specifications for building on @value{OS-mingw
 You must set the --cross flag with configure to cross compile with windows.
 See the Example below. Note that the cross compiler name varies between distributions.
 
-As of this writing, @value{OS-mingw} has available to it several versions of gcc; only one of which may be found and used in the path as @code{gcc} and @code{g++}. Configure will thus find what is probably the older version of gcc in a typical @value{OS-mingw} environment. If you desire to build with the newer gcc, it is found in the path as @command{gcc-4} and @command{g++-4} respectively and you must indicate to configure the desired versions. The following syntax should do the trick:
+The following is an example:
 @end quotation
 
 @example
-../configure --cross=i686-w64-mingw32 --gcc=gcc-4
+../configure --cross=x86_64-w64-mingw32
 @end example
 
 @include building/prerequisites.common.texi
