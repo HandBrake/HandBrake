@@ -88,9 +88,8 @@
 {
     if (self = [super initWithWindowNibName:@"Preferences"])
     {
-        NSAssert([self window], @"[HBPreferencesController init] window outlet is not connected in Preferences.nib");
         _languages = [[HBLanguagesSelection alloc] init];
-
+        NSAssert([self window], @"[HBPreferencesController init] window outlet is not connected in Preferences.nib");
     }
     return self;
 }
