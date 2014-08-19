@@ -611,10 +611,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		[fPresetDrawer open];
 	}
 
-    /* Initially set the dvd angle widgets to hidden (dvdnav only) */
-    [fSrcAngleLabel setHidden:YES];
-    [fSrcAnglePopUp setHidden:YES];
-    
     /* Setup the start / stop popup */
     [fEncodeStartStopPopUp removeAllItems];
     [fEncodeStartStopPopUp addItemWithTitle: @"Chapters"];
@@ -4318,26 +4314,14 @@ fWorkingCount = 0;
     [fSrcChapterEndPopUp   selectItemAtIndex:
         hb_list_count( title->list_chapter ) - 1];
     [self chapterPopUpChanged:nil];
-    
-    /* if using dvd nav, show the angle widget */
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue])
+
+    [fSrcAnglePopUp removeAllItems];
+    for( int i = 0; i < title->angle_count; i++ )
     {
-        [fSrcAngleLabel setHidden:NO];
-        [fSrcAnglePopUp setHidden:NO];
-        
-        [fSrcAnglePopUp removeAllItems];
-        for( int i = 0; i < title->angle_count; i++ )
-        {
-            [fSrcAnglePopUp addItemWithTitle: [NSString stringWithFormat: @"%d", i + 1]];
-        }
-        [fSrcAnglePopUp selectItemAtIndex: 0];
+        [fSrcAnglePopUp addItemWithTitle: [NSString stringWithFormat: @"%d", i + 1]];
     }
-    else
-    {
-        [fSrcAngleLabel setHidden:YES];
-        [fSrcAnglePopUp setHidden:YES];
-    }
-    
+    [fSrcAnglePopUp selectItemAtIndex: 0];
+
     /* Start Get and set the initial pic size for display */
 	fTitle = title;
     

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -140,6 +140,13 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <binding destination="5676" name="hidden" keyPath="values.UseDvdNav" id="GhV-lP-BWw">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="5181">
                         <rect key="frame" x="436" y="506" width="44" height="22"/>
@@ -153,6 +160,13 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <connections>
+                            <binding destination="5676" name="hidden" keyPath="values.UseDvdNav" id="8xq-AL-yDc">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="1552">
                         <rect key="frame" x="5" y="454" width="47" height="17"/>
@@ -225,7 +239,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="1539">
-                        <rect key="frame" x="70" y="540" width="310" height="14.000000042040575"/>
+                        <rect key="frame" x="70" y="540" width="310" height="14.000000042040593"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
                             <font key="font" metaFont="smallSystem"/>
@@ -341,7 +355,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="bar" id="3203">
-                        <rect key="frame" x="386" y="542.00000004203991" width="541" height="12"/>
+                        <rect key="frame" x="386" y="542.0000000420406" width="541" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <button toolTip="This rearranges the header of the MP4 file to optimize it for streaming across the web." id="4579">
