@@ -1697,6 +1697,8 @@ namespace HandBrakeWPF.ViewModels
         {
             if (info.TotalBytes == 0 || info.BytesRead == 0)
             {
+                this.UpdateAvailable = false;
+                this.UpdateMessage = info.WasSuccessful ? "Update Downloaded" : "Update Service Unavailable. You can try downloading the update from https://handbrake.fr";
                 return;
             }
 
@@ -1717,7 +1719,7 @@ namespace HandBrakeWPF.ViewModels
         private void DownloadComplete(DownloadStatus info)
         {
             this.UpdateAvailable = false;
-            this.UpdateMessage = info.WasSuccessful ? "Update Downloaded" : "Update Failed. You can try downloading the update from http://handbrake.fr";
+            this.UpdateMessage = info.WasSuccessful ? "Update Downloaded" : "Update Failed. You can try downloading the update from https://handbrake.fr";
 
             Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
             Execute.OnUIThread(() => Application.Current.Shutdown());

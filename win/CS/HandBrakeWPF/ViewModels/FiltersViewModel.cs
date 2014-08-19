@@ -464,7 +464,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.SelectedDenoise == Denoise.NlMeans;
+                return this.SelectedDenoise == Denoise.NLMeans;
             }
         }
 

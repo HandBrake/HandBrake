@@ -16,6 +16,6 @@ namespace HandBrake.Interop.Model.Encoding
 	{
 		Off = 0,
         hqdn3d = 1,
-		NlMeans = 2,
+		NLMeans = 2,
 	}
 }

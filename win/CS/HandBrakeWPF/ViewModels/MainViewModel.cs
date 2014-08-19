@@ -27,7 +27,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Model.Subtitle;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 

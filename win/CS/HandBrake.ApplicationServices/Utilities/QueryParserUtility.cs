@@ -296,7 +296,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (nlmeans.Success)
                 {
-                    parsed.Denoise = Denoise.NlMeans;
+                    parsed.Denoise = Denoise.NLMeans;
                     switch (nlmeans.ToString().Replace("--nlmeans=", string.Empty).Replace("\"", string.Empty))
                     {
                         case "ultralight":

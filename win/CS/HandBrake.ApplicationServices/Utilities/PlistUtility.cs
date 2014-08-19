@@ -224,7 +224,7 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             // These keys are still TBD.   TODO Update these
-            if (parsed.Denoise == Denoise.NlMeans)
+            if (parsed.Denoise == Denoise.NLMeans)
             {
                 switch (parsed.DenoisePreset)
                 {

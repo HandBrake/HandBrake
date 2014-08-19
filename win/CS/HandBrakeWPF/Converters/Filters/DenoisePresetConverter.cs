@@ -52,7 +52,7 @@ namespace HandBrakeWPF.Converters.Filters
                     return new List<DenoisePreset> { DenoisePreset.Weak, DenoisePreset.Medium, DenoisePreset.Strong, DenoisePreset.Custom };
                 }
 
-                if (denoiseChoice == Denoise.NlMeans)
+                if (denoiseChoice == Denoise.NLMeans)
                 {
                     return new List<DenoisePreset> { DenoisePreset.Ultralight, DenoisePreset.Light, DenoisePreset.Medium, DenoisePreset.Strong };
                 } 

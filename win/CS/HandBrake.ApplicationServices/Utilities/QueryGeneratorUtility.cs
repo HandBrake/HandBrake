@@ -392,7 +392,7 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             // NL Means
-            if (task.Denoise == Denoise.NlMeans)
+            if (task.Denoise == Denoise.NLMeans)
             {
                 switch (task.DenoisePreset) // Denoise
                 {
