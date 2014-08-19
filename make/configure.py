@@ -822,8 +822,8 @@ class Project( Action ):
             self.build = time.strftime('%Y%m%d') + '99'
             self.title = '%s rev%d (%s)' % (self.name,repo.rev,self.build)
 
-        self.url_appcast = 'http://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
-        self.url_appnote = 'http://handbrake.fr/appcast/%s.html' % (url_ntype)
+        self.url_appcast = 'https://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
+        self.url_appnote = 'https://handbrake.fr/appcast/%s.html' % (url_ntype)
 
         self.msg_end = '%s (%s)' % (self.name,repo.type)
         self.fail = False
