@@ -83,13 +83,13 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     if (hb_handle)
         return NO;
 
-    state = HBStateIdle;    
+    state = HBStateIdle;
 
     hb_handle = hb_init(debugMode ? HB_DEBUG_ALL : HB_DEBUG_NONE, checkForUpdates);
     if (!hb_handle)
         return NO;
 
-    updateTimer = [[NSTimer scheduledTimerWithTimeInterval:0.2
+    updateTimer = [[NSTimer scheduledTimerWithTimeInterval:0.5
                                                     target:self
                                                   selector:@selector(stateUpdateTimer:) 
                                                   userInfo:NULL 
@@ -109,7 +109,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     NSAssert(hb_handle, @"[HBCore close] libhb is not open");
     if (!hb_handle)
         return NO;
-        
+
     [updateTimer invalidate];
     [updateTimer release];
     updateTimer = nil;

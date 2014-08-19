@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -19,20 +19,22 @@
                 <outlet property="fCropTopStepper" destination="12" id="61"/>
                 <outlet property="fDeblockBox" destination="421" id="434"/>
                 <outlet property="fDeblockField" destination="291" id="372"/>
-                <outlet property="fDeblockSlider" destination="292" id="371"/>
                 <outlet property="fDecombBox" destination="315" id="364"/>
+                <outlet property="fDecombCustomTextField" destination="316" id="VbO-pu-4GQ"/>
                 <outlet property="fDecombDeinterlaceBox" destination="287" id="360"/>
-                <outlet property="fDecombDeinterlaceSlider" destination="313" id="361"/>
-                <outlet property="fDecombPopUp" destination="318" id="362"/>
                 <outlet property="fDeinterlaceBox" destination="314" id="365"/>
-                <outlet property="fDeinterlacePopUp" destination="328" id="366"/>
                 <outlet property="fDenoiseBox" destination="288" id="368"/>
-                <outlet property="fDenoisePopUp" destination="300" id="369"/>
+                <outlet property="fDenoiseCustomField" destination="302" id="OGp-PW-gBH"/>
+                <outlet property="fDenoiseCustomLabel" destination="301" id="gyb-ha-nT2"/>
+                <outlet property="fDenoiseCustomTextField" destination="302" id="ocm-va-TCv"/>
+                <outlet property="fDenoisePreset" destination="ZSz-Vu-qC0" id="ksD-JU-hU9"/>
+                <outlet property="fDenoisePresetPopUp" destination="2F0-KY-tOC" id="qWR-VK-SxC"/>
+                <outlet property="fDenoisePresetPopup" destination="2F0-KY-tOC" id="viA-Tt-qd7"/>
+                <outlet property="fDenoiseTuneLabel" destination="gpP-sp-Lev" id="Q7g-G7-JZZ"/>
+                <outlet property="fDenoiseTunePopUp" destination="Upd-5E-OpR" id="5UN-Gt-l11"/>
                 <outlet property="fDetelecineBox" destination="286" id="356"/>
-                <outlet property="fDetelecinePopUp" destination="345" id="358"/>
                 <outlet property="fDisplayWidthField" destination="396" id="407"/>
                 <outlet property="fDisplayWidthLabel" destination="402" id="526"/>
-                <outlet property="fGrayscaleCheck" destination="293" id="373"/>
                 <outlet property="fHeightField" destination="43" id="66"/>
                 <outlet property="fHeightStepper" destination="46" id="67"/>
                 <outlet property="fModulusLabel" destination="390" id="532"/>
@@ -54,17 +56,17 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window title="Picture Settings" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="PicturePanel" customClass="NSPanel">
+        <window title="Picture Settings" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="PictureSizing" animationBehavior="default" id="5" userLabel="PicturePanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" utility="YES" HUD="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="63" y="414" width="635" height="394"/>
+            <rect key="contentRect" x="63" y="414" width="635" height="252"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
             <view key="contentView" id="6">
-                <rect key="frame" x="0.0" y="0.0" width="635" height="394"/>
+                <rect key="frame" x="0.0" y="0.0" width="635" height="252"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <userGuides>
                     <userLayoutGuide affinity="minY"/>
-                    <userLayoutGuide location="125" affinity="minX"/>
+                    <userLayoutGuide location="101" affinity="minX"/>
                 </userGuides>
                 <subviews>
                     <textField verticalHuggingPriority="750" id="262">
@@ -86,17 +88,17 @@
                         </textFieldCell>
                     </textField>
                     <tabView controlSize="mini" initialItem="282" id="281">
-                        <rect key="frame" x="-12" y="18" width="658" height="358"/>
+                        <rect key="frame" x="-12" y="18" width="658" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <font key="font" metaFont="miniSystem"/>
                         <tabViewItems>
                             <tabViewItem label="Size" identifier="1" id="282">
                                 <view key="view" id="285">
-                                    <rect key="frame" x="10" y="19" width="638" height="326"/>
+                                    <rect key="frame" x="10" y="19" width="638" height="184"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box title="Box" borderType="none" titlePosition="noTitle" id="436">
-                                            <rect key="frame" x="14" y="191" width="358" height="126"/>
+                                            <rect key="frame" x="14" y="49" width="358" height="126"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView">
                                                 <rect key="frame" x="0.0" y="0.0" width="358" height="126"/>
@@ -168,7 +170,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="44">
                                                         <rect key="frame" x="143" y="103" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="169">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="169">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -205,7 +207,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="46">
                                                         <rect key="frame" x="143" y="78" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="171">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="171">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -301,7 +303,7 @@
                                             <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </box>
                                         <box borderType="none" titlePosition="noTitle" id="7">
-                                            <rect key="frame" x="374" y="191" width="254" height="126"/>
+                                            <rect key="frame" x="374" y="49" width="254" height="126"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView">
                                                 <rect key="frame" x="0.0" y="0.0" width="254" height="126"/>
@@ -328,22 +330,22 @@
                                                         </stepperCell>
                                                     </stepper>
                                                     <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="16">
-                                                        <rect key="frame" x="64" y="97" width="20" height="24"/>
+                                                        <rect key="frame" x="64" y="92" width="81" height="31"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="cellSize" width="20" height="11"/>
-                                                        <size key="intercellSpacing" width="4" height="2"/>
-                                                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="mini" inset="2" id="178">
+                                                        <size key="cellSize" width="81" height="14"/>
+                                                        <size key="intercellSpacing" width="2" height="3"/>
+                                                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="mini" inset="2" id="178" customClass="HBHUDButtonCell">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="miniSystem"/>
                                                         </buttonCell>
                                                         <cells>
                                                             <column>
-                                                                <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="17">
+                                                                <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="17" customClass="HBHUDButtonCell">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
                                                                 </buttonCell>
-                                                                <buttonCell type="radio" title="Custom:" imagePosition="left" alignment="left" controlSize="mini" inset="2" id="18">
+                                                                <buttonCell type="radio" title="Custom:" imagePosition="left" alignment="left" controlSize="mini" inset="2" id="18" customClass="HBHUDButtonCell">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                     <font key="font" metaFont="miniSystem"/>
                                                                 </buttonCell>
@@ -409,24 +411,6 @@
                                                             </connections>
                                                         </stepperCell>
                                                     </stepper>
-                                                    <textField verticalHuggingPriority="750" id="250">
-                                                        <rect key="frame" x="80" y="111" width="68" height="11"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" title="Automatic" id="251">
-                                                            <font key="font" metaFont="miniSystem"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField verticalHuggingPriority="750" id="252">
-                                                        <rect key="frame" x="80" y="97" width="68" height="11"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" title="Custom" id="253">
-                                                            <font key="font" metaFont="miniSystem"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
                                                     <textField verticalHuggingPriority="750" id="382">
                                                         <rect key="frame" x="3" y="107" width="59" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -446,18 +430,18 @@
                             </tabViewItem>
                             <tabViewItem label="Filters" identifier="2" id="283">
                                 <view key="view" id="284">
-                                    <rect key="frame" x="10" y="19" width="638" height="326"/>
+                                    <rect key="frame" x="10" y="19" width="638" height="184"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <box autoresizesSubviews="NO" title="Box" borderType="line" titlePosition="noTitle" id="286">
-                                            <rect key="frame" x="37" y="257" width="232" height="67"/>
+                                        <box autoresizesSubviews="NO" title="Box" borderType="bezel" titlePosition="noTitle" id="286">
+                                            <rect key="frame" x="11" y="113" width="232" height="66"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView">
-                                                <rect key="frame" x="1" y="1" width="230" height="65"/>
+                                                <rect key="frame" x="3" y="3" width="226" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" id="346">
-                                                        <rect key="frame" x="19" y="38" width="64" height="14"/>
+                                                        <rect key="frame" x="19" y="36" width="64" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="347">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -466,34 +450,36 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="344">
-                                                        <rect key="frame" x="34" y="15" width="49" height="14"/>
+                                                        <rect key="frame" x="34" y="13" width="49" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="353">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="hidden" keyPath="self.filters.detelecine" id="GeL-Hh-N04">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
                                                     </textField>
                                                     <popUpButton verticalHuggingPriority="750" id="345">
-                                                        <rect key="frame" x="88" y="37" width="110" height="15"/>
+                                                        <rect key="frame" x="87" y="35" width="110" height="15"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="350" id="348">
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="348">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="miniSystem"/>
-                                                            <menu key="menu" title="OtherViews" id="349">
-                                                                <items>
-                                                                    <menuItem title="Item1" state="on" id="350"/>
-                                                                    <menuItem title="Item2" id="351"/>
-                                                                    <menuItem title="Item3" id="352"/>
-                                                                </items>
-                                                            </menu>
+                                                            <menu key="menu" title="OtherViews" id="349"/>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <action selector="FilterSettingsChanged:" target="-2" id="374"/>
+                                                            <binding destination="-2" name="selectedIndex" keyPath="self.filters.detelecine" previousBinding="pGd-yk-F9V" id="nJ6-iy-GiP"/>
+                                                            <binding destination="-2" name="content" keyPath="self.filters.detelecineSettings" id="pGd-yk-F9V"/>
                                                         </connections>
                                                     </popUpButton>
                                                     <textField verticalHuggingPriority="750" id="343">
-                                                        <rect key="frame" x="89" y="14" width="108" height="16"/>
+                                                        <rect key="frame" x="88" y="12" width="108" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="354">
                                                             <font key="font" metaFont="miniSystem"/>
@@ -501,239 +487,12 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="FilterSettingsChanged:" target="-2" id="ApX-0E-8GE"/>
-                                                            <binding destination="-2" name="value" keyPath="self.detelecineCustomString" id="pxi-vJ-hxS"/>
-                                                        </connections>
-                                                    </textField>
-                                                </subviews>
-                                            </view>
-                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </box>
-                                        <box titlePosition="aboveBottom" id="287">
-                                            <rect key="frame" x="37" y="150" width="232" height="105"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <view key="contentView">
-                                                <rect key="frame" x="2" y="18" width="228" height="85"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <subviews>
-                                                    <slider verticalHuggingPriority="750" id="313">
-                                                        <rect key="frame" x="59" y="58" width="37" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" controlSize="small" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" allowsTickMarkValuesOnly="YES" sliderType="linear" id="340">
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                        </sliderCell>
-                                                        <connections>
-                                                            <action selector="modeDecombDeinterlaceSliderChanged:" target="-2" id="381"/>
-                                                        </connections>
-                                                    </slider>
-                                                    <textField verticalHuggingPriority="750" id="312">
-                                                        <rect key="frame" x="1" y="57" width="56" height="17"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Decomb" id="341">
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField verticalHuggingPriority="750" id="311">
-                                                        <rect key="frame" x="97" y="56" width="89" height="17"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Deinterlace" id="342">
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <box autoresizesSubviews="NO" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="315">
-                                                        <rect key="frame" x="14" y="-14" width="198" height="70"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <view key="contentView">
-                                                            <rect key="frame" x="0.0" y="0.0" width="198" height="70"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField verticalHuggingPriority="750" id="319">
-                                                                    <rect key="frame" x="14" y="40" width="52" height="14"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Decomb:" id="320">
-                                                                        <font key="font" metaFont="smallSystem"/>
-                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                                <textField verticalHuggingPriority="750" id="317">
-                                                                    <rect key="frame" x="17" y="17" width="49" height="14"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="326">
-                                                                        <font key="font" metaFont="smallSystem"/>
-                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                                <popUpButton verticalHuggingPriority="750" id="318">
-                                                                    <rect key="frame" x="73" y="39" width="110" height="15"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="323" id="321">
-                                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                                        <font key="font" metaFont="miniSystem"/>
-                                                                        <menu key="menu" title="OtherViews" id="322">
-                                                                            <items>
-                                                                                <menuItem title="Item1" state="on" id="323"/>
-                                                                                <menuItem title="Item2" id="324"/>
-                                                                                <menuItem title="Item3" id="325"/>
-                                                                            </items>
-                                                                        </menu>
-                                                                    </popUpButtonCell>
-                                                                    <connections>
-                                                                        <action selector="FilterSettingsChanged:" target="-2" id="375"/>
-                                                                    </connections>
-                                                                </popUpButton>
-                                                                <textField verticalHuggingPriority="750" id="316">
-                                                                    <rect key="frame" x="74" y="16" width="108" height="16"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="327">
-                                                                        <font key="font" metaFont="miniSystem"/>
-                                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                    <connections>
-                                                                        <action selector="FilterSettingsChanged:" target="-2" id="cQu-1x-zhN"/>
-                                                                        <binding destination="-2" name="value" keyPath="self.decombCustomString" id="4lc-Rt-V0u">
-                                                                            <dictionary key="options">
-                                                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                                                            </dictionary>
-                                                                        </binding>
-                                                                    </connections>
-                                                                </textField>
-                                                            </subviews>
-                                                        </view>
-                                                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    </box>
-                                                    <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="314">
-                                                        <rect key="frame" x="-6" y="-13" width="222" height="66"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <view key="contentView">
-                                                            <rect key="frame" x="0.0" y="0.0" width="222" height="66"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField verticalHuggingPriority="750" id="331">
-                                                                    <rect key="frame" x="17" y="39" width="68" height="14"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="332">
-                                                                        <font key="font" metaFont="smallSystem"/>
-                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                                <textField verticalHuggingPriority="750" id="330">
-                                                                    <rect key="frame" x="37" y="16" width="49" height="14"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="333">
-                                                                        <font key="font" metaFont="smallSystem"/>
-                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                                <popUpButton verticalHuggingPriority="750" id="328">
-                                                                    <rect key="frame" x="93" y="38" width="110" height="15"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="337" id="335">
-                                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                                        <font key="font" metaFont="miniSystem"/>
-                                                                        <menu key="menu" title="OtherViews" id="336">
-                                                                            <items>
-                                                                                <menuItem title="Item1" state="on" id="337"/>
-                                                                                <menuItem title="Item2" id="338"/>
-                                                                                <menuItem title="Item3" id="339"/>
-                                                                            </items>
-                                                                        </menu>
-                                                                    </popUpButtonCell>
-                                                                    <connections>
-                                                                        <action selector="FilterSettingsChanged:" target="-2" id="377"/>
-                                                                    </connections>
-                                                                </popUpButton>
-                                                                <textField verticalHuggingPriority="750" id="329">
-                                                                    <rect key="frame" x="95" y="15" width="108" height="16"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="334">
-                                                                        <font key="font" metaFont="miniSystem"/>
-                                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                    <connections>
-                                                                        <action selector="FilterSettingsChanged:" target="-2" id="54Z-kr-6oa"/>
-                                                                        <binding destination="-2" name="value" keyPath="self.deinterlaceCustomString" id="eu9-Ar-QY2">
-                                                                            <dictionary key="options">
-                                                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                                                            </dictionary>
-                                                                        </binding>
-                                                                    </connections>
-                                                                </textField>
-                                                            </subviews>
-                                                        </view>
-                                                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    </box>
-                                                </subviews>
-                                            </view>
-                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </box>
-                                        <box autoresizesSubviews="NO" title="Box" borderType="line" titlePosition="noTitle" id="288">
-                                            <rect key="frame" x="37" y="82" width="232" height="66"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <view key="contentView">
-                                                <rect key="frame" x="1" y="1" width="230" height="64"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <subviews>
-                                                    <textField verticalHuggingPriority="750" id="299">
-                                                        <rect key="frame" x="33" y="38" width="50" height="14"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="310">
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField verticalHuggingPriority="750" id="301">
-                                                        <rect key="frame" x="34" y="15" width="49" height="14"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="304">
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <popUpButton verticalHuggingPriority="750" id="300">
-                                                        <rect key="frame" x="88" y="37" width="110" height="15"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="309" id="305">
-                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="miniSystem"/>
-                                                            <menu key="menu" title="OtherViews" id="306">
-                                                                <items>
-                                                                    <menuItem title="Item1" state="on" id="309"/>
-                                                                    <menuItem title="Item2" id="308"/>
-                                                                    <menuItem title="Item3" id="307"/>
-                                                                </items>
-                                                            </menu>
-                                                        </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="FilterSettingsChanged:" target="-2" id="378"/>
-                                                        </connections>
-                                                    </popUpButton>
-                                                    <textField verticalHuggingPriority="750" id="302">
-                                                        <rect key="frame" x="89" y="14" width="108" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="303">
-                                                            <font key="font" metaFont="miniSystem"/>
-                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <action selector="FilterSettingsChanged:" target="-2" id="em7-cp-nCV"/>
-                                                            <binding destination="-2" name="value" keyPath="self.denoiseCustomString" id="9bk-dZ-FOv">
+                                                            <binding destination="-2" name="hidden" keyPath="self.filters.detelecine" id="BLn-QV-lw8">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.filters.detelecineCustomString" id="gSO-TA-w8P">
                                                                 <dictionary key="options">
                                                                     <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                                                 </dictionary>
@@ -745,15 +504,310 @@
                                             <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                             <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </box>
-                                        <box autoresizesSubviews="NO" title="Box" borderType="line" titlePosition="noTitle" id="421">
-                                            <rect key="frame" x="37" y="20" width="232" height="60"/>
+                                        <box borderType="bezel" titlePosition="aboveBottom" id="287">
+                                            <rect key="frame" x="11" y="4" width="232" height="107"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView">
-                                                <rect key="frame" x="1" y="1" width="230" height="58"/>
+                                                <rect key="frame" x="3" y="19" width="226" height="85"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="kSA-Hn-6ya">
+                                                        <rect key="frame" x="88" y="43" width="83" height="32"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        <size key="cellSize" width="83" height="15"/>
+                                                        <size key="intercellSpacing" width="4" height="2"/>
+                                                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="m9e-GO-6R2" customClass="HBHUDButtonCell">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <cells>
+                                                            <column>
+                                                                <buttonCell type="radio" title="Deinterlace" imagePosition="left" alignment="left" controlSize="small" state="on" tag="1" inset="2" id="UmU-23-PdR" customClass="HBHUDButtonCell">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                </buttonCell>
+                                                                <buttonCell type="radio" title="Decomb" imagePosition="left" alignment="left" controlSize="small" inset="2" id="N0e-d0-RLj" customClass="HBHUDButtonCell">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                </buttonCell>
+                                                            </column>
+                                                        </cells>
+                                                        <connections>
+                                                            <binding destination="-2" name="selectedIndex" keyPath="self.filters.useDecomb" id="FHi-fu-YUi"/>
+                                                        </connections>
+                                                    </matrix>
+                                                    <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="315" userLabel="Decomb Box">
+                                                        <rect key="frame" x="11" y="-11" width="207" height="62"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <view key="contentView">
+                                                            <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <textField verticalHuggingPriority="750" id="319">
+                                                                    <rect key="frame" x="20" y="35" width="52" height="14"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Decomb:" id="320">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <textField verticalHuggingPriority="750" id="317">
+                                                                    <rect key="frame" x="23" y="11" width="49" height="14"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="326">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.decomb" id="SgL-u6-Y9a">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </textField>
+                                                                <popUpButton verticalHuggingPriority="750" id="318">
+                                                                    <rect key="frame" x="76" y="34" width="111" height="15"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="321">
+                                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="miniSystem"/>
+                                                                        <menu key="menu" title="OtherViews" id="322"/>
+                                                                    </popUpButtonCell>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="selectedIndex" keyPath="self.filters.decomb" previousBinding="Rky-63-XUy" id="0LF-hS-iFS"/>
+                                                                        <binding destination="-2" name="contentValues" keyPath="self.filters.decombSettings" id="Rky-63-XUy"/>
+                                                                    </connections>
+                                                                </popUpButton>
+                                                                <textField verticalHuggingPriority="750" id="316">
+                                                                    <rect key="frame" x="77" y="10" width="108" height="16"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="327">
+                                                                        <font key="font" metaFont="miniSystem"/>
+                                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.decomb" id="akE-8W-aND">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                        <binding destination="-2" name="value" keyPath="self.filters.decombCustomString" id="y3W-Df-Jgn">
+                                                                            <dictionary key="options">
+                                                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </textField>
+                                                            </subviews>
+                                                        </view>
+                                                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                                                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </box>
+                                                    <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="314" userLabel="Deinterlace Box">
+                                                        <rect key="frame" x="11" y="-11" width="207" height="62"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <view key="contentView">
+                                                            <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <textField verticalHuggingPriority="750" id="331">
+                                                                    <rect key="frame" x="4" y="35" width="68" height="14"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="332">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <textField verticalHuggingPriority="750" id="330">
+                                                                    <rect key="frame" x="23" y="11" width="49" height="14"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="333">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlace" id="rIM-KR-bUf">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </textField>
+                                                                <popUpButton verticalHuggingPriority="750" id="328">
+                                                                    <rect key="frame" x="77" y="34" width="111" height="15"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="335">
+                                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="miniSystem"/>
+                                                                        <menu key="menu" title="OtherViews" id="336"/>
+                                                                    </popUpButtonCell>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="selectedIndex" keyPath="self.filters.deinterlace" previousBinding="hol-Lh-FVF" id="5jK-2w-2Fq"/>
+                                                                        <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceSettings" id="hol-Lh-FVF"/>
+                                                                    </connections>
+                                                                </popUpButton>
+                                                                <textField verticalHuggingPriority="750" id="329">
+                                                                    <rect key="frame" x="77" y="10" width="108" height="16"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="334">
+                                                                        <font key="font" metaFont="miniSystem"/>
+                                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlace" id="7f6-Fd-pfo">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                        <binding destination="-2" name="value" keyPath="self.filters.deinterlaceCustomString" id="aSX-hF-LBO">
+                                                                            <dictionary key="options">
+                                                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </textField>
+                                                            </subviews>
+                                                        </view>
+                                                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                                                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </box>
+                                                </subviews>
+                                            </view>
+                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </box>
+                                        <box autoresizesSubviews="NO" title="Box" borderType="bezel" titlePosition="noTitle" id="288">
+                                            <rect key="frame" x="245" y="4" width="232" height="107"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <view key="contentView">
+                                                <rect key="frame" x="3" y="3" width="226" height="101"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField verticalHuggingPriority="750" id="299">
+                                                        <rect key="frame" x="32" y="73" width="50" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="310">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <popUpButton toolTip="Denoise filtering reduces or removes the appearance of noise and grain." verticalHuggingPriority="750" id="300">
+                                                        <rect key="frame" x="86" y="73" width="110" height="15"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="305">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <menu key="menu" title="OtherViews" id="306"/>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="selectedValue" keyPath="self.filters.denoise" previousBinding="mkS-wD-luU" id="1LQ-5U-xih">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBDenoiseTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="contentValues" keyPath="self.filters.denoiseTypes" id="mkS-wD-luU"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                    <textField verticalHuggingPriority="750" id="ZSz-Vu-qC0">
+                                                        <rect key="frame" x="42" y="50" width="40" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="CBk-r9-aJb">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <popUpButton verticalHuggingPriority="750" id="2F0-KY-tOC">
+                                                        <rect key="frame" x="86" y="50" width="110" height="15"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="nMP-H2-vMe">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <menu key="menu" title="OtherViews" id="Mxi-ZP-xzf"/>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="selectedValue" keyPath="self.filters.denoisePreset" previousBinding="Lju-Js-fav" id="8HL-Js-eww">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBDenoisePresetTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="contentValues" keyPath="self.filters.denoisePresets" id="Lju-Js-fav"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                    <textField verticalHuggingPriority="750" id="gpP-sp-Lev">
+                                                        <rect key="frame" x="48" y="28" width="34" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="BqI-14-fzH">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <popUpButton verticalHuggingPriority="750" id="Upd-5E-OpR">
+                                                        <rect key="frame" x="86" y="28" width="110" height="15"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="lPq-MO-3Oz">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <menu key="menu" title="OtherViews" id="NiL-SO-Fbj"/>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="selectedValue" keyPath="self.filters.denoiseTune" previousBinding="nST-CD-SjR" id="wvC-Ag-WKc">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBDenoiseTuneTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="contentValues" keyPath="self.filters.denoiseTunes" id="nST-CD-SjR"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                    <textField verticalHuggingPriority="750" id="301">
+                                                        <rect key="frame" x="33" y="27" width="49" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="304">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField verticalHuggingPriority="750" id="302">
+                                                        <rect key="frame" x="87" y="26" width="108" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="303">
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="value" keyPath="self.filters.denoiseCustomString" id="cUD-QA-8K3">
+                                                                <dictionary key="options">
+                                                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                            </view>
+                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </box>
+                                        <box autoresizesSubviews="NO" title="Box" borderType="bezel" titlePosition="noTitle" id="421">
+                                            <rect key="frame" x="245" y="113" width="232" height="66"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <view key="contentView">
+                                                <rect key="frame" x="3" y="3" width="226" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" id="289">
-                                                        <rect key="frame" x="30" y="32" width="51" height="14"/>
+                                                        <rect key="frame" x="30" y="36" width="51" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblock:" id="298">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -762,7 +816,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="290">
-                                                        <rect key="frame" x="24" y="9" width="58" height="14"/>
+                                                        <rect key="frame" x="24" y="13" width="58" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Grayscale:" id="297">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -771,7 +825,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="291">
-                                                        <rect key="frame" x="79" y="31" width="31" height="14"/>
+                                                        <rect key="frame" x="79" y="35" width="31" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="Off" id="296">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -780,24 +834,24 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <slider verticalHuggingPriority="750" id="292">
-                                                        <rect key="frame" x="108" y="30" width="104" height="16"/>
+                                                        <rect key="frame" x="108" y="34" width="104" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" minValue="4" maxValue="15" doubleValue="4" tickMarkPosition="below" numberOfTickMarks="12" allowsTickMarkValuesOnly="YES" sliderType="linear" id="295">
                                                             <font key="font" metaFont="miniSystem"/>
                                                         </sliderCell>
                                                         <connections>
-                                                            <action selector="deblockSliderChanged:" target="-2" id="379"/>
+                                                            <binding destination="-2" name="value" keyPath="self.filters.deblock" id="QYG-e5-NYq"/>
                                                         </connections>
                                                     </slider>
                                                     <button id="293">
-                                                        <rect key="frame" x="84" y="7" width="19" height="18"/>
+                                                        <rect key="frame" x="84" y="11" width="19" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="294">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <action selector="FilterSettingsChanged:" target="-2" id="380"/>
+                                                            <binding destination="-2" name="value" keyPath="self.filters.grayscale" id="CyF-w9-sk3"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -814,7 +868,7 @@
                         </connections>
                     </tabView>
                     <button verticalHuggingPriority="750" id="270">
-                        <rect key="frame" x="15" y="370" width="57" height="16"/>
+                        <rect key="frame" x="15" y="228" width="64" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Preview" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="271">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -826,6 +880,9 @@
                     </button>
                 </subviews>
             </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="hby-dR-NFK"/>
+            </connections>
         </window>
     </objects>
 </document>

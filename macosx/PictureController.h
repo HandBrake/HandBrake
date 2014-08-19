@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import "HBFilters.h"
 #include "hb.h"
 
 @protocol HBPictureControllerDelegate <NSObject>
@@ -15,23 +16,8 @@
 
 @interface HBPictureController : NSWindowController <NSWindowDelegate>
 
-@property (nonatomic, readwrite) NSInteger detelecine;
-@property (nonatomic, readwrite, copy) NSString *detelecineCustomString;
-
-@property (nonatomic, readwrite) NSInteger deinterlace;
-@property (nonatomic, readwrite, copy) NSString *deinterlaceCustomString;
-
-@property (nonatomic, readwrite) NSInteger decomb;
-@property (nonatomic, readwrite, copy) NSString *decombCustomString;
-
-@property (nonatomic, readwrite) NSInteger denoise;
-@property (nonatomic, readwrite, copy) NSString *denoiseCustomString;
-
-@property (nonatomic, readwrite) NSInteger deblock;
-@property (nonatomic, readwrite) NSInteger grayscale;
-
+@property (nonatomic, readwrite, retain) HBFilters *filters;
 @property (nonatomic, readwrite) BOOL autoCrop;
-@property (nonatomic, readwrite) NSInteger useDecomb;
 
 @property (nonatomic, readwrite, assign) id <HBPictureControllerDelegate> delegate;
 

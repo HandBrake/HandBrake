@@ -8,6 +8,33 @@
 #import "PictureController.h"
 #import "HBPreviewController.h"
 
+@interface HBCustomFilterTransformer : NSValueTransformer
+@end
+
+@implementation HBCustomFilterTransformer
+
++ (Class)transformedValueClass
+{
+    return [NSNumber class];
+}
+
+- (id)transformedValue:(id)value
+{
+    if ([value intValue] == 1)
+        return @NO;
+    else
+        return @YES;
+}
+
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
+}
+
+@end
+
+static void *HBPictureControllerContext = &HBPictureControllerContext;
+
 @interface HBPictureController ()
 {
     hb_title_t               * fTitle;
@@ -51,50 +78,30 @@
 
     /* Video Filters */
     IBOutlet NSBox           * fDetelecineBox;
-    IBOutlet NSPopUpButton   * fDetelecinePopUp;
-
     IBOutlet NSBox           * fDecombDeinterlaceBox;
-    IBOutlet NSSlider        * fDecombDeinterlaceSlider;
-
     IBOutlet NSBox           * fDecombBox;
-    IBOutlet NSPopUpButton   * fDecombPopUp;
-
     IBOutlet NSBox           * fDeinterlaceBox;
-    IBOutlet NSPopUpButton   * fDeinterlacePopUp;
 
-    IBOutlet NSBox           * fDenoiseBox;
-    IBOutlet NSPopUpButton   * fDenoisePopUp;
-
-    IBOutlet NSBox           * fDeblockBox; // also holds the grayscale box
     IBOutlet NSTextField     * fDeblockField;
-    IBOutlet NSSlider        * fDeblockSlider;
 
-    IBOutlet NSButton        * fGrayscaleCheck;
+    IBOutlet NSTextField    *fDenoisePreset;
+    IBOutlet NSPopUpButton  *fDenoisePresetPopUp;
+    IBOutlet NSTextField    *fDenoiseTuneLabel;
+    IBOutlet NSPopUpButton  *fDenoiseTunePopUp;
+    IBOutlet NSTextField    *fDenoiseCustomLabel;
+    IBOutlet NSTextField    *fDenoiseCustomField;
 }
-
-- (void) tabView: (NSTabView *) tabView didSelectTabViewItem: (NSTabViewItem *) tabViewItem;
-
-- (void) resizeInspectorForTab: (id) sender;
-
-- (void) adjustSizingDisplay:(id) sender;
-- (void) adjustFilterDisplay: (id) sender;
-
-- (void) reloadStillPreview;
-
-/* Internal Actions */
-- (IBAction) settingsChanged: (id) sender;
-- (IBAction) FilterSettingsChanged: (id) sender;
-- (IBAction) modeDecombDeinterlaceSliderChanged: (id) sender;
-- (IBAction) deblockSliderChanged: (id) sender;
 
 @end
 
 @implementation HBPictureController
 
-- (id) init
+- (instancetype)init
 {
 	if (self = [super initWithWindowNibName:@"PictureSettings"])
 	{
+        _filters = [[HBFilters alloc] init];
+
         // NSWindowController likes to lazily load its window. However since
         // this controller tries to set all sorts of outlets before the window
         // is displayed, we need it to load immediately. The correct way to do
@@ -105,10 +112,17 @@
         // go away.
         [self window];
 
-        _detelecineCustomString = @"";
-        _deinterlaceCustomString = @"";
-        _decombCustomString = @"";
-        _denoiseCustomString = @"";
+        // Add the observers for the filters values
+        NSArray *observerdKeyPaths = @[@"filters.detelecine", @"filters.detelecineCustomString",
+                                       @"filters.deinterlace", @"filters.deinterlaceCustomString",
+                                       @"filters.decomb", @"filters.decombCustomString",
+                                       @"filters.denoise", @"filters.denoisePreset",
+                                       @"filters.denoiseTune", @"filters.denoiseCustomString",
+                                       @"filters.deblock", @"filters.grayscale", @"filters.useDecomb"];
+        for (NSString *keyPath in observerdKeyPaths)
+        {
+            [self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
+        }
 
         fPreviewController = [[HBPreviewController alloc] init];
     }
@@ -116,23 +130,34 @@
 	return self;
 }
 
-- (void) awakeFromNib
+- (void) dealloc
 {
-    [[self window] setDelegate:self];
+    NSArray *observerdKeyPaths = @[@"filters.detelecine", @"filters.detelecineCustomString",
+                                   @"filters.deinterlace", @"filters.deinterlaceCustomString",
+                                   @"filters.decomb", @"filters.decombCustomString",
+                                   @"filters.denoise", @"filters.denoisePreset",
+                                   @"filters.denoiseTune", @"filters.denoiseCustomString",
+                                   @"filters.deblock", @"filters.grayscale", @"filters.useDecomb"];
+    @try {
+        for (NSString *keyPath in observerdKeyPaths)
+        {
+            [self removeObserver:self forKeyPath:keyPath];
+        }
 
-    if( ![[self window] setFrameUsingName:@"PictureSizing"] )
-        [[self window] center];
+    } @catch (NSException * __unused exception) {}
 
-    [self setWindowFrameAutosaveName:@"PictureSizing"];
+    [_filters release];
+    [fPreviewController release];
+    [super dealloc];
+}
+
+- (void)windowDidLoad
+{
     [[self window] setExcludedFromWindowsMenu:YES];
 
     /* Populate the user interface */
     [fWidthStepper  setValueWraps: NO];
-    [fWidthStepper  setIncrement: 16];
-    [fWidthStepper  setMinValue: 64];
     [fHeightStepper setValueWraps: NO];
-    [fHeightStepper setIncrement: 16];
-    [fHeightStepper setMinValue: 64];
 
     [fCropTopStepper    setIncrement: 2];
     [fCropTopStepper    setMinValue:  0];
@@ -151,26 +176,8 @@
     [fModulusPopUp removeAllItems];
     [fModulusPopUp addItemsWithTitles:@[@"16", @"8", @"4", @"2"]];
 
-    /* we use a popup to show the detelecine settings */
-    [fDetelecinePopUp removeAllItems];
-    [fDetelecinePopUp addItemsWithTitles:@[@"Off", @"Custom", @"Default"]];
-    [fDetelecinePopUp selectItemAtIndex: self.detelecine];
-
-    /* we use a popup to show the decomb settings */
-	[fDecombPopUp removeAllItems];
-    [fDecombPopUp addItemsWithTitles:@[@"Off", @"Custom", @"Default", @"Fast", @"Bob"]];
-    [self modeDecombDeinterlaceSliderChanged:nil];
-    [fDecombPopUp selectItemAtIndex: self.decomb];
-
-    /* we use a popup to show the deinterlace settings */
-	[fDeinterlacePopUp removeAllItems];
-    [fDeinterlacePopUp addItemsWithTitles:@[@"Off", @"Custom", @"Fast", @"Slow", @"Slower", @"Bob"]];
-    [fDeinterlacePopUp selectItemAtIndex: self.deinterlace];
-
-    /* we use a popup to show the denoise settings */
-	[fDenoisePopUp removeAllItems];
-    [fDenoisePopUp addItemsWithTitles:@[@"Off", @"Custom", @"Weak", @"Medium", @"Strong"]];
-    [fDenoisePopUp selectItemAtIndex: self.denoise];
+    [self resizeInspectorForTab:nil];
+    [self adjustSizingDisplay:nil];
 }
 
 - (void) setHandle: (hb_handle_t *) handle
@@ -284,21 +291,123 @@
                                  job->anamorphic.par_height;
     [fDisplayWidthField setIntValue: display_width];
 
-
-    /* Set filters widgets according to the filters struct */
-    [fDetelecinePopUp selectItemAtIndex:self.detelecine];
-    [fDecombPopUp selectItemAtIndex:self.decomb];
-    [fDeinterlacePopUp selectItemAtIndex: self.deinterlace];
-    [fDenoisePopUp selectItemAtIndex: self.denoise];
-    [fDeblockSlider setFloatValue:self.deblock];
-    [fGrayscaleCheck setState:self.grayscale];
-
-    [self deblockSliderChanged: nil];
-
     [fPreviewController setTitle:title];
 
-    [self FilterSettingsChanged:nil];
     [self settingsChanged:nil];
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBPictureControllerContext)
+    {
+        // We use KVO to update the panel
+        // and notify the main controller of the changes
+        // in the filters settings.
+        if ([keyPath isEqualToString:@"filters.useDecomb"])
+        {
+            if (self.filters.useDecomb)
+            {
+                [fDecombBox setHidden:NO];
+                [fDeinterlaceBox setHidden:YES];
+            }
+            else
+            {
+                [fDecombBox setHidden:YES];
+                [fDeinterlaceBox setHidden:NO];
+            }
+        }
+        else if ([keyPath isEqualToString:@"filters.deblock"])
+        {
+            // The minimum deblock value is 5,
+            // set it to 0 if the value is
+            // less than 4.
+            if (self.filters.deblock == 4)
+            {
+                [fDeblockField setStringValue: @"Off"];
+                self.filters.deblock = 0;
+            }
+            else if (self.filters.deblock > 4)
+            {
+                [fDeblockField setStringValue:[NSString stringWithFormat: @"%.0ld", (long)self.filters.deblock]];
+            }
+        }
+        else if ([keyPath isEqualToString:@"filters.deinterlace"] || [keyPath isEqualToString:@"filters.decomb"])
+        {
+            // Might need to update the preview images with
+            // the new deinterlace/decomb setting.
+            if ((self.filters.deinterlace && !self.filters.useDecomb) ||
+                (self.filters.decomb && self.filters.useDecomb))
+            {
+                fPreviewController.deinterlacePreview = YES;
+            }
+            else
+            {
+                fPreviewController.deinterlacePreview = NO;
+            }
+            [fPreviewController reload];
+        }
+        else if ([keyPath isEqualToString:@"filters.denoise"] || [keyPath isEqualToString:@"filters.denoisePreset"])
+        {
+            [self validateDenoiseUI];
+        }
+
+        // If one of the filters properties changes
+        // update the UI in the main window
+        if ([keyPath hasPrefix:@"filters"])
+        {
+            [self.delegate pictureSettingsDidChange];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+/**
+ *  Validates the denoise UI items,
+ *  disables/enables the right ones.
+ */
+- (void)validateDenoiseUI
+{
+    if ([self.filters.denoise isEqualToString:@"off"])
+    {
+        NSArray *uiElements = @[fDenoisePreset, fDenoisePresetPopUp,
+                                fDenoiseTuneLabel, fDenoiseTunePopUp,
+                                fDenoiseCustomLabel, fDenoiseCustomField];
+        for (NSView *view in uiElements)
+            [view setHidden:YES];
+    }
+    else
+    {
+        NSArray *uiElements = @[fDenoisePreset, fDenoisePresetPopUp];
+        for (NSView *view in uiElements)
+            [view setHidden:NO];
+
+        if ([self.filters.denoisePreset isEqualToString:@"none"])
+        {
+            [fDenoiseTuneLabel setHidden:YES];
+            [fDenoiseTunePopUp setHidden:YES];
+            [fDenoiseCustomLabel setHidden:NO];
+            [fDenoiseCustomField setHidden:NO];
+        }
+        else if ([self.filters.denoise isEqualToString:@"hqdn3d"])
+        {
+            [fDenoiseTuneLabel setHidden:YES];
+            [fDenoiseTunePopUp setHidden:YES];
+            [fDenoiseCustomLabel setHidden:YES];
+            [fDenoiseCustomField setHidden:YES];
+        }
+        else
+        {
+            [fDenoiseTuneLabel setHidden:NO];
+            [fDenoiseTunePopUp setHidden:NO];
+            [fDenoiseCustomLabel setHidden:YES];
+            [fDenoiseCustomField setHidden:YES];
+        }
+    }
 }
 
 #pragma mark -
@@ -319,20 +428,18 @@
     /* we are 1 which is Filters*/
     if ([fSizeFilterView indexOfTabViewItem: [fSizeFilterView selectedTabViewItem]] == 1)
     {
-        frame.size.width = 314;
+        frame.size.width = 484;
         /* we glean the height from the size of the boxes plus the extra window space
          * needed for non boxed display
          */
-        frame.size.height = 110.0 + [fDetelecineBox frame].size.height + [fDecombDeinterlaceBox frame].size.height + [fDenoiseBox frame].size.height + [fDeblockBox frame].size.height;
+        frame.size.height = 100.0 + [fDetelecineBox frame].size.height + [fDecombDeinterlaceBox frame].size.height;
         /* Hide the size readout at the bottom as the vertical inspector is not wide enough */
-        [fSizeInfoField setHidden:YES];
     }
     else // we are Tab index 0 which is size
     {
         frame.size.width = 30.0 + [fPictureSizeBox frame].size.width + [fPictureCropBox frame].size.width;
         frame.size.height = [fPictureSizeBox frame].size.height + 90;
         /* hide the size summary field at the bottom */
-        [fSizeInfoField setHidden:NO];
     }
     /* get delta's for the change in window size */
     CGFloat deltaX = frame.size.width - [[self window] frame].size.width;
@@ -418,135 +525,9 @@
     [self resizeInspectorForTab:nil];
 }
 
-- (void) adjustFilterDisplay: (id) sender
-{
-    NSBox *filterBox = nil;
-    if (sender == fDetelecinePopUp)
-    {
-        filterBox = fDetelecineBox;
-    }
-
-    if (sender == fDecombDeinterlaceSlider)
-    {
-        if ([fDecombDeinterlaceSlider floatValue] == 0.0)
-        {
-            filterBox = fDecombBox;
-        }
-        else
-        {
-            filterBox = fDeinterlaceBox;
-        }
-    }
-
-    if (sender == fDecombPopUp)
-    {
-        filterBox = fDecombBox;
-    }
-
-    if (sender == fDeinterlacePopUp)
-    {
-        filterBox = fDeinterlaceBox;
-    }
-
-    if (sender == fDenoisePopUp)
-    {
-        filterBox = fDenoiseBox;
-    }
-
-    NSSize currentSize = [filterBox frame].size;
-    NSRect boxFrame = [filterBox frame];
-
-    if ([[sender titleOfSelectedItem]  isEqualToString: @"Custom"])
-    {
-        currentSize.height = 60;
-    }
-    else
-    {
-        currentSize.height = 36;
-    }
-
-    /* Check to see if we have changed the size from current */
-    if (currentSize.height != [filterBox frame].size.height)
-    {
-        /* We are changing the size of the box, so recalc the origin */
-        NSPoint boxOrigin = [filterBox frame].origin;
-        /* We get the deltaY here for how much we are expanding/contracting the box vertically */
-        CGFloat deltaYBoxShift = currentSize.height - [filterBox frame].size.height;
-        boxOrigin.y -= deltaYBoxShift;
-
-        boxFrame.size.height = currentSize.height;
-        boxFrame.origin.y = boxOrigin.y;
-        [filterBox setFrame:boxFrame];
-
-        if (filterBox == fDecombBox || filterBox == fDeinterlaceBox)
-        {
-            /* fDecombDeinterlaceBox*/
-            NSSize decombDeinterlaceBoxSize = [fDecombDeinterlaceBox frame].size;
-            NSPoint decombDeinterlaceBoxOrigin = [fDecombDeinterlaceBox frame].origin;
-
-            if ([fDeinterlaceBox isHidden] == YES)
-            {
-                decombDeinterlaceBoxSize.height = [fDecombBox frame].size.height + 50;
-            }
-            else
-            {
-                decombDeinterlaceBoxSize.height = [fDeinterlaceBox frame].size.height + 50;
-            }
-            /* get delta's for the change in window size */
-
-            CGFloat deltaYdecombDeinterlace = decombDeinterlaceBoxSize.height - [fDecombDeinterlaceBox frame].size.height;
-
-            deltaYBoxShift = deltaYdecombDeinterlace;
-
-            decombDeinterlaceBoxOrigin.y -= deltaYdecombDeinterlace;
-
-            [fDecombDeinterlaceBox setFrameSize:decombDeinterlaceBoxSize];
-            [fDecombDeinterlaceBox setFrameOrigin:decombDeinterlaceBoxOrigin];
-        }
-
-        /* now we must reset the origin of each box below the adjusted box*/
-        NSPoint decombDeintOrigin = [fDecombDeinterlaceBox frame].origin;
-        NSPoint denoiseOrigin = [fDenoiseBox frame].origin;
-        NSPoint deblockOrigin = [fDeblockBox frame].origin;
-        if (sender == fDetelecinePopUp)
-        {
-            decombDeintOrigin.y -= deltaYBoxShift;
-            [fDecombDeinterlaceBox setFrameOrigin:decombDeintOrigin];
-
-            denoiseOrigin.y -= deltaYBoxShift;
-            [fDenoiseBox setFrameOrigin:denoiseOrigin];
-
-            deblockOrigin.y -= deltaYBoxShift;
-            [fDeblockBox setFrameOrigin:deblockOrigin];
-        }
-        if (sender == fDecombPopUp || sender == fDeinterlacePopUp)
-        {
-            denoiseOrigin.y -= deltaYBoxShift;
-            [fDenoiseBox setFrameOrigin:denoiseOrigin];
-
-            deblockOrigin.y -= deltaYBoxShift;
-            [fDeblockBox setFrameOrigin:deblockOrigin];
-        }
-
-        if (sender == fDenoisePopUp)
-        {
-            deblockOrigin.y -= deltaYBoxShift;
-            [fDeblockBox setFrameOrigin:deblockOrigin];
-        }
-
-        /* now we call to resize the entire inspector window */
-        [self resizeInspectorForTab:nil];
-    }
-}
-
 - (NSString *) pictureSizeInfoString
 {
     return [fSizeInfoField stringValue];
-}
-
-- (void) reloadStillPreview
-{
-    [fPreviewController reload];
 }
 
 #pragma mark -
@@ -573,7 +554,7 @@
         [[self window] setLevel:NSFloatingWindowLevel];
     }
 
-    [self adjustFilterDisplay:nil];
+    [self resizeInspectorForTab:nil];
     [self adjustSizingDisplay:nil];
 }
 
@@ -588,11 +569,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PictureSizeWindowIsOpen"];
 }
 
-- (BOOL) windowShouldClose: (id) sender
-{
-    return YES;
-}
-
 /**
  * This method is used to detect clicking on a tab in fSizeFilterView
  */
@@ -601,14 +577,7 @@
     [self resizeInspectorForTab:nil];
 }
 
-- (void) dealloc
-{
-    [fPreviewController release];
-    [super dealloc];
-}
-
-#pragma mark -
-#pragma mark Interface Update Logic
+#pragma mark - Picture Update Logic
 
 - (IBAction) settingsChanged: (id) sender
 {
@@ -795,7 +764,7 @@
      */
     if (job->width >= 64 && job->height >= 64)
     {
-        [self reloadStillPreview];
+        [fPreviewController reload];
     }
 
     /* we get the sizing info to display from fPreviewController */
@@ -810,120 +779,6 @@
     {
         [self adjustSizingDisplay:nil];
     }
-}
-
-- (IBAction) modeDecombDeinterlaceSliderChanged: (id) sender
-{
-    /* since its a tickless slider, we have to  make sure we are on or off */
-    if ([fDecombDeinterlaceSlider floatValue] < 0.50)
-    {
-        [fDecombDeinterlaceSlider setFloatValue:0.0];
-    }
-    else
-    {
-        [fDecombDeinterlaceSlider setFloatValue:1.0];
-    }
-
-    /* Decomb selected*/
-    if ([fDecombDeinterlaceSlider floatValue] == 0.0)
-    {
-        [fDecombBox setHidden:NO];
-        [fDeinterlaceBox setHidden:YES];
-        self.decomb = [fDecombPopUp indexOfSelectedItem];
-        _useDecomb = 1;
-        self.deinterlace = 0;
-        [fDecombPopUp selectItemAtIndex:self.decomb];
-        [self adjustFilterDisplay:fDecombPopUp];
-    }
-    else
-    {
-        [fDecombBox setHidden:YES];
-        [fDeinterlaceBox setHidden:NO];
-        _useDecomb = 0;
-        self.decomb = 0;
-        [fDeinterlacePopUp selectItemAtIndex: self.deinterlace];
-        [self adjustFilterDisplay:fDeinterlacePopUp];
-    }
-
-    [self FilterSettingsChanged: fDecombDeinterlaceSlider];
-}
-
-
-- (IBAction) FilterSettingsChanged: (id) sender
-{
-    if (!fTitle)
-        return;
-
-    self.detelecine  = [fDetelecinePopUp indexOfSelectedItem];
-    [self adjustFilterDisplay:fDetelecinePopUp];
-
-    self.decomb = [fDecombPopUp indexOfSelectedItem];
-    [self adjustFilterDisplay:fDecombPopUp];
-
-    self.deinterlace = [fDeinterlacePopUp indexOfSelectedItem];
-    [self adjustFilterDisplay:fDeinterlacePopUp];
-
-    self.denoise = [fDenoisePopUp indexOfSelectedItem];
-    [self adjustFilterDisplay:fDenoisePopUp];
-
-    if ([[fDeblockField stringValue] isEqualToString:@"Off"])
-    {
-        self.deblock  = 0;
-    }
-    else
-    {
-        self.deblock  = [fDeblockField intValue];
-    }
-
-    // Tell PreviewController whether it should deinterlace
-    // the previews or not
-    if ((self.deinterlace && !self.useDecomb) ||
-        (self.decomb && self.useDecomb))
-    {
-        fPreviewController.deinterlacePreview = YES;
-    }
-    else
-    {
-        fPreviewController.deinterlacePreview = NO;
-    }
-
-    self.grayscale = [fGrayscaleCheck state];
-
-    if (sender != nil)
-    {
-        [self.delegate pictureSettingsDidChange];
-        [self reloadStillPreview];
-    }
-}
-
-- (IBAction) deblockSliderChanged: (id) sender
-{
-    if ([fDeblockSlider floatValue] == 4.0)
-    {
-        [fDeblockField setStringValue: @"Off"];
-    }
-    else
-    {
-        [fDeblockField setStringValue: [NSString stringWithFormat: @"%.0f", [fDeblockSlider floatValue]]];
-    }
-	[self FilterSettingsChanged: sender];
-}
-
-#pragma mark -
-
-- (void) setUseDecomb: (NSInteger) setting
-{
-    _useDecomb = setting;
-    if (self.useDecomb == 1)
-    {
-        [fDecombDeinterlaceSlider setFloatValue:0.0];
-    }
-    else
-    {
-        [fDecombDeinterlaceSlider setFloatValue:1.0];
-    }
-    
-    [self modeDecombDeinterlaceSliderChanged:nil];
 }
 
 @end

@@ -236,7 +236,6 @@ extern NSString *keyTitleTag;
 
 /* Text summaries of various settings */
 - (NSString*) pictureSettingsSummary;
-- (NSString*) pictureFiltersSummary;
 - (NSString*) muxerOptionsSummary;
 
 /* Add All titles to the queue */
