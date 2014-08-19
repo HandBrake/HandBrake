@@ -2746,6 +2746,13 @@ import_xlat_preset(GValue *user_preset)
     if (videoLevel != NULL)
         ghb_settings_set_string(dict, "VideoLevel", videoLevel);
 
+    if (ghb_dict_lookup(user_preset, "x264OptionExtra") != NULL)
+    {
+        char *optionExtra;
+        optionExtra = ghb_settings_get_string(dict, "x264OptionExtra");
+        ghb_settings_set_string(dict, "VideoOptionExtra", optionExtra);
+    }
+
     return dict;
 }
 
