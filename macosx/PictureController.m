@@ -204,11 +204,15 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     {
         [fWidthStepper  setEnabled: NO];
         [fHeightStepper setEnabled: NO];
+        [fWidthField    setEditable:NO];
+        [fHeightField   setEditable:NO];
     }
     else
     {
         [fWidthStepper  setEnabled: YES];
         [fHeightStepper setEnabled: YES];
+        [fWidthField    setEditable:YES];
+        [fHeightField   setEditable:YES];
     }
     if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT ||
         job->anamorphic.mode == HB_ANAMORPHIC_LOOSE)
@@ -596,6 +600,8 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
             [fModulusPopUp  setHidden:  YES];
             [fWidthStepper  setEnabled: NO];
             [fHeightStepper setEnabled: NO];
+            [fWidthField    setEditable:NO];
+            [fHeightField   setEditable:NO];
         }
         else
         {
@@ -603,6 +609,8 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
             [fModulusPopUp  setHidden:  NO];
             [fWidthStepper  setEnabled: YES];
             [fHeightStepper setEnabled: YES];
+            [fWidthField    setEditable:YES];
+            [fHeightField    setEditable:YES];
         }
         if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT ||
             job->anamorphic.mode == HB_ANAMORPHIC_LOOSE)
@@ -633,16 +641,24 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [fDisplayWidthField setEnabled: !job->anamorphic.keep_display_aspect];
     }
 
-    if (sender == fHeightStepper)
+    if (sender == fHeightStepper || sender == fHeightField)
     {
         keep |= HB_KEEP_HEIGHT;
-        job->height = [fHeightStepper intValue];
+
+        if (sender == fHeightStepper)
+            job->height = [fHeightStepper intValue];
+        else
+            job->height = [fHeightField intValue];
     }
 
-    if (sender == fWidthStepper)
+    if (sender == fWidthStepper || sender == fWidthField)
     {
         keep |= HB_KEEP_WIDTH;
-        job->width = [fWidthStepper intValue];
+
+        if (sender == fWidthStepper)
+            job->width = [fWidthStepper intValue];
+        else
+            job->width = [fWidthField intValue];
     }
 
     if (sender == fParWidthField || sender == fParHeightField)
