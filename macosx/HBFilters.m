@@ -111,7 +111,7 @@ static NSDictionary *_nlmeansTunesDict;
 
 - (void)prepareFiltersForPreset:(NSMutableDictionary *)preset
 {
-    preset[@"PictureDecombDeinterlace"] = self.useDecomb;
+    preset[@"PictureDecombDeinterlace"] = @(self.useDecomb);
 
     preset[@"PictureDeinterlace"] = @(self.deinterlace);
     preset[@"PictureDeinterlaceCustom"] = self.deinterlaceCustomString;
