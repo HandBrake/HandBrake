@@ -1752,7 +1752,7 @@ static void work_loop( void * _w )
 static void filter_loop( void * _f )
 {
     hb_filter_object_t * f = _f;
-    hb_buffer_t      * buf_in, * buf_out;
+    hb_buffer_t      * buf_in, * buf_out = NULL;
 
     while( !*f->done && f->status != HB_FILTER_DONE )
     {
