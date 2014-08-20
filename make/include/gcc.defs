@@ -83,7 +83,7 @@ GCC.args.extra.exe++   = $(LDFLAGS)
 
 define import.GCC
     $(1).GCC.gcc = $$(GCC.gcc)
-    $(1).GCC.gxx = $$(dir $$($(1).GCC.gcc))$$(subst gcc,g++,$$(notdir $$($(1).GCC.gcc)))
+    $(1).GCC.gxx = $$(dir $$($(1).GCC.gcc))$$(subst clang,clang++,$$(subst gcc,g++,$$(notdir $$($(1).GCC.gcc))))
 
     $(1).GCC.pipe    = $$(GCC.pipe)
     $(1).GCC.c_std   = $$(GCC.c_std)

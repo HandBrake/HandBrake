@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,CMAKE))
+$(eval $(call import.CONTRIB.rules,CMAKE))

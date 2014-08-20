@@ -1,4 +1,5 @@
-$(eval $(call import.MODULE.defs,X265,x265,YASM))
+__deps__ := YASM CMAKE
+$(eval $(call import.MODULE.defs,X265,x265,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,X265))
 
 X265.FETCH.url = http://download.handbrake.fr/contrib/x265-7246-d6257335c537-1.2.tar.bz2

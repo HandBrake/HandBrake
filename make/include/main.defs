@@ -12,15 +12,25 @@ ifeq (1,$(FEATURE.local_pkgconfig))
     MODULES += contrib/pkgconfig
 endif
 
+HB_TOOLS_PATH =
+ifeq (1,$(FEATURE.local_cmake))
+    MODULES += contrib/cmake
+    HB_TOOLS_PATH = $(call fn.ABSOLUTE,$(CONTRIB.build/)bin)
+endif
+
 ifeq (1,$(FEATURE.local_autotools))
     MODULES += contrib/autoconf
     MODULES += contrib/automake
     MODULES += contrib/libtool
     MODULES += contrib/m4
     AUTOTOOL_MODULES = AUTOCONF AUTOMAKE LIBTOOL M4
-    PATH := $(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)
+    HB_TOOLS_PATH = $(call fn.ABSOLUTE,$(CONTRIB.build/)bin)
 else
     AUTOTOOL_MODULES =
+endif
+
+ifneq (,$(HB_TOOLS_PATH))
+    PATH := $(HB_TOOLS_PATH):$(PATH)
 endif
 
 ifneq (,$(filter $(BUILD.system),cygwin mingw))
