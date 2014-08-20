@@ -647,50 +647,29 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
     [fPresetDrawer setContentView:[fPresetsView view]];
     fPresetsView.delegate = self;
-
     [[fPresetDrawer contentView] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
 
     // Set up the chapters title view
     fChapterTitlesController = [[HBChapterTitlesController alloc] init];
-    [fChaptersTitlesView addSubview: [fChapterTitlesController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fChapterTitlesController view] setFrame: [fChaptersTitlesView bounds]];
-    [[fChapterTitlesController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+    [fChaptersTitlesTab setView:[fChapterTitlesController view]];
 
     // setup the subtitles view
     fSubtitlesViewController = [[HBSubtitlesController alloc] init];
-	[fSubtitlesView addSubview: [fSubtitlesViewController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fSubtitlesViewController view] setFrame: [fSubtitlesView bounds]];
-    [[fSubtitlesViewController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+	[fSubtitlesTab setView:[fSubtitlesViewController view]];
 
 	// setup the audio controller
     fAudioController = [[HBAudioController alloc] init];
-	[fAudioView addSubview: [fAudioController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fAudioController view] setFrame: [fAudioView bounds]];
-    [[fAudioController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+	[fAudioTab setView:[fAudioController view]];
 
     // setup the advanced view controller
     fAdvancedOptions = [[HBAdvancedController alloc] init];
 	[fAdvancedView addSubview: [fAdvancedOptions view]];
 
-    // make sure we automatically resize the controller's view to the current window size
-	[[fAudioController view] setFrame: [fAudioView bounds]];
-    [[fAudioController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
-
     // setup the video view controller
     fVideoController = [[HBVideoController alloc] init];
     fVideoController.fAdvancedOptions = fAdvancedOptions;
     fVideoController.fHBController = self;
-	[fVideoView addSubview: [fVideoController view]];
-
-    // make sure we automatically resize the controller's view to the current window size
-	[[fVideoController view] setFrame: [fVideoView bounds]];
-    [[fVideoController view] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+	[fVideoTab setView:[fVideoController view]];
 
     [fWindow recalculateKeyViewLoop];
 

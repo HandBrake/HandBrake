@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" defaultVersion="1090" identifier="macosx"/>
+        <deployment version="1060" defaultVersion="1060" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
@@ -1089,8 +1089,8 @@ DQ
             <connections>
                 <outlet property="fAddPresetPanel" destination="1867" id="1869"/>
                 <outlet property="fAdvancedView" destination="2513" id="2516"/>
-                <outlet property="fAudioView" destination="1476" id="bAi-A0-1dK"/>
-                <outlet property="fChaptersTitlesView" destination="1990" id="4WE-iV-1e2"/>
+                <outlet property="fAudioTab" destination="1475" id="AuZ-Uf-bla"/>
+                <outlet property="fChaptersTitlesTab" destination="1989" id="oUt-8L-Ag2"/>
                 <outlet property="fDstBrowseButton" destination="1562" id="1578"/>
                 <outlet property="fDstFile1Field" destination="1552" id="1596"/>
                 <outlet property="fDstFile2Field" destination="1561" id="1585"/>
@@ -1135,8 +1135,8 @@ DQ
                 <outlet property="fSrcTitleField" destination="1540" id="1592"/>
                 <outlet property="fSrcTitlePopUp" destination="1541" id="1593"/>
                 <outlet property="fStatusField" destination="1123" id="1238"/>
-                <outlet property="fSubtitlesView" destination="5195" id="Ngb-0O-f4g"/>
-                <outlet property="fVideoView" destination="1478" id="M6c-3U-STI"/>
+                <outlet property="fSubtitlesTab" destination="5194" id="d9b-rJ-XrS"/>
+                <outlet property="fVideoTab" destination="1477" id="6o2-cM-yy4"/>
                 <outlet property="fWindow" destination="21" id="350"/>
                 <outlet property="presetsMenu" destination="1949" id="bkm-2h-uFI"/>
             </connections>

@@ -38,19 +38,19 @@ extern NSString *keyTitleTag;
 
     /* Video view controller */
     HBVideoController       * fVideoController;
-    IBOutlet NSView         * fVideoView;
+    IBOutlet NSTabViewItem  * fVideoTab;
 
     /* Subtitles view controller */
 	HBSubtitlesController   * fSubtitlesViewController;
-    IBOutlet NSView         * fSubtitlesView;
+    IBOutlet NSTabViewItem  * fSubtitlesTab;
 
 	/* Audio view controller */
 	HBAudioController       * fAudioController;
-    IBOutlet NSView         * fAudioView;
+    IBOutlet NSTabViewItem  * fAudioTab;
 
 	/* Chapters view controller */
 	HBChapterTitlesController    * fChapterTitlesController;
-    IBOutlet NSView              * fChaptersTitlesView;
+    IBOutlet NSTabViewItem       * fChaptersTitlesTab;
 
     /* Main Menu Outlets */
     NSMenuItem                   * fOpenSourceTitleMMenu;
