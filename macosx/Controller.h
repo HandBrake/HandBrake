@@ -30,7 +30,7 @@ extern NSString *keyTitleTag;
 @class HBOutputPanelController;
 @class HBPresetsViewController;
 @class HBPresetsManager;
-@class DockTextField;
+@class HBDockTile;
 
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSToolbarDelegate, NSDrawerDelegate>
 {
@@ -192,9 +192,8 @@ extern NSString *keyTitleTag;
     double                          dockIconProgress;
     
     BOOL                            fWillScan;
-    NSDockTile                    * dockTile;
-    DockTextField                 * percentField;
-    DockTextField                 * timeField;
+
+    HBDockTile  *dockTile;
 }
 - (int) getPidnum;
 
@@ -321,7 +320,5 @@ extern NSString *keyTitleTag;
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames;
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
-
-- (void) updateDockIcon:(double)progress withETA:(NSString*)etaStr;
 
 @end

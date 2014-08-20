@@ -144,6 +144,7 @@
 		A9F2EB6F196F12C800066546 /* Audio.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9F2EB6D196F12C800066546 /* Audio.xib */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F4728D1976BAA70009EC65 /* HBSubtitlesSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F4728C1976BAA70009EC65 /* HBSubtitlesSettings.m */; };
+		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
 		D2BCB10916F5152C0084604C /* activity.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB0F616F515230084604C /* activity.png */; };
 		D2BCB10A16F5152C0084604C /* activity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB0F716F515230084604C /* activity@2x.png */; };
 		D2BCB10B16F5152C0084604C /* addqueue.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB0F816F515240084604C /* addqueue.png */; };
@@ -372,6 +373,8 @@
 		A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesDefaultsController.m; sourceTree = "<group>"; };
 		A9F4728B1976BAA70009EC65 /* HBSubtitlesSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesSettings.h; sourceTree = "<group>"; };
 		A9F4728C1976BAA70009EC65 /* HBSubtitlesSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesSettings.m; sourceTree = "<group>"; };
+		A9F7102419A475EC00F61301 /* HBDockTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBDockTile.h; sourceTree = "<group>"; };
+		A9F7102519A475EC00F61301 /* HBDockTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDockTile.m; sourceTree = "<group>"; };
 		D2BCB0F616F515230084604C /* activity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = activity.png; sourceTree = "<group>"; };
 		D2BCB0F716F515230084604C /* activity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "activity@2x.png"; sourceTree = "<group>"; };
 		D2BCB0F816F515240084604C /* addqueue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addqueue.png; sourceTree = "<group>"; };
@@ -837,6 +840,8 @@
 			children = (
 				46AB433315F98A2B009C0961 /* DockTextField.h */,
 				46AB433415F98A2B009C0961 /* DockTextField.m */,
+				A9F7102419A475EC00F61301 /* HBDockTile.h */,
+				A9F7102519A475EC00F61301 /* HBDockTile.m */,
 				273F209914ADBE670021BE6D /* HBImageAndTextCell.h */,
 				273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */,
 				A9BB0F2519A0ECE40079F1C1 /* HBHUDButtonCell.h */,
@@ -1031,6 +1036,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */,
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A932E273198834130047D13E /* HBAudioSettings.m in Sources */,
@@ -1226,6 +1232,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
@@ -1254,6 +1261,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",

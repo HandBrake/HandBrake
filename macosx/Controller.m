@@ -12,7 +12,7 @@
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
 #import "HBPreviewController.h"
-#import "DockTextField.h"
+#import "HBDockTile.h"
 #import "HBUtilities.h"
 
 #import "HBPresetsViewController.h"
@@ -26,7 +26,6 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 
 NSString *dragDropFiles                        = @"dragDropFiles";
 
-NSString *dockTilePercentFormat                = @"%2.1f%%";
 // DockTile update freqency in total percent increment
 #define dockTileUpdateFrequency                  0.1f
 
@@ -53,67 +52,56 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
  *******************************/
 @implementation HBController
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
-    if( !self )
+    if (self)
     {
-        return nil;
+        // Register the defaults preferences
+        [HBPreferencesController registerUserDefaults];
+
+        /* Check for and create the App Support Preview directory if necessary */
+        NSString *previewDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Previews"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:previewDirectory])
+        {
+            [[NSFileManager defaultManager] createDirectoryAtPath:previewDirectory
+                                      withIntermediateDirectories:YES
+                                                       attributes:nil
+                                                            error:NULL];
+        }
+
+        // Inits the controllers
+        outputPanel = [[HBOutputPanelController alloc] init];
+        fPictureController = [[HBPictureController alloc] init];
+        fQueueController = [[HBQueueController alloc] init];
+
+        // we init the HBPresetsManager class
+        NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
+        presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
+        _selectedPreset = presetManager.defaultPreset;
+
+        // Load the dockTile and instiante initial text fields
+        dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
+                                                  image:[[NSApplication sharedApplication] applicationIconImage]];
+
+        [dockTile updateDockIcon:-1.0 withETA:@""];
+
+        // Lets report the HandBrake version number here to the activity log and text log file
+        NSString *versionStringFull = [[NSString stringWithFormat:@"Handbrake Version: %@",
+                                        [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]
+                                       stringByAppendingString:[NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+        [HBUtilities writeToActivityLog: "%s", [versionStringFull UTF8String]];
+
+        // Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it
+        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+        fHandle = hb_init(loggingLevel, 0);
+
+        // Optional dvd nav UseDvdNav
+        hb_dvd_set_dvdnav([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]);
+
+        // Init a separate instance of libhb for user scanning and setting up jobs
+        fQueueEncodeLibhb = hb_init(loggingLevel, 0);
     }
-
-    [HBPreferencesController registerUserDefaults];
-    fHandle = NULL;
-    fQueueEncodeLibhb = NULL;
-
-    /* Check for and create the App Support Preview directory if necessary */
-    NSString *PreviewDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Previews"];
-    if( ![[NSFileManager defaultManager] fileExistsAtPath:PreviewDirectory] )
-    {
-        [[NSFileManager defaultManager] createDirectoryAtPath:PreviewDirectory
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:NULL];
-    }                                                            
-    outputPanel = [[HBOutputPanelController alloc] init];
-    fPictureController = [[HBPictureController alloc] init];
-    fQueueController = [[HBQueueController alloc] init];
-
-    /* we init the HBPresetsManager class */
-    NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
-    presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
-    _selectedPreset = presetManager.defaultPreset;
-
-    fPreferencesController = [[HBPreferencesController alloc] init];
-    /* Lets report the HandBrake version number here to the activity log and text log file */
-    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
-    [HBUtilities writeToActivityLog: "%s", [versionStringFull UTF8String]];
-    
-    /* Load the dockTile and instiante initial text fields */
-    dockTile = [[NSApplication sharedApplication] dockTile];
-    NSImageView *iv = [[NSImageView alloc] init];
-    [iv setImage:[[NSApplication sharedApplication] applicationIconImage]];
-    [dockTile setContentView:iv];
-    [iv release];
-    
-    /* We can move the specific values out from here by subclassing NSDockTile and package everything in here */
-    /* If colors are to be chosen once and for all, we can also remove the instantiation with numerical values */
-    percentField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 32.0f, [dockTile size].width, 30.0f)];
-    [percentField changeGradientColors:[NSColor colorWithDeviceRed:0.4f green:0.6f blue:0.4f alpha:1.0f] endColor:[NSColor colorWithDeviceRed:0.2f green:0.4f blue:0.2f alpha:1.0f]];
-    [iv addSubview:percentField];
-    
-    timeField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, [dockTile size].width, 30.0f)];
-    [timeField changeGradientColors:[NSColor colorWithDeviceRed:0.6f green:0.4f blue:0.4f alpha:1.0f] endColor:[NSColor colorWithDeviceRed:0.4f green:0.2f blue:0.2f alpha:1.0f]];
-    [iv addSubview:timeField];
-    
-    [self updateDockIcon:-1.0 withETA:@""];
-    
-    /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
-    int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
-    fHandle = hb_init(loggingLevel, 0);
-    /* Optional dvd nav UseDvdNav*/
-    hb_dvd_set_dvdnav([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]);
-    /* Init a separate instance of libhb for user scanning and setting up jobs */
-    fQueueEncodeLibhb = hb_init(loggingLevel, 0);
 
     return self;
 }
@@ -561,6 +549,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
 
     [presetManager savePresets];
+    [presetManager release];
 
     [self closeQueueFSEvent];
     [currentQueueEncodeNameString release];
@@ -569,11 +558,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[fQueueController release];
     [fPreviewController release];
     [fPictureController release];
+    [dockTile release];
 
     hb_close(&fHandle);
     hb_close(&fQueueEncodeLibhb);
     hb_global_close();
-
 }
 
 
@@ -748,31 +737,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fAudioController setUIEnabled:b];
     [fSubtitlesViewController setUIEnabled:b];
     [fChapterTitlesController setUIEnabled:b];
-}
-
-/***********************************************************************
- * updateDockIcon
- ***********************************************************************
- * Updates two DockTextFields on the dockTile,
- * one with total percentage, the other one with the ETA.
- * The ETA string is formated by the callers
- **********************************************************************/
-- (void) updateDockIcon: (double) progress withETA:(NSString*)etaStr
-{
-    if (progress < 0.0 || progress > 1.0)
-    {
-        [percentField setHidden:YES];
-        [timeField setHidden:YES];
-    }
-    else
-    {
-        [percentField setTextToDisplay:[NSString stringWithFormat:dockTilePercentFormat,progress * 100]];
-        [percentField setHidden:NO];
-        [timeField setTextToDisplay:etaStr];
-        [timeField setHidden:NO];
-    }
-    
-    [dockTile display];
 }
 
 - (void) updateUI: (NSTimer *) timer
@@ -1035,7 +999,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 else
                     etaStr = @"~";
                 
-                [self updateDockIcon:progress_total withETA:etaStr];
+                [dockTile updateDockIcon:progress_total withETA:etaStr];
 
                 dockIconProgress += dockTileUpdateFrequency;
             }
@@ -1056,7 +1020,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fRipIndicator startAnimation: nil];
             
             /* Update dock icon */
-            [self updateDockIcon:1.0 withETA:@""];
+            [dockTile updateDockIcon:1.0 withETA:@""];
             
 			break;
         }
@@ -1084,7 +1048,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [[fWindow toolbar] validateVisibleItems];
             
             /* Restore dock icon */
-            [self updateDockIcon:-1.0 withETA:@""];
+            [dockTile updateDockIcon:-1.0 withETA:@""];
             dockIconProgress = 0;
             
             if( fRipIndicatorShown )
@@ -4254,8 +4218,8 @@ fWorkingCount = 0;
     hb_list_item(list, (int)[fSrcTitlePopUp indexOfSelectedItem]);
 
     // Generate a new file name
-    NSString *fileName = [HBUtilities automaticNameForSource:[browsedSourceDisplayName stringByDeletingPathExtension]
-                                                       title: title->index
+    NSString *fileName = [HBUtilities automaticNameForSource:@(title->name)
+                                                       title:title->index
                                                     chapters:NSMakeRange([fSrcChapterStartPopUp indexOfSelectedItem] + 1, [fSrcChapterEndPopUp indexOfSelectedItem] + 1)
                                                      quality:fVideoController.selectedQualityType ? fVideoController.selectedQuality : 0
                                                      bitrate:!fVideoController.selectedQualityType ? fVideoController.selectedBitrate : 0
@@ -4680,7 +4644,12 @@ the user is using "Custom" settings by determining the sender*/
  */
 - (IBAction) showPreferencesWindow: (id) sender
 {
-    NSWindow * window = [fPreferencesController window];
+    if (fPreferencesController == nil)
+    {
+        fPreferencesController = [[HBPreferencesController alloc] init];
+    }
+
+    NSWindow *window = [fPreferencesController window];
     if (![window isVisible])
         [window center];
 
