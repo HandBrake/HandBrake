@@ -945,46 +945,46 @@
         [finalString appendString: videoInfo withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
         
-        if ([item[@"VideoEncoder"] isEqualToString: @"H.264 (x264)"])
+        if ([item[@"VideoEncoder"] isEqualToString: @"H.264 (x264)"] || [item[@"VideoEncoder"] isEqualToString: @"H.265 (x265)"])
         {
-            /* we are using x264 */
-            NSString *x264Info = @"";
+            /* we are using x264/x265 */
+            NSString *encoderPresetInfo = @"";
             if ([item[@"x264UseAdvancedOptions"] intValue])
             {
                 // we are using the old advanced panel
                 if (item[@"x264Option"] &&
                     [item[@"x264Option"] length])
                 {
-                    x264Info = [x264Info stringByAppendingString: item[@"x264Option"]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: item[@"x264Option"]];
                 }
                 else
                 {
-                    x264Info = [x264Info stringByAppendingString: @"default settings"];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: @"default settings"];
                 }
             }
             else
             {
                 // we are using the x264 system
-                x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@"Preset: %@", item[@"x264Preset"]]];
-                if ([item[@"x264Tune"] length])
+                encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@"Preset: %@", item[@"VideoPreset"]]];
+                if ([item[@"VideoTune"] length])
                 {
-                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Tune: %@", item[@"x264Tune"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Tune: %@", item[@"VideoTune"]]];
                 }
-                if ([item[@"x264OptionExtra"] length])
+                if ([item[@"VideoOptionExtra"] length])
                 {
-                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Options: %@", item[@"x264OptionExtra"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Options: %@", item[@"VideoOptionExtra"]]];
                 }
-                if ([item[@"h264Profile"] length])
+                if ([item[@"VideoProfile"] length])
                 {
-                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Profile: %@", item[@"h264Profile"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Profile: %@", item[@"VideoProfile"]]];
                 }
-                if ([item[@"h264Level"] length])
+                if ([item[@"VideoLevel"] length])
                 {
-                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Level: %@", item[@"h264Level"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Level: %@", item[@"VideoLevel"]]];
                 }
             }
-            [finalString appendString: @"x264: " withAttributes:detailBoldAttr];
-            [finalString appendString: x264Info withAttributes:detailAttr];
+            [finalString appendString: @"Encoder Options: " withAttributes:detailBoldAttr];
+            [finalString appendString: encoderPresetInfo withAttributes:detailAttr];
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
         else if (![item[@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])

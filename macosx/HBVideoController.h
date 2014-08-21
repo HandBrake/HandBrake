@@ -36,14 +36,14 @@ extern NSString *HBVideoEncoderChangedNotification;
 @property (nonatomic, copy, readwrite) NSString *pictureFiltersField;
 
 // Property exposed for the auto name function
-@property (nonatomic, readonly) int selectedCodec;
-@property (nonatomic, readonly) int selectedQualityType;
+@property (nonatomic, readonly) int codec;
+@property (nonatomic, readonly) int qualityType;
 @property (nonatomic, readonly) NSString *selectedBitrate;
 @property (nonatomic, readonly) NSString *selectedQuality;
 
 // Property updates when the video size changes
-@property (nonatomic, readwrite) NSUInteger fX264PresetsWidthForUnparse;
-@property (nonatomic, readwrite) NSUInteger fX264PresetsHeightForUnparse;
+@property (nonatomic, readwrite) NSUInteger fPresetsWidthForUnparse;
+@property (nonatomic, readwrite) NSUInteger fPresetsHeightForUnparse;
 
 @property (nonatomic, retain, readwrite) HBController *fHBController;
 @property (nonatomic, retain, readwrite) HBAdvancedController *fAdvancedOptions;

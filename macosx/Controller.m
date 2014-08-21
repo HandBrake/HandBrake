@@ -893,7 +893,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			/* Update text field */
             if (p.job_cur == 1 && p.job_count > 1)
             {
-                if ([[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SubtitleList"] && [[[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex]objectForKey:@"SubtitleList"] objectAtIndex:0] objectForKey:@"subtitleSourceTrackNum"] intValue] == 1)
+                if (QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] &&
+                    [[QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] firstObject][keySubTrackIndex] intValue] == -1)
                 {
                     pass_desc = @"(subtitle scan)";   
                 }
@@ -3358,7 +3359,7 @@ fWorkingCount = 0;
         job->chapter_markers = 0;
     }
     
-    if (job->vcodec == HB_VCODEC_X264)
+    if (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265)
     {
         /* iPod 5G atom */
         job->ipod_atom = ([[queueToApply objectForKey:@"Mp4iPodCompatible"]
@@ -3390,23 +3391,23 @@ fWorkingCount = 0;
         else
         {
             // we are using the x264 preset system
-            if ([(tmpString = [queueToApply objectForKey:@"x264Tune"]) length])
+            if ([(tmpString = [queueToApply objectForKey:@"VideoTune"]) length])
             {
                 encoder_tune = [tmpString UTF8String];
             }
-            if ([(tmpString = [queueToApply objectForKey:@"x264OptionExtra"]) length])
+            if ([(tmpString = [queueToApply objectForKey:@"VideoOptionExtra"]) length])
             {
                 encoder_options = [tmpString UTF8String];
             }
-            if ([(tmpString = [queueToApply objectForKey:@"h264Profile"]) length])
+            if ([(tmpString = [queueToApply objectForKey:@"VideoProfile"]) length])
             {
                 encoder_profile = [tmpString UTF8String];
             }
-            if ([(tmpString = [queueToApply objectForKey:@"h264Level"]) length])
+            if ([(tmpString = [queueToApply objectForKey:@"VideoLevel"]) length])
             {
                 encoder_level = [tmpString UTF8String];
             }
-            encoder_preset = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
+            encoder_preset = [[queueToApply objectForKey:@"VideoPreset"] UTF8String];
         }
         hb_job_set_encoder_preset (job, encoder_preset);
         hb_job_set_encoder_tune   (job, encoder_tune);
@@ -4200,9 +4201,9 @@ fWorkingCount = 0;
     NSString *fileName = [HBUtilities automaticNameForSource:@(title->name)
                                                        title:title->index
                                                     chapters:NSMakeRange([fSrcChapterStartPopUp indexOfSelectedItem] + 1, [fSrcChapterEndPopUp indexOfSelectedItem] + 1)
-                                                     quality:fVideoController.selectedQualityType ? fVideoController.selectedQuality : 0
-                                                     bitrate:!fVideoController.selectedQualityType ? fVideoController.selectedBitrate : 0
-                                                  videoCodec:fVideoController.selectedCodec];
+                                                     quality:fVideoController.qualityType ? fVideoController.selectedQuality : 0
+                                                     bitrate:!fVideoController.qualityType ? fVideoController.selectedBitrate : 0
+                                                  videoCodec:fVideoController.codec];
 
     // Swap the old one with the new one
     [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@/%@.%@",
@@ -4483,7 +4484,7 @@ fWorkingCount = 0;
 
 - (void)updateMp4Checkboxes:(NSNotification *)notification
 {
-    if (fVideoController.selectedCodec != HB_VCODEC_X264)
+    if (fVideoController.codec != HB_VCODEC_X264)
     {
         /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
          * container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
@@ -4533,8 +4534,8 @@ the user is using "Custom" settings by determining the sender*/
     /* Store storage resolution for unparse */
     if (fTitle)
     {
-        fVideoController.fX264PresetsWidthForUnparse  = fTitle->job->width;
-        fVideoController.fX264PresetsHeightForUnparse = fTitle->job->height;
+        fVideoController.fPresetsWidthForUnparse  = fTitle->job->width;
+        fVideoController.fPresetsHeightForUnparse = fTitle->job->height;
         // width or height may have changed, unparse
         [fVideoController x264PresetsChangedDisplayExpandedOptions:nil];
     }
@@ -4715,17 +4716,7 @@ the user is using "Custom" settings by determining the sender*/
         /* Video encoder */
         [fVideoController applySettingsFromPreset:chosenPreset];
 
-        if ([chosenPreset objectForKey:@"lavcOption"])
-        {
-            [fAdvancedOptions setLavcOptions:[chosenPreset objectForKey:@"lavcOption"]];
-        }
-        else
-        {
-            [fAdvancedOptions setLavcOptions:@""];   
-        }
-        
         /* Lets run through the following functions to get variables set there */
-        //[self videoEncoderPopUpChanged:nil];
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
         [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
 

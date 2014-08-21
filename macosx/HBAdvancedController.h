@@ -14,17 +14,14 @@
 {
     /* Advanced Tab for opts fX264optView*/
     IBOutlet NSBox              * fOptionsBox;
-    
+
+    IBOutlet NSView             * fEmptyView;
+
     IBOutlet NSView             * fX264optView;
-    IBOutlet NSView             * fFFmpegView;
     IBOutlet NSTextField        * fX264optViewTitleLabel;
     IBOutlet NSTextField        * fDisplayX264OptionsLabel;
     IBOutlet NSTextField        * fDisplayX264Options;
-    IBOutlet NSTextField        * fDisplayLavcOptionsLabel;
-    IBOutlet NSTextField        * fDisplayLavcOptions;
-    
-    IBOutlet NSTextField        * fDisplayTheoraOptionsLabel;
-    
+
     IBOutlet NSTextField        * fX264optBframesLabel;
     IBOutlet NSPopUpButton      * fX264optBframesPopUp;
     IBOutlet NSTextField        * fX264optRefLabel;
@@ -67,11 +64,8 @@
 // x264 Advanced Panel Methods
 
 - (NSString *) optionsString;
-- (NSString *) optionsStringLavc;
 - (void) setOptions: (NSString *)string;
-- (void) setLavcOptions: (NSString *)string;
 - (void) setHidden: (BOOL) hide;
-- (void) setLavcOptsEnabled: (BOOL) lavc;
 - (IBAction) X264AdvancedOptionsAnimate: (id) sender;
 - (IBAction) X264AdvancedOptionsSet: (id) sender;
 - (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender;

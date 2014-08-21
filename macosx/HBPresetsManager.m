@@ -435,11 +435,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"fast";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"baseline";
-    preset[@"h264Level"] = @"3.0";
+    preset[@"VideoPreset"] = @"fast";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"baseline";
+    preset[@"VideoLevel"] = @"3.0";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -550,11 +550,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"baseline";
-    preset[@"h264Level"] = @"1.3";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"baseline";
+    preset[@"VideoLevel"] = @"1.3";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -654,11 +654,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"high";
-    preset[@"h264Level"] = @"3.1";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"high";
+    preset[@"VideoLevel"] = @"3.1";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -758,11 +758,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"high";
-    preset[@"h264Level"] = @"3.1";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"high";
+    preset[@"VideoLevel"] = @"3.1";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -862,11 +862,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"qpmin=4:cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500";
-    preset[@"h264Profile"] = @"high";
-    preset[@"h264Level"] = @"3.1";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"qpmin=4:cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500";
+    preset[@"VideoProfile"] = @"high";
+    preset[@"VideoLevel"] = @"3.1";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -977,11 +977,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"high";
-    preset[@"h264Level"] = @"3.1";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"high";
+    preset[@"VideoLevel"] = @"3.1";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -1092,11 +1092,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"high";
-    preset[@"h264Level"] = @"4.0";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"high";
+    preset[@"VideoLevel"] = @"4.0";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -1207,11 +1207,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"main";
-    preset[@"h264Level"] = @"3.0";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"main";
+    preset[@"VideoLevel"] = @"3.0";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -1311,11 +1311,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"main";
-    preset[@"h264Level"] = @"3.1";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"main";
+    preset[@"VideoLevel"] = @"3.1";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -1415,11 +1415,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"main";
-    preset[@"h264Level"] = @"3.1";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"main";
+    preset[@"VideoLevel"] = @"3.1";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -1519,11 +1519,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"veryfast";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"main";
-    preset[@"h264Level"] = @"4.0";
+    preset[@"VideoPreset"] = @"veryfast";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"main";
+    preset[@"VideoLevel"] = @"4.0";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";
@@ -1623,11 +1623,11 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
-    preset[@"x264Preset"] = @"medium";
-    preset[@"x264Tune"] = @"";
-    preset[@"x264OptionExtra"] = @"";
-    preset[@"h264Profile"] = @"high";
-    preset[@"h264Level"] = @"4.1";
+    preset[@"VideoPreset"] = @"medium";
+    preset[@"VideoTune"] = @"";
+    preset[@"VideoOptionExtra"] = @"";
+    preset[@"VideoProfile"] = @"high";
+    preset[@"VideoLevel"] = @"4.1";
     
     /* Video rate control */
     preset[@"VideoAvgBitrate"] = @"2500";

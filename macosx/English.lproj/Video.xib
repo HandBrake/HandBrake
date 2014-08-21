@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
+        <deployment version="1060" defaultVersion="1060" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
             <connections>
-                <outlet property="fDisplayX264PresetsAdditonalOptionsLabel" destination="z5f-9f-CkC" id="Vjj-gk-xgv"/>
-                <outlet property="fDisplayX264PresetsAdditonalOptionsTextField" destination="nd4-77-0zJ" id="6Gt-Hx-Bda"/>
-                <outlet property="fDisplayX264PresetsUnparseTextField" destination="5rt-5S-acT" id="YST-Hq-mBY"/>
+                <outlet property="fDisplayPresetsAdditonalOptionsLabel" destination="ijg-ux-uvb" id="Zhw-D7-xOs"/>
+                <outlet property="fDisplayPresetsAdditonalOptionsTextField" destination="oJk-ur-wgc" id="TUr-Lt-UHQ"/>
+                <outlet property="fDisplayX264PresetsUnparseTextField" destination="wk1-2U-z4i" id="aIk-h1-bOP"/>
+                <outlet property="fFastDecodeCheck" destination="z7F-H2-Vfr" id="usU-aE-DUt"/>
                 <outlet property="fFramerateCfrCell" destination="ZRE-Ig-mhJ" id="vqQ-Pd-63o"/>
                 <outlet property="fFramerateMatrix" destination="Xe2-d5-nEH" id="GCQ-qu-zBk"/>
                 <outlet property="fFramerateVfrPfrCell" destination="DD4-13-4gw" id="Cwu-GV-AKd"/>
+                <outlet property="fLavcOptionsLabel" destination="26w-dz-St2" id="R7C-nz-BBZ"/>
+                <outlet property="fLavcOptionsTextField" destination="mL3-yC-hUj" id="DHu-CV-Emx"/>
+                <outlet property="fLevelPopUp" destination="P7c-Zk-G99" id="dHU-91-P9m"/>
+                <outlet property="fLevelPopUpLabel" destination="BY1-IG-JvI" id="kmr-tF-K73"/>
                 <outlet property="fPictureFiltersField" destination="gPF-Jh-4d0" id="6AQ-Ee-tFl"/>
                 <outlet property="fPictureSettingsField" destination="9L5-i4-5eu" id="elr-IU-9BI"/>
+                <outlet property="fPresetSelectedTextField" destination="gvn-wG-crj" id="vzQ-yp-EBS"/>
+                <outlet property="fPresetSliderLabel" destination="0sa-ep-yfr" id="DVa-aK-Cq4"/>
+                <outlet property="fPresetView" destination="2dX-Hf-Hxl" id="OEP-rM-gGp"/>
+                <outlet property="fPresetsBox" destination="A4U-3F-pYq" id="m5l-h9-Ak8"/>
+                <outlet property="fPresetsSlider" destination="Biw-5K-pPD" id="ixn-dK-MaZ"/>
+                <outlet property="fProfilePopUp" destination="CPP-lh-FbN" id="rch-3L-jwi"/>
+                <outlet property="fProfilePopUpLabel" destination="dY9-5D-mXX" id="Lno-BZ-ZMH"/>
+                <outlet property="fSimplePresetView" destination="aRi-vN-oR0" id="e0P-NK-oHv"/>
+                <outlet property="fTunePopUp" destination="A7d-wM-Xmp" id="J1a-PP-NEr"/>
+                <outlet property="fTunePopUpLabel" destination="gzq-SL-YVY" id="uCk-oz-Mow"/>
                 <outlet property="fVidBitrateCell" destination="6tI-Qz-3bJ" id="oWy-lK-5aZ"/>
                 <outlet property="fVidBitrateField" destination="A3o-Zx-OfM" id="IzD-XM-sDC"/>
                 <outlet property="fVidConstantCell" destination="au3-pU-KX6" id="M31-Xr-Rsv"/>
@@ -29,18 +44,7 @@
                 <outlet property="fVidRatePopUp" destination="9tc-EO-QMd" id="O1B-x4-qfm"/>
                 <outlet property="fVidTurboPassCheck" destination="olm-zg-k9Y" id="r9Y-Ym-R0Y"/>
                 <outlet property="fVidTwoPassCheck" destination="bnV-aE-FVh" id="yPb-4E-8CL"/>
-                <outlet property="fX264FastDecodeCheck" destination="40r-Rt-3Kj" id="32H-ba-oMp"/>
-                <outlet property="fX264LevelPopUp" destination="Bc9-RS-X0z" id="pUh-ol-tli"/>
-                <outlet property="fX264LevelPopUpLabel" destination="Zx9-aq-QUO" id="jjZ-4j-1QK"/>
-                <outlet property="fX264PresetSelectedTextField" destination="Dau-qh-WdE" id="u7d-d0-Rnq"/>
-                <outlet property="fX264PresetSliderLabel" destination="3O9-81-H2o" id="ICQ-EA-fXq"/>
-                <outlet property="fX264PresetsBox" destination="A4U-3F-pYq" id="ZWI-nV-Xch"/>
-                <outlet property="fX264PresetsSlider" destination="bWg-Ip-WlZ" id="vOO-eN-auR"/>
-                <outlet property="fX264ProfilePopUp" destination="M7o-me-kIK" id="B3q-AD-eth"/>
-                <outlet property="fX264ProfilePopUpLabel" destination="xhg-dJ-Jmi" id="V3u-jn-fcf"/>
-                <outlet property="fX264TunePopUp" destination="KOr-SM-yFa" id="plC-0t-1Bk"/>
-                <outlet property="fX264TunePopUpLabel" destination="6q1-ib-FgH" id="M4n-rc-szP"/>
-                <outlet property="fX264UseAdvancedOptionsCheck" destination="304-sL-Qb9" id="rPi-LC-n0h"/>
+                <outlet property="fX264UseAdvancedOptionsCheck" destination="Zs7-1Y-50A" id="WWx-OC-tor"/>
                 <outlet property="view" destination="wAC-5p-nXb" id="i3V-vv-tDn"/>
             </connections>
         </customObject>
@@ -69,7 +73,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9L5-i4-5eu">
-                    <rect key="frame" x="18" y="21" width="892" height="14"/>
+                    <rect key="frame" x="18" y="21" width="884" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Picture Settings:" id="UWU-31-FxR">
                         <font key="font" metaFont="smallSystem"/>
@@ -91,7 +95,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="gPF-Jh-4d0">
-                    <rect key="frame" x="18" y="5" width="892" height="14"/>
+                    <rect key="frame" x="18" y="5" width="884" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Picture Filters:" id="l1l-8S-ttm">
                         <font key="font" metaFont="smallSystem"/>
@@ -103,14 +107,14 @@
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="9tc-EO-QMd">
-                    <rect key="frame" x="112" y="258" width="149" height="22"/>
+                    <rect key="frame" x="110" y="258" width="149" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Xzy-hl-maq" id="0VS-Ah-Q3S">
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="Jj0-Qw-HF8">
                             <items>
-                                <menuItem state="on" id="Xzy-hl-maq"/>
+                                <menuItem id="Xzy-hl-maq"/>
                             </items>
                         </menu>
                     </popUpButtonCell>
@@ -138,23 +142,24 @@
                     </buttonCell>
                 </button>
                 <popUpButton verticalHuggingPriority="750" id="xwK-Yu-a1e">
-                    <rect key="frame" x="112" y="284" width="149" height="22"/>
+                    <rect key="frame" x="110" y="284" width="149" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="cZC-bI-lgS" id="KHu-7m-NR7">
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="KHu-7m-NR7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="6Cs-jo-8Q6">
                             <items>
-                                <menuItem state="on" id="cZC-bI-lgS"/>
+                                <menuItem id="cZC-bI-lgS"/>
                             </items>
                         </menu>
                     </popUpButtonCell>
                     <connections>
                         <action selector="videoEncoderPopUpChanged:" target="-2" id="ojB-Jd-Au6"/>
+                        <binding destination="-2" name="selectedTag" keyPath="self.codec" id="CvW-H4-Tco"/>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="bAn-iZ-ieF">
-                    <rect key="frame" x="20" y="263" width="90" height="14"/>
+                    <rect key="frame" x="18" y="263" width="90" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Framerate (FPS):" id="SJc-tv-AMH">
                         <font key="font" metaFont="smallSystem"/>
@@ -163,7 +168,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="rOd-nt-22T">
-                    <rect key="frame" x="18" y="289" width="91" height="14"/>
+                    <rect key="frame" x="16" y="289" width="91" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Video Codec:" id="Mrb-6Q-0YM">
                         <font key="font" metaFont="smallSystem"/>
@@ -195,10 +200,11 @@
                     </cells>
                     <connections>
                         <action selector="videoMatrixChanged:" target="-2" id="rGb-Wc-eBW"/>
+                        <binding destination="-2" name="selectedTag" keyPath="self.qualityType" id="JkP-GB-eWw"/>
                     </connections>
                 </matrix>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="Xe2-d5-nEH">
-                    <rect key="frame" x="115" y="215" width="157" height="38"/>
+                    <rect key="frame" x="113" y="215" width="157" height="38"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     <size key="cellSize" width="157" height="18"/>
@@ -220,173 +226,12 @@
                         </column>
                     </cells>
                 </matrix>
-                <box autoresizesSubviews="NO" title="x264 Presets" borderType="bezel" titlePosition="noTitle" id="A4U-3F-pYq">
-                    <rect key="frame" x="17" y="36" width="886" height="160"/>
+                <box autoresizesSubviews="NO" title="x264 Presets" borderType="none" titlePosition="noTitle" id="A4U-3F-pYq">
+                    <rect key="frame" x="0.0" y="52" width="923" height="134"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <view key="contentView">
-                        <rect key="frame" x="3" y="3" width="880" height="154"/>
+                        <rect key="frame" x="0.0" y="0.0" width="923" height="134"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <slider verticalHuggingPriority="750" id="bWg-Ip-WlZ">
-                                <rect key="frame" x="246" y="109" width="618" height="16"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="5" tickMarkPosition="above" numberOfTickMarks="2" allowsTickMarkValuesOnly="YES" sliderType="linear" id="4Su-5w-YOc"/>
-                                <connections>
-                                    <action selector="x264PresetsSliderChanged:" target="-2" id="AqS-DX-fly"/>
-                                </connections>
-                            </slider>
-                            <textField verticalHuggingPriority="750" id="3O9-81-H2o">
-                                <rect key="frame" x="18" y="111" width="79" height="13"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="x264 Preset:" id="Ukc-RA-XL5">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" id="6q1-ib-FgH">
-                                <rect key="frame" x="18" y="90" width="79" height="13"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="x264 Tune:" id="2eQ-Jg-bXh">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" id="xhg-dJ-Jmi">
-                                <rect key="frame" x="18" y="69" width="79" height="13"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="H.264 Profile:" id="brS-VD-Laz">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" id="Zx9-aq-QUO">
-                                <rect key="frame" x="18" y="48" width="79" height="13"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="H.264 Level:" id="KrD-UK-LYs">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <popUpButton verticalHuggingPriority="750" id="KOr-SM-yFa">
-                                <rect key="frame" x="101" y="88" width="126" height="15"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="cfq-xj-BRo" id="bLm-PZ-R5A">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <menu key="menu" title="OtherViews" id="7nV-xW-qaD">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="cfq-xj-BRo"/>
-                                            <menuItem title="Item 2" id="UPL-Zb-3Xd"/>
-                                            <menuItem title="Item 3" id="EtH-09-EHF"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="ht2-EV-ydT"/>
-                                </connections>
-                            </popUpButton>
-                            <popUpButton verticalHuggingPriority="750" id="M7o-me-kIK">
-                                <rect key="frame" x="101" y="67" width="126" height="15"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="kBz-wm-XOZ" id="IEi-CG-TxH">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <menu key="menu" title="OtherViews" id="G1A-9W-cJa">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="kBz-wm-XOZ"/>
-                                            <menuItem title="Item 2" id="5Rp-9r-HV3"/>
-                                            <menuItem title="Item 3" id="nRE-UN-2Au"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="eCE-Aq-zNc"/>
-                                </connections>
-                            </popUpButton>
-                            <popUpButton verticalHuggingPriority="750" id="Bc9-RS-X0z">
-                                <rect key="frame" x="101" y="46" width="126" height="15"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="3yN-hT-w38" id="6MD-Fg-LbH">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <menu key="menu" title="OtherViews" id="awh-D2-IGg">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="3yN-hT-w38"/>
-                                            <menuItem title="Item 2" id="Ifh-EU-YmV"/>
-                                            <menuItem title="Item 3" id="Is1-hb-ZV9"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="Iak-Zl-GR9"/>
-                                </connections>
-                            </popUpButton>
-                            <button id="40r-Rt-3Kj">
-                                <rect key="frame" x="243" y="88" width="108" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="k1V-Fa-g1s">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="2Zq-Jp-9Me"/>
-                                </connections>
-                            </button>
-                            <textField verticalHuggingPriority="750" id="z5f-9f-CkC">
-                                <rect key="frame" x="243" y="69" width="110" height="13"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="xtl-bu-yOc">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="nd4-77-0zJ">
-                                <rect key="frame" x="359" y="51" width="505" height="32"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Sgj-JS-4Un">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <connections>
-                                    <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="7Ee-gb-ZSL"/>
-                                </connections>
-                            </textField>
-                            <textField verticalHuggingPriority="750" id="Dau-qh-WdE">
-                                <rect key="frame" x="99" y="111" width="129" height="13"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="GFY-BH-2SD">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button id="304-sL-Qb9">
-                                <rect key="frame" x="13" y="129" width="209" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Use x264 Advanced Options Panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="mRh-IJ-juS">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="updateX264Widgets:" target="-2" id="9Vz-FZ-hTj"/>
-                                </connections>
-                            </button>
-                            <textField verticalHuggingPriority="750" id="5rt-5S-acT">
-                                <rect key="frame" x="15" y="11" width="851" height="29"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="x264 Unparse:" id="CW8-Fr-sh7">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                        </subviews>
                     </view>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -410,7 +255,230 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <box autoresizesSubviews="NO" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="aeW-F6-jrd">
+                    <rect key="frame" x="20" y="41" width="880" height="5"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <box autoresizesSubviews="NO" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="NtL-8e-tS7">
+                    <rect key="frame" x="20" y="194" width="880" height="5"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
             </subviews>
         </view>
+        <customView id="2dX-Hf-Hxl" userLabel="x264/x264 presets view">
+            <rect key="frame" x="0.0" y="0.0" width="920" height="134"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <slider verticalHuggingPriority="750" id="Biw-5K-pPD">
+                    <rect key="frame" x="120" y="97" width="123" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Adjust encoder settings to trade off compression efficiency against encoding speed.
+
+This estabilishes your default encoder settings. Tunes, profiles, levels and advances option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</string>
+                    <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="5" tickMarkPosition="above" numberOfTickMarks="2" allowsTickMarkValuesOnly="YES" sliderType="linear" id="suZ-F3-AGy"/>
+                    <connections>
+                        <action selector="presetsSliderChanged:" target="-2" id="bKH-cB-TyO"/>
+                    </connections>
+                </slider>
+                <textField verticalHuggingPriority="750" id="0sa-ep-yfr">
+                    <rect key="frame" x="35" y="99" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="iab-iA-j04">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="gzq-SL-YVY">
+                    <rect key="frame" x="35" y="78" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="zSD-4Y-1cI">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="dY9-5D-mXX">
+                    <rect key="frame" x="35" y="57" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Profile:" id="hib-wi-BDx">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="BY1-IG-JvI">
+                    <rect key="frame" x="35" y="36" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Level:" id="QyZ-rl-uGw">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="A7d-wM-Xmp">
+                    <rect key="frame" x="119" y="77" width="126" height="15"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Tune settings to optimize for common scenarios.
+
+This can improve efficiency for particular source characteristics or set characteristics of the output file. Changes will be applied after the preset but before all other parameters.</string>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="rl3-yb-lhe" id="dy8-w4-ycN">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="miniSystem"/>
+                        <menu key="menu" title="OtherViews" id="c4N-uO-iVC">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="rl3-yb-lhe"/>
+                                <menuItem title="Item 2" id="Oh1-Pi-VOR"/>
+                                <menuItem title="Item 3" id="8PG-Nw-5ky"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="NXN-UM-juC"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton verticalHuggingPriority="750" id="CPP-lh-FbN">
+                    <rect key="frame" x="119" y="56" width="126" height="15"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Sets and ensures compliance with the specified profile.
+Overrides all other settings.</string>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="mmg-zN-rCB" id="oOm-hC-AoS">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="miniSystem"/>
+                        <menu key="menu" title="OtherViews" id="7CG-ga-88H">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="mmg-zN-rCB"/>
+                                <menuItem title="Item 2" id="got-Ie-NJ2"/>
+                                <menuItem title="Item 3" id="Dgy-rE-2Tr"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="WDW-WH-NRA"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton toolTip="Sets and ensures compliance with the specified level. Overrides all other settings." verticalHuggingPriority="750" id="P7c-Zk-G99">
+                    <rect key="frame" x="119" y="35" width="126" height="15"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="kAg-9O-5hF" id="PhX-Wa-Vhs">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="miniSystem"/>
+                        <menu key="menu" title="OtherViews" id="pPu-oR-2R8">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="kAg-9O-5hF"/>
+                                <menuItem title="Item 2" id="D7y-fr-REA"/>
+                                <menuItem title="Item 3" id="b0U-ow-7Mq"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="vbv-LQ-CX5"/>
+                    </connections>
+                </popUpButton>
+                <button id="z7F-H2-Vfr">
+                    <rect key="frame" x="261" y="77" width="108" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Reduce decoder CPU usage.
+Set this if your device is struggling to play the output (dropped frames).</string>
+                    <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="5De-nU-l3h">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="UYm-bq-oxP"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" id="ijg-ux-uvb">
+                    <rect key="frame" x="261" y="58" width="110" height="13"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="ZSm-03-g0B">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="oJk-ur-wgc">
+                    <rect key="frame" x="377" y="35" width="523" height="37"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="IID-yp-or8">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <action selector="x264PresetsChangedDisplayExpandedOptions:" target="-2" id="wJH-X4-1oP"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="gvn-wG-crj">
+                    <rect key="frame" x="250" y="100" width="129" height="13"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="rHx-Kg-tc2">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button toolTip="Use Advanced Options tab for x264 settings. Use at your own risk!" id="Zs7-1Y-50A">
+                    <rect key="frame" x="117" y="118" width="209" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Use Advanced Options Panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="sa6-r3-eVr">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="updateEncoderOptionsWidgets:" target="-2" id="kT9-0X-dVp"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" id="wk1-2U-z4i">
+                    <rect key="frame" x="18" y="0.0" width="883" height="29"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="G8P-IF-mpl">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="mkM-81-g3d">
+                    <rect key="frame" x="18" y="120" width="96" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="XIe-8Z-tIF">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+        </customView>
+        <customView id="aRi-vN-oR0" userLabel="ffmpeg presets view">
+            <rect key="frame" x="0.0" y="0.0" width="920" height="34"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="mL3-yC-hUj">
+                    <rect key="frame" x="120" y="2" width="545" height="32"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="z0u-VS-m0l">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="26w-dz-St2">
+                    <rect key="frame" x="18" y="20" width="96" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="7bP-tR-sAX">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+        </customView>
     </objects>
 </document>
