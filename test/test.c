@@ -3448,14 +3448,54 @@ static void ShowPresets()
     printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E ffaac,copy:ac3 -B 160,160 -6 dpl2,none -R Auto,Auto -D 0.0,0.0 --audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 -f mp4 -4 --decomb --loose-anamorphic --modulus 2 -m --x264-preset medium --h264-profile high --h264-level 4.1\n");
     printf("\n>\n");
 }
-static char * hb_strndup( char * str, int len )
+
+static char* strchr_quote(char *pos, char c, char q)
 {
+    if (pos == NULL)
+        return NULL;
+
+    while (*pos != 0 && *pos != c)
+    {
+        if (*pos == q)
+        {
+            pos = strchr_quote(pos+1, q, 0);
+            if (pos == NULL)
+                return NULL;
+            pos++;
+        }
+        else if (*pos == '\\' && *(pos+1) != 0)
+            pos += 2;
+        else
+            pos++;
+    }
+    if (*pos != c)
+        return NULL;
+    return pos;
+}
+
+static char *strndup_quote(char *str, char q, int len)
+{
+    if (str == NULL)
+        return NULL;
+
     char * res;
     int str_len = strlen( str );
-
+    int src = 0, dst = 0;
     res = malloc( len > str_len ? str_len + 1 : len + 1 );
-    strncpy( res, str, len );
-    res[len] = '\0';
+
+    while (str[src] != 0 && src < len)
+    {
+        if (str[src] == q)
+            src++;
+        else if (str[src] == '\\' && str[src+1] != 0)
+        {
+            res[dst++] = str[src+1];
+            src += 2;
+        }
+        else
+            res[dst++] = str[src++];
+    }
+    res[dst] = '\0';
     return res;
 }
 
@@ -3465,7 +3505,12 @@ static char** str_split( char *str, char delem )
     char *  end;
     char ** ret;
     int     count, i;
+    char quote = '"';
 
+    if (delem == '"')
+    {
+        quote = '\'';
+    }
     if ( str == NULL || str[0] == 0 )
     {
         ret = malloc( sizeof(char*) );
@@ -3476,7 +3521,7 @@ static char** str_split( char *str, char delem )
     // Find number of elements in the string
     count = 1;
     pos = str;
-    while ( ( pos = strchr( pos, delem ) ) != NULL )
+    while ( ( pos = strchr_quote( pos, delem, quote ) ) != NULL )
     {
         count++;
         pos++;
@@ -3487,11 +3532,11 @@ static char** str_split( char *str, char delem )
     pos = str;
     for ( i = 0; i < count - 1; i++ )
     {
-        end = strchr( pos, delem );
-        ret[i] = hb_strndup(pos, end - pos);
+        end = strchr_quote( pos, delem, quote );
+        ret[i] = strndup_quote(pos, quote, end - pos);
         pos = end + 1;
     }
-    ret[i] = strdup(pos);
+    ret[i] = strndup_quote(pos, quote, strlen(pos));
 
     return ret;
 }
