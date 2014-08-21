@@ -23,7 +23,8 @@
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
-        
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
+
         <Style TargetType="Button">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,1" />
@@ -485,8 +486,8 @@
                     <ComboBox Name="Container"
                               MinWidth="100"
                               Margin="8,0,0,0"
-                              ItemsSource="{Binding OutputFormats}"
-                              SelectedItem="{Binding SelectedOutputFormat}"
+                              ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
+                              SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}"
                               />
                     <CheckBox Name="WebOptimized"
                               Margin="8,0,0,0"

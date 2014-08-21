@@ -1527,10 +1527,8 @@ namespace HandBrakeWPF.ViewModels
                             this.SelectedOutputFormat = OutputFormat.Mkv;
                             break;
                         case ".mp4":
-                            this.SelectedOutputFormat = OutputFormat.Mp4;
-                            break;
                         case ".m4v":
-                            this.SelectedOutputFormat = OutputFormat.M4V;
+                            this.SelectedOutputFormat = OutputFormat.Mp4;
                             break;
                     }
 

@@ -21,8 +21,8 @@ namespace HandBrake.Interop.Model.Encoding
 		None = 0x0,
 
 		[Display(Name = "MP4")]
-		Mp4,
+		MP4,
 		[Display(Name = "MKV")]
-		Mkv
+		MKV
 	}
 }

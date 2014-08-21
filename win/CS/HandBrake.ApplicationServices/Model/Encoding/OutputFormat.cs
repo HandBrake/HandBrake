@@ -10,6 +10,7 @@
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The Output format.
@@ -17,12 +18,11 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     public enum OutputFormat
     {
         [Description("MP4")]
+        [Display(Name = "MP4")]
         Mp4 = 0,
 
-        [Description("M4V")]
-        M4V,
-
         [Description("MKV")]
+        [Display(Name = "MKV")]
         Mkv,
     }
 }

@@ -590,7 +590,7 @@ namespace HandBrakeWPF.ViewModels
 
             if ((source.SubtitleType == SubtitleType.PGS || source.SubtitleType == SubtitleType.VobSub || source.SubtitleType == SubtitleType.ForeignAudioSearch)
                 && this.Task != null
-                && (this.Task.OutputFormat == OutputFormat.Mp4 || this.Task.OutputFormat == OutputFormat.M4V))
+                && this.Task.OutputFormat == OutputFormat.Mp4)
             {
                 if (track.CanBeBurned)
                 {

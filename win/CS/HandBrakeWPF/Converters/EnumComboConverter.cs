@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Converters
     using System;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
@@ -69,7 +70,6 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<QsvPreset>.GetDisplay((QsvPreset)value);
             }
- 
             if (value is IEnumerable<PresetPictureSettingsMode>)
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
@@ -90,10 +90,13 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<Denoise>.GetEnumDisplayValues(typeof(Denoise));
             }
-
             if (value is IEnumerable<VideoScaler>)
             {
                 return EnumHelper<VideoScaler>.GetEnumDisplayValues(typeof(VideoScaler));
+            }
+            if (value is IEnumerable<OutputFormat>)
+            {
+                return EnumHelper<OutputFormat>.GetEnumDisplayValues(typeof(OutputFormat));
             }
 
             // Single Items
@@ -146,6 +149,11 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(VideoScaler) || value.GetType() == typeof(VideoScaler))
             {
                 return EnumHelper<VideoScaler>.GetDisplay((VideoScaler)value);
+            }
+
+            if (targetType == typeof(OutputFormat) || value.GetType() == typeof(OutputFormat))
+            {
+                return EnumHelper<OutputFormat>.GetDisplay((OutputFormat)value);
             }
 
             return null;
@@ -221,6 +229,11 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(VideoScaler) || value.GetType() == typeof(VideoScaler))
             {
                 return EnumHelper<VideoScaler>.GetValue(value.ToString());
+            }
+
+            if (targetType == typeof(OutputFormat) || value.GetType() == typeof(OutputFormat))
+            {
+                return EnumHelper<OutputFormat>.GetValue(value.ToString());
             }
 
             return null;

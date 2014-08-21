@@ -136,7 +136,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.IncludeChapterMarkers ? "1" : "0");
             AddEncodeElement(xmlWriter, "Default", "integer", "0");
-            AddEncodeElement(xmlWriter, "FileFormat", "string", (parsed.OutputFormat == OutputFormat.Mp4 || parsed.OutputFormat == OutputFormat.M4V) ? "MP4 file" : "MKV file");
+            AddEncodeElement(xmlWriter, "FileFormat", "string", (parsed.OutputFormat == OutputFormat.Mp4) ? "MP4 file" : "MKV file");
             AddBooleanElement(xmlWriter, "Folder", false);
             AddEncodeElement(xmlWriter, "Mp4HttpOptimize", "integer", parsed.OptimizeMP4 ? "1" : "0");
             AddEncodeElement(xmlWriter, "Mp4iPodCompatible", "integer", parsed.IPod5GSupport ? "1" : "0");

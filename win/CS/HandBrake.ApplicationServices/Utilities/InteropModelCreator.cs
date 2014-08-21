@@ -129,7 +129,6 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (work.OutputFormat)
             {
                 case OutputFormat.Mp4:
-                case OutputFormat.M4V:
                     profile.ContainerName = "av_mp4"; // TODO make part of enum.
                     break;
                 case OutputFormat.Mkv:
