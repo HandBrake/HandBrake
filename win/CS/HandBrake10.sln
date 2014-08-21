@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.ApplicationServices", "HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj", "{087A2BA8-BAC2-4577-A46F-07FF9D420016}"
 EndProject
@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		build.xml = build.xml
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.Server", "HandBrake.Server\HandBrake.Server.csproj", "{36847BA0-6814-41E1-B1C3-1D9D874418E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,27 +93,6 @@ Global
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x64.Build.0 = Release|x64
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.ActiveCfg = Release|x86
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.Build.0 = Release|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug|x64.ActiveCfg = Debug|x64
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug|x64.Build.0 = Debug|x64
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug|x86.ActiveCfg = Debug|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug|x86.Build.0 = Debug|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug32|Any CPU.ActiveCfg = Debug32|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug32|Mixed Platforms.ActiveCfg = Debug32|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug32|Mixed Platforms.Build.0 = Debug32|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug32|x64.ActiveCfg = Debug32|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug32|x64.Build.0 = Debug32|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug32|x86.ActiveCfg = Debug32|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Debug32|x86.Build.0 = Debug32|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Release|Any CPU.ActiveCfg = Release|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Release|Mixed Platforms.Build.0 = Release|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Release|x64.ActiveCfg = Release|x64
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Release|x64.Build.0 = Release|x64
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Release|x86.ActiveCfg = Release|x86
-		{36847BA0-6814-41E1-B1C3-1D9D874418E9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

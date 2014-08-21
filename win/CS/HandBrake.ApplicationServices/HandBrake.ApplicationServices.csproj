@@ -111,7 +111,6 @@
     <Compile Include="Factories\PlistPresetFactory.cs" />
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
-    <Compile Include="LibHb\AudioVideoHelpers.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
     <Compile Include="Model\Audio\AudioBehaviours.cs" />
     <Compile Include="Model\Encoding\DenoisePreset.cs" />

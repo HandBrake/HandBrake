@@ -551,10 +551,6 @@
       <Project>{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}</Project>
       <Name>HandBrakeInterop</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HandBrake.Server\HandBrake.Server.csproj">
-      <Project>{36847BA0-6814-41E1-B1C3-1D9D874418E9}</Project>
-      <Name>HandBrake.Server</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\Advanced.png" />
