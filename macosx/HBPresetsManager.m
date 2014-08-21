@@ -432,7 +432,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"fast";
@@ -547,7 +546,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -651,7 +649,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -755,7 +752,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -859,7 +855,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -974,7 +969,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -1089,7 +1083,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -1204,7 +1197,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -1308,7 +1300,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -1412,7 +1403,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";
@@ -1516,7 +1506,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"veryfast";
@@ -1620,7 +1609,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Video encoder and advanced options */
     preset[@"VideoEncoder"] = @"H.264 (x264)";
-    preset[@"lavcOption"] = @"";
     preset[@"x264Option"] = @"";
     preset[@"x264UseAdvancedOptions"] = @0;
     preset[@"VideoPreset"] = @"medium";

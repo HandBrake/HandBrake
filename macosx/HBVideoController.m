@@ -281,8 +281,6 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     /* video encoder */
     self.codec = [queueToApply[@"JobVideoEncoderVcodec"] intValue];
 
-    self.lavcOptions = queueToApply[@"lavcOption"];
-
     /* advanced x264 options */
     if ([queueToApply[@"x264UseAdvancedOptions"] intValue])
     {
@@ -298,7 +296,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         [fX264UseAdvancedOptionsCheck setState:NSOnState];
         [self updateEncoderOptionsWidgets:nil];
     }
-    else
+    else if (self.codec == HB_VCODEC_X264 || self.codec == HB_VCODEC_X265)
     {
         // we are using the x264 preset system
         [self setPreset:     queueToApply[@"VideoPreset"]];
@@ -311,6 +309,10 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         // disable the advanced panel and update the widgets
         [fX264UseAdvancedOptionsCheck setState:NSOffState];
         [self updateEncoderOptionsWidgets:nil];
+    }
+    else
+    {
+        self.lavcOptions = queueToApply[@"VideoOptionExtra"];
     }
 
     /* Lets run through the following functions to get variables set there */
@@ -445,9 +447,11 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
             [self updateEncoderOptionsWidgets:nil];
         }
     }
-
-    // Apply the lavcOption
-    self.lavcOptions = preset[@"lavcOption"];
+    else
+    {
+        // Apply the lavcOption
+        self.lavcOptions = preset[@"VideoOptionExtra"];
+    }
 
     int qualityType = [preset[@"VideoQualityType"] intValue] - 1;
     /* Note since the removal of Target Size encoding, the possible values for VideoQuality type are 0 - 1.
@@ -536,7 +540,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         queueFileJob[@"x264UseAdvancedOptions"] = @1;
         queueFileJob[@"x264Option"] = [self.fAdvancedOptions optionsString];
     }
-    else
+    else if (self.codec == HB_VCODEC_X264 || self.codec == HB_VCODEC_X265)
     {
         // we are using the x264/x265 preset system
         queueFileJob[@"x264UseAdvancedOptions"] = @0;
@@ -546,9 +550,11 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         queueFileJob[@"VideoProfile"] = [self profile];
         queueFileJob[@"VideoLevel"] = [self level];
     }
-
-    /* FFmpeg (lavc) Option String */
-    queueFileJob[@"lavcOption"] = self.lavcOptions;
+    else
+    {
+        /* FFmpeg (lavc) Option String */
+        queueFileJob[@"VideoOptionExtra"] = self.lavcOptions;
+    }
 
 	queueFileJob[@"VideoQualityType"] = @(self.qualityType + 1);
 	queueFileJob[@"VideoAvgBitrate"] = [fVidBitrateField stringValue];
@@ -708,7 +714,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         preset[@"x264UseAdvancedOptions"] = @1;
         preset[@"x264Option"] = [self.fAdvancedOptions optionsString];
     }
-    else
+    else if (self.codec == HB_VCODEC_X264 || self.codec == HB_VCODEC_X265)
     {
         /* use the x264 preset system */
         preset[@"x264UseAdvancedOptions"] = @0;
@@ -731,9 +737,11 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
             preset[@"x264Option"] = @"";
         }
     }
-
-    /* FFmpeg (lavc) Option String */
-    preset[@"lavcOption"] = self.lavcOptions;
+    else
+    {
+        /* FFmpeg (lavc) Option String */
+        preset[@"VideoOptionExtra"] = self.lavcOptions;
+    }
 
     /* though there are actually only 0 - 1 types available in the ui we need to map to the old 0 - 2
      * set of indexes from when we had 0 == Target , 1 == Abr and 2 == Constant Quality for presets

@@ -3418,7 +3418,7 @@ fWorkingCount = 0;
     else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
         hb_job_set_encoder_options(job,
-                                   [[queueToApply objectForKey:@"lavcOption"]
+                                   [[queueToApply objectForKey:@"VideoOptionExtra"]
                                     UTF8String]);
     }
 

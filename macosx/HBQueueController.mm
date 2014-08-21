@@ -991,16 +991,16 @@
         {
             /* we are using libavcodec */
             NSString *lavcInfo = @"";
-            if (item[@"lavcOption"] &&
-                [item[@"lavcOption"] length])
+            if (item[@"VideoOptionExtra"] &&
+                [item[@"VideoOptionExtra"] length])
             {
-                lavcInfo = [lavcInfo stringByAppendingString: item[@"lavcOption"]];
+                lavcInfo = [lavcInfo stringByAppendingString: item[@"VideoOptionExtra"]];
             }
             else
             {
                 lavcInfo = [lavcInfo stringByAppendingString: @"default settings"];
             }
-            [finalString appendString: @"ffmpeg: " withAttributes:detailBoldAttr];
+            [finalString appendString: @"Encoder Options: " withAttributes:detailBoldAttr];
             [finalString appendString: lavcInfo withAttributes:detailAttr];
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
