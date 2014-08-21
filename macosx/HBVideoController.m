@@ -449,8 +449,15 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     }
     else
     {
-        // Apply the lavcOption
-        self.lavcOptions = preset[@"VideoOptionExtra"];
+        if (preset[@"lavcOption"])
+        {
+            // Load the old format
+            self.lavcOptions = preset[@"lavcOption"];
+        }
+        else
+        {
+            self.lavcOptions = preset[@"VideoOptionExtra"];
+        }
     }
 
     int qualityType = [preset[@"VideoQualityType"] intValue] - 1;
