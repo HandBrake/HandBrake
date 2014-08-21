@@ -260,6 +260,13 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         self.codec = hb_video_encoder_get_default(videoContainer);
         [self videoEncoderPopUpChanged:nil];
     }
+    else
+    {
+        self.codec = selectedVidEncoderTag;
+    }
+
+    [fVidEncoderPopUp selectItemWithTag:self.codec];
+
 }
 
 - (void)titleChanged:(NSNotification *)aNotification
@@ -438,6 +445,9 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
             [self updateEncoderOptionsWidgets:nil];
         }
     }
+
+    // Apply the lavcOption
+    self.lavcOptions = preset[@"lavcOption"];
 
     int qualityType = [preset[@"VideoQualityType"] intValue] - 1;
     /* Note since the removal of Target Size encoding, the possible values for VideoQuality type are 0 - 1.
