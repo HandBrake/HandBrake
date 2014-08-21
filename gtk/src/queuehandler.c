@@ -601,7 +601,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         g_free(track);
         g_free(quality);
     }
-    XPRINT("</small>");
+    if (count > 1)
+    {
+        XPRINT("</small>");
+    }
 
     // Next line in the display (Subtitle)
     // Subtitle Tracks: count
