@@ -173,7 +173,7 @@ namespace HandBrake.ApplicationServices.Factories
                     preset.Task.CustomDecomb = kvp.Value;
                     break;
                 case "PictureDecombDeinterlace":
-                    preset.UseDeinterlace = kvp.Value == 1;
+                    preset.UseDeinterlace = kvp.Value == true;
                     break;
                 case "PictureDeinterlace":
                     preset.Task.Deinterlace = (Deinterlace)kvp.Value;
@@ -229,7 +229,7 @@ namespace HandBrake.ApplicationServices.Factories
                     }
                     break;
                 case "VideoGrayScale":
-                    preset.Task.Grayscale = kvp.Value == 1;
+                    preset.Task.Grayscale = kvp.Value == true;
                     break;
                 case "VideoQualitySlider":
                     preset.Task.Quality = double.Parse(kvp.Value.ToString(), CultureInfo.InvariantCulture);

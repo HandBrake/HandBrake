@@ -127,166 +127,54 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </param>
         private static void AddEncodeSettings(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset, string build)
         {
-            AddEncodeElement(xmlWriter, "AudioAllowAACPass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowAACPass));
-            AddEncodeElement(xmlWriter, "AudioAllowAC3Pass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowAC3Pass));
-            AddEncodeElement(xmlWriter, "AudioAllowDTSHDPass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowDTSHDPass));
-            AddEncodeElement(xmlWriter, "AudioAllowDTSPass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowDTSPass));
-            AddEncodeElement(xmlWriter, "AudioAllowMP3Pass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowMP3Pass));
+            AddBooleanElement(xmlWriter, "AudioAllowAACPass", parsed.AllowedPassthruOptions.AudioAllowAACPass);
+            AddBooleanElement(xmlWriter, "AudioAllowAC3Pass", parsed.AllowedPassthruOptions.AudioAllowAC3Pass);
+            AddBooleanElement(xmlWriter, "AudioAllowDTSHDPass", parsed.AllowedPassthruOptions.AudioAllowDTSHDPass);
+            AddBooleanElement(xmlWriter, "AudioAllowDTSPass", parsed.AllowedPassthruOptions.AudioAllowDTSPass);
+            AddBooleanElement(xmlWriter, "AudioAllowMP3Pass", parsed.AllowedPassthruOptions.AudioAllowMP3Pass);
+
+            // TODO Update
             AddEncodeElement(xmlWriter, "AudioEncoderFallback", "string", EnumHelper<AudioEncoder>.GetDisplay(parsed.AllowedPassthruOptions.AudioEncoderFallback));
 
-            AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.IncludeChapterMarkers ? "1" : "0");
+            AddBooleanElement(xmlWriter, "ChapterMarkers", parsed.IncludeChapterMarkers);
             AddEncodeElement(xmlWriter, "Default", "integer", "0");
-            AddEncodeElement(xmlWriter, "FileFormat", "string", (parsed.OutputFormat == OutputFormat.Mp4) ? "MP4 file" : "MKV file");
+            AddEncodeElement(xmlWriter, "FileFormat", "string", (parsed.OutputFormat == OutputFormat.Mp4) ? "MP4 file" : "MKV file"); // TODO
             AddBooleanElement(xmlWriter, "Folder", false);
             AddEncodeElement(xmlWriter, "Mp4HttpOptimize", "integer", parsed.OptimizeMP4 ? "1" : "0");
             AddEncodeElement(xmlWriter, "Mp4iPodCompatible", "integer", parsed.IPod5GSupport ? "1" : "0");
             AddEncodeElement(xmlWriter, "PictureAutoCrop", "integer", "1");
-            AddEncodeElement(xmlWriter, "PictureBottomCrop", "integer", parsed.Cropping.Bottom.ToString());
+            
 
             // Filters
             AddEncodeElement(xmlWriter, "PictureDeblock", "integer", parsed.Deblock.ToString());
 
-            switch (parsed.Decomb)
-            {
-                case Decomb.Off:
-                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "0");
-                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
-                    break;
-                case Decomb.Default:
-                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "2");
-                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
-                    break;
-                case Decomb.Fast:
-                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "3");
-                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
-                    break;
-                case Decomb.Bob:
-                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "4");
-                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
-                    break;
-                case Decomb.Custom:
-                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "1");
-                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", parsed.CustomDecomb);
-                    break;
-            }
-            AddEncodeElement(xmlWriter, "PictureDecombDeinterlace", "integer", parsed.Decomb != Decomb.Off ? "0" : "1");
-
-            switch (parsed.Deinterlace)
-            {
-                case Deinterlace.Off:
-                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "0");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
-                    break;
-                case Deinterlace.Fast:
-                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "2");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
-                    break;
-                case Deinterlace.Slow:
-                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "3");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
-                    break;
-                case Deinterlace.Slower:
-                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "4");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
-                    break;
-                case Deinterlace.Bob:
-                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "5");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
-                    break;
-                case Deinterlace.Custom:
-                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "1");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", parsed.CustomDeinterlace);
-                    break;
-            }
+            AddBooleanElement(xmlWriter, "PictureDecombDeinterlace", parsed.Decomb != Decomb.Off);
+            AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", parsed.Decomb == Decomb.Custom ? parsed.CustomDecomb : string.Empty);
+            AddEncodeElement(xmlWriter, "PictureDecomb", "integer", ((int)parsed.Decomb).ToString());
+            AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", parsed.Deinterlace == Deinterlace.Custom ? parsed.CustomDeinterlace : string.Empty);
+            AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", ((int)parsed.Deinterlace).ToString());
 
 
-            if (parsed.Denoise == Denoise.hqdn3d)
-            {
-                switch (parsed.DenoisePreset)
-                {
-                    case DenoisePreset.Weak:
-                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "2");
-                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                        break;
-                    case DenoisePreset.Medium:
-                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "3");
-                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                        break;
-                    case DenoisePreset.Strong:
-                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "4");
-                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                        break;
-                    case DenoisePreset.Custom:
-                        AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "1");
-                        AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.CustomDenoise);
-                        break;
-                }
-            }
-
-            // These keys are still TBD.   TODO Update these
+            AddEncodeElement(xmlWriter, "PictureDenoiseFilter", "string", parsed.Denoise.ToString().ToLower());
+            AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.DenoisePreset == DenoisePreset.Custom ? parsed.CustomDenoise : string.Empty);
+            AddEncodeElement(xmlWriter, "PictureDenoisePreset", "string", parsed.DenoisePreset.ToString().ToLower());
             if (parsed.Denoise == Denoise.NLMeans)
             {
-                switch (parsed.DenoisePreset)
-                {
-                    case DenoisePreset.Ultralight:
-                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "1");
-                        break;
-                    case DenoisePreset.Light:
-                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "2");
-                        break;
-                    case DenoisePreset.Medium:
-                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "3");
-                        break;
-                    case DenoisePreset.Strong:
-                        AddEncodeElement(xmlWriter, "DenoisePreset", "integer", "4");
-                        break;
-                }
-
-                switch (parsed.DenoiseTune)
-                {
-                    case DenoiseTune.None:
-                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "0");
-                        break;
-                    case DenoiseTune.Animation:
-                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "1");
-                        break;
-                    case DenoiseTune.Film:
-                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "2");
-                        break;
-                    case DenoiseTune.Grain:
-                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "3");
-                        break;
-                    case DenoiseTune.HighMotion:
-                        AddEncodeElement(xmlWriter, "DenoiseTune", "integer", "4");
-                        break;
-                }
+                AddEncodeElement(xmlWriter, "PictureDenoiseTune", "string", parsed.DenoiseTune.ToString().ToLower());
             }
 
-            int detelecine = 0;
-            switch (parsed.Detelecine)
-            {
-                case Detelecine.Off:
-                    detelecine = 0;
-                    break;
-                case Detelecine.Default:
-                    detelecine = 2;
-                    break;
-                case Detelecine.Custom:
-                    detelecine = 1;
-                    break;
-            }
-
-            AddEncodeElement(xmlWriter, "PictureDetelecine", "integer", detelecine.ToString());
-            AddEncodeElement(xmlWriter, "PictureDetelecineCustom", "string", detelecine == 1 ? parsed.CustomDecomb : string.Empty);
+            AddEncodeElement(xmlWriter, "PictureDetelecine", "integer", ((int)parsed.Detelecine).ToString());
+            AddEncodeElement(xmlWriter, "PictureDetelecineCustom", "string", parsed.Detelecine == Detelecine.Custom ? parsed.CustomDecomb : string.Empty);
 
             // Picture Settings
             AddEncodeElement(xmlWriter, "PictureHeight", "integer", parsed.Height.ToString());
-            AddEncodeElement(xmlWriter, "PictureKeepRatio", "integer", parsed.KeepDisplayAspect ? "1" : "0");
-            AddEncodeElement(xmlWriter, "PictureLeftCrop", "integer", parsed.Cropping.Left.ToString());
+            AddEncodeElement(xmlWriter, "PictureKeepRatio", "integer", parsed.KeepDisplayAspect ? "1" : "0");          
             AddEncodeElement(xmlWriter, "PictureModulus", "integer", parsed.Modulus.ToString());
             AddEncodeElement(xmlWriter, "PicturePAR", "integer", ((int)parsed.Anamorphic).ToString());
+            AddEncodeElement(xmlWriter, "PictureLeftCrop", "integer", parsed.Cropping.Left.ToString());
             AddEncodeElement(xmlWriter, "PictureRightCrop", "integer", parsed.Cropping.Right.ToString());
             AddEncodeElement(xmlWriter, "PictureTopCrop", "integer", parsed.Cropping.Top.ToString());
+            AddEncodeElement(xmlWriter, "PictureBottomCrop", "integer", parsed.Cropping.Bottom.ToString());
             AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.Width.ToString());
 
             // Preset Information
@@ -298,14 +186,14 @@ namespace HandBrake.ApplicationServices.Utilities
             // Preset Settings
             AddEncodeElement(xmlWriter, "UsesMaxPictureSettings", "integer", (parsed.MaxWidth != 0 || parsed.MaxHeight != 0) ? "1" : "0");
             AddEncodeElement(xmlWriter, "UsesPictureFilters", "integer", "1");
-            AddEncodeElement(xmlWriter, "UsesPictureSettings", "integer", "2");
+            AddEncodeElement(xmlWriter, "UsesPictureSettings", "integer", "1");
 
             // Video Settings
             AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.VideoBitrate.ToString());
             AddEncodeElement(xmlWriter, "VideoEncoder", "string", EnumHelper<VideoEncoder>.GetDisplay(parsed.VideoEncoder));
             AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.Framerate == null ? "Same as source" : parsed.Framerate.ToString());
             AddEncodeElement(xmlWriter, "VideoFramerateMode", "string", parsed.FramerateMode.ToString().ToLower());
-            AddEncodeElement(xmlWriter, "VideoGrayScale", "integer", parsed.Grayscale ? "1" : "0");
+            AddBooleanElement(xmlWriter, "VideoGrayScale", parsed.Grayscale);
             AddEncodeElement(xmlWriter, "VideoQualitySlider", "real", parsed.Quality.ToString());
             AddEncodeElement(xmlWriter, "h264Level", "string", parsed.H264Level);
             AddEncodeElement(xmlWriter, "x264OptionExtra", "string", parsed.AdvancedEncoderOptions);
@@ -318,7 +206,6 @@ namespace HandBrake.ApplicationServices.Utilities
             }
             AddEncodeElement(xmlWriter, "x264Tune", "string", tune);
             AddEncodeElement(xmlWriter, "x264UseAdvancedOptions", "integer", parsed.ShowAdvancedTab ? "1" : "0");
-            AddEncodeElement(xmlWriter, "qsvPreset", "string", parsed.QsvPreset.ToString().ToLower());
 
             AddEncodeElement(xmlWriter, "h265Profile", "string", parsed.H265Profile.ToString().ToLower());
             AddEncodeElement(xmlWriter, "x265Preset", "string", parsed.X265Preset.ToString().ToLower());
@@ -349,12 +236,12 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="value">
         /// The value.
         /// </param>
-        private static void AddBooleanElement(XmlTextWriter xmlWriter, string keyName, bool value)
+        private static void AddBooleanElement(XmlTextWriter xmlWriter, string keyName, bool? value)
         {
             xmlWriter.WriteStartElement("key");
             xmlWriter.WriteString(keyName);
             xmlWriter.WriteEndElement();
-            xmlWriter.WriteStartElement(value ? "true" : "false");
+            xmlWriter.WriteStartElement(value.HasValue ? value.Value ? "true" : "false" : "false");
             xmlWriter.WriteEndElement();
         }
 
