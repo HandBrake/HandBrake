@@ -713,11 +713,11 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (firstLoop)
                 {
-                    audioItems = string.IsNullOrEmpty(trackName) ? "\"\"" : string.Format("\"{0}\"", trackName.Trim());
+                    audioItems = string.IsNullOrEmpty(trackName) ? "\\\"\\\"" : string.Format("\\\"{0}\\\"", trackName.Trim());
                     firstLoop = false;
                 }
                 else
-                    audioItems += "," + (string.IsNullOrEmpty(trackName) ? "\"\"" : string.Format("\"{0}\"", trackName.Trim()));
+                    audioItems += "," + (string.IsNullOrEmpty(trackName) ? "\\\"\\\"" : string.Format("\\\"{0}\\\"", trackName.Trim()));
             }
             if (foundTrackName)
                 query += string.Format(" --aname={0}", audioItems);
