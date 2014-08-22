@@ -56,10 +56,10 @@
 
 #define BORDER_SIZE 2.0
 // make min width and height of preview window large enough for hud
-#define MIN_WIDTH 460.0
-#define MIN_HEIGHT 128.0
+#define MIN_WIDTH 480.0
+#define MIN_HEIGHT 360.0
 
-#define ANIMATION_DUR 0.2
+#define ANIMATION_DUR 0.15
 
 typedef enum ViewMode : NSUInteger {
     ViewModePicturePreview,
@@ -70,9 +70,9 @@ typedef enum ViewMode : NSUInteger {
 @interface HBPreviewController () <HBPreviewGeneratorDelegate>
 {
     /* HUD boxes */
-    IBOutlet NSBox           * fPictureControlBox;
-    IBOutlet NSBox           * fEncodingControlBox;
-    IBOutlet NSBox           * fMoviePlaybackControlBox;
+    IBOutlet NSView           * fPictureControlBox;
+    IBOutlet NSView           * fEncodingControlBox;
+    IBOutlet NSView           * fMoviePlaybackControlBox;
 
     IBOutlet NSSlider        * fPictureSlider;
     IBOutlet NSTextField     * fInfoField;
@@ -185,9 +185,6 @@ typedef enum ViewMode : NSUInteger {
 
     /* Setup our layers for core animation */
     [[[self window] contentView] setWantsLayer:YES];
-    [fPictureControlBox setWantsLayer:YES];
-    [fEncodingControlBox setWantsLayer:YES];
-    [fMoviePlaybackControlBox setWantsLayer:YES];
 
     self.backLayer = [CALayer layer];
     [self.backLayer setBounds:CGRectMake(0.0, 0.0, MIN_WIDTH, MIN_HEIGHT)];
@@ -442,7 +439,15 @@ typedef enum ViewMode : NSUInteger {
     [[NSAnimationContext currentContext] setDuration:ANIMATION_DUR];
 
     [boxes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [[obj animator] setHidden:([indexes containsIndex:idx]) ? NO : YES];
+        BOOL hide = [indexes containsIndex:idx] ? NO : YES;
+        if (hide)
+        {
+            [self hideHudWithAnimation:obj];
+        }
+        else
+        {
+            [self showHudWithAnimation:obj];
+        }
     }];
 
     [NSAnimationContext endGrouping];
@@ -545,31 +550,79 @@ typedef enum ViewMode : NSUInteger {
         /* Since we are not encoding, verify which control hud to show
          * or hide based on aMovie ( aMovie indicates we need movie controls )
          */
-        NSBox *hudBoxToShow;
+        NSView *hud;
         if (self.currentViewMode == !ViewModeMoviePreview) // No movie loaded up
         {
-            hudBoxToShow = fPictureControlBox;
+            hud = fPictureControlBox;
         }
         else // We have a movie
         {
-            hudBoxToShow = fMoviePlaybackControlBox;
+            hud = fMoviePlaybackControlBox;
         }
 
-        if (NSPointInRect(mouseLoc, [hudBoxToShow frame]))
+        if (NSPointInRect(mouseLoc, [hud frame]))
         {
-            [[hudBoxToShow animator] setHidden: NO];
+            [self showHudWithAnimation:hud];
             [self stopHudTimer];
         }
 		else if (NSPointInRect(mouseLoc, [[[self window] contentView] frame]))
         {
-            [[hudBoxToShow animator] setHidden: NO];
+            [self showHudWithAnimation:hud];
             [self startHudTimer];
         }
         else
         {
-            [[hudBoxToShow animator] setHidden: YES];
+            [self hideHudWithAnimation:hud];
+            [self stopHudTimer];
         }
 	}
+}
+
+- (void)showHudWithAnimation:(NSView *)hud
+{
+    // The standard view animator doesn't play
+    // nicely with the Yosemite visual effects yet.
+    // So let's do the fade ourself.
+    if (hud.layer.opacity == 0 || [hud isHidden])
+    {
+        [hud setHidden:NO];
+
+        [CATransaction begin];
+        CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        fadeInAnimation.fromValue = @(0.0);
+        fadeInAnimation.toValue = @(1.0);
+        fadeInAnimation.beginTime = 0.0;
+        fadeInAnimation.duration = ANIMATION_DUR;
+
+        [hud.layer addAnimation:fadeInAnimation forKey:nil];
+        [hud.layer setOpacity:1];
+
+        [CATransaction commit];
+    }
+}
+
+- (void)hideHudWithAnimation:(NSView *)hud
+{
+    if (hud.layer.opacity != 0)
+    {
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^{
+            if (hud.layer.opacity == 0)
+            {
+                [hud setHidden:YES];
+            }
+        }];
+        CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        fadeInAnimation.fromValue = @([hud.layer.presentationLayer opacity]);
+        fadeInAnimation.toValue = @(0.0);
+        fadeInAnimation.beginTime = 0.0;
+        fadeInAnimation.duration = ANIMATION_DUR;
+
+        [hud.layer addAnimation:fadeInAnimation forKey:nil];
+        [hud.layer setOpacity:0];
+
+        [CATransaction commit];
+    }
 }
 
 - (void) startHudTimer
@@ -596,8 +649,9 @@ typedef enum ViewMode : NSUInteger {
     /* Regardless which control box is active, after the timer
      * period we want either one to fade to hidden.
      */
-    [[fPictureControlBox animator] setHidden: YES];
-    [[fMoviePlaybackControlBox animator] setHidden: YES];
+    [self hideHudWithAnimation:fPictureControlBox];
+    [self hideHudWithAnimation:fMoviePlaybackControlBox];
+
     [self stopHudTimer];
 }
 

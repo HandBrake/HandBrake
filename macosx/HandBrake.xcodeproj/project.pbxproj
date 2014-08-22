@@ -129,6 +129,7 @@
 		A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AA44791970664A00D7DEFC /* HBUtilities.m */; };
 		A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */; };
 		A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9C0DB83197E7B0000DF55B3 /* SubtitlesDefaults.xib */; };
+		A9C9F88919A733FE00DC8923 /* HBHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C9F88819A733FE00DC8923 /* HBHUDView.m */; };
 		A9CF25F11990D62C0023F727 /* Presets.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9CF25EF1990D62C0023F727 /* Presets.xib */; };
 		A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F31990D64E0023F727 /* HBPreset.m */; };
 		A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F61990D6820023F727 /* HBPresetsViewController.m */; };
@@ -352,6 +353,8 @@
 		A9BB0F2519A0ECE40079F1C1 /* HBHUDButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBHUDButtonCell.h; sourceTree = "<group>"; };
 		A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBHUDButtonCell.m; sourceTree = "<group>"; };
 		A9C0DB84197E7B0000DF55B3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = SubtitlesDefaults.xib; sourceTree = "<group>"; };
+		A9C9F88719A733FE00DC8923 /* HBHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBHUDView.h; sourceTree = "<group>"; };
+		A9C9F88819A733FE00DC8923 /* HBHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBHUDView.m; sourceTree = "<group>"; };
 		A9CF25F01990D62C0023F727 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Presets.xib; sourceTree = "<group>"; };
 		A9CF25F21990D64E0023F727 /* HBPreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreset.h; sourceTree = "<group>"; };
 		A9CF25F31990D64E0023F727 /* HBPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreset.m; sourceTree = "<group>"; };
@@ -846,6 +849,8 @@
 				273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */,
 				A9BB0F2519A0ECE40079F1C1 /* HBHUDButtonCell.h */,
 				A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */,
+				A9C9F88719A733FE00DC8923 /* HBHUDView.h */,
+				A9C9F88819A733FE00DC8923 /* HBHUDView.m */,
 			);
 			name = "UI Views";
 			sourceTree = "<group>";
@@ -1065,6 +1070,7 @@
 				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
 				273F20BE14ADC09F0021BE6D /* main.mm in Sources */,
 				A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */,
+				A9C9F88919A733FE00DC8923 /* HBHUDView.m in Sources */,
 				A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */,
 				46AB433515F98A2B009C0961 /* DockTextField.m in Sources */,
 				A9D488A51996270300E9B1BA /* HBTreeNode.m in Sources */,
