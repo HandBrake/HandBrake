@@ -47,10 +47,12 @@
                 <!-- Row 2-->
                 <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                     <Label Content="Width:" />
-                    <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" IsEnabled="{Binding WidthControlEnabled}" Modulus="{Binding SelectedModulus, Mode=OneWay}"
+                    <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" 
+                                        Modulus="{Binding SelectedModulus, Mode=OneWay}"
                                              Minimum="0" Width="60"  />
                     <Label Content="Height:" />
-                    <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" Modulus="{Binding SelectedModulus, Mode=OneWay}" 
+                    <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True" 
+                                        Modulus="{Binding SelectedModulus, Mode=OneWay}" 
                                              Minimum="0" Width="60"  />
                     <CheckBox Content="Keep Aspect Ratio" IsChecked="{Binding MaintainAspectRatio}"
                           Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" 

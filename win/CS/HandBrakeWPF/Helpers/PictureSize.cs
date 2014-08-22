@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Helpers
 {
     using System;
+    using System.Diagnostics;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.HbLib;
@@ -150,7 +151,17 @@ namespace HandBrakeWPF.Helpers
         }
 
         /// <summary>
-        /// The hb_set_anamorphic_size_native.
+        /// The keep setting.
+        /// </summary>
+        public enum KeepSetting
+        {
+            HB_KEEP_WIDTH = 0x01,
+            HB_KEEP_HEIGHT = 0x02,
+            HB_KEEP_DISPLAY_ASPECT = 0x04
+        }
+
+        /// <summary>
+        /// The hb_set_anamorphic_size 2.
         /// </summary>
         /// <param name="job">
         /// The job.
@@ -158,54 +169,52 @@ namespace HandBrakeWPF.Helpers
         /// <param name="title">
         /// The title.
         /// </param>
+        /// <param name="setting">
+        /// The setting.
+        /// </param>
         /// <returns>
-        /// The <see cref="AnamorphicResult"/> object.
+        /// The <see cref="AnamorphicResult"/>.
         /// </returns>
-        public static AnamorphicResult hb_set_anamorphic_size(PictureSettingsJob job, PictureSettingsTitle title)
+        public static AnamorphicResult hb_set_anamorphic_size2(PictureSettingsJob job, PictureSettingsTitle title, KeepSetting setting)
         {
             int outputHeight = 0;
             int outputParHeight = 0;
             int outputParWidth = 0;
             int outputWidth = 0;
 
-            hb_job_s nativeJob = new hb_job_s
-                                     {
-                                         modulus = job.Modulus.HasValue ? job.Modulus.Value : 16,
-                                         anamorphic =
-                                             new hb_anamorphic_substruct
-                                                 {
-                                                     par_width = job.ParW,
-                                                     par_height = job.ParH,
-                                                     itu_par = 0,
-                                                     mode = (hb_anamorphic_mode_t)job.AnamorphicMode,
-                                                     dar_width = 0,
-                                                     dar_height = 0,
-                                                     keep_display_aspect = job.KeepDisplayAspect ? 1 : 0
-                                                 },
-                                         maxWidth = title.Width,
-                                         maxHeight = title.Height,
-                                         width = job.Width,
-                                         height = job.Height,
-                                         crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right }
-                                     };
+            int settingMode = (int)setting + (job.KeepDisplayAspect ? 0x04 : 0);
 
-            hb_title_s title_s = new hb_title_s
-                                     {
-                                         crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right },
-                                         width = title.Width,
-                                         height = title.Height,
-                                         pixel_aspect_width = title.ParW,
-                                         pixel_aspect_height = title.ParH,
-                                         aspect = 0
-                                     };
+            hb_ui_geometry_s uiGeometry = new hb_ui_geometry_s
+            {
+                crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right },
+                dar = new hb_rational_t { den = 0, num = 0 },
+                height = job.Height,
+                itu_par = 0,
+                keep = settingMode,
+                maxWidth = job.MaxWidth,
+                maxHeight = job.MaxHeight,
+                mode = (int)(hb_anamorphic_mode_t)job.AnamorphicMode,
+                modulus = job.Modulus.HasValue ? job.Modulus.Value : 16,
+                par = job.AnamorphicMode != Anamorphic.Custom ? new hb_rational_t { den = title.ParH, num = title.ParW } : new hb_rational_t { den = job.ParH, num = job.ParW },
+                width = job.Width,
+            };
 
-            IntPtr pointer = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_title_s)));
-            Marshal.StructureToPtr(title_s, pointer, false);
-            nativeJob.title = pointer;
+            hb_geometry_s sourceGeometry = new hb_geometry_s
+            {
+                width = title.Width,
+                height = title.Height,
+                par = new hb_rational_t { den = title.ParH, num = title.ParW }
+            };
 
-            HBFunctions.hb_set_anamorphic_size(
-                ref nativeJob, ref outputWidth, ref outputHeight, ref outputParWidth, ref outputParHeight);
+            hb_geometry_s result = new hb_geometry_s();
 
+            HBFunctions.hb_set_anamorphic_size2(ref sourceGeometry, ref uiGeometry, ref result);
+
+            outputWidth = result.width;
+            outputHeight = result.height;
+            outputParWidth = result.par.den;
+            outputParHeight = result.par.num;
+            Debug.WriteLine("hb_set_anamorphic_size2: {0}x{1}", outputWidth, outputHeight);
             return new AnamorphicResult { OutputWidth = outputWidth, OutputHeight = outputHeight, OutputParWidth = outputParWidth, OutputParHeight = outputParHeight };
         }
     }

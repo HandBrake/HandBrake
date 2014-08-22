@@ -12,14 +12,9 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Windows;
-    using System.Windows.Media.Imaging;
-
-    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
 
@@ -109,6 +104,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private DelayedActionProcessor delayedPreviewprocessor = new DelayedActionProcessor();
 
+        /// <summary>
+        /// The current title.
+        /// </summary>
+        private Title currentTitle;
+
         #endregion
 
         #region Constructors and Destructors
@@ -119,12 +119,7 @@ namespace HandBrakeWPF.ViewModels
         public PictureSettingsViewModel()
         {
             this.Task = new EncodeTask();
-            this.SelectedModulus = 16;
-            this.MaintainAspectRatio = true;
-
-            // Default the Max Width / Height to 1080p format
-            this.MaxHeight = 1080;
-            this.MaxWidth = 1920;
+            this.Init();
         }
 
         #endregion
@@ -148,86 +143,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets CropBottom.
-        /// </summary>
-        public int CropBottom
-        {
-            get
-            {
-                return this.Task.Cropping.Bottom;
-            }
-
-            set
-            {
-                this.Task.Cropping.Bottom = value;
-                this.NotifyOfPropertyChange(() => this.CropBottom);
-                this.CropAdjust();
-                this.SetDisplaySize();
-                this.UpdatePreviewImage();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets CropLeft.
-        /// </summary>
-        public int CropLeft
-        {
-            get
-            {
-                return this.Task.Cropping.Left;
-            }
-
-            set
-            {
-                this.Task.Cropping.Left = value;
-                this.NotifyOfPropertyChange(() => this.CropLeft);
-                this.CropAdjust();
-                this.SetDisplaySize();
-                this.UpdatePreviewImage();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets CropRight.
-        /// </summary>
-        public int CropRight
-        {
-            get
-            {
-                return this.Task.Cropping.Right;
-            }
-
-            set
-            {
-                this.Task.Cropping.Right = value;
-                this.NotifyOfPropertyChange(() => this.CropRight);
-                this.CropAdjust();
-                this.SetDisplaySize();
-                this.UpdatePreviewImage();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets CropTop.
-        /// </summary>
-        public int CropTop
-        {
-            get
-            {
-                return this.Task.Cropping.Top;
-            }
-
-            set
-            {
-                this.Task.Cropping.Top = value;
-                this.NotifyOfPropertyChange(() => this.CropTop);
-                this.CropAdjust();
-                this.SetDisplaySize();
-                this.UpdatePreviewImage();
-            }
-        }
-
-        /// <summary>
         /// Gets or sets DisplaySize.
         /// </summary>
         public string DisplaySize
@@ -241,52 +156,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.displaySize = value;
                 this.NotifyOfPropertyChange(() => this.DisplaySize);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets DisplayWidth.
-        /// </summary>
-        public int DisplayWidth
-        {
-            get
-            {
-                return this.Task.DisplayWidth.HasValue
-                           ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture))
-                           : 0;
-            }
-
-            set
-            {
-                if (!object.Equals(this.Task.DisplayWidth, value))
-                {
-                    this.Task.DisplayWidth = value;
-                    this.CustomAnamorphicAdjust();
-                    this.NotifyOfPropertyChange(() => this.DisplayWidth);
-                    this.UpdatePreviewImage();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets Height.
-        /// </summary>
-        public int Height
-        {
-            get
-            {
-                return this.Task.Height.HasValue ? this.Task.Height.Value : 0;
-            }
-
-            set
-            {
-                if (!object.Equals(this.Task.Height, value))
-                {
-                    this.Task.Height = value;
-                    this.HeightAdjust();
-                    this.NotifyOfPropertyChange(() => this.Height);
-                    this.UpdatePreviewImage();
-                }
             }
         }
 
@@ -308,42 +177,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether IsCustomCrop.
-        /// </summary>
-        public bool IsCustomCrop
-        {
-            get
-            {
-                return this.Task.HasCropping;
-            }
-
-            set
-            {
-                this.Task.HasCropping = value;
-                this.NotifyOfPropertyChange(() => this.IsCustomCrop);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether MaintainAspectRatio.
-        /// </summary>
-        public bool MaintainAspectRatio
-        {
-            get
-            {
-                return this.Task.KeepDisplayAspect;
-            }
-
-            set
-            {
-                this.Task.KeepDisplayAspect = value;
-                this.WidthAdjust();
-                this.NotifyOfPropertyChange(() => this.MaintainAspectRatio);
-                this.UpdatePreviewImage();
-            }
-        }
-
-        /// <summary>
         /// Gets ModulusValues.
         /// </summary>
         public IEnumerable<int> ModulusValues
@@ -351,91 +184,6 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return new List<int> { 16, 8, 4, 2 };
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets ParHeight.
-        /// </summary>
-        public int ParHeight
-        {
-            get
-            {
-                return this.Task.PixelAspectY;
-            }
-
-            set
-            {
-                if (!object.Equals(this.Task.PixelAspectY, value))
-                {
-                    this.Task.PixelAspectY = value;
-                    this.CustomAnamorphicAdjust();
-                    this.NotifyOfPropertyChange(() => this.ParHeight);
-                    this.UpdatePreviewImage();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets ParWidth.
-        /// </summary>
-        public int ParWidth
-        {
-            get
-            {
-                return this.Task.PixelAspectX;
-            }
-
-            set
-            {
-                if (!object.Equals(this.Task.PixelAspectX, value))
-                {
-                    this.Task.PixelAspectX = value;
-                    this.CustomAnamorphicAdjust();
-                    this.NotifyOfPropertyChange(() => this.ParWidth);
-                    this.UpdatePreviewImage();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedAnamorphicMode.
-        /// </summary>
-        public Anamorphic SelectedAnamorphicMode
-        {
-            get
-            {
-                return this.Task.Anamorphic;
-            }
-
-            set
-            {
-                if (!object.Equals(this.SelectedAnamorphicMode, value))
-                {
-                    this.Task.Anamorphic = value;
-                    this.AnamorphicAdjust();
-                    this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
-                    this.UpdatePreviewImage();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedModulus.
-        /// </summary>
-        public int? SelectedModulus
-        {
-            get
-            {
-                return this.Task.Modulus;
-            }
-
-            set
-            {
-                this.Task.Modulus = value;
-                this.ModulusAdjust();
-                this.NotifyOfPropertyChange(() => this.SelectedModulus);
-                this.UpdatePreviewImage();
             }
         }
 
@@ -453,6 +201,45 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.showCustomAnamorphicControls = value;
                 this.NotifyOfPropertyChange(() => this.ShowCustomAnamorphicControls);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SourceInfo.
+        /// </summary>
+        public string SourceInfo
+        {
+            get
+            {
+                return this.sourceInfo;
+            }
+
+            set
+            {
+                this.sourceInfo = value;
+                this.NotifyOfPropertyChange(() => this.SourceInfo);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Task.
+        /// </summary>
+        public EncodeTask Task { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether WidthControlEnabled.
+        /// </summary>
+        public bool WidthControlEnabled
+        {
+            get
+            {
+                return this.widthControlEnabled;
+            }
+
+            set
+            {
+                this.widthControlEnabled = value;
+                this.NotifyOfPropertyChange(() => this.WidthControlEnabled);
             }
         }
 
@@ -489,67 +276,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets SourceInfo.
-        /// </summary>
-        public string SourceInfo
-        {
-            get
-            {
-                return this.sourceInfo;
-            }
-
-            set
-            {
-                this.sourceInfo = value;
-                this.NotifyOfPropertyChange(() => this.SourceInfo);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets Task.
-        /// </summary>
-        public EncodeTask Task { get; set; }
-
-        /// <summary>
-        /// Gets or sets Width.
-        /// </summary>
-        public int Width
-        {
-            get
-            {
-                return this.Task.Width.HasValue ? this.Task.Width.Value : 0;
-            }
-
-            set
-            {
-                if (!object.Equals(this.Task.Width, value))
-                {
-                    this.Task.Width = value;
-                    this.WidthAdjust();
-                    this.NotifyOfPropertyChange(() => this.Width);
-                    this.UpdatePreviewImage();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether WidthControlEnabled.
-        /// </summary>
-        public bool WidthControlEnabled
-        {
-            get
-            {
-                return this.widthControlEnabled;
-            }
-
-            set
-            {
-                this.widthControlEnabled = value;
-                this.NotifyOfPropertyChange(() => this.WidthControlEnabled);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets MaxHeight.
         /// </summary>
         public int MaxHeight
@@ -582,20 +308,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets SourceAspect.
-        /// </summary>
-        private Size SourceAspect
-        {
-            get
-            {
-                // display aspect = (width * par_width) / (height * par_height)
-                return new Size(
-                    (this.sourceParValues.Width * this.sourceResolution.Width),
-                    (this.sourceParValues.Height * this.sourceResolution.Height));
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether show keep ar.
         /// </summary>
         public bool ShowKeepAR
@@ -619,6 +331,263 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableStaticPreview);
+            }
+        }
+
+        #endregion
+
+        #region Task Properties
+
+        /// <summary>
+        /// Gets or sets CropBottom.
+        /// </summary>
+        public int CropBottom
+        {
+            get
+            {
+                return this.Task.Cropping.Bottom;
+            }
+
+            set
+            {
+                this.Task.Cropping.Bottom = value;
+                this.NotifyOfPropertyChange(() => this.CropBottom);
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets CropLeft.
+        /// </summary>
+        public int CropLeft
+        {
+            get
+            {
+                return this.Task.Cropping.Left;
+            }
+
+            set
+            {
+                this.Task.Cropping.Left = value;
+                this.NotifyOfPropertyChange(() => this.CropLeft);
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets CropRight.
+        /// </summary>
+        public int CropRight
+        {
+            get
+            {
+                return this.Task.Cropping.Right;
+            }
+
+            set
+            {
+                this.Task.Cropping.Right = value;
+                this.NotifyOfPropertyChange(() => this.CropRight);
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets CropTop.
+        /// </summary>
+        public int CropTop
+        {
+            get
+            {
+                return this.Task.Cropping.Top;
+            }
+
+            set
+            {
+                this.Task.Cropping.Top = value;
+                this.NotifyOfPropertyChange(() => this.CropTop);
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsCustomCrop.
+        /// </summary>
+        public bool IsCustomCrop
+        {
+            get
+            {
+                return this.Task.HasCropping;
+            }
+
+            set
+            {
+                this.Task.HasCropping = value;
+                this.NotifyOfPropertyChange(() => this.IsCustomCrop);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets DisplayWidth.
+        /// </summary>
+        public int DisplayWidth
+        {
+            get
+            {
+                return this.Task.DisplayWidth.HasValue
+                           ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture))
+                           : 0;
+            }
+
+            set
+            {
+                if (!object.Equals(this.Task.DisplayWidth, value))
+                {
+                    this.Task.DisplayWidth = value;
+                    this.NotifyOfPropertyChange(() => this.DisplayWidth);
+                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.DisplayWidth);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Width.
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return this.Task.Width.HasValue ? this.Task.Width.Value : 0;
+            }
+
+            set
+            {
+                if (!object.Equals(this.Task.Width, value))
+                {
+                    this.Task.Width = value;
+                    this.NotifyOfPropertyChange(() => this.Width);
+                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.Width);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Height.
+        /// </summary>
+        public int Height
+        {
+            get
+            {
+                return this.Task.Height.HasValue ? this.Task.Height.Value : 0;
+            }
+
+            set
+            {
+                if (!object.Equals(this.Task.Height, value))
+                {
+                    this.Task.Height = value;
+                    this.NotifyOfPropertyChange(() => this.Height);
+                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.Height);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether MaintainAspectRatio.
+        /// </summary>
+        public bool MaintainAspectRatio
+        {
+            get
+            {
+                return this.Task.KeepDisplayAspect;
+            }
+
+            set
+            {
+                this.Task.KeepDisplayAspect = value;
+                this.NotifyOfPropertyChange(() => this.MaintainAspectRatio);
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.MaintainAspectRatio);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets ParHeight.
+        /// </summary>
+        public int ParHeight
+        {
+            get
+            {
+                return this.Task.PixelAspectY;
+            }
+
+            set
+            {
+                if (!object.Equals(this.Task.PixelAspectY, value))
+                {
+                    this.Task.PixelAspectY = value;
+                    this.NotifyOfPropertyChange(() => this.ParHeight);
+                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.ParH);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets ParWidth.
+        /// </summary>
+        public int ParWidth
+        {
+            get
+            {
+                return this.Task.PixelAspectX;
+            }
+
+            set
+            {
+                if (!object.Equals(this.Task.PixelAspectX, value))
+                {
+                    this.Task.PixelAspectX = value;
+                    this.NotifyOfPropertyChange(() => this.ParWidth);
+                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.ParW);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedAnamorphicMode.
+        /// </summary>
+        public Anamorphic SelectedAnamorphicMode
+        {
+            get
+            {
+                return this.Task.Anamorphic;
+            }
+
+            set
+            {
+                if (!object.Equals(this.SelectedAnamorphicMode, value))
+                {
+                    this.Task.Anamorphic = value;
+                    this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
+                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.Anamorphic);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedModulus.
+        /// </summary>
+        public int? SelectedModulus
+        {
+            get
+            {
+                return this.Task.Modulus;
+            }
+
+            set
+            {
+                this.Task.Modulus = value;
+                this.NotifyOfPropertyChange(() => this.SelectedModulus);
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Modulus);
             }
         }
 
@@ -665,11 +634,11 @@ namespace HandBrakeWPF.ViewModels
                     this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
 
                     // Set the width, then check the height doesn't breach the max height and correct if necessary.
-                    int width = this.GetModulusValue(this.getRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth));
+                    int width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth));
                     this.Width = width;
 
                     // If we have a max height, make sure we havn't breached it.
-                    int height = this.GetModulusValue(this.getRes((this.sourceResolution.Height - this.CropTop - this.CropBottom), preset.Task.MaxHeight));
+                    int height = this.GetModulusValue(this.GetRes((this.sourceResolution.Height - this.CropTop - this.CropBottom), preset.Task.MaxHeight));
                     if (preset.Task.MaxHeight.HasValue && this.Height > preset.Task.MaxHeight.Value)
                     {
                         this.Height = height;
@@ -740,6 +709,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
+            this.currentTitle = title;
             this.Task = task;
 
             if (title != null)
@@ -751,25 +721,25 @@ namespace HandBrakeWPF.ViewModels
                 // Update the cropping values, preffering those in the presets.
                 if (!preset.Task.HasCropping)
                 {
-                    this.CropTop = title.AutoCropDimensions.Top;
-                    this.CropBottom = title.AutoCropDimensions.Bottom;
-                    this.CropLeft = title.AutoCropDimensions.Left;
-                    this.CropRight = title.AutoCropDimensions.Right;
+                    this.Task.Cropping.Top = title.AutoCropDimensions.Top;
+                    this.Task.Cropping.Bottom = title.AutoCropDimensions.Bottom;
+                    this.Task.Cropping.Left = title.AutoCropDimensions.Left;
+                    this.Task.Cropping.Right = title.AutoCropDimensions.Right;
                     this.IsCustomCrop = false;
                 }
                 else
                 {
-                    this.CropLeft = preset.Task.Cropping.Left;
-                    this.CropRight = preset.Task.Cropping.Right;
-                    this.CropTop = preset.Task.Cropping.Top;
-                    this.CropBottom = preset.Task.Cropping.Bottom;
+                    this.Task.Cropping.Left = preset.Task.Cropping.Left;
+                    this.Task.Cropping.Right = preset.Task.Cropping.Right;
+                    this.Task.Cropping.Top = preset.Task.Cropping.Top;
+                    this.Task.Cropping.Bottom = preset.Task.Cropping.Bottom;
                     this.IsCustomCrop = true;
                 }
 
                 if (preset.PictureSettingsMode == PresetPictureSettingsMode.None)
                 {
                     // We have no instructions, so simply set it to the source.
-                    this.Width = this.GetModulusValue(this.sourceResolution.Width - this.CropLeft - this.CropRight);
+                    this.Task.Width = this.GetModulusValue(this.sourceResolution.Width - this.CropLeft - this.CropRight);
                     this.MaintainAspectRatio = true;
                 }
                 else
@@ -796,23 +766,18 @@ namespace HandBrakeWPF.ViewModels
                     // Set the Width, and Maintain Aspect ratio. That should calc the Height for us.
                     if (this.SelectedAnamorphicMode == Anamorphic.None)
                     {
-                        this.Width = preset.Task.Width ?? (this.MaxWidth - this.CropLeft - this.CropRight);
+                        this.Task.Width = preset.Task.Width ?? (this.MaxWidth - this.CropLeft - this.CropRight);
                         // Note: This will be auto-corrected in the property if it's too large.
                     }
                     else
                     {
-                        this.Width = preset.Task.Width ?? this.MaxWidth;
+                        this.Task.Width = preset.Task.Width ?? this.MaxWidth;
                     }
 
                     // If our height is too large, let it downscale the width for us by setting the height to the lower value.
                     if (!this.MaintainAspectRatio && this.Height > this.MaxHeight)
                     {
-                        this.Height = this.MaxHeight;
-                    }
-
-                    if (this.SelectedAnamorphicMode == Anamorphic.Custom)
-                    {
-                        this.AnamorphicAdjust(); // Refresh the values
+                        this.Task.Height = this.MaxHeight;
                     }
                 }
 
@@ -824,6 +789,8 @@ namespace HandBrakeWPF.ViewModels
                     title.AspectRatio,
                     title.ParVal.Width,
                     title.ParVal.Height);
+
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Width);
             }
 
             this.NotifyOfPropertyChange(() => this.Task);
@@ -848,305 +815,19 @@ namespace HandBrakeWPF.ViewModels
         #region Methods
 
         /// <summary>
-        /// The crop adjust.
+        /// The init.
         /// </summary>
-        private void CropAdjust()
+        private void Init()
         {
-            PictureSize.AnamorphicResult result = PictureSize.hb_set_anamorphic_size(this.GetPictureSettings(), this.GetPictureTitleInfo());
-            switch (this.SelectedAnamorphicMode)
-            {
-                case Anamorphic.None:
-                    // this.Width = result.OutputWidth;
-                    // this.Height = result.OutputHeight;
-                    break;
-                case Anamorphic.Strict:
-                case Anamorphic.Loose:
-                case Anamorphic.Custom:
-                    double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
-                    this.DisplaySize = this.sourceResolution.IsEmpty
-                                   ? string.Empty
-                                   : string.Format("Storage: {0}x{1}, Display: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
-                    break;
-            }
-        }
+            this.Task.Modulus = 16;
+            this.Task.KeepDisplayAspect = true;
 
-        /// <summary>
-        /// Adjust other values after the user has altered the anamorphic.
-        /// </summary>
-        private void AnamorphicAdjust()
-        {
-            this.ShowDisplaySize = true;
-            this.ShowKeepAR = true;
-            switch (this.SelectedAnamorphicMode)
-            {
-                case Anamorphic.None:
-                    this.WidthControlEnabled = true;
-                    this.HeightControlEnabled = true;
-                    this.ShowCustomAnamorphicControls = false;
-                    this.ShowModulus = true;
-                    this.ShowDisplaySize = true;
-                    this.ShowKeepAR = true;
-                    this.SelectedModulus = 16; // Reset
-                    if (this.Width == 0)
-                    {
-                        this.Width = this.GetModulusValue(this.sourceResolution.Width - this.CropLeft - this.CropRight);
-                    }
+            this.NotifyOfPropertyChange(() => this.SelectedModulus);
+            this.NotifyOfPropertyChange(() => this.MaintainAspectRatio);
 
-                    if (!this.MaintainAspectRatio && this.Height == 0)
-                    {
-                        this.Height = this.GetModulusValue(this.sourceResolution.Height - this.CropTop - this.CropBottom);
-                    }
-
-                    this.MaintainAspectRatio = true;
-
-                    this.SetDisplaySize();
-                    break;
-                case Anamorphic.Strict:
-                    this.WidthControlEnabled = false;
-                    this.HeightControlEnabled = false;
-                    this.ShowCustomAnamorphicControls = false;
-                    this.ShowModulus = false;
-                    this.SelectedModulus = 16; // Reset
-                    this.ShowKeepAR = false;
-
-                    this.Width = 0;
-                    this.Height = 0;
-                    this.SetDisplaySize();
-                    break;
-
-                case Anamorphic.Loose:
-                    this.WidthControlEnabled = true;
-                    this.HeightControlEnabled = false;
-                    this.ShowCustomAnamorphicControls = false;
-                    this.ShowModulus = true;
-
-                    // Reset to the source size.
-                    this.Width = this.sourceResolution.Width;
-                    this.Height = 0; // this.sourceResolution.Height - this.CropTop - this.CropBottom;
-                    this.ShowKeepAR = false;
-
-                    this.SetDisplaySize();
-                    break;
-
-                case Anamorphic.Custom:
-                    this.WidthControlEnabled = true;
-                    this.HeightControlEnabled = true;
-                    this.ShowCustomAnamorphicControls = true;
-                    this.MaintainAspectRatio = false;  // TODO Fix when implementing custom
-                    this.ShowModulus = true;
-                    this.ShowDisplaySize = false; // Disabled for Custom until we implement it properly. TODO
-                    this.ShowKeepAR = false;
-
-                    // Ignore any of the users current settings and reset to source to make things easier.
-                    this.Width = this.sourceResolution.Width;
-                    this.Height = this.sourceResolution.Height - this.CropTop - this.CropBottom;
-
-                    // Set the Display Width and set the Par X/Y to the source values initially.      
-                    this.ParWidth = this.sourceParValues.Width;
-                    this.ParHeight = this.sourceParValues.Height;
-                    if (this.ParHeight != 0)
-                    {
-                        this.DisplayWidth = (this.Width * this.ParWidth / this.ParHeight);
-                    }
-
-                    // this.SetDisplaySize();
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Adjust other values after the user has altered one of the custom anamorphic settings
-        /// </summary>
-        private void CustomAnamorphicAdjust()
-        {
-            if (this.SelectedAnamorphicMode == Anamorphic.Custom)
-            {
-                if (this.MaintainAspectRatio && this.DisplayWidth != 0)
-                {
-                    this.ParWidth = this.DisplayWidth;
-                    this.ParHeight = this.Width;
-                }
-
-                this.SetDisplaySize();
-            }
-        }
-
-        /// <summary>
-        /// For a given value, correct so that it matches the users currently selected modulus value
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <returns>
-        /// Value corrected so that value % selected modulus == 0
-        /// </returns>
-        private int GetModulusValue(double value)
-        {
-            if (this.SelectedModulus == null)
-            {
-                return 0;
-            }
-
-            double remainder = value % this.SelectedModulus.Value;
-
-            if (remainder.Equals(0.0d))
-            {
-                return (int)Math.Abs(value);
-            }
-
-            double result = remainder >= ((double)this.SelectedModulus.Value / 2)
-                       ? value + (this.SelectedModulus.Value - remainder)
-                       : value - remainder;
-
-            return (int)Math.Abs(result);
-        }
-
-        /// <summary>
-        /// Adjust other values after the user has altered the height
-        /// </summary>
-        private void HeightAdjust()
-        {
-            if (this.sourceResolution == new Size(0, 0))
-            {
-                return;
-            }
-
-            if (this.Height > this.sourceResolution.Height)
-            {
-                this.Task.Height = this.sourceResolution.Height;
-                this.NotifyOfPropertyChange(() => this.Task.Height);
-            }
-
-            switch (this.SelectedAnamorphicMode)
-            {
-                case Anamorphic.None:
-                    if (this.MaintainAspectRatio)
-                    {
-                        double cropWidth = this.sourceResolution.Width - this.CropLeft - this.CropRight;
-                        double cropHeight = this.sourceResolution.Height - this.CropTop - this.CropBottom;
-
-                        double newWidth = ((double)this.Height * this.sourceResolution.Height * this.SourceAspect.Width *
-                                            cropWidth) /
-                                           ((double)this.sourceResolution.Width * this.SourceAspect.Height * cropHeight);
-
-                        this.Task.Width = this.GetModulusValue(newWidth);
-                        this.NotifyOfPropertyChange(() => this.Task.Width);
-                    }
-
-                    break;
-                case Anamorphic.Custom:
-                    this.SetDisplaySize();
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Adjust other values after the user has altered the modulus
-        /// </summary>
-        private void ModulusAdjust()
-        {
-            this.WidthAdjust();
-        }
-
-        /// <summary>
-        /// Set the display size text
-        /// </summary>
-        private void SetDisplaySize()
-        {
-            /*
-            * Handle Anamorphic Display
-            */
-            if (this.SelectedAnamorphicMode != Anamorphic.None)
-            {
-                PictureSize.AnamorphicResult result = PictureSize.hb_set_anamorphic_size(this.GetPictureSettings(), this.GetPictureTitleInfo());
-                double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
-
-                this.DisplaySize = this.sourceResolution.IsEmpty
-                                     ? string.Format(Properties.Resources.PictureSettings_OutputResolution, "None")
-                                     : string.Format("Output: {0}x{1}, Anamorphic: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
-            }
-            else
-            {
-                this.DisplaySize = this.sourceResolution.IsEmpty
-                     ? string.Empty
-                     : string.Format("Output: {0}x{1}", this.Width, this.Height);
-            }
-        }
-
-        /// <summary>
-        /// Adjust other values after the user has altered the width
-        /// </summary>
-        private void WidthAdjust()
-        {
-            if (this.Width > this.sourceResolution.Width)
-            {
-                this.Task.Width = this.sourceResolution.Width;
-                this.NotifyOfPropertyChange(() => this.Task.Width);
-            }
-
-            switch (this.SelectedAnamorphicMode)
-            {
-                case Anamorphic.None:
-                    if (this.MaintainAspectRatio)
-                    {
-                        double cropWidth = this.sourceResolution.Width - this.CropLeft - this.CropRight;
-                        double cropHeight = this.sourceResolution.Height - this.CropTop - this.CropBottom;
-
-                        if (this.SourceAspect.Width == 0 && this.SourceAspect.Height == 0)
-                        {
-                            break;
-                        }
-
-                        double newHeight = ((double)this.Width * this.sourceResolution.Width * this.SourceAspect.Height *
-                                            cropHeight) /
-                                           ((double)this.sourceResolution.Height * this.SourceAspect.Width * cropWidth);
-
-                        this.Task.Height = this.GetModulusValue(newHeight);
-                        this.NotifyOfPropertyChange(() => this.Height);
-                    }
-                    this.SetDisplaySize();
-                    break;
-                case Anamorphic.Strict:
-                    this.Task.Width = 0;
-                    this.Task.Height = 0;
-
-                    this.NotifyOfPropertyChange(() => this.Width);
-                    this.NotifyOfPropertyChange(() => this.Height);
-                    this.SetDisplaySize();
-                    break;
-                case Anamorphic.Loose:
-                    this.Task.Height = 0;
-                    this.NotifyOfPropertyChange(() => this.Width);
-                    this.NotifyOfPropertyChange(() => this.Height);
-                    this.SetDisplaySize();
-                    break;
-                case Anamorphic.Custom:
-                    if (this.MaintainAspectRatio)
-                    {
-                        this.ParWidth = this.DisplayWidth;
-                        this.ParHeight = this.Width;
-                    }
-
-                    this.SetDisplaySize();
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Quick function to get the max resolution value
-        ///  </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="max">
-        /// The max.
-        /// </param>
-        /// <returns>
-        /// An Int
-        /// </returns>
-        private int getRes(int value, int? max)
-        {
-            return max.HasValue ? (value > max.Value ? max.Value : value) : value;
+            // Default the Max Width / Height to 1080p format
+            this.MaxHeight = 1080;
+            this.MaxWidth = 1920;
         }
 
         /// <summary>
@@ -1204,18 +885,201 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Updates the preview after a period of time.
-        /// This gives the user the opertunity to make changes in quick sucession without the image refreshing instantly
-        /// and causing performance lag.
+        /// Recalculate the picture settings when the user changes a particular field defined in the ChangedPictureField enum.
+        /// The properties in this class are dumb. They simply call this method if there is a change.
+        /// It is the job of this method to update all affected private fields and raise change notifications. 
         /// </summary>
-        private void UpdatePreviewImage()
+        /// <param name="changedField">
+        /// The changed field.
+        /// </param>
+        private void RecaulcatePictureSettingsProperties(ChangedPictureField changedField)
         {
+            // Sanity Check
+            if (this.currentTitle == null)
+            {
+                return;
+            }
+
+            // Step 1, Update what controls are visibile.
+            this.UpdateVisibileControls();
+
+            // Step 2, Set sensible defaults
+            if (changedField == ChangedPictureField.Anamorphic && (this.SelectedAnamorphicMode == Anamorphic.None || this.SelectedAnamorphicMode == Anamorphic.Loose))
+            {
+                this.Task.Width = this.sourceResolution.Width > this.MaxWidth
+                                      ? this.MaxWidth
+                                      : this.sourceResolution.Width;
+                this.Task.KeepDisplayAspect = true;
+            }
+
+            // Choose which setting to keep.
+            PictureSize.KeepSetting setting = PictureSize.KeepSetting.HB_KEEP_WIDTH;
+            switch (changedField)
+            {
+                case ChangedPictureField.Width:
+                    setting = PictureSize.KeepSetting.HB_KEEP_WIDTH;
+                    break;
+                case ChangedPictureField.Height:
+                    setting = PictureSize.KeepSetting.HB_KEEP_HEIGHT;
+                    break;
+            }
+
+            // Step 2, For the changed field, call hb_set_anamorphic_size and process the results.
+            PictureSize.AnamorphicResult result = PictureSize.hb_set_anamorphic_size2(this.GetPictureSettings(), this.GetPictureTitleInfo(), setting);
+
+            switch (this.SelectedAnamorphicMode)
+            {
+                case Anamorphic.None:
+                    this.Task.Width = result.OutputWidth;
+                    this.Task.Height = result.OutputHeight;
+                    break;
+                case Anamorphic.Strict:
+                    this.Task.Width = 0;
+                    this.Task.Height = 0;
+                    break;
+                case Anamorphic.Loose:
+                    this.Task.Width = result.OutputWidth;
+                    this.Task.Height = 0;
+                    break;
+                case Anamorphic.Custom:
+                    this.Task.Width = result.OutputWidth;
+                    this.Task.Height = result.OutputHeight;
+                    break;
+            }
+
+            // Step 3, Set the display width label to indicate the output.
+            double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
+            this.DisplaySize = this.sourceResolution.IsEmpty
+                           ? string.Empty
+                           : string.Format("Storage: {0}x{1}, Display: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
+
+            // Step 4, Force an update on all the UI elements.
+            this.NotifyOfPropertyChange(() => this.Width);
+            this.NotifyOfPropertyChange(() => this.Height);
+            this.NotifyOfPropertyChange(() => this.ParWidth);
+            this.NotifyOfPropertyChange(() => this.ParHeight);
+            this.NotifyOfPropertyChange(() => this.CropTop);
+            this.NotifyOfPropertyChange(() => this.CropBottom);
+            this.NotifyOfPropertyChange(() => this.CropLeft);
+            this.NotifyOfPropertyChange(() => this.CropRight);
+            this.NotifyOfPropertyChange(() => this.SelectedModulus);
+            this.NotifyOfPropertyChange(() => this.MaintainAspectRatio);
+
+            // Step 5, Update the Preview
             if (delayedPreviewprocessor != null && this.Task != null && this.StaticPreviewViewModel != null && this.StaticPreviewViewModel.IsOpen)
             {
                 delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task), 800);
             }
         }
 
+        /// <summary>
+        /// The update visibile controls.
+        /// </summary>
+        private void UpdateVisibileControls()
+        {
+            this.ShowDisplaySize = true;
+            this.ShowKeepAR = true;
+
+            switch (this.SelectedAnamorphicMode)
+            {
+                case Anamorphic.None:
+                    this.WidthControlEnabled = true;
+                    this.HeightControlEnabled = true;
+                    this.ShowCustomAnamorphicControls = false;
+                    this.ShowModulus = true;
+                    this.ShowDisplaySize = true;
+                    this.ShowKeepAR = true;
+                    break;
+                case Anamorphic.Strict:
+                    this.WidthControlEnabled = false;
+                    this.HeightControlEnabled = false;
+                    this.ShowCustomAnamorphicControls = false;
+                    this.ShowModulus = false;
+                    this.ShowKeepAR = false;
+                    break;
+
+                case Anamorphic.Loose:
+                    this.WidthControlEnabled = true;
+                    this.HeightControlEnabled = false;
+                    this.ShowCustomAnamorphicControls = false;
+                    this.ShowModulus = true;
+                    this.ShowKeepAR = false;
+                    break;
+
+                case Anamorphic.Custom:
+                    this.WidthControlEnabled = true;
+                    this.HeightControlEnabled = true;
+                    this.ShowCustomAnamorphicControls = true;
+                    this.ShowModulus = true;
+                    this.ShowDisplaySize = false;
+                    this.ShowKeepAR = false;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// For a given value, correct so that it matches the users currently selected modulus value
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// Value corrected so that value % selected modulus == 0
+        /// </returns>
+        private int GetModulusValue(double value)
+        {
+            if (this.SelectedModulus == null)
+            {
+                return 0;
+            }
+
+            double remainder = value % this.SelectedModulus.Value;
+
+            if (remainder.Equals(0.0d))
+            {
+                return (int)Math.Abs(value);
+            }
+
+            double result = remainder >= ((double)this.SelectedModulus.Value / 2)
+                       ? value + (this.SelectedModulus.Value - remainder)
+                       : value - remainder;
+
+            return (int)Math.Abs(result);
+        }
+
+        /// <summary>
+        /// The get res.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        private int GetRes(int value, int? max)
+        {
+            return max.HasValue ? (value > max.Value ? max.Value : value) : value;
+        }
+
         #endregion
+    }
+
+    /// <summary>
+    /// The changed picture field.
+    /// </summary>
+    enum ChangedPictureField
+    {
+        Width,
+        Height,
+        ParW,
+        ParH,
+        DisplayWidth,
+        Crop,
+        Anamorphic,
+        MaintainAspectRatio,
+        Modulus
     }
 }
