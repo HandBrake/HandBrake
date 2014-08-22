@@ -36,6 +36,8 @@ extern NSString *keyTitleTag;
 {
     IBOutlet NSWindow            * fWindow;
 
+    IBOutlet NSTabView *fMainTabView;
+
     /* Video view controller */
     HBVideoController       * fVideoController;
     IBOutlet NSTabViewItem  * fVideoTab;
@@ -51,6 +53,10 @@ extern NSString *keyTitleTag;
 	/* Chapters view controller */
 	HBChapterTitlesController    * fChapterTitlesController;
     IBOutlet NSTabViewItem       * fChaptersTitlesTab;
+
+    /* Advanced options tab */
+    HBAdvancedController         * fAdvancedOptions;
+	IBOutlet NSTabViewItem       * fAdvancedTab;
 
     /* Main Menu Outlets */
     NSMenuItem                   * fOpenSourceTitleMMenu;
@@ -68,11 +74,7 @@ extern NSString *keyTitleTag;
     
     /* Picture Preview */
     HBPreviewController            * fPreviewController;
-    
-    /* Advanced options tab */
-    HBAdvancedController         * fAdvancedOptions;
-	IBOutlet NSBox               * fAdvancedView;
-    
+
     HBPreferencesController      * fPreferencesController;
     
     /* Queue panel */

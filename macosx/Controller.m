@@ -663,7 +663,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
     // setup the advanced view controller
     fAdvancedOptions = [[HBAdvancedController alloc] init];
-	[fAdvancedView addSubview: [fAdvancedOptions view]];
+	[fAdvancedTab setView:[fAdvancedOptions view]];
 
     // setup the video view controller
     fVideoController = [[HBVideoController alloc] init];

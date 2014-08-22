@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A329r" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1060" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -64,18 +64,6 @@
                                 <view key="view" id="2016">
                                     <rect key="frame" x="10" y="25" width="900" height="319"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <box title="Box" boxType="oldStyle" borderType="none" titlePosition="noTitle" id="2513">
-                                            <rect key="frame" x="-3" y="17" width="906" height="295"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <view key="contentView">
-                                                <rect key="frame" x="0.0" y="0.0" width="906" height="295"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            </view>
-                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </box>
-                                    </subviews>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Chapters" identifier="4" id="1989">
@@ -1088,7 +1076,7 @@ DQ
         <customObject id="240" userLabel="HBController" customClass="HBController">
             <connections>
                 <outlet property="fAddPresetPanel" destination="1867" id="1869"/>
-                <outlet property="fAdvancedView" destination="2513" id="2516"/>
+                <outlet property="fAdvancedTab" destination="2015" id="4eO-Lg-7cH"/>
                 <outlet property="fAudioTab" destination="1475" id="AuZ-Uf-bla"/>
                 <outlet property="fChaptersTitlesTab" destination="1989" id="oUt-8L-Ag2"/>
                 <outlet property="fDstBrowseButton" destination="1562" id="1578"/>
@@ -1100,6 +1088,7 @@ DQ
                 <outlet property="fDstMp4LargeFileCheck" destination="2364" id="4578"/>
                 <outlet property="fDstMp4iPodFileCheck" destination="4967" id="4969"/>
                 <outlet property="fEncodeStartStopPopUp" destination="5513" id="5527"/>
+                <outlet property="fMainTabView" destination="1474" id="XMU-Vi-8QM"/>
                 <outlet property="fOpenSourceTitleMMenu" destination="2698" id="2700"/>
                 <outlet property="fPresetDrawer" destination="1841" id="1889"/>
                 <outlet property="fPresetNewDesc" destination="2673" id="2674"/>
