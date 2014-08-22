@@ -1,0 +1,9 @@
+$(eval $(call import.MODULE.defs,CMAKE,cmake))
+$(eval $(call import.CONTRIB.defs,CMAKE))
+
+CMAKE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/cmake-3.0.1.tar.gz
+
+CMAKE.CONFIGURE.deps =
+CMAKE.CONFIGURE.shared =
+CMAKE.CONFIGURE.static =
+CMAKE.CONFIGURE.extra = --no-qt-gui
