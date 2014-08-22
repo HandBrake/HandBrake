@@ -4197,8 +4197,20 @@ fWorkingCount = 0;
     hb_title_t *title = (hb_title_t *)
     hb_list_item(list, (int)[fSrcTitlePopUp indexOfSelectedItem]);
 
+    NSString *sourceName = nil;
+    // Get the file name
+    if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) &&
+        hb_list_count( list ) > 1 )
+    {
+        sourceName = @(title->name);
+    }
+    else
+    {
+        sourceName = [browsedSourceDisplayName stringByDeletingPathExtension];
+    }
+
     // Generate a new file name
-    NSString *fileName = [HBUtilities automaticNameForSource:@(title->name)
+    NSString *fileName = [HBUtilities automaticNameForSource:sourceName
                                                        title:title->index
                                                     chapters:NSMakeRange([fSrcChapterStartPopUp indexOfSelectedItem] + 1, [fSrcChapterEndPopUp indexOfSelectedItem] + 1)
                                                      quality:fVideoController.qualityType ? fVideoController.selectedQuality : 0
