@@ -8,7 +8,7 @@
 #import "HBAudioController.h"
 #import "Controller.h"
 #import "HBAudio.h"
-#import "HBAudioSettings.h"
+#import "HBAudioDefaults.h"
 #import "HBAudioDefaultsController.h"
 #import "HBAudioTrackPreset.h"
 #import "hb.h"
@@ -44,7 +44,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 // Defaults
 @property (nonatomic, readwrite, retain) HBAudioDefaultsController *defaultsController;
-@property (nonatomic, readwrite, retain) HBAudioSettings *settings;
+@property (nonatomic, readwrite, retain) HBAudioDefaults *settings;
 
 @end
 
@@ -199,7 +199,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
-    self.settings = [[[HBAudioSettings alloc] init] autorelease];
+    self.settings = [[[HBAudioDefaults alloc] init] autorelease];
     [self.settings applySettingsFromPreset:preset];
     [self.settings validateEncoderFallbackForVideoContainer:[self.videoContainerTag intValue]];
 

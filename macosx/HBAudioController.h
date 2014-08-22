@@ -19,7 +19,7 @@ extern NSString *keyAudioInputChannelLayout;
 extern NSString *HBMixdownChangedNotification;
 
 @class HBAudio;
-@class HBAudioSettings;
+@class HBAudioDefaults;
 /**
  *  HBAudioController
  *
@@ -30,7 +30,7 @@ extern NSString *HBMixdownChangedNotification;
 @property (nonatomic, readonly, retain) NSArray *masterTrackArray;
 @property (nonatomic, readonly) NSDictionary *noneTrack;
 
-@property(nonatomic, readonly) HBAudioSettings *settings;
+@property(nonatomic, readonly) HBAudioDefaults *settings;
 
 // Get the list of audio tracks
 @property (readonly, nonatomic, copy) NSArray *audioTracks;

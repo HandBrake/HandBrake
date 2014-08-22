@@ -12,7 +12,7 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackSelectionBehavior) {
     HBSubtitleTrackSelectionBehaviorAll,
 };
 
-@interface HBSubtitlesSettings : NSObject
+@interface HBSubtitlesDefaults : NSObject
 
 @property (nonatomic, readwrite) HBSubtitleTrackSelectionBehavior trackSelectionBehavior;
 @property (nonatomic, readwrite, retain) NSMutableArray *trackSelectionLanguages;

@@ -5,14 +5,14 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBSubtitlesDefaultsController.h"
-#import "HBSubtitlesSettings.h"
+#import "HBSubtitlesDefaults.h"
 #import "HBLanguagesSelection.h"
 
 static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 @interface HBSubtitlesDefaultsController ()
 
-@property (nonatomic, readonly) HBSubtitlesSettings *settings;
+@property (nonatomic, readonly) HBSubtitlesDefaults *settings;
 
 @property (nonatomic, readonly) HBLanguagesSelection *languagesList;
 @property (assign) IBOutlet HBLanguageArrayController *tableController;
@@ -22,7 +22,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 @implementation HBSubtitlesDefaultsController
 
-- (instancetype)initWithSettings:(HBSubtitlesSettings *)settings
+- (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings
 {
     self = [super initWithWindowNibName:@"SubtitlesDefaults"];
     if (self)

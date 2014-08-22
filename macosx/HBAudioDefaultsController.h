@@ -6,11 +6,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBAudioSettings;
+@class HBAudioDefaults;
 
 @interface HBAudioDefaultsController : NSWindowController
 
-- (instancetype)initWithSettings:(HBAudioSettings *)settings;
+- (instancetype)initWithSettings:(HBAudioDefaults *)settings;
 
 @property (nonatomic, readwrite, assign) id delegate;
 

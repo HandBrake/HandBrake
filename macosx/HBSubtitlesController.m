@@ -6,7 +6,7 @@
 
 #import "HBSubtitlesController.h"
 #import "HBSubtitlesDefaultsController.h"
-#import "HBSubtitlesSettings.h"
+#import "HBSubtitlesDefaults.h"
 
 #import "Controller.h"
 #include "hb.h"
@@ -51,7 +51,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 // Defaults
 @property (nonatomic, readwrite, retain) HBSubtitlesDefaultsController *defaultsController;
-@property (nonatomic, readwrite, retain) HBSubtitlesSettings *settings;
+@property (nonatomic, readwrite, retain) HBSubtitlesDefaults *settings;
 
 // Table view cells models
 @property (nonatomic, readonly) NSArray *charCodeArray;
@@ -221,7 +221,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
-    self.settings = [[[HBSubtitlesSettings alloc] init] autorelease];
+    self.settings = [[[HBSubtitlesDefaults alloc] init] autorelease];
     [self.settings applySettingsFromPreset:preset];
 
     [self addTracksFromDefaults:self];

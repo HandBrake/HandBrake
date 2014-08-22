@@ -5,14 +5,14 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBAudioDefaultsController.h"
-#import "HBAudioSettings.h"
+#import "HBAudioDefaults.h"
 #import "HBLanguagesSelection.h"
 
 static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 @interface HBAudioDefaultsController ()
 
-@property (nonatomic, readonly) HBAudioSettings *settings;
+@property (nonatomic, readonly) HBAudioDefaults *settings;
 
 @property (nonatomic, readonly) HBLanguagesSelection *languagesList;
 @property (assign) IBOutlet HBLanguageArrayController *tableController;
@@ -24,7 +24,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 @implementation HBAudioDefaultsController
 
-- (instancetype)initWithSettings:(HBAudioSettings *)settings
+- (instancetype)initWithSettings:(HBAudioDefaults *)settings
 {
     self = [super initWithWindowNibName:@"AudioDefaults"];
     if (self)

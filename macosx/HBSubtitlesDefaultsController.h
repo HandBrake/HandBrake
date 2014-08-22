@@ -6,11 +6,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBSubtitlesSettings;
+@class HBSubtitlesDefaults;
 
 @interface HBSubtitlesDefaultsController : NSWindowController
 
-- (instancetype)initWithSettings:(HBSubtitlesSettings *)settings;
+- (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings;
 
 @property (nonatomic, readwrite, assign) id delegate;
 

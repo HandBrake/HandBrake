@@ -1,23 +1,21 @@
-//
-//  HBAudioSettings.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 29/07/14.
-//
-//
+/*  HBAudioSettings.m $
 
-#import "HBAudioSettings.h"
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
+
+#import "HBAudioDefaults.h"
 #import "HBAudioTrackPreset.h"
 #import "hb.h"
 #import "lang.h"
 
-@interface HBAudioSettings ()
+@interface HBAudioDefaults ()
 
 @property (nonatomic, readwrite) int container;
 
 @end
 
-@implementation HBAudioSettings
+@implementation HBAudioDefaults
 
 - (instancetype)init
 {

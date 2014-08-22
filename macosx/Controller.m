@@ -17,7 +17,7 @@
 
 #import "HBPresetsViewController.h"
 
-#import "HBAudioSettings.h"
+#import "HBAudioDefaults.h"
 
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";

@@ -4,9 +4,9 @@
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import "HBSubtitlesSettings.h"
+#import "HBSubtitlesDefaults.h"
 
-@implementation HBSubtitlesSettings
+@implementation HBSubtitlesDefaults
 
 - (instancetype)init
 {

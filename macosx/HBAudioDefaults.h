@@ -1,10 +1,8 @@
-//
-//  HBAudioSettings.h
-//  HandBrake
-//
-//  Created by Damiano Galassi on 29/07/14.
-//
-//
+/*  HBAudioSettings.h $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
 
@@ -18,7 +16,7 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
  *  HBAudioSettings
  *  Stores the audio defaults settings.
  */
-@interface HBAudioSettings : NSObject
+@interface HBAudioDefaults : NSObject
 
 @property (nonatomic, readwrite) HBAudioTrackSelectionBehavior trackSelectionBehavior;
 @property (nonatomic, readwrite, retain) NSMutableArray *trackSelectionLanguages;
