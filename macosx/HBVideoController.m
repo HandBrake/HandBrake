@@ -1038,6 +1038,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
             fMediumPresetIndex = i;
         }
     }
+    [fPresetNames autorelease];
     fPresetNames = [[NSArray alloc] initWithArray:tmp_array];
     [tmp_array release];
     // setup the preset slider

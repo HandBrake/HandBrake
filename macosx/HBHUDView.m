@@ -64,6 +64,7 @@
     if (NSClassFromString(@"NSVisualEffectView"))
     {
         // Return a NSVisualEffectView instance
+        [self release];
         self = [[NSClassFromString(@"NSVisualEffectView") alloc] initWithFrame:frame];
         if (self)
         {
