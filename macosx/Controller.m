@@ -687,8 +687,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fSrcChapterStartPopUp, fSrcChapterToField,
         fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
         fDstFormatField, fDstFormatPopUp, fDstFile1Field, fDstFile2Field,
-        fDstBrowseButton, fSrcAngleLabel,
-        fSrcAnglePopUp, fDstMp4LargeFileCheck,
+        fDstBrowseButton, fSrcAngleLabel, fSrcAnglePopUp,
         fDstMp4HttpOptFileCheck, fDstMp4iPodFileCheck,
         fEncodeStartStopPopUp, fSrcTimeStartEncodingField,
         fSrcTimeEndEncodingField, fSrcFrameStartEncodingField,
@@ -2426,8 +2425,6 @@ fWorkingCount = 0;
      */
     [queueFileJob setObject:fChapterTitlesController.chapterTitlesArray forKey:@"ChapterNames"];
     
-    /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-	[queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
     /* Mux mp4 with http optimization */
     [queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
     /* Add iPod uuid atom */
@@ -2775,8 +2772,6 @@ fWorkingCount = 0;
     fChapterTitlesController.createChapterMarkers = [[queueToApply objectForKey:@"ChapterMarkers"] boolValue];
     [fChapterTitlesController addChaptersFromQueue:[queueToApply objectForKey:@"ChapterNames"]];
 
-    /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-    [fDstMp4LargeFileCheck setState:[[queueToApply objectForKey:@"Mp4LargeFile"] intValue]];
     /* Mux mp4 with http optimization */
     [fDstMp4HttpOptFileCheck setState:[[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue]];
 
@@ -4427,15 +4422,10 @@ fWorkingCount = 0;
     int videoContainer = (int)[[fDstFormatPopUp selectedItem] tag];
     const char *ext    = NULL;
 
-    /* Initially set the large file (64 bit formatting) output checkbox to hidden */
-    [fDstMp4LargeFileCheck   setHidden:YES];
+    // enable chapter markers and hide muxer-specific options
     [fDstMp4HttpOptFileCheck setHidden:YES];
     [fDstMp4iPodFileCheck    setHidden:YES];
 
-    // enable chapter markers and hide muxer-specific options
-    [fDstMp4LargeFileCheck   setHidden:YES];
-    [fDstMp4HttpOptFileCheck setHidden:YES];
-    [fDstMp4iPodFileCheck    setHidden:YES];
     switch (videoContainer)
     {
         case HB_MUX_AV_MP4:
@@ -4578,12 +4568,6 @@ the user is using "Custom" settings by determining the sender*/
 - (NSString*) muxerOptionsSummary
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
-    if ([fDstMp4LargeFileCheck  isHidden] == NO  &&
-        [fDstMp4LargeFileCheck isEnabled] == YES &&
-        [fDstMp4LargeFileCheck     state] == NSOnState)
-    {
-        [summary appendString:@" - Large file size"];
-    }
     if ([fDstMp4HttpOptFileCheck  isHidden] == NO  &&
         [fDstMp4HttpOptFileCheck isEnabled] == YES &&
         [fDstMp4HttpOptFileCheck     state] == NSOnState)
@@ -4720,8 +4704,6 @@ the user is using "Custom" settings by determining the sender*/
         /* check to see if we have only one chapter */
         [self chapterPopUpChanged:nil];
         
-        /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-        [fDstMp4LargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
         /* Mux mp4 with http optimization */
         [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
         
@@ -4983,8 +4965,9 @@ the user is using "Custom" settings by determining the sender*/
     [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
     /* Chapter Markers fCreateChapterMarkers*/
     [preset setObject:@(fChapterTitlesController.createChapterMarkers) forKey:@"ChapterMarkers"];
-    /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-    [preset setObject:[NSNumber numberWithInteger:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
+    /* Allow Mpeg4 64 bit formatting +4GB file sizes
+        key kept for compatibility. */
+    [preset setObject:[NSNumber numberWithInteger:0]forKey:@"Mp4LargeFile"];
     /* Mux mp4 with http optimization */
     [preset setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
     /* Add iPod uuid atom */

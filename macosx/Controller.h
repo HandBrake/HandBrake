@@ -123,8 +123,6 @@ extern NSString *keyTitleTag;
     IBOutlet NSTextField         * fDstFile2Field;
     IBOutlet NSButton            * fDstBrowseButton;
     /* MP4 Options */
-    // Creates 64 bit mp4's that allow file sizes over 4gb
-    IBOutlet NSButton            * fDstMp4LargeFileCheck;
     // Optimizes mp4's for http
     IBOutlet NSButton            * fDstMp4HttpOptFileCheck;
     // Creates iPod compatible mp4's (add ipod uuid atom)

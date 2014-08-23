@@ -357,18 +357,6 @@
                             <action selector="customSettingUsed:" target="240" id="4971"/>
                         </connections>
                     </button>
-                    <button id="2364">
-                        <rect key="frame" x="513" y="401" width="96" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <string key="toolTip">Caution: This option will likely break device compatiblity with all but the AppleTV Take 2. Checking this box enables a 64 bit mp4 file which can be over 4 GB.</string>
-                        <buttonCell key="cell" type="check" title="Large file size" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4926">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="customSettingUsed:" target="240" id="2366"/>
-                        </connections>
-                    </button>
                     <button toolTip="This option adds an atom to the MP4 file which allows older iPods (5th Generation classic style) to play the file." id="4967">
                         <rect key="frame" x="388" y="401" width="108" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1085,7 +1073,6 @@ DQ
                 <outlet property="fDstFormatField" destination="1556" id="1583"/>
                 <outlet property="fDstFormatPopUp" destination="1557" id="1584"/>
                 <outlet property="fDstMp4HttpOptFileCheck" destination="4579" id="4581"/>
-                <outlet property="fDstMp4LargeFileCheck" destination="2364" id="4578"/>
                 <outlet property="fDstMp4iPodFileCheck" destination="4967" id="4969"/>
                 <outlet property="fEncodeStartStopPopUp" destination="5513" id="5527"/>
                 <outlet property="fMainTabView" destination="1474" id="XMU-Vi-8QM"/>
