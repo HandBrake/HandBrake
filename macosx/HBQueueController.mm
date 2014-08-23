@@ -405,23 +405,26 @@
         * screw up the sync while the window is open
         */
        [fHBController Pause:NULL];
-         NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
+         NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
         // Which window to attach the sheet to?
-        NSWindow * docWindow = nil;
+        NSWindow *docWindow = nil;
         if ([sender respondsToSelector: @selector(window)])
+        {
             docWindow = [sender window];
-        
-        
-        NSBeginCriticalAlertSheet(
-                                  alertTitle,
-                                  NSLocalizedString(@"Keep Encoding", nil),
-                                  nil,
-                                  NSLocalizedString(@"Stop Encoding and Delete", nil),
-                                  docWindow, self,
-                                  nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
-                                  NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil));
-        
-        // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
+        }
+
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:alertTitle];
+        [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", nil)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:docWindow
+                          modalDelegate:self
+                         didEndSelector:@selector(didDimissCancelCurrentJob:returnCode:contextInfo:)
+                            contextInfo:nil];
+        [alert release];
     }
     else
     { 
@@ -439,7 +442,7 @@
      * [fHBController Pause:NULL]; Again will resume encoding
      */
     [fHBController Pause:NULL];
-    if (returnCode == NSAlertOtherReturn)
+    if (returnCode == NSAlertSecondButtonReturn)
     {
         /* We need to save the currently encoding item number first */
         int encodingItemToRemove = fEncodingQueueItem;
@@ -533,22 +536,26 @@
         * screw up the sync while the window is open
         */
        [fHBController Pause:NULL];
-         NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
+         NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
         // Which window to attach the sheet to?
-        NSWindow * docWindow = nil;
+        NSWindow *docWindow = nil;
         if ([sender respondsToSelector: @selector(window)])
+        {
             docWindow = [sender window];
-        
-        
-        NSBeginCriticalAlertSheet(
-                                  alertTitle,
-                                  NSLocalizedString(@"Keep Encoding", nil),
-                                  nil,
-                                  NSLocalizedString(@"Stop Encoding and Delete", nil),
-                                  docWindow, self,
-                                  nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
-                                  NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil));
-        
+        }
+
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:alertTitle];
+        [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", nil)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:docWindow
+                          modalDelegate:self
+                         didEndSelector:@selector(didDimissCancelCurrentJob:returnCode:contextInfo:)
+                            contextInfo:nil];
+        [alert release];
     }
     else
     { 
@@ -1004,15 +1011,10 @@
             [finalString appendString: lavcInfo withAttributes:detailAttr];
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
-        
-        
-        
-        
+
         /* Seventh Line Audio Details*/
-        NSEnumerator *audioDetailEnumerator = [audioDetails objectEnumerator];
-		NSString *anAudioDetail;
 		int audioDetailCount = 0;
-		while (nil != (anAudioDetail = [audioDetailEnumerator nextObject])) {
+		for (NSString *anAudioDetail in audioDetails) {
 			audioDetailCount++;
 			if (0 < [anAudioDetail length]) {
 				[finalString appendString: [NSString stringWithFormat: @"Audio Track %d ", audioDetailCount] withAttributes: detailBoldAttr];
@@ -1020,7 +1022,7 @@
 				[finalString appendString: @"\n" withAttributes: detailAttr];
 			}
 		}
-        
+
         /* Eigth Line Auto Passthru Details */
         // only print Auto Passthru settings if we have an Auro Passthru output track
         if (autoPassthruPresent == YES)
@@ -1079,11 +1081,7 @@
         }
         
         /* Ninth Line Subtitle Details */
-        
-        int i = 0;
-        NSEnumerator *enumerator = [item[@"SubtitleList"] objectEnumerator];
-        id tempObject;
-        while (tempObject = [enumerator nextObject])
+        for (id tempObject in item[@"SubtitleList"])
         {
             /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
             [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
@@ -1101,7 +1099,6 @@
                 [finalString appendString: @" - Default" withAttributes:detailAttr];
             }
             [finalString appendString:@"\n" withAttributes:detailAttr];
-            i++;
         }
 
         [pool release];
