@@ -36,7 +36,7 @@
         <window title="HandBrake Preview" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="PreviewPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="142" y="519" width="490" height="360"/>
+            <rect key="contentRect" x="221" y="837" width="490" height="360"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="490" height="360"/>
@@ -48,7 +48,7 @@
                         <color key="fillColor" red="0.80000000999999998" green="0.80000000999999998" blue="0.80000000999999998" alpha="1" colorSpace="calibratedRGB"/>
                     </qtMovieView>
                     <customView id="2me-4k-EDi" userLabel="Picture Controls" customClass="HBHUDView">
-                        <rect key="frame" x="15" y="132" width="460" height="100"/>
+                        <rect key="frame" x="15" y="136" width="460" height="100"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button toolTip="Encode And Play Back A Live Preview At Your Current Settings" verticalHuggingPriority="750" id="215">
@@ -85,25 +85,32 @@
                                 </connections>
                             </button>
                             <textField verticalHuggingPriority="750" id="234">
-                                <rect key="frame" x="118" y="14" width="75" height="11"/>
+                                <rect key="frame" x="105" y="14" width="48" height="11"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Duration (sec):" id="235">
+                                <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="235">
+                                    <font key="font" metaFont="miniSystemBold"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField appearanceType="aqua" verticalHuggingPriority="750" id="q81-Om-Azd">
+                                <rect key="frame" x="211" y="14" width="21" height="11"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="sec" id="APs-l9-qFj">
                                     <font key="font" metaFont="miniSystemBold"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <popUpButton toolTip="Select The Length Of Live Preview to Encode" verticalHuggingPriority="750" id="226">
-                                <rect key="frame" x="197" y="12" width="58" height="15"/>
+                                <rect key="frame" x="158" y="12" width="49" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="231" id="227">
+                                <popUpButtonCell key="cell" type="push" title="240" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="231" id="227">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
                                     <menu key="menu" title="OtherViews" id="228">
                                         <items>
-                                            <menuItem title="Item 1" state="on" id="231"/>
-                                            <menuItem title="Item 2" id="230"/>
-                                            <menuItem title="Item 3" id="229"/>
+                                            <menuItem title="240" state="on" id="231"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
@@ -142,7 +149,7 @@
                         </subviews>
                     </customView>
                     <customView hidden="YES" id="COi-Ia-2yt" userLabel="Playback Controls" customClass="HBHUDView">
-                        <rect key="frame" x="15" y="24" width="460" height="100"/>
+                        <rect key="frame" x="15" y="32" width="460" height="100"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <slider verticalHuggingPriority="750" id="341">

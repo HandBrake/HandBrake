@@ -18,17 +18,6 @@
 
 @implementation HBHUDView
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self)
-    {
-        [self setupOldStyleHUD];
-    }
-
-    return self;
-}
-
 + (void)setupNewStyleHUD:(NSView *)view
 {
     [view setWantsLayer:YES];
@@ -43,27 +32,30 @@
     [view setAppearance:[NSAppearance appearanceNamed:@"NSAppearanceNameVibrantDark"]];
 }
 
-- (void)setupOldStyleHUD
+- (void)drawRect:(NSRect)dirtyRect
 {
-    [self setWantsLayer:YES];
-    [self.layer setCornerRadius:14];
+    NSGraphicsContext  *theContext = [NSGraphicsContext currentContext];
+    [theContext saveGraphicsState];
 
-    // Black transparent background and white border
-    CGColorRef white = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 0.9);
-    [self.layer setBorderColor:white];
-    CFRelease(white);
-    [self.layer setBorderWidth:2];
+    NSRect rect = NSMakeRect(0.0, 0.0, [self frame].size.width, [self frame].size.height);
 
-    CGColorRef black = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.6);
-    [self.layer setBackgroundColor:black];
-    CFRelease(black);
+    // Draw a standard HUD with black transparent background and white border.
+    [[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:0.0 alpha:0.6] setFill];
+    [[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(rect, 1, 1) xRadius:14.0 yRadius:14.0] fill];
+
+    [[NSColor whiteColor] setStroke];
+    [NSBezierPath setDefaultLineWidth:2.0];
+    [[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(rect, 1, 1) xRadius:14.0 yRadius:14.0] stroke];
+
+    [theContext restoreGraphicsState];
 }
 
 - (instancetype)initWithFrame:(NSRect)frame
 {
     if (NSClassFromString(@"NSVisualEffectView"))
     {
-        // Return a NSVisualEffectView instance
+        // If NSVisualEffectView class is loaded
+        // release ourself and return a NSVisualEffectView instance instead.
         [self release];
         self = [[NSClassFromString(@"NSVisualEffectView") alloc] initWithFrame:frame];
         if (self)
@@ -76,20 +68,9 @@
         self = [super initWithFrame:frame];
         if (self)
         {
-            [self setupOldStyleHUD];
         }
     }
 
-    return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super initWithCoder:coder];
-    if (self)
-    {
-        [self setupOldStyleHUD];
-    }
     return self;
 }
 
