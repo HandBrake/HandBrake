@@ -38,7 +38,7 @@
     self.addForeignAudioSubtitle = [preset[@"SubtitleAddForeignAudioSubtitle"] boolValue];
 }
 
-- (void)prepareSubtitlesForPreset:(NSMutableDictionary *)preset
+- (void)prepareSubtitlesDefaultsForPreset:(NSMutableDictionary *)preset
 {
     if (self.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
     {

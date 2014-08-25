@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 @property(nonatomic, readonly) NSArray *audioEncoderFallbacks;
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
-- (void)prepareAudioForPreset:(NSMutableDictionary *)preset;
+- (void)prepareAudioDefaultsForPreset:(NSMutableDictionary *)preset;
 
 - (void)validateEncoderFallbackForVideoContainer:(int)container;
 

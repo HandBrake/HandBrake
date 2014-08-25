@@ -22,6 +22,6 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackSelectionBehavior) {
 @property (nonatomic, readwrite) BOOL addCC;
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
-- (void)prepareSubtitlesForPreset:(NSMutableDictionary *)preset;
+- (void)prepareSubtitlesDefaultsForPreset:(NSMutableDictionary *)preset;
 
 @end

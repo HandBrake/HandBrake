@@ -132,6 +132,8 @@
         self.encoderFallback = hb_audio_encoder_get_from_name(strValue);
     }
 
+    [self.tracksArray removeAllObjects];
+
     for (NSDictionary *track in preset[@"AudioList"])
     {
         HBAudioTrackPreset *newTrack = [[HBAudioTrackPreset alloc] init];
@@ -162,7 +164,7 @@
     }
 }
 
-- (void)prepareAudioForPreset:(NSMutableDictionary *)preset
+- (void)prepareAudioDefaultsForPreset:(NSMutableDictionary *)preset
 {
     // Track selection behavior
     if (self.trackSelectionBehavior == HBAudioTrackSelectionBehaviorFirst)

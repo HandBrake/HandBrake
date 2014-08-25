@@ -21,6 +21,8 @@ extern NSString *keySubTrackSrtOffset;
 extern NSString *keySubTrackSrtFilePath;
 extern NSString *keySubTrackSrtCharCode;
 
+@class HBSubtitlesDefaults;
+
 /**
  *  HBSubtitlesController
  *  Responds to HBContainerChangedNotification and HBTitleChangedNotification notifications.
@@ -30,9 +32,10 @@ extern NSString *keySubTrackSrtCharCode;
 - (void)addTracksFromQueue:(NSMutableArray *)newSubtitleArray;
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
-- (void)prepareSubtitlesForPreset:(NSMutableDictionary *)preset;
 
 // Get the list of subtitles tracks
 @property (readonly, nonatomic, copy) NSArray *subtitles;
+
+@property (nonatomic, readonly) HBSubtitlesDefaults *settings;
 
 @end

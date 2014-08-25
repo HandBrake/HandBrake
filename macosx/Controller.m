@@ -18,6 +18,7 @@
 #import "HBPresetsViewController.h"
 
 #import "HBAudioDefaults.h"
+#import "HBSubtitlesDefaults.h"
 
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
@@ -2400,7 +2401,7 @@ fWorkingCount = 0;
     /* Source and Destination Information */
     
     [queueFileJob setObject:[NSString stringWithUTF8String: title->path] forKey:@"SourcePath"];
-    [queueFileJob setObject:[fSrcDVD2Field stringValue] forKey:@"SourceName"];
+    [queueFileJob setObject:[[fSrcDVD2Field stringValue] lastPathComponent] forKey:@"SourceName"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->index] forKey:@"TitleNumber"];
     [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
     
@@ -2513,21 +2514,20 @@ fWorkingCount = 0;
     queueFileJob[@"PictureDeblock"] = [NSString stringWithFormat:@"%ld",(long)filters.deblock];
     queueFileJob[@"VideoGrayScale"] = [NSString stringWithFormat:@"%ld",(long)filters.grayscale];
 
-    /* Auto Passthru */
-    [queueFileJob setObject:@(fAudioController.settings.allowAACPassthru) forKey: @"AudioAllowAACPass"];
-    [queueFileJob setObject:@(fAudioController.settings.allowAC3Passthru) forKey: @"AudioAllowAC3Pass"];
-    [queueFileJob setObject:@(fAudioController.settings.allowDTSHDPassthru) forKey: @"AudioAllowDTSHDPass"];
-    [queueFileJob setObject:@(fAudioController.settings.allowDTSPassthru) forKey: @"AudioAllowDTSPass"];
-    [queueFileJob setObject:@(fAudioController.settings.allowMP3Passthru) forKey: @"AudioAllowMP3Pass"];
-    // just in case we need it for display purposes
-    [queueFileJob setObject:@(hb_audio_encoder_get_name((int)fAudioController.settings.encoderFallback)) forKey: @"AudioEncoderFallback"];
-    // actual fallback encoder
-    [queueFileJob setObject:@(fAudioController.settings.encoderFallback) forKey: @"JobAudioEncoderFallback"];
+    /* Audio Defaults */
+    NSMutableDictionary *audioDefaults = [NSMutableDictionary dictionary];
+    [fAudioController.settings prepareAudioDefaultsForPreset:audioDefaults];
+    queueFileJob[@"AudioDefaults"] = audioDefaults;
 
     /* Audio */
     NSMutableArray *audioArray = [[NSMutableArray alloc] initWithArray:[fAudioController audioTracks] copyItems:YES];
     [queueFileJob setObject:[NSArray arrayWithArray: audioArray] forKey:@"AudioList"];
     [audioArray release];
+
+	/* Subtitles Defaults */
+    NSMutableDictionary *subtitlesDefaults = [NSMutableDictionary dictionary];
+    [fSubtitlesViewController.settings prepareSubtitlesDefaultsForPreset:subtitlesDefaults];
+    queueFileJob[@"SubtitlesDefaults"] = subtitlesDefaults;
 
 	/* Subtitles */
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesViewController subtitles] copyItems:YES];
@@ -2814,18 +2814,16 @@ fWorkingCount = 0;
     /* video encoder */
     [fVideoController applyVideoSettingsFromQueue:queueToApply];
 
-    /* Auto Passthru */
-    fAudioController.settings.allowAACPassthru = [[queueToApply objectForKey:@"AudioAllowAACPass"] boolValue];
-    fAudioController.settings.allowAC3Passthru = [[queueToApply objectForKey:@"AudioAllowAC3Pass"] boolValue];
-    fAudioController.settings.allowDTSHDPassthru = [[queueToApply objectForKey:@"AudioAllowDTSHDPass"] boolValue];
-    fAudioController.settings.allowDTSPassthru = [[queueToApply objectForKey:@"AudioAllowDTSPass"] boolValue];
-    fAudioController.settings.allowMP3Passthru = [[queueToApply objectForKey:@"AudioAllowMP3Pass"] boolValue];
-    fAudioController.settings.encoderFallback = [queueToApply objectForKey:@"AudioEncoderFallback"];
+    /* Audio Defaults */
+    [fAudioController.settings applySettingsFromPreset:queueToApply[@"AudioDefaults"]];
 
     /* Audio */
     /* Now lets add our new tracks to the audio list here */
     [fAudioController addTracksFromQueue: queueToApply];
-    
+
+    /* Subtitles Defaults */
+    [fSubtitlesViewController.settings applySettingsFromPreset:queueToApply[@"SubtitlesDefaults"]];
+
     /* Subtitles */
     [fSubtitlesViewController addTracksFromQueue:[queueToApply objectForKey:@"SubtitleList"]];
 
@@ -3620,29 +3618,32 @@ fWorkingCount = 0;
                                   job->crop[2], job->crop[3]] UTF8String] );
     }
 
-    /* Auto Passthru */
+    /* Auto Defaults */
+    NSDictionary *audioDefaults = queueToApply[@"AudioDefaults"];
+
     job->acodec_copy_mask = 0;
-    if( [[queueToApply objectForKey: @"AudioAllowAACPass"] intValue] == 1 )
+
+    if ([audioDefaults[@"AudioAllowAACPass"] boolValue])
     {
         job->acodec_copy_mask |= HB_ACODEC_FFAAC;
     }
-    if( [[queueToApply objectForKey: @"AudioAllowAC3Pass"] intValue] == 1 )
+    if ([audioDefaults[@"AudioAllowAC3Pass"] boolValue])
     {
         job->acodec_copy_mask |= HB_ACODEC_AC3;
     }
-    if( [[queueToApply objectForKey: @"AudioAllowDTSHDPass"] intValue] == 1 )
+    if ([audioDefaults[@"AudioAllowDTSHDPass"] boolValue])
     {
         job->acodec_copy_mask |= HB_ACODEC_DCA_HD;
     }
-    if( [[queueToApply objectForKey: @"AudioAllowDTSPass"] intValue] == 1 )
+    if ([audioDefaults[@"AudioAllowDTSPass"] boolValue])
     {
         job->acodec_copy_mask |= HB_ACODEC_DCA;
     }
-    if( [[queueToApply objectForKey: @"AudioAllowMP3Pass"] intValue] == 1 )
+    if ([audioDefaults[@"AudioAllowMP3Pass"] boolValue])
     {
         job->acodec_copy_mask |= HB_ACODEC_MP3;
     }
-    job->acodec_fallback = [[queueToApply objectForKey: @"JobAudioEncoderFallback"] intValue];
+    job->acodec_fallback = hb_audio_encoder_get_from_name([audioDefaults[@"AudioEncoderFallback"] UTF8String]);
 
     /* Audio tracks and mixdowns */
     /* Now lets add our new tracks to the audio list here */
@@ -5032,10 +5033,10 @@ the user is using "Custom" settings by determining the sender*/
     [fPictureController.filters prepareFiltersForPreset:preset];
 
     /* Audio */
-    [fAudioController.settings prepareAudioForPreset:preset];
+    [fAudioController.settings prepareAudioDefaultsForPreset:preset];
 
     /* Subtitles */
-    [fSubtitlesViewController prepareSubtitlesForPreset:preset];
+    [fSubtitlesViewController.settings prepareSubtitlesDefaultsForPreset:preset];
 
     [preset autorelease];
     return preset;

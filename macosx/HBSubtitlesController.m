@@ -227,11 +227,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     [self addTracksFromDefaults:self];
 }
 
-- (void)prepareSubtitlesForPreset:(NSMutableDictionary *)preset
-{
-    [self.settings prepareSubtitlesForPreset:preset];
-}
-
 #pragma mark - Actions
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem

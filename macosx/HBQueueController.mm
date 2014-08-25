@@ -1028,12 +1028,13 @@
         if (autoPassthruPresent == YES)
         {
             NSString *autoPassthruFallback = @"", *autoPassthruCodecs = @"";
-            autoPassthruFallback = [autoPassthruFallback stringByAppendingString: item[@"AudioEncoderFallback"]];
-            if (0 < [item[@"AudioAllowAACPass"] intValue])
+            NSDictionary *audioDefaults = item[@"AudioDefaults"];
+            autoPassthruFallback = [autoPassthruFallback stringByAppendingString: audioDefaults[@"AudioEncoderFallback"]];
+            if (0 < [audioDefaults[@"AudioAllowAACPass"] intValue])
             {
                 autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"AAC"];
             }
-            if (0 < [item[@"AudioAllowAC3Pass"] intValue])
+            if (0 < [audioDefaults[@"AudioAllowAC3Pass"] intValue])
             {
                 if (0 < [autoPassthruCodecs length])
                 {
@@ -1041,7 +1042,7 @@
                 }
                 autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"AC3"];
             }
-            if (0 < [item[@"AudioAllowDTSHDPass"] intValue])
+            if (0 < [audioDefaults[@"AudioAllowDTSHDPass"] intValue])
             {
                 if (0 < [autoPassthruCodecs length])
                 {
@@ -1049,7 +1050,7 @@
                 }
                 autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"DTS-HD"];
             }
-            if (0 < [item[@"AudioAllowDTSPass"] intValue])
+            if (0 < [audioDefaults[@"AudioAllowDTSPass"] intValue])
             {
                 if (0 < [autoPassthruCodecs length])
                 {
@@ -1057,7 +1058,7 @@
                 }
                 autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"DTS"];
             }
-            if (0 < [item[@"AudioAllowMP3Pass"] intValue])
+            if (0 < [audioDefaults[@"AudioAllowMP3Pass"] intValue])
             {
                 if (0 < [autoPassthruCodecs length])
                 {
