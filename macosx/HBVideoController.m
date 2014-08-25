@@ -45,6 +45,8 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     IBOutlet NSView         *fPresetView;
     IBOutlet NSView         *fSimplePresetView;
 
+    IBOutlet NSTextField    *fEncoderOptionsLabel;
+
     /* Simple Presets Box */
     IBOutlet NSTextField    *fLavcOptionsTextField;
     IBOutlet NSTextField    *fLavcOptionsLabel;
@@ -201,6 +203,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         fVidQualitySlider,
         fVidTwoPassCheck,
         fVidTurboPassCheck,
+        fEncoderOptionsLabel,
         fPictureSettingsField,
         fPictureFiltersField
     };
@@ -281,6 +284,9 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     /* video encoder */
     self.codec = [queueToApply[@"JobVideoEncoderVcodec"] intValue];
 
+    /* Lets run through the following functions to get variables set there */
+    [self videoEncoderPopUpChanged:nil];
+
     /* advanced x264 options */
     if ([queueToApply[@"x264UseAdvancedOptions"] intValue])
     {
@@ -314,9 +320,6 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     {
         self.lavcOptions = queueToApply[@"VideoOptionExtra"];
     }
-
-    /* Lets run through the following functions to get variables set there */
-    [self videoEncoderPopUpChanged:nil];
 
     /* Video quality */
     self.qualityType = [queueToApply[@"VideoQualityType"] intValue];
