@@ -29,7 +29,7 @@
     [view setMaterial:2];
     [view setState:1];
 
-    [view setAppearance:[NSAppearance appearanceNamed:@"NSAppearanceNameVibrantDark"]];
+    [view setAppearance:[NSClassFromString(@"NSAppearance") appearanceNamed:@"NSAppearanceNameVibrantDark"]];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -66,9 +66,6 @@
     else
     {
         self = [super initWithFrame:frame];
-        if (self)
-        {
-        }
     }
 
     return self;
