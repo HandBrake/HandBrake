@@ -606,12 +606,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fEncodeStartStopPopUp addItemWithTitle: @"Chapters"];
     [fEncodeStartStopPopUp addItemWithTitle: @"Seconds"];
     [fEncodeStartStopPopUp addItemWithTitle: @"Frames"];
-    /* Align the start / stop widgets with the chapter popups */
-    [fSrcTimeStartEncodingField setFrameOrigin:[fSrcChapterStartPopUp frame].origin];
-    [fSrcTimeEndEncodingField setFrameOrigin:[fSrcChapterEndPopUp frame].origin];
+
+    // Align the start / stop widgets with the chapter popups
+    NSPoint startPoint = [fSrcChapterStartPopUp frame].origin;
+    startPoint.y += 2;
+
+    NSPoint endPoint = [fSrcChapterEndPopUp frame].origin;
+    endPoint.y += 2;
+
+    [fSrcTimeStartEncodingField setFrameOrigin:startPoint];
+    [fSrcTimeEndEncodingField setFrameOrigin:endPoint];
     
-    [fSrcFrameStartEncodingField setFrameOrigin:[fSrcChapterStartPopUp frame].origin];
-    [fSrcFrameEndEncodingField setFrameOrigin:[fSrcChapterEndPopUp frame].origin];
+    [fSrcFrameStartEncodingField setFrameOrigin:startPoint];
+    [fSrcFrameEndEncodingField setFrameOrigin:endPoint];
     
     /* Destination box*/
     NSMenuItem *menuItem;
