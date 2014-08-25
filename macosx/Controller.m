@@ -671,12 +671,45 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     fVideoController.fHBController = self;
 	[fVideoTab setView:[fVideoController view]];
 
+    [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
+                                                              forKeyPath:@"values.HBShowAdvancedTab"
+                                                                 options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                                                                 context:NULL];
+
     [fWindow recalculateKeyViewLoop];
 
     // Presets initialization
     [self checkBuiltInsForUpdates];
     [self buildPresetsMenu];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildPresetsMenu) name:HBPresetsChangedNotification object:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == NULL)
+    {
+        if ([keyPath isEqualToString:@"values.HBShowAdvancedTab"])
+        {
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"])
+            {
+                if (![[fMainTabView tabViewItems] containsObject:fAdvancedTab])
+                {
+                    [fMainTabView insertTabViewItem:fAdvancedTab atIndex:3];
+                    [fAdvancedTab release];
+                }
+            }
+            else
+            {
+                [fAdvancedTab retain];
+                [fMainTabView removeTabViewItem:fAdvancedTab];
+            }
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (void) enableUI: (BOOL) b
