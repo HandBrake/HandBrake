@@ -370,7 +370,7 @@
                 <textField appearanceType="aqua" horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="mbd-FQ-sxW">
                     <rect key="frame" x="201" y="18" width="248" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: this settings applies only to build-in presets. Use the audio defaults panel for custom presets." id="fIj-Tz-ghb">
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: these settings apply only to build-in presets. Use the audio defaults panel for custom presets." id="fIj-Tz-ghb">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
