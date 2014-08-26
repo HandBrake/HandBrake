@@ -17,7 +17,7 @@ index 2e4a98d..2065222 100644
 +#undef  X264_VERSION
 +#endif
 +#define X264_BUILD       142
-+#define X264_VERSION " r2431 ac76440"
++#define X264_VERSION " r2479 dd79a61"
  
  /* Application developers planning to link against a shared library version of
   * libx264 from a Microsoft Visual Studio or similar development environment
