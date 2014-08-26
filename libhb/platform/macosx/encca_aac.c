@@ -46,7 +46,7 @@ struct hb_work_private_s
 
     AudioConverterRef converter;
     unsigned long isamples, isamplesiz, omaxpacket, nchannels;
-    uint64_t pts, ibytes;
+    uint64_t samples, ibytes;
     Float64 osamplerate;
 
     hb_audio_remap_t *remap;
@@ -441,9 +441,10 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     }
 
     obuf->size        = odesc.mDataByteSize;
-    obuf->s.start     = pv->pts;
-    pv->pts += 90000LL * pv->isamples / pv->osamplerate;
-    obuf->s.stop      = pv->pts;
+    obuf->s.start     = 90000LL * pv->samples / pv->osamplerate;
+    pv->samples      += pv->isamples;
+    obuf->s.stop      = 90000LL * pv->samples / pv->osamplerate;
+    obuf->s.duration  = (double)90000 * pv->isamples / pv->osamplerate;
     obuf->s.type      = AUDIO_BUF;
     obuf->s.frametype = HB_FRAME_AUDIO;
 
