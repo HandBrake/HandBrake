@@ -113,7 +113,7 @@
                     <CheckBox Content="2-Pass Encoding" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                               IsChecked="{Binding TwoPass}" Margin="0,0,10,0" />
                     <CheckBox Content="Turbo first pass" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                              IsChecked="{Binding TurboFirstPass}" />
+                              IsChecked="{Binding TurboFirstPass}" Visibility="{Binding DisplayTurboFirstPass, Converter={StaticResource boolToVisConverter}}" />
                 </StackPanel>
 
             </StackPanel>

@@ -497,7 +497,7 @@ namespace HandBrake.ApplicationServices.Utilities
             if (task.TwoPass)
                 query += " -2 ";
 
-            if (task.TurboFirstPass)
+            if (task.TurboFirstPass && task.VideoEncoder == VideoEncoder.X264)
                 query += " -T ";
 
             if (task.Framerate.HasValue)

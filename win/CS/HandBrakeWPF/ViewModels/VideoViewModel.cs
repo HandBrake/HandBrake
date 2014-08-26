@@ -37,6 +37,12 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class VideoViewModel : ViewModelBase, IVideoViewModel
     {
+        /*
+         * TODO
+         * 1. Refactor the Video Encoder Preset/Tune/Level options to be generic instead of encoder specific.
+         * 2. Model the UI Interactions in a better way.
+         */
+
         #region Constants and Fields
         /// <summary>
         /// Same as source constant.
@@ -127,6 +133,11 @@ namespace HandBrakeWPF.ViewModels
         /// The x265 preset value.
         /// </summary>
         private int x265PresetValue;
+
+        /// <summary>
+        /// The display turbo first pass.
+        /// </summary>
+        private bool displayTurboFirstPass;
 
         #endregion
 
@@ -565,6 +576,7 @@ namespace HandBrakeWPF.ViewModels
                 this.DisplayH264Options = value == VideoEncoder.X264 || value == VideoEncoder.QuickSync;
                 this.UseAdvancedTab = value != VideoEncoder.QuickSync && this.UseAdvancedTab;
                 this.DisplayNonQSVControls = value != VideoEncoder.QuickSync;
+                this.DisplayTurboFirstPass = value == VideoEncoder.X264; 
 
                 this.NotifyOfPropertyChange(() => this.Rfqp);
                 this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
@@ -1017,6 +1029,27 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets X265Tunes.
         /// </summary>
         public IEnumerable<x265Tune> X265Tunes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether display turbo first pass.
+        /// </summary>
+        public bool DisplayTurboFirstPass
+        {
+            get
+            {
+                return this.displayTurboFirstPass;
+            }
+            set
+            {
+                if (value.Equals(this.displayTurboFirstPass))
+                {
+                    return;
+                }
+                this.displayTurboFirstPass = value;
+                this.NotifyOfPropertyChange(() => this.DisplayTurboFirstPass);
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -1238,6 +1271,7 @@ namespace HandBrakeWPF.ViewModels
             this.DisplayX264Options = encoder == VideoEncoder.X264;
             this.DisplayQSVOptions = encoder == VideoEncoder.QuickSync;
             this.DisplayX265Options = encoder == VideoEncoder.X265;
+            this.DisplayTurboFirstPass = encoder == VideoEncoder.X264;
 
             if (encoder == VideoEncoder.QuickSync)
             {
