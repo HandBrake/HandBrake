@@ -2689,9 +2689,11 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
 
     switch (vcodec)
     {
+        case HB_VCODEC_X265:
         case HB_VCODEC_X264:
         {
-            if (ghb_settings_get_boolean(js, "x264UseAdvancedOptions"))
+            if (vcodec == HB_VCODEC_X264 &&
+                ghb_settings_get_boolean(js, "x264UseAdvancedOptions"))
             {
                 char *opts = ghb_settings_get_string(js, "x264Option");
                 hb_job_set_encoder_options(job, opts);
@@ -2708,13 +2710,16 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
                 char *tunes;
 
                 g_string_append_printf(str, "%s", tune);
-                if (ghb_settings_get_boolean(js, "x264FastDecode"))
+                if (vcodec == HB_VCODEC_X264)
                 {
-                    g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "fastdecode");
-                }
-                if (ghb_settings_get_boolean(js, "x264ZeroLatency"))
-                {
-                    g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "zerolatency");
+                    if (ghb_settings_get_boolean(js, "x264FastDecode"))
+                    {
+                        g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "fastdecode");
+                    }
+                    if (ghb_settings_get_boolean(js, "x264ZeroLatency"))
+                    {
+                        g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "zerolatency");
+                    }
                 }
                 tunes = g_string_free(str, FALSE);
 
