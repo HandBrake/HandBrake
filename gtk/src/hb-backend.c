@@ -4748,8 +4748,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
         /*
          * If turbo options have been selected then set job->fastfirstpass
          */
-        if( ghb_settings_get_boolean(js, "VideoTurboTwoPass") &&
-            job->vcodec == HB_VCODEC_X264 )
+        if(ghb_settings_get_boolean(js, "VideoTurboTwoPass") &&
+           (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265))
         {
             job->fastfirstpass = 1;
         }

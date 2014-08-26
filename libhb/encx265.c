@@ -64,6 +64,24 @@ struct chapter_s
     int64_t start;
 };
 
+static int param_parse(x265_param *param, const char *key, const char *value)
+{
+    int ret = x265_param_parse(param, key, value);
+    // let x265 sanity check the options for us
+    switch (ret)
+    {
+    case X265_PARAM_BAD_NAME:
+        hb_log("encx265: unknown option '%s'", key);
+        break;
+    case X265_PARAM_BAD_VALUE:
+        hb_log("encx265: bad argument '%s=%s'", key, value ? value : "(null)");
+        break;
+    default:
+        break;
+    }
+    return ret;
+}
+
 /***********************************************************************
  * hb_work_encx265_init
  ***********************************************************************
@@ -156,11 +174,10 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             snprintf(colormatrix, sizeof(colormatrix), "%d", job->title->color_matrix);
             break;
     }
-    if (x265_param_parse(param, "colorprim",   colorprim)   ||
-        x265_param_parse(param, "transfer",    transfer)    ||
-        x265_param_parse(param, "colormatrix", colormatrix))
+    if (param_parse(param, "colorprim",   colorprim)   ||
+        param_parse(param, "transfer",    transfer)    ||
+        param_parse(param, "colormatrix", colormatrix))
     {
-        hb_error("encx265: failed to set VUI color description");
         goto fail;
     }
 
@@ -170,19 +187,10 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     while ((entry = hb_dict_next(x265_opts, entry)) != NULL)
     {
         // here's where the strings are passed to libx265 for parsing
-        ret = x265_param_parse(param, entry->key, entry->value);
-        // let x265 sanity check the options for us
-        switch (ret)
+        if (param_parse(param, entry->key, entry->value))
         {
-            case X265_PARAM_BAD_NAME:
-                hb_log("encx265: unknown option '%s'", entry->key);
-                break;
-            case X265_PARAM_BAD_VALUE:
-                hb_log("encx265: bad argument '%s=%s'", entry->key,
-                       entry->value ? entry->value : "(null)");
-                break;
-            default:
-                break;
+            hb_dict_free(&x265_opts);
+            goto fail;
         }
     }
     hb_dict_free(&x265_opts);
@@ -212,9 +220,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         char sar[22];
         snprintf(sar, sizeof(sar), "%d:%d",
                  job->anamorphic.par_width, job->anamorphic.par_height);
-        if (x265_param_parse(param, "sar", sar))
+        if (param_parse(param, "sar", sar))
         {
-            hb_error("encx265: failed to set SAR");
             goto fail;
         }
     }
@@ -228,6 +235,23 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         param->rc.rateControlMode = X265_RC_ABR;
         param->rc.bitrate         = job->vbitrate;
+        if (job->pass > 0 && job->pass < 3)
+        {
+            char stats_file[1024] = "";
+            char pass[2];
+            snprintf(pass, sizeof(pass), "%d", job->pass);
+            hb_get_tempory_filename(job->h, stats_file, "x265.log");
+            if (param_parse(param, "stats", stats_file) ||
+                param_parse(param, "pass", pass))
+            {
+                goto fail;
+            }
+            if (job->pass == 1 && job->fastfirstpass == 0 &&
+                param_parse(param, "slow-firstpass", "1"))
+            {
+                goto fail;
+            }
+        }
     }
 
     /* statsfile (but not 2-pass) */

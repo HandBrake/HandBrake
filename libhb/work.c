@@ -366,13 +366,16 @@ void hb_display_job_info(hb_job_t *job)
         else
         {
             hb_log( "     + bitrate: %d kbps, pass: %d", job->vbitrate, job->pass );
-            if( job->pass == 1 && job->fastfirstpass == 1 &&
-                job->vcodec == HB_VCODEC_X264 )
+            if(job->pass == 1 && job->fastfirstpass == 1 &&
+               (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265))
             {
                 hb_log( "     + fast first pass" );
-                hb_log( "     + options: ref=1:8x8dct=0:me=dia:trellis=0" );
-                hb_log( "                analyse=i4x4 (if originally enabled, else analyse=none)" );
-                hb_log( "                subq=2 (if originally greater than 2, else subq unchanged)" );
+                if (job->vcodec == HB_VCODEC_X264)
+                {
+                    hb_log( "     + options: ref=1:8x8dct=0:me=dia:trellis=0" );
+                    hb_log( "                analyse=i4x4 (if originally enabled, else analyse=none)" );
+                    hb_log( "                subq=2 (if originally greater than 2, else subq unchanged)" );
+                }
             }
         }
 
