@@ -2444,7 +2444,6 @@ fWorkingCount = 0;
     
     /* Lets get the preset info if there is any */
     [queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
-    [queueFileJob setObject:[NSNumber numberWithInteger:fPresetsView.indexOfSelectedItem] forKey:@"PresetIndexNum"];
 
     [queueFileJob setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
     /* Chapter Markers*/
@@ -2945,22 +2944,10 @@ fWorkingCount = 0;
     [fPictureController setTitle:fTitle];
     [self pictureSettingsDidChange];
 
-    if ([queueToApply objectForKey:@"PresetIndexNum"]) // This item used a preset so insert that info
-	{
-        /* somehow we need to figure out a way to tie the queue item to a preset if it used one */
-	}
-    else
-    {
-        /* Deselect the currently selected Preset if there is one*/
-        [fPresetsView deselect];
-		/* Change UI to show "Custom" settings are being used */
-		[fPresetSelectedDisplay setStringValue: @"Custom"];
-    }
-    
-    /* We need to set this bool back to NO, in case the user wants to do a scan */
-    //applyQueueToScan = NO;
-    
-    /* Not that source is loaded and settings applied, delete the queue item from the queue */
+    [fPresetSelectedDisplay setStringValue:queueToApply[@"PresetName"]];
+    [fPresetsView deselect];
+
+    /* Now that source is loaded and settings applied, delete the queue item from the queue */
     [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d",fqueueEditRescanItemNum];
     [self removeQueueFileItem:fqueueEditRescanItemNum];
 }
