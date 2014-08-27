@@ -303,6 +303,37 @@ void syncVideoClose( hb_work_object_t * w )
 
 #define ABS(a)  ((a) < 0 ? -(a) : (a))
 
+static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
+{
+    int len, ii;
+    char *text;
+    hb_buffer_t *buf = hb_buffer_init(a->size + b->size);
+    buf->s = a->s;
+
+    // Find the text in the second SSA sub
+    text = (char*)b->data;
+    for (ii = 0; ii < 8; ii++)
+    {
+        text = strchr(text, ',');
+        if (text == NULL)
+            break;
+        text++;
+    }
+    if (text != NULL)
+    {
+        len = sprintf((char*)buf->data, "%s\n%s", a->data, text);
+        if (len >= 0)
+            buf->size = len + 1;
+    }
+    else
+    {
+        memcpy(buf->data, a->data, a->size);
+        buf->size = a->size;
+    }
+
+    return buf;
+}
+
 static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
 {
     hb_buffer_t *a, *b, *buf, *out = NULL, *last = NULL;
@@ -310,9 +341,10 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
     do
     {
         a = sanitizer->list_current;
+        b = a != NULL ? a->next : NULL;
 
         buf = NULL;
-        if (a != NULL && end)
+        if (a != NULL && b == NULL && end)
         {
             sanitizer->list_current = a->next;
             if (sanitizer->list_current == NULL)
@@ -322,8 +354,6 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
         }
         else if (a != NULL && a->s.stop != AV_NOPTS_VALUE)
         {
-            b = a->next;
-
             if (!sanitizer->merge)
             {
                 sanitizer->list_current = a->next;
@@ -344,9 +374,7 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
                     a->next = NULL;
                     b->s.start = a->s.stop;
 
-                    buf = hb_buffer_init(a->size + b->size);
-                    buf->s = a->s;
-                    sprintf((char*)buf->data, "%s\n%s", a->data, b->data);
+                    buf = merge_ssa(a, b);
                     hb_buffer_close(&a);
 
                     if (b->s.stop != AV_NOPTS_VALUE && ABS(b->s.stop - b->s.start) <= 18000)
