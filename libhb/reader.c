@@ -651,6 +651,10 @@ void ReadLoop( void * _w )
                     //        buf->s.id, r->scr_offset, buf->s.start, 
                     //        buf->s.start - r->scr_offset);
                     buf->s.start -= r->scr_offset;
+                    if ( buf->s.stop != AV_NOPTS_VALUE )
+                    {
+                        buf->s.stop -= r->scr_offset;
+                    }
                 }
                 if ( buf->s.renderOffset != AV_NOPTS_VALUE )
                 {
