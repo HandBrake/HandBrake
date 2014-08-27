@@ -1070,8 +1070,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         pkt.flags |= AV_PKT_FLAG_KEY;
     }
 
-    track->duration += pkt.duration;
-
     switch (track->type)
     {
         case MUX_TYPE_VIDEO:
@@ -1138,7 +1136,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                         *job->die = 1;
                         return -1;
                     }
-                    track->duration = pts;
                 }
                 if (track->st->codec->codec_id == AV_CODEC_ID_MOV_TEXT)
                 {
@@ -1209,6 +1206,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         default:
             break;
     }
+    track->duration = pts + pkt.duration;
 
     pkt.stream_index = track->st->index;
     int ret = av_interleaved_write_frame(m->oc, &pkt);
