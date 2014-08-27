@@ -1079,12 +1079,12 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                 if (!keep_height)
                 {
                     width = MULTIPLE_MOD_UP(ui_geo->width, mod);
-                    height = MULTIPLE_MOD((int)(width / dar), mod);
+                    height = MULTIPLE_MOD(width / dar, mod);
                 }
                 else
                 {
                     height = MULTIPLE_MOD_UP(ui_geo->height, mod);
-                    width = MULTIPLE_MOD((int)(height * dar), mod);
+                    width = MULTIPLE_MOD(height * dar, mod);
                 }
             }
             else
@@ -1095,12 +1095,12 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             if (maxWidth && (width > maxWidth))
             {
                 width  = maxWidth;
-                height = MULTIPLE_MOD((int)(width / dar), mod);
+                height = MULTIPLE_MOD(width / dar, mod);
             }
             if (maxHeight && (height > maxHeight))
             {
                 height  = maxHeight;
-                width = MULTIPLE_MOD((int)(height * dar), mod);
+                width = MULTIPLE_MOD(height * dar, mod);
             }
             dst_par_num = dst_par_den = 1;
         } break;
@@ -1141,24 +1141,24 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             if (!keep_height)
             {
                 width = MULTIPLE_MOD_UP(ui_geo->width, mod);
-                height = MULTIPLE_MOD_UP((int)(width / storage_aspect + 0.5), mod);
+                height = MULTIPLE_MOD_UP(width / storage_aspect + 0.5, mod);
             }
             else
             {
                 height = MULTIPLE_MOD_UP(ui_geo->height, mod);
-                width = MULTIPLE_MOD_UP((int)(height * storage_aspect + 0.5), mod);
+                width = MULTIPLE_MOD_UP(height * storage_aspect + 0.5, mod);
             }
 
             if (maxWidth && (maxWidth < width))
             {
                 width = maxWidth;
-                height = MULTIPLE_MOD((int)(width / storage_aspect + 0.5), mod);
+                height = MULTIPLE_MOD(width / storage_aspect + 0.5, mod);
             }
 
             if (maxHeight && (maxHeight < height))
             {
                 height = maxHeight;
-                width = MULTIPLE_MOD((int)(height * storage_aspect + 0.5), mod);
+                width = MULTIPLE_MOD(height * storage_aspect + 0.5, mod);
             }
 
             /* Adjust the output PAR for new width/height

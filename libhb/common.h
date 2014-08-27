@@ -63,11 +63,10 @@
 #define HB_DEBUG_ASSERT(x, y) { if ((x)) { hb_error("ASSERT: %s", y); exit(1); } }
 #endif
 
-#define EVEN( a )        ( (a) + ( (a) & 1 ) )
-#define MULTIPLE_16( a ) ( 16 * ( ( (a) + 8 ) / 16 ) )
-#define MULTIPLE_MOD( a, b ) ((b==1)?a:( b * ( ( (a) + (b / 2) - 1) / b ) ))
-#define MULTIPLE_MOD_UP( a, b ) ((b==1)?a:( b * ( ( (a) + (b) - 1) / b ) ))
-#define MULTIPLE_MOD_DOWN( a, b ) ((b==1)?a:( b * ( (a) / b ) ))
+#define EVEN( a )               ((a) + ((a) & 1))
+#define MULTIPLE_MOD(a, b)      (((b) * (int)(((a) + ((b) / 2)) / (b))))
+#define MULTIPLE_MOD_UP(a, b)   (((b) * (int)(((a) + ((b) - 1)) / (b))))
+#define MULTIPLE_MOD_DOWN(a, b) (((b) * (int)((a) / (b))))
 
 #define HB_DVD_READ_BUFFER_SIZE 2048
 

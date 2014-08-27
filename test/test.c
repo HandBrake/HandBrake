@@ -1730,6 +1730,17 @@ static int HandleEvents( hb_handle_t * h )
 
             keep_display_aspect |= anamorphic_mode != HB_ANAMORPHIC_CUSTOM;
             uiGeo.mode = job->anamorphic.mode = anamorphic_mode;
+            if (width != 0 && height != 0)
+            {
+                if (anamorphic_mode == HB_ANAMORPHIC_NONE)
+                {
+                    keep_display_aspect = 0;
+                }
+                else
+                {
+                    uiGeo.mode = HB_ANAMORPHIC_CUSTOM;
+                }
+            }
             job->anamorphic.keep_display_aspect = keep_display_aspect;
             uiGeo.keep = !!keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
             uiGeo.itu_par = job->anamorphic.itu_par = itu_par;
