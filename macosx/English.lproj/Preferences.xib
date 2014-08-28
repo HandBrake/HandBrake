@@ -367,7 +367,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField appearanceType="aqua" horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="mbd-FQ-sxW">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="mbd-FQ-sxW">
                     <rect key="frame" x="201" y="18" width="248" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: these settings apply only to build-in presets. Use the audio defaults panel for custom presets." id="fIj-Tz-ghb">
@@ -582,7 +582,7 @@
                         <binding destination="61" name="value" keyPath="values.MinTitleScanSeconds" id="483"/>
                     </connections>
                 </textField>
-                <button appearanceType="aqua" id="ybi-46-yhY">
+                <button id="ybi-46-yhY">
                     <rect key="frame" x="137" y="17" width="223" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Show Advanced Encoder Options Tab" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Du1-9x-nHn">

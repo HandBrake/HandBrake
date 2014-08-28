@@ -183,7 +183,7 @@
                         </menu>
                     </popUpButtonCell>
                 </popUpButton>
-                <button appearanceType="aqua" verticalHuggingPriority="750" id="QsM-28-Pya">
+                <button verticalHuggingPriority="750" id="QsM-28-Pya">
                     <rect key="frame" x="110" y="288" width="140" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Configure Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxg-bs-1si">
@@ -194,7 +194,7 @@
                         <action selector="showSettingsSheet:" target="-2" id="OAA-S8-tfS"/>
                     </connections>
                 </button>
-                <button appearanceType="aqua" verticalHuggingPriority="750" id="Vxx-gk-9kY">
+                <button verticalHuggingPriority="750" id="Vxx-gk-9kY">
                     <rect key="frame" x="248" y="288" width="116" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Reload Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jG8-uo-1tv">
