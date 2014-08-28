@@ -1,1 +1,3 @@
 https://github.com/punker76/gong-wpf-dragdrop
+
+[New BSD License](http://opensource.org/licenses/BSD-3-Clause)
