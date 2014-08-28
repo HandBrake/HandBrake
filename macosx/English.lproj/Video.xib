@@ -56,16 +56,16 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" id="gfa-Hb-cDP">
-                    <rect key="frame" x="336" y="289" width="79" height="14"/>
+                    <rect key="frame" x="279" y="289" width="69" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Video Quality:" id="F3s-qR-qeE">
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Quality:" id="F3s-qR-qeE">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="A3o-Zx-OfM">
-                    <rect key="frame" x="491" y="224" width="78" height="19"/>
+                    <rect key="frame" x="507" y="241" width="78" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="eQl-KB-XJu">
                         <font key="font" metaFont="smallSystem"/>
@@ -74,7 +74,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9L5-i4-5eu">
-                    <rect key="frame" x="18" y="21" width="884" height="14"/>
+                    <rect key="frame" x="18" y="25" width="884" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Picture Settings:" id="UWU-31-FxR">
                         <font key="font" metaFont="smallSystem"/>
@@ -86,7 +86,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="Pai-3Q-Gs3">
-                    <rect key="frame" x="514" y="271" width="50" height="14"/>
+                    <rect key="frame" x="530" y="288" width="50" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="bvD-W7-O0N">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="efn-Vj-Jp7"/>
@@ -96,7 +96,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="gPF-Jh-4d0">
-                    <rect key="frame" x="18" y="5" width="884" height="14"/>
+                    <rect key="frame" x="18" y="9" width="884" height="14"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Picture Filters:" id="l1l-8S-ttm">
                         <font key="font" metaFont="smallSystem"/>
@@ -124,7 +124,7 @@
                     </connections>
                 </popUpButton>
                 <button id="bnV-aE-FVh">
-                    <rect key="frame" x="363" y="205" width="124" height="18"/>
+                    <rect key="frame" x="379" y="222" width="124" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="2-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -135,7 +135,7 @@
                     </connections>
                 </button>
                 <button id="olm-zg-k9Y">
-                    <rect key="frame" x="488" y="205" width="107" height="16"/>
+                    <rect key="frame" x="504" y="222" width="107" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Turbo first pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -160,7 +160,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="bAn-iZ-ieF">
-                    <rect key="frame" x="18" y="263" width="90" height="14"/>
+                    <rect key="frame" x="6" y="263" width="101" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Framerate (FPS):" id="SJc-tv-AMH">
                         <font key="font" metaFont="smallSystem"/>
@@ -169,7 +169,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="rOd-nt-22T">
-                    <rect key="frame" x="16" y="289" width="91" height="14"/>
+                    <rect key="frame" x="6" y="289" width="101" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Video Codec:" id="Mrb-6Q-0YM">
                         <font key="font" metaFont="smallSystem"/>
@@ -178,7 +178,7 @@
                     </textFieldCell>
                 </textField>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="lsD-0N-H8k">
-                    <rect key="frame" x="338" y="217" width="145" height="70"/>
+                    <rect key="frame" x="354" y="234" width="145" height="70"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     <size key="cellSize" width="145" height="18"/>
@@ -205,10 +205,10 @@
                     </connections>
                 </matrix>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="Xe2-d5-nEH">
-                    <rect key="frame" x="113" y="215" width="157" height="38"/>
+                    <rect key="frame" x="113" y="215" width="143" height="38"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    <size key="cellSize" width="157" height="18"/>
+                    <size key="cellSize" width="143" height="18"/>
                     <size key="intercellSpacing" width="4" height="2"/>
                     <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="M9p-y9-GDo">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -228,7 +228,7 @@
                     </cells>
                 </matrix>
                 <box autoresizesSubviews="NO" title="x264 Presets" borderType="none" titlePosition="noTitle" id="A4U-3F-pYq">
-                    <rect key="frame" x="0.0" y="52" width="923" height="134"/>
+                    <rect key="frame" x="0.0" y="56" width="923" height="134"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <view key="contentView">
                         <rect key="frame" x="0.0" y="0.0" width="923" height="134"/>
@@ -238,9 +238,9 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
                 <slider verticalHuggingPriority="750" id="GPu-Ht-bKg">
-                    <rect key="frame" x="366" y="248" width="534" height="17"/>
+                    <rect key="frame" x="382" y="265" width="518" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="51" doubleValue="19" tickMarkPosition="above" numberOfTickMarks="205" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
+                    <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
                     <connections>
@@ -248,7 +248,7 @@
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" id="1au-ZO-l1i">
-                    <rect key="frame" x="489" y="271" width="28" height="14"/>
+                    <rect key="frame" x="505" y="288" width="28" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="RF:" id="rRB-9F-pHn">
                         <font key="font" metaFont="smallSystem"/>
@@ -257,14 +257,14 @@
                     </textFieldCell>
                 </textField>
                 <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="aeW-F6-jrd">
-                    <rect key="frame" x="20" y="41" width="880" height="5"/>
+                    <rect key="frame" x="20" y="45" width="880" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
                 </box>
                 <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="NtL-8e-tS7">
-                    <rect key="frame" x="20" y="194" width="880" height="5"/>
+                    <rect key="frame" x="20" y="198" width="880" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
