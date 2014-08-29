@@ -45,6 +45,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 // The current selected preset.
 @property (nonatomic, retain) HBPreset *selectedPreset;
+@property (nonatomic) BOOL customPreset;
 
 @end
 
@@ -1474,6 +1475,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 return NO;
             else
                 return [fWindow attachedSheet] == nil;
+        }
+        if (action == @selector(selectPresetFromMenu:))
+        {
+            if (!self.customPreset && [menuItem.representedObject isEqualTo:self.selectedPreset])
+            {
+                [menuItem setState:NSOnState];
+            }
+            else
+            {
+                [menuItem setState:NSOffState];
+            }
         }
     }
 
@@ -4539,6 +4551,7 @@ the user is using "Custom" settings by determining the sender*/
         [fPresetsView deselect];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
+        self.customPreset = YES;
 	}
 
     /* If Auto Naming is on it might need to be update if it includes the quality token */
@@ -5141,23 +5154,11 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction)selectPresetFromMenu:(id)sender
 {
-    __block HBPreset *preset = nil;
-    __block NSInteger i = -1;
-
-    NSInteger tag = [sender tag];
-
-    [presetManager.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
-    {
-        if (i == tag)
-        {
-            preset = obj;
-            *stop = YES;
-        }
-        i++;
-    }];
+    // Retrieve the preset stored in the NSMenuItem
+    HBPreset *preset = [sender representedObject];
 
     [self applyPreset:preset];
-    [fPresetsView setSelection:_selectedPreset];
+    [fPresetsView setSelection:preset];
 }
 
 /**
@@ -5192,6 +5193,7 @@ the user is using "Custom" settings by determining the sender*/
             if ([obj isLeaf])
             {
                 item.action = @selector(selectPresetFromMenu:);
+                item.representedObject = obj;
             }
             // Make the default preset font bold.
             if ([obj isDefault])
