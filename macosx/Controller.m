@@ -2814,11 +2814,11 @@ fWorkingCount = 0;
     
     [fSrcChapterStartPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterStart"] intValue] - 1];
     [fSrcChapterEndPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1];
-    
+
     /* File Format */
-    [fDstFormatPopUp selectItemWithTitle:[queueToApply objectForKey:@"FileFormat"]];
+    [fDstFormatPopUp selectItemWithTag:queueToApply[@"JobFileFormatMux"]];
     [self formatPopUpChanged:nil];
-    
+
     /* Chapter Markers*/
     fChapterTitlesController.createChapterMarkers = [[queueToApply objectForKey:@"ChapterMarkers"] boolValue];
     [fChapterTitlesController addChaptersFromQueue:[queueToApply objectForKey:@"ChapterNames"]];
@@ -4715,14 +4715,13 @@ the user is using "Custom" settings by determining the sender*/
 - (void)applyPreset:(HBPreset *)preset
 {
     self.selectedPreset = preset;
+    self.customPreset = NO;
 
     if (preset != nil && SuccessfulScan)
     {
         hb_job_t * job = fTitle->job;
-
-        // for mapping names via libhb
-        const char *strValue;
         NSDictionary *chosenPreset = preset.content;
+
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
 
         if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
@@ -4733,13 +4732,13 @@ the user is using "Custom" settings by determining the sender*/
         {
             [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
         }
-        
+
         /* File Format */
         /* map legacy container names via libhb */
-        strValue = hb_container_sanitize_name([[chosenPreset objectForKey:@"FileFormat"] UTF8String]);
-        [fDstFormatPopUp selectItemWithTitle:[NSString stringWithFormat:@"%s", strValue]];
+        int format = hb_container_get_from_name(hb_container_sanitize_name([chosenPreset[@"FileFormat"] UTF8String]));
+        [fDstFormatPopUp selectItemWithTag:format];
         [self formatPopUpChanged:nil];
-        
+
         /* Chapter Markers*/
         fChapterTitlesController.createChapterMarkers = [[chosenPreset objectForKey:@"ChapterMarkers"] boolValue];
         /* check to see if we have only one chapter */
