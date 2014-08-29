@@ -1,3 +1,12 @@
+/* deccc608sub.c
+
+   Copyright (c) 2003-2014 HandBrake Team
+   This file is part of the HandBrake source code
+   Homepage: <http://handbrake.fr/>.
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
+
 /*
  * From ccextractor, leave this file as intact and close to the original as possible so that
  * it is easy to patch in fixes - even though this file contains code that we don't need.
