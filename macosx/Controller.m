@@ -3237,7 +3237,7 @@ fWorkingCount = 0;
 	}
 
     /* Denoise */
-    if (filters.denoise)
+    if (![filters.denoise isEqualToString:@"off"])
     {
         int filter_id = HB_FILTER_HQDN3D;
         if ([filters.denoise isEqualToString:@"nlmeans"])
