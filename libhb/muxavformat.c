@@ -155,8 +155,9 @@ static int avformatInit( hb_mux_object_t * m )
 
             av_dict_set(&av_opts, "brand", "mp42", 0);
             if (job->mp4_optimize)
-                av_dict_set( &av_opts, "movflags", "faststart", 0 );
-            av_dict_set( &av_opts, "movflags", "disable_chpl", 0 );
+                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl", 0);
+            else
+                av_dict_set(&av_opts, "movflags", "+disable_chpl", 0);
             break;
 
         case HB_MUX_AV_MKV:
