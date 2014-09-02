@@ -3243,7 +3243,7 @@ fWorkingCount = 0;
         if ([filters.denoise isEqualToString:@"nlmeans"])
             filter_id = HB_FILTER_NLMEANS;
 
-        if ([filters.denoisePreset isEqualToString:@"custom"])
+        if ([filters.denoisePreset isEqualToString:@"none"])
         {
             const char *filter_str;
             filter_str = [filters.denoiseCustomString UTF8String];
@@ -3752,7 +3752,7 @@ fWorkingCount = 0;
         if ([queueToApply[@"PictureDenoise"] isEqualToString:@"nlmeans"])
             filter_id = HB_FILTER_NLMEANS;
 
-        if ([queueToApply[@"PictureDenoisePreset"] isEqualToString:@"custom"])
+        if ([queueToApply[@"PictureDenoisePreset"] isEqualToString:@"none"])
         {
             const char *filter_str;
             filter_str = [queueToApply[@"PictureDenoiseCustom"] UTF8String];
