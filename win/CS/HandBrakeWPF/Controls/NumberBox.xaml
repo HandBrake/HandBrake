@@ -150,7 +150,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Button
+            <Button  AutomationProperties.Name="Increase Number"
 				Style="{StaticResource UpButton}"
 				Grid.Row="0"
 				FontSize="4"
@@ -160,7 +160,7 @@
 					Style="{StaticResource Arrow}"
 					Points="4,0 0,4 8,4" />
             </Button>
-            <Button
+            <Button  AutomationProperties.Name="Decrease Number"
 				Style="{StaticResource DownButton}"
 				Grid.Row="1"
 				FontSize="4"
