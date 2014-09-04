@@ -99,8 +99,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     // Set things in context that we will allow the user to 
     // override with advanced settings.
-    context->thread_count = ( hb_get_cpu_count() * 3 / 2 );
-
     if( job->pass == 2 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
@@ -272,7 +270,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if( hb_avcodec_open( context, codec, &av_opts, 0 ) )
+    if (hb_avcodec_open(context, codec, &av_opts, HB_FFMPEG_THREADS_AUTO))
     {
         hb_log( "encavcodecInit: avcodec_open failed" );
     }
