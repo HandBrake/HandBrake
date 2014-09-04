@@ -2747,6 +2747,7 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
 
         case HB_VCODEC_FFMPEG_MPEG2:
         case HB_VCODEC_FFMPEG_MPEG4:
+        case HB_VCODEC_FFMPEG_VP8:
         {
             gchar *opts = ghb_settings_get_string(js, "VideoOptionExtra");
             if (opts != NULL && opts[0])
