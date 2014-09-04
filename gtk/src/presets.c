@@ -3706,10 +3706,8 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     int width = ghb_settings_get_int(ud->settings, "PictureWidth");
     int height = ghb_settings_get_int(ud->settings, "PictureHeight");
     gboolean autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
-    ghb_ui_update(ud, "PictureWidthEnable",
-        ghb_boolean_value(width!=0&&!autoscale));
-    ghb_ui_update(ud, "PictureHeightEnable",
-        ghb_boolean_value(height!=0&&!autoscale));
+    ghb_ui_update(ud, "PictureWidthEnable", ghb_boolean_value(!autoscale));
+    ghb_ui_update(ud, "PictureHeightEnable", ghb_boolean_value(!autoscale));
     if (!width)
     {
         width = ghb_settings_get_int(ud->settings, "scale_width");
@@ -4350,5 +4348,6 @@ G_MODULE_EXPORT void
 preset_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
 }
 
