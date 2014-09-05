@@ -1314,6 +1314,7 @@ static int avformatEnd(hb_mux_object_t *m)
     av_write_trailer(m->oc);
     avio_close(m->oc->pb);
     avformat_free_context(m->oc);
+    free(m->tracks);
     m->oc = NULL;
 
     return 0;

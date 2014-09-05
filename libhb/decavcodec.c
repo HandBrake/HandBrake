@@ -700,6 +700,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 dec_len = avcodec_decode_audio4(context, frame, &got_frame, &avp);
                 if (dec_len < 0)
                 {
+                    av_frame_free(&frame);
                     break;
                 }
                 if (dec_len > 0 && got_frame)
@@ -774,9 +775,11 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     }
 
                     ret = 1;
+                    av_frame_free(&frame);
                     break;
                 }
                 dec_pos += dec_len;
+                av_frame_free(&frame);
             }
             parse_pos += parse_len;
         }

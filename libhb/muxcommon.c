@@ -538,6 +538,7 @@ void muxClose( hb_work_object_t * w )
             }
             free( track );
         }
+        free(mux->track);
         hb_unlock( mux->mutex );
         hb_lock_close( &mux->mutex );
         hb_bitvec_free(&mux->eof);
