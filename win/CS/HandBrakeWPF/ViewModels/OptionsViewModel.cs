@@ -1680,6 +1680,11 @@ namespace HandBrakeWPF.ViewModels
                 this.UpdateMessage = "A New Update is Available!";
                 this.UpdateAvailable = true;
             }
+            else if (Environment.Is64BitOperatingSystem && !System.Environment.Is64BitProcess)
+            {
+                this.UpdateMessage = "Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.";
+                this.UpdateAvailable = true;
+            }
             else
             {
                 this.UpdateMessage = "There are no new updates at this time.";

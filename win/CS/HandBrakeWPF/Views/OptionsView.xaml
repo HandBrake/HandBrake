@@ -375,8 +375,10 @@
                     <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
                         <ProgressBar Minimum="0" Maximum="100" Height="20" Width="400" Value="{Binding DownloadProgressPercentage}" 
                                  Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
-                        <TextBlock Text="{Binding UpdateMessage}" Margin="10,0,10,0" VerticalAlignment="Center" />
+                        
                     </StackPanel>
+
+                    <TextBlock Text="{Binding UpdateMessage}" Margin="20,5,10,0" VerticalAlignment="Center" TextWrapping="Wrap" />
 
                 </StackPanel>
 
