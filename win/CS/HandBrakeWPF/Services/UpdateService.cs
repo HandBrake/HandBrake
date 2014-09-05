@@ -85,14 +85,14 @@ namespace HandBrakeWPF.Services
                     try
                     {
                         string url =
-                            VersionHelper.Is64Bit()
+                            VersionHelper.Is64Bit() || Environment.Is64BitOperatingSystem
                                 ? Constants.Appcast64
                                 : Constants.Appcast32;
 
                         if (VersionHelper.IsNightly())
                         {
                             url =
-                            VersionHelper.Is64Bit()
+                            VersionHelper.Is64Bit() || Environment.Is64BitOperatingSystem
                                 ? Constants.AppcastUnstable64
                                 : Constants.AppcastUnstable32;
                         }
