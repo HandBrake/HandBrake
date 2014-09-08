@@ -99,6 +99,8 @@ struct s_write {
     int width;
     int height;
     int crop[4];
+    uint8_t prev_font_style;
+    uint8_t prev_font_color;
 };
 
 enum command_code

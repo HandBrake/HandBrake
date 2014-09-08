@@ -584,13 +584,12 @@ static void find_limit_characters(unsigned char *line, int *first_non_blank,
     }
 }
 
-static unsigned get_decoder_line_encoded(unsigned char *buffer, int line_num,
+static unsigned get_decoder_line_encoded(struct s_write *wb,
+                                         unsigned char *buffer, int line_num,
                                          struct eia608_screen *data)
 {
     uint8_t font_style;
-    uint8_t prev_font_style = FONT_REGULAR;
     uint8_t font_color;
-    uint8_t prev_font_color = COL_WHITE;
     int i;
 
     unsigned char *line = data->characters[line_num];
@@ -607,8 +606,8 @@ static unsigned get_decoder_line_encoded(unsigned char *buffer, int line_num,
         // Handle reset to defaults
         if ((font_style & FONT_STYLE_MASK) == 0 && font_color == COL_WHITE)
         {
-            if (((font_style ^ prev_font_style) & FONT_STYLE_MASK) ||
-                (font_color != prev_font_color))
+            if (((font_style ^ wb->prev_font_style) & FONT_STYLE_MASK) ||
+                (font_color != wb->prev_font_color))
             {
                 buffer += encode_line(buffer, (uint8_t*)"{\\r}");
             }
@@ -616,15 +615,15 @@ static unsigned get_decoder_line_encoded(unsigned char *buffer, int line_num,
         else
         {
             // Open markup
-            if (((font_style ^ prev_font_style) & FONT_STYLE_MASK) ||
-                (font_color != prev_font_color))
+            if (((font_style ^ wb->prev_font_style) & FONT_STYLE_MASK) ||
+                (font_color != wb->prev_font_color))
             {
                 // style changed
                 buffer += encode_line(buffer, (uint8_t*)"{");
             }
 
             // Handle underlined
-            if ((font_style ^ prev_font_style) & FONT_UNDERLINED)
+            if ((font_style ^ wb->prev_font_style) & FONT_UNDERLINED)
             {
                 int enable = !!(font_style & FONT_UNDERLINED);
                 buffer += encode_line(buffer, (uint8_t*)"\\u");
@@ -632,7 +631,7 @@ static unsigned get_decoder_line_encoded(unsigned char *buffer, int line_num,
             }
 
             // Handle italics
-            if ((font_style ^ prev_font_style) & FONT_ITALICS)
+            if ((font_style ^ wb->prev_font_style) & FONT_ITALICS)
             {
                 int enable = !!(font_style & FONT_ITALICS);
                 buffer += encode_line(buffer, (uint8_t*)"\\i");
@@ -640,7 +639,7 @@ static unsigned get_decoder_line_encoded(unsigned char *buffer, int line_num,
             }
 
             // Handle color
-            if (font_color != prev_font_color)
+            if (font_color != wb->prev_font_color)
             {
                 buffer += encode_line(buffer, (uint8_t*)"\\1c");
                 buffer += encode_line(buffer,
@@ -648,15 +647,15 @@ static unsigned get_decoder_line_encoded(unsigned char *buffer, int line_num,
             }
 
             // Close markup
-            if (((font_style ^ prev_font_style) & FONT_STYLE_MASK) ||
-                (font_color != prev_font_color))
+            if (((font_style ^ wb->prev_font_style) & FONT_STYLE_MASK) ||
+                (font_color != wb->prev_font_color))
             {
                 // style changed
                 buffer += encode_line(buffer, (uint8_t*)"}");
             }
         }
-        prev_font_style = font_style;
-        prev_font_color = font_color;
+        wb->prev_font_style = font_style;
+        wb->prev_font_color = font_color;
 
         int bytes = 0;
         bytes = get_char_in_utf8(buffer, line[i]);
@@ -851,6 +850,8 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
         }
     }
 
+    wb->prev_font_style = FONT_REGULAR;
+    wb->prev_font_color = COL_WHITE;
     wb->enc_buffer_used = 0;
     int line = 1;
     for (i = 0; i < 15; i++)
@@ -905,13 +906,13 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
              * old code still here just in case..
              */
             if (line == 1) {
-                wb->enc_buffer_used += get_decoder_line_encoded(
+                wb->enc_buffer_used += get_decoder_line_encoded(wb,
                         wb->enc_buffer + wb->enc_buffer_used, i, data);
                 line = 2;
             } else {
                 wb->enc_buffer_used += encode_line(
                         wb->enc_buffer + wb->enc_buffer_used, (uint8_t*)"\\N");
-                wb->enc_buffer_used += get_decoder_line_encoded(
+                wb->enc_buffer_used += get_decoder_line_encoded(wb,
                         wb->enc_buffer + wb->enc_buffer_used, i, data);
             }
         }
@@ -1164,6 +1165,8 @@ static void handle_command(unsigned char c1, const unsigned char c2,
                     wb->data608->screenfuls_counter++;
                 erase_memory (wb, 1);
             }
+            wb->data608->color=default_color;
+            wb->data608->font=FONT_REGULAR;
             if (wb->data608->mode==MODE_ROLLUP_2 && !is_current_row_empty(wb))
             {
                 if (debug_608)
@@ -1184,6 +1187,8 @@ static void handle_command(unsigned char c1, const unsigned char c2,
                     wb->data608->screenfuls_counter++;
                 erase_memory (wb, 1);
             }
+            wb->data608->color=default_color;
+            wb->data608->font=FONT_REGULAR;
             if (wb->data608->mode==MODE_ROLLUP_3 && !is_current_row_empty(wb))
             {
                 if (debug_608)
@@ -1204,6 +1209,8 @@ static void handle_command(unsigned char c1, const unsigned char c2,
                     wb->data608->screenfuls_counter++;
                 erase_memory (wb, 1);
             }
+            wb->data608->color=default_color;
+            wb->data608->font=FONT_REGULAR;
             if (wb->data608->mode==MODE_ROLLUP_4 && !is_current_row_empty(wb))
             {
                 if (debug_608)
