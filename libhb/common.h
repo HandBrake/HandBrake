@@ -99,6 +99,8 @@ typedef struct hb_work_object_s  hb_work_object_t;
 typedef struct hb_filter_private_s hb_filter_private_t;
 typedef struct hb_filter_object_s  hb_filter_object_t;
 typedef struct hb_buffer_s hb_buffer_t;
+typedef struct hb_buffer_settings_s hb_buffer_settings_t;
+typedef struct hb_image_format_s hb_image_format_t;
 typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
 typedef enum

@@ -51,6 +51,41 @@ void hb_set_state( hb_handle_t *, hb_state_t * );
  * May have metadata associated with it via extra fields
  * that are conditionally used depending on the type of packet.
  */
+struct hb_buffer_settings_s
+{
+    enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF, OTHER_BUF } type;
+
+    int           id;           // ID of the track that the packet comes from
+    int64_t       start;        // start time of frame
+    double        duration;     // Actual duration, may be fractional ticks
+    int64_t       stop;         // stop time of frame
+    int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
+    int64_t       pcr;
+    uint8_t       discontinuity;
+    int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
+
+#define HB_FRAME_IDR      0x01
+#define HB_FRAME_I        0x02
+#define HB_FRAME_AUDIO    0x04
+#define HB_FRAME_SUBTITLE 0x08
+#define HB_FRAME_P        0x10
+#define HB_FRAME_B        0x20
+#define HB_FRAME_BREF     0x40
+#define HB_FRAME_KEY      0x0F
+#define HB_FRAME_REF      0xF0
+    uint8_t       frametype;
+    uint16_t      flags;
+};
+
+struct hb_image_format_s
+{
+    int           x;
+    int           y;
+    int           width;
+    int           height;
+    int           fmt;
+};
+
 struct hb_buffer_s
 {
     int           size;     // size of this packet
@@ -71,40 +106,8 @@ struct hb_buffer_s
      */
     int64_t       sequence;
 
-    struct settings
-    {
-        enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF, OTHER_BUF } type;
-
-        int           id;           // ID of the track that the packet comes from
-        int64_t       start;        // start time of frame
-        double        duration;     // Actual duration, may be fractional ticks
-        int64_t       stop;         // stop time of frame
-        int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
-        int64_t       pcr;
-        uint8_t       discontinuity;
-        int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
-
-    #define HB_FRAME_IDR      0x01
-    #define HB_FRAME_I        0x02
-    #define HB_FRAME_AUDIO    0x04
-    #define HB_FRAME_SUBTITLE 0x08
-    #define HB_FRAME_P        0x10
-    #define HB_FRAME_B        0x20
-    #define HB_FRAME_BREF     0x40
-    #define HB_FRAME_KEY      0x0F
-    #define HB_FRAME_REF      0xF0
-        uint8_t       frametype;
-        uint16_t      flags;
-    } s;
-
-    struct format
-    {
-        int           x;
-        int           y;
-        int           width;
-        int           height;
-        int           fmt;
-    } f;
+    hb_buffer_settings_t s;
+    hb_image_format_t f;
 
     struct buffer_plane
     {

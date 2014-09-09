@@ -52,6 +52,7 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
+#include "taskset.h"
 
 #define NLMEANS_STRENGTH_LUMA_DEFAULT      8
 #define NLMEANS_STRENGTH_CHROMA_DEFAULT    8
@@ -82,8 +83,8 @@
 #define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
 #define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
 
-#define NLMEANS_FRAMES_MAX 32
-#define NLMEANS_EXPSIZE    128
+#define NLMEANS_FRAMES_MAX  32
+#define NLMEANS_EXPSIZE     128
 
 typedef struct
 {
@@ -94,7 +95,18 @@ typedef struct
     int w;
     int h;
     int border;
+    hb_lock_t *mutex;
+    int prefiltered;
 } BorderedPlane;
+
+typedef struct
+{
+    int width;
+    int height;
+    int fmt;
+    BorderedPlane plane[3];
+    hb_buffer_settings_t s;
+} Frame;
 
 struct PixelSum
 {
@@ -102,27 +114,38 @@ struct PixelSum
     float pixel_sum;
 };
 
+typedef struct
+{
+    hb_filter_private_t *pv;
+    int segment;
+    hb_buffer_t *out;
+} nlmeans_thread_arg_t;
+
 struct hb_filter_private_s
 {
     double strength[3];    // averaging weight decay, larger produces smoother output
     double origin_tune[3]; // weight tuning for origin patch, 0.00..1.00
     int    patch_size[3];  // pixel context region width  (must be odd)
     int    range[3];       // spatial search window width (must be odd)
-    int    frames[3];      // temporal search depth in frames
+    int    nframes[3];     // temporal search depth in frames
     int    prefilter[3];   // prefilter mode, can improve weight analysis
 
-    BorderedPlane frame_tmp[3][32];
-    int           frame_ready[3][32];
+    Frame      *frame;
+    int         next_frame;
+    int         max_frames;
+
+    taskset_t   taskset;
+    int         thread_count;
+    nlmeans_thread_arg_t **thread_data;
 };
 
-static int hb_nlmeans_init(hb_filter_object_t *filter,
-                           hb_filter_init_t   *init);
-
-static int hb_nlmeans_work(hb_filter_object_t *filter,
+static int nlmeans_init(hb_filter_object_t *filter, hb_filter_init_t *init);
+static int nlmeans_work(hb_filter_object_t *filter,
                            hb_buffer_t **buf_in,
                            hb_buffer_t **buf_out);
+static void nlmeans_close(hb_filter_object_t *filter);
 
-static void hb_nlmeans_close(hb_filter_object_t *filter);
+static void nlmeans_filter_thread(void *thread_args_v);
 
 hb_filter_object_t hb_filter_nlmeans =
 {
@@ -130,9 +153,9 @@ hb_filter_object_t hb_filter_nlmeans =
     .enforce_order = 1,
     .name          = "Denoise (nlmeans)",
     .settings      = NULL,
-    .init          = hb_nlmeans_init,
-    .work          = hb_nlmeans_work,
-    .close         = hb_nlmeans_close,
+    .init          = nlmeans_init,
+    .work          = nlmeans_work,
+    .close         = nlmeans_close,
 };
 
 static void nlmeans_border(uint8_t *src,
@@ -140,69 +163,69 @@ static void nlmeans_border(uint8_t *src,
                            int h,
                            int border)
 {
-
-    uint8_t *image = src + border + w*border;
-    int iw = w - 2*border;
-    int ih = h - 2*border;
+    int bw = w + 2 * border;
+    uint8_t *image = src + border + bw * border;
 
     // Create faux borders using edge pixels
-    for (int y = 0; y < ih; y++)
+    for (int y = 0; y < h; y++)
     {
         for (int x = 0; x < border; x++)
         {
-            *(image + y*w - x - 1)  = *(image + y*w + x);
-            *(image + y*w + x + iw) = *(image + y*w - x + (iw-1));
+            *(image + y*bw - x - 1) = *(image + y*bw + x);
+            *(image + y*bw + x + w) = *(image + y*bw - x + (w-1));
         }
     }
     for (int y = 0; y < border; y++)
     {
-        memcpy(image - border -  (y+1)*w, image - border +        y*w, w);
-        memcpy(image - border + (y+ih)*w, image - border + (ih-y-1)*w, w);
+        memcpy(image - border - (y+1)*bw, image - border +       y*bw, bw);
+        memcpy(image - border + (y+h)*bw, image - border + (h-y-1)*bw, bw);
     }
 
 }
 
-static void nlmeans_deborder(uint8_t *src,
+static void nlmeans_deborder(BorderedPlane *src,
                              uint8_t *dst,
                              int w,
-                             int h,
-                             int border)
+                             int s,
+                             int h)
 {
-
-    uint8_t *image = src + border + w*border;
-    int iw = w - 2*border;
-    int ih = h - 2*border;
+    int bw = src->w + 2 * src->border;
+    uint8_t *image = src->mem + src->border + bw * src->border;
+    int width = w;
+    if (src->w < width)
+        width = src->w;
 
     // Copy main image
-    for (int y = 0; y < ih; y++)
+    for (int y = 0; y < h; y++)
     {
-        memcpy(dst + y*iw, image + y*w, iw);
+        memcpy(dst + y * s, image + y * bw, width);
     }
 
 }
 
 static void nlmeans_alloc(uint8_t *src,
                           int src_w,
+                          int src_s,
                           int src_h,
                           BorderedPlane *dst,
-                          int dst_w,
-                          int dst_h,
                           int border)
 {
+    int bw = src_w + 2 * border;
+    int bh = src_h + 2 * border;
 
-    uint8_t *mem   = malloc(dst_w * dst_h * sizeof(uint8_t));
-    uint8_t *image = mem + border + dst_w*border;
+    uint8_t *mem   = malloc(bw * bh * sizeof(uint8_t));
+    uint8_t *image = mem + border + bw * border;
 
     // Copy main image
     for (int y = 0; y < src_h; y++)
     {
-        memcpy(image + y*dst_w, src + y*src_w, src_w);
+        memcpy(image + y * bw, src + y * src_s, src_w);
     }
 
     dst->mem       = mem;
     dst->image     = image;
-    dst->w         = dst_w;
-    dst->h         = dst_h;
+    dst->w         = src_w;
+    dst->h         = src_h;
     dst->border    = border;
 
     nlmeans_border(dst->mem, dst->w, dst->h, dst->border);
@@ -220,25 +243,24 @@ static void nlmeans_filter_mean(uint8_t *src,
 {
 
     // Mean filter
-    int iw = w - 2*border;
-    int ih = h - 2*border;
+    int bw = w + 2 * border;
     int offset_min = -((size - 1) /2);
     int offset_max =   (size + 1) /2;
     uint16_t pixel_sum;
     double pixel_weight = 1.0 / (size * size);
-    for (int y = 0; y < ih; y++)
+    for (int y = 0; y < h; y++)
     {
-        for (int x = 0; x < iw; x++)
+        for (int x = 0; x < w; x++)
         {
             pixel_sum = 0;
             for (int k = offset_min; k < offset_max; k++)
             {
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixel_sum = pixel_sum + *(src + w*(y+j) + (x+k));
+                    pixel_sum = pixel_sum + *(src + bw*(y+j) + (x+k));
                 }
             }
-            *(dst + w*y + x) = (uint8_t)(pixel_sum * pixel_weight);
+            *(dst + bw*y + x) = (uint8_t)(pixel_sum * pixel_weight);
         }
     }
 
@@ -315,28 +337,26 @@ static void nlmeans_filter_median(uint8_t *src,
                                   int border,
                                   int size)
 {
-
     // Median filter
-    int iw = w - 2*border;
-    int ih = h - 2*border;
+    int bw = w + 2 * border;
     int offset_min = -((size - 1) /2);
     int offset_max =   (size + 1) /2;
     int index;
     uint8_t pixels[size * size];
-    for (int y = 0; y < ih; y++)
+    for (int y = 0; y < h; y++)
     {
-        for (int x = 0; x < iw; x++)
+        for (int x = 0; x < w; x++)
         {
             index = 0;
             for (int k = offset_min; k < offset_max; k++)
             {
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixels[index] = *(src + w*(y+j) + (x+k));
+                    pixels[index] = *(src + bw*(y+j) + (x+k));
                     index++;
                 }
             }
-            *(dst + w*y + x) = nlmeans_filter_median_opt(pixels, size);
+            *(dst + bw*y + x) = nlmeans_filter_median_opt(pixels, size);
         }
     }
 
@@ -348,9 +368,8 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
                                      int h,
                                      int border)
 {
-
-    int iw = w - 2*border;
-    int ih = h - 2*border;
+    int bw = w + 2 * border;
+    int bh = h + 2 * border;
 
     // Custom kernel
     int kernel_size = 3;
@@ -364,11 +383,11 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
     int offset_max =   (kernel_size + 1) /2;
     uint16_t pixel1;
     uint16_t pixel2;
-    uint8_t *mask_mem = calloc(w * h, sizeof(uint8_t));
-    uint8_t *mask = mask_mem + border + w*border;
-    for (int y = 0; y < ih; y++)
+    uint8_t *mask_mem = calloc(bw * bh, sizeof(uint8_t));
+    uint8_t *mask = mask_mem + border + bw * border;
+    for (int y = 0; y < h; y++)
     {
-        for (int x = 0; x < iw; x++)
+        for (int x = 0; x < w; x++)
         {
             pixel1 = 0;
             pixel2 = 0;
@@ -376,37 +395,37 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
             {
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixel1 += kernel[j+1][k+1] * *(src + w*(y+j) + (x+k));
-                    pixel2 += kernel[k+1][j+1] * *(src + w*(y+j) + (x+k));
+                    pixel1 += kernel[j+1][k+1] * *(src + bw*(y+j) + (x+k));
+                    pixel2 += kernel[k+1][j+1] * *(src + bw*(y+j) + (x+k));
                 }
             }
             pixel1 = pixel1 > 0 ? pixel1 : -pixel1;
             pixel2 = pixel2 > 0 ? pixel2 : -pixel2;
             pixel1 = (uint16_t)(((double)pixel1 * kernel_coef) + 128);
             pixel2 = (uint16_t)(((double)pixel2 * kernel_coef) + 128);
-            *(mask + w*y + x) = (uint8_t)(pixel1 + pixel2);
-            if (*(mask + w*y + x) > 160)
+            *(mask + bw*y + x) = (uint8_t)(pixel1 + pixel2);
+            if (*(mask + bw*y + x) > 160)
             {
-                *(mask + w*y + x) = 235;
+                *(mask + bw*y + x) = 235;
             }
-            else if (*(mask + w*y + x) > 16)
+            else if (*(mask + bw*y + x) > 16)
             {
-                *(mask + w*y + x) = 128;
+                *(mask + bw*y + x) = 128;
             }
             else
             {
-                *(mask + w*y + x) = 16;
+                *(mask + bw*y + x) = 16;
             }
         }
     }
 
     // Post-process and output
     int pixels;
-    for (int y = 0; y < ih; y++)
+    for (int y = 0; y < h; y++)
     {
-        for (int x = 0; x < iw; x++)
+        for (int x = 0; x < w; x++)
         {
-            if (*(mask + w*y + x) > 16)
+            if (*(mask + bw*y + x) > 16)
             {
                 // Count nearby edge pixels
                 pixels = 0;
@@ -414,7 +433,7 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
                 {
                     for (int j = offset_min; j < offset_max; j++)
                     {
-                        if (*(mask + w*(y+j) + (x+k)) > 16)
+                        if (*(mask + bw*(y+j) + (x+k)) > 16)
                         {
                             pixels++;
                         }
@@ -423,33 +442,38 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
                 // Remove false positive
                 if (pixels < 3)
                 {
-                    *(mask + w*y + x) = 16;
+                    *(mask + bw*y + x) = 16;
                 }
                 // Filter output
-                if (*(mask + w*y + x) > 16)
+                if (*(mask + bw*y + x) > 16)
                 {
-                    if (*(mask + w*y + x) == 235)
+                    if (*(mask + bw*y + x) == 235)
                     {
-                        *(dst + w*y + x) = (3 * *(src + w*y + x) + 1 * *(dst + w*y + x)) /4;
+                        *(dst + bw*y + x) = (3 * *(src + bw*y + x) + 1 * *(dst + bw*y + x)) /4;
                     }
                     else
                     {
-                        *(dst + w*y + x) = (2 * *(src + w*y + x) + 3 * *(dst + w*y + x)) /5;
+                        *(dst + bw*y + x) = (2 * *(src + bw*y + x) + 3 * *(dst + bw*y + x)) /5;
                     }
-                    //*(dst + w*y + x) = *(mask + w*y + x); // Overlay mask
+                    //*(dst + bw*y + x) = *(mask + bw*y + x); // Overlay mask
                 }
             }
-            //*(dst + w*y + x) = *(mask + w*y + x); // Full mask
+            //*(dst + bw*y + x) = *(mask + bw*y + x); // Full mask
         }
     }
 
     free(mask_mem);
-
 }
 
 static void nlmeans_prefilter(BorderedPlane *src,
                               int filter_type)
 {
+    hb_lock(src->mutex);
+    if (src->prefiltered)
+    {
+        hb_unlock(src->mutex);
+        return;
+    }
 
     if (filter_type & NLMEANS_PREFILTER_MODE_MEAN3X3   ||
         filter_type & NLMEANS_PREFILTER_MODE_MEAN5X5   ||
@@ -460,16 +484,18 @@ static void nlmeans_prefilter(BorderedPlane *src,
         // Source image
         uint8_t *mem   = src->mem;
         uint8_t *image = src->image;
+        int border     = src->border;
         int w          = src->w;
         int h          = src->h;
-        int border     = src->border;
+        int bw         = w + 2 * border;
+        int bh         = h + 2 * border;
 
         // Duplicate plane
-        uint8_t *mem_pre = malloc(w * h * sizeof(uint8_t));
-        uint8_t *image_pre = mem_pre + border + w*border;
+        uint8_t *mem_pre = malloc(bw * bh * sizeof(uint8_t));
+        uint8_t *image_pre = mem_pre + border + bw * border;
         for (int y = 0; y < h; y++)
         {
-            memcpy(mem_pre + y*w, mem + y*w, w);
+            memcpy(mem_pre + y * bw, mem + y * bw, bw);
         }
 
         // Filter plane; should already have at least 2px extra border on each side
@@ -521,11 +547,11 @@ static void nlmeans_prefilter(BorderedPlane *src,
         }
         if (dry > 0)
         {
-            for (int y = 0; y < h; y++)
+            for (int y = 0; y < bh; y++)
             {
-                for (int x = 0; x < w; x++)
+                for (int x = 0; x < bw; x++)
                 {
-                    *(mem_pre + w*y + x) = (uint8_t)((wet * *(mem_pre + w*y + x) + dry * *(mem + w*y + x)) / (wet + dry));
+                    *(mem_pre + bw*y + x) = (uint8_t)((wet * *(mem_pre + bw*y + x) + dry * *(mem + bw*y + x)) / (wet + dry));
                 }
             }
         }
@@ -538,33 +564,37 @@ static void nlmeans_prefilter(BorderedPlane *src,
         nlmeans_border(mem_pre, w, h, border);
 
     }
-
+    src->prefiltered = 1;
+    hb_unlock(src->mutex);
 }
 
-static void nlmeans_plane(BorderedPlane *plane_tmp,
-                          int *plane_ready,
+static void nlmeans_plane(Frame *frame,
+                          int prefilter,
+                          int plane,
+                          int nframes,
                           uint8_t *dst,
                           int w,
+                          int s,
                           int h,
                           double h_param,
                           double origin_tune,
                           int n,
                           int r)
 {
-
     int n_half = (n-1) /2;
     int r_half = (r-1) /2;
 
     // Source image
-    uint8_t *src     = plane_tmp[0].image;
-    uint8_t *src_pre = plane_tmp[0].image_pre;
-    int src_w        = plane_tmp[0].w;
+    uint8_t *src     = frame[0].plane[plane].image;
+    uint8_t *src_pre = frame[0].plane[plane].image_pre;
+    int border       = frame[0].plane[plane].border;
+    int src_w        = frame[0].plane[plane].w + 2 * border;
 
     // Allocate temporary pixel sums
     struct PixelSum *tmp_data = calloc(w * h, sizeof(struct PixelSum));
 
     // Allocate integral image
-    int integral_stride = w + 2*16;
+    int integral_stride = w + 2 * 16;
     uint32_t *integral_mem = malloc(integral_stride * (h+1) * sizeof(uint32_t));
     uint32_t *integral     = integral_mem + integral_stride + 16;
 
@@ -582,13 +612,15 @@ static void nlmeans_plane(BorderedPlane *plane_tmp,
     exptable[NLMEANS_EXPSIZE-1] = 0;
 
     // Iterate through available frames
-    for (int plane_index = 0; plane_ready[plane_index] == 1; plane_index++)
+    for (int f = 0; f < nframes; f++)
     {
+        nlmeans_prefilter(&frame[f].plane[plane], prefilter);
 
         // Compare image
-        uint8_t *compare     = plane_tmp[plane_index].image;
-        uint8_t *compare_pre = plane_tmp[plane_index].image_pre;
-        int compare_w        = plane_tmp[plane_index].w;
+        uint8_t *compare     = frame[f].plane[plane].image;
+        uint8_t *compare_pre = frame[f].plane[plane].image_pre;
+        int border           = frame[f].plane[plane].border;
+        int compare_w        = frame[f].plane[plane].w + 2 * border;
 
         // Iterate through all displacements
         for (int dy = -r_half; dy <= r_half; dy++)
@@ -597,7 +629,7 @@ static void nlmeans_plane(BorderedPlane *plane_tmp,
             {
 
                 // Apply special weight tuning to origin patch
-                if (dx == 0 && dy == 0 && plane_index == 0)
+                if (dx == 0 && dy == 0 && f == 0)
                 {
                     // TODO: Parallelize this
                     for (int y = n_half; y < h-n + n_half; y++)
@@ -680,14 +712,14 @@ static void nlmeans_plane(BorderedPlane *plane_tmp,
     {
         for (int x = 0; x < n_half; x++)
         {
-            *(dst + y*w + x)         = *(src + y*src_w - x - 1);
-            *(dst + y*w - x + (w-1)) = *(src + y*src_w + x + w);
+            *(dst + y * s + x)           = *(src + y * src_w - x - 1);
+            *(dst + y * s - x + (w - 1)) = *(src + y * src_w + x + w);
         }
     }
     for (int y = 0; y < n_half; y++)
     {
-        memcpy(dst +       y*w, src - (y+1)*src_w, w);
-        memcpy(dst + (h-y-1)*w, src + (y+h)*src_w, w);
+        memcpy(dst +       y*s, src - (y+1)*src_w, w);
+        memcpy(dst + (h-y-1)*s, src + (y+h)*src_w, w);
     }
 
     // Copy main image
@@ -697,7 +729,7 @@ static void nlmeans_plane(BorderedPlane *plane_tmp,
         for (int x = n_half; x < w-n_half; x++)
         {
             result = (uint8_t)(tmp_data[y*w + x].pixel_sum / tmp_data[y*w + x].weight_sum);
-            *(dst + y*w + x) = result ? result : *(src + y*src_w + x);
+            *(dst + y*s + x) = result ? result : *(src + y*src_w + x);
         }
     }
 
@@ -706,7 +738,7 @@ static void nlmeans_plane(BorderedPlane *plane_tmp,
 
 }
 
-static int hb_nlmeans_init(hb_filter_object_t *filter,
+static int nlmeans_init(hb_filter_object_t *filter,
                            hb_filter_init_t *init)
 {
     filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
@@ -719,7 +751,7 @@ static int hb_nlmeans_init(hb_filter_object_t *filter,
         pv->origin_tune[c] = -1;
         pv->patch_size[c]  = -1;
         pv->range[c]       = -1;
-        pv->frames[c]      = -1;
+        pv->nframes[c]     = -1;
         pv->prefilter[c]   = -1;
     }
 
@@ -727,9 +759,9 @@ static int hb_nlmeans_init(hb_filter_object_t *filter,
     if (filter->settings != NULL)
     {
         sscanf(filter->settings, "%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d",
-               &pv->strength[0], &pv->origin_tune[0], &pv->patch_size[0], &pv->range[0], &pv->frames[0], &pv->prefilter[0],
-               &pv->strength[1], &pv->origin_tune[1], &pv->patch_size[1], &pv->range[1], &pv->frames[1], &pv->prefilter[1],
-               &pv->strength[2], &pv->origin_tune[2], &pv->patch_size[2], &pv->range[2], &pv->frames[2], &pv->prefilter[2]);
+               &pv->strength[0], &pv->origin_tune[0], &pv->patch_size[0], &pv->range[0], &pv->nframes[0], &pv->prefilter[0],
+               &pv->strength[1], &pv->origin_tune[1], &pv->patch_size[1], &pv->range[1], &pv->nframes[1], &pv->prefilter[1],
+               &pv->strength[2], &pv->origin_tune[2], &pv->patch_size[2], &pv->range[2], &pv->nframes[2], &pv->prefilter[2]);
     }
 
     // Cascade values
@@ -740,7 +772,7 @@ static int hb_nlmeans_init(hb_filter_object_t *filter,
         if (pv->origin_tune[c] == -1) { pv->origin_tune[c] = pv->origin_tune[c-1]; }
         if (pv->patch_size[c]  == -1) { pv->patch_size[c]  = pv->patch_size[c-1]; }
         if (pv->range[c]       == -1) { pv->range[c]       = pv->range[c-1]; }
-        if (pv->frames[c]      == -1) { pv->frames[c]      = pv->frames[c-1]; }
+        if (pv->nframes[c]     == -1) { pv->nframes[c]     = pv->nframes[c-1]; }
         if (pv->prefilter[c]   == -1) { pv->prefilter[c]   = pv->prefilter[c-1]; }
     }
 
@@ -751,7 +783,7 @@ static int hb_nlmeans_init(hb_filter_object_t *filter,
         if (pv->origin_tune[c] == -1) { pv->origin_tune[c] = c ? NLMEANS_ORIGIN_TUNE_LUMA_DEFAULT : NLMEANS_ORIGIN_TUNE_CHROMA_DEFAULT; }
         if (pv->patch_size[c]  == -1) { pv->patch_size[c]  = c ? NLMEANS_PATCH_SIZE_LUMA_DEFAULT  : NLMEANS_PATCH_SIZE_CHROMA_DEFAULT; }
         if (pv->range[c]       == -1) { pv->range[c]       = c ? NLMEANS_RANGE_LUMA_DEFAULT       : NLMEANS_RANGE_CHROMA_DEFAULT; }
-        if (pv->frames[c]      == -1) { pv->frames[c]      = c ? NLMEANS_FRAMES_LUMA_DEFAULT      : NLMEANS_FRAMES_CHROMA_DEFAULT; }
+        if (pv->nframes[c]     == -1) { pv->nframes[c]     = c ? NLMEANS_FRAMES_LUMA_DEFAULT      : NLMEANS_FRAMES_CHROMA_DEFAULT; }
         if (pv->prefilter[c]   == -1) { pv->prefilter[c]   = c ? NLMEANS_PREFILTER_LUMA_DEFAULT   : NLMEANS_PREFILTER_CHROMA_DEFAULT; }
 
         // Sanitize
@@ -762,21 +794,59 @@ static int hb_nlmeans_init(hb_filter_object_t *filter,
         if (pv->patch_size[c] < 1)      { pv->patch_size[c] = 1; }
         if (pv->range[c] % 2 == 0)      { pv->range[c]--; }
         if (pv->range[c] < 1)           { pv->range[c] = 1; }
-        if (pv->frames[c] < 1)          { pv->frames[c] = 1; }
-        if (pv->frames[c] > NLMEANS_FRAMES_MAX) { pv->frames[c] = NLMEANS_FRAMES_MAX; }
+        if (pv->nframes[c] < 1)         { pv->nframes[c] = 1; }
+        if (pv->nframes[c] > NLMEANS_FRAMES_MAX) { pv->nframes[c] = NLMEANS_FRAMES_MAX; }
         if (pv->prefilter[c] < 0)       { pv->prefilter[c] = 0; }
 
-        // Mark buffer empty
-        for (int f = 0; f < NLMEANS_FRAMES_MAX; f++)
+        if (pv->max_frames < pv->nframes[c]) pv->max_frames = pv->nframes[c];
+    }
+
+    pv->thread_count = hb_get_cpu_count();
+    pv->frame = calloc(pv->thread_count + pv->max_frames, sizeof(Frame));
+    for (int ii = 0; ii < pv->thread_count + pv->max_frames; ii++)
+    {
+        for (int c = 0; c < 3; c++)
         {
-            pv->frame_ready[c][f] = 0;
+            pv->frame[ii].plane[c].mutex = hb_lock_init();
+        }
+    }
+
+    pv->thread_data = malloc(pv->thread_count * sizeof(nlmeans_thread_arg_t*));
+    if (taskset_init(&pv->taskset, pv->thread_count,
+                     sizeof(nlmeans_thread_arg_t)) == 0)
+    {
+        hb_error("nlmeans could not initialize taskset");
+        goto fail;
+    }
+
+    for (int ii = 0; ii < pv->thread_count; ii++)
+    {
+        pv->thread_data[ii] = taskset_thread_args(&pv->taskset, ii);
+        if (pv->thread_data[ii] == NULL)
+        {
+            hb_error("nlmeans could not create thread args");
+            goto fail;
+        }
+        pv->thread_data[ii]->pv = pv;
+        pv->thread_data[ii]->segment = ii;
+        if (taskset_thread_spawn(&pv->taskset, ii, "nlmeans_filter",
+                                 nlmeans_filter_thread, HB_NORMAL_PRIORITY) == 0)
+        {
+            hb_error("nlmeans could not spawn thread");
+            goto fail;
         }
     }
 
     return 0;
+
+fail:
+    taskset_fini(&pv->taskset);
+    free(pv->thread_data);
+    free(pv);
+    return -1;
 }
 
-static void hb_nlmeans_close(hb_filter_object_t *filter)
+static void nlmeans_close(hb_filter_object_t *filter)
 {
     hb_filter_private_t *pv = filter->private_data;
 
@@ -785,113 +855,269 @@ static void hb_nlmeans_close(hb_filter_object_t *filter)
         return;
     }
 
+    taskset_fini(&pv->taskset);
     for (int c = 0; c < 3; c++)
     {
-        for (int f = 0; f < pv->frames[c]; f++)
+        for (int f = 0; f < pv->nframes[c]; f++)
         {
-            if (pv->frame_tmp[c][f].mem_pre != NULL &&
-                pv->frame_tmp[c][f].mem_pre != pv->frame_tmp[c][f].mem)
+            if (pv->frame[f].plane[c].mem_pre != NULL &&
+                pv->frame[f].plane[c].mem_pre != pv->frame[f].plane[c].mem)
             {
-                free(pv->frame_tmp[c][f].mem_pre);
-                pv->frame_tmp[c][f].mem_pre = NULL;
+                free(pv->frame[f].plane[c].mem_pre);
+                pv->frame[f].plane[c].mem_pre = NULL;
             }
-            if (pv->frame_tmp[c][f].mem != NULL)
+            if (pv->frame[f].plane[c].mem != NULL)
             {
-                free(pv->frame_tmp[c][f].mem);
-                pv->frame_tmp[c][f].mem = NULL;
+                free(pv->frame[f].plane[c].mem);
+                pv->frame[f].plane[c].mem = NULL;
             }
         }
     }
 
+    for (int ii = 0; ii < pv->thread_count + pv->max_frames; ii++)
+    {
+        for (int c = 0; c < 3; c++)
+        {
+            hb_lock_close(&pv->frame[ii].plane[c].mutex);
+        }
+    }
+
+    free(pv->frame);
+    free(pv->thread_data);
     free(pv);
     filter->private_data = NULL;
 }
 
-static int hb_nlmeans_work(hb_filter_object_t *filter,
+static void nlmeans_filter_thread(void *thread_args_v)
+{
+    nlmeans_thread_arg_t *thread_data = thread_args_v;
+    hb_filter_private_t *pv = thread_data->pv;
+    int segment = thread_data->segment;
+
+    hb_log("NLMeans Denoise thread started for segment %d", segment);
+
+    while (1)
+    {
+        // Wait until there is work to do.
+        taskset_thread_wait4start(&pv->taskset, segment);
+
+        if (taskset_thread_stop(&pv->taskset, segment))
+        {
+            break;
+        }
+
+        Frame *frame = &pv->frame[segment];
+        hb_buffer_t *buf;
+        buf = hb_frame_buffer_init(frame->fmt, frame->width, frame->height);
+
+        for (int c = 0; c < 3; c++)
+        {
+            if (pv->strength[c] == 0)
+            {
+                nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
+                                 buf->plane[c].width, buf->plane[c].stride,
+                                 buf->plane[c].height);
+                continue;
+            }
+            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
+            {
+                nlmeans_prefilter(&pv->frame->plane[c], pv->prefilter[c]);
+                nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
+                                 buf->plane[c].width, buf->plane[c].stride,
+                                 buf->plane[c].height);
+                continue;
+            }
+
+            // Process current plane
+            nlmeans_plane(frame,
+                          pv->prefilter[c],
+                          c,
+                          pv->nframes[c],
+                          buf->plane[c].data,
+                          buf->plane[c].width,
+                          buf->plane[c].stride,
+                          buf->plane[c].height,
+                          pv->strength[c],
+                          pv->origin_tune[c],
+                          pv->patch_size[c],
+                          pv->range[c]);
+        }
+        buf->s = pv->frame[segment].s;
+        thread_data->out = buf;
+
+        // Finished this segment, notify.
+        taskset_thread_complete(&pv->taskset, segment);
+    }
+    taskset_thread_complete(&pv->taskset, segment);
+}
+
+static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
+{
+    for (int c = 0; c < 3; c++)
+    {
+        // Extend copy of plane with extra border and place in buffer
+        int border = ((pv->range[c] + 2) / 2 + 15) / 16 * 16;
+        nlmeans_alloc(buf->plane[c].data,
+                      buf->plane[c].width,
+                      buf->plane[c].stride,
+                      buf->plane[c].height,
+                      &pv->frame[pv->next_frame].plane[c],
+                      border);
+        pv->frame[pv->next_frame].s = buf->s;
+        pv->frame[pv->next_frame].width = buf->f.width;
+        pv->frame[pv->next_frame].height = buf->f.height;
+        pv->frame[pv->next_frame].fmt = buf->f.fmt;
+    }
+    pv->next_frame++;
+}
+
+static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
+{
+    if (pv->next_frame < pv->max_frames + pv->thread_count)
+        return NULL;
+
+    taskset_cycle(&pv->taskset);
+
+    // Free buffers that are not needed for next taskset cycle
+    for (int c = 0; c < 3; c++)
+    {
+        for (int t = 0; t < pv->thread_count; t++)
+        {
+            // Release last frame in buffer
+            if (pv->frame[t].plane[c].mem_pre != NULL &&
+                pv->frame[t].plane[c].mem_pre != pv->frame[t].plane[c].mem)
+            {
+                free(pv->frame[t].plane[c].mem_pre);
+                pv->frame[t].plane[c].mem_pre = NULL;
+            }
+            if (pv->frame[t].plane[c].mem != NULL)
+            {
+                free(pv->frame[t].plane[c].mem);
+                pv->frame[t].plane[c].mem = NULL;
+            }
+        }
+    }
+    // Shift frames in buffer down
+    for (int f = 0; f < pv->max_frames; f++)
+    {
+        // Don't move the mutex!
+        Frame frame = pv->frame[f];
+        pv->frame[f] = pv->frame[f+pv->thread_count];
+        for (int c = 0; c < 3; c++)
+        {
+            pv->frame[f].plane[c].mutex = frame.plane[c].mutex;
+            pv->frame[f+pv->thread_count].plane[c].mem_pre = NULL;
+            pv->frame[f+pv->thread_count].plane[c].mem = NULL;
+        }
+    }
+    pv->next_frame -= pv->thread_count;
+
+    // Collect results from taskset
+    hb_buffer_t *last = NULL, *out = NULL;
+    for (int t = 0; t < pv->thread_count; t++)
+    {
+        if (out == NULL)
+        {
+            out = last = pv->thread_data[t]->out;
+        }
+        else
+        {
+            last->next = pv->thread_data[t]->out;
+            last = pv->thread_data[t]->out;
+        }
+    }
+    return out;
+}
+
+static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
+{
+    hb_buffer_t *out = NULL, *last = NULL;
+
+    for (int f = 0; f < pv->next_frame; f++)
+    {
+        Frame *frame = &pv->frame[f];
+        hb_buffer_t *buf;
+        buf = hb_frame_buffer_init(frame->fmt, frame->width, frame->height);
+
+        for (int c = 0; c < 3; c++)
+        {
+            if (pv->strength[c] == 0)
+            {
+                nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
+                                 buf->plane[c].width, buf->plane[c].stride,
+                                 buf->plane[c].height);
+                continue;
+            }
+            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
+            {
+                nlmeans_prefilter(&pv->frame[f].plane[c], pv->prefilter[c]);
+                nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
+                                 buf->plane[c].width, buf->plane[c].stride,
+                                 buf->plane[c].height);
+                continue;
+            }
+
+            int nframes = pv->next_frame - f;
+            if (pv->nframes[c] < nframes)
+                nframes = pv->nframes[c];
+            // Process current plane
+            nlmeans_plane(frame,
+                          pv->prefilter[c],
+                          c,
+                          nframes,
+                          buf->plane[c].data,
+                          buf->plane[c].width,
+                          buf->plane[c].stride,
+                          buf->plane[c].height,
+                          pv->strength[c],
+                          pv->origin_tune[c],
+                          pv->patch_size[c],
+                          pv->range[c]);
+        }
+        buf->s = frame->s;
+        if (out == NULL)
+        {
+            out = last = buf;
+        }
+        else
+        {
+            last->next = buf;
+            last = buf;
+        }
+    }
+    return out;
+}
+
+static int nlmeans_work(hb_filter_object_t *filter,
                            hb_buffer_t **buf_in,
                            hb_buffer_t **buf_out )
 {
     hb_filter_private_t *pv = filter->private_data;
-    hb_buffer_t *in = *buf_in, *out;
+    hb_buffer_t *in = *buf_in;
 
     if (in->size <= 0)
     {
-        *buf_out = in;
+        hb_buffer_t *last;
+        // Flush buffered frames
+        last = *buf_out = nlmeans_filter_flush(pv);
+
+        // And terminate the buffer list with a null buffer
+        if (last != NULL)
+        {
+            while (last->next != NULL)
+                last = last->next;
+            last->next = in;
+        }
+        else
+        {
+            *buf_out = in;
+        }
         *buf_in  = NULL;
         return HB_FILTER_DONE;
     }
 
-    out = hb_video_buffer_init(in->f.width, in->f.height);
-
-    for (int c = 0; c < 3; c++)
-    {
-
-        if (pv->strength[c] == 0)
-        {
-            out->plane[c].data = in->plane[c].data;
-            continue;
-        }
-
-        int frames = pv->frames[c];
-
-        // Release last frame in buffer
-        if (pv->frame_tmp[c][frames-1].mem_pre != NULL &&
-            pv->frame_tmp[c][frames-1].mem_pre != pv->frame_tmp[c][frames-1].mem)
-        {
-            free(pv->frame_tmp[c][frames-1].mem_pre);
-            pv->frame_tmp[c][frames-1].mem_pre = NULL;
-        }
-        if (pv->frame_tmp[c][frames-1].mem != NULL)
-        {
-            free(pv->frame_tmp[c][frames-1].mem);
-            pv->frame_tmp[c][frames-1].mem = NULL;
-        }
-        pv->frame_ready[c][frames-1] = 0;
-
-        // Shift frames in buffer down one level
-        for (int f = frames-1; f > 0; f--)
-        {
-            pv->frame_tmp[c][f]   = pv->frame_tmp[c][f-1];
-            pv->frame_ready[c][f] = pv->frame_ready[c][f-1];
-        }
-
-        // Extend copy of plane with extra border and place in buffer
-        int border = ((pv->range[c] + 2) / 2 + 15) /16*16;
-        int w = in->plane[c].stride + 2*border;
-        int h = in->plane[c].height + 2*border;
-        nlmeans_alloc(in->plane[c].data,
-                      in->plane[c].stride,
-                      in->plane[c].height,
-                      &pv->frame_tmp[c][0],
-                      w,
-                      h,
-                      border);
-        nlmeans_prefilter(&pv->frame_tmp[c][0], pv->prefilter[c]);
-        pv->frame_ready[c][0] = 1;
-
-        if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
-        {
-            nlmeans_deborder(pv->frame_tmp[c][0].mem_pre, out->plane[c].data, w, h, border);
-            continue;
-        }
-
-        // Process current plane
-        nlmeans_plane(pv->frame_tmp[c],
-                      pv->frame_ready[c],
-                      out->plane[c].data,
-                      in->plane[c].stride,
-                      in->plane[c].height,
-                      pv->strength[c],
-                      pv->origin_tune[c],
-                      pv->patch_size[c],
-                      pv->range[c]);
-
-    }
-
-    out->s = in->s;
-    hb_buffer_move_subs(out, in);
-
-    *buf_out = out;
+    nlmeans_add_frame(pv, in);
+    *buf_out = nlmeans_filter(pv);
 
     return HB_FILTER_OK;
 }
