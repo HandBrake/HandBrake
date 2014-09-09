@@ -3460,8 +3460,8 @@ static hb_buffer_t * hb_ps_stream_decode( hb_stream_t *stream )
                  !isIframe( stream, buf->data, buf->size ) )
             {
                 // not the video stream or didn't find an I frame
-                // but we'll only wait 255 video frames for an I frame.
-                if ( buf->s.type != VIDEO_BUF || ++stream->need_keyframe < 512 )
+                // but we'll only wait 600 video frames for an I frame.
+                if ( buf->s.type != VIDEO_BUF || ++stream->need_keyframe < 600 )
                 {
                     continue;
                 }
@@ -4889,21 +4889,11 @@ static hb_buffer_t * hb_ts_stream_decode( hb_stream_t *stream )
 
 void hb_stream_set_need_keyframe(hb_stream_t *stream, int need_keyframe)
 {
-    if ( stream->hb_stream_type == transport )
+    if ( stream->hb_stream_type == transport ||
+         stream->hb_stream_type == program )
     {
         // Only wait for a keyframe if the stream is known to have IDRs
-        if ( stream->has_IDRs )
-        {
-            stream->need_keyframe = need_keyframe;
-        }
-    }
-    else if ( stream->hb_stream_type == program )
-    {
-        // Only wait for a keyframe if the stream is known to have IDRs
-        if ( stream->has_IDRs )
-        {
-            stream->need_keyframe = need_keyframe;
-        }
+        stream->need_keyframe = !!need_keyframe & !!stream->has_IDRs;
     }
     else
     {

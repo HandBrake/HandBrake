@@ -32,8 +32,10 @@ typedef struct
 
 } hb_scan_t;
 
+#define PREVIEW_READ_THRESH (1024 * 1024 * 10)
+
 static void ScanFunc( void * );
-static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
+static int  DecodePreviews( hb_scan_t *, hb_title_t * title, int flush );
 static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
 static int  AllAudioOK( hb_title_t * title );
 static void UpdateState1(hb_scan_t *scan, int title);
@@ -181,7 +183,7 @@ static void ScanFunc( void * _data )
 
     for( i = 0; i < hb_list_count( data->title_set->list_title ); )
     {
-        int j;
+        int j, npreviews;
         hb_audio_t * audio;
 
         if ( *data->die )
@@ -194,7 +196,12 @@ static void ScanFunc( void * _data )
 
         /* Decode previews */
         /* this will also detect more AC3 / DTS information */
-        if( !DecodePreviews( data, title ) )
+        npreviews = DecodePreviews( data, title, 1 );
+        if (npreviews < 2)
+        {
+            npreviews = DecodePreviews( data, title, 0 );
+        }
+        if (npreviews == 0)
         {
             /* TODO: free things */
             hb_list_rem( data->title_set->list_title, title );
@@ -477,15 +484,16 @@ static int is_close_to( int val, int target, int thresh )
  * It assumes that data->reader and data->vts have successfully been
  * DVDOpen()ed and ifoOpen()ed.
  **********************************************************************/
-static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
+static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 {
-    int             i, npreviews = 0;
+    int             i, npreviews = 0, abort = 0;
     hb_buffer_t   * buf, * buf_es;
     hb_list_t     * list_es;
     int progressive_count = 0;
     int pulldown_count = 0;
     int doubled_frame_count = 0;
     int interlaced_preview_count = 0;
+    hb_stream_t  * stream = NULL;
     info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
     crop_record_t *crops = crop_record_init( data->preview_count );
 
@@ -513,7 +521,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     }
     else if (data->batch)
     {
-        data->stream = hb_stream_open( title->path, title, 1 );
+        stream = hb_stream_open( title->path, title, 1 );
+    }
+    else if (data->stream)
+    {
+        stream = hb_stream_open( data->path, title, 1 );
     }
 
     if (title->video_codec == WORK_NONE)
@@ -552,7 +564,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
               continue;
           }
         }
-        else if (data->stream)
+        else if (stream)
         {
             /* we start reading streams at zero rather than 1/11 because
              * short streams may have only one sequence header in the entire
@@ -562,22 +574,27 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
              * so skip initial seek */
             if (i != 0)
             {
-                if (!hb_stream_seek(data->stream,
+                if (!hb_stream_seek(stream,
                                     (float)i / (data->preview_count + 1.0)))
                 {
                     continue;
                 }
             }
+            else
+            {
+                hb_stream_set_need_keyframe(stream, 1);
+            }
         }
 
         hb_deep_log( 2, "scan: preview %d", i + 1 );
 
-        if ( vid_decoder->flush )
+        if (flush && vid_decoder->flush)
             vid_decoder->flush( vid_decoder );
 
         hb_buffer_t * vid_buf = NULL;
 
-        for( j = 0; j < 10240 ; j++ )
+        int total_read = 0;
+        while (total_read < PREVIEW_READ_THRESH)
         {
             if (data->bd)
             {
@@ -588,6 +605,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                     break;
                   }
                   hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
+                  abort = 1;
                   goto skip_preview;
               }
             }
@@ -600,18 +618,20 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                     break;
                   }
                   hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
+                  abort = 1;
                   goto skip_preview;
               }
             }
-            else if (data->stream)
+            else if (stream)
             {
-              if ( (buf = hb_stream_read( data->stream )) == NULL )
+              if ( (buf = hb_stream_read(stream)) == NULL )
               {
                   if ( vid_buf )
                   {
                     break;
                   }
                   hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
+                  abort = 1;
                   goto skip_preview;
               }
             }
@@ -620,8 +640,17 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 // Silence compiler warning
                 buf = NULL;
                 hb_error( "Error: This can't happen!" );
+                abort = 1;
                 goto skip_preview;
             }
+
+            if (buf->size <= 0)
+            {
+                hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
+                abort = 1;
+                goto skip_preview;
+            }
+            total_read += buf->size;
 
             (hb_demux[title->demuxer])(buf, list_es, 0 );
 
@@ -796,15 +825,19 @@ skip_preview:
         {
             hb_buffer_close( &vid_buf );
         }
+        if (abort)
+        {
+            break;
+        }
     }
     UpdateState3(data, i);
 
     vid_decoder->close( vid_decoder );
     free( vid_decoder );
 
-    if ( data->batch && data->stream )
+    if (stream != NULL)
     {
-        hb_stream_close( &data->stream );
+        hb_stream_close(&stream);
     }
 
     if ( npreviews )
