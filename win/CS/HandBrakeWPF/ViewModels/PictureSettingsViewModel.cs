@@ -633,8 +633,12 @@ namespace HandBrakeWPF.ViewModels
                     // Set the Maintain Aspect ratio.
                     this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
 
+                    // Set the Maximum so libhb can correctly manage the size.
+                    this.MaxWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
+                    this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
+
                     // Set the width, then check the height doesn't breach the max height and correct if necessary.
-                    int width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth));
+                    int width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth)); 
                     this.Width = width;
 
                     // If we have a max height, make sure we havn't breached it.
@@ -643,9 +647,6 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.Height = height;
                     }
-
-                    this.MaxWidth = width;
-                    this.MaxHeight = height;
                     break;
                 case PresetPictureSettingsMode.None:
                     // Do Nothing except reset the Max Width/Height
