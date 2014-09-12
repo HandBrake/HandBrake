@@ -4864,11 +4864,11 @@ the user is using "Custom" settings by determining the sender*/
         job->anamorphic.par_width = par_width;
         job->anamorphic.par_height = par_height;
 
+        /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
+        [fPictureController setTitle:fTitle];
         [fPictureController.filters applySettingsFromPreset:chosenPreset];
+        [self pictureSettingsDidChange];
     }
-    /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-    [fPictureController setTitle:fTitle];
-    [self pictureSettingsDidChange];
 }
 
 #pragma mark - Presets View Controller Delegate
