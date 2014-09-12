@@ -867,7 +867,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (srtFile != string.Empty) // SRTs
                 {
-                    query += " --srt-file " + "\"" + srtFile + "\"";
+                    query += " --srt-file " + "\"" + srtFile.Replace("\\", "\\\\") + "\"";
 
                     if (srtCodeset != string.Empty)
                         query += " --srt-codeset " + srtCodeset;
