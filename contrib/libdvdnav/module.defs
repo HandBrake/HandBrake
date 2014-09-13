@@ -1,8 +1,10 @@
 $(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,PKGCONFIG LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
-LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-a5c1325.tar.bz2
+LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-5.0.1-0-gaa3659d.tar.gz
+LIBDVDNAV.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
 
+LIBDVDNAV.GCC.g = max
 ifneq (max,$(LIBDVDNAV.GCC.g))
     LIBDVDNAV.GCC.D += NDEBUG
 endif

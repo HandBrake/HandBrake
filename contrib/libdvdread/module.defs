@@ -1,7 +1,8 @@
 $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread,PKGCONFIG))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
-LIBDVDREAD.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdread-a2f211a.tar.bz2
+LIBDVDREAD.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdread-5.0.0-6-gcb1ae87.tar.gz
+LIBDVDREAD.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn
