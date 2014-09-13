@@ -3821,6 +3821,7 @@ int hb_subtitle_can_pass( int source, int mux )
         case HB_MUX_AV_MP4:
             switch( source )
             {
+                case VOBSUB:
                 case SSASUB:
                 case SRTSUB:
                 case UTF8SUB:
