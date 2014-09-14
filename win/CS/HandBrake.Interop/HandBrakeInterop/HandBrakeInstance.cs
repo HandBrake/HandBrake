@@ -832,14 +832,7 @@ namespace HandBrake.Interop
 
                 foreach (hb_title_s title in this.originalTitles)
                 {
-                    var newTitle = this.ConvertTitle(title);
-
-                    // Convert the Path to UTF-8.
-                    byte[] bytes = Encoding.Default.GetBytes(title.path);
-                    string utf8Str = Encoding.UTF8.GetString(bytes);
-                    newTitle.Path = utf8Str;
-
-                    this.titles.Add(newTitle);
+                    this.titles.Add(this.ConvertTitle(title));
                 }
 
                 if (this.originalTitles.Count > 0)
@@ -1884,7 +1877,7 @@ namespace HandBrake.Interop
                 Framerate = ((double)title.rate) / title.rate_base,
                 FramerateNumerator = title.rate,
                 FramerateDenominator = title.rate_base,
-                Path = title.path
+                Path = Encoding.UTF8.GetString(title.path).TrimEnd('\0')
             };
 
             switch (title.type)

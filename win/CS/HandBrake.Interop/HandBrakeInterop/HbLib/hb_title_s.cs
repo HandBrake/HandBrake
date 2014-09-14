@@ -19,8 +19,8 @@ namespace HandBrake.Interop.HbLib
 		public uint reg_desc;
 
 		/// char[1024]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
-		public string path;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1024)]
+		public byte[] path;
 
 		/// char[1024]
 		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
