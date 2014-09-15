@@ -178,7 +178,17 @@ void hb_srt_to_ssa(hb_buffer_t *sub_in, int line)
             hb_buffer_realloc(sub_in, pos + 4);
             // After realloc, sub_in->data may change
             ssa = (char*)sub_in->data;
-            if (srt[ii] == '\n')
+            if (srt[ii] == '\r')
+            {
+                ssa[pos++] = '\\';
+                ssa[pos++] = 'N';
+                ii++;
+                if (srt[ii] == '\n')
+                {
+                    ii++;
+                }
+            }
+            else if (srt[ii] == '\n')
             {
                 ssa[pos++] = '\\';
                 ssa[pos++] = 'N';
