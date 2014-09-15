@@ -578,7 +578,6 @@
                              Grid.Row="1"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Background="Transparent"
                              SnapsToDevicePixels="False"
                              UseLayoutRounding="False"
                              ToolBar.OverflowMode="Never" 
