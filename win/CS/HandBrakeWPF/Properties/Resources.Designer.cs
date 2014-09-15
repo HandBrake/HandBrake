@@ -871,9 +871,9 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjusts x264 settings to trade off compression efficiency against encoding speed.
+        ///   Looks up a localized string similar to Adjusts settings to trade off compression efficiency against encoding speed.
         ///
-        ///This establishes your default x264 settings. Tunes, profiles, levels and advanced options string will be applied to this.
+        ///This establishes your default settings. Tunes, profiles, levels and advanced options string will be applied to this.
         ///
         ///You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files..
         /// </summary>
@@ -884,7 +884,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Limit the H.264 profile of the output stream. This will override all other settings..
+        ///   Looks up a localized string similar to Limit the profile of the output stream. This will override all other settings..
         /// </summary>
         public static string Video_EncoderProfile {
             get {
@@ -927,11 +927,9 @@ namespace HandBrakeWPF.Properties {
         ///   Looks up a localized string similar to A value of 0 means lossless and will result in a file size that is larger than the original source, 
         ///unless the source was also lossless. 
         ///
-        ///x264&apos;s scale is logarithmic and lower values correspond to higher quality. 
+        ///x264 and x265&apos;s scale is logarithmic and lower values correspond to higher quality. 
         ///
-        ///So small increases in value will result in progressively larger increases in the resulting file size. 
-        ///
-        ///Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition..
+        ///So small increases in value will result in progressively larger increases in the resulting file size..
         /// </summary>
         public static string Video_LosslessWarningTooltip {
             get {
