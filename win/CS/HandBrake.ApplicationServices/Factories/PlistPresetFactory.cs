@@ -271,7 +271,7 @@ namespace HandBrake.ApplicationServices.Factories
                     preset.Task.H265Profile = EnumHelper<x265Profile>.GetValue(kvp.Value, true);
                     break;
                 case "x265Tune":
-                    preset.Task.X265Tune = EnumHelper<x265Profile>.GetValue(kvp.Value, true);
+                    preset.Task.X265Tune = EnumHelper<x265Tune>.GetValue(kvp.Value, true);
                     break;
                 case "x265Preset":
                     preset.Task.X265Preset = EnumHelper<x265Preset>.GetValue(kvp.Value, true);
@@ -429,7 +429,7 @@ namespace HandBrake.ApplicationServices.Factories
                 switch (item.Key)
                 {
                     case "AudioBitrate":
-                        track.Bitrate = item.Value;
+                        track.Bitrate = int.Parse(item.Value);
                         break;
                     case "AudioEncoder":
                         track.Encoder = Converters.GetAudioEncoder(item.Value.Trim());
@@ -447,7 +447,7 @@ namespace HandBrake.ApplicationServices.Factories
                         track.DRC = item.Value;
                         break;
                     case "AudioTrackGainSlider":
-                        track.Gain = item.Value;
+                        track.Gain = (int)item.Value;
                         break;
                 }
             }
