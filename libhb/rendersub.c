@@ -690,7 +690,7 @@ static int textsub_work(hb_filter_object_t * filter,
             hb_buffer_close(&sub);
         }
     }
-    if (pv->current_sub != NULL && pv->current_sub->s.start < in->s.start)
+    if (pv->current_sub != NULL && pv->current_sub->s.start <= in->s.start)
     {
         // We don't know the duration of this subtitle, but we know
         // that it started before the current video frame and that
