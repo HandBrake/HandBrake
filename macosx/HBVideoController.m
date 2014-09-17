@@ -55,6 +55,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     NSArray                      * fPresetNames;
     NSUInteger                     fMediumPresetIndex;
     IBOutlet NSButton            * fX264UseAdvancedOptionsCheck;
+    IBOutlet NSBox               * fDividerLine;
     IBOutlet NSBox               * fPresetsBox;
     IBOutlet NSSlider            * fPresetsSlider;
     IBOutlet NSTextField         * fPresetSliderLabel;
@@ -127,6 +128,12 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
         /* register that we are interested in changes made to the video container */
         [center addObserver:self selector: @selector(containerChanged:) name:HBContainerChangedNotification object:nil];
         [center addObserver:self selector: @selector(titleChanged:) name:HBTitleChangedNotification object:nil];
+
+        // Observe the andvanced tab preference.
+        [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
+                                                                  forKeyPath:@"values.HBShowAdvancedTab"
+                                                                     options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                                                                     context:NULL];
     }
 
     return self;
@@ -277,6 +284,37 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     [fVidRatePopUp selectItemAtIndex: 0];
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == NULL)
+    {
+        if ([keyPath isEqualToString:@"values.HBShowAdvancedTab"])
+        {
+            [self validateAdvancedOptionsCheckBoxForEncoder:self.codec];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)validateAdvancedOptionsCheckBoxForEncoder:(int)encoder
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && (encoder == HB_VCODEC_X264))
+    {
+        [fX264UseAdvancedOptionsCheck setHidden:NO];
+        [fDividerLine setHidden:YES];
+        [fEncoderOptionsLabel setStringValue:NSLocalizedString(@"Encoder Options:", @"")];
+    }
+    else
+    {
+        [fX264UseAdvancedOptionsCheck setHidden:YES];
+        [fDividerLine setHidden:NO];
+        [fEncoderOptionsLabel setStringValue:NSLocalizedString(@"Encoder Options", @"")];
+    }
+}
+
 #pragma mark - apply settings
 
 - (void)applyVideoSettingsFromQueue:(NSDictionary *)queueToApply
@@ -409,26 +447,37 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
             }
             else
             {
-                [self.fAdvancedOptions setOptions:        @""];
-                [self             setOptionExtra:nil];
+                [self.fAdvancedOptions setOptions:@""];
+                [self setOptionExtra:nil];
             }
             /* preset does not use the x264 preset system, reset the widgets */
             [self setPreset: nil];
             [self setTune:   nil];
             [self setProfile:nil];
             [self setLevel:  nil];
+
             /* we enable the advanced panel and update the widgets */
-            [fX264UseAdvancedOptionsCheck setState:NSOnState];
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"])
+            {
+                [fX264UseAdvancedOptionsCheck setState:NSOnState];
+            }
+            else
+            {
+                [fX264UseAdvancedOptionsCheck setState:NSOffState];
+            }
             [self updateEncoderOptionsWidgets:nil];
         }
         else
         {
-            /*
-             * x264UseAdvancedOptions is set to 0 (disabled),
-             * so we use the x264 preset system
-             */
+            // x264UseAdvancedOptions is set to 0 (disabled),
+            // so we use the new preset system and
+            // disable the advanced panel
+            [self.fAdvancedOptions setOptions:@""];
+            [fX264UseAdvancedOptionsCheck setState:NSOffState];
+
             if (preset[@"x264Preset"])
             {
+                // Read the old x264 preset keys
                 [self setPreset:     preset[@"x264Preset"]];
                 [self setTune:       preset[@"x264Tune"]];
                 [self setOptionExtra:preset[@"x264OptionExtra"]];
@@ -437,16 +486,14 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
             }
             else
             {
+                // Read the new preset keys (0.10)
                 [self setPreset:     preset[@"VideoPreset"]];
                 [self setTune:       preset[@"VideoTune"]];
                 [self setOptionExtra:preset[@"VideoOptionExtra"]];
                 [self setProfile:    preset[@"VideoProfile"]];
                 [self setLevel:      preset[@"VideoLevel"]];
             }
-            /* preset does not use the advanced panel, reset it */
-            [self.fAdvancedOptions setOptions:@""];
-            /* we disable the advanced panel and update the widgets */
-            [fX264UseAdvancedOptionsCheck setState:NSOffState];
+
             [self updateEncoderOptionsWidgets:nil];
         }
     }
@@ -1016,15 +1063,14 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
 
 - (void) setupPresetsWidgetsForEncoder:(int)encoder
 {
+    [self validateAdvancedOptionsCheckBoxForEncoder:(int)encoder];
 
     if (encoder == HB_VCODEC_X264)
     {
-        [fX264UseAdvancedOptionsCheck setHidden:NO];
         [fFastDecodeCheck setHidden:NO];
     }
     else
     {
-        [fX264UseAdvancedOptionsCheck setHidden:YES];
         [fFastDecodeCheck setHidden:YES];
     }
 
