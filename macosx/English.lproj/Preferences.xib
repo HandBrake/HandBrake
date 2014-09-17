@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A329r" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A361c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1060" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -359,7 +359,7 @@
                     </connections>
                 </comboBox>
                 <textField verticalHuggingPriority="750" id="509">
-                    <rect key="frame" x="52" y="68" width="145" height="14"/>
+                    <rect key="frame" x="18" y="68" width="179" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Alternate Language:" id="510">
                         <font key="font" metaFont="smallSystem"/>
@@ -370,7 +370,7 @@
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="mbd-FQ-sxW">
                     <rect key="frame" x="201" y="18" width="248" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: these settings apply only to build-in presets. Use the audio defaults panel for custom presets." id="fIj-Tz-ghb">
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: these settings apply only to built-in presets. Use the audio defaults panel for custom presets." id="fIj-Tz-ghb">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -379,20 +379,11 @@
             </subviews>
         </customView>
         <customView id="236" userLabel="Advanced">
-            <rect key="frame" x="0.0" y="0.0" width="500" height="266"/>
+            <rect key="frame" x="0.0" y="0.0" width="500" height="278"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" id="444">
-                    <rect key="frame" x="18" y="44" width="117" height="14"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Presets:" id="445">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
                 <popUpButton verticalHuggingPriority="750" id="363">
-                    <rect key="frame" x="295" y="73" width="66" height="22"/>
+                    <rect key="frame" x="297" y="78" width="66" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="369" id="364">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -410,7 +401,7 @@
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" id="387">
-                    <rect key="frame" x="300" y="225" width="76" height="22"/>
+                    <rect key="frame" x="300" y="237" width="76" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -433,7 +424,7 @@
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" id="352">
-                    <rect key="frame" x="300" y="163" width="73" height="22"/>
+                    <rect key="frame" x="299" y="178" width="73" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="353">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -475,7 +466,7 @@
                     </connections>
                 </popUpButton>
                 <button id="401">
-                    <rect key="frame" x="138" y="42" width="339" height="18"/>
+                    <rect key="frame" x="138" y="37" width="339" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <buttonCell key="cell" type="check" title="Alert when updating built-in presets" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="402">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -486,7 +477,7 @@
                     </connections>
                 </button>
                 <button id="398">
-                    <rect key="frame" x="138" y="131" width="339" height="18"/>
+                    <rect key="frame" x="138" y="136" width="339" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <buttonCell key="cell" type="check" title="Use libdvdnav (instead of libdvdread)" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="399">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -497,7 +488,7 @@
                     </connections>
                 </button>
                 <button id="347">
-                    <rect key="frame" x="138" y="97" width="340" height="18"/>
+                    <rect key="frame" x="138" y="102" width="340" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <buttonCell key="cell" type="check" title="Put individual encode logs in same location as movie" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="348">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -508,7 +499,7 @@
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="442">
-                    <rect key="frame" x="18" y="133" width="117" height="14"/>
+                    <rect key="frame" x="18" y="138" width="117" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="DVD-Video:" id="443">
                         <font key="font" metaFont="smallSystem"/>
@@ -517,7 +508,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="350">
-                    <rect key="frame" x="17" y="99" width="118" height="14"/>
+                    <rect key="frame" x="17" y="104" width="118" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Log:" id="351">
                         <font key="font" metaFont="smallSystem"/>
@@ -526,7 +517,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="371">
-                    <rect key="frame" x="112" y="78" width="180" height="14"/>
+                    <rect key="frame" x="114" y="83" width="180" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Activity Log Verbosity Level:" id="372">
                         <font key="font" metaFont="smallSystem"/>
@@ -535,7 +526,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="359">
-                    <rect key="frame" x="18" y="168" width="279" height="14"/>
+                    <rect key="frame" x="17" y="183" width="279" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Number of picture previews to scan:" id="360">
                         <font key="font" metaFont="smallSystem"/>
@@ -544,7 +535,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="463">
-                    <rect key="frame" x="18" y="198" width="279" height="14"/>
+                    <rect key="frame" x="119" y="210" width="178" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Minimum length of title to scan:" id="464">
                         <font key="font" metaFont="smallSystem"/>
@@ -553,7 +544,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="UXr-op-aKN">
-                    <rect key="frame" x="356" y="197" width="121" height="14"/>
+                    <rect key="frame" x="356" y="209" width="121" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="seconds" id="klQ-DW-Kc6">
                         <font key="font" metaFont="smallSystem"/>
@@ -562,7 +553,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="395">
-                    <rect key="frame" x="18" y="230" width="279" height="14"/>
+                    <rect key="frame" x="18" y="242" width="279" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x264 Constant Quality fractional granularity:" id="396">
                         <font key="font" metaFont="smallSystem"/>
@@ -571,7 +562,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="480">
-                    <rect key="frame" x="303" y="195" width="48" height="19"/>
+                    <rect key="frame" x="303" y="207" width="48" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="481">
                         <font key="font" metaFont="smallSystem"/>
@@ -583,7 +574,7 @@
                     </connections>
                 </textField>
                 <button id="ybi-46-yhY">
-                    <rect key="frame" x="137" y="17" width="223" height="20"/>
+                    <rect key="frame" x="138" y="17" width="344" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Show Advanced Encoder Options Tab" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Du1-9x-nHn">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -593,6 +584,20 @@
                         <binding destination="61" name="value" keyPath="values.HBShowAdvancedTab" id="PgA-TV-kBr"/>
                     </connections>
                 </button>
+                <box appearanceType="aqua" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="NGW-RG-tnZ">
+                    <rect key="frame" x="20" y="64" width="460" height="5"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <box appearanceType="aqua" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="I0V-hM-Fq0">
+                    <rect key="frame" x="20" y="164" width="460" height="5"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
             </subviews>
         </customView>
         <customObject id="410" userLabel="Updater" customClass="SUUpdater"/>
