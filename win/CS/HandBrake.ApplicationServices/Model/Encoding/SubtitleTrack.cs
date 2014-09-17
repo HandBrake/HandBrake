@@ -249,7 +249,12 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {    
                 if (this.SourceTrack != null)
                 {
-                    return this.SourceTrack.CanBurnIn || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch;
+                    return this.SourceTrack.CanBurnIn || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch || this.SubtitleType == SubtitleType.SRT;
+                }
+
+                if (this.SubtitleType == SubtitleType.SRT)
+                {
+                    return true;
                 }
 
                 return false;

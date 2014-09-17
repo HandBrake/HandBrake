@@ -8,7 +8,6 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-             xmlns:dropButton="clr-namespace:HandBrakeWPF.Controls.DropButton"
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
@@ -211,21 +210,21 @@
 
                             <!--  Row 1  -->
                             <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Text="Source" />
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SrtFileName}" Margin="5,0,5,0" Width="80" TextWrapping="NoWrap" TextTrimming="WordEllipsis"
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SrtFileName}" Margin="5,0,5,0" Width="75" TextWrapping="NoWrap" TextTrimming="WordEllipsis"
                                        Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" />
 
                             <TextBlock  Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Lang" />
-                            <ComboBox  Grid.Column="3" Height="22" Width="100" Margin="5,0,5,0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSrtSubtitle}"
+                            <ComboBox  Grid.Column="3" Height="22" Width="85" Margin="5,0,5,0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSrtSubtitle}"
                                       ItemsSource="{Binding DataContext.Langauges, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SrtLang}" />
                             
                             <TextBlock  Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Char Code" />
-                            <ComboBox Grid.Column="5" Width="75" Height="22" Margin="5,0,5,0" IsEnabled="{Binding IsSrtSubtitle}"
+                            <ComboBox Grid.Column="5" Width="70" Height="22" Margin="5,0,5,0" IsEnabled="{Binding IsSrtSubtitle}"
                                       ItemsSource="{Binding DataContext.CharacterCodes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SrtCharCode}" />
                             
                             <TextBlock Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="Offset (ms)" />
-                            <controls:NumberBox Grid.Column="7" Width="65" Height="24" Margin="5,0,5,0" Minimum="-900000" Maximum="900000" 
+                            <controls:NumberBox Grid.Column="7" Width="58" Height="24" Margin="5,0,5,0" Minimum="-9000000" Maximum="900000" 
                                                 IsEnabled="{Binding IsSrtSubtitle}" Number="{Binding SrtOffset, Mode=TwoWay}" />
 
                             <TextBlock Grid.Column="8" VerticalAlignment="Center" FontWeight="Bold" Text="Default" />
@@ -256,7 +255,7 @@
                         <Image Grid.Column="2"
                                Width="16"
                                Height="16"
-                               Margin="10,0,10,0"
+                               Margin="5,0,10,0"
                                Source="Images/delete.png">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDown">
