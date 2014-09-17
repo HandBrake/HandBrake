@@ -1234,7 +1234,6 @@
     
     NSString * thisOpt = @"";  // The separated option such as "bframes=3"
     NSString * optName = @"";  // The option name such as "bframes"
-    NSString * optValue = @""; // The option value such as "3"
     NSArray *currentOptsArray;
     
     /* Get the current opt string being displayed. */
@@ -1273,7 +1272,6 @@
                    already have at least one option=value pair in them. */
                    
                 optName = [thisOpt substringToIndex:splitOptRange.location];
-                optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
 
                 /*If the optNameToChange is found, appropriately change the value or delete it if
                     "Unspecified" is set.*/
