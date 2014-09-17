@@ -288,7 +288,7 @@ x264 and x265's scale is logarithmic and lower values correspond to higher quali
 So small increases in value will result in progressively larger increases in the resulting file size.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>You can optionally store a maximum resolution for encodes that use this preset. There are 4 modes:
+    <value>You can optionally store a maximum resolution for encodes that use this preset. There are 3 modes:
 
 None:  There is no maximum resolution for encodes using this preset. When the preset is loaded, the current width, height and aspect ratio that you currently have set will be reloaded.
 
