@@ -581,6 +581,7 @@
                              SnapsToDevicePixels="False"
                              UseLayoutRounding="False"
                              ToolBar.OverflowMode="Never" 
+                             Background="Transparent"
                              ToolBarTray.IsLocked="True"
                              Loaded="ToolBarLoaded"
                              KeyboardNavigation.TabNavigation="Continue"

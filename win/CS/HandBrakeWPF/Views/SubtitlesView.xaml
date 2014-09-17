@@ -201,6 +201,8 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
@@ -231,6 +233,17 @@
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SelectDefaultTrack">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+
+                            <TextBlock Grid.Column="10" VerticalAlignment="Center" FontWeight="Bold" Text="Burn In" />
+                            <CheckBox Grid.Column="11" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <cal:ActionMessage MethodName="SetBurnedToFalseForAllExcept">
                                             <cal:Parameter Value="{Binding}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
