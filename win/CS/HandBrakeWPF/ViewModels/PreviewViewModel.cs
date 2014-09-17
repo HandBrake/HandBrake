@@ -267,7 +267,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.Task == null || string.IsNullOrEmpty(Task.Source))
             {
-                this.errorService.ShowMessageBox("You must first scan a source and setup your encode before creating a perview.",
+                this.errorService.ShowMessageBox("You must first scan a source and setup your encode before creating a preview.",
                                Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
