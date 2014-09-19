@@ -390,6 +390,10 @@ typedef enum EncodeState : NSUInteger {
             {
                 [self.delegate didCreateMovieAtURL:self.fileURL];
             }
+            else
+            {
+                [self.delegate didCancelMovieCreation];
+            }
 
             self.encodeState = EncodeStateIdle;
 

@@ -10,6 +10,8 @@
 @protocol HBPreviewGeneratorDelegate <NSObject>
 
 - (void) didCreateMovieAtURL: (NSURL *) fileURL;
+- (void) didCancelMovieCreation;
+
 - (void) updateProgress: (double) progress info: (NSString *) progressInfo;
 
 @end

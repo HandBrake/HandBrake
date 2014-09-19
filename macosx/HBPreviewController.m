@@ -232,6 +232,7 @@ typedef enum ViewMode : NSUInteger {
 {
     _title = title;
 
+    self.generator.delegate = nil;
     [self.generator cancel];
     self.generator = nil;
 
@@ -244,6 +245,7 @@ typedef enum ViewMode : NSUInteger {
         [fPictureSlider setMaxValue: self.generator.imagesCount - 1.0];
         [fPictureSlider setNumberOfTickMarks: self.generator.imagesCount];
 
+        [self switchViewToMode:ViewModePicturePreview];
         [self displayPreview];
     }
 }
@@ -466,7 +468,6 @@ typedef enum ViewMode : NSUInteger {
         {
             if (self.currentViewMode == ViewModeEncoding)
             {
-                [self.generator cancel];
                 [self toggleBoxes:@[fPictureControlBox, fEncodingControlBox]
                      usingIndexes:[NSIndexSet indexSetWithIndex:0]];
                 [fMovieCreationProgressIndicator stopAnimation:self];
@@ -858,6 +859,11 @@ typedef enum ViewMode : NSUInteger {
     [fMovieCreationProgressIndicator setDoubleValue: progress];
 }
 
+- (void)didCancelMovieCreation
+{
+    [self switchViewToMode:ViewModePicturePreview];
+}
+
 - (void) didCreateMovieAtURL: (NSURL *) fileURL
 {
     /* Load the new movie into fMovieView */
@@ -919,7 +925,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (IBAction) cancelCreateMoviePreview: (id) sender
 {
-    [self switchViewToMode:ViewModePicturePreview];
+    [self.generator cancel];
 }
 
 - (IBAction) createMoviePreview: (id) sender
