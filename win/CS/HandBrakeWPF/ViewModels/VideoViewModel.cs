@@ -1157,8 +1157,8 @@ namespace HandBrakeWPF.ViewModels
                     break;
             }
 
-            this.Task.TwoPass = preset.Task.TwoPass;
-            this.Task.TurboFirstPass = preset.Task.TurboFirstPass;
+            this.TwoPass = preset.Task.TwoPass;
+            this.TurboFirstPass = preset.Task.TurboFirstPass;
             this.Task.VideoBitrate = preset.Task.VideoBitrate;
 
             this.NotifyOfPropertyChange(() => this.Task);

@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (C) 2003-2013 The HandBrake Team
+        ///   Looks up a localized string similar to Copyright (C) 2003-2014 The HandBrake Team
         ///
         ///This program is free software; you can redistribute it and/or
         ///modify it under the terms of the GNU General Public License
@@ -80,13 +80,13 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can optionally store a maximum resolution for encodes that use this preset. There are 3 modes:
+        ///   Looks up a localized string similar to You can optionally store a picture settings with this preset. There are 3 modes:
         ///
-        ///None:  There is no maximum resolution for encodes using this preset. When the preset is loaded, the current width, height and aspect ratio that you currently have set will be reloaded.
+        ///None:  Picture settings are not stored in the preset. When loading a source, they will remain as-is within the bounds of the source resolution. This also affects Anamorphic, modulus, cropping etc.
         ///
         ///Custom: You can optionally set a Maximum width and Height. When doing this an encode will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
         ///
-        ///Source Maximum:  Similar to custom, but [rest of string was truncated]&quot;;.
+        ///Source Maximum:  Always encode at the sources [rest of string was truncated]&quot;;.
         /// </summary>
         public static string AddPreset_PictureSizeMode {
             get {
