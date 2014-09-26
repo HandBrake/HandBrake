@@ -23,8 +23,6 @@
 static int debug_608 = 0;
 static int cc_channel = 1;
 static int subs_delay = 0;
-static int norollup = 0;
-static int direct_rollup = 0;
 
 /*
  * Get the time of the last buffer that we have received.
@@ -666,22 +664,6 @@ static unsigned get_decoder_line_encoded(struct s_write *wb,
 }
 
 
-static void delete_all_lines_but_current (struct eia608_screen *data, int row)
-{
-    int i;
-    for (i=0;i<15;i++)
-    {
-        if (i!=row)
-        {
-            memset(data->characters[i],' ',CC608_SCREEN_WIDTH);
-            data->characters[i][CC608_SCREEN_WIDTH]=0;
-            memset (data->colors[i],default_color,CC608_SCREEN_WIDTH+1);
-            memset (data->fonts[i],FONT_REGULAR,CC608_SCREEN_WIDTH+1);
-            data->row_used[i]=0;
-        }
-    }
-}
-
 static void clear_eia608_cc_buffer (struct eia608_screen *data)
 {
     int i;
@@ -775,6 +757,7 @@ static void write_char(const unsigned char c, struct s_write *wb)
         use_buffer->empty = 0;
         if (wb->data608->cursor_column < 31)
             wb->data608->cursor_column++;
+        use_buffer->dirty = 1;
     }
 
 }
@@ -917,7 +900,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
             }
         }
     }
-    if (wb->enc_buffer_used && wb->enc_buffer[0] != 0)
+    if (wb->enc_buffer_used && wb->enc_buffer[0] != 0 && data->dirty)
     {
         hb_buffer_t *buffer;
         int len;
@@ -974,8 +957,11 @@ static int write_cc_buffer(struct s_write *wb)
     int wrote_something=0;
 
     data = get_current_visible_buffer(wb);
+    if (!data->dirty)
+        return 0;
     wb->new_sentence=1;
     wrote_something = write_cc_buffer_as_ssa(data, wb);
+    data->dirty = 0;
     return wrote_something;
 }
 
@@ -1054,6 +1040,7 @@ static void roll_up(struct s_write *wb)
     if (rows_now > keep_lines)
         hb_log ("Bug in roll_up, should have %d lines but I have %d.\n",
             keep_lines, rows_now);
+    use_buffer->dirty = 1;
 }
 
 void erase_memory (struct s_write *wb, int displayed)
@@ -1131,8 +1118,11 @@ static void handle_command(unsigned char c1, const unsigned char c2,
         case COM_BACKSPACE:
             if (wb->data608->cursor_column>0)
             {
+                struct eia608_screen *data;
+                data = get_writing_buffer(wb);
                 wb->data608->cursor_column--;
-                get_writing_buffer(wb)->characters[wb->data608->cursor_row][wb->data608->cursor_column] = ' ';
+                data->characters[wb->data608->cursor_row][wb->data608->cursor_column] = ' ';
+                data->dirty = 1;
             }
             break;
         case COM_TABOFFSET1:
@@ -1235,8 +1225,6 @@ static void handle_command(unsigned char c1, const unsigned char c2,
                 wb->data608->current_visible_start_ms = get_last_pts(wb);
                 break;
             }
-            if (norollup)
-                delete_all_lines_but_current(get_current_visible_buffer(wb), wb->data608->cursor_row);
             if (write_cc_buffer(wb))
                 wb->data608->screenfuls_counter++;
             roll_up(wb);
@@ -1247,16 +1235,24 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             erase_memory (wb,0);
             break;
         case COM_ERASEDISPLAYEDMEMORY:
-            // Write it to disk before doing this, and make a note of the new
-            // time it became clear.
-            erase_memory (wb,1);
-            if (wb->data608->mode == MODE_POPUP)
+            // There may be "displayed" rollup data that has not been
+            // written to a buffer yet.
+            if (wb->data608->mode == MODE_ROLLUP_2 ||
+                wb->data608->mode == MODE_ROLLUP_3 ||
+                wb->data608->mode == MODE_ROLLUP_4)
             {
-                // If popup, the last pts is the time to remove the
-                // popup from the screen
-                wb->data608->current_visible_start_ms = get_last_pts(wb);
+                write_cc_buffer(wb);
             }
+            erase_memory (wb,1);
+
+            // the last pts is the time to remove the previously 
+            // displayed CC from the display
+            wb->data608->current_visible_start_ms = get_last_pts(wb);
+
             // Write "clear" subtitle if necessary
+            struct eia608_screen *data;
+            data = get_current_visible_buffer(wb);
+            data->dirty = 1;
             write_cc_buffer(wb);
             break;
         case COM_ENDOFCAPTION: // Switch buffers
@@ -1526,7 +1522,6 @@ static void process608(const unsigned char *data, int length,
         for (i=0;i<length;i=i+2)
         {
             unsigned char hi, lo;
-            int wrote_to_screen=0;
             hi = data[i] & 0x7F; // Get rid of parity bit
             lo = data[i+1] & 0x7F; // Get rid of parity bit
 
@@ -1565,7 +1560,7 @@ static void process608(const unsigned char *data, int length,
                 }
                 wb->data608->last_c1=hi;
                 wb->data608->last_c2=lo;
-                wrote_to_screen=disCommand (hi,lo,wb);
+                disCommand (hi,lo,wb);
             }
             if (hi>=0x20) // Standard characters (always in pairs)
             {
@@ -1584,7 +1579,6 @@ static void process608(const unsigned char *data, int length,
 
                 handle_single(hi,wb);
                 handle_single(lo,wb);
-                wrote_to_screen=1;
                 wb->data608->last_c1=0;
                 wb->data608->last_c2=0;
             }
@@ -1594,12 +1588,13 @@ static void process608(const unsigned char *data, int length,
                 //hb_log("Current FTS: %s\n", print_mstime(get_last_pts()));
             }
 
-            if (wrote_to_screen && direct_rollup && // If direct_rollup is enabled and
-                (wb->data608->mode==MODE_ROLLUP_2 || // we are in rollup mode, write now.
-                wb->data608->mode==MODE_ROLLUP_3 ||
-                wb->data608->mode==MODE_ROLLUP_4))
+            if ((wb->data608->mode == MODE_ROLLUP_2 ||
+                 wb->data608->mode == MODE_ROLLUP_3 ||
+                 wb->data608->mode == MODE_ROLLUP_4) &&
+                wb->direct_rollup)
             {
-                // We don't increase screenfuls_counter here.
+                // If we are showing rollup on the fly (direct_rollup)
+                // write a buffer now
                 write_cc_buffer(wb);
                 wb->data608->current_visible_start_ms = get_last_pts(wb);
             }
@@ -1651,6 +1646,10 @@ static int decccInit( hb_work_object_t * w, hb_job_t * job )
         int width = job->title->width - job->crop[2] - job->crop[3];
         hb_subtitle_add_ssa_header(w->subtitle, width, height);
     }
+    // When rendering subs, we need to push rollup subtitles out
+    // asap (instead of waiting for a completed line) so that we
+    // do not miss the frame that they should be rendered over.
+    pv->cc608->direct_rollup = w->subtitle->config.dest == RENDERSUB;
     return retval;
 }
 

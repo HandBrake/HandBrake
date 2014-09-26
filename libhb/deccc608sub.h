@@ -58,6 +58,7 @@ struct eia608_screen // A CC buffer
     unsigned char fonts[15][33]; // Extra char at the end for a 0
     int row_used[15]; // Any data in row?
     int empty; // Buffer completely empty?
+    int dirty; // Flag indicates buffer has changed since written
 };
 
 struct eia608
@@ -95,6 +96,7 @@ struct s_write {
                             // subtitle to clear the current subtitle
 
     int rollup_cr;  // Flag indicates if CR command performed by rollup
+    int direct_rollup;
     int line;   // SSA line number
     int width;
     int height;
