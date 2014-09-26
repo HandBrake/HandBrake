@@ -376,7 +376,7 @@
                                         <Image Width="20" 
                                                Height="20" VerticalAlignment="Center"
                                                Source="Images/Options24.png"
-                                               ToolTip="Reset job status to Waiting.">
+                                               ToolTip="Send the job back to the main window for editing.">
                                         </Image>
                                     </ControlTemplate>
                                 </Button.Template>
@@ -395,7 +395,7 @@
                                         <Image Width="20" 
                                                Height="20" VerticalAlignment="Center" 
                                                Source="Images/delete.png"
-                                               ToolTip="Reset job status to Waiting.">
+                                               ToolTip="Delete the job from the queue.">
                                         </Image>
                                     </ControlTemplate>
                                 </Button.Template>
