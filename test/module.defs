@@ -48,6 +48,8 @@ ifeq ($(BUILD.system),darwin)
     TEST.GCC.l += iconv
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m
+else ifeq ($(BUILD.system),kfreebsd)
+    TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),solaris)
     TEST.GCC.l += pthread nsl socket iconv
     TEST.GCC.D += _POSIX_C_SOURCE=200112L __EXTENSIONS__
