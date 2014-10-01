@@ -3317,7 +3317,7 @@ static void ShowHelp()
 
     "### Filters---------------------------------------------------------\n\n"
 
-     "    -d, --deinterlace       Deinterlace video with Libav, yadif or mcdeint\n"
+     "    -d, --deinterlace       Unconditionally deinterlaces all frames\n"
      "          <fast/slow/slower/bob");
 #ifdef USE_QSV
 if (hb_qsv_available())
@@ -3327,7 +3327,7 @@ if (hb_qsv_available())
 #endif
      fprintf( out, "> or omitted (default settings)\n"
      "           or\n"
-     "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
+     "          <YM:FD>           (default 0:-1)\n"
      "    -5, --decomb            Selectively deinterlaces when it detects combing\n"
      "          <fast/bob> or omitted (default settings)\n"
      "           or\n"
