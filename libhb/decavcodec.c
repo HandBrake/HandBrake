@@ -1149,6 +1149,20 @@ static hb_buffer_t * cc_fill_buffer(hb_work_private_t *pv, uint8_t *cc, int size
     return buf;
 }
 
+static int get_frame_type(int type)
+{
+    switch(type)
+    {
+        case AV_PICTURE_TYPE_I:
+            return HB_FRAME_I;
+        case AV_PICTURE_TYPE_B:
+            return HB_FRAME_B;
+        case AV_PICTURE_TYPE_P:
+            return HB_FRAME_P;
+    }
+    return 0;
+}
+
 /*
  * Decodes a video frame from the specified raw packet data
  *      ('data', 'size', 'sequence').
@@ -1315,6 +1329,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         {
             flags |= PIC_FLAG_REPEAT_FRAME;
         }
+        int frametype = get_frame_type(pv->frame->pict_type);
 
         // Check for CC data
         AVFrameSideData *sd;
@@ -1385,6 +1400,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
             buf->sequence = sequence;
 
             buf->s.flags = flags;
+            buf->s.frametype = frametype;
 
             if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
@@ -1451,6 +1467,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         buf->sequence = sequence;
         /* Store picture flags for later use by filters */
         buf->s.flags = flags;
+        buf->s.frametype = frametype;
         pv->delayq[slot] = buf;
         heap_push( &pv->pts_heap, pts );
 
@@ -1654,6 +1671,10 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         // Set encoder opts...
         AVDictionary * av_opts = NULL;
         av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
+        if (pv->title->flags & HBTF_NO_IDR)
+        {
+            av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
+        }
 
         if ( hb_avcodec_open( pv->context, codec, &av_opts, pv->threads ) )
         {
@@ -1818,6 +1839,10 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         AVDictionary * av_opts = NULL;
         av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
+        if (pv->title->flags & HBTF_NO_IDR)
+        {
+            av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
+        }
 
         // disable threaded decoding for scan, can cause crashes
         if ( hb_avcodec_open( pv->context, codec, &av_opts, pv->threads ) )

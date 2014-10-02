@@ -350,7 +350,6 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         case BLURAY_STREAM_TYPE_VIDEO_H264:
             title->video_codec = WORK_DECAVCODECV;
             title->video_codec_param = AV_CODEC_ID_H264;
-            title->flags |= HBTF_NO_IDR;
             break;
 
         default:

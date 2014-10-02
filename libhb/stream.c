@@ -1098,7 +1098,6 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     chapter->seconds = title->seconds;
     hb_list_add( title->list_chapter, chapter );
 
-
     if ( stream->has_IDRs < 1 )
     {
         hb_log( "stream doesn't seem to have video IDR frames" );
@@ -5439,9 +5438,6 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 title->pixel_aspect_width = ic->streams[i]->sample_aspect_ratio.num;
                 title->pixel_aspect_height = ic->streams[i]->sample_aspect_ratio.den;
             }
-
-            if ( context->codec_id == AV_CODEC_ID_H264 )
-                title->flags |= HBTF_NO_IDR;
 
             title->video_codec = WORK_DECAVCODECV;
             title->video_codec_param = context->codec_id;

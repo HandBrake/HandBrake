@@ -493,6 +493,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     int pulldown_count = 0;
     int doubled_frame_count = 0;
     int interlaced_preview_count = 0;
+    int frame_wait = 0;
     hb_stream_t  * stream = NULL;
     info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
     crop_record_t *crops = crop_record_init( data->preview_count );
@@ -590,6 +591,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
         if (flush && vid_decoder->flush)
             vid_decoder->flush( vid_decoder );
+        if (title->flags & HBTF_NO_IDR)
+        {
+            frame_wait = 100;
+        }
 
         hb_buffer_t * vid_buf = NULL;
 
@@ -660,6 +665,18 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                 if( buf_es->s.id == title->video_id && vid_buf == NULL )
                 {
                     vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
+                    if (vid_buf != NULL && frame_wait)
+                    {
+                        if (vid_buf->s.frametype != HB_FRAME_I)
+                        {
+                            hb_buffer_close(&vid_buf);
+                            frame_wait--;
+                        }
+                        else
+                        {
+                            frame_wait = 0;
+                        }
+                    }
                 }
                 else if( ! AllAudioOK( title ) ) 
                 {
