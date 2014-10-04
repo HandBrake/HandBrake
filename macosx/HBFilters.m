@@ -138,8 +138,8 @@ static NSDictionary *_nlmeansTunesDict;
     {
         /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key. */
         self.useDecomb = 1;
-        _decomb = 0;
-        _deinterlace = 0;
+        self.decomb = 0;
+        self.deinterlace = 0;
         if ([preset[@"PictureDecombDeinterlace"] intValue] == 1)
         {
             /* we are using decomb */
