@@ -51,7 +51,7 @@ fi
 (grep "^AM_PROG_LIBTOOL" $srcdir/configure.ac >/dev/null) && {
   (libtoolize --version) < /dev/null > /dev/null 2>&1 || {
     echo
-    echo "**Error**: You must have \`libtool' installed."
+    echo "**Error**: You must have \`libtoolize' installed."
     echo "You can get it from: ftp://ftp.gnu.org/pub/gnu/"
     DIE=1
   }
