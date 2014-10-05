@@ -13,11 +13,11 @@ namespace HandBrake.ApplicationServices.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
@@ -25,10 +25,15 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
+    using HandBrake.Interop.SourceData;
 
     using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
+    using Chapter = HandBrake.ApplicationServices.Parsing.Chapter;
     using ScanProgressEventArgs = HandBrake.Interop.EventArgs.ScanProgressEventArgs;
     using Size = System.Drawing.Size;
+    using Subtitle = HandBrake.ApplicationServices.Parsing.Subtitle;
+    using SubtitleType = HandBrake.ApplicationServices.Model.Encoding.SubtitleType;
+    using Title = HandBrake.ApplicationServices.Parsing.Title;
 
     /// <summary>
     /// Scan a Source
@@ -465,7 +470,8 @@ namespace HandBrake.ApplicationServices.Services
                         AutoCropDimensions = title.AutoCropDimensions,
                         Fps = title.Framerate,
                         SourceName = title.Path,
-                        MainTitle = title.TitleNumber == featureTitle
+                        MainTitle = title.TitleNumber == featureTitle,
+                        Playlist = title.InputType == InputType.Bluray ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null
                     };
 
                 foreach (Interop.SourceData.Chapter chapter in title.Chapters)

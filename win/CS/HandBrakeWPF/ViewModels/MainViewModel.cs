@@ -743,7 +743,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
-                    this.Duration = this.selectedTitle.Duration.ToString("g");
+                    this.Duration = this.DurationCalculation();
 
                     // Setup the tab controls
                     this.SetupTabs();
@@ -1898,15 +1898,20 @@ namespace HandBrakeWPF.ViewModels
             }
 
             double startEndDuration = this.SelectedEndPoint - this.SelectedStartPoint;
+            TimeSpan output;
+
             switch (this.SelectedPointToPoint)
             {
                 case PointToPointMode.Chapters:
-                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString("g");
+                    output = this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint);
+                    return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
                 case PointToPointMode.Seconds:
-                    return TimeSpan.FromSeconds(startEndDuration).ToString("g");
+                    output = TimeSpan.FromSeconds(startEndDuration);
+                    return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
                 case PointToPointMode.Frames:
                     startEndDuration = startEndDuration / selectedTitle.Fps;
-                    return TimeSpan.FromSeconds(Math.Round(startEndDuration, 2)).ToString("g");
+                    output = TimeSpan.FromSeconds(Math.Round(startEndDuration, 2));
+                    return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
             }
 
             return "--:--:--";

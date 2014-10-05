@@ -416,10 +416,10 @@
                                                        ConverterParameter=false}"
                                                 />
 
-                        <Label Margin="8,0,0,0" Content="through" />
+                        <Label Margin="4,0,0,0" Content="through" />
                         <ComboBox Name="EndPoint"
                                   MinWidth="60"
-                                  Margin="8,0,0,0"
+                                  Margin="4,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
                                   SelectedItem="{Binding SelectedEndPoint}"
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
@@ -433,8 +433,9 @@
                                                        ConverterParameter=false}"
                                                 />
 
-                        <Label Margin="8,0,0,0" Content="Duration" />
-                        <Label Margin="8,0,0,0" Content="{Binding Duration}" />
+                        <Label Margin="4,0,0,0" Content="Duration" />
+                        <Label Margin="4,0,0,0" Content="{Binding Duration}" />
+
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
