@@ -584,14 +584,14 @@
                         <binding destination="61" name="value" keyPath="values.HBShowAdvancedTab" id="PgA-TV-kBr"/>
                     </connections>
                 </button>
-                <box appearanceType="aqua" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="NGW-RG-tnZ">
+                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="NGW-RG-tnZ">
                     <rect key="frame" x="20" y="64" width="460" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
                 </box>
-                <box appearanceType="aqua" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="I0V-hM-Fq0">
+                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="I0V-hM-Fq0">
                     <rect key="frame" x="20" y="164" width="460" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>

@@ -449,7 +449,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <box appearanceType="aqua" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="g5v-MD-kdo">
+                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="g5v-MD-kdo">
                     <rect key="frame" x="120" y="124" width="780" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
