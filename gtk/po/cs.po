@@ -1,25 +1,28 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# VictorR2007 <victorr2007@yandex.ru>, 2013-2014.
+# Translators:
 # Czech X Team <info@czechxteam.net>, 2013
-# fri <pavelfric@seznam.cz>, 2013-2014
-# fri <pavelfric@seznam.cz>, 2013
-# fri <pavelfric@seznam.cz>, 2013-2014
+# fri, 2013
+# fri, 2013-2014
+# fri, 2013-2014
+# fri, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-13 12:44+0400\n"
-"PO-Revision-Date: 2014-02-15 17:00+0000\n"
-"Last-Translator: fri <pavelfric@seznam.cz>\n"
+"PO-Revision-Date: 2014-10-06 09:25+0000\n"
+"Last-Translator: fri\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/handbrake/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Poedit 1.6.9\n"
 
 #: rc.cpp:1
 msgctxt "NAME OF TRANSLATORS"
@@ -88,6 +91,15 @@ msgstr "Pokračovat v kódování"
 msgid "Add Queue"
 msgstr "Přidat řadu"
 
+msgid "Add _Multiple"
+msgstr "Přidat _více"
+
+msgid "Add"
+msgstr "Přidat"
+
+msgid "_Add"
+msgstr "_Přidat"
+
 msgid "_Add Queue"
 msgstr "_Přidat řadu"
 
@@ -124,6 +136,90 @@ msgstr "Zastavit řadu"
 msgid " None"
 msgstr " Žádný"
 
+msgid "Presets"
+msgstr "Přednastavení"
+
+msgid "_Presets"
+msgstr "_Přednastavení"
+
+msgid "_Delete"
+msgstr "_Smazat"
+
+msgid "_New Folder"
+msgstr "_Nová složka"
+
+msgid "Picture"
+msgstr "Obrázek"
+
+msgid "<b>Storage Geometry</b>"
+msgstr "<b>Uspořádání úložiště</b>"
+
+msgid "<b>Display Geometry</b>"
+msgstr "<b>Uspořádání zobrazení</b>"
+
+msgid "Audio Defaults"
+msgstr "Výchozí nastavení zvuku"
+
+msgid "Selection Behavior:"
+msgstr "Chování výběru"
+
+msgid "First Track Matching Selected Languages"
+msgstr "První stopa odpovídá vybraným jazykům"
+
+msgid "All Tracks Matching Selected Languages"
+msgstr "Všechny stopy odpovídají vybraným jazykům"
+
+msgid "Available Languages"
+msgstr "Dostupné jazyky"
+
+msgid "Selected Languages"
+msgstr "Vybrané jazyky"
+
+msgid "Remove"
+msgstr "Odstranit"
+
+msgid "Audio Encoder Settings:"
+msgstr "Nastavení kódování zvuku:"
+
+msgid "Use only first encoder for secondary audio"
+msgstr "Použít pouze první kodér pro doplňkový zvuk"
+
+msgid "Bitrate/Quality"
+msgstr "Datový tok/Jakost"
+
+msgid "Mixdown"
+msgstr "Závěrečné smíchání"
+
+msgid "Samplerate"
+msgstr "Vzorkovací kmitočet"
+
+msgid "Audio List"
+msgstr "Seznam zvukových stop"
+
+msgid "Add All"
+msgstr "Přidat vše"
+
+msgid "Add all audio tracks to the list"
+msgstr "Přidat všechny zvukové stopy do seznamu"
+
+msgid "Reload Defaults"
+msgstr "Nahrát výchozí hodnoty znovu"
+
+msgid "Subtitle Defaults"
+msgstr "Výchozí nastavení titulků"
+
+msgid "Preferred Language: None"
+msgstr "Upřednostňovaný jazyk: Žádný"
+
+msgid "Subtitle List"
+msgstr "Seznam titulků"
+
+msgid "Reset All Titles"
+msgstr "Nastavit všechny názvy znovu"
+
+msgid "_Preview"
+msgstr "_Náhled"
+
 msgid "<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>\n"
 msgstr "<b>Obrázek:</b> Zdroj: <small>%d x %d, Výstup %d x %d %s</small>\n"
 
@@ -143,7 +239,7 @@ msgid "_Picture Settings"
 msgstr "Nastavení _obrázku"
 
 msgid "_Activity Window"
-msgstr "Okno pro č_innost"
+msgstr "Č_innost"
 
 msgid "Show _Queue"
 msgstr "Ukázat ř_adu"
@@ -152,7 +248,7 @@ msgid "_Help"
 msgstr "_Nápověda"
 
 msgid "_Guide"
-msgstr "Prů_vodce"
+msgstr "Pří_ručka"
 
 msgid "_Minimize/Maximize"
 msgstr "Zvě_tšit/Zmenšit"
@@ -259,7 +355,7 @@ msgid ""
 "Most players will automatically display this\n"
 "subtitle track whenever the video is played.\n"
 "\n"
-"This is useful for creating a \"forced\" track\n"
+"This is usefule for creating a \"forced\" track\n"
 "in your output."
 msgstr "Nastavit výchozí výstupní stopu titulků.\n\nVětšina přehrávačů automaticky zobrazí tuto\nstopu titulků vždycky, když je video přehráváno.\n\nToto je užitečné při vytváření \"vynucené\" stopy\nve vašem výstupu."
 
@@ -421,7 +517,7 @@ msgid ""
 msgstr "Nastavit průměrný datový tok. Okamžitý datový tok může být vyšší nebo nižší v kterémkoli časovém bodě.  Ale průměr pro dlouhou dobu trvání bude hodnota nastavená zde.  Pokud okamžitý datový tok  potřebujete omezit, podívejte se na nastavení x264 vbv-bufsize a vbv-maxrate."
 
 msgid "Bitrate (kbps):    "
-msgstr "Datový tok (k/ps):  "
+msgstr "Datový tok (kB/s):  "
 
 msgid ""
 "Set the average bitrate. The instantaneous bitrate can be much higher or "
@@ -525,7 +621,7 @@ msgid ""
 msgstr "Dodatečné nastavení pro x264.\n\n            Dvojtečkou oddělený seznam voleb pro x264."
 
 msgid "Video"
-msgstr "Video"
+msgstr "Obraz"
 
 msgid "Add new audio settings to the list"
 msgstr "Přidat nové nastavení zvuku do seznamu"
@@ -979,6 +1075,9 @@ msgstr "Volby pro přednastavení"
 msgid "<b>Presets</b>"
 msgstr "<b>Přednastavení</b>"
 
+msgid "<b>Presets List</b>"
+msgstr "<b>Seznam přednastavení</b>"
+
 msgid "_Preferences"
 msgstr "_Nastavení"
 
@@ -1007,7 +1106,7 @@ msgid "Filter short titles (seconds)"
 msgstr "Filtrovat krátké tituly (sekundy)"
 
 msgid "Show system tray icon"
-msgstr "Ukázat ikonu v oznamovací části panelu"
+msgstr "Ukázat ikonu v oznamovací oblasti panelu"
 
 msgid "General"
 msgstr "Obecné"
@@ -1240,7 +1339,7 @@ msgid "Display Aspect:"
 msgstr "Zobrazit poměr stran:"
 
 msgid "<b>Display</b>"
-msgstr "<b>Zobrazit</b>"
+msgstr "<b>Zobrazení</b>"
 
 msgid "Dimensions"
 msgstr "Rozměry"
@@ -1874,7 +1973,7 @@ msgid "Autoselect"
 msgstr "Automatický výběr"
 
 msgid "Superfluous tunes! %s"
-msgstr ""
+msgstr "Nadbytečný zvuk! %s"
 
 msgid ""
 "%s: Folder already exists.\n"
@@ -2181,7 +2280,7 @@ msgid "grain"
 msgstr "Zrnitost"
 
 msgid "stillimage"
-msgstr ""
+msgstr "stillimage"
 
 msgid "psnr"
 msgstr "psnr"
@@ -2206,3 +2305,57 @@ msgstr "Rok"
 
 msgid "Immortal"
 msgstr "Už nikdy"
+
+msgid "Unrecognized start tag (%s)"
+msgstr "Nerozpoznaná značka pro začátek (%s)"
+
+msgid "Not Selected"
+msgstr "Nevybráno"
+
+msgid "Closing HandBrake will terminate encoding.\n"
+msgstr "Zavření programu HandBrake povede k ukončení kódování.\n"
+
+msgid "Scanning ..."
+msgstr "Prohledává se..."
+
+msgid "No Title Found"
+msgstr "Nenalezen žádný název"
+
+msgid "Reload all audio settings from defaults"
+msgstr "Nahrát znovu všechna nastavení zvuku z výchozích hodnot"
+
+msgid "Reload all subtitle settings from defaults"
+msgstr "Nahrát znovu všechna nastavení titulků z výchozích hodnot"
+
+msgid "Reload"
+msgstr "Nahrát znovu"
+
+msgid "Reload All"
+msgstr "Nahrát vše znovu"
+
+msgid "Destination files OK.  No duplicates detected."
+msgstr "Cílové soubory jsou v pořádku. Nebylo zjištěno, že by byly některé soubory dvakrát."
+
+msgid "Destination"
+msgstr "Cíl"
+
+msgid "Clear All"
+msgstr "Vyprázdnit vše"
+
+msgid "Unmark all titles"
+msgstr "Odznačit všechny názvy"
+
+msgid "Select All"
+msgstr "Vybrat vše"
+
+msgid "Mark all titles for adding to the queue"
+msgstr "Označit všechny názvy pro přidání do řady"
+
+msgid "Auto-Name Template"
+msgstr "Pojmenovat předlohu automaticky"
+
+msgid "Delete completed jobs from queue"
+msgstr "Odmazat dokončené úkoly z řady"
+
+msgid "<b>Destination</b>"
+msgstr ""
