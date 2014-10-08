@@ -259,7 +259,7 @@ msgid ""
 "Most players will automatically display this\n"
 "subtitle track whenever the video is played.\n"
 "\n"
-"This is usefule for creating a \"forced\" track\n"
+"This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr "Nastavit výchozí výstupní stopu titulků.\n\nVětšina přehrávačů automaticky zobrazí tuto\nstopu titulků vždycky, když je video přehráváno.\n\nToto je užitečné při vytváření \"vynucené\" stopy\nve vašem výstupu."
 

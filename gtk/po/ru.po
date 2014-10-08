@@ -255,7 +255,7 @@ msgid ""
 "Most players will automatically display this\n"
 "subtitle track whenever the video is played.\n"
 "\n"
-"This is usefule for creating a \"forced\" track\n"
+"This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr ""
 
