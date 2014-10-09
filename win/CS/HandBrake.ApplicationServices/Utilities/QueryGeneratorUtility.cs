@@ -715,14 +715,14 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (firstLoop)
                 {
-                    audioItems = string.IsNullOrEmpty(fixedTrackName) ? "\\\"\\\"" : string.Format("\\\"{0}\\\"", fixedTrackName.Trim());
+                    audioItems = string.IsNullOrEmpty(fixedTrackName) ? string.Empty : string.Format("{0}", fixedTrackName.Trim());
                     firstLoop = false;
                 }
                 else
-                    audioItems += "," + (string.IsNullOrEmpty(fixedTrackName) ? "\\\"\\\"" : string.Format("\\\"{0}\\\"", fixedTrackName.Trim()));
+                    audioItems += "," + (string.IsNullOrEmpty(fixedTrackName) ? string.Empty : string.Format("{0}", fixedTrackName.Trim()));
             }
             if (foundTrackName)
-                query += string.Format(" --aname={0}", audioItems);
+                query += string.Format(" --aname=\"{0}\"", audioItems);
 
             // Passthru Settings
             if (task.AllowedPassthruOptions != null)
