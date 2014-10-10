@@ -2357,9 +2357,9 @@ This allows a player to initiate playback before downloading the entire file.</p
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
-                                                <property name="tooltip_text">When picture settings require that the image
+                                                <property name="tooltip_text" translatable="yes">When picture settings require that the image
 dimensions be rounded to some multiple number
-of pixels. This setting will crop a few extra pixels
+of pixels, this setting will crop a few extra pixels
 instead of doing exact cropping and then scaling to
 the required multiple.</property>
                                                 <property name="xalign">0</property>
