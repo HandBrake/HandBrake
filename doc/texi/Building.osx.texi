@@ -20,17 +20,16 @@ Building on @value{OS-osx} is well supported. It is the reference platform for @
 
 @itemize @bullet
 @item Mac Intel hardware
-@item @value{OS-osx} 10.7.5 or @value{OS-osx} 10.8.3
-@item Xcode 4.6.1 (4H512)
-@item llvm-gcc-4.2 version 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
-@item Xcode command-line tools (installed via Preferences > Downloads > Components)
+@item @value{OS-osx} 10.9.4 or later
+@item Xcode 6.0.1
+@item Xcode command-line tools (installed via Preferences > Downloads > Components) or download via Appla Developer website.
 @item XQuartz (http://xquartz.macosforge.org/landing/)
 @end itemize
 
 The following tools are compiled during the build process if necessary, but you can speed up your build by installing them:
 
 @itemize @bullet
-@item yasm 1.2.0 or later
+@item yasm 1.3.0 or later
 @item autoconf
 @item automake
 @item libtool

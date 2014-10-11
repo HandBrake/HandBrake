@@ -19,9 +19,10 @@
 The following are the recommended specifications for building on @value{OS-mingw}; but is not necessarily the only configuration that is possible:
 
 @itemize @bullet
-@item Intel 32-bit or 64-bit hardware
-@item @value{OS-mingw} on Fedora 17+, Ubuntu 12+ or Debian using gcc 4.6+
-@item yasm 1.2.x (for i386 or x86_64 architectures)
+@item Intel 64-bit hardware
+@item @value{OS-mingw} on Fedora 20+, Ubuntu 14+ or Debian 7+ using gcc 4.7+
+@item Official MinGW-w64 builds are recommended over those provided by distributions.
+@item yasm 1.3.x 
 @end itemize
 
 @include building/prerequisites.bundled.texi

@@ -20,9 +20,9 @@ The following are the recommended specifications for building on @value{OS-linux
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit kernel
-@item Ubuntu 14.04, gcc 4.8, yasm 1.2.x
-@item Fedora 20, gcc 4.8, yasm 1.2.x
-@item gcc 4.5 or higher is reported to work
+@item Ubuntu 14.04, gcc 4.8, yasm 1.3.x
+@item Fedora 20, gcc 4.8, yasm 1.3.x
+@item gcc 4.7 or higher is reported to work
 @end itemize
 
 @include building/prerequisites.bundled.texi
