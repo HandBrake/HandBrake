@@ -12,8 +12,9 @@ Changes between 0.9.9 and 0.10
         Lanczos
             HandBrakes? default scaler.
         Bicubic (OpenCL) (Experimental)
+            Available on the Command Line (All Platforms) and Windows GUI. (Mac / Linux GUI's will come in a later release)
             Currently only available in OpenCL form so requires a AMD or Intel GPU supporting OpenCL 1.1 or later. Nvidia GPU's are not currently supported.
-            When downscaling, up to 5% performance improvement can be achieved. No benefit when not down-scaling.
+            When downscaling, up to 5% performance improvement can be achieved. No benefit when not downscaling.
             Small loss in quality over the Lanczos scaler.
     -   Denoise
         hqdn3d filter now accepts individual settings for both chroma channels (Cr, Cb)
@@ -26,15 +27,14 @@ Changes between 0.9.9 and 0.10
         libbluray 0.5.0
     - Libavformat is now used for muxing instead of mp4v2 and libmkv
         "Large File Size" checkbox has now bee removed for mp4, as the new muxer will transition to 64bit files automatically.
-        mp4v2 and libmkv options have now been removed.
         mpeg2dec has also been replaced in favour of using libav
     - The LibAV AAC encoder is now the default as FAAC has been removed.
         This encoder is adequate for most, but until it improves a bit further, we have enabled support for the FDK-AAC encoder also.
-        This FDK option is a temporary measure until the LibAV encoder improves.
-        Note that FDK-AAC is much slower and will likely bottleneck the encode process, but will produce better quality audio.
-    - H.265 encoder (Experimental - available when compiled from source with --enable-x265)
-        Early build of the new x265 encoder. Enabled on Windows only currently. (Mac / Linux builds will have it enabled shortly)
-        Currently still some way off being ready for prime time. Useful for testing only at this stage.
+            This FDK option is a temporary measure until the LibAV encoder improves.
+            Note that FDK-AAC is much slower and will likely bottleneck the encode process, but will produce better quality audio.
+    - H.265 encoder
+        Using x265 v1.3
+        This encoder is still early in it's development, so is missing many H.265 features and optimisations.
     - Added VP8 Encoder (using libvpx)
         Available in MKV files only.
     - Removed mcdeint deinterlace and decomb modes. This relied on the snow encoder in libav which has been was removed by upstream.
@@ -45,6 +45,7 @@ Changes between 0.9.9 and 0.10
         Added option to 'Use System Colors'. The app should now be usable in a High Contrast mode.
         Fixed Tab ordering to make the app more keyboard friendly.
     - LibHB is now used for scanning instead of the CLI.
+        Experiential Preview window is now available as a result. (Can be enabled via preferences)
     - Improved the layout and design of the Audio and Subtitle tabs.
         Split buttons similar to the old 0.9.8 WinForms? GUI
         Improved layout on the track listbox to make better use of the space.
@@ -61,6 +62,7 @@ Changes between 0.9.9 and 0.10
         Removed Growl for Windows support due to bugs and issues with this library that remain unfixed. Project appears abandoned.
         Many misc other fixes.
     - Windows XP is no longer supported. Windows Vista with Service Pack 2 or later is now a requirement.
+    - The 32bit build of the application is now considered deprecated. This is due to 32bit process memory limitations.
 
   Mac
     - Build system updates to compiled under OS X 10.9
