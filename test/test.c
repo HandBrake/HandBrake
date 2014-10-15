@@ -4356,17 +4356,21 @@ static int ParseOptions( int argc, char ** argv )
 
     if (nlmeans)
     {
-        if (nlmeans_opt == NULL && nlmeans_tune_opt != NULL)
-        {
-            fprintf(stdout, "Default nlmeans parameters specified; ignoring nlmeans tune (%s).\n", nlmeans_tune_opt);
-        }
-
         char *opt = hb_generate_filter_settings(HB_FILTER_NLMEANS,
                                                 nlmeans_opt, nlmeans_tune_opt);
         if (opt != NULL)
         {
             free(nlmeans_opt);
             nlmeans_opt = opt;
+        }
+        else if (nlmeans_opt != NULL)
+        {
+            fprintf(stderr, "Invalid parameters for nlmeans (%s).", nlmeans_opt);
+            return -1;
+        }
+        else if (nlmeans_tune_opt != NULL)
+        {
+            fprintf(stdout, "Default nlmeans parameters specified; ignoring nlmeans tune (%s).\n", nlmeans_tune_opt);
         }
     }
     if (denoise)
@@ -4377,6 +4381,11 @@ static int ParseOptions( int argc, char ** argv )
         {
             free(denoise_opt);
             denoise_opt = opt;
+        }
+        else if (denoise_opt != NULL)
+        {
+            fprintf(stderr, "Invalid parameters for hqdn3d (%s).", denoise_opt);
+            return -1;
         }
     }
 
