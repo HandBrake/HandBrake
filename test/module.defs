@@ -60,7 +60,7 @@ endif
 ifeq (1,$(FEATURE.hwd))
     TEST.GCC.D += USE_HWD
 endif
-    TEST.GCC.l += pthreadGC2 iconv ws2_32
+    TEST.GCC.l += pthreadGC2 iconv ws2_32 regex
     TEST.GCC.D += PTW32_STATIC_LIB
     TEST.GCC.args.extra.exe++ += -static
 endif #   (1-mingw,$(BUILD.cross)-$(BUILD.system))

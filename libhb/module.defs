@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
-    PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX
+    PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -126,6 +126,12 @@ ifneq ($(HAS.iconv),1)
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libiconv.a
 else
     LIBHB.GCC.l += iconv
+endif
+
+ifneq ($(HAS.regex),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libregex.a
+else
+    LIBHB.GCC.l += regex
 endif
 
 ifeq (1,$(FRIBIDI.enabled))

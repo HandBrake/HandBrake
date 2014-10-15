@@ -84,6 +84,9 @@ endif
 ifneq ($(HAS.libz),1)
     MODULES += contrib/zlib
 endif
+ifneq ($(HAS.regex),1)
+    MODULES += contrib/libgnurx
+endif
 endif
 
 ifneq (,$(filter $(BUILD.system),solaris))
