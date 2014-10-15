@@ -1,0 +1,24 @@
+$(eval $(call import.MODULE.defs,LIBGNURX,libgnurx))
+$(eval $(call import.CONTRIB.defs,LIBGNURX))
+
+LIBGNURX.FETCH.url = http://download.handbrake.fr/handbrake/contrib/mingw-libgnurx-2.5.1-src.tar.gz
+LIBGNURX.EXTRACT.tarbase = mingw-libgnurx-2.5.1
+
+LIBGNURX.BUILD.ntargets = libregex.a-static
+
+define LIBGNURX.INSTALL
+    $(CP.exe) $(LIBGNURX.EXTRACT.dir/)libregex.a $(CONTRIB.build/)lib/
+    $(CP.exe) $(LIBGNURX.EXTRACT.dir/)regex.h $(CONTRIB.build/)include/
+    $(TOUCH.exe) $@
+endef
+
+define LIBGNURX.UNINSTALL
+    $(RM.exe) -f $(CONTRIB.build/)lib/libregex.a
+    $(RM.exe) -f $(CONTRIB.build/)include/regex.h
+    $(RM.exe) -f $(LIBGNURX.INSTALL.target)
+endef
+
+ifeq (1,$(FEATURE.local_pkgconfig))
+    LIBGNURX.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBGNURX.BUILD.env     = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+endif
