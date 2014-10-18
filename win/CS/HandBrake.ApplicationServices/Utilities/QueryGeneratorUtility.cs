@@ -799,6 +799,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 string srtOffset = String.Empty;
                 string srtLang = String.Empty;
                 string srtDefault = String.Empty;
+                int? srtBurnTrack = null;
                 int srtCount = 0;
                 int subCount = 0;
 
@@ -824,6 +825,8 @@ namespace HandBrake.ApplicationServices.Utilities
 
                         itemToAdd = item.SrtOffset.ToString();
                         srtOffset += srtOffset == string.Empty ? itemToAdd : "," + itemToAdd;
+                        if (item.Burned)
+                            srtBurnTrack = srtCount;
                     }
                     else // We have Bitmap or CC
                     {
@@ -879,6 +882,8 @@ namespace HandBrake.ApplicationServices.Utilities
                         query += " --srt-lang " + srtLang;
                     if (srtDefault != string.Empty)
                         query += " --srt-default=" + srtDefault;
+                    if (srtBurnTrack.HasValue)
+                        query += " --srt-burn=" + srtBurnTrack.Value;
                 }
             }
 
