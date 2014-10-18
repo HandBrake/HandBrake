@@ -3421,9 +3421,9 @@ if (hb_qsv_available())
     "                            means no subtitle will be automatically displayed\n"
     "                            If \"number\" is omitted, the first srt is default.\n"
     "                            \"number\" is an 1 based index into the srt-file list\n"
-	"        --srt-burn          \"Burn\" the selected srt subtitle into the video track\n"
+    "        --srt-burn          \"Burn\" the selected srt subtitle into the video track\n"
     "          <number>          If \"number\" is omitted, the first srt is burned.\n"
-	"                            \"number\" is an 1 based index into the srt-file list\n"
+    "                            \"number\" is an 1 based index into the srt-file list\n"
     "\n"
     );
 
