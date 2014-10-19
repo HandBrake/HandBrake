@@ -6,8 +6,7 @@ diff -ur mingw-libgnurx-2.5.1/Makefile.in.orig mingw-libgnurx-2.5.1/Makefile.in
  	cp -p libgnurx.dll.a $@
  
 +libregex.a-static: $(OBJECTS)
-+	ar rcu libregex.a $(OBJECTS)
-+	ranlib libregex.a
++	ar rscu libregex.a $(OBJECTS)
 +
  gnurx.lib: libgnurx-$(DLLVERSION).dll
  	$(MSVCLIB) -def:libgnurx.def -out:gnurx.lib
