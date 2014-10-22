@@ -965,6 +965,79 @@ static int write_cc_buffer(struct s_write *wb)
     return wrote_something;
 }
 
+static void move_roll_up(struct s_write *wb, int row)
+{
+    struct eia608_screen *use_buffer;
+    int ii, src, dst, keep_lines;
+
+    switch (wb->data608->mode)
+    {
+        case MODE_ROLLUP_2:
+            keep_lines = 2;
+            break;
+        case MODE_ROLLUP_3:
+            keep_lines = 3;
+            break;
+        case MODE_ROLLUP_4:
+            keep_lines = 4;
+            break;
+        default:
+            // Not rollup mode, nothing to do
+            return;
+    }
+
+    if (row == wb->data608->rollup_base_row)
+    {
+        // base row didn't change, nothing to do
+        return;
+    }
+
+    use_buffer = get_current_visible_buffer(wb);
+    if (row < wb->data608->rollup_base_row)
+    {
+        src = wb->data608->rollup_base_row - keep_lines + 1;
+        dst = row - keep_lines + 1;
+        for (ii = 0; ii < keep_lines; ii++)
+        {
+            memcpy(use_buffer->characters[dst], use_buffer->characters[src], CC608_SCREEN_WIDTH+1);
+            memcpy(use_buffer->colors[dst], use_buffer->colors[src], CC608_SCREEN_WIDTH+1);
+            memcpy(use_buffer->fonts[dst], use_buffer->fonts[src], CC608_SCREEN_WIDTH+1);
+            use_buffer->row_used[dst] = use_buffer->row_used[src];
+
+            memset(use_buffer->characters[src], ' ', CC608_SCREEN_WIDTH);
+            memset(use_buffer->colors[src], COL_WHITE, CC608_SCREEN_WIDTH);
+            memset(use_buffer->fonts[src], FONT_REGULAR, CC608_SCREEN_WIDTH);
+            use_buffer->characters[src][CC608_SCREEN_WIDTH] = 0;
+            use_buffer->row_used[src] = 0;
+
+            src++;
+            dst++;
+        }
+    }
+    else
+    {
+        src = wb->data608->rollup_base_row;
+        dst = row;
+        for (ii = 0; ii < keep_lines; ii++)
+        {
+            memcpy(use_buffer->characters[dst], use_buffer->characters[src], CC608_SCREEN_WIDTH+1);
+            memcpy(use_buffer->colors[dst], use_buffer->colors[src], CC608_SCREEN_WIDTH+1);
+            memcpy(use_buffer->fonts[dst], use_buffer->fonts[src], CC608_SCREEN_WIDTH+1);
+            use_buffer->row_used[dst] = use_buffer->row_used[src];
+
+            memset(use_buffer->characters[src], ' ', CC608_SCREEN_WIDTH);
+            memset(use_buffer->colors[src], COL_WHITE, CC608_SCREEN_WIDTH);
+            memset(use_buffer->fonts[src], FONT_REGULAR, CC608_SCREEN_WIDTH);
+            use_buffer->characters[src][CC608_SCREEN_WIDTH] = 0;
+            use_buffer->row_used[src] = 0;
+
+            src--;
+            dst--;
+        }
+    }
+    use_buffer->dirty = 1;
+}
+
 static void roll_up(struct s_write *wb)
 {
     struct eia608_screen *use_buffer;
@@ -1388,10 +1461,39 @@ static void handle_pac(unsigned char c1, unsigned char c2, struct s_write *wb)
     if (debug_608)
         hb_log ("  --  Position: %d:%d, color: %s,  font: %s\n",row,
             indent,color_text[color][0],font_text[font]);
+
+    // CC spec says to the preferred method to handle a roll-up base row
+    // that causes the display to scroll off the top of the screen is to 
+    // adjust the base row down.
+    int keep_lines;
+    switch (wb->data608->mode)
+    {
+        case MODE_ROLLUP_2:
+            keep_lines = 2;
+            break;
+        case MODE_ROLLUP_3:
+            keep_lines = 3;
+            break;
+        case MODE_ROLLUP_4:
+            keep_lines = 4;
+            break;
+        default:
+            // Not rollup mode, all rows ok
+            keep_lines = 0;
+            return;
+    }
+    if (row < keep_lines)
+    {
+        row = keep_lines;
+    }
     if (wb->data608->mode != MODE_TEXT)
     {
         // According to Robson, row info is discarded in text mode
         // but column is accepted
+        //
+        // CC-608 spec says current rollup display must move to the
+        // new position when the cursor row changes
+        move_roll_up(wb, row - 1);
         wb->data608->cursor_row = row - 1 ; // Since the array is 0 based
     }
     wb->data608->rollup_base_row = row - 1;
