@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" defaultVersion="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <deployment version="1060" identifier="macosx"/>
+        <development version="5100" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAdvancedController">
@@ -53,7 +54,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="5" userLabel="x264">
             <rect key="frame" x="0.0" y="0.0" width="891" height="290"/>
             <autoresizingMask key="autoresizingMask"/>
@@ -69,7 +70,7 @@
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" id="388">
-                    <rect key="frame" x="347" y="65" width="102" height="16"/>
+                    <rect key="frame" x="298" y="65" width="151" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Psychovisual Trellis:" id="391">
                         <font key="font" metaFont="label"/>
@@ -88,7 +89,7 @@
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" id="90">
-                    <rect key="frame" x="1" y="212" width="119" height="16"/>
+                    <rect key="frame" x="4" y="212" width="123" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="CABAC Entropy Coding:" id="380">
                         <font key="font" metaFont="label"/>
@@ -97,7 +98,7 @@
                     </textFieldCell>
                 </textField>
                 <button id="89">
-                    <rect key="frame" x="122" y="212" width="22" height="18"/>
+                    <rect key="frame" x="129" y="212" width="22" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="379">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -108,7 +109,7 @@
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="88">
-                    <rect key="frame" x="40" y="191" width="80" height="16"/>
+                    <rect key="frame" x="2" y="191" width="125" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="8x8 Transform:" id="378">
                         <font key="font" metaFont="label"/>
@@ -117,7 +118,7 @@
                     </textFieldCell>
                 </textField>
                 <button id="87">
-                    <rect key="frame" x="122" y="191" width="22" height="18"/>
+                    <rect key="frame" x="129" y="191" width="22" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="377">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -128,7 +129,7 @@
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="86">
-                    <rect key="frame" x="674" y="254" width="83" height="16"/>
+                    <rect key="frame" x="662" y="254" width="95" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Partition Types:" id="376">
                         <font key="font" metaFont="label"/>
@@ -173,7 +174,7 @@
                     </connections>
                 </popUpButton>
                 <button id="73">
-                    <rect key="frame" x="122" y="107" width="22" height="18"/>
+                    <rect key="frame" x="129" y="107" width="22" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="373">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -184,7 +185,7 @@
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="66">
-                    <rect key="frame" x="695" y="107" width="62" height="16"/>
+                    <rect key="frame" x="689" y="107" width="68" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblocking:" id="366">
                         <font key="font" metaFont="label"/>
@@ -256,7 +257,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="49">
-                    <rect key="frame" x="337" y="233" width="112" height="16"/>
+                    <rect key="frame" x="298" y="233" width="151" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Adaptive Direct Mode:" id="361">
                         <font key="font" metaFont="label"/>
@@ -265,7 +266,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="382">
-                    <rect key="frame" x="304" y="86" width="145" height="16"/>
+                    <rect key="frame" x="298" y="86" width="151" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Psychovisual Rate Distortion:" id="383">
                         <font key="font" metaFont="label"/>
@@ -274,7 +275,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="46">
-                    <rect key="frame" x="15" y="149" width="105" height="16"/>
+                    <rect key="frame" x="2" y="149" width="125" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Pyramidal B-Frames:" id="358">
                         <font key="font" metaFont="label"/>
@@ -283,7 +284,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="44">
-                    <rect key="frame" x="298" y="191" width="151" height="16"/>
+                    <rect key="frame" x="285" y="191" width="164" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Subpixel ME &amp; Mode Decision:" id="356">
                         <font key="font" metaFont="label"/>
@@ -310,7 +311,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="38">
-                    <rect key="frame" x="320" y="170" width="129" height="16"/>
+                    <rect key="frame" x="298" y="170" width="151" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Motion Estimation Range:" id="354">
                         <font key="font" metaFont="label"/>
@@ -319,7 +320,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="37">
-                    <rect key="frame" x="314" y="212" width="135" height="16"/>
+                    <rect key="frame" x="298" y="212" width="151" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Motion Estimation Method:" id="353">
                         <font key="font" metaFont="label"/>
@@ -358,7 +359,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="24">
-                    <rect key="frame" x="17" y="107" width="103" height="16"/>
+                    <rect key="frame" x="24" y="107" width="103" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="No DCT Decimation:" id="348">
                         <font key="font" metaFont="label"/>
@@ -367,7 +368,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="23">
-                    <rect key="frame" x="720" y="233" width="37" height="16"/>
+                    <rect key="frame" x="662" y="233" width="95" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Trellis:" id="347">
                         <font key="font" metaFont="label"/>
@@ -412,7 +413,7 @@
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" id="13">
-                    <rect key="frame" x="124" y="235" width="97" height="15"/>
+                    <rect key="frame" x="131" y="235" width="97" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingMiddle" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="17" id="345">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -430,7 +431,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="396">
-                    <rect key="frame" x="349" y="254" width="100" height="16"/>
+                    <rect key="frame" x="298" y="254" width="151" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Adaptive B-Frames:" id="397">
                         <font key="font" metaFont="label"/>
@@ -439,7 +440,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="12">
-                    <rect key="frame" x="15" y="233" width="105" height="16"/>
+                    <rect key="frame" x="2" y="233" width="125" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Maximum B-Frames:" id="344">
                         <font key="font" metaFont="label"/>
@@ -448,7 +449,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="11">
-                    <rect key="frame" x="26" y="254" width="94" height="16"/>
+                    <rect key="frame" x="2" y="254" width="125" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Reference Frames:" id="343">
                         <font key="font" metaFont="label"/>
@@ -457,7 +458,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="6">
-                    <rect key="frame" x="124" y="256" width="97" height="15"/>
+                    <rect key="frame" x="131" y="256" width="97" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="8" id="342">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -475,7 +476,7 @@
                     </connections>
                 </popUpButton>
                 <button id="407">
-                    <rect key="frame" x="122" y="170" width="22" height="18"/>
+                    <rect key="frame" x="129" y="170" width="22" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="410">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -486,7 +487,7 @@
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="408">
-                    <rect key="frame" x="18" y="170" width="102" height="16"/>
+                    <rect key="frame" x="2" y="170" width="125" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Weighted P-Frames:" id="409">
                         <font key="font" metaFont="label"/>
@@ -505,7 +506,7 @@
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" id="421">
-                    <rect key="frame" x="333" y="107" width="116" height="16"/>
+                    <rect key="frame" x="298" y="107" width="151" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Adaptive Quantization:" id="422">
                         <font key="font" metaFont="label"/>
@@ -514,7 +515,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="427">
-                    <rect key="frame" x="124" y="151" width="97" height="15"/>
+                    <rect key="frame" x="131" y="151" width="97" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="Item1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingMiddle" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="430" id="428">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
