@@ -82,9 +82,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
         _selectedPreset = presetManager.defaultPreset;
 
+        // Workaround to avoid a bug in Snow Leopard
+        // we can switch back to [[NSApplication sharedApplication] applicationIconImage]
+        // when we won't support it anymore.
+        NSImage *appIcon = [NSImage imageNamed:@"HandBrake"];
+        [appIcon setSize:NSMakeSize(1024, 1024)];
+
         // Load the dockTile and instiante initial text fields
         dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
-                                                  image:[[NSApplication sharedApplication] applicationIconImage]];
+                                                  image:appIcon];
 
         [dockTile updateDockIcon:-1.0 withETA:@""];
 
