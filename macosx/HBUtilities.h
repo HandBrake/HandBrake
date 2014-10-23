@@ -39,6 +39,6 @@
                             chapters:(NSRange)chaptersRange
                              quality:(NSString *)quality
                              bitrate:(NSString *)bitrate
-                          videoCodec:(uint32_t *)codec;
+                          videoCodec:(uint32_t)codec;
 
 @end

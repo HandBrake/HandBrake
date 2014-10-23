@@ -43,7 +43,7 @@
                             chapters:(NSRange)chaptersRange
                              quality:(NSString *)quality
                              bitrate:(NSString *)bitrate
-                          videoCodec:(uint32_t *)codec
+                          videoCodec:(uint32_t)codec
 {
     NSMutableString *name = [[[NSMutableString alloc] init] autorelease];
     // The format array contains the tokens as NSString

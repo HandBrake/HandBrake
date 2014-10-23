@@ -2816,7 +2816,7 @@ fWorkingCount = 0;
     [fSrcChapterEndPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1];
 
     /* File Format */
-    [fDstFormatPopUp selectItemWithTag:queueToApply[@"JobFileFormatMux"]];
+    [fDstFormatPopUp selectItemWithTag:[queueToApply[@"JobFileFormatMux"] integerValue]];
     [self formatPopUpChanged:nil];
 
     /* Chapter Markers*/

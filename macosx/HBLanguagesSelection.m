@@ -240,7 +240,7 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
 {
     if (([info draggingSourceOperationMask] == NSDragOperationCopy))
     {
-        return nil;
+        return NO;
     }
 
     if ([info draggingSource] == view)

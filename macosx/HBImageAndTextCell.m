@@ -9,6 +9,7 @@
 #import "HBImageAndTextCell.h"
 
 
+#if 0
 static inline CGFloat
 xLeftInRect(NSSize innerSize, NSRect outerRect)
 {
@@ -66,7 +67,7 @@ scaleProportionally(NSSize imageSize, NSRect canvasRect)
   return imageSize;
 }
 
-
+#endif
 
 @implementation HBImageAndTextCell
 
