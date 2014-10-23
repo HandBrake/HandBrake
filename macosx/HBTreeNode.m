@@ -34,7 +34,7 @@
     return [self.children objectAtIndex:index];
 }
 
-- (void)insertObject:(id)presetObject inChildrenAtIndex:(NSUInteger)index
+- (void)insertObject:(HBTreeNode *)presetObject inChildrenAtIndex:(NSUInteger)index
 {
     [self.children insertObject:presetObject atIndex:index];
     [presetObject setDelegate:self.delegate];

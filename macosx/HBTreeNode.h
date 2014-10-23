@@ -38,7 +38,7 @@
 // KVC Accessor Methods
 - (NSUInteger)countOfChildren;
 - (id)objectInChildrenAtIndex:(NSUInteger)index;
-- (void)insertObject:(id)presetObject inChildrenAtIndex:(NSUInteger)index;
+- (void)insertObject:(HBTreeNode *)presetObject inChildrenAtIndex:(NSUInteger)index;
 - (void)removeObjectFromChildrenAtIndex:(NSUInteger)index;
 
 @end
