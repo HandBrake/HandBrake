@@ -77,6 +77,7 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
+	(cd $(STAGE.out.src/)utopic && dput handbrake-snapshots handbrake_$(HB.version)ppa1~utopic1_source.changes )
 	(cd $(STAGE.out.src/)trusty && dput handbrake-snapshots handbrake_$(HB.version)ppa1~trusty1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
