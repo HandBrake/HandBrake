@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn6308 (2014081801) on Linux
+Guide to Building HandBrake svn6419 (2014093001) on Linux
 *********************************************************
 
 1 Introduction
@@ -33,9 +33,9 @@ The following are the recommended specifications for building on Linux;
 but is not necessarily the only configuration that is possible:
 
    * Intel 32-bit or 64-bit kernel
-   * Ubuntu 14.04, gcc 4.8, yasm 1.2.x
-   * Fedora 20, gcc 4.8, yasm 1.2.x
-   * gcc 4.5 or higher is reported to work
+   * Ubuntu 14.04, gcc 4.8, yasm 1.3.x
+   * Fedora 20, gcc 4.8, yasm 1.3.x
+   * gcc 4.7 or higher is reported to work
 
      Note: It is recommended to use the platform distribution's standard
      compiler for maximum C++ compatibility.  If you build with a custom
@@ -64,6 +64,7 @@ of these packages installed:
 
 Ubuntu 14.04 packages:
    * subversion (cli/gui)
+   * cmake (cli/gui)
    * yasm (cli/gui)
    * build-essential (cli/gui)
    * autoconf (cli/gui)
@@ -93,13 +94,13 @@ Ubuntu 14.04 packages:
    * libappindicator-dev (gui)
 
 To install these packages:
-     sudo apt-get install subversion yasm build-essential autoconf libtool \
+     sudo apt-get install subversion cmake yasm build-essential autoconf libtool \
      zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
      libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
-     libfontconfig1-dev libass-dev libmp3lame-dev intltool libglib2.0-dev \
-     libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev \
-     libnotify-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-     libappindicator-dev
+     libfontconfig1-dev libass-dev libmp3lame-dev libx264-dev intltool \
+     libglib2.0-dev libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev \
+     libwebkitgtk-3.0-dev libnotify-dev libgstreamer1.0-dev \
+     libgstreamer-plugins-base1.0-dev libappindicator-dev
 
 Fedora 20 package groups:
    * Development Tools
@@ -112,6 +113,11 @@ To install these package groups:
      "X Software Development" "GNOME Software Development"
 
 Additional Fedora packages:
+   * patch (cli/gui)
+   * intltool (cli/gui)
+   * libtool (cli/gui)
+   * cmake (cli/gui)
+   * gcc-c++ (cli/gui)
    * yasm (cli/gui)
    * zlib-devel (cli/gui)
    * bzip2-devel (cli/gui)
@@ -134,11 +140,11 @@ Additional Fedora packages:
    * gstreamer1-plugins-base-devel (gui)
 
 To install these packages:
-     sudo yum install yasm zlib-devel bzip2-devel libogg-devel libtheora-devel \
-     libvorbis-devel libsamplerate-devel libxml2-devel fribidi-devel \
-     freetype-devel fontconfig-devel libass-devel lame-devel dbus-glib-devel \
-     libgudev1-devel webkitgtk3-devel libnotify-devel \
-     gstreamer1-devel gstreamer1-plugins-base-devel
+     sudo yum install patch intltool libtool cmake gcc-c++ yasm zlib-devel \
+     bzip2-devel libogg-devel libtheora-devel libvorbis-devel libsamplerate-devel \
+     libxml2-devel fribidi-devel freetype-devel fontconfig-devel libass-devel \
+     lame-devel x264-devel dbus-glib-devel libgudev1-devel webkitgtk3-devel \
+     libnotify-devel gstreamer1-devel gstreamer1-plugins-base-devel
 
 3 QuickStart
 ************
@@ -189,7 +195,7 @@ exactly the same branch.
 
 If you have write-access to the repository, then you may add the
 appropriate login/password information as needed.  It is recommended to
-use Subversion 1.6.0 or higher.  Lower versions should also work.
+use Subversion 1.6.0 or higher.  Lower versions may also work.
 
 5.2 Configure
 =============
@@ -360,11 +366,10 @@ scoped targets:
 5.4.3 Contrib Modules
 ---------------------
 
-Contrib modules such as 'a52dec', 'bzip2', 'faac', 'faad2', 'ffmpeg',
-'fontconfig', 'freetype', 'fribidi', 'lame', 'libass', 'libbluray',
-'libdca', 'libdvdnav', 'libdvdread', 'libiconv', 'libmkv', 'libogg',
-'libsamplerate', 'libtheora', 'libvorbis', 'libxml2', 'mp4v2',
-'mpeg2dec', 'x264', 'yasm' and 'zlib' have the following scoped targets:
+Contrib modules such as 'bzip2', 'ffmpeg', 'fontconfig', 'freetype',
+'fribidi', 'lame', 'libass', 'libbluray', 'libdvdnav', 'libdvdread',
+'libiconv', 'libogg', 'libsamplerate', 'libtheora', 'libvorbis',
+'libxml2', 'x264', 'yasm' and 'zlib' have the following scoped targets:
 
 'make MODULE.fetch'
      Download source tarball from the Internet and save to
@@ -506,6 +511,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    6308
-     date:   2014-08-18 10:05:00 -0700
+     rev:    6419
+     date:   2014-09-21 09:44:45 -0700
      type:   developer

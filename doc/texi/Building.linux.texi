@@ -34,6 +34,7 @@ The @b{GTK UI} introduces some significant extra build requirements. GTK version
 Ubuntu 14.04 packages:
 @itemize @bullet
 @item subversion (cli/gui)
+@item cmake (cli/gui)
 @item yasm (cli/gui)
 @item build-essential (cli/gui)
 @item autoconf (cli/gui)
@@ -65,13 +66,13 @@ Ubuntu 14.04 packages:
 
 To install these packages:
 @example
-sudo apt-get install subversion yasm build-essential autoconf libtool \
+sudo apt-get install subversion cmake yasm build-essential autoconf libtool \
 zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
 libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
-libfontconfig1-dev libass-dev libmp3lame-dev intltool libglib2.0-dev \
-libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev libwebkitgtk-3.0-dev \
-libnotify-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-libappindicator-dev
+libfontconfig1-dev libass-dev libmp3lame-dev libx264-dev intltool \
+libglib2.0-dev libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev \
+libwebkitgtk-3.0-dev libnotify-dev libgstreamer1.0-dev \
+libgstreamer-plugins-base1.0-dev libappindicator-dev
 @end example
 
 Fedora 20 package groups:
@@ -90,6 +91,11 @@ sudo yum groupinstall "Development Tools" "Development Libraries" \
 
 Additional Fedora packages:
 @itemize @bullet
+@item patch (cli/gui)
+@item intltool (cli/gui)
+@item libtool (cli/gui)
+@item cmake (cli/gui)
+@item gcc-c++ (cli/gui)
 @item yasm (cli/gui)
 @item zlib-devel (cli/gui)
 @item bzip2-devel (cli/gui)
@@ -114,11 +120,11 @@ Additional Fedora packages:
 
 To install these packages:
 @example
-sudo yum install yasm zlib-devel bzip2-devel libogg-devel libtheora-devel \
-libvorbis-devel libsamplerate-devel libxml2-devel fribidi-devel \
-freetype-devel fontconfig-devel libass-devel lame-devel dbus-glib-devel \
-libgudev1-devel webkitgtk3-devel libnotify-devel \
-gstreamer1-devel gstreamer1-plugins-base-devel
+sudo yum install patch intltool libtool cmake gcc-c++ yasm zlib-devel \
+bzip2-devel libogg-devel libtheora-devel libvorbis-devel libsamplerate-devel \
+libxml2-devel fribidi-devel freetype-devel fontconfig-devel libass-devel \
+lame-devel x264-devel dbus-glib-devel libgudev1-devel webkitgtk3-devel \
+libnotify-devel gstreamer1-devel gstreamer1-plugins-base-devel
 @end example
 
 @c %**-------------------------------------------------------------------------
