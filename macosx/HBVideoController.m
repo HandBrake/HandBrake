@@ -1035,6 +1035,11 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     [self.fHBController customSettingUsed: sender];
 }
 
+- (IBAction)bitrateFieldChanged:(id)sender
+{
+    [self.fHBController customSettingUsed: sender];
+}
+
 #pragma mark - Video x264/x265 Presets
 
 - (void)switchPresetViewForEncoder:(int)encoder

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A361c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" defaultVersion="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <deployment version="1060" identifier="macosx"/>
+        <development version="5100" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
@@ -51,7 +52,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="wAC-5p-nXb">
             <rect key="frame" x="0.0" y="0.0" width="920" height="315"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -73,6 +74,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <action selector="bitrateFieldChanged:" target="-2" id="zC1-Yc-rrz"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9L5-i4-5eu">
                     <rect key="frame" x="18" y="25" width="884" height="14"/>
@@ -265,6 +269,7 @@
                     <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
+            <point key="canvasLocation" x="185" y="286.5"/>
         </view>
         <customView id="2dX-Hf-Hxl" userLabel="x264/x264 presets view">
             <rect key="frame" x="0.0" y="0.0" width="920" height="134"/>
@@ -457,6 +462,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                     <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
+            <point key="canvasLocation" x="185" y="576"/>
         </customView>
         <customView id="aRi-vN-oR0" userLabel="ffmpeg presets view">
             <rect key="frame" x="0.0" y="0.0" width="920" height="34"/>
