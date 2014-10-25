@@ -428,6 +428,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot encode to a file with the same path and name as the source file. Please update the destination filename so that it does not match the source file..
+        /// </summary>
+        public static string Main_MatchingFileOverwriteWarning {
+            get {
+                return ResourceManager.GetString("Main_MatchingFileOverwriteWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Default Preset Set: {0}.
         /// </summary>
         public static string Main_NewDefaultPreset {

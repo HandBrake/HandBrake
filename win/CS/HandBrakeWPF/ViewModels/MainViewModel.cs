@@ -1212,6 +1212,12 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+            if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
+            {
+                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
 
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
@@ -1367,6 +1373,12 @@ namespace HandBrakeWPF.ViewModels
             if (string.IsNullOrEmpty(this.Destination))
             {
                 this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
+            {
+                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 

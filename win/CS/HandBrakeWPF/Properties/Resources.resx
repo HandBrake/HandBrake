@@ -527,4 +527,7 @@ Non-Live Options: {date} {time} {quality} {bitrate}  (These only change if you s
 
 Not both at the same time!</value>
   </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>You cannot encode to a file with the same path and name as the source file. Please update the destination filename so that it does not match the source file.</value>
+  </data>
 </root>
