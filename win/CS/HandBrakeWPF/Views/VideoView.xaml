@@ -90,7 +90,7 @@
                            Margin="10,0,0,0" ToolTip="{x:Static Properties:Resources.Video_LosslessWarningTooltip}" FontWeight="Bold" />
                 </StackPanel>
 
-                <Slider Width="280" Value="{Binding RF}" HorizontalAlignment="Left"  Maximum="{Binding QualityMax}" Minimum="{Binding QualityMin}"
+                <Slider Width="280" Value="{Binding RF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"  Maximum="{Binding QualityMax}" Minimum="{Binding QualityMin}"
                         IsEnabled="{Binding IsConstantQuantity}" Margin="20,0,0,10"
                         ToolTip="{x:Static Properties:Resources.Video_QualitySlider}" Style="{StaticResource LongToolTipHolder}" 
                         IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" />

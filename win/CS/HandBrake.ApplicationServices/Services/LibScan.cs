@@ -89,6 +89,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private IHandBrakeInstance instance;
 
+        /// <summary>
+        /// The post scan operation.
+        /// </summary>
+        private Action<bool> postScanOperation;
+
         #endregion
 
         /// <summary>
@@ -190,6 +195,9 @@ namespace HandBrake.ApplicationServices.Services
                     // Do Nothing
                 }
             }
+
+            // Handle the post scan operation.
+            postScanOperation = postAction;
 
             // Clear down the logging
             this.logging.Clear();
@@ -369,8 +377,14 @@ namespace HandBrake.ApplicationServices.Services
 
             IsScanning = false;
 
-            if (this.ScanCompleted != null)
-                this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, string.Empty));
+            if (postScanOperation != null)
+            {
+                postScanOperation(true);
+            }
+            else
+            {
+                if (this.ScanCompleted != null) this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, string.Empty));
+            }
         }
 
         /// <summary>
