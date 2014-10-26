@@ -4,6 +4,9 @@ $(eval $(call import.CONTRIB.defs,LIBGNURX))
 LIBGNURX.FETCH.url = http://download.handbrake.fr/handbrake/contrib/mingw-libgnurx-2.5.1-src.tar.gz
 LIBGNURX.EXTRACT.tarbase = mingw-libgnurx-2.5.1
 
+LIBGNURX.CONFIGURE.env += AR="$(AR.exe)"
+LIBGNURX.CONFIGURE.bootstrap = autoreconf -fiv;
+
 LIBGNURX.BUILD.ntargets = libregex.a-static
 
 define LIBGNURX.INSTALL

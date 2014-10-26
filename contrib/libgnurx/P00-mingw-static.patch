@@ -1,12 +1,20 @@
-diff -ur mingw-libgnurx-2.5.1/Makefile.in.orig mingw-libgnurx-2.5.1/Makefile.in
---- mingw-libgnurx-2.5.1/Makefile.in.orig	2007-05-07 15:28:28.000000000 -0400
-+++ mingw-libgnurx-2.5.1/Makefile.in	2014-10-11 14:10:50.000000000 -0400
-@@ -72,11 +72,19 @@ libgnurx-$(DLLVERSION).dll libgnurx.dll.a: $(OBJEC
+diff -ur mingw-libgnurx-2.5.1.orig/Makefile.in mingw-libgnurx-2.5.1/Makefile.in
+--- mingw-libgnurx-2.5.1.orig/Makefile.in	2007-05-07 15:28:28.000000000 -0400
++++ mingw-libgnurx-2.5.1/Makefile.in	2014-10-26 02:56:15.000000000 -0400
+@@ -38,6 +38,7 @@
+ bindir = @bindir@
+ mandir = @mandir@
+ 
++AR = @AR@
+ CC = @CC_QUALIFIED@
+ CFLAGS = @CFLAGS@ -I ${srcdir}
+ LDFLAGS = @LDFLAGS@
+@@ -72,11 +73,19 @@
  libregex.a: libgnurx.dll.a
  	cp -p libgnurx.dll.a $@
  
 +libregex.a-static: $(OBJECTS)
-+	ar rscu libregex.a $(OBJECTS)
++	$(AR) rcsu libregex.a $(OBJECTS)
 +
  gnurx.lib: libgnurx-$(DLLVERSION).dll
  	$(MSVCLIB) -def:libgnurx.def -out:gnurx.lib
@@ -21,4 +29,14 @@ diff -ur mingw-libgnurx-2.5.1/Makefile.in.orig mingw-libgnurx-2.5.1/Makefile.in
  install-dll:
  	mkdir -p ${bindir}
  	cp -p $(BINDIST_FILES) ${bindir}
-
+diff -ur mingw-libgnurx-2.5.1.orig/configure.ac mingw-libgnurx-2.5.1/configure.ac
+--- mingw-libgnurx-2.5.1.orig/configure.ac	2014-10-26 02:48:55.000000000 -0400
++++ mingw-libgnurx-2.5.1/configure.ac	2014-10-26 02:49:13.000000000 -0400
+@@ -75,6 +75,7 @@
+ #
+   AC_SUBST([GNURX_LIB])
+   AC_SUBST([CC_QUALIFIED], ["$CC $CC_QUALIFIED"])
++  AC_SUBST([AR])
+   LDFLAGS="$LDFLAGS -Wl,--enable-auto-image-base -Wl,--out-implib,libgnurx.dll.a"
+   test -n "${GNURX_LIB}" && LDFLAGS="$LDFLAGS -Wl,--output-def,libgnurx.def"
+   AC_CONFIG_FILES([Makefile])
