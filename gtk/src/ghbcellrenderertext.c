@@ -246,7 +246,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                    g_param_spec_boxed ("background-gdk",
                                                        P_("Background color"),
                                                        P_("Background color as a GdkColor"),
-                                                       GDK_TYPE_COLOR,
+                                                       GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
@@ -262,7 +262,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                    g_param_spec_boxed ("foreground-gdk",
                                                        P_("Foreground color"),
                                                        P_("Foreground color as a GdkColor"),
-                                                       GDK_TYPE_COLOR,
+                                                       GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
 
@@ -845,9 +845,9 @@ ghb_cell_renderer_text_get_property (GObject        *object,
 
 static void
 set_bg_color (GhbCellRendererText *celltext,
-              GdkColor            *color)
+              GdkRGBA             *rgba)
 {
-  if (color)
+  if (rgba)
     {
       if (!celltext->background_set)
         {
@@ -855,9 +855,9 @@ set_bg_color (GhbCellRendererText *celltext,
           g_object_notify (G_OBJECT (celltext), "background-set");
         }
 
-      celltext->background.red = color->red;
-      celltext->background.green = color->green;
-      celltext->background.blue = color->blue;
+      celltext->background.red = rgba->red;
+      celltext->background.green = rgba->green;
+      celltext->background.blue = rgba->blue;
     }
   else
     {
@@ -872,9 +872,9 @@ set_bg_color (GhbCellRendererText *celltext,
 
 static void
 set_fg_color (GhbCellRendererText *celltext,
-              GdkColor            *color)
+              GdkRGBA             *rgba)
 {
-  if (color)
+  if (rgba)
     {
       if (!celltext->foreground_set)
         {
@@ -882,9 +882,9 @@ set_fg_color (GhbCellRendererText *celltext,
           g_object_notify (G_OBJECT (celltext), "foreground-set");
         }
 
-      celltext->foreground.red = color->red;
-      celltext->foreground.green = color->green;
-      celltext->foreground.blue = color->blue;
+      celltext->foreground.red = rgba->red;
+      celltext->foreground.green = rgba->green;
+      celltext->foreground.blue = rgba->blue;
     }
   else
     {
@@ -1095,14 +1095,14 @@ ghb_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_BACKGROUND:
       {
-        GdkColor color;
+        GdkRGBA rgba;
 
         if (!g_value_get_string (value))
           set_bg_color (celltext, NULL);       /* reset to background_set to FALSE */
-        else if (gdk_color_parse (g_value_get_string (value), &color))
-          set_bg_color (celltext, &color);
+        else if (gdk_rgba_parse(&rgba, g_value_get_string(value)))
+          set_bg_color (celltext, &rgba);
         else
-          g_warning ("Don't know color `%s'", g_value_get_string (value));
+          g_warning ("Don't know color `%s'", g_value_get_string(value));
 
         g_object_notify (object, "background-gdk");
       }
@@ -1110,12 +1110,12 @@ ghb_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_FOREGROUND:
       {
-        GdkColor color;
+        GdkRGBA  rgba;
 
         if (!g_value_get_string (value))
           set_fg_color (celltext, NULL);       /* reset to foreground_set to FALSE */
-        else if (gdk_color_parse (g_value_get_string (value), &color))
-          set_fg_color (celltext, &color);
+        else if (gdk_rgba_parse(&rgba, g_value_get_string(value)))
+          set_fg_color (celltext, &rgba);
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
@@ -1629,8 +1629,8 @@ static void ghb_cell_renderer_text_render(
 {
     GhbCellRendererText *celltext = (GhbCellRendererText *) cell;
     PangoLayout *layout;
-    gint x_offset;
-    gint y_offset;
+    gint x_offset = 0;
+    gint y_offset = 0;
     GhbCellRendererTextPrivate *priv;
 
     priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);

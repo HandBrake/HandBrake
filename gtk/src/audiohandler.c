@@ -1896,7 +1896,8 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     // Audio Quality Label
     label = GTK_LABEL(gtk_label_new("0.00"));
     gtk_label_set_width_chars(label, 4);
-    gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+    gtk_widget_set_halign(GTK_WIDGET(label), GTK_ALIGN_START);
+    gtk_widget_set_valign(GTK_WIDGET(label), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(label), "AudioTrackQualityValue");
     gtk_widget_show(GTK_WIDGET(label));
     gtk_box_pack_start(qbox, GTK_WIDGET(label), FALSE, FALSE, 0);
@@ -1957,7 +1958,8 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     // Audio Gain Label
     label = GTK_LABEL(gtk_label_new("0dB"));
     gtk_label_set_width_chars(label, 6);
-    gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+    gtk_widget_set_halign(GTK_WIDGET(label), GTK_ALIGN_START);
+    gtk_widget_set_valign(GTK_WIDGET(label), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(label), "AudioTrackGainValue");
     gtk_widget_show(GTK_WIDGET(label));
     gtk_box_pack_start(box3, GTK_WIDGET(label), FALSE, FALSE, 0);
@@ -1991,7 +1993,8 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     // Audio DRC Label
     label = GTK_LABEL(gtk_label_new("Off"));
     gtk_label_set_width_chars(label, 4);
-    gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+    gtk_widget_set_halign(GTK_WIDGET(label), GTK_ALIGN_START);
+    gtk_widget_set_valign(GTK_WIDGET(label), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(label), "AudioTrackDRCValue");
     gtk_widget_show(GTK_WIDGET(label));
     gtk_box_pack_start(box3, GTK_WIDGET(label), FALSE, FALSE, 0);

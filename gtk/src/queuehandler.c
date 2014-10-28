@@ -472,7 +472,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     if (video_encoder->codec == HB_VCODEC_X264 &&
         !ghb_settings_get_boolean(settings, "x264UseAdvancedOptions"))
     {
-        const gchar *extra_opt;
+        const gchar *extra_opt = NULL;
 
         // If the encoder supports presets...
         if (hb_video_encoder_get_presets(video_encoder->codec) != NULL)
@@ -1375,7 +1375,8 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     // Title label
     title = GTK_LABEL(gtk_label_new("No Title"));
     gtk_label_set_width_chars(title, 12);
-    gtk_misc_set_alignment(GTK_MISC(title), 0, 0.5);
+    gtk_widget_set_halign(GTK_WIDGET(title), GTK_ALIGN_START);
+    gtk_widget_set_valign(GTK_WIDGET(title), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(title), "title_label");
     gtk_widget_show(GTK_WIDGET(title));
     gtk_box_pack_start(hbox, GTK_WIDGET(title), FALSE, FALSE, 0);
