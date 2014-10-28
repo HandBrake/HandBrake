@@ -5976,7 +5976,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="rules_hint">True</property>
                                 <property name="enable_search">False</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection3"/>
@@ -6538,11 +6537,11 @@ Resets all queue jobs to pending and ready to run again.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="title_add_multiple_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -6552,12 +6551,11 @@ Resets all queue jobs to pending and ready to run again.</property>
             </child>
             <child>
               <object class="GtkButton" id="title_add_multiple_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="yalign">0.55000001192092896</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -6744,11 +6742,11 @@ Resets all queue jobs to pending and ready to run again.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="pref_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -7491,12 +7489,12 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="preset_folder_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -7506,12 +7504,12 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
             </child>
             <child>
               <object class="GtkButton" id="preset_folder_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -7653,12 +7651,12 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="preset_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -7668,12 +7666,12 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
             </child>
             <child>
               <object class="GtkButton" id="preset_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8101,7 +8099,7 @@ Setting this to 0 means there is no maximum height.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Show Cropped area of the preview</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="show_crop_changed_cb" swapped="no"/>
               </object>
@@ -8178,13 +8176,13 @@ Setting this to 0 means there is no maximum height.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="source_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8194,13 +8192,13 @@ Setting this to 0 means there is no maximum height.</property>
             </child>
             <child>
               <object class="GtkButton" id="source_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8315,6 +8313,18 @@ Setting this to 0 means there is no maximum height.</property>
       <action-widget response="-9">source_ok</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkImage" id="gtk-cancel">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="icon_name">gtk-cancel</property>
+  </object>
+  <object class="GtkImage" id="gtk-ok">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="icon_name">gtk-ok</property>
+  </object>
   <object class="GtkImage" id="srt_add_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -8349,12 +8359,12 @@ Setting this to 0 means there is no maximum height.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="tweak_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8364,14 +8374,14 @@ Setting this to 0 means there is no maximum height.</property>
             </child>
             <child>
               <object class="GtkButton" id="tweak_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8458,11 +8468,11 @@ Setting this to 0 means there is no maximum height.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="subtitle_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8472,11 +8482,11 @@ Setting this to 0 means there is no maximum height.</property>
             </child>
             <child>
               <object class="GtkButton" id="subtitle_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8848,11 +8858,11 @@ in your output.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="audio_cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8862,11 +8872,11 @@ in your output.</property>
             </child>
             <child>
               <object class="GtkButton" id="audio_ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -9459,9 +9469,11 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                   <object class="GtkLabel" id="label22">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
-                    <property name="ypad">5</property>
+                    <property name="halign">start</property>
+                    <property name="margin-left">10</property>
+                    <property name="margin-right">10</property>
+                    <property name="margin-top">5</property>
+                    <property name="margin-bottom">5</property>
                     <property name="label" translatable="yes">&lt;b&gt;A new version of HandBrake is available!&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
@@ -9475,9 +9487,11 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                   <object class="GtkLabel" id="update_message">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">10</property>
-                    <property name="ypad">5</property>
+                    <property name="halign">start</property>
+                    <property name="margin-left">10</property>
+                    <property name="margin-right">10</property>
+                    <property name="margin-top">5</property>
+                    <property name="margin-bottom">5</property>
                     <property name="label" translatable="yes">HandBrake xxx is now available (you have yyy).</property>
                   </object>
                   <packing>
