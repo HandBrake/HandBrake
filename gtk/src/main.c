@@ -730,7 +730,7 @@ GtkEntry {                          \n\
 @define-color gray46 #757575;       \n\
 @define-color white  #ffffff;       \n\
                                     \n\
-#preview_event_box,                 \n\
+#preview_hud,                       \n\
 #live_preview_play,                 \n\
 #live_duration,                     \n\
 #preview_fullscreen                 \n\
@@ -874,7 +874,7 @@ main(int argc, char *argv[])
 
     // Must set the names of the widgets that I want to modify
     // style for.
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_event_box"), "preview_event_box");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_hud"), "preview_hud");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_frame"), "preview_frame");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_play"), "live_preview_play");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_progress"), "live_preview_progress");
@@ -888,10 +888,10 @@ main(int argc, char *argv[])
     gtk_widget_set_name(widget, "preview_window");
 
     // Set up the "hud" control overlay for the preview window
-    GtkWidget *align, *draw, *hud, *blender;
+    GtkWidget *preview_box, *draw, *hud, *blender;
 
-    align = GHB_WIDGET(ud->builder, "preview_window_alignment");
-    draw = GHB_WIDGET(ud->builder, "preview_image_align");
+    preview_box = GHB_WIDGET(ud->builder, "preview_window_box");
+    draw = GHB_WIDGET(ud->builder, "preview_image");
     hud = GHB_WIDGET(ud->builder, "preview_hud");
 
 #if 0 // GTK_CHECK_VERSION(3, 0, 0)
@@ -908,7 +908,7 @@ main(int argc, char *argv[])
     // So for now, I'll just continue using my home-grown overlay
     // widget (GhbCompositor).
     blender = gtk_overlay_new();
-    gtk_container_add(GTK_CONTAINER(align), blender);
+    gtk_container_add(GTK_CONTAINER(preview_box), blender);
     gtk_container_add(GTK_CONTAINER(blender), draw);
     gtk_widget_set_valign (hud, GTK_ALIGN_END);
     gtk_widget_set_halign (hud, GTK_ALIGN_CENTER);
@@ -922,7 +922,7 @@ main(int argc, char *argv[])
     // Set up compositing for hud
     blender = ghb_compositor_new();
 
-    gtk_container_add(GTK_CONTAINER(align), blender);
+    gtk_container_add(GTK_CONTAINER(preview_box), blender);
     ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), draw, 1, 1);
     ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), hud, 2, .85);
     gtk_widget_show(blender);
