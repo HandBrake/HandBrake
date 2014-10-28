@@ -494,6 +494,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     int doubled_frame_count = 0;
     int interlaced_preview_count = 0;
     int frame_wait = 0;
+    int cc_wait = 10;
     hb_stream_t  * stream = NULL;
     info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
     crop_record_t *crops = crop_record_init( data->preview_count );
@@ -665,16 +666,23 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                 if( buf_es->s.id == title->video_id && vid_buf == NULL )
                 {
                     vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
-                    if (vid_buf != NULL && frame_wait)
+                    // There are 2 conditions we decode additional
+                    // video frames for during scan.
+                    // 1. We did not detect IDR frames, so the initial video
+                    //    frames may be corrupt.  We docode extra frames to
+                    //    increase the probability of a complete preview frame
+                    // 2. Some frames do not contain CC data, even though
+                    //    CCs are present in the stream.  So we need to decode
+                    //    additional frames to find the CCs.
+                    if (vid_buf != NULL && (frame_wait || cc_wait))
                     {
-                        if (vid_buf->s.frametype != HB_FRAME_I)
+                        if (vid_buf->s.frametype == HB_FRAME_I)
+                            frame_wait = 0;
+                        if (frame_wait || cc_wait)
                         {
                             hb_buffer_close(&vid_buf);
-                            frame_wait--;
-                        }
-                        else
-                        {
-                            frame_wait = 0;
+                            if (frame_wait) frame_wait--;
+                            if (cc_wait) cc_wait--;
                         }
                     }
                 }
