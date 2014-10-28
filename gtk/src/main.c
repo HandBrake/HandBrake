@@ -1057,20 +1057,10 @@ main(int argc, char *argv[])
     {
         app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_PASSIVE );
     }
-    GtkStatusIcon *si;
-    si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-
-    gtk_status_icon_set_visible(si, FALSE );
 #else
-    GtkStatusIcon *si;
-    si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-
-    gtk_status_icon_set_visible(si,
-            ghb_settings_get_boolean(ud->prefs, "show_status"));
-
-    gtk_status_icon_set_has_tooltip(si, TRUE);
-    g_signal_connect(si, "query-tooltip",
-                    status_icon_query_tooltip_cb, ud);
+    // gtk-3 has eliminated status icons.  Remove the option from preferences
+    GtkWidget *status_icon_pref = GHB_WIDGET(ud->builder, "show_status");
+    gtk_widget_set_visible(status_icon_pref, FALSE);
 #endif
 
     GtkWidget *ghb_window = GHB_WIDGET(ud->builder, "hb_window");
@@ -1220,7 +1210,6 @@ main(int argc, char *argv[])
     // Everything should be go-to-go.  Lets rock!
 
     gtk_main();
-    gtk_status_icon_set_visible(si, FALSE);
     ghb_backend_close();
 
     ghb_value_free(ud->queue);

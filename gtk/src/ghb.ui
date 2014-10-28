@@ -572,11 +572,6 @@ libx264 authors:
     </child>
   </object>
 
-  <object class="GtkStatusIcon" id="hb_status">
-    <property name="icon_name">hb-icon</property>
-    <property name="visible">False</property>
-    <signal name="activate" handler="status_activate_cb" swapped="no"/>
-  </object>
   <object class="GtkWindow" id="hb_window">
     <property name="can_focus">False</property>
     <property name="events">GDK_VISIBILITY_NOTIFY_MASK</property>

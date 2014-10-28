@@ -3355,34 +3355,6 @@ ghb_backend_events(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT gboolean
-status_icon_query_tooltip_cb(
-    GtkStatusIcon *si,
-    gint           x,
-    gint           y,
-    gboolean       kbd_mode,
-    GtkTooltip    *tt,
-    signal_user_data_t *ud)
-{
-    ghb_status_t status;
-    gchar *status_str;
-
-    ghb_get_status(&status);
-    if (status.queue.state & GHB_STATE_WORKING)
-        status_str = working_status_string(ud, &status.queue);
-    else if (status.queue.state & GHB_STATE_SEARCHING)
-        status_str = searching_status_string(ud, &status.queue);
-    else if (status.queue.state & GHB_STATE_WORKDONE)
-        status_str = g_strdup(_("Encode Complete"));
-    else
-        status_str = g_strdup("HandBrake");
-
-    gtk_tooltip_set_text(tt, status_str);
-    gtk_tooltip_set_icon_from_icon_name(tt, "hb-icon", GTK_ICON_SIZE_BUTTON);
-    g_free(status_str);
-    return TRUE;
-}
-
-G_MODULE_EXPORT gboolean
 ghb_timer_cb(gpointer data)
 {
     signal_user_data_t *ud = (signal_user_data_t*)data;
@@ -4021,12 +3993,6 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
             app_indicator_set_status(ud->ai, APP_INDICATOR_STATUS_PASSIVE);
         }
     }
-#else
-    GtkStatusIcon *si;
-
-    si = GTK_STATUS_ICON(GHB_OBJECT (ud->builder, "hb_status"));
-    gtk_status_icon_set_visible(si,
-            ghb_settings_get_boolean(ud->prefs, "show_status"));
 #endif
 }
 
@@ -5243,27 +5209,6 @@ hb_visibility_event_cb(
 }
 
 G_MODULE_EXPORT void
-status_activate_cb(GtkStatusIcon *si, signal_user_data_t *ud)
-{
-    GtkWindow *window;
-    GdkWindowState state;
-
-    window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(window)));
-    if ((state & GDK_WINDOW_STATE_ICONIFIED) ||
-        (ud->hb_visibility != GDK_VISIBILITY_UNOBSCURED))
-    {
-        gtk_window_present(window);
-        gtk_window_set_skip_taskbar_hint(window, FALSE);
-    }
-    else
-    {
-        gtk_window_set_skip_taskbar_hint(window, TRUE);
-        gtk_window_iconify(window);
-    }
-}
-
-G_MODULE_EXPORT void
 show_hide_toggle_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     GtkWindow *window;
@@ -5309,9 +5254,6 @@ ghb_notify_done(signal_user_data_t *ud)
                 );
 #else
         ,NULL);
-
-    GtkStatusIcon *si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-    notify_notification_attach_to_status_icon(notification, si);
 #endif
     GtkIconTheme *theme = gtk_icon_theme_get_default();
     GdkPixbuf *pb = gtk_icon_theme_load_icon(theme, "hb-icon", 32,
