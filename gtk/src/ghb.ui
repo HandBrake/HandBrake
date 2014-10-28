@@ -1065,7 +1065,7 @@ Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">None</property>
                           </object>
                           <packing>
@@ -1108,7 +1108,7 @@ Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                           <object class="GtkLabel" id="label20">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Title:</property>
                           </object>
                           <packing>
@@ -1288,7 +1288,7 @@ This is often the feature title of a DVD.</property>
                                   <object class="GtkLabel" id="label6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0.1</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Duration:</property>
                                   </object>
                                   <packing>
@@ -1302,7 +1302,7 @@ This is often the feature title of a DVD.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">hh:mm:ss</property>
                                     <property name="width_chars">8</property>
                                   </object>
@@ -1365,7 +1365,7 @@ This is often the feature title of a DVD.</property>
                               <object class="GtkLabel" id="label18">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">File:</property>
                               </object>
                               <packing>
@@ -1474,7 +1474,7 @@ This is often the feature title of a DVD.</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip_text" translatable="yes">Add iPod Atom needed by some older iPods.</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
@@ -1494,7 +1494,7 @@ This is often the feature title of a DVD.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip_text" translatable="yes">Optimize the layout of the MP4 file for progressive download.
 This allows a player to initiate playback before downloading the entire file.</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="http_opt_changed_cb" swapped="no"/>
                               </object>
@@ -1515,7 +1515,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                 <property name="tooltip_markup">Allow 64 bit MP4 file which can be over 4GB.
 
 &lt;b&gt;Caution:&lt;/b&gt; This option may break device compatibility.</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
@@ -1684,7 +1684,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Source Codec:</property>
                                       </object>
                                       <packing>
@@ -1713,7 +1713,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Dimensions:</property>
                                       </object>
                                       <packing>
@@ -1742,7 +1742,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Aspect: </property>
                                       </object>
                                       <packing>
@@ -1771,7 +1771,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Frame Rate:</property>
                                       </object>
                                       <packing>
@@ -1836,7 +1836,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                       <object class="GtkLabel" id="label13">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Autocrop:</property>
                                       </object>
                                       <packing>
@@ -1863,7 +1863,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                       <object class="GtkLabel" id="label12">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Crop:</property>
                                       </object>
                                       <packing>
@@ -1891,7 +1891,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Crop Dimensions:</property>
                                       </object>
                                       <packing>
@@ -1956,7 +1956,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                       <object class="GtkLabel" id="label14">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Scale Dimensions:</property>
                                       </object>
                                       <packing>
@@ -1983,7 +1983,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                       <object class="GtkLabel" id="label15">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Optimal for Source:</property>
                                       </object>
                                       <packing>
@@ -2010,7 +2010,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                       <object class="GtkLabel" id="label17">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Anamorphic:</property>
                                       </object>
                                       <packing>
@@ -2114,8 +2114,8 @@ This allows a player to initiate playback before downloading the entire file.</p
                                     <property name="width_request">85</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0.2</property>
-                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="valign">start</property>
                                     <property name="label" translatable="yes">--</property>
                                   </object>
                                   <packing>
@@ -2270,7 +2270,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <property name="receives_default">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Automatically crop black borders around edges of the video.</property>
-                                            <property name="xalign">0</property>
+                                            <property name="halign">start</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
                                           </object>
@@ -2292,7 +2292,7 @@ dimensions be rounded to some multiple number
 of pixels, this setting will crop a few extra pixels
 instead of doing exact cropping and then scaling to
 the required multiple.</property>
-                                            <property name="xalign">0</property>
+                                            <property name="halign">start</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
                                           </object>
@@ -2322,7 +2322,7 @@ the required multiple.</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="xalign">0</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">Crop Dimensions:</property>
                                           </object>
                                           <packing>
@@ -2475,7 +2475,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                             <property name="receives_default">False</property>
                                             <property name="tooltip_text" translatable="yes">If enabled, select the 'optimal' storage resolution.
 This will be the resolution that most closely matches the source resolution after cropping.</property>
-                                            <property name="xalign">0</property>
+                                            <property name="halign">start</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
                                           </object>
@@ -2503,7 +2503,7 @@ This will be the resolution that most closely matches the source resolution afte
                                           <object class="GtkLabel" id="label96">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">Anamorphic:</property>
                                           </object>
                                           <packing>
@@ -2552,7 +2552,7 @@ Strict - Keep original source dimensions and pixel
                                           <object class="GtkLabel" id="label95">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">Alignment:</property>
                                           </object>
                                           <packing>
@@ -2781,7 +2781,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                                         <property name="receives_default">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">If enabled, the original display aspect of the source will be maintained.</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
@@ -2805,7 +2805,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="xalign">0</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">Display Aspect:</property>
                                           </object>
                                           <packing>
@@ -2884,7 +2884,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                                         <property name="receives_default">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">If enabled, filter colour components out of video.</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                                       </object>
@@ -2899,7 +2899,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                                       <object class="GtkLabel" id="label41">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Deblock:</property>
                                       </object>
                                       <packing>
@@ -2946,7 +2946,7 @@ If your source exhibits 'blockiness', this filter may help clean it up.</propert
                                       <object class="GtkLabel" id="label32">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Denoise Filter:</property>
                                       </object>
                                       <packing>
@@ -2979,7 +2979,7 @@ Using this filter on such sources can result in smaller file sizes.</property>
                                       <object class="GtkLabel" id="PictureDenoisePresetLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Denoise Preset:</property>
                                       </object>
                                       <packing>
@@ -3012,7 +3012,7 @@ Using this filter on such sources can result in smaller file sizes.</property>
                                       <object class="GtkLabel" id="PictureDenoiseTuneLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Denoise Tune:</property>
                                       </object>
                                       <packing>
@@ -3076,7 +3076,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                       <object class="GtkLabel" id="label86">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Detelecine:</property>
                                       </object>
                                       <packing>
@@ -3136,7 +3136,7 @@ This will preserve quality in frames that are not interlaced.
 
 The classic deinterlace filter is applied to all frames.
 Frames that are not interlaced will suffer some quality degradation.</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -3161,7 +3161,7 @@ This will preserve quality in frames that are not interlaced.
 
 The classic deinterlace filter is applied to all frames.
 Frames that are not interlaced will suffer some quality degradation.</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">PictureDecombDeinterlace</property>
                                         <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -3177,7 +3177,7 @@ Frames that are not interlaced will suffer some quality degradation.</property>
                                       <object class="GtkLabel" id="PictureDecombLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Decomb:</property>
                                       </object>
                                       <packing>
@@ -3229,7 +3229,7 @@ ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity</property>
                                       <object class="GtkLabel" id="PictureDeinterlaceLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Deinterlace:</property>
                                       </object>
                                       <packing>
@@ -3333,7 +3333,7 @@ YadifMode:YadifParity:McdintMode:McdeintQp</property>
                                   <object class="GtkLabel" id="label46">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Video Encoder:</property>
                                   </object>
                                   <packing>
@@ -3363,7 +3363,7 @@ YadifMode:YadifParity:McdintMode:McdeintQp</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Framerate:</property>
                                   </object>
                                   <packing>
@@ -3400,7 +3400,7 @@ a variable framerate, 'Same as source' will preserve it.</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip_text" translatable="yes">Enables constant framerate output.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                                   </object>
@@ -3422,7 +3422,7 @@ a variable framerate, 'Same as source' will preserve it.</property>
 rate determined by the framerate setting.
 
 VFR is not compatible with some players.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">VideoFramerateCFR</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -3444,7 +3444,7 @@ VFR is not compatible with some players.</property>
                                     <property name="tooltip_text" translatable="yes">Enables variable framerate output.
 
 VFR is not compatible with some players.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">VideoFramerateCFR</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -3521,7 +3521,7 @@ was also lossless.
 
 FFMpeg's and Theora's scale is more linear.
 These encoders do not have a lossless mode.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="vquality_type_changed_cb" swapped="no"/>
@@ -3545,7 +3545,7 @@ These encoders do not have a lossless mode.</property>
 The instantaneous bitrate can be much higher or lower at any point in time.
 But the average over a long duration will be the value set here.  If you need
 to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">vquality_type_constant</property>
                                     <signal name="toggled" handler="vquality_type_changed_cb" swapped="no"/>
@@ -3591,7 +3591,7 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
 The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
 the video are collected.  Then in the second pass, those statistics are used
 to make bitrate allocation decisions.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                                   </object>
@@ -3610,7 +3610,7 @@ to make bitrate allocation decisions.</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip_text" translatable="yes">During the 1st pass of a 2 pass encode, use settings that speed things along.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -3656,7 +3656,7 @@ to make bitrate allocation decisions.</property>
                                 <property name="tooltip_text" translatable="yes">Use advanced options Tab for x264 settings.
 
 Use at your own risk!</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="x264_use_advanced_options_changed_cb" swapped="no"/>
                               </object>
@@ -3679,7 +3679,7 @@ Use at your own risk!</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Preset:</property>
                                   </object>
                                   <packing>
@@ -3719,7 +3719,7 @@ settings will result in better quality or smaller files.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Tune:</property>
                                     <property name="margin_top">8</property>
                                     <property name="margin_bottom">8</property>
@@ -3761,7 +3761,7 @@ preset but before all other parameters.</property>
                                     <property name="tooltip_text" translatable="yes">Reduce decoder CPU usage.
 
 Set this if your device is struggling to play the output (dropped frames).</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="margin_left">2</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
@@ -3786,7 +3786,7 @@ This is useful for broadcast of live streams.
 
 Since HandBrake is not suitable for live stream broadcast purposes,
 this setting is of little value here.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="margin_left">2</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
@@ -3803,7 +3803,7 @@ this setting is of little value here.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Profile:</property>
                                     <property name="margin_top">8</property>
                                     <property name="margin_bottom">8</property>
@@ -3838,7 +3838,7 @@ Overrides all other settings.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Level:</property>
                                     <property name="margin_top">8</property>
                                     <property name="margin_bottom">8</property>
@@ -3880,7 +3880,7 @@ Overrides all other settings.</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">More Settings:</property>
                                       </object>
                                       <packing>
@@ -3976,7 +3976,7 @@ Colon separated list of encoder options.</property>
                                       <object class="GtkLabel" id="label4">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">1</property>
+                                        <property name="halign">end</property>
                                         <property name="label" translatable="yes">Selection Behavior:</property>
                                         <property name="justify">right</property>
                                       </object>
@@ -4131,7 +4131,7 @@ Colon separated list of encoder options.</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip_text" translatable="yes">Only the primary audio track will be encoded with the full encoder list.
 All other secondary audio output tracks will be encoded with first encoder only.</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="audio_def_widget_changed_cb" swapped="no"/>
@@ -4166,7 +4166,7 @@ All other secondary audio output tracks will be encoded with first encoder only.
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Auto Passthru:</property>
                                       </object>
                                       <packing>
@@ -4344,7 +4344,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">6</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="use_markup">True</property>
                             <property name="label" translatable="yes">&lt;b&gt;Audio Encoder Settings:&lt;/b&gt;</property>
                             <property name="tooltip_markup">Each selected source track will be encoded with all selected encoders</property>
@@ -4618,7 +4618,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                                       <object class="GtkLabel" id="sub_label4">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">1</property>
+                                        <property name="halign">end</property>
                                         <property name="label" translatable="yes">Selection Behavior:</property>
                                         <property name="justify">right</property>
                                       </object>
@@ -4761,7 +4761,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                                       <object class="GtkLabel" id="subtitle_preferred_language">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
+                                        <property name="halign">end</property>
                                         <property name="label" translatable="yes">Preferred Language: None</property>
                                         <property name="justify">right</property>
                                       </object>
@@ -4800,7 +4800,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">Add "Foreign Audio Search" when the default audio track is your preferred language.
 This search pass finds short sequences of foreign audio and provides subtitles for them.</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
@@ -4817,7 +4817,7 @@ This search pass finds short sequences of foreign audio and provides subtitles f
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">When the default audio track is not your preferred language, add a subtitle track.</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
@@ -4834,7 +4834,7 @@ This search pass finds short sequences of foreign audio and provides subtitles f
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">Closed captions are text subtitles that can be added to any container as a soft subtitle track (not burned)</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
                           </object>
@@ -5008,7 +5008,7 @@ This search pass finds short sequences of foreign audio and provides subtitles f
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="xalign">0</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">&lt;small&gt;Reference Frames:&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
@@ -5048,7 +5048,7 @@ you're absolutely sure you know what you're doing!</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="xalign">0</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">&lt;small&gt;Maximum B-Frames:&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
@@ -5089,7 +5089,7 @@ Baseline profile, as required for iPods and similar devices, requires B-frames t
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="xalign">0</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">&lt;small&gt;Pyramidal B-Frames:&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
@@ -5123,7 +5123,7 @@ Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly reco
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="xalign">0</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">&lt;small&gt;Weighted P-Frames:&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
@@ -5168,7 +5168,7 @@ completely incompatible with it, for example.</property>
 It improves compression by at least 5% at a very small speed cost and may
 provide an unusually high visual quality benefit compared to its compression
 gain.  However, it requires High Profile, which many devices may not support.</property>
-                                                <property name="xalign">0</property>
+                                                <property name="halign">start</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <signal name="toggled" handler="x264_widget_changed_cb" swapped="no"/>
@@ -5194,7 +5194,7 @@ compresses significantly better (10-30%), especially at lower bitrates.
 
 If you're looking to minimize CPU requirements for video playback, disable this option.
 Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled.</property>
-                                                <property name="xalign">0</property>
+                                                <property name="halign">start</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <signal name="toggled" handler="x264_widget_changed_cb" swapped="no"/>
@@ -5263,7 +5263,7 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Motion Est. Method:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5303,7 +5303,7 @@ Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions.
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Subpel ME &amp;amp; Mode:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5341,7 +5341,7 @@ SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest,
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Motion Est. Range:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5380,7 +5380,7 @@ a high speed cost.</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Adaptive Direct Mode:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5415,7 +5415,7 @@ adaptively select which is better for each particular frame.</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Adaptive B-Frames:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5479,7 +5479,7 @@ but makes much more accurate decisions, especially when used with B-pyramid.</pr
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Partitions:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5514,7 +5514,7 @@ decisions, since the best option might have been one that was turned off.</prope
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Trellis:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5599,7 +5599,7 @@ Trellis costs more speed at higher bitrates and requires CABAC.</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Adaptive Quantization Strength:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5637,7 +5637,7 @@ Higher values take more bits away from edges and complex areas to improve areas 
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Psychovisual Rate Distortion:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5676,7 +5676,7 @@ Being an RD algorithm, it requires mode decision to be at least "6".</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;Psychovisual Trellis:&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                   </object>
@@ -5731,7 +5731,7 @@ and other sharp-edged graphics.</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="label" translatable="yes">Deblocking: </property>
                                                   </object>
                                                   <packing>
@@ -5808,7 +5808,7 @@ dither.
 
 Don't touch this unless you're having banding issues or other such cases
 where you are having trouble keeping fine noise.</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">start</property>
                                                     <property name="active">True</property>
                                                     <property name="draw_indicator">True</property>
                                                     <signal name="toggled" handler="x264_widget_changed_cb" swapped="no"/>
@@ -5943,7 +5943,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip_text" translatable="yes">Add chapter markers to output file.</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="chapter_markers_changed_cb" swapped="no"/>
                               </object>
@@ -6011,7 +6011,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Title:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6048,7 +6048,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Actors:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6085,7 +6085,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Director:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6122,7 +6122,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Release Date:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6159,7 +6159,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Comment:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6196,7 +6196,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Genre:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6233,7 +6233,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Description:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6270,7 +6270,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">1</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Plot:</property>
                             <property name="use_markup">True</property>
                           </object>
@@ -6464,7 +6464,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -6477,7 +6477,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="xalign">1</property>
+                <property name="halign">end</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -6619,7 +6619,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                     <property name="tooltip_text" translatable="yes">Mark all titles for adding to the queue</property>
                     <property name="halign">start</property>
                     <property name="vexpand">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="title_add_multiple_select_all_cb" swapped="no"/>
                   </object>
@@ -6637,7 +6637,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                     <property name="tooltip_text" translatable="yes">Unmark all titles</property>
                     <property name="halign">start</property>
                     <property name="vexpand">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="title_add_multiple_clear_all_cb" swapped="no"/>
                   </object>
@@ -6915,7 +6915,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
@@ -6940,7 +6940,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                                 <property name="label" translatable="yes">Auto-Name Template</property>
                                 <property name="use_markup">True</property>
 
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -6980,7 +6980,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="use_m4v_changed_cb" swapped="no"/>
                           </object>
@@ -7099,7 +7099,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
@@ -7162,7 +7162,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                               <object class="GtkLabel" id="label85">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Constant Quality fractional granularity</property>
                               </object>
                               <packing>
@@ -7185,7 +7185,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
@@ -7207,7 +7207,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                               </object>
@@ -7242,7 +7242,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                                   <object class="GtkLabel" id="label1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Activity Log Verbosity Level</property>
                                   </object>
                                   <packing>
@@ -7282,7 +7282,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                                   <object class="GtkLabel" id="labela2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Activity Log Longevity</property>
                                   </object>
                                   <packing>
@@ -7312,7 +7312,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
@@ -7330,7 +7330,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="tooltip_text" translatable="yes">Scans the DVD whenever a new disc is loaded</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
@@ -7350,7 +7350,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                             <property name="tooltip_text" translatable="yes">Use advanced video options at your own risk.
 We recommend that you use the controls available
 on the Video tab instead.</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="advanced_video_changed_cb" swapped="no"/>
                           </object>
@@ -7369,7 +7369,7 @@ on the Video tab instead.</property>
                             <property name="receives_default">False</property>
                             <property name="tooltip_text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
 Check this if you want the queue to clean itself up by deleting completed jobs.</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="advanced_video_changed_cb" swapped="no"/>
                           </object>
@@ -7397,7 +7397,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             <property name="label" translatable="yes">Allow Tweaks</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="tweaks_changed_cb" swapped="no"/>
                           </object>
@@ -7413,7 +7413,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             <property name="label" translatable="yes">Allow HandBrake For Dummies</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="hbfd_feature_changed_cb" swapped="no"/>
                           </object>
@@ -7542,7 +7542,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Folder Name:</property>
                   </object>
                   <packing>
@@ -7704,7 +7704,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Preset Name:</property>
                   </object>
                   <packing>
@@ -7752,7 +7752,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">&lt;b&gt;Custom Picture Dimensions&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
@@ -7768,7 +7768,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                   </object>
                   <packing>
                     <property name="top_attach">1</property>
@@ -7785,7 +7785,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Enable maximum width limit.</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="preset_widget_changed_cb" swapped="no"/>
                   </object>
@@ -7826,7 +7826,7 @@ Setting this to 0 means there is no maximum width.</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Enable maximum height limit.</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="preset_widget_changed_cb" swapped="no"/>
                   </object>
@@ -8516,7 +8516,7 @@ Setting this to 0 means there is no maximum height.</property>
                 <property name="receives_default">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip_text" translatable="yes">Enable settings to import an SRT subtitle file</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="subtitle_srt_radio_toggled_cb" swapped="no"/>
               </object>
@@ -8534,7 +8534,7 @@ Setting this to 0 means there is no maximum height.</property>
                 <property name="receives_default">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip_text" translatable="yes">Enable settings to select embedded subtitles</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">SubtitleSrtEnable</property>
               </object>
@@ -8764,7 +8764,7 @@ as forced in the source subtitle track
 "Forced" subtitles are usually used to show
 subtitles during scenes where someone is speaking
 a foreign language.</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="subtitle_forced_toggled_cb" swapped="no"/>
                   </object>
@@ -8783,7 +8783,7 @@ a foreign language.</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Render the subtitle over the video.
 The subtitle will be part of the video and can not be disabled.</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="subtitle_burned_toggled_cb" swapped="no"/>
                   </object>
@@ -8807,7 +8807,7 @@ subtitle track whenever the video is played.
 
 This is useful for creating a "forced" track
 in your output.</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="subtitle_default_toggled_cb" swapped="no"/>
                   </object>
@@ -9104,7 +9104,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Enable bitrate setting</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="audio_quality_radio_changed_cb" swapped="no"/>
                       </object>
@@ -9122,7 +9122,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Enable quality setting</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">AudioTrackBitrateEnable</property>
                         <signal name="toggled" handler="audio_quality_radio_changed_cb" swapped="no"/>
@@ -9191,7 +9191,7 @@ weather-clear</property>
                       <object class="GtkLabel" id="AudioTrackQualityValue">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">00.0</property>
                         <property name="use_markup">True</property>
                         <property name="width_chars">4</property>
@@ -9281,7 +9281,7 @@ audio-volume-medium</property>
                   <object class="GtkLabel" id="AudioTrackGainValue">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">0dB</property>
                     <property name="use_markup">True</property>
                     <property name="width_chars">6</property>
@@ -9332,7 +9332,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                   <object class="GtkLabel" id="AudioTrackDRCValue">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Off</property>
                     <property name="use_markup">True</property>
                     <property name="width_chars">4</property>
