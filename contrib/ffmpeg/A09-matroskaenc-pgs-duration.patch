@@ -1,0 +1,31 @@
+From dab79ea5cd01187567b1761aaf1c329926483786 Mon Sep 17 00:00:00 2001
+From: John Stebbins <stebbins@jetheaddev.com>
+Date: Wed, 29 Oct 2014 10:54:44 -0700
+Subject: [PATCH] matroskaenc: Fix writing zero duration subtitles
+
+The matroska spec says blockduration == 0 means the frame is not a
+keyframe.  Since all subtitles are "keyframes", 0 blockduration should
+not be written.
+
+Fixes mkvalidator error messages for PGS subtitles.
+---
+ libavformat/matroskaenc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libavformat/matroskaenc.c b/libavformat/matroskaenc.c
+index 4ec474d..628300b 100644
+--- a/libavformat/matroskaenc.c
++++ b/libavformat/matroskaenc.c
+@@ -1487,7 +1487,8 @@ static int mkv_write_packet_internal(AVFormatContext *s, AVPacket *pkt)
+                                                    mkv_blockgroup_size(pkt->size));
+         duration = pkt->convergence_duration;
+         mkv_write_block(s, pb, MATROSKA_ID_BLOCK, pkt, 0);
+-        put_ebml_uint(pb, MATROSKA_ID_BLOCKDURATION, duration);
++        if (duration > 0)
++            put_ebml_uint(pb, MATROSKA_ID_BLOCKDURATION, duration);
+         end_ebml_master(pb, blockgroup);
+     }
+ 
+-- 
+1.9.3
+
