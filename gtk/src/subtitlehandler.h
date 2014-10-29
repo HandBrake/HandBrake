@@ -36,5 +36,6 @@ void ghb_subtitle_list_refresh_all(signal_user_data_t *ud);
 void ghb_init_subtitle_defaults_ui(signal_user_data_t *ud);
 void ghb_subtitle_defaults_to_ui(signal_user_data_t *ud);
 void ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show);
+void ghb_subtitle_set_pref_lang(GValue *settings);
 
 #endif // _SUBTITLEHANDLER_H_

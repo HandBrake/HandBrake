@@ -1336,6 +1336,28 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
     gtk_widget_set_visible(GTK_WIDGET(button), visible);
 }
 
+void
+ghb_subtitle_set_pref_lang(GValue *settings)
+{
+    GValue *lang_list;
+    gboolean set = FALSE;
+    lang_list = ghb_settings_get_value(settings, "SubtitleLanguageList");
+    if (ghb_array_len(lang_list) > 0)
+    {
+        GValue *glang = ghb_array_get_nth(lang_list, 0);
+        if (glang != NULL)
+        {
+            ghb_settings_set_string(settings, "PreferredLanguage",
+                                    g_value_get_string(glang));
+            set = TRUE;
+        }
+    }
+    if (!set)
+    {
+        ghb_settings_set_string(settings, "PreferredLanguage", "und");
+    }
+}
+
 G_MODULE_EXPORT void
 subtitle_add_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {

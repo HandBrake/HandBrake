@@ -781,7 +781,8 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
 {
     // Check to see if the dest file exists or is
     // already in the queue
-    gchar *message, *dest;
+    gchar *message;
+    const gchar *dest;
     gint count, ii;
     gint title_id, titleindex;
     const hb_title_t *title;
@@ -789,15 +790,15 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
     title_id = ghb_settings_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL) return FALSE;
-    dest = ghb_settings_get_string(settings, "destination");
+    dest = ghb_settings_get_const_string(settings, "destination");
     count = ghb_array_len(ud->queue);
     for (ii = 0; ii < count; ii++)
     {
         GValue *js;
-        gchar *filename;
+        const gchar *filename;
 
         js = ghb_array_get_nth(ud->queue, ii);
-        filename = ghb_settings_get_string(js, "destination");
+        filename = ghb_settings_get_const_string(js, "destination");
         if (strcmp(dest, filename) == 0)
         {
             message = g_strdup_printf(
@@ -807,15 +808,12 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                         dest);
             if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Overwrite")))
             {
-                g_free(filename);
-                g_free(dest);
                 g_free(message);
                 return FALSE;
             }
             g_free(message);
             break;
         }
-        g_free(filename);
     }
     gchar *destdir = g_path_get_dirname(dest);
     if (!g_file_test(destdir, G_FILE_TEST_IS_DIR))
@@ -825,7 +823,6 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                     "This is not a valid directory."),
                     destdir);
         ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
-        g_free(dest);
         g_free(message);
         g_free(destdir);
         return FALSE;
@@ -839,7 +836,6 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                     "Can not read or write the directory."),
                     destdir);
         ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
-        g_free(dest);
         g_free(message);
         g_free(destdir);
         return FALSE;
@@ -871,8 +867,8 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                                 (guint)(size / (1024L*1024L)));
                     if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Proceed")))
                     {
-                        g_free(dest);
                         g_free(message);
+                        g_free(destdir);
                         return FALSE;
                     }
                     g_free(message);
@@ -893,14 +889,12 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                     dest);
         if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Overwrite")))
         {
-            g_free(dest);
             g_free(message);
             return FALSE;
         }
         g_free(message);
         g_unlink(dest);
     }
-    g_free(dest);
     // Validate audio settings
     if (!ghb_validate_audio(settings))
     {

@@ -1148,6 +1148,7 @@ ghb_get_user_config_dir(gchar *subdir)
             if (!g_file_test(config, G_FILE_TEST_IS_DIR))
                 g_mkdir (config, 0755);
         }
+        g_strfreev(split);
     }
     return config;
 }
@@ -2638,7 +2639,7 @@ import_xlat_preset(GValue *user_preset)
     } break;
     }
 
-    gchar *mode = ghb_settings_get_string(dict, "VideoFramerateMode");
+    const gchar *mode = ghb_settings_get_const_string(dict, "VideoFramerateMode");
     if (strcmp(mode, "cfr") == 0)
     {
         ghb_settings_set_boolean(dict, "VideoFramerateCFR", TRUE);
@@ -2657,7 +2658,6 @@ import_xlat_preset(GValue *user_preset)
         ghb_settings_set_boolean(dict, "VideoFrameratePFR", FALSE);
         ghb_settings_set_boolean(dict, "VideoFramerateVFR", TRUE);
     }
-    g_free(mode);
 
     if (ghb_settings_get_boolean(dict, "x264UseAdvancedOptions"))
     {
@@ -2730,26 +2730,26 @@ import_xlat_preset(GValue *user_preset)
         g_free(tune);
     }
 
-    char *videoProfile;
+    const char *videoProfile;
     if (ghb_dict_lookup(user_preset, "x264Profile") != NULL)
-        videoProfile = ghb_settings_get_string(dict, "x264Profile");
+        videoProfile = ghb_settings_get_const_string(dict, "x264Profile");
     else
-        videoProfile = ghb_settings_get_string(dict, "VideoProfile");
+        videoProfile = ghb_settings_get_const_string(dict, "VideoProfile");
     if (videoProfile != NULL)
         ghb_settings_set_string(dict, "VideoProfile", videoProfile);
 
-    char *videoLevel;
+    const char *videoLevel;
     if (ghb_dict_lookup(user_preset, "x264Level") != NULL)
-        videoLevel = ghb_settings_get_string(dict, "x264Level");
+        videoLevel = ghb_settings_get_const_string(dict, "x264Level");
     else
-        videoLevel = ghb_settings_get_string(dict, "VideoLevel");
+        videoLevel = ghb_settings_get_const_string(dict, "VideoLevel");
     if (videoLevel != NULL)
         ghb_settings_set_string(dict, "VideoLevel", videoLevel);
 
     if (ghb_dict_lookup(user_preset, "x264OptionExtra") != NULL)
     {
-        char *optionExtra;
-        optionExtra = ghb_settings_get_string(dict, "x264OptionExtra");
+        const char *optionExtra;
+        optionExtra = ghb_settings_get_const_string(dict, "x264OptionExtra");
         ghb_settings_set_string(dict, "VideoOptionExtra", optionExtra);
     }
 
@@ -3389,7 +3389,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     GtkWidget *dialog;
     GtkResponseType response;
-    gchar *exportDir;
+    const gchar *exportDir;
     gchar *filename;
     GtkFileFilter *filter;
 
@@ -3412,13 +3412,12 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
-    exportDir = ghb_settings_get_string(ud->prefs, "ExportDirectory");
+    exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
     {
-        exportDir = g_strdup(".");
+        exportDir = ".";
     }
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
-    g_free(exportDir);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
@@ -3481,7 +3480,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         }
         ghb_value_free(array);
 
-        exportDir = ghb_settings_get_string(ud->prefs, "ExportDirectory");
+        exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
         dir = g_path_get_dirname(filename);
         if (strcmp(dir, exportDir) != 0)
         {
@@ -3489,7 +3488,6 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
             ghb_pref_save(ud->prefs, "ExportDirectory");
         }
         g_free(filename);
-        g_free(exportDir);
         g_free(dir);
         store_presets();
     }
@@ -3530,7 +3528,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     GValue *preset;
     const gchar *name = "";
     gint count, *indices, len;
-    gchar *exportDir;
+    const gchar *exportDir;
     gchar *filename;
 
     g_debug("preset_export_clicked_cb ()");
@@ -3553,16 +3551,15 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                 NULL);
 
-    exportDir = ghb_settings_get_string(ud->prefs, "ExportDirectory");
+    exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
     {
-        exportDir = g_strdup(".");
+        exportDir = ".";
     }
     filename = g_strdup_printf("%s.plist", name);
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), filename);
     g_free(filename);
-    g_free(exportDir);
 
     indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
     if (indices == NULL)
@@ -3599,14 +3596,13 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         }
         ghb_value_free(array);
 
-        exportDir = ghb_settings_get_string(ud->prefs, "ExportDirectory");
+        exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
         dir = g_path_get_dirname(filename);
         if (strcmp(dir, exportDir) != 0)
         {
             ghb_settings_set_string(ud->prefs, "ExportDirectory", dir);
             ghb_pref_save(ud->prefs, "ExportDirectory");
         }
-        g_free(exportDir);
         g_free(dir);
         g_free(filename);
     }

@@ -567,9 +567,9 @@ check_name_template(signal_user_data_t *ud, const char *str)
 {
     if (ghb_settings_get_boolean(ud->prefs, "auto_name"))
     {
-        gchar *template;
+        const gchar *template;
 
-        template = ghb_settings_get_string(ud->prefs, "auto_name_template");
+        template = ghb_settings_get_const_string(ud->prefs, "auto_name_template");
         if (strstr(template, str) != NULL)
             return TRUE;
     }
@@ -1811,6 +1811,7 @@ set_title_settings(signal_user_data_t *ud, GValue *settings)
     title_id = ghb_settings_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
+    ghb_subtitle_set_pref_lang(settings);
     if (title != NULL)
     {
         gint num_chapters = hb_list_count(title->list_chapter);
