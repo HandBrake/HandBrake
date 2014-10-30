@@ -16,6 +16,7 @@
 
 #define FIFO_TIMEOUT 200
 //#define HB_FIFO_DEBUG 1
+//#define HB_BUFFER_DEBUG 1
 
 /* Fifo */
 struct hb_fifo_s
@@ -64,6 +65,9 @@ struct hb_buffer_pools_s
     int64_t allocated;
     hb_lock_t *lock;
     hb_fifo_t *pool[MAX_BUFFER_POOLS];
+#if defined(HB_BUFFER_DEBUG)
+    hb_list_t *alloc_list;
+#endif
 } buffers;
 
 
@@ -71,6 +75,10 @@ void hb_buffer_pool_init( void )
 {
     buffers.lock = hb_lock_init();
     buffers.allocated = 0;
+
+#if defined(HB_BUFFER_DEBUG)
+    buffers.alloc_list = hb_list_init();
+#endif
 
     /* we allocate pools for sizes 2^10 through 2^25. requests larger than
      * 2^25 will get passed through to malloc. */
@@ -243,6 +251,16 @@ void hb_buffer_pool_free( void )
 
     hb_lock(buffers.lock);
 
+#if defined(HB_BUFFER_DEBUG)
+    hb_deep_log(2, "leaked %d buffers", hb_list_count(buffers.alloc_list));
+    for (i = 0; i < hb_list_count(buffers.alloc_list); i++)
+    {
+        hb_buffer_t *b = hb_list_item(buffers.alloc_list, i);
+        hb_deep_log(2, "leaked buffer %p type %d size %d alloc %d",
+               b, b->s.type, b->size, b->alloc);
+    }
+#endif
+
     for( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i)
     {
         count = 0;
@@ -350,6 +368,11 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
             b->cl.last_event      = last_event;
             b->cl.buffer_location = loc;
 
+#if defined(HB_BUFFER_DEBUG)
+            hb_lock(buffers.lock);
+            hb_list_add(buffers.alloc_list, b);
+            hb_unlock(buffers.lock);
+#endif
             return( b );
         }
     }
@@ -410,6 +433,11 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
     b->s.start = AV_NOPTS_VALUE;
     b->s.stop = AV_NOPTS_VALUE;
     b->s.renderOffset = AV_NOPTS_VALUE;
+#if defined(HB_BUFFER_DEBUG)
+    hb_lock(buffers.lock);
+    hb_list_add(buffers.alloc_list, b);
+    hb_unlock(buffers.lock);
+#endif
     return b;
 }
 
@@ -632,6 +660,11 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
         b->next = NULL;
 
+#if defined(HB_BUFFER_DEBUG)
+        hb_lock(buffers.lock);
+        hb_list_rem(buffers.alloc_list, b);
+        hb_unlock(buffers.lock);
+#endif
         // Close any attached subtitle buffers
         hb_buffer_close( &b->sub );
 
