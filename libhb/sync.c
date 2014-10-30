@@ -877,6 +877,11 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 if (out != NULL)
                     hb_fifo_push( subtitle->fifo_out, out );
             }
+            else
+            {
+                // Push the end of stream marker
+                hb_fifo_push( subtitle->fifo_out, sub );
+            }
         }
     }
 
