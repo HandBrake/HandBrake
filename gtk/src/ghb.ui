@@ -6459,6 +6459,7 @@ Resets all queue jobs to pending and ready to run again.</property>
             <property name="margin-bottom">4</property>
             <property name="margin-left">12</property>
             <property name="margin-right">12</property>
+            <property name="spacing">4</property>
             <child>
               <object class="GtkLabel" id="work_status">
                 <property name="visible">True</property>
