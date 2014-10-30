@@ -536,12 +536,11 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 - (IBAction)showSettingsSheet:(id)sender
 {
     self.defaultsController = [[[HBAudioDefaultsController alloc] initWithSettings:self.settings] autorelease];
-    self.defaultsController.delegate = self;
 
 	[NSApp beginSheet:[self.defaultsController window]
        modalForWindow:[[self view] window]
         modalDelegate:self
-       didEndSelector:NULL
+       didEndSelector:@selector(sheetDidEnd)
           contextInfo:NULL];
 }
 

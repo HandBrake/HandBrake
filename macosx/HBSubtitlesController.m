@@ -341,12 +341,11 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 - (IBAction)showSettingsSheet:(id)sender
 {
     self.defaultsController = [[[HBSubtitlesDefaultsController alloc] initWithSettings:self.settings] autorelease];
-    self.defaultsController.delegate = self;
 
 	[NSApp beginSheet:[self.defaultsController window]
        modalForWindow:[[self view] window]
         modalDelegate:self
-       didEndSelector:NULL
+       didEndSelector:@selector(sheetDidEnd)
           contextInfo:NULL];
 }
 

@@ -12,6 +12,4 @@
 
 - (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings;
 
-@property (nonatomic, readwrite, assign) id delegate;
-
 @end

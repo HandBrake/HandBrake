@@ -87,11 +87,6 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
     [self.settings.trackSelectionLanguages removeAllObjects];
     [self.settings.trackSelectionLanguages addObjectsFromArray:self.languagesList.selectedLanguages];
-
-    if ([self.delegate respondsToSelector:@selector(sheetDidEnd)])
-    {
-        [self.delegate performSelector:@selector(sheetDidEnd)];
-    }
 }
 
 - (void)dealloc

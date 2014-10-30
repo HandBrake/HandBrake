@@ -19,7 +19,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [[self cell] setBezelStyle: NSTextFieldRoundedBezel];
+        [[self cell] setBezelStyle:NSRoundedBezelStyle];
         _textToDisplay = @"";
         [self changeGradientColors:[NSColor grayColor] endColor:[NSColor blackColor]];
     }

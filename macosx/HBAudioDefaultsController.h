@@ -12,6 +12,4 @@
 
 - (instancetype)initWithSettings:(HBAudioDefaults *)settings;
 
-@property (nonatomic, readwrite, assign) id delegate;
-
 @end
