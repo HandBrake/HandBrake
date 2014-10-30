@@ -444,6 +444,7 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 mux->done = 1;
                 hb_unlock( mux->mutex );
+                hb_bitvec_free(&more);
                 return HB_WORK_DONE;
             }
         }
