@@ -1221,6 +1221,11 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             wb->data608->current_visible_start_ms = get_last_pts(wb);
             break;
         case COM_ROLLUP2:
+            if (wb->data608->rollup_base_row + 1 < 2)
+            {
+                move_roll_up(wb, 1);
+                wb->data608->rollup_base_row = 1;
+            }
             if (wb->data608->mode==MODE_POPUP)
             {
                 swap_visible_buffer(wb);
@@ -1244,6 +1249,11 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             wb->data608->cursor_row = wb->data608->rollup_base_row;
             break;
         case COM_ROLLUP3:
+            if (wb->data608->rollup_base_row + 1 < 3)
+            {
+                move_roll_up(wb, 2);
+                wb->data608->rollup_base_row = 2;
+            }
             if (wb->data608->mode==MODE_POPUP)
             {
                 if (write_cc_buffer(wb))
@@ -1266,6 +1276,11 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             wb->data608->cursor_row = wb->data608->rollup_base_row;
             break;
         case COM_ROLLUP4:
+            if (wb->data608->rollup_base_row + 1 < 4)
+            {
+                move_roll_up(wb, 3);
+                wb->data608->rollup_base_row = 3;
+            }
             if (wb->data608->mode==MODE_POPUP)
             {
                 if (write_cc_buffer(wb))
