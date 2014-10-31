@@ -264,6 +264,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [fCropLeftStepper   setEnabled: !self.autoCrop];
         [fCropRightStepper  setEnabled: !self.autoCrop];
 
+        [fCropTopField      setEditable: !self.autoCrop];
+        [fCropBottomField   setEditable: !self.autoCrop];
+        [fCropLeftField     setEditable: !self.autoCrop];
+        [fCropRightField    setEditable: !self.autoCrop];
+
         /* If auto, lets set the crop steppers according to
          * current fTitle->crop values */
         memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
@@ -697,6 +702,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
             [fCropBottomStepper setEnabled: !self.autoCrop];
             [fCropLeftStepper   setEnabled: !self.autoCrop];
             [fCropRightStepper  setEnabled: !self.autoCrop];
+
+            [fCropTopField      setEditable: !self.autoCrop];
+            [fCropBottomField   setEditable: !self.autoCrop];
+            [fCropLeftField     setEditable: !self.autoCrop];
+            [fCropRightField    setEditable: !self.autoCrop];
         }
     }
     if (sender == fCropTopStepper)
@@ -722,6 +732,63 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         job->crop[3] = [fCropRightStepper  intValue];
         [fCropRightField setIntValue: job->crop[3]];
         [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+    }
+
+    if (sender == fCropTopField)
+    {
+        int cropValue = [fCropTopField intValue];
+        if (cropValue >= 0 && (cropValue <= fTitle->height/2-2))
+        {
+            job->crop[0] = cropValue;
+            [fCropTopStepper setIntValue:cropValue];
+            [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+        }
+        else
+        {
+            [fCropLeftField setIntValue:job->crop[0]];
+        }
+    }
+    else if (sender == fCropBottomField)
+    {
+        int cropValue = [fCropBottomField intValue];
+        if (cropValue >= 0 && (cropValue <= fTitle->height/2-2))
+        {
+            job->crop[1] = cropValue;
+            [fCropBottomStepper setIntValue:cropValue];
+            [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+        }
+        else
+        {
+            [fCropLeftField setIntValue:job->crop[1]];
+        }
+    }
+    else if (sender == fCropLeftField)
+    {
+        int cropValue = [fCropLeftField intValue];
+        if (cropValue >= 0 && (cropValue <= fTitle->width/2-2))
+        {
+            job->crop[2] = cropValue;
+            [fCropLeftStepper setIntValue:cropValue];
+            [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+        }
+        else
+        {
+            [fCropLeftField setIntValue:job->crop[2]];
+        }
+    }
+    else if (sender == fCropRightField)
+    {
+        int cropValue = [fCropRightField intValue];
+        if (cropValue >= 0 && (cropValue <= fTitle->width/2-2))
+        {
+            job->crop[3] = cropValue;
+            [fCropRightStepper setIntValue:cropValue];
+            [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+        }
+        else
+        {
+            [fCropLeftField setIntValue:job->crop[3]];
+        }
     }
 
     keep |= !!job->anamorphic.keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
