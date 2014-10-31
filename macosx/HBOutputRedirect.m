@@ -77,7 +77,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
  * Adds specified object as listener for this output. Method @c stdoutRedirect:
  * or @c stderrRedirect: of the listener is called to redirect the output.
  */
-- (void)addListener:(id)aListener
+- (void)addListener:(id <HBOutputRedirectListening>)aListener
 {
 	NSAssert2([aListener respondsToSelector:forwardingSelector], @"Object %@ doesn't respond to selector \"%@\"", aListener, NSStringFromSelector(forwardingSelector));
 
@@ -94,7 +94,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 /**
  * Stops forwarding for this output to the specified listener object.
  */
-- (void)removeListener:(id)aListener
+- (void)removeListener:(id <HBOutputRedirectListening>)aListener
 {
 	if ([listeners containsObject:aListener])
 	{
@@ -138,7 +138,6 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 		forwardingSelector = aSelector;
 		stream = aStream;
 		oldWriteFunc = NULL;
-		lock = [[NSLock alloc] init];
 	}
 	return self;
 }

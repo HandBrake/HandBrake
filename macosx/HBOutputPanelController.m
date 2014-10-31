@@ -22,6 +22,9 @@
 // lets use this higher value for now for better gui debugging
 #define TextStorageLowerSizeLimit 120000
 
+@interface HBOutputPanelController () <HBOutputRedirectListening>
+@end
+
 @implementation HBOutputPanelController
 
 /**

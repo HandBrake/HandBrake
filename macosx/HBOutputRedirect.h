@@ -7,6 +7,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+
+@protocol HBOutputRedirectListening <NSObject>
+
+- (void)stdoutRedirect:(NSString *)text;
+- (void)stderrRedirect:(NSString *)text;
+
+@end
+
 /**
  * This class is used to redirect @c stdout and @c stderr outputs. It is never
  * created directly; @c stdoutRedirect and @c stderrRedirect class methods
@@ -31,15 +39,13 @@
 	
 	/// Pointer to old write function for the stream.
 	int	(*oldWriteFunc)(void *, const char *, int);
-	
-	NSLock *lock;
 }
 
 + (id)stdoutRedirect;
 + (id)stderrRedirect;
 
-- (void)addListener:(id)aListener;
-- (void)removeListener:(id)aListener;
+- (void)addListener:(id <HBOutputRedirectListening>)aListener;
+- (void)removeListener:(id <HBOutputRedirectListening>)aListener;
 
 @end
 
