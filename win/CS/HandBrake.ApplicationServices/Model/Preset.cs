@@ -121,6 +121,14 @@ namespace HandBrake.ApplicationServices.Model
         /// </param>
         public void Update(EncodeTask task, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
         {
+            // Copy over Max Width / Height for the following picture settings modes.
+            if (this.PictureSettingsMode == PresetPictureSettingsMode.Custom
+                || this.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+            {
+                task.MaxWidth = this.Task.MaxWidth;
+                task.MaxHeight = this.Task.MaxHeight;
+            }
+
             this.Task = task;
             this.AudioTrackBehaviours = audioBehaviours;
             this.SubtitleTrackBehaviours = subtitleBehaviours;
