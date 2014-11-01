@@ -360,7 +360,7 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     }
 
     /* Video quality */
-    self.qualityType = [queueToApply[@"VideoQualityType"] intValue];
+    self.qualityType = [queueToApply[@"VideoQualityType"] intValue] - 1;
 
     [fVidBitrateField setStringValue:queueToApply[@"VideoAvgBitrate"]];
 
