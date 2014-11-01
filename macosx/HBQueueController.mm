@@ -89,6 +89,35 @@
     }
 }
 
+/**
+ *  An index set containing the indexes of the targeted rows.
+ *  If the selected row indexes contain the clicked row index, it returns every selected row,
+ *  otherwise it returns only the clicked row index.
+ */
+- (NSIndexSet *)targetedRowIndexes
+{
+    NSMutableIndexSet *rowIndexes = [NSMutableIndexSet indexSet];
+    NSIndexSet *selectedRowIndexes = [self selectedRowIndexes];
+    NSInteger clickedRow = [self clickedRow];
+
+    if (clickedRow != -1)
+    {
+        [rowIndexes addIndex:clickedRow];
+
+        // If we clicked on a selected row, then we want to consider all rows in the selection. Otherwise, we only consider the clicked on row.
+        if ([selectedRowIndexes containsIndex:clickedRow])
+        {
+            [rowIndexes addIndexes:selectedRowIndexes];
+        }
+    }
+    else
+    {
+        [rowIndexes addIndexes:selectedRowIndexes];
+    }
+
+    return [[rowIndexes copy] autorelease];
+}
+
 @end
 
 #pragma mark -
@@ -391,8 +420,8 @@
 //------------------------------------------------------------------------------------
 - (IBAction)removeSelectedQueueItem: (id)sender
 {
-    NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
-    NSUInteger row = [selectedRows firstIndex];
+    NSIndexSet *targetedRow = [fOutlineView targetedRowIndexes];
+    NSUInteger row = [targetedRow firstIndex];
     if( row == NSNotFound )
         return;
     /* if this is a currently encoding job, we need to be sure to alert the user,
@@ -463,8 +492,8 @@
 //------------------------------------------------------------------------------------
 - (IBAction)revealSelectedQueueItem: (id)sender
 {
-    NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
-    NSInteger row = [selectedRows firstIndex];
+    NSIndexSet *targetedRow = [fOutlineView targetedRowIndexes];
+    NSInteger row = [targetedRow firstIndex];
     if (row != NSNotFound)
     {
         while (row != NSNotFound)
@@ -472,7 +501,7 @@
             NSMutableDictionary *queueItemToOpen = [fOutlineView itemAtRow: row];
             [[NSWorkspace sharedWorkspace] selectFile:queueItemToOpen[@"DestinationPath"] inFileViewerRootedAtPath:nil];
 
-            row = [selectedRows indexGreaterThanIndex: row];
+            row = [targetedRow indexGreaterThanIndex: row];
         }
     }
 }
@@ -522,10 +551,12 @@
 //------------------------------------------------------------------------------------
 - (IBAction)editSelectedQueueItem: (id)sender
 {
-    NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
-    NSUInteger row = [selectedRows firstIndex];
-    if( row == NSNotFound )
+    NSInteger row = [fOutlineView clickedRow];
+    if (row == NSNotFound)
+    {
         return;
+    }
+
     /* if this is a currently encoding job, we need to be sure to alert the user,
      * to let them decide to cancel it first, then if they do, we can come back and
      * remove it */
