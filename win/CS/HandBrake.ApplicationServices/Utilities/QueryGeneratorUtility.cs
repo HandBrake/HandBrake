@@ -820,7 +820,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         if (item.Default)
                             srtDefault = srtCount.ToString();
 
-                        itemToAdd = item.SrtPath;
+                        itemToAdd = item.SrtPath.Replace("\\", "\\\\").Replace(",", "\\,");
                         srtFile += srtFile == string.Empty ? itemToAdd : "," + itemToAdd;
 
                         itemToAdd = item.SrtOffset.ToString();
@@ -872,7 +872,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (srtFile != string.Empty) // SRTs
                 {
-                    query += " --srt-file " + "\"" + srtFile.Replace("\\", "\\\\") + "\"";
+                    query += " --srt-file " + "\"" + srtFile + "\"";
 
                     if (srtCodeset != string.Empty)
                         query += " --srt-codeset " + srtCodeset;
