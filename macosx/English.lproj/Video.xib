@@ -478,7 +478,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="26w-dz-St2">
-                    <rect key="frame" x="18" y="20" width="96" height="14"/>
+                    <rect key="frame" x="6" y="20" width="108" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="7bP-tR-sAX">
                         <font key="font" metaFont="smallSystem"/>
