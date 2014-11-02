@@ -192,13 +192,13 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     return [ret autorelease];
 }
 
-- (void)addTracksFromQueue:(NSMutableArray *)newSubtitleArray
+- (void)addTracksFromQueue:(NSArray *)queueSubtitleArray
 {
     /* Note: we need to look for external subtitles so it can be added to the source array track.
      * Remember the source container subs are already loaded with resetTitle which is already called
      * so any external sub sources need to be added to our source subs here
      */
-    for (id tempObject in newSubtitleArray)
+    for (id tempObject in queueSubtitleArray)
     {
         /* We have an srt track */
         if ([tempObject[keySubTrackType] intValue] == SRTSUB)
@@ -212,10 +212,9 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
         }
     }
 
-    [newSubtitleArray addObject:[self createSubtitleTrack]];
-
     // Set the subtitleArray to the newSubtitleArray
-    [self.subtitleArray setArray:newSubtitleArray];
+    [self.subtitleArray setArray:queueSubtitleArray];
+    [self.subtitleArray addObject:[self createSubtitleTrack]];
     [self.fTableView reloadData];
 }
 

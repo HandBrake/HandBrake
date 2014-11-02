@@ -29,7 +29,7 @@ extern NSString *keySubTrackSrtCharCode;
  */
 @interface HBSubtitlesController : NSViewController <HBViewValidation>
 
-- (void)addTracksFromQueue:(NSMutableArray *)newSubtitleArray;
+- (void)addTracksFromQueue:(NSArray *)queueSubtitleArray;
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
 
