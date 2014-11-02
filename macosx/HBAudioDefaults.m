@@ -179,7 +179,7 @@
     {
         preset[@"AudioTrackSelectionBehavior"] = @"none";
     }
-    preset[@"AudioLanguageList"] = self.trackSelectionLanguages;
+    preset[@"AudioLanguageList"] = [[self.trackSelectionLanguages copy] autorelease];
 
     // Passthru settings
     preset[@"AudioAllowAACPass"] = @(self.allowAACPassthru);

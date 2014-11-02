@@ -2545,7 +2545,7 @@ fWorkingCount = 0;
 
     /* Audio */
     NSMutableArray *audioArray = [[NSMutableArray alloc] initWithArray:[fAudioController audioTracks] copyItems:YES];
-    [queueFileJob setObject:[NSArray arrayWithArray: audioArray] forKey:@"AudioList"];
+    [queueFileJob setObject:audioArray forKey:@"AudioList"];
     [audioArray release];
 
 	/* Subtitles Defaults */
@@ -2555,7 +2555,7 @@ fWorkingCount = 0;
 
 	/* Subtitles */
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesViewController subtitles] copyItems:YES];
-    [queueFileJob setObject:[NSArray arrayWithArray: subtitlesArray] forKey:@"SubtitleList"];
+    [queueFileJob setObject:subtitlesArray forKey:@"SubtitleList"];
     [subtitlesArray release];
 
     /* Now we go ahead and set the "job->values in the plist for passing right to fQueueEncodeLibhb */

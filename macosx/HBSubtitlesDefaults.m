@@ -52,7 +52,8 @@
     {
         preset[@"SubtitleTrackSelectionBehavior"] = @"none";
     }
-    preset[@"SubtitleLanguageList"] = self.trackSelectionLanguages;
+
+    preset[@"SubtitleLanguageList"] = [[self.trackSelectionLanguages copy] autorelease];
     preset[@"SubtitleAddCC"] = @(self.addCC);
     preset[@"SubtitleAddForeignAudioSearch"] = @(self.addForeignAudioSearch);
     preset[@"SubtitleAddForeignAudioSubtitle"] = @(self.addForeignAudioSubtitle);
