@@ -634,7 +634,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
          container != NULL;
          container  = hb_container_get_next(container))
     {
-        menuItem = [[fDstFormatPopUp menu] addItemWithTitle:[NSString stringWithUTF8String:container->name]
+        NSString *title = nil;
+        if (container->format & HB_MUX_MASK_MP4)
+        {
+            title = @"MP4 File";
+        }
+        else if (container->format & HB_MUX_MASK_MKV)
+        {
+            title = @"MKV File";
+        }
+        else
+        {
+            title = [NSString stringWithUTF8String:container->name];
+        }
+        menuItem = [[fDstFormatPopUp menu] addItemWithTitle:title
                                                      action:nil
                                               keyEquivalent:@""];
         [menuItem setTag:container->format];
