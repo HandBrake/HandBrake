@@ -36,7 +36,7 @@ extern NSString *HBMixdownChangedNotification;
 @property (readonly, nonatomic, copy) NSArray *audioTracks;
 
 - (void) applySettingsFromPreset:(NSDictionary *)preset;
-- (void) addTracksFromQueue: (NSMutableDictionary *) aQueue;
+- (void) addTracksFromQueue: (NSArray *) queueArray;
 
 - (BOOL) anyCodecMatches: (int) aCodecValue;
 - (void) settingTrackToNone: (HBAudio *) newNoneTrack;

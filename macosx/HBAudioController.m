@@ -170,7 +170,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     return tracksArray;
 }
 
-- (void) addTracksFromQueue: (NSMutableDictionary *) aQueue
+- (void) addTracksFromQueue: (NSArray *) queueArray
 
 {
     // Reinitialize the configured list of audio tracks
@@ -178,7 +178,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
     // The following is the pattern to follow, but with Audio%dTrack being the key to seek...
     // Can we assume that there will be no skip in the data?
-    for (NSDictionary *audioDict in aQueue[@"AudioList"])
+    for (NSDictionary *audioDict in queueArray)
     {
         HBAudio *newAudio = [[HBAudio alloc] init];
         [newAudio setController: self];

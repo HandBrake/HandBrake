@@ -2843,7 +2843,7 @@ fWorkingCount = 0;
 
     /* Audio */
     /* Now lets add our new tracks to the audio list here */
-    [fAudioController addTracksFromQueue: queueToApply];
+    [fAudioController addTracksFromQueue:[queueToApply objectForKey:@"AudioList"]];
 
     /* Subtitles Defaults */
     [fSubtitlesViewController.settings applySettingsFromPreset:queueToApply[@"SubtitlesDefaults"]];
