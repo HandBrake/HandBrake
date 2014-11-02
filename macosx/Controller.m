@@ -3344,17 +3344,7 @@ fWorkingCount = 0;
     /* Format (Muxer) and Video Encoder */
     job->mux = [[queueToApply objectForKey:@"JobFileFormatMux"] intValue];
     job->vcodec = [[queueToApply objectForKey:@"JobVideoEncoderVcodec"] intValue];
-    
-    
-    /* If mpeg-4, then set mpeg-4 specific options like chapters and > 4gb file sizes */
-    if( [[queueToApply objectForKey:@"Mp4LargeFile"] intValue] == 1)
-    {
-        job->largeFileSize = 1;
-    }
-    else
-    {
-        job->largeFileSize = 0;
-    }
+
     /* We set http optimized mp4 here */
     if( [[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue] == 1 )
     {
@@ -5011,9 +5001,6 @@ the user is using "Custom" settings by determining the sender*/
     [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
     /* Chapter Markers fCreateChapterMarkers*/
     [preset setObject:@(fChapterTitlesController.createChapterMarkers) forKey:@"ChapterMarkers"];
-    /* Allow Mpeg4 64 bit formatting +4GB file sizes
-        key kept for compatibility. */
-    [preset setObject:[NSNumber numberWithInteger:0]forKey:@"Mp4LargeFile"];
     /* Mux mp4 with http optimization */
     [preset setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
     /* Add iPod uuid atom */
