@@ -2559,12 +2559,6 @@ fWorkingCount = 0;
     [subtitlesArray release];
 
     /* Now we go ahead and set the "job->values in the plist for passing right to fQueueEncodeLibhb */
-     
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"JobChapterStart"];
-    
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"JobChapterEnd"];
-    
-    
     [queueFileJob setObject:[NSNumber numberWithInteger:[[fDstFormatPopUp selectedItem] tag]] forKey:@"JobFileFormatMux"];
     
     /* Codecs */
@@ -3306,8 +3300,8 @@ fWorkingCount = 0;
     {
         /* Chapter selection */
         [HBUtilities writeToActivityLog: "Start / Stop set to chapters"];
-        job->chapter_start = [[queueToApply objectForKey:@"JobChapterStart"] intValue];
-        job->chapter_end   = [[queueToApply objectForKey:@"JobChapterEnd"] intValue];
+        job->chapter_start = [[queueToApply objectForKey:@"ChapterStart"] intValue];
+        job->chapter_end   = [[queueToApply objectForKey:@"ChapterEnd"] intValue];
     }
     else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 1)
     {
