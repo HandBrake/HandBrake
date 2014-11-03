@@ -439,7 +439,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" id="wk1-2U-z4i">
                     <rect key="frame" x="18" y="0.0" width="883" height="29"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="G8P-IF-mpl">
+                    <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="G8P-IF-mpl">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -487,6 +487,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                     </textFieldCell>
                 </textField>
             </subviews>
+            <point key="canvasLocation" x="185" y="727"/>
         </customView>
     </objects>
 </document>
