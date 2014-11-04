@@ -1,19 +1,19 @@
-diff -r c1e4fc0162c1 source/common/param.cpp
---- a/source/common/param.cpp	Thu Aug 21 16:49:02 2014 -0500
-+++ b/source/common/param.cpp	Tue Aug 26 14:52:01 2014 -0700
-@@ -1053,6 +1053,7 @@
-     uint32_t maxCUDepth = maxLog2CUSize - 2;
-     uint32_t tuQTMinLog2Size = 2; //log2(4)
+diff -r d2db9c1ab44b source/common/param.cpp
+--- a/source/common/param.cpp	Fri Oct 31 13:52:08 2014 -0500
++++ b/source/common/param.cpp	Mon Nov 03 10:28:18 2014 -0800
+@@ -1059,6 +1059,7 @@
  
+ int x265_set_globals(x265_param *param)
+ {
 +#if 0
      static int once /* = 0 */;
  
      if (ATOMIC_CAS32(&once, 0, 1) == 1)
-@@ -1064,6 +1065,7 @@
+@@ -1070,6 +1071,7 @@
          }
      }
      else
 +#endif
      {
-         // set max CU width & height
-         g_maxCUSize = param->maxCUSize;
+         uint32_t maxLog2CUSize = (uint32_t)g_log2Size[param->maxCUSize];
+ 
