@@ -89,10 +89,8 @@
         <real>1</real>
         <key>start_frame</key>
         <integer>-1</integer>
-        <key>title_no</key>
-        <integer>0</integer>
         <key>title</key>
-        <string>none</string>
+        <integer>0</integer>
         <key>title_selected</key>
         <false />
         <key>volume_label</key>
