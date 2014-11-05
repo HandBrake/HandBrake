@@ -11,6 +11,7 @@
  * any later version.
  */
 
+#include <glib/gi18n.h>
 #include "ghbcompat.h"
 #include <string.h>
 #include "settings.h"
@@ -172,9 +173,9 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 
         char * new_tt;
         if (new_opts)
-            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"%s\"", tt, new_opts);
+            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""), tt, new_opts);
         else
-            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"\"", tt);
+            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""), tt);
         gtk_widget_set_tooltip_text(eo, new_tt);
 
         g_free(new_tt);
@@ -194,9 +195,9 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
         char * new_tt;
         if (opts)
-            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"%s\"", tt, opts);
+            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""), tt, opts);
         else
-            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"\"", tt);
+            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""), tt);
         gtk_widget_set_tooltip_text(eo, new_tt);
         g_free(new_tt);
 

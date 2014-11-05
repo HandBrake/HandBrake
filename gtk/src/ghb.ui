@@ -1512,7 +1512,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_markup">Allow 64 bit MP4 file which can be over 4GB.
+                                <property name="tooltip_markup" translatable="yes">Allow 64 bit MP4 file which can be over 4GB.
 
 &lt;b&gt;Caution:&lt;/b&gt; This option may break device compatibility.</property>
                                 <property name="halign">start</property>
@@ -2518,7 +2518,7 @@ This will be the resolution that most closely matches the source resolution afte
                                             <property name="valign">GTK_ALIGN_CENTER</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_markup">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
+                                            <property name="tooltip_markup" translatable="yes">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
 &lt;small&gt;&lt;tt&gt;
 None   - Force pixel aspect ratio to 1:1.
 Loose  - Align dimensions to chosen 'Alignment' value
@@ -4347,7 +4347,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                             <property name="halign">start</property>
                             <property name="use_markup">True</property>
                             <property name="label" translatable="yes">&lt;b&gt;Audio Encoder Settings:&lt;/b&gt;</property>
-                            <property name="tooltip_markup">Each selected source track will be encoded with all selected encoders</property>
+                            <property name="tooltip_markup" translatable="yes">Each selected source track will be encoded with all selected encoders</property>
                           </object>
                           <packing>
                             <property name="position">2</property>
@@ -5319,7 +5319,7 @@ Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions.
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="tooltip_markup">This setting controls both subpixel-precision motion estimation and mode decision methods.
+                                                    <property name="tooltip_markup" translatable="yes">This setting controls both subpixel-precision motion estimation and mode decision methods.
 
 Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.
 Mode decision is the method used to choose how to encode each block of the frame: a very important decision.
@@ -5431,7 +5431,7 @@ adaptively select which is better for each particular frame.</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="tooltip_markup">x264 has a variety of algorithms to decide when to use B-frames and how many to use.
+                                                    <property name="tooltip_markup" translatable="yes">x264 has a variety of algorithms to decide when to use B-frames and how many to use.
 
 Fast mode takes roughly the same amount of time no matter how many B-frames you specify.
 However, while fast, its decisions are often suboptimal.
@@ -5745,7 +5745,7 @@ and other sharp-edged graphics.</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="tooltip_markup">H.264 deblocking filter.
+                                                    <property name="tooltip_markup" translatable="yes">H.264 deblocking filter.
 
 h.264 has a built-in deblocking filter that smooths out blocking artifacts
 after decoding each frame.  This not only improves visual quality, but also
@@ -5772,7 +5772,7 @@ The default is 0 (normal strength) for both parameters.</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="tooltip_markup">H.264 deblocking filter.
+                                                    <property name="tooltip_markup" translatable="yes">H.264 deblocking filter.
 
 h.264 has a built-in deblocking filter that smooths out blocking artifacts
 after decoding each frame.  This not only improves visual quality, but also
@@ -9056,7 +9056,7 @@ Players may use this in the audio selection list.</property>
               <object class="GtkLabel" id="AudioTrackDRCSliderLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_markup">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track.
+                <property name="tooltip_markup" translatable="yes">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track.
 
 For source audio that has a wide dynamic range (very loud and very soft sequences),
 DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder.</property>
@@ -9169,7 +9169,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                         <property name="valign">GTK_ALIGN_CENTER</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_markup">&lt;b&gt;Quality:&lt;/b&gt; For output codec's that support it, adjust the quality of the output.</property>
+                        <property name="tooltip_markup" translatable="yes">&lt;b&gt;Quality:&lt;/b&gt; For output codec's that support it, adjust the quality of the output.</property>
                         <property name="orientation">vertical</property>
                         <property name="adjustment">audio_quality_adj</property>
                         <property name="icons">weather-storm
@@ -9263,7 +9263,7 @@ weather-clear</property>
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_markup">&lt;b&gt;Audio Gain:&lt;/b&gt; Adjust the amplification or attenuation of the output audio track.</property>
+                    <property name="tooltip_markup" translatable="yes">&lt;b&gt;Audio Gain:&lt;/b&gt; Adjust the amplification or attenuation of the output audio track.</property>
                     <property name="orientation">vertical</property>
                     <property name="adjustment">adjustment35</property>
                     <property name="icons">audio-volume-muted
@@ -9314,7 +9314,7 @@ audio-volume-medium</property>
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_markup">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track.
+                    <property name="tooltip_markup" translatable="yes">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track.
 
 For source audio that has a wide dynamic range (very loud and very soft sequences),
 DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder.</property>

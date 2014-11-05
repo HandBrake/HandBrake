@@ -2847,7 +2847,7 @@ ghb_get_chapters(const hb_title_t *title)
         if (chapter->title == NULL || chapter->title[0] == 0)
         {
             gchar *str;
-            str = g_strdup_printf ("Chapter %2d", ii+1);
+            str = g_strdup_printf (_("Chapter %2d"), ii+1);
             ghb_array_append(chapters, ghb_string_value_new(str));
             g_free(str);
         }
@@ -4287,7 +4287,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
                 name = ghb_value_string(chapter);
                 if (name == NULL)
                 {
-                    name = g_strdup_printf ("Chapter %2d", chap+1);
+                    name = g_strdup_printf (_("Chapter %2d"), chap+1);
                 }
                 chapter_s = hb_list_item( job->list_chapter, chap);
                 hb_chapter_set_title(chapter_s, name);

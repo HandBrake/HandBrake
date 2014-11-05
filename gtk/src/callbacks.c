@@ -2869,7 +2869,7 @@ ghb_update_pending(signal_user_data_t *ud)
 
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "pending_status"));
     pending = queue_pending_count(ud->queue);
-    str = g_strdup_printf("%d encode(s) pending", pending);
+    str = g_strdup_printf(_("%d encode(s) pending"), pending);
     gtk_label_set_text(label, str);
     g_free(str);
 }
@@ -4921,7 +4921,7 @@ tweak_setting_cb(
                 message = g_strdup_printf(
                             _("Invalid Settings:\n%s"),
                             tweak);
-                ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+                ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
                 g_free(message);
             }
         }

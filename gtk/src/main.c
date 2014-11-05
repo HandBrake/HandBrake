@@ -1099,11 +1099,11 @@ main(int argc, char *argv[])
     GtkFileChooser *chooser;
     chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "source_dialog"));
     filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
-    gtk_file_filter_set_name(filter, "All");
+    gtk_file_filter_set_name(filter, _("All"));
     gtk_file_filter_add_pattern(filter, "*");
     gtk_file_chooser_add_filter(chooser, filter);
     filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterVideo"));
-    gtk_file_filter_set_name(filter, "Video");
+    gtk_file_filter_set_name(filter, _("Video"));
     gtk_file_filter_add_mime_type(filter, "video/*");
     gtk_file_chooser_add_filter(chooser, filter);
     filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterTS"));

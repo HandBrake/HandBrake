@@ -1214,7 +1214,7 @@ fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
     if (active)
     {
         gtk_window_set_resizable(window, TRUE);
-        gtk_button_set_label(GTK_BUTTON(toggle), "Windowed");
+        gtk_button_set_label(GTK_BUTTON(toggle), _("Windowed"));
         // Changing resizable property doesn't take effect immediately
         // need to delay fullscreen till after this callback returns
         // to mainloop
@@ -1224,7 +1224,7 @@ fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
     {
         gtk_window_unfullscreen(window);
         gtk_window_set_resizable(window, FALSE);
-        gtk_button_set_label(GTK_BUTTON(toggle), "Fullscreen");
+        gtk_button_set_label(GTK_BUTTON(toggle), _("Fullscreen"));
         ghb_set_preview_image(ud);
     }
 }
