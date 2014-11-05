@@ -573,7 +573,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pout = in->data;
             len = pout_len = in->size;
         }
-        if (pout)
+        if (pout != NULL && pout_len > 0)
         {
             decodeAudio( w->audio, pv, pout, pout_len, cur );
         }
@@ -646,10 +646,15 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     }
 
     hb_ff_set_sample_fmt( context, codec, AV_SAMPLE_FMT_FLT );
-    if ( hb_avcodec_open( context, codec, NULL, 0 ) )
+
+    AVDictionary * av_opts = NULL;
+    av_dict_set( &av_opts, "err_detect", "crccheck+explode", 0 );
+    if ( hb_avcodec_open( context, codec, &av_opts, 0 ) )
     {
+        av_dict_free( &av_opts );
         return -1;
     }
+    av_dict_free( &av_opts );
     unsigned char *parse_buffer;
     int parse_pos, dec_pos, parse_buffer_size;
 
