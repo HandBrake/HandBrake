@@ -128,7 +128,8 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
         // The frame at the actual start time may not be an i-frame
         // so can't be decoded without starting a little early.
         // sync.c will drop early frames.
-        r->pts_to_start = MAX(0, job->pts_to_start - 180000);
+        // Starting a little over 10 seconds early
+        r->pts_to_start = MAX(0, job->pts_to_start - 1000000);
     }
 
     if (job->pts_to_stop)
@@ -278,7 +279,7 @@ static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf, 1 );
 
-    if( buf->s.renderOffset < 0 )
+    if (buf->s.renderOffset == AV_NOPTS_VALUE)
     {
         st->last += st->filtered_average;
         return;
@@ -441,7 +442,7 @@ void ReadLoop( void * _w )
         // and then seek to the appropriate offset from it
         if ( ( buf = hb_stream_read( r->stream ) ) )
         {
-            if ( buf->s.start > 0 )
+            if (buf->s.start != AV_NOPTS_VALUE)
             {
                 pts_to_start += buf->s.start;
             }
@@ -531,21 +532,6 @@ void ReadLoop( void * _w )
                 }
             }
         }
-        if (r->stream && r->start_found == 2 )
-        {
-            // We will inspect the timestamps of each frame in sync
-            // to skip from this seek point to the timestamp we
-            // want to start at.
-            if ( buf->s.start > 0 && buf->s.start < r->job->pts_to_start )
-            {
-                r->job->pts_to_start -= buf->s.start;
-            }
-            else if ( buf->s.start >= r->job->pts_to_start )
-            {
-                r->job->pts_to_start = 0;
-            }
-            r->start_found = 1;
-        }
 
         (hb_demux[r->title->demuxer])( buf, list, &r->demux );
 
@@ -553,6 +539,23 @@ void ReadLoop( void * _w )
         {
             hb_list_rem( list, buf );
             fifos = GetFifoForId( r, buf->s.id );
+
+            if (fifos && r->stream && r->start_found == 2 )
+            {
+                // We will inspect the timestamps of each frame in sync
+                // to skip from this seek point to the timestamp we
+                // want to start at.
+                if (buf->s.start != AV_NOPTS_VALUE &&
+                    buf->s.start < r->job->pts_to_start)
+                {
+                    r->job->pts_to_start -= buf->s.start;
+                }
+                else if ( buf->s.start >= r->job->pts_to_start )
+                {
+                    r->job->pts_to_start = 0;
+                }
+                r->start_found = 1;
+            }
 
             if ( fifos && ! r->saw_video && !r->job->indepth_scan )
             {
