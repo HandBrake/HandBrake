@@ -18,6 +18,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 #include <string.h>
 #include "ghbcompat.h"
 #include "hb.h"
@@ -1609,7 +1610,7 @@ ghb_presets_list_init(
     presets = presets_get_folder(presetsPlist, indices, len);
     if (presets == NULL)
     {
-        g_warning("Failed to find parent folder when adding child.");
+        g_warning(_("Failed to find parent folder when adding child."));
         g_free(more_indices);
         return;
     }
@@ -1761,7 +1762,7 @@ presets_list_insert(
     presets = presets_get_folder(presetsPlist, indices, len-1);
     if (presets == NULL)
     {
-        g_warning("Failed to find parent folder while adding child.");
+        g_warning(_("Failed to find parent folder while adding child."));
         return;
     }
     parent_path = ghb_tree_path_new_from_indices(indices, len-1);
@@ -3164,10 +3165,10 @@ settings_save(signal_user_data_t *ud, const GValue *path)
         {
             gchar *message;
             message = g_strdup_printf(
-                        "%s: Folder already exists.\n"
-                        "You can not replace it with a preset.",
+                      _("%s: Folder already exists.\n"
+                        "You can not replace it with a preset."),
                         name);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
             g_free(message);
             return;
         }
@@ -3254,10 +3255,10 @@ folder_save(signal_user_data_t *ud, const GValue *path)
         {
             gchar *message;
             message = g_strdup_printf(
-                        "%s: Preset already exists.\n"
-                        "You can not replace it with a folder.",
+                      _("%s: Preset already exists.\n"
+                        "You can not replace it with a folder."),
                         name);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
             g_free(message);
             g_free(indices);
             return;
@@ -3402,12 +3403,12 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 NULL);
 
     filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, "All (*)");
+    gtk_file_filter_set_name(filter, _("All (*)"));
     gtk_file_filter_add_pattern(filter, "*");
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 
     filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, "Presets (*.plist)");
+    gtk_file_filter_set_name(filter, _("Presets (*.plist)"));
     gtk_file_filter_add_pattern(filter, "*.plist");
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
@@ -3545,7 +3546,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     name = g_value_get_string(ghb_array_get_nth(preset, count-1));
 
-    dialog = gtk_file_chooser_dialog_new("Export Preset", NULL,
+    dialog = gtk_file_chooser_dialog_new(_("Export Preset"), NULL,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
                 GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                 GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
@@ -3797,8 +3798,8 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         folder = ghb_presets_get_folder(presetsPlist, indices, len);
         dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
                             GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
-                            "Confirm deletion of %s:\n\n%s",
-                            folder ? "folder" : "preset",
+                            _("Confirm deletion of %s:\n\n%s"),
+                            folder ? _("folder") : _("preset"),
                             preset);
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy (dialog);
@@ -4230,7 +4231,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
     }
     else
     {
-        g_debug("No selection???  Perhaps unselected.");
+        g_debug(_("No selection???  Perhaps unselected."));
         gtk_widget_set_sensitive(widget, FALSE);
     }
 }

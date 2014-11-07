@@ -1856,8 +1856,8 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     if (paused)
     {
         gtk_widget_set_sensitive (widget, show_start);
-        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), "_Resume Queue");
-        gtk_widget_set_tooltip_text(widget, "Resume Encoding");
+        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Resume Queue"));
+        gtk_widget_set_tooltip_text(widget, _("Resume Encoding"));
     }
     else
     {

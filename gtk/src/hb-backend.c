@@ -1871,7 +1871,7 @@ ghb_create_title_label(const hb_title_t *title)
         }
         else
         {
-            label = g_strdup_printf("%d (%05d.MPLS) - Unknown Length",
+            label = g_strdup_printf(_("%d (%05d.MPLS) - Unknown Length"),
                 title->index, title->playlist);
         }
     }
@@ -1884,7 +1884,7 @@ ghb_create_title_label(const hb_title_t *title)
         }
         else
         {
-            label  = g_strdup_printf("%d - Unknown Length",
+            label  = g_strdup_printf(_("%d - Unknown Length"),
                                     title->index);
         }
     }
