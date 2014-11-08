@@ -530,4 +530,10 @@ Not both at the same time!</value>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>You cannot encode to a file with the same path and name as the source file. Please update the destination filename so that it does not match the source file.</value>
   </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>Your system prevented HandBrake from launching a web browser.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>You can still access the help pages by visiting the website directly at: https://handbrake.fr</value>
+  </data>
 </root>

@@ -672,6 +672,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your system prevented HandBrake from launching a web browser..
+        /// </summary>
+        public static string Main_UnableToLoadHelpMessage {
+            get {
+                return ResourceManager.GetString("Main_UnableToLoadHelpMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can still access the help pages by visiting the website directly at: https://handbrake.fr.
+        /// </summary>
+        public static string Main_UnableToLoadHelpSolution {
+            get {
+                return ResourceManager.GetString("Main_UnableToLoadHelpSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Encodes Pending.
         /// </summary>
         public static string Main_XEncodesPending {

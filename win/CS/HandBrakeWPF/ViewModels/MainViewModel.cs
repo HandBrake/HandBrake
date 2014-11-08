@@ -1172,7 +1172,14 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LaunchHelp()
         {
-            Process.Start("https://trac.handbrake.fr/wiki/HandBrakeGuide");
+            try
+            {
+                Process.Start("https://trac.handbrake.fr/wiki/HandBrakeGuide");
+            }
+            catch (Exception exc)
+            {
+                this.errorService.ShowError(Resources.Main_UnableToLoadHelpMessage, Resources.Main_UnableToLoadHelpSolution, exc);
+            }
         }
 
         /// <summary>
