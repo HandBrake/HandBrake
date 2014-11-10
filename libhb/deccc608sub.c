@@ -1495,7 +1495,7 @@ static void handle_pac(unsigned char c1, unsigned char c2, struct s_write *wb)
         default:
             // Not rollup mode, all rows ok
             keep_lines = 0;
-            return;
+            break;
     }
     if (row < keep_lines)
     {
