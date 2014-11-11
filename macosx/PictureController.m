@@ -243,31 +243,10 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [fWidthStepper  setIncrement: 16];
         [fHeightStepper setIncrement: 16];
     }
-    if (!self.autoCrop)
-    {
-        [fCropMatrix  selectCellAtRow: 1 column:0];
-        [fCropTopStepper    setIntValue: job->crop[0]];
-        [fCropTopField      setIntValue: job->crop[0]];
-        [fCropBottomStepper setIntValue: job->crop[1]];
-        [fCropBottomField   setIntValue: job->crop[1]];
-        [fCropLeftStepper   setIntValue: job->crop[2]];
-        [fCropLeftField     setIntValue: job->crop[2]];
-        [fCropRightStepper  setIntValue: job->crop[3]];
-        [fCropRightField    setIntValue: job->crop[3]];
-    }
-    else
+
+    if (self.autoCrop)
     {
         [fCropMatrix  selectCellAtRow: 0 column:0];
-
-        [fCropTopStepper    setEnabled: !self.autoCrop];
-        [fCropBottomStepper setEnabled: !self.autoCrop];
-        [fCropLeftStepper   setEnabled: !self.autoCrop];
-        [fCropRightStepper  setEnabled: !self.autoCrop];
-
-        [fCropTopField      setEditable: !self.autoCrop];
-        [fCropBottomField   setEditable: !self.autoCrop];
-        [fCropLeftField     setEditable: !self.autoCrop];
-        [fCropRightField    setEditable: !self.autoCrop];
 
         /* If auto, lets set the crop steppers according to
          * current fTitle->crop values */
@@ -281,6 +260,29 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [fCropRightStepper  setIntValue: fTitle->crop[3]];
         [fCropRightField    setIntValue: fTitle->crop[3]];
     }
+    else
+    {
+        [fCropMatrix  selectCellAtRow: 1 column:0];
+        [fCropTopStepper    setIntValue: job->crop[0]];
+        [fCropTopField      setIntValue: job->crop[0]];
+        [fCropBottomStepper setIntValue: job->crop[1]];
+        [fCropBottomField   setIntValue: job->crop[1]];
+        [fCropLeftStepper   setIntValue: job->crop[2]];
+        [fCropLeftField     setIntValue: job->crop[2]];
+        [fCropRightStepper  setIntValue: job->crop[3]];
+        [fCropRightField    setIntValue: job->crop[3]];
+    }
+
+    [fCropTopStepper    setEnabled: !self.autoCrop];
+    [fCropBottomStepper setEnabled: !self.autoCrop];
+    [fCropLeftStepper   setEnabled: !self.autoCrop];
+    [fCropRightStepper  setEnabled: !self.autoCrop];
+
+    [fCropTopField      setEditable: !self.autoCrop];
+    [fCropBottomField   setEditable: !self.autoCrop];
+    [fCropLeftField     setEditable: !self.autoCrop];
+    [fCropRightField    setEditable: !self.autoCrop];
+
     [fWidthStepper      setMaxValue: title->width - job->crop[2] - job->crop[3]];
     [fWidthStepper      setIntValue: job->width];
     [fWidthField        setIntValue: job->width];
