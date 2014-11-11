@@ -595,17 +595,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fScanIndicator setUsesThreadedAnimation:NO];
     [fRipIndicator setUsesThreadedAnimation:NO];
 
+    // Presets initialization
+    [self checkBuiltInsForUpdates];
+    [self buildPresetsMenu];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildPresetsMenu) name:HBPresetsChangedNotification object:nil];
+
     [fPresetDrawer setDelegate:self];
     NSSize drawerSize = NSSizeFromString([[NSUserDefaults standardUserDefaults]
-                                           stringForKey:@"Drawer Size"]);
+                                           stringForKey:@"HBDrawerSize"]);
     if (drawerSize.width)
+    {
         [fPresetDrawer setContentSize: drawerSize];
+    }
 
 	/* Show/Dont Show Presets drawer upon launch based
-     on user preference DefaultPresetsDrawerShow*/
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"])
+     on user preference DefaultPresetsDrawerShow */
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBDefaultPresetsDrawerShow"])
 	{
-		[fPresetDrawer open];
+		[fPresetDrawer open:self];
 	}
 
     /* Setup the start / stop popup */
@@ -705,12 +713,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                                                  context:NULL];
 
     [fWindow recalculateKeyViewLoop];
-
-    // Presets initialization
-    [self checkBuiltInsForUpdates];
-    [self buildPresetsMenu];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildPresetsMenu) name:HBPresetsChangedNotification object:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -2131,7 +2133,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 - (NSSize) drawerWillResizeContents:(NSDrawer *) drawer toSize:(NSSize) contentSize {
-	[[NSUserDefaults standardUserDefaults] setObject:NSStringFromSize( contentSize ) forKey:@"Drawer Size"];
+	[[NSUserDefaults standardUserDefaults] setObject:NSStringFromSize( contentSize ) forKey:@"HBDrawerSize"];
 	return contentSize;
 }
 
@@ -4689,11 +4691,11 @@ the user is using "Custom" settings by determining the sender*/
 {
     if ([fPresetDrawer state] == NSDrawerClosedState)
     {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"DefaultPresetsDrawerShow"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HBDefaultPresetsDrawerShow"];
     }
     else
     {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"DefaultPresetsDrawerShow"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HBDefaultPresetsDrawerShow"];
     }
 
     [fPresetDrawer toggle:self];

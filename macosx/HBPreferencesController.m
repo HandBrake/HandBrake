@@ -61,7 +61,7 @@
         @"DefaultLanguage":                 @"English",
         @"DefaultMpegExtension":            @"Auto",
         @"UseDvdNav":                       @"YES",
-        @"DefaultPresetsDrawerShow":        @YES,
+        @"HBDefaultPresetsDrawerShow":      @YES,
         @"LastDestinationDirectory":        desktopDirectory,
         @"LastSourceDirectory":             desktopDirectory,
         @"DefaultAutoNaming":               @NO,
