@@ -161,8 +161,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [self.window setAppearance:[NSClassFromString(@"NSAppearance") appearanceNamed:@"NSAppearanceNameAqua"]];
     }
 
-    [[self window] setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
-
     /* Populate the user interface */
     [fWidthStepper  setValueWraps: NO];
     [fHeightStepper setValueWraps: NO];
