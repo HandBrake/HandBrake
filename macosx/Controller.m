@@ -3153,8 +3153,8 @@ fWorkingCount = 0;
         audio->out.normalize_mix_level       = 0;
         audio->out.bitrate                   = [audioDict[@"JobBitrate"] intValue];
         audio->out.samplerate                = [audioDict[@"JobSamplerate"] intValue];
-        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] floatValue];
-        audio->out.gain                      = [audioDict[@"TrackGainSlider"] floatValue];
+        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] doubleValue];
+        audio->out.gain                      = [audioDict[@"TrackGainSlider"] doubleValue];
         audio->out.dither_method             = hb_audio_dither_get_default();
 
         hb_audio_add(job, audio);
@@ -3671,8 +3671,8 @@ fWorkingCount = 0;
         audio->out.normalize_mix_level       = 0;
         audio->out.bitrate                   = [audioDict[@"JobBitrate"] intValue];
         audio->out.samplerate                = [audioDict[@"JobSamplerate"] intValue];
-        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] intValue];
-        audio->out.gain                      = [audioDict[@"TrackGainSlider"] intValue];
+        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] doubleValue];
+        audio->out.gain                      = [audioDict[@"TrackGainSlider"] doubleValue];
         audio->out.dither_method             = hb_audio_dither_get_default();
 
         hb_audio_add(job, audio);
