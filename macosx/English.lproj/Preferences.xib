@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
@@ -315,12 +315,12 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drag to the above format field to add" id="dQ6-Dh-9sD">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
             </subviews>
-            <point key="canvasLocation" x="101" y="-370"/>
+            <point key="canvasLocation" x="-82" y="-471"/>
         </customView>
         <customView id="235" userLabel="Audio">
             <rect key="frame" x="0.0" y="0.0" width="500" height="136"/>
@@ -514,7 +514,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="463">
-                    <rect key="frame" x="126" y="196" width="171" height="14"/>
+                    <rect key="frame" x="118" y="195" width="179" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Minimum length of title to scan:" id="464">
                         <font key="font" metaFont="smallSystem"/>
@@ -620,7 +620,7 @@
                     </connections>
                 </popUpButton>
             </subviews>
-            <point key="canvasLocation" x="101" y="71"/>
+            <point key="canvasLocation" x="-50" y="-68"/>
         </customView>
         <customObject id="410" userLabel="Updater" customClass="SUUpdater"/>
     </objects>
