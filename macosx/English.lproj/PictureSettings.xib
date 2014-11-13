@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
@@ -165,7 +165,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="44">
                                                         <rect key="frame" x="143" y="103" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="169">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="169">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -208,7 +208,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="46">
                                                         <rect key="frame" x="143" y="78" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="171">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="171">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>

@@ -155,6 +155,14 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 {
     [[self window] setExcludedFromWindowsMenu:YES];
 
+    // Set the panel appearance explicity to aqua.
+    // can be removed when Apple will fix UI appearance on Yosemite.
+    if (NSClassFromString(@"NSVisualEffectView")) {
+        [self.window setAppearance:[NSClassFromString(@"NSAppearance") appearanceNamed:@"NSAppearanceNameAqua"]];
+    }
+
+    [[self window] setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
+
     /* Populate the user interface */
     [fWidthStepper  setValueWraps: NO];
     [fHeightStepper setValueWraps: NO];
