@@ -120,6 +120,12 @@
 		A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */; };
 		A91C02521A165EA200DEA6F3 /* EncodeComplete.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02501A165EA200DEA6F3 /* EncodeComplete.png */; };
 		A91C02531A165EA200DEA6F3 /* EncodeComplete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */; };
+		A91C025A1A166BE300DEA6F3 /* EncodeWorking0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02541A166BE300DEA6F3 /* EncodeWorking0@2x.png */; };
+		A91C025B1A166BE300DEA6F3 /* EncodeWorking1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02551A166BE300DEA6F3 /* EncodeWorking1@2x.png */; };
+		A91C025C1A166BE300DEA6F3 /* EncodeWorking2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02561A166BE300DEA6F3 /* EncodeWorking2@2x.png */; };
+		A91C025D1A166BE300DEA6F3 /* EncodeWorking3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02571A166BE300DEA6F3 /* EncodeWorking3@2x.png */; };
+		A91C025E1A166BE300DEA6F3 /* EncodeWorking4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02581A166BE300DEA6F3 /* EncodeWorking4@2x.png */; };
+		A91C025F1A166BE300DEA6F3 /* EncodeWorking5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02591A166BE300DEA6F3 /* EncodeWorking5@2x.png */; };
 		A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A932E26A1988334B0047D13E /* AudioDefaults.xib */; };
 		A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E26E198833920047D13E /* HBAudioDefaultsController.m */; };
 		A932E273198834130047D13E /* HBAudioDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E272198834130047D13E /* HBAudioDefaults.m */; };
@@ -335,6 +341,12 @@
 		A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JobSmall@2x.png"; sourceTree = "<group>"; };
 		A91C02501A165EA200DEA6F3 /* EncodeComplete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeComplete.png; sourceTree = "<group>"; };
 		A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeComplete@2x.png"; sourceTree = "<group>"; };
+		A91C02541A166BE300DEA6F3 /* EncodeWorking0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking0@2x.png"; sourceTree = "<group>"; };
+		A91C02551A166BE300DEA6F3 /* EncodeWorking1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking1@2x.png"; sourceTree = "<group>"; };
+		A91C02561A166BE300DEA6F3 /* EncodeWorking2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking2@2x.png"; sourceTree = "<group>"; };
+		A91C02571A166BE300DEA6F3 /* EncodeWorking3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking3@2x.png"; sourceTree = "<group>"; };
+		A91C02581A166BE300DEA6F3 /* EncodeWorking4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking4@2x.png"; sourceTree = "<group>"; };
+		A91C02591A166BE300DEA6F3 /* EncodeWorking5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking5@2x.png"; sourceTree = "<group>"; };
 		A932E26B1988334B0047D13E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AudioDefaults.xib; sourceTree = "<group>"; };
 		A932E26D198833920047D13E /* HBAudioDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaultsController.h; sourceTree = "<group>"; };
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
@@ -676,6 +688,12 @@
 				273F212F14ADCBF80021BE6D /* EncodeWorking3.png */,
 				273F213014ADCBF80021BE6D /* EncodeWorking4.png */,
 				273F213114ADCBF80021BE6D /* EncodeWorking5.png */,
+				A91C02541A166BE300DEA6F3 /* EncodeWorking0@2x.png */,
+				A91C02551A166BE300DEA6F3 /* EncodeWorking1@2x.png */,
+				A91C02561A166BE300DEA6F3 /* EncodeWorking2@2x.png */,
+				A91C02571A166BE300DEA6F3 /* EncodeWorking3@2x.png */,
+				A91C02581A166BE300DEA6F3 /* EncodeWorking4@2x.png */,
+				A91C02591A166BE300DEA6F3 /* EncodeWorking5@2x.png */,
 				273F213414ADCBF80021BE6D /* JobPassFirstSmall.png */,
 				273F213614ADCBF80021BE6D /* JobPassSecondSmall.png */,
 				273F213814ADCBF80021BE6D /* JobPassSubtitleSmall.png */,
@@ -967,6 +985,7 @@
 				A9F2EB6F196F12C800066546 /* Audio.xib in Resources */,
 				273F215114ADCBF80021BE6D /* EncodeCanceled.png in Resources */,
 				273F215314ADCBF80021BE6D /* EncodeWorking0.png in Resources */,
+				A91C025E1A166BE300DEA6F3 /* EncodeWorking4@2x.png in Resources */,
 				273F215414ADCBF80021BE6D /* EncodeWorking1.png in Resources */,
 				273F215514ADCBF80021BE6D /* EncodeWorking2.png in Resources */,
 				273F215614ADCBF80021BE6D /* EncodeWorking3.png in Resources */,
@@ -998,12 +1017,15 @@
 				A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */,
 				A9E1468316BC2AD800C307BC /* prev-p.pdf in Resources */,
 				D2BCB10916F5152C0084604C /* activity.png in Resources */,
+				A91C025D1A166BE300DEA6F3 /* EncodeWorking3@2x.png in Resources */,
 				D2BCB10A16F5152C0084604C /* activity@2x.png in Resources */,
 				D2BCB10B16F5152C0084604C /* addqueue.png in Resources */,
 				D2BCB10C16F5152C0084604C /* addqueue@2x.png in Resources */,
 				D2BCB10D16F5152C0084604C /* advanced.png in Resources */,
 				A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */,
+				A91C025A1A166BE300DEA6F3 /* EncodeWorking0@2x.png in Resources */,
 				D2BCB10E16F5152C0084604C /* advanced@2x.png in Resources */,
+				A91C025B1A166BE300DEA6F3 /* EncodeWorking1@2x.png in Resources */,
 				D2BCB10F16F5152C0084604C /* audio.png in Resources */,
 				D2BCB11016F5152C0084604C /* audio@2x.png in Resources */,
 				D2BCB11116F5152C0084604C /* encode.png in Resources */,
@@ -1017,6 +1039,8 @@
 				D2BCB11616F5152C0084604C /* picturesettings@2x.png in Resources */,
 				D2BCB11716F5152C0084604C /* presets.png in Resources */,
 				D2BCB11816F5152C0084604C /* presets@2x.png in Resources */,
+				A91C025F1A166BE300DEA6F3 /* EncodeWorking5@2x.png in Resources */,
+				A91C025C1A166BE300DEA6F3 /* EncodeWorking2@2x.png in Resources */,
 				A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */,
 				D2BCB11916F5152C0084604C /* preview.png in Resources */,
 				A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */,
