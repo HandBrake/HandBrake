@@ -48,7 +48,6 @@
 		273F214E14ADCBF80021BE6D /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212714ADCBF70021BE6D /* DeleteHighlightPressed.png */; };
 		273F214F14ADCBF80021BE6D /* DeletePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212814ADCBF70021BE6D /* DeletePressed.png */; };
 		273F215114ADCBF80021BE6D /* EncodeCanceled.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212A14ADCBF80021BE6D /* EncodeCanceled.png */; };
-		273F215214ADCBF80021BE6D /* EncodeComplete.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212B14ADCBF80021BE6D /* EncodeComplete.png */; };
 		273F215314ADCBF80021BE6D /* EncodeWorking0.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212C14ADCBF80021BE6D /* EncodeWorking0.png */; };
 		273F215414ADCBF80021BE6D /* EncodeWorking1.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212D14ADCBF80021BE6D /* EncodeWorking1.png */; };
 		273F215514ADCBF80021BE6D /* EncodeWorking2.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212E14ADCBF80021BE6D /* EncodeWorking2.png */; };
@@ -118,6 +117,9 @@
 		46AB433515F98A2B009C0961 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
 		A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */; };
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
+		A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */; };
+		A91C02521A165EA200DEA6F3 /* EncodeComplete.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02501A165EA200DEA6F3 /* EncodeComplete.png */; };
+		A91C02531A165EA200DEA6F3 /* EncodeComplete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */; };
 		A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A932E26A1988334B0047D13E /* AudioDefaults.xib */; };
 		A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E26E198833920047D13E /* HBAudioDefaultsController.m */; };
 		A932E273198834130047D13E /* HBAudioDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E272198834130047D13E /* HBAudioDefaults.m */; };
@@ -270,7 +272,6 @@
 		273F212714ADCBF70021BE6D /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
 		273F212814ADCBF70021BE6D /* DeletePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeletePressed.png; sourceTree = "<group>"; };
 		273F212A14ADCBF80021BE6D /* EncodeCanceled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeCanceled.png; sourceTree = "<group>"; };
-		273F212B14ADCBF80021BE6D /* EncodeComplete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeComplete.png; sourceTree = "<group>"; };
 		273F212C14ADCBF80021BE6D /* EncodeWorking0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking0.png; sourceTree = "<group>"; };
 		273F212D14ADCBF80021BE6D /* EncodeWorking1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking1.png; sourceTree = "<group>"; };
 		273F212E14ADCBF80021BE6D /* EncodeWorking2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking2.png; sourceTree = "<group>"; };
@@ -331,6 +332,9 @@
 		A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBChapterTitlesController.h; sourceTree = "<group>"; };
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
 		A919C7AC199369180049E6A3 /* HBViewValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBViewValidation.h; sourceTree = "<group>"; };
+		A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JobSmall@2x.png"; sourceTree = "<group>"; };
+		A91C02501A165EA200DEA6F3 /* EncodeComplete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeComplete.png; sourceTree = "<group>"; };
+		A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeComplete@2x.png"; sourceTree = "<group>"; };
 		A932E26B1988334B0047D13E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AudioDefaults.xib; sourceTree = "<group>"; };
 		A932E26D198833920047D13E /* HBAudioDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaultsController.h; sourceTree = "<group>"; };
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
@@ -664,7 +668,8 @@
 				273F212714ADCBF70021BE6D /* DeleteHighlightPressed.png */,
 				273F212814ADCBF70021BE6D /* DeletePressed.png */,
 				273F212A14ADCBF80021BE6D /* EncodeCanceled.png */,
-				273F212B14ADCBF80021BE6D /* EncodeComplete.png */,
+				A91C02501A165EA200DEA6F3 /* EncodeComplete.png */,
+				A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */,
 				273F212C14ADCBF80021BE6D /* EncodeWorking0.png */,
 				273F212D14ADCBF80021BE6D /* EncodeWorking1.png */,
 				273F212E14ADCBF80021BE6D /* EncodeWorking2.png */,
@@ -676,6 +681,7 @@
 				273F213814ADCBF80021BE6D /* JobPassSubtitleSmall.png */,
 				273F213914ADCBF80021BE6D /* JobPassUnknownSmall.png */,
 				273F213A14ADCBF80021BE6D /* JobSmall.png */,
+				A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */,
 				273F214014ADCBF80021BE6D /* Reveal.png */,
 				273F214114ADCBF80021BE6D /* RevealHighlight.png */,
 				273F214214ADCBF80021BE6D /* RevealHighlightPressed.png */,
@@ -960,7 +966,6 @@
 				273F214F14ADCBF80021BE6D /* DeletePressed.png in Resources */,
 				A9F2EB6F196F12C800066546 /* Audio.xib in Resources */,
 				273F215114ADCBF80021BE6D /* EncodeCanceled.png in Resources */,
-				273F215214ADCBF80021BE6D /* EncodeComplete.png in Resources */,
 				273F215314ADCBF80021BE6D /* EncodeWorking0.png in Resources */,
 				273F215414ADCBF80021BE6D /* EncodeWorking1.png in Resources */,
 				273F215514ADCBF80021BE6D /* EncodeWorking2.png in Resources */,
@@ -975,6 +980,7 @@
 				273F216114ADCBF80021BE6D /* JobSmall.png in Resources */,
 				273F216714ADCBF80021BE6D /* Reveal.png in Resources */,
 				273F216814ADCBF80021BE6D /* RevealHighlight.png in Resources */,
+				A91C02521A165EA200DEA6F3 /* EncodeComplete.png in Resources */,
 				273F216914ADCBF80021BE6D /* RevealHighlightPressed.png in Resources */,
 				273F216A14ADCBF80021BE6D /* RevealPressed.png in Resources */,
 				273F218A14ADDDA10021BE6D /* AdvancedView.xib in Resources */,
@@ -1003,6 +1009,7 @@
 				D2BCB11116F5152C0084604C /* encode.png in Resources */,
 				D2BCB11216F5152C0084604C /* encode@2x.png in Resources */,
 				D2BCB11316F5152C0084604C /* pauseencode.png in Resources */,
+				A91C02531A165EA200DEA6F3 /* EncodeComplete@2x.png in Resources */,
 				A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */,
 				D2BCB11416F5152C0084604C /* pauseencode@2x.png in Resources */,
 				D2BCB11516F5152C0084604C /* picturesettings.png in Resources */,
@@ -1010,6 +1017,7 @@
 				D2BCB11616F5152C0084604C /* picturesettings@2x.png in Resources */,
 				D2BCB11716F5152C0084604C /* presets.png in Resources */,
 				D2BCB11816F5152C0084604C /* presets@2x.png in Resources */,
+				A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */,
 				D2BCB11916F5152C0084604C /* preview.png in Resources */,
 				A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */,
 				D2BCB11A16F5152C0084604C /* preview@2x.png in Resources */,
