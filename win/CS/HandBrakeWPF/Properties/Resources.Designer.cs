@@ -500,6 +500,25 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to import the selected preset..
+        /// </summary>
+        public static string Main_PresetImportFailed {
+            get {
+                return ResourceManager.GetString("Main_PresetImportFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The preset may be corrupted or from an older version of HandBrake which is not supported. 
+        ///Presets from older versions must be re-created in the current version..
+        /// </summary>
+        public static string Main_PresetImportFailedSolution {
+            get {
+                return ResourceManager.GetString("Main_PresetImportFailedSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This preset appears to already exist. Would you like to overwrite it?.
         /// </summary>
         public static string Main_PresetOverwriteWarning {

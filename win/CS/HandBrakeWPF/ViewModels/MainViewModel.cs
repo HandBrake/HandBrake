@@ -1685,26 +1685,36 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
 
-                Preset preset = PlistPresetFactory.CreatePreset(plist);
-
-                if (this.presetService.CheckIfPresetExists(preset.Name))
+                Preset preset = null;
+                try
                 {
-                    if (!presetService.CanUpdatePreset(preset.Name))
-                    {
-                        MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    MessageBoxResult result =
-                        MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        presetService.Update(preset);
-                    }
+                    preset = PlistPresetFactory.CreatePreset(plist);
                 }
-                else
+                catch (Exception exc)
                 {
-                    presetService.Add(preset);
+                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, exc);
+                }
+
+                if (preset != null)
+                {
+                    if (this.presetService.CheckIfPresetExists(preset.Name))
+                    {
+                        if (!presetService.CanUpdatePreset(preset.Name))
+                        {
+                            MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+
+                        MessageBoxResult result = MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            presetService.Update(preset);
+                        }
+                    }
+                    else
+                    {
+                        presetService.Add(preset);
+                    }
                 }
 
                 this.NotifyOfPropertyChange(() => this.Presets);

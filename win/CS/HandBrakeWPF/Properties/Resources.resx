@@ -536,4 +536,11 @@ Not both at the same time!</value>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
     <value>You can still access the help pages by visiting the website directly at: https://handbrake.fr</value>
   </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>Unable to import the selected preset.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>The preset may be corrupted or from an older version of HandBrake which is not supported. 
+Presets from older versions must be re-created in the current version.</value>
+  </data>
 </root>
