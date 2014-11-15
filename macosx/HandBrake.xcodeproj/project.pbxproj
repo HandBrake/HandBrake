@@ -54,10 +54,6 @@
 		273F215614ADCBF80021BE6D /* EncodeWorking3.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212F14ADCBF80021BE6D /* EncodeWorking3.png */; };
 		273F215714ADCBF80021BE6D /* EncodeWorking4.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F213014ADCBF80021BE6D /* EncodeWorking4.png */; };
 		273F215814ADCBF80021BE6D /* EncodeWorking5.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F213114ADCBF80021BE6D /* EncodeWorking5.png */; };
-		273F215B14ADCBF80021BE6D /* JobPassFirstSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F213414ADCBF80021BE6D /* JobPassFirstSmall.png */; };
-		273F215D14ADCBF80021BE6D /* JobPassSecondSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F213614ADCBF80021BE6D /* JobPassSecondSmall.png */; };
-		273F215F14ADCBF80021BE6D /* JobPassSubtitleSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F213814ADCBF80021BE6D /* JobPassSubtitleSmall.png */; };
-		273F216014ADCBF80021BE6D /* JobPassUnknownSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F213914ADCBF80021BE6D /* JobPassUnknownSmall.png */; };
 		273F216114ADCBF80021BE6D /* JobSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F213A14ADCBF80021BE6D /* JobSmall.png */; };
 		273F216714ADCBF80021BE6D /* Reveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F214014ADCBF80021BE6D /* Reveal.png */; };
 		273F216814ADCBF80021BE6D /* RevealHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F214114ADCBF80021BE6D /* RevealHighlight.png */; };
@@ -126,12 +122,21 @@
 		A91C025D1A166BE300DEA6F3 /* EncodeWorking3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02571A166BE300DEA6F3 /* EncodeWorking3@2x.png */; };
 		A91C025E1A166BE300DEA6F3 /* EncodeWorking4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02581A166BE300DEA6F3 /* EncodeWorking4@2x.png */; };
 		A91C025F1A166BE300DEA6F3 /* EncodeWorking5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02591A166BE300DEA6F3 /* EncodeWorking5@2x.png */; };
+		A9204DC51A16C5AB007CA74C /* Delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9204DC21A16C5AB007CA74C /* Delete@2x.png */; };
+		A9204DC61A16C5AB007CA74C /* DeleteHighlightPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9204DC31A16C5AB007CA74C /* DeleteHighlightPressed@2x.png */; };
+		A9204DC71A16C5AB007CA74C /* DeletePressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9204DC41A16C5AB007CA74C /* DeletePressed@2x.png */; };
+		A9252C041A17343500B8B7F8 /* DeleteHighlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C031A17343500B8B7F8 /* DeleteHighlight@2x.png */; };
+		A9252C091A173D4800B8B7F8 /* Reveal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C051A173D4800B8B7F8 /* Reveal@2x.png */; };
+		A9252C0A1A173D4800B8B7F8 /* RevealHighlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C061A173D4800B8B7F8 /* RevealHighlight@2x.png */; };
+		A9252C0B1A173D4800B8B7F8 /* RevealHighlightPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C071A173D4800B8B7F8 /* RevealHighlightPressed@2x.png */; };
+		A9252C0C1A173D4800B8B7F8 /* RevealPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C081A173D4800B8B7F8 /* RevealPressed@2x.png */; };
 		A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A932E26A1988334B0047D13E /* AudioDefaults.xib */; };
 		A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E26E198833920047D13E /* HBAudioDefaultsController.m */; };
 		A932E273198834130047D13E /* HBAudioDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E272198834130047D13E /* HBAudioDefaults.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
 		A9523937199A6AAE00588AEF /* HBFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = A9523936199A6AAE00588AEF /* HBFilters.m */; };
+		A967E4BA1A16768200DF1DFC /* EncodeCanceled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */; };
 		A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */; };
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
 		A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AA44791970664A00D7DEFC /* HBUtilities.m */; };
@@ -284,10 +289,6 @@
 		273F212F14ADCBF80021BE6D /* EncodeWorking3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking3.png; sourceTree = "<group>"; };
 		273F213014ADCBF80021BE6D /* EncodeWorking4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking4.png; sourceTree = "<group>"; };
 		273F213114ADCBF80021BE6D /* EncodeWorking5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking5.png; sourceTree = "<group>"; };
-		273F213414ADCBF80021BE6D /* JobPassFirstSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassFirstSmall.png; sourceTree = "<group>"; };
-		273F213614ADCBF80021BE6D /* JobPassSecondSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSecondSmall.png; sourceTree = "<group>"; };
-		273F213814ADCBF80021BE6D /* JobPassSubtitleSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSubtitleSmall.png; sourceTree = "<group>"; };
-		273F213914ADCBF80021BE6D /* JobPassUnknownSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassUnknownSmall.png; sourceTree = "<group>"; };
 		273F213A14ADCBF80021BE6D /* JobSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobSmall.png; sourceTree = "<group>"; };
 		273F214014ADCBF80021BE6D /* Reveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Reveal.png; sourceTree = "<group>"; };
 		273F214114ADCBF80021BE6D /* RevealHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealHighlight.png; sourceTree = "<group>"; };
@@ -347,6 +348,14 @@
 		A91C02571A166BE300DEA6F3 /* EncodeWorking3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking3@2x.png"; sourceTree = "<group>"; };
 		A91C02581A166BE300DEA6F3 /* EncodeWorking4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking4@2x.png"; sourceTree = "<group>"; };
 		A91C02591A166BE300DEA6F3 /* EncodeWorking5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeWorking5@2x.png"; sourceTree = "<group>"; };
+		A9204DC21A16C5AB007CA74C /* Delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Delete@2x.png"; sourceTree = "<group>"; };
+		A9204DC31A16C5AB007CA74C /* DeleteHighlightPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DeleteHighlightPressed@2x.png"; sourceTree = "<group>"; };
+		A9204DC41A16C5AB007CA74C /* DeletePressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DeletePressed@2x.png"; sourceTree = "<group>"; };
+		A9252C031A17343500B8B7F8 /* DeleteHighlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DeleteHighlight@2x.png"; sourceTree = "<group>"; };
+		A9252C051A173D4800B8B7F8 /* Reveal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Reveal@2x.png"; sourceTree = "<group>"; };
+		A9252C061A173D4800B8B7F8 /* RevealHighlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RevealHighlight@2x.png"; sourceTree = "<group>"; };
+		A9252C071A173D4800B8B7F8 /* RevealHighlightPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RevealHighlightPressed@2x.png"; sourceTree = "<group>"; };
+		A9252C081A173D4800B8B7F8 /* RevealPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RevealPressed@2x.png"; sourceTree = "<group>"; };
 		A932E26B1988334B0047D13E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AudioDefaults.xib; sourceTree = "<group>"; };
 		A932E26D198833920047D13E /* HBAudioDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaultsController.h; sourceTree = "<group>"; };
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
@@ -357,6 +366,7 @@
 		A93E0ED61972958C00FD67FB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Video.xib; sourceTree = "<group>"; };
 		A9523935199A6AAE00588AEF /* HBFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFilters.h; sourceTree = "<group>"; };
 		A9523936199A6AAE00588AEF /* HBFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFilters.m; sourceTree = "<group>"; };
+		A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeCanceled@2x.png"; sourceTree = "<group>"; };
 		A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBLanguagesSelection.h; sourceTree = "<group>"; };
 		A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBLanguagesSelection.m; sourceTree = "<group>"; };
 		A9935212196F38A70069C6B7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ChaptersTitles.xib; sourceTree = "<group>"; };
@@ -675,11 +685,16 @@
 				A9E1467D16BC2AD800C307BC /* pause-p.pdf */,
 				A9E1467E16BC2AD800C307BC /* play-p.pdf */,
 				A9E1467F16BC2AD800C307BC /* prev-p.pdf */,
+				A9204DC21A16C5AB007CA74C /* Delete@2x.png */,
+				A9252C031A17343500B8B7F8 /* DeleteHighlight@2x.png */,
+				A9204DC31A16C5AB007CA74C /* DeleteHighlightPressed@2x.png */,
+				A9204DC41A16C5AB007CA74C /* DeletePressed@2x.png */,
 				273F212514ADCBF70021BE6D /* Delete.png */,
 				273F212614ADCBF70021BE6D /* DeleteHighlight.png */,
 				273F212714ADCBF70021BE6D /* DeleteHighlightPressed.png */,
 				273F212814ADCBF70021BE6D /* DeletePressed.png */,
 				273F212A14ADCBF80021BE6D /* EncodeCanceled.png */,
+				A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */,
 				A91C02501A165EA200DEA6F3 /* EncodeComplete.png */,
 				A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */,
 				273F212C14ADCBF80021BE6D /* EncodeWorking0.png */,
@@ -694,12 +709,12 @@
 				A91C02571A166BE300DEA6F3 /* EncodeWorking3@2x.png */,
 				A91C02581A166BE300DEA6F3 /* EncodeWorking4@2x.png */,
 				A91C02591A166BE300DEA6F3 /* EncodeWorking5@2x.png */,
-				273F213414ADCBF80021BE6D /* JobPassFirstSmall.png */,
-				273F213614ADCBF80021BE6D /* JobPassSecondSmall.png */,
-				273F213814ADCBF80021BE6D /* JobPassSubtitleSmall.png */,
-				273F213914ADCBF80021BE6D /* JobPassUnknownSmall.png */,
 				273F213A14ADCBF80021BE6D /* JobSmall.png */,
 				A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */,
+				A9252C051A173D4800B8B7F8 /* Reveal@2x.png */,
+				A9252C061A173D4800B8B7F8 /* RevealHighlight@2x.png */,
+				A9252C071A173D4800B8B7F8 /* RevealHighlightPressed@2x.png */,
+				A9252C081A173D4800B8B7F8 /* RevealPressed@2x.png */,
 				273F214014ADCBF80021BE6D /* Reveal.png */,
 				273F214114ADCBF80021BE6D /* RevealHighlight.png */,
 				273F214214ADCBF80021BE6D /* RevealHighlightPressed.png */,
@@ -991,11 +1006,7 @@
 				273F215614ADCBF80021BE6D /* EncodeWorking3.png in Resources */,
 				273F215714ADCBF80021BE6D /* EncodeWorking4.png in Resources */,
 				273F215814ADCBF80021BE6D /* EncodeWorking5.png in Resources */,
-				273F215B14ADCBF80021BE6D /* JobPassFirstSmall.png in Resources */,
-				273F215D14ADCBF80021BE6D /* JobPassSecondSmall.png in Resources */,
-				273F215F14ADCBF80021BE6D /* JobPassSubtitleSmall.png in Resources */,
 				A9CF25F11990D62C0023F727 /* Presets.xib in Resources */,
-				273F216014ADCBF80021BE6D /* JobPassUnknownSmall.png in Resources */,
 				273F216114ADCBF80021BE6D /* JobSmall.png in Resources */,
 				273F216714ADCBF80021BE6D /* Reveal.png in Resources */,
 				273F216814ADCBF80021BE6D /* RevealHighlight.png in Resources */,
@@ -1004,6 +1015,9 @@
 				273F216A14ADCBF80021BE6D /* RevealPressed.png in Resources */,
 				273F218A14ADDDA10021BE6D /* AdvancedView.xib in Resources */,
 				273F218B14ADDDA10021BE6D /* InfoPlist.strings in Resources */,
+				A967E4BA1A16768200DF1DFC /* EncodeCanceled@2x.png in Resources */,
+				A9252C091A173D4800B8B7F8 /* Reveal@2x.png in Resources */,
+				A9204DC61A16C5AB007CA74C /* DeleteHighlightPressed@2x.png in Resources */,
 				A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */,
 				273F218C14ADDDA10021BE6D /* MainMenu.xib in Resources */,
 				273F218D14ADDDA10021BE6D /* OutputPanel.xib in Resources */,
@@ -1022,6 +1036,7 @@
 				D2BCB10B16F5152C0084604C /* addqueue.png in Resources */,
 				D2BCB10C16F5152C0084604C /* addqueue@2x.png in Resources */,
 				D2BCB10D16F5152C0084604C /* advanced.png in Resources */,
+				A9204DC51A16C5AB007CA74C /* Delete@2x.png in Resources */,
 				A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */,
 				A91C025A1A166BE300DEA6F3 /* EncodeWorking0@2x.png in Resources */,
 				D2BCB10E16F5152C0084604C /* advanced@2x.png in Resources */,
@@ -1034,10 +1049,14 @@
 				A91C02531A165EA200DEA6F3 /* EncodeComplete@2x.png in Resources */,
 				A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */,
 				D2BCB11416F5152C0084604C /* pauseencode@2x.png in Resources */,
+				A9252C0A1A173D4800B8B7F8 /* RevealHighlight@2x.png in Resources */,
 				D2BCB11516F5152C0084604C /* picturesettings.png in Resources */,
 				A93E0ED71972958C00FD67FB /* Video.xib in Resources */,
+				A9252C0B1A173D4800B8B7F8 /* RevealHighlightPressed@2x.png in Resources */,
 				D2BCB11616F5152C0084604C /* picturesettings@2x.png in Resources */,
 				D2BCB11716F5152C0084604C /* presets.png in Resources */,
+				A9252C0C1A173D4800B8B7F8 /* RevealPressed@2x.png in Resources */,
+				A9204DC71A16C5AB007CA74C /* DeletePressed@2x.png in Resources */,
 				D2BCB11816F5152C0084604C /* presets@2x.png in Resources */,
 				A91C025F1A166BE300DEA6F3 /* EncodeWorking5@2x.png in Resources */,
 				A91C025C1A166BE300DEA6F3 /* EncodeWorking2@2x.png in Resources */,
@@ -1052,6 +1071,7 @@
 				D2BCB12616F5154E0084604C /* source.png in Resources */,
 				D2BCB12716F5154E0084604C /* source@2x.png in Resources */,
 				D2BCB12816F5154E0084604C /* stopencode.png in Resources */,
+				A9252C041A17343500B8B7F8 /* DeleteHighlight@2x.png in Resources */,
 				D2BCB12916F5154E0084604C /* stopencode@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
