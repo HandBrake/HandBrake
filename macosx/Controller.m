@@ -4189,7 +4189,7 @@ fWorkingCount = 0;
                                      defaultButton:@"Cancel"
                                    alternateButton:@"Yes, I want to add all titles to the queue"
                                        otherButton:nil
-                         informativeTextWithFormat:@"Current settings will be applied to all %ld titles. Are you sure you want to do this?", (long)[fSrcTitlePopUp numberOfItems]];
+                         informativeTextWithFormat:@"Current preset will be applied to all %ld titles. Are you sure you want to do this?", (long)[fSrcTitlePopUp numberOfItems]];
     [alert setAlertStyle:NSCriticalAlertStyle];
 
     [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( addAllTitlesToQueueAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
