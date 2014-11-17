@@ -523,11 +523,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     }
     else if (data->batch)
     {
-        stream = hb_stream_open( title->path, title, 1 );
+        stream = hb_stream_open( title->path, title, 0 );
     }
     else if (data->stream)
     {
-        stream = hb_stream_open( data->path, title, 1 );
+        stream = hb_stream_open( data->path, title, 0 );
     }
 
     if (title->video_codec == WORK_NONE)
