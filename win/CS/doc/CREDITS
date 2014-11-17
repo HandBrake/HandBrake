@@ -5,29 +5,27 @@ HandBrake uses many cool libraries from the GNU/Linux world.
 Thanks to the authors of the following libraries which help power HandBrake:
 See the local project AUTHORS files for details of the individuals involved.
 
-liba52
 libbzip2
-libfaac
-libfaad2
 libavcodec
 libfontconfig
 libfreetype
 liblame
 libass
 libbluray
-libdca
 libdvdnav
 libdvdread
 libiconv
-libmkv
 libogg
 libsamplerate
 libtheora
 libvorbis
 libxml2
-libmp4v2
 libmpeg2dec
 libpthreadsw32
 libx264
+libx265
 libzlib
 fdk-aac
+libmfx
+libvpx
+libgnurx

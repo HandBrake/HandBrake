@@ -3,7 +3,7 @@ NEWS file for HandBrake <http://handbrake.fr/>
 Changes between 0.9.9 and 0.10
 
   Core
-    - Intel QuickSync Video Encode / Decode support.
+    - Intel QuickSync Video Encode / Decode support. (Beta)
         Windows only currently. We hope to bring this to Linux user in the future.
     - DXVA Hardware Decode support (Experimental)
         Windows Only.
@@ -22,7 +22,7 @@ Changes between 0.9.9 and 0.10
     - Presets
         Added Windows Phone 8 Preset
     - Updated Libraries
-        x264 r2431-ac76440
+        x264 r2479-dd79a61
         Libav v10.1
         libbluray 0.5.0
     - Libavformat is now used for muxing instead of mp4v2 and libmkv
@@ -33,7 +33,7 @@ Changes between 0.9.9 and 0.10
             This FDK option is a temporary measure until the LibAV encoder improves.
             Note that FDK-AAC is much slower and will likely bottleneck the encode process, but will produce better quality audio.
     - H.265 encoder
-        Using x265 v1.3
+        Using x265 v1.4
         This encoder is still early in it's development, so is missing many H.265 features and optimisations.
     - Added VP8 Encoder (using libvpx)
         Available in MKV files only.
@@ -65,7 +65,7 @@ Changes between 0.9.9 and 0.10
     - The 32bit build of the application is now considered deprecated. This is due to 32bit process memory limitations.
 
   Mac
-    - Build system updates to compiled under OS X 10.9
+    - Build system updates to compiled under OS X 10.9 / 10.10
     - Automatic audio and subtitle track selection behaviours which can be stored per preset.
     - Improvements to Auto-Naming feature.
     - Misc UI enhancements.

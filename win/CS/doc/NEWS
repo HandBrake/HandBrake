@@ -1,7 +1,91 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+Changes between 0.9.9 and 0.10
 
-Changes betwen 0.9.8 and 0.9.9:
+  Core
+    - Intel QuickSync Video Encode / Decode support. (Beta)
+        Windows only currently. We hope to bring this to Linux user in the future.
+    - DXVA Hardware Decode support (Experimental)
+        Windows Only.
+        Suitable only for slower machines so disabled in preferences by default.
+    - Choice of Scalers
+        Lanczos
+            HandBrakes? default scaler.
+        Bicubic (OpenCL) (Experimental)
+            Available on the Command Line (All Platforms) and Windows GUI. (Mac / Linux GUI's will come in a later release)
+            Currently only available in OpenCL form so requires a AMD or Intel GPU supporting OpenCL 1.1 or later. Nvidia GPU's are not currently supported.
+            When downscaling, up to 5% performance improvement can be achieved. No benefit when not downscaling.
+            Small loss in quality over the Lanczos scaler.
+    -   Denoise
+        hqdn3d filter now accepts individual settings for both chroma channels (Cr, Cb)
+        New NlMeans? denoiser. This is very slow, but results are significantly better than hqdn3d.
+    - Presets
+        Added Windows Phone 8 Preset
+    - Updated Libraries
+        x264 r2479-dd79a61
+        Libav v10.1
+        libbluray 0.5.0
+    - Libavformat is now used for muxing instead of mp4v2 and libmkv
+        "Large File Size" checkbox has now bee removed for mp4, as the new muxer will transition to 64bit files automatically.
+        mpeg2dec has also been replaced in favour of using libav
+    - The LibAV AAC encoder is now the default as FAAC has been removed.
+        This encoder is adequate for most, but until it improves a bit further, we have enabled support for the FDK-AAC encoder also.
+            This FDK option is a temporary measure until the LibAV encoder improves.
+            Note that FDK-AAC is much slower and will likely bottleneck the encode process, but will produce better quality audio.
+    - H.265 encoder
+        Using x265 v1.4
+        This encoder is still early in it's development, so is missing many H.265 features and optimisations.
+    - Added VP8 Encoder (using libvpx)
+        Available in MKV files only.
+    - Removed mcdeint deinterlace and decomb modes. This relied on the snow encoder in libav which has been was removed by upstream.
+    - Bug fixes and Misc Improvements
+
+  Windows
+    - Accessibility / Usability Improvements
+        Added option to 'Use System Colors'. The app should now be usable in a High Contrast mode.
+        Fixed Tab ordering to make the app more keyboard friendly.
+    - LibHB is now used for scanning instead of the CLI.
+        Experiential Preview window is now available as a result. (Can be enabled via preferences)
+    - Improved the layout and design of the Audio and Subtitle tabs.
+        Split buttons similar to the old 0.9.8 WinForms? GUI
+        Improved layout on the track listbox to make better use of the space.
+    - Improvements to Auto-Naming feature.
+    - When Done
+        Added an option that will reset this to 'Do nothing' when the app is closed and restarted.
+    - Presets
+        New 'Presets' Menu
+        Presets bar can now be hidden if it's not wanted.
+    - Numerous bug fixes
+        Fixed the Issue in the source dropdown where the drive menu items did not work when clicked.
+        Numerous fixes in the Picture settings panel around resolution calculation.
+        Numerous fixes around the way Presets are loaded and saved, particularly around Picture settings.
+        Removed Growl for Windows support due to bugs and issues with this library that remain unfixed. Project appears abandoned.
+        Many misc other fixes.
+    - Windows XP is no longer supported. Windows Vista with Service Pack 2 or later is now a requirement.
+    - The 32bit build of the application is now considered deprecated. This is due to 32bit process memory limitations.
+
+  Mac
+    - Build system updates to compiled under OS X 10.9 / 10.10
+    - Automatic audio and subtitle track selection behaviours which can be stored per preset.
+    - Improvements to Auto-Naming feature.
+    - Misc UI enhancements.
+    - Bug fixes and Misc Improvements
+    
+  Linux
+    - Automatic audio and subtitle track selection behaviours which can be stored per preset.
+    - Improvements to Auto-Naming feature.
+    - Batch Add to queue by list selection.
+    - Russian and Czech Translations
+    - Bug fixes and Misc Improvements
+    - Requires GTK3
+
+  Command Line Interface
+    - Basic support for return codes from the CLI. (0 = No Error, 1 = Cancelled, 2 = Invalid Input, 3 = Initialization error, 4 = Unknown Error")
+    - Bug fixes and Misc Improvements
+
+    
+    
+Changes between 0.9.8 and 0.9.9:
 
     General
      - Improved HandBrake pineapple icon by Matt Johnson
