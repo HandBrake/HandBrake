@@ -385,7 +385,7 @@ static char * get_gain_string(gdouble gain)
     if ( gain >= 21.0 )
         s_gain = g_strdup_printf("*11*");
     else
-        s_gain = g_strdup_printf("%ddB", (int)gain);
+        s_gain = g_strdup_printf(_("%ddB"), (int)gain);
     return s_gain;
 }
 
@@ -836,12 +836,12 @@ audio_refresh_list_row_ui(
     {
         sr = aconfig->in.samplerate;
     }
-    s_sr = g_strdup_printf("%.4gkHz", (double)sr/1000);
+    s_sr = g_strdup_printf(_("%.4gkHz"), (double)sr/1000);
 
     const hb_mixdown_t *mix;
     mix = ghb_settings_mixdown(settings, "AudioMixdown");
     gain = ghb_settings_get_double(settings, "AudioTrackGainSlider");
-    s_gain = g_strdup_printf("%ddB", (int)gain);
+    s_gain = g_strdup_printf(_("%ddB"), (int)gain);
 
     drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
     if (drc < 1.0)
@@ -851,7 +851,7 @@ audio_refresh_list_row_ui(
 
     s_track_name = ghb_settings_get_string(settings, "AudioTrackName");
 
-    info_src = g_strdup_printf("<small>%d - %s (%.4gkHz)</small>",
+    info_src = g_strdup_printf(_("<small>%d - %s (%.4gkHz)</small>"),
         track + 1, s_track, (double)aconfig->in.samplerate / 1000);
     if (aconfig->in.bitrate > 0)
     {
@@ -1278,7 +1278,7 @@ format_gain_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
     if ( val >= 21.0 )
         return g_strdup_printf("*11*");
-    return g_strdup_printf("%ddB", (int)val);
+    return g_strdup_printf(_("%ddB"), (int)val);
 }
 
 G_MODULE_EXPORT void
@@ -1956,7 +1956,7 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     gtk_box_pack_start(box3, GTK_WIDGET(scale), FALSE, FALSE, 0);
 
     // Audio Gain Label
-    label = GTK_LABEL(gtk_label_new("0dB"));
+    label = GTK_LABEL(gtk_label_new(_("0dB")));
     gtk_label_set_width_chars(label, 6);
     gtk_widget_set_halign(GTK_WIDGET(label), GTK_ALIGN_START);
     gtk_widget_set_valign(GTK_WIDGET(label), GTK_ALIGN_CENTER);

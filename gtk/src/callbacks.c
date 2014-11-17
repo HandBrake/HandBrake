@@ -1771,7 +1771,7 @@ ghb_update_title_info(signal_user_data_t *ud)
     if ( title->video_codec_name )
         gtk_label_set_text (GTK_LABEL(widget), title->video_codec_name);
     else
-        gtk_label_set_text (GTK_LABEL(widget), "Unknown");
+        gtk_label_set_text (GTK_LABEL(widget), _("Unknown"));
 
     widget = GHB_WIDGET (ud->builder, "source_dimensions");
     text = g_strdup_printf ("%d x %d", title->width, title->height);

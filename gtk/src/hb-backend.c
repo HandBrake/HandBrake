@@ -1846,7 +1846,7 @@ ghb_create_title_label(const hb_title_t *title)
         if (title->duration != 0)
         {
             char *tmp;
-            tmp  = g_strdup_printf ("%d - %02dh%02dm%02ds - %s",
+            tmp  = g_strdup_printf (_("%d - %02dh%02dm%02ds - %s"),
                 title->index, title->hours, title->minutes, title->seconds,
                 title->name);
             label = g_markup_escape_text(tmp, -1);
@@ -1865,7 +1865,7 @@ ghb_create_title_label(const hb_title_t *title)
     {
         if (title->duration != 0)
         {
-            label = g_strdup_printf("%d (%05d.MPLS) - %02dh%02dm%02ds",
+            label = g_strdup_printf(_("%d (%05d.MPLS) - %02dh%02dm%02ds"),
                 title->index, title->playlist, title->hours,
                 title->minutes, title->seconds);
         }
@@ -1879,7 +1879,7 @@ ghb_create_title_label(const hb_title_t *title)
     {
         if (title->duration != 0)
         {
-            label  = g_strdup_printf("%d - %02dh%02dm%02ds",
+            label  = g_strdup_printf(_("%d - %02dh%02dm%02ds"),
                 title->index, title->hours, title->minutes, title->seconds);
         }
         else
@@ -2899,7 +2899,7 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
     custom_audio_bitrate.rate = rate;
     if (rate < 0)
     {
-        snprintf(custom_audio_bitrate_str, 8, "N/A");
+        snprintf(custom_audio_bitrate_str, 8, _("N/A"));
     }
     else
     {
@@ -3983,7 +3983,7 @@ ghb_validate_subtitles(GValue *settings)
     if (title == NULL)
     {
         /* No valid title, stop right there */
-        g_message("No title found.\n");
+        g_message(_("No title found.\n"));
         return FALSE;
     }
 
@@ -4055,7 +4055,7 @@ ghb_validate_audio(GValue *settings)
     if (title == NULL)
     {
         /* No valid title, stop right there */
-        g_message("No title found.\n");
+        g_message(_("No title found.\n"));
         return FALSE;
     }
 

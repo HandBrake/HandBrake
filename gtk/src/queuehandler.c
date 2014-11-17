@@ -110,17 +110,17 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     if (!vqtype && two_pass)
     {
-        XPRINT("<big><b>%s</b></big> "
+        XPRINT(_("<big><b>%s</b></big> "
                 "<small>(Title %d, %s %d through %d, 2 Video Passes)"
-                " --> %s</small>",
+                " --> %s</small>"),
                 escape2, title, points, start_point, end_point, escape
         );
     }
     else
     {
-        XPRINT("<big><b>%s</b></big> "
+        XPRINT(_("<big><b>%s</b></big> "
                 "<small>(Title %d, %s %d through %d)"
-                " --> %s</small>",
+                " --> %s</small>"),
                 escape2, title, points, start_point, end_point, escape
         );
     }
@@ -183,17 +183,17 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     if (preset_modified)
     {
-        XPRINT("<b>Modified Preset Based On:</b> <small>%s</small>\n", preset);
+        XPRINT(_("<b>Modified Preset Based On:</b> <small>%s</small>\n"), preset);
     }
     else
     {
-        XPRINT("<b>Preset:</b> <small>%s</small>\n", preset);
+        XPRINT(_("<b>Preset:</b> <small>%s</small>\n"), preset);
     }
     g_free(preset);
 
     // Next line in the display (Container type)
     // Format: XXX Container
-    XPRINT("<b>Format:</b> <small>%s Container</small>\n", mux->name);
+    XPRINT(_("<b>Format:</b> <small>%s Container</small>\n"), mux->name);
 
     // Next line in the display (Container options)
     // Container Options: - Chapter Markers
@@ -207,25 +207,25 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     if (http || ipod || large || markers)
     {
         const char *prefix = " ";
-        XPRINT("<b>Container Options:</b><small>");
+        XPRINT(_("<b>Container Options:</b><small>"));
         if (markers)
         {
-            XPRINT("%sChapter Markers", prefix);
+            XPRINT(_("%sChapter Markers"), prefix);
             prefix = " - ";
         }
         if (ipod)
         {
-            XPRINT("%siPod 5G Support", prefix);
+            XPRINT(_("%siPod 5G Support"), prefix);
             prefix = " - ";
         }
         if (http)
         {
-            XPRINT("%sWeb Optimized", prefix);
+            XPRINT(_("%sWeb Optimized"), prefix);
             prefix = " - ";
         }
         if (large)
         {
-            XPRINT("%sLarge File Size (>4GB)", prefix);
+            XPRINT(_("%sLarge File Size (>4GB)"), prefix);
             prefix = " - ";
         }
         XPRINT("</small>\n");
@@ -234,7 +234,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     // Next line in the display (Destination)
     // Destination: /Full/Destination/Path.mkv
     escape = g_markup_escape_text(dest, -1);
-    XPRINT("<b>Destination:</b> <small>%s</small>\n", escape);
+    XPRINT(_("<b>Destination:</b> <small>%s</small>\n"), escape);
     g_free(escape);
 
     // Next line in the display (Picture settings)
@@ -259,27 +259,27 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     {
         if (keep_aspect)
         {
-            aspect_desc = "(Aspect Preserved)";
+            aspect_desc = _("(Aspect Preserved)");
         }
         else
         {
-            aspect_desc = "(Aspect Lost)";
+            aspect_desc = _("(Aspect Lost)");
         }
     } break;
 
     case 1:
     {
-        aspect_desc = "(Anamorphic)";
+        aspect_desc = _("(Anamorphic)");
     } break;
 
     case 2:
     {
-        aspect_desc = "(Anamorphic)";
+        aspect_desc = _("(Anamorphic)");
     } break;
 
     case 3:
     {
-        aspect_desc = "(Custom Anamorphic)";
+        aspect_desc = _("(Custom Anamorphic)");
     } break;
 
     default:
@@ -291,8 +291,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     gint source_width, source_height;
     source_width = ghb_settings_get_int(settings, "source_width");
     source_height = ghb_settings_get_int(settings, "source_height");
-    XPRINT("<b>Picture:</b> <small>");
-    XPRINT("Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d",
+    XPRINT(_("<b>Picture:</b> <small>"));
+    XPRINT(_("Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"),
            source_width, source_height, width, height, aspect_desc,
            crop[0], crop[1], crop[2], crop[3]);
     if (pic_par)
@@ -300,7 +300,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         int display_width, display_height;
         display_width = ghb_settings_get_int(settings, "PictureDisplayWidth");
         display_height = ghb_settings_get_int(settings, "PictureDisplayHeight");
-        XPRINT(", Display %d x %d",
+        XPRINT(_(", Display %d x %d"),
                 display_width, display_height);
     }
     XPRINT("</small>\n");
@@ -341,10 +341,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     if (filters)
     {
         const char *prefix = " ";
-        XPRINT("<b>Filters:</b><small>");
+        XPRINT(_("<b>Filters:</b><small>"));
         if (detel)
         {
-            XPRINT("%sDetelecine", prefix);
+            XPRINT(_("%sDetelecine"), prefix);
             if (detel == 1)
             {
                 XPRINT(": %s", detel_cust);
@@ -353,7 +353,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         if (decomb_deint && decomb)
         {
-            XPRINT("%sDecomb", prefix);
+            XPRINT(_("%sDecomb"), prefix);
             if (decomb == 1)
             {
                 XPRINT(": %s", decomb_cust);
@@ -366,7 +366,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         else if (!decomb_deint && deint)
         {
-            XPRINT("%sDeinterlace", prefix);
+            XPRINT(_("%sDeinterlace"), prefix);
             if (deint == 1)
             {
                 XPRINT(": %s", deint_cust);
@@ -379,7 +379,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         if (denoise)
         {
-            XPRINT("%sDenoise Filter %s:", prefix, denoise_opt);
+            XPRINT(_("%sDenoise Filter %s:"), prefix, denoise_opt);
             if (ghb_settings_combo_int(settings, "PictureDenoisePreset") == 1)
             {
                 XPRINT(" %s", denoise_cust);
@@ -396,12 +396,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         }
         if (deblock >= 5)
         {
-            XPRINT("%sDeblock: %d", prefix, deblock);
+            XPRINT(_("%sDeblock: %d"), prefix, deblock);
             prefix = " - ";
         }
         if (grayscale)
         {
-            XPRINT("%sGrayscale", prefix);
+            XPRINT(_("%sGrayscale"), prefix);
             prefix = " - ";
         }
         XPRINT("</small>\n");
@@ -412,7 +412,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     const hb_encoder_t *video_encoder;
     video_encoder = ghb_settings_video_encoder(settings, "VideoEncoder");
 
-    XPRINT("<b>Video:</b> <small>%s", video_encoder->name);
+    XPRINT(_("<b>Video:</b> <small>%s"), video_encoder->name);
 
     const hb_rate_t *fps;
     fps = ghb_settings_video_framerate(settings, "VideoFramerate");
@@ -420,31 +420,31 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     {
         const char *rate_mode;
         if (ghb_settings_get_boolean(settings, "VideoFramerateCFR"))
-            rate_mode = "(constant)";
+            rate_mode = _("(constant)");
         else
-            rate_mode = "(variable)";
-        XPRINT(", Framerate: %s %s", fps->name, rate_mode);
+            rate_mode = _("(variable)");
+        XPRINT(_(", Framerate: %s %s"), fps->name, rate_mode);
     }
     else
     {
         if (ghb_settings_get_boolean(settings, "VideoFrameratePFR"))
         {
-            XPRINT(", Framerate: Peak %s (may be lower)", fps->name);
+            XPRINT(_(", Framerate: Peak %s (may be lower)"), fps->name);
         }
         else
         {
-            XPRINT(", Framerate: %s (constant frame rate)", fps->name);
+            XPRINT(_(", Framerate: %s (constant frame rate)"), fps->name);
         }
     }
-    const gchar *vq_desc = "Error";
+    const gchar *vq_desc = _("Error");
     const gchar *vq_units = "";
     gdouble vqvalue;
     if (!vqtype)
     {
         // Has to be bitrate
         vqvalue = ghb_settings_get_int(settings, "VideoAvgBitrate");
-        vq_desc = "Bitrate:";
-        vq_units = "kbps";
+        vq_desc = _("Bitrate:");
+        vq_units = _("kbps");
         XPRINT(", %s %d%s",
                vq_desc, (int)vqvalue, vq_units);
     }
@@ -452,7 +452,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     {
         // Constant quality
         vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
-        vq_desc = "Constant Quality:";
+        vq_desc = _("Constant Quality:");
         vq_units = hb_video_quality_get_name(video_encoder->codec);
         XPRINT(", %s %.4g(%s)",
                vq_desc, vqvalue, vq_units);
@@ -464,7 +464,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     turbo = ghb_settings_get_boolean(settings, "VideoTurboTwoPass");
     if (!vqtype && two_pass && turbo)
     {
-        XPRINT("<b>Turbo 1st Pass:</b> <small>On</small>\n");
+        XPRINT(_("<b>Turbo 1st Pass:</b> <small>On</small>\n"));
     }
 
     // Next line in the display (Video Encoder Options)
@@ -489,11 +489,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             level_opt = ghb_settings_get_const_string(settings, "VideoLevel");
             extra_opt = ghb_settings_get_const_string(settings, "VideoOptionExtra");
 
-            XPRINT("<b>Video Options:</b> <small>Preset: %s</small>", preset_opt);
+            XPRINT(_("<b>Video Options:</b> <small>Preset: %s</small>"), preset_opt);
             if ((tune_opt != NULL && tune_opt[0] != 0) || zerolatency || fastdecode)
             {
                 const char *prefix = "";
-                XPRINT("<small> - Tune: ");
+                XPRINT(_("<small> - Tune: "));
                 if (tune_opt != NULL && tune_opt[0] != 0)
                 {
                     XPRINT("%s%s", prefix, tune_opt);
@@ -516,11 +516,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             }
             if (profile_opt != NULL && profile_opt[0] != 0)
             {
-                XPRINT("<small> - Profile: %s</small>", profile_opt);
+                XPRINT(_("<small> - Profile: %s</small>"), profile_opt);
             }
             if (level_opt != NULL && level_opt[0] != 0)
             {
-                XPRINT("<small> - Level: %s</small>", level_opt);
+                XPRINT(_("<small> - Level: %s</small>"), level_opt);
             }
             XPRINT("\n");
         }
@@ -529,7 +529,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         // Video Advanced Options: detailed settings
         if (extra_opt != NULL && extra_opt[0] != 0)
         {
-            XPRINT("<b>Advanced Options:</b> <small>%s</small>\n", extra_opt);
+            XPRINT(_("<b>Advanced Options:</b> <small>%s</small>\n"), extra_opt);
         }
     }
     else if (video_encoder->codec == HB_VCODEC_X264)
@@ -539,7 +539,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         gchar *opts = ghb_build_advanced_opts_string(settings);
         if (opts != NULL && opts[0] != 0)
         {
-            XPRINT("<b>Advanced Options:</b> <small>%s</small>\n", opts);
+            XPRINT(_("<b>Advanced Options:</b> <small>%s</small>\n"), opts);
         }
         g_free(opts);
     }
@@ -555,11 +555,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     count = ghb_array_len(audio_list);
     if (count == 1)
     {
-        XPRINT("<b>Audio:</b> <small>");
+        XPRINT(_("<b>Audio:</b> <small>"));
     }
     else if (count > 1)
     {
-        XPRINT("<b>Audio Tracks: %d</b><small>", count);
+        XPRINT(_("<b>Audio Tracks: %d</b><small>"), count);
     }
     for (ii = 0; ii < count; ii++)
     {
@@ -574,12 +574,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
             q != HB_INVALID_AUDIO_QUALITY)
         {
-            quality = ghb_format_quality("Quality: ", audio_encoder->codec, q);
+            quality = ghb_format_quality(_("Quality: "), audio_encoder->codec, q);
         }
         else
         {
             int br = ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
-            quality = g_strdup_printf("Bitrate: %d", br);
+            quality = g_strdup_printf(_("Bitrate: %d"), br);
         }
         const hb_rate_t *sr;
         sr = ghb_settings_audio_samplerate(asettings, "AudioSamplerate");
@@ -591,11 +591,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
         if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
         {
-            XPRINT("%s --> Encoder: %s", track, audio_encoder->name);
+            XPRINT(_("%s --> Encoder: %s"), track, audio_encoder->name);
         }
         else
         {
-            XPRINT("%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s",
+            XPRINT(_("%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"),
              track, audio_encoder->name, mix->name, sr->name, quality);
         }
         g_free(track);
@@ -616,11 +616,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     count = ghb_array_len(sub_list);
     if (count == 1)
     {
-        XPRINT("<b>Subtitle:</b> ");
+        XPRINT(_("<b>Subtitle:</b> "));
     }
     else if (count > 1)
     {
-        XPRINT("<b>Subtitle Tracks: %d</b>\n", count);
+        XPRINT(_("<b>Subtitle Tracks: %d</b>\n"), count);
     }
     for (ii = 0; ii < count; ii++)
     {
@@ -641,9 +641,9 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         if (source != SRTSUB)
         {
             XPRINT("<small>%s%s%s%s</small>\n", track,
-                    force ? " (Force)":"",
-                    burn  ? " (Burn)":"",
-                    def   ? " (Default)":""
+                    force ? _(" (Force)"):"",
+                    burn  ? _(" (Burn)"):"",
+                    def   ? _(" (Default)"):""
             );
         }
         else
@@ -656,7 +656,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
             basename = g_path_get_basename(filename);
             code = ghb_settings_get_string(settings, "SrtCodeset");
 
-            XPRINT("<small> %s (%s), %s, Offset (ms) %d%s</small>\n",
+            XPRINT(_("<small> %s (%s), %s, Offset (ms) %d%s</small>\n"),
                 track, code, basename, offset, def   ? " (Default)":"");
 
             g_free(filename);
@@ -1359,7 +1359,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     // Select checkbox
     selected = GTK_CHECK_BUTTON(gtk_check_button_new());
     gtk_widget_set_tooltip_markup(GTK_WIDGET(selected),
-      "Select this title for adding to the queue.\n");
+      _("Select this title for adding to the queue.\n"));
     gtk_widget_set_valign(GTK_WIDGET(selected), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(selected), "title_selected");
     gtk_widget_show(GTK_WIDGET(selected));
@@ -1367,7 +1367,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_box_pack_start(hbox, GTK_WIDGET(selected), FALSE, FALSE, 0);
 
     // Title label
-    title = GTK_LABEL(gtk_label_new("No Title"));
+    title = GTK_LABEL(gtk_label_new(_("No Title")));
     gtk_label_set_width_chars(title, 12);
     gtk_widget_set_halign(GTK_WIDGET(title), GTK_ALIGN_START);
     gtk_widget_set_valign(GTK_WIDGET(title), GTK_ALIGN_CENTER);
@@ -1377,9 +1377,9 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
 
     default_title_attrs = gtk_label_get_attributes(title);
     gtk_widget_set_tooltip_text(GTK_WIDGET(title),
-        "There is another title with the same destination file name.\n"
+        _("There is another title with the same destination file name.\n"
         "This title will not be added to the queue unless you change\n"
-        "the output file name.\n");
+        "the output file name.\n"));
     gtk_widget_set_has_tooltip(GTK_WIDGET(title), FALSE);
 
     // Destination entry and file chooser
@@ -1393,7 +1393,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
     gtk_box_pack_start(vbox_dest, GTK_WIDGET(dest_file), FALSE, FALSE, 0);
     dest_dir = GTK_FILE_CHOOSER_BUTTON(
-            gtk_file_chooser_button_new("Destination Directory",
+            gtk_file_chooser_button_new(_("Destination Directory"),
                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER));
     g_signal_connect(dest_dir, "selection-changed",
                     (GCallback)title_dest_dir_cb, ud);
