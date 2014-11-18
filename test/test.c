@@ -1720,6 +1720,11 @@ static int HandleEvents( hb_handle_t * h )
                 hb_add_filter( job, filter, rotate_opt);
             }
 
+			if (use_hwd)
+            {
+                job->use_hwd = use_hwd;
+			}
+
             hb_geometry_t srcGeo, resultGeo;
             hb_ui_geometry_t uiGeo;
 
