@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="14A329r" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" defaultVersion="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <deployment version="1060" identifier="macosx"/>
+        <development version="5100" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -11,8 +12,8 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
-        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HandBrakeMainWindow" animationBehavior="default" id="21" userLabel="MainWindow">
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBMainWindow" animationBehavior="default" id="21" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" unifiedTitleAndToolbar="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="946" height="568"/>
@@ -104,6 +105,7 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <accessibility description="Title"/>
                         <connections>
                             <action selector="titlePopUpChanged:" target="240" id="1567"/>
                         </connections>
@@ -148,6 +150,7 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <accessibility description="Angle"/>
                         <connections>
                             <binding destination="5676" name="hidden" keyPath="values.UseDvdNav" id="8xq-AL-yDc">
                                 <dictionary key="options">
@@ -204,6 +207,7 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <accessibility description="Format"/>
                         <connections>
                             <action selector="formatPopUpChanged:" target="240" id="1614"/>
                         </connections>
@@ -389,6 +393,7 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <accessibility description="Start Chapter"/>
                         <connections>
                             <action selector="chapterPopUpChanged:" target="240" id="1615"/>
                         </connections>
@@ -405,6 +410,7 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <accessibility description="End Chapter"/>
                         <connections>
                             <action selector="chapterPopUpChanged:" target="240" id="1616"/>
                         </connections>
@@ -1006,17 +1012,6 @@ Gw
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" id="2707">
-                        <rect key="frame" x="15" y="13" width="80" height="28"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4949">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="closeSourceTitleScanPanel:" target="240" id="2714"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" id="2708">
                         <rect key="frame" x="290" y="13" width="87" height="28"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1058,8 +1053,20 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button verticalHuggingPriority="750" id="2707">
+                        <rect key="frame" x="212" y="13" width="80" height="28"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4949">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="closeSourceTitleScanPanel:" target="240" id="2714"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="515" y="271"/>
         </window>
         <customObject id="240" userLabel="HBController" customClass="HBController">
             <connections>
