@@ -1150,7 +1150,7 @@ namespace HandBrakeWPF.ViewModels
                 // x265 Only
                 if (preset.Task.VideoEncoder == VideoEncoder.X265)
                 {
-                    this.X265PresetValue = (int)preset.Task.X264Preset;
+                    this.X265PresetValue = (int)preset.Task.X265Preset;
                     this.X265Tune = preset.Task.X265Tune;
                     this.H265Profile = preset.Task.H265Profile;
                 }

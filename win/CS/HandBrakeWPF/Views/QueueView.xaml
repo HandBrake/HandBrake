@@ -62,7 +62,7 @@
 
             <DockPanel Background="Transparent" HorizontalAlignment="Stretch">
 
-                <Button Name="Start" DockPanel.Dock="Left"
+                <Button Name="Start" DockPanel.Dock="Left" AutomationProperties.Name="Start Queue"
                         cal:Message.Attach="[Event Click] = [Action StartEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
@@ -77,7 +77,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Name="Pause" DockPanel.Dock="Left"
+                <Button Name="Pause" DockPanel.Dock="Left" AutomationProperties.Name="Pause Queue"
                         cal:Message.Attach="[Event Click] = [Action PauseEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
