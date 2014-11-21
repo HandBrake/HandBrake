@@ -785,16 +785,16 @@ class Project( Action ):
         self.name          = 'HandBrake'
         self.acro_lower    = 'hb'
         self.acro_upper    = 'HB'
-        self.url_website   = 'http://handbrake.fr'
-        self.url_community = 'http://forum.handbrake.fr'
+        self.url_website   = 'https://handbrake.fr'
+        self.url_community = 'https://forum.handbrake.fr'
         self.url_irc       = 'irc://irc.freenode.net/handbrake'
 
         self.name_lower = self.name.lower()
         self.name_upper = self.name.upper()
 
         self.vmajor = 0
-        self.vminor = 9
-        self.vpoint = 9
+        self.vminor = 10
+        self.vpoint = 0
 
     def _action( self ):
         ## add architecture to URL only for Mac
