@@ -128,12 +128,6 @@ extern NSString *keyTitleTag;
     // Creates iPod compatible mp4's (add ipod uuid atom)
     IBOutlet NSButton            * fDstMp4iPodFileCheck;
 
-	/* Picture variables */
-	int                        AutoCropTop;
-	int                        AutoCropBottom;
-	int                        AutoCropLeft;
-	int                        AutoCropRight;
-
     /* Bottom */
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fRipIndicator;

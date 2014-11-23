@@ -2889,10 +2889,10 @@ fWorkingCount = 0;
     {
         [fPictureController setAutoCrop:YES];
         /* Here we use the auto crop values determined right after scan */
-        job->crop[0] = AutoCropTop;
-        job->crop[1] = AutoCropBottom;
-        job->crop[2] = AutoCropLeft;
-        job->crop[3] = AutoCropRight;
+        job->crop[0] = fTitle->crop[0];
+        job->crop[1] = fTitle->crop[1];
+        job->crop[2] = fTitle->crop[2];
+        job->crop[3] = fTitle->crop[3];
         
     }
 
@@ -4339,13 +4339,6 @@ fWorkingCount = 0;
     
     /* Set Auto Crop to on upon selecting a new title  */
     [fPictureController setAutoCrop:YES];
-    
-	/* We get the originial output picture width and height and put them
-	in variables for use with some presets later on */
-	AutoCropTop = title->crop[0];
-	AutoCropBottom = title->crop[1];
-	AutoCropLeft = title->crop[2];
-	AutoCropRight = title->crop[3];
 
 	/* Update the others views */
 	[[NSNotificationCenter defaultCenter] postNotification:
@@ -4812,11 +4805,10 @@ the user is using "Custom" settings by determining the sender*/
             {
                 [fPictureController setAutoCrop:YES];
                 /* Here we use the auto crop values determined right after scan */
-                job->crop[0] = AutoCropTop;
-                job->crop[1] = AutoCropBottom;
-                job->crop[2] = AutoCropLeft;
-                job->crop[3] = AutoCropRight;
-                
+                job->crop[0] = fTitle->crop[0];
+                job->crop[1] = fTitle->crop[1];
+                job->crop[2] = fTitle->crop[2];
+                job->crop[3] = fTitle->crop[3];
             }
             
             /* crop may have changed, reset maxWidth/maxHeight */
