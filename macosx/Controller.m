@@ -2518,8 +2518,6 @@ fWorkingCount = 0;
     [fVideoController prepareVideoForQueueFileJob:queueFileJob];
 
 	/* Picture Sizing */
-	/* Use Max Picture settings for whatever the dvd is.*/
-	[queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
@@ -4838,8 +4836,7 @@ the user is using "Custom" settings by determining the sender*/
              * If not 2 it must be 1 here which means "Use the picture
              * size specified in the preset"
              */
-            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]    intValue] != 2 &&
-                [[chosenPreset objectForKey:@"UsesMaxPictureSettings"] intValue] != 1)
+            if ([[chosenPreset objectForKey:@"UsesPictureSettings"] intValue] != 2)
             {
                 /*
                  * if the preset specifies neither max. width nor height
