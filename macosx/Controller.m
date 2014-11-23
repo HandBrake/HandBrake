@@ -4836,7 +4836,8 @@ the user is using "Custom" settings by determining the sender*/
              * If not 2 it must be 1 here which means "Use the picture
              * size specified in the preset"
              */
-            if ([[chosenPreset objectForKey:@"UsesPictureSettings"] intValue] != 2)
+            if ([[chosenPreset objectForKey:@"UsesPictureSettings"] intValue] != 2 &&
+                [[chosenPreset objectForKey:@"UsesMaxPictureSettings"] intValue] != 1)
             {
                 /*
                  * if the preset specifies neither max. width nor height
