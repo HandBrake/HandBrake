@@ -29,7 +29,6 @@ namespace HandBrake.ApplicationServices
         /// <param name="container">The container.</param><param name="store">The configuration store.</param>
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Register(Component.For<IPresetService>().ImplementedBy<PresetService>());
             container.Register(Component.For<IQueueProcessor>().ImplementedBy<QueueProcessor>());
         }
 

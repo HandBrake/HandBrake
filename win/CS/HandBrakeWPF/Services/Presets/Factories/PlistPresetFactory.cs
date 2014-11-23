@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Factories
+namespace HandBrakeWPF.Services.Presets.Factories
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -19,11 +19,13 @@ namespace HandBrake.ApplicationServices.Factories
     using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Model.Subtitle;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
     using HandBrake.Interop.Model.Encoding.x265;
+
+    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets;
 
     /// <summary>
     /// A Factory to translate a Plist object into a Preset.

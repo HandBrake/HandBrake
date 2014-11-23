@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Interfaces
+namespace HandBrakeWPF.Services.Presets.Interfaces
 {
     using System.Collections.ObjectModel;
 
-    using HandBrake.ApplicationServices.Model;
+    using HandBrakeWPF.Model.Preset;
 
     /// <summary>
     /// The Preset Service Interface

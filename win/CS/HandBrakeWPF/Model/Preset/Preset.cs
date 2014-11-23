@@ -7,10 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model
+namespace HandBrakeWPF.Model.Preset
 {
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Subtitle;
 

@@ -21,6 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Commands.Interfaces;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Preset;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

@@ -7,14 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Utilities
+namespace HandBrakeWPF.Services.Presets.Factories
 {
     using System.Text;
     using System.Xml;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
+
+    using HandBrakeWPF.Model.Preset;
 
     /// <summary>
     /// Plist Preset Converter

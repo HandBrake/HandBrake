@@ -26,6 +26,8 @@ namespace HandBrakeWPF.Startup
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Interfaces;
+    using HandBrakeWPF.Services.Presets;
+    using HandBrakeWPF.Services.Presets.Interfaces;
 
     using ViewModels;
     using ViewModels.Interfaces;
@@ -63,6 +65,7 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<INotificationService>().ImplementedBy<NotificationService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IPrePostActionService>().ImplementedBy<PrePostActionService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IUserSettingService>().ImplementedBy<UserSettingService>());
+            this.windsorContainer.Register(Component.For<IPresetService>().ImplementedBy<PresetService>());
 
             // Commands
             this.windsorContainer.Register(Component.For<IAdvancedEncoderOptionsCommand>().ImplementedBy<AdvancedEncoderOptionsCommand>().LifeStyle.Is(LifestyleType.Singleton));

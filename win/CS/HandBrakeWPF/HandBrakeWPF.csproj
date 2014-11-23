@@ -110,6 +110,7 @@
     <Reference Include="LumenWorks.Framework.IO">
       <HintPath>..\libraries\CsvReader\LumenWorks.Framework.IO.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\libraries\OokiiDialogs\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
@@ -153,14 +154,19 @@
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
+    <Compile Include="Services\Presets\Factories\PlistPresetFactory.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Model\Preset\Preset.cs" />
     <Compile Include="Model\ScanMode.cs" />
     <Compile Include="Factories\HBConfigurationFactory.cs" />
+    <Compile Include="Services\Presets\Interfaces\IPresetService.cs" />
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
+    <Compile Include="Services\Presets\PresetService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
+    <Compile Include="Services\Presets\Factories\PlistFactory.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
     <Compile Include="Controls\SourceSelection.xaml.cs">

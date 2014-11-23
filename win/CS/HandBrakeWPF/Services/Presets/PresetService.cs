@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services
+namespace HandBrakeWPF.Services.Presets
 {
     using System;
     using System.Collections.Generic;
@@ -20,10 +20,11 @@ namespace HandBrake.ApplicationServices.Services
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Utilities;
+
+    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets.Interfaces;
 
     /// <summary>
     /// The preset service manages HandBrake's presets
