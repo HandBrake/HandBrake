@@ -28,9 +28,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Model.Encoding.x265;
 
     using HandBrakeWPF.Commands.Interfaces;
-    using HandBrakeWPF.Model.Preset;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

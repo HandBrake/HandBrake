@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
     /// Plist Preset Converter

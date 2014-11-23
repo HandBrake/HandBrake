@@ -33,11 +33,11 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
-    using HandBrakeWPF.Model.Preset;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;

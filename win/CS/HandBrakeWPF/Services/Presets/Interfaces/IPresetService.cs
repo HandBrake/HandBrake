@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
 {
     using System.Collections.ObjectModel;
 
-    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
     /// The Preset Service Interface

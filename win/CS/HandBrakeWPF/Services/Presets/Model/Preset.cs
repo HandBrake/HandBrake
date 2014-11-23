@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model.Preset
+namespace HandBrakeWPF.Services.Presets.Model
 {
     using Caliburn.Micro;
 

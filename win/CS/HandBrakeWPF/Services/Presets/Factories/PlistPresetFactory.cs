@@ -24,8 +24,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrake.Interop.Model.Encoding.x264;
     using HandBrake.Interop.Model.Encoding.x265;
 
-    using HandBrakeWPF.Model.Preset;
     using HandBrakeWPF.Services.Presets;
+    using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
     /// A Factory to translate a Plist object into a Preset.

@@ -19,7 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Helpers;
-    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 

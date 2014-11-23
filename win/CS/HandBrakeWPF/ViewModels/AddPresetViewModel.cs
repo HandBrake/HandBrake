@@ -21,12 +21,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Model.Preset;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

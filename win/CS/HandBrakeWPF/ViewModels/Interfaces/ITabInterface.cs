@@ -12,7 +12,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
 
-    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
     /// Common interface for all the main tab panels

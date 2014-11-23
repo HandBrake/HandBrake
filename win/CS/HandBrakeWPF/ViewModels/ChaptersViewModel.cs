@@ -21,8 +21,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
 
-    using HandBrakeWPF.Model.Preset;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using LumenWorks.Framework.IO.Csv;

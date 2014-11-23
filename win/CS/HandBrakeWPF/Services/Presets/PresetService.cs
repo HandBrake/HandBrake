@@ -23,8 +23,8 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Utilities;
 
-    using HandBrakeWPF.Model.Preset;
     using HandBrakeWPF.Services.Presets.Interfaces;
+    using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
     /// The preset service manages HandBrake's presets

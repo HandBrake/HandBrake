@@ -11,7 +11,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrake.ApplicationServices.Model;
 
-    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
     /// The Main Window View Model

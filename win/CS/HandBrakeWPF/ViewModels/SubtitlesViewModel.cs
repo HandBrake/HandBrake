@@ -20,7 +20,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Utilities;
 
-    using HandBrakeWPF.Model.Preset;
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
