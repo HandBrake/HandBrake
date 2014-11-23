@@ -16,6 +16,7 @@
 #import "HBUtilities.h"
 
 #import "HBPresetsViewController.h"
+#import "HBAddPresetController.h"
 
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
@@ -1818,6 +1819,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
 
+    // Save the current settings
+    if (titleLoaded) {
+        self.selectedPreset = [self createPresetFromCurrentSettings];
+        titleLoaded = NO;
+    }
+
     [fPictureController setTitle:NULL];
 
 	//	Notify anyone interested (audio/subtitles/chapters controller) that there's no title
@@ -2060,6 +2067,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             SuccessfulScan = YES;
 
             [self titlePopUpChanged:nil];
+
+            titleLoaded = YES;
+
             [self encodeStartStopPopUpChanged:nil];
 
             [self enableUI: YES];
@@ -4270,6 +4280,12 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
 
+    // If there is already a title load, save the current settings to a preset
+    if (titleLoaded)
+    {
+        self.selectedPreset = [self createPresetFromCurrentSettings];
+    }
+
     /* If we are a stream type and a batch scan, grok the output file name from title->name upon title change */
     if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) &&
         hb_list_count( list ) > 1 )
@@ -4345,7 +4361,7 @@ fWorkingCount = 0;
         [self updateFileName];
 	}
 
-   /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
+   /* apply the current preset */
     [self applyPreset:self.selectedPreset];
 }
 
@@ -4907,147 +4923,84 @@ the user is using "Custom" settings by determining the sender*/
     }
 }
 
-- (IBAction) addPresetPicDropdownChanged: (id) sender
+- (IBAction)showAddPresetPanel:(id)sender
 {
-    if ([[fPresetNewPicSettingsPopUp selectedItem] tag] == 1)
-    {
-        [fPresetNewPicWidthHeightBox setHidden:NO];
-    }
-    else
-    {
-        [fPresetNewPicWidthHeightBox setHidden:YES];
-    }
+	/* Show the add panel */
+    HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
+                                                                                     videoSize:NSMakeSize(fTitle->job->width, fTitle->job->height)];
+
+    [NSApp beginSheet:addPresetController.window modalForWindow:fWindow modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:addPresetController];
 }
 
-- (IBAction) showAddPresetPanel: (id) sender
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-    /*
-     * Populate the preset picture settings popup.
-     *
-     * Custom is not applicable when the anamorphic mode is Strict.
-     *
-     * Use [NSMenuItem tag] to store preset values for each option.
-     */
-    [fPresetNewPicSettingsPopUp removeAllItems];
-    [fPresetNewPicSettingsPopUp addItemWithTitle:@"None"];
-    [[fPresetNewPicSettingsPopUp lastItem] setTag: 0];
-    if (fTitle->job->anamorphic.mode != HB_ANAMORPHIC_STRICT)
+    HBAddPresetController *addPresetController = (HBAddPresetController *)contextInfo;
+
+    if (returnCode == NSModalResponseContinue)
     {
-        // not Strict, Custom is applicable
-        [fPresetNewPicSettingsPopUp addItemWithTitle:@"Custom"];
-        [[fPresetNewPicSettingsPopUp lastItem] setTag: 1];
+        [presetManager addPreset:addPresetController.preset];
     }
-    [fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
-    [[fPresetNewPicSettingsPopUp lastItem] setTag: 2];
-    /*
-     * Default to Source Maximum for anamorphic Strict
-     * Default to Custom for all other anamorphic modes
-     */
-    [fPresetNewPicSettingsPopUp selectItemWithTag: (1 + (fTitle->job->anamorphic.mode == HB_ANAMORPHIC_STRICT))];
-    /* Save the current filters in the preset by default */
-    [fPresetNewPicFiltersCheck setState:NSOnState];
-    /* Erase info from the input fields*/
-	[fPresetNewName setStringValue: @""];
-	[fPresetNewDesc setStringValue: @""];
-    
-    /* Initialize custom height and width settings to current values */
-    
-	[fPresetNewPicWidth setStringValue: [NSString stringWithFormat:@"%d",fTitle->job->width]];
-	[fPresetNewPicHeight setStringValue: [NSString stringWithFormat:@"%d",fTitle->job->height]];
-    [self addPresetPicDropdownChanged:nil];
-	/* Show the panel */
-	[NSApp beginSheet:fAddPresetPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+
+    [addPresetController release];
 }
 
-- (IBAction) closeAddPresetPanel: (id) sender
+- (HBPreset *)createPresetFromCurrentSettings
 {
-    [NSApp endSheet: fAddPresetPanel];
-    [fAddPresetPanel orderOut: self];
-}
+    NSMutableDictionary *preset = [NSMutableDictionary dictionary];
+    NSDictionary *currentPreset = self.selectedPreset.content;
 
-- (IBAction)addUserPreset:(id)sender
-{
-    if (![[fPresetNewName stringValue] length])
-    {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Warning!"];
-        [alert setInformativeText:@"You need to insert a name for the preset."];
-        [alert runModal];
-        [alert release];
-    }
-    else
-    {
-        /* Here we create a custom user preset */
-        [presetManager addPreset:[self createPreset]];
+    preset[@"PresetBuildNumber"] = [NSString stringWithFormat: @"%d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
+    preset[@"PresetName"] = fPresetSelectedDisplay.stringValue;
+    preset[@"Folder"] = @NO;
 
-        [self closeAddPresetPanel:nil];
-    }
-}
+	// Set whether or not this is a user preset or factory 0 is factory, 1 is user
+    preset[@"Type"] = @1;
+    preset[@"Default"] = @0;
 
-- (NSDictionary *)createPreset
-{
-    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
-    /* Preset build number */
-    [preset setObject:[NSString stringWithFormat: @"%d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]] forKey:@"PresetBuildNumber"];
-    [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
-	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
-    /* Set whether or not this is to be a folder fPresetNewFolderCheck*/
-    [preset setObject:[NSNumber numberWithBool:NO] forKey:@"Folder"];
-	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
-	[preset setObject:[NSNumber numberWithInt:1] forKey:@"Type"];
-	/*Set whether or not this is default, at creation set to 0*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+    // Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
+    preset[@"UsesPictureSettings"] = currentPreset[@"UsesPictureSettings"];
+    // Get whether or not to use the current Picture Filter settings for the preset
+    preset[@"UsesPictureFilters"] = currentPreset[@"UsesPictureFilters"];
 
-    /*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
-    [preset setObject:[NSNumber numberWithInteger:[[fPresetNewPicSettingsPopUp selectedItem] tag]] forKey:@"UsesPictureSettings"];
-    /* Get whether or not to use the current Picture Filter settings for the preset */
-    [preset setObject:[NSNumber numberWithInteger:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
+    preset[@"PresetDescription"] = currentPreset[@"PresetDescription"];
+    preset[@"FileFormat"] = fDstFormatPopUp.titleOfSelectedItem;
+    preset[@"ChapterMarkers"] = @(fChapterTitlesController.createChapterMarkers);
 
-    /* Get New Preset Description from the field in the AddPresetPanel*/
-    [preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
-    /* File Format */
-    [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
-    /* Chapter Markers fCreateChapterMarkers*/
-    [preset setObject:@(fChapterTitlesController.createChapterMarkers) forKey:@"ChapterMarkers"];
-    /* Mux mp4 with http optimization */
-    [preset setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
-    /* Add iPod uuid atom */
-    [preset setObject:[NSNumber numberWithInteger:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
-    
-    /* Codecs */
-    /* Video encoder */
+    // Mux mp4 with http optimization
+    preset[@"Mp4HttpOptimize"] = @(fDstMp4HttpOptFileCheck.state);
+    // Add iPod uuid atom
+    preset[@"Mp4iPodCompatible"] = @(fDstMp4iPodFileCheck.state);
+
+    // Video encoder
     [fVideoController prepareVideoForPreset:preset];
 
-    /*Picture Settings*/
-    hb_job_t * job = fTitle->job;
-    
-    /* Picture Sizing */
-    [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
-    [preset setObject:[NSNumber numberWithInt:[fPresetNewPicWidth intValue]] forKey:@"PictureWidth"];
-    [preset setObject:[NSNumber numberWithInt:[fPresetNewPicHeight intValue]] forKey:@"PictureHeight"];
-    [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
-    [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
-    [preset setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
+    // Picture Sizing
+    preset[@"PictureWidth"]  = currentPreset[@"PictureWidth"];
+    preset[@"PictureHeight"] = currentPreset[@"PictureHeight"];
 
-    /* Set crop settings here */
-    [preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
-    [preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-    [preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-    [preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
-    
-    /* Picture Filters */
+    hb_job_t *job = fTitle->job;
+    preset[@"PictureKeepRatio"] = @(job->anamorphic.keep_display_aspect);
+    preset[@"PicturePAR"]       = @(job->anamorphic.mode);
+    preset[@"PictureModulus"]   = @(job->modulus);
+
+    // Set crop settings
+    preset[@"PictureAutoCrop"] = @(fPictureController.autoCrop);
+
+    preset[@"PictureTopCrop"]    = @(job->crop[0]);
+    preset[@"PictureBottomCrop"] = @(job->crop[1]);
+    preset[@"PictureLeftCrop"]   = @(job->crop[2]);
+    preset[@"PictureRightCrop"]  = @(job->crop[3]);
+
+    // Picture Filters
     [fPictureController.filters prepareFiltersForPreset:preset];
 
-    /* Audio */
+    // Audio
     [fAudioController.settings prepareAudioDefaultsForPreset:preset];
 
-    /* Subtitles */
+    // Subtitles
     [fSubtitlesViewController.settings prepareSubtitlesDefaultsForPreset:preset];
 
-    [preset autorelease];
-    return preset;
+    return [[[HBPreset alloc] initWithName:preset[@"PresetName"] content:preset builtIn:NO] autorelease];
     
 }
 
@@ -5121,9 +5074,9 @@ the user is using "Custom" settings by determining the sender*/
         [[NSUserDefaults standardUserDefaults] setURL:importPresetsDirectory forKey:@"LastPresetImportDirectoryURL"];
 
         /* NOTE: here we need to do some sanity checking to verify we do not hose up our presets file   */
-        NSMutableArray * presetsToImport = [[NSMutableArray alloc] initWithContentsOfURL:importPresetsFile];
+        NSMutableArray *presetsToImport = [[NSMutableArray alloc] initWithContentsOfURL:importPresetsFile];
         /* iterate though the new array of presets to import and add them to our presets array */
-        for (id tempObject in presetsToImport)
+        for (NSMutableDictionary *tempObject in presetsToImport)
         {
             /* make any changes to the incoming preset we see fit */
             /* make sure the incoming preset is not tagged as default */
@@ -5133,7 +5086,7 @@ the user is using "Custom" settings by determining the sender*/
             [tempObject setObject:prependedName forKey:@"PresetName"];
             
             /* actually add the new preset to our presets array */
-            [presetManager addPreset:tempObject];
+            [presetManager addPresetFromDictionary:tempObject];
         }
         [presetsToImport autorelease];
     }];

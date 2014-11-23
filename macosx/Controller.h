@@ -148,20 +148,10 @@ extern NSString *keyTitleTag;
 	/* User Preset variables here */
 	HBPresetsManager             * presetManager;
     HBPresetsViewController      * fPresetsView;
+
     IBOutlet NSMenu              * presetsMenu;
-
 	IBOutlet NSDrawer            * fPresetDrawer;
-	IBOutlet NSTextField         * fPresetNewName;
-	IBOutlet NSTextField         * fPresetNewDesc;
-	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
-    IBOutlet NSTextField         * fPresetNewPicWidth;
-    IBOutlet NSTextField         * fPresetNewPicHeight;
-    IBOutlet NSBox               * fPresetNewPicWidthHeightBox;
-
-    IBOutlet NSButton            * fPresetNewPicFiltersCheck;
-	IBOutlet NSTextField         * fPresetSelectedDisplay;
-
-    IBOutlet NSPanel             * fAddPresetPanel;
+    IBOutlet NSTextField         * fPresetSelectedDisplay;
 
     hb_handle_t                  * fHandle;
     
@@ -184,6 +174,7 @@ extern NSString *keyTitleTag;
 		of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
     BOOL                           SuccessfulScan;
+    BOOL                           titleLoaded;
     BOOL                           applyQueueToScan;
 	NSString                      * currentSource;
     NSString                      * browsedSourceDisplayName;
@@ -295,13 +286,9 @@ extern NSString *keyTitleTag;
 /* Manage User presets */    
 - (IBAction) customSettingUsed: (id) sender;
 - (IBAction) showAddPresetPanel: (id) sender;
-- (IBAction) addPresetPicDropdownChanged: (id) sender;
-- (IBAction) closeAddPresetPanel: (id) sender;
-- (NSDictionary *)createPreset;
 
 - (IBAction)selectDefaultPreset:(id)sender;
 - (IBAction)addFactoryPresets:(id)sender;
-- (IBAction)addUserPreset:(id)sender;
 
 -(void)sendToMetaX:(NSString *) filePath;
 // Growl methods

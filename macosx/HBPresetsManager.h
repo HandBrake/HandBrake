@@ -55,7 +55,14 @@ extern NSString *HBPresetsChangedNotification;
  *
  *  @param preset the preset dict.
  */
-- (void)addPreset:(NSDictionary *)preset;
+- (void)addPresetFromDictionary:(NSDictionary *)preset;
+
+/**
+ *  Adds a given preset to the manager.
+ *
+ *  @param preset the preset dict.
+ */
+- (void)addPreset:(HBPreset *)preset;
 
 /**
  *  Deletes the presets at the specified index path.

@@ -229,7 +229,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     return retValue;
 }
 
-- (void)addPreset:(NSDictionary *)preset
+- (void)addPresetFromDictionary:(NSDictionary *)preset
 {
     HBPreset *presetNode = [[HBPreset alloc] initWithName:preset[@"PresetName"]
                                                    content:preset
@@ -237,6 +237,13 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
     [self.root insertObject:presetNode inChildrenAtIndex:[self.root countOfChildren]];
     [presetNode release];
+
+    [self savePresets];
+}
+
+- (void)addPreset:(HBPreset *)preset
+{
+    [self.root insertObject:preset inChildrenAtIndex:[self.root countOfChildren]];
 
     [self savePresets];
 }

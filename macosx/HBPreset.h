@@ -19,10 +19,10 @@
 - (instancetype)initWithFolderName:(NSString *)title builtIn:(BOOL)builtIn;
 
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, readwrite, retain) NSString *presetDescription;
+@property (nonatomic, copy) NSString *presetDescription;
 @property (nonatomic, retain) NSDictionary *content;
 
-@property (nonatomic, readwrite) BOOL isDefault;
+@property (nonatomic) BOOL isDefault;
 @property (nonatomic, readonly) BOOL isBuiltIn;
 
 @end
