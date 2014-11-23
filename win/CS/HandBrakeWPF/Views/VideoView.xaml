@@ -67,7 +67,7 @@
                                    Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
 
                         <StackPanel Orientation="Vertical" Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}}">
-                            <RadioButton Content="Constant Framerate" IsChecked="{Binding IsConstantFramerate}" Margin="0,10,0,0" />
+                            <RadioButton Content="Constant Framerate" IsChecked="{Binding IsConstantFramerate}" Margin="0,5,0,0" />
                             <RadioButton Content="Variable Framerate" IsChecked="{Binding IsVariableFramerate}" Margin="0,5,0,0" 
                                      Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <RadioButton Content="Peak Framerate" IsChecked="{Binding IsPeakFramerate}" Margin="0,5,0,0"
@@ -78,7 +78,7 @@
             </StackPanel>
 
 
-            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2">
+            <StackPanel Orientation="Vertical" Grid.Column="1">
                 <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
@@ -95,7 +95,7 @@
                         ToolTip="{x:Static Properties:Resources.Video_QualitySlider}" Style="{StaticResource LongToolTipHolder}" 
                         IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" />
 
-                <Grid Margin="20,0,0,20" Width="280" HorizontalAlignment="Left">
+                <Grid Margin="20,0,0,15" Width="280" HorizontalAlignment="Left">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -104,7 +104,7 @@
                     <TextBlock Text="{Binding HighQualityLabel}" HorizontalAlignment="Right" Grid.Column="1" />
                 </Grid>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                     <RadioButton Content="Avg Bitrate (kbps):" IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
                     <TextBox Width="75" Text="{Binding Task.VideoBitrate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
                 </StackPanel>
@@ -119,7 +119,7 @@
             </StackPanel>
 
             <!-- H264 settings -->
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0" Visibility="{Binding DisplayH264Options, Converter={StaticResource boolToVisConverter}}">
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Visibility="{Binding DisplayH264Options, Converter={StaticResource boolToVisConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -219,7 +219,7 @@
 
             <!-- H265 settings -->
 
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0" Visibility="{Binding DisplayX265Options, Converter={StaticResource boolToVisConverter}}">
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Visibility="{Binding DisplayX265Options, Converter={StaticResource boolToVisConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
