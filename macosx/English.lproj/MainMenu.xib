@@ -731,7 +731,7 @@
                             </menuItem>
                             <menuItem title="Presets Drawer" keyEquivalent="t" id="1884">
                                 <connections>
-                                    <action selector="toggle:" target="1841" id="1885"/>
+                                    <action selector="toggleDrawer:" target="240" id="5Yh-Cm-6ea"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Picture Settings" keyEquivalent="P" id="2488">
