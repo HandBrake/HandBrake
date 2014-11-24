@@ -105,9 +105,18 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
     [presetsArray release];
 
-    // If the preset list is empty,
-    // readd the built in presets.
-    if (self.root.children.count == 0)
+    // If the preset list contains no leaf,
+    // add back the built in presets.
+    __block BOOL leafFound = NO;
+    [self.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop) {
+        if ([obj isLeaf])
+        {
+            leafFound = YES;
+            *stop = YES;
+        }
+    }];
+
+    if (!leafFound)
     {
         [self generateBuiltInPresets];
     }
@@ -170,10 +179,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         }
     }
 
-    if (!node.isBuiltIn)
-    {
-        node.delegate = self;
-    }
+    node.delegate = self;
 
     return node;
 }
@@ -229,7 +235,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     return retValue;
 }
 
-- (void)addPreset:(NSDictionary *)preset
+- (void)addPresetFromDictionary:(NSDictionary *)preset
 {
     HBPreset *presetNode = [[HBPreset alloc] initWithName:preset[@"PresetName"]
                                                    content:preset
@@ -237,6 +243,13 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
     [self.root insertObject:presetNode inChildrenAtIndex:[self.root countOfChildren]];
     [presetNode release];
+
+    [self savePresets];
+}
+
+- (void)addPreset:(HBPreset *)preset
+{
+    [self.root insertObject:preset inChildrenAtIndex:[self.root countOfChildren]];
 
     [self savePresets];
 }
@@ -277,13 +290,15 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 }
 
 /**
- *  Private method to select a new default
- *  when the default preset is deleted.
+ *  Private method to select a new default after the default preset is deleted
+ *  or when the built-in presets are regenerated.
  */
 - (void)selectNewDefault
 {
     __block HBPreset *normalPreset = nil;
     __block HBPreset *firstUserPreset = nil;
+    __block HBPreset *firstBuiltInPreset = nil;
+    __block BOOL defaultAlreadySetted = NO;
 
     // Search for a possibile new default preset
     // Try to use "Normal" or the first user preset.
@@ -294,15 +309,27 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
             {
                 normalPreset = obj;
             }
+            if (firstBuiltInPreset == nil)
+            {
+                firstBuiltInPreset = obj;
+            }
         }
-        else if ([obj isLeaf])
+        else if ([obj isLeaf] && firstUserPreset == nil)
         {
             firstUserPreset = obj;
             *stop = YES;
         }
+
+        if ([obj isDefault]) {
+            defaultAlreadySetted = YES;
+        }
     }];
 
-    if (normalPreset)
+    if (defaultAlreadySetted)
+    {
+        return;
+    }
+    else if (normalPreset)
     {
         self.defaultPreset = normalPreset;
         normalPreset.isDefault = YES;
@@ -311,6 +338,10 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     {
         self.defaultPreset = firstUserPreset;
         firstUserPreset.isDefault = YES;
+    }
+    else if (firstBuiltInPreset) {
+        self.defaultPreset = firstBuiltInPreset;
+        firstBuiltInPreset.isDefault = YES;
     }
 }
 
@@ -372,20 +403,17 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         @selector(createAndroidTabletPreset),
         @selector(createW8PhonePreset)
     };
-    
+
     SEL regularPresets[] = { @selector(createNormalPreset),
         @selector(createHighProfilePreset)};
-    
+
     [self deleteBuiltInPresets];
 
     [self loadPresetsForType:@"Regular" fromSel:regularPresets length:2];
     [self loadPresetsForType:@"Devices" fromSel:devicesPresets length:10];
 
-    if (self.defaultPreset == nil)
-    {
-        [self selectNewDefault];
-    }
-
+    // set a new Default preset
+    [self selectNewDefault];
 
     [HBUtilities writeToActivityLog: "built in presets updated to build number: %d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
 }

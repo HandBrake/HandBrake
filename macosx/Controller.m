@@ -80,7 +80,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         // we init the HBPresetsManager class
         NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
         presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
-        _selectedPreset = presetManager.defaultPreset;
+        _selectedPreset = [presetManager.defaultPreset retain];
 
         // Workaround to avoid a bug in Snow Leopard
         // we can switch back to [[NSApplication sharedApplication] applicationIconImage]
@@ -4978,7 +4978,7 @@ the user is using "Custom" settings by determining the sender*/
     else
     {
         /* Here we create a custom user preset */
-        [presetManager addPreset:[self createPreset]];
+        [presetManager addPresetFromDictionary:[self createPreset]];
 
         [self closeAddPresetPanel:nil];
     }
@@ -5133,7 +5133,7 @@ the user is using "Custom" settings by determining the sender*/
             [tempObject setObject:prependedName forKey:@"PresetName"];
             
             /* actually add the new preset to our presets array */
-            [presetManager addPreset:tempObject];
+            [presetManager addPresetFromDictionary:tempObject];
         }
         [presetsToImport autorelease];
     }];
