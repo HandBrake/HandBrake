@@ -105,9 +105,18 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
     [presetsArray release];
 
-    // If the preset list is empty,
-    // readd the built in presets.
-    if (self.root.children.count == 0)
+    // If the preset list contains no leaf,
+    // add back the built in presets.
+    __block BOOL leafFound = NO;
+    [self.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop) {
+        if ([obj isLeaf])
+        {
+            leafFound = YES;
+            *stop = YES;
+        }
+    }];
+
+    if (!leafFound)
     {
         [self generateBuiltInPresets];
     }
@@ -291,6 +300,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 {
     __block HBPreset *normalPreset = nil;
     __block HBPreset *firstUserPreset = nil;
+    __block HBPreset *firstBuiltInPreset = nil;
 
     // Search for a possibile new default preset
     // Try to use "Normal" or the first user preset.
@@ -301,8 +311,12 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
             {
                 normalPreset = obj;
             }
+            if (firstBuiltInPreset == nil)
+            {
+                firstBuiltInPreset = obj;
+            }
         }
-        else if ([obj isLeaf])
+        else if ([obj isLeaf] && firstUserPreset == nil)
         {
             firstUserPreset = obj;
             *stop = YES;
@@ -318,6 +332,10 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     {
         self.defaultPreset = firstUserPreset;
         firstUserPreset.isDefault = YES;
+    }
+    else if (firstBuiltInPreset) {
+        self.defaultPreset = firstBuiltInPreset;
+        firstBuiltInPreset.isDefault = YES;
     }
 }
 
