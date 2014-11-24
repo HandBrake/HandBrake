@@ -81,7 +81,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         // we init the HBPresetsManager class
         NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
         presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
-        _selectedPreset = presetManager.defaultPreset;
+        _selectedPreset = [presetManager.defaultPreset retain];
 
         // Workaround to avoid a bug in Snow Leopard
         // we can switch back to [[NSApplication sharedApplication] applicationIconImage]
