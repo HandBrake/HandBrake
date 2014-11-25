@@ -123,6 +123,11 @@ namespace HandBrake.ApplicationServices.Utilities
                 gpuBuilder.AppendLine(string.Format("  {0}", item));
             }
 
+            if (string.IsNullOrEmpty(gpuBuilder.ToString().Trim()))
+            {
+                gpuBuilder.Append("GPU Information is unavailable");
+            }
+
             logHeader.AppendLine(String.Format("HandBrake {0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion()));
             logHeader.AppendLine(String.Format("OS: {0} - {1}", Environment.OSVersion, Environment.Is64BitOperatingSystem ? "64bit" : "32bit"));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));

@@ -127,26 +127,34 @@ namespace HandBrake.ApplicationServices.Utilities
             get
             {
                 List<string> gpuInfo = new List<string>();
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(
-                "select * from " + "Win32_VideoController");
 
-                foreach (ManagementObject share in searcher.Get())
+                try
                 {
-                    string gpu = string.Empty, version = string.Empty;
+                    ManagementObjectSearcher searcher =
+                        new ManagementObjectSearcher("select * from " + "Win32_VideoController");
 
-                    foreach (PropertyData PC in share.Properties)
+                    foreach (ManagementObject share in searcher.Get())
                     {
-                        if (!string.IsNullOrEmpty(PC.Name) && PC.Value != null)
+                        string gpu = string.Empty, version = string.Empty;
+
+                        foreach (PropertyData PC in share.Properties)
                         {
-                            if (PC.Name.Equals("DriverVersion")) version = PC.Value.ToString();
-                            if (PC.Name.Equals("Name")) gpu = PC.Value.ToString();
+                            if (!string.IsNullOrEmpty(PC.Name) && PC.Value != null)
+                            {
+                                if (PC.Name.Equals("DriverVersion")) version = PC.Value.ToString();
+                                if (PC.Name.Equals("Name")) gpu = PC.Value.ToString();
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(gpu) && !string.IsNullOrEmpty(version))
+                        {
+                            gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
                         }
                     }
-
-                    if (!string.IsNullOrEmpty(gpu) && !string.IsNullOrEmpty(version))
-                    {
-                        gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
-                    }
+                }
+                catch (Exception)
+                {
+                    // Do Nothing. We couldn't get GPU Information.
                 }
 
                 return gpuInfo;
