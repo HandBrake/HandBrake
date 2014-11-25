@@ -33,8 +33,7 @@ Changes between 0.9.9 and 0.10
             This FDK option is a temporary measure until the LibAV encoder improves.
             Note that FDK-AAC is much slower and will likely bottleneck the encode process, but will produce better quality audio.
     - H.265 encoder
-        Using x265 v1.4
-        This encoder is still early in it's development, so is missing many H.265 features and optimisations.
+        is now available through x265 1.4. While this encoder is still fairly new, we have seen some promising results come out of it. It's still under heavy active development and is only going to improve over time!
     - Added VP8 Encoder (using libvpx)
         Available in MKV files only.
     - Removed mcdeint deinterlace and decomb modes. This relied on the snow encoder in libav which has been was removed by upstream.
