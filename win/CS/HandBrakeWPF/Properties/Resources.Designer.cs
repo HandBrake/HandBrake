@@ -825,7 +825,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Still Preview.
+        ///   Looks up a localized string similar to *** EXPERIMENTAL *** Still Preview.
         /// </summary>
         public static string Preview {
             get {
@@ -834,7 +834,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Still Preview (Scaled).
+        ///   Looks up a localized string similar to  *** EXPERIMENTAL *** Still Preview (Scaled).
         /// </summary>
         public static string Preview_Scaled {
             get {
