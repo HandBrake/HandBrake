@@ -4,12 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
              WindowStartupLocation="CenterScreen"
              cal:Message.Attach="[Event SizeChanged] = [Action PreviewSizeChanged($eventArgs)]"       
              Title="{Binding Title}">
+    
+    <Window.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    </Window.Resources>
     <Grid>
+
+        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" Visibility="{Binding PreviewNotAvailable, Converter={StaticResource booleanToVisibilityConverter}}">
+            <TextBlock Text="No Preview Available" VerticalAlignment="Center" Padding="60,60,60,60" FontWeight="Bold" FontSize="25" Foreground="DarkGray" />
+        </StackPanel>
 
         <Image Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" />
         <Slider Maximum="{Binding TotalPreviews}" Minimum="0" 

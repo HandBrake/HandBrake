@@ -10,11 +10,13 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Runtime.ExceptionServices;
     using System.Windows;
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -25,7 +27,6 @@ namespace HandBrakeWPF.ViewModels
     {
         /*
          * TODO
-         * - Screen needs to be made DPI Aware
          * - Integrate Video Preview panel.
          */
 
@@ -56,6 +57,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private int width;
 
+        /// <summary>
+        /// The preview not available.
+        /// </summary>
+        private bool previewNotAvailable;
+
         #endregion
 
         #region Constructors and Destructors
@@ -71,6 +77,7 @@ namespace HandBrakeWPF.ViewModels
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
             this.Title = Properties.Resources.Preview;
+            this.PreviewNotAvailable = true;
         }
 
         #endregion
@@ -176,6 +183,26 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether preview not available.
+        /// </summary>
+        public bool PreviewNotAvailable
+        {
+            get
+            {
+                return this.previewNotAvailable;
+            }
+            set
+            {
+                if (value.Equals(this.previewNotAvailable))
+                {
+                    return;
+                }
+                this.previewNotAvailable = value;
+                this.NotifyOfPropertyChange(() => this.PreviewNotAvailable);
+            }
+        }
+
         #endregion
 
         #region Public Methods and Operators
@@ -202,12 +229,35 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     The update preview frame.
         /// </summary>
+        [HandleProcessCorruptedStateExceptions] 
         public void UpdatePreviewFrame()
         {
-            BitmapImage image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage);
+            // Don't preview for small images.
+            if (this.Task.Anamorphic == Anamorphic.Loose && this.Task.Width < 32)
+            {
+                PreviewNotAvailable = true;
+                return;
+            }
+
+            if ((this.Task.Anamorphic == Anamorphic.None || this.Task.Anamorphic == Anamorphic.Custom) && (this.Task.Width < 32 || this.Task.Height < 32))
+            {
+                PreviewNotAvailable = true;
+                return;
+            }
+
+            BitmapImage image = null;
+            try
+            {
+                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage);
+            }
+            catch (Exception exc)
+            {
+                PreviewNotAvailable = true;
+            }
 
             if (image != null)
             {
+                PreviewNotAvailable = false;
                 this.Width = (int)Math.Ceiling(image.Width);
                 this.Height = (int)Math.Ceiling(image.Height);
                 this.PreviewImage = image;

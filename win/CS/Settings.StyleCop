@@ -63,6 +63,7 @@
       <AnalyzerSettings>
         <StringProperty Name="CompanyName">HandBrake Project (http://handbrake.fr)</StringProperty>
         <StringProperty Name="Copyright">This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.</StringProperty>
+        <BooleanProperty Name="IncludeFields">False</BooleanProperty>
       </AnalyzerSettings>
     </Analyzer>
     <Analyzer AnalyzerId="StyleCop.CSharp.MaintainabilityRules">
