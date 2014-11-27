@@ -331,8 +331,7 @@
                         <TextBlock Text="Alpha Features" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical"  Margin="20,0,0,0">
-                            <CheckBox Content="Enable Static Preview" Margin="0,5,0,0" IsChecked="{Binding EnableStaticPreview}" />
-                                    
+                                   
                             <CheckBox Content="Use LibHB for Encoding (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" Visibility="Collapsed" />
                             <CheckBox Content="Enable Process Isolation (Run Encodes via an intermediate service)" Margin="20,10,0,0" IsChecked="{Binding EnableProcessIsolation}" Visibility="Collapsed" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="Collapsed">

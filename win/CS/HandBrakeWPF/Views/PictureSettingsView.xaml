@@ -153,8 +153,7 @@
             </StackPanel>
 
             <!-- Preview Panel -->
-            <StackPanel Name="PreviewPanel" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0"
-                        Visibility="{Binding IsPicturePreviewEnabled, Converter={StaticResource boolToVisConverter}}">
+            <StackPanel Name="PreviewPanel" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
                 <Label Content="Output" FontWeight="Bold" />
 
                 <Grid Margin="5,0,0,0">

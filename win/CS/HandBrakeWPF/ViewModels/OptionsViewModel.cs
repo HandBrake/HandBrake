@@ -281,11 +281,6 @@ namespace HandBrakeWPF.ViewModels
         private bool showAdvancedTab;
 
         /// <summary>
-        /// The enable static preview.
-        /// </summary>
-        private bool enableStaticPreview;
-
-        /// <summary>
         /// The remove punctuation.
         /// </summary>
         private bool removePunctuation;
@@ -1134,22 +1129,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether enable static preview.
-        /// </summary>
-        public bool EnableStaticPreview
-        {
-            get
-            {
-                return this.enableStaticPreview;
-            }
-            set
-            {
-                this.enableStaticPreview = value;
-                this.NotifyOfPropertyChange(() => this.EnableStaticPreview);
-            }
-        }
-
         #endregion
 
         #region Video
@@ -1591,9 +1570,7 @@ namespace HandBrakeWPF.ViewModels
             this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
 
             // Use dvdnav
-            this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
-
-            this.EnableStaticPreview = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableStaticPreview);            
+            this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);  
 
             int port;
             int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
@@ -1652,7 +1629,6 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
             userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
-            userSettingService.SetUserSetting(UserSettingConstants.EnableStaticPreview, this.EnableStaticPreview);
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
