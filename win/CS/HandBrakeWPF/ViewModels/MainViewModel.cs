@@ -28,6 +28,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Factories;
@@ -1039,9 +1040,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public override void OnLoad()
         {
-            // Check the CLI Executable.
-            CliCheckHelper.CheckCLIVersion();
-
             // Perform an update check if required
             this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
 
@@ -1675,7 +1673,7 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
 
-                if (buildNumber != userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString(CultureInfo.InvariantCulture))
+                if (buildNumber != HandBrakeUtils.Build.ToString(CultureInfo.InvariantCulture))
                 {
                     MessageBoxResult result = MessageBox.Show(
                         Resources.Preset_OldVersion_Message,
@@ -1748,7 +1746,7 @@ namespace HandBrakeWPF.ViewModels
                     PlistUtility.Export(
                         savefiledialog.FileName,
                         this.selectedPreset,
-                        this.userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString(CultureInfo.InvariantCulture));
+                        HandBrakeUtils.Build.ToString(CultureInfo.InvariantCulture));
                 }
             }
             else

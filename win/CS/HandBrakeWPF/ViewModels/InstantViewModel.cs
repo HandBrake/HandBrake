@@ -555,9 +555,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public override void OnLoad()
         {
-            // Check the CLI Executable.
-            CliCheckHelper.CheckCLIVersion();
-
             // Perform an update check if required
             // this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
 

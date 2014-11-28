@@ -106,14 +106,6 @@
   </item>
   <item>
     <key>
-      <string>HandBrakeBuild</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">00010101</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>updateStatus</string>
     </key>
     <value>
@@ -250,14 +242,6 @@
   </item>
   <item>
     <key>
-      <string>CliExeHash</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
-    </value>
-  </item>
-  <item>
-    <key>
       <string>previewScanCount</string>
     </key>
     <value>
@@ -366,14 +350,6 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">10</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>HandBrakeExeHash</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">RQuM6TVXbXkdih1PmGTf+h178Ho=</anyType>
     </value>
   </item>
   <item>

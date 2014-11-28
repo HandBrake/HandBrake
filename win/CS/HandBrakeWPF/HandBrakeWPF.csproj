@@ -258,7 +258,6 @@
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
     <Compile Include="Helpers\AdvancedChoicesHelper.cs" />
     <Compile Include="Helpers\AutoNameHelper.cs" />
-    <Compile Include="Helpers\CliCheckHelper.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
     <Compile Include="Helpers\QueueRecoveryHelper.cs" />
     <Compile Include="Model\AdvancedChoice.cs" />

@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services
     using System.Threading;
 
     using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
@@ -96,11 +97,9 @@ namespace HandBrakeWPF.Services
                                 ? Constants.AppcastUnstable64
                                 : Constants.AppcastUnstable32;
                         }
-                        
-                        var currentBuild =
-                            this.userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild);
-                        var skipBuild = this.userSettingService.GetUserSetting<int>(
-                            UserSettingConstants.Skipversion);
+
+                        var currentBuild = HandBrakeUtils.Build;
+                        var skipBuild = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion);
 
                         // Initialize variables
                         WebRequest request = WebRequest.Create(url);
