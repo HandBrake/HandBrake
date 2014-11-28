@@ -12,9 +12,9 @@ namespace HandBrakeWPF.Services.Presets
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Xml.Serialization;
@@ -125,7 +125,7 @@ namespace HandBrakeWPF.Services.Presets
                 this.UpdatePresetFiles();
                 return true;
             }
-            
+
             this.Update(preset);
             return true;
         }
@@ -252,32 +252,20 @@ namespace HandBrakeWPF.Services.Presets
         /// </summary>
         public void UpdateBuiltInPresets()
         {
-            // Create a new tempory file and execute the CLI to get the built in Presets.
-            string handbrakeCLIPath = Path.Combine(System.Windows.Forms.Application.StartupPath, "HandBrakeCLI.exe");
-            string presetsPath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
-            string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
-
-            ProcessStartInfo getPresets = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
-
-            Process hbproc = Process.Start(getPresets);
-            hbproc.WaitForExit();
-            hbproc.Dispose();
-            hbproc.Close();
-
             // Clear the current built in Presets and now parse the tempory Presets file.
             this.ClearBuiltIn();
 
-            if (File.Exists(presetsPath))
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HandBrakeWPF.Presets.dat"))
             {
-                using (StreamReader presetInput = new StreamReader(presetsPath))
+                using (StreamReader reader = new StreamReader(stream))
                 {
                     StringBuilder contents = new StringBuilder();
 
                     string category = String.Empty;
 
-                    while (!presetInput.EndOfStream)
+                    while (!reader.EndOfStream)
                     {
-                        string line = presetInput.ReadLine();
+                        string line = reader.ReadLine();
                         contents.AppendLine(line);
 
                         // Found the beginning of a preset block )
@@ -293,15 +281,15 @@ namespace HandBrakeWPF.Services.Presets
                             string[] presetName = r.Split(line);
 
                             Preset newPreset = new Preset
-                                {
-                                    Category = category,
-                                    Name = presetName[0].Replace("+", string.Empty).Trim(),
-                                    Version = VersionHelper.GetVersion(),
-                                    Description = string.Empty, // Maybe one day we will populate this.
-                                    IsBuildIn = true,
-                                    UsePictureFilters = true,
-                                    Task = QueryParserUtility.Parse(presetName[2])
-                                };
+                            {
+                                Category = category,
+                                Name = presetName[0].Replace("+", string.Empty).Trim(),
+                                Version = VersionHelper.GetVersion(),
+                                Description = string.Empty, // Maybe one day we will populate this.
+                                IsBuildIn = true,
+                                UsePictureFilters = true,
+                                Task = QueryParserUtility.Parse(presetName[2])
+                            };
 
                             if (newPreset.Name == "iPod")
                             {
@@ -309,7 +297,7 @@ namespace HandBrakeWPF.Services.Presets
                             }
 
                             newPreset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
-                            
+
                             if (newPreset.Name == "Normal")
                             {
                                 newPreset.IsDefault = true;
@@ -325,11 +313,6 @@ namespace HandBrakeWPF.Services.Presets
                         throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", new Exception(contents.ToString()));
                     }
                 }
-            } 
-            else
-            {
-                // Something really bad must have happened if the file is missing.
-                throw new GeneralApplicationException("Preset Export Failed. Unable to load in Presets.", "Please restart HandBrake", null);
             }
 
             // Finally, Create a new or update the current Presets.xml file
@@ -354,7 +337,7 @@ namespace HandBrakeWPF.Services.Presets
                         this.UpdateBuiltInPresets();
                         return true;
                     }
-                }       
+                }
             }
 
             return false;
@@ -409,7 +392,7 @@ namespace HandBrakeWPF.Services.Presets
                         File.Delete(file);
                     }
                 }
-            } 
+            }
             catch (IOException)
             {
                 // Give up
@@ -435,11 +418,11 @@ namespace HandBrakeWPF.Services.Presets
                         foreach (Preset preset in list)
                         {
                             preset.IsBuildIn = true;
-                                // Older versions did not have this flag so explicitly make sure it is set.
+                            // Older versions did not have this flag so explicitly make sure it is set.
                             this.presets.Add(preset);
                         }
                     }
-                } 
+                }
             }
             catch (Exception)
             {
@@ -465,7 +448,7 @@ namespace HandBrakeWPF.Services.Presets
             catch (Exception exc)
             {
                 RecoverFromCorruptedPresetFile(this.userPresetFile);
-                throw new GeneralApplicationException("HandBrake has detected a problem with your presets.", "Your old presets file has been renamed so that it doesn't get loaded on next launch.", exc);    
+                throw new GeneralApplicationException("HandBrake has detected a problem with your presets.", "Your old presets file has been renamed so that it doesn't get loaded on next launch.", exc);
             }
         }
 

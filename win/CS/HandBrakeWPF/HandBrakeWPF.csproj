@@ -373,6 +373,7 @@
     <None Include="Installer\Installer64.nsi" />
     <None Include="Installer\MakeNightly.nsi.tmpl" />
     <None Include="Installer\MakeNightly64.nsi.tmpl" />
+    <EmbeddedResource Include="Presets.dat" />
     <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <None Include="Properties\Settings.settings">
@@ -505,7 +506,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="defaultsettings.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Resource Include="Views\Images\add40.png" />
