@@ -144,15 +144,6 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
-        /// Get the Process ID of HandBrakeCLI for the current instance.
-        /// </summary>
-        /// <returns>A list of processes</returns>
-        public static Process[] GetCliProcess()
-        {
-            return Process.GetProcessesByName("HandBrakeCLI");
-        }
-
-        /// <summary>
         /// Get a list of available DVD drives which are ready and contain DVD content.
         /// </summary>
         /// <returns>A List of Drives with their details</returns>
