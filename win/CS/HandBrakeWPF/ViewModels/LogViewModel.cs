@@ -13,7 +13,12 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Windows;
 
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
+    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
+
     using Interfaces;
 
     using HandBrake.ApplicationServices.EventArgs;

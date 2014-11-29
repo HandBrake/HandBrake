@@ -15,10 +15,10 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
-
-    using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
 
     /// <summary>
     /// HandBrake WCF Service

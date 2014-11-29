@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Parsing
+namespace HandBrake.ApplicationServices.Services.Scan.Model
 {
     using System;
     using System.Globalization;
@@ -64,7 +64,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>A string formatted as: {chapter #}</returns>
         public override string ToString()
         {
-            return ChapterNumber.ToString(CultureInfo.InvariantCulture);
+            return this.ChapterNumber.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

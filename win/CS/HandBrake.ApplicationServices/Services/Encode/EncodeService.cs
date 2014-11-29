@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Encode.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="EncodeService.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -7,24 +7,23 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services
+namespace HandBrake.ApplicationServices.Services.Encode
 {
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Windows.Forms;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Base;
-    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// Class which handles the CLI
     /// </summary>
-    public class Encode : EncodeBase, IEncode
+    public class EncodeService : EncodeBase, IEncode
     {
         #region Private Variables
 
@@ -100,7 +99,7 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     try
                     {
-                        this.SetupLogging(currentTask);
+                        this.SetupLogging(this.currentTask);
                     }
                     catch (Exception)
                     {
@@ -110,7 +109,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Make sure the path exists, attempt to create it if it doesn't
-                this.VerifyEncodeDestinationPath(currentTask);
+                this.VerifyEncodeDestinationPath(this.currentTask);
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
 
@@ -143,7 +142,7 @@ namespace HandBrake.ApplicationServices.Services
                     this.HbProcess.BeginErrorReadLine();
                 }
 
-                this.HbProcess.OutputDataReceived += HbProcess_OutputDataReceived;
+                this.HbProcess.OutputDataReceived += this.HbProcess_OutputDataReceived;
                 this.HbProcess.BeginOutputReadLine();
 
                 this.processId = this.HbProcess.Id;
@@ -179,7 +178,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Fire the Encode Started Event
-                this.InvokeEncodeStarted(EventArgs.Empty);
+                this.InvokeEncodeStarted(System.EventArgs.Empty);
             }
             catch (Exception exc)
             {
@@ -253,9 +252,9 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="e">
         /// The EventArgs.
         /// </param>
-        private void HbProcessExited(object sender, EventArgs e)
+        private void HbProcessExited(object sender, System.EventArgs e)
         {
-            HbProcess.WaitForExit();
+            this.HbProcess.WaitForExit();
 
             try
             {
@@ -289,15 +288,15 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (!String.IsNullOrEmpty(e.Data))
             {
-                if (initShutdown && this.LogBuffer.Length < 25000000)
+                if (this.initShutdown && this.LogBuffer.Length < 25000000)
                 {
-                    initShutdown = false; // Reset this flag.
+                    this.initShutdown = false; // Reset this flag.
                 }
 
-                if (this.LogBuffer.Length > 25000000 && !initShutdown) // Approx 23.8MB and make sure it's only printed once
+                if (this.LogBuffer.Length > 25000000 && !this.initShutdown) // Approx 23.8MB and make sure it's only printed once
                 {
                     this.ProcessLogMessage("ERROR: Initiating automatic shutdown of encode process. The size of the log file indicates that there is an error! ");
-                    initShutdown = true;
+                    this.initShutdown = true;
                     this.Stop();
                 }
 

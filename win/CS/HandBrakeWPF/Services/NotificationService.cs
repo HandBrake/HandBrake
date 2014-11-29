@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.Services
 {
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Services.Interfaces;
@@ -68,7 +70,7 @@ namespace HandBrakeWPF.Services
         /// <param name="e">
         /// The EncodeCompletedEventArgs.
         /// </param>
-        private void EncodeServiceEncodeCompleted(object sender, HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs e)
+        private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode))
             {

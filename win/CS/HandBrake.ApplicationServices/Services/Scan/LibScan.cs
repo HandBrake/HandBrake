@@ -7,19 +7,18 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services
+namespace HandBrake.ApplicationServices.Services.Scan
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using System.Text.RegularExpressions;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
+    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
     using HandBrake.Interop.EventArgs;
@@ -27,13 +26,12 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.Interop.Model;
     using HandBrake.Interop.SourceData;
 
-    using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
-    using Chapter = HandBrake.ApplicationServices.Parsing.Chapter;
+    using Chapter = HandBrake.ApplicationServices.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.Interop.EventArgs.ScanProgressEventArgs;
     using Size = System.Drawing.Size;
-    using Subtitle = HandBrake.ApplicationServices.Parsing.Subtitle;
+    using Subtitle = HandBrake.ApplicationServices.Services.Scan.Model.Subtitle;
     using SubtitleType = HandBrake.ApplicationServices.Model.Encoding.SubtitleType;
-    using Title = HandBrake.ApplicationServices.Parsing.Title;
+    using Title = HandBrake.ApplicationServices.Services.Scan.Model.Title;
 
     /// <summary>
     /// Scan a Source
@@ -101,9 +99,9 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public LibScan()
         {
-            logging = new StringBuilder();
+            this.logging = new StringBuilder();
 
-            header = GeneralUtilities.CreateCliLogHeader();
+            this.header = GeneralUtilities.CreateCliLogHeader();
 
             try
             {
@@ -182,13 +180,13 @@ namespace HandBrake.ApplicationServices.Services
         public void Scan(string sourcePath, int title, Action<bool> postAction, HBConfiguration configuraiton)
         {
             // Try to cleanup any previous scan instances.
-            if (instance != null)
+            if (this.instance != null)
             {
                 try
                 {
                     this.scanLog.Close();
                     this.scanLog.Dispose();
-                    instance.Dispose();
+                    this.instance.Dispose();
                 }
                 catch (Exception)
                 {
@@ -197,7 +195,7 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             // Handle the post scan operation.
-            postScanOperation = postAction;
+            this.postScanOperation = postAction;
 
             // Clear down the logging
             this.logging.Clear();
@@ -205,9 +203,9 @@ namespace HandBrake.ApplicationServices.Services
             try
             {
                 // Make we don't pick up a stale last_scan_log_xyz.txt (and that we have rights to the file)
-                if (File.Exists(dvdInfoPath))
+                if (File.Exists(this.dvdInfoPath))
                 {
-                    File.Delete(dvdInfoPath);
+                    File.Delete(this.dvdInfoPath);
                 }
             }
             catch (Exception)
@@ -215,19 +213,19 @@ namespace HandBrake.ApplicationServices.Services
                 // Do nothing.
             }
 
-            if (!Directory.Exists(Path.GetDirectoryName(dvdInfoPath)))
+            if (!Directory.Exists(Path.GetDirectoryName(this.dvdInfoPath)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(dvdInfoPath));
+                Directory.CreateDirectory(Path.GetDirectoryName(this.dvdInfoPath));
             }
 
             // Create a new scan log.
-            scanLog = new StreamWriter(dvdInfoPath);
+            this.scanLog = new StreamWriter(this.dvdInfoPath);
 
             // Create a new HandBrake Instance.
-            instance = new HandBrakeInstance();
-            instance.Initialize(1);
-            instance.ScanProgress += this.InstanceScanProgress;
-            instance.ScanCompleted += this.InstanceScanCompleted;
+            this.instance = new HandBrakeInstance();
+            this.instance.Initialize(1);
+            this.instance.ScanProgress += this.InstanceScanProgress;
+            this.instance.ScanCompleted += this.InstanceScanCompleted;
 
             // Start the scan on a back
             this.ScanSource(sourcePath, title, configuraiton.PreviewScanCount, configuraiton);
@@ -238,7 +236,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public void Stop()
         {
-            instance.StopScan();
+            this.instance.StopScan();
 
             try
             {
@@ -315,11 +313,11 @@ namespace HandBrake.ApplicationServices.Services
 
                 string source = sourcePath.ToString().EndsWith("\\") ? string.Format("\"{0}\\\\\"", sourcePath.ToString().TrimEnd('\\'))
                               : "\"" + sourcePath + "\"";
-                currentSourceScanPath = source;
+                this.currentSourceScanPath = source;
 
-                IsScanning = true;
+                this.IsScanning = true;
                 if (this.ScanStared != null)
-                    this.ScanStared(this, new EventArgs());
+                    this.ScanStared(this, System.EventArgs.Empty);
 
                 TimeSpan minDuration =
                     TimeSpan.FromSeconds(
@@ -350,7 +348,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="e">
         /// The EventArgs.
         /// </param>
-        private void InstanceScanCompleted(object sender, EventArgs e)
+        private void InstanceScanCompleted(object sender, System.EventArgs e)
         {
             // Write the log file out before we start processing incase we crash.
             try
@@ -366,20 +364,20 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             // TODO -> Might be a better place to fix this.
-            string path = currentSourceScanPath;
-            if (currentSourceScanPath.Contains("\""))
+            string path = this.currentSourceScanPath;
+            if (this.currentSourceScanPath.Contains("\""))
             {
-                path = currentSourceScanPath.Trim('\"');
+                path = this.currentSourceScanPath.Trim('\"');
             }
 
             // Process into internal structures.
             this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles, this.instance.FeatureTitle), ScanPath = path };
 
-            IsScanning = false;
+            this.IsScanning = false;
 
-            if (postScanOperation != null)
+            if (this.postScanOperation != null)
             {
-                postScanOperation(true);
+                this.postScanOperation(true);
             }
             else
             {
@@ -400,8 +398,8 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (this.ScanStatusChanged != null)
             {
-                ApplicationServices.EventArgs.ScanProgressEventArgs eventArgs =
-                    new ApplicationServices.EventArgs.ScanProgressEventArgs
+                EventArgs.ScanProgressEventArgs eventArgs =
+                    new EventArgs.ScanProgressEventArgs
                         {
                             CurrentTitle = e.CurrentTitle,
                             Titles = e.Titles,
@@ -496,7 +494,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 foreach (Interop.SourceData.AudioTrack track in title.AudioTracks)
                 {
-                    converted.AudioTracks.Add(new AudioTrack(track.TrackNumber, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.Bitrate));
+                    converted.AudioTracks.Add(new Audio(track.TrackNumber, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.Bitrate));
                 }
 
                 foreach (Interop.SourceData.Subtitle track in title.Subtitles)

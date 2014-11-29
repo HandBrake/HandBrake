@@ -11,7 +11,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
 {
     using System.ServiceModel;
 
-    using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
 
     /// <summary>
     /// HandBrake WCF Service Callbacks

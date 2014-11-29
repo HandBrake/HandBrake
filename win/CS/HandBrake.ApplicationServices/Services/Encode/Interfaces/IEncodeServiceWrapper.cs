@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Interfaces
+namespace HandBrake.ApplicationServices.Services.Encode.Interfaces
 {
     /// <summary>
     /// EncodeServiceWrapper Interface

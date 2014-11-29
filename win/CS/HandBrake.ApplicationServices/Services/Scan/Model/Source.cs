@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Parsing
+namespace HandBrake.ApplicationServices.Services.Scan.Model
 {
     using System.Collections.Generic;
     using System.Runtime.Serialization;
@@ -24,7 +24,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </summary>
         public Source()
         {
-            Titles = new List<Title>();
+            this.Titles = new List<Title>();
         }
 
         /// <summary>

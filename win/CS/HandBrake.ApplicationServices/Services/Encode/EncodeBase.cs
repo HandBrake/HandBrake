@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Base
+namespace HandBrake.ApplicationServices.Services.Encode
 {
     using System;
     using System.Globalization;
@@ -15,10 +15,10 @@ namespace HandBrake.ApplicationServices.Services.Base
     using System.Text;
     using System.Text.RegularExpressions;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
@@ -56,7 +56,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         public EncodeBase()
         {
             this.logBuffer = new StringBuilder();
-            header = GeneralUtilities.CreateCliLogHeader();
+            this.header = GeneralUtilities.CreateCliLogHeader();
             this.LogIndex = 0;
         }
 
@@ -158,7 +158,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <param name="e">
         /// The EventArgs.
         /// </param>
-        public void InvokeEncodeStarted(EventArgs e)
+        public void InvokeEncodeStarted(System.EventArgs e)
         {
             EventHandler handler = this.EncodeStarted;
             if (handler != null)
@@ -304,7 +304,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         protected void SetupLogging(QueueTask encodeQueueTask)
         {
-            ShutdownFileWriter();
+            this.ShutdownFileWriter();
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", GeneralUtilities.ProcessId));
             string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", GeneralUtilities.ProcessId));
@@ -328,7 +328,7 @@ namespace HandBrake.ApplicationServices.Services.Base
                 }
 
                 this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-                this.fileWriter.WriteLine(header);
+                this.fileWriter.WriteLine(this.header);
                 this.fileWriter.WriteLine(string.Format("CLI Query: {0}", query));
                 this.fileWriter.WriteLine();
             }

@@ -101,11 +101,7 @@
     <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
-    <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
-    <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
-    <Compile Include="EventArgs\ScanCompletedEventArgs.cs" />
-    <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
@@ -117,9 +113,13 @@
     <Compile Include="Model\Subtitle\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitle\SubtitleBehaviours.cs" />
     <Compile Include="Model\VideoScaler.cs" />
-    <Compile Include="Services\Interfaces\IEncodeServiceWrapper.cs" />
+    <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
+    <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
+    <Compile Include="Services\Encode\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
     <Compile Include="Services\Interfaces\IServerService.cs" />
+    <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
+    <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Services\ServerService.cs" />
     <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
@@ -140,24 +140,24 @@
     <Compile Include="Model\QueueItemStatus.cs" />
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />
-    <Compile Include="Parsing\Audio.cs" />
-    <Compile Include="Parsing\Chapter.cs" />
-    <Compile Include="Parsing\Source.cs" />
-    <Compile Include="Parsing\Subtitle.cs" />
-    <Compile Include="Parsing\Title.cs" />
+    <Compile Include="Services\Scan\Model\Audio.cs" />
+    <Compile Include="Services\Scan\Model\Chapter.cs" />
+    <Compile Include="Services\Scan\Model\Source.cs" />
+    <Compile Include="Services\Scan\Model\Subtitle.cs" />
+    <Compile Include="Services\Scan\Model\Title.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ServicesWindsorInstaller.cs" />
-    <Compile Include="Services\Base\EncodeBase.cs" />
-    <Compile Include="Services\Encode.cs" />
-    <Compile Include="Services\Interfaces\IEncode.cs" />
+    <Compile Include="Services\Encode\EncodeBase.cs" />
+    <Compile Include="Services\Encode\EncodeService.cs" />
+    <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
-    <Compile Include="Services\Interfaces\IScan.cs" />
-    <Compile Include="Services\LibEncode.cs" />
-    <Compile Include="Services\LibScan.cs" />
+    <Compile Include="Services\Scan\Interfaces\IScan.cs" />
+    <Compile Include="Services\Encode\LibEncode.cs" />
+    <Compile Include="Services\Scan\LibScan.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Utilities\CharCodesUtilities.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
@@ -185,7 +185,9 @@
       <Name>HandBrakeInterop</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\Encode\Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

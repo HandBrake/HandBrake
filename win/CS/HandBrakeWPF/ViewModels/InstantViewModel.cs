@@ -24,8 +24,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
+    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;

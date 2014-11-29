@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.EventArgs
+namespace HandBrake.ApplicationServices.Services.Scan.EventArgs
 {
     using System;
     using System.Runtime.Serialization;
@@ -15,7 +15,7 @@ namespace HandBrake.ApplicationServices.EventArgs
     /// <summary>
     /// Scan Progress Event Args
     /// </summary>
-    [DataContractAttribute]
+    [DataContract]
     public class ScanProgressEventArgs : EventArgs
     {
         /// <summary>

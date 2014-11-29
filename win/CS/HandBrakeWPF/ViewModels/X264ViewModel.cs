@@ -15,7 +15,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Commands.Interfaces;

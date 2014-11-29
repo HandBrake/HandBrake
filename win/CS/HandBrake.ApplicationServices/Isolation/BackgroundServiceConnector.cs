@@ -18,6 +18,7 @@ namespace HandBrake.ApplicationServices.Isolation
 
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>

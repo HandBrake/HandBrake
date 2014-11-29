@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Parsing
+namespace HandBrake.ApplicationServices.Services.Scan.Model
 {
     using System;
     using System.Collections.Generic;
@@ -139,7 +139,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 this.Playlist = string.Format(" {0}", this.Playlist);
             }
 
-            return string.Format("{0}{1} ({2:00}:{3:00}:{4:00})", TitleNumber, Playlist, Duration.Hours, Duration.Minutes, Duration.Seconds);
+            return string.Format("{0}{1} ({2:00}:{3:00}:{4:00})", this.TitleNumber, this.Playlist, this.Duration.Hours, this.Duration.Minutes, this.Duration.Seconds);
         }
     }
 }

@@ -13,10 +13,10 @@ namespace HandBrake.ApplicationServices.Isolation
     using System;
     using System.Threading;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
 
     /// <summary>
     /// Isolated Scan Service. 

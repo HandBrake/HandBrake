@@ -19,6 +19,8 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Factories;
@@ -401,7 +403,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The EncodeProgressEventArgs.
         /// </param>
-        private void encodeService_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
+        private void encodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
             this.Percentage = string.Format("{0} %", Math.Round(e.PercentComplete, 2).ToString(CultureInfo.InvariantCulture));
             this.PercentageValue = e.PercentComplete;
@@ -416,7 +418,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The EncodeCompletedEventArgs.
         /// </param>
-        private void encodeService_EncodeCompleted(object sender, HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs e)
+        private void encodeService_EncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.Percentage = "0.00%";
             this.PercentageValue = 0;

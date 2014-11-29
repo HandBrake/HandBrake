@@ -13,7 +13,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     /// <summary>
     /// Subtitle Information

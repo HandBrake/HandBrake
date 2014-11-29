@@ -7,22 +7,21 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services
+namespace HandBrake.ApplicationServices.Services.Encode
 {
     using System;
     using System.Diagnostics;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Base;
-    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
 
-    using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
+    using EncodeCompletedEventArgs = HandBrake.ApplicationServices.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrake.ApplicationServices.Services.Encode.EventArgs.EncodeProgressEventArgs;
 
     /// <summary>
     /// LibHB Implementation of IEncode
@@ -98,10 +97,10 @@ namespace HandBrake.ApplicationServices.Services
 
             // Create a new HandBrake instance
             // Setup the HandBrake Instance
-            instance = new HandBrakeInstance();
-            instance.Initialize(1);
-            instance.EncodeCompleted += this.InstanceEncodeCompleted;
-            instance.EncodeProgress += this.InstanceEncodeProgress;
+            this.instance = new HandBrakeInstance();
+            this.instance.Initialize(1);
+            this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
+            this.instance.EncodeProgress += this.InstanceEncodeProgress;
             
             try
             {
@@ -132,11 +131,11 @@ namespace HandBrake.ApplicationServices.Services
 
                 // We have to scan the source again but only the title so the HandBrake instance is initialised correctly. 
                 // Since the UI sends the crop params down, we don't have to do all the previews.
-                instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
+                this.instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
 
-                instance.ScanCompleted += delegate
+                this.instance.ScanCompleted += delegate
                     {
-                        ScanCompleted(job, instance);
+                        this.ScanCompleted(job, this.instance);
                     };
             }
             catch (Exception exc)
@@ -211,7 +210,7 @@ namespace HandBrake.ApplicationServices.Services
             instance.StartEncode(encodeJob, job.Configuration.PreviewScanCount);
 
             // Fire the Encode Started Event
-            this.InvokeEncodeStarted(EventArgs.Empty);
+            this.InvokeEncodeStarted(System.EventArgs.Empty);
 
             // Set the Process Priority
             switch (job.Configuration.ProcessPriority)

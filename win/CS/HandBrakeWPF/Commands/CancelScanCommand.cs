@@ -13,6 +13,8 @@ namespace HandBrakeWPF.Commands
     using System.Windows.Input;
 
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
+    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
 
     /// <summary>
     /// Command to cancel a scan that is in progress
@@ -47,7 +49,7 @@ namespace HandBrakeWPF.Commands
         /// <param name="e">
         /// The ScanCompletedEventArgs.
         /// </param>
-        private void ScanServiceWrapperScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
+        private void ScanServiceWrapperScanCompleted(object sender, ScanCompletedEventArgs e)
         {
             Caliburn.Micro.Execute.OnUIThread(this.OnCanExecuteChanged);    
         }

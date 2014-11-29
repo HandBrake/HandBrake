@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
     using System.ComponentModel;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
 
     /// <summary>
     /// The Queue Processor

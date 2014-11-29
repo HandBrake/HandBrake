@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Parsing
+namespace HandBrake.ApplicationServices.Services.Scan.Model
 {
     using System;
 
@@ -156,7 +156,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 return false;
             }
 
-            return Equals((Audio)obj);
+            return this.Equals((Audio)obj);
         }
 
         /// <summary>

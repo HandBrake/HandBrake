@@ -10,7 +10,7 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     using HandBrakeWPF.Services.Presets.Model;
 

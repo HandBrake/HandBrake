@@ -1,30 +1,28 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EncodeCompletedEventArgs.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="ScanCompletedEventArgs.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Encode Progress Event Args
+//   Scan Progress Event Args
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.EventArgs
+namespace HandBrake.ApplicationServices.Services.Scan.EventArgs
 {
     using System;
     using System.Runtime.Serialization;
 
-    using HandBrake.ApplicationServices.Model;
-
     /// <summary>
-    /// Encode Progress Event Args
+    /// Scan Progress Event Args
     /// </summary>
-    [DataContractAttribute]
-    public class EncodeCompletedEventArgs : EventArgs
+    [DataContract]
+    public class ScanCompletedEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EncodeCompletedEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="ScanCompletedEventArgs"/> class.
         /// </summary>
-        /// <param name="sucessful">
-        /// The sucessful.
+        /// <param name="cancelled">
+        /// Whether the scan was cancelled.
         /// </param>
         /// <param name="exception">
         /// The exception.
@@ -32,28 +30,25 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// <param name="errorInformation">
         /// The error information.
         /// </param>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
-        public EncodeCompletedEventArgs(bool sucessful, Exception exception, string errorInformation, string filename)
+        public ScanCompletedEventArgs(bool cancelled, Exception exception, string errorInformation)
         {
-            this.Successful = sucessful;
+            this.Successful = !cancelled && exception == null && string.IsNullOrEmpty(errorInformation);
+            this.Cancelled = cancelled;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
-            this.FileName = filename;
         }
-
-        /// <summary>
-        /// Gets or sets the file name.
-        /// </summary>
-        [DataMember]
-        public string FileName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Successful.
         /// </summary>
         [DataMember]
         public bool Successful { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Cancelled.
+        /// </summary>
+        [DataMember]
+        public bool Cancelled { get; set; }
 
         /// <summary>
         /// Gets or sets Exception.

@@ -12,18 +12,16 @@
 namespace HandBrakeWPF.Services
 {
     using System;
-    using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Isolation;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Encode;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Services.Interfaces;
-
-    using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
 
     /// <summary>
     /// We have multiple implementations of Iencode. This is a wrapper class for the GUI so that the 
@@ -81,7 +79,7 @@ namespace HandBrakeWPF.Services
             }
             else
             {
-                this.encodeService = new Encode();
+                this.encodeService = new EncodeService();
             }
 
             this.encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.EventArgs
+namespace HandBrake.ApplicationServices.Services.Encode.EventArgs
 {
     using System;
     using System.Runtime.Serialization;
@@ -15,7 +15,7 @@ namespace HandBrake.ApplicationServices.EventArgs
     /// <summary>
     /// Encode Progress Event Args
     /// </summary>
-    [DataContractAttribute]
+    [DataContract]
     public class EncodeProgressEventArgs : EventArgs
     {
         /// <summary>

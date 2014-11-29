@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Parsing
+namespace HandBrake.ApplicationServices.Services.Scan.Model
 {
     using System;
     using System.Xml.Serialization;
@@ -181,7 +181,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 return false;
             }
 
-            return Equals((Subtitle)obj);
+            return this.Equals((Subtitle)obj);
         }
 
         /// <summary>

@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Interfaces
+namespace HandBrake.ApplicationServices.Services.Encode.Interfaces
 {
     using System;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
 
     /// <summary>
     /// Encode Progess Status

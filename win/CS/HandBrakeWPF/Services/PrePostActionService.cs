@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -92,7 +93,7 @@ namespace HandBrakeWPF.Services
         /// <param name="e">
         /// The EncodeCompletedEventArgs.
         /// </param>
-        private void EncodeService_EncodeCompleted(object sender, HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs e)
+        private void EncodeService_EncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             // Send the file to the users requested applicaiton
             if (e.Successful)

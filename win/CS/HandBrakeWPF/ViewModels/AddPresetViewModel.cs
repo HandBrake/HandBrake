@@ -15,9 +15,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Subtitle;
-    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 

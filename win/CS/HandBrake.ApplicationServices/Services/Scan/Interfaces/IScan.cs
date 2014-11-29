@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Interfaces
+namespace HandBrake.ApplicationServices.Services.Scan.Interfaces
 {
     using System;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     /// <summary>
     /// Encode Progess Status

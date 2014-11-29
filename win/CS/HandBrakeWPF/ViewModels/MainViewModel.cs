@@ -25,8 +25,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Model.Subtitle;
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
+    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
 
@@ -1973,7 +1977,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The EventArgs
         /// </param>
-        private void ScanStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs e)
+        private void ScanStatusChanged(object sender, ScanProgressEventArgs e)
         {
             this.SourceLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
             this.StatusLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
@@ -1988,7 +1992,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The EventArgs
         /// </param>
-        private void ScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
+        private void ScanCompleted(object sender, ScanCompletedEventArgs e)
         {
             this.scanService.SouceData.CopyTo(this.ScannedSource);
             Execute.OnUIThread(() =>
@@ -2053,7 +2057,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The Encode Progress Event Args
         /// </param>
-        private void EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
+        private void EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
             int percent;
             int.TryParse(
