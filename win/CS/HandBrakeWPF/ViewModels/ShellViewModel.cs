@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System.IO;
+    using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -184,6 +186,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        /// <summary>
+        /// The files dropped on window. Pass this through to the active view model.
+        /// </summary>
+        /// <param name="e">
+        /// The DragEventArgs.
+        /// </param>
+        public void FilesDroppedOnWindow(DragEventArgs e)
+        {
+            this.MainViewModel.FilesDroppedOnWindow(e);
+        }
 
         /// <summary>
         /// Checks with the use if this window can be closed.
