@@ -16,7 +16,6 @@ namespace HandBrakeWPF.Services
     using System.Reflection;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Collections;
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
 
@@ -35,12 +34,12 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// The XML Serializer 
         /// </summary>
-        readonly XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, object>));
+        readonly XmlSerializer serializer = new XmlSerializer(typeof(Collections.SerializableDictionary<string, object>));
 
         /// <summary>
         /// The User Settings
         /// </summary>
-        private SerializableDictionary<string, object> userSettings;
+        private Collections.SerializableDictionary<string, object> userSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserSettingService"/> class.
@@ -162,17 +161,17 @@ namespace HandBrakeWPF.Services
                 {
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
-                        SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)this.serializer.Deserialize(reader);
+                        Collections.SerializableDictionary<string, object> data = (Collections.SerializableDictionary<string, object>)this.serializer.Deserialize(reader);
                         this.userSettings = data;
                     }
                 }
                 else
                 {
-                    this.userSettings = new SerializableDictionary<string, object>();
+                    this.userSettings = new Collections.SerializableDictionary<string, object>();
                 }
 
                 // Add any missing / new settings
-                SerializableDictionary<string, object> defaults = this.GetDefaults();
+                Collections.SerializableDictionary<string, object> defaults = this.GetDefaults();
                 foreach (var item in defaults.Where(item => !this.userSettings.Keys.Contains(item.Key)))
                 {
                     this.userSettings.Add(item.Key, item.Value);
@@ -205,7 +204,7 @@ namespace HandBrakeWPF.Services
         /// <returns>
         /// The get defaults.
         /// </returns>
-        private SerializableDictionary<string, object> GetDefaults()
+        private Collections.SerializableDictionary<string, object> GetDefaults()
         {
             try
             {
@@ -213,15 +212,15 @@ namespace HandBrakeWPF.Services
                 Stream stream = assembly.GetManifestResourceStream("HandBrakeWPF.defaultsettings.xml");
                 if (stream != null)
                 {
-                    return (SerializableDictionary<string, object>)this.serializer.Deserialize(stream);
+                    return (Collections.SerializableDictionary<string, object>)this.serializer.Deserialize(stream);
                 }
             }
             catch (Exception)
             {
-                return new SerializableDictionary<string, object>();
+                return new Collections.SerializableDictionary<string, object>();
             }
 
-            return new SerializableDictionary<string, object>();
+            return new Collections.SerializableDictionary<string, object>();
         }
     }
 }

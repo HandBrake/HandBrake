@@ -26,6 +26,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// A Factory to translate a Plist object into a Preset.

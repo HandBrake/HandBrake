@@ -132,6 +132,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
   </ItemGroup>
@@ -142,6 +143,7 @@
     </ApplicationDefinition>
     <Compile Include="AppArguments.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
+    <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
     <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
@@ -163,10 +165,13 @@
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
     <Compile Include="Services\Presets\PresetService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
+    <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
     <Compile Include="Services\Presets\Factories\PlistFactory.cs" />
+    <Compile Include="Utilities\PList.cs" />
+    <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
     <Compile Include="Controls\SourceSelection.xaml.cs">

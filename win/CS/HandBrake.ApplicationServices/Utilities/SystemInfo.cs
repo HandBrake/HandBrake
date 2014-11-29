@@ -11,10 +11,8 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Management;
     using System.Text.RegularExpressions;
-    using System.Windows.Documents;
     using System.Windows.Forms;
 
     using HandBrake.Interop.HbLib;

@@ -97,7 +97,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
@@ -125,11 +124,9 @@
     <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\InteropModelCreator.cs" />
-    <Compile Include="Utilities\PList.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\VersionHelper.cs" />
     <Compile Include="Utilities\Win32.cs" />
-    <Compile Include="Utilities\Win7.cs" />
     <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Encoding\AllowedPassthru.cs" />
     <Compile Include="Model\Encoding\AudioTrack.cs" />
@@ -162,7 +159,6 @@
     <Compile Include="Services\LibEncode.cs" />
     <Compile Include="Services\LibScan.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
-    <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\CharCodesUtilities.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />

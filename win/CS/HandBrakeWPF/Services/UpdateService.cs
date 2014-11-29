@@ -20,6 +20,8 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
 
+    using AppcastReader = HandBrakeWPF.Utilities.AppcastReader;
+
     /// <summary>
     /// The Update Service
     /// </summary>

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Collections
+namespace HandBrakeWPF.Collections
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;

@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Views
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Application = System.Windows.Application;
