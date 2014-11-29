@@ -9,8 +9,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -29,38 +27,44 @@
                                 Minimum="0" Maximum="1000" Number="{Binding TitleSpecificScan, Mode=TwoWay}" />
             </StackPanel>
 
-            <TextBlock Text="Then choose your source: " Margin="0,10,0,0" />
+            <TextBlock Text="Then choose the video(s) you'd like to encode: " Margin="0,10,0,0" />
         </StackPanel>
 
         <!-- Source Type -->
-        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" Margin="5,5,0,0">
+        <Grid Grid.Row="2" HorizontalAlignment="Left" Margin="5,5,0,0">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
             <!-- Ctrl + R -->
-            <Button  AutomationProperties.Name="Choose Folder to Scan" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
+            <Button Grid.Row="0"  AutomationProperties.Name="Choose Folder to Scan" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
                     Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
                
                 <StackPanel Orientation="Horizontal" MinWidth="100">
                     <Image Source="../Views/Images/folder32.png" Width="32" />
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="Folder" VerticalAlignment="Center" Margin="5,0,0,0" />
-                        <TextBlock Text="Open a VIDEO_TS folder or a batch of files" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="Open a folder with one or more files." VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>                   
                 </StackPanel>
             </Button>
 
             <!--Ctrl + F-->
-            <Button AutomationProperties.Name="Choose File to Scan" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
+            <Button Grid.Row="1"  AutomationProperties.Name="Choose File to Scan" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
                     Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal" MinWidth="100">
                     <Image Source="../Views/Images/File32.png" Width="32" />
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="File" VerticalAlignment="Center" Margin="5,0,0,0" />
-                        <TextBlock Text="Open a single file." VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="Open a single video file." VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Button>
-            
-            <ListBox ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0">
+
+            <ListBox Grid.Row="2" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
@@ -79,7 +83,7 @@
                 </ListBox.ItemTemplate>
                 
             </ListBox>
-        </StackPanel>
+        </Grid>
 
         <!-- Cancel Window -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,10">

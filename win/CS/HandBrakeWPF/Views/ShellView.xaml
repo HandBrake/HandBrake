@@ -4,6 +4,8 @@
         xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:views="clr-namespace:HandBrakeWPF.Views"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cal="http://www.caliburnproject.org"
         Title="{Data:Binding Path=WindowTitle}"
         Width="1015"
         Height="675"
@@ -20,7 +22,15 @@
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
-    
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Drop">
+            <cal:ActionMessage MethodName="FilesDroppedOnWindow">
+                <cal:Parameter Value="$eventArgs" />
+            </cal:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <ContentControl x:Name="MainViewModel"  Visibility="{Binding ShowMainWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
         <ContentControl x:Name="OptionsViewModel"  Visibility="{Binding ShowOptions, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />

@@ -3,23 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:HandBrakeWPF.Controls"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-             xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
+             xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              AllowDrop="True"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
        >
-
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Drop">
-            <Micro:ActionMessage MethodName="FilesDroppedOnWindow">
-                <Micro:Parameter Value="$eventArgs" />
-            </Micro:ActionMessage>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
