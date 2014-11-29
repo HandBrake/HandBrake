@@ -1,21 +1,14 @@
-/**
- * @file
- * Implementation of class HBCore.
- */
+/*  HBCore.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBCore.h"
-#include "hb.h"
+#import "HBDVDDetector.h"
+#import "HBUtilities.h"
 
-// These constants specify the current state of HBCore.
-
-const NSString *HBStateIdle = @"HBStateIdle";           ///< HB is doing nothing (HB_STATE_IDLE)
-const NSString *HBStateScanning = @"HBStateScanning";   ///< HB is scanning (HB_STATE_SCANNING)
-const NSString *HBStateScanDone = @"HBStateScanDone";   ///< Scanning has been completed (HB_STATE_SCANDONE)
-const NSString *HBStateWorking = @"HBStateWorking";     ///< HB is encoding (HB_STATE_WORKING)
-const NSString *HBStatePaused = @"HBStatePaused";       ///< Encoding is paused (HB_STATE_PAUSED)
-const NSString *HBStateWorkDone = @"HBStateWorkDone";   ///< Encoding has been completed (HB_STATE_WORKDONE)
-const NSString *HBStateMuxing = @"HBStateMuxing";       ///< HB is muxing (HB_STATE_MUXING)
-
+#include <dlfcn.h>
 
 // These constants specify various status notifications sent by HBCore
 
@@ -40,11 +33,24 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 /**
  * Private methods of HBCore.
  */
-@interface HBCore (Private)
-- (NSString *)stateAsString:(int)stateValue;
+@interface HBCore ()
+
+/// Current state of HBCore.
+@property (nonatomic, readwrite) HBState state;
+
+/// Timer used to poll libhb for state changes.
+@property (nonatomic, readwrite, retain) NSTimer *updateTimer;
+
+- (void)stateUpdateTimer:(NSTimer *)timer;
+
 @end
 
 @implementation HBCore
+
++ (void)setDVDNav:(BOOL)enabled
+{
+    hb_dvd_set_dvdnav(enabled);
+}
 
 /**
  * Initializes HBCore.
@@ -53,8 +59,8 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 {
     if (self = [super init])
     {
-        state = HBStateIdle;    
-        hb_state = malloc(sizeof(struct hb_state_s));   
+        _state = HBStateIdle;
+        _hb_state = malloc(sizeof(struct hb_state_s));
     }
     return self;
 }
@@ -64,7 +70,11 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
  */
 - (void)dealloc
 {
-    free(hb_state);    
+    [self stopUpdateTimer];
+    hb_close(&_hb_handle);
+    _hb_handle = NULL;
+
+    free(_hb_state);
     [super dealloc];
 }
 
@@ -73,107 +83,189 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
  * functions HBCore are used.
  *
  * @param debugMode         If set to YES, libhb will print verbose debug output.
- * @param checkForUpdates   If set to YES, libhb checks for updated versions.
  *
  * @return YES if libhb was opened, NO if there was an error.
  */
-- (BOOL)openInDebugMode:(BOOL)debugMode checkForUpdates:(BOOL)checkForUpdates;
+- (instancetype)initWithLoggingLevel:(int)loggingLevel
 {
-    NSAssert(!hb_handle, @"[HBCore openInDebugMode:checkForUpdates:] libhb is already open");
-    if (hb_handle)
+    self = [self init];
+    if (self)
+    {
+        _hb_handle = hb_init(loggingLevel, 0);
+        if (!_hb_handle)
+        {
+            [self release];
+            return nil;
+        }
+    }
+
+    return self;
+}
+
+#pragma mark - Scan
+
+- (BOOL)canScan:(NSURL *)url error:(NSError **)error
+{
+    if (!_hb_handle)
+    {
+        // Libhb is not open so we cannot do anything.
         return NO;
+    }
 
-    state = HBStateIdle;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
+        if (*error) {
+            *error = [NSError errorWithDomain:@"HBErrorDomain"
+                                         code:100
+                                     userInfo:@{ NSLocalizedDescriptionKey: @"Unable to find the file at the specified URL" }];
+        }
 
-    hb_handle = hb_init(debugMode ? HB_DEBUG_ALL : HB_DEBUG_NONE, checkForUpdates);
-    if (!hb_handle)
         return NO;
+    }
 
-    updateTimer = [[NSTimer scheduledTimerWithTimeInterval:0.5
-                                                    target:self
-                                                  selector:@selector(stateUpdateTimer:) 
-                                                  userInfo:NULL 
-                                                   repeats:YES] retain];
+    HBDVDDetector *detector = [HBDVDDetector detectorForPath:url.path];
 
-    [[NSRunLoop currentRunLoop] addTimer:updateTimer forMode:NSModalPanelRunLoopMode];        
+    if (detector.isVideoDVD)
+    {
+        // The chosen path was actually on a DVD, so use the raw block
+        // device path instead.
+
+        [HBUtilities writeToActivityLog: "trying to open a physical dvd at: %s", [url.path UTF8String]];
+
+        // Notify the user that we don't support removal of copy protection.
+        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
+        if (dvdcss)
+        {
+            // libdvdcss was found so all is well
+            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
+            dlclose(dvdcss);
+        }
+        else
+        {
+            // compatible libdvdcss not found
+            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
+
+            if (*error) {
+                *error = [NSError errorWithDomain:@"HBErrorDomain" code:101 userInfo:@{ NSLocalizedDescriptionKey: @"libdvdcss.2.dylib not found for decrypting physical dvd" }];
+            }
+        }
+    }
+
     return YES;
 }
 
-/**
- * Closes low level HandBrake library and releases resources.
- *
- * @return YES if libhb was closed successfully, NO if there was an error.
- */
-- (BOOL)close
+- (void)scan:(NSURL *)url titleNum:(NSUInteger)titleNum previewsNum:(NSUInteger)previewsNum minTitleDuration:(NSUInteger)minTitleDuration;
 {
-    NSAssert(hb_handle, @"[HBCore close] libhb is not open");
-    if (!hb_handle)
-        return NO;
+    NSAssert(_hb_handle, @"[HBCore scan:] libhb is not open");
 
-    [updateTimer invalidate];
-    [updateTimer release];
-    updateTimer = nil;
-    hb_close(&hb_handle);
-    hb_handle = NULL;
-    return YES;
+    // Start the timer to handle libhb state changes
+    [self startUpdateTimer];
+
+    NSString *path = url.path;
+    HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
+
+    if (detector.isVideoDVD)
+    {
+        // The chosen path was actually on a DVD, so use the raw block
+        // device path instead.
+        path = detector.devicePath;
+    }
+
+    // convert minTitleDuration from seconds to the internal HB time
+    uint64_t min_title_duration_ticks = 90000LL * minTitleDuration;
+
+    // If there is no title number passed to scan, we use 0
+    // which causes the default behavior of a full source scan
+    if (titleNum > 0)
+    {
+        [HBUtilities writeToActivityLog: "scanning specifically for title: %d", titleNum];
+    }
+    else
+    {
+        // minimum title duration doesn't apply to title-specific scan
+        // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
+        [HBUtilities writeToActivityLog: "scanning titles with a duration of %d seconds or more", minTitleDuration];
+    }
+
+    hb_system_sleep_prevent(_hb_handle);
+
+    hb_scan(_hb_handle, path.fileSystemRepresentation,
+            (int)titleNum, (int)previewsNum,
+            1, min_title_duration_ticks);
+}
+
+#pragma mark - Encodes
+
+- (void)start
+{
+    NSAssert(_hb_handle, @"[HBCore start] libhb is not open");
+
+    // Start the timer to handle libhb state changes
+    [self startUpdateTimer];
+
+    hb_system_sleep_prevent(_hb_handle);
+    hb_start(_hb_handle);
+}
+
+- (void)stop
+{
+    NSAssert(_hb_handle, @"[HBCore stop] libhb is not open");
+
+    hb_stop(_hb_handle);
+    hb_system_sleep_allow(_hb_handle);
+}
+
+#pragma mark - State updates
+
+/**
+ * Starts the timer used to polls libhb for state changes.
+ */
+- (void)startUpdateTimer
+{
+    if (!self.updateTimer)
+    {
+        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                            target:self
+                                                          selector:@selector(stateUpdateTimer:)
+                                                          userInfo:NULL
+                                                           repeats:YES];
+
+        [[NSRunLoop currentRunLoop] addTimer:self.updateTimer forMode:NSEventTrackingRunLoopMode];
+    }
 }
 
 /**
- * Returns libhb handle used by this HBCore instance.
- */ 
-- (struct hb_handle_s *)hb_handle
+ * Stops the update timer.
+ */
+- (void)stopUpdateTimer
 {
-    return hb_handle;
+    [self.updateTimer invalidate];
+    self.updateTimer = nil;
 }
 
 /**
- * Returns current state of HBCore.
- *
- * @return One of the HBState* string constants.
+ * Transforms a libhb state constant to a matching HBCore selector.
  */
-- (const NSString *)state
-{
-    return state;
-}
-
-/**
- * Returns latest hb_state_s information struct returned by libhb.
- *
- * @return Pointer to a hb_state_s struct containing state information of libhb.
- */
-- (const struct hb_state_s *)hb_state
-{
-    return hb_state;
-}
-
-@end 
-
-@implementation HBCore (Private)
-
-/**
- * Transforms a libhb state constant to a matching HBCore state constant.
- */
-- (const NSString *)stateAsString:(int)stateValue
+- (const SEL)selectorForState:(HBState)stateValue
 {
     switch (stateValue)
     {
-        case HB_STATE_IDLE:
-            return HBStateIdle;        
-        case HB_STATE_SCANNING:
-            return HBStateScanning;
-        case HB_STATE_SCANDONE:
-            return HBStateScanDone;
         case HB_STATE_WORKING:
-            return HBStateWorking;
-        case HB_STATE_PAUSED:
-            return HBStatePaused;
-        case HB_STATE_WORKDONE:
-            return HBStateWorkDone;
+            return @selector(handleHBStateWorking);
+        case HB_STATE_SCANNING:
+            return @selector(handleHBStateScanning);
         case HB_STATE_MUXING:
-            return HBStateMuxing;        
+            return @selector(handleHBStateMuxing);
+        case HB_STATE_PAUSED:
+            return @selector(handleHBStatePaused);
+        case HB_STATE_SEARCHING:
+            return @selector(handleHBStateSearching);
+        case HB_STATE_SCANDONE:
+            return @selector(handleHBStateScanDone);
+        case HB_STATE_WORKDONE:
+            return @selector(handleHBStateWorkDone);
         default:
-            NSAssert1(NO, @"[HBCore stateAsString:] unknown state %d", stateValue);
-            return nil;
+            NSAssert1(NO, @"[HBCore selectorForState:] unknown state %lu", stateValue);
+            return NULL;
     }
 }
 
@@ -184,34 +276,39 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
  */
 - (void)stateUpdateTimer:(NSTimer *)timer
 {
-    if (!hb_handle)
+    if (!_hb_handle)
     {
         // Libhb is not open so we cannot do anything.
         return;
     }
-    hb_get_state(hb_handle, hb_state);
+    hb_get_state(_hb_handle, _hb_state);
 
-    if (hb_state->state == HB_STATE_IDLE)
+    if (_hb_state->state == HB_STATE_IDLE)
     {
         // Libhb reported HB_STATE_IDLE, so nothing interesting has happened.
         return;
     }
-        
+
     // Update HBCore state to reflect the current state of libhb
-    NSString *newState = [self stateAsString:hb_state->state];
-    if (newState != state)
-    {
-        [self willChangeValueForKey:@"state"];
-        state = newState;
-        [self didChangeValueForKey:@"state"];
-    }
+    self.state = _hb_state->state;
 
     // Determine name of the method that does further processing for this state
     // and call it. 
-    SEL sel = NSSelectorFromString([NSString stringWithFormat:@"handle%@", state]);
-    if ([self respondsToSelector:sel])
-        [self performSelector:sel];
+    SEL sel = [self selectorForState:self.state];
+    [self performSelector:sel];
+
+    if (_hb_state->state == HB_STATE_WORKDONE || _hb_state->state == HB_STATE_SCANDONE)
+    {
+        // Libhb reported HB_STATE_WORKDONE or HB_STATE_SCANDONE,
+        // so nothing interesting will happen after this point, stop the timer.
+        [self stopUpdateTimer];
+
+        self.state = HBStateIdle;
+        hb_system_sleep_allow(_hb_handle);
+    }
 }
+
+#pragma mark - Notifications
 
 /**
  * Processes HBStateScanning state information. Current implementation just
@@ -265,6 +362,15 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 - (void)handleHBStateMuxing
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreMuxingNotification object:self];    
+}
+
+/**
+ * Processes HBStateSearching state information. Current implementation just
+ * sends HBCoreSearchingNotification.
+ */
+- (void)handleHBStateSearching
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreMuxingNotification object:self];
 }
 
 @end

@@ -1,18 +1,23 @@
-/**
- * @file
- * Interface of class HBCore.
- */
+/*  HBCore.h $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#include "hb.h"
 
-extern const NSString *HBStateIdle;
-extern const NSString *HBStateScanning;
-extern const NSString *HBStateScanDone;
-extern const NSString *HBStateWorking;
-extern const NSString *HBStatePaused;
-extern const NSString *HBStateWorkDone;
-extern const NSString *HBStateMuxing;
-extern const NSString *HBStateAll;
+// These constants specify the current state of HBCore.
+typedef NS_ENUM(NSUInteger, HBState) {
+    HBStateIdle      = HB_STATE_IDLE,        ///< HB is doing nothing
+    HBStateScanning  = HB_STATE_SCANNING,    ///< HB is scanning
+    HBStateScanDone  = HB_STATE_SCANDONE,    ///< Scanning has been completed
+    HBStateWorking   = HB_STATE_WORKING,     ///< HB is encoding
+    HBStatePaused    = HB_STATE_PAUSED,      ///< Encoding is paused
+    HBStateWorkDone  = HB_STATE_WORKDONE,    ///< Encoding has been completed
+    HBStateMuxing    = HB_STATE_MUXING,      ///< HB is muxing
+    HBStateSearching = HB_STATE_SEARCHING    ///< HB is searching
+};
 
 extern NSString *HBCoreScanningNotification;
 extern NSString *HBCoreScanDoneNotification;
@@ -28,25 +33,71 @@ extern NSString *HBCoreMuxingNotification;
  * to implement properties that can be directly bound to elements of the gui.
  */
 @interface HBCore : NSObject
-{
-    /// Pointer to libhb handle.
-    struct hb_handle_s *hb_handle;
-    
-    /// Pointer to latest state information returned by libhb.
-    struct hb_state_s *hb_state;
-    
-    /// Timer used to poll libhb for state changes.
-    NSTimer *updateTimer;
 
-    /// Current state of HBCore; one of the HBState* constants.
-    const NSString *state;  
-}
+/**
+ * Set the status of libdvdnav in low level HandBrake library.
+ * This should be called once before other functions HBCore are used.
+ *
+ * @param enabled         whether libdvdnav is enabled or not.
+ */
++ (void)setDVDNav:(BOOL)enabled;
 
-- (id)init;
-- (BOOL)openInDebugMode:(BOOL)debugMode checkForUpdates:(BOOL)checkForUpdates;
-- (BOOL)close;
-- (NSString *)state;
-- (struct hb_handle_s *)hb_handle;
-- (const struct hb_state_s *)hb_state;
+/**
+ * Opens low level HandBrake library. This should be called once before other
+ * functions HBCore are used.
+ *
+ * @param loggingLevel         the desired libhb logging level.
+ *
+ * @return YES if libhb was opened, NO if there was an error.
+ */
+- (instancetype)initWithLoggingLevel:(int)loggingLevel;
+
+/**
+ * Current state of HBCore.
+ */
+@property (nonatomic, readonly) HBState state;
+
+/**
+ * Pointer to a hb_state_s struct containing state information of libhb.
+ */
+@property (nonatomic, readonly) hb_state_t *hb_state;
+
+/**
+ * Pointer to a libhb handle used by this HBCore instance.
+ */
+@property (nonatomic, readonly) hb_handle_t *hb_handle;
+
+
+/**
+ *  Determines whether the scan operation can scan a particural URL or whether an additional decription lib is needed..
+ *
+ *  @param url   the URL of the input file.
+ *  @param error an error containing additional info.
+ *
+ *  @return YES is the file at URL is scannable.
+ */
+- (BOOL)canScan:(NSURL *)url error:(NSError **)error;
+
+/**
+ *  Starts the asynchronous execution of a scan.
+ *
+ *  @param url              the URL of the input file.
+ *  @param titleNum         the number of the desired title. Use 0 to scan every title.
+ *  @param previewsNum      the number of previews image to generate.
+ *  @param minTitleDuration the minimum duration of the wanted titles in seconds.
+ */
+- (void)scan:(NSURL *)url titleNum:(NSUInteger)titleNum previewsNum:(NSUInteger)previewsNum minTitleDuration:(NSUInteger)minTitleDuration;
+
+/**
+ * Starts the libhb encoding session.
+ *
+ *	This method must be called after all jobs have been added.
+ */
+- (void)start;
+
+/**
+ * Stops encoding session and releases resources.
+ */
+- (void)stop;
 
 @end

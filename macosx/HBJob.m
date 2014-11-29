@@ -5,8 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBJob.h"
-#import "HBAudioSettings.h"
-#import "HBSubtitlesSettings.h"
+#import "HBAudioDefaults.h"
+#import "HBSubtitlesDefaults.h"
 #import "HBPreset.h"
 
 #include "lang.h"
@@ -47,8 +47,8 @@ extern NSString *keySubTrackSrtCharCode;
         _subtitlesTracks = [[NSMutableArray alloc] init];
         _chapters = [[NSMutableArray alloc] init];
 
-        _audioSettings = [[HBAudioSettings alloc] init];
-        _subtitlesSettings = [[HBSubtitlesSettings alloc] init];
+        _audioDefaults = [[HBAudioDefaults alloc] init];
+        _subtitlesDefaults = [[HBSubtitlesDefaults alloc] init];
 
         [self loadAudioTracks];
         [self loadSubtitlesTracks];
@@ -59,8 +59,8 @@ extern NSString *keySubTrackSrtCharCode;
 
 - (void)applyPreset:(HBPreset *)preset
 {
-    [self.audioSettings applySettingsFromPreset:preset.content];
-    [self.subtitlesSettings applySettingsFromPreset:preset.content];
+    [self.audioDefaults applySettingsFromPreset:preset.content];
+    [self.subtitlesDefaults applySettingsFromPreset:preset.content];
 }
 
 #pragma mark - initialization

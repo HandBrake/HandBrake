@@ -7,6 +7,7 @@
 
 #import "HBPreviewGenerator.h"
 #import "HBUtilities.h"
+#import "HBCore.h"
 #import "Controller.h"
 
 typedef enum EncodeState : NSUInteger {
@@ -22,9 +23,9 @@ typedef enum EncodeState : NSUInteger {
 @property (nonatomic, readonly) hb_handle_t *handle;
 @property (nonatomic, readonly) hb_title_t *title;
 
-@property (nonatomic) hb_handle_t *privateHandle;
-@property (nonatomic) NSTimer *timer;
-@property (nonatomic) EncodeState encodeState;
+@property (nonatomic) HBCore *core;
+@property (nonatomic, getter=isCancelled) BOOL cancelled;
+
 
 @property (nonatomic, retain) NSURL *fileURL;
 
@@ -191,7 +192,7 @@ typedef enum EncodeState : NSUInteger {
 - (BOOL) createMovieAsyncWithImageIndex: (NSUInteger) index andDuration: (NSUInteger) duration;
 {
     /* return if an encoding if already started */
-    if (self.encodeState || index >= self.imagesCount)
+    if (self.core || index >= self.imagesCount)
         return NO;
 
     hb_job_t *job = self.title->job;
@@ -232,7 +233,7 @@ typedef enum EncodeState : NSUInteger {
      */
 
     int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
-    self.privateHandle = hb_init(loggingLevel, 0);
+    self.core = [[[HBCore alloc] initWithLoggingLevel:loggingLevel] autorelease];
 
     /*
      * If scanning we need to do some extra setup of the job.
@@ -254,7 +255,7 @@ typedef enum EncodeState : NSUInteger {
         hb_job_set_encoder_profile(job, NULL);
         hb_job_set_encoder_level  (job, NULL);
         job->pass = -1;
-        hb_add(self.privateHandle, job);
+        hb_add(self.core.hb_handle, job);
         /*
          * reset the advanced settings
          */
@@ -274,18 +275,16 @@ typedef enum EncodeState : NSUInteger {
     job->indepth_scan = 0;
     job->pass = 0;
 
-    hb_add(self.privateHandle, job);
+    hb_add(self.core.hb_handle, job);
 
     /* we need to clean up the various lists after the job(s) have been set  */
     hb_job_reset(job);
 
+    [self registerCoreNotifications];
+    self.cancelled = NO;
+
     /* start the actual encode */
-    self.encodeState = EncodeStateWorking;
-    hb_system_sleep_prevent(self.privateHandle);
-
-    [self startHBTimer];
-
-    hb_start(self.privateHandle);
+    [self.core start];
 
     return YES;
 }
@@ -295,126 +294,68 @@ typedef enum EncodeState : NSUInteger {
  */
 - (void) cancel
 {
-    if (self.privateHandle)
+    if (self.core)
     {
-        hb_state_t s;
-        hb_get_state2(self.privateHandle, &s);
-
-        if (self.encodeState && (s.state == HB_STATE_WORKING ||
-                                  s.state == HB_STATE_PAUSED))
+        if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
         {
-            self.encodeState = EncodeStateCancelled;
-            hb_stop(self.privateHandle);
-            hb_system_sleep_allow(self.privateHandle);
+            [self.core stop];
+            self.cancelled = YES;
         }
     }
 }
 
-- (void) startHBTimer
+/**
+ *  Registers for notifications from HBCore.
+ */
+- (void) registerCoreNotifications
 {
-    if (!self.timer)
-    {
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5
-                                                      target:self
-                                                    selector:@selector(updateState)
-                                                    userInfo:nil
-                                                     repeats:YES];
-    }
-}
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
 
-- (void) stopHBTimer
-{
-    [self.timer invalidate];
-    self.timer = nil;
-}
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreWorkingNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
+        hb_state_t s = *(self.core.hb_state);
 
-- (void) updateState
-{
-    hb_state_t s;
-    hb_get_state(self.privateHandle, &s);
+        NSMutableString *info = [NSMutableString stringWithFormat: @"Encoding preview:  %.2f %%", 100.0 * s.param.working.progress];
 
-    switch( s.state )
-    {
-        case HB_STATE_IDLE:
-        case HB_STATE_SCANNING:
-        case HB_STATE_SCANDONE:
-            break;
-
-        case HB_STATE_WORKING:
+        if (s.param.working.seconds > -1)
         {
-			NSMutableString *info = [NSMutableString stringWithFormat: @"Encoding preview:  %.2f %%", 100.0 * s.param.working.progress];
-
-			if( s.param.working.seconds > -1 )
-            {
-                [info appendFormat:@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-                 s.param.working.rate_cur, s.param.working.rate_avg, s.param.working.hours,
-                 s.param.working.minutes, s.param.working.seconds];
-            }
-
-            double progress = 100.0 * s.param.working.progress;
-
-            [self.delegate updateProgress:progress info:info];
-
-            break;
+            [info appendFormat:@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
+             s.param.working.rate_cur, s.param.working.rate_avg, s.param.working.hours,
+             s.param.working.minutes, s.param.working.seconds];
         }
 
-        case HB_STATE_MUXING:
+        double progress = 100.0 * s.param.working.progress;
+
+        [self.delegate updateProgress:progress info:info];
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreMuxingNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
+        [self.delegate updateProgress:100.0 info:@"Muxing Preview…"];
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreWorkDoneNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
+        [self.core stop];
+        self.core = nil;
+
+        /* Encode done, call the delegate and close libhb handle */
+        if (!self.isCancelled)
         {
-            NSString *info = @"Muxing Preview…";
-            double progress = 100.0;
-
-            [self.delegate updateProgress:progress info:info];
-
-            break;
+            [self.delegate didCreateMovieAtURL:self.fileURL];
+        }
+        else
+        {
+            [self.delegate didCancelMovieCreation];
         }
 
-        case HB_STATE_PAUSED:
-            break;
-
-        case HB_STATE_WORKDONE:
-        {
-            [self stopHBTimer];
-
-            // Delete all remaining jobs since libhb doesn't do this on its own.
-            hb_job_t * job;
-            while( ( job = hb_job(self.privateHandle, 0) ) )
-                hb_rem( self.handle, job );
-
-            hb_system_sleep_allow(self.privateHandle);
-            hb_stop(self.privateHandle);
-            hb_close(&_privateHandle);
-            self.privateHandle = NULL;
-
-            /* Encode done, call the delegate and close libhb handle */
-            if (self.encodeState != EncodeStateCancelled)
-            {
-                [self.delegate didCreateMovieAtURL:self.fileURL];
-            }
-            else
-            {
-                [self.delegate didCancelMovieCreation];
-            }
-
-            self.encodeState = EncodeStateIdle;
-
-            break;
-        }
-    }
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }];
 }
 
 #pragma mark -
 
 - (void) dealloc
 {
-    [_timer invalidate];
-    [_timer release];
-    _timer = nil;
-
-    if (_privateHandle) {
-        hb_system_sleep_allow(self.privateHandle);
-        hb_stop(_privateHandle);
-        hb_close(&_privateHandle);
-    }
+    [self.core stop];
+    self.core = nil;
 
     [_fileURL release];
     _fileURL = nil;

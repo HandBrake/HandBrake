@@ -14,8 +14,8 @@
 @class HBPicture;
 @class HBFilters;
 
-@class HBAudioSettings;
-@class HBSubtitlesSettings;
+@class HBAudioDefaults;
+@class HBSubtitlesDefaults;
 
 /**
  * HBJob
@@ -45,8 +45,8 @@
 @property (nonatomic, readonly) HBFilters *filters;
 
 // Defaults settings
-@property (nonatomic, readonly) HBAudioSettings *audioSettings;
-@property (nonatomic, readonly) HBSubtitlesSettings *subtitlesSettings;
+@property (nonatomic, readonly) HBAudioDefaults *audioDefaults;
+@property (nonatomic, readonly) HBSubtitlesDefaults *subtitlesDefaults;
 
 // File resources
 @property (nonatomic, readonly) NSMutableArray *audioTracks;
