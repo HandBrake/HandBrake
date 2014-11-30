@@ -9,6 +9,7 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Linq;
 
@@ -199,6 +200,7 @@ namespace HandBrake.ApplicationServices.Model
         #endregion
 
         #region Output Settings
+
         /// <summary>
         /// Gets or sets OutputFormat.
         /// </summary>
@@ -213,6 +215,7 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether IPod5GSupport.
         /// </summary>
         public bool IPod5GSupport { get; set; }
+
         #endregion
 
         #region Picture
@@ -276,6 +279,7 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets Modulus.
         /// </summary>
         public int? Modulus { get; set; }
+
         #endregion
 
         #region Filters
@@ -339,6 +343,7 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether Grayscale.
         /// </summary>
         public bool Grayscale { get; set; }
+
         #endregion
 
         #region Video
@@ -397,6 +402,7 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets AllowedPassthruOptions.
         /// </summary>
         public AllowedPassthru AllowedPassthruOptions { get; set; }
+
         #endregion
 
         #region Subtitles
@@ -405,6 +411,7 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets SubtitleTracks.
         /// </summary>
         public ObservableCollection<SubtitleTrack> SubtitleTracks { get; set; }
+
         #endregion
 
         #region Chapters
@@ -520,8 +527,11 @@ namespace HandBrake.ApplicationServices.Model
             {
                 if (this.OutputFormat == OutputFormat.Mp4)
                 {
-                    bool audio = this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough ||
-                        item.Encoder == AudioEncoder.Ac3 || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);
+                    bool audio =
+                        this.AudioTracks.Any(
+                            item =>
+                            item.Encoder == AudioEncoder.Ac3Passthrough || item.Encoder == AudioEncoder.Ac3
+                            || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);
 
                     bool subtitles = this.SubtitleTracks.Any(track => track.SubtitleType != SubtitleType.VobSub);
 
@@ -565,6 +575,36 @@ namespace HandBrake.ApplicationServices.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the picture settings desc.
+        /// </summary>
+        public string PictureSettingsDesc
+        {
+            get
+            {
+                string resolution = string.Empty; 
+                switch (this.Anamorphic)
+                {
+                    case Anamorphic.Strict:
+                        resolution = "Anamorphic: Strict";
+                        break;
+                    case Anamorphic.Loose:
+                        resolution = "Anamorphic: Loose, Width: " + this.Width;
+                        break;
+                    case Anamorphic.Custom:
+                        resolution = "Anamorphic: Custom, Resolution: " + this.Width + "x" + this.Height;
+                        break;
+                    case Anamorphic.None:
+                        resolution = "Resolution: " + this.Width + "x" + this.Height;
+                        break;
+                }
+
+                return resolution + Environment.NewLine + "Crop Top: " + this.Cropping.Top + ", Botton: " + this.Cropping.Bottom + ", Left: "
+                       + this.Cropping.Left + ", Right: " + this.Cropping.Right;
+            }
+        }
+
         #endregion
     }
 }

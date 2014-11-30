@@ -230,10 +230,11 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="95" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
@@ -243,21 +244,23 @@
                                 <TextBlock FontWeight="Bold" Text="Destination:" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
                                 <TextBlock Text="{Binding Task.Destination}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
 
-                                <TextBlock FontWeight="Bold" Text="Video:" Grid.Row="2" Grid.Column="0" />
+                                <TextBlock FontWeight="Bold" Text="Picture Settings:" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task.PictureSettingsDesc}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  />
+                                
+                                <TextBlock FontWeight="Bold" Text="Video:" Grid.Row="3" Grid.Column="0" />
                                 <TextBlock Text="{Binding Task.VideoEncoder, Converter={StaticResource enumComboConverter}}"
-                                           Grid.Row="2" Grid.Column="1" />
+                                           Grid.Row="3" Grid.Column="1" />
 
-                                <TextBlock FontWeight="Bold" Text="Audio: "  Grid.Row="3" Grid.Column="0"/>
+                                <TextBlock FontWeight="Bold" Text="Audio: "  Grid.Row="4" Grid.Column="0"/>
                                 <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"
-                                           Grid.Row="3" Grid.Column="1"/>
+                                           Grid.Row="4" Grid.Column="1"/>
 
-                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="Subtitles: " Grid.Row="4" Grid.Column="0"  />
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="Subtitles: " Grid.Row="5" Grid.Column="0"  />
                                 <TextBlock Text="{Binding Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
-                                           Grid.Row="4" Grid.Column="1" />
+                                           Grid.Row="5" Grid.Column="1" />
 
-
-                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0"  Text="Advanced: " />
-                                <TextBlock Text="{Binding Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"  />
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="6" Grid.Column="0"  Text="Advanced: " />
+                                <TextBlock Text="{Binding Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap"  />
                             </Grid>
 
                         </Setter.Value>
