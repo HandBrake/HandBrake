@@ -19,8 +19,10 @@ typedef NS_ENUM(NSUInteger, HBState) {
     HBStateSearching = HB_STATE_SEARCHING    ///< HB is searching
 };
 
+// These constants specify various status notifications sent by HBCore
 extern NSString *HBCoreScanningNotification;
 extern NSString *HBCoreScanDoneNotification;
+extern NSString *HBCoreSearchingNotification;
 extern NSString *HBCoreWorkingNotification;
 extern NSString *HBCorePausedNotification;
 extern NSString *HBCoreWorkDoneNotification;
@@ -41,6 +43,11 @@ extern NSString *HBCoreMuxingNotification;
  * @param enabled         whether libdvdnav is enabled or not.
  */
 + (void)setDVDNav:(BOOL)enabled;
+
+/**
+ *  Performs the final cleanup for the process.
+ */
++ (void)closeGlobal;
 
 /**
  * Opens low level HandBrake library. This should be called once before other
@@ -89,6 +96,11 @@ extern NSString *HBCoreMuxingNotification;
 - (void)scan:(NSURL *)url titleNum:(NSUInteger)titleNum previewsNum:(NSUInteger)previewsNum minTitleDuration:(NSUInteger)minTitleDuration;
 
 /**
+ *  Cancels the scan execution.
+ */
+- (void)cancelScan;
+
+/**
  * Starts the libhb encoding session.
  *
  *	This method must be called after all jobs have been added.
@@ -99,5 +111,15 @@ extern NSString *HBCoreMuxingNotification;
  * Stops encoding session and releases resources.
  */
 - (void)stop;
+
+/**
+ *  Pauses the encoding session.
+ */
+- (void)pause;
+
+/**
+ *  Resumes a paused encoding session.
+ */
+- (void)resume;
 
 @end

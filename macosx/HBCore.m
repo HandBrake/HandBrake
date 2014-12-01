@@ -18,6 +18,9 @@ NSString *HBCoreScanningNotification = @"HBCoreScanningNotification";
 /// Notification sent after scanning is complete. Matches HB_STATE_SCANDONE constant in libhb.
 NSString *HBCoreScanDoneNotification = @"HBCoreScanDoneNotification";
 
+/// Notification sent to update status while searching. Matches HB_STATE_SEARCHING constant in libhb.
+NSString *HBCoreSearchingNotification = @"HBCoreSearchingNotification";
+
 /// Notification sent to update status while encoding. Matches HB_STATE_WORKING constant in libhb.
 NSString *HBCoreWorkingNotification = @"HBCoreWorkingNotification";
 
@@ -50,6 +53,11 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 + (void)setDVDNav:(BOOL)enabled
 {
     hb_dvd_set_dvdnav(enabled);
+}
+
++ (void)closeGlobal
+{
+    hb_global_close();
 }
 
 /**
@@ -155,8 +163,6 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 
 - (void)scan:(NSURL *)url titleNum:(NSUInteger)titleNum previewsNum:(NSUInteger)previewsNum minTitleDuration:(NSUInteger)minTitleDuration;
 {
-    NSAssert(_hb_handle, @"[HBCore scan:] libhb is not open");
-
     // Start the timer to handle libhb state changes
     [self startUpdateTimer];
 
@@ -191,27 +197,51 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     hb_scan(_hb_handle, path.fileSystemRepresentation,
             (int)titleNum, (int)previewsNum,
             1, min_title_duration_ticks);
+
+    // Set the state, so the UI can be update
+    // to reflect the current state instead of
+    // waiting for libhb to set it in a background thread.
+    self.state = HBStateScanning;
+}
+
+- (void)cancelScan
+{
+    hb_scan_stop(_hb_handle);
 }
 
 #pragma mark - Encodes
 
 - (void)start
 {
-    NSAssert(_hb_handle, @"[HBCore start] libhb is not open");
-
     // Start the timer to handle libhb state changes
     [self startUpdateTimer];
 
     hb_system_sleep_prevent(_hb_handle);
     hb_start(_hb_handle);
+
+    // Set the state, so the UI can be update
+    // to reflect the current state instead of
+    // waiting for libhb to set it in a background thread.
+    self.state = HBStateWorking;
 }
 
 - (void)stop
 {
-    NSAssert(_hb_handle, @"[HBCore stop] libhb is not open");
-
     hb_stop(_hb_handle);
     hb_system_sleep_allow(_hb_handle);
+}
+
+
+- (void)pause
+{
+    hb_pause(_hb_handle);
+    hb_system_sleep_allow(_hb_handle);
+}
+
+- (void)resume
+{
+    hb_resume(_hb_handle);
+    hb_system_sleep_prevent(_hb_handle);
 }
 
 #pragma mark - State updates
@@ -292,10 +322,8 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     // Update HBCore state to reflect the current state of libhb
     self.state = _hb_state->state;
 
-    // Determine name of the method that does further processing for this state
-    // and call it. 
+    // Determine name of the method that does further processing for this state.
     SEL sel = [self selectorForState:self.state];
-    [self performSelector:sel];
 
     if (_hb_state->state == HB_STATE_WORKDONE || _hb_state->state == HB_STATE_SCANDONE)
     {
@@ -303,9 +331,13 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
         // so nothing interesting will happen after this point, stop the timer.
         [self stopUpdateTimer];
 
+        // Set the state to idle, because the update timer won't fire again.
         self.state = HBStateIdle;
         hb_system_sleep_allow(_hb_handle);
     }
+
+    // Call the determined selector.
+    [self performSelector:sel];
 }
 
 #pragma mark - Notifications
@@ -370,7 +402,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
  */
 - (void)handleHBStateSearching
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreMuxingNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreSearchingNotification object:self];
 }
 
 @end
