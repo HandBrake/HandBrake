@@ -2095,6 +2095,14 @@ meta_setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+plot_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkWidget *textview;
+    textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "MetaLongDescription"));
+    ghb_widget_to_setting(ud->settings, textview);
+}
+
+G_MODULE_EXPORT void
 chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);

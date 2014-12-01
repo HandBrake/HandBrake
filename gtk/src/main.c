@@ -701,6 +701,7 @@ watch_volumes(signal_user_data_t *ud)
 
 G_MODULE_EXPORT void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void video_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
+G_MODULE_EXPORT void plot_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void position_overlay_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_data_t *ud);
 
@@ -946,6 +947,10 @@ main(int argc, char *argv[])
     textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
     buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", (GCallback)video_option_changed_cb, ud);
+
+    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "MetaLongDescription"));
+    buffer = gtk_text_view_get_buffer(textview);
+    g_signal_connect(buffer, "changed", (GCallback)plot_changed_cb, ud);
 
     ghb_combo_init(ud);
 
