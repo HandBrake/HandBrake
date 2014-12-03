@@ -10,12 +10,17 @@
 
 @interface HBPicture : NSObject
 
-/*
- width
- height
+- (void)applySettingsFromPreset:(NSDictionary *)preset;
 
- autocrop
- crop[]
+@property (nonatomic, readwrite) int width;
+@property (nonatomic, readwrite) int height;
+
+@property (nonatomic, readwrite) BOOL autocrop;
+@property (nonatomic, readwrite) int *crop;
+
+@property (nonatomic, readwrite) int modulus;
+
+/*
  anamorphic {
  mode
  keepDisplayAspect

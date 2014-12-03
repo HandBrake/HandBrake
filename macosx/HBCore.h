@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+
 #include "hb.h"
 
 // These constants specify the current state of HBCore.
@@ -99,6 +100,11 @@ extern NSString *HBCoreMuxingNotification;
  *  Cancels the scan execution.
  */
 - (void)cancelScan;
+
+/**
+ *  An array of HBTitles found by the latest scan.
+ */
+@property (nonatomic, readonly) NSArray *titles;
 
 /**
  * Starts the libhb encoding session.

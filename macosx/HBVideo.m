@@ -10,4 +10,9 @@
 
 @implementation HBVideo
 
+- (void)applySettingsFromPreset:(NSDictionary *)preset
+{
+
+}
+
 @end

@@ -10,4 +10,9 @@
 
 @implementation HBPicture
 
+- (void)applySettingsFromPreset:(NSDictionary *)preset
+{
+
+}
+
 @end

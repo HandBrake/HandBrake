@@ -6,9 +6,9 @@
 
 #import <Foundation/Foundation.h>
 
-#include "hb.h"
-
 @class HBPreset;
+
+@class HBTitle;
 
 @class HBVideo;
 @class HBPicture;
@@ -17,15 +17,24 @@
 @class HBAudioDefaults;
 @class HBSubtitlesDefaults;
 
+typedef NS_ENUM(NSUInteger, HBJobStatus) {
+    HBJobStatusNone,
+    HBJobStatusWorking,
+    HBJobStatusCompleted,
+    HBJobStatusCanceled
+};
+
 /**
  * HBJob
  */
 @interface HBJob : NSObject <NSCoding, NSCopying>
 
-- (instancetype)initWithTitle:(hb_title_t *)title url:(NSURL *)fileURL andPreset:(HBPreset *)preset;
+- (instancetype)initWithTitle:(HBTitle *)title url:(NSURL *)fileURL andPreset:(HBPreset *)preset;
+
+@property (nonatomic, readonly) HBJobStatus status;
 
 // libhb
-@property (nonatomic, readonly) hb_title_t *title;
+@property (nonatomic, readonly) HBTitle *title;
 @property (nonatomic, readonly) NSURL *fileURL;
 
 // Old job format
@@ -33,7 +42,6 @@
 @property (nonatomic, readonly) NSAttributedString *jobDescription;
 
 // Job settings
-
 @property (nonatomic, readwrite) int fileFormat;
 
 @property (nonatomic, readwrite) BOOL mp4LargeFile;
@@ -47,10 +55,5 @@
 // Defaults settings
 @property (nonatomic, readonly) HBAudioDefaults *audioDefaults;
 @property (nonatomic, readonly) HBSubtitlesDefaults *subtitlesDefaults;
-
-// File resources
-@property (nonatomic, readonly) NSMutableArray *audioTracks;
-@property (nonatomic, readonly) NSMutableArray *subtitlesTracks;
-@property (nonatomic, readonly) NSMutableArray *chapters;
 
 @end

@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBCore.h"
+#import "HBTitle.h"
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
 
@@ -44,6 +45,8 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 /// Timer used to poll libhb for state changes.
 @property (nonatomic, readwrite, retain) NSTimer *updateTimer;
 
+@property (nonatomic, readwrite) NSArray *titles;
+
 - (void)stateUpdateTimer:(NSTimer *)timer;
 
 @end
@@ -63,13 +66,35 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 /**
  * Initializes HBCore.
  */
-- (id)init
+- (instancetype)init
 {
-    if (self = [super init])
+    return [self initWithLoggingLevel:0];
+}
+
+/**
+ * Opens low level HandBrake library. This should be called once before other
+ * functions HBCore are used.
+ *
+ * @param debugMode         If set to YES, libhb will print verbose debug output.
+ *
+ * @return YES if libhb was opened, NO if there was an error.
+ */
+- (instancetype)initWithLoggingLevel:(int)loggingLevel
+{
+    self = [super init];
+    if (self)
     {
         _state = HBStateIdle;
         _hb_state = malloc(sizeof(struct hb_state_s));
+
+        _hb_handle = hb_init(loggingLevel, 0);
+        if (!_hb_handle)
+        {
+            [self release];
+            return nil;
+        }
     }
+
     return self;
 }
 
@@ -86,40 +111,10 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     [super dealloc];
 }
 
-/**
- * Opens low level HandBrake library. This should be called once before other
- * functions HBCore are used.
- *
- * @param debugMode         If set to YES, libhb will print verbose debug output.
- *
- * @return YES if libhb was opened, NO if there was an error.
- */
-- (instancetype)initWithLoggingLevel:(int)loggingLevel
-{
-    self = [self init];
-    if (self)
-    {
-        _hb_handle = hb_init(loggingLevel, 0);
-        if (!_hb_handle)
-        {
-            [self release];
-            return nil;
-        }
-    }
-
-    return self;
-}
-
 #pragma mark - Scan
 
 - (BOOL)canScan:(NSURL *)url error:(NSError **)error
 {
-    if (!_hb_handle)
-    {
-        // Libhb is not open so we cannot do anything.
-        return NO;
-    }
-
     if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
         if (*error) {
             *error = [NSError errorWithDomain:@"HBErrorDomain"
@@ -152,7 +147,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
             // compatible libdvdcss not found
             [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
 
-            if (*error) {
+            if (error) {
                 *error = [NSError errorWithDomain:@"HBErrorDomain" code:101 userInfo:@{ NSLocalizedDescriptionKey: @"libdvdcss.2.dylib not found for decrypting physical dvd" }];
             }
         }
@@ -204,6 +199,23 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     self.state = HBStateScanning;
 }
 
+/**
+ *  Creates an array of lightweight HBTitles instances.
+ */
+- (void)scanDone
+{
+    hb_title_set_t *title_set = hb_get_title_set(_hb_handle);
+    NSMutableArray *titles = [NSMutableArray array];
+
+    for (int i = 0; i < hb_list_count(title_set->list_title); i++)
+    {
+        hb_title_t *title = (hb_title_t *) hb_list_item(title_set->list_title, i);
+        [titles addObject:[[[HBTitle alloc] initWithTitle:title featured:(title->index == title_set->feature)] autorelease]];
+    }
+
+    self.titles = [[titles copy] autorelease];
+}
+
 - (void)cancelScan
 {
     hb_scan_stop(_hb_handle);
@@ -223,6 +235,16 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     // to reflect the current state instead of
     // waiting for libhb to set it in a background thread.
     self.state = HBStateWorking;
+}
+
+- (void)workDone
+{
+    // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
+    // or someone calling hb_stop. In the latter case, hb_stop does not clear
+    // out the remaining passes/jobs in the queue. We'll do that here.
+    hb_job_t *job;
+    while ((job = hb_job(_hb_handle, 0)))
+        hb_rem(_hb_handle, job);
 }
 
 - (void)stop
@@ -357,6 +379,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
  */
 - (void)handleHBStateScanDone
 {
+    [self scanDone];
     [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreScanDoneNotification object:self];    
 }
 
@@ -384,6 +407,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
  */
 - (void)handleHBStateWorkDone
 {
+    [self workDone];
     [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreWorkDoneNotification object:self];    
 }
 

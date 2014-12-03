@@ -10,25 +10,22 @@
 
 @interface HBVideo : NSObject
 
-/*
- videoEncoder
- videoEncoderTag
+- (void)applySettingsFromPreset:(NSDictionary *)preset;
 
- qualityType
- avgBitrate
- quality
+@property (nonatomic, readwrite) int videoEncoder;
 
- frameRate
- frameRateTag
- frameRateMode
+@property (nonatomic, readwrite) int qualityType;
+@property (nonatomic, readwrite) int avgBitrate;
+@property (nonatomic, readwrite) float quality;
 
- fastFirstPass
- twoPass
- turboTwoPass
+@property (nonatomic, readwrite) int frameRate;
+@property (nonatomic, readwrite) int frameRateMode;
 
- encoderOptions {
- x264
- lav
- }*/
+
+@property (nonatomic, readwrite) BOOL fastFirstPass;
+@property (nonatomic, readwrite) BOOL twoPass;
+@property (nonatomic, readwrite) BOOL turboTwoPass;
+
+@property (nonatomic, readwrite, copy) NSString *videoOptionExtra;
 
 @end
