@@ -21,6 +21,8 @@
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
+#import "HBCore.h"
+
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
 NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
@@ -47,6 +49,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 // The current selected preset.
 @property (nonatomic, retain) HBPreset *selectedPreset;
 @property (nonatomic) BOOL customPreset;
+
+/**
+ *  The HBCore used for scanning.
+ */
+@property (nonatomic, retain) HBCore *core;
+
+/**
+ *  The HBCore used for encoding.
+ */
+@property (nonatomic, retain) HBCore *queueCore;
 
 @end
 
@@ -101,80 +113,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                        stringByAppendingString:[NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
         [HBUtilities writeToActivityLog: "%s", [versionStringFull UTF8String]];
 
-        // Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it
-        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
-        fHandle = hb_init(loggingLevel, 0);
-
         // Optional dvd nav UseDvdNav
-        hb_dvd_set_dvdnav([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]);
+        [HBCore setDVDNav:[[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]];
+
+        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+        // Init libhb
+        _core = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
 
         // Init a separate instance of libhb for user scanning and setting up jobs
-        fQueueEncodeLibhb = hb_init(loggingLevel, 0);
+        _queueCore = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
     }
 
     return self;
-}
-
-// This method is triggered at launch (and every launch) whether or not
-// files have been dragged on to the dockTile. As a consequence, [self openFiles]
-// contains the logic to detect the case when no files has been drop on the dock
-- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
-{
-    [self openFiles:filenames];
-    
-    [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
-}
-
-- (void)openFiles:(NSArray*)filenames
-{
-    if (filenames.count == 1 && [[filenames objectAtIndex:0] isEqual:@"YES"])
-        return;
-    
-    NSMutableArray *filesList = [[[NSMutableArray alloc] initWithArray:filenames] autorelease];
-    [filesList removeObject:@"YES"];
-    
-    // For now, we just want to accept one file at a time
-    // If for any reason, more than one file is submitted, we will take the first one
-    if (filesList.count > 1)
-    {
-        filesList = [NSMutableArray arrayWithObject:[filesList objectAtIndex:0]];
-    }
-    
-    // The goal of this check is to know if the application was running before the drag & drop
-    // if fSubtitlesDelegate is set, then applicationDidFinishLaunching was called
-    if (fSubtitlesViewController)
-    {
-        // Handbrake was already running when the user dropped the file(s)
-        // So we get unstack the first one and launch the scan
-        // The other ones remain in the UserDefaults, and will be handled in the updateUI method
-        // when Handbrake is idle
-        id firstItem = [filesList objectAtIndex:0];
-        [filesList removeObjectAtIndex:0];
-        
-        // This variable has only one goal, let the updateUI knows that even if idling
-        // maybe a scan is in preparation
-        fWillScan = YES;
-        
-        if (filesList.count > 0)
-        {
-            [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
-        }
-        else
-        {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
-        }
-        
-        [browsedSourceDisplayName release];
-        browsedSourceDisplayName = [[firstItem lastPathComponent] retain];
-        [self performScan:firstItem scanTitleNum:0];
-    }
-    else
-    {
-        // Handbrake was not running before the user dropped the file(s)
-        // So we save the file(s) list in the UserDefaults and we will read them
-        // in the applicationDidFinishLaunching method
-        [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
-    }
 }
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
@@ -183,9 +133,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [GrowlApplicationBridge setGrowlDelegate: self];
     /* Init others controllers */
     [fPictureController setDelegate: self];
-    [fPictureController setHandle: fHandle];
+    [fPictureController setHandle: self.core.hb_handle];
 
-    [fQueueController   setHandle: fQueueEncodeLibhb];
+    [fQueueController   setHandle: self.queueCore.hb_handle];
     [fQueueController   setHBController: self];
 
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(autoSetM4vExtension:) name: HBMixdownChangedNotification object: nil];
@@ -226,15 +176,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
 
     [self enableUI: NO];
-    /* Call UpdateUI every 1/2 sec */
-    
-    [[NSRunLoop currentRunLoop] addTimer:[NSTimer
-                                          scheduledTimerWithTimeInterval:0.5 
-                                          target:self
-                                          selector:@selector(updateUI:) 
-                                          userInfo:nil repeats:YES]
-                                          forMode:NSDefaultRunLoopMode];
-                             
+
+    // Registers the observers to the cores notifications.
+    [self registerScanCoreNotifications];
+    [self registerQueueCoreNotifications];
 
     // Open debug output window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
@@ -250,10 +195,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      * Initially we set it to NO until we start processing the queue
      */
      applyQueueToScan = NO;
-    
-    // We try to get the list of filenames that may have been drag & drop before the application was running
-    id dragDropFilesId = [[NSUserDefaults standardUserDefaults] objectForKey:dragDropFiles];
-    
+
     /* Now we re-check the queue array to see if there are
      * any remaining encodes to be done in it and ask the
      * user if they want to reload the queue */
@@ -262,10 +204,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* run  getQueueStats to see whats in the queue file */
         [self getQueueStats];
         /* this results in these values
-         * fEncodingQueueItem = 0;
          * fPendingCount = 0;
-         * fCompletedCount = 0;
-         * fCanceledCount = 0;
          * fWorkingCount = 0;
          */
         
@@ -315,48 +254,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                  didEndSelector:@selector(didDimissReloadQueue:returnCode:contextInfo:)
                                     contextInfo:nil];
                 [alert release];
-
-                // After handling the previous queue (reload or empty), if there is files waiting for scanning
-                // we will process them
-                if (dragDropFilesId)
-                {
-                    NSArray *dragDropFiles = (NSArray *)dragDropFilesId;
-                    [self openFiles:dragDropFiles];
-                }
             }
             else
             {
-                // We will open the source window only if there is no dropped files waiting to be scanned
-                if (dragDropFilesId)
+                /* Since we addressed any pending or previously encoding items above, we go ahead and make sure
+                 * the queue is empty of any finished items or cancelled items */
+                [self clearQueueAllItems];
+                /* We show whichever open source window specified in LaunchSourceBehavior preference key */
+                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
                 {
-                    NSArray *dragDropFiles = (NSArray *)dragDropFilesId;
-                    [self openFiles:dragDropFiles];
+                    [self browseSources:nil];
                 }
-                else
+
+                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
                 {
-                    /* Since we addressed any pending or previously encoding items above, we go ahead and make sure
-                     * the queue is empty of any finished items or cancelled items */
-                    [self clearQueueAllItems];
-                    /* We show whichever open source window specified in LaunchSourceBehavior preference key */
-                    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
-                    {
-                        [self browseSources:nil];
-                    }
-                
-                    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
-                    {
-                        [self browseSources:(id)fOpenSourceTitleMMenu];
-                    }
+                    [self browseSources:(id)fOpenSourceTitleMMenu];
                 }
             }
             
         }
-    }
-    // We will open the source window only if there is no dropped files waiting to be scanned
-    else if (dragDropFilesId)
-    {
-        NSArray *dragDropFiles = (NSArray *)dragDropFilesId;
-        [self openFiles:dragDropFiles];
     }
     else
     {
@@ -417,11 +333,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     return hbInstances;
 }
 
-- (int) getPidnum
-{
-    return pidNum;
-}
-
 #pragma mark -
 #pragma mark Drag & drop handling
 
@@ -449,7 +360,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     if ([[pboard types] containsObject:NSFilenamesPboardType])
     {
-        NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
+        /*NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
         
         if (paths.count > 0)
         {
@@ -459,7 +370,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             paths = reducedPaths;
         }
         
-        [self openFiles:paths];
+        [self openFiles:paths];*/
+        //FIXME
     }
     
     return YES;
@@ -502,10 +414,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
-    hb_state_t s;
-    hb_get_state2(fQueueEncodeLibhb, &s);
-
-    if (s.state != HB_STATE_IDLE)
+    if (self.queueCore.state != HBStateIdle)
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil)];
@@ -553,10 +462,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
 {
-    // When the application is closed and we still have some files in the dragDropFiles array
-    // it's highly probable that the user throw a lot of files and just want to reset this
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
-
     [presetManager savePresets];
     [presetManager release];
 
@@ -569,17 +474,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fPictureController release];
     [dockTile release];
 
-    hb_close(&fHandle);
-    hb_close(&fQueueEncodeLibhb);
-    hb_global_close();
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    self.core = nil;
+    self.queueCore = nil;
+    [HBCore closeGlobal];
 }
 
 
 - (void) awakeFromNib
 {
-    [fWindow center];
-    [fWindow setExcludedFromWindowsMenu:NO];
-
     fRipIndicatorShown = NO;  // initially out of view in the nib
     
     /* For 64 bit builds, the threaded animation in the progress
@@ -781,410 +685,292 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fChapterTitlesController setUIEnabled:b];
 }
 
-- (void) updateUI: (NSTimer *) timer
+/**
+ *  Registers the observers to the scan core notifications
+ */
+- (void)registerScanCoreNotifications
 {
-    /* Update UI for fHandle (user scanning instance of libhb ) */
-    hb_state_t s;
-    hb_get_state( fHandle, &s );
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
 
-    switch( s.state )
-    {
-        case HB_STATE_IDLE:
-            break;
-#define p s.param.scanning
-        case HB_STATE_SCANNING:
-		{
-            if( p.preview_cur )
-            {
-                [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
-                                                NSLocalizedString( @"Scanning title %d of %d, preview %d…", @"" ),
-                                                p.title_cur, p.title_count,
-                                                p.preview_cur]];
-            }
-            else
-            {
-                [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
-                                                NSLocalizedString( @"Scanning title %d of %d…", @"" ),
-                                                p.title_cur, p.title_count]];
-            }
-            [fScanIndicator setHidden: NO];
-            [fScanHorizontalLine setHidden: YES];
-            [fScanIndicator setDoubleValue: 100.0 * p.progress];
-            break;
-		}
-#undef p
-            
-#define p s.param.scandone
-        case HB_STATE_SCANDONE:
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreScanningNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
+        hb_state_t s = *(self.core.hb_state);
+        #define p s.param.scanning
+        if (p.preview_cur)
         {
-            [fScanIndicator setIndeterminate: NO];
-            [fScanIndicator setDoubleValue: 0.0];
-            [fScanIndicator setHidden: YES];
-            [fScanHorizontalLine setHidden: NO];
-			[HBUtilities writeToActivityLog:"ScanDone state received from fHandle"];
-            [self showNewScan:nil];
-            [[fWindow toolbar] validateVisibleItems];
-            
-			break;
+            fSrcDVD2Field.stringValue = [NSString stringWithFormat:
+                                         NSLocalizedString( @"Scanning title %d of %d, preview %d…", @"" ),
+                                         p.title_cur, p.title_count,
+                                         p.preview_cur];
         }
-#undef p
-            
-#define p s.param.working
-        case HB_STATE_WORKING:
+        else
         {
-            
-            break;
+            fSrcDVD2Field.stringValue = [NSString stringWithFormat:
+                                          NSLocalizedString( @"Scanning title %d of %d…", @"" ),
+                                          p.title_cur, p.title_count];
         }
-#undef p
-            
-#define p s.param.muxing
-        case HB_STATE_MUXING:
-        {
-            
-            break;
-        }
-#undef p
-            
-        case HB_STATE_PAUSED:
-            break;
-            
-        case HB_STATE_WORKDONE:
-        {
-            break;
-        }
-    }
+        fScanIndicator.hidden = NO;
+        fScanHorizontalLine.hidden = YES;
+        fScanIndicator.doubleValue = 100.0 * p.progress;
+        #undef p
+    }];
 
-    /* Update UI for fQueueEncodeLibhb */
-    hb_get_state( fQueueEncodeLibhb, &s );
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreScanDoneNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
+        fScanHorizontalLine.hidden = NO;
+        fScanIndicator.hidden = YES;
+        fScanIndicator.indeterminate = NO;
+        fScanIndicator.doubleValue = 0.0;
 
-    switch( s.state )
-    {
-        case HB_STATE_IDLE:
-            break;
-#define p s.param.scanning
-        case HB_STATE_SCANNING:
-		{
-            NSString *scan_status;
-            if( p.preview_cur )
-            {
-                scan_status = [NSString stringWithFormat:
-                               NSLocalizedString( @"Queue Scanning title %d of %d, preview %d…", @"" ),
-                               p.title_cur, p.title_count, p.preview_cur];
-            }
-            else
-            {
-                scan_status = [NSString stringWithFormat:
-                               NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
-                               p.title_cur, p.title_count];
-            }
-            [fStatusField setStringValue: scan_status];
-            
-            /* Set the status string in fQueueController as well */
-            [fQueueController setQueueStatusString: scan_status];
-            break;
-		}
-#undef p
-            
-#define p s.param.scandone
-        case HB_STATE_SCANDONE:
-        {
-			[HBUtilities writeToActivityLog:"ScanDone state received from fQueueEncodeLibhb"];
-            [self processNewQueueEncode];
-            [[fWindow toolbar] validateVisibleItems];
-            
-			break;
-        }
-#undef p
-            
-            
-#define p s.param.working
-            
-        case HB_STATE_SEARCHING:
-		{
-            NSMutableString *string;
+        [HBUtilities writeToActivityLog:"ScanDone state received from fHandle"];
+        [self showNewScan:nil];
+        [[fWindow toolbar] validateVisibleItems];
+    }];
+}
 
-            /* Update text field */
-            //string = [NSMutableString stringWithFormat:
-            //          NSLocalizedString( @"Searching for start point: pass %d %@ of %d, %.2f %%", @"" ),
-            //          p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
-            /* For now, do not announce "pass x of x for the search phase */
-            string = [NSMutableString stringWithFormat:
-                      NSLocalizedString( @"Searching for start point… :  %.2f %%", @"" ),
-                      100.0 * p.progress];
-            
-            if( p.seconds > -1 )
-            {
-                [string appendFormat:
-                 NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ),
-                 p.hours, p.minutes, p.seconds];
-            }
-            
-            [fStatusField setStringValue: string];
-            /* Set the status string in fQueueController as well */
-            [fQueueController setQueueStatusString: string];
-            /* Update slider */
-            CGFloat progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
-            [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator setDoubleValue:100.0 * progress_total];
-            
-            // If progress bar hasn't been revealed at the bottom of the window, do
-            // that now. This code used to be in doRip. I moved it to here to handle
-            // the case where hb_start is called by HBQueueController and not from
-            // HBController.
-            if( !fRipIndicatorShown )
-            {
-                NSRect frame = [fWindow frame];
-                if( frame.size.width <= 591 )
-                    frame.size.width = 591;
-                frame.size.height += 36;
-                frame.origin.y -= 36;
-                [fWindow setFrame:frame display:YES animate:YES];
-                fRipIndicatorShown = YES;
-                
-            }
-            
-            /* Update dock icon */
-            /* Note not done yet */
-            break;  
-        }
-            
-            
-        case HB_STATE_WORKING:
+- (void)registerQueueCoreNotifications
+{
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreScanningNotification object:self.queueCore queue:mainQueue usingBlock:^(NSNotification *note) {
+        hb_state_t s = *(self.queueCore.hb_state);
+        #define p s.param.scanning
+        NSString *scan_status;
+        if (p.preview_cur)
         {
-            NSMutableString * string;
-            NSString * pass_desc;
-			/* Update text field */
-            if (p.job_cur == 1 && p.job_count > 1)
+            scan_status = [NSString stringWithFormat:
+                           NSLocalizedString( @"Queue Scanning title %d of %d, preview %d…", @"" ),
+                           p.title_cur, p.title_count, p.preview_cur];
+        }
+        else
+        {
+            scan_status = [NSString stringWithFormat:
+                           NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
+                           p.title_cur, p.title_count];
+        }
+        fStatusField.stringValue = scan_status;
+
+        // Set the status string in fQueueController as well
+        [fQueueController setQueueStatusString: scan_status];
+        #undef p
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreScanDoneNotification object:self.queueCore queue:mainQueue usingBlock:^(NSNotification *note) {
+        [HBUtilities writeToActivityLog:"ScanDone state received from fQueueEncodeLibhb"];
+        [self processNewQueueEncode];
+        [[fWindow toolbar] validateVisibleItems];
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreSearchingNotification object:self.queueCore queue:mainQueue usingBlock:^(NSNotification *note) {
+        hb_state_t s = *(self.queueCore.hb_state);
+        #define p s.param.working
+        NSMutableString *string = [NSMutableString stringWithFormat:
+                                   NSLocalizedString(@"Searching for start point… :  %.2f %%", @""),
+                                   100.0 * p.progress];
+
+        if (p.seconds > -1)
+        {
+            [string appendFormat:NSLocalizedString(@" (ETA %02dh%02dm%02ds)", @"" ), p.hours, p.minutes, p.seconds];
+        }
+
+        fStatusField.stringValue = string;
+        // Set the status string in fQueueController as well
+        [fQueueController setQueueStatusString: string];
+
+        // Update slider
+        CGFloat progress_total = (p.progress + p.job_cur - 1) / p.job_count;
+        fRipIndicator.indeterminate = NO;
+        fRipIndicator.doubleValue = 100.0 * progress_total;
+
+        // If progress bar hasn't been revealed at the bottom of the window, do
+        // that now. This code used to be in doRip. I moved it to here to handle
+        // the case where hb_start is called by HBQueueController and not from
+        // HBController.
+        if (!fRipIndicatorShown)
+        {
+            NSRect frame = [fWindow frame];
+            if (frame.size.width <= 591)
+                frame.size.width = 591;
+            frame.size.height += 36;
+            frame.origin.y -= 36;
+            [fWindow setFrame:frame display:YES animate:YES];
+            fRipIndicatorShown = YES;
+        }
+        #undef p
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreWorkingNotification object:self.queueCore queue:mainQueue usingBlock:^(NSNotification *note) {
+        hb_state_t s = *(self.queueCore.hb_state);
+        #define p s.param.working
+        // Update text field
+        NSString *pass_desc;
+        if (p.job_cur == 1 && p.job_count > 1)
+        {
+            if (QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] &&
+                [[QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] firstObject][keySubTrackIndex] intValue] == -1)
             {
-                if (QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] &&
-                    [[QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] firstObject][keySubTrackIndex] intValue] == -1)
-                {
-                    pass_desc = @"(subtitle scan)";   
-                }
-                else
-                {
-                    pass_desc = @"";
-                }
+                pass_desc = NSLocalizedString(@"(subtitle scan)", @"");
             }
             else
             {
                 pass_desc = @"";
             }
-            
-            
-            if ([pass_desc length])
+        }
+        else
+        {
+            pass_desc = @"";
+        }
+
+        NSMutableString *string;
+        if (pass_desc.length)
+        {
+            string = [NSMutableString stringWithFormat:
+                      NSLocalizedString(@"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @""),
+                      currentQueueEncodeNameString,
+                      p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+        }
+        else
+        {
+            string = [NSMutableString stringWithFormat:
+                      NSLocalizedString(@"Encoding: %@ \nPass %d of %d, %.2f %%", @""),
+                      currentQueueEncodeNameString,
+                      p.job_cur, p.job_count, 100.0 * p.progress];
+        }
+
+        if (p.seconds > -1)
+        {
+            if (p.rate_cur > 0.0)
             {
-                string = [NSMutableString stringWithFormat:
-                          NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ),
-                          currentQueueEncodeNameString,
-                          p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+                [string appendFormat:
+                 NSLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @""),
+                 p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
             }
             else
             {
-                string = [NSMutableString stringWithFormat:
-                          NSLocalizedString( @"Encoding: %@ \nPass %d of %d, %.2f %%", @"" ),
-                          currentQueueEncodeNameString,
-                          p.job_cur, p.job_count, 100.0 * p.progress];
+                [string appendFormat:
+                 NSLocalizedString(@" (ETA %02dh%02dm%02ds)", @""),
+                 p.hours, p.minutes, p.seconds];
             }
-            
-            if( p.seconds > -1 )
-            {
-                if ( p.rate_cur > 0.0 )
-                {
-                    [string appendFormat:
-                     NSLocalizedString( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"" ),
-                     p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
-                }
-                else
-                {
-                    [string appendFormat:
-                     NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ),
-                     p.hours, p.minutes, p.seconds];
-                }
-            }
-            [fStatusField setStringValue: string];
-            [fQueueController setQueueStatusString:string];
-            
-            /* Update slider */
-            CGFloat progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
-            [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator setDoubleValue:100.0 * progress_total];
-            
-            // If progress bar hasn't been revealed at the bottom of the window, do
-            // that now. This code used to be in doRip. I moved it to here to handle
-            // the case where hb_start is called by HBQueueController and not from
-            // HBController.
-            if( !fRipIndicatorShown )
-            {
-                NSRect frame = [fWindow frame];
-                if( frame.size.width <= 591 )
-                    frame.size.width = 591;
-                frame.size.height += 36;
-                frame.origin.y -= 36;
-                [fWindow setFrame:frame display:YES animate:YES];
-                fRipIndicatorShown = YES;
-                
-            }
-            
-            /* Update dock icon */
-            if( dockIconProgress < 100.0 * progress_total )
-            {
-                // ETA format is [XX]X:XX:XX when ETA is greater than one hour
-                // [X]X:XX when ETA is greater than 0 (minutes or seconds)
-                // When these conditions doesn't applied (eg. when ETA is undefined)
-                // we show just a tilde (~)
-                
-                NSString *etaStr = @"";
-                if (p.hours > 0)
-                    etaStr = [NSString stringWithFormat:@"%d:%02d:%02d", p.hours, p.minutes, p.seconds];
-                else if (p.minutes > 0 || p.seconds > 0)
-                    etaStr = [NSString stringWithFormat:@"%d:%02d", p.minutes, p.seconds];
-                else
-                    etaStr = @"~";
-                
-                [dockTile updateDockIcon:progress_total withETA:etaStr];
-
-                dockIconProgress += dockTileUpdateFrequency;
-            }
-            
-            break;
         }
-#undef p
-            
-#define p s.param.muxing
-        case HB_STATE_MUXING:
+
+        fStatusField.stringValue = string;
+        [fQueueController setQueueStatusString:string];
+
+        // Update slider
+        CGFloat progress_total = (p.progress + p.job_cur - 1) / p.job_count;
+        fRipIndicator.indeterminate = NO;
+        fRipIndicator.doubleValue = 100.0 * progress_total;
+
+        // If progress bar hasn't been revealed at the bottom of the window, do
+        // that now. This code used to be in doRip. I moved it to here to handle
+        // the case where hb_start is called by HBQueueController and not from
+        // HBController.
+        if (!fRipIndicatorShown)
         {
-            /* Update text field */
-            [fStatusField setStringValue: NSLocalizedString( @"Muxing…", @"" )];
-            /* Set the status string in fQueueController as well */
-            [fQueueController setQueueStatusString: NSLocalizedString( @"Muxing…", @"" )];
-            /* Update slider */
-            [fRipIndicator setIndeterminate: YES];
-            [fRipIndicator startAnimation: nil];
-            
-            /* Update dock icon */
-            [dockTile updateDockIcon:1.0 withETA:@""];
-            
-			break;
+            NSRect frame = [fWindow frame];
+            if (frame.size.width <= 591)
+                frame.size.width = 591;
+            frame.size.height += 36;
+            frame.origin.y -= 36;
+            [fWindow setFrame:frame display:YES animate:YES];
+            fRipIndicatorShown = YES;
         }
-#undef p
-            
-        case HB_STATE_PAUSED:
-		    [fStatusField setStringValue: NSLocalizedString( @"Paused", @"" )];
-            [fQueueController setQueueStatusString: NSLocalizedString( @"Paused", @"" )];
-            
-			break;
-            
-        case HB_STATE_WORKDONE:
+
+        /* Update dock icon */
+        if (dockIconProgress < 100.0 * progress_total)
         {
-            // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
-            // or someone calling hb_stop. In the latter case, hb_stop does not clear
-            // out the remaining passes/jobs in the queue. We'll do that here.
-            
-            // Delete all remaining jobs of this encode.
-            [fStatusField setStringValue: NSLocalizedString( @"Encode Finished.", @"" )];
-            /* Set the status string in fQueueController as well */
-            [fQueueController setQueueStatusString: NSLocalizedString( @"Encode Finished.", @"" )];
-            [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator stopAnimation: nil];
-            [fRipIndicator setDoubleValue: 0.0];
-            [[fWindow toolbar] validateVisibleItems];
-            
-            /* Restore dock icon */
-            [dockTile updateDockIcon:-1.0 withETA:@""];
-            dockIconProgress = 0;
-            
-            if( fRipIndicatorShown )
-            {
-                NSRect frame = [fWindow frame];
-                if( frame.size.width <= 591 )
-				    frame.size.width = 591;
-                frame.size.height += -36;
-                frame.origin.y -= -36;
-                [fWindow setFrame:frame display:YES animate:YES];
-				fRipIndicatorShown = NO;
-			}
-            /* Since we are done with this encode, tell output to stop writing to the
-             * individual encode log
-             */
-			[outputPanel endEncodeLog];
-            /* Check to see if the encode state has not been cancelled
-             to determine if we should check for encode done notifications */
-			if( fEncodeState != 2 )
-            {
-                NSString *pathOfFinishedEncode;
-                /* Get the output file name for the finished encode */
-                pathOfFinishedEncode = [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"];
-                
-                /* Both the Growl Alert and Sending to MetaX can be done as encodes roll off the queue */
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
-                    [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
-                {
-                    /* If Play System Alert has been selected in Preferences */
-                    if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertWhenDoneSound"] == YES )
-                    {
-                        NSBeep();
-                    }
-                    [self showGrowlDoneNotification:pathOfFinishedEncode];
-                }
-                
-                /* Send to MetaX */
-                [self sendToMetaX:pathOfFinishedEncode];
-                
-                /* since we have successfully completed an encode, we increment the queue counter */
-                [self incrementQueueItemDone:currentQueueEncodeIndex]; 
+            // ETA format is [XX]X:XX:XX when ETA is greater than one hour
+            // [X]X:XX when ETA is greater than 0 (minutes or seconds)
+            // When these conditions doesn't applied (eg. when ETA is undefined)
+            // we show just a tilde (~)
 
-            }
-            
-            break;
-        }
-    }
-
-    [self getQueueStats];
-
-    // Finally after all UI updates, we look for a next dragDropItem to scan
-    // fWillScan will signal that a scan will be launched, so we need to wait
-    // the next idle cycle after the scan
-    hb_get_state2( fHandle, &s );
-    if (s.state == HB_STATE_IDLE && !fWillScan)
-    {
-        // Continue to loop on the other drag & drop files if any
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:dragDropFiles])
-        {
-            NSMutableArray *filesList = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:dragDropFiles]];
-        
-            if (filesList.count > 0)
-            {
-                // We need to add the previous scan file into the queue (without doing the usual checks)
-                // Before scanning the new one
-                [self doAddToQueue];
-                
-                id nextItem = [filesList objectAtIndex:0];
-                [filesList removeObjectAtIndex:0];
-            
-                [browsedSourceDisplayName release];
-                browsedSourceDisplayName = [[((NSString*)nextItem) lastPathComponent] retain];
-                [self performScan:nextItem scanTitleNum:0];
-            
-                if (filesList.count > 0)
-                {
-                    // Updating the list in the user defaults
-                    [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
-                }
-                else
-                {
-                    // Cleaning if last one was treated
-                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
-                }
-            }
+            NSString *etaStr = @"";
+            if (p.hours > 0)
+                etaStr = [NSString stringWithFormat:@"%d:%02d:%02d", p.hours, p.minutes, p.seconds];
+            else if (p.minutes > 0 || p.seconds > 0)
+                etaStr = [NSString stringWithFormat:@"%d:%02d", p.minutes, p.seconds];
             else
+                etaStr = @"~";
+
+            [dockTile updateDockIcon:progress_total withETA:etaStr];
+
+            dockIconProgress += dockTileUpdateFrequency;
+        }
+        #undef p
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreMuxingNotification object:self.queueCore queue:mainQueue usingBlock:^(NSNotification *note) {
+        // Update text field
+        fStatusField.stringValue = NSLocalizedString(@"Muxing…", @"");
+        // Set the status string in fQueueController as well
+        [fQueueController setQueueStatusString:NSLocalizedString(@"Muxing…", @"")];
+        // Update slider
+        fRipIndicator.indeterminate = YES;
+        [fRipIndicator startAnimation: nil];
+
+        // Update dock icon
+        [dockTile updateDockIcon:1.0 withETA:@""];
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCorePausedNotification object:self.queueCore queue:mainQueue usingBlock:^(NSNotification *note) {
+        NSString *paused = NSLocalizedString(@"Paused", @"");
+        fStatusField.stringValue = paused;
+        [fQueueController setQueueStatusString:paused];
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreWorkDoneNotification object:self.queueCore queue:mainQueue usingBlock:^(NSNotification *note) {
+        fStatusField.stringValue = NSLocalizedString(@"Encode Finished.", @"");
+        // Set the status string in fQueueController as well
+        [fQueueController setQueueStatusString:NSLocalizedString(@"Encode Finished.", @"")];
+        fRipIndicator.indeterminate = NO;
+        fRipIndicator.doubleValue = 0.0;
+        [fRipIndicator setIndeterminate: NO];
+
+        [[fWindow toolbar] validateVisibleItems];
+
+        // Restore dock icon
+        [dockTile updateDockIcon:-1.0 withETA:@""];
+        dockIconProgress = 0;
+
+        if (fRipIndicatorShown)
+        {
+            NSRect frame = [fWindow frame];
+            if( frame.size.width <= 591 )
+                frame.size.width = 591;
+            frame.size.height += -36;
+            frame.origin.y -= -36;
+            [fWindow setFrame:frame display:YES animate:YES];
+            fRipIndicatorShown = NO;
+        }
+        // Since we are done with this encode, tell output to stop writing to the
+        // individual encode log.
+        [outputPanel endEncodeLog];
+
+        // Check to see if the encode state has not been cancelled
+        // to determine if we should check for encode done notifications.
+        if (fEncodeState != 2)
+        {
+            NSString *pathOfFinishedEncode;
+            // Get the output file name for the finished encode
+            pathOfFinishedEncode = [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"];
+
+            // Both the Growl Alert and Sending to tagger can be done as encodes roll off the queue
+            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] ||
+                [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
             {
-                [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
+                // If Play System Alert has been selected in Preferences
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AlertWhenDoneSound"] == YES)
+                {
+                    NSBeep();
+                }
+                [self showGrowlDoneNotification:pathOfFinishedEncode];
             }
 
-            [filesList release];
+            // Send to tagger
+            [self sendToMetaX:pathOfFinishedEncode];
+
+            // since we have successfully completed an encode, we increment the queue counter
+            [self incrementQueueItemDone:currentQueueEncodeIndex];
         }
-    }
+    }];
 }
 
 #pragma mark -
@@ -1321,12 +1107,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     NSString * ident = [toolbarItem itemIdentifier];
         
-    if (fHandle)
+    if (self.core)
     {
-        hb_state_t s;
-        
-        hb_get_state2( fHandle, &s );
-        if (s.state == HB_STATE_SCANNING)
+        if (self.core.state == HBStateScanning)
         {
             
             if ([ident isEqualToString: ChooseSourceIdentifier])
@@ -1353,9 +1136,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
         }
 
-        hb_get_state2( fQueueEncodeLibhb, &s );
-        
-        if (s.state == HB_STATE_WORKING || s.state == HB_STATE_SEARCHING || s.state == HB_STATE_MUXING)
+        HBState queueState = self.queueCore.state;
+
+        if (queueState == HBStateWorking || queueState == HBStateSearching || queueState == HBStateMuxing)
         {
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
@@ -1383,7 +1166,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     return YES;
             }
         }
-        else if (s.state == HB_STATE_PAUSED)
+        else if (queueState == HBStatePaused)
         {
             if ([ident isEqualToString: PauseEncodingIdentifier])
             {
@@ -1402,14 +1185,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if ([ident isEqualToString: ShowPreviewIdentifier])
                 return YES;
         }
-        else if (s.state == HB_STATE_SCANNING)
+        else if (queueState == HBStateScanning)
+        {
             return NO;
-        else if (s.state == HB_STATE_WORKDONE || s.state == HB_STATE_SCANDONE || SuccessfulScan)
+        }
+        else if (queueState == HBStateWorkDone || queueState == HBStateScanDone || SuccessfulScan)
         {
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-                if (hb_count(fHandle) > 0)
+                if (hb_count(self.core.hb_handle) > 0)
                     [toolbarItem setLabel: @"Start Queue"];
                 else
                     [toolbarItem setLabel: @"Start"];
@@ -1445,11 +1230,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     SEL action = [menuItem action];
 
-    hb_state_t s;
-    hb_get_state2( fQueueEncodeLibhb, &s );
-
-    if (fQueueEncodeLibhb)
+    if (self.queueCore)
     {
+        HBState queueState = self.queueCore.state;
+
         if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
             return SuccessfulScan && [fWindow attachedSheet] == nil;
         
@@ -1457,13 +1241,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             return [fWindow attachedSheet] == nil;
         if (action == @selector(Pause:))
         {
-            if (s.state == HB_STATE_WORKING)
+            if (queueState == HBStateWorking)
             {
                 if(![[menuItem title] isEqualToString:@"Pause Encoding"])
                     [menuItem setTitle:@"Pause Encoding"];
                 return YES;
             }
-            else if (s.state == HB_STATE_PAUSED)
+            else if (queueState == HBStatePaused)
             {
                 if(![[menuItem title] isEqualToString:@"Resume Encoding"])
                     [menuItem setTitle:@"Resume Encoding"];
@@ -1474,7 +1258,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         if (action == @selector(Rip:))
         {
-            if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING || s.state == HB_STATE_PAUSED)
+            if (queueState == HBStateWorking || queueState == HBStateMuxing || queueState == HBStatePaused)
             {
                 if(![[menuItem title] isEqualToString:@"Stop Encoding"])
                     [menuItem setTitle:@"Stop Encoding"];
@@ -1491,9 +1275,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         if (action == @selector(browseSources:))
         {
-            hb_get_state2( fHandle, &s );
-
-            if (s.state == HB_STATE_SCANNING)
+            if (self.core.state == HBStateScanning)
                 return NO;
             else
                 return [fWindow attachedSheet] == nil;
@@ -1610,24 +1392,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #pragma mark Get New Source
 
 /*Opens the source browse window, called from Open Source widgets */
-- (IBAction) browseSources: (id) sender
+- (IBAction)browseSources:(id)sender
 {
-    
-    hb_state_t s;
-    hb_get_state2( fHandle, &s );
-    if (s.state == HB_STATE_SCANNING)
+    if (self.core.state == HBStateScanning)
     {
-        [self cancelScanning:nil];
+        [self.core cancelScan];
         return;
     }
-    
-    
-    NSOpenPanel * panel;
-	
-    panel = [NSOpenPanel openPanel];
-    [panel setAllowsMultipleSelection: NO];
-    [panel setCanChooseFiles: YES];
-    [panel setCanChooseDirectories: YES ];
+
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setCanChooseFiles:YES];
+    [panel setCanChooseDirectories:YES];
+
     NSURL *sourceDirectory;
 	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastSourceDirectoryURL"])
 	{
@@ -1637,6 +1414,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
 		sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
 	}
+
     /* we open up the browse sources sheet here and call for browseSourcesDone after the sheet is closed
         * to evaluate whether we want to specify a title, we pass the sender in the contextInfo variable
         */
@@ -1812,22 +1590,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
-- (void) performScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum
+- (void)performScan:(NSString *)scanPath scanTitleNum:(NSInteger)scanTitleNum
 {
-    /* use a bool to determine whether or not we can decrypt using vlc */
-    BOOL cancelScanDecrypt = 0;
-    NSString *path = scanPath;
-    HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-
     // Save the current settings
     if (titleLoaded) {
         self.selectedPreset = [self createPresetFromCurrentSettings];
         titleLoaded = NO;
     }
 
+    // Notify anyone interested (audio/subtitles/chapters controller) that there's no title
     [fPictureController setTitle:NULL];
-
-	//	Notify anyone interested (audio/subtitles/chapters controller) that there's no title
 	[[NSNotificationCenter defaultCenter] postNotification:
 	 [NSNotification notificationWithName: HBTitleChangedNotification
 								   object: self
@@ -1836,114 +1608,63 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 											nil]]];
 
     [self enableUI: NO];
-    
-    if( [detector isVideoDVD] )
-    {
-        // The chosen path was actually on a DVD, so use the raw block
-        // device path instead.
-        path = [detector devicePath];
-        [HBUtilities writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
-        
-        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSInteger suppressWarning = [prefs integerForKey:@"suppresslibdvdcss"];
-        
-        /* Notify the user that we don't support removal of copy proteciton. */
-        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-        if (dvdcss == NULL && suppressWarning != 1)
-        {
-            /* Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying. */
-            [prefs setInteger:1 forKey:@"suppresslibdvdcss"];
-            
-            /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
-            cancelScanDecrypt = 1;
-            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
-            NSInteger status;
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function."];
-            [alert setInformativeText:@"Videolan.org provides libdvdcss if you are not currently using another solution."];
-            [alert addButtonWithTitle:@"Get libdvdcss.pkg"];
-            [alert addButtonWithTitle:@"Cancel Scan"];
-            [alert addButtonWithTitle:@"Attempt Scan Anyway"];
-            [NSApp requestUserAttention:NSCriticalRequest];
-            status = [alert runModal];
-            [alert release];
 
-            if (status == NSAlertFirstButtonReturn)
-            {
-                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
-            }
-            else if (status == NSAlertSecondButtonReturn)
-            {
-                /* User chose to cancel the scan */
-                [HBUtilities writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
-            }
-            else
-            {
-                /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
-                cancelScanDecrypt = 0;
-                [HBUtilities writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
-            }
-            
-        }
-        else if (dvdcss != NULL)
+    NSError *outError = NULL;
+    NSURL *fileURL = [NSURL fileURLWithPath:scanPath];
+    BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppresslibdvdcss"];
+
+    // Check if we can scan the source and if there is any warning.
+    BOOL canScan = [self.core canScan:fileURL error:&outError];
+
+    // Notify the user that we don't support removal of copy proteciton.
+    if (canScan && [outError code] == 101 && !suppressWarning)
+    {
+        // Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying.
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"suppresslibdvdcss"];
+
+        // Compatible libdvdcss not found
+        [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
+
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function."];
+        [alert setInformativeText:@"Videolan.org provides libdvdcss if you are not currently using another solution."];
+        [alert addButtonWithTitle:@"Get libdvdcss.pkg"];
+        [alert addButtonWithTitle:@"Cancel Scan"];
+        [alert addButtonWithTitle:@"Attempt Scan Anyway"];
+        [NSApp requestUserAttention:NSCriticalRequest];
+        NSInteger status = [alert runModal];
+        [alert release];
+
+        if (status == NSAlertFirstButtonReturn)
         {
-            /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
-            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
-            dlclose(dvdcss);
+            /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
+            [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
+            canScan = NO;
+        }
+        else if (status == NSAlertSecondButtonReturn)
+        {
+            /* User chose to cancel the scan */
+            [HBUtilities writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
+            canScan = NO;
         }
         else
         {
             /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
-            cancelScanDecrypt = 0;
-            [HBUtilities writeToActivityLog:"Copy-protection warning disabled in preferences - trying to open physical dvd without decryption"];
+            [HBUtilities writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
         }
     }
-    
-    if (cancelScanDecrypt == 0)
-    {
-        /* We use our advanced pref to determine how many previews to scan */
-        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
-        /* We use our advanced pref to determine the minimum title length to use in seconds*/
-        int min_title_duration_seconds = [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
-        uint64_t min_title_duration_ticks = 90000LL * min_title_duration_seconds;
-        /* set title to NULL */
-        fTitle = NULL;
-        /* We actually pass the scan off to libhb here.
-         * If there is no title number passed to scan, we use 0
-         * which causes the default behavior of a full source scan */
-        if (scanTitleNum < 0)
-        {
-            scanTitleNum = 0;
-        }
-        if (scanTitleNum > 0)
-        {
-            [HBUtilities writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
-        }
-        else
-        {
-            // minimum title duration doesn't apply to title-specific scan
-            // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
-            [HBUtilities writeToActivityLog: "scanning titles with a duration of %d seconds or more", min_title_duration_seconds];
-        }
-        
-        hb_system_sleep_prevent(fHandle);
-        hb_scan(fHandle, [path UTF8String], (int)scanTitleNum, hb_num_previews, 1 ,
-                min_title_duration_ticks);
-        
-        [fSrcDVD2Field setStringValue:@"Scanning new source…"];
 
-        // After the scan process, we signal to enableUI loop that this scan process is now finished
-        // If remaining drag & drop files are in the UserDefaults array, they will then be processed
+    if (canScan)
+    {
+        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        int min_title_duration_seconds = [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
+
+        [self.core scan:fileURL
+               titleNum:scanTitleNum
+                previewsNum:hb_num_previews minTitleDuration:min_title_duration_seconds];
+
         fWillScan = NO;
     }
-}
-
-- (IBAction) cancelScanning:(id)sender
-{
-    hb_scan_stop(fHandle);
-    hb_system_sleep_allow(fHandle);
 }
 
 - (IBAction) showNewScan:(id)sender
@@ -1952,7 +1673,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	hb_title_t * title = NULL;
 	int feature_title=0; // Used to store the main feature title
 
-        title_set = hb_get_title_set( fHandle );
+        title_set = hb_get_title_set(self.core.hb_handle);
         
         if( !hb_list_count( title_set->list_title ) )
         {
@@ -2091,9 +1812,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 
             }
         }
-    
-    /* Done scanning, allow system sleep for the scan handle */
-    hb_system_sleep_allow(fHandle);
 }
 
 
@@ -2249,6 +1967,7 @@ static void queueFSEventStreamCallback(
     [tempQueueArray release];
     /* Send Fresh QueueFileArray to fQueueController to update queue window */
     [fQueueController setQueueArray: QueueFileArray];
+    [self getQueueStats];
 }
 
 - (void)addQueueFileItem
@@ -2272,15 +1991,15 @@ static void queueFSEventStreamCallback(
     [self getQueueStats];
 }
 
+/**
+ *  Updates the queue status label on the main window.
+ */
 - (void)getQueueStats
 {
-/* lets get the stats on the status of the queue array */
+    /* lets get the stats on the status of the queue array */
 
-fEncodingQueueItem = 0;
-fPendingCount = 0;
-fCompletedCount = 0;
-fCanceledCount = 0;
-fWorkingCount = 0;
+    fPendingCount = 0;
+    fWorkingCount = 0;
 
     /* We use a number system to set the encode status of the queue item
      * in controller.mm
@@ -2291,49 +2010,39 @@ fWorkingCount = 0;
      */
 
 	int i = 0;
-	for (id tempObject in QueueFileArray)
+	for (NSDictionary *thisQueueDict in QueueFileArray)
 	{
-		NSDictionary *thisQueueDict = tempObject;
-		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 0) // Completed
-		{
-			fCompletedCount++;	
-		}
 		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 1) // being encoded
 		{
 			fWorkingCount++;
-            fEncodingQueueItem = i;
             /* check to see if we are the instance doing this encoding */
             if ([thisQueueDict objectForKey:@"EncodingPID"] && [[thisQueueDict objectForKey:@"EncodingPID"] intValue] == pidNum)
             {
                 currentQueueEncodeIndex = i;
             }
-            	
 		}
         if ([[thisQueueDict objectForKey:@"Status"] intValue] == 2) // pending		
         {
 			fPendingCount++;
 		}
-        if ([[thisQueueDict objectForKey:@"Status"] intValue] == 3) // cancelled		
-        {
-			fCanceledCount++;
-		}
 		i++;
 	}
 
     /* Set the queue status field in the main window */
-    NSMutableString * string;
+    NSString *string;
     if (fPendingCount == 0)
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"No encode pending", @"" )];
+        string = NSLocalizedString( @"No encode pending", @"");
     }
     else if (fPendingCount == 1)
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode pending", @"" ), fPendingCount];
+        string = [NSString stringWithFormat: NSLocalizedString( @"%d encode pending", @"" ), fPendingCount];
     }
     else
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encodes pending", @"" ), fPendingCount];
+        string = [NSString stringWithFormat: NSLocalizedString( @"%d encodes pending", @"" ), fPendingCount];
     }
+
     [fQueueStatus setStringValue:string];
 }
 
@@ -2434,7 +2143,7 @@ fWorkingCount = 0;
 {
     NSMutableDictionary *queueFileJob = [[NSMutableDictionary alloc] init];
     
-       hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_list_t  * list  = hb_get_titles(self.core.hb_handle);
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             (int)[fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
@@ -2662,7 +2371,6 @@ fWorkingCount = 0;
     {
         [HBUtilities writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
         /* Done encoding, allow system sleep for the encode handle */
-        hb_system_sleep_allow(fQueueEncodeLibhb);
         /*
          * Since there are no more items to encode, go to queueCompletedAlerts
          * for user specified alerts after queue completed
@@ -2683,41 +2391,20 @@ fWorkingCount = 0;
     currentQueueEncodeNameString = [[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"] lastPathComponent]retain];
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
-    
-    /* use a bool to determine whether or not we can decrypt using vlc */
-    BOOL cancelScanDecrypt = 0;
-    /* set the bool so that showNewScan knows to apply the appropriate queue
-     * settings as this is a queue rescan
-     */
-    NSString *path = scanPath;
 
-    if (cancelScanDecrypt == 0)
-    {
-        /* We actually pass the scan off to libhb here.
-         * If there is no title number passed to scan, we use "0"
-         * which causes the default behavior of a full source scan */
-        if (scanTitleNum < 0)
-        {
-            scanTitleNum = 0;
-        }
-        if (scanTitleNum > 0)
-        {
-            [HBUtilities writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
-        }
-        /*
-         * Only scan 10 previews before an encode - additional previews are
-         * only useful for autocrop and static previews, which are already taken
-         * care of at this point
-         */
-        hb_system_sleep_prevent(fQueueEncodeLibhb);
-        hb_scan(fQueueEncodeLibhb, [path UTF8String], (int)scanTitleNum, 10, 0, 0);
-    }
+    /*
+     * Only scan 10 previews before an encode - additional previews are
+     * only useful for autocrop and static previews, which are already taken
+     * care of at this point
+     */
+    NSURL *fileURL = [NSURL fileURLWithPath:scanPath];
+    [self.queueCore scan:fileURL titleNum:scanTitleNum previewsNum:10 minTitleDuration:0];
 }
 
 /* This assumes that we have re-scanned and loaded up a new queue item to send to libhb as fQueueEncodeLibhb */
 - (void) processNewQueueEncode
 {
-    hb_list_t  * list  = hb_get_titles( fQueueEncodeLibhb );
+    hb_list_t  * list  = hb_get_titles( self.queueCore.hb_handle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
     
@@ -2752,7 +2439,7 @@ fWorkingCount = 0;
         hb_job_set_encoder_profile(job, NULL);
         hb_job_set_encoder_level  (job, NULL);
         job->pass = -1;
-        hb_add(fQueueEncodeLibhb, job);
+        hb_add(self.queueCore.hb_handle, job);
         /*
          * reset the advanced settings
          */
@@ -2773,16 +2460,16 @@ fWorkingCount = 0;
     {
         job->indepth_scan = 0;
         job->pass = 1;
-        hb_add(fQueueEncodeLibhb, job);
+        hb_add(self.queueCore.hb_handle, job);
         job->pass = 2;
-        hb_add(fQueueEncodeLibhb, job);
+        hb_add(self.queueCore.hb_handle, job);
         
     }
     else
     {
         job->indepth_scan = 0;
         job->pass = 0;
-        hb_add(fQueueEncodeLibhb, job);
+        hb_add(self.queueCore.hb_handle, job);
     }
 
     NSString *destinationDirectory = [[queueToApply objectForKey:@"DestinationPath"] stringByDeletingLastPathComponent];
@@ -2997,7 +2684,7 @@ fWorkingCount = 0;
  */
 - (void) prepareJobForPreview
 {
-    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_list_t  * list  = hb_get_titles(self.core.hb_handle);
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             (int)[fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
@@ -3311,7 +2998,7 @@ fWorkingCount = 0;
 {
     
     NSDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-    hb_list_t  * list  = hb_get_titles( fQueueEncodeLibhb );
+    hb_list_t  * list  = hb_get_titles(self.queueCore.hb_handle);
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
     hb_audio_config_t * audio;
@@ -3902,10 +3589,7 @@ fWorkingCount = 0;
 {
     [HBUtilities writeToActivityLog: "Rip: Pending queue count is %d", fPendingCount];
     /* Rip or Cancel ? */
-    hb_state_t s;
-    hb_get_state2( fQueueEncodeLibhb, &s );
-    
-    if(s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED)
+    if (self.queueCore.state == HBStateWorking || self.queueCore.state == HBStatePaused)
 	{
         [self Cancel: sender];
         return;
@@ -4036,7 +3720,7 @@ fWorkingCount = 0;
 - (void) doRip
 {
     /* Let libhb do the job */
-    hb_start( fQueueEncodeLibhb );
+    [self.queueCore start];
     /* set the fEncodeState State */
     fEncodeState = 1;
 }
@@ -4055,7 +3739,7 @@ fWorkingCount = 0;
      * No need to allow system sleep here as we'll either call Cancel:
      * (which will take care of it) or resume right away
      */
-    hb_pause(fQueueEncodeLibhb);
+    [self.queueCore pause];
 
     // Which window to attach the sheet to?
     NSWindow * docWindow;
@@ -4085,7 +3769,7 @@ fWorkingCount = 0;
 - (void) didDimissCancel: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
     /* No need to prevent system sleep here as we didn't allow it in Cancel: */
-    hb_resume(fQueueEncodeLibhb);
+    [self.queueCore resume];
 
     if (returnCode == NSAlertSecondButtonReturn)
     {
@@ -4108,16 +3792,9 @@ fWorkingCount = 0;
     // see the state has changed to HB_STATE_WORKDONE (in updateUI), we'll delete the
     // remaining passes of the job and then start the queue back up if there are any
     // remaining jobs.
-     
-    
-    hb_stop(fQueueEncodeLibhb);
-    hb_system_sleep_allow(fQueueEncodeLibhb);
-    
-    // Delete all remaining jobs since libhb doesn't do this on its own.
-            hb_job_t * job;
-            while( ( job = hb_job(fQueueEncodeLibhb, 0) ) )
-                hb_rem( fQueueEncodeLibhb, job );
-                
+
+    [self.queueCore stop];
+
     fEncodeState = 2;   // don't alert at end of processing since this was a cancel
     
     // now that we've stopped the currently encoding job, lets mark it as cancelled
@@ -4152,17 +3829,10 @@ fWorkingCount = 0;
 
 - (void) doCancelCurrentJobAndStop
 {
-    hb_stop(fQueueEncodeLibhb);
-    hb_system_sleep_allow(fQueueEncodeLibhb);
-    
-    // Delete all remaining jobs since libhb doesn't do this on its own.
-            hb_job_t * job;
-            while( ( job = hb_job(fQueueEncodeLibhb, 0) ) )
-                hb_rem( fQueueEncodeLibhb, job );
-                
-                
+    [self.queueCore stop];
+
     fEncodeState = 2;   // don't alert at end of processing since this was a cancel
-    
+
     // now that we've stopped the currently encoding job, lets mark it as cancelled
     [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
     // and as always, save it in Queue.plist
@@ -4174,18 +3844,13 @@ fWorkingCount = 0;
 }
 - (IBAction) Pause: (id) sender
 {
-    hb_state_t s;
-    hb_get_state2(fQueueEncodeLibhb, &s);
-
-    if (s.state == HB_STATE_PAUSED)
+    if (self.queueCore.state == HBStatePaused)
     {
-        hb_system_sleep_prevent(fQueueEncodeLibhb);
-        hb_resume(fQueueEncodeLibhb);
+        [self.queueCore resume];
     }
     else
     {
-        hb_pause(fQueueEncodeLibhb);
-        hb_system_sleep_allow(fQueueEncodeLibhb);
+        [self.queueCore pause];
     }
 }
 
@@ -4241,7 +3906,7 @@ fWorkingCount = 0;
         return;
     }
 
-    hb_list_t  *list  = hb_get_titles(fHandle);
+    hb_list_t  *list  = hb_get_titles(self.core.hb_handle);
     hb_title_t *title = (hb_title_t *)
     hb_list_item(list, (int)[fSrcTitlePopUp indexOfSelectedItem]);
 
@@ -4274,7 +3939,7 @@ fWorkingCount = 0;
 
 - (IBAction) titlePopUpChanged: (id) sender
 {
-    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_list_t  * list  = hb_get_titles( self.core.hb_handle );
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
 
@@ -4416,7 +4081,7 @@ fWorkingCount = 0;
     }
 
 		
-	hb_list_t  * list  = hb_get_titles( fHandle );
+	hb_list_t  * list  = hb_get_titles( self.core.hb_handle);
     hb_title_t * title = (hb_title_t *)
         hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
 
@@ -4458,7 +4123,7 @@ fWorkingCount = 0;
 
 - (IBAction) startEndFrameValueChanged: (id) sender
 {
-    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_list_t  * list  = hb_get_titles(self.core.hb_handle);
     hb_title_t * title = (hb_title_t*)
     hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
     

@@ -146,18 +146,11 @@ extern NSString *keyTitleTag;
     IBOutlet NSMenu              * presetsMenu;
 	IBOutlet NSDrawer            * fPresetDrawer;
     IBOutlet NSTextField         * fPresetSelectedDisplay;
-
-    hb_handle_t                  * fHandle;
     
     /* Queue variables */
     int                          hbInstanceNum; //stores the number of HandBrake instances currently running
-    hb_handle_t                  * fQueueEncodeLibhb;           // libhb for HB Encoding
 	hb_title_t                   * fTitle;
-    hb_title_t                   * fQueueEncodeTitle;
-    int                          fEncodingQueueItem;     // corresponds to the index of fJobGroups encoding item
     int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
-    int                          fCompletedCount;
-    int                          fCanceledCount;
     int                          fWorkingCount;
     
     NSInteger                      fqueueEditRescanItemNum; // queue array item to be reloaded into the main window
@@ -180,7 +173,6 @@ extern NSString *keyTitleTag;
 
     HBDockTile  *dockTile;
 }
-- (int) getPidnum;
 
 - (IBAction) browseSources: (id) sender;
 - (void) browseSourcesDone: (NSOpenPanel *) sheet
@@ -190,10 +182,6 @@ extern NSString *keyTitleTag;
 - (void) performScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
 - (IBAction) showNewScan: (id) sender;
 
-
-- (IBAction) cancelScanning:(id)sender;
-
-- (void)     updateUI:                                 (NSTimer*) timer;
 - (void)     enableUI:                                 (BOOL)     enable;
 
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
@@ -295,11 +283,5 @@ extern NSString *keyTitleTag;
 - (void) remindUserOfSleepOrShutdown;
 
 - (int) hbInstances;
-
-// Drag & Drop methods
-- (void)openFiles:(NSArray*)filenames;
-- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames;
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
-- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 
 @end
