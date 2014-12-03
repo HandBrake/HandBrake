@@ -277,7 +277,6 @@ extern NSString *keyTitleTag;
 - (NSDictionary *) registrationDictionaryForGrowl;
 -(void)showGrowlDoneNotification:(NSString *) filePath;
 - (IBAction)showDebugOutputPanel:(id)sender;
-- (void)setupToolbar;
 
 - (void) prepareJobForPreview;
 - (void) remindUserOfSleepOrShutdown;

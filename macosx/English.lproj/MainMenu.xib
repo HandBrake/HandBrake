@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C68k" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C68k" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -417,10 +417,73 @@
                     </popUpButton>
                 </subviews>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="ZEH-cS-zXY"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="wjB-Tl-5qq"/>
+                    <toolbarItem implicitItemIdentifier="B3BAB305-77BF-4967-B8E6-D11F40EF822B" label="Source" paletteLabel="Source" tag="-1" image="source" id="8r8-nZ-dYs">
+                        <connections>
+                            <action selector="browseSources:" target="240" id="LD2-b1-vqJ"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="4CAB4280-DF01-4BDC-B23B-98BD6E6190F4" label="Start" paletteLabel="Start" tag="-1" image="encode" id="byg-kj-sEM">
+                        <connections>
+                            <action selector="Rip:" target="240" id="0B6-IB-70f"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="E4C5E251-DD8D-4288-AC80-AF8E654B7A32" label="Pause" paletteLabel="Pause" tag="-1" image="pauseencode" id="wTQ-KF-5KW">
+                        <connections>
+                            <action selector="Pause:" target="240" id="mIG-m6-Stn"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="69E83092-D0D1-48A5-BF46-99EFB3EC630A" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">
+                        <connections>
+                            <action selector="addToQueue:" target="240" id="3oq-nG-Sdo"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Show Queue" paletteLabel="Show Queue" tag="-1" image="showqueue" id="HCx-ku-nF7">
+                        <connections>
+                            <action selector="showQueueWindow:" target="240" id="Rur-8T-VEx"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="CBA63584-4A4E-43E5-8096-9C20B59AC580" label="Picture Settings" paletteLabel="Picture Settings" tag="-1" image="picturesettings" id="2uP-T2-02Q">
+                        <connections>
+                            <action selector="showPicturePanel:" target="240" id="tlM-Jx-yzk"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="DAAC2346-2B39-4A35-A62B-C12826F6AB42" label="Preview Window" paletteLabel="Preview Window" tag="-1" image="preview" id="dK4-jt-v4K">
+                        <connections>
+                            <action selector="showPreviewWindow:" target="240" id="C49-TV-CDw"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="D9753B5B-F09B-451E-9FD8-E8DD979FBFA2" label="Activity Window" paletteLabel="Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
+                        <connections>
+                            <action selector="showDebugOutputPanel:" target="240" id="TTZ-YA-vgx"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="B774D9D7-AE89-4C1A-8685-D631473867F6" label="Toggle Presets" paletteLabel="Toggle Presets" tag="-1" image="presets" id="9ll-Jg-YAB">
+                        <connections>
+                            <action selector="toggleDrawer:" target="240" id="gY0-Xe-pxb"/>
+                        </connections>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="8r8-nZ-dYs"/>
+                    <toolbarItem reference="byg-kj-sEM"/>
+                    <toolbarItem reference="wTQ-KF-5KW"/>
+                    <toolbarItem reference="DZZ-Fe-wjw"/>
+                    <toolbarItem reference="HCx-ku-nF7"/>
+                    <toolbarItem reference="wjB-Tl-5qq"/>
+                    <toolbarItem reference="2uP-T2-02Q"/>
+                    <toolbarItem reference="dK4-jt-v4K"/>
+                    <toolbarItem reference="p7Q-L3-zcW"/>
+                    <toolbarItem reference="9ll-Jg-YAB"/>
+                </defaultToolbarItems>
+            </toolbar>
             <connections>
                 <outlet property="delegate" destination="240" id="433"/>
             </connections>
-            <point key="canvasLocation" x="507" y="501"/>
+            <point key="canvasLocation" x="488" y="424"/>
         </window>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
@@ -937,4 +1000,15 @@ DQ
         <customObject id="4963" customClass="SUUpdater"/>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
     </objects>
+    <resources>
+        <image name="activity" width="24" height="24"/>
+        <image name="addqueue" width="12" height="12"/>
+        <image name="encode" width="24" height="24"/>
+        <image name="pauseencode" width="24" height="24"/>
+        <image name="picturesettings" width="24" height="24"/>
+        <image name="presets" width="24" height="24"/>
+        <image name="preview" width="24" height="24"/>
+        <image name="showqueue" width="24" height="24"/>
+        <image name="source" width="24" height="24"/>
+    </resources>
 </document>

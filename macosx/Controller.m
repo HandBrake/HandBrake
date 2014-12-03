@@ -33,17 +33,6 @@ NSString *dragDropFiles                        = @"dragDropFiles";
 // DockTile update freqency in total percent increment
 #define dockTileUpdateFrequency                  0.1f
 
-/* We setup the toolbar values here ShowPreviewIdentifier */
-static NSString *        ToggleDrawerIdentifier             = @"Toggle Drawer Item Identifier";
-static NSString *        StartEncodingIdentifier            = @"Start Encoding Item Identifier";
-static NSString *        PauseEncodingIdentifier            = @"Pause Encoding Item Identifier";
-static NSString *        ShowQueueIdentifier                = @"Show Queue Item Identifier";
-static NSString *        AddToQueueIdentifier               = @"Add to Queue Item Identifier";
-static NSString *        ShowPictureIdentifier              = @"Show Picture Window Item Identifier";
-static NSString *        ShowPreviewIdentifier              = @"Show Preview Window Item Identifier";
-static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
-static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
-
 @interface HBController () <HBPresetsViewControllerDelegate>
 
 // The current selected preset.
@@ -578,8 +567,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		
     /* Bottom */
     [fStatusField setStringValue: @""];
-    
-	[self setupToolbar];
 
     /* Register HBController's Window as a receiver for files/folders drag & drop operations */
     [fWindow registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
@@ -975,144 +962,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 #pragma mark -
 #pragma mark Toolbar
-// ============================================================
-// NSToolbar Related Methods
-// ============================================================
-
-- (void) setupToolbar {
-    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier: @"HandBrake Toolbar"] autorelease];
-
-    [toolbar setAllowsUserCustomization: YES];
-    [toolbar setAutosavesConfiguration: YES];
-    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-
-    [toolbar setDelegate: self];
-
-    [fWindow setToolbar: toolbar];
-}
-
-- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier:
-    (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-    NSToolbarItem * item = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-
-    if ([itemIdent isEqualToString: ToggleDrawerIdentifier])
-    {
-        [item setLabel: @"Toggle Presets"];
-        [item setPaletteLabel: @"Toggler Presets"];
-        [item setToolTip: @"Open/Close Preset Drawer"];
-        [item setImage: [NSImage imageNamed: @"presets"]];
-        [item setTarget: self];
-        [item setAction: @selector(toggleDrawer:)];
-        [item setAutovalidates: NO];
-    }
-    else if ([itemIdent isEqualToString: StartEncodingIdentifier])
-    {
-        [item setLabel: @"Start"];
-        [item setPaletteLabel: @"Start Encoding"];
-        [item setToolTip: @"Start Encoding"];
-        [item setImage: [NSImage imageNamed: @"encode"]];
-        [item setTarget: self];
-        [item setAction: @selector(Rip:)];
-    }
-    else if ([itemIdent isEqualToString: ShowQueueIdentifier])
-    {
-        [item setLabel: @"Show Queue"];
-        [item setPaletteLabel: @"Show Queue"];
-        [item setToolTip: @"Show Queue"];
-        [item setImage: [NSImage imageNamed: @"showqueue"]];
-        [item setTarget: self];
-        [item setAction: @selector(showQueueWindow:)];
-        [item setAutovalidates: NO];
-    }
-    else if ([itemIdent isEqualToString: AddToQueueIdentifier])
-    {
-        [item setLabel: @"Add to Queue"];
-        [item setPaletteLabel: @"Add to Queue"];
-        [item setToolTip: @"Add to Queue"];
-        [item setImage: [NSImage imageNamed: @"addqueue"]];
-        [item setTarget: self];
-        [item setAction: @selector(addToQueue:)];
-    }
-    else if ([itemIdent isEqualToString: PauseEncodingIdentifier])
-    {
-        [item setLabel: @"Pause"];
-        [item setPaletteLabel: @"Pause Encoding"];
-        [item setToolTip: @"Pause Encoding"];
-        [item setImage: [NSImage imageNamed: @"pauseencode"]];
-        [item setTarget: self];
-        [item setAction: @selector(Pause:)];
-    }
-    else if ([itemIdent isEqualToString: ShowPictureIdentifier])
-    {
-        [item setLabel: @"Picture Settings"];
-        [item setPaletteLabel: @"Show Picture Settings"];
-        [item setToolTip: @"Show Picture Settings"];
-        [item setImage: [NSImage imageNamed: @"picturesettings"]];
-        [item setTarget: self];
-        [item setAction: @selector(showPicturePanel:)];
-    }
-    else if ([itemIdent isEqualToString: ShowPreviewIdentifier])
-    {
-        [item setLabel: @"Preview Window"];
-        [item setPaletteLabel: @"Show Preview"];
-        [item setToolTip: @"Show Preview"];
-        //[item setImage: [NSImage imageNamed: @"pref-picture"]];
-        [item setImage: [NSImage imageNamed: @"preview"]];
-        [item setTarget: self];
-        [item setAction: @selector(showPreviewWindow:)];
-    }
-    else if ([itemIdent isEqualToString: ShowActivityIdentifier]) 
-    {
-        [item setLabel: @"Activity Window"];
-        [item setPaletteLabel: @"Show Activity Window"];
-        [item setToolTip: @"Show Activity Window"];
-        [item setImage: [NSImage imageNamed: @"activity"]];
-        [item setTarget: self];
-        [item setAction: @selector(showDebugOutputPanel:)];
-        [item setAutovalidates: NO];
-    }
-    else if ([itemIdent isEqualToString: ChooseSourceIdentifier])
-    {
-        [item setLabel: @"Source"];
-        [item setPaletteLabel: @"Source"];
-        [item setToolTip: @"Choose Video Source"];
-        [item setImage: [NSImage imageNamed: @"source"]];
-        [item setTarget: self];
-        [item setAction: @selector(browseSources:)];
-    }
-    else
-    {
-        return nil;
-    }
-
-    return item;
-}
-
-- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
-{
-    return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier,
-        PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier, NSToolbarFlexibleSpaceItemIdentifier, 
-		NSToolbarSpaceItemIdentifier, ShowPictureIdentifier, ShowPreviewIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
-}
-
-- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
-{
-    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier,
-        ChooseSourceIdentifier, ShowQueueIdentifier, ShowPictureIdentifier, ShowPreviewIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
-        NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
-        NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, nil];
-}
 
 - (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
 {
-    NSString * ident = [toolbarItem itemIdentifier];
+    SEL action = toolbarItem.action;
         
     if (self.core)
     {
         if (self.core.state == HBStateScanning)
         {
             
-            if ([ident isEqualToString: ChooseSourceIdentifier])
+            if (action == @selector(browseSources:))
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
                 [toolbarItem setLabel: @"Cancel Scan"];
@@ -1121,12 +981,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 return YES;
             }
             
-            if ([ident isEqualToString: StartEncodingIdentifier] || [ident isEqualToString: AddToQueueIdentifier])
+            if (action == @selector(Rip:) || action == @selector(addToQueue:))
                 return NO;
         }
         else
         {
-            if ([ident isEqualToString: ChooseSourceIdentifier])
+            if (action == @selector(browseSources:))
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"source"]];
                 [toolbarItem setLabel: @"Source"];
@@ -1140,7 +1000,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
         if (queueState == HBStateWorking || queueState == HBStateSearching || queueState == HBStateMuxing)
         {
-            if ([ident isEqualToString: StartEncodingIdentifier])
+            if (action == @selector(Rip:))
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
                 [toolbarItem setLabel: @"Stop"];
@@ -1148,7 +1008,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [toolbarItem setToolTip: @"Stop Encoding"];
                 return YES;
             }
-            if ([ident isEqualToString: PauseEncodingIdentifier])
+            if (action == @selector(Pause:))
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
                 [toolbarItem setLabel: @"Pause"];
@@ -1158,17 +1018,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             if (SuccessfulScan)
             {
-                if ([ident isEqualToString: AddToQueueIdentifier])
+                if (action == @selector(addToQueue:))
                     return YES;
-                if ([ident isEqualToString: ShowPictureIdentifier])
+                if (action == @selector(showPicturePanel:))
                     return YES;
-                if ([ident isEqualToString: ShowPreviewIdentifier])
+                if (action == @selector(showPreviewWindow:))
                     return YES;
             }
         }
         else if (queueState == HBStatePaused)
         {
-            if ([ident isEqualToString: PauseEncodingIdentifier])
+            if (action == @selector(Pause:))
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
                 [toolbarItem setLabel: @"Resume"];
@@ -1176,13 +1036,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [toolbarItem setToolTip: @"Resume Encoding"];
                 return YES;
             }
-            if ([ident isEqualToString: StartEncodingIdentifier])
+            if (action == @selector(Rip:))
                 return YES;
-            if ([ident isEqualToString: AddToQueueIdentifier])
+            if (action == @selector(addToQueue:))
                 return YES;
-            if ([ident isEqualToString: ShowPictureIdentifier])
+            if (action == @selector(showPicturePanel:))
                 return YES;
-            if ([ident isEqualToString: ShowPreviewIdentifier])
+            if (action == @selector(showPreviewWindow:))
                 return YES;
         }
         else if (queueState == HBStateScanning)
@@ -1191,7 +1051,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         else if (queueState == HBStateWorkDone || queueState == HBStateScanDone || SuccessfulScan)
         {
-            if ([ident isEqualToString: StartEncodingIdentifier])
+            if (action == @selector(Rip:))
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
                 if (hb_count(self.core.hb_handle) > 0)
@@ -1202,25 +1062,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [toolbarItem setToolTip: @"Start Encoding"];
                 return YES;
             }
-            if ([ident isEqualToString: AddToQueueIdentifier])
+            if (action == @selector(addToQueue:))
                 return YES;
-            if ([ident isEqualToString: ShowPictureIdentifier])
+            if (action == @selector(showPicturePanel:))
                 return YES;
-            if ([ident isEqualToString: ShowPreviewIdentifier])
+            if (action == @selector(showPreviewWindow:))
                 return YES;
         }
 
     }
     /* If there are any pending queue items, make sure the start/stop button is active */
-    if ([ident isEqualToString: StartEncodingIdentifier] && fPendingCount > 0)
+    if (action == @selector(Rip:) && fPendingCount > 0)
         return YES;
-    if ([ident isEqualToString: ShowQueueIdentifier])
+    if (action == @selector(showQueueWindow:))
         return YES;
-    if ([ident isEqualToString: ToggleDrawerIdentifier])
+    if (action == @selector(toggleDrawer:))
         return YES;
-    if ([ident isEqualToString: ChooseSourceIdentifier])
+    if (action == @selector(browseSources:))
         return YES;
-    if ([ident isEqualToString: ShowActivityIdentifier])
+    if (action == @selector(showDebugOutputPanel:))
         return YES;
     
     return NO;
