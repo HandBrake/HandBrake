@@ -1459,7 +1459,9 @@ NSString *dragDropFiles                        = @"dragDropFiles";
     }
 
     // Notify anyone interested (audio/subtitles/chapters controller) that there's no title
+    fTitle = NULL;
     [fPictureController setTitle:NULL];
+
 	[[NSNotificationCenter defaultCenter] postNotification:
 	 [NSNotification notificationWithName: HBTitleChangedNotification
 								   object: self
