@@ -368,6 +368,17 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
                 if (ABS(a->s.start - b->s.start) <= 18000)
                 {
                     // subtitles start within 1/5 second of eachother, merge
+                    if (a->s.stop > b->s.stop)
+                    {
+                        // a continues after b, reorder the list and swap
+                        hb_buffer_t *tmp = a;
+                        a->next = b->next;
+                        b->next = a;
+                        a = b;
+                        b = tmp;
+                        sanitizer->list_current = a;
+                    }
+
                     sanitizer->list_current = a->next;
                     if (sanitizer->list_current == NULL)
                         sanitizer->last = NULL;
