@@ -32,7 +32,7 @@ extern NSString *keyTitleTag;
 @class HBPresetsManager;
 @class HBDockTile;
 
-@interface HBController : NSObject <GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSToolbarDelegate, NSDrawerDelegate>
+@interface HBController : NSObject <GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSDrawerDelegate>
 {
     IBOutlet NSWindow            * fWindow;
 
