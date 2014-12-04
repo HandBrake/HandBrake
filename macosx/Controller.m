@@ -72,6 +72,11 @@ NSString *keyTitleTag                          = @"keyTitleTag";
                                                             error:NULL];
         }
 
+        // Inits the controllers
+        outputPanel = [[HBOutputPanelController alloc] init];
+        fPictureController = [[HBPictureController alloc] init];
+        fQueueController = [[HBQueueController alloc] init];
+
         // we init the HBPresetsManager class
         NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
         presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
@@ -111,11 +116,6 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 
         // Set the Growl Delegate
         [GrowlApplicationBridge setGrowlDelegate: self];
-
-        // Inits the controllers
-        outputPanel = [[HBOutputPanelController alloc] init];
-        fPictureController = [[HBPictureController alloc] init];
-        fQueueController = [[HBQueueController alloc] init];
 
         [fPictureController setDelegate:self];
         [fPictureController setHandle:self.core.hb_handle];
@@ -287,10 +287,13 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 
 - (void)openFile:(NSString *)filePath
 {
-    [browsedSourceDisplayName release];
-    browsedSourceDisplayName = [filePath.lastPathComponent retain];
+    if (self.core.state != HBStateScanning)
+    {
+        [browsedSourceDisplayName release];
+        browsedSourceDisplayName = [filePath.lastPathComponent retain];
 
-    [self performScan:filePath scanTitleNum:0];
+        [self performScan:filePath scanTitleNum:0];
+    }
 }
 
 #pragma mark -
