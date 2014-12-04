@@ -28,8 +28,6 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
 NSString *keyTitleTag                          = @"keyTitleTag";
 
-NSString *dragDropFiles                        = @"dragDropFiles";
-
 // DockTile update freqency in total percent increment
 #define dockTileUpdateFrequency                  0.1f
 
@@ -74,11 +72,6 @@ NSString *dragDropFiles                        = @"dragDropFiles";
                                                             error:NULL];
         }
 
-        // Inits the controllers
-        outputPanel = [[HBOutputPanelController alloc] init];
-        fPictureController = [[HBPictureController alloc] init];
-        fQueueController = [[HBQueueController alloc] init];
-
         // we init the HBPresetsManager class
         NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
         presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
@@ -111,6 +104,29 @@ NSString *dragDropFiles                        = @"dragDropFiles";
 
         // Init a separate instance of libhb for user scanning and setting up jobs
         _queueCore = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
+
+        // Registers the observers to the cores notifications.
+        [self registerScanCoreNotifications];
+        [self registerQueueCoreNotifications];
+
+        // Set the Growl Delegate
+        [GrowlApplicationBridge setGrowlDelegate: self];
+
+        // Inits the controllers
+        outputPanel = [[HBOutputPanelController alloc] init];
+        fPictureController = [[HBPictureController alloc] init];
+        fQueueController = [[HBQueueController alloc] init];
+
+        [fPictureController setDelegate:self];
+        [fPictureController setHandle:self.core.hb_handle];
+
+        [fQueueController setHandle:self.queueCore.hb_handle];
+        [fQueueController setHBController:self];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMp4Checkboxes:) name:HBVideoEncoderChangedNotification object:nil];
+
+        dockIconProgress = 0;
     }
 
     return self;
@@ -118,20 +134,6 @@ NSString *dragDropFiles                        = @"dragDropFiles";
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
-	// Set the Growl Delegate
-    [GrowlApplicationBridge setGrowlDelegate: self];
-    /* Init others controllers */
-    [fPictureController setDelegate: self];
-    [fPictureController setHandle: self.core.hb_handle];
-
-    [fQueueController   setHandle: self.queueCore.hb_handle];
-    [fQueueController   setHBController: self];
-
-	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(autoSetM4vExtension:) name: HBMixdownChangedNotification object: nil];
-	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(updateMp4Checkboxes:) name: HBVideoEncoderChangedNotification object: nil];
-    
-    dockIconProgress = 0;
-    
     /* Init QueueFile .plist */
     [self loadQueueFile];
     [self initQueueFSEvent];
@@ -166,10 +168,6 @@ NSString *dragDropFiles                        = @"dragDropFiles";
 
     [self enableUI: NO];
 
-    // Registers the observers to the cores notifications.
-    [self registerScanCoreNotifications];
-    [self registerQueueCoreNotifications];
-
     // Open debug output window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
         [self showDebugOutputPanel:nil];
@@ -179,11 +177,6 @@ NSString *dragDropFiles                        = @"dragDropFiles";
         [self showQueueWindow:nil];
 
 	[self openMainWindow:nil];
-    
-    /* We have to set the bool to tell hb what to do after a scan
-     * Initially we set it to NO until we start processing the queue
-     */
-     applyQueueToScan = NO;
 
     /* Now we re-check the queue array to see if there are
      * any remaining encodes to be done in it and ask the
@@ -249,15 +242,19 @@ NSString *dragDropFiles                        = @"dragDropFiles";
                 /* Since we addressed any pending or previously encoding items above, we go ahead and make sure
                  * the queue is empty of any finished items or cancelled items */
                 [self clearQueueAllItems];
-                /* We show whichever open source window specified in LaunchSourceBehavior preference key */
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
-                {
-                    [self browseSources:nil];
-                }
 
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
+                if (self.core.state != HBStateScanning && !titleLoaded)
                 {
-                    [self browseSources:(id)fOpenSourceTitleMMenu];
+                    // We show whichever open source window specified in LaunchSourceBehavior preference key
+                    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+                    {
+                        [self browseSources:nil];
+                    }
+
+                    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
+                    {
+                        [self browseSources:(id)fOpenSourceTitleMMenu];
+                    }
                 }
             }
             
@@ -265,18 +262,35 @@ NSString *dragDropFiles                        = @"dragDropFiles";
     }
     else
     {
-        /* We show whichever open source window specified in LaunchSourceBehavior preference key */
-        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+        if (self.core.state != HBStateScanning && !titleLoaded)
         {
-            [self browseSources:nil];
-        }
-        
-        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
-        {
-            [self browseSources:(id)fOpenSourceTitleMMenu];
+            // We show whichever open source window specified in LaunchSourceBehavior preference key
+            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+            {
+                [self browseSources:nil];
+            }
+
+            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
+            {
+                [self browseSources:(id)fOpenSourceTitleMMenu];
+            }
         }
     }
     currentQueueEncodeNameString = @"";
+}
+
+- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
+{
+    [self openFile:filenames.firstObject];
+    [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+}
+
+- (void)openFile:(NSString *)filePath
+{
+    [browsedSourceDisplayName release];
+    browsedSourceDisplayName = [filePath.lastPathComponent retain];
+
+    [self performScan:filePath scanTitleNum:0];
 }
 
 #pragma mark -
@@ -330,37 +344,25 @@ NSString *dragDropFiles                        = @"dragDropFiles";
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
     NSPasteboard *pboard = [sender draggingPasteboard];
-    
+
     if ([[pboard types] containsObject:NSFilenamesPboardType])
     {
         NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
         return paths.count == 1 ? NSDragOperationGeneric : NSDragOperationNone;
     }
-    
+
     return NSDragOperationNone;
 }
 
 // This method is doing the job after the drag & drop operation has been validated by [self draggingEntered] and OSX
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    NSPasteboard *pboard;
-    
-    pboard = [sender draggingPasteboard];
-    
+    NSPasteboard *pboard = [sender draggingPasteboard];
+
     if ([[pboard types] containsObject:NSFilenamesPboardType])
     {
-        /*NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
-        
-        if (paths.count > 0)
-        {
-            // For now, we just want to accept one file at a time
-            // If for any reason, more than one file is submitted, we will take the first one
-            NSArray *reducedPaths = [NSArray arrayWithObject:[paths objectAtIndex:0]];
-            paths = reducedPaths;
-        }
-        
-        [self openFiles:paths];*/
-        //FIXME
+        NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
+        [self openFile:paths.firstObject];
     }
     
     return YES;
@@ -472,9 +474,7 @@ NSString *dragDropFiles                        = @"dragDropFiles";
 
 
 - (void) awakeFromNib
-{
-    fRipIndicatorShown = NO;  // initially out of view in the nib
-    
+{    
     /* For 64 bit builds, the threaded animation in the progress
      * indicators conflicts with the animation in the advanced tab
      * for reasons not completely clear. jbrjake found a note in the
@@ -1524,8 +1524,6 @@ NSString *dragDropFiles                        = @"dragDropFiles";
         [self.core scan:fileURL
                titleNum:scanTitleNum
                 previewsNum:hb_num_previews minTitleDuration:min_title_duration_seconds];
-
-        fWillScan = NO;
     }
 }
 

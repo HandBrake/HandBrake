@@ -32,7 +32,7 @@ extern NSString *keyTitleTag;
 @class HBPresetsManager;
 @class HBDockTile;
 
-@interface HBController : NSObject <GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSDrawerDelegate>
+@interface HBController : NSObject <NSApplicationDelegate, GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSDrawerDelegate>
 {
     IBOutlet NSWindow            * fWindow;
 
@@ -168,8 +168,6 @@ extern NSString *keyTitleTag;
     
     /* Dock progress variables */
     double                          dockIconProgress;
-    
-    BOOL                            fWillScan;
 
     HBDockTile  *dockTile;
 }
