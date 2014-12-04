@@ -196,8 +196,6 @@ extern NSString *keyTitleTag;
 
 - (void) prepareJob;
 - (IBAction) browseFile: (id) sender;
-- (void)     browseFileDone: (NSSavePanel *) sheet
-                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 - (IBAction) showPicturePanel: (id) sender;
 - (IBAction) showPreviewWindow: (id) sender;

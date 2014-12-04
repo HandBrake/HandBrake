@@ -1678,31 +1678,27 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 #pragma mark -
 #pragma mark New Output Destination
 
-- (IBAction) browseFile: (id) sender
+- (IBAction)browseFile:(id)sender
 {
-    /* Open a panel to let the user choose and update the text field */
+    // Open a panel to let the user choose and update the text field
     NSSavePanel * panel = [NSSavePanel savePanel];
-	/* We get the current file name and path from the destination field here */
-    NSString* destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+
+	// We get the current file name and path from the destination field here
+    NSString *destinationDirectory = fDstFile2Field.stringValue.stringByDeletingLastPathComponent;
     [panel setDirectoryURL:[NSURL fileURLWithPath:destinationDirectory]];
     [panel setNameFieldStringValue:[[fDstFile2Field stringValue] lastPathComponent]];
+
     [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
-        [self browseFileDone:panel returnCode:(int)result contextInfo:sender];
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            fDstFile2Field.stringValue = panel.URL.path;
+
+            // Save this path to the prefs so that on next browse destination window it opens there
+            NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+            [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+        }
     }];
 }
-
-- (void) browseFileDone: (NSSavePanel *) sheet
-             returnCode: (int) returnCode contextInfo: (void *) contextInfo
-{
-    if( returnCode == NSOKButton )
-    {
-        [fDstFile2Field setStringValue: [[sheet URL] path]];
-        /* Save this path to the prefs so that on next browse destination window it opens there */
-        NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
-        [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];   
-    }
-}
-
 
 #pragma mark -
 #pragma mark Main Window Control
