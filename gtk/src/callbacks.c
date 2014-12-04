@@ -60,10 +60,6 @@
 #include <dbt.h>
 #endif
 
-#if defined(_USE_APP_IND)
-#include <libappindicator/app-indicator.h>
-#endif
-
 #include "hb.h"
 #include "callbacks.h"
 #include "queuehandler.h"
@@ -3229,16 +3225,6 @@ ghb_backend_events(signal_user_data_t *ud)
     {
         gchar *status_str;
 
-        if (ghb_settings_get_boolean(ud->prefs, "show_status"))
-        {
-#if defined(_USE_APP_IND)
-            char * ai_status_str= g_strdup_printf(
-                "%.2f%%",
-                100.0 * status.queue.progress);
-            app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
-            g_free(ai_status_str);
-#endif
-        }
         status_str = searching_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction (progress, status.queue.progress);
@@ -3248,16 +3234,6 @@ ghb_backend_events(signal_user_data_t *ud)
     {
         gchar *status_str;
 
-        if (ghb_settings_get_boolean(ud->prefs, "show_status"))
-        {
-#if defined(_USE_APP_IND)
-            char * ai_status_str= g_strdup_printf(
-                "%.2f%%",
-                100.0 * status.queue.progress);
-            app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
-            g_free(ai_status_str);
-#endif
-        }
         status_str = working_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction (progress, status.queue.progress);
@@ -3327,9 +3303,6 @@ ghb_backend_events(signal_user_data_t *ud)
         }
         ghb_save_queue(ud->queue);
         ud->cancel_encode = GHB_CANCEL_NONE;
-#if defined(_USE_APP_IND)
-        app_indicator_set_label( ud->ai, "", "99.99%");
-#endif
     }
     else if (status.queue.state & GHB_STATE_MUXING)
     {
@@ -3979,30 +3952,6 @@ use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
     ghb_update_destination_extension(ud);
-}
-
-G_MODULE_EXPORT void
-show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    g_debug("show_status_cb");
-    ghb_widget_to_setting (ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
-    const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_set(ud->prefs, name);
-
-#if defined(_USE_APP_IND)
-    if (ud->ai)
-    {
-        if (ghb_settings_get_boolean(ud->prefs, "show_status"))
-        {
-            app_indicator_set_status(ud->ai, APP_INDICATOR_STATUS_ACTIVE);
-        }
-        else
-        {
-            app_indicator_set_status(ud->ai, APP_INDICATOR_STATUS_PASSIVE);
-        }
-    }
-#endif
 }
 
 G_MODULE_EXPORT void

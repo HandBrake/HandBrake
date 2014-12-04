@@ -47,10 +47,6 @@
 #define pipe(phandles)  _pipe (phandles, 4096, _O_BINARY)
 #endif
 
-#if defined(_USE_APP_IND)
-#include <libappindicator/app-indicator.h>
-#endif
-
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
@@ -1048,25 +1044,6 @@ main(int argc, char *argv[])
     // Add dvd devices to File menu
     ghb_volname_cache_init();
     GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
-
-#if defined(_USE_APP_IND)
-    GtkMenu *ai_menu = GTK_MENU(GHB_OBJECT(ud->builder, "tray_menu"));
-    ud->ai = app_indicator_new("HandBrake", "hb-icon", APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
-    app_indicator_set_menu( ud->ai, ai_menu );
-    app_indicator_set_label( ud->ai, "", "99.99%");
-    if (ghb_settings_get_boolean(ud->prefs, "show_status"))
-    {
-        app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_ACTIVE );
-    }
-    else
-    {
-        app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_PASSIVE );
-    }
-#else
-    // gtk-3 has eliminated status icons.  Remove the option from preferences
-    GtkWidget *status_icon_pref = GHB_WIDGET(ud->builder, "show_status");
-    gtk_widget_set_visible(status_icon_pref, FALSE);
-#endif
 
     GtkWidget *ghb_window = GHB_WIDGET(ud->builder, "hb_window");
 

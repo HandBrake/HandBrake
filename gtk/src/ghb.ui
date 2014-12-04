@@ -7094,25 +7094,6 @@ Resets all queue jobs to pending and ready to run again.</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkCheckButton" id="show_status">
-                        <property name="label" translatable="yes">Show system tray icon</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="halign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="margin-top">6</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-left">12</property>
-                        <signal name="toggled" handler="show_status_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">5</property>
-                      </packing>
-                    </child>
                   </object>
                 </child>
                 <child type="tab">

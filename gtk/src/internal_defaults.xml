@@ -143,8 +143,6 @@
         <false />
         <key>EncodeLogLocation</key>
         <false />
-        <key>show_status</key>
-        <true />
         <key>allow_tweaks</key>
         <false />
         <key>last_update_check</key>
