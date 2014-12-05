@@ -374,6 +374,10 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
                         hb_buffer_t *tmp = a;
                         a->next = b->next;
                         b->next = a;
+                        if (sanitizer->last == b)
+                        {
+                            sanitizer->last = a;
+                        }
                         a = b;
                         b = tmp;
                         sanitizer->list_current = a;
