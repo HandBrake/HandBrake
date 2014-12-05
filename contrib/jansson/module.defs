@@ -1,0 +1,6 @@
+$(eval $(call import.MODULE.defs,JANSSON,jansson))
+$(eval $(call import.CONTRIB.defs,JANSSON))
+
+JANSSON.FETCH.url = http://download.handbrake.fr/handbrake/contrib/jansson-2.6.tar.bz2
+
+JANSSON.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; mkdir m4; autoreconf -fiv;

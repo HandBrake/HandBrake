@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
-    LIBDVDREAD LIBDVDNAV LIBICONV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
-    PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX
+    LIBDVDREAD LIBDVDNAV LIBICONV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS \
+    LIBXML2 PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -105,9 +105,9 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avcodec avformat avutil avresample dvdnav dvdread \
-        fontconfig freetype mp3lame \
-        ogg samplerate swscale vpx theora vorbis vorbisenc x264 xml2 bluray, \
+        ass avcodec avformat avutil avresample dvdnav dvdread fontconfig \
+        freetype mp3lame ogg samplerate swscale vpx theora vorbis vorbisenc \
+        x264 xml2 bluray jansson, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
 ifeq (1,$(FEATURE.fdk_aac))

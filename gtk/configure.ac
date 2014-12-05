@@ -156,7 +156,7 @@ fi
 GHB_TOOLS_CFLAGS=`$BUILD_PKG_CONFIG --cflags glib-2.0 gdk-pixbuf-2.0`
 GHB_TOOLS_LIBS=`$BUILD_PKG_CONFIG --libs glib-2.0 gdk-pixbuf-2.0`
 
-HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2"
+HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson"
 
 case $host in
   *-*-mingw*)

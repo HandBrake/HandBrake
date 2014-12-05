@@ -93,6 +93,8 @@ ifneq (,$(filter $(BUILD.system),solaris))
     MODULES += contrib/libiconv
 endif
 
+MODULES += contrib/jansson
+
 ## these must come after contrib since some contrib modules are optional
 MODULES += libhb
 
