@@ -448,7 +448,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                  * Well.. looks like we are in the wrong mode.. lets add the
                  * newline we misinterpreted...
                  */
-                strncat(pv->current_entry.text, " ", 1024);
+                strncat(pv->current_entry.text, " ", sizeof(pv->current_entry.text) - strlen(pv->current_entry.text) - 1);
                 pv->current_state = k_state_inEntry_or_new;
                 continue;
             }
