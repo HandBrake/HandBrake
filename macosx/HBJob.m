@@ -10,10 +10,6 @@
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
-#import "HBFilters.h"
-#import "HBVideo.h"
-#import "HBPicture.h"
-
 #import "HBPreset.h"
 
 #include "lang.h"

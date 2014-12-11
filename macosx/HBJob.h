@@ -10,9 +10,9 @@
 
 @class HBTitle;
 
-@class HBVideo;
-@class HBPicture;
-@class HBFilters;
+#import "HBVideo.h"
+#import "HBPicture.h"
+#import "HBFilters.h"
 
 @class HBAudioDefaults;
 @class HBSubtitlesDefaults;
