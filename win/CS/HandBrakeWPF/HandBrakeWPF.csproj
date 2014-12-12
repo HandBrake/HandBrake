@@ -167,6 +167,7 @@
     <Compile Include="Factories\HBConfigurationFactory.cs" />
     <Compile Include="Services\Presets\Interfaces\IPresetService.cs" />
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
+    <Compile Include="Services\Presets\Model\PresetContainer.cs" />
     <Compile Include="Services\Presets\PresetService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />

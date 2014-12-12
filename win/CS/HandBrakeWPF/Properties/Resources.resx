@@ -433,7 +433,8 @@ In order to use the QuickSync encoder, you must:
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
     <value>HandBrake has determined your built-in presets are out of date... These presets will now be updated.
-Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them.</value>
+Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them. 
+The previous user_presets.xml file was backed up.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
     <value>Queue Finished</value>

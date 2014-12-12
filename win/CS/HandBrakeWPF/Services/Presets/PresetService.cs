@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Services.Presets
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
+    using System.Windows.Forms;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Exceptions;
@@ -26,12 +27,19 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The preset service manages HandBrake's presets
     /// </summary>
     public class PresetService : IPresetService
     {
+
+        // TODO refactor filename
+
         #region Private Variables
+
+        private static readonly int CurrentPresetVersion = 1;
 
         /// <summary>
         /// XML Serializer
@@ -46,7 +54,13 @@ namespace HandBrakeWPF.Services.Presets
         /// <summary>
         /// The User Preset file
         /// </summary>
-        private readonly string userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
+        private readonly string userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.json";
+
+        /// <summary>
+        /// The Legacy Preset file
+        /// </summary>
+        private readonly string legacyUserPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
+
 
         /// <summary>
         /// The Built In Presets File
@@ -432,17 +446,77 @@ namespace HandBrakeWPF.Services.Presets
 
             // Load in the users Presets from UserPresets.xml
             try
-            {
-                if (File.Exists(this.userPresetFile))
+            { 
+                // Handle Legacy Preset Format.
+                bool updatePresets = false;
+                if (File.Exists(this.legacyUserPresetFile))
                 {
-                    using (StreamReader reader = new StreamReader(this.userPresetFile))
+                    using (StreamReader reader = new StreamReader(this.legacyUserPresetFile))
                     {
-                        List<Preset> list = (List<Preset>)Ser.Deserialize(reader);
-                        foreach (Preset preset in list)
+                        try
                         {
-                            this.presets.Add(preset);
+                            var oldPresets = (List<Preset>)Ser.Deserialize(reader);
+                            foreach (Preset oldPreset in oldPresets)
+                            {
+                                this.presets.Add(oldPreset);
+                            }
+                            updatePresets = true;
+                            
+                        }
+                        catch (Exception exc)
+                        {
+                            // Do Nothing
                         }
                     }
+
+                    // Archive the old file incase the user needs it.
+                    File.Move(this.legacyUserPresetFile, this.legacyUserPresetFile + ".archive." + GeneralUtilities.ProcessId);
+                }
+
+                // New JSON Format.
+                if (File.Exists(this.userPresetFile))
+                {
+                    // New Preset Format.
+                    using (StreamReader reader = new StreamReader(this.userPresetFile))
+                    {
+                        PresetContainer presetContainer = null;
+
+                        bool createBackup = false;
+                        try
+                        {
+                           presetContainer = JsonConvert.DeserializeObject<PresetContainer>(reader.ReadToEnd());
+                        } 
+                        catch (Exception exc)
+                        {
+                            createBackup = true;
+                        }
+
+                        // If we have old presets, or the container wasn't parseable, or we have a version mismatch, backup the user preset file 
+                        // incase something goes wrong.
+                        if (createBackup || (presetContainer != null && presetContainer.Version < CurrentPresetVersion))
+                        {
+                            string backupFile = this.userPresetFile + "." + GeneralUtilities.ProcessId;
+                            File.Copy(this.userPresetFile, backupFile);
+                        }
+
+                        // Load the current presets.
+                        if (presetContainer != null && !string.IsNullOrEmpty(presetContainer.Presets))
+                        {
+                            JsonSerializerSettings settings = new JsonSerializerSettings();
+                            settings.MissingMemberHandling = MissingMemberHandling.Ignore;
+                            List<Preset> list = JsonConvert.DeserializeObject<List<Preset>>(presetContainer.Presets);
+                            foreach (Preset preset in list)
+                            {
+                                this.presets.Add(preset);
+                            }
+                        }
+                    }
+                }
+
+                // We did a preset convertion, so save the updates.
+                if (updatePresets)
+                {
+                    UpdatePresetFiles();
                 }
             }
             catch (Exception exc)
@@ -472,7 +546,16 @@ namespace HandBrakeWPF.Services.Presets
 
                 using (FileStream strm = new FileStream(this.userPresetFile, FileMode.Create, FileAccess.Write))
                 {
-                    Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn == false).ToList());
+                    List<Preset> userPresets = this.presets.Where(p => p.IsBuildIn == false).ToList();
+                    string presetsJson = JsonConvert.SerializeObject(userPresets, Formatting.Indented);
+
+                    PresetContainer container = new PresetContainer(CurrentPresetVersion, presetsJson);
+                    string containerJson = JsonConvert.SerializeObject(container, Formatting.Indented);
+
+                    using (StreamWriter writer = new StreamWriter(strm))
+                    {
+                        writer.WriteLine(containerJson);
+                    }
                 }
             }
             catch (Exception exc)

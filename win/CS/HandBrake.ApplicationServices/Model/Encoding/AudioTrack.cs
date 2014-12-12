@@ -19,6 +19,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// An Audio Track for the Audio Panel
     /// </summary>
@@ -377,6 +379,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets TrackReference.
         /// </summary>
+        [JsonIgnore]
         public AudioTrack TrackReference
         {
             get { return this; }
