@@ -170,7 +170,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             AddEncodeElement(xmlWriter, "PictureDetelecineCustom", "string", parsed.Detelecine == Detelecine.Custom ? parsed.CustomDecomb : string.Empty);
 
             // Picture Settings
-            AddEncodeElement(xmlWriter, "PictureHeight", "integer", parsed.Height.ToString());
+            AddEncodeElement(xmlWriter, "PictureHeight", "integer", parsed.MaxHeight.HasValue ? parsed.MaxHeight.Value.ToString() : parsed.Height.HasValue ? parsed.Height.Value.ToString() : "0");
             AddEncodeElement(xmlWriter, "PictureKeepRatio", "integer", parsed.KeepDisplayAspect ? "1" : "0");          
             AddEncodeElement(xmlWriter, "PictureModulus", "integer", parsed.Modulus.ToString());
             AddEncodeElement(xmlWriter, "PicturePAR", "integer", ((int)parsed.Anamorphic).ToString());
@@ -178,7 +178,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             AddEncodeElement(xmlWriter, "PictureRightCrop", "integer", parsed.Cropping.Right.ToString());
             AddEncodeElement(xmlWriter, "PictureTopCrop", "integer", parsed.Cropping.Top.ToString());
             AddEncodeElement(xmlWriter, "PictureBottomCrop", "integer", parsed.Cropping.Bottom.ToString());
-            AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.Width.ToString());
+            AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.MaxWidth.HasValue ? parsed.MaxWidth.Value.ToString() : parsed.Width.HasValue ? parsed.Width.Value.ToString() : "0");
 
             // Preset Information
             AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", build);
