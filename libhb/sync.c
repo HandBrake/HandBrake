@@ -383,22 +383,30 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
                         sanitizer->list_current = a;
                     }
 
-                    sanitizer->list_current = a->next;
-                    if (sanitizer->list_current == NULL)
-                        sanitizer->last = NULL;
                     a->next = NULL;
                     b->s.start = a->s.stop;
 
                     buf = merge_ssa(a, b);
                     hb_buffer_close(&a);
+                    a = buf;
+                    buf = NULL;
+                    sanitizer->list_current = a;
 
-                    if (b->s.stop != AV_NOPTS_VALUE && ABS(b->s.stop - b->s.start) <= 18000)
+                    if (b->s.stop != AV_NOPTS_VALUE &&
+                        ABS(b->s.stop - b->s.start) <= 18000)
                     {
                         // b and a completely overlap, remove b
-                        sanitizer->list_current = b->next;
-                        if (sanitizer->list_current == NULL)
-                            sanitizer->last = NULL;
+                        a->next = b->next;
+                        b->next = NULL;
+                        if (sanitizer->last == b)
+                        {
+                            sanitizer->last = a;
+                        }
                         hb_buffer_close(&b);
+                    }
+                    else
+                    {
+                        a->next = b;
                     }
                 }
                 else
