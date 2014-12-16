@@ -17,6 +17,7 @@ extern "C" {
 #include "project.h"
 #include "common.h"
 #include "hb_dict.h"
+#include "hb_json.h"
 
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,
@@ -70,17 +71,11 @@ int           hb_save_preview( hb_handle_t * h, int title, int preview,
                                hb_buffer_t *buf );
 hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
                                int preview );
-void          hb_get_preview( hb_handle_t *, hb_job_t *, int,
-                              uint8_t * );
 hb_image_t  * hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
-                              hb_ui_geometry_t *ui_geo, int deinterlace);
+                              hb_geometry_settings_t *geo, int deinterlace);
 void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,
-                                      hb_ui_geometry_t *ui_geo,
+                                      hb_geometry_settings_t *geo,
                                       hb_geometry_t *result);
-void          hb_set_anamorphic_size( hb_job_t *,
-                int *output_width, int *output_height,
-                int *output_par_width, int *output_par_height );
-void          hb_validate_size( hb_job_t * job );
 void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, 
                 const char * settings );
 
@@ -111,8 +106,7 @@ typedef struct hb_interjob_s
     int frame_count;       /* number of frames counted by sync */
     int out_frame_count;   /* number of frames counted by render */
     uint64_t total_time;   /* real length in 90kHz ticks (i.e. seconds / 90000) */
-    int vrate;             /* actual measured output vrate from 1st pass */
-    int vrate_base;        /* actual measured output vrate_base from 1st pass */
+    hb_rational_t vrate;   /* actual measured output vrate from 1st pass */
 
     hb_subtitle_t *select_subtitle; /* foreign language scan subtitle */
 } hb_interjob_t;

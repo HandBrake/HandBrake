@@ -26,8 +26,7 @@ struct hb_filter_private_s
     int              mode;
     int              width;
     int              height;
-    int              par_width;
-    int              par_height;
+    hb_rational_t    par;
 
     int              cpu_count;
 
@@ -267,18 +266,17 @@ static int hb_rotate_init( hb_filter_object_t * filter,
     if( pv->mode & 4 )
     {
         // 90 degree rotation, exchange width and height
-        int tmp = init->width;
-        init->width = init->height;
-        init->height = tmp;
+        int tmp = init->geometry.width;
+        init->geometry.width = init->geometry.height;
+        init->geometry.height = tmp;
 
-        tmp = init->par_width;
-        init->par_width = init->par_height;
-        init->par_height = tmp;
+        tmp = init->geometry.par.num;
+        init->geometry.par.num = init->geometry.par.den;
+        init->geometry.par.den = tmp;
     }
-    pv->width = init->width;
-    pv->height = init->height;
-    pv->par_width = init->par_width;
-    pv->par_height = init->par_height;
+    pv->width = init->geometry.width;
+    pv->height = init->geometry.height;
+    pv->par = init->geometry.par;
 
     return 0;
 }
@@ -291,10 +289,9 @@ static int hb_rotate_info( hb_filter_object_t * filter,
         return 1;
 
     memset( info, 0, sizeof( hb_filter_info_t ) );
-    info->out.width = pv->width;
-    info->out.height = pv->height;
-    info->out.par_width = pv->par_width;
-    info->out.par_height = pv->par_height;
+    info->out.geometry.width = pv->width;
+    info->out.geometry.height = pv->height;
+    info->out.geometry.par = pv->par;
     int pos = 0;
     if( pv->mode & 1 )
         pos += sprintf( &info->human_readable_desc[pos], "flip vertical" );

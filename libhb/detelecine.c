@@ -846,19 +846,20 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     ctx->bpp[0] = ctx->bpp[1] = ctx->bpp[2] = 8;
     ctx->background[1] = ctx->background[2] = 128;
 
-    ctx->w[0]      = init->width;
-    ctx->h[0]      = hb_image_height( init->pix_fmt, init->height, 0 );
-    ctx->stride[0] = hb_image_stride( init->pix_fmt, init->width, 0 );
+    ctx->w[0]      = init->geometry.width;
+    ctx->h[0]      = hb_image_height( init->pix_fmt, init->geometry.height, 0 );
+    ctx->stride[0] = hb_image_stride( init->pix_fmt, init->geometry.width, 0 );
 
-    ctx->w[1]      = init->width >> 1;
-    ctx->h[1]      = hb_image_height( init->pix_fmt, init->height, 1 );
-    ctx->stride[1] = hb_image_stride( init->pix_fmt, init->width, 1 );
+    ctx->w[1]      = init->geometry.width >> 1;
+    ctx->h[1]      = hb_image_height( init->pix_fmt, init->geometry.height, 1 );
+    ctx->stride[1] = hb_image_stride( init->pix_fmt, init->geometry.width, 1 );
 
-    ctx->w[1]      = init->width >> 1;
-    ctx->h[2]      = hb_image_height( init->pix_fmt, init->height, 2 );
-    ctx->stride[2] = hb_image_stride( init->pix_fmt, init->width, 2 );
+    ctx->w[1]      = init->geometry.width >> 1;
+    ctx->h[2]      = hb_image_height( init->pix_fmt, init->geometry.height, 2 );
+    ctx->stride[2] = hb_image_stride( init->pix_fmt, init->geometry.width, 2 );
 
-    ctx->w[3]      = ((init->width+15)/16) * ((init->height+15)/16);
+    ctx->w[3]      = ((init->geometry.width + 15) / 16) *
+                     ((init->geometry.height + 15) / 16);
     ctx->h[3]      = 2;
     ctx->stride[3] = ctx->w[3];
 

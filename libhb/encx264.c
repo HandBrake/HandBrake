@@ -126,13 +126,13 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     if( job->pass == 2 && job->cfr != 1 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
-        param.i_fps_num = interjob->vrate;
-        param.i_fps_den = interjob->vrate_base;
+        param.i_fps_num = interjob->vrate.num;
+        param.i_fps_den = interjob->vrate.den;
     }
     else
     {
-        param.i_fps_num = job->vrate;
-        param.i_fps_den = job->vrate_base;
+        param.i_fps_num = job->vrate.num;
+        param.i_fps_den = job->vrate.den;
     }
     if ( job->cfr == 1 )
     {
@@ -149,7 +149,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Set min:max keyframe intervals to 1:10 of fps;
      * adjust +0.5 for when fps has remainder to bump
      * { 23.976, 29.976, 59.94 } to { 24, 30, 60 }. */
-    param.i_keyint_min = (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
+    param.i_keyint_min = (double)job->vrate.num / job->vrate.den + 0.5;
     param.i_keyint_max = 10 * param.i_keyint_min;
 
     param.i_log_level  = X264_LOG_INFO;
@@ -252,11 +252,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_width  = job->width;
     param.i_height = job->height;
 
-    if( job->anamorphic.mode )
-    {
-        param.vui.i_sar_width  = job->anamorphic.par_width;
-        param.vui.i_sar_height = job->anamorphic.par_height;
-    }
+    param.vui.i_sar_width  = job->par.num;
+    param.vui.i_sar_height = job->par.den;
 
     if( job->vquality >= 0 )
     {
@@ -336,7 +333,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                                                      job->encoder_options,
                                                      job->encoder_profile,
                                                      job->encoder_level,
-                                                     job->width, job->height);
+                                                     job->width,
+                                                     job->height);
     if( x264_opts_unparsed != NULL )
     {
         hb_log( "encx264: unparsed options: %s", x264_opts_unparsed );
@@ -370,8 +368,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     if( job->grayscale )
     {
-        int uvsize = (hb_image_stride(AV_PIX_FMT_YUV420P, job->width,  1) *
-                      hb_image_height(AV_PIX_FMT_YUV420P, job->height, 1));
+        int uvsize = hb_image_stride(AV_PIX_FMT_YUV420P, job->width,  1) *
+                     hb_image_height(AV_PIX_FMT_YUV420P, job->height, 1);
         pv->grey_data = malloc(uvsize);
         memset(pv->grey_data, 0x80, uvsize);
         pv->pic_in.img.plane[1] = pv->pic_in.img.plane[2] = pv->grey_data;

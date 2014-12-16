@@ -289,23 +289,22 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     [fCropLeftField     setEditable: !self.autoCrop];
     [fCropRightField    setEditable: !self.autoCrop];
 
-    [fWidthStepper      setMaxValue: title->width - job->crop[2] - job->crop[3]];
+    [fWidthStepper      setMaxValue: title->geometry.width - job->crop[2] - job->crop[3]];
     [fWidthStepper      setIntValue: job->width];
     [fWidthField        setIntValue: job->width];
-    [fHeightStepper     setMaxValue: title->height - job->crop[0] - job->crop[1]];
+    [fHeightStepper     setMaxValue: title->geometry.height - job->crop[0] - job->crop[1]];
     [fHeightStepper     setIntValue: job->height];
     [fHeightField       setIntValue: job->height];
-    [fCropTopStepper    setMaxValue: title->height/2-2];
-    [fCropBottomStepper setMaxValue: title->height/2-2];
-    [fCropLeftStepper   setMaxValue: title->width/2-2];
-    [fCropRightStepper  setMaxValue: title->width/2-2];
+    [fCropTopStepper    setMaxValue: title->geometry.height/2-2];
+    [fCropBottomStepper setMaxValue: title->geometry.height/2-2];
+    [fCropLeftStepper   setMaxValue: title->geometry.width/2-2];
+    [fCropRightStepper  setMaxValue: title->geometry.width/2-2];
 
-    [fParWidthField     setIntValue: job->anamorphic.par_width];
-    [fParHeightField    setIntValue: job->anamorphic.par_height];
+    [fParWidthField     setIntValue: job->par.num];
+    [fParHeightField    setIntValue: job->par.den];
 
     int display_width;
-    display_width = job->width * job->anamorphic.par_width /
-                                 job->anamorphic.par_height;
+    display_width = job->width * job->par.num / job->par.den;
     [fDisplayWidthField setIntValue: display_width];
 
     [fPreviewController setTitle:title];
@@ -676,15 +675,15 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
     if (sender == fParWidthField || sender == fParHeightField)
     {
-        job->anamorphic.par_width = [fParWidthField intValue];
-        job->anamorphic.par_height = [fParHeightField intValue];
+        job->par.num = [fParWidthField intValue];
+        job->par.den = [fParHeightField intValue];
     }
 
     if (sender == fDisplayWidthField)
     {
         dar_updated = 1;
-        job->anamorphic.dar_width = [fDisplayWidthField intValue];
-        job->anamorphic.dar_height = [fHeightStepper intValue];
+        job->par.num = [fDisplayWidthField intValue];
+        job->par.den = [fWidthField intValue];
     }
 
     if (sender == fCropMatrix)
@@ -721,35 +720,35 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     {
         job->crop[0] = [fCropTopStepper    intValue];
         [fCropTopField setIntValue: job->crop[0]];
-        [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+        [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
     }
     if (sender == fCropBottomStepper)
     {
         job->crop[1] = [fCropBottomStepper intValue];
         [fCropBottomField setIntValue: job->crop[1]];
-        [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+        [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
     }
     if (sender == fCropLeftStepper)
     {
         job->crop[2] = [fCropLeftStepper   intValue];
         [fCropLeftField setIntValue: job->crop[2]];
-        [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+        [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
     }
     if (sender == fCropRightStepper)
     {
         job->crop[3] = [fCropRightStepper  intValue];
         [fCropRightField setIntValue: job->crop[3]];
-        [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+        [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
     }
 
     if (sender == fCropTopField)
     {
         int cropValue = [fCropTopField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->height/2-2))
+        if (cropValue >= 0 && (cropValue <= fTitle->geometry.height/2-2))
         {
             job->crop[0] = cropValue;
             [fCropTopStepper setIntValue:cropValue];
-            [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+            [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
         }
         else
         {
@@ -759,11 +758,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     else if (sender == fCropBottomField)
     {
         int cropValue = [fCropBottomField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->height/2-2))
+        if (cropValue >= 0 && (cropValue <= fTitle->geometry.height/2-2))
         {
             job->crop[1] = cropValue;
             [fCropBottomStepper setIntValue:cropValue];
-            [fHeightStepper setMaxValue: fTitle->height - job->crop[0] - job->crop[1]];
+            [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
         }
         else
         {
@@ -773,11 +772,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     else if (sender == fCropLeftField)
     {
         int cropValue = [fCropLeftField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->width/2-2))
+        if (cropValue >= 0 && (cropValue <= fTitle->geometry.width/2-2))
         {
             job->crop[2] = cropValue;
             [fCropLeftStepper setIntValue:cropValue];
-            [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+            [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
         }
         else
         {
@@ -787,11 +786,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     else if (sender == fCropRightField)
     {
         int cropValue = [fCropRightField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->width/2-2))
+        if (cropValue >= 0 && (cropValue <= fTitle->geometry.width/2-2))
         {
             job->crop[3] = cropValue;
             [fCropRightStepper setIntValue:cropValue];
-            [fWidthStepper setMaxValue: fTitle->width - job->crop[2] - job->crop[3]];
+            [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
         }
         else
         {
@@ -802,40 +801,35 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     keep |= !!job->anamorphic.keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
 
     hb_geometry_t srcGeo, resultGeo;
-    hb_ui_geometry_t uiGeo;
+    hb_geometry_settings_t uiGeo;
 
-    srcGeo.width = fTitle->width;
-    srcGeo.height = fTitle->height;
-    srcGeo.par.num = fTitle->pixel_aspect_width;
-    srcGeo.par.den = fTitle->pixel_aspect_height;
+    srcGeo.width = fTitle->geometry.width;
+    srcGeo.height = fTitle->geometry.height;
+    srcGeo.par = fTitle->geometry.par;
 
     uiGeo.mode = job->anamorphic.mode;
     uiGeo.keep = keep;
     uiGeo.itu_par = 0;
     uiGeo.modulus = job->modulus;
     memcpy(uiGeo.crop, job->crop, sizeof(int[4]));
-    uiGeo.width = job->width;
-    uiGeo.height =  job->height;
+    uiGeo.geometry.width = job->width;
+    uiGeo.geometry.height =  job->height;
     /* Modulus added to maxWidth/maxHeight to allow a small amount of
      * upscaling to the next mod boundary.
      */
-    uiGeo.maxWidth = fTitle->width - job->crop[2] - job->crop[3] + job->modulus - 1;
-    uiGeo.maxHeight = fTitle->height - job->crop[0] - job->crop[1] + job->modulus - 1;
-    uiGeo.par.num = job->anamorphic.par_width;
-    uiGeo.par.den = job->anamorphic.par_height;
-    uiGeo.dar.num = 0;
-    uiGeo.dar.den = 0;
+    uiGeo.maxWidth = fTitle->geometry.width - job->crop[2] - job->crop[3] + job->modulus - 1;
+    uiGeo.maxHeight = fTitle->geometry.height - job->crop[0] - job->crop[1] + job->modulus - 1;
+    uiGeo.geometry.par = job->par;
     if (job->anamorphic.mode == HB_ANAMORPHIC_CUSTOM && dar_updated)
     {
-        uiGeo.dar.num = job->anamorphic.dar_width;
-        uiGeo.dar.den = job->anamorphic.dar_height;
+        uiGeo.geometry.par.num = [fDisplayWidthField intValue];
+        uiGeo.geometry.par.den = uiGeo.geometry.width;
     }
     hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
 
     job->width = resultGeo.width;
     job->height = resultGeo.height;
-    job->anamorphic.par_width = resultGeo.par.num;
-    job->anamorphic.par_height = resultGeo.par.den;
+    job->par = resultGeo.par;
 
     int display_width;
     display_width = resultGeo.width * resultGeo.par.num / resultGeo.par.den;

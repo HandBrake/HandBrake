@@ -671,35 +671,35 @@ typedef enum ViewMode : NSUInteger {
     NSSize imageScaledSize = [fPreviewImage size];
     [self.pictureLayer setContents:fPreviewImage];
 
-    NSSize displaySize = NSMakeSize( ( CGFloat )title->width, ( CGFloat )title->height );
+    NSSize displaySize = NSMakeSize( ( CGFloat )title->geometry.width, ( CGFloat )title->geometry.height );
     NSString *sizeInfoString;
 
     /* Set the picture size display fields below the Preview Picture*/
     int display_width;
-    display_width = title->job->width * title->job->anamorphic.par_width / title->job->anamorphic.par_height;
+    display_width = title->job->width * title->job->par.num / title->job->par.den;
     if (title->job->anamorphic.mode == HB_ANAMORPHIC_STRICT) // Original PAR Implementation
     {
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
-                          title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
+                          title->geometry.width, title->geometry.height, title->job->width, title->job->height, display_width, title->job->height];
     }
     else if (title->job->anamorphic.mode == HB_ANAMORPHIC_LOOSE) // Loose Anamorphic
     {
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
-                          title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
+                          title->geometry.width, title->geometry.height, title->job->width, title->job->height, display_width, title->job->height];
     }
     else if (title->job->anamorphic.mode == HB_ANAMORPHIC_CUSTOM) // Custom Anamorphic
     {
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",
-                          title->width, title->height, title->job->width, title->job->height, display_width, title->job->height];
+                          title->geometry.width, title->geometry.height, title->job->width, title->job->height, display_width, title->job->height];
     }
     else // No Anamorphic
     {
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d",
-                          title->width, title->height, title->job->width, title->job->height];
+                          title->geometry.width, title->geometry.height, title->job->width, title->job->height];
     }
     displaySize.width = display_width;
     displaySize.height = title->job->height;

@@ -341,10 +341,10 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
 
     pv->list = hb_list_init();
     // list of init params provided at work.c:~700
-    pv->width_in  = init->width;
-    pv->height_in = init->height;
-    pv->width_out = init->width;
-    pv->height_out = init->height;
+    pv->width_in  = init->geometry.width;
+    pv->height_in = init->geometry.height;
+    pv->width_out = init->geometry.width;
+    pv->height_out = init->geometry.height;
     memcpy( pv->crop, init->crop, sizeof( int[4] ) );
 
     if (filter->settings != NULL)
@@ -368,8 +368,8 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
     init->cfr = 0;
 
     init->pix_fmt = pv->pix_fmt;
-    init->width = pv->width_out;
-    init->height = pv->height_out;
+    init->geometry.width = pv->width_out;
+    init->geometry.height = pv->height_out;
     memcpy( init->crop, pv->crop, sizeof( int[4] ) );
 
     return 0;

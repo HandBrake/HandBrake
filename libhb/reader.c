@@ -111,8 +111,8 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
     r->st_slots = 4;
     r->stream_timing = calloc( sizeof(stream_timing_t), r->st_slots );
     r->stream_timing[0].id = r->title->video_id;
-    r->stream_timing[0].average = 90000. * (double)job->vrate_base /
-                                           (double)job->vrate;
+    r->stream_timing[0].average = 90000. * (double)job->vrate.den /
+                                           job->vrate.num;
     r->stream_timing[0].filtered_average = r->stream_timing[0].average;
     r->stream_timing[0].last = -r->stream_timing[0].average;
     r->stream_timing[0].valid = 1;
@@ -139,7 +139,8 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
     else if (job->frame_to_stop)
     {
         int frames = job->frame_to_start + job->frame_to_stop;
-        r->duration = (int64_t)frames * job->title->rate_base * 90000 / job->title->rate;
+        r->duration = (int64_t)frames * job->title->vrate.den * 90000 /
+                               job->title->vrate.num;
     }
     else
     {

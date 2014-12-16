@@ -65,10 +65,10 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     // TODO: add pix format option to settings
     pv->job = init->job;
     pv->pix_fmt_out = init->pix_fmt;
-    pv->width_in = init->width;
-    pv->height_in = init->height;
-    pv->width_out = init->width - (init->crop[2] + init->crop[3]);
-    pv->height_out = init->height - (init->crop[0] + init->crop[1]);
+    pv->width_in = init->geometry.width;
+    pv->height_in = init->geometry.height;
+    pv->width_out = init->geometry.width - (init->crop[2] + init->crop[3]);
+    pv->height_out = init->geometry.height - (init->crop[0] + init->crop[1]);
 
     /* OpenCL/DXVA2 */
     pv->use_dxva       = init->use_dxva;
@@ -91,8 +91,8 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     // Set init values so the next stage in the pipline
     // knows what it will be getting
     init->pix_fmt = pv->pix_fmt;
-    init->width = pv->width_out;
-    init->height = pv->height_out;
+    init->geometry.width = pv->width_out;
+    init->geometry.height = pv->height_out;
     memcpy( init->crop, pv->crop, sizeof( int[4] ) );
 
     return 0;
@@ -110,8 +110,8 @@ static int hb_crop_scale_info( hb_filter_object_t * filter,
     // knows what it will be getting
     memset( info, 0, sizeof( hb_filter_info_t ) );
     info->out.pix_fmt = pv->pix_fmt;
-    info->out.width = pv->width_out;
-    info->out.height = pv->height_out;
+    info->out.geometry.width = pv->width_out;
+    info->out.geometry.height = pv->height_out;
     memcpy( info->out.crop, pv->crop, sizeof( int[4] ) );
 
     int cropped_width = pv->width_in - ( pv->crop[2] + pv->crop[3] );

@@ -104,13 +104,14 @@ typedef enum EncodeState : NSUInteger {
 {
     NSImage *img = nil;
 
-    hb_ui_geometry_t geo;
-    geo.width = title->job->width;
-    geo.height = title->job->height;
+    hb_geometry_settings_t geo;
+    memset(&geo, 0, sizeof(geo));
+    geo.geometry.width = title->job->width;
+    geo.geometry.height = title->job->height;
     // HBPreviewController will scale the image later,
     // ignore the par.
-    geo.par.num = 1;
-    geo.par.den = 1;
+    geo.geometry.par.num = 1;
+    geo.geometry.par.den = 1;
     memcpy(geo.crop, title->job->crop, sizeof(int[4]));
 
     hb_image_t *image;

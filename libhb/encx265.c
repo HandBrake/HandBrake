@@ -94,7 +94,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     pv->delayed_chapters  = hb_list_init();
     pv->job               = job;
     w->private_data       = pv;
-    int ret, vrate, vrate_base;
+    int ret;
+    hb_rational_t vrate;
     x265_nal *nal;
     uint32_t nnal;
 
@@ -133,10 +134,10 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Some HandBrake-specific defaults; users can override them
      * using the encoder_options string.
      */
-    hb_reduce(&vrate, &vrate_base, job->vrate, job->vrate_base);
-    param->fpsNum      = vrate;
-    param->fpsDenom    = vrate_base;
-    param->keyframeMin = (int)((double)vrate / (double)vrate_base + 0.5);
+    hb_reduce(&vrate.num, &vrate.den, job->vrate.num, job->vrate.den);
+    param->fpsNum      = vrate.num;
+    param->fpsDenom    = vrate.den;
+    param->keyframeMin = (double)vrate.num / vrate.den + 0.5;
     param->keyframeMax = param->keyframeMin * 10;
 
     /*
@@ -211,19 +212,16 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     param->bRepeatHeaders = 0;
     param->sourceWidth    = job->width;
     param->sourceHeight   = job->height;
-    if (job->anamorphic.mode)
+
+    /*
+     * Let x265 determnine whether to use an aspect ratio
+     * index vs. the extended SAR index + SAR width/height.
+     */
+    char sar[22];
+    snprintf(sar, sizeof(sar), "%d:%d", job->par.num, job->par.den);
+    if (param_parse(param, "sar", sar))
     {
-        /*
-         * Let x265 determnine whether to use an aspect ratio
-         * index vs. the extended SAR index + SAR width/height.
-         */
-        char sar[22];
-        snprintf(sar, sizeof(sar), "%d:%d",
-                 job->anamorphic.par_width, job->anamorphic.par_height);
-        if (param_parse(param, "sar", sar))
-        {
-            goto fail;
-        }
+        goto fail;
     }
 
     if (job->vquality > 0)

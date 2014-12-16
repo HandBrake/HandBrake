@@ -608,7 +608,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     // set up to interleave track data in blocks of 1 video frame time.
     // (the best case for buffering and playout latency). The container-
     // specific muxers can reblock this into bigger chunks if necessary.
-    mux->interleave = 90000. * (double)job->vrate_base / (double)job->vrate;
+    mux->interleave = 90000. * (double)job->vrate.den / job->vrate.num;
     mux->pts = mux->interleave;
 
     /* Get a real muxer */

@@ -102,13 +102,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if( job->pass == 2 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
-        fps.den = interjob->vrate_base;
-        fps.num = interjob->vrate;
+        fps.den = interjob->vrate.den;
+        fps.num = interjob->vrate.num;
     }
     else
     {
-        fps.den = job->vrate_base;
-        fps.num = job->vrate;
+        fps.den = job->vrate.den;
+        fps.num = job->vrate.num;
     }
 
     // If the fps.num is 27000000, there's a good chance this is
@@ -160,7 +160,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     context->time_base.den = fps.num;
     context->time_base.num = fps.den;
-    context->gop_size  = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
+    context->gop_size  = 10 * ((double)job->vrate.num / job->vrate.den + 0.5);
 
     /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * lavc_opts = NULL;
@@ -209,7 +209,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             //This value was chosen to make the bitrate high enough
             //for libvpx to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
-            context->bit_rate = job->width*job->height*( (double)fps.num / (double)fps.den );
+            context->bit_rate = job->width * job->height * fps.num / fps.den;
             hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
         }
         else
@@ -222,14 +222,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->height    = job->height;
     context->pix_fmt   = AV_PIX_FMT_YUV420P;
 
-    if( job->anamorphic.mode )
-    {
-        context->sample_aspect_ratio.num = job->anamorphic.par_width;
-        context->sample_aspect_ratio.den = job->anamorphic.par_height;
+    context->sample_aspect_ratio.num = job->par.num;
+    context->sample_aspect_ratio.den = job->par.den;
 
-        hb_log( "encavcodec: encoding with stored aspect %d/%d",
-                job->anamorphic.par_width, job->anamorphic.par_height );
-    }
+    hb_log( "encavcodec: encoding with stored aspect %d/%d",
+            job->par.num, job->par.den );
 
     if( job->mux & HB_MUX_MASK_MP4 )
     {
@@ -560,7 +557,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             av_init_packet(&pkt);
             /* Should be way too large */
-            buf = hb_video_buffer_init( job->width, job->height );
+            buf = hb_video_buffer_init(job->width, job->height);
             pkt.data = buf->data;
             pkt.size = buf->alloc;
 

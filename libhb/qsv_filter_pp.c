@@ -144,29 +144,29 @@ static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
         qsv_vpp->m_mfxVideoParam.vpp.In.ChromaFormat    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.ChromaFormat;
         qsv_vpp->m_mfxVideoParam.vpp.In.CropX           = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.CropX;
         qsv_vpp->m_mfxVideoParam.vpp.In.CropY           = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.CropY;
-        qsv_vpp->m_mfxVideoParam.vpp.In.CropW           = pv->job->title->width;
-        qsv_vpp->m_mfxVideoParam.vpp.In.CropH           = pv->job->title->height;
+        qsv_vpp->m_mfxVideoParam.vpp.In.CropW           = pv->job->title->geometry.width;
+        qsv_vpp->m_mfxVideoParam.vpp.In.CropH           = pv->job->title->geometry.height;
         qsv_vpp->m_mfxVideoParam.vpp.In.PicStruct       = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.PicStruct;
         qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtN   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN;
         qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtD   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
-        qsv_vpp->m_mfxVideoParam.vpp.In.Width           = AV_QSV_ALIGN16(pv->job->title->width);
+        qsv_vpp->m_mfxVideoParam.vpp.In.Width           = AV_QSV_ALIGN16(pv->job->title->geometry.width);
         qsv_vpp->m_mfxVideoParam.vpp.In.Height          = (MFX_PICSTRUCT_PROGRESSIVE == qsv_vpp->m_mfxVideoParam.vpp.In.PicStruct)?
-                                                            AV_QSV_ALIGN16(pv->job->title->height) : AV_QSV_ALIGN32(pv->job->title->height);
+                                                            AV_QSV_ALIGN16(pv->job->title->height) : AV_QSV_ALIGN32(pv->job->title->geometry.height);
 
         qsv_vpp->m_mfxVideoParam.vpp.Out.FourCC          = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FourCC;
         qsv_vpp->m_mfxVideoParam.vpp.Out.ChromaFormat    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.ChromaFormat;
         qsv_vpp->m_mfxVideoParam.vpp.Out.CropX           = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.CropX;
         qsv_vpp->m_mfxVideoParam.vpp.Out.CropY           = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.CropY;
-        qsv_vpp->m_mfxVideoParam.vpp.Out.CropW           = pv->job->title->width;
+        qsv_vpp->m_mfxVideoParam.vpp.Out.CropW           = pv->job->title->geometry.width;
         qsv_vpp->m_mfxVideoParam.vpp.Out.CropH           = pv->job->title->height;
         qsv_vpp->m_mfxVideoParam.vpp.Out.PicStruct       = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.PicStruct;
         qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtN   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN;
         qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
-        qsv_vpp->m_mfxVideoParam.vpp.Out.Width           = AV_QSV_ALIGN16(pv->job->title->width);
+        qsv_vpp->m_mfxVideoParam.vpp.Out.Width           = AV_QSV_ALIGN16(pv->job->title->geometry.width);
         qsv_vpp->m_mfxVideoParam.vpp.Out.Height          = (MFX_PICSTRUCT_PROGRESSIVE == qsv_vpp->m_mfxVideoParam.vpp.In.PicStruct)?
                                                             AV_QSV_ALIGN16(pv->job->title->height) : AV_QSV_ALIGN32(pv->job->title->height);
 
@@ -280,13 +280,17 @@ static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
     // PIX_FMT_YUV420P,   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples) , 3 planes: Y, U, V
     // PIX_FMT_NV12,      ///< planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V)
     pv->sws_context_from_nv12 = hb_sws_get_context(
-                        pv->job->title->width, pv->job->title->height, AV_PIX_FMT_NV12,
-                        pv->job->title->width, pv->job->title->height, AV_PIX_FMT_YUV420P,
-                        SWS_LANCZOS|SWS_ACCURATE_RND);
+        pv->job->title->geometry.width, pv->job->title->geometry.height,
+        AV_PIX_FMT_NV12,
+        pv->job->title->geometry.width, pv->job->title->geometry.height,
+        AV_PIX_FMT_YUV420P,
+        SWS_LANCZOS|SWS_ACCURATE_RND);
     pv->sws_context_to_nv12 = hb_sws_get_context(
-                        pv->job->title->width, pv->job->title->height, AV_PIX_FMT_YUV420P,
-                        pv->job->title->width, pv->job->title->height, AV_PIX_FMT_NV12,
-                        SWS_LANCZOS|SWS_ACCURATE_RND);
+        pv->job->title->geometry.width, pv->job->title->geometry.height,
+        AV_PIX_FMT_YUV420P,
+        pv->job->title->geometry.width, pv->job->title->geometry.height,
+        AV_PIX_FMT_NV12,
+        SWS_LANCZOS|SWS_ACCURATE_RND);
     return 0;
 }
 int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t * pv ){

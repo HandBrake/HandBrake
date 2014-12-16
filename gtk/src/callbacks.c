@@ -964,7 +964,7 @@ update_title_duration(signal_user_data_t *ud)
             start = ghb_settings_get_int(ud->settings, "start_point");
             end = ghb_settings_get_int(ud->settings, "end_point");
             frames = end - start + 1;
-            duration = frames * title->rate_base / title->rate;
+            duration = frames * title->vrate.den / title->vrate.num;
             break_duration(duration, &hh, &mm, &ss);
         }
         else
@@ -1068,8 +1068,8 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
         // Set the limits of cropping.  hb_set_anamorphic_size crashes if
         // you pass it a cropped width or height == 0.
         gint vbound, hbound;
-        vbound = title->height;
-        hbound = title->width;
+        vbound = title->geometry.height;
+        hbound = title->geometry.width;
 
         val = ghb_settings_get_int(ud->settings, "PictureTopCrop");
         spin_configure(ud, "PictureTopCrop", val, 0, vbound);
@@ -1101,7 +1101,8 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
         else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
         {
             gdouble max_frames;
-            max_frames = (gdouble)duration * title->rate / title->rate_base;
+            max_frames = (gdouble)duration *
+                         title->vrate.num / title->vrate.den;
 
             val = ghb_settings_get_int(ud->settings, "start_point");
             spin_configure(ud, "start_point", val, 1, max_frames);
@@ -1658,9 +1659,9 @@ get_aspect_string(gint aspect_n, gint aspect_d)
 }
 
 static gchar*
-get_rate_string(gint rate_base, gint rate)
+get_rate_string(gint rate_num, gint rate_den)
 {
-    gdouble rate_f = (gdouble)rate / rate_base;
+    gdouble rate_f = (gdouble)rate_num / rate_den;
     gchar *rate_s;
 
     rate_s = g_strdup_printf("%.6g", rate_f);
@@ -1718,8 +1719,8 @@ update_crop_info(signal_user_data_t *ud)
         crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
         crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
         crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
-        width = title->width - crop[2] - crop[3];
-        height = title->height - crop[0] - crop[1];
+        width = title->geometry.width - crop[2] - crop[3];
+        height = title->geometry.height - crop[0] - crop[1];
         widget = GHB_WIDGET(ud->builder, "crop_dimensions");
         text = g_strdup_printf ("%d x %d", width, height);
         gtk_label_set_text(GTK_LABEL(widget), text);
@@ -1770,21 +1771,21 @@ ghb_update_title_info(signal_user_data_t *ud)
         gtk_label_set_text (GTK_LABEL(widget), _("Unknown"));
 
     widget = GHB_WIDGET (ud->builder, "source_dimensions");
-    text = g_strdup_printf ("%d x %d", title->width, title->height);
+    text = g_strdup_printf ("%d x %d", title->geometry.width, title->geometry.height);
     gtk_label_set_text (GTK_LABEL(widget), text);
     g_free(text);
 
     widget = GHB_WIDGET (ud->builder, "source_aspect");
     gint aspect_n, aspect_d;
     hb_reduce(&aspect_n, &aspect_d,
-                title->width * title->pixel_aspect_width,
-                title->height * title->pixel_aspect_height);
+                title->geometry.width * title->geometry.par.num,
+                title->geometry.height * title->geometry.par.den);
     text = get_aspect_string(aspect_n, aspect_d);
     gtk_label_set_text (GTK_LABEL(widget), text);
     g_free(text);
 
     widget = GHB_WIDGET (ud->builder, "source_frame_rate");
-    text = (gchar*)get_rate_string(title->rate_base, title->rate);
+    text = (gchar*)get_rate_string(title->vrate.num, title->vrate.den);
     gtk_label_set_text (GTK_LABEL(widget), text);
     g_free(text);
 
@@ -1816,8 +1817,8 @@ set_title_settings(signal_user_data_t *ud, GValue *settings)
         ghb_settings_set_int(settings, "PtoPType", 0);
         ghb_settings_set_int(settings, "start_point", 1);
         ghb_settings_set_int(settings, "end_point", num_chapters);
-        ghb_settings_set_int(settings, "source_width", title->width);
-        ghb_settings_set_int(settings, "source_height", title->height);
+        ghb_settings_set_int(settings, "source_width", title->geometry.width);
+        ghb_settings_set_int(settings, "source_height", title->geometry.height);
         ghb_settings_set_string(settings, "source", title->path);
         if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
         {
@@ -1837,7 +1838,7 @@ set_title_settings(signal_user_data_t *ud, GValue *settings)
                 ghb_settings_get_value(ud->settings, "volume_label"));
         }
         ghb_settings_set_int(settings, "scale_width",
-                             title->width - title->crop[2] - title->crop[3]);
+                             title->geometry.width - title->crop[2] - title->crop[3]);
 
         // If anamorphic or keep_aspect, the hight will
         // be automatically calculated
@@ -1848,7 +1849,7 @@ set_title_settings(signal_user_data_t *ud, GValue *settings)
         if (!(keep_aspect || pic_par) || pic_par == 3)
         {
             ghb_settings_set_int(settings, "scale_height",
-                             title->width - title->crop[0] - title->crop[1]);
+                             title->geometry.width - title->crop[0] - title->crop[1]);
         }
 
         ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
@@ -2039,7 +2040,8 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
-        gdouble max_frames = (gdouble)duration * title->rate / title->rate_base;
+        gdouble max_frames = (gdouble)duration *
+                             title->vrate.num / title->vrate.den;
         spin_configure(ud, "start_point", 1, 1, max_frames);
         spin_configure(ud, "end_point", max_frames, 1, max_frames);
     }

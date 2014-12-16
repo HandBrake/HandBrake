@@ -361,16 +361,19 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     switch ( bdvideo->aspect )
     {
         case BLURAY_ASPECT_RATIO_4_3:
-            title->container_aspect = 4. / 3.;
+            title->container_dar.num = 4;
+            title->container_dar.den = 3;
             break;
         case BLURAY_ASPECT_RATIO_16_9:
-            title->container_aspect = 16. / 9.;
+            title->container_dar.num = 16;
+            title->container_dar.den = 9;
             break;
         default:
             hb_log( "bd: unknown aspect" );
             goto fail;
     }
-    hb_log( "bd: aspect = %g", title->container_aspect );
+    hb_log("bd: aspect = %d:%d",
+           title->container_dar.num, title->container_dar.den);
 
     /* Detect audio */
     // Max primary BD audios is 32

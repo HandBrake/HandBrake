@@ -24,10 +24,14 @@
  anamorphic {
  mode
  keepDisplayAspect
- par_width
- par_height
- dar_width
- dar_height
+ par {
+  num
+  den
+ }
+ dar {
+  num
+  den
+ }
  }
  modulus
  */

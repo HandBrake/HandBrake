@@ -2024,15 +2024,18 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     pv->cpu_count = hb_get_cpu_count();
 
     // Make segment sizes an even number of lines
-    int height = hb_image_height(init->pix_fmt, init->height, 0);
+    int height = hb_image_height(init->pix_fmt, init->geometry.height, 0);
     pv->segment_height[0] = (height / pv->cpu_count) & ~1;
     pv->segment_height[1] = hb_image_height(init->pix_fmt, pv->segment_height[0], 1);
     pv->segment_height[2] = hb_image_height(init->pix_fmt, pv->segment_height[0], 2);
 
     /* Allocate buffers to store comb masks. */
-    pv->mask = hb_frame_buffer_init(init->pix_fmt, init->width, init->height);
-    pv->mask_filtered = hb_frame_buffer_init(init->pix_fmt, init->width, init->height);
-    pv->mask_temp = hb_frame_buffer_init(init->pix_fmt, init->width, init->height);
+    pv->mask = hb_frame_buffer_init(init->pix_fmt,
+                                init->geometry.width, init->geometry.height);
+    pv->mask_filtered = hb_frame_buffer_init(init->pix_fmt,
+                                init->geometry.width, init->geometry.height);
+    pv->mask_temp = hb_frame_buffer_init(init->pix_fmt,
+                                init->geometry.width, init->geometry.height);
     memset(pv->mask->data, 0, pv->mask->size);
     memset(pv->mask_filtered->data, 0, pv->mask_filtered->size);
     memset(pv->mask_temp->data, 0, pv->mask_temp->size);
@@ -2044,14 +2047,14 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         for( ii = 0; ii < 4; ii++ )
         {
             pv->eedi_half[ii] = hb_frame_buffer_init(
-                    init->pix_fmt, init->width, init->height / 2);
+                init->pix_fmt, init->geometry.width, init->geometry.height / 2);
         }
 
         /* Allocate full-height eedi2 buffers */
         for( ii = 0; ii < 5; ii++ )
         {
             pv->eedi_full[ii] = hb_frame_buffer_init(
-                    init->pix_fmt, init->width, init->height);
+                init->pix_fmt, init->geometry.width, init->geometry.height);
         }
     }
 
@@ -2090,7 +2093,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                  * Final segment
                  */
                 thread_args->segment_height[pp] =
-                    hb_image_height(init->pix_fmt, init->height, pp) -
+                    hb_image_height(init->pix_fmt, init->geometry.height, pp) -
                     thread_args->segment_start[pp];
             } else {
                 thread_args->segment_height[pp] = pv->segment_height[pp];
@@ -2140,7 +2143,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                  * Final segment
                  */
                 thread_args->segment_height[pp] =
-                    hb_image_height(init->pix_fmt, init->height, pp) -
+                    hb_image_height(init->pix_fmt, init->geometry.height, pp) -
                     thread_args->segment_start[pp];
             } else {
                 thread_args->segment_height[pp] = pv->segment_height[pp];
@@ -2158,7 +2161,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         decomb_prev_thread_args = thread_args;
     }
 
-    pv->comb_check_nthreads = init->height / pv->block_height;
+    pv->comb_check_nthreads = init->geometry.height / pv->block_height;
 
     if (pv->comb_check_nthreads > pv->cpu_count)
         pv->comb_check_nthreads = pv->cpu_count;
@@ -2194,7 +2197,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
             }
 
             // Make segment hight a multiple of block_height
-            int h = hb_image_height(init->pix_fmt, init->height, pp) / pv->comb_check_nthreads;
+            int h = hb_image_height(init->pix_fmt, init->geometry.height, pp) / pv->comb_check_nthreads;
             h = h / pv->block_height * pv->block_height;
             if (h == 0)
                 h = pv->block_height;
@@ -2205,7 +2208,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                  * Final segment
                  */
                 thread_args->segment_height[pp] =
-                    hb_image_height(init->pix_fmt, init->height, pp) -
+                    hb_image_height(init->pix_fmt, init->geometry.height, pp) -
                     thread_args->segment_start[pp];
             } else {
                 thread_args->segment_height[pp] = h;
@@ -2256,7 +2259,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                      * Final segment
                      */
                     thread_args->segment_height[pp] =
-                        hb_image_height(init->pix_fmt, init->height, pp) -
+                        hb_image_height(init->pix_fmt, init->geometry.height, pp) -
                         thread_args->segment_start[pp];
                 } else {
                     thread_args->segment_height[pp] = pv->segment_height[pp];
@@ -2307,7 +2310,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                          * Final segment
                          */
                         thread_args->segment_height[pp] =
-                            hb_image_height(init->pix_fmt, init->height, pp) -
+                            hb_image_height(init->pix_fmt, init->geometry.height, pp) -
                             thread_args->segment_start[pp];
                     } else {
                         thread_args->segment_height[pp] = pv->segment_height[pp];
@@ -2356,7 +2359,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                          * Final segment
                          */
                         thread_args->segment_height[pp] =
-                            hb_image_height(init->pix_fmt, init->height, pp) -
+                            hb_image_height(init->pix_fmt, init->geometry.height, pp) -
                             thread_args->segment_start[pp];
                     } else {
                         thread_args->segment_height[pp] = pv->segment_height[pp];
@@ -2389,19 +2392,20 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
         if( pv->post_processing > 1 )
         {
-            int stride = hb_image_stride(init->pix_fmt, init->width, 0);
+            int stride;
+            stride = hb_image_stride(init->pix_fmt, init->geometry.width, 0);
 
             pv->cx2 = (int*)eedi2_aligned_malloc(
-                    init->height * stride * sizeof(int), 16);
+                    init->geometry.height * stride * sizeof(int), 16);
 
             pv->cy2 = (int*)eedi2_aligned_malloc(
-                    init->height * stride * sizeof(int), 16);
+                    init->geometry.height * stride * sizeof(int), 16);
 
             pv->cxy = (int*)eedi2_aligned_malloc(
-                    init->height * stride * sizeof(int), 16);
+                    init->geometry.height * stride * sizeof(int), 16);
 
             pv->tmpc = (int*)eedi2_aligned_malloc(
-                    init->height * stride * sizeof(int), 16);
+                    init->geometry.height * stride * sizeof(int), 16);
 
             if( !pv->cx2 || !pv->cy2 || !pv->cxy || !pv->tmpc )
                 hb_log("EEDI2: failed to malloc derivative arrays");

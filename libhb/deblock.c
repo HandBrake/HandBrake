@@ -371,9 +371,9 @@ static int hb_deblock_init( hb_filter_object_t * filter,
             break;
     }
 
-    int h = (init->height+16+15)&(~15);
+    int h = (init->geometry.height + 16 + 15) & (~15);
 
-    pv->pp7_temp_stride = (init->width+16+15)&(~15);
+    pv->pp7_temp_stride = (init->geometry.width + 16 + 15) & (~15);
 
     pv->pp7_src = (uint8_t*)malloc( pv->pp7_temp_stride*(h+8)*sizeof(uint8_t) );
 

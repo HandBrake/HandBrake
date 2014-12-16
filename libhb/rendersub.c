@@ -509,11 +509,11 @@ static int ssa_init( hb_filter_object_t * filter,
         return 1;
     }
 
-    int width = init->width - ( pv->crop[2] + pv->crop[3] );
-    int height = init->height - ( pv->crop[0] + pv->crop[1] );
+    int width = init->geometry.width - ( pv->crop[2] + pv->crop[3] );
+    int height = init->geometry.height - ( pv->crop[0] + pv->crop[1] );
     ass_set_frame_size( pv->renderer, width, height);
 
-    double par = (double)init->par_width / init->par_height;
+    double par = (double)init->geometry.par.num / init->geometry.par.den;
     ass_set_aspect_ratio( pv->renderer, 1, par );
 
     return 0;
@@ -592,8 +592,8 @@ static int textsub_init( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
 
-    int width = init->width - pv->crop[2] - pv->crop[3];
-    int height = init->height - pv->crop[0] - pv->crop[1];
+    int width = init->geometry.width - pv->crop[2] - pv->crop[3];
+    int height = init->geometry.height - pv->crop[0] - pv->crop[1];
 
     // Text subtitles for which we create a dummy ASS header need
     // to have the header rewritten with the correct dimensions.

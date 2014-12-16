@@ -479,11 +479,10 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
     fprintf( stderr, "  + duration: %02d:%02d:%02d\n",
              title->hours, title->minutes, title->seconds );
     fprintf( stderr, "  + size: %dx%d, pixel aspect: %d/%d, display aspect: %.2f, %.3f fps\n",
-             title->width, title->height,
-             title->pixel_aspect_width,
-             title->pixel_aspect_height,
-             (float) title->aspect,
-             (float) title->rate / title->rate_base );
+             title->geometry.width, title->geometry.height,
+             title->geometry.par.num, title->geometry.par.den,
+             (float)title->dar.num / title->dar.den,
+             (float)title->vrate.num / title->vrate.num );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
 
@@ -647,7 +646,8 @@ static int HandleEvents( hb_handle_t * h )
     hb_state_t s;
     const hb_encoder_t *encoder;
     int tmp_num_audio_tracks;
-    int filter_cfr, filter_vrate, filter_vrate_base;
+    int filter_cfr;
+    hb_rational_t filter_vrate;
 
     hb_get_state( h, &s );
     switch( s.state )
@@ -762,7 +762,6 @@ static int HandleEvents( hb_handle_t * h )
             job = hb_job_init(title);
             filter_cfr        = job->cfr;
             filter_vrate      = job->vrate;
-            filter_vrate_base = job->vrate_base;
 
 
             if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview && !stop_at_frame && !start_at_pts && !start_at_frame )
@@ -792,7 +791,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -862,7 +861,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -928,7 +927,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -998,7 +997,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -1068,7 +1067,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -1142,7 +1141,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -1212,7 +1211,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -1283,7 +1282,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -1351,7 +1350,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -1419,7 +1418,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
-                    filter_vrate_base = 900000;
+                    filter_vrate.den = 900000;
                     filter_cfr = 2;
                     if( !atracks )
                     {
@@ -1668,14 +1667,15 @@ static int HandleEvents( hb_handle_t * h )
                 memcpy(crop, title->crop, sizeof(int[4]));
             }
 
-            if( loose_crop >= 0 )
+            if (loose_crop >= 0)
             {
                 int mod = modulus > 0 ? modulus : 2;
-                apply_loose_crop(title->height, &crop[0], &crop[1], mod, loose_crop);
-                apply_loose_crop(title->width, &crop[2], &crop[3], mod, loose_crop);
+                apply_loose_crop(title->geometry.height,
+                                 &crop[0], &crop[1], mod, loose_crop);
+                apply_loose_crop(title->geometry.width,
+                                 &crop[2], &crop[3], mod, loose_crop);
             }
 
-            job->deinterlace = deinterlace;
             job->grayscale   = grayscale;
             
             hb_filter_object_t * filter;
@@ -1726,15 +1726,14 @@ static int HandleEvents( hb_handle_t * h )
             }
 
             hb_geometry_t srcGeo, resultGeo;
-            hb_ui_geometry_t uiGeo;
+            hb_geometry_settings_t uiGeo;
 
-            srcGeo.width = title->width;
-            srcGeo.height = title->height;
-            srcGeo.par.num = title->pixel_aspect_width;
-            srcGeo.par.den = title->pixel_aspect_height;
+            srcGeo.width = title->geometry.width;
+            srcGeo.height = title->geometry.height;
+            srcGeo.par = title->geometry.par;
 
             keep_display_aspect |= anamorphic_mode != HB_ANAMORPHIC_CUSTOM;
-            uiGeo.mode = job->anamorphic.mode = anamorphic_mode;
+            uiGeo.mode = anamorphic_mode;
             if (width != 0 && height != 0)
             {
                 if (anamorphic_mode == HB_ANAMORPHIC_NONE)
@@ -1746,37 +1745,34 @@ static int HandleEvents( hb_handle_t * h )
                     uiGeo.mode = HB_ANAMORPHIC_CUSTOM;
                 }
             }
-            job->anamorphic.keep_display_aspect = keep_display_aspect;
             uiGeo.keep = !!keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
-            uiGeo.itu_par = job->anamorphic.itu_par = itu_par;
-            uiGeo.modulus = job->modulus = modulus;
+            uiGeo.itu_par = itu_par;
+            uiGeo.modulus = modulus;
             memcpy(uiGeo.crop, crop, sizeof(int[4]));
             if (width == 0)
             {
-                uiGeo.width = title->width - crop[2] - crop[3];
+                uiGeo.geometry.width = title->geometry.width - crop[2] - crop[3];
             }
             else
             {
                 uiGeo.keep |= HB_KEEP_WIDTH;
-                uiGeo.width = width;
+                uiGeo.geometry.width = width;
             }
             if (height == 0)
             {
-                uiGeo.height = title->height - crop[0] - crop[1];
+                uiGeo.geometry.height = title->geometry.height - crop[0] - crop[1];
             }
             else
             {
                 uiGeo.keep |= HB_KEEP_HEIGHT;
-                uiGeo.height = height;
+                uiGeo.geometry.height = height;
             }
             uiGeo.maxWidth = maxWidth;
             uiGeo.maxHeight = maxHeight;
-            uiGeo.dar.num = 0;
-            uiGeo.dar.den = 0;
             if( par_width && par_height )
             {
-                uiGeo.par.num = par_width;
-                uiGeo.par.den = par_height;
+                uiGeo.geometry.par.num = par_width;
+                uiGeo.geometry.par.den = par_height;
             }
             else if (display_width != 0 && width != 0)
             {
@@ -1784,30 +1780,27 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     fprintf(stderr, "display_width (%d), width (%d), and height (%d) can not all be specified, ignoring height", display_width, width, height);
                 }
-                uiGeo.par.num = display_width;
-                uiGeo.par.den = width;
+                uiGeo.geometry.par.num = display_width;
+                uiGeo.geometry.par.den = width;
             }
             else if (display_width != 0)
             {
-                uiGeo.dar.num = display_width;
-                uiGeo.dar.den = uiGeo.height;
+                uiGeo.geometry.par.num = display_width;
+                uiGeo.geometry.par.den = uiGeo.geometry.width;
             }
             else
             {
-                uiGeo.par = srcGeo.par;
+                uiGeo.geometry.par = srcGeo.par;
             }
 
             hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
-            job->width = resultGeo.width;
-            job->height = resultGeo.height;
-            job->anamorphic.par_width = resultGeo.par.num;
-            job->anamorphic.par_height = resultGeo.par.den;
-            memcpy(job->crop, crop, sizeof(int[4]));
+            job->par = resultGeo.par;
 
             // Add filter that does cropping and scaling
             char * filter_str;
             filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
-                job->width, job->height, crop[0], crop[1], crop[2], crop[3] );
+                resultGeo.width, resultGeo.height,
+                crop[0], crop[1], crop[2], crop[3] );
                     
             filter = hb_filter_init( HB_FILTER_CROP_SCALE );
             hb_add_filter( job, filter, filter_str );
@@ -1816,21 +1809,20 @@ static int HandleEvents( hb_handle_t * h )
             // Add framerate shaping filter
             if (vrate)
             {
-                filter_cfr        = cfr;
-                filter_vrate      = 27000000;
-                filter_vrate_base = vrate;
+                filter_cfr       = cfr;
+                filter_vrate.num = 27000000;
+                filter_vrate.den = vrate;
             }
             else if (cfr)
             {
                 // cfr or pfr flag with no rate specified implies
                 // use the title rate.
                 filter_cfr        = cfr;
-                filter_vrate      = title->rate;
-                filter_vrate_base = title->rate_base;
+                filter_vrate      = title->vrate;
             }
             filter     = hb_filter_init(HB_FILTER_VFR);
-            filter_str = hb_strdup_printf("%d:%d:%d", filter_cfr, filter_vrate,
-                                          filter_vrate_base);
+            filter_str = hb_strdup_printf("%d:%d:%d", filter_cfr,
+                                          filter_vrate.num, filter_vrate.den);
             hb_add_filter(job, filter, filter_str);
             free(filter_str);
 
@@ -2797,11 +2789,6 @@ static int HandleEvents( hb_handle_t * h )
             hb_job_set_encoder_tune   (job, x264_tune);
             hb_job_set_encoder_profile(job, h264_profile);
             hb_job_set_encoder_level  (job, h264_level);
-
-            if (maxWidth)
-                job->maxWidth = maxWidth;
-            if (maxHeight)
-                job->maxHeight = maxHeight;
 
             if( start_at_preview )
             {

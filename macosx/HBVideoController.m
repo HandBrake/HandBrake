@@ -726,8 +726,8 @@ NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotificatio
     else
     {
         /* same as source */
-        fps_num = title->rate;
-        fps_den = title->rate_base;
+        fps_num = title->vrate.num;
+        fps_den = title->vrate.den;
         if ([fFramerateMatrix selectedRow] == 1)
         {
             // CFR

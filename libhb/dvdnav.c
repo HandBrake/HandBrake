@@ -664,7 +664,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         lang = lang_for_code( ifo->vtsi_mat->vts_subp_attr[i].lang_code );
 
         subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
-        subtitle->track = i+1;
+        subtitle->track = i;
         subtitle->id = ( ( 0x20 + position ) << 8 ) | 0xbd;
         snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name);
@@ -809,17 +809,20 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     switch( ifo->vtsi_mat->vts_video_attr.display_aspect_ratio )
     {
         case 0:
-            title->container_aspect = 4. / 3.;
+            title->container_dar.num = 4;
+            title->container_dar.den = 3;
             break;
         case 3:
-            title->container_aspect = 16. / 9.;
+            title->container_dar.num = 16;
+            title->container_dar.den = 9;
             break;
         default:
             hb_log( "scan: unknown aspect" );
             goto fail;
     }
 
-    hb_log( "scan: aspect = %g", title->container_aspect );
+    hb_log("scan: aspect = %d:%d",
+           title->container_dar.num, title->container_dar.den);
 
     /* This title is ok so far */
     goto cleanup;

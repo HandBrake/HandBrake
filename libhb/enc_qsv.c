@@ -267,11 +267,12 @@ int qsv_enc_init(hb_work_private_t *pv)
     }
     else
     {
-        pv->sws_context_to_nv12 = hb_sws_get_context(job->width, job->height,
-                                                     AV_PIX_FMT_YUV420P,
-                                                     job->width, job->height,
-                                                     AV_PIX_FMT_NV12,
-                                                     SWS_LANCZOS|SWS_ACCURATE_RND);
+        pv->sws_context_to_nv12 = hb_sws_get_context(
+                                    job->geometry.width, job->geometry.height,
+                                    AV_PIX_FMT_YUV420P,
+                                    job->geometry.width, job->geometry.height,
+                                    AV_PIX_FMT_NV12,
+                                    SWS_LANCZOS|SWS_ACCURATE_RND);
     }
 
     // allocate tasks
@@ -515,13 +516,13 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // some encoding parameters are used by filters to configure their output
     if (pv->param.videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE)
     {
-        job->qsv.enc_info.align_height = AV_QSV_ALIGN32(job->height);
+        job->qsv.enc_info.align_height = AV_QSV_ALIGN32(job->geometry.height);
     }
     else
     {
-        job->qsv.enc_info.align_height = AV_QSV_ALIGN16(job->height);
+        job->qsv.enc_info.align_height = AV_QSV_ALIGN16(job->geometry.height);
     }
-    job->qsv.enc_info.align_width  = AV_QSV_ALIGN16(job->width);
+    job->qsv.enc_info.align_width  = AV_QSV_ALIGN16(job->geometry.width);
     job->qsv.enc_info.pic_struct   = pv->param.videoParam->mfx.FrameInfo.PicStruct;
     job->qsv.enc_info.is_init_done = 1;
 
@@ -537,8 +538,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.FrameInfo.AspectRatioH  = par_height;
     pv->param.videoParam->mfx.FrameInfo.CropX         = 0;
     pv->param.videoParam->mfx.FrameInfo.CropY         = 0;
-    pv->param.videoParam->mfx.FrameInfo.CropW         = job->width;
-    pv->param.videoParam->mfx.FrameInfo.CropH         = job->height;
+    pv->param.videoParam->mfx.FrameInfo.CropW         = job->geometry.width;
+    pv->param.videoParam->mfx.FrameInfo.CropH         = job->geometry.height;
     pv->param.videoParam->mfx.FrameInfo.PicStruct     = job->qsv.enc_info.pic_struct;
     pv->param.videoParam->mfx.FrameInfo.Width         = job->qsv.enc_info.align_width;
     pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv.enc_info.align_height;

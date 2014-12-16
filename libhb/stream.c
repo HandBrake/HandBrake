@@ -5435,8 +5435,8 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             if ( ic->streams[i]->sample_aspect_ratio.num &&
                  ic->streams[i]->sample_aspect_ratio.den )
             {
-                title->pixel_aspect_width = ic->streams[i]->sample_aspect_ratio.num;
-                title->pixel_aspect_height = ic->streams[i]->sample_aspect_ratio.den;
+                title->geometry.par.num = ic->streams[i]->sample_aspect_ratio.num;
+                title->geometry.par.den = ic->streams[i]->sample_aspect_ratio.den;
             }
 
             title->video_codec = WORK_DECAVCODECV;

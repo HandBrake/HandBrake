@@ -341,34 +341,22 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->codec->extradata = priv_data;
     track->st->codec->extradata_size = priv_size;
 
-    if (job->anamorphic.mode > 0)
-    {
-        track->st->sample_aspect_ratio.num        = job->anamorphic.par_width;
-        track->st->sample_aspect_ratio.den        = job->anamorphic.par_height;
-        track->st->codec->sample_aspect_ratio.num = job->anamorphic.par_width;
-        track->st->codec->sample_aspect_ratio.den = job->anamorphic.par_height;
-    }
-    else
-    {
-        track->st->sample_aspect_ratio.num        = 1;
-        track->st->sample_aspect_ratio.den        = 1;
-        track->st->codec->sample_aspect_ratio.num = 1;
-        track->st->codec->sample_aspect_ratio.den = 1;
-    }
-    track->st->codec->width = job->width;
-    track->st->codec->height = job->height;
+    track->st->sample_aspect_ratio.num        = job->par.num;
+    track->st->sample_aspect_ratio.den        = job->par.den;
+    track->st->codec->sample_aspect_ratio.num = job->par.num;
+    track->st->codec->sample_aspect_ratio.den = job->par.den;
+    track->st->codec->width                   = job->width;
+    track->st->codec->height                  = job->height;
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
 
-    int vrate_base, vrate;
+    hb_rational_t vrate;
     if( job->pass == 2 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
-        vrate_base = interjob->vrate_base;
         vrate = interjob->vrate;
     }
     else
     {
-        vrate_base = job->vrate_base;
         vrate = job->vrate;
     }
 
@@ -378,32 +366,32 @@ static int avformatInit( hb_mux_object_t * m )
     // measuring framerate, the actual value may not be exact.  So
     // we look for rates that are "close" and make an adjustment
     // to fps.den.
-    if (vrate == 27000000)
+    if (vrate.num == 27000000)
     {
         const hb_rate_t *video_framerate = NULL;
         while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)
         {
-            if (abs(vrate_base - video_framerate->rate) < 10)
+            if (abs(vrate.den - video_framerate->rate) < 10)
             {
-                vrate_base = video_framerate->rate;
+                vrate.den = video_framerate->rate;
                 break;
             }
         }
     }
-    hb_reduce(&vrate_base, &vrate, vrate_base, vrate);
+    hb_reduce(&vrate.num, &vrate.den, vrate.num, vrate.den);
     if (job->mux == HB_MUX_AV_MP4)
     {
         // libavformat mp4 muxer requires that the codec time_base have the
         // same denominator as the stream time_base, it uses it for the
         // mdhd timescale.
-        double scale = (double)track->st->time_base.den / vrate;
+        double scale = (double)track->st->time_base.den / vrate.num;
         track->st->codec->time_base.den = track->st->time_base.den;
-        track->st->codec->time_base.num = vrate_base * scale;
+        track->st->codec->time_base.num = vrate.den * scale;
     }
     else
     {
-        track->st->codec->time_base.num = vrate_base;
-        track->st->codec->time_base.den = vrate;
+        track->st->codec->time_base.num = vrate.den;
+        track->st->codec->time_base.den = vrate.num;
     }
 
     /* add the audio tracks */
@@ -751,10 +739,7 @@ static int avformatInit( hb_mux_object_t * m )
             };
 
             int width, height = 60;
-            if (job->anamorphic.mode)
-                width = job->width * ((float)job->anamorphic.par_width / job->anamorphic.par_height);
-            else
-                width = job->width;
+            width = job->width * job->par.num / job->par.den;
             track->st->codec->width = width;
             track->st->codec->height = height;
             properties[14] = height >> 8;

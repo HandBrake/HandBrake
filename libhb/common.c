@@ -2877,14 +2877,14 @@ hb_title_t * hb_title_init( char * path, int index )
     t->list_subtitle = hb_list_init();
     t->list_attachment = hb_list_init();
     t->metadata      = hb_metadata_init();
-    strcat( t->path, path );
+    strncat(t->path, path, sizeof(t->path) - 1);
     // default to decoding mpeg2
     t->video_id      = 0xE0;
     t->video_codec   = WORK_DECAVCODECV;
     t->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
     t->angle_count   = 1;
-    t->pixel_aspect_width = 1;
-    t->pixel_aspect_height = 1;
+    t->geometry.par.num = 1;
+    t->geometry.par.den = 1;
 
     return t;
 }
@@ -2967,8 +2967,7 @@ static void job_reset_for_mac_ui( hb_job_t * job, hb_title_t * title )
     job->vquality   = -1.0;
     job->vbitrate   = 1000;
     job->pass       = 0;
-    job->vrate      = title->rate;
-    job->vrate_base = title->rate_base;
+    job->vrate      = title->vrate;
 
     job->list_audio = hb_list_init();
     job->list_subtitle = hb_list_init();
@@ -2979,7 +2978,7 @@ static void job_reset_for_mac_ui( hb_job_t * job, hb_title_t * title )
 }
 
 
-static void job_setup( hb_job_t * job, hb_title_t * title )
+static void job_setup(hb_job_t * job, hb_title_t * title)
 {
     if ( job == NULL || title == NULL )
         return;
@@ -2995,36 +2994,47 @@ static void job_setup( hb_job_t * job, hb_title_t * title )
     memcpy( job->crop, title->crop, 4 * sizeof( int ) );
 
     /* Preserve a source's pixel aspect, if it's available. */
-    if( title->pixel_aspect_width && title->pixel_aspect_height )
+    if (title->geometry.par.num && title->geometry.par.den)
     {
-        job->anamorphic.par_width  = title->pixel_aspect_width;
-        job->anamorphic.par_height = title->pixel_aspect_height;
+        job->par = title->geometry.par;
+    }
+    else if (title->dar.num && title->dar.den)
+    {
+        hb_reduce(&job->par.num, &job->par.den,
+                  title->geometry.height * title->dar.num,
+                  title->geometry.width * title->dar.den);
     }
 
-    if( title->aspect != 0 && title->aspect != 1. &&
-        !job->anamorphic.par_width && !job->anamorphic.par_height)
-    {
-        hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height,
-                   (int)(title->aspect * title->height + 0.5), title->width );
-    }
-
-    job->width = title->width - job->crop[2] - job->crop[3];
-    job->height = title->height - job->crop[0] - job->crop[1];
+    job->width = title->geometry.width - title->crop[2] - title->crop[3];
+    job->height = title->geometry.height - title->crop[0] - title->crop[1];
+#ifdef HB_DEPRECATE_JOB_SETTINGS
     job->anamorphic.keep_display_aspect = 1;
+#endif
 
-    int width, height, par_width, par_height;
-    hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
-    job->width = width;
-    job->height = height;
-    job->anamorphic.par_width = par_width;
-    job->anamorphic.par_height = par_height;
+    hb_geometry_t resultGeo, srcGeo;
+    hb_geometry_settings_t uiGeo;
+
+    srcGeo.width = title->geometry.width;
+    srcGeo.height = title->geometry.height;
+    srcGeo.par = title->geometry.par;
+
+    uiGeo.geometry.width = job->width;
+    uiGeo.geometry.height = job->height;
+    uiGeo.geometry.par = job->par;
+    uiGeo.mode = 0;
+    uiGeo.keep = HB_KEEP_DISPLAY_ASPECT;
+    uiGeo.itu_par = 0;
+
+    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
+    job->width = resultGeo.width;
+    job->height = resultGeo.height;
+    job->par = resultGeo.par;
 
     job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
     job->vquality   = -1.0;
     job->vbitrate   = 1000;
     job->pass       = 0;
-    job->vrate      = title->rate;
-    job->vrate_base = title->rate_base;
+    job->vrate      = title->vrate;
 
     job->mux = HB_MUX_MP4;
 
@@ -3133,10 +3143,10 @@ hb_title_t * hb_find_title_by_index( hb_handle_t *h, int title_index )
  */
 hb_job_t * hb_job_init_by_index( hb_handle_t * h, int title_index )
 {
-    hb_title_set_t *title_set = hb_get_title_set( h );
-    hb_title_t * title = hb_list_item( title_set->list_title,
-                                       title_index - 1 );
-    return hb_job_init( title );
+    hb_title_t * title = hb_find_title_by_index(h, title_index);
+    if (title == NULL)
+        return NULL;
+    return hb_job_init(title);
 }
 
 hb_job_t * hb_job_init( hb_title_t * title )
@@ -3574,6 +3584,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
      * HandBrakeCLI assumes this value is preserved in the jobs
      * audio list, but in.track in the title's audio list is not
      * required to be the same. */
+    // "track" in title->list_audio is an index into the source's tracks.
+    // "track" in job->list_audio is an index into title->list_audio
     audio->config.in.track = audiocfg->in.track;
 
     /* Really shouldn't ignore the passed out track, but there is currently no
@@ -3739,6 +3751,9 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
         return 0;
     }
 
+    // "track" in title->list_audio is an index into the source's tracks.
+    // "track" in job->list_audio is an index into title->list_audio
+    subtitle->track = track;
     subtitle->config = *subtitlecfg;
     subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);

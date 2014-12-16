@@ -592,8 +592,8 @@ static int decavcodecaInfo( hb_work_object_t *w, hb_work_info_t *info )
     {
         AVCodecContext *context = pv->context;
         info->bitrate = context->bit_rate;
-        info->rate = context->time_base.num;
-        info->rate_base = context->time_base.den;
+        info->rate.num = context->time_base.num;
+        info->rate.den = context->time_base.den;
         info->profile = context->profile;
         info->level = context->level;
         return 1;
@@ -710,15 +710,15 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 }
                 if (dec_len > 0 && got_frame)
                 {
-                    info->rate_base          = 1;
+                    info->rate.den = 1;
                     // libavcoded doesn't consistently set frame->sample_rate
                     if (frame->sample_rate != 0)
                     {
-                        info->rate = frame->sample_rate;
+                        info->rate.num = frame->sample_rate;
                     }
                     else
                     {
-                        info->rate = context->sample_rate;
+                        info->rate.num = context->sample_rate;
                         hb_log("decavcodecaBSInfo: warning: invalid frame sample_rate! Using context sample_rate.");
                     }
                     info->samples_per_frame  = frame->nb_samples;
@@ -727,7 +727,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     int channels = av_get_channel_layout_nb_channels(frame->channel_layout);
                     if (bps > 0)
                     {
-                        info->bitrate = (bps * channels * info->rate);
+                        info->bitrate = bps * channels * info->rate.num;
                     }
                     else if (context->bit_rate > 0)
                     {
@@ -842,8 +842,8 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     }
     else
     {
-        w = pv->job->title->width;
-        h = pv->job->title->height;
+        w = pv->job->title->geometry.width;
+        h = pv->job->title->geometry.height;
     }
 
 #ifdef USE_HWD
@@ -860,7 +860,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         {
             pv->dst_frame = malloc( ww * hh * 3 / 2 );
         }
-        if( hb_va_extract( pv->dxva2, pv->dst_frame, pv->frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->opencl_scale, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
+        if( hb_va_extract( pv->dxva2, pv->dst_frame, pv->frame, pv->job->geometry.width, pv->job->geometry.height, pv->job->title->crop, pv->opencl_scale, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
         {
             hb_log( "hb_va_Extract failed!!!!!!" );
         }
@@ -1360,7 +1360,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 if (subtitle == NULL)
                 {
                     subtitle = calloc(sizeof( hb_subtitle_t ), 1);
-                    subtitle->track = 0;
+                    subtitle->track = hb_list_count(pv->title->list_subtitle);
                     subtitle->id = 0;
                     subtitle->format = TEXTSUB;
                     subtitle->source = CC608SUB;
@@ -1998,15 +1998,15 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     // HandBrake's video pipeline uses yuv420 color.  This means all
     // dimensions must be even.  So we must adjust the dimensions
     // of incoming video if not even.
-    info->width = pv->context->width & ~1;
-    info->height = pv->context->height & ~1;
+    info->geometry.width = pv->context->width & ~1;
+    info->geometry.height = pv->context->height & ~1;
 
-    info->pixel_aspect_width = pv->context->sample_aspect_ratio.num;
-    info->pixel_aspect_height = pv->context->sample_aspect_ratio.den;
+    info->geometry.par.num = pv->context->sample_aspect_ratio.num;
+    info->geometry.par.den = pv->context->sample_aspect_ratio.den;
 
     compute_frame_duration( pv );
-    info->rate = 27000000;
-    info->rate_base = pv->duration * 300.;
+    info->rate.num = 27000000;
+    info->rate.den = pv->duration * 300.;
 
     info->profile = pv->context->profile;
     info->level = pv->context->level;
@@ -2027,11 +2027,11 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
             break;
         default:
         {
-            if( ( info->width >= 1280 || info->height >= 720 ) ||
-                ( info->width >   720 && info->height >  576 ) )
+            if ((info->geometry.width >= 1280 || info->geometry.height >= 720)||
+                (info->geometry.width >   720 && info->geometry.height >  576 ))
                 // ITU BT.709 HD content
                 info->color_prim = HB_COLR_PRI_BT709;
-            else if( info->rate_base == 1080000 )
+            else if( info->rate.den == 1080000 )
                 // ITU BT.601 DVD or SD TV content (PAL)
                 info->color_prim = HB_COLR_PRI_EBUTECH;
             else
@@ -2068,8 +2068,8 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
             break;
         default:
         {
-            if( ( info->width >= 1280 || info->height >= 720 ) ||
-                ( info->width >   720 && info->height >  576 ) )
+            if ((info->geometry.width >= 1280 || info->geometry.height >= 720)||
+                (info->geometry.width >   720 && info->geometry.height >  576 ))
                 // ITU BT.709 HD content
                 info->color_matrix = HB_COLR_MAT_BT709;
             else

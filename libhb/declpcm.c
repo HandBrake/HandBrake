@@ -374,8 +374,8 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     memset( info, 0, sizeof(*info) );
 
     info->name = "LPCM";
-    info->rate = rate;
-    info->rate_base = 1;
+    info->rate.num = rate;
+    info->rate.den = 1;
     info->bitrate = bitrate;
     info->flags = ( b->data[3] << 16 ) | ( b->data[4] << 8 ) | b->data[5];
     info->matrix_encoding = AV_MATRIX_ENCODING_NONE;

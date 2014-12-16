@@ -171,7 +171,8 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
         else if( job->frame_to_stop )
         {
             /* Set the duration to a rough estimate */
-            duration = ( job->frame_to_stop / ( title->rate / title->rate_base ) ) * 90000;
+            duration = (int64_t)job->frame_to_stop * title->vrate.den * 90000 /
+                       title->vrate.num;
         }
         else
         {
@@ -182,7 +183,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
                 duration += chapter->duration;
             }
         }
-        sync->count_frames_max = duration * title->rate / title->rate_base / 90000;
+        sync->count_frames_max = duration * title->vrate.num / title->vrate.den / 90000;
     }
 
     hb_log( "sync: expecting %d video frames", sync->count_frames_max );
@@ -697,7 +698,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         pv->common->first_pts[0] = INT64_MAX - 1;
         cur->s.start = sync->next_start;
-        cur->s.stop = cur->s.start + 90000. / ((double)job->vrate / (double)job->vrate_base);
+        cur->s.stop = cur->s.start + 90000L * job->vrate.den / job->vrate.num;
         sync->next_start += cur->s.stop - cur->s.start;;
 
         /* Make sure last frame is reflected in frame count */

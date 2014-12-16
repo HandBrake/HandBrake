@@ -60,15 +60,6 @@ static const GUID DXVA2_ModeVC1_D = { 0x1b81beA3, 0xa0c7, 0x11d3, {0xb9, 0x84, 0
 
 typedef struct
 {
-    int width;
-    int height;
-    int rate;
-    int rate_base;
-
-}hb_dx_format;
-
-typedef struct
-{
     LPDIRECT3DSURFACE9 d3d;
     int                refcount;
     unsigned int       order;

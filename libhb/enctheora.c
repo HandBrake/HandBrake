@@ -74,23 +74,16 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     if( job->pass == 2 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
-        ti.fps_numerator = interjob->vrate;
-        ti.fps_denominator = interjob->vrate_base;
+        ti.fps_numerator = interjob->vrate.num;
+        ti.fps_denominator = interjob->vrate.den;
     }
     else
     {
-        ti.fps_numerator = job->vrate;
-        ti.fps_denominator = job->vrate_base;
+        ti.fps_numerator = job->vrate.num;
+        ti.fps_denominator = job->vrate.den;
     }
-    if( job->anamorphic.mode )
-    {
-        ti.aspect_numerator = job->anamorphic.par_width;
-        ti.aspect_denominator = job->anamorphic.par_height;
-    }
-    else
-    {
-        ti.aspect_numerator = ti.aspect_denominator = 1;
-    }
+    ti.aspect_numerator = job->par.num;
+    ti.aspect_denominator = job->par.den;
     ti.colorspace = TH_CS_UNSPECIFIED;
     ti.pixel_fmt = TH_PF_420;
     if (job->vquality < 0.0)
@@ -104,7 +97,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         ti.quality = job->vquality;
     }
 
-    keyframe_frequency = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
+    keyframe_frequency = 10 * ((double)job->vrate.num / job->vrate.den + 0.5);
 
     hb_log("theora: keyint: %i", keyframe_frequency);
 

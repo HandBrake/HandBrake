@@ -687,7 +687,8 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
     }
 
     hb_buffer_t * buf;
-    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P, title->width, title->height);
+    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
+                               title->geometry.width, title->geometry.height);
 
     int pp, hh;
     for (pp = 0; pp < 3; pp++)
@@ -709,7 +710,7 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
 }
 
 hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
-                            hb_ui_geometry_t *ui_geo, int deinterlace)
+                            hb_geometry_settings_t *geo, int deinterlace)
 {
     char                 filename[1024];
     hb_buffer_t        * in_buf, * deint_buf = NULL, * preview_buf;
@@ -717,8 +718,9 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     AVPicture            pic_in, pic_preview, pic_deint, pic_crop;
     struct SwsContext  * context;
 
-    int width = ui_geo->width * ui_geo->par.num / ui_geo->par.den;
-    int height = ui_geo->height;
+    int width = geo->geometry.width *
+                geo->geometry.par.num / geo->geometry.par.den;
+    int height = geo->geometry.height;
 
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
@@ -749,31 +751,30 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     {
         // Deinterlace and crop
         deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
-                                          title->width, title->height );
+                              title->geometry.width, title->geometry.height );
         hb_deinterlace(deint_buf, in_buf);
         hb_avpicture_fill( &pic_deint, deint_buf );
 
         av_picture_crop(&pic_crop, &pic_deint, AV_PIX_FMT_YUV420P,
-                        ui_geo->crop[0], ui_geo->crop[2] );
+                        geo->crop[0], geo->crop[2] );
     }
     else
     {
         // Crop
         av_picture_crop(&pic_crop, &pic_in, AV_PIX_FMT_YUV420P,
-                        ui_geo->crop[0], ui_geo->crop[2] );
+                        geo->crop[0], geo->crop[2] );
     }
 
     // Get scaling context
     context = hb_sws_get_context(
-                        title->width  - (ui_geo->crop[2] + ui_geo->crop[3]),
-                        title->height - (ui_geo->crop[0] + ui_geo->crop[1]),
-                        AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32,
-                        swsflags);
+                title->geometry.width  - (geo->crop[2] + geo->crop[3]),
+                title->geometry.height - (geo->crop[0] + geo->crop[1]),
+                AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags);
 
     // Scale
     sws_scale(context,
               (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
-              0, title->height - (ui_geo->crop[0] + ui_geo->crop[1]),
+              0, title->geometry.height - (geo->crop[0] + geo->crop[1]),
               pic_preview.data, pic_preview.linesize);
 
     // Free context
@@ -787,91 +788,6 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     hb_buffer_close( &preview_buf );
 
     return image;
-}
-
-/**
- * Create preview image of desired title a index of picture.
- * @param h Handle to hb_handle_t.
- * @param title Handle to hb_title_t of desired title.
- * @param picture Index in title.
- * @param buffer Handle to buffer were image will be drawn.
- */
-void hb_get_preview( hb_handle_t * h, hb_job_t * job, int picture,
-                     uint8_t * buffer )
-{
-    hb_title_t         * title = job->title;
-    char                 filename[1024];
-    hb_buffer_t        * in_buf, * deint_buf = NULL, * preview_buf;
-    uint8_t            * pen;
-    uint32_t             swsflags;
-    AVPicture            pic_in, pic_preview, pic_deint, pic_crop;
-    struct SwsContext  * context;
-    int                  i;
-    int                  preview_size;
-
-    swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
-
-    preview_buf = hb_frame_buffer_init( AV_PIX_FMT_RGB32,
-                                        job->width, job->height );
-    hb_avpicture_fill( &pic_preview, preview_buf );
-
-    // Allocate the AVPicture frames and fill in
-
-    memset( filename, 0, 1024 );
-
-    in_buf = hb_read_preview( h, title, picture );
-    if ( in_buf == NULL )
-    {
-        return;
-    }
-
-    hb_avpicture_fill( &pic_in, in_buf );
-
-    if( job->deinterlace )
-    {
-        // Deinterlace and crop
-        deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
-                                          title->width, title->height );
-        hb_deinterlace(deint_buf, in_buf);
-        hb_avpicture_fill( &pic_deint, deint_buf );
-
-        av_picture_crop( &pic_crop, &pic_deint, AV_PIX_FMT_YUV420P,
-                job->crop[0], job->crop[2] );
-    }
-    else
-    {
-        // Crop
-        av_picture_crop( &pic_crop, &pic_in, AV_PIX_FMT_YUV420P, job->crop[0], job->crop[2] );
-    }
-
-    // Get scaling context
-    context = hb_sws_get_context(title->width  - (job->crop[2] + job->crop[3]),
-                             title->height - (job->crop[0] + job->crop[1]),
-                             AV_PIX_FMT_YUV420P,
-                             job->width, job->height, AV_PIX_FMT_RGB32,
-                             swsflags);
-
-    // Scale
-    sws_scale(context,
-              (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
-              0, title->height - (job->crop[0] + job->crop[1]),
-              pic_preview.data, pic_preview.linesize);
-
-    // Free context
-    sws_freeContext( context );
-
-    preview_size = pic_preview.linesize[0];
-    pen = buffer;
-    for( i = 0; i < job->height; i++ )
-    {
-        memcpy( pen, pic_preview.data[0] + preview_size * i, 4 * job->width );
-        pen += 4 * job->width;
-    }
-
-    // Clean up
-    hb_buffer_close( &in_buf );
-    hb_buffer_close( &deint_buf );
-    hb_buffer_close( &preview_buf );
 }
 
  /**
@@ -977,24 +893,25 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
  *
  * Returns calculated geometry
  * @param source_geometry - Pointer to source geometry info
- * @param ui_geometry     - Pointer to requested destination parameters
+ * @param geometry        - Pointer to requested destination parameters
  */
 void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
-                             hb_ui_geometry_t *ui_geo,
+                             hb_geometry_settings_t *geo,
                              hb_geometry_t *result)
 {
     hb_rational_t in_par, out_par;
-    int keep_display_aspect = !!(ui_geo->keep & HB_KEEP_DISPLAY_ASPECT);
-    int keep_height         = !!(ui_geo->keep & HB_KEEP_HEIGHT);
+    int keep_display_aspect = !!(geo->keep & HB_KEEP_DISPLAY_ASPECT);
+    int keep_height         = !!(geo->keep & HB_KEEP_HEIGHT);
 
     /* Set up some variables to make the math easier to follow. */
-    int cropped_width = src_geo->width - ui_geo->crop[2] - ui_geo->crop[3];
-    int cropped_height = src_geo->height - ui_geo->crop[0] - ui_geo->crop[1];
+    int cropped_width = src_geo->width - geo->crop[2] - geo->crop[3];
+    int cropped_height = src_geo->height - geo->crop[0] - geo->crop[1];
     double storage_aspect = (double)cropped_width / cropped_height;
-    int mod = ui_geo->modulus ? EVEN(ui_geo->modulus) : 2;
+    int mod = geo->modulus ? EVEN(geo->modulus) : 2;
 
     // Use 64 bits to avoid overflow till the final hb_reduce() call
-    hb_reduce(&in_par.num, &in_par.den, ui_geo->par.num, ui_geo->par.den);
+    hb_reduce(&in_par.num, &in_par.den,
+              geo->geometry.par.num, geo->geometry.par.den);
     int64_t dst_par_num = in_par.num;
     int64_t dst_par_den = in_par.den;
 
@@ -1002,7 +919,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
 
     /* If a source was really NTSC or PAL and the user specified ITU PAR
        values, replace the standard PAR values with the ITU broadcast ones. */
-    if (src_geo->width == 720 && ui_geo->itu_par)
+    if (src_geo->width == 720 && geo->itu_par)
     {
         // convert aspect to a scaled integer so we can test for 16:9 & 4:3
         // aspect ratios ignoring insignificant differences in the LSBs of
@@ -1054,14 +971,14 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     int width, height;
     int maxWidth, maxHeight;
 
-    maxWidth = MULTIPLE_MOD_DOWN(ui_geo->maxWidth, mod);
-    maxHeight = MULTIPLE_MOD_DOWN(ui_geo->maxHeight, mod);
+    maxWidth = MULTIPLE_MOD_DOWN(geo->maxWidth, mod);
+    maxHeight = MULTIPLE_MOD_DOWN(geo->maxHeight, mod);
     if (maxWidth && maxWidth < 32)
         maxWidth = 32;
     if (maxHeight && maxHeight < 32)
         maxHeight = 32;
 
-    switch (ui_geo->mode)
+    switch (geo->mode)
     {
         case HB_ANAMORPHIC_NONE:
         {
@@ -1078,19 +995,19 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             {
                 if (!keep_height)
                 {
-                    width = MULTIPLE_MOD_UP(ui_geo->width, mod);
+                    width = MULTIPLE_MOD_UP(geo->geometry.width, mod);
                     height = MULTIPLE_MOD(width / dar, mod);
                 }
                 else
                 {
-                    height = MULTIPLE_MOD_UP(ui_geo->height, mod);
+                    height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
                     width = MULTIPLE_MOD(height * dar, mod);
                 }
             }
             else
             {
-                width = MULTIPLE_MOD_UP(ui_geo->width, mod);
-                height = MULTIPLE_MOD_UP(ui_geo->height, mod);
+                width = MULTIPLE_MOD_UP(geo->geometry.width, mod);
+                height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
             }
             if (maxWidth && (width > maxWidth))
             {
@@ -1140,12 +1057,12 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
              */
             if (!keep_height)
             {
-                width = MULTIPLE_MOD_UP(ui_geo->width, mod);
+                width = MULTIPLE_MOD_UP(geo->geometry.width, mod);
                 height = MULTIPLE_MOD_UP(width / storage_aspect + 0.5, mod);
             }
             else
             {
-                height = MULTIPLE_MOD_UP(ui_geo->height, mod);
+                height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
                 width = MULTIPLE_MOD_UP(height * storage_aspect + 0.5, mod);
             }
 
@@ -1173,11 +1090,11 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                - Set everything based on specified values */
 
             /* Use specified storage dimensions */
-            storage_aspect = (double)ui_geo->width / ui_geo->height;
+            storage_aspect = (double)geo->geometry.width / geo->geometry.height;
 
             /* Time to get picture dimensions that divide cleanly.*/
-            width  = MULTIPLE_MOD_UP(ui_geo->width, mod);
-            height = MULTIPLE_MOD_UP(ui_geo->height, mod);
+            width  = MULTIPLE_MOD_UP(geo->geometry.width, mod);
+            height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
 
             /* Bind to max dimensions */
             if (maxWidth && width > maxWidth)
@@ -1207,41 +1124,29 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                     width  = MULTIPLE_MOD(width, mod);
                 }
             }
-
-            /* That finishes the storage dimensions. On to display. */
-            if (ui_geo->dar.num && ui_geo->dar.den)
+            if (keep_display_aspect)
             {
-                /* We need to adjust the PAR to produce this aspect. */
-                dst_par_num = (int64_t)height * ui_geo->dar.num /
-                                                ui_geo->dar.den;
-                dst_par_den = width;
+                /* We can ignore the possibility of a PAR change
+                 * Adjust the output PAR for new width/height
+                 * See comment in HB_ANAMORPHIC_STRICT
+                 */
+                dst_par_num = (int64_t)height * cropped_width  *
+                                       src_par.num;
+                dst_par_den = (int64_t)width  * cropped_height *
+                                       src_par.den;
             }
             else
             {
-                if (keep_display_aspect)
-                {
-                    /* We can ignore the possibility of a PAR change
-                     * Adjust the output PAR for new width/height
-                     * See comment in HB_ANAMORPHIC_STRICT
-                     */
-                    dst_par_num = (int64_t)height * cropped_width  *
-                                           src_par.num;
-                    dst_par_den = (int64_t)width  * cropped_height *
-                                           src_par.den;
-                }
-                else
-                {
-                    /* If the dimensions were changed by the modulus
-                     * or by maxWidth/maxHeight, we also change the
-                     * output PAR so that the DAR is unchanged.
-                     *
-                     * PAR is the requested output display width / storage width
-                     * requested output display width is the original
-                     * requested width * original requested PAR
-                     */
-                    dst_par_num = ui_geo->width * dst_par_num;
-                    dst_par_den = width * dst_par_den;
-                }
+                /* If the dimensions were changed by the modulus
+                 * or by maxWidth/maxHeight, we also change the
+                 * output PAR so that the DAR is unchanged.
+                 *
+                 * PAR is the requested output display width / storage width
+                 * requested output display width is the original
+                 * requested width * original requested PAR
+                 */
+                dst_par_num = geo->geometry.width * dst_par_num;
+                dst_par_den = width * dst_par_den;
             }
         } break;
     }
@@ -1257,62 +1162,16 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
 
     /* If the user is directling updating PAR, don't override his values */
     hb_reduce(&out_par.num, &out_par.den, dst_par_num, dst_par_den);
-    if (ui_geo->mode == HB_ANAMORPHIC_CUSTOM && !keep_display_aspect &&
+    if (geo->mode == HB_ANAMORPHIC_CUSTOM && !keep_display_aspect &&
         out_par.num == in_par.num && out_par.den == in_par.den)
     {
-        result->par.num = ui_geo->par.num;
-        result->par.den = ui_geo->par.den;
+        result->par.num = geo->geometry.par.num;
+        result->par.den = geo->geometry.par.den;
     }
     else
     {
         hb_reduce(&result->par.num, &result->par.den, dst_par_num, dst_par_den);
     }
-}
-
-/**
- * Calculates job width and height for anamorphic content,
- *
- * @param job Handle to hb_job_t
- * @param output_width Pointer to returned storage width
- * @param output_height Pointer to returned storage height
- * @param output_par_width Pointer to returned pixel width
- * @param output_par_height Pointer to returned pixel height
- */
-void hb_set_anamorphic_size( hb_job_t * job,
-        int *output_width, int *output_height,
-        int *output_par_width, int *output_par_height )
-{
-    hb_geometry_t result;
-    hb_geometry_t src;
-    hb_ui_geometry_t ui_geo;
-
-    src.width = job->title->width;
-    src.height = job->title->height;
-    src.par.num = job->title->pixel_aspect_width;
-    src.par.den = job->title->pixel_aspect_height;
-
-    ui_geo.width = job->width;
-    ui_geo.height = job->height;
-    ui_geo.par.num = job->anamorphic.par_width;
-    ui_geo.par.den = job->anamorphic.par_height;
-
-    ui_geo.modulus = job->modulus;
-    memcpy(ui_geo.crop, job->crop, sizeof(int[4]));
-    ui_geo.maxWidth = job->maxWidth;
-    ui_geo.maxHeight = job->maxHeight;
-    ui_geo.mode = job->anamorphic.mode;
-    ui_geo.keep = 0;
-    if (job->anamorphic.keep_display_aspect)
-        ui_geo.keep = HB_KEEP_DISPLAY_ASPECT;
-    ui_geo.itu_par = job->anamorphic.itu_par;
-    ui_geo.dar.num = job->anamorphic.dar_width;
-    ui_geo.dar.den = job->anamorphic.dar_height;
-
-    hb_set_anamorphic_size2(&src, &ui_geo, &result);
-    *output_width = result.width;
-    *output_height = result.height;
-    *output_par_width = result.par.num;
-    *output_par_height = result.par.den;
 }
 
 /**
@@ -1352,21 +1211,6 @@ void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * se
     }
     // No position found or order not enforced for this filter
     hb_list_add( job->list_filter, filter );
-}
-
-/**
- * Validate and adjust dimensions if necessary
- *
- * @param job Handle to hb_job_t
- */
-void hb_validate_size( hb_job_t * job )
-{
-    int width, height, par_width, par_height;
-    hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
-    job->width = width;
-    job->height = height;
-    job->anamorphic.par_width = par_width;
-    job->anamorphic.par_height = par_height;
 }
 
 /**

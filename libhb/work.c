@@ -274,31 +274,15 @@ void hb_display_job_info(hb_job_t *job)
         }
     }
     
-    if( job->anamorphic.mode )
-    {
-        hb_log( "   + %s anamorphic", job->anamorphic.mode == 1 ? "strict" : job->anamorphic.mode == 2? "loose" : "custom" );
-        if( job->anamorphic.mode == 3 && job->anamorphic.keep_display_aspect )
-        {
-            hb_log( "     + keeping source display aspect ratio"); 
-        }
-        hb_log( "     + storage dimensions: %d * %d, mod %i",
-                    job->width, job->height, job->modulus );
-        if( job->anamorphic.itu_par )
-        {
-            hb_log( "     + using ITU pixel aspect ratio values"); 
-        }
-        hb_log( "     + pixel aspect ratio: %i / %i", job->anamorphic.par_width, job->anamorphic.par_height );
-        hb_log( "     + display dimensions: %.0f * %i",
-            (float)( job->width * job->anamorphic.par_width / job->anamorphic.par_height ), job->height );
-    }
-    else
-    {
-        hb_log( "   + dimensions: %d * %d, mod %i",
-                job->width, job->height, job->modulus );
-    }
-
     if ( job->grayscale )
-        hb_log( "   + grayscale mode" );
+        hb_log( "     + grayscale mode" );
+
+    hb_log( "   + Output geometry" );
+    hb_log( "     + storage dimensions: %d x %d", job->width, job->height );
+    hb_log( "     + pixel aspect ratio: %d : %d", job->par.num, job->par.den );
+    hb_log( "     + display dimensions: %d x %d",
+            job->width * job->par.num / job->par.den, job->height );
+
 
     if( !job->indepth_scan )
     {
@@ -521,8 +505,9 @@ void correct_framerate( hb_job_t * job )
         return; // Interjob information is for a different encode.
 
     // compute actual output vrate from first pass
-    interjob->vrate = job->vrate_base * ( (double)interjob->out_frame_count * 90000 / interjob->total_time );
-    interjob->vrate_base = job->vrate_base;
+    interjob->vrate.den = (int64_t)job->vrate.num * interjob->total_time /
+                          ((int64_t)interjob->out_frame_count * 90000);
+    interjob->vrate.num = job->vrate.num;
 }
 
 /**
@@ -698,19 +683,30 @@ static void do_job(hb_job_t *job)
         }
         if (one_burned)
         {
-            // Add subtitle rendering filter
-            // Note that if the filter is already in the filter chain, this
-            // has no effect. Note also that this means the front-end is
-            // not required to add the subtitle rendering filter since
-            // we will always try to do it here.
-            hb_filter_object_t *filter = hb_filter_init(HB_FILTER_RENDER_SUB);
-            char *filter_settings      = hb_strdup_printf("%d:%d:%d:%d",
-                                                          job->crop[0],
-                                                          job->crop[1],
-                                                          job->crop[2],
-                                                          job->crop[3]);
-            hb_add_filter(job, filter, filter_settings);
-            free(filter_settings);
+            int found = 0;
+            // Check that the HB_FILTER_RENDER_SUB is in the filter chain.
+            // We can not add it automatically because it needs crop
+            // values which only the frontend knows.
+            if (job->list_filter != NULL)
+            {
+                int ii;
+                for (ii = 0; ii < hb_list_count(job->list_filter); ii++)
+                {
+                    hb_filter_object_t *filter;
+                    filter = hb_list_item(job->list_filter, ii);
+                    if (filter->id == HB_FILTER_RENDER_SUB)
+                    {
+                        found = 1;
+                        break;
+                    }
+                }
+            }
+            if (!found)
+            {
+                // If this happens, it is a programming error that
+                // needs to be fixed in the frontend
+                hb_error("Subtitle burned, but no rendering filter");
+            }
         }
     }
 
@@ -879,17 +875,15 @@ static void do_job(hb_job_t *job)
 
         init.job = job;
         init.pix_fmt = AV_PIX_FMT_YUV420P;
-        init.width = title->width;
-        init.height = title->height;
+        init.geometry.width = title->geometry.width;
+        init.geometry.height = title->geometry.height;
 
         /* DXVA2 */
         init.use_dxva = hb_use_dxva(title);
 
-        init.par_width = job->anamorphic.par_width;
-        init.par_height = job->anamorphic.par_height;
+        init.geometry.par = job->par;
         memcpy(init.crop, title->crop, sizeof(int[4]));
-        init.vrate_base = title->rate_base;
-        init.vrate = title->rate;
+        init.vrate = title->vrate;
         init.cfr = 0;
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
@@ -904,36 +898,31 @@ static void do_job(hb_job_t *job)
             }
             i++;
         }
-        job->width = init.width;
-        job->height = init.height;
-        job->anamorphic.par_width = init.par_width;
-        job->anamorphic.par_height = init.par_height;
+        job->width = init.geometry.width;
+        job->height = init.geometry.height;
+        job->par = init.geometry.par;
         memcpy(job->crop, init.crop, sizeof(int[4]));
-        job->vrate_base = init.vrate_base;
         job->vrate = init.vrate;
         job->cfr = init.cfr;
     }
 
-    if( job->anamorphic.mode )
+    /* While x264 is smart enough to reduce fractions on its own, libavcodec
+     * needs some help with the math, so lose superfluous factors. */
+    hb_reduce(&job->par.num, &job->par.den,
+               job->par.num,  job->par.den);
+    if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
-        /* While x264 is smart enough to reduce fractions on its own, libavcodec and
-         * the MacGUI need some help with the math, so lose superfluous factors. */
-        hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height,
-                    job->anamorphic.par_width,  job->anamorphic.par_height );
-        if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
+        /* Just to make working with ffmpeg even more fun,
+         * lavc's MPEG-4 encoder can't handle PAR values >= 255,
+         * even though AVRational does. Adjusting downwards
+         * distorts the display aspect slightly, but such is life. */
+        while ((job->par.num & ~0xFF) ||
+               (job->par.den & ~0xFF))
         {
-            /* Just to make working with ffmpeg even more fun,
-             * lavc's MPEG-4 encoder can't handle PAR values >= 255,
-             * even though AVRational does. Adjusting downwards
-             * distorts the display aspect slightly, but such is life. */
-            while( ( job->anamorphic.par_width  & ~0xFF ) ||
-                   ( job->anamorphic.par_height & ~0xFF ) )
-            {
-                job->anamorphic.par_width  >>= 1;
-                job->anamorphic.par_height >>= 1;
-                hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height,
-                            job->anamorphic.par_width,  job->anamorphic.par_height );
-            }
+            job->par.num >>= 1;
+            job->par.den >>= 1;
+            hb_reduce(&job->par.num, &job->par.den,
+                       job->par.num,  job->par.den);
         }
     }
 

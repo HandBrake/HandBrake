@@ -454,8 +454,8 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     hb_filter_private_t * pv = filter->private_data;
 
-    pv->width = init->width;
-    pv->height = init->height;
+    pv->width = init->geometry.width;
+    pv->height = init->geometry.height;
 
     pv->yadif_ready    = 0;
     pv->yadif_mode     = YADIF_MODE_DEFAULT;

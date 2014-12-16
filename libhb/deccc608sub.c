@@ -1741,8 +1741,8 @@ static int decccInit( hb_work_object_t * w, hb_job_t * job )
 
         if( pv->cc608 )
         {
-            pv->cc608->width = job->title->width;
-            pv->cc608->height = job->title->height;
+            pv->cc608->width = job->title->geometry.width;
+            pv->cc608->height = job->title->geometry.height;
             memcpy(pv->cc608->crop, job->crop, sizeof(int[4]));
             retval = general_608_init(pv->cc608);
             if( !retval )
@@ -1759,8 +1759,8 @@ static int decccInit( hb_work_object_t * w, hb_job_t * job )
     if (!retval)
     {
         // Generate generic SSA Script Info.
-        int height = job->title->height - job->crop[0] - job->crop[1];
-        int width = job->title->width - job->crop[2] - job->crop[3];
+        int height = job->title->geometry.height - job->crop[0] - job->crop[1];
+        int width = job->title->geometry.width - job->crop[2] - job->crop[3];
         hb_subtitle_add_ssa_header(w->subtitle, width, height);
     }
     // When rendering subs, we need to push rollup subtitles out

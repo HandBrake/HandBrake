@@ -2091,8 +2091,8 @@ static void queueFSEventStreamCallback(
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
     [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
-    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_width] forKey:@"PicturePARPixelWidth"];
-    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_height] forKey:@"PicturePARPixelHeight"];
+    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->par.num] forKey:@"PicturePARPixelWidth"];
+    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->par.den] forKey:@"PicturePARPixelHeight"];
 
     /* Text summaries of various settings */
     [queueFileJob setObject:[NSString stringWithString:[self pictureSettingsSummary]]
@@ -2154,8 +2154,8 @@ static void queueFSEventStreamCallback(
     
     /* Codecs */
     /* Framerate */
-    [queueFileJob setObject:[NSNumber numberWithInt:title->rate]                         forKey:@"JobVrate"];
-    [queueFileJob setObject:[NSNumber numberWithInt:title->rate_base]                    forKey:@"JobVrateBase"];
+    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.num]                         forKey:@"JobVrate"];
+    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.den]                    forKey:@"JobVrateBase"];
 
     /* we need to auto relase the queueFileJob and return it */
     [queueFileJob autorelease];
@@ -2845,7 +2845,7 @@ static void queueFSEventStreamCallback(
     /* Add Crop/Scale filter */
     hb_filter_object_t *filter = hb_filter_init( HB_FILTER_CROP_SCALE );
     hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
-                                  job->width,job->height,
+                                  job->width, job->height,
                                   job->crop[0], job->crop[1],
                                   job->crop[2], job->crop[3]] UTF8String] );
 }
@@ -3020,9 +3020,8 @@ static void queueFSEventStreamCallback(
     job->anamorphic.keep_display_aspect = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
     job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
     job->modulus = [[queueToApply objectForKey:@"PictureModulus"] intValue];
-    job->anamorphic.par_width = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
-    job->anamorphic.par_height = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
-    job->anamorphic.dar_width = job->anamorphic.dar_height = 0;
+    job->par.num = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
+    job->par.den = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
 
     /* Here we use the crop values saved at the time the preset was saved */
     job->crop[0] = [[queueToApply objectForKey:@"PictureTopCrop"]  intValue];
@@ -3343,7 +3342,7 @@ static void queueFSEventStreamCallback(
     /* Add Crop/Scale filter */
     filter = hb_filter_init( HB_FILTER_CROP_SCALE );
     hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
-                                  job->width,job->height,
+                                  job->width, job->height,
                                   job->crop[0], job->crop[1],
                                   job->crop[2], job->crop[3]] UTF8String] );
 
@@ -3829,7 +3828,7 @@ static void queueFSEventStreamCallback(
     /* For point a to point b frame encoding, set the start and end fields to 0 and the title duration * announced fps in seconds respectively */
     [fSrcFrameStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 1]];
     //[fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", ((title->hours * 3600) + (title->minutes * 60) + (title->seconds)) * 24]];
-    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->rate / title->rate_base)]];    
+    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->vrate.num / title->vrate.den)]];    
 
     /* Update encode start / stop variables */
 
@@ -3986,7 +3985,7 @@ static void queueFSEventStreamCallback(
     hb_title_t * title = (hb_title_t*)
     hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
     
-    int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->rate / title->rate_base);
+    int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->vrate.num / title->vrate.den);
     [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
                                          @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60,
                                          duration % 60]];
@@ -4301,8 +4300,8 @@ the user is using "Custom" settings by determining the sender*/
          * height, width, keep ar, anamorphic and crop settings.
          * picture filters are handled separately below.
          */
-        int maxWidth = fTitle->width - job->crop[2] - job->crop[3];
-        int maxHeight = fTitle->height - job->crop[0] - job->crop[1];
+        int maxWidth = fTitle->geometry.width - job->crop[2] - job->crop[3];
+        int maxHeight = fTitle->geometry.height - job->crop[0] - job->crop[1];
         job->maxWidth = job->maxHeight = 0;
         /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None" 
          * ( 2 is use max for source and 1 is use exact size when the preset was created ) and the 
@@ -4334,8 +4333,8 @@ the user is using "Custom" settings by determining the sender*/
             }
             
             /* crop may have changed, reset maxWidth/maxHeight */
-            maxWidth = fTitle->width - job->crop[2] - job->crop[3];
-            maxHeight = fTitle->height - job->crop[0] - job->crop[1];
+            maxWidth = fTitle->geometry.width - job->crop[2] - job->crop[3];
+            maxHeight = fTitle->geometry.height - job->crop[0] - job->crop[1];
 
             /* Set modulus */
             if ([chosenPreset objectForKey:@"PictureModulus"])
@@ -4351,8 +4350,8 @@ the user is using "Custom" settings by determining the sender*/
              * Assume max picture settings initially
              */
             job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-            job->width = fTitle->width - job->crop[2] - job->crop[3];
-            job->height = fTitle->height - job->crop[0] - job->crop[1];
+            job->width = fTitle->geometry.width - job->crop[2] - job->crop[3];
+            job->height = fTitle->geometry.height - job->crop[0] - job->crop[1];
             job->anamorphic.keep_display_aspect = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
 
             /* Check to see if the objectForKey:@"UsesPictureSettings" is 2,
@@ -4392,12 +4391,28 @@ the user is using "Custom" settings by determining the sender*/
         if (job->maxHeight == 0 || job->maxHeight > maxHeight)
             job->maxHeight = maxHeight;
 
-        int width, height, par_width, par_height;
-        hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
-        job->width = width;
-        job->height = height;
-        job->anamorphic.par_width = par_width;
-        job->anamorphic.par_height = par_height;
+        hb_geometry_t srcGeo, resultGeo;
+        hb_geometry_settings_t uiGeo;
+
+        srcGeo.width = fTitle->geometry.width;
+        srcGeo.height = fTitle->geometry.height;
+        srcGeo.par = fTitle->geometry.par;
+
+        uiGeo.mode = job->anamorphic.mode;
+        uiGeo.keep = !!job->anamorphic.keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
+        uiGeo.itu_par = 0;
+        uiGeo.modulus = job->modulus;
+        memcpy(uiGeo.crop, job->crop, sizeof(int[4]));
+        uiGeo.geometry.width = job->width;
+        uiGeo.geometry.height =  job->height;
+        uiGeo.geometry.par = job->par;
+        uiGeo.maxWidth = job->maxWidth;
+        uiGeo.maxHeight = job->maxHeight;
+        hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
+
+        job->width = resultGeo.width;
+        job->height = resultGeo.height;
+        job->par = resultGeo.par;
 
         /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
         [fPictureController setTitle:fTitle];
