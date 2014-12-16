@@ -148,8 +148,8 @@ static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
         // FrameRate is important for VPP to start with
         if( qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN == 0 &&
             qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD == 0 ){
-            qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN = pv->job->title->rate;
-            qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD = pv->job->title->rate_base;
+            qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN = pv->job->title->vrate.num;
+            qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD = pv->job->title->vrate.den;
         }
 
         /*
@@ -179,8 +179,8 @@ static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
 
         qsv_vpp->m_mfxVideoParam.vpp.In.FourCC          = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FourCC;
         qsv_vpp->m_mfxVideoParam.vpp.In.ChromaFormat    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.ChromaFormat;
-        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtN   = pv->job->vrate;
-        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtD   = pv->job->vrate_base;
+        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtN   = pv->job->vrate.num;
+        qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtD   = pv->job->vrate.den;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
         qsv_vpp->m_mfxVideoParam.vpp.In.Width           = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.Width;
@@ -192,8 +192,8 @@ static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
 
         qsv_vpp->m_mfxVideoParam.vpp.Out.FourCC          = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FourCC;
         qsv_vpp->m_mfxVideoParam.vpp.Out.ChromaFormat    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.ChromaFormat;
-        qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtN   = pv->job->vrate;
-        qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD   = pv->job->vrate_base;
+        qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtN   = pv->job->vrate.num;
+        qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD   = pv->job->vrate.den;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
         qsv_vpp->m_mfxVideoParam.vpp.Out.Width           = pv->job->qsv.enc_info.align_width;
@@ -360,10 +360,6 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
     // will be later as more params will be known
     // filter_init(pv->job->qsv, pv);
 
-    // just passing
-    init->vrate = init->vrate;
-    init->vrate_base = init->vrate_base;
-
     // framerate shaping not yet supported
     init->cfr = 0;
 
@@ -439,7 +435,6 @@ void qsv_filter_close( av_qsv_context* qsv, AV_QSV_STAGE_TYPE vpp_type ){
 
 static void hb_qsv_filter_close( hb_filter_object_t * filter )
 {
-    int i = 0;
     hb_filter_private_t * pv = filter->private_data;
 
     if ( !pv )
@@ -639,18 +634,17 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
         out = *buf_out;
         if(pv->is_frc_used && out)
         {
-            mfxStatus sts = MFX_ERR_NONE;
-                if(out->qsv_details.qsv_atom){
-                    av_qsv_stage* stage = av_qsv_get_last_stage( out->qsv_details.qsv_atom );
-                    mfxFrameSurface1 *work_surface = stage->out.p_surface;
+            if(out->qsv_details.qsv_atom){
+                av_qsv_stage* stage = av_qsv_get_last_stage( out->qsv_details.qsv_atom );
+                mfxFrameSurface1 *work_surface = stage->out.p_surface;
 
-                    av_qsv_wait_on_sync( qsv,stage );
+                av_qsv_wait_on_sync( qsv,stage );
 
-                    av_qsv_space *qsv_vpp = pv->vpp_space;
-                    int64_t duration  = ((double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD/(double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtN ) * 90000.;
-                    out->s.start = work_surface->Data.TimeStamp;
-                    out->s.stop = work_surface->Data.TimeStamp + duration;
-                }
+                av_qsv_space *qsv_vpp = pv->vpp_space;
+                int64_t duration  = ((double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD/(double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtN ) * 90000.;
+                out->s.start = work_surface->Data.TimeStamp;
+                out->s.stop = work_surface->Data.TimeStamp + duration;
+            }
         }
         hb_list_rem(pv->list,*buf_out);
     }

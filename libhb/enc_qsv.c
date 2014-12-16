@@ -268,9 +268,9 @@ int qsv_enc_init(hb_work_private_t *pv)
     else
     {
         pv->sws_context_to_nv12 = hb_sws_get_context(
-                                    job->geometry.width, job->geometry.height,
+                                    job->width, job->height,
                                     AV_PIX_FMT_YUV420P,
-                                    job->geometry.width, job->geometry.height,
+                                    job->width, job->height,
                                     AV_PIX_FMT_NV12,
                                     SWS_LANCZOS|SWS_ACCURATE_RND);
     }
@@ -505,24 +505,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     // sanitize values that may exceed the Media SDK variable size
-    int64_t vrate, vrate_base;
-    int64_t par_width, par_height;
-    hb_limit_rational64(&vrate, &vrate_base,
-                        job->vrate, job->vrate_base, UINT32_MAX);
-    hb_limit_rational64(&par_width, &par_height,
-                        job->anamorphic.par_width,
-                        job->anamorphic.par_height, UINT16_MAX);
+    hb_rational_t par;
+    hb_limit_rational(&par.num, &par.den,
+                      job->par.num, job->par.den, UINT16_MAX);
 
     // some encoding parameters are used by filters to configure their output
     if (pv->param.videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE)
     {
-        job->qsv.enc_info.align_height = AV_QSV_ALIGN32(job->geometry.height);
+        job->qsv.enc_info.align_height = AV_QSV_ALIGN32(job->height);
     }
     else
     {
-        job->qsv.enc_info.align_height = AV_QSV_ALIGN16(job->geometry.height);
+        job->qsv.enc_info.align_height = AV_QSV_ALIGN16(job->height);
     }
-    job->qsv.enc_info.align_width  = AV_QSV_ALIGN16(job->geometry.width);
+    job->qsv.enc_info.align_width  = AV_QSV_ALIGN16(job->width);
     job->qsv.enc_info.pic_struct   = pv->param.videoParam->mfx.FrameInfo.PicStruct;
     job->qsv.enc_info.is_init_done = 1;
 
@@ -532,14 +528,14 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.CodecProfile            = MFX_PROFILE_UNKNOWN;
     pv->param.videoParam->mfx.FrameInfo.FourCC        = MFX_FOURCC_NV12;
     pv->param.videoParam->mfx.FrameInfo.ChromaFormat  = MFX_CHROMAFORMAT_YUV420;
-    pv->param.videoParam->mfx.FrameInfo.FrameRateExtN = vrate;
-    pv->param.videoParam->mfx.FrameInfo.FrameRateExtD = vrate_base;
-    pv->param.videoParam->mfx.FrameInfo.AspectRatioW  = par_width;
-    pv->param.videoParam->mfx.FrameInfo.AspectRatioH  = par_height;
+    pv->param.videoParam->mfx.FrameInfo.FrameRateExtN = job->vrate.num;
+    pv->param.videoParam->mfx.FrameInfo.FrameRateExtD = job->vrate.den;
+    pv->param.videoParam->mfx.FrameInfo.AspectRatioW  = par.num;
+    pv->param.videoParam->mfx.FrameInfo.AspectRatioH  = par.den;
     pv->param.videoParam->mfx.FrameInfo.CropX         = 0;
     pv->param.videoParam->mfx.FrameInfo.CropY         = 0;
-    pv->param.videoParam->mfx.FrameInfo.CropW         = job->geometry.width;
-    pv->param.videoParam->mfx.FrameInfo.CropH         = job->geometry.height;
+    pv->param.videoParam->mfx.FrameInfo.CropW         = job->width;
+    pv->param.videoParam->mfx.FrameInfo.CropH         = job->height;
     pv->param.videoParam->mfx.FrameInfo.PicStruct     = job->qsv.enc_info.pic_struct;
     pv->param.videoParam->mfx.FrameInfo.Width         = job->qsv.enc_info.align_width;
     pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv.enc_info.align_height;
@@ -770,7 +766,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set the keyframe interval
     if (pv->param.gop.gop_pic_size < 0)
     {
-        int rate = (int)((double)job->vrate / (double)job->vrate_base + 0.5);
+        int rate = (int)((double)job->vrate.num / (double)job->vrate.den + 0.5);
         if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
         {
             // ensure B-pyramid is enabled for CQP on Haswell
@@ -1387,8 +1383,8 @@ static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
          * compute it based on the init_delay and average frame duration,
          * and account for potential rounding errors due to the timebase.
          */
-        double avg_frame_dur = ((double)pv->job->vrate_base /
-                                (double)pv->job->vrate * 90000.);
+        double avg_frame_dur = ((double)pv->job->vrate.den /
+                                (double)pv->job->vrate.num * 90000.);
 
         pv->bfrm_delay = (init_delay + (avg_frame_dur / 2)) / avg_frame_dur;
 

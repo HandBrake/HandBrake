@@ -2316,6 +2316,32 @@ void hb_reduce( int *x, int *y, int num, int den )
     }
 }
 
+void hb_limit_rational( int *x, int *y, int num, int den, int limit )
+{
+    hb_reduce( &num, &den, num, den );
+    if ( num < limit && den < limit )
+    {
+        *x = num;
+        *y = den;
+        return;
+    }
+
+    if ( num > den )
+    {
+        double div = (double)limit / num;
+        num = limit;
+        den *= div;
+    }
+    else
+    {
+        double div = (double)limit / den;
+        den = limit;
+        num *= div;
+    }
+    *x = num;
+    *y = den;
+}
+
 /**********************************************************************
  * hb_reduce64
  **********************************************************************

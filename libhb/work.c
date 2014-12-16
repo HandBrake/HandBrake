@@ -769,8 +769,8 @@ static void do_job(hb_job_t *job)
         int num_cpu_filters = 0;
         hb_filter_object_t *filter;
         // default values for VPP filter
-        vpp_settings[0] = job->title->width;
-        vpp_settings[1] = job->title->height;
+        vpp_settings[0] = job->title->geometry.width;
+        vpp_settings[1] = job->title->geometry.height;
         vpp_settings[2] = job->title->crop[0];
         vpp_settings[3] = job->title->crop[1];
         vpp_settings[4] = job->title->crop[2];
@@ -842,8 +842,8 @@ static void do_job(hb_job_t *job)
                 filter = hb_filter_init(HB_FILTER_QSV_POST);
                 hb_add_filter(job, filter, NULL);
             }
-            if (vpp_settings[0] != job->title->width  ||
-                vpp_settings[1] != job->title->height ||
+            if (vpp_settings[0] != job->title->geometry.width  ||
+                vpp_settings[1] != job->title->geometry.height ||
                 vpp_settings[2] >= 1 /* crop */       ||
                 vpp_settings[3] >= 1 /* crop */       ||
                 vpp_settings[4] >= 1 /* crop */       ||
