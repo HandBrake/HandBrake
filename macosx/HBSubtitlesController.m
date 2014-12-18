@@ -40,8 +40,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 @property (assign) IBOutlet NSButton *configureDefaults;
 @property (assign) IBOutlet NSButton *reloadDefaults;
 
-@property (nonatomic, readwrite) BOOL enabled;
-
 // Subtitles arrays
 @property (nonatomic, readonly) NSMutableArray *subtitleArray;
 @property (nonatomic, readonly) NSMutableArray *subtitleSourceArray;
@@ -68,6 +66,8 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 @implementation HBSubtitlesController
 
+@synthesize enabled = _enabled;
+
 - (instancetype)init
 {
     self = [super initWithNibName:@"Subtitles" bundle:nil];
@@ -92,13 +92,13 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     return self;
 }
 
-- (void)setUIEnabled:(BOOL)flag
+- (void)setEnabled:(BOOL)enabled
 {
-    [self.trackPopUp setEnabled:flag];
-    [self.configureDefaults setEnabled:flag];
-    [self.reloadDefaults setEnabled:flag];
-    [self.fTableView setEnabled:flag];
-    self.enabled = flag;
+    [self.trackPopUp setEnabled:enabled];
+    [self.configureDefaults setEnabled:enabled];
+    [self.reloadDefaults setEnabled:enabled];
+    [self.fTableView setEnabled:enabled];
+    _enabled = enabled;
 }
 
 - (void)titleChanged:(NSNotification *)aNotification

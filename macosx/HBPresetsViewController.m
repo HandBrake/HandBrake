@@ -28,11 +28,11 @@
 
 @property (assign) IBOutlet NSOutlineView *outlineView;
 
-@property (nonatomic) BOOL enabled;
-
 @end
 
 @implementation HBPresetsViewController
+
+@synthesize enabled = _enabled;
 
 - (instancetype)initWithPresetManager:(HBPresetsManager *)presetManager
 {
@@ -81,13 +81,6 @@
     }
 
     return YES;
-}
-
-#pragma mark - HBViewValidation methods
-
-- (void)setUIEnabled:(BOOL)flag
-{
-    self.enabled = flag;
 }
 
 #pragma mark - UI Methods

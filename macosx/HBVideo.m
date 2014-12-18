@@ -388,23 +388,24 @@
             (!preset[@"x264UseAdvancedOptions"] ||
              [preset[@"x264UseAdvancedOptions"] intValue]))
         {
+            // preset does not use the x264 preset system, reset the widgets.
+            self.preset = @"medium";
+            self.tune = nil;
+            self.profile = nil;
+            self.level = nil;
+
             // x264UseAdvancedOptions is not set (legacy preset)
             // or set to 1 (enabled), so we use the old advanced panel.
             if (preset[@"x264Option"])
             {
                 // we set the advanced options string here if applicable.
-                self.advancedOptions = YES;
                 self.videoOptionExtra = preset[@"x264Option"];
+                self.advancedOptions = YES;
             }
             else
             {
                 self.videoOptionExtra = nil;
             }
-            // preset does not use the x264 preset system, reset the widgets.
-            self.preset = nil;
-            self.tune = nil;
-            self.profile = nil;
-            self.level = nil;
         }
         else
         {
@@ -575,11 +576,12 @@
     if ([queueToApply[@"x264UseAdvancedOptions"] intValue])
     {
         // we are using the advanced panel
-        self.preset = nil;
+        self.preset = @"medium";
         self.tune = nil;
-        self.videoOptionExtra = queueToApply[@"x264Option"];
         self.profile = nil;
         self.level = nil;
+        self.videoOptionExtra = queueToApply[@"x264Option"];
+        self.advancedOptions = YES;
     }
     else if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
     {
@@ -858,7 +860,22 @@
     const char *name = hb_video_framerate_get_name([value intValue]);
     if (name)
     {
-        return @(name);
+        if (!strcmp(name, "23.976"))
+        {
+            return @"23.976 (NTSC Film)";
+        }
+        else if (!strcmp(name, "25"))
+        {
+            return @"25 (PAL Film/Video)";
+        }
+        else if (!strcmp(name, "29.97"))
+        {
+            return @"29.97 (NTSC Video)";
+        }
+        else
+        {
+            return @(name);
+        }
     }
     else
     {
@@ -907,12 +924,15 @@
 
 - (id)transformedValue:(id)value
 {
-    const char * const *presets = hb_video_encoder_get_presets(_encoder);
-    for (int i = 0; presets[i] != NULL; i++)
+    if (value)
     {
-        if (!strcasecmp(presets[i], [value UTF8String]))
+        const char * const *presets = hb_video_encoder_get_presets(_encoder);
+        for (int i = 0; presets != NULL && presets[i] != NULL; i++)
         {
-            return @(i);
+            if (!strcasecmp(presets[i], [value UTF8String]))
+            {
+                return @(i);
+            }
         }
     }
 
@@ -927,7 +947,7 @@
 - (id)reverseTransformedValue:(id)value
 {
     const char * const *presets = hb_video_encoder_get_presets(_encoder);
-    for (int i = 0; presets[i] != NULL; i++)
+    for (int i = 0; presets != NULL && presets[i] != NULL; i++)
     {
         if (i == [value intValue])
         {

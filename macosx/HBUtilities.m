@@ -41,8 +41,8 @@
 + (NSString *)automaticNameForSource:(NSString *)sourceName
                                title:(NSUInteger)title
                             chapters:(NSRange)chaptersRange
-                             quality:(NSString *)quality
-                             bitrate:(NSString *)bitrate
+                             quality:(double)quality
+                             bitrate:(int)bitrate
                           videoCodec:(uint32_t)codec
 {
     NSMutableString *name = [[[NSMutableString alloc] init] autorelease];
@@ -109,12 +109,12 @@
             {
                 // Append the right quality suffix for the selected codec (rf/qp)
                 [name appendString:[[NSString stringWithUTF8String:hb_video_quality_get_name(codec)] lowercaseString]];
-                [name appendString:quality];
+                [name appendString:[NSString stringWithFormat:@"%0.2f", quality]];
             }
             else
             {
                 [name appendString:@"abr"];
-                [name appendString:bitrate];
+                [name appendString:[NSString stringWithFormat:@"%d", bitrate]];
             }
         }
         else

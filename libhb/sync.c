@@ -513,6 +513,7 @@ static hb_buffer_t * sanitizeSubtitle(
             sanitizer->last = sub;
         }
     }
+
     return mergeSubtitles(sanitizer, 0);
 }
 

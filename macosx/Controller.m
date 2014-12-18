@@ -21,6 +21,8 @@
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
+#import "HBJob.h"
+
 #import "HBCore.h"
 
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
@@ -32,6 +34,8 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 #define dockTileUpdateFrequency                  0.1f
 
 @interface HBController () <HBPresetsViewControllerDelegate>
+
+@property (nonatomic, retain) HBJob *job;
 
 // The current selected preset.
 @property (nonatomic, retain) HBPreset *selectedPreset;
@@ -597,9 +601,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 	[fAdvancedTab setView:[fAdvancedOptions view]];
 
     // setup the video view controller
-    fVideoController = [[HBVideoController alloc] init];
-    fVideoController.fAdvancedOptions = fAdvancedOptions;
-    fVideoController.fHBController = self;
+    fVideoController = [[HBVideoController alloc] initWithAdvancedController:fAdvancedOptions];
 	[fVideoTab setView:[fVideoController view]];
 
     [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
@@ -668,11 +670,11 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         [controls[i] setEnabled: b];
     }
 
-    [fPresetsView setUIEnabled:b];
-    [fVideoController setUIEnabled:b];
-    [fAudioController setUIEnabled:b];
-    [fSubtitlesViewController setUIEnabled:b];
-    [fChapterTitlesController setUIEnabled:b];
+    fPresetsView.enabled = b;
+    fVideoController.enabled = b;
+    fAudioController.enabled = b;
+    fSubtitlesViewController.enabled = b;
+    fChapterTitlesController.enabled = b;
 }
 
 /**
@@ -1650,13 +1652,12 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 
             SuccessfulScan = YES;
 
+            [self enableUI:YES];
             [self titlePopUpChanged:nil];
 
             titleLoaded = YES;
 
             [self encodeStartStopPopUpChanged:nil];
-
-            [self enableUI: YES];
 
             // Open preview window now if it was visible when HB was closed
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
@@ -2083,7 +2084,7 @@ static void queueFSEventStreamCallback(
     
     /* Codecs */
 	/* Video encoder */
-    [fVideoController prepareVideoForQueueFileJob:queueFileJob];
+    [fVideoController.video prepareVideoForQueueFileJob:queueFileJob];
 
 	/* Picture Sizing */
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
@@ -2399,7 +2400,7 @@ static void queueFSEventStreamCallback(
     [fDstMp4iPodFileCheck setState:[[queueToApply objectForKey:@"Mp4iPodCompatible"] intValue]];
 
     /* video encoder */
-    [fVideoController applyVideoSettingsFromQueue:queueToApply];
+    [fVideoController.video applyVideoSettingsFromQueue:queueToApply];
 
     /* Audio Defaults */
     [fAudioController.settings applySettingsFromPreset:queueToApply[@"AudioDefaults"]];
@@ -2557,7 +2558,7 @@ static void queueFSEventStreamCallback(
     job->mux = (int)[[fDstFormatPopUp selectedItem] tag];
 
     /* Video Encoder */
-    [fVideoController prepareVideoForJobPreview:job andTitle:title];
+    [fVideoController.video prepareVideoForJobPreview:job andTitle:title];
 
     /* Subtitle settings */
     BOOL one_burned = NO;
@@ -3645,11 +3646,7 @@ static void queueFSEventStreamCallback(
 //------------------------------------------------------------------------------------
 - (void) doCancelCurrentJob
 {
-    // Stop the current job. hb_stop will only cancel the current pass and then set
-    // its state to HB_STATE_WORKDONE. It also does this asynchronously. So when we
-    // see the state has changed to HB_STATE_WORKDONE (in updateUI), we'll delete the
-    // remaining passes of the job and then start the queue back up if there are any
-    // remaining jobs.
+    // Stop the current job.
 
     [self.queueCore stop];
 
@@ -3784,9 +3781,9 @@ static void queueFSEventStreamCallback(
     NSString *fileName = [HBUtilities automaticNameForSource:sourceName
                                                        title:title->index
                                                     chapters:NSMakeRange([fSrcChapterStartPopUp indexOfSelectedItem] + 1, [fSrcChapterEndPopUp indexOfSelectedItem] + 1)
-                                                     quality:fVideoController.qualityType ? fVideoController.selectedQuality : 0
-                                                     bitrate:!fVideoController.qualityType ? fVideoController.selectedBitrate : 0
-                                                  videoCodec:fVideoController.codec];
+                                                     quality:fVideoController.video.qualityType ? fVideoController.video.quality : 0
+                                                     bitrate:!fVideoController.video.qualityType ? fVideoController.video.avgBitrate : 0
+                                                  videoCodec:fVideoController.video.encoder];
 
     // Swap the old one with the new one
     [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@/%@.%@",
@@ -4061,7 +4058,7 @@ static void queueFSEventStreamCallback(
 
 - (void)updateMp4Checkboxes:(NSNotification *)notification
 {
-    if (fVideoController.codec != HB_VCODEC_X264)
+    if (fVideoController.video.encoder != HB_VCODEC_X264)
     {
         /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
          * container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
@@ -4106,16 +4103,14 @@ the user is using "Custom" settings by determining the sender*/
 - (void)pictureSettingsDidChange 
 {
     // align picture settings and video filters in the UI using tabs
-    fVideoController.pictureSettingsField = [self pictureSettingsSummary];
-    fVideoController.pictureFiltersField = fPictureController.filters.summary;
+    fVideoController.pictureSettings = [self pictureSettingsSummary];
+    fVideoController.pictureFilters = fPictureController.filters.summary;
 
     /* Store storage resolution for unparse */
     if (fTitle)
     {
-        fVideoController.fPresetsWidthForUnparse  = fTitle->job->width;
-        fVideoController.fPresetsHeightForUnparse = fTitle->job->height;
-        // width or height may have changed, unparse
-        [fVideoController x264PresetsChangedDisplayExpandedOptions:nil];
+        fVideoController.video.widthForUnparse  = fTitle->job->width;
+        fVideoController.video.heightForUnparse = fTitle->job->height;
     }
 }
 
@@ -4249,11 +4244,11 @@ the user is using "Custom" settings by determining the sender*/
 
 - (void)applyPreset:(HBPreset *)preset
 {
-    self.selectedPreset = preset;
-    self.customPreset = NO;
-
     if (preset != nil && SuccessfulScan)
     {
+        self.selectedPreset = preset;
+        self.customPreset = NO;
+
         hb_job_t * job = fTitle->job;
         NSDictionary *chosenPreset = preset.content;
 
@@ -4283,7 +4278,7 @@ the user is using "Custom" settings by determining the sender*/
         [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
         
         /* Video encoder */
-        [fVideoController applySettingsFromPreset:chosenPreset];
+        [fVideoController.video applySettingsFromPreset:chosenPreset];
 
         /* Lets run through the following functions to get variables set there */
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
@@ -4501,7 +4496,7 @@ the user is using "Custom" settings by determining the sender*/
     preset[@"Mp4iPodCompatible"] = @(fDstMp4iPodFileCheck.state);
 
     // Video encoder
-    [fVideoController prepareVideoForPreset:preset];
+    [fVideoController.video prepareVideoForPreset:preset];
 
     // Picture Sizing
     preset[@"PictureWidth"]  = currentPreset[@"PictureWidth"];

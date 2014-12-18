@@ -37,8 +37,8 @@
 + (NSString *)automaticNameForSource:(NSString *)sourceName
                                title:(NSUInteger)title
                             chapters:(NSRange)chaptersRange
-                             quality:(NSString *)quality
-                             bitrate:(NSString *)bitrate
+                             quality:(double)quality
+                             bitrate:(int)bitrate
                           videoCodec:(uint32_t)codec;
 
 @end

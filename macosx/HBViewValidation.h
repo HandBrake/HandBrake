@@ -10,6 +10,6 @@
 
 @protocol HBViewValidation <NSObject>
 
-- (void)setUIEnabled:(BOOL)flag;
+@property (nonatomic, readwrite, getter=isEnabled) BOOL enabled;
 
 @end

@@ -23,6 +23,8 @@
 
 @implementation HBChapterTitlesController
 
+@synthesize enabled = _enabled;
+
 - (instancetype)init
 {
     self = [super initWithNibName:@"ChaptersTitles" bundle:nil];
@@ -83,12 +85,12 @@
     [fChapterTable reloadData];
 }
 
-- (void)setUIEnabled:(BOOL)flag
+- (void)setEnabled:(BOOL)enabled
 {
-    [fCreateChaptersMarkers setEnabled:flag];
-    [fChapterTable setEnabled:flag];
-    [fLoadChaptersButton setEnabled:flag];
-    [fSaveChaptersButton setEnabled:flag];
+    [fCreateChaptersMarkers setEnabled:enabled];
+    [fChapterTable setEnabled:enabled];
+    [fLoadChaptersButton setEnabled:enabled];
+    [fSaveChaptersButton setEnabled:enabled];
 }
 
 - (NSArray *)chapterTitlesArray

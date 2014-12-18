@@ -37,7 +37,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 @property (assign) IBOutlet NSPopUpButton *trackPopup;
 @property (assign) IBOutlet NSButton *configureDefaults;
 @property (assign) IBOutlet NSButton *reloadDefaults;
-@property (nonatomic, readwrite) BOOL enabled;
 
 @property (nonatomic, readwrite, retain) NSArray *masterTrackArray;
 @property (nonatomic, retain) NSNumber *videoContainerTag; // initially is the default HB_MUX_MP4
@@ -56,6 +55,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 @synthesize masterTrackArray;
 @synthesize noneTrack;
 @synthesize videoContainerTag;
+@synthesize enabled = _enabled;
 
 - (instancetype)init
 {
@@ -95,13 +95,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self switchingTrackFromNone:nil];
 }
 
-- (void)setUIEnabled:(BOOL)flag
+- (void)setEnabled:(BOOL)enabled
 {
-    self.enabled = flag;
-    [fTableView setEnabled:flag];
-    [self.trackPopup setEnabled:flag];
-    [self.configureDefaults setEnabled:flag];
-    [self.reloadDefaults setEnabled:flag];
+    _enabled = enabled;
+    [fTableView setEnabled:enabled];
+    [self.trackPopup setEnabled:enabled];
+    [self.configureDefaults setEnabled:enabled];
+    [self.reloadDefaults setEnabled:enabled];
 }
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
