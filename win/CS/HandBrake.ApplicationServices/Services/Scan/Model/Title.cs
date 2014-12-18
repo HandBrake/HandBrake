@@ -72,7 +72,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
         /// <summary>
         /// Gets or sets the aspect ratio of this Title
         /// </summary>
-        public double AspectRatio { get; set; }
+        public decimal AspectRatio { get; set; }
 
         /// <summary>
         /// Gets or sets AngleCount.

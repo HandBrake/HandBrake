@@ -38,7 +38,7 @@ namespace HandBrake.Interop.HbLib
     /// The hb_ui_geometry_s.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct hb_ui_geometry_s
+    public struct hb_geometry_settings_s
     {
         /// <summary>
         ///  Anamorphic mode, see job struct anamorphic
@@ -67,16 +67,6 @@ namespace HandBrake.Interop.HbLib
         public int[] crop;
 
         /// <summary>
-        /// destination storage width
-        /// </summary>
-        public int width;
-
-        /// <summary>
-        /// destination storage height
-        /// </summary>
-        public int height; 
-
-        /// <summary>
         /// max destination storage width
         /// </summary>
         public int maxWidth; 
@@ -89,12 +79,7 @@ namespace HandBrake.Interop.HbLib
         /// <summary>
         /// Pixel aspect used in custom anamorphic
         /// </summary>
-        public hb_rational_t par; 
-
-        /// <summary>
-        ///  Display aspect used in custom anamorphic
-        /// </summary>
-        public hb_rational_t dar;
+        public hb_geometry_s geometry; 
     }
 
     /// <summary>
@@ -104,12 +89,12 @@ namespace HandBrake.Interop.HbLib
     public struct hb_rational_t
     {
         /// <summary>
-        /// The num.
+        /// The num. W
         /// </summary>
         public int num;
 
         /// <summary>
-        /// The den.
+        /// The den. H
         /// </summary>
         public int den;
     }

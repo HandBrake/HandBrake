@@ -60,9 +60,9 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int bitrate;
 
-		public float quality;
+        public double quality;
 
-		public float compression_level;
+        public double compression_level;
 
 		/// double
 		public double dynamic_range_compression;

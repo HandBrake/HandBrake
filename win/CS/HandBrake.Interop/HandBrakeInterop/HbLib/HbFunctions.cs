@@ -115,7 +115,7 @@ namespace HandBrake.Interop.HbLib
 		public static extern void hb_set_anamorphic_size(ref hb_job_s job, ref int output_width, ref int output_height, ref int output_par_width, ref int output_par_height);
 
         [DllImport("hb.dll", EntryPoint = "hb_set_anamorphic_size2", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hb_set_anamorphic_size2(ref hb_geometry_s sourceGeometry, ref hb_ui_geometry_s uiGeometry, ref hb_geometry_s result);
+        public static extern void hb_set_anamorphic_size2(ref hb_geometry_s sourceGeometry, ref hb_geometry_settings_s uiGeometry, ref hb_geometry_s result);
         
 
 		/// Return Type: int

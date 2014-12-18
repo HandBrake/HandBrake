@@ -1166,8 +1166,8 @@ namespace HandBrake.Interop
                 {
                     // CFR with "Same as Source". Use the title rate
                     nativeJob.cfr = 1;
-                    nativeJob.vrate = originalTitle.rate;
-                    nativeJob.vrate_base = originalTitle.rate_base;
+                    nativeJob.vrate = originalTitle.vrate.num;
+                    nativeJob.vrate_base = originalTitle.vrate.den;
                 }
                 else
                 {
@@ -1860,8 +1860,8 @@ namespace HandBrake.Interop
             {
                 TitleNumber = title.index,
                 Playlist = title.playlist,
-                Resolution = new Size(title.width, title.height),
-                ParVal = new Size(title.pixel_aspect_width, title.pixel_aspect_height),
+                Resolution = new Size(title.geometry.width, title.geometry.height),
+                ParVal = new Size(title.geometry.par.num, title.geometry.par.den),
                 Duration = Converters.Converters.PtsToTimeSpan(title.duration),
                 DurationPts = title.duration,
                 AutoCropDimensions = new Cropping
@@ -1871,12 +1871,12 @@ namespace HandBrake.Interop
                     Left = title.crop[2],
                     Right = title.crop[3]
                 },
-                AspectRatio = title.aspect,
+                AspectRatio = Math.Round((decimal)title.container_dar.num / title.container_dar.den, 2),
                 AngleCount = title.angle_count,
                 VideoCodecName = title.video_codec_name,
-                Framerate = ((double)title.rate) / title.rate_base,
-                FramerateNumerator = title.rate,
-                FramerateDenominator = title.rate_base,
+                Framerate = ((double)title.vrate.num) / title.vrate.den,
+                FramerateNumerator = title.vrate.num,
+                FramerateDenominator = title.vrate.den,
                 Path = Encoding.UTF8.GetString(title.path).TrimEnd('\0')
             };
 

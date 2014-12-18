@@ -184,19 +184,16 @@ namespace HandBrakeWPF.Helpers
 
             int settingMode = (int)setting + (job.KeepDisplayAspect ? 0x04 : 0);
 
-            hb_ui_geometry_s uiGeometry = new hb_ui_geometry_s
+            hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
                 crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right },
-                dar = new hb_rational_t { den = 0, num = 0 },
-                height = job.Height,
                 itu_par = 0,
                 keep = settingMode,
                 maxWidth = job.MaxWidth,
                 maxHeight = job.MaxHeight,
                 mode = (int)(hb_anamorphic_mode_t)job.AnamorphicMode,
                 modulus = job.Modulus.HasValue ? job.Modulus.Value : 16,
-                par = job.AnamorphicMode != Anamorphic.Custom ? new hb_rational_t { den = title.ParH, num = title.ParW } : new hb_rational_t { den = job.ParH, num = job.ParW },
-                width = job.Width,
+                geometry =  new hb_geometry_s() { height = job.Height, width =  job.Width, par = job.AnamorphicMode != Anamorphic.Custom ? new hb_rational_t { den = title.ParH, num = title.ParW } : new hb_rational_t { den = job.ParH, num = job.ParW }}
             };
 
             hb_geometry_s sourceGeometry = new hb_geometry_s

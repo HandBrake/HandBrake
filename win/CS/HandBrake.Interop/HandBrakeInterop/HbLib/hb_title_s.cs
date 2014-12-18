@@ -69,35 +69,20 @@ namespace HandBrake.Interop.HbLib
 		/// uint64_t->unsigned int
 		public ulong duration;
 
-		/// double
-		public double aspect;
-
-		/// double
-		public double container_aspect;
-
 		public int has_resolution_change;
 
-		/// int
-		public int width;
+	    public hb_geometry_s geometry;
 
-		/// int
-		public int height;
+	    public hb_rational_t dar;
 
-		/// int
-		public int pixel_aspect_width;
-
-		/// int
-		public int pixel_aspect_height;
+	    public hb_rational_t container_dar;
 
 		public int color_prim;
 		public int color_transfer; 
 		public int color_matrix; 
 
 		/// int
-		public int rate;
-
-		/// int
-		public int rate_base;
+		public hb_rational_t vrate;
 
 		/// int[4]
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
@@ -179,7 +164,9 @@ namespace HandBrake.Interop.HbLib
 	{
 		HB_DVD_DEMUXER = 0,
 
-		HB_MPEG_DEMUXER,
+        HB_TS_DEMUXER,
+
+		HB_PS_DEMUXER,
 
 		HB_NULL_DEMUXER,
 	}
