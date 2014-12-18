@@ -124,10 +124,10 @@ void hb_va_close( hb_va_dxva2_t *dxva2 )
  */
 static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const  hb_title_t* fmt )
 {
-    dxva2->width = fmt->width;
-    dxva2->height = fmt->height;
-    dxva2->surface_width = (fmt->width  + 15) & ~15;
-    dxva2->surface_height = (fmt->height + 15) & ~15;
+    dxva2->width = fmt->geometry.width;
+    dxva2->height = fmt->geometry.height;
+    dxva2->surface_width = (fmt->geometry.width  + 15) & ~15;
+    dxva2->surface_height = (fmt->geometry.height + 15) & ~15;
     switch( codec_id )
     {
         case AV_CODEC_ID_H264:
@@ -162,17 +162,17 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
         surface->order = 0;
     }
     hb_log( "dxva2:CreateSurface succeed with %d, fmt (%dx%d) surfaces (%dx%d)", dxva2->surface_count,
-            fmt->width, fmt->height, dxva2->surface_width, dxva2->surface_height );
+            fmt->geometry.width, fmt->geometry.height, dxva2->surface_width, dxva2->surface_height );
     DXVA2_VideoDesc dsc;
     memset( &dsc, 0, sizeof(dsc));
-    dsc.SampleWidth = fmt->width;
-    dsc.SampleHeight = fmt->height;
+    dsc.SampleWidth = fmt->geometry.width;
+    dsc.SampleHeight = fmt->geometry.height;
     dsc.Format = dxva2->render;
 
-    if( fmt->rate> 0 && fmt->rate_base> 0 )
+    if( fmt->vrate.num > 0 && fmt->vrate.den > 0 )
     {
-        dsc.InputSampleFreq.Numerator = fmt->rate;
-        dsc.InputSampleFreq.Denominator = fmt->rate_base;
+        dsc.InputSampleFreq.Numerator = fmt->vrate.num;
+        dsc.InputSampleFreq.Denominator = fmt->vrate.den;
     }
     else
     {
@@ -489,8 +489,8 @@ static int hb_va_setup( hb_va_dxva2_t *dxva2, void **hw, int width, int height )
 
     hb_title_t fmt;
     memset( &fmt, 0, sizeof(fmt));
-    fmt.width = width;
-    fmt.height = height;
+    fmt.geometry.width = width;
+    fmt.geometry.height = height;
 
     if( hb_dx_create_video_decoder( dxva2, dxva2->codec_id, &fmt ) == HB_WORK_ERROR )
         return HB_WORK_ERROR;

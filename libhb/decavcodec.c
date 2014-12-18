@@ -860,7 +860,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         {
             pv->dst_frame = malloc( ww * hh * 3 / 2 );
         }
-        if( hb_va_extract( pv->dxva2, pv->dst_frame, pv->frame, pv->job->geometry.width, pv->job->geometry.height, pv->job->title->crop, pv->opencl_scale, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
+        if( hb_va_extract( pv->dxva2, pv->dst_frame, pv->frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->opencl_scale, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
         {
             hb_log( "hb_va_Extract failed!!!!!!" );
         }
