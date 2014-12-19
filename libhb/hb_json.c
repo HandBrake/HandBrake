@@ -1269,6 +1269,7 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
         av_base64_encode(plane_base64, base64size,
                          image->plane[ii].data, image->plane[ii].size);
 
+        base64size = strlen(plane_base64);
         json_t *plane_dict;
         plane_dict = json_pack_ex(&error, 0,
             "{s:o, s:o, s:o, s:o, s:o, s:o}",
