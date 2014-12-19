@@ -16,14 +16,18 @@ extern "C" {
 
 #include "hb.h"
 
-char     * hb_get_title_set_json(hb_handle_t * h);
-char     * hb_title_to_json(const hb_title_t * title);
-char     * hb_job_init_json(hb_handle_t *h, int title_index);
-char     * hb_job_to_json(const hb_job_t * job);
-hb_job_t * hb_json_to_job(hb_handle_t * h, const char * json_job);
-int        hb_add_json(hb_handle_t *h, const char * json_job);
-char     * hb_set_anamorphic_size_json(const char * json_param);
-char     * hb_get_state_json(hb_handle_t * h);
+char       * hb_get_title_set_json(hb_handle_t * h);
+char       * hb_title_to_json(const hb_title_t * title);
+char       * hb_job_init_json(hb_handle_t *h, int title_index);
+char       * hb_job_to_json(const hb_job_t * job);
+hb_job_t   * hb_json_to_job(hb_handle_t * h, const char * json_job);
+int          hb_add_json(hb_handle_t *h, const char * json_job);
+char       * hb_set_anamorphic_size_json(const char * json_param);
+char       * hb_get_state_json(hb_handle_t * h);
+hb_image_t * hb_json_to_image(char *json_image);
+char       * hb_get_preview_params_json(int title_idx, int preview_idx,
+                            int deinterlace, hb_geometry_settings_t *settings);
+char       * hb_get_preview_json(hb_handle_t * h, const char *json_param);
 
 #ifdef __cplusplus
 }

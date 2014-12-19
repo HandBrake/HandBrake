@@ -1241,15 +1241,19 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
 
     if (json_result < 0)
     {
-        hb_error("json unpack failure: %s", error.text);
+        hb_error("preview params: json unpack failure: %s", error.text);
         return NULL;
     }
 
     image = hb_get_preview2(h, title_idx, preview_idx, &settings, deinterlace);
+    if (image == NULL)
+    {
+        return NULL;
+    }
 
     dict = json_pack_ex(&error, 0,
         "{s:o, s:o, s:o}",
-            "Format",       json_integer(image->width),
+            "Format",       json_integer(image->format),
             "Width",        json_integer(image->width),
             "Height",       json_integer(image->height));
     if (dict == NULL)
@@ -1262,7 +1266,7 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
     for (ii = 0; ii < 4; ii++)
     {
         int base64size = AV_BASE64_SIZE(image->plane[ii].size);
-        if (base64size < 0)
+        if (image->plane[ii].size <= 0 || base64size <= 0)
             continue;
 
         char *plane_base64 = calloc(base64size, 1);
@@ -1294,5 +1298,122 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
     json_decref(dict);
 
     return result;
+}
+
+char* hb_get_preview_params_json(int title_idx, int preview_idx,
+                            int deinterlace, hb_geometry_settings_t *settings)
+{
+    json_error_t error;
+    json_t * dict;
+
+    dict = json_pack_ex(&error, 0,
+        "{"
+        "s:o, s:o, s:o,"
+        "s:{"
+        "   s:{s:o, s:o, s:{s:o, s:o}},"
+        "   s:o, s:o, s:o, s:o, s:o, s:o"
+        "   s:[oooo]"
+        "  }"
+        "}",
+        "Title",                json_integer(title_idx),
+        "Preview",              json_integer(preview_idx),
+        "Deinterlace",          json_boolean(deinterlace),
+        "DestSettings",
+            "Geometry",
+                "Width",        json_integer(settings->geometry.width),
+                "Height",       json_integer(settings->geometry.height),
+                "PAR",
+                    "Num",      json_integer(settings->geometry.par.num),
+                    "Den",      json_integer(settings->geometry.par.den),
+            "AnamorphicMode",   json_integer(settings->mode),
+            "Keep",             json_integer(settings->keep),
+            "ItuPAR",           json_boolean(settings->itu_par),
+            "Modulus",          json_integer(settings->modulus),
+            "MaxWidth",         json_integer(settings->maxWidth),
+            "MaxHeight",        json_integer(settings->maxHeight),
+            "Crop",             json_integer(settings->crop[0]),
+                                json_integer(settings->crop[1]),
+                                json_integer(settings->crop[2]),
+                                json_integer(settings->crop[3])
+    );
+    if (dict == NULL)
+    {
+        hb_error("hb_get_preview_params_json: pack failure: %s", error.text);
+        return NULL;
+    }
+
+    char *result = json_dumps(dict, JSON_INDENT(4)|JSON_PRESERVE_ORDER);
+    json_decref(dict);
+
+    return result;
+}
+
+hb_image_t* hb_json_to_image(char *json_image)
+{
+    int json_result;
+    json_error_t error;
+    json_t * dict;
+    int pix_fmt, width, height;
+    dict = json_loads(json_image, 0, NULL);
+    json_result = json_unpack_ex(dict, &error, 0,
+        "{"
+        // Format, Width, Height
+        "s:i, s:i, s:i,"
+        "}",
+        "Format",                   unpack_i(&pix_fmt),
+        "Width",                    unpack_i(&width),
+        "Height",                   unpack_b(&height)
+    );
+    if (json_result < 0)
+    {
+        hb_error("image: json unpack failure: %s", error.text);
+        json_decref(dict);
+        return NULL;
+    }
+
+    hb_image_t *image = hb_image_init(pix_fmt, width, height);
+    if (image == NULL)
+    {
+        json_decref(dict);
+        return NULL;
+    }
+
+    json_t * planes = NULL;
+    json_result = json_unpack_ex(dict, &error, 0,
+                                 "{s:o}", "Planes", unpack_o(&planes));
+    if (json_result < 0)
+    {
+        hb_error("image::planes: json unpack failure: %s", error.text);
+        json_decref(dict);
+        return image;
+    }
+    if (json_is_array(planes))
+    {
+        int ii;
+        json_t *plane_dict;
+        json_array_foreach(planes, ii, plane_dict)
+        {
+            char *data = NULL;
+            int size;
+            json_result = json_unpack_ex(plane_dict, &error, 0,
+                                         "{s:i, s:s}",
+                                         "Size", unpack_i(&size),
+                                         "Data", unpack_s(&data));
+            if (json_result < 0)
+            {
+                hb_error("image::plane::data: json unpack failure: %s", error.text);
+                json_decref(dict);
+                return image;
+            }
+            if (image->plane[ii].size > 0 && data != NULL)
+            {
+                av_base64_decode(image->plane[ii].data, data,
+                                 image->plane[ii].size);
+            }
+        }
+    }
+    json_decref(dict);
+
+    return image;
 }
 
