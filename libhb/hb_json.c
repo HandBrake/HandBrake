@@ -9,6 +9,7 @@
 
 #include <jansson.h>
 #include "hb_json.h"
+#include "libavutil/base64.h"
 
 /**
  * Convert an hb_state_t to a jansson dict
@@ -1060,6 +1061,7 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
             }
         }
     }
+    json_decref(dict);
 
     return job;
 }
@@ -1126,14 +1128,13 @@ char* hb_set_anamorphic_size_json(const char * json_param)
     "s:{s:i, s:i, s:{s:i, s:i}},"
     // DestSettings
     "s:{"
-    // {
     //   Geometry {Width, Height, PAR {Num, Den}},
     "s:{s:i, s:i, s:{s:i, s:i}},"
     //   AnamorphicMode, Keep, ItuPAR, Modulus, MaxWidth, MaxHeight,
     "s:i, s?i, s?b, s:i, s:i, s:i,"
     //   Crop [Top, Bottom, Left, Right]
     "s?[iiii]"
-    // }
+    "  }"
     "}",
     "SourceGeometry",
         "Width",                unpack_i(&src.width),
@@ -1159,6 +1160,8 @@ char* hb_set_anamorphic_size_json(const char * json_param)
                                 unpack_i(&ui_geo.crop[2]),
                                 unpack_i(&ui_geo.crop[3])
     );
+    json_decref(dict);
+
     if (json_result < 0)
     {
         hb_error("json unpack failure: %s", error.text);
@@ -1184,3 +1187,110 @@ char* hb_set_anamorphic_size_json(const char * json_param)
 
     return result;
 }
+
+char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
+{
+    hb_image_t *image;
+    int ii, title_idx, preview_idx, deinterlace = 0;
+
+    int json_result;
+    json_error_t error;
+    json_t * dict;
+    hb_geometry_settings_t settings;
+
+    // Clear dest geometry since some fields are optional.
+    memset(&settings, 0, sizeof(settings));
+
+    dict = json_loads(json_param, 0, NULL);
+    json_result = json_unpack_ex(dict, &error, 0,
+    "{"
+    // Title, Preview, Deinterlace
+    "s:i, s:i, s?b,"
+    // DestSettings
+    "s:{"
+    //   Geometry {Width, Height, PAR {Num, Den}},
+    "s:{s:i, s:i, s:{s:i, s:i}},"
+    //   AnamorphicMode, Keep, ItuPAR, Modulus, MaxWidth, MaxHeight,
+    "s:i, s?i, s?b, s:i, s:i, s:i,"
+    //   Crop [Top, Bottom, Left, Right]
+    "s?[iiii]"
+    "  }"
+    "}",
+    "Title",                    unpack_i(&title_idx),
+    "Preview",                  unpack_i(&preview_idx),
+    "Deinterlace",              unpack_b(&deinterlace),
+    "DestSettings",
+        "Geometry",
+            "Width",            unpack_i(&settings.geometry.width),
+            "Height",           unpack_i(&settings.geometry.height),
+            "PAR",
+                "Num",          unpack_i(&settings.geometry.par.num),
+                "Den",          unpack_i(&settings.geometry.par.den),
+        "AnamorphicMode",       unpack_i(&settings.mode),
+        "Keep",                 unpack_i(&settings.keep),
+        "ItuPAR",               unpack_b(&settings.itu_par),
+        "Modulus",              unpack_i(&settings.modulus),
+        "MaxWidth",             unpack_i(&settings.maxWidth),
+        "MaxHeight",            unpack_i(&settings.maxHeight),
+        "Crop",                 unpack_i(&settings.crop[0]),
+                                unpack_i(&settings.crop[1]),
+                                unpack_i(&settings.crop[2]),
+                                unpack_i(&settings.crop[3])
+    );
+    json_decref(dict);
+
+    if (json_result < 0)
+    {
+        hb_error("json unpack failure: %s", error.text);
+        return NULL;
+    }
+
+    image = hb_get_preview2(h, title_idx, preview_idx, &settings, deinterlace);
+
+    dict = json_pack_ex(&error, 0,
+        "{s:o, s:o, s:o}",
+            "Format",       json_integer(image->width),
+            "Width",        json_integer(image->width),
+            "Height",       json_integer(image->height));
+    if (dict == NULL)
+    {
+        hb_error("hb_get_preview_json: pack failure: %s", error.text);
+        return NULL;
+    }
+
+    json_t * planes = json_array();
+    for (ii = 0; ii < 4; ii++)
+    {
+        int base64size = AV_BASE64_SIZE(image->plane[ii].size);
+        if (base64size < 0)
+            continue;
+
+        char *plane_base64 = calloc(base64size, 1);
+        av_base64_encode(plane_base64, base64size,
+                         image->plane[ii].data, image->plane[ii].size);
+
+        json_t *plane_dict;
+        plane_dict = json_pack_ex(&error, 0,
+            "{s:o, s:o, s:o, s:o, s:o, s:o}",
+            "Width",        json_integer(image->plane[ii].width),
+            "Height",       json_integer(image->plane[ii].height),
+            "Stride",       json_integer(image->plane[ii].stride),
+            "HeightStride", json_integer(image->plane[ii].height_stride),
+            "Size",         json_integer(base64size),
+            "Data",         json_string(plane_base64)
+        );
+        if (plane_dict == NULL)
+        {
+            hb_error("plane_dict: json pack failure: %s", error.text);
+            return NULL;
+        }
+        json_array_append_new(planes, plane_dict);
+    }
+    json_object_set_new(dict, "Planes", planes);
+
+    char *result = json_dumps(dict, JSON_INDENT(4)|JSON_PRESERVE_ORDER);
+    json_decref(dict);
+
+    return result;
+}
+
