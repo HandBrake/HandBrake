@@ -725,9 +725,9 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
     preview_buf = hb_frame_buffer_init(AV_PIX_FMT_RGB32, width, height);
+    // fill in AVPicture
     hb_avpicture_fill( &pic_preview, preview_buf );
 
-    // Allocate the AVPicture frames and fill in
 
     memset( filename, 0, 1024 );
 
@@ -736,13 +736,13 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     if (title == NULL)
     {
         hb_error( "hb_get_preview2: invalid title (%d)", title_idx );
-        return NULL;
+        goto fail;
     }
 
     in_buf = hb_read_preview( h, title, picture );
     if ( in_buf == NULL )
     {
-        return NULL;
+        goto fail;
     }
 
     hb_avpicture_fill( &pic_in, in_buf );
@@ -787,6 +787,11 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     hb_buffer_close( &deint_buf );
     hb_buffer_close( &preview_buf );
 
+    return image;
+
+fail:
+
+    image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
     return image;
 }
 
