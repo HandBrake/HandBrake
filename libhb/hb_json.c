@@ -1287,6 +1287,7 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
         json_array_append_new(planes, plane_dict);
     }
     json_object_set_new(dict, "Planes", planes);
+    hb_image_close(&image);
 
     char *result = json_dumps(dict, JSON_INDENT(4)|JSON_PRESERVE_ORDER);
     json_decref(dict);
