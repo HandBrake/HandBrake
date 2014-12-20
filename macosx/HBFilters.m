@@ -6,6 +6,8 @@
 
 #import "HBFilters.h"
 
+NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
+
 @implementation HBGenericDictionaryTransformer
 
 + (Class)transformedValueClass
@@ -70,6 +72,12 @@ static NSDictionary *_denoiseTypesDict;
 static NSDictionary *_denoisePresetsDict;
 static NSDictionary *_nlmeansTunesDict;
 
+@interface HBFilters ()
+
+@property (nonatomic, readwrite, getter=areNotificationsEnabled) BOOL notificationsEnabled;
+
+@end
+
 @implementation HBFilters
 
 + (void)initialize
@@ -105,9 +113,151 @@ static NSDictionary *_nlmeansTunesDict;
         _denoiseCustomString = @"";
         _denoisePreset = @"medium";
         _denoiseTune = @"none";
+
+        _notificationsEnabled = YES;
     }
     return self;
 }
+
+- (void)postChangedNotification
+{
+    if (self.areNotificationsEnabled)
+    {
+        [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:HBFiltersChangedNotification
+                                                                                              object:self
+                                                                                            userInfo:nil]];
+    }
+}
+
+#pragma mark - Setters
+
+- (void)setDetelecine:(NSInteger)detelecine
+{
+    _detelecine = detelecine;
+    [self postChangedNotification];
+}
+
+// Override setter to avoid nil values.
+- (void)setDetelecineCustomString:(NSString *)detelecineCustomString
+{
+    [_detelecineCustomString autorelease];
+
+    if (detelecineCustomString)
+    {
+        _detelecineCustomString = [detelecineCustomString copy];
+    }
+    else
+    {
+        _detelecineCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setDeinterlace:(NSInteger)deinterlace
+{
+    _deinterlace = deinterlace;
+    [self postChangedNotification];
+}
+
+- (void)setDeinterlaceCustomString:(NSString *)deinterlaceCustomString
+{
+    [_deinterlaceCustomString autorelease];
+
+    if (deinterlaceCustomString)
+    {
+        _deinterlaceCustomString = [deinterlaceCustomString copy];
+    }
+    else
+    {
+        _deinterlaceCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setDecomb:(NSInteger)decomb
+{
+    _decomb = decomb;
+    [self postChangedNotification];
+}
+
+- (void)setDecombCustomString:(NSString *)decombCustomString
+{
+    [_decombCustomString autorelease];
+
+    if (decombCustomString)
+    {
+        _decombCustomString = [decombCustomString copy];
+    }
+    else
+    {
+        _decombCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setDenoise:(NSString *)denoise
+{
+    [_denoise autorelease];
+    _denoise = [denoise copy];
+
+    [self postChangedNotification];
+}
+
+- (void)setDenoisePreset:(NSString *)denoisePreset
+{
+    [_denoisePreset autorelease];
+    _denoisePreset = [denoisePreset copy];
+
+    [self postChangedNotification];
+}
+
+
+- (void)setDenoiseTune:(NSString *)denoiseTune
+{
+    [_denoiseTune autorelease];
+    _denoiseTune = [denoiseTune copy];
+
+    [self postChangedNotification];
+}
+
+- (void)setDenoiseCustomString:(NSString *)denoiseCustomString
+{
+    [_denoiseCustomString autorelease];
+
+    if (denoiseCustomString)
+    {
+        _denoiseCustomString = [denoiseCustomString copy];
+    }
+    else
+    {
+        _denoiseCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setDeblock:(NSInteger)deblock
+{
+    _deblock = deblock;
+    [self postChangedNotification];
+}
+
+- (void)setGrayscale:(BOOL)grayscale
+{
+    _grayscale = grayscale;
+    [self postChangedNotification];
+}
+
+- (void)setUseDecomb:(BOOL)useDecomb
+{
+    _useDecomb = useDecomb;
+    [self postChangedNotification];
+}
+
+#pragma mark - Presets and queue
 
 - (void)prepareFiltersForPreset:(NSMutableDictionary *)preset
 {
@@ -133,6 +283,8 @@ static NSDictionary *_nlmeansTunesDict;
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
+    self.notificationsEnabled = NO;
+
     /* If the preset has an objectForKey:@"UsesPictureFilters", and handle the filters here */
     if (preset[@"UsesPictureFilters"] && [preset[@"UsesPictureFilters"]  intValue] > 0)
     {
@@ -242,6 +394,8 @@ static NSDictionary *_nlmeansTunesDict;
 
         self.grayscale = [preset[@"VideoGrayScale"] intValue];
     }
+
+    self.notificationsEnabled = YES;
 }
 
 - (NSString *)summary
@@ -358,49 +512,6 @@ static NSDictionary *_nlmeansTunesDict;
     }
 
     return [NSString stringWithString:summary];
-}
-
-// Override setter to avoid nil values.
-- (void)setDetelecineCustomString:(NSString *)detelecineCustomString
-{
-    [_detelecineCustomString autorelease];
-
-    if (detelecineCustomString)
-    {
-        _detelecineCustomString = [detelecineCustomString copy];
-    }
-    else
-    {
-        _detelecineCustomString = @"";
-    }
-}
-
-- (void)setDeinterlaceCustomString:(NSString *)deinterlaceCustomString
-{
-    [_deinterlaceCustomString autorelease];
-
-    if (deinterlaceCustomString)
-    {
-        _deinterlaceCustomString = [deinterlaceCustomString copy];
-    }
-    else
-    {
-        _deinterlaceCustomString = @"";
-    }
-}
-
-- (void)setDenoiseCustomString:(NSString *)denoiseCustomString
-{
-    [_denoiseCustomString autorelease];
-
-    if (denoiseCustomString)
-    {
-        _denoiseCustomString = [denoiseCustomString copy];
-    }
-    else
-    {
-        _denoiseCustomString = @"";
-    }
 }
 
 #pragma mark - Valid values
