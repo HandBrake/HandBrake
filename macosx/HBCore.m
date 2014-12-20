@@ -134,20 +134,20 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
 
-        [HBUtilities writeToActivityLog:"%@ trying to open a physical dvd at: %s", self.name.UTF8String, url.path.UTF8String];
+        [HBUtilities writeToActivityLog:"%s trying to open a physical dvd at: %s", self.name.UTF8String, url.path.UTF8String];
 
         // Notify the user that we don't support removal of copy protection.
         void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
         if (dvdcss)
         {
             // libdvdcss was found so all is well
-            [HBUtilities writeToActivityLog:"%@ libdvdcss.2.dylib found for decrypting physical dvd", self.name.UTF8String];
+            [HBUtilities writeToActivityLog:"%s libdvdcss.2.dylib found for decrypting physical dvd", self.name.UTF8String];
             dlclose(dvdcss);
         }
         else
         {
             // compatible libdvdcss not found
-            [HBUtilities writeToActivityLog:"%@, libdvdcss.2.dylib not found for decrypting physical dvd", self.name.UTF8String];
+            [HBUtilities writeToActivityLog:"%s, libdvdcss.2.dylib not found for decrypting physical dvd", self.name.UTF8String];
 
             if (error) {
                 *error = [NSError errorWithDomain:@"HBErrorDomain"
