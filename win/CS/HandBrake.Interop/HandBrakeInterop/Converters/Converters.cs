@@ -17,7 +17,7 @@ namespace HandBrake.Interop.Converters
     using HandBrake.Interop.Helpers;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.SourceData;
+    using HandBrake.Interop.Model.Scan;
 
     /// <summary>
 	/// Converters for various encoding values.

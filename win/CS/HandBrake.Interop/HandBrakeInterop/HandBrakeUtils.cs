@@ -17,7 +17,7 @@ namespace HandBrake.Interop
     using HandBrake.Interop.HbLib;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.SourceData;
+    using HandBrake.Interop.Model.Scan;
 
     /// <summary>
     /// HandBrake Interop Utilities

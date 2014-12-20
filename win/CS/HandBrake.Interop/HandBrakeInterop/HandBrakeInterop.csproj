@@ -223,14 +223,14 @@
     <Compile Include="Helpers\NativeList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
-    <Compile Include="SourceData\AudioCodec.cs" />
-    <Compile Include="SourceData\AudioTrack.cs" />
-    <Compile Include="SourceData\Chapter.cs" />
-    <Compile Include="SourceData\InputType.cs" />
-    <Compile Include="SourceData\Subtitle.cs" />
-    <Compile Include="SourceData\SubtitleSource.cs" />
-    <Compile Include="SourceData\SubtitleType.cs" />
-    <Compile Include="SourceData\Title.cs" />
+    <Compile Include="Model\Scan\AudioCodec.cs" />
+    <Compile Include="Model\Scan\AudioTrack.cs" />
+    <Compile Include="Model\Scan\Chapter.cs" />
+    <Compile Include="Model\Scan\InputType.cs" />
+    <Compile Include="Model\Scan\Subtitle.cs" />
+    <Compile Include="Model\Scan\SubtitleSource.cs" />
+    <Compile Include="Model\Scan\SubtitleType.cs" />
+    <Compile Include="Model\Scan\Title.cs" />
     <Compile Include="Helpers\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +249,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SourceData\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

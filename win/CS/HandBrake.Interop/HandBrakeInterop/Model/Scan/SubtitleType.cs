@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.SourceData
+namespace HandBrake.Interop.Model.Scan
 {
     /// <summary>
     /// The subtitle type.

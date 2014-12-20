@@ -1,28 +1,26 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputType.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="SubtitleSource.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the InputType type.
+//   Defines the SubtitleSource type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.SourceData
+namespace HandBrake.Interop.Model.Scan
 {
-    using System.ComponentModel.DataAnnotations;
-
     /// <summary>
-    /// The input type.
+    /// The subtitle source.
     /// </summary>
-    public enum InputType
+    public enum SubtitleSource
 	{
-		[Display(Name = "File")]
-		Stream,
-
-		[Display(Name = "DVD")]
-		Dvd,
-
-		[Display(Name = "Blu-ray")]
-		Bluray
+		VobSub,
+		SRT,
+		CC608,
+		CC708,
+		UTF8,
+		TX3G,
+		SSA,
+		PGS
 	}
 }

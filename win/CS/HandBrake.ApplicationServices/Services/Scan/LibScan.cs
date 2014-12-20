@@ -24,7 +24,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
-    using HandBrake.Interop.SourceData;
+    using HandBrake.Interop.Model.Scan;
 
     using Chapter = HandBrake.ApplicationServices.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.Interop.EventArgs.ScanProgressEventArgs;
@@ -466,10 +466,10 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// <returns>
         /// The convert titles.
         /// </returns>
-        private static List<Title> ConvertTitles(IEnumerable<Interop.SourceData.Title> titles, int featureTitle)
+        private static List<Title> ConvertTitles(IEnumerable<Interop.Model.Scan.Title> titles, int featureTitle)
         {
             List<Title> titleList = new List<Title>();
-            foreach (Interop.SourceData.Title title in titles)
+            foreach (Interop.Model.Scan.Title title in titles)
             {
                 Title converted = new Title
                     {
@@ -486,45 +486,45 @@ namespace HandBrake.ApplicationServices.Services.Scan
                         Playlist = title.InputType == InputType.Bluray ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null
                     };
 
-                foreach (Interop.SourceData.Chapter chapter in title.Chapters)
+                foreach (Interop.Model.Scan.Chapter chapter in title.Chapters)
                 {
                     string chapterName = !string.IsNullOrEmpty(chapter.Name) ? chapter.Name : string.Empty;
                     converted.Chapters.Add(new Chapter(chapter.ChapterNumber, chapterName, chapter.Duration));
                 }
 
-                foreach (Interop.SourceData.AudioTrack track in title.AudioTracks)
+                foreach (AudioTrack track in title.AudioTracks)
                 {
                     converted.AudioTracks.Add(new Audio(track.TrackNumber, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.Bitrate));
                 }
 
-                foreach (Interop.SourceData.Subtitle track in title.Subtitles)
+                foreach (Interop.Model.Scan.Subtitle track in title.Subtitles)
                 {
                     SubtitleType convertedType = new SubtitleType();
 
                     switch (track.SubtitleSource)
                     {
-                        case Interop.SourceData.SubtitleSource.VobSub:
+                        case SubtitleSource.VobSub:
                             convertedType = SubtitleType.VobSub;
                             break;
-                        case Interop.SourceData.SubtitleSource.UTF8:
+                        case SubtitleSource.UTF8:
                             convertedType = SubtitleType.UTF8Sub;
                             break;
-                        case Interop.SourceData.SubtitleSource.TX3G:
+                        case SubtitleSource.TX3G:
                             convertedType = SubtitleType.TX3G;
                             break;
-                        case Interop.SourceData.SubtitleSource.SSA:
+                        case SubtitleSource.SSA:
                             convertedType = SubtitleType.SSA;
                             break;
-                        case Interop.SourceData.SubtitleSource.SRT:
+                        case SubtitleSource.SRT:
                             convertedType = SubtitleType.SRT;
                             break;
-                        case Interop.SourceData.SubtitleSource.CC608:
+                        case SubtitleSource.CC608:
                             convertedType = SubtitleType.CC;
                             break;
-                        case Interop.SourceData.SubtitleSource.CC708:
+                        case SubtitleSource.CC708:
                             convertedType = SubtitleType.CC;
                             break;
-                        case Interop.SourceData.SubtitleSource.PGS:
+                        case SubtitleSource.PGS:
                             convertedType = SubtitleType.PGS;
                             break;
                     }

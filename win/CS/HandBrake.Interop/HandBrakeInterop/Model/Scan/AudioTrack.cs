@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.SourceData
+namespace HandBrake.Interop.Model.Scan
 {
-	/// <summary>
+    /// <summary>
 	/// An object represending an AudioTrack associated with a Title, in a DVD
 	/// </summary>
 	public class AudioTrack

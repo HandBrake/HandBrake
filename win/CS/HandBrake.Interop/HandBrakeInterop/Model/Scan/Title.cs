@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.SourceData
+namespace HandBrake.Interop.Model.Scan
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 
-	using HandBrake.Interop.Model;
+    using HandBrake.Interop.Model;
 
-	/// <summary>
+    /// <summary>
 	/// An object that represents a single Title of a DVD
 	/// </summary>
 	public class Title

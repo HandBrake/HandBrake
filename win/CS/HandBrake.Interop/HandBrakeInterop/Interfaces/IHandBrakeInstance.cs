@@ -15,7 +15,7 @@ namespace HandBrake.Interop.Interfaces
 
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Model;
-    using HandBrake.Interop.SourceData;
+    using HandBrake.Interop.Model.Scan;
 
     /// <summary>
     /// The Interface for HandBrakeInstance

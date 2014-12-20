@@ -26,7 +26,7 @@ namespace HandBrake.Interop
     using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.SourceData;
+    using HandBrake.Interop.Model.Scan;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.

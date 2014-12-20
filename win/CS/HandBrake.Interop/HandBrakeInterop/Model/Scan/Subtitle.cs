@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.SourceData
+namespace HandBrake.Interop.Model.Scan
 {
-	using HandBrake.Interop.HbLib;
+    using HandBrake.Interop.HbLib;
 
-	/// <summary>
+    /// <summary>
 	/// An object that represents a subtitle associated with a Title, in a DVD
 	/// </summary>
 	public class Subtitle
