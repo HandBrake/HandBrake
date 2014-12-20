@@ -12,21 +12,30 @@ namespace HandBrake.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing;
+    using System.Drawing.Imaging;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
-    using System.Windows.Media;
+    using System.Timers;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.HbLib;
     using HandBrake.Interop.Helpers;
     using HandBrake.Interop.Interfaces;
+    using HandBrake.Interop.Json.Factories;
+    using HandBrake.Interop.Json.Scan;
+    using HandBrake.Interop.Json.State;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Scan;
+
+    using Newtonsoft.Json;
+
+    using Size = HandBrake.Interop.Model.Size;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.
@@ -66,12 +75,12 @@ namespace HandBrake.Interop
         /// <summary>
         /// The timer to poll for scan status.
         /// </summary>
-        private System.Timers.Timer scanPollTimer;
+        private Timer scanPollTimer;
 
         /// <summary>
         /// The timer to poll for encode status.
         /// </summary>
-        private System.Timers.Timer encodePollTimer;
+        private Timer encodePollTimer;
 
         /// <summary>
         /// The list of original titles in native structure form.
@@ -107,6 +116,11 @@ namespace HandBrake.Interop
         /// A value indicating whether this object has been disposed or not.
         /// </summary>
         private bool disposed;
+
+        /// <summary>
+        /// The last scan.
+        /// </summary>
+        private JsonScanObject lastScan;
 
         /// <summary>
         /// Finalizes an instance of the HandBrakeInstance class.
@@ -251,7 +265,7 @@ namespace HandBrake.Interop
             HBFunctions.hb_scan(this.hbHandle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
 
-            this.scanPollTimer = new System.Timers.Timer();
+            this.scanPollTimer = new Timer();
             this.scanPollTimer.Interval = ScanPollIntervalMs;
 
             // Lambda notation used to make sure we can view any JIT exceptions the method throws
@@ -306,8 +320,8 @@ namespace HandBrake.Interop
             // We've copied the data out of unmanaged memory. Clean up that memory now.
             InteropUtilities.FreeMemory(allocatedMemory);
 
-            var bitmap = new System.Drawing.Bitmap(outputWidth, outputHeight);
-            System.Drawing.Imaging.BitmapData bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, outputWidth, outputHeight), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            var bitmap = new Bitmap(outputWidth, outputHeight);
+            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, outputWidth, outputHeight), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
 
             IntPtr ptr = bitmapData.Scan0;
 
@@ -323,7 +337,7 @@ namespace HandBrake.Interop
             {
                 try
                 {
-                    bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
+                    bitmap.Save(memoryStream, ImageFormat.Bmp);
                 }
                 finally
                 {
@@ -575,7 +589,7 @@ namespace HandBrake.Interop
             // Should be safe to clean up the job we started with; a copy is in the queue now.
             InteropUtilities.CloseJob(nativeJobPtr);
 
-            this.encodePollTimer = new System.Timers.Timer();
+            this.encodePollTimer = new Timer();
             this.encodePollTimer.Interval = EncodePollIntervalMs;
 
             this.encodePollTimer.Elapsed += (o, e) =>
@@ -803,46 +817,49 @@ namespace HandBrake.Interop
         /// </summary>
         private void PollScanProgress()
         {
-            var state = new hb_state_s();
-            HBFunctions.hb_get_state(this.hbHandle, ref state);
+            IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
+            string statusJson = Marshal.PtrToStringAnsi(json);
+            JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
-            if (state.state == NativeConstants.HB_STATE_SCANNING)
+            if (state.State == NativeConstants.HB_STATE_SCANNING)
             {
                 if (this.ScanProgress != null)
                 {
-                    hb_state_scanning_anon scanningState = state.param.scanning;
-
                     this.ScanProgress(this, new ScanProgressEventArgs
-                        {
-                            Progress = scanningState.progress,
-                            CurrentPreview = scanningState.preview_cur,
-                            Previews = scanningState.preview_count,
-                            CurrentTitle = scanningState.title_cur,
-                            Titles = scanningState.title_count
-                        });
+                    {
+                        Progress = state.Scanning.Progress,
+                        CurrentPreview = state.Scanning.Preview,
+                        Previews = state.Scanning.PreviewCount,
+                        CurrentTitle = state.Scanning.Title,
+                        Titles = state.Scanning.TitleCount
+                    });
                 }
             }
-            else if (state.state == NativeConstants.HB_STATE_SCANDONE)
+            else if (state.State == NativeConstants.HB_STATE_SCANDONE)
             {
                 this.titles = new List<Title>();
 
                 IntPtr titleSetPtr = HBFunctions.hb_get_title_set(this.hbHandle);
+                var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
+                string scanJson = Marshal.PtrToStringAnsi(jsonMsg);
+                JsonScanObject scanObject = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
+                lastScan = scanObject;
+
+                foreach (Title title in ScanFactory.CreateTitleSet(scanObject))
+                {
+                    // Convert the Path to UTF-8.
+                    byte[] bytes = Encoding.Default.GetBytes(title.Path);
+                    string utf8Str = Encoding.UTF8.GetString(bytes);
+                    title.Path = utf8Str;
+
+                    // Set the Main Title.
+                    this.featureTitle = title.IsMainFeature ? title.TitleNumber : 0;
+
+                    this.titles.Add(title);
+                }
+
                 hb_title_set_s titleSet = InteropUtilities.ToStructureFromPtr<hb_title_set_s>(titleSetPtr);
                 this.originalTitles = titleSet.list_title.ToListFromHandBrakeList<hb_title_s>();
-
-                foreach (hb_title_s title in this.originalTitles)
-                {
-                    this.titles.Add(this.ConvertTitle(title));
-                }
-
-                if (this.originalTitles.Count > 0)
-                {
-                    this.featureTitle = titleSet.feature;
-                }
-                else
-                {
-                    this.featureTitle = 0;
-                }
 
                 this.scanPollTimer.Stop();
 
@@ -1455,7 +1472,7 @@ namespace HandBrake.Interop
                             int subtitleAddSucceded = HBFunctions.hb_subtitle_add(ref nativeJob, ref subtitleConfig, sourceSubtitle.TrackNumber - 1);
                             if (subtitleAddSucceded == 0)
                             {
-                                System.Diagnostics.Debug.WriteLine("Subtitle add failed");
+                                Debug.WriteLine("Subtitle add failed");
                             }
                         }
                     }
@@ -1476,7 +1493,7 @@ namespace HandBrake.Interop
                         int srtAddSucceded = HBFunctions.hb_srt_add(ref nativeJob, ref subtitleConfig, srtSubtitle.LanguageCode);
                         if (srtAddSucceded == 0)
                         {
-                            System.Diagnostics.Debug.WriteLine("SRT add failed");
+                            Debug.WriteLine("SRT add failed");
                         }
                     }
                 }
@@ -1847,147 +1864,6 @@ namespace HandBrake.Interop
 	        }
 
             return nativeAudio;
-        }
-
-        /// <summary>
-        /// Converts a native title to a Title object.
-        /// </summary>
-        /// <param name="title">The native title structure.</param>
-        /// <returns>The managed Title object.</returns>
-        private Title ConvertTitle(hb_title_s title)
-        {
-            var newTitle = new Title
-            {
-                TitleNumber = title.index,
-                Playlist = title.playlist,
-                Resolution = new Size(title.geometry.width, title.geometry.height),
-                ParVal = new Size(title.geometry.par.num, title.geometry.par.den),
-                Duration = Converters.Converters.PtsToTimeSpan(title.duration),
-                DurationPts = title.duration,
-                AutoCropDimensions = new Cropping
-                {
-                    Top = title.crop[0],
-                    Bottom = title.crop[1],
-                    Left = title.crop[2],
-                    Right = title.crop[3]
-                },
-                AspectRatio =   title.container_dar.den != 0 ? Math.Round((decimal)title.container_dar.num / title.container_dar.den, 2) : 1.0m, // TODO FIx
-                AngleCount = title.angle_count,
-                VideoCodecName = title.video_codec_name,
-                Framerate = ((double)title.vrate.num) / title.vrate.den,
-                FramerateNumerator = title.vrate.num,
-                FramerateDenominator = title.vrate.den,
-                Path = Encoding.UTF8.GetString(title.path).TrimEnd('\0')
-            };
-
-            switch (title.type)
-            {
-                case hb_title_type_anon.HB_STREAM_TYPE:
-                    newTitle.InputType = InputType.Stream;
-                    break;
-                case hb_title_type_anon.HB_DVD_TYPE:
-                    newTitle.InputType = InputType.Dvd;
-                    break;
-                case hb_title_type_anon.HB_BD_TYPE:
-                    newTitle.InputType = InputType.Bluray;
-                    break;
-            }
-
-            int currentSubtitleTrack = 1;
-            List<hb_subtitle_s> subtitleList = title.list_subtitle.ToListFromHandBrakeList<hb_subtitle_s>();
-            foreach (hb_subtitle_s subtitle in subtitleList)
-            {
-                var newSubtitle = new Subtitle
-                {
-                    TrackNumber = currentSubtitleTrack,
-                    Language = subtitle.lang,
-                    LanguageCode = subtitle.iso639_2
-                };
-
-                if (subtitle.format == hb_subtitle_s_subtype.PICTURESUB)
-                {
-                    newSubtitle.SubtitleType = SubtitleType.Picture;
-                }
-                else if (subtitle.format == hb_subtitle_s_subtype.TEXTSUB)
-                {
-                    newSubtitle.SubtitleType = SubtitleType.Text;
-                }
-
-                newSubtitle.SubtitleSourceInt = (int)subtitle.source;
-
-                switch (subtitle.source)
-                {
-                    case hb_subtitle_s_subsource.CC608SUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.CC608;
-                        break;
-                    case hb_subtitle_s_subsource.CC708SUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.CC708;
-                        break;
-                    case hb_subtitle_s_subsource.SRTSUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.SRT;
-                        break;
-                    case hb_subtitle_s_subsource.SSASUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.SSA;
-                        break;
-                    case hb_subtitle_s_subsource.TX3GSUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.TX3G;
-                        break;
-                    case hb_subtitle_s_subsource.UTF8SUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.UTF8;
-                        break;
-                    case hb_subtitle_s_subsource.VOBSUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.VobSub;
-                        break;
-                    case hb_subtitle_s_subsource.PGSSUB:
-                        newSubtitle.SubtitleSource = SubtitleSource.PGS;
-                        break;
-                    default:
-                        break;
-                }
-
-                newTitle.Subtitles.Add(newSubtitle);
-
-                currentSubtitleTrack++;
-            }
-
-            int currentAudioTrack = 1;
-            List<hb_audio_s> audioList = title.list_audio.ToListFromHandBrakeList<hb_audio_s>();
-            foreach (hb_audio_s audio in audioList)
-            {
-                var newAudio = new AudioTrack
-                {
-                    TrackNumber = currentAudioTrack,
-                    Codec = Converters.Converters.NativeToAudioCodec(audio.config.input.codec),
-					CodecParam = audio.config.input.codec_param,
-                    CodecId = audio.config.input.codec,
-                    Language = audio.config.lang.simple,
-                    LanguageCode = audio.config.lang.iso639_2,
-                    Description = audio.config.lang.description,
-                    ChannelLayout = audio.config.input.channel_layout,
-                    SampleRate = audio.config.input.samplerate,
-                    Bitrate = audio.config.input.bitrate
-                };
-
-                newTitle.AudioTracks.Add(newAudio);
-
-                currentAudioTrack++;
-            }
-
-            List<hb_chapter_s> chapterList = title.list_chapter.ToListFromHandBrakeList<hb_chapter_s>();
-            foreach (hb_chapter_s chapter in chapterList)
-            {
-                var newChapter = new Chapter
-                {
-                    Name = chapter.title,
-                    ChapterNumber = chapter.index,
-                    Duration = Converters.Converters.PtsToTimeSpan(chapter.duration),
-                    DurationPts = chapter.duration
-                };
-
-                newTitle.Chapters.Add(newChapter);
-            }
-
-            return newTitle;
         }
 
         /// <summary>

@@ -478,5 +478,40 @@ namespace HandBrake.Interop.HbLib
 		
 		[DllImport("hb.dll", EntryPoint = "hb_qsv_info_init", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_qsv_info_init();
+
+
+        /* JSON API */
+
+        // char     * hb_get_title_set_json(hb_handle_t * h);
+        [DllImport("hb.dll", EntryPoint = "hb_get_title_set_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_get_title_set_json(IntPtr hbHandle);
+
+        // char     * hb_title_to_json(const hb_title_t * title);
+        [DllImport("hb.dll", EntryPoint = "hb_title_to_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_title_to_json(ref hb_title_s title);
+
+        // char     * hb_job_init_json(hb_handle_t *h, int title_index);
+        [DllImport("hb.dll", EntryPoint = "hb_job_init_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_job_init_json(IntPtr hbHandle, int title_index);
+
+        // char     * hb_job_to_json(const hb_job_t * job);
+        [DllImport("hb.dll", EntryPoint = "hb_job_to_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_job_to_json(IntPtr hb_job_t);
+
+        // hb_job_t * hb_json_to_job(hb_handle_t * h, const char * json_job);
+        [DllImport("hb.dll", EntryPoint = "hb_json_to_job", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_json_to_job(IntPtr hbHandle, IntPtr json_job);
+
+        // int           hb_add_json( hb_handle_t *, const char * ) 
+        [DllImport("hb.dll", EntryPoint = "hb_add_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_add_json(IntPtr hbHandle, IntPtr json_job);
+
+        //char     * hb_set_anamorphic_size_json(const char * json_param);
+        [DllImport("hb.dll", EntryPoint = "hb_set_anamorphic_size_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_set_anamorphic_size_json(IntPtr json_param);
+
+        // char     * hb_get_state_json(hb_handle_t * h);
+        [DllImport("hb.dll", EntryPoint = "hb_get_state_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_get_state_json(IntPtr hbHandle);
 	}
 }

@@ -124,6 +124,10 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libraries\json\Net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -163,6 +167,7 @@
     <Compile Include="HbLib\hb_filter_ids.cs" />
     <Compile Include="HbLib\hb_filter_object_s.cs" />
     <Compile Include="HbLib\hb_geometry.cs" />
+    <Compile Include="HbLib\hb_handle_s.cs" />
     <Compile Include="HbLib\hb_mixdown_s.cs" />
     <Compile Include="HbLib\hb_rate_s.cs" />
     <Compile Include="HbLib\hb_state_s.cs" />
@@ -175,6 +180,23 @@
     <Compile Include="HbLib\NativeConstants.cs" />
     <Compile Include="Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Helpers\InteropUtilities.cs" />
+    <Compile Include="Json\Factories\ScanFactory.cs" />
+    <Compile Include="Json\Scan\AudioList.cs" />
+    <Compile Include="Json\Scan\ChapterList.cs" />
+    <Compile Include="Json\Scan\Color.cs" />
+    <Compile Include="Json\Scan\Duration.cs" />
+    <Compile Include="Json\Scan\Duration2.cs" />
+    <Compile Include="Json\Scan\FrameRate.cs" />
+    <Compile Include="Json\Scan\Geometry.cs" />
+    <Compile Include="Json\Scan\JsonScanObject.cs" />
+    <Compile Include="Json\Scan\MetaData.cs" />
+    <Compile Include="Json\Scan\PAR.cs" />
+    <Compile Include="Json\Scan\SubtitleList.cs" />
+    <Compile Include="Json\Scan\TitleList.cs" />
+    <Compile Include="Json\State\JsonState.cs" />
+    <Compile Include="Json\State\Scanning.cs" />
+    <Compile Include="Json\State\WorkDone.cs" />
+    <Compile Include="Json\State\Working.cs" />
     <Compile Include="Model\Encoding\PictureRotation.cs" />
     <Compile Include="Model\Encoding\x265\x265Preset.cs" />
     <Compile Include="Model\Encoding\x265\x265Profile.cs" />
@@ -223,13 +245,11 @@
     <Compile Include="Helpers\NativeList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
-    <Compile Include="Model\Scan\AudioCodec.cs" />
     <Compile Include="Model\Scan\AudioTrack.cs" />
     <Compile Include="Model\Scan\Chapter.cs" />
     <Compile Include="Model\Scan\InputType.cs" />
     <Compile Include="Model\Scan\Subtitle.cs" />
     <Compile Include="Model\Scan\SubtitleSource.cs" />
-    <Compile Include="Model\Scan\SubtitleType.cs" />
     <Compile Include="Model\Scan\Title.cs" />
     <Compile Include="Helpers\Utilities.cs" />
   </ItemGroup>

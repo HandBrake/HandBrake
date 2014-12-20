@@ -1,31 +1,27 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputType.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PAR.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the InputType type.
+//   The par.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model.Scan
+namespace HandBrake.Interop.Json.Scan
 {
-    using System.ComponentModel.DataAnnotations;
-
     /// <summary>
-    /// The input type.
+    /// The par.
     /// </summary>
-    public enum InputType
-	{
-		[Display(Name = "File")]
-		Stream,
+    internal class PAR
+    {
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
+        public int Num { get; set; }
 
-		[Display(Name = "DVD")]
-		Dvd,
-
-		[Display(Name = "Blu-ray")]
-		Bluray,
-
-        [Display(Name = "File")]
-        FFStream
-	}
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        public int Den { get; set; }
+    }
 }

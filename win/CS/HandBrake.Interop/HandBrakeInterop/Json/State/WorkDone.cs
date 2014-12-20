@@ -1,31 +1,22 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputType.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="WorkDone.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the InputType type.
+//   The work done.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model.Scan
+namespace HandBrake.Interop.Json.State
 {
-    using System.ComponentModel.DataAnnotations;
-
     /// <summary>
-    /// The input type.
+    ///     The work done.
     /// </summary>
-    public enum InputType
-	{
-		[Display(Name = "File")]
-		Stream,
-
-		[Display(Name = "DVD")]
-		Dvd,
-
-		[Display(Name = "Blu-ray")]
-		Bluray,
-
-        [Display(Name = "File")]
-        FFStream
-	}
+    public class WorkDone
+    {
+        /// <summary>
+        /// Gets or sets the error.
+        /// </summary>
+        public int Error { get; set; }
+    }
 }

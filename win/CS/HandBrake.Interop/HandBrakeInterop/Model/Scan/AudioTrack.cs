@@ -20,11 +20,6 @@ namespace HandBrake.Interop.Model.Scan
 		public int TrackNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets the audio codec of this Track.
-		/// </summary>
-		public AudioCodec Codec { get; set; }
-
-		/// <summary>
 		/// Gets or sets the audio codec ID for this track.
 		/// </summary>
 		public uint CodecId { get; set; }

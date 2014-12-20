@@ -66,42 +66,6 @@ namespace HandBrake.Interop.Converters
 		}
 
 		/// <summary>
-		/// Convert Native HB Internal Audio int to a AudioCodec model.
-		/// </summary>
-		/// <param name="codec">
-		/// The codec.
-		/// </param>
-		/// <returns>
-		/// An AudioCodec object.
-		/// </returns>
-		public static AudioCodec NativeToAudioCodec(uint codec)
-		{
-			switch (codec)
-			{
-				case NativeConstants.HB_ACODEC_AC3:
-					return AudioCodec.Ac3;
-				case NativeConstants.HB_ACODEC_DCA:
-					return AudioCodec.Dts;
-				case NativeConstants.HB_ACODEC_DCA_HD:
-					return AudioCodec.DtsHD;
-				case NativeConstants.HB_ACODEC_LAME:
-				case NativeConstants.HB_ACODEC_MP3:
-					return AudioCodec.Mp3;
-				case NativeConstants.HB_ACODEC_FFAAC:
-				case NativeConstants.HB_ACODEC_CA_AAC:
-				case NativeConstants.HB_ACODEC_CA_HAAC:
-				case NativeConstants.HB_ACODEC_FDK_HAAC: // TODO Check this is correct
-				case NativeConstants.HB_ACODEC_FDK_AAC: // TODO Check this is correct
-					return AudioCodec.Aac;
-				case NativeConstants.HB_ACODEC_FFFLAC:
-					return AudioCodec.Flac;
-
-				default:
-					return AudioCodec.Other;
-			}
-		}
-
-		/// <summary>
 		/// Converts a native HB encoder structure to an Encoder model.
 		/// </summary>
 		/// <param name="encoder">The structure to convert.</param>

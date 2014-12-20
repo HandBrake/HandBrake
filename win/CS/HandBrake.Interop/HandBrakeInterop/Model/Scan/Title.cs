@@ -89,11 +89,6 @@ namespace HandBrake.Interop.Model.Scan
 		public TimeSpan Duration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the duration of the title in PTS.
-		/// </summary>
-		public ulong DurationPts { get; set; }
-
-		/// <summary>
 		/// Gets or sets the resolution (width/height) of this Title
 		/// </summary>
 		public Size Resolution { get; set; }
@@ -185,5 +180,10 @@ namespace HandBrake.Interop.Model.Scan
 				return this.ToString();
 			}
 		}
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is main feature.
+        /// </summary>
+        public bool IsMainFeature { get; set; }
 	}
 }

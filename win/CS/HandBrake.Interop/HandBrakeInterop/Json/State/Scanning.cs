@@ -1,53 +1,42 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AudioCodec.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="Scanning.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the AudioCodec type.
+//   The scanning.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model.Scan
+namespace HandBrake.Interop.Json.State
 {
     /// <summary>
-    /// The audio codec.
-    /// Only contains 2 real codecs at the moment as those are what we care about. More will be added later.
+    /// The scanning.
     /// </summary>
-    public enum AudioCodec
+    public class Scanning
     {
         /// <summary>
-        /// The ac 3.
+        /// Gets or sets the preview.
         /// </summary>
-        Ac3, 
+        public int Preview { get; set; }
 
         /// <summary>
-        /// The dts.
+        /// Gets or sets the preview count.
         /// </summary>
-        Dts, 
+        public int PreviewCount { get; set; }
 
         /// <summary>
-        /// The dts hd.
+        /// Gets or sets the progress.
         /// </summary>
-        DtsHD, 
+        public double Progress { get; set; }
 
         /// <summary>
-        /// The mp 3.
+        /// Gets or sets the title.
         /// </summary>
-        Mp3, 
+        public int Title { get; set; }
 
         /// <summary>
-        /// The aac.
+        /// Gets or sets the title count.
         /// </summary>
-        Aac, 
-
-        /// <summary>
-        /// The other.
-        /// </summary>
-        Other, 
-
-        /// <summary>
-        /// The flac.
-        /// </summary>
-        Flac,       
+        public int TitleCount { get; set; }
     }
 }

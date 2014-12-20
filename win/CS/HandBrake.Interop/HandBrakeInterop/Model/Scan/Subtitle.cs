@@ -32,11 +32,6 @@ namespace HandBrake.Interop.Model.Scan
 		public string LanguageCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subtitle type.
-		/// </summary>
-		public SubtitleType SubtitleType { get; set; }
-
-		/// <summary>
 		/// Gets or sets the subtitle source.
 		/// </summary>
 		public SubtitleSource SubtitleSource { get; set; }

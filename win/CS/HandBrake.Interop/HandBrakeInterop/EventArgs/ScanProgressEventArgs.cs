@@ -19,7 +19,7 @@ namespace HandBrake.Interop.EventArgs
 		/// <summary>
 		/// Gets or sets the total progress fraction for the scan.
 		/// </summary>
-		public float Progress { get; set; }
+		public double Progress { get; set; }
 
 		/// <summary>
 		/// Gets or sets the current preview being processed on the scan.

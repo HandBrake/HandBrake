@@ -1,20 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SubtitleType.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="MetaData.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the SubtitleType type.
+//   The meta data.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model.Scan
+namespace HandBrake.Interop.Json.Scan
 {
     /// <summary>
-    /// The subtitle type.
+    /// The meta data.
     /// </summary>
-    public enum SubtitleType
-	{
-		Picture,
-		Text
-	}
+    internal class MetaData
+    {
+    }
 }
