@@ -75,6 +75,10 @@ extern NSString *HBCoreMuxingNotification;
  */
 @property (nonatomic, readonly) hb_handle_t *hb_handle;
 
+/**
+ *  The name of the core, used in for debugging purpose.
+ */
+@property (nonatomic, copy) NSString *name;
 
 /**
  *  Determines whether the scan operation can scan a particural URL or whether an additional decription lib is needed..

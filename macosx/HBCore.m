@@ -45,7 +45,8 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 /// Timer used to poll libhb for state changes.
 @property (nonatomic, readwrite, retain) NSTimer *updateTimer;
 
-@property (nonatomic, readwrite) NSArray *titles;
+/// Current scanned titles.
+@property (nonatomic, readwrite, retain) NSArray *titles;
 
 - (void)stateUpdateTimer:(NSTimer *)timer;
 
@@ -84,6 +85,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     self = [super init];
     if (self)
     {
+        _name = @"HBCore";
         _state = HBStateIdle;
         _hb_state = malloc(sizeof(struct hb_state_s));
 
@@ -132,23 +134,25 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
 
-        [HBUtilities writeToActivityLog: "trying to open a physical dvd at: %s", [url.path UTF8String]];
+        [HBUtilities writeToActivityLog:"%@ trying to open a physical dvd at: %s", self.name.UTF8String, url.path.UTF8String];
 
         // Notify the user that we don't support removal of copy protection.
         void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
         if (dvdcss)
         {
             // libdvdcss was found so all is well
-            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
+            [HBUtilities writeToActivityLog:"%@ libdvdcss.2.dylib found for decrypting physical dvd", self.name.UTF8String];
             dlclose(dvdcss);
         }
         else
         {
             // compatible libdvdcss not found
-            [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
+            [HBUtilities writeToActivityLog:"%@, libdvdcss.2.dylib not found for decrypting physical dvd", self.name.UTF8String];
 
             if (error) {
-                *error = [NSError errorWithDomain:@"HBErrorDomain" code:101 userInfo:@{ NSLocalizedDescriptionKey: @"libdvdcss.2.dylib not found for decrypting physical dvd" }];
+                *error = [NSError errorWithDomain:@"HBErrorDomain"
+                                             code:101
+                                         userInfo:@{ NSLocalizedDescriptionKey: @"libdvdcss.2.dylib not found for decrypting physical dvd" }];
             }
         }
     }
@@ -178,13 +182,13 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     // which causes the default behavior of a full source scan
     if (titleNum > 0)
     {
-        [HBUtilities writeToActivityLog: "scanning specifically for title: %d", titleNum];
+        [HBUtilities writeToActivityLog:"%s scanning specifically for title: %d", self.name.UTF8String, titleNum];
     }
     else
     {
         // minimum title duration doesn't apply to title-specific scan
         // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
-        [HBUtilities writeToActivityLog: "scanning titles with a duration of %d seconds or more", minTitleDuration];
+        [HBUtilities writeToActivityLog:"%s scanning titles with a duration of %d seconds or more", self.name.UTF8String, minTitleDuration];
     }
 
     hb_system_sleep_prevent(_hb_handle);
