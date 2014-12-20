@@ -9,9 +9,7 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using System;
     using System.Diagnostics;
-    using System.Runtime.InteropServices;
 
     using HandBrake.Interop.HbLib;
     using HandBrake.Interop.Model;
@@ -177,11 +175,6 @@ namespace HandBrakeWPF.Helpers
         /// </returns>
         public static AnamorphicResult hb_set_anamorphic_size2(PictureSettingsJob job, PictureSettingsTitle title, KeepSetting setting)
         {
-            int outputHeight = 0;
-            int outputParHeight = 0;
-            int outputParWidth = 0;
-            int outputWidth = 0;
-
             int settingMode = (int)setting + (job.KeepDisplayAspect ? 0x04 : 0);
 
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
@@ -193,7 +186,7 @@ namespace HandBrakeWPF.Helpers
                 maxHeight = job.MaxHeight,
                 mode = (int)(hb_anamorphic_mode_t)job.AnamorphicMode,
                 modulus = job.Modulus.HasValue ? job.Modulus.Value : 16,
-                geometry =  new hb_geometry_s() { height = job.Height, width =  job.Width, par = job.AnamorphicMode != Anamorphic.Custom ? new hb_rational_t { den = title.ParH, num = title.ParW } : new hb_rational_t { den = job.ParH, num = job.ParW }}
+                geometry =  new hb_geometry_s { height = job.Height, width =  job.Width, par = job.AnamorphicMode != Anamorphic.Custom ? new hb_rational_t { den = title.ParH, num = title.ParW } : new hb_rational_t { den = job.ParH, num = job.ParW }}
             };
 
             hb_geometry_s sourceGeometry = new hb_geometry_s
@@ -207,10 +200,10 @@ namespace HandBrakeWPF.Helpers
 
             HBFunctions.hb_set_anamorphic_size2(ref sourceGeometry, ref uiGeometry, ref result);
 
-            outputWidth = result.width;
-            outputHeight = result.height;
-            outputParWidth = result.par.den;
-            outputParHeight = result.par.num;
+            int outputWidth = result.width;
+            int outputHeight = result.height;
+            int outputParWidth = result.par.num;
+            int outputParHeight = result.par.den;
             Debug.WriteLine("hb_set_anamorphic_size2: {0}x{1}", outputWidth, outputHeight);
             return new AnamorphicResult { OutputWidth = outputWidth, OutputHeight = outputHeight, OutputParWidth = outputParWidth, OutputParHeight = outputParHeight };
         }
