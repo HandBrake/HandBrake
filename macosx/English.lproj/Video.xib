@@ -86,8 +86,8 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="-2" name="value" keyPath="self.video.quality" id="tMZ-Xb-TuF"/>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="EsL-F5-tAO"/>
+                        <binding destination="-2" name="value" keyPath="self.video.quality" id="tMZ-Xb-TuF"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="gPF-Jh-4d0">
@@ -540,8 +540,8 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="-2" name="value" keyPath="self.video.preset" id="yix-Fd-Qfi"/>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Dpc-uO-tKp"/>
+                        <binding destination="-2" name="value" keyPath="self.video.preset" id="yix-Fd-Qfi"/>
                     </connections>
                 </textField>
                 <button toolTip="Use Advanced Options tab for x264 settings. Use at your own risk!" id="Zs7-1Y-50A">
@@ -556,7 +556,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                         <binding destination="-2" name="value" keyPath="self.video.advancedOptions" id="sQg-ab-NdN"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="wk1-2U-z4i">
+                <textField verticalHuggingPriority="750" id="wk1-2U-z4i">
                     <rect key="frame" x="18" y="0.0" width="883" height="29"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="charWrapping" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="G8P-IF-mpl">
