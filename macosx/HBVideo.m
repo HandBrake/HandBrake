@@ -628,7 +628,7 @@
         }
     }
 
-    self.frameRate = [queueToApply[@"JobIndexVideoFramerate"] intValue];
+    self.frameRate = hb_video_framerate_get_from_name([queueToApply[@"VideoFramerate"] UTF8String]);
 
     self.twoPass = [queueToApply[@"VideoTwoPass"] intValue];
     self.turboTwoPass = [queueToApply[@"VideoTurboTwoPass"] intValue];

@@ -7,6 +7,9 @@
 #import <Foundation/Foundation.h>
 #include "hb.h"
 
+/**
+ *  HBVideo
+ */
 @interface HBVideo : NSObject
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
