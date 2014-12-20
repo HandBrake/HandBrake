@@ -1871,7 +1871,7 @@ namespace HandBrake.Interop
                     Left = title.crop[2],
                     Right = title.crop[3]
                 },
-                AspectRatio = Math.Round((decimal)title.container_dar.num / title.container_dar.den, 2),
+                AspectRatio =   title.container_dar.den != 0 ? Math.Round((decimal)title.container_dar.num / title.container_dar.den, 2) : 1.0m, // TODO FIx
                 AngleCount = title.angle_count,
                 VideoCodecName = title.video_codec_name,
                 Framerate = ((double)title.vrate.num) / title.vrate.den,
