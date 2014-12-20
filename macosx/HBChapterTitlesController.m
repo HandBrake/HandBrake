@@ -54,9 +54,9 @@
 
     if (title)
     {
-        for (int i = 0; i < hb_list_count(title->job->list_chapter); i++)
+        for (int i = 0; i < hb_list_count(title->list_chapter); i++)
         {
-            hb_chapter_t *chapter = hb_list_item(title->job->list_chapter, i);
+            hb_chapter_t *chapter = hb_list_item(title->list_chapter, i);
             if (chapter != NULL)
             {
                 if (chapter->title != NULL)
