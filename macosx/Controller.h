@@ -88,7 +88,6 @@ extern NSString *keyTitleTag;
 	IBOutlet NSProgressIndicator * fScanIndicator;
 	IBOutlet NSBox               * fScanHorizontalLine;
     
-	NSString                     * sourceDisplayName;
     IBOutlet NSTextField         * fSrcDVD2Field;
     IBOutlet NSTextField         * fSrcTitleField;
     IBOutlet NSPopUpButton       * fSrcTitlePopUp;
