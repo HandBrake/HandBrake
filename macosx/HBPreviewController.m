@@ -10,6 +10,9 @@
 #import "Controller.h"
 #import <QTKit/QTKit.h>
 
+#import "HBPicture.h"
+#import "HBJob.h"
+
 @implementation QTMovieView (HBQTMovieViewExtensions)
 
 - (void) mouseMoved: (NSEvent *) theEvent
@@ -228,18 +231,18 @@ typedef enum ViewMode : NSUInteger {
         self.backingScaleFactor = 1.0;
 }
 
-- (void) setTitle: (hb_title_t *) title
+- (void) setJob:(HBJob *)job
 {
-    _title = title;
+    _job = job;
 
     self.generator.delegate = nil;
     [self.generator cancel];
     self.generator = nil;
 
-    if (_title)
+    if (job)
     {
         /* alloc and init a generator for the current title */
-        self.generator = [[[HBPreviewGenerator alloc] initWithHandle:self.handle andTitle:self.title] autorelease];
+        self.generator = [[[HBPreviewGenerator alloc] initWithCore:self.core job:self.job] autorelease];
 
         /* adjust the preview slider length */
         [fPictureSlider setMaxValue: self.generator.imagesCount - 1.0];
@@ -250,9 +253,9 @@ typedef enum ViewMode : NSUInteger {
     }
 }
 
-- (void) reload
+- (void) reloadPreviews
 {
-    if (self.title)
+    if (self.job)
     {
         // Purge the existing picture previews so they get recreated the next time
         // they are needed.
@@ -264,12 +267,16 @@ typedef enum ViewMode : NSUInteger {
 
 - (void) showWindow: (id) sender
 {
+    [super showWindow:sender];
+
     if (self.currentViewMode == ViewModeMoviePreview)
     {
         [self startMovieTimer];
     }
-
-    [super showWindow:sender];
+    else
+    {
+        [self reloadPreviews];
+    }
 }
 
 - (void) windowWillClose: (NSNotification *) aNotification
@@ -302,8 +309,8 @@ typedef enum ViewMode : NSUInteger {
         // Scale factor changed, update the preview window
         // to the new situation
         self.backingScaleFactor = newBackingScaleFactor;
-        if (self.title)
-            [self reload];
+        if (self.job)
+            [self reloadPreviews];
     }
 }
 
@@ -546,7 +553,7 @@ typedef enum ViewMode : NSUInteger {
     NSPoint mouseLoc = [theEvent locationInWindow];
 
     /* Test for mouse location to show/hide hud controls */
-    if (self.currentViewMode != ViewModeEncoding && self.title)
+    if (self.currentViewMode != ViewModeEncoding && self.job)
     {
         /* Since we are not encoding, verify which control hud to show
          * or hide based on aMovie ( aMovie indicates we need movie controls )
@@ -665,46 +672,18 @@ typedef enum ViewMode : NSUInteger {
  */
 - (void) displayPreview
 {
-    hb_title_t *title = self.title;
+    if (self.window.isVisible)
+    {
+        NSImage *fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
+        [self.pictureLayer setContents:fPreviewImage];
+    }
 
-    NSImage *fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
-    NSSize imageScaledSize = [fPreviewImage size];
-    [self.pictureLayer setContents:fPreviewImage];
-
-    NSSize displaySize = NSMakeSize( ( CGFloat )title->geometry.width, ( CGFloat )title->geometry.height );
-    NSString *sizeInfoString;
+    HBPicture *pict = self.job.picture;
 
     /* Set the picture size display fields below the Preview Picture*/
-    int display_width;
-    display_width = title->job->width * title->job->par.num / title->job->par.den;
-    if (title->job->anamorphic.mode == HB_ANAMORPHIC_STRICT) // Original PAR Implementation
-    {
-        sizeInfoString = [NSString stringWithFormat:
-                          @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
-                          title->geometry.width, title->geometry.height, title->job->width, title->job->height, display_width, title->job->height];
-    }
-    else if (title->job->anamorphic.mode == HB_ANAMORPHIC_LOOSE) // Loose Anamorphic
-    {
-        sizeInfoString = [NSString stringWithFormat:
-                          @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
-                          title->geometry.width, title->geometry.height, title->job->width, title->job->height, display_width, title->job->height];
-    }
-    else if (title->job->anamorphic.mode == HB_ANAMORPHIC_CUSTOM) // Custom Anamorphic
-    {
-        sizeInfoString = [NSString stringWithFormat:
-                          @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",
-                          title->geometry.width, title->geometry.height, title->job->width, title->job->height, display_width, title->job->height];
-    }
-    else // No Anamorphic
-    {
-        sizeInfoString = [NSString stringWithFormat:
-                          @"Source: %dx%d, Output: %dx%d",
-                          title->geometry.width, title->geometry.height, title->job->width, title->job->height];
-    }
-    displaySize.width = display_width;
-    displaySize.height = title->job->height;
-    imageScaledSize.width = display_width;
-    imageScaledSize.height = title->job->height;
+    int display_width = pict.width * pict.parWidth / pict.parHeight;
+    NSSize imageScaledSize = NSMakeSize(display_width, pict.height);
+    NSSize displaySize = NSMakeSize(display_width, pict.height);
 
     if (self.backingScaleFactor != 1.0)
     {
@@ -793,13 +772,13 @@ typedef enum ViewMode : NSUInteger {
 
     /* Set the info fields in the hud controller */
     [fInfoField setStringValue: [NSString stringWithFormat:
-                                 @"%@", sizeInfoString]];
+                                 @"%@", self.job.picture.info]];
 
     [fscaleInfoField setStringValue: [NSString stringWithFormat:
                                       @"%@", scaleString]];
 
     /* Set the info field in the window title bar */
-    [[self window] setTitle:[NSString stringWithFormat: @"Preview - %@ %@",sizeInfoString, scaleString]];
+    [[self window] setTitle:[NSString stringWithFormat: @"Preview - %@ %@", self.job.picture.info, scaleString]];
 }
 
 - (IBAction) previewDurationPopUpChanged: (id) sender
@@ -807,15 +786,9 @@ typedef enum ViewMode : NSUInteger {
     [[NSUserDefaults standardUserDefaults] setObject:[fPreviewMovieLengthPopUp titleOfSelectedItem] forKey:@"PreviewLength"];
 }
 
-- (void) setDeinterlacePreview: (BOOL) deinterlacePreview
-{
-    _deinterlacePreview = deinterlacePreview;
-    self.generator.deinterlace = deinterlacePreview;
-}
-
 - (IBAction) pictureSliderChanged: (id) sender
 {
-    if ((self.pictureIndex != [fPictureSlider intValue] || !sender) && self.title) {
+    if ((self.pictureIndex != [fPictureSlider intValue] || !sender) && self.job) {
         self.pictureIndex = [fPictureSlider intValue];
         [self displayPreview];
     }
@@ -837,11 +810,6 @@ typedef enum ViewMode : NSUInteger {
         [self displayPreview];
         [fScaleToScreenToggleButton setTitle:@"Actual Scale"];
     }
-}
-
-- (NSString *) pictureSizeInfoString
-{
-    return [fInfoField stringValue];
 }
 
 - (IBAction) showPictureSettings: (id) sender

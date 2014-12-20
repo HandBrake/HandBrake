@@ -21,9 +21,8 @@
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
-#import "HBJob.h"
-
 #import "HBCore.h"
+#import "HBJob.h"
 
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
@@ -79,6 +78,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         // Inits the controllers
         outputPanel = [[HBOutputPanelController alloc] init];
         fPictureController = [[HBPictureController alloc] init];
+        fPreviewController = [[HBPreviewController  alloc] init];
         fQueueController = [[HBQueueController alloc] init];
 
         // we init the HBPresetsManager class
@@ -110,9 +110,11 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
         // Init libhb
         _core = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
+        _core.name = @"ScanCore";
 
         // Init a separate instance of libhb for user scanning and setting up jobs
         _queueCore = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
+        _queueCore.name = @"QueueCore";
 
         // Registers the observers to the cores notifications.
         [self registerScanCoreNotifications];
@@ -122,13 +124,17 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         [GrowlApplicationBridge setGrowlDelegate: self];
 
         [fPictureController setDelegate:self];
-        [fPictureController setHandle:self.core.hb_handle];
+
+        fPreviewController.delegate = self;
+        [fPreviewController setCore:self.core];
 
         [fQueueController setHandle:self.queueCore.hb_handle];
         [fQueueController setHBController:self];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMp4Checkboxes:) name:HBVideoEncoderChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:nil];
 
         dockIconProgress = 0;
     }
@@ -569,9 +575,6 @@ NSString *keyTitleTag                          = @"keyTitleTag";
                                     stringWithFormat:@"%@/Desktop/Movie.mp4",
                                     NSHomeDirectory()]];
 
-	/* Set Auto Crop to On at launch */
-    [fPictureController setAutoCrop:YES];
-		
     /* Bottom */
     [fStatusField setStringValue: @""];
 
@@ -1465,7 +1468,8 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 
     // Notify anyone interested (audio/subtitles/chapters controller) that there's no title
     fTitle = NULL;
-    [fPictureController setTitle:NULL];
+    fPictureController.picture = nil;
+    fPreviewController.job = nil;
 
 	[[NSNotificationCenter defaultCenter] postNotification:
 	 [NSNotification notificationWithName: HBTitleChangedNotification
@@ -1547,7 +1551,9 @@ NSString *keyTitleTag                          = @"keyTitleTag";
             SuccessfulScan = NO;
 
             // Notify PictureController that there's no title
-            [fPictureController setTitle:NULL];
+            fPictureController.picture = nil;
+            fPictureController.filters = nil;
+            fPreviewController.job = nil;
 
 			//	Notify anyone interested (video/audio/subtitles/chapters controller) that there's no title
 			[[NSNotificationCenter defaultCenter] postNotification:
@@ -2006,10 +2012,7 @@ static void queueFSEventStreamCallback(
     hb_list_t  * list  = hb_get_titles(self.core.hb_handle);
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             (int)[fSrcTitlePopUp indexOfSelectedItem] );
-    hb_job_t * job = title->job;
-    
-    
-    
+
     /* We use a number system to set the encode status of the queue item
      * 0 == already encoded
      * 1 == is being encoded
@@ -2087,13 +2090,7 @@ static void queueFSEventStreamCallback(
     [fVideoController.video prepareVideoForQueueFileJob:queueFileJob];
 
 	/* Picture Sizing */
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.keep_display_aspect] forKey:@"PictureKeepRatio"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
-    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
-    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->par.num] forKey:@"PicturePARPixelWidth"];
-    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->par.den] forKey:@"PicturePARPixelHeight"];
+    [fPictureController.picture preparePictureForQueueFileJob:queueFileJob];
 
     /* Text summaries of various settings */
     [queueFileJob setObject:[NSString stringWithString:[self pictureSettingsSummary]]
@@ -2102,13 +2099,6 @@ static void queueFSEventStreamCallback(
                      forKey:@"PictureFiltersSummary"];
     [queueFileJob setObject:[NSString stringWithString:[self muxerOptionsSummary]]
                      forKey:@"MuxerOptionsSummary"];
-    
-    /* Set crop settings here */
-	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
-    [queueFileJob setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    [queueFileJob setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 
     /* Picture Filters */
     HBFilters *filters = fPictureController.filters;
@@ -2155,8 +2145,8 @@ static void queueFSEventStreamCallback(
     
     /* Codecs */
     /* Framerate */
-    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.num]                         forKey:@"JobVrate"];
-    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.den]                    forKey:@"JobVrateBase"];
+    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.num] forKey:@"JobVrate"];
+    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.den] forKey:@"JobVrateBase"];
 
     /* we need to auto relase the queueFileJob and return it */
     [queueFileJob autorelease];
@@ -2266,7 +2256,7 @@ static void queueFSEventStreamCallback(
 {
     hb_list_t  * list  = hb_get_titles( self.queueCore.hb_handle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
-    hb_job_t * job = title->job;
+    hb_job_t * job = hb_job_init(title);
     
     if( !hb_list_count( list ) )
     {
@@ -2277,7 +2267,7 @@ static void queueFSEventStreamCallback(
     [HBUtilities writeToActivityLog: "Preset: %s", [[queueToApply objectForKey:@"PresetName"] UTF8String]];
     [HBUtilities writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
     hb_job_set_file(job, [[queueToApply objectForKey:@"DestinationPath"] UTF8String]);
-    [self prepareJob];
+    [self prepareJob:job];
     
     /*
      * If scanning we need to do some extra setup of the job.
@@ -2370,8 +2360,8 @@ static void queueFSEventStreamCallback(
  */
 - (IBAction)applyQueueSettingsToMainWindow:(id)sender
 {
-    NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:fqueueEditRescanItemNum];
-    hb_job_t * job = fTitle->job;
+    NSDictionary *queueToApply = [QueueFileArray objectAtIndex:fqueueEditRescanItemNum];
+
     if (queueToApply)
     {
         [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: queue item found"];
@@ -2416,40 +2406,9 @@ static void queueFSEventStreamCallback(
     [fSubtitlesViewController addTracksFromQueue:[queueToApply objectForKey:@"SubtitleList"]];
 
     /* Picture Settings */
-    
-    /* If Cropping is set to custom, then recall all four crop values from
-     when the preset was created and apply them */
-    if ([[queueToApply objectForKey:@"PictureAutoCrop"]  intValue] == 0)
-    {
-        [fPictureController setAutoCrop:NO];
-        
-        /* Here we use the custom crop values saved at the time the preset was saved */
-        job->crop[0] = [[queueToApply objectForKey:@"PictureTopCrop"]  intValue];
-        job->crop[1] = [[queueToApply objectForKey:@"PictureBottomCrop"]  intValue];
-        job->crop[2] = [[queueToApply objectForKey:@"PictureLeftCrop"]  intValue];
-        job->crop[3] = [[queueToApply objectForKey:@"PictureRightCrop"]  intValue];
-        
-    }
-    else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-    {
-        [fPictureController setAutoCrop:YES];
-        /* Here we use the auto crop values determined right after scan */
-        job->crop[0] = fTitle->crop[0];
-        job->crop[1] = fTitle->crop[1];
-        job->crop[2] = fTitle->crop[2];
-        job->crop[3] = fTitle->crop[3];
-        
-    }
-
-    job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
-    job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
-    job->maxWidth = job->maxHeight = 0;
-    job->anamorphic.keep_display_aspect = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
-    job->width  = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
-    job->height  = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
+    [fPictureController.picture applyPictureSettingsFromQueue:queueToApply];
 
     /* Filters */
-
     HBFilters *filters = [fPictureController filters];
 
     /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key. */
@@ -2523,7 +2482,6 @@ static void queueFSEventStreamCallback(
     filters.grayscale = [queueToApply[@"VideoGrayScale"] boolValue];
 
     /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-    [fPictureController setTitle:fTitle];
     [self pictureSettingsDidChange];
 
     [fPresetSelectedDisplay setStringValue:queueToApply[@"PresetName"]];
@@ -2559,6 +2517,23 @@ static void queueFSEventStreamCallback(
 
     /* Video Encoder */
     [fVideoController.video prepareVideoForJobPreview:job andTitle:title];
+
+    /* Picture Size Settings */
+    HBPicture *pict = self.job.picture;
+    job->width = pict.width;
+    job->height = pict.height;
+
+    job->anamorphic.keep_display_aspect = pict.keepDisplayAspect;
+    job->anamorphic.mode = pict.anamorphicMode;
+    job->modulus = pict.modulus;
+    job->par.num = pict.parWidth;
+    job->par.den = pict.parHeight;
+
+    /* Here we use the crop values saved at the time the preset was saved */
+    job->crop[0] = pict.cropTop;
+    job->crop[1] = pict.cropBottom;
+    job->crop[2] = pict.cropLeft;
+    job->crop[3] = pict.cropRight;
 
     /* Subtitle settings */
     BOOL one_burned = NO;
@@ -2854,13 +2829,13 @@ static void queueFSEventStreamCallback(
 #pragma mark -
 #pragma mark Job Handling
 
-- (void) prepareJob
-{
-    
+- (void) prepareJob:(hb_job_t *)job
+{    
     NSDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
+
     hb_list_t  * list  = hb_get_titles(self.queueCore.hb_handle);
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
-    hb_job_t * job = title->job;
+
     hb_audio_config_t * audio;
     hb_filter_object_t * filter;
     /* Title Angle for dvdnav */
@@ -3794,19 +3769,21 @@ static void queueFSEventStreamCallback(
 
 - (IBAction) titlePopUpChanged: (id) sender
 {
-    hb_list_t  * list  = hb_get_titles( self.core.hb_handle );
-    hb_title_t * title = (hb_title_t*)
-        hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
-
     // If there is already a title load, save the current settings to a preset
     if (titleLoaded)
     {
         self.selectedPreset = [self createPresetFromCurrentSettings];
     }
 
+    HBTitle *hbtitle = [self.core.titles objectAtIndex:fSrcTitlePopUp.indexOfSelectedItem];
+    self.job = [[[HBJob alloc] initWithTitle:hbtitle
+                                         url:[NSURL fileURLWithPath:fSrcDVD2Field.stringValue]
+                                   andPreset:self.selectedPreset] autorelease];
+
+    hb_title_t *title = hbtitle.hb_title;
+
     /* If we are a stream type and a batch scan, grok the output file name from title->name upon title change */
-    if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) &&
-        hb_list_count( list ) > 1 )
+    if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) && self.core.titles.count)
     {
         /* we set the default name according to the new title->name */
         [fDstFile2Field setStringValue: [NSString stringWithFormat:
@@ -3854,9 +3831,10 @@ static void queueFSEventStreamCallback(
 
     /* Start Get and set the initial pic size for display */
 	fTitle = title;
-    
-    /* Set Auto Crop to on upon selecting a new title  */
-    [fPictureController setAutoCrop:YES];
+
+    fPictureController.picture = self.job.picture;
+    fPictureController.filters = self.job.filters;
+    fPreviewController.job = self.job;
 
 	/* Update the others views */
 	[[NSNotificationCenter defaultCenter] postNotification:
@@ -3866,13 +3844,16 @@ static void queueFSEventStreamCallback(
 											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
 											nil]]];
 
+    /* Set Auto Crop to on upon selecting a new title  */
+    fPictureController.picture.autocrop = YES;
+
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
 	{
         [self updateFileName];
 	}
 
-   /* apply the current preset */
+    /* apply the current preset */
     [self applyPreset:self.selectedPreset];
 }
 
@@ -4107,31 +4088,31 @@ the user is using "Custom" settings by determining the sender*/
     fVideoController.pictureFilters = fPictureController.filters.summary;
 
     /* Store storage resolution for unparse */
-    if (fTitle)
-    {
-        fVideoController.video.widthForUnparse  = fTitle->job->width;
-        fVideoController.video.heightForUnparse = fTitle->job->height;
-    }
+    fVideoController.video.widthForUnparse  = fPictureController.picture.width;
+    fVideoController.video.heightForUnparse = fPictureController.picture.height;
+
+    [fPreviewController reloadPreviews];
 }
 
 #pragma mark -
 #pragma mark - Text Summaries
 
-- (NSString*) pictureSettingsSummary
+- (NSString *)pictureSettingsSummary
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
-    if (fPictureController && fTitle && fTitle->job)
+    if (fPictureController.picture)
     {
-        [summary appendString:[fPictureController pictureSizeInfoString]];
-        if (fTitle->job->anamorphic.mode != HB_ANAMORPHIC_STRICT)
+        HBPicture *pict = fPictureController.picture;
+        [summary appendString:fPictureController.picture.info];
+        if (pict.anamorphicMode != HB_ANAMORPHIC_STRICT)
         {
             // anamorphic is not Strict, show the modulus
-            [summary appendFormat:@", Modulus: %d", fTitle->job->modulus];
+            [summary appendFormat:@", Modulus: %d", pict.modulus];
         }
         [summary appendFormat:@", Crop: %s %d/%d/%d/%d",
-         [fPictureController autoCrop] ? "Auto" : "Custom",
-         fTitle->job->crop[0], fTitle->job->crop[1],
-         fTitle->job->crop[2], fTitle->job->crop[3]];
+         pict.autocrop ? "Auto" : "Custom",
+         pict.cropTop, pict.cropBottom,
+         pict.cropLeft, pict.cropRight];
     }
     return [NSString stringWithString:summary];
 }
@@ -4232,12 +4213,12 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) showPicturePanel: (id) sender
 {
-	[fPictureController showPictureWindow:sender];
+	[fPictureController showPictureWindow];
 }
 
 - (IBAction) showPreviewWindow: (id) sender
 {
-	[fPictureController showPreviewWindow:sender];
+	[fPreviewController showWindow:sender];
 }
 
 #pragma mark - Preset  Methods
@@ -4249,7 +4230,6 @@ the user is using "Custom" settings by determining the sender*/
         self.selectedPreset = preset;
         self.customPreset = NO;
 
-        hb_job_t * job = fTitle->job;
         NSDictionary *chosenPreset = preset.content;
 
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
@@ -4291,126 +4271,8 @@ the user is using "Custom" settings by determining the sender*/
         [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
 
         /* Picture Settings */
-        /* Note: objectForKey:@"UsesPictureSettings" refers to picture size, which encompasses:
-         * height, width, keep ar, anamorphic and crop settings.
-         * picture filters are handled separately below.
-         */
-        int maxWidth = fTitle->geometry.width - job->crop[2] - job->crop[3];
-        int maxHeight = fTitle->geometry.height - job->crop[0] - job->crop[1];
-        job->maxWidth = job->maxHeight = 0;
-        /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None" 
-         * ( 2 is use max for source and 1 is use exact size when the preset was created ) and the 
-         * preset completely ignores any picture sizing values in the preset.
-         */
-        if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
-        {
-            /* If Cropping is set to custom, then recall all four crop values from
-             when the preset was created and apply them */
-            if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
-            {
-                [fPictureController setAutoCrop:NO];
-                
-                /* Here we use the custom crop values saved at the time the preset was saved */
-                job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-                job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-                job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-                job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-                
-            }
-            else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-            {
-                [fPictureController setAutoCrop:YES];
-                /* Here we use the auto crop values determined right after scan */
-                job->crop[0] = fTitle->crop[0];
-                job->crop[1] = fTitle->crop[1];
-                job->crop[2] = fTitle->crop[2];
-                job->crop[3] = fTitle->crop[3];
-            }
-            
-            /* crop may have changed, reset maxWidth/maxHeight */
-            maxWidth = fTitle->geometry.width - job->crop[2] - job->crop[3];
-            maxHeight = fTitle->geometry.height - job->crop[0] - job->crop[1];
-
-            /* Set modulus */
-            if ([chosenPreset objectForKey:@"PictureModulus"])
-            {
-                job->modulus = [[chosenPreset objectForKey:@"PictureModulus"]  intValue];
-            }
-            else
-            {
-                job->modulus = 16;
-            }
-
-            /*
-             * Assume max picture settings initially
-             */
-            job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-            job->width = fTitle->geometry.width - job->crop[2] - job->crop[3];
-            job->height = fTitle->geometry.height - job->crop[0] - job->crop[1];
-            job->anamorphic.keep_display_aspect = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-
-            /* Check to see if the objectForKey:@"UsesPictureSettings" is 2,
-             * which means "Use max. picture size for source"
-             * If not 2 it must be 1 here which means "Use the picture
-             * size specified in the preset"
-             */
-            if ([[chosenPreset objectForKey:@"UsesPictureSettings"] intValue] != 2 &&
-                [[chosenPreset objectForKey:@"UsesMaxPictureSettings"] intValue] != 1)
-            {
-                /*
-                 * if the preset specifies neither max. width nor height
-                 * (both are 0), use the max. picture size
-                 *
-                 * if the specified non-zero dimensions exceed those of the
-                 * source, also use the max. picture size (no upscaling)
-                 */
-                if ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] > 0)
-                {
-                    job->maxWidth  = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-                }
-                if ([[chosenPreset objectForKey:@"PictureHeight"]  intValue] > 0)
-                {
-                    job->maxHeight  = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
-                }
-            }
-        }
-        /* Modulus added to maxWidth/maxHeight to allow a small amount of
-         * upscaling to the next mod boundary. This does not apply to 
-         * explicit limits set for device compatibility.  It only applies
-         * when limiting to cropped title dimensions.
-         */
-        maxWidth += job->modulus - 1;
-        maxHeight += job->modulus - 1;
-        if (job->maxWidth == 0 || job->maxWidth > maxWidth)
-            job->maxWidth = maxWidth;
-        if (job->maxHeight == 0 || job->maxHeight > maxHeight)
-            job->maxHeight = maxHeight;
-
-        hb_geometry_t srcGeo, resultGeo;
-        hb_geometry_settings_t uiGeo;
-
-        srcGeo.width = fTitle->geometry.width;
-        srcGeo.height = fTitle->geometry.height;
-        srcGeo.par = fTitle->geometry.par;
-
-        uiGeo.mode = job->anamorphic.mode;
-        uiGeo.keep = !!job->anamorphic.keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
-        uiGeo.itu_par = 0;
-        uiGeo.modulus = job->modulus;
-        memcpy(uiGeo.crop, job->crop, sizeof(int[4]));
-        uiGeo.geometry.width = job->width;
-        uiGeo.geometry.height =  job->height;
-        uiGeo.geometry.par = job->par;
-        uiGeo.maxWidth = job->maxWidth;
-        uiGeo.maxHeight = job->maxHeight;
-        hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
-
-        job->width = resultGeo.width;
-        job->height = resultGeo.height;
-        job->par = resultGeo.par;
-
         /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-        [fPictureController setTitle:fTitle];
+        [fPictureController.picture applySettingsFromPreset:chosenPreset];
         [fPictureController.filters applySettingsFromPreset:chosenPreset];
         [self pictureSettingsDidChange];
     }
@@ -4451,7 +4313,7 @@ the user is using "Custom" settings by determining the sender*/
 {
 	/* Show the add panel */
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
-                                                                                     videoSize:NSMakeSize(fTitle->job->width, fTitle->job->height)];
+                                                                                     videoSize:NSMakeSize(fPictureController.picture.width, fPictureController.picture.height)];
 
     [NSApp beginSheet:addPresetController.window modalForWindow:fWindow modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:addPresetController];
 }
@@ -4498,25 +4360,14 @@ the user is using "Custom" settings by determining the sender*/
     // Video encoder
     [fVideoController.video prepareVideoForPreset:preset];
 
-    // Picture Sizing
     preset[@"PictureWidth"]  = currentPreset[@"PictureWidth"];
     preset[@"PictureHeight"] = currentPreset[@"PictureHeight"];
 
-    hb_job_t *job = fTitle->job;
-    preset[@"PictureKeepRatio"] = @(job->anamorphic.keep_display_aspect);
-    preset[@"PicturePAR"]       = @(job->anamorphic.mode);
-    preset[@"PictureModulus"]   = @(job->modulus);
-
-    // Set crop settings
-    preset[@"PictureAutoCrop"] = @(fPictureController.autoCrop);
-
-    preset[@"PictureTopCrop"]    = @(job->crop[0]);
-    preset[@"PictureBottomCrop"] = @(job->crop[1]);
-    preset[@"PictureLeftCrop"]   = @(job->crop[2]);
-    preset[@"PictureRightCrop"]  = @(job->crop[3]);
-
     // Picture Filters
     [fPictureController.filters prepareFiltersForPreset:preset];
+
+    // Picture Size
+    [fPictureController.picture preparePictureForPreset:preset];
 
     // Audio
     [fAudioController.settings prepareAudioDefaultsForPreset:preset];

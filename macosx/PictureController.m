@@ -8,6 +8,8 @@
 #import "PictureController.h"
 #import "HBPreviewController.h"
 
+#import "HBTitle.h"
+
 @interface HBCustomFilterTransformer : NSValueTransformer
 @end
 
@@ -37,44 +39,14 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
 @interface HBPictureController ()
 {
-    hb_title_t               * fTitle;
-
-    HBPreviewController        * fPreviewController;
-
     /* Picture Sizing */
     IBOutlet NSTabView       * fSizeFilterView;
     IBOutlet NSBox           * fPictureSizeBox;
     IBOutlet NSBox           * fPictureCropBox;
 
-    IBOutlet NSTextField     * fWidthField;
-    IBOutlet NSStepper       * fWidthStepper;
-    IBOutlet NSTextField     * fHeightField;
-    IBOutlet NSStepper       * fHeightStepper;
-    IBOutlet NSTextField     * fRatioLabel;
-    IBOutlet NSButton        * fRatioCheck;
-    IBOutlet NSMatrix        * fCropMatrix;
-    IBOutlet NSTextField     * fCropTopField;
-    IBOutlet NSStepper       * fCropTopStepper;
-    IBOutlet NSTextField     * fCropBottomField;
-    IBOutlet NSStepper       * fCropBottomStepper;
-    IBOutlet NSTextField     * fCropLeftField;
-    IBOutlet NSStepper       * fCropLeftStepper;
-    IBOutlet NSTextField     * fCropRightField;
-    IBOutlet NSStepper       * fCropRightStepper;
-
-    IBOutlet NSTextField     * fModulusLabel;
-    IBOutlet NSPopUpButton   * fModulusPopUp;
-
-    IBOutlet NSTextField     * fDisplayWidthField;
-    IBOutlet NSTextField     * fDisplayWidthLabel;
-
-    IBOutlet NSTextField     * fParWidthField;
-    IBOutlet NSTextField     * fParHeightField;
-    IBOutlet NSTextField     * fParWidthLabel;
-    IBOutlet NSTextField     * fParHeightLabel;
-
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
-    IBOutlet NSTextField     * fSizeInfoField;
+    IBOutlet NSStepper       * fWidthStepper;
+    IBOutlet NSStepper       * fHeightStepper;
 
     /* Video Filters */
     IBOutlet NSBox           * fDetelecineBox;
@@ -101,6 +73,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 	if (self = [super initWithWindowNibName:@"PictureSettings"])
 	{
         _filters = [[HBFilters alloc] init];
+        _picture = [[HBPicture alloc] init];
 
         // NSWindowController likes to lazily load its window. However since
         // this controller tries to set all sorts of outlets before the window
@@ -113,18 +86,15 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [self window];
 
         // Add the observers for the filters values
-        NSArray *observerdKeyPaths = @[@"filters.detelecine", @"filters.detelecineCustomString",
-                                       @"filters.deinterlace", @"filters.deinterlaceCustomString",
-                                       @"filters.decomb", @"filters.decombCustomString",
-                                       @"filters.denoise", @"filters.denoisePreset",
-                                       @"filters.denoiseTune", @"filters.denoiseCustomString",
-                                       @"filters.deblock", @"filters.grayscale", @"filters.useDecomb"];
+        NSArray *observerdKeyPaths = @[@"self.filters.useDecomb", @"self.filters.deblock",
+                                       @"self.filters.denoise", @"self.filters.denoisePreset"];
         for (NSString *keyPath in observerdKeyPaths)
         {
             [self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
         }
 
-        fPreviewController = [[HBPreviewController alloc] init];
+        [self addObserver:self forKeyPath:@"self.picture.anamorphicMode" options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
+        [self addObserver:self forKeyPath:@"self.picture.modulus" options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
     }
 
 	return self;
@@ -132,12 +102,8 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
 - (void) dealloc
 {
-    NSArray *observerdKeyPaths = @[@"filters.detelecine", @"filters.detelecineCustomString",
-                                   @"filters.deinterlace", @"filters.deinterlaceCustomString",
-                                   @"filters.decomb", @"filters.decombCustomString",
-                                   @"filters.denoise", @"filters.denoisePreset",
-                                   @"filters.denoiseTune", @"filters.denoiseCustomString",
-                                   @"filters.deblock", @"filters.grayscale", @"filters.useDecomb"];
+    NSArray *observerdKeyPaths = @[@"self.filters.useDecomb", @"self.filters.deblock",
+                                   @"self.filters.denoise", @"self.filters.denoisePreset"];
     @try {
         for (NSString *keyPath in observerdKeyPaths)
         {
@@ -146,8 +112,9 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
     } @catch (NSException * __unused exception) {}
 
-    [_filters release];
-    [fPreviewController release];
+    self.filters = nil;
+    self.picture = nil;
+
     [super dealloc];
 }
 
@@ -161,155 +128,12 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [self.window setAppearance:[NSClassFromString(@"NSAppearance") appearanceNamed:@"NSAppearanceNameAqua"]];
     }
 
-    /* Populate the user interface */
-    [fWidthStepper  setValueWraps: NO];
-    [fHeightStepper setValueWraps: NO];
-
-    [fCropTopStepper    setIncrement: 2];
-    [fCropTopStepper    setMinValue:  0];
-    [fCropBottomStepper setIncrement: 2];
-    [fCropBottomStepper setMinValue:  0];
-    [fCropLeftStepper   setIncrement: 2];
-    [fCropLeftStepper   setMinValue:  0];
-    [fCropRightStepper  setIncrement: 2];
-    [fCropRightStepper  setMinValue:  0];
-
     /* Populate the Anamorphic NSPopUp button here */
     [fAnamorphicPopUp removeAllItems];
     [fAnamorphicPopUp addItemsWithTitles:@[@"None", @"Strict", @"Loose", @"Custom"]];
 
-    /* populate the modulus popup here */
-    [fModulusPopUp removeAllItems];
-    [fModulusPopUp addItemsWithTitles:@[@"16", @"8", @"4", @"2"]];
-
     [self resizeInspectorForTab:nil];
     [self adjustSizingDisplay:nil];
-}
-
-- (void) setHandle: (hb_handle_t *) handle
-{
-    [fPreviewController setHandle: handle];
-    [fPreviewController setDelegate:(HBController *)self.delegate];
-}
-
-- (void) setTitle: (hb_title_t *) title
-{
-    fTitle = title;
-
-    if (!title) {
-        [fPreviewController setTitle:NULL];
-        return;
-    }
-
-    hb_job_t * job = title->job;
-
-    fTitle = title;
-
-    [fAnamorphicPopUp selectItemAtIndex: job->anamorphic.mode];
-    if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT)
-    {
-        [fWidthStepper  setEnabled: NO];
-        [fHeightStepper setEnabled: NO];
-        [fWidthField    setEditable:NO];
-        [fHeightField   setEditable:NO];
-    }
-    else
-    {
-        [fWidthStepper  setEnabled: YES];
-        [fHeightStepper setEnabled: YES];
-        [fWidthField    setEditable:YES];
-        [fHeightField   setEditable:YES];
-    }
-    if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT ||
-        job->anamorphic.mode == HB_ANAMORPHIC_LOOSE)
-    {
-        job->anamorphic.keep_display_aspect = 1;
-        [fRatioCheck    setState:   NSOnState];
-        [fRatioCheck    setEnabled: NO];
-    }
-    else
-    {
-        [fRatioCheck    setEnabled: YES];
-        [fRatioCheck setState:   job->anamorphic.keep_display_aspect ?
-                                                        NSOnState : NSOffState];
-    }
-    [fParWidthField setEnabled:     !job->anamorphic.keep_display_aspect];
-    [fParHeightField setEnabled:    !job->anamorphic.keep_display_aspect];
-    [fDisplayWidthField setEnabled: !job->anamorphic.keep_display_aspect];
-
-    if (job->modulus)
-    {
-        [fModulusPopUp selectItemWithTitle: [NSString stringWithFormat:@"%d",job->modulus]];
-        [fWidthStepper  setIncrement: job->modulus];
-        [fHeightStepper setIncrement: job->modulus];
-    }
-    else
-    {
-        [fModulusPopUp selectItemAtIndex: 0];
-        [fWidthStepper  setIncrement: 16];
-        [fHeightStepper setIncrement: 16];
-    }
-
-    if (self.autoCrop)
-    {
-        [fCropMatrix  selectCellAtRow: 0 column:0];
-
-        /* If auto, lets set the crop steppers according to
-         * current fTitle->crop values */
-        memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
-        [fCropTopStepper    setIntValue: fTitle->crop[0]];
-        [fCropTopField      setIntValue: fTitle->crop[0]];
-        [fCropBottomStepper setIntValue: fTitle->crop[1]];
-        [fCropBottomField   setIntValue: fTitle->crop[1]];
-        [fCropLeftStepper   setIntValue: fTitle->crop[2]];
-        [fCropLeftField     setIntValue: fTitle->crop[2]];
-        [fCropRightStepper  setIntValue: fTitle->crop[3]];
-        [fCropRightField    setIntValue: fTitle->crop[3]];
-    }
-    else
-    {
-        [fCropMatrix  selectCellAtRow: 1 column:0];
-        [fCropTopStepper    setIntValue: job->crop[0]];
-        [fCropTopField      setIntValue: job->crop[0]];
-        [fCropBottomStepper setIntValue: job->crop[1]];
-        [fCropBottomField   setIntValue: job->crop[1]];
-        [fCropLeftStepper   setIntValue: job->crop[2]];
-        [fCropLeftField     setIntValue: job->crop[2]];
-        [fCropRightStepper  setIntValue: job->crop[3]];
-        [fCropRightField    setIntValue: job->crop[3]];
-    }
-
-    [fCropTopStepper    setEnabled: !self.autoCrop];
-    [fCropBottomStepper setEnabled: !self.autoCrop];
-    [fCropLeftStepper   setEnabled: !self.autoCrop];
-    [fCropRightStepper  setEnabled: !self.autoCrop];
-
-    [fCropTopField      setEditable: !self.autoCrop];
-    [fCropBottomField   setEditable: !self.autoCrop];
-    [fCropLeftField     setEditable: !self.autoCrop];
-    [fCropRightField    setEditable: !self.autoCrop];
-
-    [fWidthStepper      setMaxValue: title->geometry.width - job->crop[2] - job->crop[3]];
-    [fWidthStepper      setIntValue: job->width];
-    [fWidthField        setIntValue: job->width];
-    [fHeightStepper     setMaxValue: title->geometry.height - job->crop[0] - job->crop[1]];
-    [fHeightStepper     setIntValue: job->height];
-    [fHeightField       setIntValue: job->height];
-    [fCropTopStepper    setMaxValue: title->geometry.height/2-2];
-    [fCropBottomStepper setMaxValue: title->geometry.height/2-2];
-    [fCropLeftStepper   setMaxValue: title->geometry.width/2-2];
-    [fCropRightStepper  setMaxValue: title->geometry.width/2-2];
-
-    [fParWidthField     setIntValue: job->par.num];
-    [fParHeightField    setIntValue: job->par.den];
-
-    int display_width;
-    display_width = job->width * job->par.num / job->par.den;
-    [fDisplayWidthField setIntValue: display_width];
-
-    [fPreviewController setTitle:title];
-
-    [self settingsChanged:nil];
 }
 
 #pragma mark - KVO
@@ -320,8 +144,18 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     {
         // We use KVO to update the panel
         // and notify the main controller of the changes
-        // in the filters settings.
-        if ([keyPath isEqualToString:@"filters.useDecomb"])
+        // in the filters and picture settings.
+
+        if ([keyPath isEqualToString:@"self.picture.anamorphicMode"])
+        {
+            [self adjustSizingDisplay:nil];
+        }
+        else if ([keyPath isEqualToString:@"self.picture.modulus"])
+        {
+            [fWidthStepper setIncrement:self.picture.modulus];
+            [fHeightStepper setIncrement:self.picture.modulus];
+        }
+        else if ([keyPath isEqualToString:@"self.filters.useDecomb"])
         {
             if (self.filters.useDecomb)
             {
@@ -334,7 +168,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
                 [fDeinterlaceBox setHidden:NO];
             }
         }
-        else if ([keyPath isEqualToString:@"filters.deblock"])
+        else if ([keyPath isEqualToString:@"self.filters.deblock"])
         {
             // The minimum deblock value is 5,
             // set it to 0 if the value is
@@ -349,31 +183,9 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
                 [fDeblockField setStringValue:[NSString stringWithFormat: @"%.0ld", (long)self.filters.deblock]];
             }
         }
-        else if ([keyPath isEqualToString:@"filters.deinterlace"] || [keyPath isEqualToString:@"filters.decomb"])
-        {
-            // Might need to update the preview images with
-            // the new deinterlace/decomb setting.
-            if ((self.filters.deinterlace && !self.filters.useDecomb) ||
-                (self.filters.decomb && self.filters.useDecomb))
-            {
-                fPreviewController.deinterlacePreview = YES;
-            }
-            else
-            {
-                fPreviewController.deinterlacePreview = NO;
-            }
-            [fPreviewController reload];
-        }
-        else if ([keyPath isEqualToString:@"filters.denoise"] || [keyPath isEqualToString:@"filters.denoisePreset"])
+        else if ([keyPath isEqualToString:@"self.filters.denoise"] || [keyPath isEqualToString:@"self.filters.denoisePreset"])
         {
             [self validateDenoiseUI];
-        }
-
-        // If one of the filters properties changes
-        // update the UI in the main window
-        if ([keyPath hasPrefix:@"filters"])
-        {
-            [self.delegate pictureSettingsDidChange];
         }
     }
     else
@@ -428,6 +240,14 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
 #pragma mark -
 #pragma mark Interface Resize
+
+/**
+ * This method is used to detect clicking on a tab in fSizeFilterView
+ */
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
+{
+    [self resizeInspectorForTab:nil];
+}
 
 /**
  * resizeInspectorForTab is called at launch, and each time either the
@@ -491,26 +311,10 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     if ([fAnamorphicPopUp indexOfSelectedItem] == HB_ANAMORPHIC_CUSTOM)
     {   // custom / power user jamboree
         pictureSizingBoxSize.width = 350;
-
-        /* Set visibility of capuj widgets */
-        [fParWidthField setHidden: NO];
-        [fParHeightField setHidden: NO];
-        [fParWidthLabel setHidden: NO];
-        [fParHeightLabel setHidden: NO];
-        [fDisplayWidthField setHidden: NO];
-        [fDisplayWidthLabel setHidden: NO];
     }
     else
     {
         pictureSizingBoxSize.width = 200;
-
-        /* Set visibility of capuj widgets */
-        [fParWidthField setHidden: YES];
-        [fParHeightField setHidden: YES];
-        [fParWidthLabel setHidden: YES];
-        [fParHeightLabel setHidden: YES];
-        [fDisplayWidthField setHidden: YES];
-        [fDisplayWidthLabel setHidden: YES];
     }
 
     /* Check to see if we have changed the size from current */
@@ -541,17 +345,12 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     [self resizeInspectorForTab:nil];
 }
 
-- (NSString *) pictureSizeInfoString
-{
-    return [fSizeInfoField stringValue];
-}
-
 #pragma mark -
 
 /**
  * Displays and brings the picture window to the front
  */
-- (IBAction) showPictureWindow: (id) sender
+- (void)showPictureWindow
 {
     if ([[self window] isVisible])
     {
@@ -559,15 +358,8 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     }
     else
     {
-        [self showWindow:sender];
+        [self showWindow:self];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureSizeWindowIsOpen"];
-        /* Set the window back to Floating Window mode
-         * This will put the window always on top, but
-         * since we have Hide on Deactivate set in our
-         * xib, if other apps are put in focus we will
-         * hide properly to stay out of the way
-         */
-        [[self window] setLevel:NSFloatingWindowLevel];
     }
 
     [self resizeInspectorForTab:nil];
@@ -576,294 +368,12 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
 - (IBAction) showPreviewWindow: (id) sender
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PreviewWindowIsOpen"];
-    [fPreviewController showWindow:sender];
+    [self.delegate showPreviewWindow:sender];
 }
 
 - (void) windowWillClose: (NSNotification *)aNotification
 {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PictureSizeWindowIsOpen"];
-}
-
-/**
- * This method is used to detect clicking on a tab in fSizeFilterView
- */
-- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
-{
-    [self resizeInspectorForTab:nil];
-}
-
-#pragma mark - Picture Update Logic
-
-- (IBAction) settingsChanged: (id) sender
-{
-    if (!fTitle)
-        return;
-
-    hb_job_t * job = fTitle->job;
-    int keep = 0, dar_updated = 0;
-
-    if (sender == fAnamorphicPopUp)
-    {
-        job->anamorphic.mode = (int)[fAnamorphicPopUp indexOfSelectedItem];
-        if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT)
-        {
-            [fModulusLabel  setHidden:  YES];
-            [fModulusPopUp  setHidden:  YES];
-            [fWidthStepper  setEnabled: NO];
-            [fHeightStepper setEnabled: NO];
-            [fWidthField    setEditable:NO];
-            [fHeightField   setEditable:NO];
-        }
-        else
-        {
-            [fModulusLabel  setHidden:  NO];
-            [fModulusPopUp  setHidden:  NO];
-            [fWidthStepper  setEnabled: YES];
-            [fHeightStepper setEnabled: YES];
-            [fWidthField    setEditable:YES];
-            [fHeightField    setEditable:YES];
-        }
-        if (job->anamorphic.mode == HB_ANAMORPHIC_STRICT ||
-            job->anamorphic.mode == HB_ANAMORPHIC_LOOSE)
-        {
-            job->anamorphic.keep_display_aspect = 1;
-            [fRatioCheck setState: NSOnState];
-            [fRatioCheck setEnabled: NO];
-        }
-        else
-        {
-            [fRatioCheck setEnabled: YES];
-            [fRatioCheck setState:   job->anamorphic.keep_display_aspect ?
-                                                        NSOnState : NSOffState];
-        }
-    }
-    else if (sender == fModulusPopUp)
-    {
-        job->modulus = [[fModulusPopUp titleOfSelectedItem] intValue];
-        [fWidthStepper  setIncrement: job->modulus];
-        [fHeightStepper setIncrement: job->modulus];
-    }
-
-    if (sender == fRatioCheck)
-    {
-        job->anamorphic.keep_display_aspect = [fRatioCheck  state] == NSOnState;
-        [fParWidthField setEnabled:     !job->anamorphic.keep_display_aspect];
-        [fParHeightField setEnabled:    !job->anamorphic.keep_display_aspect];
-        [fDisplayWidthField setEnabled: !job->anamorphic.keep_display_aspect];
-    }
-
-    if (sender == fHeightStepper || sender == fHeightField)
-    {
-        keep |= HB_KEEP_HEIGHT;
-
-        if (sender == fHeightStepper)
-            job->height = [fHeightStepper intValue];
-        else
-            job->height = [fHeightField intValue];
-    }
-
-    if (sender == fWidthStepper || sender == fWidthField)
-    {
-        keep |= HB_KEEP_WIDTH;
-
-        if (sender == fWidthStepper)
-            job->width = [fWidthStepper intValue];
-        else
-            job->width = [fWidthField intValue];
-    }
-
-    if (sender == fParWidthField || sender == fParHeightField)
-    {
-        job->par.num = [fParWidthField intValue];
-        job->par.den = [fParHeightField intValue];
-    }
-
-    if (sender == fDisplayWidthField)
-    {
-        dar_updated = 1;
-        job->par.num = [fDisplayWidthField intValue];
-        job->par.den = [fWidthField intValue];
-    }
-
-    if (sender == fCropMatrix)
-    {
-        if (self.autoCrop != ( [fCropMatrix selectedRow] == 0 ))
-        {
-            self.autoCrop = !self.autoCrop;
-            if (self.autoCrop)
-            {
-                /* If auto, lets set the crop steppers according to
-                 * current fTitle->crop values */
-                memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
-                [fCropTopStepper    setIntValue: fTitle->crop[0]];
-                [fCropTopField      setIntValue: fTitle->crop[0]];
-                [fCropBottomStepper setIntValue: fTitle->crop[1]];
-                [fCropBottomField   setIntValue: fTitle->crop[1]];
-                [fCropLeftStepper   setIntValue: fTitle->crop[2]];
-                [fCropLeftField     setIntValue: fTitle->crop[2]];
-                [fCropRightStepper  setIntValue: fTitle->crop[3]];
-                [fCropRightField    setIntValue: fTitle->crop[3]];
-            }
-            [fCropTopStepper    setEnabled: !self.autoCrop];
-            [fCropBottomStepper setEnabled: !self.autoCrop];
-            [fCropLeftStepper   setEnabled: !self.autoCrop];
-            [fCropRightStepper  setEnabled: !self.autoCrop];
-
-            [fCropTopField      setEditable: !self.autoCrop];
-            [fCropBottomField   setEditable: !self.autoCrop];
-            [fCropLeftField     setEditable: !self.autoCrop];
-            [fCropRightField    setEditable: !self.autoCrop];
-        }
-    }
-    if (sender == fCropTopStepper)
-    {
-        job->crop[0] = [fCropTopStepper    intValue];
-        [fCropTopField setIntValue: job->crop[0]];
-        [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
-    }
-    if (sender == fCropBottomStepper)
-    {
-        job->crop[1] = [fCropBottomStepper intValue];
-        [fCropBottomField setIntValue: job->crop[1]];
-        [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
-    }
-    if (sender == fCropLeftStepper)
-    {
-        job->crop[2] = [fCropLeftStepper   intValue];
-        [fCropLeftField setIntValue: job->crop[2]];
-        [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
-    }
-    if (sender == fCropRightStepper)
-    {
-        job->crop[3] = [fCropRightStepper  intValue];
-        [fCropRightField setIntValue: job->crop[3]];
-        [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
-    }
-
-    if (sender == fCropTopField)
-    {
-        int cropValue = [fCropTopField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->geometry.height/2-2))
-        {
-            job->crop[0] = cropValue;
-            [fCropTopStepper setIntValue:cropValue];
-            [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
-        }
-        else
-        {
-            [fCropLeftField setIntValue:job->crop[0]];
-        }
-    }
-    else if (sender == fCropBottomField)
-    {
-        int cropValue = [fCropBottomField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->geometry.height/2-2))
-        {
-            job->crop[1] = cropValue;
-            [fCropBottomStepper setIntValue:cropValue];
-            [fHeightStepper setMaxValue: fTitle->geometry.height - job->crop[0] - job->crop[1]];
-        }
-        else
-        {
-            [fCropLeftField setIntValue:job->crop[1]];
-        }
-    }
-    else if (sender == fCropLeftField)
-    {
-        int cropValue = [fCropLeftField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->geometry.width/2-2))
-        {
-            job->crop[2] = cropValue;
-            [fCropLeftStepper setIntValue:cropValue];
-            [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
-        }
-        else
-        {
-            [fCropLeftField setIntValue:job->crop[2]];
-        }
-    }
-    else if (sender == fCropRightField)
-    {
-        int cropValue = [fCropRightField intValue];
-        if (cropValue >= 0 && (cropValue <= fTitle->geometry.width/2-2))
-        {
-            job->crop[3] = cropValue;
-            [fCropRightStepper setIntValue:cropValue];
-            [fWidthStepper setMaxValue: fTitle->geometry.width - job->crop[2] - job->crop[3]];
-        }
-        else
-        {
-            [fCropLeftField setIntValue:job->crop[3]];
-        }
-    }
-
-    keep |= !!job->anamorphic.keep_display_aspect * HB_KEEP_DISPLAY_ASPECT;
-
-    hb_geometry_t srcGeo, resultGeo;
-    hb_geometry_settings_t uiGeo;
-
-    srcGeo.width = fTitle->geometry.width;
-    srcGeo.height = fTitle->geometry.height;
-    srcGeo.par = fTitle->geometry.par;
-
-    uiGeo.mode = job->anamorphic.mode;
-    uiGeo.keep = keep;
-    uiGeo.itu_par = 0;
-    uiGeo.modulus = job->modulus;
-    memcpy(uiGeo.crop, job->crop, sizeof(int[4]));
-    uiGeo.geometry.width = job->width;
-    uiGeo.geometry.height =  job->height;
-    /* Modulus added to maxWidth/maxHeight to allow a small amount of
-     * upscaling to the next mod boundary.
-     */
-    uiGeo.maxWidth = fTitle->geometry.width - job->crop[2] - job->crop[3] + job->modulus - 1;
-    uiGeo.maxHeight = fTitle->geometry.height - job->crop[0] - job->crop[1] + job->modulus - 1;
-    uiGeo.geometry.par = job->par;
-    if (job->anamorphic.mode == HB_ANAMORPHIC_CUSTOM && dar_updated)
-    {
-        uiGeo.geometry.par.num = [fDisplayWidthField intValue];
-        uiGeo.geometry.par.den = uiGeo.geometry.width;
-    }
-    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
-
-    job->width = resultGeo.width;
-    job->height = resultGeo.height;
-    job->par = resultGeo.par;
-
-    int display_width;
-    display_width = resultGeo.width * resultGeo.par.num / resultGeo.par.den;
-
-    [fWidthStepper      setIntValue: resultGeo.width];
-    [fWidthField        setIntValue: resultGeo.width];
-    [fHeightStepper     setIntValue: resultGeo.height];
-    [fHeightField       setIntValue: resultGeo.height];
-    [fParWidthField     setIntValue: resultGeo.par.num];
-    [fParHeightField    setIntValue: resultGeo.par.den];
-    [fDisplayWidthField setIntValue: display_width];
-
-    /*
-     * Sanity-check here for previews < 16 pixels to avoid crashing
-     * hb_get_preview(). In fact, let's get previews at least 64 pixels in both
-     * dimensions; no human can see any meaningful detail below that.
-     */
-    if (job->width >= 64 && job->height >= 64)
-    {
-        [fPreviewController reload];
-    }
-
-    /* we get the sizing info to display from fPreviewController */
-    [fSizeInfoField setStringValue: [fPreviewController pictureSizeInfoString]];
-
-    if (sender != nil)
-    {
-        [self.delegate pictureSettingsDidChange];
-    }
-
-    if ([[self window] isVisible])
-    {
-        [self adjustSizingDisplay:nil];
-    }
 }
 
 @end

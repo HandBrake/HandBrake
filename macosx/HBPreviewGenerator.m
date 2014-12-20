@@ -7,8 +7,10 @@
 
 #import "HBPreviewGenerator.h"
 #import "HBUtilities.h"
-#import "HBCore.h"
 #import "Controller.h"
+
+#import "HBCore.h"
+#import "HBJob.h"
 
 typedef enum EncodeState : NSUInteger {
     EncodeStateIdle,
@@ -20,8 +22,8 @@ typedef enum EncodeState : NSUInteger {
 
 @property (nonatomic, readonly, retain) NSMutableDictionary *picturePreviews;
 @property (nonatomic, readonly) NSUInteger imagesCount;
-@property (nonatomic, readonly) hb_handle_t *handle;
-@property (nonatomic, readonly) hb_title_t *title;
+@property (nonatomic, readonly) HBCore *scanCore;
+@property (nonatomic, readonly) HBJob *job;
 
 @property (nonatomic) HBCore *core;
 @property (nonatomic, getter=isCancelled) BOOL cancelled;
@@ -33,13 +35,13 @@ typedef enum EncodeState : NSUInteger {
 
 @implementation HBPreviewGenerator
 
-- (id) initWithHandle: (hb_handle_t *) handle andTitle: (hb_title_t *) title
+- (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job
 {
     self = [super init];
     if (self)
     {
-        _handle = handle;
-        _title = title;
+        _scanCore = core;
+        _job = job;
         _picturePreviews = [[NSMutableDictionary alloc] init];
         _imagesCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
     }
@@ -65,10 +67,13 @@ typedef enum EncodeState : NSUInteger {
 
     if (!theImage)
     {
+        HBFilters *filters = self.job.filters;
+        BOOL deinterlace = (filters.deinterlace && !filters.useDecomb) || (filters.decomb && filters.useDecomb);
+
         theImage = [HBPreviewGenerator makeImageForPicture:index
-                                                     libhb:self.handle
-                                                     title:self.title
-                                               deinterlace:self.deinterlace];
+                                                     libhb:self.scanCore.hb_handle
+                                                   picture:self.job.picture
+                                               deinterlace:deinterlace];
         if (cache && theImage)
             [self.picturePreviews setObject:theImage forKey:@(index)];
     }
@@ -99,23 +104,24 @@ typedef enum EncodeState : NSUInteger {
  */
 + (NSImage *) makeImageForPicture: (NSUInteger) pictureIndex
                             libhb: (hb_handle_t *) handle
-                            title: (hb_title_t *) title
+                          picture: (HBPicture *) picture
                       deinterlace: (BOOL) deinterlace
 {
     NSImage *img = nil;
 
     hb_geometry_settings_t geo;
     memset(&geo, 0, sizeof(geo));
-    geo.geometry.width = title->job->width;
-    geo.geometry.height = title->job->height;
+    geo.geometry.width = picture.width;
+    geo.geometry.height = picture.height;
     // HBPreviewController will scale the image later,
     // ignore the par.
     geo.geometry.par.num = 1;
     geo.geometry.par.den = 1;
-    memcpy(geo.crop, title->job->crop, sizeof(int[4]));
+    int crop[4] = {picture.cropTop, picture.cropBottom, picture.cropLeft, picture.cropRight};
+    memcpy(geo.crop, crop, sizeof(int[4]));
 
     hb_image_t *image;
-    image = hb_get_preview2(handle, title->index, (int)pictureIndex, &geo, deinterlace);
+    image = hb_get_preview2(handle, picture.title.hb_title->index, (int)pictureIndex, &geo, deinterlace);
 
     if (image)
     {
@@ -196,7 +202,7 @@ typedef enum EncodeState : NSUInteger {
     if (self.core || index >= self.imagesCount)
         return NO;
 
-    hb_job_t *job = self.title->job;
+    hb_job_t *job = self.job.title.hb_title->job;
 
     /* Generate the file url and directories. */
     if (job->mux & HB_MUX_MASK_MP4)
@@ -235,6 +241,7 @@ typedef enum EncodeState : NSUInteger {
 
     int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
     self.core = [[[HBCore alloc] initWithLoggingLevel:loggingLevel] autorelease];
+    self.core.name = @"PreviewCore";
 
     /*
      * If scanning we need to do some extra setup of the job.

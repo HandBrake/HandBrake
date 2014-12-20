@@ -5,28 +5,23 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+
 #import "HBFilters.h"
-#include "hb.h"
+#import "HBPicture.h"
 
 @protocol HBPictureControllerDelegate <NSObject>
 
-- (void) pictureSettingsDidChange;
+- (IBAction)showPreviewWindow:(id)sender;
 
 @end
 
 @interface HBPictureController : NSWindowController <NSWindowDelegate>
 
 @property (nonatomic, readwrite, retain) HBFilters *filters;
-@property (nonatomic, readwrite) BOOL autoCrop;
+@property (nonatomic, readwrite, retain) HBPicture *picture;
 
 @property (nonatomic, readwrite, assign) id <HBPictureControllerDelegate> delegate;
 
-- (void) setHandle:(hb_handle_t *) handle;
-- (void) setTitle:(hb_title_t *) title;
-
-- (IBAction) showPictureWindow: (id)sender;
-- (IBAction) showPreviewWindow: (id)sender;
-
-- (NSString *) pictureSizeInfoString;
+- (void)showPictureWindow;
 
 @end

@@ -5,19 +5,22 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-#include "hb.h"
 
 @class HBController;
 
+@class HBCore;
+@class HBJob;
+
 @interface HBPreviewController : NSWindowController <NSWindowDelegate>
 
-@property (nonatomic) BOOL deinterlacePreview;
-@property (nonatomic, readonly) NSString *pictureSizeInfoString;
-
 @property (nonatomic, assign) HBController *delegate;
-@property (nonatomic, assign) hb_handle_t *handle;
-@property (nonatomic, assign) hb_title_t *title;
+@property (nonatomic, assign) HBCore *core;
+@property (nonatomic, assign) HBJob *job;
 
-- (void) reload;
+/**
+ *  Reloads the preview images.
+ *  Usually called after a picture setting changes.
+ */
+- (void)reloadPreviews;
 
 @end

@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureController">
             <connections>
                 <outlet property="fAnamorphicPopUp" destination="132" id="140"/>
-                <outlet property="fCropBottomField" destination="10" id="53"/>
-                <outlet property="fCropBottomStepper" destination="14" id="54"/>
-                <outlet property="fCropLeftField" destination="11" id="55"/>
-                <outlet property="fCropLeftStepper" destination="19" id="56"/>
-                <outlet property="fCropMatrix" destination="16" id="57"/>
-                <outlet property="fCropRightField" destination="9" id="58"/>
-                <outlet property="fCropRightStepper" destination="15" id="59"/>
-                <outlet property="fCropTopField" destination="13" id="60"/>
-                <outlet property="fCropTopStepper" destination="12" id="61"/>
                 <outlet property="fDeblockField" destination="291" id="372"/>
                 <outlet property="fDecombBox" destination="315" id="364"/>
                 <outlet property="fDecombDeinterlaceBox" destination="287" id="360"/>
@@ -29,23 +20,11 @@
                 <outlet property="fDenoiseTuneLabel" destination="gpP-sp-Lev" id="Q7g-G7-JZZ"/>
                 <outlet property="fDenoiseTunePopUp" destination="Upd-5E-OpR" id="5UN-Gt-l11"/>
                 <outlet property="fDetelecineBox" destination="286" id="356"/>
-                <outlet property="fDisplayWidthField" destination="396" id="407"/>
-                <outlet property="fDisplayWidthLabel" destination="402" id="526"/>
-                <outlet property="fHeightField" destination="43" id="66"/>
-                <outlet property="fHeightStepper" destination="46" id="67"/>
-                <outlet property="fModulusLabel" destination="390" id="532"/>
-                <outlet property="fModulusPopUp" destination="384" id="392"/>
-                <outlet property="fParHeightField" destination="442" id="449"/>
-                <outlet property="fParHeightLabel" destination="446" id="525"/>
-                <outlet property="fParWidthField" destination="440" id="448"/>
-                <outlet property="fParWidthLabel" destination="444" id="524"/>
+                <outlet property="fHeightStepper" destination="46" id="cLy-f3-fot"/>
                 <outlet property="fPictureCropBox" destination="7" id="242"/>
                 <outlet property="fPictureSizeBox" destination="436" id="437"/>
-                <outlet property="fRatioCheck" destination="45" id="74"/>
                 <outlet property="fSizeFilterView" destination="281" id="419"/>
-                <outlet property="fSizeInfoField" destination="278" id="280"/>
-                <outlet property="fWidthField" destination="42" id="68"/>
-                <outlet property="fWidthStepper" destination="44" id="69"/>
+                <outlet property="fWidthStepper" destination="44" id="z49-FB-Xci"/>
                 <outlet property="window" destination="5" id="184"/>
             </connections>
         </customObject>
@@ -61,7 +40,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <userGuides>
                     <userLayoutGuide affinity="minY"/>
-                    <userLayoutGuide location="115" affinity="minX"/>
+                    <userLayoutGuide location="114" affinity="minX"/>
                 </userGuides>
                 <subviews>
                     <textField verticalHuggingPriority="750" id="262">
@@ -81,6 +60,9 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                         </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.picture.info" id="Qs2-Ni-TWK"/>
+                        </connections>
                     </textField>
                     <tabView controlSize="mini" initialItem="282" id="281">
                         <rect key="frame" x="-12" y="18" width="658" height="216"/>
@@ -107,6 +89,13 @@
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="aUz-kE-qa4">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="396">
                                                         <rect key="frame" x="278" y="106" width="61" height="16"/>
@@ -117,7 +106,18 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="EIO-m9-bQ5"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="zMs-ue-T1n" id="gD3-Yl-3au">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="gD3-Yl-3au" id="PSj-Fl-3Ni">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="zMs-ue-T1n"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="nMg-v2-Fvg"/>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="440">
@@ -129,7 +129,18 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="Ip6-Hp-U6K"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="Wvz-jo-lwE" id="b7l-Ej-dxa">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="b7l-Ej-dxa" id="4ER-Vi-m2V">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="Wvz-jo-lwE"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.parWidth" id="PXg-GA-vo6"/>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="442">
@@ -141,7 +152,18 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="YvM-ki-flP"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="Vjg-8L-veN" id="kG8-EC-OJR">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="kG8-EC-OJR" id="6PT-Pz-qs1">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="Vjg-8L-veN"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="HrI-5d-evg"/>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="444">
@@ -152,6 +174,13 @@
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="Gp6-pf-QeR">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="446">
                                                         <rect key="frame" x="202" y="56" width="71" height="16"/>
@@ -161,6 +190,13 @@
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="IQs-tB-UlR">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="44">
                                                         <rect key="frame" x="143" y="103" width="15" height="22"/>
@@ -169,25 +205,28 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="je3-pw-SC3"/>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxWidth" id="P3g-UC-vRH"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.width" previousBinding="P3g-UC-vRH" id="Ilz-OP-M5c"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.widthEditable" id="ied-mi-MjS"/>
                                                         </connections>
                                                     </stepper>
                                                     <popUpButton verticalHuggingPriority="750" id="384">
                                                         <rect key="frame" x="75" y="15" width="46" height="15"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="16" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="387" id="385">
+                                                        <popUpButtonCell key="cell" type="push" title="4" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="389" id="385">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <menu key="menu" title="OtherViews" id="386">
                                                                 <items>
-                                                                    <menuItem title="16" state="on" id="387"/>
+                                                                    <menuItem title="16" id="387"/>
                                                                     <menuItem title="8" id="388"/>
-                                                                    <menuItem title="4" id="389"/>
+                                                                    <menuItem title="4" state="on" id="389"/>
+                                                                    <menuItem title="2" id="Fx1-DI-r18"/>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="fS2-p2-Ldc"/>
+                                                            <binding destination="-2" name="selectedValue" keyPath="self.picture.modulus" id="anc-Ha-mxE"/>
                                                         </connections>
                                                     </popUpButton>
                                                     <textField verticalHuggingPriority="750" id="42">
@@ -202,7 +241,13 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="EJC-vL-fSK"/>
+                                                            <binding destination="-2" name="editable" keyPath="self.picture.widthEditable" id="YBx-pZ-bPA"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.width" id="Dr6-U5-h7T">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSNullPlaceholder" value="0"/>
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="46">
@@ -212,7 +257,9 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="77Y-D7-WA9"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.height" previousBinding="nJk-wN-aaB" id="l4c-7G-SMf"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.heightEditable" id="Fdi-IK-Y16"/>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxHeight" id="nJk-wN-aaB"/>
                                                         </connections>
                                                     </stepper>
                                                     <textField verticalHuggingPriority="750" id="138">
@@ -236,19 +283,19 @@
                                                     <popUpButton verticalHuggingPriority="750" id="132">
                                                         <rect key="frame" x="75" y="38" width="80" height="15"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="135" id="173">
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="173">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <menu key="menu" title="OtherViews" id="134">
                                                                 <items>
-                                                                    <menuItem title="Item 1" state="on" id="135"/>
+                                                                    <menuItem title="Item 1" id="135"/>
                                                                     <menuItem title="Item 2" id="136"/>
                                                                     <menuItem title="Item 3" id="137"/>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="OGE-xz-yb7"/>
+                                                            <binding destination="-2" name="selectedIndex" keyPath="self.picture.anamorphicMode" id="nZC-Kh-dDe"/>
                                                         </connections>
                                                     </popUpButton>
                                                     <textField verticalHuggingPriority="750" id="390">
@@ -284,7 +331,13 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="hfw-v1-XQB"/>
+                                                            <binding destination="-2" name="editable" keyPath="self.picture.heightEditable" id="Je1-xf-WNB"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.height" id="T7h-fp-Qs6">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSNullPlaceholder" value="0"/>
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                     <button id="45">
@@ -295,7 +348,8 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="urF-IM-OfA"/>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.keepDisplayAspect" id="8uc-2H-rkz"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspectEditable" id="DSI-Ra-G0d"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -317,7 +371,13 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="gih-EE-fLI"/>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="9ff-Ns-69S"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="Vp0-sU-c5s">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropTop" previousBinding="9ff-Ns-69S" id="4Cj-4f-6FM"/>
                                                         </connections>
                                                     </stepper>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="15">
@@ -325,10 +385,16 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="155">
                                                             <font key="font" metaFont="smallSystem"/>
-                                                            <connections>
-                                                                <action selector="settingsChanged:" target="-2" id="pwP-2b-uZ1"/>
-                                                            </connections>
                                                         </stepperCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="39d-dv-rDM"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="5QD-Dh-bzl">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropRight" previousBinding="39d-dv-rDM" id="OUg-17-HR9"/>
+                                                        </connections>
                                                     </stepper>
                                                     <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="16">
                                                         <rect key="frame" x="64" y="92" width="90" height="31"/>
@@ -353,7 +419,11 @@
                                                             </column>
                                                         </cells>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="dUb-Ct-S9f"/>
+                                                            <binding destination="-2" name="selectedIndex" keyPath="self.picture.autocrop" id="9wD-y3-pVM">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </matrix>
                                                     <textField verticalHuggingPriority="750" id="13">
@@ -365,7 +435,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="LEd-0c-EqV"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="DlH-KY-uVi">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="ABP-Q9-NDw">
+                                                                <dictionary key="options">
+                                                                    <string key="NSNullPlaceholder">0</string>
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="10">
@@ -377,7 +457,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="txb-hc-ans"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="Hai-0I-6yj">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="nVf-lw-Tr1">
+                                                                <dictionary key="options">
+                                                                    <string key="NSNullPlaceholder">0</string>
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="19">
@@ -385,10 +475,16 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="156">
                                                             <font key="font" metaFont="smallSystem"/>
-                                                            <connections>
-                                                                <action selector="settingsChanged:" target="-2" id="Ds0-vg-mpO"/>
-                                                            </connections>
                                                         </stepperCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="2Rh-om-NkW"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="WmV-2A-EDo">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropLeft" previousBinding="2Rh-om-NkW" id="hk3-CS-WKR"/>
+                                                        </connections>
                                                     </stepper>
                                                     <textField verticalHuggingPriority="750" id="9">
                                                         <rect key="frame" x="194" y="56" width="36" height="16"/>
@@ -399,7 +495,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="FQT-HE-w3X"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="yw7-7Q-sse">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="lou-1C-A2w">
+                                                                <dictionary key="options">
+                                                                    <string key="NSNullPlaceholder">0</string>
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="11">
@@ -411,7 +517,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="settingsChanged:" target="-2" id="JTs-h7-4xm"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="egn-yP-dYe">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="ste-Ks-OLX">
+                                                                <dictionary key="options">
+                                                                    <string key="NSNullPlaceholder">0</string>
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="14">
@@ -419,10 +535,16 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="154">
                                                             <font key="font" metaFont="smallSystem"/>
-                                                            <connections>
-                                                                <action selector="settingsChanged:" target="-2" id="e3a-Lo-Umb"/>
-                                                            </connections>
                                                         </stepperCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="jS8-Tg-h3O"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="soK-UE-pde">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropBottom" previousBinding="jS8-Tg-h3O" id="k6f-Bd-Crr"/>
+                                                        </connections>
                                                     </stepper>
                                                     <textField verticalHuggingPriority="750" id="382">
                                                         <rect key="frame" x="3" y="107" width="59" height="17"/>
@@ -896,7 +1018,8 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="hby-dR-NFK"/>
             </connections>
-            <point key="canvasLocation" x="182.5" y="419"/>
+            <point key="canvasLocation" x="-1.5" y="238"/>
         </window>
+        <userDefaultsController representsSharedInstance="YES" id="vUw-ux-GVV"/>
     </objects>
 </document>

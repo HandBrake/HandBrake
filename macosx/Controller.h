@@ -193,7 +193,6 @@ extern NSString *keyTitleTag;
 - (IBAction) formatPopUpChanged: (id) sender;
 - (IBAction) autoSetM4vExtension: (id) sender;
 
-- (void) prepareJob;
 - (IBAction) browseFile: (id) sender;
 
 - (IBAction) showPicturePanel: (id) sender;

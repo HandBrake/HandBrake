@@ -5,7 +5,9 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-#include "hb.h"
+
+@class HBCore;
+@class HBJob;
 
 @protocol HBPreviewGeneratorDelegate <NSObject>
 
@@ -19,9 +21,8 @@
 @interface HBPreviewGenerator : NSObject
 
 @property (nonatomic, assign) id <HBPreviewGeneratorDelegate> delegate;
-@property (nonatomic) BOOL deinterlace;
 
-- (id) initWithHandle: (hb_handle_t *) handle andTitle: (hb_title_t *) title;
+- (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job;
 
 /* Still image generator */
 - (NSImage *) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
