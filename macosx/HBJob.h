@@ -6,9 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class HBPreset;
-
-@class HBTitle;
+#import "HBTitle.h"
 
 #import "HBVideo.h"
 #import "HBPicture.h"
@@ -16,6 +14,8 @@
 
 @class HBAudioDefaults;
 @class HBSubtitlesDefaults;
+
+@class HBPreset;
 
 typedef NS_ENUM(NSUInteger, HBJobStatus) {
     HBJobStatusNone,
@@ -30,6 +30,7 @@ typedef NS_ENUM(NSUInteger, HBJobStatus) {
 @interface HBJob : NSObject <NSCoding, NSCopying>
 
 - (instancetype)initWithTitle:(HBTitle *)title url:(NSURL *)fileURL andPreset:(HBPreset *)preset;
+- (void)applyPreset:(HBPreset *)preset;
 
 @property (nonatomic, readonly) HBJobStatus status;
 

@@ -20,6 +20,10 @@
 {
     self = [super init];
     if (self) {
+        NSParameterAssert(title);
+        NSParameterAssert(fileURL);
+        NSParameterAssert(preset);
+
         _title = title;
         _fileURL = [fileURL copy];
 
@@ -27,7 +31,7 @@
         _subtitlesDefaults = [[HBSubtitlesDefaults alloc] init];
 
         _video = [[HBVideo alloc] init];
-        _picture = [[HBPicture alloc] init];
+        _picture = [[HBPicture alloc] initWithTitle:title];
         _filters = [[HBFilters alloc] init];
 
         [self applyPreset:preset];

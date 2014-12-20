@@ -9,7 +9,7 @@
 
 /**
  * HBTitles is an interface to the low-level hb_title_t.
- * the properties ara lazy-loaded.
+ * the properties are lazy-loaded.
  */
 @interface HBTitle : NSObject
 
@@ -25,7 +25,7 @@
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly, getter=isFeatured) BOOL featured;
 
-@property (nonatomic, readonly) hb_title_t *title;
+@property (nonatomic, readonly) hb_title_t *hb_title;
 
 @property (nonatomic, readonly) NSArray *audioTracks;
 @property (nonatomic, readonly) NSArray *subtitlesTracks;

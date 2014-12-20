@@ -54,6 +54,7 @@ extern NSString *keySubTrackSrtCharCode;
             return nil;
         }
 
+        _hb_title = title;
         _featured = featured;
     }
 
@@ -64,23 +65,26 @@ extern NSString *keySubTrackSrtCharCode;
 {
     if (!_name)
     {
-        if (self.title->type == HB_BD_TYPE)
-        {
-            _name = [NSString stringWithFormat:@"%s %d (%05d.MPLS) - %02dh%02dm%02ds",
-                     self.title->name, self.title->index, self.title->playlist,
-                     self.title->hours, self.title->minutes, self.title->seconds];
-        }
-        else
-        {
-            _name = [NSString stringWithFormat:@"%s %d - %02dh%02dm%02ds",
-                     self.title->name, self.title->index,
-                     self.title->hours, self.title->minutes, self.title->seconds];
-        }
-
-        [_name retain];
+        _name = [@(self.hb_title->name) retain];
     }
 
     return _name;
+}
+
+- (NSString *)description
+{
+    if (self.hb_title->type == HB_BD_TYPE)
+    {
+        return [NSString stringWithFormat:@"%@ %d (%05d.MPLS) - %02dh%02dm%02ds",
+                 @(self.hb_title->name), self.hb_title->index, self.hb_title->playlist,
+                 self.hb_title->hours, self.hb_title->minutes, self.hb_title->seconds];
+    }
+    else
+    {
+        return [NSString stringWithFormat:@"%@ %d - %02dh%02dm%02ds",
+                 @(self.hb_title->name), self.hb_title->index,
+                 self.hb_title->hours, self.hb_title->minutes, self.hb_title->seconds];
+    }
 }
 
 - (NSArray *)audioTracks
@@ -89,7 +93,7 @@ extern NSString *keySubTrackSrtCharCode;
     {
         NSMutableArray *tracks = [NSMutableArray array];
         hb_audio_config_t *audio;
-        hb_list_t *list = self.title->list_audio;
+        hb_list_t *list = self.hb_title->list_audio;
         int count = hb_list_count(list);
 
         // Initialize the audio list of available audio tracks from this title
@@ -118,7 +122,7 @@ extern NSString *keySubTrackSrtCharCode;
     {
         NSMutableArray *tracks = [NSMutableArray array];
         hb_subtitle_t *subtitle;
-        hb_list_t *list = self.title->list_audio;
+        hb_list_t *list = self.hb_title->list_audio;
         int count = hb_list_count(list);
 
         NSMutableArray *forcedSourceNamesArray = [[NSMutableArray alloc] init];
@@ -126,7 +130,7 @@ extern NSString *keySubTrackSrtCharCode;
 
         for (int i = 0; i < count; i++)
         {
-            subtitle = (hb_subtitle_t *)hb_list_item(self.title->list_subtitle, i);
+            subtitle = (hb_subtitle_t *)hb_list_item(self.hb_title->list_subtitle, i);
 
             /* Human-readable representation of subtitle->source */
             NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
@@ -187,9 +191,9 @@ extern NSString *keySubTrackSrtCharCode;
     {
         NSMutableArray *chapters = [NSMutableArray array];
 
-        for (int i = 0; i < hb_list_count(self.title->job->list_chapter); i++)
+        for (int i = 0; i < hb_list_count(self.hb_title->list_chapter); i++)
         {
-            hb_chapter_t *chapter = hb_list_item(self.title->job->list_chapter, i);
+            hb_chapter_t *chapter = hb_list_item(self.hb_title->list_chapter, i);
 
             if (chapter != NULL)
             {
