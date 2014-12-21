@@ -246,16 +246,18 @@
         }
     }
 
-    if (self.video.qualityType != 2)
+    switch (self.video.qualityType)
     {
-        job->vquality = -1.0;
-        job->vbitrate = self.video.avgBitrate;
-    }
-    if (self.video.qualityType == 2)
-    {
-        job->vquality = self.video.quality;
-        job->vbitrate = 0;
-
+        case 0:
+            // ABR
+            job->vquality = -1.0;
+            job->vbitrate = self.video.avgBitrate;
+            break;
+        case 1:
+            // Constant Quality
+            job->vquality = self.video.quality;
+            job->vbitrate = 0;
+            break;
     }
 
     job->grayscale = self.filters.grayscale;

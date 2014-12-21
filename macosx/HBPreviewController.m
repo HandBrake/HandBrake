@@ -902,7 +902,6 @@ typedef enum ViewMode : NSUInteger {
         return;
 
     self.generator.delegate = self;
-    [self.delegate prepareJobForPreview];
     [self.generator createMovieAsyncWithImageIndex:self.pictureIndex
                                        andDuration:[[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue]];
 

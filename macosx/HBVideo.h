@@ -18,8 +18,6 @@
 - (void)applyVideoSettingsFromQueue:(NSDictionary *)queueToApply;
 - (void)prepareVideoForQueueFileJob:(NSMutableDictionary *)queueFileJob;
 
-- (void)prepareVideoForJobPreview:(hb_job_t *)job andTitle:(hb_title_t *)title;
-
 @property (nonatomic, readwrite) int encoder;
 
 @property (nonatomic, readwrite) int qualityType;

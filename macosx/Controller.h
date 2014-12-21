@@ -262,7 +262,6 @@ extern NSString *keyContainerTag;
 -(void)showGrowlDoneNotification:(NSString *) filePath;
 - (IBAction)showDebugOutputPanel:(id)sender;
 
-- (void) prepareJobForPreview;
 - (void) remindUserOfSleepOrShutdown;
 
 - (int) hbInstances;

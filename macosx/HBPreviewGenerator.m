@@ -202,7 +202,7 @@ typedef enum EncodeState : NSUInteger {
     if (self.core || index >= self.imagesCount)
         return NO;
 
-    hb_job_t *job = self.job.title.hb_title->job;
+    hb_job_t *job = self.job.hb_job;
 
     /* Generate the file url and directories. */
     if (job->mux & HB_MUX_MASK_MP4)
@@ -286,7 +286,7 @@ typedef enum EncodeState : NSUInteger {
     hb_add(self.core.hb_handle, job);
 
     /* we need to clean up the various lists after the job(s) have been set  */
-    hb_job_reset(job);
+    hb_job_close(&job);
 
     [self registerCoreNotifications];
     self.cancelled = NO;
