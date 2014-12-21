@@ -164,8 +164,6 @@ extern NSString *keyContainerTag;
 }
 
 - (IBAction) browseSources: (id) sender;
-- (void) browseSourcesDone: (NSOpenPanel *) sheet
-                returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (IBAction) showSourceTitleScanPanel: (id) sender;
 - (IBAction) closeSourceTitleScanPanel: (id) sender;  
 - (void) performScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
