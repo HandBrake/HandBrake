@@ -43,8 +43,8 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 @property (assign) IBOutlet NSButton *reloadDefaults;
 
 // Subtitles arrays
-@property (nonatomic, readonly) NSMutableArray *subtitleArray;
-@property (nonatomic, readonly) NSMutableArray *subtitleSourceArray;
+@property (nonatomic, readwrite) NSMutableArray *subtitleArray;
+@property (nonatomic, readwrite) NSMutableArray *subtitleSourceArray;
 
 @property (nonatomic, readwrite, retain) NSString *foreignAudioSearchTrackName;
 @property (nonatomic, readwrite) int container;
@@ -111,6 +111,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
     if (job)
     {
+        self.subtitleArray = job.subtitlesTracks;
         self.settings = job.subtitlesDefaults;
         hb_title_t *title = job.title.hb_title;
 

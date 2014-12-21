@@ -12,16 +12,18 @@
 #import "HBPicture.h"
 #import "HBFilters.h"
 
-@class HBAudioDefaults;
-@class HBSubtitlesDefaults;
+#import "HBAudioDefaults.h"
+#import "HBSubtitlesDefaults.h"
+
+#include "hb.h"
 
 @class HBPreset;
 
-typedef NS_ENUM(NSUInteger, HBJobStatus) {
-    HBJobStatusNone,
-    HBJobStatusWorking,
-    HBJobStatusCompleted,
-    HBJobStatusCanceled
+typedef NS_ENUM(NSUInteger, HBJobState) {
+    HBJobStateNone,
+    HBJobStateWorking,
+    HBJobStateCompleted,
+    HBJobStateCanceled
 };
 
 /**
@@ -32,11 +34,19 @@ typedef NS_ENUM(NSUInteger, HBJobStatus) {
 - (instancetype)initWithTitle:(HBTitle *)title url:(NSURL *)fileURL andPreset:(HBPreset *)preset;
 - (void)applyPreset:(HBPreset *)preset;
 
-@property (nonatomic, readonly) HBJobStatus status;
+/**
+ *  Current state of the job.
+ */
+@property (nonatomic, readonly) HBJobState state;
 
-// libhb
 @property (nonatomic, readonly) HBTitle *title;
+
+// urls
 @property (nonatomic, readonly) NSURL *fileURL;
+@property (nonatomic, readonly) NSURL *destURL;
+
+// Libhb job
+@property (nonatomic, readonly) hb_job_t *hb_job;
 
 // Old job format
 @property (nonatomic, readwrite, retain) NSDictionary *jobDict;
@@ -45,13 +55,18 @@ typedef NS_ENUM(NSUInteger, HBJobStatus) {
 // Job settings
 @property (nonatomic, readwrite) int fileFormat;
 
-@property (nonatomic, readwrite) BOOL mp4LargeFile;
 @property (nonatomic, readwrite) BOOL mp4HttpOptimize;
 @property (nonatomic, readwrite) BOOL mp4iPodCompatible;
 
 @property (nonatomic, readonly) HBVideo *video;
 @property (nonatomic, readonly) HBPicture *picture;
 @property (nonatomic, readonly) HBFilters *filters;
+
+@property (nonatomic, readonly) NSMutableArray *audioTracks;
+@property (nonatomic, readonly) NSMutableArray *subtitlesTracks;
+
+@property (nonatomic, readonly) BOOL chaptersEnabled;
+@property (nonatomic, readonly) NSMutableArray *chapterNames;
 
 // Defaults settings
 @property (nonatomic, readonly) HBAudioDefaults *audioDefaults;
