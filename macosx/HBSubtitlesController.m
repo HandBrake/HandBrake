@@ -8,6 +8,8 @@
 #import "HBSubtitlesDefaultsController.h"
 #import "HBSubtitlesDefaults.h"
 
+#import "HBJob.h"
+
 #import "Controller.h"
 #include "hb.h"
 #include "lang.h"
@@ -86,7 +88,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
         // Register as observer for the HBController notifications.
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(containerChanged:) name: HBContainerChangedNotification object: nil];
-        [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object: nil];
     }
 
     return self;
@@ -101,19 +102,18 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     _enabled = enabled;
 }
 
-- (void)titleChanged:(NSNotification *)aNotification
+- (void)setJob:(HBJob *)job
 {
-    NSDictionary *notDict = [aNotification userInfo];
-    NSData *theData = notDict[keyTitleTag];
-    hb_title_t *title = NULL;
-    [theData getBytes: &title length: sizeof(title)];
-
     /* reset the subtitles arrays */
     [self.subtitleArray removeAllObjects];
     [self.subtitleSourceArray removeAllObjects];
+    self.settings = nil;
 
-    if (title)
+    if (job)
     {
+        self.settings = job.subtitlesDefaults;
+        hb_title_t *title = job.title.hb_title;
+
         /* now populate the array with the source subtitle track info */
         NSMutableArray *forcedSourceNamesArray = [[NSMutableArray alloc] init];
         for (int i = 0; i < hb_list_count(title->list_subtitle); i++)
@@ -220,7 +220,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
-    self.settings = [[[HBSubtitlesDefaults alloc] init] autorelease];
     [self.settings applySettingsFromPreset:preset];
 
     [self addTracksFromDefaults:self];

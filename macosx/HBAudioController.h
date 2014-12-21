@@ -18,19 +18,20 @@ extern NSString *keyAudioInputChannelLayout;
 
 extern NSString *HBMixdownChangedNotification;
 
+@class HBJob;
 @class HBAudio;
-@class HBAudioDefaults;
+
 /**
  *  HBAudioController
  *
- *  Responds to HBContainerChangedNotification and HBTitleChangedNotification notifications.
+ *  Responds to HBContainerChangedNotification.
  */
 @interface HBAudioController : NSViewController <HBViewValidation>
 
 @property (nonatomic, readonly, retain) NSArray *masterTrackArray;
 @property (nonatomic, readonly) NSDictionary *noneTrack;
 
-@property(nonatomic, readonly) HBAudioDefaults *settings;
+@property (nonatomic, readwrite, assign) HBJob *job;
 
 // Get the list of audio tracks
 @property (readonly, nonatomic, copy) NSArray *audioTracks;

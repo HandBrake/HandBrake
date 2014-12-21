@@ -11,6 +11,9 @@
 #import "HBAudioDefaults.h"
 #import "HBAudioDefaultsController.h"
 #import "HBAudioTrackPreset.h"
+
+#import "HBJob.h"
+
 #import "hb.h"
 #include "lang.h"
 
@@ -68,7 +71,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         /* register that we are interested in changes made to the video container */
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         [center addObserver: self selector: @selector(containerChanged:) name: HBContainerChangedNotification object: nil];
-        [center addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object: nil];
     }
     return self;
 }
@@ -199,7 +201,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
-    self.settings = [[[HBAudioDefaults alloc] init] autorelease];
     [self.settings applySettingsFromPreset:preset];
     [self.settings validateEncoderFallbackForVideoContainer:[self.videoContainerTag intValue]];
 
@@ -485,22 +486,15 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self.settings validateEncoderFallbackForVideoContainer:[self.videoContainerTag intValue]];
 }
 
-- (void) titleChanged: (NSNotification *) aNotification
+- (void)setJob:(HBJob *)job
 
 {
-    NSDictionary *notDict = [aNotification userInfo];
-    NSData *theData = notDict[keyTitleTag];
-    hb_title_t *title = NULL;
-
     // Reinitialize the configured list of audio tracks
     [self _clearAudioArray];
     
-    [theData getBytes: &title length: sizeof(title)];
-    if (title)
+    if (job)
     {
-        hb_audio_config_t *audio;
-        hb_list_t *list = title->list_audio;
-        int i, count = hb_list_count(list);
+        self.settings = job.audioDefaults;
 
         // Reinitialize the master list of available audio tracks from this title
         NSMutableArray *newTrackArray = [NSMutableArray array];
@@ -509,23 +503,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                        keyAudioTrackName: NSLocalizedString(@"None", @"None"),
                        keyAudioInputCodec: @0} retain];
         [newTrackArray addObject: noneTrack];
-        for (i = 0; i < count; i++)
-        {
-            audio = (hb_audio_config_t *) hb_list_audio_config_item(list, i);
-            [newTrackArray addObject: @{keyAudioTrackIndex: @(i + 1),
-                                        keyAudioTrackName: [NSString stringWithFormat: @"%d: %s", i, audio->lang.description],
-                                        keyAudioInputBitrate: @(audio->in.bitrate / 1000),
-                                        keyAudioInputSampleRate: @(audio->in.samplerate),
-                                        keyAudioInputCodec: [NSNumber numberWithUnsignedInteger: audio->in.codec],
-                                        keyAudioInputCodecParam: [NSNumber numberWithUnsignedInteger: audio->in.codec_param],
-                                        keyAudioInputChannelLayout: @(audio->in.channel_layout),
-                                        keyAudioTrackLanguageIsoCode: @(audio->lang.iso639_2)}];
-        }
+        [newTrackArray addObjectsFromArray:job.title.audioTracks];
         self.masterTrackArray = newTrackArray;
         [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
     }
     else
     {
+        self.settings = nil;
         self.masterTrackArray = nil;
     }
 

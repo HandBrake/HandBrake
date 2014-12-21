@@ -7,8 +7,6 @@
 #import <Cocoa/Cocoa.h>
 #import <Growl/Growl.h>
 
-#include "hb.h"
-
 #import "PictureController.h"
 #import "HBPreviewController.h"
 
@@ -24,8 +22,6 @@
 
 extern NSString *HBContainerChangedNotification;
 extern NSString *keyContainerTag;
-extern NSString *HBTitleChangedNotification;
-extern NSString *keyTitleTag;
 
 @class HBOutputPanelController;
 @class HBPresetsViewController;
@@ -148,7 +144,6 @@ extern NSString *keyTitleTag;
     
     /* Queue variables */
     int                          hbInstanceNum; //stores the number of HandBrake instances currently running
-	hb_title_t                   * fTitle;
     int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
     int                          fWorkingCount;
     
@@ -159,10 +154,7 @@ extern NSString *keyTitleTag;
     /* integer to set to determine the previous state
 		of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
-    BOOL                           SuccessfulScan;
-    BOOL                           titleLoaded;
     BOOL                           applyQueueToScan;
-	NSString                      * currentSource;
     NSString                      * browsedSourceDisplayName;
     
     /* Dock progress variables */

@@ -187,7 +187,7 @@ extern NSString *keySubTrackSrtCharCode;
 
 - (NSArray *)chapters
 {
-    if (_chapters)
+    if (!_chapters)
     {
         NSMutableArray *chapters = [NSMutableArray array];
 

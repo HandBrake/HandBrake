@@ -11,7 +11,6 @@
 
 #include "hb.h"
 
-NSString *HBVideoEncoderChangedNotification = @"HBVideoEncoderChangedNotification";
 static void *HBVideoControllerContext = &HBVideoControllerContext;
 
 @interface HBVideoController () {
@@ -39,7 +38,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 
 @property (nonatomic, retain, readwrite) HBAdvancedController *advancedController;
 
-@property (nonatomic, readwrite) HBVideo *video;
 @property (nonatomic, readwrite) BOOL presetViewEnabled;
 
 @property (nonatomic, readwrite) NSColor *labelColor;

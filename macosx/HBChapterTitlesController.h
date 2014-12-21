@@ -7,13 +7,16 @@
 #import <Cocoa/Cocoa.h>
 #import "HBViewValidation.h"
 
+@class HBJob;
+
 /**
  *  HBChapterTitlesController
- *  Responds to HBTitleChangedNotification notifications.
  */
 @interface HBChapterTitlesController : NSViewController <HBViewValidation>
 
 - (void)addChaptersFromQueue:(NSMutableArray *)newChaptersArray;
+
+@property (nonatomic, readwrite, assign) HBJob *job;
 
 /**
  *  Enable/disable chapters markers

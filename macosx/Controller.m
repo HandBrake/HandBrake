@@ -4,7 +4,6 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include <dlfcn.h>
 #import "Controller.h"
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
@@ -26,14 +25,13 @@
 
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
-NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
-NSString *keyTitleTag                          = @"keyTitleTag";
 
 // DockTile update freqency in total percent increment
 #define dockTileUpdateFrequency                  0.1f
 
 @interface HBController () <HBPresetsViewControllerDelegate>
 
+// The current job.
 @property (nonatomic, retain) HBJob *job;
 
 // The current selected preset.
@@ -132,7 +130,6 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         [fQueueController setHBController:self];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMp4Checkboxes:) name:HBVideoEncoderChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:nil];
 
@@ -253,7 +250,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
                  * the queue is empty of any finished items or cancelled items */
                 [self clearQueueAllItems];
 
-                if (self.core.state != HBStateScanning && !titleLoaded)
+                if (self.core.state != HBStateScanning && !self.job)
                 {
                     // We show whichever open source window specified in LaunchSourceBehavior preference key
                     if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
@@ -272,7 +269,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
     }
     else
     {
-        if (self.core.state != HBStateScanning && !titleLoaded)
+        if (self.core.state != HBStateScanning && !self.job)
         {
             // We show whichever open source window specified in LaunchSourceBehavior preference key
             if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
@@ -1024,7 +1021,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
                 [toolbarItem setToolTip: @"Pause Encoding"];
                 return YES;
             }
-            if (SuccessfulScan)
+            if (self.job)
             {
                 if (action == @selector(addToQueue:))
                     return YES;
@@ -1057,7 +1054,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         {
             return NO;
         }
-        else if (queueState == HBStateWorkDone || queueState == HBStateScanDone || SuccessfulScan)
+        else if (queueState == HBStateWorkDone || queueState == HBStateScanDone || self.job)
         {
             if (action == @selector(Rip:))
             {
@@ -1103,7 +1100,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         HBState queueState = self.queueCore.state;
 
         if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
-            return SuccessfulScan && [fWindow attachedSheet] == nil;
+            return self.job && [fWindow attachedSheet] == nil;
         
         if (action == @selector(selectDefaultPreset:))
             return [fWindow attachedSheet] == nil;
@@ -1132,7 +1129,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
                     [menuItem setTitle:@"Stop Encoding"];
                 return YES;
             }
-            else if (SuccessfulScan)
+            else if (self.job)
             {
                 if(![[menuItem title] isEqualToString:@"Start Encoding"])
                     [menuItem setTitle:@"Start Encoding"];
@@ -1303,10 +1300,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
     /* User selected a file to open */
 	if( returnCode == NSOKButton )
     {
-        // We started a new scan, so set SuccessfulScan to no for now.
-        SuccessfulScan = NO;
-
-            /* Free display name allocated previously by this code */
+        /* Free display name allocated previously by this code */
         [browsedSourceDisplayName release];
        
         NSURL *scanURL = [[sheet URLs] objectAtIndex: 0];
@@ -1461,22 +1455,20 @@ NSString *keyTitleTag                          = @"keyTitleTag";
 - (void)performScan:(NSString *)scanPath scanTitleNum:(NSInteger)scanTitleNum
 {
     // Save the current settings
-    if (titleLoaded) {
+    if (self.job) {
         self.selectedPreset = [self createPresetFromCurrentSettings];
-        titleLoaded = NO;
     }
 
+    self.job = nil;
     // Notify anyone interested (audio/subtitles/chapters controller) that there's no title
-    fTitle = NULL;
     fPictureController.picture = nil;
+    fPictureController.filters = nil;
     fPreviewController.job = nil;
 
-	[[NSNotificationCenter defaultCenter] postNotification:
-	 [NSNotification notificationWithName: HBTitleChangedNotification
-								   object: self
-								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
-											nil]]];
+    fAudioController.job = nil;
+    fSubtitlesViewController.job = nil;
+    fVideoController.video = nil;
+    fChapterTitlesController.job = nil;
 
     [self enableUI: NO];
 
@@ -1548,20 +1540,6 @@ NSString *keyTitleTag                          = @"keyTitleTag";
         {
             /* We display a message if a valid dvd source was not chosen */
             [fSrcDVD2Field setStringValue: @"No Valid Source Found"];
-            SuccessfulScan = NO;
-
-            // Notify PictureController that there's no title
-            fPictureController.picture = nil;
-            fPictureController.filters = nil;
-            fPreviewController.job = nil;
-
-			//	Notify anyone interested (video/audio/subtitles/chapters controller) that there's no title
-			[[NSNotificationCenter defaultCenter] postNotification:
-			 [NSNotification notificationWithName: HBTitleChangedNotification
-										   object: self
-										 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-													[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
-													nil]]];
         }
         else
         {
@@ -1587,7 +1565,7 @@ NSString *keyTitleTag                          = @"keyTitleTag";
             {
                 title = (hb_title_t *) hb_list_item( title_set->list_title, i );
                 
-                currentSource = [NSString stringWithUTF8String: title->name];
+                NSString *currentSource = [NSString stringWithUTF8String: title->name];
                 /*Set DVD Name at top of window with the browsedSourceDisplayName grokked right before -performScan */
                 if (!browsedSourceDisplayName)
                 {
@@ -1656,12 +1634,8 @@ NSString *keyTitleTag                          = @"keyTitleTag";
                 [fSrcTitlePopUp selectItemAtIndex: feature_title];
             }
 
-            SuccessfulScan = YES;
-
             [self enableUI:YES];
             [self titlePopUpChanged:nil];
-
-            titleLoaded = YES;
 
             [self encodeStartStopPopUpChanged:nil];
 
@@ -2087,21 +2061,21 @@ static void queueFSEventStreamCallback(
     
     /* Codecs */
 	/* Video encoder */
-    [fVideoController.video prepareVideoForQueueFileJob:queueFileJob];
+    [self.job.video prepareVideoForQueueFileJob:queueFileJob];
 
 	/* Picture Sizing */
-    [fPictureController.picture preparePictureForQueueFileJob:queueFileJob];
+    [self.job.picture preparePictureForQueueFileJob:queueFileJob];
 
     /* Text summaries of various settings */
     [queueFileJob setObject:[NSString stringWithString:[self pictureSettingsSummary]]
                      forKey:@"PictureSettingsSummary"];
-    [queueFileJob setObject:fPictureController.filters.summary
+    [queueFileJob setObject:self.job.filters.summary
                      forKey:@"PictureFiltersSummary"];
     [queueFileJob setObject:[NSString stringWithString:[self muxerOptionsSummary]]
                      forKey:@"MuxerOptionsSummary"];
 
     /* Picture Filters */
-    HBFilters *filters = fPictureController.filters;
+    HBFilters *filters = self.job.filters;
     queueFileJob[@"PictureDetelecine"] = @(filters.detelecine);
     queueFileJob[@"PictureDetelecineCustom"] = filters.detelecineCustomString;
 
@@ -2122,7 +2096,7 @@ static void queueFSEventStreamCallback(
 
     /* Audio Defaults */
     NSMutableDictionary *audioDefaults = [NSMutableDictionary dictionary];
-    [fAudioController.settings prepareAudioDefaultsForPreset:audioDefaults];
+    [self.job.audioDefaults prepareAudioDefaultsForPreset:audioDefaults];
     queueFileJob[@"AudioDefaults"] = audioDefaults;
 
     /* Audio */
@@ -2132,7 +2106,7 @@ static void queueFSEventStreamCallback(
 
 	/* Subtitles Defaults */
     NSMutableDictionary *subtitlesDefaults = [NSMutableDictionary dictionary];
-    [fSubtitlesViewController.settings prepareSubtitlesDefaultsForPreset:subtitlesDefaults];
+    [self.job.subtitlesDefaults prepareSubtitlesDefaultsForPreset:subtitlesDefaults];
     queueFileJob[@"SubtitlesDefaults"] = subtitlesDefaults;
 
 	/* Subtitles */
@@ -2390,26 +2364,26 @@ static void queueFSEventStreamCallback(
     [fDstMp4iPodFileCheck setState:[[queueToApply objectForKey:@"Mp4iPodCompatible"] intValue]];
 
     /* video encoder */
-    [fVideoController.video applyVideoSettingsFromQueue:queueToApply];
+    [self.job.video applyVideoSettingsFromQueue:queueToApply];
 
     /* Audio Defaults */
-    [fAudioController.settings applySettingsFromPreset:queueToApply[@"AudioDefaults"]];
+    [self.job.audioDefaults applySettingsFromPreset:queueToApply[@"AudioDefaults"]];
 
     /* Audio */
     /* Now lets add our new tracks to the audio list here */
     [fAudioController addTracksFromQueue:[queueToApply objectForKey:@"AudioList"]];
 
     /* Subtitles Defaults */
-    [fSubtitlesViewController.settings applySettingsFromPreset:queueToApply[@"SubtitlesDefaults"]];
+    [self.job.subtitlesDefaults applySettingsFromPreset:queueToApply[@"SubtitlesDefaults"]];
 
     /* Subtitles */
     [fSubtitlesViewController addTracksFromQueue:[queueToApply objectForKey:@"SubtitleList"]];
 
     /* Picture Settings */
-    [fPictureController.picture applyPictureSettingsFromQueue:queueToApply];
+    [self.job.picture applyPictureSettingsFromQueue:queueToApply];
 
     /* Filters */
-    HBFilters *filters = [fPictureController filters];
+    HBFilters *filters = self.job.filters;
 
     /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key. */
     filters.useDecomb = YES;
@@ -2481,7 +2455,7 @@ static void queueFSEventStreamCallback(
 
     filters.grayscale = [queueToApply[@"VideoGrayScale"] boolValue];
 
-    /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
+    // Updates the previews window and summary strings
     [self pictureSettingsDidChange];
 
     [fPresetSelectedDisplay setStringValue:queueToApply[@"PresetName"]];
@@ -2516,7 +2490,7 @@ static void queueFSEventStreamCallback(
     job->mux = (int)[[fDstFormatPopUp selectedItem] tag];
 
     /* Video Encoder */
-    [fVideoController.video prepareVideoForJobPreview:job andTitle:title];
+    [self.job.video prepareVideoForJobPreview:job andTitle:title];
 
     /* Picture Size Settings */
     HBPicture *pict = self.job.picture;
@@ -2639,27 +2613,28 @@ static void queueFSEventStreamCallback(
 
     /* Auto Passthru */
     job->acodec_copy_mask = 0;
-    if (fAudioController.settings.allowAACPassthru)
+    HBAudioDefaults *audioDefaults = self.job.audioDefaults;
+    if (audioDefaults.allowAACPassthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_FFAAC;
     }
-    if (fAudioController.settings.allowAC3Passthru)
+    if (audioDefaults.allowAC3Passthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_AC3;
     }
-    if (fAudioController.settings.allowDTSHDPassthru)
+    if (audioDefaults.allowDTSHDPassthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_DCA_HD;
     }
-    if (fAudioController.settings.allowDTSPassthru)
+    if (audioDefaults.allowDTSPassthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_DCA;
     }
-    if (fAudioController.settings.allowMP3Passthru)
+    if (audioDefaults.allowMP3Passthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_MP3;
     }
-    job->acodec_fallback = fAudioController.settings.encoderFallback;
+    job->acodec_fallback = audioDefaults.encoderFallback;
 
     // First clear out any audio tracks in the job currently
     int audiotrack_count = hb_list_count(job->list_audio);
@@ -2692,12 +2667,13 @@ static void queueFSEventStreamCallback(
     }
 
     /* Filters */
-    
+    HBFilters *filters = self.job.filters;
+
     /* Though Grayscale is not really a filter, per se
      * we put it here since its in the filters panel
      */
-     
-    if ([fPictureController.filters grayscale])
+
+    if (filters.grayscale)
     {
         job->grayscale = 1;
     }
@@ -2707,12 +2683,9 @@ static void queueFSEventStreamCallback(
     }
     
     /* Now lets call the filters if applicable.
-    * The order of the filters is critical
-    */
-    
+    * The order of the filters is critical */
 
 	/* Detelecine */
-    HBFilters *filters = [fPictureController filters];
     if (filters.detelecine == 1)
     {
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_DETELECINE);
@@ -3731,7 +3704,7 @@ static void queueFSEventStreamCallback(
 
 - (void)updateFileName
 {
-    if (!SuccessfulScan)
+    if (!self.job)
     {
         return;
     }
@@ -3756,9 +3729,9 @@ static void queueFSEventStreamCallback(
     NSString *fileName = [HBUtilities automaticNameForSource:sourceName
                                                        title:title->index
                                                     chapters:NSMakeRange([fSrcChapterStartPopUp indexOfSelectedItem] + 1, [fSrcChapterEndPopUp indexOfSelectedItem] + 1)
-                                                     quality:fVideoController.video.qualityType ? fVideoController.video.quality : 0
-                                                     bitrate:!fVideoController.video.qualityType ? fVideoController.video.avgBitrate : 0
-                                                  videoCodec:fVideoController.video.encoder];
+                                                     quality:self.job.video.qualityType ? self.job.video.quality : 0
+                                                     bitrate:!self.job.video.qualityType ? self.job.video.avgBitrate : 0
+                                                  videoCodec:self.job.video.encoder];
 
     // Swap the old one with the new one
     [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@/%@.%@",
@@ -3770,7 +3743,7 @@ static void queueFSEventStreamCallback(
 - (IBAction) titlePopUpChanged: (id) sender
 {
     // If there is already a title load, save the current settings to a preset
-    if (titleLoaded)
+    if (self.job)
     {
         self.selectedPreset = [self createPresetFromCurrentSettings];
     }
@@ -3829,23 +3802,18 @@ static void queueFSEventStreamCallback(
     }
     [fSrcAnglePopUp selectItemAtIndex: 0];
 
-    /* Start Get and set the initial pic size for display */
-	fTitle = title;
-
+    // Set the jobs info to the view controllers
     fPictureController.picture = self.job.picture;
     fPictureController.filters = self.job.filters;
     fPreviewController.job = self.job;
 
-	/* Update the others views */
-	[[NSNotificationCenter defaultCenter] postNotification:
-	 [NSNotification notificationWithName: HBTitleChangedNotification
-								   object: self
-								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
-											nil]]];
+    fVideoController.video = self.job.video;
+    fAudioController.job = self.job;
+    fSubtitlesViewController.job = self.job;
+    fChapterTitlesController.job = self.job;
 
-    /* Set Auto Crop to on upon selecting a new title  */
-    fPictureController.picture.autocrop = YES;
+    // Set Auto Crop to on upon selecting a new title
+    self.job.picture.autocrop = YES;
 
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
@@ -4039,7 +4007,7 @@ static void queueFSEventStreamCallback(
 
 - (void)updateMp4Checkboxes:(NSNotification *)notification
 {
-    if (fVideoController.video.encoder != HB_VCODEC_X264)
+    if (self.job.video.encoder != HB_VCODEC_X264)
     {
         /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
          * container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
@@ -4085,11 +4053,11 @@ the user is using "Custom" settings by determining the sender*/
 {
     // align picture settings and video filters in the UI using tabs
     fVideoController.pictureSettings = [self pictureSettingsSummary];
-    fVideoController.pictureFilters = fPictureController.filters.summary;
+    fVideoController.pictureFilters = self.job.filters.summary;
 
     /* Store storage resolution for unparse */
-    fVideoController.video.widthForUnparse  = fPictureController.picture.width;
-    fVideoController.video.heightForUnparse = fPictureController.picture.height;
+    fVideoController.video.widthForUnparse  = self.job.picture.width;
+    fVideoController.video.heightForUnparse = self.job.picture.height;
 
     [fPreviewController reloadPreviews];
 }
@@ -4100,10 +4068,10 @@ the user is using "Custom" settings by determining the sender*/
 - (NSString *)pictureSettingsSummary
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
-    if (fPictureController.picture)
+    if (self.job.picture)
     {
-        HBPicture *pict = fPictureController.picture;
-        [summary appendString:fPictureController.picture.info];
+        HBPicture *pict = self.job.picture;
+        [summary appendString:pict.info];
         if (pict.anamorphicMode != HB_ANAMORPHIC_STRICT)
         {
             // anamorphic is not Strict, show the modulus
@@ -4225,7 +4193,7 @@ the user is using "Custom" settings by determining the sender*/
 
 - (void)applyPreset:(HBPreset *)preset
 {
-    if (preset != nil && SuccessfulScan)
+    if (preset != nil && self.job)
     {
         self.selectedPreset = preset;
         self.customPreset = NO;
@@ -4256,9 +4224,6 @@ the user is using "Custom" settings by determining the sender*/
         
         /* Mux mp4 with http optimization */
         [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
-        
-        /* Video encoder */
-        [fVideoController.video applySettingsFromPreset:chosenPreset];
 
         /* Lets run through the following functions to get variables set there */
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
@@ -4270,10 +4235,9 @@ the user is using "Custom" settings by determining the sender*/
         /*Subtitles*/
         [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
 
-        /* Picture Settings */
-        /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-        [fPictureController.picture applySettingsFromPreset:chosenPreset];
-        [fPictureController.filters applySettingsFromPreset:chosenPreset];
+        // Apply the preset to the current job
+        [self.job applyPreset:preset];
+
         [self pictureSettingsDidChange];
     }
 }
@@ -4313,7 +4277,7 @@ the user is using "Custom" settings by determining the sender*/
 {
 	/* Show the add panel */
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
-                                                                                     videoSize:NSMakeSize(fPictureController.picture.width, fPictureController.picture.height)];
+                                                                                     videoSize:NSMakeSize(self.job.picture.width, self.job.picture.height)];
 
     [NSApp beginSheet:addPresetController.window modalForWindow:fWindow modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:addPresetController];
 }
@@ -4358,22 +4322,22 @@ the user is using "Custom" settings by determining the sender*/
     preset[@"Mp4iPodCompatible"] = @(fDstMp4iPodFileCheck.state);
 
     // Video encoder
-    [fVideoController.video prepareVideoForPreset:preset];
+    [self.job.video prepareVideoForPreset:preset];
 
     preset[@"PictureWidth"]  = currentPreset[@"PictureWidth"];
     preset[@"PictureHeight"] = currentPreset[@"PictureHeight"];
 
     // Picture Filters
-    [fPictureController.filters prepareFiltersForPreset:preset];
+    [self.job.filters prepareFiltersForPreset:preset];
 
     // Picture Size
-    [fPictureController.picture preparePictureForPreset:preset];
+    [self.job.picture preparePictureForPreset:preset];
 
     // Audio
-    [fAudioController.settings prepareAudioDefaultsForPreset:preset];
+    [self.job.audioDefaults prepareAudioDefaultsForPreset:preset];
 
     // Subtitles
-    [fSubtitlesViewController.settings prepareSubtitlesDefaultsForPreset:preset];
+    [self.job.subtitlesDefaults prepareSubtitlesDefaultsForPreset:preset];
 
     return [[[HBPreset alloc] initWithName:preset[@"PresetName"] content:preset builtIn:NO] autorelease];
     

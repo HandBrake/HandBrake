@@ -6,7 +6,7 @@
    
 #import "HBChapterTitlesController.h"
 #import "Controller.h"
-#include "hb.h"
+#import "HBJob.h"
 
 @interface HBChapterTitlesController () <NSTableViewDataSource, NSTableViewDelegate>
 {
@@ -31,7 +31,6 @@
     if (self)
     {
         fChapterTitlesArray = [[[NSMutableArray alloc] init] retain];
-        [[NSNotificationCenter defaultCenter]  addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object: nil];
     }
     return self;
 }
@@ -42,39 +41,10 @@
     [super               dealloc];
 }
 
-- (void)titleChanged:(NSNotification *)aNotification
+- (void)setJob:(HBJob *)job
 {
-    NSDictionary *notDict = [aNotification userInfo];
-    NSData *theData = [notDict objectForKey: keyTitleTag];
-    hb_title_t *title = NULL;
-
-    [theData getBytes: &title length: sizeof(title)];
-
     [fChapterTitlesArray removeAllObjects];
-
-    if (title)
-    {
-        for (int i = 0; i < hb_list_count(title->list_chapter); i++)
-        {
-            hb_chapter_t *chapter = hb_list_item(title->list_chapter, i);
-            if (chapter != NULL)
-            {
-                if (chapter->title != NULL)
-                {
-                    [fChapterTitlesArray addObject:[NSString
-                                                    stringWithFormat:@"%s",
-                                                    chapter->title]];
-                }
-                else
-                {
-                    [fChapterTitlesArray addObject:[NSString
-                                                    stringWithFormat:@"Chapter %d",
-                                                    i + 1]];
-                }
-            }
-        }
-    }
-
+    [fChapterTitlesArray addObjectsFromArray:job.title.chapters];
     [fChapterTable reloadData];
 }
 

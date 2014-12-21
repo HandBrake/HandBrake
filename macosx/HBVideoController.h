@@ -7,14 +7,10 @@
 #import <Cocoa/Cocoa.h>
 #import "HBViewValidation.h"
 
-#include "hb.h"
-
 @class HBController;
 @class HBAdvancedController;
 
 @class HBVideo;
-
-extern NSString *HBVideoEncoderChangedNotification;
 
 /**
  *  HBVideoController
@@ -31,6 +27,6 @@ extern NSString *HBVideoEncoderChangedNotification;
 @property (nonatomic, copy, readwrite) NSString *pictureSettings;
 @property (nonatomic, copy, readwrite) NSString *pictureFilters;
 
-@property (nonatomic, readonly) HBVideo *video;
+@property (nonatomic, readwrite, retain) HBVideo *video;
 
 @end
