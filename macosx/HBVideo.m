@@ -543,7 +543,7 @@
     {
         preset[@"VideoFramerateMode"] = @"cfr";
     }
-    if (self.frameRateMode == 0) // Same as source is selected
+    if (self.frameRate == 0) // Same as source is selected
     {
         preset[@"VideoFramerate"] = @"Same as source";
 
