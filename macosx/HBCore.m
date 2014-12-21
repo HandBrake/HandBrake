@@ -218,11 +218,15 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     }
 
     self.titles = [[titles copy] autorelease];
+
+    [HBUtilities writeToActivityLog:"%s scan done", self.name.UTF8String];
 }
 
 - (void)cancelScan
 {
     hb_scan_stop(_hb_handle);
+
+    [HBUtilities writeToActivityLog:"%s scan cancelled", self.name.UTF8String];
 }
 
 #pragma mark - Encodes
@@ -239,6 +243,8 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     // to reflect the current state instead of
     // waiting for libhb to set it in a background thread.
     self.state = HBStateWorking;
+
+    [HBUtilities writeToActivityLog:"%s work started", self.name.UTF8String];
 }
 
 - (void)workDone
@@ -249,12 +255,16 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     hb_job_t *job;
     while ((job = hb_job(_hb_handle, 0)))
         hb_rem(_hb_handle, job);
+
+    [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
 }
 
 - (void)stop
 {
     hb_stop(_hb_handle);
     hb_system_sleep_allow(_hb_handle);
+
+    [HBUtilities writeToActivityLog:"%s stop", self.name.UTF8String];
 }
 
 
