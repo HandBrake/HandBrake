@@ -108,9 +108,12 @@
     else
     {
         self.preset.name = self.name.stringValue;
-        self.preset.presetDescription = self.name.stringValue;
+        self.preset.presetDescription = self.desc.stringValue;
 
         NSMutableDictionary *dict = [[self.preset.content mutableCopy] autorelease];
+
+        dict[@"PresetName"] = self.name.stringValue;
+        dict[@"PresetDescription"] = self.desc.stringValue;
 
         // Get the picture size
         dict[@"PictureWidth"] = @(self.picWidth.integerValue);
