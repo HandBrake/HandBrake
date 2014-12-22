@@ -13,7 +13,7 @@ extern NSString * const HBPictureChangedNotification;
 /**
  * HBPicture
  */
-@interface HBPicture : NSObject
+@interface HBPicture : NSObject <NSCoding>
 
 - (instancetype)initWithTitle:(HBTitle *)title;
 
@@ -63,7 +63,7 @@ extern NSString * const HBPictureChangedNotification;
 @property (nonatomic, readonly, getter=isKeepDisplayAspect) BOOL keepDisplayAspectEditable;
 @property (nonatomic, readonly, getter=isCustomAnamorphicEnabled) BOOL customAnamorphicEnabled;
 
-@property (nonatomic, readonly) HBTitle *title;
+@property (nonatomic, readwrite, assign) HBTitle *title;
 
 
 @end

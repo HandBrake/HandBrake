@@ -5,12 +5,11 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#include "hb.h"
 
 /**
  *  HBVideo
  */
-@interface HBVideo : NSObject
+@interface HBVideo : NSObject <NSCoding>
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
 - (void)prepareVideoForPreset:(NSMutableDictionary *)preset;
@@ -27,7 +26,6 @@
 @property (nonatomic, readwrite) int frameRate;
 @property (nonatomic, readwrite) int frameRateMode;
 
-@property (nonatomic, readwrite) BOOL fastFirstPass;
 @property (nonatomic, readwrite) BOOL twoPass;
 @property (nonatomic, readwrite) BOOL turboTwoPass;
 

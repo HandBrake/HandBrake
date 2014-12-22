@@ -7,6 +7,8 @@
 #import "HBPicture.h"
 #import "HBTitle.h"
 
+#import "NSCodingMacro.h"
+
 #include "hb.h"
 
 NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
@@ -42,7 +44,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     self = [self init];
     if (self)
     {
-        _title = [title retain];
+        _title = title;
         _width = title.hb_title->geometry.width;
         _height = title.hb_title->geometry.height;
 
@@ -478,6 +480,56 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
     [self postChangedNotification];
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeInt:1 forKey:@"HBPictureVersion"];
+
+    encodeInt(_width);
+    encodeInt(_height);
+
+    encodeInt(_keepDisplayAspect);
+    encodeInt(_anamorphicMode);
+    encodeInt(_modulus);
+
+    encodeInt(_displayWidth);
+    encodeInt(_parWidth);
+    encodeInt(_parHeight);
+
+    encodeBool(_autocrop);
+    encodeInt(_cropTop);
+    encodeInt(_cropBottom);
+    encodeInt(_cropLeft);
+    encodeInt(_cropRight);
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+
+    decodeInt(_width);
+    decodeInt(_height);
+
+    decodeInt(_keepDisplayAspect);
+    decodeInt(_anamorphicMode);
+    decodeInt(_modulus);
+
+    decodeInt(_displayWidth);
+    decodeInt(_parWidth);
+    decodeInt(_parHeight);
+
+    decodeBool(_autocrop);
+    decodeInt(_cropTop);
+    decodeInt(_cropBottom);
+    decodeInt(_cropLeft);
+    decodeInt(_cropRight);
+    
+    return self;
+}
+
+#pragma mark - Presets/Queue
 
 - (void)preparePictureForPreset:(NSMutableDictionary *)preset
 {

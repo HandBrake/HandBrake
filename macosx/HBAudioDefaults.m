@@ -6,6 +6,7 @@
 
 #import "HBAudioDefaults.h"
 #import "HBAudioTrackPreset.h"
+#import "NSCodingMacro.h"
 #import "hb.h"
 #import "lang.h"
 
@@ -238,6 +239,48 @@
     }
 
     self.container = container;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeInt:1 forKey:@"HBAudioDefaultsVersion"];
+
+    encodeInteger(_trackSelectionBehavior);
+    encodeObject(_trackSelectionLanguages);
+
+    encodeObject(_tracksArray);
+
+    encodeBool(_allowAACPassthru);
+    encodeBool(_allowAC3Passthru);
+    encodeBool(_allowDTSHDPassthru);
+    encodeBool(_allowDTSPassthru);
+    encodeBool(_allowMP3Passthru);
+
+    encodeInt(_encoderFallback);
+    encodeBool(_secondaryEncoderMode);
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+
+    decodeInteger(_trackSelectionBehavior);
+    decodeObject(_trackSelectionLanguages);
+
+    decodeObject(_tracksArray);
+
+    decodeBool(_allowAACPassthru);
+    decodeBool(_allowAC3Passthru);
+    decodeBool(_allowDTSHDPassthru);
+    decodeBool(_allowDTSPassthru);
+    decodeBool(_allowMP3Passthru);
+
+    decodeInt(_encoderFallback);
+    decodeBool(_secondaryEncoderMode);
+
+    return self;
 }
 
 @end

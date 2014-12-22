@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBFilters.h"
+#import "NSCodingMacro.h"
 
 NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
@@ -255,6 +256,66 @@ static NSDictionary *_nlmeansTunesDict;
 {
     _useDecomb = useDecomb;
     [self postChangedNotification];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeInt:1 forKey:@"HBFiltersVersion"];
+
+    encodeInteger(_detelecine);
+    encodeObject(_detelecineCustomString);
+
+    encodeInteger(_deinterlace);
+    encodeObject(_deinterlaceCustomString);
+
+    encodeInteger(_decomb);
+    encodeObject(_decombCustomString);
+
+    encodeInteger(_detelecine);
+    encodeObject(_detelecineCustomString);
+
+    encodeObject(_denoise);
+    encodeObject(_denoisePreset);
+    encodeObject(_denoiseTune);
+    encodeObject(_denoiseCustomString);
+
+    encodeInteger(_deblock);
+    encodeBool(_grayscale);
+
+    encodeBool(_useDecomb);
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+
+    decodeInteger(_detelecine);
+    decodeObject(_detelecineCustomString);
+
+    decodeInteger(_deinterlace);
+    decodeObject(_deinterlaceCustomString);
+
+    decodeInteger(_decomb);
+    decodeObject(_decombCustomString);
+
+    decodeInteger(_detelecine);
+    decodeObject(_detelecineCustomString);
+
+    decodeObject(_denoise);
+    decodeObject(_denoisePreset);
+    decodeObject(_denoiseTune);
+    decodeObject(_denoiseCustomString);
+
+    decodeInteger(_deblock);
+    decodeBool(_grayscale);
+
+    decodeBool(_useDecomb);
+
+    _notificationsEnabled = YES;
+
+    return self;
 }
 
 #pragma mark - Presets and queue

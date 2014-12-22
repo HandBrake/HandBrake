@@ -5,6 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBVideo.h"
+#import "NSCodingMacro.h"
+#include "hb.h"
 
 @interface HBVideo ()
 
@@ -372,6 +374,68 @@
     }
 
     return retval;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeInt:1 forKey:@"HBVideoVersion"];
+
+    encodeInt(_encoder);
+
+    encodeInt(_qualityType);
+    encodeInt(_avgBitrate);
+    encodeDouble(_quality);
+
+    encodeInt(_frameRate);
+    encodeInt(_frameRateMode);
+
+    encodeBool(_twoPass);
+    encodeBool(_turboTwoPass);
+
+    encodeBool(_turboTwoPass);
+
+    encodeInt(_advancedOptions);
+    encodeObject(_preset);
+    encodeObject(_tune);
+    encodeObject(_profile);
+    encodeObject(_level);
+
+    encodeObject(_videoOptionExtra);
+
+    encodeBool(_fastDecode);
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+
+    decodeInt(_encoder);
+
+    decodeInt(_qualityType);
+    decodeInt(_avgBitrate);
+    decodeDouble(_quality);
+
+    decodeInt(_frameRate);
+    decodeInt(_frameRateMode);
+
+    decodeBool(_twoPass);
+    decodeBool(_turboTwoPass);
+
+    decodeBool(_turboTwoPass);
+
+    decodeInt(_advancedOptions);
+    decodeObject(_preset);
+    decodeObject(_tune);
+    decodeObject(_profile);
+    decodeObject(_level);
+
+    decodeObject(_videoOptionExtra);
+
+    decodeBool(_fastDecode);
+
+    return self;
 }
 
 #pragma mark - Various conversion methods from dict/preset/queue/etc

@@ -11,7 +11,7 @@
 #import "HBAudioController.h"
 #import "HBSubtitlesController.h"
 
-#include "lang.h"
+#import "NSCodingMacro.h"
 
 @implementation HBJob
 
@@ -71,6 +71,8 @@
  */
 - (hb_job_t *)hb_job
 {
+    NSAssert(self.title, @"HBJob: calling hb_job without a valid title loaded");
+
     hb_title_t *title = self.title.hb_title;
     hb_job_t *job = hb_job_init(title);
 
@@ -574,11 +576,58 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+    [coder encodeInt:1 forKey:@"HBVideoVersion"];
+
+    encodeInt(_state);
+
+    encodeObject(_fileURL);
+    encodeObject(_destURL);
+
+    encodeInt(_fileFormat);
+    encodeBool(_mp4HttpOptimize);
+    encodeBool(_mp4iPodCompatible);
+
+    encodeObject(_video);
+    encodeObject(_picture);
+    encodeObject(_filters);
+
+    encodeObject(_audioTracks);
+    encodeObject(_subtitlesTracks);
+
+    encodeBool(_chaptersEnabled);
+    encodeObject(_chapterNames);
+
+    encodeObject(_audioDefaults);
+    encodeObject(_subtitlesDefaults);
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-    return nil;
+    self = [super init];
+
+    decodeInt(_state);
+
+    decodeObject(_fileURL);
+    decodeObject(_destURL);
+
+    decodeInt(_fileFormat);
+    decodeBool(_mp4HttpOptimize);
+    decodeBool(_mp4iPodCompatible);
+
+    decodeObject(_video);
+    decodeObject(_picture);
+    decodeObject(_filters);
+
+    decodeObject(_audioTracks);
+    decodeObject(_subtitlesTracks);
+
+    decodeBool(_chaptersEnabled);
+    decodeObject(_chapterNames);
+
+    decodeObject(_audioDefaults);
+    decodeObject(_subtitlesDefaults);
+
+    return self;
 }
 
 #pragma mark - NSCopying

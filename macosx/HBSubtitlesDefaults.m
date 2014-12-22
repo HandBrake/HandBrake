@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBSubtitlesDefaults.h"
+#import "NSCodingMacro.h"
 
 @implementation HBSubtitlesDefaults
 
@@ -57,6 +58,34 @@
     preset[@"SubtitleAddCC"] = @(self.addCC);
     preset[@"SubtitleAddForeignAudioSearch"] = @(self.addForeignAudioSearch);
     preset[@"SubtitleAddForeignAudioSubtitle"] = @(self.addForeignAudioSubtitle);
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeInt:1 forKey:@"HBAudioDefaultsVersion"];
+
+    encodeInteger(_trackSelectionBehavior);
+    encodeObject(_trackSelectionLanguages);
+
+    encodeBool(_addForeignAudioSearch);
+    encodeBool(_addForeignAudioSubtitle);
+    encodeBool(_addCC);
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+
+    decodeInteger(_trackSelectionBehavior);
+    decodeObject(_trackSelectionLanguages);
+
+    decodeBool(_addForeignAudioSearch);
+    decodeBool(_addForeignAudioSubtitle);
+    decodeBool(_addCC);
+
+    return self;
 }
 
 - (void)dealloc

@@ -11,7 +11,7 @@ extern NSString * const HBFiltersChangedNotification;
 /**
  *  Filters settings.
  */
-@interface HBFilters : NSObject
+@interface HBFilters : NSObject <NSCoding>
 
 - (void)prepareFiltersForPreset:(NSMutableDictionary *)preset;
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
