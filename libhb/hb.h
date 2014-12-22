@@ -88,7 +88,6 @@ void          hb_rem( hb_handle_t *, hb_job_t * );
 hb_title_t  * hb_find_title_by_index( hb_handle_t *h, int title_index );
 hb_job_t    * hb_job_init_by_index( hb_handle_t *h, int title_index );
 hb_job_t    * hb_job_init( hb_title_t * title );
-void          hb_job_reset( hb_job_t * job );
 void          hb_job_close( hb_job_t ** job );
 
 void          hb_start( hb_handle_t * );
