@@ -674,7 +674,6 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     fVideoController.enabled = b;
     fAudioController.enabled = b;
     fSubtitlesViewController.enabled = b;
-    fChapterTitlesController.enabled = b;
 }
 
 /**
@@ -1994,15 +1993,15 @@ static void queueFSEventStreamCallback(
     }
     else
     {
-        [queueFileJob setObject:@(fChapterTitlesController.createChapterMarkers) forKey:@"ChapterMarkers"];
+        [queueFileJob setObject:@(self.job.chaptersEnabled) forKey:@"ChapterMarkers"];
     }
 	
     /* We need to get the list of chapter names to put into an array and store 
      * in our queue, so they can be reapplied in prepareJob when this queue
      * item comes up if Chapter Markers is set to on.
      */
-    [queueFileJob setObject:fChapterTitlesController.chapterTitlesArray forKey:@"ChapterNames"];
-    
+    [queueFileJob setObject:[[self.job.chapterTitles copy] autorelease] forKey:@"ChapterNames"];
+
     /* Mux mp4 with http optimization */
     [queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
     /* Add iPod uuid atom */
@@ -2303,7 +2302,7 @@ static void queueFSEventStreamCallback(
     [self formatPopUpChanged:nil];
 
     /* Chapter Markers*/
-    fChapterTitlesController.createChapterMarkers = [[queueToApply objectForKey:@"ChapterMarkers"] boolValue];
+    self.job.chaptersEnabled = [[queueToApply objectForKey:@"ChapterMarkers"] boolValue];
     [fChapterTitlesController addChaptersFromQueue:[queueToApply objectForKey:@"ChapterNames"]];
 
     /* Mux mp4 with http optimization */
@@ -3338,80 +3337,77 @@ static void queueFSEventStreamCallback(
         self.selectedPreset = [self createPresetFromCurrentSettings];
     }
 
-    HBTitle *hbtitle = [self.core.titles objectAtIndex:fSrcTitlePopUp.indexOfSelectedItem];
-    self.job = [[[HBJob alloc] initWithTitle:hbtitle
-                                         url:[NSURL fileURLWithPath:fSrcDVD2Field.stringValue]
+    HBTitle *hbtitle = self.core.titles[fSrcTitlePopUp.indexOfSelectedItem];
+    HBJob *job = [[[HBJob alloc] initWithTitle:hbtitle
                                    andPreset:self.selectedPreset] autorelease];
 
     hb_title_t *title = hbtitle.hb_title;
 
-    /* If we are a stream type and a batch scan, grok the output file name from title->name upon title change */
+    // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
     if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) && self.core.titles.count > 1)
     {
-        /* we set the default name according to the new title->name */
+        // we set the default name according to the new title->name
         [fDstFile2Field setStringValue: [NSString stringWithFormat:
                                          @"%@/%@.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
                                          [NSString stringWithUTF8String: title->name],
                                          [[fDstFile2Field stringValue] pathExtension]]];
         
-        /* Change the source to read out the parent folder also */
+        // Change the source to read out the parent folder also
         [fSrcDVD2Field setStringValue:[NSString stringWithFormat:@"%@/%@", browsedSourceDisplayName,[NSString stringWithUTF8String: title->name]]];
     }
     
-    /* For point a to point b pts encoding, set the start and end fields to 0 and the title duration in seconds respectively */
+    // For point a to point b pts encoding, set the start and end fields to 0 and the title duration in seconds respectively
     int duration = (title->hours * 3600) + (title->minutes * 60) + (title->seconds);
     [fSrcTimeStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 0]];
     [fSrcTimeEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration]];
-    /* For point a to point b frame encoding, set the start and end fields to 0 and the title duration * announced fps in seconds respectively */
+    // For point a to point b frame encoding, set the start and end fields to 0 and the title duration * announced fps in seconds respectively
     [fSrcFrameStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 1]];
-    //[fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", ((title->hours * 3600) + (title->minutes * 60) + (title->seconds)) * 24]];
-    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->vrate.num / title->vrate.den)]];    
+    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->vrate.num / title->vrate.den)]];
 
-    /* Update encode start / stop variables */
-
-    /* Update chapter popups */
+    // Update chapter popups
     [fSrcChapterStartPopUp removeAllItems];
     [fSrcChapterEndPopUp   removeAllItems];
-    for( int i = 0; i < hb_list_count( title->list_chapter ); i++ )
-    {
-        [fSrcChapterStartPopUp addItemWithTitle: [NSString
-            stringWithFormat: @"%d", i + 1]];
-        [fSrcChapterEndPopUp addItemWithTitle: [NSString
-            stringWithFormat: @"%d", i + 1]];
-    }
+
+    [hbtitle.chapters enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *title = [NSString stringWithFormat: @"%lu", idx + 1];
+        [fSrcChapterStartPopUp addItemWithTitle:title];
+        [fSrcChapterEndPopUp addItemWithTitle: title];
+    }];
 
     [fSrcChapterStartPopUp selectItemAtIndex: 0];
-    [fSrcChapterEndPopUp   selectItemAtIndex:
-        hb_list_count( title->list_chapter ) - 1];
+    [fSrcChapterEndPopUp   selectItemAtIndex:hbtitle.chapters.count - 1];
     [self chapterPopUpChanged:nil];
 
     [fSrcAnglePopUp removeAllItems];
-    for( int i = 0; i < title->angle_count; i++ )
+
+    for (int i = 0; i < hbtitle.angles; i++)
     {
-        [fSrcAnglePopUp addItemWithTitle: [NSString stringWithFormat: @"%d", i + 1]];
+        [fSrcAnglePopUp addItemWithTitle:[NSString stringWithFormat: @"%d", i + 1]];
     }
     [fSrcAnglePopUp selectItemAtIndex: 0];
 
     // Set the jobs info to the view controllers
-    fPictureController.picture = self.job.picture;
-    fPictureController.filters = self.job.filters;
-    fPreviewController.job = self.job;
+    fPictureController.picture = job.picture;
+    fPictureController.filters = job.filters;
+    fPreviewController.job = job;
 
-    fVideoController.video = self.job.video;
-    fAudioController.job = self.job;
-    fSubtitlesViewController.job = self.job;
-    fChapterTitlesController.job = self.job;
+    fVideoController.video = job.video;
+    fAudioController.job = job;
+    fSubtitlesViewController.job = job;
+    fChapterTitlesController.job = job;
 
     // Set Auto Crop to on upon selecting a new title
-    self.job.picture.autocrop = YES;
+    job.picture.autocrop = YES;
 
-    /* If Auto Naming is on. We create an output filename of dvd name - title number */
+    self.job = job;
+
+    // If Auto Naming is on. We create an output filename of dvd name - title number
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
 	{
         [self updateFileName];
 	}
 
-    /* apply the current preset */
+    // apply the current preset
     [self applyPreset:self.selectedPreset];
 }
 
@@ -3577,7 +3573,7 @@ static void queueFSEventStreamCallback(
     
     BOOL anyCodecAC3 = [fAudioController anyCodecMatches: HB_ACODEC_AC3] || [fAudioController anyCodecMatches: HB_ACODEC_AC3_PASS];
     /* Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter */
-    BOOL chapterMarkers = (fChapterTitlesController.createChapterMarkers) &&
+    BOOL chapterMarkers = (self.job.chaptersEnabled) &&
                           ([fEncodeStartStopPopUp indexOfSelectedItem] != 0 ||
                            [fSrcChapterStartPopUp indexOfSelectedItem] < [fSrcChapterEndPopUp indexOfSelectedItem]);
 	
@@ -3807,8 +3803,6 @@ the user is using "Custom" settings by determining the sender*/
         [fDstFormatPopUp selectItemWithTag:format];
         [self formatPopUpChanged:nil];
 
-        /* Chapter Markers*/
-        fChapterTitlesController.createChapterMarkers = [[chosenPreset objectForKey:@"ChapterMarkers"] boolValue];
         /* check to see if we have only one chapter */
         [self chapterPopUpChanged:nil];
         
@@ -3904,7 +3898,7 @@ the user is using "Custom" settings by determining the sender*/
 
     preset[@"PresetDescription"] = currentPreset[@"PresetDescription"];
     preset[@"FileFormat"] = fDstFormatPopUp.titleOfSelectedItem;
-    preset[@"ChapterMarkers"] = @(fChapterTitlesController.createChapterMarkers);
+    preset[@"ChapterMarkers"] = @(self.job.chaptersEnabled);
 
     // Mux mp4 with http optimization
     preset[@"Mp4HttpOptimize"] = @(fDstMp4HttpOptFileCheck.state);

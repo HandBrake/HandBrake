@@ -8,6 +8,7 @@
 
 #import "HBTitle.h"
 
+#import "HBRange.h"
 #import "HBVideo.h"
 #import "HBPicture.h"
 #import "HBFilters.h"
@@ -20,7 +21,7 @@
 @class HBPreset;
 
 typedef NS_ENUM(NSUInteger, HBJobState) {
-    HBJobStateNone,
+    HBJobStateReady,
     HBJobStateWorking,
     HBJobStateCompleted,
     HBJobStateCanceled
@@ -31,7 +32,7 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
  */
 @interface HBJob : NSObject <NSCoding, NSCopying>
 
-- (instancetype)initWithTitle:(HBTitle *)title url:(NSURL *)fileURL andPreset:(HBPreset *)preset;
+- (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
 - (void)applyPreset:(HBPreset *)preset;
 
 /**
@@ -47,17 +48,15 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 
 // Libhb job
 @property (nonatomic, readonly) hb_job_t *hb_job;
-
-// Old job format
-@property (nonatomic, readwrite, retain) NSDictionary *jobDict;
 @property (nonatomic, readonly) NSAttributedString *jobDescription;
 
 // Job settings
-@property (nonatomic, readwrite) int fileFormat;
+@property (nonatomic, readwrite) int container;
 
 @property (nonatomic, readwrite) BOOL mp4HttpOptimize;
 @property (nonatomic, readwrite) BOOL mp4iPodCompatible;
 
+@property (nonatomic, readonly) HBRange *range;
 @property (nonatomic, readonly) HBVideo *video;
 @property (nonatomic, readonly) HBPicture *picture;
 @property (nonatomic, readonly) HBFilters *filters;
@@ -65,8 +64,8 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 @property (nonatomic, readonly) NSMutableArray *audioTracks;
 @property (nonatomic, readonly) NSMutableArray *subtitlesTracks;
 
-@property (nonatomic, readonly) BOOL chaptersEnabled;
-@property (nonatomic, readonly) NSMutableArray *chapterNames;
+@property (nonatomic, readwrite) BOOL chaptersEnabled;
+@property (nonatomic, readonly) NSMutableArray *chapterTitles;
 
 // Defaults settings
 @property (nonatomic, readonly) HBAudioDefaults *audioDefaults;

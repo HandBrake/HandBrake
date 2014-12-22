@@ -10,62 +10,44 @@
 
 @interface HBChapterTitlesController () <NSTableViewDataSource, NSTableViewDelegate>
 {
-    NSMutableArray *fChapterTitlesArray;
-
     IBOutlet NSTableView         * fChapterTable;
-	IBOutlet NSButton            * fLoadChaptersButton;
-	IBOutlet NSButton            * fSaveChaptersButton;
-    IBOutlet NSButton            * fCreateChaptersMarkers;
 	IBOutlet NSTableColumn       * fChapterTableNameColumn;
 }
+
+@property (nonatomic, readwrite, retain) NSMutableArray *chapterTitles;
 
 @end
 
 @implementation HBChapterTitlesController
-
-@synthesize enabled = _enabled;
 
 - (instancetype)init
 {
     self = [super initWithNibName:@"ChaptersTitles" bundle:nil];
     if (self)
     {
-        fChapterTitlesArray = [[[NSMutableArray alloc] init] retain];
+        _chapterTitles = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [fChapterTitlesArray release];
-    [super               dealloc];
+    [_chapterTitles release];
+    [super dealloc];
 }
 
 - (void)setJob:(HBJob *)job
 {
-    [fChapterTitlesArray removeAllObjects];
-    [fChapterTitlesArray addObjectsFromArray:job.title.chapters];
+    _job = job;
+    self.chapterTitles = job.chapterTitles;
     [fChapterTable reloadData];
 }
 
 - (void)addChaptersFromQueue:(NSMutableArray *)newChaptersArray
 {
-    [fChapterTitlesArray removeAllObjects];
-    [fChapterTitlesArray addObjectsFromArray:newChaptersArray];
+    [self.chapterTitles removeAllObjects];
+    [self.chapterTitles addObjectsFromArray:newChaptersArray];
     [fChapterTable reloadData];
-}
-
-- (void)setEnabled:(BOOL)enabled
-{
-    [fCreateChaptersMarkers setEnabled:enabled];
-    [fChapterTable setEnabled:enabled];
-    [fLoadChaptersButton setEnabled:enabled];
-    [fSaveChaptersButton setEnabled:enabled];
-}
-
-- (NSArray *)chapterTitlesArray
-{
-    return [NSArray arrayWithArray:fChapterTitlesArray];
 }
 
 - (IBAction)createChapterMarkersChanged:(id)sender
@@ -75,7 +57,7 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-    return [fChapterTitlesArray count];
+    return self.chapterTitles.count;
 }
 
 - (void)tableView:(NSTableView *)aTableView
@@ -85,7 +67,7 @@
 {
     if (aTableColumn != nil && [[aTableColumn identifier] intValue] == 2)
     {
-        [fChapterTitlesArray replaceObjectAtIndex:rowIndex
+        [self.chapterTitles replaceObjectAtIndex:rowIndex
                                        withObject:[NSString
                                                    stringWithString:anObject]];
     }
@@ -101,7 +83,7 @@
     }
     else
     {
-        return [NSString stringWithString:[fChapterTitlesArray
+        return [NSString stringWithString:[self.chapterTitles
                                            objectAtIndex:rowIndex]];
     }
     return @"__DATA ERROR__";

@@ -15,28 +15,29 @@
 
 @implementation HBJob
 
-- (instancetype)initWithTitle:(HBTitle *)title url:(NSURL *)fileURL andPreset:(HBPreset *)preset
+- (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset
 {
     self = [super init];
     if (self) {
         NSParameterAssert(title);
-        NSParameterAssert(fileURL);
         NSParameterAssert(preset);
 
         _title = title;
-        _fileURL = [fileURL copy];
 
-        _fileFormat = HB_MUX_MP4;
+        _container = HB_MUX_MP4;
 
         _audioDefaults = [[HBAudioDefaults alloc] init];
         _subtitlesDefaults = [[HBSubtitlesDefaults alloc] init];
 
+        _range = [[HBRange alloc] init];
         _video = [[HBVideo alloc] init];
         _picture = [[HBPicture alloc] initWithTitle:title];
         _filters = [[HBFilters alloc] init];
 
         _audioTracks = [[NSMutableArray alloc] init];
         _subtitlesTracks = [[NSMutableArray alloc] init];
+
+        _chapterTitles = [title.chapters mutableCopy];
 
         [self applyPreset:preset];
     }
@@ -46,8 +47,19 @@
 
 - (void)applyPreset:(HBPreset *)preset
 {
+    NSDictionary *content = preset.content;
+
+    self.container = hb_container_get_from_name(hb_container_sanitize_name([content[@"FileFormat"] UTF8String]));
+
+    // Mux mp4 with http optimization
+    self.mp4HttpOptimize = [content[@"Mp4HttpOptimize"] boolValue];
+    self.mp4iPodCompatible = [content[@"Mp4iPodCompatible"] boolValue];
+
+    // Chapter Markers
+    self.chaptersEnabled = [content[@"ChapterMarkers"] boolValue];
+
     [@[self.audioDefaults, self.subtitlesDefaults, self.video, self.picture, self.filters] makeObjectsPerformSelector:@selector(applySettingsFromPreset:)
-                                                                                                           withObject:preset.content];
+                                                                                                           withObject:content];
 }
 
 - (void)dealloc
@@ -119,7 +131,7 @@
     }*/
 
     // Format (Muxer) and Video Encoder
-    job->mux = self.fileFormat;
+    job->mux = self.container;
     job->vcodec = self.video.encoder;
 
     // We set http optimized mp4 here
@@ -138,7 +150,7 @@
         // Also, note that if for some reason we don't apply chapter names, the
         // chapters just come out 001, 002, etc. etc.
         int i = 0;
-        for (NSString *name in self.chapterNames)
+        for (NSString *name in self.chapterTitles)
         {
             hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item(job->list_chapter, i);
             if (chapter != NULL)
@@ -583,10 +595,11 @@
     encodeObject(_fileURL);
     encodeObject(_destURL);
 
-    encodeInt(_fileFormat);
+    encodeInt(_container);
     encodeBool(_mp4HttpOptimize);
     encodeBool(_mp4iPodCompatible);
 
+    encodeObject(_range);
     encodeObject(_video);
     encodeObject(_picture);
     encodeObject(_filters);
@@ -595,7 +608,7 @@
     encodeObject(_subtitlesTracks);
 
     encodeBool(_chaptersEnabled);
-    encodeObject(_chapterNames);
+    encodeObject(_chapterTitles);
 
     encodeObject(_audioDefaults);
     encodeObject(_subtitlesDefaults);
@@ -610,10 +623,11 @@
     decodeObject(_fileURL);
     decodeObject(_destURL);
 
-    decodeInt(_fileFormat);
+    decodeInt(_container);
     decodeBool(_mp4HttpOptimize);
     decodeBool(_mp4iPodCompatible);
 
+    decodeObject(_range);
     decodeObject(_video);
     decodeObject(_picture);
     decodeObject(_filters);
@@ -622,7 +636,7 @@
     decodeObject(_subtitlesTracks);
 
     decodeBool(_chaptersEnabled);
-    decodeObject(_chapterNames);
+    decodeObject(_chapterTitles);
 
     decodeObject(_audioDefaults);
     decodeObject(_subtitlesDefaults);

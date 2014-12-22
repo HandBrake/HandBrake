@@ -96,6 +96,11 @@ extern NSString *keySubTrackSrtCharCode;
     }
 }
 
+- (NSInteger)angles
+{
+    return self.hb_title->angle_count;
+}
+
 - (NSArray *)audioTracks
 {
     if (!_audioTracks)

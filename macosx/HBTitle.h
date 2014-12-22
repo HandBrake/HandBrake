@@ -27,6 +27,8 @@
 
 @property (nonatomic, readonly) hb_title_t *hb_title;
 
+@property (nonatomic, readonly) NSInteger angles;
+
 @property (nonatomic, readonly) NSArray *audioTracks;
 @property (nonatomic, readonly) NSArray *subtitlesTracks;
 @property (nonatomic, readonly) NSArray *chapters;

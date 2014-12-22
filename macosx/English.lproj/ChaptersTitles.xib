@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBChapterTitlesController">
             <connections>
                 <outlet property="fChapterTable" destination="InF-gR-Lia" id="DSk-hZ-TGI"/>
                 <outlet property="fChapterTableNameColumn" destination="Z6H-lJ-ipr" id="TkJ-3q-ejW"/>
-                <outlet property="fCreateChaptersMarkers" destination="7Xf-c0-jsr" id="RqA-eo-yhD"/>
-                <outlet property="fLoadChaptersButton" destination="Ron-3B-rYg" id="6Tt-yt-c0U"/>
-                <outlet property="fSaveChaptersButton" destination="3SP-6e-RPS" id="LxX-yO-VCg"/>
                 <outlet property="view" destination="qs9-Xl-pXA" id="km6-16-y27"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="qs9-Xl-pXA">
             <rect key="frame" x="0.0" y="0.0" width="926" height="322"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -29,7 +26,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="0rK-Rs-NTb" id="InF-gR-Lia">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="19"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -63,6 +60,11 @@
                                     </tableColumn>
                                 </tableColumns>
                                 <connections>
+                                    <binding destination="-2" name="enabled" keyPath="self.job" id="leT-dv-Prc">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
                                     <outlet property="dataSource" destination="-2" id="7rd-Et-5BT"/>
                                     <outlet property="delegate" destination="-2" id="DOu-XY-6Tq"/>
                                 </connections>
@@ -74,7 +76,7 @@
                         <rect key="frame" x="-100" y="-100" width="488" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="yp0-pp-Yw7">
+                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="yp0-pp-Yw7">
                         <rect key="frame" x="869" y="17" width="16" height="248"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -92,7 +94,12 @@
                     </buttonCell>
                     <connections>
                         <action selector="createChapterMarkersChanged:" target="-2" id="J6X-VM-8Me"/>
-                        <binding destination="-2" name="value" keyPath="createChapterMarkers" id="7It-q2-Xl3"/>
+                        <binding destination="-2" name="enabled" keyPath="self.job" id="JMA-67-MXH">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.job.chaptersEnabled" id="7wG-le-s1k"/>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="Ron-3B-rYg">
@@ -104,6 +111,11 @@
                     </buttonCell>
                     <connections>
                         <action selector="browseForChapterFile:" target="-2" id="yMS-zB-Pa6"/>
+                        <binding destination="-2" name="enabled" keyPath="self.job" id="Rla-9q-ULw">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" id="3SP-6e-RPS">
@@ -115,9 +127,15 @@
                     </buttonCell>
                     <connections>
                         <action selector="browseForChapterFileSave:" target="-2" id="kKu-5B-QsT"/>
+                        <binding destination="-2" name="enabled" keyPath="self.job" id="TZV-TC-ydR">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </button>
             </subviews>
+            <point key="canvasLocation" x="131" y="343"/>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="coy-s6-QLx"/>
     </objects>

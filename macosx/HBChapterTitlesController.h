@@ -12,21 +12,10 @@
 /**
  *  HBChapterTitlesController
  */
-@interface HBChapterTitlesController : NSViewController <HBViewValidation>
+@interface HBChapterTitlesController : NSViewController
 
 - (void)addChaptersFromQueue:(NSMutableArray *)newChaptersArray;
 
 @property (nonatomic, readwrite, assign) HBJob *job;
-
-/**
- *  Enable/disable chapters markers
- */
-@property (readwrite, nonatomic) BOOL createChapterMarkers;
-
-/**
- *  Get the list of chapter titles
- */
-@property (readonly, nonatomic) NSArray *chapterTitlesArray;
-
 
 @end

@@ -113,6 +113,7 @@
 		46AB433515F98A2B009C0961 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
 		A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */; };
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
+		A91806711A4807B000FC9BED /* HBRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A91806701A4807B000FC9BED /* HBRange.m */; };
 		A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */; };
 		A91C02521A165EA200DEA6F3 /* EncodeComplete.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02501A165EA200DEA6F3 /* EncodeComplete.png */; };
 		A91C02531A165EA200DEA6F3 /* EncodeComplete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */; };
@@ -348,6 +349,8 @@
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
 		A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBChapterTitlesController.h; sourceTree = "<group>"; };
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
+		A918066F1A4807B000FC9BED /* HBRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBRange.h; sourceTree = "<group>"; };
+		A91806701A4807B000FC9BED /* HBRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBRange.m; sourceTree = "<group>"; };
 		A919C7AC199369180049E6A3 /* HBViewValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBViewValidation.h; sourceTree = "<group>"; };
 		A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JobSmall@2x.png"; sourceTree = "<group>"; };
 		A91C02501A165EA200DEA6F3 /* EncodeComplete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeComplete.png; sourceTree = "<group>"; };
@@ -854,6 +857,8 @@
 				A971281E1A2C75180088C076 /* HBTitle.m */,
 				A9DEC87D1A23DF6F00C79B48 /* HBJob.h */,
 				A9DEC87E1A23DF6F00C79B48 /* HBJob.m */,
+				A918066F1A4807B000FC9BED /* HBRange.h */,
+				A91806701A4807B000FC9BED /* HBRange.m */,
 				A9DEC8751A23C88D00C79B48 /* HBVideo.h */,
 				A9DEC8761A23C88D00C79B48 /* HBVideo.m */,
 				A9DEC8781A23C89E00C79B48 /* HBPicture.h */,
@@ -1144,6 +1149,7 @@
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A932E273198834130047D13E /* HBAudioDefaults.m in Sources */,
+				A91806711A4807B000FC9BED /* HBRange.m in Sources */,
 				A9DEC8771A23C88D00C79B48 /* HBVideo.m in Sources */,
 				A9523937199A6AAE00588AEF /* HBFilters.m in Sources */,
 				A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */,
