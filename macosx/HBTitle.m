@@ -61,6 +61,15 @@ extern NSString *keySubTrackSrtCharCode;
     return self;
 }
 
+- (void)dealloc
+{
+    [_name release];
+    [_audioTracks release];
+    [_subtitlesTracks release];
+    [_chapters release];
+
+    [super dealloc];
+}
 - (NSString *)name
 {
     if (!_name)

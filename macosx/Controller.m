@@ -1442,7 +1442,6 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         self.selectedPreset = [self createPresetFromCurrentSettings];
     }
 
-    self.job = nil;
     // Notify anyone interested (audio/subtitles/chapters controller) that there's no title
     fPictureController.picture = nil;
     fPictureController.filters = nil;
@@ -1452,6 +1451,8 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     fSubtitlesViewController.job = nil;
     fVideoController.video = nil;
     fChapterTitlesController.job = nil;
+
+    self.job = nil;
 
     [self enableUI: NO];
 
@@ -2578,21 +2579,9 @@ static void queueFSEventStreamCallback(
     }
 
     /* Picture Size Settings */
-    job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
-    job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
-
-    job->anamorphic.keep_display_aspect = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
-    job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
-    job->modulus = [[queueToApply objectForKey:@"PictureModulus"] intValue];
     job->par.num = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
     job->par.den = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
 
-    /* Here we use the crop values saved at the time the preset was saved */
-    job->crop[0] = [[queueToApply objectForKey:@"PictureTopCrop"]  intValue];
-    job->crop[1] = [[queueToApply objectForKey:@"PictureBottomCrop"]  intValue];
-    job->crop[2] = [[queueToApply objectForKey:@"PictureLeftCrop"]  intValue];
-    job->crop[3] = [[queueToApply objectForKey:@"PictureRightCrop"]  intValue];
-    
     /* Video settings */
     /* Framerate */
     int fps_mode, fps_num, fps_den;
@@ -2904,11 +2893,11 @@ static void queueFSEventStreamCallback(
     }
 
     /* Add Crop/Scale filter */
-    filter = hb_filter_init( HB_FILTER_CROP_SCALE );
+    filter = hb_filter_init(HB_FILTER_CROP_SCALE);
     hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
-                                  job->width, job->height,
-                                  job->crop[0], job->crop[1],
-                                  job->crop[2], job->crop[3]] UTF8String] );
+                                  [queueToApply[@"PictureWidth"] intValue], [queueToApply[@"PictureHeight"] intValue],
+                                  [queueToApply[@"PictureTopCrop"] intValue], [queueToApply[@"PictureBottomCrop"] intValue],
+                                  [queueToApply[@"PictureLeftCrop"] intValue], [queueToApply[@"PictureRightCrop"] intValue]] UTF8String] );
 
     /* Add framerate shaping filter */
     filter = hb_filter_init(HB_FILTER_VFR);

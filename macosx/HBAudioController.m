@@ -494,7 +494,8 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     
     if (job)
     {
-        audioArray = job.audioTracks;
+        [audioArray release];
+        audioArray = [job.audioTracks retain];
         self.settings = job.audioDefaults;
 
         // Reinitialize the master list of available audio tracks from this title
@@ -510,6 +511,8 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     }
     else
     {
+        [audioArray release];
+        audioArray = nil;
         self.settings = nil;
         self.masterTrackArray = nil;
     }

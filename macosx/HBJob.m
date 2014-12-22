@@ -50,6 +50,22 @@
                                                                                                            withObject:preset.content];
 }
 
+- (void)dealloc
+{
+    [_audioTracks release];
+    [_subtitlesTracks release];
+
+    [_video release];
+    [_picture release];
+    [_filters release];
+
+    [_audioDefaults release];
+    [_subtitlesDefaults release];
+    [_fileURL release];
+
+    [super dealloc];
+}
+
 /**
  *  Prepares a hb_job_t
  */
@@ -195,20 +211,8 @@
     }
 
     // Picture Size Settings
-    job->width = self.picture.width;
-    job->height = self.picture.height;
-
-    job->anamorphic.keep_display_aspect = self.picture.keepDisplayAspect;
-    job->anamorphic.mode = self.picture.anamorphicMode;
-    job->modulus = self.picture.modulus;
     job->par.num = self.picture.parWidth;
     job->par.den = self.picture.parHeight;
-
-    // Here we use the crop values saved at the time the preset was saved
-    job->crop[0] = self.picture.cropTop;
-    job->crop[1] = self.picture.cropBottom;
-    job->crop[2] = self.picture.cropLeft;
-    job->crop[3] = self.picture.cropRight;
 
     // Video settings
     // Framerate
@@ -268,6 +272,9 @@
 
     for (NSDictionary *subtitleDict in self.subtitlesTracks)
     {
+        if (i == self.subtitlesTracks.count - 1)
+            continue;
+
         int subtitle = [subtitleDict[keySubTrackIndex] intValue];
         int force = [subtitleDict[keySubTrackForced] intValue];
         int burned = [subtitleDict[keySubTrackBurned] intValue];
@@ -551,9 +558,9 @@
     // Add Crop/Scale filter
     filter = hb_filter_init(HB_FILTER_CROP_SCALE);
     hb_add_filter( job, filter, [NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
-                                  job->width, job->height,
-                                  job->crop[0], job->crop[1],
-                                  job->crop[2], job->crop[3]].UTF8String);
+                                  self.picture.width, self.picture.height,
+                                  self.picture.cropTop, self.picture.cropBottom,
+                                  self.picture.cropLeft, self.picture.cropRight].UTF8String);
 
     // Add framerate shaping filter
     filter = hb_filter_init(HB_FILTER_VFR);

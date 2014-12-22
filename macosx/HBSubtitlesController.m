@@ -43,8 +43,8 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 @property (assign) IBOutlet NSButton *reloadDefaults;
 
 // Subtitles arrays
-@property (nonatomic, readwrite) NSMutableArray *subtitleArray;
-@property (nonatomic, readwrite) NSMutableArray *subtitleSourceArray;
+@property (nonatomic, readwrite, retain) NSMutableArray *subtitleArray;
+@property (nonatomic, readwrite, retain) NSMutableArray *subtitleSourceArray;
 
 @property (nonatomic, readwrite, retain) NSString *foreignAudioSearchTrackName;
 @property (nonatomic, readwrite) int container;
