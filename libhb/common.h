@@ -462,31 +462,10 @@ struct hb_job_s
     int             grayscale;      // Black and white encoding
     hb_list_t     * list_filter;
 
-// These job settings should be depricated, but the mac ui is still using them.
-// hb_set_anamorphic_mode2 should be used during job setup which makes
-// these settings unnecessary
-#define HB_DEPRECATE_JOB_SETTINGS
-#ifdef HB_DEPRECATE_JOB_SETTINGS
-    int             crop[4];
-    int             width;
-    int             height;
-    hb_rational_t   par;
-    int             modulus;
-    int             maxWidth;
-    int             maxHeight;
-
-    struct
-    {
-        hb_anamorphic_mode_t  mode;
-        int                   itu_par;
-        int                   keep_display_aspect;
-    } anamorphic;
-#else
     PRIVATE int             crop[4];
     PRIVATE int             width;
     PRIVATE int             height;
     hb_rational_t           par;
-#endif
 
     /* Video settings:
          vcodec:            output codec
@@ -968,11 +947,6 @@ struct hb_title_s
     hb_list_t     * list_audio;
     hb_list_t     * list_subtitle;
     hb_list_t     * list_attachment;
-
-#define HB_TITLE_JOBS
-#if defined(HB_TITLE_JOBS)
-    hb_job_t      * job;
-#endif
 
     uint32_t        flags;
                 // set if video stream doesn't have IDR frames
