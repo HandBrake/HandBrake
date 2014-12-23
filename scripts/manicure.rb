@@ -508,11 +508,6 @@ class Display
       commandString << " -I"
     end
     
-    # 64-bit files
-    if hash["Mp4LargeFile"] == 1
-      commandString << " -4"
-    end
-    
     #MP4 Optimize for HTTP Streaming
     if hash["Mp4HttpOptimize"].to_i == 1
       commandString << " -O"
@@ -912,11 +907,6 @@ class Display
       commandString << " -I"
     end
     
-    # 64-bit files
-    if hash["Mp4LargeFile"] == 1
-      commandString << " -4"
-    end
-    
     #MP4 Optimize for HTTP Streaming
     if hash["Mp4HttpOptimize"].to_i == 1
       commandString << " -O"
@@ -1079,11 +1069,6 @@ class Display
     #iPod MP4 atom
     if hash["Mp4iPodCompatible"].to_i == 1
       commandString << "job->ipod_atom = 1;\n    "
-    end
-    
-    # 64-bit files
-    if hash["Mp4LargeFile"] == 1
-      commandString << "job->largeFileSize = 1;\n    "
     end
     
     #MP4 Optimize for HTTP Streaming
@@ -1772,11 +1757,6 @@ class Display
     #iPod MP4 atom
     if hash["Mp4iPodCompatible"].to_i == 1
       commandString << " -I"
-    end
-    
-    # 64-bit files
-    if hash["Mp4LargeFile"] == 1
-      commandString << " -4"
     end
     
     #MP4 Optimize for HTTP Streaming

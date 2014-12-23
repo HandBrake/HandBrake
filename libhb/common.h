@@ -555,8 +555,6 @@ struct hb_job_s
     int             mux;
     char          * file;
 
-    /* Allow MP4 files > 4 gigs */
-    int             largeFileSize;
     int             mp4_optimize;
     int             ipod_atom;
 

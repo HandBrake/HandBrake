@@ -431,9 +431,8 @@ char* hb_job_to_json( const hb_job_t * job )
     if (job->mux & HB_MUX_MASK_MP4)
     {
         json_t *mp4_dict;
-        mp4_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
+        mp4_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
             "Mp4Optimize",      json_boolean(job->mp4_optimize),
-            "LargeFileSize",    json_boolean(job->largeFileSize),
             "IpodAtom",         json_boolean(job->ipod_atom));
         json_object_set_new(dest_dict, "Mp4Options", mp4_dict);
     }
@@ -707,8 +706,8 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
     "{"
     "s:i,"
     // Destination {File, Mux, ChapterMarkers, Mp4Options {
-    //                          Mp4Optimize, LargeFileSize, IpodAtom}
-    "s:{s?s, s:i, s:b s?{s?b, s?b, s?b}},"
+    //                          Mp4Optimize, IpodAtom}
+    "s:{s?s, s:i, s:b s?{s?b, s?b}},"
     // Source {Angle, Range {ChapterStart, ChapterEnd, PtsToStart, PtsToStop,
     //                  FrameToStart, FrameToStop, StartAtPreview, SeekPoints}
     "s:{s?i, s:{s?i, s?i, s?I, s?I, s?i, s?i, s?i, s?i}},"
@@ -734,7 +733,6 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
             "ChapterMarkers",       unpack_b(&job->chapter_markers),
             "Mp4Options",
                 "Mp4Optimize",      unpack_b(&job->mp4_optimize),
-                "LargeFileSize",    unpack_b(&job->largeFileSize),
                 "IpodAtom",         unpack_b(&job->ipod_atom),
         "Source",
             "Angle",                unpack_i(&job->angle),

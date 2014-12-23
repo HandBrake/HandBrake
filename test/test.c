@@ -129,7 +129,6 @@ static char * h264_level    = NULL;
 static int    maxHeight     = 0;
 static int    maxWidth      = 0;
 static int    turbo_opts_enabled = 0;
-static int    largeFileSize = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
 static int    cfr           = 0;
@@ -924,7 +923,6 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         mux = HB_MUX_MP4;
                     }
-                    job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 22.0;
                     filter_vrate.den = 900000;
@@ -994,7 +992,6 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         mux = HB_MUX_MP4;
                     }
-                    job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
                     filter_vrate.den = 900000;
@@ -1064,7 +1061,6 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         mux = HB_MUX_MP4;
                     }
-                    job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
                     filter_vrate.den = 900000;
@@ -1138,7 +1134,6 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         mux = HB_MUX_MP4;
                     }
-                    job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
                     filter_vrate.den = 900000;
@@ -1208,7 +1203,6 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         mux = HB_MUX_MP4;
                     }
-                    job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
                     filter_vrate.den = 900000;
@@ -1549,7 +1543,6 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         mux = HB_MUX_MP4;
                     }
-                    job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
                     if( !atracks )
@@ -1834,10 +1827,6 @@ static int HandleEvents( hb_handle_t * h )
                 job->mux = mux;
             }
             // then, muxer options
-            if (largeFileSize)
-            {
-                job->largeFileSize = 1;
-            }
             if (mp4_optimize)
             {
                 job->mp4_optimize = 1;
@@ -3648,7 +3637,6 @@ static int ParseOptions( int argc, char ** argv )
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
             { "output",      required_argument, NULL,    'o' },
-            { "large-file",  no_argument,       NULL,    '4' },
             { "optimize",    no_argument,       NULL,    'O' },
             { "ipod-atom",   no_argument,       NULL,    'I' },
             { "use-opencl",  no_argument,       NULL,    'P' },
@@ -3820,9 +3808,6 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'o':
                 output = strdup( optarg );
-                break;
-            case '4':
-                largeFileSize = 1;
                 break;
             case 'O':
                 mp4_optimize = 1;

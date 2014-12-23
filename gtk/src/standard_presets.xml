@@ -63,8 +63,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>0</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>
@@ -193,8 +191,6 @@
 				<key>Folder</key>
 				<false/>
 				<key>Mp4HttpOptimize</key>
-				<integer>0</integer>
-				<key>Mp4LargeFile</key>
 				<integer>0</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>1</integer>
@@ -325,8 +321,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>1</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>
@@ -456,8 +450,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>1</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>
@@ -603,8 +595,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>1</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>
@@ -750,8 +740,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>1</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>
@@ -897,8 +885,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>1</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>
@@ -1027,8 +1013,6 @@
 				<key>Folder</key>
 				<false/>
 				<key>Mp4HttpOptimize</key>
-				<integer>0</integer>
-				<key>Mp4LargeFile</key>
 				<integer>0</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
@@ -1159,8 +1143,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>0</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>
@@ -1289,8 +1271,6 @@
 				<key>Folder</key>
 				<false/>
 				<key>Mp4HttpOptimize</key>
-				<integer>0</integer>
-				<key>Mp4LargeFile</key>
 				<integer>0</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
@@ -1435,8 +1415,6 @@
 				<key>Folder</key>
 				<false/>
 				<key>Mp4HttpOptimize</key>
-				<integer>0</integer>
-				<key>Mp4LargeFile</key>
 				<integer>0</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
@@ -1583,8 +1561,6 @@
 				<false/>
 				<key>Mp4HttpOptimize</key>
 				<integer>0</integer>
-				<key>Mp4LargeFile</key>
-				<integer>1</integer>
 				<key>Mp4iPodCompatible</key>
 				<integer>0</integer>
 				<key>PictureAutoCrop</key>

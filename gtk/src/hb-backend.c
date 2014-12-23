@@ -4210,12 +4210,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     job->mux = mux->format;
     if (job->mux & HB_MUX_MASK_MP4)
     {
-        job->largeFileSize = ghb_settings_get_boolean(js, "Mp4LargeFile");
         job->mp4_optimize = ghb_settings_get_boolean(js, "Mp4HttpOptimize");
     }
     else
     {
-        job->largeFileSize = FALSE;
         job->mp4_optimize = FALSE;
     }
     if (!job->start_at_preview)

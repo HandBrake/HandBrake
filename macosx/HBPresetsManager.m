@@ -450,7 +450,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @0;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -564,7 +563,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @0;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @1;
     
@@ -667,7 +665,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @1;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -770,7 +767,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @1;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -873,7 +869,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @1;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -987,7 +982,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @1;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -1101,7 +1095,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @1;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -1215,7 +1208,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @0;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -1318,7 +1310,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @0;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -1421,7 +1412,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @0;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -1524,7 +1514,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @0;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     
@@ -1627,7 +1616,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     
     /* Container format and related settings */
     preset[@"FileFormat"] = @"MP4 file";
-    preset[@"Mp4LargeFile"] = @1;
     preset[@"Mp4HttpOptimize"] = @0;
     preset[@"Mp4iPodCompatible"] = @0;
     

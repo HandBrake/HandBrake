@@ -278,8 +278,6 @@
         <false />
         <key>PictureKeepRatio</key>
         <true />
-        <key>Mp4LargeFile</key>
-        <false />
         <key>AudioAllowMP3Pass</key>
         <true />
         <key>AudioAllowAACPass</key>

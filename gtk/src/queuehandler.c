@@ -197,14 +197,13 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
     // Next line in the display (Container options)
     // Container Options: - Chapter Markers
-    gboolean ipod = FALSE, http = FALSE, large = FALSE;
+    gboolean ipod = FALSE, http = FALSE;
     if (mux->format & HB_MUX_MASK_MP4)
     {
         ipod = ghb_settings_get_boolean(settings, "Mp4iPodCompatible");
         http = ghb_settings_get_boolean(settings, "Mp4HttpOptimize");
-        large = ghb_settings_get_boolean(settings, "Mp4LargeFile");
     }
-    if (http || ipod || large || markers)
+    if (http || ipod || markers)
     {
         const char *prefix = " ";
         XPRINT(_("<b>Container Options:</b><small>"));
@@ -221,11 +220,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
         if (http)
         {
             XPRINT(_("%sWeb Optimized"), prefix);
-            prefix = " - ";
-        }
-        if (large)
-        {
-            XPRINT(_("%sLarge File Size (>4GB)"), prefix);
             prefix = " - ";
         }
         XPRINT("</small>\n");
