@@ -1721,9 +1721,7 @@ static int HandleEvents( hb_handle_t * h )
             hb_geometry_t srcGeo, resultGeo;
             hb_geometry_settings_t uiGeo;
 
-            srcGeo.width = title->geometry.width;
-            srcGeo.height = title->geometry.height;
-            srcGeo.par = title->geometry.par;
+            srcGeo = title->geometry;
 
             keep_display_aspect |= anamorphic_mode != HB_ANAMORPHIC_CUSTOM;
             uiGeo.mode = anamorphic_mode;
