@@ -6,6 +6,7 @@
     
 #import "HBAdvancedController.h"
 #import "HBVideo.h"
+#import "HBVideo+UIAdditions.h"
 
 @interface HBAdvancedController ()
 {
