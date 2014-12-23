@@ -258,6 +258,7 @@ static json_t* hb_title_to_dict( const hb_title_t * title )
             "Description",      json_string(audio->config.lang.description),
             "Language",         json_string(audio->config.lang.simple),
             "LanguageCode",     json_string(audio->config.lang.iso639_2),
+            "Codec",            json_integer(audio->config.in.codec),
             "SampleRate",       json_integer(audio->config.in.samplerate),
             "BitRate",          json_integer(audio->config.in.bitrate),
             "ChannelLayout",    json_integer(audio->config.in.channel_layout));

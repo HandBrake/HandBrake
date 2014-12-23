@@ -3837,6 +3837,20 @@ int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder)
     }
 }
 
+int hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx, int audio_idx, int encoder)
+{
+    hb_title_t *title = hb_find_title_by_index(h, title_idx);
+    if (title == NULL)
+        return 0;
+
+    hb_audio_t *audio = hb_list_item(title->list_audio, audio_idx);
+    if (audio == NULL)
+        return 0;
+
+    return hb_audio_can_apply_drc(audio->config.in.codec,
+                                  audio->config.in.codec_param, encoder);
+}
+
 /**********************************************************************
  * hb_metadata_init
  **********************************************************************

@@ -169,6 +169,8 @@ int hb_subtitle_can_burn( int source );
 int hb_subtitle_can_pass( int source, int mux );
 
 int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder);
+int hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx,
+                            int audio_idx, int encoder);
 
 hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
 
