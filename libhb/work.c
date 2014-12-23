@@ -360,8 +360,7 @@ void hb_display_job_info(hb_job_t *job)
             }
         }
 
-        if (job->color_matrix_code && (job->vcodec == HB_VCODEC_X264 ||
-                                       job->mux    == HB_MUX_MP4V2))
+        if (job->color_matrix_code && job->vcodec == HB_VCODEC_X264)
         {
             // color matrix is set:
             // 1) at the stream    level (x264  only),

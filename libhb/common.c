@@ -3793,11 +3793,6 @@ int hb_subtitle_can_pass( int source, int mux )
                     return 0;
             } break;
 
-        case HB_MUX_MP4V2:
-            if (source == VOBSUB)
-            {
-                return 1;
-            } // fall through to next case...
         case HB_MUX_AV_MP4:
             switch( source )
             {
