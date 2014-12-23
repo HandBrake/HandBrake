@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C68k" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
@@ -185,6 +185,9 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="0.76630436999999996" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                         </textFieldCell>
+                        <connections>
+                            <binding destination="240" name="value" keyPath="self.job.range.duration" id="D3F-S5-u15"/>
+                        </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="1555">
                         <rect key="frame" x="20" y="486" width="70" height="14"/>
@@ -209,7 +212,7 @@
                         </popUpButtonCell>
                         <accessibility description="Format"/>
                         <connections>
-                            <action selector="formatPopUpChanged:" target="240" id="1614"/>
+                            <binding destination="240" name="selectedTag" keyPath="self.job.container" id="ful-Gq-2mt"/>
                         </connections>
                     </popUpButton>
                     <button verticalHuggingPriority="750" id="1562">
@@ -257,7 +260,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <action selector="startEndSecValueChanged:" target="240" id="5528"/>
+                            <binding destination="240" name="value" keyPath="self.job.range.secondsStart" id="yuS-GN-avp"/>
                         </connections>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" id="5521">
@@ -269,7 +272,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <action selector="startEndFrameValueChanged:" target="240" id="5530"/>
+                            <binding destination="240" name="value" keyPath="self.job.range.frameStart" id="7yg-HW-q0R"/>
                         </connections>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" id="5493">
@@ -281,7 +284,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <action selector="startEndSecValueChanged:" target="240" id="5529"/>
+                            <binding destination="240" name="value" keyPath="self.job.range.secondsStop" id="BUI-Zz-m1A"/>
                         </connections>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" id="5523">
@@ -293,7 +296,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <action selector="startEndFrameValueChanged:" target="240" id="5531"/>
+                            <binding destination="240" name="value" keyPath="self.job.range.frameStop" id="8G6-K0-vyD"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="1627">
@@ -358,7 +361,12 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <action selector="customSettingUsed:" target="240" id="4971"/>
+                            <binding destination="240" name="value" keyPath="self.job.mp4HttpOptimize" id="b1e-md-dT3"/>
+                            <binding destination="240" name="hidden" keyPath="self.job.mp4OptionsEnabled" id="D27-Mk-6hO">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
                     <button toolTip="This option adds an atom to the MP4 file which allows older iPods (5th Generation classic style) to play the file." id="4967">
@@ -369,7 +377,12 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <action selector="customSettingUsed:" target="240" id="4970"/>
+                            <binding destination="240" name="hidden" keyPath="self.job.mp4OptionsEnabled" id="Vlg-uB-45p">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="240" name="value" keyPath="self.job.mp4iPodCompatible" id="GWA-QG-Bfu"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="5505">
@@ -396,6 +409,8 @@
                         <accessibility description="Start Chapter"/>
                         <connections>
                             <action selector="chapterPopUpChanged:" target="240" id="1615"/>
+                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="6kP-TS-bEc"/>
+                            <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStart" previousBinding="6kP-TS-bEc" id="U76-2W-TvD"/>
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="1548">
@@ -413,6 +428,8 @@
                         <accessibility description="End Chapter"/>
                         <connections>
                             <action selector="chapterPopUpChanged:" target="240" id="1616"/>
+                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="Yqp-Sg-lBf"/>
+                            <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStop" previousBinding="Yqp-Sg-lBf" id="4k2-Sm-RoJ"/>
                         </connections>
                     </popUpButton>
                 </subviews>

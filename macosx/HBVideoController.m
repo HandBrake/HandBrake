@@ -5,9 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBVideoController.h"
-#import "Controller.h"
 #import "HBAdvancedController.h"
-#import "HBVideo.h"
+#import "HBVideo+UIAdditions.h"
 
 #include "hb.h"
 
@@ -67,9 +66,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         // will use the HBJob one in the future.
         _video = [[HBVideo alloc] init];
 
-        // register that we are interested in changes made to the video container.
-        [[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(containerChanged:) name:HBContainerChangedNotification object:nil];
-
         // Observe the advanced tab pref shown/hided state.
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
                                                                   forKeyPath:@"values.HBShowAdvancedTab"
@@ -90,12 +86,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     }
 
     return self;
-}
-
-- (void)loadView
-{
-    [super loadView];
-    [self switchPresetView];
 }
 
 - (void)setEnabled:(BOOL)flag
@@ -180,11 +170,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
-}
-
-- (void)containerChanged:(NSNotification *)aNotification
-{
-    self.video.container = [[aNotification userInfo][keyContainerTag] intValue];
 }
 
 #pragma mark - Interface setup

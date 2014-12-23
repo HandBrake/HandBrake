@@ -14,8 +14,6 @@
 
 /**
  *  HBVideoController
- *
- *  Responds to HBContainerChangedNotification notifications.
  */
 @interface HBVideoController : NSViewController <HBViewValidation>
 

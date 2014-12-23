@@ -8,6 +8,7 @@
 
 #import "HBAddPresetController.h"
 #import "HBPreset.h"
+#include "hb.h"
 
 @interface HBAddPresetController ()
 

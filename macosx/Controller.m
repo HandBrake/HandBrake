@@ -17,19 +17,18 @@
 #import "HBPresetsViewController.h"
 #import "HBAddPresetController.h"
 
+#import "HBPicture+UIAdditions.h"
+
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
 #import "HBCore.h"
 #import "HBJob.h"
 
-NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
-NSString *keyContainerTag                      = @"keyContainerTag";
-
 // DockTile update freqency in total percent increment
 #define dockTileUpdateFrequency                  0.1f
 
-@interface HBController () <HBPresetsViewControllerDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBPreviewControllerDelegate>
 
 // The current job.
 @property (nonatomic, retain) HBJob *job;
@@ -76,7 +75,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         // Inits the controllers
         outputPanel = [[HBOutputPanelController alloc] init];
         fPictureController = [[HBPictureController alloc] init];
-        fPreviewController = [[HBPreviewController  alloc] init];
+        fPreviewController = [[HBPreviewController  alloc] initWithDelegate:self];
         fQueueController = [[HBQueueController alloc] init];
 
         // we init the HBPresetsManager class
@@ -123,7 +122,6 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
         [fPictureController setDelegate:self];
 
-        fPreviewController.delegate = self;
         [fPreviewController setCore:self.core];
 
         [fQueueController setHandle:self.queueCore.hb_handle];
@@ -132,6 +130,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatPopUpChanged:) name:HBContainerChangedNotification object:nil];
     }
 
     return self;
@@ -1930,10 +1929,8 @@ static void queueFSEventStreamCallback(
 - (NSDictionary *)createQueueFileItem
 {
     NSMutableDictionary *queueFileJob = [[NSMutableDictionary alloc] init];
-    
-    hb_list_t  * list  = hb_get_titles(self.core.hb_handle);
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            (int)[fSrcTitlePopUp indexOfSelectedItem] );
+
+    hb_title_t *title = self.job.title.hb_title;
 
     /* We use a number system to set the encode status of the queue item
      * 0 == already encoded
@@ -2292,10 +2289,8 @@ static void queueFSEventStreamCallback(
     /* since the queue only scans a single title, its already been selected in showNewScan
        so do not try to reset it here. However if we do decide to do full source scans on
        a queue edit rescan, we would need it. So leaving in for now but commenting out. */
-    //[fSrcTitlePopUp selectItemAtIndex: [[queueToApply objectForKey:@"TitleNumber"] intValue] - 1];
-    
-    [fSrcChapterStartPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterStart"] intValue] - 1];
-    [fSrcChapterEndPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1];
+    self.job.range.chapterStart = [[queueToApply objectForKey:@"ChapterStart"] intValue] - 1;
+    self.job.range.chapterStop = [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1;
 
     /* File Format */
     [fDstFormatPopUp selectItemWithTag:[queueToApply[@"JobFileFormatMux"] integerValue]];
@@ -3317,7 +3312,7 @@ static void queueFSEventStreamCallback(
     // Generate a new file name
     NSString *fileName = [HBUtilities automaticNameForSource:title.name
                                                        title:title.hb_title->index
-                                                    chapters:NSMakeRange([fSrcChapterStartPopUp indexOfSelectedItem] + 1, [fSrcChapterEndPopUp indexOfSelectedItem] + 1)
+                                                    chapters:NSMakeRange(self.job.range.chapterStart + 1, self.job.range.chapterStop + 1)
                                                      quality:self.job.video.qualityType ? self.job.video.quality : 0
                                                      bitrate:!self.job.video.qualityType ? self.job.video.avgBitrate : 0
                                                   videoCodec:self.job.video.encoder];
@@ -3341,51 +3336,6 @@ static void queueFSEventStreamCallback(
     HBJob *job = [[[HBJob alloc] initWithTitle:hbtitle
                                    andPreset:self.selectedPreset] autorelease];
 
-    hb_title_t *title = hbtitle.hb_title;
-
-    // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
-    if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) && self.core.titles.count > 1)
-    {
-        // we set the default name according to the new title->name
-        [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                         @"%@/%@.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
-                                         [NSString stringWithUTF8String: title->name],
-                                         [[fDstFile2Field stringValue] pathExtension]]];
-        
-        // Change the source to read out the parent folder also
-        [fSrcDVD2Field setStringValue:[NSString stringWithFormat:@"%@/%@", browsedSourceDisplayName,[NSString stringWithUTF8String: title->name]]];
-    }
-    
-    // For point a to point b pts encoding, set the start and end fields to 0 and the title duration in seconds respectively
-    int duration = (title->hours * 3600) + (title->minutes * 60) + (title->seconds);
-    [fSrcTimeStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 0]];
-    [fSrcTimeEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration]];
-    // For point a to point b frame encoding, set the start and end fields to 0 and the title duration * announced fps in seconds respectively
-    [fSrcFrameStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 1]];
-    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->vrate.num / title->vrate.den)]];
-
-    // Update chapter popups
-    [fSrcChapterStartPopUp removeAllItems];
-    [fSrcChapterEndPopUp   removeAllItems];
-
-    [hbtitle.chapters enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSString *title = [NSString stringWithFormat: @"%lu", idx + 1];
-        [fSrcChapterStartPopUp addItemWithTitle:title];
-        [fSrcChapterEndPopUp addItemWithTitle: title];
-    }];
-
-    [fSrcChapterStartPopUp selectItemAtIndex: 0];
-    [fSrcChapterEndPopUp   selectItemAtIndex:hbtitle.chapters.count - 1];
-    [self chapterPopUpChanged:nil];
-
-    [fSrcAnglePopUp removeAllItems];
-
-    for (int i = 0; i < hbtitle.angles; i++)
-    {
-        [fSrcAnglePopUp addItemWithTitle:[NSString stringWithFormat: @"%d", i + 1]];
-    }
-    [fSrcAnglePopUp selectItemAtIndex: 0];
-
     // Set the jobs info to the view controllers
     fPictureController.picture = job.picture;
     fPictureController.filters = job.filters;
@@ -3401,6 +3351,31 @@ static void queueFSEventStreamCallback(
 
     self.job = job;
 
+    hb_title_t *title = hbtitle.hb_title;
+
+    // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
+    if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) && self.core.titles.count > 1)
+    {
+        // we set the default name according to the new title->name
+        [fDstFile2Field setStringValue: [NSString stringWithFormat:
+                                         @"%@/%@.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
+                                         [NSString stringWithUTF8String: title->name],
+                                         [[fDstFile2Field stringValue] pathExtension]]];
+        
+        // Change the source to read out the parent folder also
+        [fSrcDVD2Field setStringValue:[NSString stringWithFormat:@"%@/%@", browsedSourceDisplayName,[NSString stringWithUTF8String: title->name]]];
+    }
+
+    [self chapterPopUpChanged:nil];
+
+    [fSrcAnglePopUp removeAllItems];
+
+    for (int i = 0; i < hbtitle.angles; i++)
+    {
+        [fSrcAnglePopUp addItemWithTitle:[NSString stringWithFormat: @"%d", i + 1]];
+    }
+    [fSrcAnglePopUp selectItemAtIndex: 0];
+
     // If Auto Naming is on. We create an output filename of dvd name - title number
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
 	{
@@ -3413,136 +3388,73 @@ static void queueFSEventStreamCallback(
 
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
 {
-    if( [fEncodeStartStopPopUp isEnabled] )
+    // We are chapters
+    if ([fEncodeStartStopPopUp indexOfSelectedItem] == 0)
     {
-        /* We are chapters */
-        if( [fEncodeStartStopPopUp indexOfSelectedItem] == 0 )
-        {
-            [fSrcChapterStartPopUp  setHidden: NO];
-            [fSrcChapterEndPopUp  setHidden: NO];
-            
-            [fSrcTimeStartEncodingField  setHidden: YES];
-            [fSrcTimeEndEncodingField  setHidden: YES];
-            
-            [fSrcFrameStartEncodingField  setHidden: YES];
-            [fSrcFrameEndEncodingField  setHidden: YES];
-            
-               [self chapterPopUpChanged:nil];   
-        }
-        /* We are time based (seconds) */
-        else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 1)
-        {
-            [fSrcChapterStartPopUp  setHidden: YES];
-            [fSrcChapterEndPopUp  setHidden: YES];
-            
-            [fSrcTimeStartEncodingField  setHidden: NO];
-            [fSrcTimeEndEncodingField  setHidden: NO];
-            
-            [fSrcFrameStartEncodingField  setHidden: YES];
-            [fSrcFrameEndEncodingField  setHidden: YES];
-            
-            [self startEndSecValueChanged:nil];
-        }
-        /* We are frame based */
-        else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 2)
-        {
-            [fSrcChapterStartPopUp  setHidden: YES];
-            [fSrcChapterEndPopUp  setHidden: YES];
-            
-            [fSrcTimeStartEncodingField  setHidden: YES];
-            [fSrcTimeEndEncodingField  setHidden: YES];
-            
-            [fSrcFrameStartEncodingField  setHidden: NO];
-            [fSrcFrameEndEncodingField  setHidden: NO];
-            
-            [self startEndFrameValueChanged:nil];
-        }
+        self.job.range.type = HBRangeTypeChapters;
+
+        [fSrcChapterStartPopUp  setHidden: NO];
+        [fSrcChapterEndPopUp  setHidden: NO];
+
+        [fSrcTimeStartEncodingField  setHidden: YES];
+        [fSrcTimeEndEncodingField  setHidden: YES];
+
+        [fSrcFrameStartEncodingField  setHidden: YES];
+        [fSrcFrameEndEncodingField  setHidden: YES];
+
+        [self chapterPopUpChanged:nil];
+    }
+    // We are time based (seconds)
+    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 1)
+    {
+        self.job.range.type = HBRangeTypeSeconds;
+
+        [fSrcChapterStartPopUp  setHidden: YES];
+        [fSrcChapterEndPopUp  setHidden: YES];
+
+        [fSrcTimeStartEncodingField  setHidden: NO];
+        [fSrcTimeEndEncodingField  setHidden: NO];
+
+        [fSrcFrameStartEncodingField  setHidden: YES];
+        [fSrcFrameEndEncodingField  setHidden: YES];
+    }
+    // We are frame based
+    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 2)
+    {
+        self.job.range.type = HBRangeTypeFrames;
+
+        [fSrcChapterStartPopUp  setHidden: YES];
+        [fSrcChapterEndPopUp  setHidden: YES];
+
+        [fSrcTimeStartEncodingField  setHidden: YES];
+        [fSrcTimeEndEncodingField  setHidden: YES];
+
+        [fSrcFrameStartEncodingField  setHidden: NO];
+        [fSrcFrameEndEncodingField  setHidden: NO];
     }
 }
 
 - (IBAction) chapterPopUpChanged: (id) sender
 {
-
-	/* If start chapter popup is greater than end chapter popup,
-	we set the end chapter popup to the same as start chapter popup */
-	if ([fSrcChapterStartPopUp indexOfSelectedItem] > [fSrcChapterEndPopUp indexOfSelectedItem])
-	{
-		[fSrcChapterEndPopUp selectItemAtIndex: [fSrcChapterStartPopUp indexOfSelectedItem]];
-    }
-
-		
-	hb_list_t  * list  = hb_get_titles( self.core.hb_handle);
-    hb_title_t * title = (hb_title_t *)
-        hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
-
-    hb_chapter_t * chapter;
-    int64_t        duration = 0;
-    for( NSInteger i = [fSrcChapterStartPopUp indexOfSelectedItem];
-         i <= [fSrcChapterEndPopUp indexOfSelectedItem]; i++ )
-    {
-        chapter = (hb_chapter_t *) hb_list_item( title->list_chapter, (int)i );
-        duration += chapter->duration;
-    }
-    
-    duration /= 90000; /* pts -> seconds */
-    [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
-        @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
-        duration % 60]];
-
-    /* We're changing the chapter range - we may need to flip the m4v/mp4 extension */
+    // We're changing the chapter range - we may need to flip the m4v/mp4 extension
     if ([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4)
     {
         [self autoSetM4vExtension:sender];
     }
 
-    /* If Auto Naming is on it might need to be update if it includes the chapters range */
+    // If Auto Naming is on it might need to be update if it includes the chapters range
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
 	{
         [self updateFileName];
 	}
 }
 
-- (IBAction) startEndSecValueChanged: (id) sender
-{
-
-	int duration = [fSrcTimeEndEncodingField intValue] - [fSrcTimeStartEncodingField intValue];
-    [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
-        @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60,
-        duration % 60]];
-}
-
-- (IBAction) startEndFrameValueChanged: (id) sender
-{
-    hb_list_t  * list  = hb_get_titles(self.core.hb_handle);
-    hb_title_t * title = (hb_title_t*)
-    hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
-    
-    int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->vrate.num / title->vrate.den);
-    [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
-                                         @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60,
-                                         duration % 60]];
-}
-
 - (IBAction) formatPopUpChanged: (id) sender
 {
     NSString *string   = [fDstFile2Field stringValue];
-    int videoContainer = (int)[[fDstFormatPopUp selectedItem] tag];
+    int videoContainer = self.job.container;
     const char *ext    = NULL;
 
-    // enable chapter markers and hide muxer-specific options
-    [fDstMp4HttpOptFileCheck setHidden:YES];
-    [fDstMp4iPodFileCheck    setHidden:YES];
-
-    switch (videoContainer)
-    {
-        case HB_MUX_AV_MP4:
-            [fDstMp4HttpOptFileCheck setHidden:NO];
-            [fDstMp4iPodFileCheck    setHidden:NO];
-            break;
-
-        default:
-            break;
-    }
     // set the file extension
     ext = hb_container_get_default_extension(videoContainer);
     [fDstFile2Field setStringValue:[NSString stringWithFormat:@"%@.%s",
@@ -3552,59 +3464,33 @@ static void queueFSEventStreamCallback(
     {
         [self autoSetM4vExtension:sender];
     }
-
-    /* post a notification for any interested observers to indicate that our video container has changed */
-    [[NSNotificationCenter defaultCenter] postNotification:
-     [NSNotification notificationWithName:HBContainerChangedNotification
-                                   object:self
-                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSNumber numberWithInt:videoContainer], keyContainerTag,
-                                           nil]]];
-
-	[self customSettingUsed:sender];
 }
 
 - (void) autoSetM4vExtension:(NSNotification *)notification
 {
-    if (!([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4))
+    if (!(self.job.container & HB_MUX_MASK_MP4))
         return;
     
-    NSString * extension = @"mp4";
+    NSString *extension = @"mp4";
     
     BOOL anyCodecAC3 = [fAudioController anyCodecMatches: HB_ACODEC_AC3] || [fAudioController anyCodecMatches: HB_ACODEC_AC3_PASS];
-    /* Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter */
+    // Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter
     BOOL chapterMarkers = (self.job.chaptersEnabled) &&
-                          ([fEncodeStartStopPopUp indexOfSelectedItem] != 0 ||
-                           [fSrcChapterStartPopUp indexOfSelectedItem] < [fSrcChapterEndPopUp indexOfSelectedItem]);
-	
+                          (self.job.range.type != HBRangeTypeChapters ||
+                           self.job.range.chapterStart < self.job.range.chapterStop);
+
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString: @".m4v"] || 
         ((YES == anyCodecAC3 || YES == chapterMarkers) &&
-         [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString: @"Auto"] ))
+         [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString: @"Auto"]))
     {
         extension = @"m4v";
     }
     
-    if( [extension isEqualTo: [[fDstFile2Field stringValue] pathExtension]] )
+    if ([extension isEqualTo: [[fDstFile2Field stringValue] pathExtension]] )
         return;
     else
         [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%@",
                                          [[fDstFile2Field stringValue] stringByDeletingPathExtension], extension]];
-}
-
-- (void)updateMp4Checkboxes:(NSNotification *)notification
-{
-    if (self.job.video.encoder != HB_VCODEC_X264)
-    {
-        /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
-         * container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
-         * anything other than MP4. */
-        [fDstMp4iPodFileCheck setEnabled: NO];
-        [fDstMp4iPodFileCheck setState: NSOffState];
-    }
-    else
-    {
-        [fDstMp4iPodFileCheck setEnabled: YES];
-    }
 }
 
 /* Method to determine if we should change the UI
@@ -3634,16 +3520,11 @@ the user is using "Custom" settings by determining the sender*/
 /**
  * Registers changes made in the Picture Settings Window.
  */
-
 - (void)pictureSettingsDidChange 
 {
     // align picture settings and video filters in the UI using tabs
     fVideoController.pictureSettings = [self pictureSettingsSummary];
     fVideoController.pictureFilters = self.job.filters.summary;
-
-    /* Store storage resolution for unparse */
-    fVideoController.video.widthForUnparse  = self.job.picture.width;
-    fVideoController.video.heightForUnparse = self.job.picture.height;
 
     [fPreviewController reloadPreviews];
 }
@@ -3671,18 +3552,14 @@ the user is using "Custom" settings by determining the sender*/
     return [NSString stringWithString:summary];
 }
 
-- (NSString*) muxerOptionsSummary
+- (NSString *) muxerOptionsSummary
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
-    if ([fDstMp4HttpOptFileCheck  isHidden] == NO  &&
-        [fDstMp4HttpOptFileCheck isEnabled] == YES &&
-        [fDstMp4HttpOptFileCheck     state] == NSOnState)
+    if ((self.job.container & HB_MUX_MASK_MP4)  && self.job.mp4HttpOptimize)
     {
         [summary appendString:@" - Web optimized"];
     }
-    if ([fDstMp4iPodFileCheck  isHidden] == NO  &&
-        [fDstMp4iPodFileCheck isEnabled] == YES &&
-        [fDstMp4iPodFileCheck     state] == NSOnState)
+    if ((self.job.container & HB_MUX_MASK_MP4)  && self.job.mp4iPodCompatible)
     {
         [summary appendString:@" - iPod 5G support"];
     }
@@ -3797,30 +3674,17 @@ the user is using "Custom" settings by determining the sender*/
             [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
         }
 
-        /* File Format */
-        /* map legacy container names via libhb */
-        int format = hb_container_get_from_name(hb_container_sanitize_name([chosenPreset[@"FileFormat"] UTF8String]));
-        [fDstFormatPopUp selectItemWithTag:format];
-        [self formatPopUpChanged:nil];
-
-        /* check to see if we have only one chapter */
-        [self chapterPopUpChanged:nil];
-        
-        /* Mux mp4 with http optimization */
-        [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
-
-        /* Lets run through the following functions to get variables set there */
-        /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
-        [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
-
-        /* Audio */
-        [fAudioController applySettingsFromPreset: chosenPreset];
-        
-        /*Subtitles*/
-        [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
-
         // Apply the preset to the current job
         [self.job applyPreset:preset];
+
+        // check to see if we have only one chapter
+        [self chapterPopUpChanged:nil];
+
+        // Audio
+        [fAudioController applySettingsFromPreset: chosenPreset];
+        
+        // Subtitles
+        [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
 
         [self pictureSettingsDidChange];
     }
@@ -3896,35 +3760,14 @@ the user is using "Custom" settings by determining the sender*/
     // Get whether or not to use the current Picture Filter settings for the preset
     preset[@"UsesPictureFilters"] = currentPreset[@"UsesPictureFilters"];
 
-    preset[@"PresetDescription"] = currentPreset[@"PresetDescription"];
-    preset[@"FileFormat"] = fDstFormatPopUp.titleOfSelectedItem;
-    preset[@"ChapterMarkers"] = @(self.job.chaptersEnabled);
-
-    // Mux mp4 with http optimization
-    preset[@"Mp4HttpOptimize"] = @(fDstMp4HttpOptFileCheck.state);
-    // Add iPod uuid atom
-    preset[@"Mp4iPodCompatible"] = @(fDstMp4iPodFileCheck.state);
-
-    // Video encoder
-    [self.job.video prepareVideoForPreset:preset];
-
     preset[@"PictureWidth"]  = currentPreset[@"PictureWidth"];
     preset[@"PictureHeight"] = currentPreset[@"PictureHeight"];
 
-    // Picture Filters
-    [self.job.filters prepareFiltersForPreset:preset];
+    preset[@"PresetDescription"] = currentPreset[@"PresetDescription"];
 
-    // Picture Size
-    [self.job.picture preparePictureForPreset:preset];
-
-    // Audio
-    [self.job.audioDefaults prepareAudioDefaultsForPreset:preset];
-
-    // Subtitles
-    [self.job.subtitlesDefaults prepareSubtitlesDefaultsForPreset:preset];
+    [self.job applyCurrentSettingsToPreset:preset];
 
     return [[[HBPreset alloc] initWithName:preset[@"PresetName"] content:preset builtIn:NO] autorelease];
-    
 }
 
 #pragma mark -

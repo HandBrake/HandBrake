@@ -7,11 +7,10 @@
 #import "HBPreviewController.h"
 #import "HBPreviewGenerator.h"
 #import "HBUtilities.h"
-#import "Controller.h"
 #import <QTKit/QTKit.h>
 
-#import "HBPicture.h"
 #import "HBJob.h"
+#import "HBPicture+UIAdditions.h"
 
 @implementation QTMovieView (HBQTMovieViewExtensions)
 
@@ -98,6 +97,8 @@ typedef enum ViewMode : NSUInteger {
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp;
 }
 
+@property (nonatomic, assign) id <HBPreviewControllerDelegate> delegate;
+
 @property (nonatomic) CALayer *backLayer;
 @property (nonatomic) CALayer *pictureLayer;
 
@@ -134,7 +135,7 @@ typedef enum ViewMode : NSUInteger {
 
 @implementation HBPreviewController
 
-- (id) init
+- (id)initWithDelegate:(id <HBPreviewControllerDelegate>)delegate
 {
 	if (self = [super initWithWindowNibName:@"PicturePreview"])
 	{
@@ -147,6 +148,7 @@ typedef enum ViewMode : NSUInteger {
         // If/when we switch a lot of this stuff to bindings, this can probably
         // go away.
         [self window];
+        _delegate = delegate;
 
     }
 	return self;

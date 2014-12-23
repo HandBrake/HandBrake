@@ -4,36 +4,9 @@
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import "Controller.h"
 #import "PictureController.h"
-#import "HBPreviewController.h"
-
-#import "HBTitle.h"
-
-@interface HBCustomFilterTransformer : NSValueTransformer
-@end
-
-@implementation HBCustomFilterTransformer
-
-+ (Class)transformedValueClass
-{
-    return [NSNumber class];
-}
-
-- (id)transformedValue:(id)value
-{
-    if ([value intValue] == 1)
-        return @NO;
-    else
-        return @YES;
-}
-
-+ (BOOL)allowsReverseTransformation
-{
-    return NO;
-}
-
-@end
+#import "HBFilters.h"
+#import "HBPicture.h"
 
 static void *HBPictureControllerContext = &HBPictureControllerContext;
 
@@ -308,7 +281,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     NSSize pictureCropBoxSize = [fPictureCropBox frame].size;
     NSPoint fPictureCropBoxOrigin = [fPictureCropBox frame].origin;
 
-    if ([fAnamorphicPopUp indexOfSelectedItem] == HB_ANAMORPHIC_CUSTOM)
+    if ([fAnamorphicPopUp indexOfSelectedItem] == 3)
     {   // custom / power user jamboree
         pictureSizingBoxSize.width = 350;
     }

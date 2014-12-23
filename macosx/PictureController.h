@@ -6,8 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "HBFilters.h"
-#import "HBPicture.h"
+@class HBFilters;
+@class HBPicture;
 
 @protocol HBPictureControllerDelegate <NSObject>
 

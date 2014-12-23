@@ -20,9 +20,6 @@
 
 #import "HBPreferencesController.h"
 
-extern NSString *HBContainerChangedNotification;
-extern NSString *keyContainerTag;
-
 @class HBOutputPanelController;
 @class HBPresetsViewController;
 @class HBPresetsManager;
@@ -176,9 +173,6 @@ extern NSString *keyContainerTag;
 
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
-- (IBAction) startEndSecValueChanged: (id) sender;
-- (IBAction) startEndFrameValueChanged: (id) sender;
-
 
 - (IBAction) formatPopUpChanged: (id) sender;
 - (IBAction) autoSetM4vExtension: (id) sender;

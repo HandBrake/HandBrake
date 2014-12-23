@@ -11,9 +11,16 @@
 @class HBCore;
 @class HBJob;
 
+@protocol HBPreviewControllerDelegate <NSObject>
+
+- (IBAction)showPicturePanel:(id)sender;
+
+@end
+
 @interface HBPreviewController : NSWindowController <NSWindowDelegate>
 
-@property (nonatomic, assign) HBController *delegate;
+- (id)initWithDelegate:(id <HBPreviewControllerDelegate>)delegate;
+
 @property (nonatomic, assign) HBCore *core;
 @property (nonatomic, assign) HBJob *job;
 

@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#include "hb.h"
 
 @class HBPreset;
 
