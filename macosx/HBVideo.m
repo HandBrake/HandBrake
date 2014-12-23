@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBVideo.h"
+#import "HBJob.h"
 #import "NSCodingMacro.h"
 #include "hb.h"
 
@@ -19,7 +20,7 @@
 
 @implementation HBVideo
 
-- (instancetype)init
+- (instancetype)initWithJob:(HBJob *)job;
 {
     self = [super init];
     if (self) {
@@ -27,9 +28,7 @@
         _avgBitrate = 1000;
         _quality = 18.0;
         _qualityMaxValue = 51.0f;
-
-        _widthForUnparse = 1;
-        _heightForUnparse = 1;
+        _job = job;
 
         [self updateQualityBounds];
     }
@@ -73,17 +72,15 @@
     [self validateAdvancedOptions];
 }
 
-- (void)setContainer:(int)container
+- (void)containerChanged
 {
-    _container = container;
-
     BOOL encoderSupported = NO;
 
     for (const hb_encoder_t *video_encoder = hb_video_encoder_get_next(NULL);
          video_encoder != NULL;
          video_encoder  = hb_video_encoder_get_next(video_encoder))
     {
-        if (video_encoder->muxers & self.container)
+        if (video_encoder->muxers & self.job.container)
         {
             if (video_encoder->codec == self.encoder)
             {
@@ -143,55 +140,42 @@
     }
 }
 
-#pragma mark - Possible values
-
-- (NSArray *)encoders
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
-    NSMutableArray *encoders = [NSMutableArray array];
-    for (const hb_encoder_t *video_encoder = hb_video_encoder_get_next(NULL);
-         video_encoder != NULL;
-         video_encoder  = hb_video_encoder_get_next(video_encoder))
+    NSSet *retval = nil;
+
+    // Tell KVO to reload the presets settings
+    // after a change to the encoder.
+    if ([key isEqualToString:@"presets"] ||
+        [key isEqualToString:@"tunes"] ||
+        [key isEqualToString:@"profiles"] ||
+        [key isEqualToString:@"levels"])
     {
-        if (video_encoder->muxers & self.container)
-        {
-            [encoders addObject:@(video_encoder->name)];
-        }
+        retval = [NSSet setWithObjects:@"encoder", nil];
     }
-    return [[encoders copy] autorelease];
+
+    // Tell KVO to reload the x264 unparse string
+    // after values changes.
+    if ([key isEqualToString:@"unparseOptions"])
+    {
+        retval = [NSSet setWithObjects:@"encoder", @"preset", @"tune", @"profile", @"level",
+                  @"videoOptionExtra", @"fastDecode", @"job.picture.width", @"job.picture.height", nil];
+    }
+
+    if ([key isEqualToString:@"encoders"])
+    {
+        retval = [NSSet setWithObjects:@"job.container", nil];
+    }
+
+    if ([key isEqualToString:@"fastDecodeSupported"])
+    {
+        retval = [NSSet setWithObjects:@"encoder", nil];
+    }
+
+    return retval;
 }
 
-- (NSArray *)frameRates
-{
-    NSMutableArray *framerates = [NSMutableArray array];
-
-    [framerates addObject:NSLocalizedString(@"Same as source", @"")];
-
-    for (const hb_rate_t *video_framerate = hb_video_framerate_get_next(NULL);
-         video_framerate != NULL;
-         video_framerate  = hb_video_framerate_get_next(video_framerate))
-    {
-        NSString *itemTitle;
-        if (!strcmp(video_framerate->name, "23.976"))
-        {
-            itemTitle = @"23.976 (NTSC Film)";
-        }
-        else if (!strcmp(video_framerate->name, "25"))
-        {
-            itemTitle = @"25 (PAL Film/Video)";
-        }
-        else if (!strcmp(video_framerate->name, "29.97"))
-        {
-            itemTitle = @"29.97 (NTSC Video)";
-        }
-        else
-        {
-            itemTitle = @(video_framerate->name);
-        }
-
-        [framerates addObject:itemTitle];
-    }
-    return [[framerates copy] autorelease];
-}
+#pragma mark -
 
 - (NSArray *)presets
 {
@@ -260,122 +244,6 @@
     return [[temp copy] autorelease];
 }
 
-- (BOOL)fastDecodeSupported
-{
-    return (self.encoder == HB_VCODEC_X264);
-}
-
-/**
- *  This is called everytime a x264 widget in the video tab is changed to
- *  display the expanded options in a text field via outlet fDisplayX264PresetsUnparseTextField
- */
-- (NSString *)unparseOptions
-{
-    if (self.encoder != HB_VCODEC_X264)
-    {
-        return @"";
-    }
-
-    /* API reference:
-     *
-     * char * hb_x264_param_unparse(const char *x264_preset,
-     *                              const char *x264_tune,
-     *                              const char *x264_encopts,
-     *                              const char *h264_profile,
-     *                              const char *h264_level,
-     *                              int width, int height);
-     */
-    NSString   *tmpString;
-    const char *x264_preset   = [self.preset UTF8String];
-    const char *x264_tune     = NULL;
-    const char *advanced_opts = NULL;
-    const char *h264_profile  = NULL;
-    const char *h264_level    = NULL;
-
-    tmpString = self.tune;
-    if (self.fastDecode)
-    {
-        if (self.tune.length)
-        {
-            tmpString = [tmpString stringByAppendingString: @","];
-        }
-        tmpString = [tmpString stringByAppendingString: @"fastdecode"];
-    }
-
-    // prepare the tune, advanced options, profile and level
-    if ([tmpString length])
-    {
-        x264_tune = [tmpString UTF8String];
-    }
-    if ([(tmpString = self.videoOptionExtra) length])
-    {
-        advanced_opts = [tmpString UTF8String];
-    }
-    if ([(tmpString = self.profile) length])
-    {
-        h264_profile = [tmpString UTF8String];
-    }
-    if ([(tmpString = self.level) length])
-    {
-        h264_level = [tmpString UTF8String];
-    }
-
-    // now, unparse
-    char *fX264PresetsUnparsedUTF8String = hb_x264_param_unparse(x264_preset,
-                                                           x264_tune,
-                                                           advanced_opts,
-                                                           h264_profile,
-                                                           h264_level,
-                                                           _widthForUnparse, _heightForUnparse);
-    // update the text field
-    if (fX264PresetsUnparsedUTF8String != NULL)
-    {
-        tmpString = [NSString stringWithUTF8String:fX264PresetsUnparsedUTF8String];
-        free(fX264PresetsUnparsedUTF8String);
-    }
-    else
-    {
-        tmpString = @"";
-    }
-
-    return tmpString;
-}
-
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
-{
-    NSSet *retval = nil;
-
-    // Tell KVO to reload the presets settings
-    // after a change to the encoder.
-    if ([key isEqualToString:@"presets"] ||
-        [key isEqualToString:@"tunes"] ||
-        [key isEqualToString:@"profiles"] ||
-        [key isEqualToString:@"levels"])
-    {
-        retval = [NSSet setWithObjects:@"encoder", nil];
-    }
-
-    // Tell KVO to reload the x264 unparse string
-    // after values changes.
-    if ([key isEqualToString:@"unparseOptions"])
-    {
-        retval = [NSSet setWithObjects:@"encoder", @"preset", @"tune", @"profile", @"level",
-                  @"videoOptionExtra", @"fastDecode", @"widthForUnparse", @"heightForUnparse", nil];
-    }
-
-    if ([key isEqualToString:@"encoders"])
-    {
-        retval = [NSSet setWithObjects:@"container", nil];
-    }
-
-    if ([key isEqualToString:@"fastDecodeSupported"])
-    {
-        retval = [NSSet setWithObjects:@"encoder", nil];
-    }
-
-    return retval;
-}
-
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder
@@ -392,8 +260,6 @@
     encodeInt(_frameRateMode);
 
     encodeBool(_twoPass);
-    encodeBool(_turboTwoPass);
-
     encodeBool(_turboTwoPass);
 
     encodeInt(_advancedOptions);
@@ -423,8 +289,6 @@
     decodeBool(_twoPass);
     decodeBool(_turboTwoPass);
 
-    decodeBool(_turboTwoPass);
-
     decodeInt(_advancedOptions);
     decodeObject(_preset);
     decodeObject(_tune);
@@ -439,6 +303,43 @@
 }
 
 #pragma mark - Various conversion methods from dict/preset/queue/etc
+
+/**
+ *  Returns a string minus the fastdecode string.
+ */
+- (NSString *)stripFastDecodeFromString:(NSString *)tune
+{
+    // filter out fastdecode
+    tune = [tune stringByReplacingOccurrencesOfString:@"," withString:@""];
+    tune = [tune stringByReplacingOccurrencesOfString:@"fastdecode" withString:@""];
+
+    return tune;
+}
+
+/**
+ *  Retuns the tune string plus the fastdecode option (if enabled)
+ */
+- (NSString *)completeTune
+{
+    NSMutableString *string = [[NSMutableString alloc] init];
+
+    if (self.tune)
+    {
+        [string appendString:self.tune];
+    }
+
+    if (self.fastDecode)
+    {
+        if (string.length)
+        {
+            [string appendString:@","];
+        }
+
+        [string appendString:@"fastdecode"];
+    }
+
+    return [string autorelease];
+}
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
@@ -457,6 +358,7 @@
             self.tune = nil;
             self.profile = nil;
             self.level = nil;
+            self.fastDecode = NO;
 
             // x264UseAdvancedOptions is not set (legacy preset)
             // or set to 1 (enabled), so we use the old advanced panel.
@@ -496,6 +398,17 @@
                 self.profile = preset[@"VideoProfile"];
                 self.level   = preset[@"VideoLevel"];
             }
+
+            if ([self.tune rangeOfString:@"fastdecode"].location != NSNotFound)
+            {
+                self.fastDecode = YES;;
+            }
+            else
+            {
+                self.fastDecode = NO;
+            }
+
+            self.tune = [self stripFastDecodeFromString:self.tune];
         }
     }
     else
@@ -584,7 +497,7 @@
         // use the new preset system.
         preset[@"x264UseAdvancedOptions"] = @0;
         preset[@"VideoPreset"]      = self.preset;
-        preset[@"VideoTune"]        = self.tune;
+        preset[@"VideoTune"]        = [self completeTune];
         preset[@"VideoOptionExtra"] = self.videoOptionExtra;
         preset[@"VideoProfile"]     = self.profile;
         preset[@"VideoLevel"]       = self.level;
@@ -716,7 +629,7 @@
          // we are using the x264/x265 preset system.
          queueFileJob[@"x264UseAdvancedOptions"] = @0;
          queueFileJob[@"VideoPreset"] = self.preset;
-         queueFileJob[@"VideoTune"] = self.tune;
+         queueFileJob[@"VideoTune"] = [self completeTune];
          queueFileJob[@"VideoOptionExtra"] = self.videoOptionExtra;
          queueFileJob[@"VideoProfile"] = self.profile;
          queueFileJob[@"VideoLevel"] = self.level;
@@ -762,210 +675,6 @@
     // 2 Pass Encoding
     queueFileJob[@"VideoTwoPass"] = @(self.twoPass);
     queueFileJob[@"VideoTurboTwoPass"] = @(self.turboTwoPass);
-}
-
-@end
-
-#pragma mark - Value Trasformers
-
-@implementation HBVideoEncoderTransformer
-
-+ (Class)transformedValueClass
-{
-    return [NSString class];
-}
-
-- (id)transformedValue:(id)value
-{
-    const char *name = hb_video_encoder_get_name([value intValue]);
-    if (name)
-    {
-        return @(name);
-    }
-    else
-    {
-        return nil;
-    }
-}
-
-+ (BOOL)allowsReverseTransformation
-{
-    return YES;
-}
-
-- (id)reverseTransformedValue:(id)value
-{
-    return @(hb_video_encoder_get_from_name([value UTF8String]));
-}
-
-@end
-
-@implementation HBFrameRateTransformer
-
-+ (Class)transformedValueClass
-{
-    return [NSString class];
-}
-
-- (id)transformedValue:(id)value
-{
-    const char *name = hb_video_framerate_get_name([value intValue]);
-    if (name)
-    {
-        if (!strcmp(name, "23.976"))
-        {
-            return @"23.976 (NTSC Film)";
-        }
-        else if (!strcmp(name, "25"))
-        {
-            return @"25 (PAL Film/Video)";
-        }
-        else if (!strcmp(name, "29.97"))
-        {
-            return @"29.97 (NTSC Video)";
-        }
-        else
-        {
-            return @(name);
-        }
-    }
-    else
-    {
-        return NSLocalizedString(@"Same as source", @"");
-    }
-}
-
-+ (BOOL)allowsReverseTransformation
-{
-    return YES;
-}
-
-- (id)reverseTransformedValue:(id)value
-{
-    if ([value isEqualTo:NSLocalizedString(@"Same as source", @"")])
-    {
-        return @0;
-    }
-    else
-    {
-        return @(hb_video_framerate_get_from_name([value UTF8String]));
-    }
-}
-
-@end
-
-@implementation HBPresetsTransformer
-{
-    int _encoder;
-}
-
-- (instancetype)initWithEncoder:(int)encoder
-{
-    self = [super init];
-    if (self)
-    {
-        _encoder = encoder;
-    }
-    return self;
-}
-
-+ (Class)transformedValueClass
-{
-    return [NSNumber class];
-}
-
-- (id)transformedValue:(id)value
-{
-    if (value)
-    {
-        const char * const *presets = hb_video_encoder_get_presets(_encoder);
-        for (int i = 0; presets != NULL && presets[i] != NULL; i++)
-        {
-            if (!strcasecmp(presets[i], [value UTF8String]))
-            {
-                return @(i);
-            }
-        }
-    }
-
-    return @(-1);
-}
-
-+ (BOOL)allowsReverseTransformation
-{
-    return YES;
-}
-
-- (id)reverseTransformedValue:(id)value
-{
-    const char * const *presets = hb_video_encoder_get_presets(_encoder);
-    for (int i = 0; presets != NULL && presets[i] != NULL; i++)
-    {
-        if (i == [value intValue])
-        {
-            return @(presets[i]);
-        }
-    }
-
-    return @"none";
-}
-
-@end
-
-@implementation HBQualityTransformer
-{
-    BOOL _reverse;
-    double _min;
-    double _max;
-}
-
-- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max
-{
-    self = [super init];
-    if (self)
-    {
-        _reverse = reverse;
-        _min = min;
-        _max = max;
-    }
-
-    return self;
-}
-
-+ (Class)transformedValueClass
-{
-    return [NSNumber class];
-}
-
-- (id)transformedValue:(id)value
-{
-    if (_reverse)
-    {
-        double inverseValue = _min + _max - [value doubleValue];
-        return @(inverseValue);
-    }
-    else
-    {
-        return value;
-    }
-}
-
-+ (BOOL)allowsReverseTransformation
-{
-    return YES;
-}
-
-- (id)reverseTransformedValue:(id)value
-{
-    if (_reverse)
-    {
-        double inverseValue = _min + _max - [value doubleValue];
-        return @(inverseValue);
-    }
-    else
-    {
-        return value;
-    }
 }
 
 @end

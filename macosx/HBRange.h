@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class HBTitle;
+
 typedef NS_ENUM(NSUInteger, HBRangeType) {
     HBRangeTypeChapters,
     HBRangeTypeFrames,
@@ -14,15 +16,21 @@ typedef NS_ENUM(NSUInteger, HBRangeType) {
 
 @interface HBRange : NSObject <NSCoding>
 
+- (instancetype)initWithTitle:(HBTitle *)title;
+
 @property (nonatomic, readwrite) HBRangeType type;
 
-@property (nonatomic, readwrite) NSInteger chapterStart;
-@property (nonatomic, readwrite) NSInteger chapterStop;
+@property (nonatomic, readwrite) int chapterStart;
+@property (nonatomic, readwrite) int chapterStop;
 
-@property (nonatomic, readwrite) NSInteger frameStart;
-@property (nonatomic, readwrite) NSInteger frameStop;
+@property (nonatomic, readwrite) int frameStart;
+@property (nonatomic, readwrite) int frameStop;
 
-@property (nonatomic, readwrite) NSInteger secondsStart;
-@property (nonatomic, readwrite) NSInteger secondsStop;
+@property (nonatomic, readwrite) int secondsStart;
+@property (nonatomic, readwrite) int secondsStop;
+
+@property (nonatomic, readonly) NSString *duration;
+
+@property (nonatomic, readwrite, assign) HBTitle *title;
 
 @end

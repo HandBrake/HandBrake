@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import "HBPreset.h"
 #import "HBTitle.h"
 
 #import "HBRange.h"
@@ -18,7 +19,8 @@
 
 #include "hb.h"
 
-@class HBPreset;
+extern NSString *HBContainerChangedNotification;
+extern NSString *keyContainerTag;
 
 typedef NS_ENUM(NSUInteger, HBJobState) {
     HBJobStateReady,
@@ -33,7 +35,9 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 @interface HBJob : NSObject <NSCoding, NSCopying>
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
+
 - (void)applyPreset:(HBPreset *)preset;
+- (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict;
 
 /**
  *  Current state of the job.
@@ -42,9 +46,9 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 
 @property (nonatomic, readonly) HBTitle *title;
 
-// urls
+// Urls
 @property (nonatomic, readonly) NSURL *fileURL;
-@property (nonatomic, readonly) NSURL *destURL;
+@property (nonatomic, readwrite, copy) NSURL *destURL;
 
 // Libhb job
 @property (nonatomic, readonly) hb_job_t *hb_job;
@@ -52,6 +56,7 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 
 // Job settings
 @property (nonatomic, readwrite) int container;
+@property (nonatomic, readwrite) int angle;
 
 @property (nonatomic, readwrite) BOOL mp4HttpOptimize;
 @property (nonatomic, readwrite) BOOL mp4iPodCompatible;

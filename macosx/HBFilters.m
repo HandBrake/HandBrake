@@ -9,69 +9,9 @@
 
 NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
-@implementation HBGenericDictionaryTransformer
-
-+ (Class)transformedValueClass
-{
-    return [NSString class];
-}
-
-- (id)transformedValue:(id)value
-{
-    return [[self.dict allKeysForObject:value] firstObject];
-}
-
-+ (BOOL)allowsReverseTransformation
-{
-    return YES;
-}
-
-- (id)reverseTransformedValue:(id)value
-{
-    return [self.dict valueForKey:value];
-}
-
-@end
-
-@implementation HBDenoisePresetTransformer
-
-- (instancetype)init
-{
-    if (self = [super init])
-        self.dict = [HBFilters denoisePresetDict];
-
-    return self;
-}
-
-@end
-
-@implementation HBDenoiseTuneTransformer
-
-- (instancetype)init
-{
-    if (self = [super init])
-        self.dict = [HBFilters nlmeansTunesDict];
-
-    return self;
-}
-
-@end
-
-@implementation HBDenoiseTransformer
-
-- (instancetype)init
-{
-    if (self = [super init])
-        self.dict = [HBFilters denoiseTypesDict];
-
-    return self;
-}
-
-@end
-
-static NSDictionary *_denoiseTypesDict;
-static NSDictionary *_denoisePresetsDict;
-static NSDictionary *_nlmeansTunesDict;
+NSDictionary *_HandBrake_denoiseTypesDict;
+NSDictionary *_HandBrake_denoisePresetsDict;
+NSDictionary *_HandBrake_nlmeansTunesDict;
 
 @interface HBFilters ()
 
@@ -83,18 +23,19 @@ static NSDictionary *_nlmeansTunesDict;
 
 + (void)initialize
 {
-    if (self == [HBFilters class]) {
-        _denoiseTypesDict = [@{NSLocalizedString(@"Off", nil):      @"off",
+    if (self == [HBFilters class])
+    {
+        _HandBrake_denoiseTypesDict = [@{NSLocalizedString(@"Off", nil):      @"off",
                                NSLocalizedString(@"NLMeans", nil):  @"nlmeans",
                                NSLocalizedString(@"HQDN3D", nil):   @"hqdn3d"} retain];
 
-        _denoisePresetsDict = [@{NSLocalizedString(@"Custom", nil):     @"none",
+        _HandBrake_denoisePresetsDict = [@{NSLocalizedString(@"Custom", nil):     @"none",
                                  NSLocalizedString(@"Ultralight", nil): @"ultralight",
                                  NSLocalizedString(@"Light", nil):      @"light",
                                  NSLocalizedString(@"Medium", nil) :    @"medium",
                                  NSLocalizedString(@"Strong", nil) :    @"strong"} retain];
 
-        _nlmeansTunesDict = [@{NSLocalizedString(@"None", nil):         @"none",
+        _HandBrake_nlmeansTunesDict = [@{NSLocalizedString(@"None", nil):         @"none",
                                NSLocalizedString(@"Film", nil):         @"film",
                                NSLocalizedString(@"Grain", nil):        @"grain",
                                NSLocalizedString(@"High Motion", nil):  @"highmotion",
@@ -273,9 +214,6 @@ static NSDictionary *_nlmeansTunesDict;
     encodeInteger(_decomb);
     encodeObject(_decombCustomString);
 
-    encodeInteger(_detelecine);
-    encodeObject(_detelecineCustomString);
-
     encodeObject(_denoise);
     encodeObject(_denoisePreset);
     encodeObject(_denoiseTune);
@@ -299,9 +237,6 @@ static NSDictionary *_nlmeansTunesDict;
 
     decodeInteger(_decomb);
     decodeObject(_decombCustomString);
-
-    decodeInteger(_detelecine);
-    decodeObject(_detelecineCustomString);
 
     decodeObject(_denoise);
     decodeObject(_denoisePreset);
@@ -542,14 +477,14 @@ static NSDictionary *_nlmeansTunesDict;
     /* Denoise */
     if (![self.denoise isEqualToString:@"off"])
     {
-        [summary appendFormat:@" - Denoise (%@", [[_denoiseTypesDict allKeysForObject:self.denoise] firstObject]];
+        [summary appendFormat:@" - Denoise (%@", [[_HandBrake_denoiseTypesDict allKeysForObject:self.denoise] firstObject]];
         if (![self.denoisePreset isEqualToString:@"none"])
         {
-            [summary appendFormat:@", %@", [[_denoisePresetsDict allKeysForObject:self.denoisePreset] firstObject]];
+            [summary appendFormat:@", %@", [[_HandBrake_denoisePresetsDict allKeysForObject:self.denoisePreset] firstObject]];
 
             if ([self.denoise isEqualToString:@"nlmeans"])
             {
-                [summary appendFormat:@", %@", [[_nlmeansTunesDict allKeysForObject:self.denoiseTune] firstObject]];
+                [summary appendFormat:@", %@", [[_HandBrake_nlmeansTunesDict allKeysForObject:self.denoiseTune] firstObject]];
             }
         }
         else
@@ -573,53 +508,6 @@ static NSDictionary *_nlmeansTunesDict;
     }
 
     return [NSString stringWithString:summary];
-}
-
-#pragma mark - Valid values
-
-+ (NSDictionary *)denoisePresetDict
-{
-    return _denoisePresetsDict;
-}
-
-+ (NSDictionary *)nlmeansTunesDict
-{
-    return _nlmeansTunesDict;
-}
-
-+ (NSDictionary *)denoiseTypesDict
-{
-    return _denoiseTypesDict;
-}
-
-- (NSArray *)detelecineSettings
-{
-    return @[@"Off", @"Custom", @"Default"];
-}
-
-- (NSArray *)decombSettings
-{
-    return @[@"Off", @"Custom", @"Default", @"Fast", @"Bob"];
-}
-
-- (NSArray *)deinterlaceSettings
-{
-    return @[@"Off", @"Custom", @"Fast", @"Slow", @"Slower", @"Bob"];
-}
-
-- (NSArray *)denoiseTypes
-{
-    return @[@"Off", @"NLMeans", @"HQDN3D"];
-}
-
-- (NSArray *)denoisePresets
-{
-    return @[@"Custom", @"Ultralight", @"Light", @"Medium", @"Strong"];
-}
-
-- (NSArray *)denoiseTunes
-{
-    return @[@"None", @"Film", @"Grain", @"High Motion", @"Animation"];
 }
 
 @end

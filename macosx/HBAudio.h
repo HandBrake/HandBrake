@@ -18,7 +18,7 @@ extern NSString *keyAudioMixdown;
 extern NSString *keyAudioSamplerate;
 extern NSString *keyAudioBitrate;
 
-@interface HBAudio : NSObject
+@interface HBAudio : NSObject <NSCoding>
 
 @property (nonatomic, retain) NSDictionary *track;
 @property (nonatomic, retain) NSDictionary *codec;

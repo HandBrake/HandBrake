@@ -46,24 +46,7 @@ extern NSString * const HBPictureChangedNotification;
 @property (nonatomic, readwrite) int cropLeft;
 @property (nonatomic, readwrite) int cropRight;
 
-/**
- *  UI enabled bindings
- */
-@property (nonatomic, readonly) NSString *info;
-
-@property (nonatomic, readonly) int maxWidth;
-@property (nonatomic, readonly) int maxHeight;
-
-@property (nonatomic, readonly) int maxVerticalCrop;
-@property (nonatomic, readonly) int maxHorizontalCrop;
-
-@property (nonatomic, readonly, getter=isWidthEditable) BOOL widthEditable;
-@property (nonatomic, readonly, getter=isHeightEditable) BOOL heightEditable;
-
-@property (nonatomic, readonly, getter=isKeepDisplayAspect) BOOL keepDisplayAspectEditable;
-@property (nonatomic, readonly, getter=isCustomAnamorphicEnabled) BOOL customAnamorphicEnabled;
-
 @property (nonatomic, readwrite, assign) HBTitle *title;
 
-
 @end
+

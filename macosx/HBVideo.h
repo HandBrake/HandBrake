@@ -6,10 +6,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class HBJob;
+
 /**
  *  HBVideo
  */
 @interface HBVideo : NSObject <NSCoding>
+
+- (instancetype)initWithJob:(HBJob *)job;
+
+- (void)containerChanged;
 
 - (void)applySettingsFromPreset:(NSDictionary *)preset;
 - (void)prepareVideoForPreset:(NSMutableDictionary *)preset;
@@ -43,51 +49,6 @@
 
 @property (nonatomic, readwrite) BOOL fastDecode;
 
-/**
- *  Arrays of possible options for the video properties.
- */
-@property (nonatomic, readonly) NSArray *encoders;
-@property (nonatomic, readonly) NSArray *frameRates;
+@property (nonatomic, readwrite, assign) HBJob *job;
 
-@property (nonatomic, readonly) NSArray *presets;
-@property (nonatomic, readonly) NSArray *tunes;
-@property (nonatomic, readonly) NSArray *profiles;
-@property (nonatomic, readonly) NSArray *levels;
-
-@property (nonatomic, readonly) BOOL fastDecodeSupported;
-
-@property (nonatomic, readonly) NSString *unparseOptions;
-
-@property (nonatomic, readonly) double qualityMinValue;
-@property (nonatomic, readonly) double qualityMaxValue;
-
-/**
- * Width and height for x264 unparse. Will be removed later.
- */
-@property (nonatomic, readwrite) int widthForUnparse;
-@property (nonatomic, readwrite) int heightForUnparse;
-
-/**
- *  Current container, this will be removed later too.
- */
-@property (nonatomic, readwrite) int container;
-
-@end
-
-/**
- *  A series of value trasformers to bridge the libhb enums
- *  to the textual rapresentations used in the interface.
- */
-@interface HBVideoEncoderTransformer : NSValueTransformer
-@end
-
-@interface HBFrameRateTransformer : NSValueTransformer
-@end
-
-@interface HBPresetsTransformer : NSValueTransformer
-- (instancetype)initWithEncoder:(int)encoder;
-@end
-
-@interface HBQualityTransformer : NSValueTransformer
-- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max;
 @end

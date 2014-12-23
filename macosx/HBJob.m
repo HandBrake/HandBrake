@@ -13,6 +13,15 @@
 
 #import "NSCodingMacro.h"
 
+NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
+NSString *keyContainerTag                      = @"keyContainerTag";
+
+@interface HBJob ()
+
+@property (nonatomic, readonly) int titleIdx;
+
+@end
+
 @implementation HBJob
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset
@@ -23,14 +32,18 @@
         NSParameterAssert(preset);
 
         _title = title;
+        _titleIdx = title.hb_title->index;
+
+        _fileURL = [[NSURL fileURLWithPath:@(title.hb_title->path)] retain];
 
         _container = HB_MUX_MP4;
+        _angle = 1;
 
         _audioDefaults = [[HBAudioDefaults alloc] init];
         _subtitlesDefaults = [[HBSubtitlesDefaults alloc] init];
 
-        _range = [[HBRange alloc] init];
-        _video = [[HBVideo alloc] init];
+        _range = [[HBRange alloc] initWithTitle:title];
+        _video = [[HBVideo alloc] initWithJob:self];
         _picture = [[HBPicture alloc] initWithTitle:title];
         _filters = [[HBFilters alloc] init];
 
@@ -62,6 +75,57 @@
                                                                                                            withObject:content];
 }
 
+- (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict
+{
+    dict[@"FileFormat"] = @(hb_container_get_name(self.container));
+
+    dict[@"ChapterMarkers"] = @(self.chaptersEnabled);
+
+    // Mux mp4 with http optimization
+    dict[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
+    // Add iPod uuid atom
+    dict[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
+
+    // Video encoder
+    [self.video prepareVideoForPreset:dict];
+
+    // Picture Filters
+    [self.filters prepareFiltersForPreset:dict];
+
+    // Picture Size
+    [self.picture preparePictureForPreset:dict];
+
+    // Audio
+    [self.audioDefaults prepareAudioDefaultsForPreset:dict];
+
+    // Subtitles
+    [self.subtitlesDefaults prepareSubtitlesDefaultsForPreset:dict];
+}
+
+- (void)setContainer:(int)container
+{
+    _container = container;
+    [self.video containerChanged];
+
+    /* post a notification for any interested observers to indicate that our video container has changed */
+    [[NSNotificationCenter defaultCenter] postNotification:
+     [NSNotification notificationWithName:HBContainerChangedNotification
+                                   object:self
+                                 userInfo:@{keyContainerTag: @(self.container)}]];
+}
+
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+{
+    NSSet *retval = nil;
+
+    if ([key isEqualToString:@"mp4OptionsEnabled"])
+    {
+        retval = [NSSet setWithObjects:@"container", nil];
+    }
+
+    return retval;
+}
+
 - (void)dealloc
 {
     [_audioTracks release];
@@ -91,44 +155,36 @@
     hb_job_set_file(job, self.destURL.path.fileSystemRepresentation);
 
     // Title Angle for dvdnav
-    job->angle = 1; //FIXME
+    job->angle = self.angle;
 
-    /*
-    if([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 0)
+    if (self.range.type == HBRangeTypeChapters)
     {
         // Chapter selection
-        [HBUtilities writeToActivityLog: "Start / Stop set to chapters"];
-        job->chapter_start = [[queueToApply objectForKey:@"ChapterStart"] intValue];
-        job->chapter_end   = [[queueToApply objectForKey:@"ChapterEnd"] intValue];
+        job->chapter_start = self.range.chapterStart + 1;
+        job->chapter_end   = self.range.chapterStop + 1;
     }
-    else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 1)
+    else if (self.range.type == HBRangeTypeSeconds)
     {
         // we are pts based start / stop
-        [HBUtilities writeToActivityLog: "Start / Stop set to seconds…"];
-
         // Point A to Point B. Time to time in seconds.
         // get the start seconds from the start seconds field
-        int start_seconds = [[queueToApply objectForKey:@"StartSeconds"] intValue];
+        int start_seconds = self.range.secondsStart;
         job->pts_to_start = start_seconds * 90000LL;
         // Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds
-        int stop_seconds = [[queueToApply objectForKey:@"StopSeconds"] intValue];
+        int stop_seconds = self.range.secondsStop;
         job->pts_to_stop = stop_seconds * 90000LL;
-
     }
-    else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 2)
+    else if (self.range.type == HBRangeTypeFrames)
     {
         // we are frame based start / stop
-        [HBUtilities writeToActivityLog: "Start / Stop set to frames…"];
-
         //Point A to Point B. Frame to frame
         // get the start frame from the start frame field
-        int start_frame = [[queueToApply objectForKey:@"StartFrame"] intValue];
+        int start_frame = self.range.frameStart;
         job->frame_to_start = start_frame;
         // get the frame to stop on from the end frame field
-        int stop_frame = [[queueToApply objectForKey:@"StopFrame"] intValue];
+        int stop_frame = self.range.frameStop;
         job->frame_to_stop = stop_frame;
-
-    }*/
+    }
 
     // Format (Muxer) and Video Encoder
     job->mux = self.container;
@@ -591,11 +647,13 @@
     [coder encodeInt:1 forKey:@"HBVideoVersion"];
 
     encodeInt(_state);
+    encodeInt(_titleIdx);
 
     encodeObject(_fileURL);
     encodeObject(_destURL);
 
     encodeInt(_container);
+    encodeInt(_angle);
     encodeBool(_mp4HttpOptimize);
     encodeBool(_mp4iPodCompatible);
 
@@ -619,11 +677,13 @@
     self = [super init];
 
     decodeInt(_state);
+    decodeInt(_titleIdx);
 
     decodeObject(_fileURL);
     decodeObject(_destURL);
 
     decodeInt(_container);
+    decodeInt(_angle);
     decodeBool(_mp4HttpOptimize);
     decodeBool(_mp4iPodCompatible);
 

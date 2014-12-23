@@ -7,6 +7,7 @@
 
 #import "HBAudio.h"
 #import "HBAudioController.h"
+#import "NSCodingMacro.h"
 #import "hb.h"
 
 NSString *keyAudioCodecName = @"keyAudioCodecName";
@@ -572,6 +573,46 @@ static NSMutableArray *masterBitRateArray = nil;
         retval = [NSSet setWithObjects: @"track", @"mixdown", nil];
     }
     return retval;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeInt:1 forKey:@"HBAudioTrackVersion"];
+
+    encodeObject(_track);
+    encodeObject(_codec);
+    encodeObject(_mixdown);
+    encodeObject(_sampleRate);
+    encodeObject(_bitRate);
+    encodeObject(_drc);
+    encodeObject(_gain);
+    encodeObject(_videoContainerTag);
+
+    encodeObject(_codecs);
+    encodeObject(_mixdowns);
+    encodeObject(_bitRates);
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+
+    decodeObject(_track);
+    decodeObject(_codec);
+    decodeObject(_mixdown);
+    decodeObject(_sampleRate);
+    decodeObject(_bitRate);
+    decodeObject(_drc);
+    decodeObject(_gain);
+    decodeObject(_videoContainerTag);
+
+    decodeObject(_codecs);
+    decodeObject(_mixdowns);
+    decodeObject(_bitRates);
+
+    return self;
 }
 
 @end

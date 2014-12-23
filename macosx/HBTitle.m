@@ -96,9 +96,19 @@ extern NSString *keySubTrackSrtCharCode;
     }
 }
 
-- (NSInteger)angles
+- (int)angles
 {
     return self.hb_title->angle_count;
+}
+
+- (int)duration
+{
+    return (self.hb_title->hours * 3600) + (self.hb_title->minutes * 60) + (self.hb_title->seconds);
+}
+
+- (int)frames
+{
+    return self.duration * (self.hb_title->vrate.num / self.hb_title->vrate.den);
 }
 
 - (NSArray *)audioTracks

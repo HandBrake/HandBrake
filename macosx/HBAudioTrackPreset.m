@@ -7,6 +7,7 @@
 //
 
 #import "HBAudioTrackPreset.h"
+#import "NSCodingMacro.h"
 #include "hb.h"
 
 #define DEFAULT_SAMPLERATE 48000
@@ -214,6 +215,36 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     }
 
     return retval;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeInt:1 forKey:@"HBAudioTrackPresetVersion"];
+
+    encodeInt(_encoder);
+    encodeInt(_mixdown);
+    encodeInt(_sampleRate);
+    encodeInt(_bitRate);
+
+    encodeInt(_gain);
+    encodeDouble(_drc);
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+
+    decodeInt(_encoder);
+    decodeInt(_mixdown);
+    decodeInt(_sampleRate);
+    decodeInt(_bitRate);
+
+    decodeInt(_gain);
+    decodeDouble(_drc);
+
+    return self;
 }
 
 @end

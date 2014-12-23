@@ -137,8 +137,13 @@
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
 		A9523937199A6AAE00588AEF /* HBFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = A9523936199A6AAE00588AEF /* HBFilters.m */; };
+		A9537BF01A48A85C00141102 /* HBJob+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BEF1A48A85C00141102 /* HBJob+UIAdditions.m */; };
+		A9537BF31A48A99500141102 /* HBVideo+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BF21A48A99500141102 /* HBVideo+UIAdditions.m */; };
+		A9537BF61A48AB6300141102 /* HBPicture+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BF51A48AB6300141102 /* HBPicture+UIAdditions.m */; };
+		A9537BF91A48AC9000141102 /* HBFilters+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BF81A48AC9000141102 /* HBFilters+UIAdditions.m */; };
 		A955128A1A320A6F001BFC6F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
 		A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
+		A9597A2A1A49749D00007771 /* HBRange+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9597A291A49749D00007771 /* HBRange+UIAdditions.m */; };
 		A967E4BA1A16768200DF1DFC /* EncodeCanceled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */; };
 		A971281F1A2C75180088C076 /* HBTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = A971281E1A2C75180088C076 /* HBTitle.m */; };
 		A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */; };
@@ -379,7 +384,17 @@
 		A93E0ED61972958C00FD67FB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Video.xib; sourceTree = "<group>"; };
 		A9523935199A6AAE00588AEF /* HBFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFilters.h; sourceTree = "<group>"; };
 		A9523936199A6AAE00588AEF /* HBFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFilters.m; sourceTree = "<group>"; };
+		A9537BEE1A48A85C00141102 /* HBJob+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+UIAdditions.h"; sourceTree = "<group>"; };
+		A9537BEF1A48A85C00141102 /* HBJob+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBJob+UIAdditions.m"; sourceTree = "<group>"; };
+		A9537BF11A48A99500141102 /* HBVideo+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBVideo+UIAdditions.h"; sourceTree = "<group>"; };
+		A9537BF21A48A99500141102 /* HBVideo+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBVideo+UIAdditions.m"; sourceTree = "<group>"; };
+		A9537BF41A48AB6300141102 /* HBPicture+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBPicture+UIAdditions.h"; sourceTree = "<group>"; };
+		A9537BF51A48AB6300141102 /* HBPicture+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBPicture+UIAdditions.m"; sourceTree = "<group>"; };
+		A9537BF71A48AC9000141102 /* HBFilters+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBFilters+UIAdditions.h"; sourceTree = "<group>"; };
+		A9537BF81A48AC9000141102 /* HBFilters+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBFilters+UIAdditions.m"; sourceTree = "<group>"; };
 		A95512881A320A12001BFC6F /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = external/contrib/lib/libjansson.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9597A281A49749D00007771 /* HBRange+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBRange+UIAdditions.h"; sourceTree = "<group>"; };
+		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
 		A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeCanceled@2x.png"; sourceTree = "<group>"; };
 		A971281D1A2C75180088C076 /* HBTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTitle.h; sourceTree = "<group>"; };
 		A971281E1A2C75180088C076 /* HBTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTitle.m; sourceTree = "<group>"; };
@@ -848,6 +863,23 @@
 			name = Presets;
 			sourceTree = "<group>";
 		};
+		A9537BED1A48A7F900141102 /* UI Bindings Additions */ = {
+			isa = PBXGroup;
+			children = (
+				A9537BEE1A48A85C00141102 /* HBJob+UIAdditions.h */,
+				A9537BEF1A48A85C00141102 /* HBJob+UIAdditions.m */,
+				A9597A281A49749D00007771 /* HBRange+UIAdditions.h */,
+				A9597A291A49749D00007771 /* HBRange+UIAdditions.m */,
+				A9537BF11A48A99500141102 /* HBVideo+UIAdditions.h */,
+				A9537BF21A48A99500141102 /* HBVideo+UIAdditions.m */,
+				A9537BF41A48AB6300141102 /* HBPicture+UIAdditions.h */,
+				A9537BF51A48AB6300141102 /* HBPicture+UIAdditions.m */,
+				A9537BF71A48AC9000141102 /* HBFilters+UIAdditions.h */,
+				A9537BF81A48AC9000141102 /* HBFilters+UIAdditions.m */,
+			);
+			name = "UI Bindings Additions";
+			sourceTree = "<group>";
+		};
 		A98C29C51977C00000AF5DED /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -877,6 +909,7 @@
 				A9D1E41618262364002F6424 /* HBPreviewGenerator.m */,
 				273F209714ADBE670021BE6D /* HBDVDDetector.h */,
 				273F209814ADBE670021BE6D /* HBDVDDetector.m */,
+				A9537BED1A48A7F900141102 /* UI Bindings Additions */,
 				A9A2A77F1A4737DD006C219C /* NSCodingMacro.h */,
 			);
 			name = Core;
@@ -1158,8 +1191,10 @@
 				273F20AE14ADBE670021BE6D /* HBAudio.m in Sources */,
 				A9DEC87A1A23C89E00C79B48 /* HBPicture.m in Sources */,
 				273F20AF14ADBE670021BE6D /* HBAudioController.m in Sources */,
+				A9537BF31A48A99500141102 /* HBVideo+UIAdditions.m in Sources */,
 				273F20B114ADBE670021BE6D /* HBDVDDetector.m in Sources */,
 				273F20B214ADBE670021BE6D /* HBImageAndTextCell.m in Sources */,
+				A9537BF61A48AB6300141102 /* HBPicture+UIAdditions.m in Sources */,
 				273F20B314ADBE670021BE6D /* HBOutputPanelController.m in Sources */,
 				273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */,
 				A971281F1A2C75180088C076 /* HBTitle.m in Sources */,
@@ -1177,7 +1212,9 @@
 				273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */,
 				273F20BA14ADBE670021BE6D /* PictureController.m in Sources */,
 				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
+				A9537BF91A48AC9000141102 /* HBFilters+UIAdditions.m in Sources */,
 				273F20BE14ADC09F0021BE6D /* main.mm in Sources */,
+				A9537BF01A48A85C00141102 /* HBJob+UIAdditions.m in Sources */,
 				A9EA43681A2210C400785E95 /* HBQueueOutlineView.m in Sources */,
 				A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */,
 				A9C9F88919A733FE00DC8923 /* HBHUDView.m in Sources */,
@@ -1186,6 +1223,7 @@
 				A9DEC87F1A23DF6F00C79B48 /* HBJob.m in Sources */,
 				A9E2FD271A21BC4A000E8D3F /* HBAddPresetController.m in Sources */,
 				A9D488A51996270300E9B1BA /* HBTreeNode.m in Sources */,
+				A9597A2A1A49749D00007771 /* HBRange+UIAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
