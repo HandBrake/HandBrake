@@ -3776,7 +3776,6 @@ int hb_subtitle_can_pass( int source, int mux )
     switch (mux)
     {
         case HB_MUX_AV_MKV:
-        case HB_MUX_LIBMKV:
             switch( source )
             {
                 case PGSSUB:
