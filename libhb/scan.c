@@ -268,9 +268,6 @@ static void ScanFunc( void * _data )
     {
         title      = hb_list_item( data->title_set->list_title, i );
         title->flags |= HBTF_SCAN_COMPLETE;
-#if defined(HB_TITLE_JOBS)
-        title->job = hb_job_init( title );
-#endif
     }
 
 finish:

@@ -2961,10 +2961,6 @@ void hb_title_close( hb_title_t ** _t )
     free( t->video_codec_name );
     free(t->container_name);
 
-#if defined(HB_TITLE_JOBS)
-    hb_job_close( &t->job );
-#endif
-
     free( t );
     *_t = NULL;
 }
@@ -2998,9 +2994,6 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
 
     job->width = title->geometry.width - title->crop[2] - title->crop[3];
     job->height = title->geometry.height - title->crop[0] - title->crop[1];
-#ifdef HB_DEPRECATE_JOB_SETTINGS
-    job->anamorphic.keep_display_aspect = 1;
-#endif
 
     hb_geometry_t resultGeo, srcGeo;
     hb_geometry_settings_t uiGeo;
