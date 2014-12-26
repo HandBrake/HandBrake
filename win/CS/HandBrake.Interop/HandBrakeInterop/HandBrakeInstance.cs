@@ -26,6 +26,7 @@ namespace HandBrake.Interop
     using HandBrake.Interop.HbLib;
     using HandBrake.Interop.Helpers;
     using HandBrake.Interop.Interfaces;
+    using HandBrake.Interop.Json.Encode;
     using HandBrake.Interop.Json.Factories;
     using HandBrake.Interop.Json.Scan;
     using HandBrake.Interop.Json.State;
@@ -43,11 +44,6 @@ namespace HandBrake.Interop
     public class HandBrakeInstance : IHandBrakeInstance, IDisposable
     {
         /// <summary>
-        /// The modulus for picture size when auto-sizing dimensions.
-        /// </summary>
-        private const int PictureAutoSizeModulus = 2;
-
-        /// <summary>
         /// The number of MS between status polls when scanning.
         /// </summary>
         private const double ScanPollIntervalMs = 200;
@@ -56,11 +52,6 @@ namespace HandBrake.Interop
         /// The number of MS between status polls when encoding.
         /// </summary>
         private const double EncodePollIntervalMs = 200;
-
-        /// <summary>
-        /// X264 options to add for a turbo first pass.
-        /// </summary>
-        private const string TurboX264Opts = "ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 
         /// <summary>
         /// The native handle to the HandBrake instance.
@@ -83,34 +74,14 @@ namespace HandBrake.Interop
         private Timer encodePollTimer;
 
         /// <summary>
-        /// The list of original titles in native structure form.
-        /// </summary>
-        private List<hb_title_s> originalTitles;
-
-        /// <summary>
         /// The list of titles on this instance.
         /// </summary>
         private List<Title> titles;
 
         /// <summary>
-        /// The current encode job for this instance.
-        /// </summary>
-        private EncodeJob currentJob;
-
-        /// <summary>
-        /// True if the current job is scanning for subtitles.
-        /// </summary>
-        private bool subtitleScan;
-
-        /// <summary>
         /// The index of the default title.
         /// </summary>
         private int featureTitle;
-
-        /// <summary>
-        /// A list of native memory locations allocated by this instance.
-        /// </summary>
-        private List<IntPtr> encodeAllocatedMemory;
 
         /// <summary>
         /// A value indicating whether this object has been disposed or not.
@@ -295,39 +266,48 @@ namespace HandBrake.Interop
         /// <returns>An image with the requested preview.</returns>
         public BitmapImage GetPreview(EncodeJob job, int previewNumber)
         {
-            IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
-            var nativeJob = InteropUtilities.ToStructureFromPtr<hb_job_s>(nativeJobPtr);
 
-            List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
+            Title title = this.Titles.FirstOrDefault(t => t.TitleNumber == job.Title);
+            Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
 
-            // There are some problems with getting previews with deinterlacing. Disabling for now.
-            nativeJob.deinterlace = 0;
+            hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
+            {
+                crop = new[] { job.EncodingProfile.Cropping.Top, job.EncodingProfile.Cropping.Bottom, job.EncodingProfile.Cropping.Left, job.EncodingProfile.Cropping.Right },
+                itu_par = 0,
+                keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (job.EncodingProfile.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
+                maxWidth = job.EncodingProfile.MaxWidth,
+                maxHeight = job.EncodingProfile.MaxHeight,
+                mode = (int)(hb_anamorphic_mode_t)job.EncodingProfile.Anamorphic,
+                modulus = job.EncodingProfile.Modulus,
+                geometry = new hb_geometry_s { height = job.EncodingProfile.Height, width = job.EncodingProfile.Width, 
+                    par = job.EncodingProfile.Anamorphic != Anamorphic.Custom 
+                        ? new hb_rational_t { den = title.ParVal.Height, num = title.ParVal.Width }
+                        : new hb_rational_t { den = job.EncodingProfile.PixelAspectY, num = job.EncodingProfile.PixelAspectX } }
+            };
 
-            int outputWidth = nativeJob.width;
-            int outputHeight = nativeJob.height;
-            int imageBufferSize = outputWidth * outputHeight * 4;
-            IntPtr nativeBuffer = Marshal.AllocHGlobal(imageBufferSize);
-            allocatedMemory.Add(nativeBuffer);
-            HBFunctions.hb_get_preview(this.hbHandle, ref nativeJob, previewNumber, nativeBuffer);
+            // Sanatise the input.
+           Json.Anamorphic.Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
 
-            // We've used the job to get the preview. Clean up the job.
-            InteropUtilities.CloseJob(nativeJobPtr);
+           int outputWidth = resultGeometry.Width;
+           int outputHeight = resultGeometry.Height;
+           int imageBufferSize = outputWidth * outputHeight * 4;
+           IntPtr nativeBuffer = Marshal.AllocHGlobal(imageBufferSize);
+
+
+            HBFunctions.hb_get_preview2(this.hbHandle, job.Title, previewNumber, ref uiGeometry, 0);
 
             // Copy the filled image buffer to a managed array.
             byte[] managedBuffer = new byte[imageBufferSize];
             Marshal.Copy(nativeBuffer, managedBuffer, 0, imageBufferSize);
-
-            // We've copied the data out of unmanaged memory. Clean up that memory now.
-            InteropUtilities.FreeMemory(allocatedMemory);
 
             var bitmap = new Bitmap(outputWidth, outputHeight);
             BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, outputWidth, outputHeight), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
 
             IntPtr ptr = bitmapData.Scan0;
 
-            for (int i = 0; i < nativeJob.height; i++)
+            for (int i = 0; i < job.EncodingProfile.Height; i++)
             {
-                Marshal.Copy(managedBuffer, i * nativeJob.width * 4, ptr, nativeJob.width * 4);
+                Marshal.Copy(managedBuffer, i * job.EncodingProfile.Width * 4, ptr, job.EncodingProfile.Width * 4);
                 ptr = IntPtr.Add(ptr, bitmapData.Stride);
             }
 
@@ -458,138 +438,28 @@ namespace HandBrake.Interop
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
-        /// <param name="job">
-        /// The job to start.
-        /// </param>
-        /// <param name="preview">
-        /// True if this is a preview encode.
-        /// </param>
-        /// <param name="previewNumber">
-        /// The preview number to start the encode at (0-based).
-        /// </param>
-        /// <param name="previewSeconds">
-        /// The number of seconds in the preview.
-        /// </param>
-        /// <param name="overallSelectedLengthSeconds">
-        /// The currently selected encode length. Used in preview
-        /// for calculating bitrate when the target size would be wrong.
-        /// </param>
-        /// <param name="scanPreviewCount">
-        /// The scan Preview Count.
-        /// </param>
+        /// <param name="job">The job to start.</param>
+        /// <param name="preview">The scan Preview Count.</param>
+        /// <param name="previewNumber">Preview Feature: Preview to encode</param>
+        /// <param name="previewSeconds">Number of seconds to encode for the preview</param>
+        /// <param name="overallSelectedLengthSeconds"></param>
+        /// <param name="scanPreviewCount">Number of previews</param>
         public void StartEncode(EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount)
         {
-            EncodingProfile profile = job.EncodingProfile;
-            if (job.ChosenAudioTracks == null)
-            {
-                throw new ArgumentException("job.ChosenAudioTracks cannot be null.");
-            }
-
             this.previewCount = scanPreviewCount;
-            this.currentJob = job;
 
-            IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
-            var nativeJob = InteropUtilities.ToStructureFromPtr<hb_job_s>(nativeJobPtr);
+            JsonEncodeObject encodeObject = EncodeFactory.Create(job, lastScan);
 
-            this.encodeAllocatedMemory = this.ApplyJob(ref nativeJob, job, preview, previewNumber, previewSeconds, overallSelectedLengthSeconds);
-
-            this.subtitleScan = false;
-            if (job.Subtitles != null && job.Subtitles.SourceSubtitles != null)
+            JsonSerializerSettings settings = new JsonSerializerSettings
             {
-                foreach (SourceSubtitle subtitle in job.Subtitles.SourceSubtitles)
-                {
-                    if (subtitle.TrackNumber == 0)
-                    {
-                        this.subtitleScan = true;
-                        break;
-                    }
-                }
-            }
+                NullValueHandling = NullValueHandling.Ignore
+            };
 
-            string videoOptions = profile.VideoOptions ?? string.Empty;
-            IntPtr originalVideoOptions = Marshal.StringToHGlobalAnsi(videoOptions);
-            this.encodeAllocatedMemory.Add(originalVideoOptions);
-
-            if (!string.IsNullOrEmpty(profile.VideoProfile))
-            {
-                nativeJob.encoder_profile = Marshal.StringToHGlobalAnsi(profile.VideoProfile);
-                this.encodeAllocatedMemory.Add(nativeJob.encoder_profile);
-            }
-
-            if (!string.IsNullOrEmpty(profile.VideoPreset))
-            {
-                nativeJob.encoder_preset = Marshal.StringToHGlobalAnsi(profile.VideoPreset);
-                this.encodeAllocatedMemory.Add(nativeJob.encoder_preset);
-            }
-
-            if (profile.VideoTunes != null && profile.VideoTunes.Count > 0)
-            {
-                nativeJob.encoder_tune = Marshal.StringToHGlobalAnsi(string.Join(",", profile.VideoTunes));
-                this.encodeAllocatedMemory.Add(nativeJob.encoder_tune);
-            }
-
-            if (!string.IsNullOrEmpty(job.EncodingProfile.VideoLevel))
-            {
-                nativeJob.encoder_level = Marshal.StringToHGlobalAnsi(job.EncodingProfile.VideoLevel);
-                this.encodeAllocatedMemory.Add(nativeJob.encoder_level);
-            }
-
-            if (this.subtitleScan)
-            {
-                // If we need to scan subtitles, enqueue a pre-processing job to do that.
-                nativeJob.pass = -1;
-                nativeJob.indepth_scan = 1;
-
-                nativeJob.encoder_options = IntPtr.Zero;
-
-                HBFunctions.hb_add(this.hbHandle, ref nativeJob);
-            }
-
-            nativeJob.indepth_scan = 0;
-
-            if (job.EncodingProfile.VideoEncodeRateType != VideoEncodeRateType.ConstantQuality && job.EncodingProfile.TwoPass)
-            {
-                // First pass. Apply turbo options if needed.
-                nativeJob.pass = 1;
-                string firstPassAdvancedOptions = videoOptions;
-                if (job.EncodingProfile.TurboFirstPass)
-                {
-                    if (firstPassAdvancedOptions == string.Empty)
-                    {
-                        firstPassAdvancedOptions = TurboX264Opts;
-                    }
-                    else
-                    {
-                        firstPassAdvancedOptions += ":" + TurboX264Opts;
-                    }
-                }
-
-                nativeJob.encoder_options = Marshal.StringToHGlobalAnsi(firstPassAdvancedOptions);
-                this.encodeAllocatedMemory.Add(nativeJob.encoder_options);
-
-                HBFunctions.hb_add(this.hbHandle, ref nativeJob);
-
-                // Second pass. Apply normal options.
-                nativeJob.pass = 2;
-                nativeJob.encoder_options = originalVideoOptions;
-
-                HBFunctions.hb_add(this.hbHandle, ref nativeJob);
-            }
-            else
-            {
-                // One pass job.
-                nativeJob.pass = 0;
-                nativeJob.encoder_options = originalVideoOptions;
-
-                HBFunctions.hb_add(this.hbHandle, ref nativeJob);
-            }
-
+            string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
+            HBFunctions.hb_add_json(this.hbHandle, Marshal.StringToHGlobalAnsi(encode));
             HBFunctions.hb_start(this.hbHandle);
 
-            // Should be safe to clean up the job we started with; a copy is in the queue now.
-            InteropUtilities.CloseJob(nativeJobPtr);
-
-            this.encodePollTimer = new Timer();
+            this.encodePollTimer = new System.Timers.Timer();
             this.encodePollTimer.Interval = EncodePollIntervalMs;
 
             this.encodePollTimer.Elapsed += (o, e) =>
@@ -638,49 +508,6 @@ namespace HandBrake.Interop
         }
 
         /// <summary>
-        /// Gets the final size for a given encode job.
-        /// </summary>
-        /// <param name="job">The encode job to use.</param>
-        /// <param name="width">The storage width.</param>
-        /// <param name="height">The storage height.</param>
-        /// <param name="parWidth">The pixel aspect X number.</param>
-        /// <param name="parHeight">The pixel aspect Y number.</param>
-        public void GetSize(EncodeJob job, out int width, out int height, out int parWidth, out int parHeight)
-        {
-            Title title = this.GetTitle(job.Title);
-
-            if (job.EncodingProfile.Anamorphic == Anamorphic.None)
-            {
-                Size storageDimensions = CalculateNonAnamorphicOutput(job.EncodingProfile, title);
-
-                width = storageDimensions.Width;
-                height = storageDimensions.Height;
-
-                parWidth = 1;
-                parHeight = 1;
-
-                return;
-            }
-
-            IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(title));
-            var nativeJob = InteropUtilities.ToStructureFromPtr<hb_job_s>(nativeJobPtr);
-
-            List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
-            InteropUtilities.FreeMemory(allocatedMemory);
-
-            InteropUtilities.CloseJob(nativeJobPtr);
-
-            // During the ApplyJob call, it modified nativeJob to have the correct width, height and PAR.
-            // We use those for the size.
-            width = nativeJob.width;
-            height = nativeJob.height;
-            parWidth = nativeJob.anamorphic.par_width;
-            parHeight = nativeJob.anamorphic.par_height;
-        }
-
-
-
-        /// <summary>
         /// Frees any resources associated with this object.
         /// </summary>
         public void Dispose()
@@ -715,104 +542,6 @@ namespace HandBrake.Interop
         }
 
         /// <summary>
-        /// Calculates the output size for a non-anamorphic job.
-        /// </summary>
-        /// <param name="profile">The encoding profile for the job.</param>
-        /// <param name="title">The title being encoded.</param>
-        /// <returns>The dimensions of the final encode.</returns>
-        private static Size CalculateNonAnamorphicOutput(EncodingProfile profile, Title title)
-        {
-            int sourceWidth = title.Resolution.Width;
-            int sourceHeight = title.Resolution.Height;
-
-            int width = profile.Width;
-            int height = profile.Height;
-
-            Cropping crop;
-            switch (profile.CroppingType)
-            {
-                case CroppingType.Automatic:
-                    crop = title.AutoCropDimensions;
-                    break;
-                case CroppingType.Custom:
-                    crop = profile.Cropping;
-                    break;
-                default:
-                    crop = new Cropping();
-                    break;
-            }
-
-            sourceWidth -= crop.Left;
-            sourceWidth -= crop.Right;
-
-            sourceHeight -= crop.Top;
-            sourceHeight -= crop.Bottom;
-
-            double croppedAspectRatio = ((double)sourceWidth * title.ParVal.Width) / (sourceHeight * title.ParVal.Height);
-
-            if (width == 0)
-            {
-                width = sourceWidth;
-            }
-
-            if (profile.MaxWidth > 0 && width > profile.MaxWidth)
-            {
-                width = profile.MaxWidth;
-            }
-
-            if (height == 0)
-            {
-                height = sourceHeight;
-            }
-
-            if (profile.MaxHeight > 0 && height > profile.MaxHeight)
-            {
-                height = profile.MaxHeight;
-            }
-
-            if (profile.KeepDisplayAspect)
-            {
-                if ((profile.Width == 0 && profile.Height == 0) || profile.Width == 0)
-                {
-                    width = (int)((double)height * croppedAspectRatio);
-                    if (profile.MaxWidth > 0 && width > profile.MaxWidth)
-                    {
-                        width = profile.MaxWidth;
-                        height = (int)((double)width / croppedAspectRatio);
-                        height = GetNearestValue(height, PictureAutoSizeModulus);
-                    }
-
-                    width = GetNearestValue(width, PictureAutoSizeModulus);
-                }
-                else if (profile.Height == 0)
-                {
-                    height = (int)((double)width / croppedAspectRatio);
-                    if (profile.MaxHeight > 0 && height > profile.MaxHeight)
-                    {
-                        height = profile.MaxHeight;
-                        width = (int)((double)height * croppedAspectRatio);
-                        width = GetNearestValue(width, PictureAutoSizeModulus);
-                    }
-
-                    height = GetNearestValue(height, PictureAutoSizeModulus);
-                }
-            }
-
-            return new Size(width, height);
-        }
-
-        /// <summary>
-        /// Gets the closest value to the given number divisible by the given modulus.
-        /// </summary>
-        /// <param name="number">The number to approximate.</param>
-        /// <param name="modulus">The modulus.</param>
-        /// <returns>The closest value to the given number divisible by the given modulus.</returns>
-        private static int GetNearestValue(int number, int modulus)
-        {
-            return modulus * ((number + modulus / 2) / modulus);
-        }
-
-        /// <summary>
         /// Checks the status of the ongoing scan.
         /// </summary>
         private void PollScanProgress()
@@ -839,7 +568,6 @@ namespace HandBrake.Interop
             {
                 this.titles = new List<Title>();
 
-                IntPtr titleSetPtr = HBFunctions.hb_get_title_set(this.hbHandle);
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
                 string scanJson = Marshal.PtrToStringAnsi(jsonMsg);
                 JsonScanObject scanObject = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
@@ -858,9 +586,6 @@ namespace HandBrake.Interop
                     this.titles.Add(title);
                 }
 
-                hb_title_set_s titleSet = InteropUtilities.ToStructureFromPtr<hb_title_set_s>(titleSetPtr);
-                this.originalTitles = titleSet.list_title.ToListFromHandBrakeList<hb_title_s>();
-
                 this.scanPollTimer.Stop();
 
                 if (this.ScanCompleted != null)
@@ -873,742 +598,43 @@ namespace HandBrake.Interop
         /// <summary>
         /// Checks the status of the ongoing encode.
         /// </summary>
+        /// <summary>
+        /// Checks the status of the ongoing encode.
+        /// </summary>
         private void PollEncodeProgress()
         {
-            hb_state_s state = new hb_state_s();
-            HBFunctions.hb_get_state(this.hbHandle, ref state);
+            IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
+            string statusJson = Marshal.PtrToStringAnsi(json);
+            JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
-            if (state.state == NativeConstants.HB_STATE_WORKING)
+            if (state.State == NativeConstants.HB_STATE_WORKING)
             {
                 if (this.EncodeProgress != null)
                 {
-                    int pass = 1;
-                    int rawJobNumber = state.param.working.job_cur;
-
-                    if (this.currentJob.EncodingProfile.VideoEncodeRateType != VideoEncodeRateType.ConstantQuality && this.currentJob.EncodingProfile.TwoPass)
-                    {
-                        if (this.subtitleScan)
-                        {
-                            switch (rawJobNumber)
-                            {
-                                case 1:
-                                    pass = -1;
-                                    break;
-                                case 2:
-                                    pass = 1;
-                                    break;
-                                case 3:
-                                    pass = 2;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (rawJobNumber)
-                            {
-                                case 1:
-                                    pass = 1;
-                                    break;
-                                case 2:
-                                    pass = 2;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (this.subtitleScan)
-                        {
-                            switch (rawJobNumber)
-                            {
-                                case 1:
-                                    pass = -1;
-                                    break;
-                                case 2:
-                                    pass = 1;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            pass = 1;
-                        }
-                    }
-
                     var progressEventArgs = new EncodeProgressEventArgs
                     {
-                        FractionComplete = state.param.working.progress,
-                        CurrentFrameRate = state.param.working.rate_cur,
-                        AverageFrameRate = state.param.working.rate_avg,
-                        EstimatedTimeLeft = new TimeSpan(state.param.working.hours, state.param.working.minutes, state.param.working.seconds),
-                        Pass = pass
+                        FractionComplete = state.Working.Progress,
+                        CurrentFrameRate = state.Working.Rate,
+                        AverageFrameRate = state.Working.RateAvg,
+                        EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
+                        Pass = 1, // TODO
                     };
 
                     this.EncodeProgress(this, progressEventArgs);
                 }
             }
-            else if (state.state == NativeConstants.HB_STATE_WORKDONE)
+            else if (state.State == NativeConstants.HB_STATE_WORKDONE)
             {
-                InteropUtilities.FreeMemory(this.encodeAllocatedMemory);
                 this.encodePollTimer.Stop();
 
-				if (this.EncodeCompleted != null)
-				{
-					this.EncodeCompleted(this, new EncodeCompletedEventArgs { Error = state.param.workdone.error != hb_error_code.HB_ERROR_NONE });
-				}
-            }
-        }
-
-        /// <summary>
-        /// Applies the encoding job to the native memory structure and returns a list of memory
-        /// locations allocated during this.
-        /// </summary>
-        /// <param name="nativeJob">The native structure to apply to job info to.</param>
-        /// <param name="job">The job info to apply.</param>
-        /// <returns>The list of memory locations allocated for the job.</returns>
-        private List<IntPtr> ApplyJob(ref hb_job_s nativeJob, EncodeJob job)
-        {
-            return this.ApplyJob(ref nativeJob, job, false, 0, 0, 0);
-        }
-
-        /// <summary>
-        /// Applies the encoding job to the native memory structure and returns a list of memory
-        /// locations allocated during this.
-        /// </summary>
-        /// <param name="nativeJob">The native structure to apply to job info to.</param>
-        /// <param name="job">The job info to apply.</param>
-        /// <param name="preview">True if this is a preview encode.</param>
-        /// <param name="previewNumber">The preview number (0-based) to encode.</param>
-        /// <param name="previewSeconds">The number of seconds in the preview.</param>
-        /// <param name="overallSelectedLengthSeconds">The currently selected encode length. Used in preview
-        /// for calculating bitrate when the target size would be wrong.</param>
-        /// <returns>The list of memory locations allocated for the job.</returns>
-        private List<IntPtr> ApplyJob(ref hb_job_s nativeJob, EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds)
-        {
-            var allocatedMemory = new List<IntPtr>();
-            Title title = this.GetTitle(job.Title);
-            hb_title_s originalTitle = this.GetOriginalTitle(job.Title);
-
-            EncodingProfile profile = job.EncodingProfile;
-
-            if (preview)
-            {
-                nativeJob.start_at_preview = previewNumber + 1;
-                nativeJob.seek_points = this.previewCount;
-
-                // There are 90,000 PTS per second.
-                nativeJob.pts_to_stop = previewSeconds * 90000;
-            }
-            else
-            {
-                switch (job.RangeType)
+                if (this.EncodeCompleted != null)
                 {
-                    case VideoRangeType.All:
-                        break;
-                    case VideoRangeType.Chapters:
-                        if (job.ChapterStart > 0 && job.ChapterEnd > 0)
-                        {
-                            nativeJob.chapter_start = job.ChapterStart;
-                            nativeJob.chapter_end = job.ChapterEnd;
-                        }
-                        else
-                        {
-                            nativeJob.chapter_start = 1;
-                            nativeJob.chapter_end = title.Chapters.Count;
-                        }
-
-                        break;
-                    case VideoRangeType.Seconds:
-                        if (job.SecondsStart < 0 || job.SecondsEnd < 0 || job.SecondsStart >= job.SecondsEnd)
-                        {
-                            throw new ArgumentException("Seconds range " + job.SecondsStart + "-" + job.SecondsEnd + " is invalid.", "job");
-                        }
-
-                        // If they've selected the "full" title duration, leave off the arguments to make it clean
-                        if (job.SecondsStart > 0 || job.SecondsEnd < title.Duration.TotalSeconds)
-                        {
-                            // For some reason "pts_to_stop" actually means the number of pts to stop AFTER the start point.
-                            nativeJob.pts_to_start = (int)(job.SecondsStart * 90000);
-                            nativeJob.pts_to_stop = (int)((job.SecondsEnd - job.SecondsStart) * 90000);
-                        }
-                        break;
-                    case VideoRangeType.Frames:
-                        if (job.FramesStart < 0 || job.FramesEnd < 0 || job.FramesStart >= job.FramesEnd)
-                        {
-                            throw new ArgumentException("Frames range " + job.FramesStart + "-" + job.FramesEnd + " is invalid.", "job");
-                        }
-
-                        // "frame_to_stop" actually means the number of frames total to encode AFTER the start point.
-                        nativeJob.frame_to_start = job.FramesStart;
-                        nativeJob.frame_to_stop = job.FramesEnd - job.FramesStart;
-                        break;
-                }
-            }
-
-            // Chapter markers
-            nativeJob.chapter_markers = profile.IncludeChapterMarkers ? 1 : 0;
-
-            List<IntPtr> nativeChapters = nativeJob.list_chapter.ToIntPtrList();
-
-            if (!preview && profile.IncludeChapterMarkers)
-            {
-                int numChapters = title.Chapters.Count;
-
-                if (job.UseDefaultChapterNames)
-                {
-                    for (int i = 0; i < numChapters; i++)
+                    this.EncodeCompleted(this, new EncodeCompletedEventArgs
                     {
-                        if (i < nativeChapters.Count)
-                        {
-                            HBFunctions.hb_chapter_set_title(nativeChapters[i], "Chapter " + (i + 1));
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < numChapters; i++)
-                    {
-                        if (i < nativeChapters.Count && i < job.CustomChapterNames.Count)
-                        {
-                            IntPtr chapterNamePtr;
-
-                            if (string.IsNullOrWhiteSpace(job.CustomChapterNames[i]))
-                            {
-                                chapterNamePtr = InteropUtilities.ToUtf8PtrFromString("Chapter " + (i + 1));
-                            }
-                            else
-                            {
-                                chapterNamePtr = InteropUtilities.ToUtf8PtrFromString(job.CustomChapterNames[i]);
-                            }
-
-                            HBFunctions.hb_chapter_set_title__ptr(nativeChapters[i], chapterNamePtr);
-                            Marshal.FreeHGlobal(chapterNamePtr);
-                        }
-                    }
+                        Error = state.WorkDone.Error != (int)hb_error_code.HB_ERROR_NONE
+                    });
                 }
             }
-
-            Cropping crop = GetCropping(profile, title);
-
-            nativeJob.crop[0] = crop.Top;
-            nativeJob.crop[1] = crop.Bottom;
-            nativeJob.crop[2] = crop.Left;
-            nativeJob.crop[3] = crop.Right;
-
-            var filterList = new List<hb_filter_object_s>();
-
-            // FILTERS: These must be added in the correct order since we cannot depend on the automatic ordering in hb_add_filter . Ordering is determined
-            // by the order they show up in the filters enum.
-
-            // Detelecine
-            if (profile.Detelecine != Detelecine.Off)
-            {
-                string settings = null;
-                if (profile.Detelecine == Detelecine.Custom)
-                {
-                    settings = profile.CustomDetelecine;
-                }
-
-                this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_DETELECINE, settings, allocatedMemory);
-            }
-
-            // Decomb
-            if (profile.Decomb != Decomb.Off)
-            {
-                string settings = null;
-                switch (profile.Decomb)
-                {
-                    case Decomb.Default:
-                        break;
-                    case Decomb.Fast:
-                        settings = "7:2:6:9:1:80";
-                        break;
-                    case Decomb.Bob:
-                        settings = "455";
-                        break;
-                    case Decomb.Custom:
-                        settings = profile.CustomDecomb;
-                        break;
-                    default:
-                        break;
-                }
-
-                this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_DECOMB, settings, allocatedMemory);
-            }
-
-            // Deinterlace
-            if (profile.Deinterlace != Deinterlace.Off)
-            {
-                nativeJob.deinterlace = 1;
-                string settings = null;
-
-                switch (profile.Deinterlace)
-                {
-                    case Deinterlace.Fast:
-                        settings = "0";
-                        break;
-                    case Deinterlace.Slow:
-                        settings = "1";
-                        break;
-                    case Deinterlace.Slower:
-                        settings = "3";
-                        break;
-                    case Deinterlace.Bob:
-                        settings = "15";
-                        break;
-                    case Deinterlace.Custom:
-                        settings = profile.CustomDeinterlace;
-                        break;
-                    default:
-                        break;
-                }
-
-                this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_DEINTERLACE, settings, allocatedMemory);
-            }
-            else
-            {
-                nativeJob.deinterlace = 0;
-            }
-
-            // VFR
-            if (profile.Framerate == 0)
-            {
-                if (profile.ConstantFramerate)
-                {
-                    // CFR with "Same as Source". Use the title rate
-                    nativeJob.cfr = 1;
-                    nativeJob.vrate = originalTitle.vrate.num;
-                    nativeJob.vrate_base = originalTitle.vrate.den;
-                }
-                else
-                {
-                    // Pure VFR "Same as Source"
-                    nativeJob.cfr = 0;
-                }
-            }
-            else
-            {
-                // Specified framerate
-                if (profile.ConstantFramerate)
-                {
-                    // Mark as pure CFR
-                    nativeJob.cfr = 1;
-                }
-                else
-                {
-                    // Mark as peak framerate
-                    nativeJob.cfr = 2;
-                }
-
-                nativeJob.vrate = 27000000;
-                nativeJob.vrate_base = Converters.Converters.FramerateToVrate(profile.Framerate);
-            }
-
-            string vfrSettings = string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", nativeJob.cfr, nativeJob.vrate, nativeJob.vrate_base);
-            this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_VFR, vfrSettings, allocatedMemory);
-
-            // Deblock
-            if (profile.Deblock > 0)
-            {
-                this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_DEBLOCK, profile.Deblock.ToString(CultureInfo.InvariantCulture), allocatedMemory);
-            }
-
-            // Denoise
-            if (profile.Denoise != Denoise.Off)
-            {
-	            int filterType = profile.Denoise == Denoise.hqdn3d ? (int)hb_filter_ids.HB_FILTER_HQDN3D : (int)hb_filter_ids.HB_FILTER_NLMEANS;
-
-				this.AddFilterFromPreset(filterList, filterType, profile.DenoisePreset, profile.DenoiseTune);
-            }
-
-            // Crop/scale
-            int width = profile.Width;
-            int height = profile.Height;
-
-            int cropHorizontal = crop.Left + crop.Right;
-            int cropVertical = crop.Top + crop.Bottom;
-
-            if (width == 0)
-            {
-                width = title.Resolution.Width - cropHorizontal;
-            }
-
-            if (profile.MaxWidth > 0 && width > profile.MaxWidth)
-            {
-                width = profile.MaxWidth;
-            }
-
-            if (height == 0)
-            {
-                height = title.Resolution.Height - cropVertical;
-            }
-
-            if (profile.MaxHeight > 0 && height > profile.MaxHeight)
-            {
-                height = profile.MaxHeight;
-            }
-
-            // The job width can sometimes start not clean, due to interference from
-            // preview generation. We reset it here to allow good calculations.
-            nativeJob.width = width;
-            nativeJob.height = height;
-
-            nativeJob.grayscale = profile.Grayscale ? 1 : 0;
-
-            switch (profile.Anamorphic)
-            {
-                case Anamorphic.None:
-                    nativeJob.anamorphic.mode = 0;
-
-                    Size outputSize = CalculateNonAnamorphicOutput(profile, title);
-                    width = outputSize.Width;
-                    height = outputSize.Height;
-
-                    nativeJob.anamorphic.keep_display_aspect = 0;
-					nativeJob.anamorphic.par_width = 1;
-					nativeJob.anamorphic.par_height = 1;
-
-                    nativeJob.width = width;
-                    nativeJob.height = height;
-
-                    nativeJob.maxWidth = profile.MaxWidth;
-                    nativeJob.maxHeight = profile.MaxHeight;
-
-		            nativeJob.modulus = 2;
-
-                    break;
-                case Anamorphic.Strict:
-                    nativeJob.anamorphic.mode = hb_anamorphic_mode_t.HB_ANAMORPHIC_STRICT;
-
-                    nativeJob.anamorphic.par_width = title.ParVal.Width;
-                    nativeJob.anamorphic.par_height = title.ParVal.Height;
-                    break;
-                case Anamorphic.Loose:
-                    nativeJob.anamorphic.mode = hb_anamorphic_mode_t.HB_ANAMORPHIC_LOOSE;
-
-                    nativeJob.modulus = profile.Modulus;
-
-                    nativeJob.width = width;
-
-                    nativeJob.maxWidth = profile.MaxWidth;
-
-                    nativeJob.anamorphic.par_width = title.ParVal.Width;
-                    nativeJob.anamorphic.par_height = title.ParVal.Height;
-                    break;
-                case Anamorphic.Custom:
-                    nativeJob.anamorphic.mode = hb_anamorphic_mode_t.HB_ANAMORPHIC_CUSTOM;
-
-                    nativeJob.modulus = profile.Modulus;
-
-                    if (profile.UseDisplayWidth)
-                    {
-                        if (profile.KeepDisplayAspect)
-                        {
-                            int cropWidth = title.Resolution.Width - cropHorizontal;
-                            int cropHeight = title.Resolution.Height - cropVertical;
-
-                            double displayAspect = ((double)(cropWidth * title.ParVal.Width)) / (cropHeight * title.ParVal.Height);
-                            int displayWidth = profile.DisplayWidth;
-
-                            if (profile.Height > 0)
-                            {
-                                displayWidth = (int)((double)profile.Height * displayAspect);
-                            }
-                            else if (displayWidth > 0)
-                            {
-                                height = (int)((double)displayWidth / displayAspect);
-                            }
-                            else
-                            {
-                                displayWidth = (int)((double)height * displayAspect);
-                            }
-
-                            nativeJob.anamorphic.dar_width = displayWidth;
-                            nativeJob.anamorphic.dar_height = height;
-                            nativeJob.anamorphic.keep_display_aspect = 1;
-                        }
-                        else
-                        {
-                            nativeJob.anamorphic.dar_width = profile.DisplayWidth;
-                            nativeJob.anamorphic.dar_height = height;
-                            nativeJob.anamorphic.keep_display_aspect = 0;
-                        }
-                    }
-                    else
-                    {
-                        nativeJob.anamorphic.par_width = profile.PixelAspectX;
-                        nativeJob.anamorphic.par_height = profile.PixelAspectY;
-                        nativeJob.anamorphic.keep_display_aspect = 0;
-                    }
-
-                    nativeJob.width = width;
-                    nativeJob.height = height;
-
-                    nativeJob.maxWidth = profile.MaxWidth;
-                    nativeJob.maxHeight = profile.MaxHeight;
-
-                    break;
-                default:
-                    break;
-            }
-
-            // Need to fix up values before adding crop/scale filter
-            if (profile.Anamorphic != Anamorphic.None)
-            {
-                int anamorphicWidth = 0, anamorphicHeight = 0, anamorphicParWidth = 0, anamorphicParHeight = 0;
-
-                HBFunctions.hb_set_anamorphic_size(ref nativeJob, ref anamorphicWidth, ref anamorphicHeight, ref anamorphicParWidth, ref anamorphicParHeight);
-                nativeJob.width = anamorphicWidth;
-                nativeJob.height = anamorphicHeight;
-                nativeJob.anamorphic.par_width = anamorphicParWidth;
-                nativeJob.anamorphic.par_height = anamorphicParHeight;
-            }
-
-            string cropScaleSettings = string.Format(
-                CultureInfo.InvariantCulture,
-                "{0}:{1}:{2}:{3}:{4}:{5}",
-                nativeJob.width,
-                nativeJob.height,
-                nativeJob.crop[0],
-                nativeJob.crop[1],
-                nativeJob.crop[2],
-                nativeJob.crop[3]);
-            this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_CROP_SCALE, cropScaleSettings, allocatedMemory);
-
-
-
-
-
-            HBVideoEncoder videoEncoder = Encoders.VideoEncoders.FirstOrDefault(e => e.ShortName == profile.VideoEncoder);
-            if (videoEncoder == null)
-            {
-                throw new ArgumentException("Video encoder " + profile.VideoEncoder + " not recognized.");
-            }
-
-            nativeJob.vcodec = videoEncoder.Id;
-
-
-
-            // areBframes
-            // color_matrix
-            List<hb_audio_s> titleAudio = originalTitle.list_audio.ToListFromHandBrakeList<hb_audio_s>();
-
-            var audioList = new List<hb_audio_s>();
-            int numTracks = 0;
-
-            List<Tuple<AudioEncoding, int>> outputTrackList = this.GetOutputTracks(job, title);
-
-            if (!string.IsNullOrEmpty(profile.AudioEncoderFallback))
-            {
-                HBAudioEncoder audioEncoder = Encoders.GetAudioEncoder(profile.AudioEncoderFallback);
-                if (audioEncoder == null)
-                {
-                    throw new ArgumentException("Unrecognized fallback audio encoder: " + profile.AudioEncoderFallback);
-                }
-
-                nativeJob.acodec_fallback = Encoders.GetAudioEncoder(profile.AudioEncoderFallback).Id;
-            }
-
-            nativeJob.acodec_copy_mask = (int)NativeConstants.HB_ACODEC_ANY;
-
-            foreach (Tuple<AudioEncoding, int> outputTrack in outputTrackList)
-            {
-	            AudioEncoding encoding = outputTrack.Item1;
-	            int trackNumber = outputTrack.Item2;
-
-				audioList.Add(this.ConvertAudioBack(encoding, titleAudio[trackNumber - 1], numTracks++, allocatedMemory));
-            }
-
-            NativeList nativeAudioList = InteropUtilities.ToHandBrakeListFromList<hb_audio_s>(audioList);
-            nativeJob.list_audio = nativeAudioList.Ptr;
-            allocatedMemory.AddRange(nativeAudioList.AllocatedMemory);
-
-            if (job.Subtitles != null)
-            {
-                if (job.Subtitles.SourceSubtitles != null && job.Subtitles.SourceSubtitles.Count > 0)
-                {
-                    List<hb_subtitle_s> titleSubtitles = originalTitle.list_subtitle.ToListFromHandBrakeList<hb_subtitle_s>();
-
-                    foreach (SourceSubtitle sourceSubtitle in job.Subtitles.SourceSubtitles)
-                    {
-                        if (sourceSubtitle.TrackNumber == 0)
-                        {
-                            // Use subtitle search.
-                            nativeJob.select_subtitle_config.force = sourceSubtitle.Forced ? 1 : 0;
-                            nativeJob.select_subtitle_config.default_track = sourceSubtitle.Default ? 1 : 0;
-
-                            if (!sourceSubtitle.BurnedIn)
-                            {
-                                nativeJob.select_subtitle_config.dest = hb_subtitle_config_s_subdest.PASSTHRUSUB;
-                            }
-
-                            nativeJob.indepth_scan = 1;
-                        }
-                        else
-                        {
-                            // Use specified subtitle.
-                            hb_subtitle_s nativeSubtitle = titleSubtitles[sourceSubtitle.TrackNumber - 1];
-                            var subtitleConfig = new hb_subtitle_config_s();
-
-                            subtitleConfig.force = sourceSubtitle.Forced ? 1 : 0;
-                            subtitleConfig.default_track = sourceSubtitle.Default ? 1 : 0;
-
-                            bool supportsBurn = nativeSubtitle.source == hb_subtitle_s_subsource.VOBSUB || nativeSubtitle.source == hb_subtitle_s_subsource.SSASUB || nativeSubtitle.source == hb_subtitle_s_subsource.PGSSUB;
-                            if (supportsBurn && sourceSubtitle.BurnedIn)
-                            {
-                                subtitleConfig.dest = hb_subtitle_config_s_subdest.RENDERSUB;
-                            }
-                            else
-                            {
-                                subtitleConfig.dest = hb_subtitle_config_s_subdest.PASSTHRUSUB;
-                            }
-
-                            int subtitleAddSucceded = HBFunctions.hb_subtitle_add(ref nativeJob, ref subtitleConfig, sourceSubtitle.TrackNumber - 1);
-                            if (subtitleAddSucceded == 0)
-                            {
-                                Debug.WriteLine("Subtitle add failed");
-                            }
-                        }
-                    }
-                }
-
-                if (job.Subtitles.SrtSubtitles != null)
-                {
-                    foreach (SrtSubtitle srtSubtitle in job.Subtitles.SrtSubtitles)
-                    {
-                        var subtitleConfig = new hb_subtitle_config_s();
-
-	                    subtitleConfig.dest = srtSubtitle.BurnedIn ? hb_subtitle_config_s_subdest.RENDERSUB : hb_subtitle_config_s_subdest.PASSTHRUSUB;
-                        subtitleConfig.src_codeset = srtSubtitle.CharacterCode;
-                        subtitleConfig.src_filename = srtSubtitle.FileName;
-                        subtitleConfig.offset = srtSubtitle.Offset;
-                        subtitleConfig.default_track = srtSubtitle.Default ? 1 : 0;
-
-                        int srtAddSucceded = HBFunctions.hb_srt_add(ref nativeJob, ref subtitleConfig, srtSubtitle.LanguageCode);
-                        if (srtAddSucceded == 0)
-                        {
-                            Debug.WriteLine("SRT add failed");
-                        }
-                    }
-                }
-
-                bool hasBurnedSubtitle = job.Subtitles.SourceSubtitles != null && job.Subtitles.SourceSubtitles.Any(s => s.BurnedIn);
-                if (hasBurnedSubtitle)
-                {
-                    this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_RENDER_SUB, string.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}:{3}", crop.Top, crop.Bottom, crop.Left, crop.Right), allocatedMemory);
-                }
-            }
-
-			// Rotate
-	        if (profile.FlipHorizontal || profile.FlipVertical || profile.Rotation != PictureRotation.None)
-	        {
-		        bool rotate90 = false;
-		        bool flipHorizontal = profile.FlipHorizontal;
-		        bool flipVertical = profile.FlipVertical;
-
-		        switch (profile.Rotation)
-		        {
-			        case PictureRotation.Clockwise90:
-				        rotate90 = true;
-				        break;
-			        case PictureRotation.Clockwise180:
-				        flipHorizontal = !flipHorizontal;
-				        flipVertical = !flipVertical;
-				        break;
-			        case PictureRotation.Clockwise270:
-				        rotate90 = true;
-				        flipHorizontal = !flipHorizontal;
-				        flipVertical = !flipVertical;
-				        break;
-		        }
-
-		        int rotateSetting = 0;
-				if (flipVertical)
-		        {
-			        rotateSetting |= 1;
-		        }
-
-				if (flipHorizontal)
-		        {
-			        rotateSetting |= 2;
-		        }
-
-				if (rotate90)
-		        {
-			        rotateSetting |= 4;
-		        }
-
-				this.AddFilter(filterList, (int)hb_filter_ids.HB_FILTER_ROTATE, rotateSetting.ToString(CultureInfo.InvariantCulture), allocatedMemory);
-	        }
-
-            // Construct final filter list
-            nativeJob.list_filter = this.ConvertFilterListToNative(filterList, allocatedMemory).Ptr;
-
-            if (profile.ScaleMethod == ScaleMethod.Bicubic)
-            {
-                HBFunctions.hb_get_opencl_env();
-                nativeJob.use_opencl = 1;
-            }
-            else
-            {
-                nativeJob.use_opencl = 0;
-            }
-
-            nativeJob.qsv.decode = profile.QsvDecode ? 1 : 0;
-            nativeJob.use_hwd = job.DxvaDecoding ? 1 : 0;
-
-            if (profile.ContainerName != null)
-            {
-                nativeJob.mux = HBFunctions.hb_container_get_from_name(profile.ContainerName);
-            }
-
-			if (job.OutputPath == null)
-			{
-				nativeJob.file = IntPtr.Zero;
-			}
-			else
-			{
-				IntPtr outputPathPtr = InteropUtilities.ToUtf8PtrFromString(job.OutputPath);
-				allocatedMemory.Add(outputPathPtr);
-				nativeJob.file = outputPathPtr;
-			}
-
-            nativeJob.largeFileSize = profile.LargeFile ? 1 : 0;
-            nativeJob.mp4_optimize = profile.Optimize ? 1 : 0;
-            nativeJob.ipod_atom = profile.IPod5GSupport ? 1 : 0;
-
-            if (title.AngleCount > 1)
-            {
-                nativeJob.angle = job.Angle;
-            }
-
-            switch (profile.VideoEncodeRateType)
-            {
-                case VideoEncodeRateType.ConstantQuality:
-                    nativeJob.vquality = (float)profile.Quality;
-                    nativeJob.vbitrate = 0;
-                    break;
-                case VideoEncodeRateType.AverageBitrate:
-                    nativeJob.vquality = -1;
-                    nativeJob.vbitrate = profile.VideoBitrate;
-                    break;
-                case VideoEncodeRateType.TargetSize:
-                    nativeJob.vquality = -1;
-                    nativeJob.vbitrate = this.CalculateBitrate(job, profile.TargetSize, overallSelectedLengthSeconds);
-                    break;
-                default:
-                    break;
-            }
-
-            // frames_to_skip
-
-            return allocatedMemory;
         }
 
         /// <summary>
@@ -1654,68 +680,6 @@ namespace HandBrake.Interop
         }
 
         /// <summary>
-        /// Adds a filter to the given filter list.
-        /// </summary>
-        /// <param name="filterList">The list to add the filter to.</param>
-        /// <param name="filterType">The type of filter.</param>
-        /// <param name="settings">Settings for the filter.</param>
-        /// <param name="allocatedMemory">The list of allocated memory.</param>
-        private void AddFilter(List<hb_filter_object_s> filterList, int filterType, string settings, List<IntPtr> allocatedMemory)
-        {
-            IntPtr settingsNativeString = Marshal.StringToHGlobalAnsi(settings);
-            hb_filter_object_s filter = InteropUtilities.ToStructureFromPtr<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
-            filter.settings = settingsNativeString;
-
-            allocatedMemory.Add(settingsNativeString);
-            filterList.Add(filter);
-        }
-
-		/// <summary>
-		/// Adds a filter to the given filter list with the provided preset and tune.
-		/// </summary>
-		/// <param name="filterList">The list to add the filter to.</param>
-		/// <param name="filterType">The type of filter.</param>
-		/// <param name="preset">The preset name.</param>
-		/// <param name="tune">The tune name.</param>
-	    private void AddFilterFromPreset(List<hb_filter_object_s> filterList, int filterType, string preset, string tune)
-	    {
-		    IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings(filterType, preset, tune);
-
-			hb_filter_object_s filter = InteropUtilities.ToStructureFromPtr<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
-		    filter.settings = settingsPtr;
-
-			filterList.Add(filter);
-	    }
-
-        /// <summary>
-        /// Converts the given filter list to a native list.
-        /// </summary>
-        /// <remarks>Sorts the list by filter ID before converting to a native list, as HB expects it that way.
-        /// The list memory itself will be added to the allocatedMemory list.</remarks>
-        /// <param name="filterList">The filter list to convert.</param>
-        /// <param name="allocatedMemory">The list of allocated memory to add to.</param>
-        /// <returns>The converted list.</returns>
-        private NativeList ConvertFilterListToNative(List<hb_filter_object_s> filterList, List<IntPtr> allocatedMemory)
-        {
-            var filterPtrList = new List<IntPtr>();
-
-            var sortedList = filterList.OrderBy(f => f.id);
-            foreach (var filter in sortedList)
-            {
-                IntPtr filterPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_filter_object_s)));
-                Marshal.StructureToPtr(filter, filterPtr, false);
-
-                allocatedMemory.Add(filterPtr);
-                filterPtrList.Add(filterPtr);
-            }
-
-            NativeList filterListNative = InteropUtilities.ToHandBrakeListFromPtrList(filterPtrList);
-            allocatedMemory.AddRange(filterListNative.AllocatedMemory);
-
-            return filterListNative;
-        }
-
-        /// <summary>
         /// Gets the title, given the 1-based title number.
         /// </summary>
         /// <param name="titleNumber">The number of the title (1-based).</param>
@@ -1723,171 +687,6 @@ namespace HandBrake.Interop
         private Title GetTitle(int titleNumber)
         {
             return this.Titles.SingleOrDefault(title => title.TitleNumber == titleNumber);
-        }
-
-        /// <summary>
-        /// Gets the 1-based title index of the given title.
-        /// </summary>
-        /// <param name="titleNumber">The 1-based title title number.</param>
-        /// <returns>The 1-based title index.</returns>
-        private int GetTitleIndex(int titleNumber)
-        {
-            Title title = this.GetTitle(titleNumber);
-            return this.GetTitleIndex(title);
-        }
-
-        /// <summary>
-        /// Gets the 1-based title index of the given title.
-        /// </summary>
-        /// <param name="title">The title to look up</param>
-        /// <returns>The 1-based title index of the given title.</returns>
-        private int GetTitleIndex(Title title)
-        {
-            return this.Titles.IndexOf(title) + 1;
-        }
-
-        /// <summary>
-        /// Gets the native title object from the title index.
-        /// </summary>
-        /// <param name="titleIndex">The index of the title (1-based).</param>
-        /// <returns>Gets the native title object for the given index.</returns>
-        private hb_title_s GetOriginalTitle(int titleIndex)
-        {
-            List<hb_title_s> matchingTitles = this.originalTitles.Where(title => title.index == titleIndex).ToList();
-            if (matchingTitles.Count == 0)
-            {
-                throw new ArgumentException("Could not find specified title.");
-            }
-
-            if (matchingTitles.Count > 1)
-            {
-                throw new ArgumentException("Multiple titles matched.");
-            }
-
-            return matchingTitles[0];
-        }
-
-        /// <summary>
-        /// Applies an audio encoding to a native audio encoding base structure.
-        /// </summary>
-        /// <param name="encoding">The encoding to apply.</param>
-        /// <param name="baseStruct">The base native structure.</param>
-        /// <param name="outputTrack">The output track number (0-based).</param>
-        /// <param name="allocatedMemory">The collection of allocated memory.</param>
-        /// <returns>The resulting native audio structure.</returns>
-        private hb_audio_s ConvertAudioBack(AudioEncoding encoding, hb_audio_s baseStruct, int outputTrack, List<IntPtr> allocatedMemory)
-        {
-            hb_audio_s nativeAudio = baseStruct;
-            HBAudioEncoder encoder = Encoders.GetAudioEncoder(encoding.Encoder);
-
-			if (encoder == null)
-			{
-				throw new InvalidOperationException("Could not find audio encoder " + encoding.Name);
-			}
-
-	        bool isPassthrough = encoder.IsPassthrough;
-
-	        HBAudioEncoder inputCodec = Encoders.GetAudioEncoder((int)baseStruct.config.input.codec);
-
-	        uint outputCodec = (uint)encoder.Id;
-	        if (encoding.PassthroughIfPossible && 
-				(encoder.Id == baseStruct.config.input.codec || 
-					inputCodec != null && (inputCodec.ShortName.ToLowerInvariant().Contains("aac") && encoder.ShortName.ToLowerInvariant().Contains("aac") ||
-					inputCodec.ShortName.ToLowerInvariant().Contains("mp3") && encoder.ShortName.ToLowerInvariant().Contains("mp3"))) &&
-				(inputCodec.Id & NativeConstants.HB_ACODEC_PASS_MASK) > 0)
-	        {
-				outputCodec = baseStruct.config.input.codec | NativeConstants.HB_ACODEC_PASS_FLAG;
-		        isPassthrough = true;
-	        }
-
-            nativeAudio.config.output.track = outputTrack;
-			nativeAudio.config.output.codec = outputCodec;
-            nativeAudio.config.output.compression_level = -1;
-            nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
-            nativeAudio.config.output.dither_method = -1;
-
-			if (!isPassthrough)
-            {
-                if (encoding.SampleRateRaw != 0)
-                {
-                    nativeAudio.config.output.samplerate = encoding.SampleRateRaw;
-                }
-
-                HBMixdown mixdown = Encoders.GetMixdown(encoding.Mixdown);
-                nativeAudio.config.output.mixdown = mixdown.Id;
-
-                if (encoding.EncodeRateType == AudioEncodeRateType.Bitrate)
-                {
-                    // Disable quality targeting.
-                    nativeAudio.config.output.quality = -3;
-
-                    if (encoding.Bitrate == 0)
-                    {
-                        // Bitrate of 0 means auto: choose the default for this codec, sample rate and mixdown.
-                        nativeAudio.config.output.bitrate = HBFunctions.hb_audio_bitrate_get_default(
-                            nativeAudio.config.output.codec,
-                            nativeAudio.config.output.samplerate,
-                            nativeAudio.config.output.mixdown);
-                    }
-                    else
-                    {
-                        nativeAudio.config.output.bitrate = encoding.Bitrate;
-                    }
-                }
-                else if (encoding.EncodeRateType == AudioEncodeRateType.Quality)
-                {
-                    // Bitrate of -1 signals quality targeting.
-                    nativeAudio.config.output.bitrate = -1;
-                    nativeAudio.config.output.quality = encoding.Quality;
-                }
-
-                // If this encoder supports compression level, pass it in.
-                if (encoder.SupportsCompression)
-                {
-                    nativeAudio.config.output.compression_level = encoding.Compression;
-                }
-
-                nativeAudio.config.output.dynamic_range_compression = encoding.Drc;
-                nativeAudio.config.output.gain = encoding.Gain;
-            }
-
-            if (!string.IsNullOrEmpty(encoding.Name))
-            {
-                IntPtr encodingNamePtr = Marshal.StringToHGlobalAnsi(encoding.Name);
-                nativeAudio.config.output.name = encodingNamePtr;
-                allocatedMemory.Add(encodingNamePtr);
-            }
-
-	        if (nativeAudio.padding == null)
-	        {
-				nativeAudio.padding = new byte[MarshalingConstants.AudioPaddingBytes];
-	        }
-
-            return nativeAudio;
-        }
-
-        /// <summary>
-        /// Gets the cropping to use for the given encoding profile and title.
-        /// </summary>
-        /// <param name="profile">The encoding profile to use.</param>
-        /// <param name="title">The title being encoded.</param>
-        /// <returns>The cropping to use for the encode.</returns>
-        private static Cropping GetCropping(EncodingProfile profile, Title title)
-        {
-            Cropping crop;
-            switch (profile.CroppingType)
-            {
-                case CroppingType.Automatic:
-                    crop = title.AutoCropDimensions;
-                    break;
-                case CroppingType.Custom:
-                    crop = profile.Cropping;
-                    break;
-                default:
-                    crop = new Cropping();
-                    break;
-            }
-            return crop;
         }
     }
 }

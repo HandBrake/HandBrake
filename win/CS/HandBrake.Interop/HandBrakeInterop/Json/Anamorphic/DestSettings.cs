@@ -44,7 +44,7 @@ namespace HandBrake.Interop.Json.Anamorphic
         /// <summary>
         /// Gets or sets a value indicating whether keep display aspect.
         /// </summary>
-        public bool Keep { get; set; }
+        public int Keep { get; set; }
 
         /// <summary>
         /// Gets or sets the max height.

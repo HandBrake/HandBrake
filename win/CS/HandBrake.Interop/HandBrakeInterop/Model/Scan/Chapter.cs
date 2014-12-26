@@ -33,11 +33,6 @@ namespace HandBrake.Interop.Model.Scan
 		public TimeSpan Duration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the duration of this chapter in PTS.
-		/// </summary>
-		public ulong DurationPts { get; set; }
-
-		/// <summary>
 		/// Override of the ToString method to make this object easier to use in the UI
 		/// </summary>
 		/// <returns>A string formatted as: {chapter #}</returns>

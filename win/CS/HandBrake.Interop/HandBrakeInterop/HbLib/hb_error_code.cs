@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HandBrake.Interop.HbLib
+﻿namespace HandBrake.Interop.HbLib
 {
 	public enum hb_error_code
 	{

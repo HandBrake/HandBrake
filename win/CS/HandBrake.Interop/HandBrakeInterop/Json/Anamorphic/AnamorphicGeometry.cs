@@ -17,7 +17,7 @@ namespace HandBrake.Interop.Json.Anamorphic
         /// <summary>
         /// Gets or sets the dest geometry.
         /// </summary>
-        public DestSettings DestGeometry { get; set; }
+        public DestSettings DestSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the source geometry.

@@ -22,19 +22,19 @@ namespace HandBrake.ApplicationServices.Services.Encode.EventArgs
         /// Gets or sets PercentComplete.
         /// </summary>
         [DataMember]
-        public float PercentComplete { get; set; }
+        public double PercentComplete { get; set; }
 
         /// <summary>
         /// Gets or sets CurrentFrameRate.
         /// </summary>
         [DataMember]
-        public float CurrentFrameRate { get; set; }
+        public double CurrentFrameRate { get; set; }
 
         /// <summary>
         /// Gets or sets AverageFrameRate.
         /// </summary>
         [DataMember]
-        public float AverageFrameRate { get; set; }
+        public double AverageFrameRate { get; set; }
 
         /// <summary>
         /// Gets or sets EstimatedTimeLeft.

@@ -19,17 +19,17 @@ namespace HandBrake.Interop.EventArgs
 	    /// <summary>
 	    /// Gets or sets FractionComplete.
 	    /// </summary>
-	    public float FractionComplete { get; set; }
+        public double FractionComplete { get; set; }
 
 	    /// <summary>
 	    /// Gets or sets CurrentFrameRate.
 	    /// </summary>
-	    public float CurrentFrameRate { get; set; }
+        public double CurrentFrameRate { get; set; }
 
 	    /// <summary>
 	    /// Gets or sets AverageFrameRate.
 	    /// </summary>
-	    public float AverageFrameRate { get; set; }
+        public double AverageFrameRate { get; set; }
 
 	    /// <summary>
 	    /// Gets or sets EstimatedTimeLeft.

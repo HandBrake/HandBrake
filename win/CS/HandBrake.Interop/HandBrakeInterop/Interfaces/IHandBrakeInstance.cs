@@ -128,26 +128,6 @@ namespace HandBrake.Interop.Interfaces
         BitmapImage GetPreview(EncodeJob job, int previewNumber);
 
         /// <summary>
-        /// Gets the final size for a given encode job.
-        /// </summary>
-        /// <param name="job">
-        /// The encode job to use.
-        /// </param>
-        /// <param name="width">
-        /// The storage width.
-        /// </param>
-        /// <param name="height">
-        /// The storage height.
-        /// </param>
-        /// <param name="parWidth">
-        /// The pixel aspect X number.
-        /// </param>
-        /// <param name="parHeight">
-        /// The pixel aspect Y number.
-        /// </param>
-        void GetSize(EncodeJob job, out int width, out int height, out int parWidth, out int parHeight);
-
-        /// <summary>
         /// Pauses the current encode.
         /// </summary>
         void PauseEncode();
@@ -217,7 +197,6 @@ namespace HandBrake.Interop.Interfaces
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
         void StartScan(string path, int previewCount, int titleIndex);
-
 
         /// <summary>
         /// Starts a scan of the given path.

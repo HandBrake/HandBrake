@@ -419,52 +419,6 @@ namespace HandBrake.Interop.Json.Factories
         }
 
         /// <summary>
-        /// The create geometry.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Geometry"/>.
-        /// </returns>
-        private static Json.Anamorphic.Geometry CreateGeometry(EncodeJob job, JsonScanObject scannedSource)
-        {
-            TitleList title = scannedSource.TitleList.FirstOrDefault(c => c.Index == job.Title);
-
-            // Sanatise the Geometry First.
-            AnamorphicGeometry anamorphicGeometry = new AnamorphicGeometry
-                {
-                    DestGeometry = new DestSettings(),
-                    SourceGeometry =
-                        new SourceGeometry
-                            {
-                                Width = title.Geometry.Width,
-                                Height = title.Geometry.Height,
-                                PAR = new Json.Anamorphic.PAR { Num = title.Geometry.PAR.Num, Den = title.Geometry.PAR.Den }
-                            }
-                };
-
-            anamorphicGeometry.DestGeometry.AnamorphicMode = (int)job.EncodingProfile.Anamorphic;
-            anamorphicGeometry.DestGeometry.Geometry.Width = job.EncodingProfile.Width;
-            anamorphicGeometry.DestGeometry.Geometry.Height = job.EncodingProfile.Height;
-            anamorphicGeometry.DestGeometry.Keep = job.EncodingProfile.KeepDisplayAspect;
-            anamorphicGeometry.DestGeometry.Geometry.PAR = new Json.Anamorphic.PAR { Num = job.EncodingProfile.PixelAspectX, Den = job.EncodingProfile.PixelAspectY };
-            anamorphicGeometry.DestGeometry.Crop = new List<int> { job.EncodingProfile.Cropping.Top, job.EncodingProfile.Cropping.Bottom, job.EncodingProfile.Cropping.Left, job.EncodingProfile.Cropping.Right };
-
-            string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
-            string statusJson = Marshal.PtrToStringAnsi(json);
-            AnamorphicResult sanatisedGeometry = JsonConvert.DeserializeObject<AnamorphicResult>(statusJson);
-
-            // Setup the Destination Gemotry.
-            Json.Anamorphic.Geometry geometry = new Json.Anamorphic.Geometry();
-            geometry.Width = sanatisedGeometry.Width;
-            geometry.Height = sanatisedGeometry.Height;
-            geometry.PAR = sanatisedGeometry.PAR;
-            return geometry;
-        }
-
-        /// <summary>
         /// The create meta data.
         /// </summary>
         /// <param name="job">
@@ -477,41 +431,6 @@ namespace HandBrake.Interop.Json.Factories
         {
             MetaData metaData = new MetaData();
             return metaData;
-        }
-
-
-        /// <summary>
-        /// Adds a filter to the given filter list.
-        /// </summary>
-        /// <param name="filterList">The list to add the filter to.</param>
-        /// <param name="filterType">The type of filter.</param>
-        /// <param name="settings">Settings for the filter.</param>
-        /// <param name="allocatedMemory">The list of allocated memory.</param>
-        private void AddFilter(List<hb_filter_object_s> filterList, int filterType, string settings, List<IntPtr> allocatedMemory)
-        {
-            IntPtr settingsNativeString = Marshal.StringToHGlobalAnsi(settings);
-            hb_filter_object_s filter = InteropUtilities.ToStructureFromPtr<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
-            filter.settings = settingsNativeString;
-
-            allocatedMemory.Add(settingsNativeString);
-            filterList.Add(filter);
-        }
-
-        /// <summary>
-        /// Adds a filter to the given filter list with the provided preset and tune.
-        /// </summary>
-        /// <param name="filterList">The list to add the filter to.</param>
-        /// <param name="filterType">The type of filter.</param>
-        /// <param name="preset">The preset name.</param>
-        /// <param name="tune">The tune name.</param>
-        private void AddFilterFromPreset(List<hb_filter_object_s> filterList, int filterType, string preset, string tune)
-        {
-            IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings(filterType, preset, tune);
-
-            hb_filter_object_s filter = InteropUtilities.ToStructureFromPtr<hb_filter_object_s>(HBFunctions.hb_filter_init(filterType));
-            filter.settings = settingsPtr;
-
-            filterList.Add(filter);
         }
     }
 }

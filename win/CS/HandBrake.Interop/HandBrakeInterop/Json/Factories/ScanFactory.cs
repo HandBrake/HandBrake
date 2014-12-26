@@ -143,39 +143,8 @@ namespace HandBrake.Interop.Json.Factories
                     Language = subtitle.Language,
                     LanguageCode = subtitle.LanguageCode,
                     SubtitleSourceInt = subtitle.Source,
-                   // SubtitleSource =  null,
+                    SubtitleSource = (SubtitleSource)subtitle.Source  // TODO Check correct
                 };
-
- 
-                //switch (subtitle.subsource)
-                //{
-                //    case hb_subtitle_s_subsource.CC608SUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.CC608;
-                //        break;
-                //    case hb_subtitle_s_subsource.CC708SUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.CC708;
-                //        break;
-                //    case hb_subtitle_s_subsource.SRTSUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.SRT;
-                //        break;
-                //    case hb_subtitle_s_subsource.SSASUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.SSA;
-                //        break;
-                //    case hb_subtitle_s_subsource.TX3GSUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.TX3G;
-                //        break;
-                //    case hb_subtitle_s_subsource.UTF8SUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.UTF8;
-                //        break;
-                //    case hb_subtitle_s_subsource.VOBSUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.VobSub;
-                //        break;
-                //    case hb_subtitle_s_subsource.PGSSUB:
-                //        newSubtitle.SubtitleSource = SubtitleSource.PGS;
-                //        break;
-                //    default:
-                //        break;
-                //}
 
                 subtiles.Add(newSubtitle);
 
@@ -241,8 +210,7 @@ namespace HandBrake.Interop.Json.Factories
                 {
                     Name = chapter.Name,
                     ChapterNumber = currentTrack,
-                    Duration = new TimeSpan(chapter.Duration.Hours, chapter.Duration.Minutes, chapter.Duration.Seconds),
-                    // DurationPts = chapter.duration
+                    Duration = new TimeSpan(chapter.Duration.Hours, chapter.Duration.Minutes, chapter.Duration.Seconds)
                 };
 
                 tracks.Add(newChapter);

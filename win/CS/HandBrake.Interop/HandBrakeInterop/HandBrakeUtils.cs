@@ -11,13 +11,18 @@ namespace HandBrake.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.HbLib;
+    using HandBrake.Interop.Json.Anamorphic;
+    using HandBrake.Interop.Json.Scan;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Scan;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// HandBrake Interop Utilities
