@@ -420,8 +420,8 @@
     {
         while (row != NSNotFound)
         {
-            NSMutableDictionary *queueItemToOpen = [fOutlineView itemAtRow: row];
-            [[NSWorkspace sharedWorkspace] selectFile:queueItemToOpen[@"DestinationPath"] inFileViewerRootedAtPath:nil];
+            HBJob *queueItemToOpen = [fOutlineView itemAtRow:row];
+            [[NSWorkspace sharedWorkspace] selectFile:queueItemToOpen.destURL.path inFileViewerRootedAtPath:nil];
 
             row = [targetedRow indexGreaterThanIndex: row];
         }
@@ -1106,7 +1106,7 @@
         BOOL highlighted = [outlineView isRowSelected:[outlineView rowForItem: item]] && [[outlineView window] isKeyWindow] && ([[outlineView window] firstResponder] == outlineView);
 
         HBJob *job = item;
-        if (job.state == HBJobStateWorking && job.pidId != pidNum)
+        if (job.state == HBJobStateCompleted)
         {
             [cell setAction: @selector(revealSelectedQueueItem:)];
             if (highlighted)
@@ -1119,16 +1119,14 @@
         }
         else
         {
-            
-                [cell setAction: @selector(removeSelectedQueueItem:)];
-                if (highlighted)
-                {
-                    [cell setImage:[NSImage imageNamed:@"DeleteHighlight"]];
-                    [cell setAlternateImage:[NSImage imageNamed:@"DeleteHighlightPressed"]];
-                }
-                else
-                    [cell setImage:[NSImage imageNamed:@"Delete"]];
-   
+            [cell setAction: @selector(removeSelectedQueueItem:)];
+            if (highlighted)
+            {
+                [cell setImage:[NSImage imageNamed:@"DeleteHighlight"]];
+                [cell setAlternateImage:[NSImage imageNamed:@"DeleteHighlightPressed"]];
+            }
+            else
+                [cell setImage:[NSImage imageNamed:@"Delete"]];
         }
     }
 }
