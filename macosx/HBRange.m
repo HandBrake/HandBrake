@@ -77,6 +77,26 @@
     return retval;
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBRange *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_type = _type;
+        copy->_chapterStart = _chapterStart;
+        copy->_chapterStop = _chapterStop;
+        copy->_secondsStart = _secondsStart;
+        copy->_secondsStop = _secondsStop;
+        copy->_frameStart = _frameStart;
+        copy->_frameStop = _frameStop;
+    }
+
+    return copy;
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder

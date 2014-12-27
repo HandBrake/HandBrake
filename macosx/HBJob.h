@@ -14,6 +14,8 @@
 #import "HBPicture.h"
 #import "HBFilters.h"
 
+#import "HBAudio.h"
+
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
@@ -42,9 +44,11 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 /**
  *  Current state of the job.
  */
-@property (nonatomic, readonly) HBJobState state;
+@property (nonatomic, readwrite) HBJobState state;
 
-@property (nonatomic, readonly) HBTitle *title;
+@property (nonatomic, readwrite, assign) HBTitle *title;
+@property (nonatomic, readonly) int titleIdx;
+@property (nonatomic, readwrite) int pidId;
 
 // Urls
 @property (nonatomic, readonly) NSURL *fileURL;

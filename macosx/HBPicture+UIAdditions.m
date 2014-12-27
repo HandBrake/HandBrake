@@ -86,4 +86,23 @@
     return sizeInfo;
 }
 
+- (NSString *)summary
+{
+    NSMutableString *summary = [NSMutableString stringWithString:@""];
+    [summary appendString:self.info];
+
+    if (self.anamorphicMode != HB_ANAMORPHIC_STRICT)
+    {
+        // anamorphic is not Strict, show the modulus
+        [summary appendFormat:@", Modulus: %d", self.modulus];
+    }
+
+    [summary appendFormat:@", Crop: %s %d/%d/%d/%d",
+     self.autocrop ? "Auto" : "Custom",
+     self.cropTop, self.cropBottom,
+     self.cropLeft, self.cropRight];
+
+    return [[summary copy] autorelease];
+}
+
 @end

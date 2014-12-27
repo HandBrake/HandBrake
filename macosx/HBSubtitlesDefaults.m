@@ -19,7 +19,7 @@
     return self;
 }
 
-- (void)applySettingsFromPreset:(NSDictionary *)preset
+- (void)applyPreset:(NSDictionary *)preset
 {
     if ([preset[@"SubtitleTrackSelectionBehavior"] isEqualToString:@"first"])
     {
@@ -39,7 +39,7 @@
     self.addForeignAudioSubtitle = [preset[@"SubtitleAddForeignAudioSubtitle"] boolValue];
 }
 
-- (void)prepareSubtitlesDefaultsForPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(NSMutableDictionary *)preset
 {
     if (self.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
     {
@@ -58,6 +58,26 @@
     preset[@"SubtitleAddCC"] = @(self.addCC);
     preset[@"SubtitleAddForeignAudioSearch"] = @(self.addForeignAudioSearch);
     preset[@"SubtitleAddForeignAudioSubtitle"] = @(self.addForeignAudioSubtitle);
+}
+
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBSubtitlesDefaults *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_trackSelectionBehavior = _trackSelectionBehavior;
+        [copy->_trackSelectionLanguages release];
+        copy->_trackSelectionLanguages = [_trackSelectionLanguages mutableCopy];
+
+        copy->_addForeignAudioSearch = _addForeignAudioSearch;
+        copy->_addForeignAudioSubtitle = _addForeignAudioSubtitle;
+        copy->_addCC = _addCC;
+    }
+    
+    return copy;
 }
 
 #pragma mark - NSCoding

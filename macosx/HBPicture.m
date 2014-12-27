@@ -413,6 +413,35 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     [self postChangedNotification];
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBPicture *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_width = _width;
+        copy->_height = _height;
+
+        copy->_keepDisplayAspect = _keepDisplayAspect;
+        copy->_anamorphicMode = _anamorphicMode;
+        copy->_modulus = _modulus;
+
+        copy->_displayWidth = _displayWidth;
+        copy->_parWidth = _parWidth;
+        copy->_parHeight = _parHeight;
+
+        copy->_autocrop = _autocrop;
+        copy->_cropTop = _cropTop;
+        copy->_cropBottom = _cropBottom;
+        copy->_cropLeft = _cropLeft;
+        copy->_cropRight = _cropRight;
+    }
+
+    return copy;
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder
@@ -463,7 +492,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 #pragma mark - Presets/Queue
 
-- (void)preparePictureForPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(NSMutableDictionary *)preset
 {
     preset[@"PictureKeepRatio"] = @(self.keepDisplayAspect);
     preset[@"PicturePAR"]       = @(self.anamorphicMode);
@@ -478,7 +507,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     preset[@"PictureRightCrop"]  = @(self.cropRight);
 }
 
-- (void)applySettingsFromPreset:(NSDictionary *)preset
+- (void)applyPreset:(NSDictionary *)preset
 {
     self.validating = YES;
     hb_title_t *title = self.title.hb_title;
@@ -605,66 +634,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     self.displayWidth = display_width;
 
     self.validating = NO;
-}
-
-- (void)preparePictureForQueueFileJob:(NSMutableDictionary *)queueFileJob
-{
-    queueFileJob[@"PictureWidth"]  = @(self.width);
-    queueFileJob[@"PictureHeight"] = @(self.height);
-
-    queueFileJob[@"PictureKeepRatio"] = @(self.keepDisplayAspect);
-    queueFileJob[@"PicturePAR"]       = @(self.anamorphicMode);
-
-    queueFileJob[@"PictureModulus"] = @(self.modulus);
-
-    queueFileJob[@"PicturePARPixelWidth"]  = @(self.parWidth);
-    queueFileJob[@"PicturePARPixelHeight"] = @(self.parHeight);
-
-    queueFileJob[@"PictureAutoCrop"]    = @(self.autocrop);
-    queueFileJob[@"PictureTopCrop"]     = @(self.cropTop);
-    queueFileJob[@"PictureBottomCrop"]  = @(self.cropBottom);
-    queueFileJob[@"PictureLeftCrop"]    = @(self.cropLeft);
-    queueFileJob[@"PictureRightCrop"]   = @(self.cropRight);
-}
-
-- (void)applyPictureSettingsFromQueue:(NSDictionary *)queueToApply
-{
-    self.validating = YES;
-    /* If Cropping is set to custom, then recall all four crop values from
-     when the preset was created and apply them */
-    if ([queueToApply[@"PictureAutoCrop"] intValue] == 0)
-    {
-        self.autocrop = NO;
-
-        /* Here we use the custom crop values saved at the time the preset was saved */
-        self.cropTop    = [queueToApply[@"PictureTopCrop"] intValue];
-        self.cropBottom = [queueToApply[@"PictureBottomCrop"] intValue];
-        self.cropLeft   = [queueToApply[@"PictureLeftCrop"] intValue];
-        self.cropRight  = [queueToApply[@"PictureRightCrop"] intValue];
-
-    }
-    else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-    {
-        self.autocrop = YES;
-
-        hb_title_t *title = self.title.hb_title;
-
-        /* Here we use the auto crop values determined right after scan */
-        self.cropTop    = title->crop[0];
-        self.cropBottom = title->crop[1];
-        self.cropLeft   = title->crop[2];
-        self.cropRight  = title->crop[3];
-
-    }
-
-    self.anamorphicMode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
-    self.modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
-    self.keepDisplayAspect = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
-    self.width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
-    self.height  = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
-
-    self.validating = NO;
-    [self validateSettings];
 }
 
 @end

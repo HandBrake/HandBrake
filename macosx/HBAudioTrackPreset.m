@@ -217,6 +217,26 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     return retval;
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBAudioTrackPreset *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_encoder = _encoder;
+        copy->_mixdown = _mixdown;
+        copy->_sampleRate = _sampleRate;
+        copy->_bitRate = _bitRate;
+
+        copy->_gain = _gain;
+        copy->_drc = _drc;
+    }
+
+    return copy;
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder

@@ -199,6 +199,37 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
     [self postChangedNotification];
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBFilters *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_detelecine = _detelecine;
+        copy->_detelecineCustomString = [_detelecineCustomString copy];
+
+        copy->_deinterlace = _deinterlace;
+        copy->_deinterlaceCustomString = [_deinterlaceCustomString copy];
+
+        copy->_decomb = _decomb;
+        copy->_decombCustomString = [_decombCustomString copy];
+
+        copy->_denoise = [_denoise copy];
+        copy->_denoisePreset = [_denoisePreset copy];
+        copy->_denoiseTune = [_denoiseTune copy];
+        copy->_denoiseCustomString = [_denoiseCustomString copy];
+
+        copy->_deblock = _deblock;
+        copy->_grayscale = _grayscale;
+
+        copy->_useDecomb = _useDecomb;
+    }
+    
+    return copy;
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder
@@ -255,7 +286,7 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 
 #pragma mark - Presets and queue
 
-- (void)prepareFiltersForPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(NSMutableDictionary *)preset
 {
     preset[@"PictureDecombDeinterlace"] = @(self.useDecomb);
 
@@ -277,7 +308,7 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
     preset[@"VideoGrayScale"] = @(self.grayscale);
 }
 
-- (void)applySettingsFromPreset:(NSDictionary *)preset
+- (void)applyPreset:(NSDictionary *)preset
 {
     self.notificationsEnabled = NO;
 
@@ -392,122 +423,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
     }
 
     self.notificationsEnabled = YES;
-}
-
-- (NSString *)summary
-{
-    NSMutableString *summary = [NSMutableString string];
-
-    /* Detelecine */
-    switch (self.detelecine)
-    {
-        case 1:
-            [summary appendFormat:@" - Detelecine (%@)", self.detelecineCustomString];
-            break;
-
-        case 2:
-            [summary appendString:@" - Detelecine (Default)"];
-            break;
-
-        default:
-            break;
-    }
-
-    if (self.useDecomb)
-    {
-        /* Decomb */
-        switch (self.decomb)
-        {
-            case 1:
-                [summary appendFormat:@" - Decomb (%@)", self.decombCustomString];
-                break;
-
-            case 2:
-                [summary appendString:@" - Decomb (Default)"];
-                break;
-
-            case 3:
-                [summary appendString:@" - Decomb (Fast)"];
-                break;
-
-            case 4:
-                [summary appendString:@" - Decomb (Bob)"];
-                break;
-
-            default:
-                break;
-        }
-    }
-    else
-    {
-        /* Deinterlace */
-        switch (self.deinterlace)
-        {
-            case 1:
-                [summary appendFormat:@" - Deinterlace (%@)", self.deinterlaceCustomString];
-                break;
-
-            case 2:
-                [summary appendString:@" - Deinterlace (Fast)"];
-                break;
-
-            case 3:
-                [summary appendString:@" - Deinterlace (Slow)"];
-                break;
-
-            case 4:
-                [summary appendString:@" - Deinterlace (Slower)"];
-                break;
-
-            case 5:
-                [summary appendString:@" - Deinterlace (Bob)"];
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    /* Deblock */
-    if (self.deblock > 0)
-    {
-        [summary appendFormat:@" - Deblock (%ld)", self.deblock];
-    }
-
-    /* Denoise */
-    if (![self.denoise isEqualToString:@"off"])
-    {
-        [summary appendFormat:@" - Denoise (%@", [[_HandBrake_denoiseTypesDict allKeysForObject:self.denoise] firstObject]];
-        if (![self.denoisePreset isEqualToString:@"none"])
-        {
-            [summary appendFormat:@", %@", [[_HandBrake_denoisePresetsDict allKeysForObject:self.denoisePreset] firstObject]];
-
-            if ([self.denoise isEqualToString:@"nlmeans"])
-            {
-                [summary appendFormat:@", %@", [[_HandBrake_nlmeansTunesDict allKeysForObject:self.denoiseTune] firstObject]];
-            }
-        }
-        else
-        {
-            [summary appendFormat:@", %@", self.denoiseCustomString];
-        }
-
-        [summary appendString:@")"];
-
-    }
-
-    /* Grayscale */
-    if (self.grayscale)
-    {
-        [summary appendString:@" - Grayscale"];
-    }
-
-    if ([summary hasPrefix:@" - "])
-    {
-        [summary deleteCharactersInRange:NSMakeRange(0, 3)];
-    }
-
-    return [NSString stringWithString:summary];
 }
 
 @end

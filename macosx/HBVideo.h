@@ -5,23 +5,18 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
+#import "HBPresetCoding.h"
 
 @class HBJob;
 
 /**
  *  HBVideo
  */
-@interface HBVideo : NSObject <NSCoding>
+@interface HBVideo : NSObject <NSCoding, NSCopying, HBPresetCoding>
 
 - (instancetype)initWithJob:(HBJob *)job;
 
 - (void)containerChanged;
-
-- (void)applySettingsFromPreset:(NSDictionary *)preset;
-- (void)prepareVideoForPreset:(NSMutableDictionary *)preset;
-
-- (void)applyVideoSettingsFromQueue:(NSDictionary *)queueToApply;
-- (void)prepareVideoForQueueFileJob:(NSMutableDictionary *)queueFileJob;
 
 @property (nonatomic, readwrite) int encoder;
 

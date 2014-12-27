@@ -5,11 +5,17 @@
     It may be used under the terms of the GNU General Public License. */
 
 #import "HBQueueController.h"
+#import "HBCore.h"
 #import "Controller.h"
 
 #import "HBQueueOutlineView.h"
 #import "HBImageAndTextCell.h"
 #import "HBUtilities.h"
+
+#import "HBJob.h"
+
+#import "HBPicture+UIAdditions.h"
+#import "HBFilters+UIAdditions.h"
 
 #define HB_ROW_HEIGHT_TITLE_ONLY           17.0
 
@@ -39,7 +45,6 @@
 
 @interface HBQueueController () <HBQueueOutlineViewDelegate>
 {
-    hb_handle_t                  *fQueueEncodeLibhb;              // reference to libhb
     HBController                 *fHBController;        // reference to HBController
     NSMutableArray               *fJobGroups;           // mirror image of the queue array from controller.mm
 
@@ -69,6 +74,8 @@
     NSDictionary            *titleAttr;
     NSDictionary            *shortHeightAttr;
 }
+
+@property (nonatomic, readonly) HBCore *queueCore;
 
 /* control encodes in the window */
 - (IBAction)removeSelectedQueueItem: (id)sender;
@@ -110,40 +117,31 @@
 
     [fOutlineView reloadData];
 
-    /* lets get the stats on the status of the queue array */
+    // lets get the stats on the status of the queue array
     
     fPendingCount = 0;
     fWorkingCount = 0;
-    
-    /* We use a number system to set the encode status of the queue item
-     * in controller.mm
-     * 0 == already encoded
-     * 1 == is being encoded
-     * 2 == is yet to be encoded
-     * 3 == cancelled
-     */
+
 	int i = 0;
-    NSDictionary *thisQueueDict = nil;
-	for (id tempObject in fJobGroups)
+	for (HBJob *job in fJobGroups)
 	{
-		thisQueueDict = tempObject;
-		if ([thisQueueDict[@"Status"] intValue] == 1) // being encoded
+		if (job.state == HBJobStateWorking) // being encoded
 		{
 			fWorkingCount++;
-            /* we have an encoding job so, lets start the animation timer */
-            if (thisQueueDict[@"EncodingPID"] && [thisQueueDict[@"EncodingPID"] intValue] == pidNum)
+            // we have an encoding job so, lets start the animation timer
+            if (job.pidId == pidNum)
             {
                 fEncodingQueueItem = i;
             }
 		}
-        if ([thisQueueDict[@"Status"] intValue] == 2) // pending		
+        if (job.state == HBJobStateReady) // pending
         {
 			fPendingCount++;
 		}
 		i++;
 	}
-    
-    /* Set the queue status field in the queue window */
+
+    // Set the queue status field in the queue window
     NSMutableString *string;
     if (fPendingCount == 0)
     {
@@ -199,9 +197,9 @@
 //------------------------------------------------------------------------------------
 // Receive HB handle
 //------------------------------------------------------------------------------------
-- (void)setHandle: (hb_handle_t *)handle
+- (void)setCore: (HBCore *)core
 {
-    fQueueEncodeLibhb = handle;
+    _queueCore = core;
 }
 
 //------------------------------------------------------------------------------------
@@ -267,16 +265,14 @@
     // Optional method: This message is sent to us since we are the target of some
     // toolbar item actions.
 
-    if (!fQueueEncodeLibhb) return NO;
+    if (!self.queueCore) return NO;
 
     BOOL enable = NO;
-
-    hb_state_t s;
-    hb_get_state2 (fQueueEncodeLibhb, &s);
+    HBState s = self.queueCore.state;
 
     if ([[toolbarItem itemIdentifier] isEqualToString:@"HBQueueStartCancelToolbarIdentifier"])
     {
-        if ((s.state == HB_STATE_PAUSED) || (s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+        if ((s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
         {
             enable = YES;
             [toolbarItem setImage:[NSImage imageNamed: @"stopencode"]];
@@ -303,7 +299,7 @@
 
     if ([[toolbarItem itemIdentifier] isEqualToString:@"HBQueuePauseResumeToolbarIdentifier"])
     {
-        if (s.state == HB_STATE_PAUSED)
+        if (s == HBStatePaused)
         {
             enable = YES;
             [toolbarItem setImage:[NSImage imageNamed: @"encode"]];
@@ -311,7 +307,7 @@
             [toolbarItem setToolTip: @"Resume Encoding"];
        }
 
-        else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+        else if ((s == HBStateWorking) || (s == HBStateMuxing))
         {
             enable = YES;
             [toolbarItem setImage:[NSImage imageNamed: @"pauseencode"]];
@@ -348,13 +344,13 @@
 {
     NSIndexSet *targetedRow = [fOutlineView targetedRowIndexes];
     NSUInteger row = [targetedRow firstIndex];
-    if( row == NSNotFound )
+    if (row == NSNotFound)
         return;
     /* if this is a currently encoding job, we need to be sure to alert the user,
      * to let them decide to cancel it first, then if they do, we can come back and
      * remove it */
     
-    if ([fJobGroups[row][@"Status"] integerValue] == 1)
+    if ([fJobGroups[row] state] == HBJobStateWorking)
     {
        /* We pause the encode here so that it doesn't finish right after and then
         * screw up the sync while the window is open
@@ -383,8 +379,8 @@
     }
     else
     { 
-    /* since we are not a currently encoding item, we can just be removed */
-            [fHBController removeQueueFileItem:row];
+        // since we are not a currently encoding item, we can just be removed
+        [fHBController removeQueueFileItem:row];
     }
 }
 
@@ -437,16 +433,17 @@
 //------------------------------------------------------------------------------------
 - (IBAction)toggleStartCancel: (id)sender
 {
-    if (!fQueueEncodeLibhb) return;
+    if (!self.queueCore) return;
 
-    hb_state_t s;
-    hb_get_state2 (fQueueEncodeLibhb, &s);
-
-    if ((s.state == HB_STATE_PAUSED) || (s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+    HBState s = self.queueCore.state;
+    if ((s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
+    {
         [fHBController Cancel: self];
-
+    }
     else if (fPendingCount > 0)
+    {
         [fHBController Rip: NULL];
+    }
 }
 
 //------------------------------------------------------------------------------------
@@ -454,23 +451,20 @@
 //------------------------------------------------------------------------------------
 - (IBAction)togglePauseResume: (id)sender
 {
-    if (!fQueueEncodeLibhb) return;
-    
-    hb_state_t s;
-    hb_get_state2 (fQueueEncodeLibhb, &s);
-    
-    if (s.state == HB_STATE_PAUSED)
+    if (!self.queueCore) return;
+
+    HBState s = self.queueCore.state;
+    if (s == HBStatePaused)
     {
-        hb_resume (fQueueEncodeLibhb);
+        [self.queueCore resume];
         [self startAnimatingCurrentWorkingEncodeInQueue];
     }
-    else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+    else if ((s == HBStateWorking) || (s == HBStateMuxing))
     {
-        hb_pause (fQueueEncodeLibhb);
+        [self.queueCore pause];
         [self stopAnimatingCurrentJobGroupInQueue];
     }
 }
-
 
 //------------------------------------------------------------------------------------
 // Send the selected queue item back to the main window for rescan and possible edit.
@@ -486,14 +480,14 @@
     /* if this is a currently encoding job, we need to be sure to alert the user,
      * to let them decide to cancel it first, then if they do, we can come back and
      * remove it */
-    
-    if ([fJobGroups[row][@"Status"] integerValue] == 1)
+
+    HBJob *job = fJobGroups[row];
+    if (job.state == HBJobStateWorking)
     {
-       /* We pause the encode here so that it doesn't finish right after and then
-        * screw up the sync while the window is open
-        */
-       [fHBController Pause:NULL];
-         NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
+        // We pause the encode here so that it doesn't finish right after and then
+        // screw up the sync while the window is open
+        [fHBController Pause:NULL];
+        NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
         // Which window to attach the sheet to?
         NSWindow *docWindow = nil;
         if ([sender respondsToSelector: @selector(window)])
@@ -517,10 +511,7 @@
     else
     { 
         /* since we are not a currently encoding item, we can just be cancelled */
-        [fHBController rescanQueueItemToMainWindow:fJobGroups[row][@"SourcePath"]
-                                      scanTitleNum:[fJobGroups[row][@"TitleNumber"] integerValue]
-                                 selectedQueueItem:row];
-    
+        [fHBController rescanQueueItemToMainWindow:row];
     }
 }
 
@@ -721,45 +712,45 @@
     {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         /* Below should be put into a separate method but I am way too f'ing lazy right now */
-        NSMutableAttributedString * finalString = [[NSMutableAttributedString alloc] initWithString: @""];
-        
+        NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithString: @""];
+        HBJob *job = item;
+
         /* First line, we should strip the destination path and just show the file name and add the title num and chapters (if any) */
-        NSString * summaryInfo;
+        NSString *summaryInfo;
         
-        NSString * titleString = [NSString stringWithFormat:@"Title %d", [item[@"TitleNumber"] intValue]];
+        NSString *titleString = [NSString stringWithFormat:@"Title %d", job.titleIdx];
         
-        NSString * startStopString = @"";
-        if ([item[@"fEncodeStartStop"] intValue] == 0)
+        NSString *startStopString = @"";
+        if (job.range.type == HBRangeTypeChapters)
         {
-            /* Start Stop is chapters */
-            startStopString = ([item[@"ChapterStart"] intValue] == [item[@"ChapterEnd"] intValue]) ?
-            [NSString stringWithFormat:@"Chapter %d", [item[@"ChapterStart"] intValue]] :
-            [NSString stringWithFormat:@"Chapters %d through %d", [item[@"ChapterStart"] intValue], [item[@"ChapterEnd"] intValue]];
+            // Start Stop is chapters
+            startStopString = (job.range.chapterStart == job.range.chapterStop) ?
+            [NSString stringWithFormat:@"Chapter %d", job.range.chapterStart] :
+            [NSString stringWithFormat:@"Chapters %d through %d", job.range.chapterStart, job.range.chapterStop];
         }
-        else if ([item[@"fEncodeStartStop"] intValue] == 1)
+        else if (job.range.type == HBRangeTypeSeconds)
         {
-            /* Start Stop is seconds */
-            startStopString = [NSString stringWithFormat:@"Seconds %d through %d", [item[@"StartSeconds"] intValue], [item[@"StartSeconds"] intValue] + [item[@"StopSeconds"] intValue]];
+            // Start Stop is seconds
+            startStopString = [NSString stringWithFormat:@"Seconds %d through %d", job.range.secondsStart, job.range.secondsStop];
         }
-        else if ([item[@"fEncodeStartStop"] intValue] == 2)
+        else if (job.range.type == HBRangeTypeFrames)
         {
-            /* Start Stop is Frames */
-            startStopString = [NSString stringWithFormat:@"Frames %d through %d", [item[@"StartFrame"] intValue], [item[@"StartFrame"] intValue] + [item[@"StopFrame"] intValue]];
+            // Start Stop is Frames
+            startStopString = [NSString stringWithFormat:@"Frames %d through %d", job.range.frameStart, job.range.frameStop];
         }
-        
-        NSString * passesString = @"";
-        /* check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan */
-        if ([item[@"SubtitleList"] count] && [item[@"SubtitleList"][0][@"keySubTrackIndex"] intValue] == -1)
+        NSString *passesString = @"";
+        // check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan
+        if (job.subtitlesTracks.count && [job.subtitlesTracks[0][@"keySubTrackIndex"] intValue] == -1)
         {
-          passesString = [passesString stringByAppendingString:@"1 Foreign Language Search Pass - "];
+            passesString = [passesString stringByAppendingString:@"1 Foreign Language Search Pass - "];
         }
-        if ([item[@"VideoTwoPass"] intValue] == 0)
+        if (job.video.twoPass == YES)
         {
             passesString = [passesString stringByAppendingString:@"1 Video Pass"];
         }
         else
         {
-            if ([item[@"VideoTurboTwoPass"] intValue] == 1)
+            if (job.video.turboTwoPass == YES)
             {
                 passesString = [passesString stringByAppendingString:@"2 Video Passes First Turbo"];
             }
@@ -768,197 +759,206 @@
                 passesString = [passesString stringByAppendingString:@"2 Video Passes"];
             }
         }
-        
-        [finalString appendString:[NSString stringWithFormat:@"%@", item[@"SourceName"]] withAttributes:titleAttr];
-        
+
+        [finalString appendString:[NSString stringWithFormat:@"%@", job.fileURL.path.lastPathComponent] withAttributes:titleAttr];
+
+
         /* lets add the output file name to the title string here */
-        NSString * outputFilenameString = [item[@"DestinationPath"] lastPathComponent];
+        NSString *outputFilenameString = job.destURL.lastPathComponent;
         
         summaryInfo = [NSString stringWithFormat: @" (%@, %@, %@) -> %@", titleString, startStopString, passesString, outputFilenameString];
-        
-        [finalString appendString:[NSString stringWithFormat:@"%@\n", summaryInfo] withAttributes:detailAttr];  
-        
+
+        [finalString appendString:[NSString stringWithFormat:@"%@\n", summaryInfo] withAttributes:detailAttr];
+
         // Insert a short-in-height line to put some white space after the title
         [finalString appendString:@"\n" withAttributes:shortHeightAttr];
         // End of Title Stuff
-        
-        /* Second Line  (Preset Name)*/
-        [finalString appendString: @"Preset: " withAttributes:detailBoldAttr];
-        [finalString appendString:[NSString stringWithFormat:@"%@\n", item[@"PresetName"]] withAttributes:detailAttr];
-        
-        /* Third Line  (Format Summary) */
-        NSString * audioCodecSummary = @"";	//	This seems to be set by the last track we have available...
-        /* Lets also get our audio track detail since we are going through the logic for use later */
 
-		NSMutableArray *audioDetails = [NSMutableArray arrayWithCapacity: [item[@"AudioList"] count]];
+        // Second Line  (Preset Name)
+        // FIXME
+        //[finalString appendString: @"Preset: " withAttributes:detailBoldAttr];
+        //[finalString appendString:[NSString stringWithFormat:@"%@\n", item[@"PresetName"]] withAttributes:detailAttr];
+
+
+        // Third Line  (Format Summary)
+        NSString *audioCodecSummary = @"";	//	This seems to be set by the last track we have available...
+        // Lets also get our audio track detail since we are going through the logic for use later
+
+		NSMutableArray *audioDetails = [NSMutableArray arrayWithCapacity:job.audioTracks.count];
         BOOL autoPassthruPresent = NO;
 
-        for (NSDictionary *audioTrack in item[@"AudioList"])
+        for (HBAudio *audioTrack in job.audioTracks)
         {
-            audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack[@"Encoder"]];
-            NSNumber *drc = audioTrack[@"TrackDRCSlider"];
-            NSNumber *gain = audioTrack[@"TrackGainSlider"];
+            audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack.codec[keyAudioCodecName]];
+            NSNumber *drc = audioTrack.drc;
+            NSNumber *gain = audioTrack.gain;
             NSString *detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
-                            audioTrack[@"TrackDescription"],
-                            audioTrack[@"Encoder"],
-                            audioTrack[@"Mixdown"],
-                            audioTrack[@"Samplerate"],
-                            audioTrack[@"Bitrate"],
+                            audioTrack.track[keyAudioTrackName],
+                            audioTrack.codec[keyAudioCodecName],
+                            audioTrack.mixdown[keyAudioMixdownName],
+                            audioTrack.sampleRate[keyAudioSampleRateName],
+                            audioTrack.bitRate[keyAudioBitrateName],
                             (0.0 < [drc floatValue]) ? (NSObject *)drc : (NSObject *)@"Off",
                             (0.0 != [gain floatValue]) ? (NSObject *)gain : (NSObject *)@"Off"
                             ];
             [audioDetails addObject: detailString];
             // check if we have an Auto Passthru output track
-            if ([audioTrack[@"Encoder"] isEqualToString: @"Auto Passthru"])
+            if ([audioTrack.codec[keyAudioCodecName] isEqualToString: @"Auto Passthru"])
             {
                 autoPassthruPresent = YES;
             }
         }
 
-        NSString * jobFormatInfo;
-        if ([item[@"ChapterMarkers"] intValue] == 1)
-            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video  %@ Audio, Chapter Markers\n", item[@"FileFormat"], item[@"VideoEncoder"], audioCodecSummary];
+        NSString *jobFormatInfo;
+        if (job.chaptersEnabled)
+            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video  %@ Audio, Chapter Markers\n",
+                             @(hb_container_get_name(job.container)), @(hb_video_encoder_get_name(job.video.encoder)), audioCodecSummary];
         else
-            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video  %@ Audio\n", item[@"FileFormat"], item[@"VideoEncoder"], audioCodecSummary];
-        
+            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video  %@ Audio\n",
+                             @(hb_container_get_name(job.container)), @(hb_video_encoder_get_name(job.video.encoder)), audioCodecSummary];
         
         [finalString appendString: @"Format: " withAttributes:detailBoldAttr];
         [finalString appendString: jobFormatInfo withAttributes:detailAttr];
-        
-        /* Optional String for muxer options */
-        if ([item[@"MuxerOptionsSummary"] length])
+
+        // Optional String for muxer options
+        NSMutableString *containerOptions = [NSMutableString stringWithString:@""];
+        if ((job.container & HB_MUX_MASK_MP4) && job.mp4HttpOptimize)
         {
-            NSString *containerOptions = [NSString stringWithFormat:@"%@",
-                                          item[@"MuxerOptionsSummary"]];
+            [containerOptions appendString:@" - Web optimized"];
+        }
+        if ((job.container & HB_MUX_MASK_MP4)  && job.mp4iPodCompatible)
+        {
+            [containerOptions appendString:@" - iPod 5G support"];
+        }
+        if ([containerOptions hasPrefix:@" - "])
+        {
+            [containerOptions deleteCharactersInRange:NSMakeRange(0, 3)];
+        }
+        if (containerOptions.length)
+        {
             [finalString appendString:@"Container Options: " withAttributes:detailBoldAttr];
             [finalString appendString:containerOptions       withAttributes:detailAttr];
             [finalString appendString:@"\n"                  withAttributes:detailAttr];
         }
-        
-        /* Fourth Line (Destination Path)*/
+
+        // Fourth Line (Destination Path)
         [finalString appendString: @"Destination: " withAttributes:detailBoldAttr];
-        [finalString appendString: item[@"DestinationPath"] withAttributes:detailAttr];
+        [finalString appendString: job.destURL.path withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
-        
-        /* Fifth Line Picture Details*/
-        NSString *pictureInfo = [NSString stringWithFormat:@"%@",
-                                 item[@"PictureSettingsSummary"]];
-        if ([item[@"PictureKeepRatio"] intValue] == 1)
+
+
+        // Fifth Line Picture Details
+        NSString *pictureInfo = [NSString stringWithFormat:@"%@", job.picture.summary];
+        if (job.picture.keepDisplayAspect)
         {
             pictureInfo = [pictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
         }
         [finalString appendString:@"Picture: " withAttributes:detailBoldAttr];
         [finalString appendString:pictureInfo  withAttributes:detailAttr];
         [finalString appendString:@"\n"        withAttributes:detailAttr];
-        
+
         /* Optional String for Picture Filters */
-        if ([item[@"PictureFiltersSummary"] length])
+        if (job.filters.summary.length)
         {
-            NSString *pictureFilters = [NSString stringWithFormat:@"%@",
-                                        item[@"PictureFiltersSummary"]];
+            NSString *pictureFilters = [NSString stringWithFormat:@"%@", job.filters.summary];
             [finalString appendString:@"Filters: "   withAttributes:detailBoldAttr];
             [finalString appendString:pictureFilters withAttributes:detailAttr];
             [finalString appendString:@"\n"          withAttributes:detailAttr];
         }
+
+        // Sixth Line Video Details
+        NSString * videoInfo = [NSString stringWithFormat:@"Encoder: %@", @(hb_video_encoder_get_name(job.video.encoder))];
         
-        /* Sixth Line Video Details*/
-        NSString * videoInfo;
-        videoInfo = [NSString stringWithFormat:@"Encoder: %@", item[@"VideoEncoder"]];
-        
-        /* for framerate look to see if we are using vfr detelecine */
-        if ([item[@"JobIndexVideoFramerate"] intValue] == 0)
+        // for framerate look to see if we are using vfr detelecine
+        if (job.video.frameRate == 0)
         {
-            if ([item[@"VideoFramerateMode"] isEqualToString:@"vfr"])
+            if (job.video.frameRateMode == 0)
             {
-                /* we are using same as source with vfr detelecine */
+                // we are using same as source with vfr detelecine
                 videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (Variable Frame Rate)", videoInfo];
             }
             else
             {
-                /* we are using a variable framerate without dropping frames */
+                // we are using a variable framerate without dropping frames
                 videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (Constant Frame Rate)", videoInfo];
             }
         }
         else
         {
-            /* we have a specified, constant framerate */
-            if ([item[@"VideoFramerateMode"] isEqualToString:@"pfr"])
+            // we have a specified, constant framerate
+            if (job.video.frameRate == 0)
             {
-            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Peak Frame Rate)", videoInfo ,item[@"VideoFramerate"]];
+                videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Peak Frame Rate)", videoInfo, @(hb_video_framerate_get_name(job.video.frameRate))];
             }
             else
             {
-            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Constant Frame Rate)", videoInfo ,item[@"VideoFramerate"]];
+                videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Constant Frame Rate)", videoInfo, @(hb_video_framerate_get_name(job.video.frameRate))];
             }
         }
-        
-        if ([item[@"VideoQualityType"] intValue] == 0)// Target Size MB
+
+
+        if (job.video.qualityType == 0) // ABR
         {
-            videoInfo = [NSString stringWithFormat:@"%@ Target Size: %@(MB) (%d(kbps) abr)", videoInfo ,item[@"VideoTargetSize"],[item[@"VideoAvgBitrate"] intValue]];
-        }
-        else if ([item[@"VideoQualityType"] intValue] == 1) // ABR
-        {
-            videoInfo = [NSString stringWithFormat:@"%@ Bitrate: %d(kbps)", videoInfo ,[item[@"VideoAvgBitrate"] intValue]];
+            videoInfo = [NSString stringWithFormat:@"%@ Bitrate: %d(kbps)", videoInfo, job.video.avgBitrate];
         }
         else // CRF
         {
-            videoInfo = [NSString stringWithFormat:@"%@ Constant Quality: %.2f", videoInfo ,[item[@"VideoQualitySlider"] floatValue]];
+            videoInfo = [NSString stringWithFormat:@"%@ Constant Quality: %.2f", videoInfo ,job.video.quality];
         }
-        
+
         [finalString appendString: @"Video: " withAttributes:detailBoldAttr];
         [finalString appendString: videoInfo withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
-        
-        if ([item[@"VideoEncoder"] isEqualToString: @"H.264 (x264)"] || [item[@"VideoEncoder"] isEqualToString: @"H.265 (x265)"])
+
+
+        if (job.video.encoder == HB_VCODEC_X264 || job.video.encoder == HB_VCODEC_X265)
         {
-            /* we are using x264/x265 */
+            // we are using x264/x265
             NSString *encoderPresetInfo = @"";
-            if ([item[@"x264UseAdvancedOptions"] intValue])
+            if (job.video.advancedOptions)
             {
                 // we are using the old advanced panel
-                if (item[@"x264Option"] &&
-                    [item[@"x264Option"] length])
+                if (job.video.videoOptionExtra.length)
                 {
-                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: item[@"x264Option"]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString:job.video.videoOptionExtra];
                 }
                 else
                 {
-                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: @"default settings"];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString:@"default settings"];
                 }
             }
             else
             {
                 // we are using the x264 system
-                encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@"Preset: %@", item[@"VideoPreset"]]];
-                if ([item[@"VideoTune"] length])
+                encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@"Preset: %@", job.video.preset]];
+                if (job.video.tune.length)
                 {
-                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Tune: %@", item[@"VideoTune"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Tune: %@", job.video.tune]];
                 }
-                if ([item[@"VideoOptionExtra"] length])
+                if (job.video.videoOptionExtra.length)
                 {
-                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Options: %@", item[@"VideoOptionExtra"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Options: %@", job.video.videoOptionExtra]];
                 }
-                if ([item[@"VideoProfile"] length])
+                if (job.video.profile.length)
                 {
-                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Profile: %@", item[@"VideoProfile"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Profile: %@", job.video.profile]];
                 }
-                if ([item[@"VideoLevel"] length])
+                if (job.video.level.length)
                 {
-                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Level: %@", item[@"VideoLevel"]]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Level: %@", job.video.level]];
                 }
             }
             [finalString appendString: @"Encoder Options: " withAttributes:detailBoldAttr];
             [finalString appendString: encoderPresetInfo withAttributes:detailAttr];
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
-        else if (![item[@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])
+        else
         {
-            /* we are using libavcodec */
+            // we are using libavcodec
             NSString *lavcInfo = @"";
-            if (item[@"VideoOptionExtra"] &&
-                [item[@"VideoOptionExtra"] length])
+            if (job.video.videoOptionExtra.length)
             {
-                lavcInfo = [lavcInfo stringByAppendingString: item[@"VideoOptionExtra"]];
+                lavcInfo = [lavcInfo stringByAppendingString:job.video.videoOptionExtra];
             }
             else
             {
@@ -969,62 +969,63 @@
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
 
-        /* Seventh Line Audio Details*/
+
+        // Seventh Line Audio Details
 		int audioDetailCount = 0;
 		for (NSString *anAudioDetail in audioDetails) {
 			audioDetailCount++;
-			if (0 < [anAudioDetail length]) {
+			if (anAudioDetail.length) {
 				[finalString appendString: [NSString stringWithFormat: @"Audio Track %d ", audioDetailCount] withAttributes: detailBoldAttr];
 				[finalString appendString: anAudioDetail withAttributes: detailAttr];
 				[finalString appendString: @"\n" withAttributes: detailAttr];
 			}
 		}
 
-        /* Eigth Line Auto Passthru Details */
+        // Eigth Line Auto Passthru Details
         // only print Auto Passthru settings if we have an Auro Passthru output track
         if (autoPassthruPresent == YES)
         {
             NSString *autoPassthruFallback = @"", *autoPassthruCodecs = @"";
-            NSDictionary *audioDefaults = item[@"AudioDefaults"];
-            autoPassthruFallback = [autoPassthruFallback stringByAppendingString: audioDefaults[@"AudioEncoderFallback"]];
-            if (0 < [audioDefaults[@"AudioAllowAACPass"] intValue])
+            HBAudioDefaults *audioDefaults = job.audioDefaults;
+            autoPassthruFallback = [autoPassthruFallback stringByAppendingString:@(hb_audio_encoder_get_name(audioDefaults.encoderFallback))];
+            if (audioDefaults.allowAACPassthru)
             {
-                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"AAC"];
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@"AAC"];
             }
-            if (0 < [audioDefaults[@"AudioAllowAC3Pass"] intValue])
+            if (audioDefaults.allowAC3Passthru)
             {
-                if (0 < [autoPassthruCodecs length])
+                if (autoPassthruCodecs.length)
                 {
-                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@", "];
                 }
-                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"AC3"];
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@"AC3"];
             }
-            if (0 < [audioDefaults[@"AudioAllowDTSHDPass"] intValue])
+            if (audioDefaults.allowDTSHDPassthru)
             {
-                if (0 < [autoPassthruCodecs length])
+                if (autoPassthruCodecs.length)
                 {
-                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@", "];
                 }
-                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"DTS-HD"];
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@"DTS-HD"];
             }
-            if (0 < [audioDefaults[@"AudioAllowDTSPass"] intValue])
+            if (audioDefaults.allowDTSPassthru)
             {
-                if (0 < [autoPassthruCodecs length])
+                if (autoPassthruCodecs.length)
                 {
-                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@", "];
                 }
-                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"DTS"];
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@"DTS"];
             }
-            if (0 < [audioDefaults[@"AudioAllowMP3Pass"] intValue])
+            if (audioDefaults.allowMP3Passthru)
             {
-                if (0 < [autoPassthruCodecs length])
+                if (autoPassthruCodecs.length)
                 {
-                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@", "];
                 }
-                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"MP3"];
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString:@"MP3"];
             }
             [finalString appendString: @"Auto Passthru Codecs: " withAttributes: detailBoldAttr];
-            if (0 < [autoPassthruCodecs length])
+            if (autoPassthruCodecs.length)
             {
                 [finalString appendString: autoPassthruCodecs withAttributes: detailAttr];
             }
@@ -1037,22 +1038,22 @@
             [finalString appendString: autoPassthruFallback withAttributes: detailAttr];
             [finalString appendString: @"\n" withAttributes: detailAttr];
         }
-        
-        /* Ninth Line Subtitle Details */
-        for (id tempObject in item[@"SubtitleList"])
+
+        // Ninth Line Subtitle Details
+        for (NSDictionary *track in job.subtitlesTracks)
         {
             /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
             [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
-            [finalString appendString: tempObject[@"keySubTrackName"] withAttributes:detailAttr];
-            if ([tempObject[@"keySubTrackForced"] intValue] == 1)
+            [finalString appendString: track[@"keySubTrackName"] withAttributes:detailAttr];
+            if ([track[@"keySubTrackForced"] intValue] == 1)
             {
                 [finalString appendString: @" - Forced Only" withAttributes:detailAttr];
             }
-            if ([tempObject[@"keySubTrackBurned"] intValue] == 1)
+            if ([track[@"keySubTrackBurned"] intValue] == 1)
             {
                 [finalString appendString: @" - Burned In" withAttributes:detailAttr];
             }
-            if ([tempObject[@"keySubTrackDefault"] intValue] == 1)
+            if ([track[@"keySubTrackDefault"] intValue] == 1)
             {
                 [finalString appendString: @" - Default" withAttributes:detailAttr];
             }
@@ -1065,15 +1066,16 @@
     }
     else if ([[tableColumn identifier] isEqualToString:@"icon"])
     {
-        if ([item[@"Status"] intValue] == 0)
+        HBJob *job = item;
+        if (job.state == HBJobStateCompleted)
         {
             return [NSImage imageNamed:@"EncodeComplete"];
         }
-        else if ([item[@"Status"] intValue] == 1)
+        else if (job.state == HBJobStateWorking)
         {
             return [NSImage imageNamed: [NSString stringWithFormat: @"EncodeWorking%d", fAnimationIndex]];
         }
-        else if ([item[@"Status"] intValue] == 3)
+        else if (job.state == HBJobStateCanceled)
         {
             return [NSImage imageNamed:@"EncodeCanceled"];
         }
@@ -1081,7 +1083,6 @@
         {
             return [NSImage imageNamed:@"JobSmall"];
         }
-        
     }
     else
     {
@@ -1103,8 +1104,9 @@
     {
         [cell setEnabled: YES];
         BOOL highlighted = [outlineView isRowSelected:[outlineView rowForItem: item]] && [[outlineView window] isKeyWindow] && ([[outlineView window] firstResponder] == outlineView);
-        
-        if ([item[@"Status"] intValue] == 0 || ([item[@"Status"] intValue] == 1 && [item[@"EncodingPID"] intValue] != pidNum))
+
+        HBJob *job = item;
+        if (job.state == HBJobStateWorking && job.pidId != pidNum)
         {
             [cell setAction: @selector(revealSelectedQueueItem:)];
             if (highlighted)
@@ -1152,7 +1154,7 @@
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
 {
     // Dragging is only allowed of the pending items.
-    if ([items[0][@"Status"] integerValue] != 2) // 2 is pending
+    if ([items[0] state] != HBJobStateReady) // 2 is pending
     {
         return NO;
     }
@@ -1206,7 +1208,7 @@
 {
     NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
 
-    for( id obj in fDraggedNodes )
+    for (id obj in fDraggedNodes)
         [moveItems addIndex:[fJobGroups indexOfObject:obj]];
 
     // Successful drop, we use moveObjectsInQueueArray:... in fHBController

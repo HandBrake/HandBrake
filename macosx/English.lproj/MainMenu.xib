@@ -152,6 +152,7 @@
                         </popUpButtonCell>
                         <accessibility description="Angle"/>
                         <connections>
+                            <binding destination="240" name="content" keyPath="self.job.angles" id="oFZ-d6-aeJ"/>
                             <binding destination="5676" name="hidden" keyPath="values.UseDvdNav" id="8xq-AL-yDc">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -245,11 +246,18 @@
                     <textField verticalHuggingPriority="750" id="1561">
                         <rect key="frame" x="56" y="455" width="782" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <binding destination="240" name="value" keyPath="self.job.destURL" id="f8U-7W-7gP">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">HBURLTransformer</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" id="5491">
                         <rect key="frame" x="581" y="492" width="54" height="19"/>
@@ -409,8 +417,8 @@
                         <accessibility description="Start Chapter"/>
                         <connections>
                             <action selector="chapterPopUpChanged:" target="240" id="1615"/>
-                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="6kP-TS-bEc"/>
                             <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStart" previousBinding="6kP-TS-bEc" id="U76-2W-TvD"/>
+                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="6kP-TS-bEc"/>
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="1548">
@@ -428,8 +436,8 @@
                         <accessibility description="End Chapter"/>
                         <connections>
                             <action selector="chapterPopUpChanged:" target="240" id="1616"/>
-                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="Yqp-Sg-lBf"/>
                             <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStop" previousBinding="Yqp-Sg-lBf" id="4k2-Sm-RoJ"/>
+                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="Yqp-Sg-lBf"/>
                         </connections>
                     </popUpButton>
                 </subviews>
@@ -973,7 +981,7 @@ DQ
                 <outlet property="fChaptersTitlesTab" destination="1989" id="oUt-8L-Ag2"/>
                 <outlet property="fDstBrowseButton" destination="1562" id="1578"/>
                 <outlet property="fDstFile1Field" destination="1552" id="1596"/>
-                <outlet property="fDstFile2Field" destination="1561" id="1585"/>
+                <outlet property="fDstFile2Field" destination="1561" id="N8U-j2-c00"/>
                 <outlet property="fDstFormatField" destination="1556" id="1583"/>
                 <outlet property="fDstFormatPopUp" destination="1557" id="1584"/>
                 <outlet property="fDstMp4HttpOptFileCheck" destination="4579" id="4581"/>

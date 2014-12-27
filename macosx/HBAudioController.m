@@ -114,96 +114,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 #pragma mark -
 #pragma mark HBController Support
 
-- (NSArray *)audioTracks
-
-{
-    NSMutableArray *tracksArray = [NSMutableArray array];
-
-    NSUInteger audioArrayCount = [self countOfAudioArray];
-    for (NSUInteger counter = 0; counter < audioArrayCount; counter++)
-    {
-        HBAudio *anAudio = [self objectInAudioArrayAtIndex: counter];
-        if ([anAudio enabled])
-        {
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            NSNumber *sampleRateToUse = ([anAudio.sampleRate[keyAudioSamplerate] intValue] == 0 ?
-                                         anAudio.track[keyAudioInputSampleRate] :
-                                         anAudio.sampleRate[keyAudioSamplerate]);
-
-            dict[@"Track"]            = @([anAudio.track[keyAudioTrackIndex] intValue] -1);
-            dict[@"TrackDescription"] = anAudio.track[keyAudioTrackName];
-            dict[@"Encoder"]          = anAudio.codec[keyAudioCodecName];
-            dict[@"Mixdown"]          = anAudio.mixdown[keyAudioMixdownName];
-            dict[@"Samplerate"]       = anAudio.sampleRate[keyAudioSampleRateName];
-            dict[@"Bitrate"]          = anAudio.bitRate[keyAudioBitrateName];
-
-            // output is not passthru so apply gain
-            if (!([[anAudio codec][keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG))
-            {
-                dict[@"TrackGainSlider"] = anAudio.gain;
-            }
-            else
-            {
-                // output is passthru - the Gain dial is disabled so don't apply its value
-                dict[@"TrackGainSlider"] = @0;
-            }
-
-            if (hb_audio_can_apply_drc([anAudio.track[keyAudioInputCodec] intValue],
-                                       [anAudio.track[keyAudioInputCodecParam] intValue],
-                                       [anAudio.codec[keyAudioCodec] intValue]))
-            {
-                dict[@"TrackDRCSlider"] = anAudio.drc;
-            }
-            else
-            {
-                // source isn't AC3 or output is passthru - the DRC dial is disabled so don't apply its value
-                dict[@"TrackDRCSlider"] = @0;
-            }
-
-            dict[@"JobEncoder"]    = anAudio.codec[keyAudioCodec];
-            dict[@"JobMixdown"]    = anAudio.mixdown[keyAudioMixdown];
-            dict[@"JobSamplerate"] = sampleRateToUse;
-            dict[@"JobBitrate"]    = anAudio.bitRate[keyAudioBitrate];
-
-            [tracksArray addObject:dict];
-        }
-    }
-
-    return tracksArray;
-}
-
-- (void) addTracksFromQueue: (NSArray *) queueArray
-
-{
-    // Reinitialize the configured list of audio tracks
-    [self _clearAudioArray];
-
-    // The following is the pattern to follow, but with Audio%dTrack being the key to seek...
-    // Can we assume that there will be no skip in the data?
-    for (NSDictionary *audioDict in queueArray)
-    {
-        HBAudio *newAudio = [[HBAudio alloc] init];
-        [newAudio setController: self];
-        [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
-        [newAudio setVideoContainerTag: [self videoContainerTag]];
-        [newAudio setTrackFromIndex: [audioDict[@"Track"] intValue] + 1];
-        [newAudio setCodecFromName: audioDict[@"Encoder"]];
-        [newAudio setMixdownFromName: audioDict[@"Mixdown"]];
-        [newAudio setSampleRateFromName: audioDict[@"Samplerate"]];
-        [newAudio setBitRateFromName: audioDict[@"Bitrate"]];
-        [newAudio setDrc: audioDict[@"TrackDRCSlider"]];
-        [newAudio setGain: audioDict[@"TrackGainSlider"]];
-        [newAudio release];
-    }
-
-    [self switchingTrackFromNone: nil]; // see if we need to add one to the list
-}
-
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
-    [self.settings applySettingsFromPreset:preset];
     [self.settings validateEncoderFallbackForVideoContainer:[self.videoContainerTag intValue]];
-
     [self addTracksFromDefaults:NO];
 }
 
@@ -507,6 +420,13 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         [newTrackArray addObject: noneTrack];
         [newTrackArray addObjectsFromArray:job.title.audioTracks];
         self.masterTrackArray = newTrackArray;
+
+        // Readd the controller reference to the audio tracks.
+        for (HBAudio *audioTrack in audioArray)
+        {
+            audioTrack.controller = self;
+        }
+
         [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
     }
     else

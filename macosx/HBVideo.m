@@ -244,6 +244,41 @@
     return [[temp copy] autorelease];
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBVideo *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_encoder = _encoder;
+
+        copy->_qualityType = _qualityType;
+        copy->_avgBitrate = _avgBitrate;
+        copy->_quality = _quality;
+
+        copy->_qualityMinValue = _qualityMinValue;
+        copy->_qualityMaxValue = _qualityMaxValue;
+
+        copy->_frameRate = _frameRate;
+        copy->_frameRateMode = _frameRateMode;
+
+        copy->_twoPass = _twoPass;
+        copy->_turboTwoPass = _turboTwoPass;
+
+        copy->_advancedOptions = _advancedOptions;
+        copy->_preset = [_preset copy];
+        copy->_tune = [_tune copy];
+        copy->_profile = [_profile copy];
+        copy->_level = [_level copy];
+        copy->_videoOptionExtra = [_videoOptionExtra copy];
+        copy->_fastDecode = _fastDecode;
+    }
+
+    return copy;
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder
@@ -255,6 +290,9 @@
     encodeInt(_qualityType);
     encodeInt(_avgBitrate);
     encodeDouble(_quality);
+
+    encodeDouble(_qualityMinValue);
+    encodeDouble(_qualityMaxValue);
 
     encodeInt(_frameRate);
     encodeInt(_frameRateMode);
@@ -282,6 +320,9 @@
     decodeInt(_qualityType);
     decodeInt(_avgBitrate);
     decodeDouble(_quality);
+
+    decodeDouble(_qualityMinValue);
+    decodeDouble(_qualityMaxValue);
 
     decodeInt(_frameRate);
     decodeInt(_frameRateMode);
@@ -341,7 +382,7 @@
     return [string autorelease];
 }
 
-- (void)applySettingsFromPreset:(NSDictionary *)preset
+- (void)applyPreset:(NSDictionary *)preset
 {
     // map legacy encoder names via libhb.
     const char *strValue = hb_video_encoder_sanitize_name([preset[@"VideoEncoder"] UTF8String]);
@@ -481,7 +522,7 @@
     self.turboTwoPass = [preset[@"VideoTurboTwoPass"] intValue];
 }
 
-- (void)prepareVideoForPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(NSMutableDictionary *)preset
 {
     preset[@"VideoEncoder"] = @(hb_video_encoder_get_name(self.encoder));
 
@@ -542,139 +583,6 @@
 
     preset[@"VideoTwoPass"] = @(self.twoPass);
     preset[@"VideoTurboTwoPass"] = @(self.turboTwoPass);
-}
-
-- (void)applyVideoSettingsFromQueue:(NSDictionary *)queueToApply
-{
-    // Video encoder
-    self.encoder = [queueToApply[@"JobVideoEncoderVcodec"] intValue];
-
-    // Advanced x264 options
-    if ([queueToApply[@"x264UseAdvancedOptions"] intValue])
-    {
-        // we are using the advanced panel
-        self.preset = @"medium";
-        self.tune = nil;
-        self.profile = nil;
-        self.level = nil;
-        self.videoOptionExtra = queueToApply[@"x264Option"];
-        self.advancedOptions = YES;
-    }
-    else if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
-    {
-        // we are using the x264 preset system
-        self.preset = queueToApply[@"VideoPreset"];
-        self.tune = queueToApply[@"VideoTune"];
-        self.videoOptionExtra = queueToApply[@"VideoOptionExtra"];
-        self.profile = queueToApply[@"VideoProfile"];
-        self.level = queueToApply[@"VideoLevel"];
-    }
-    else
-    {
-        self.videoOptionExtra = queueToApply[@"VideoOptionExtra"];
-    }
-
-    self.qualityType = [queueToApply[@"VideoQualityType"] intValue] - 1;
-
-    self.avgBitrate = [queueToApply[@"VideoAvgBitrate"] intValue];
-    self.quality = [queueToApply[@"VideoQualitySlider"] doubleValue];
-
-    // Video framerate
-    if ([queueToApply[@"JobIndexVideoFramerate"] intValue] == 0)
-    {
-        // Now set the Video Frame Rate Mode to either vfr or cfr according to the preset
-        if ([queueToApply[@"VideoFramerateMode"] isEqualToString:@"vfr"])
-        {
-            self.frameRateMode = 0; // we want vfr
-        }
-        else
-        {
-            self.frameRateMode = 1; // we want cfr
-        }
-    }
-    else
-    {
-        // Now set the Video Frame Rate Mode to either pfr or cfr according to the preset
-        if ([queueToApply[@"VideoFramerateMode"] isEqualToString:@"pfr"])
-        {
-            self.frameRateMode = 0; // we want pfr
-        }
-        else
-        {
-            self.frameRateMode = 1; // we want cfr
-        }
-    }
-
-    self.frameRate = hb_video_framerate_get_from_name([queueToApply[@"VideoFramerate"] UTF8String]);
-
-    self.twoPass = [queueToApply[@"VideoTwoPass"] intValue];
-    self.turboTwoPass = [queueToApply[@"VideoTurboTwoPass"] intValue];
-}
-
-- (void)prepareVideoForQueueFileJob:(NSMutableDictionary *)queueFileJob
-{
-    // Video encoder.
-    queueFileJob[@"VideoEncoder"] = @(hb_video_encoder_get_name(self.encoder));
-    queueFileJob[@"JobVideoEncoderVcodec"] = @(self.encoder);
-
-    // x264 advanced options.
-    if (self.advancedOptions)
-    {
-        // we are using the advanced panel
-        queueFileJob[@"x264UseAdvancedOptions"] = @1;
-        queueFileJob[@"x264Option"] = self.videoOptionExtra;
-     }
-     else if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
-     {
-         // we are using the x264/x265 preset system.
-         queueFileJob[@"x264UseAdvancedOptions"] = @0;
-         queueFileJob[@"VideoPreset"] = self.preset;
-         queueFileJob[@"VideoTune"] = [self completeTune];
-         queueFileJob[@"VideoOptionExtra"] = self.videoOptionExtra;
-         queueFileJob[@"VideoProfile"] = self.profile;
-         queueFileJob[@"VideoLevel"] = self.level;
-     }
-     else
-     {
-         // FFmpeg (lavc) Option String.
-         queueFileJob[@"VideoOptionExtra"] = self.videoOptionExtra;
-     }
-
-    queueFileJob[@"VideoQualityType"] = @(self.qualityType + 1);
-    queueFileJob[@"VideoAvgBitrate"] = @(self.avgBitrate);
-    queueFileJob[@"VideoQualitySlider"] = @(self.quality);
-
-    // Framerate
-    if (self.frameRate)
-    {
-        queueFileJob[@"VideoFramerate"] = @(hb_video_framerate_get_name(self.frameRate));
-    }
-    else
-    {
-        queueFileJob[@"VideoFramerate"] = @"Same as source";
-    }
-    queueFileJob[@"JobIndexVideoFramerate"] = @(self.frameRate);
-
-    // Frame Rate Mode
-    if (self.frameRateMode == 1) // if selected we are cfr regardless of the frame rate popup
-    {
-        queueFileJob[@"VideoFramerateMode"] = @"cfr";
-    }
-    else
-    {
-        if (self.frameRate == 0) // Same as source frame rate
-        {
-            queueFileJob[@"VideoFramerateMode"] = @"vfr";
-        }
-        else
-        {
-            queueFileJob[@"VideoFramerateMode"] = @"pfr";
-        }
-    }
-
-    // 2 Pass Encoding
-    queueFileJob[@"VideoTwoPass"] = @(self.twoPass);
-    queueFileJob[@"VideoTurboTwoPass"] = @(self.turboTwoPass);
 }
 
 @end

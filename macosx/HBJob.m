@@ -16,12 +16,6 @@
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
 
-@interface HBJob ()
-
-@property (nonatomic, readonly) int titleIdx;
-
-@end
-
 @implementation HBJob
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset
@@ -64,42 +58,27 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
     self.container = hb_container_get_from_name(hb_container_sanitize_name([content[@"FileFormat"] UTF8String]));
 
-    // Mux mp4 with http optimization
+    // MP4 specifics options.
     self.mp4HttpOptimize = [content[@"Mp4HttpOptimize"] boolValue];
     self.mp4iPodCompatible = [content[@"Mp4iPodCompatible"] boolValue];
 
     // Chapter Markers
     self.chaptersEnabled = [content[@"ChapterMarkers"] boolValue];
 
-    [@[self.audioDefaults, self.subtitlesDefaults, self.video, self.picture, self.filters] makeObjectsPerformSelector:@selector(applySettingsFromPreset:)
+    [@[self.audioDefaults, self.subtitlesDefaults, self.filters, self.picture, self.video, ] makeObjectsPerformSelector:@selector(applyPreset:)
                                                                                                            withObject:content];
 }
 
 - (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict
 {
     dict[@"FileFormat"] = @(hb_container_get_name(self.container));
-
     dict[@"ChapterMarkers"] = @(self.chaptersEnabled);
-
-    // Mux mp4 with http optimization
+    // MP4 specifics options.
     dict[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
-    // Add iPod uuid atom
     dict[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
 
-    // Video encoder
-    [self.video prepareVideoForPreset:dict];
-
-    // Picture Filters
-    [self.filters prepareFiltersForPreset:dict];
-
-    // Picture Size
-    [self.picture preparePictureForPreset:dict];
-
-    // Audio
-    [self.audioDefaults prepareAudioDefaultsForPreset:dict];
-
-    // Subtitles
-    [self.subtitlesDefaults prepareSubtitlesDefaultsForPreset:dict];
+    [@[self.video, self.filters, self.picture, self.audioDefaults, self.subtitlesDefaults] makeObjectsPerformSelector:@selector(writeToPreset:)
+                                                                                                           withObject:dict];
 }
 
 - (void)setContainer:(int)container
@@ -112,6 +91,13 @@ NSString *keyContainerTag                      = @"keyContainerTag";
      [NSNotification notificationWithName:HBContainerChangedNotification
                                    object:self
                                  userInfo:@{keyContainerTag: @(self.container)}]];
+}
+
+- (void)setTitle:(HBTitle *)title
+{
+    _title = title;
+    self.range.title = title;
+    self.picture.title = title;
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
@@ -131,13 +117,18 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     [_audioTracks release];
     [_subtitlesTracks release];
 
+    [_fileURL release];
+    [_destURL release];
+
+    [_range release];
     [_video release];
     [_picture release];
     [_filters release];
 
     [_audioDefaults release];
     [_subtitlesDefaults release];
-    [_fileURL release];
+
+    [_chapterTitles release];
 
     [super dealloc];
 }
@@ -342,9 +333,6 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
     for (NSDictionary *subtitleDict in self.subtitlesTracks)
     {
-        if (i == self.subtitlesTracks.count - 1)
-            continue;
-
         int subtitle = [subtitleDict[keySubTrackIndex] intValue];
         int force = [subtitleDict[keySubTrackForced] intValue];
         int burned = [subtitleDict[keySubTrackBurned] intValue];
@@ -523,19 +511,20 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
     // Detelecine
     hb_filter_object_t *filter;
-    filter = hb_filter_init(HB_FILTER_DETELECINE);
     if (self.filters.detelecine == 1)
     {
+        filter = hb_filter_init(HB_FILTER_DETELECINE);
         // use a custom detelecine string
         hb_add_filter(job, filter, self.filters.detelecineCustomString.UTF8String);
     }
     else if (self.filters.detelecine == 2)
     {
+        filter = hb_filter_init(HB_FILTER_DETELECINE);
         // Use libhb's default values
         hb_add_filter(job, filter, NULL);
     }
 
-    if (self.filters.useDecomb)
+    if (self.filters.useDecomb && self.filters.decomb)
     {
         // Decomb
         filter = hb_filter_init(HB_FILTER_DECOMB);
@@ -560,7 +549,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
             hb_add_filter(job, filter, "455");
         }
     }
-    else
+    else if (self.filters.deinterlace)
     {
         // Deinterlace
         filter = hb_filter_init(HB_FILTER_DEINTERLACE);
@@ -619,9 +608,9 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     // NOTE: even though there is a valid deblock setting of 0 for the filter, for
     // the macgui's purposes a value of 0 actually means to not even use the filter
     // current hb_filter_deblock.settings valid ranges are from 5 - 15
-    filter = hb_filter_init(HB_FILTER_DEBLOCK);
     if (self.filters.deblock != 0)
     {
+        filter = hb_filter_init(HB_FILTER_DEBLOCK);
         hb_add_filter(job, filter, [NSString stringWithFormat:@"%ld", (long)self.filters.deblock].UTF8String);
     }
 
@@ -640,6 +629,56 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     return job;
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBJob *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_state = HBJobStateReady;
+        copy->_titleIdx = _titleIdx;
+        copy->_pidId = _pidId;
+
+        copy->_fileURL = [_fileURL copy];
+        copy->_destURL = [_destURL copy];
+
+        copy->_container = _container;
+        copy->_angle = _angle;
+        copy->_mp4HttpOptimize = _mp4HttpOptimize;
+        copy->_mp4iPodCompatible = _mp4iPodCompatible;
+
+        copy->_range = [_range copy];
+        copy->_video = [_video copy];
+        copy->_picture = [_picture copy];
+        copy->_filters = [_filters copy];
+
+        // Copy the tracks, but not the last one because it's empty.
+        copy->_audioTracks = [[NSMutableArray alloc] init];
+        [_audioTracks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if (idx < _audioTracks.count - 1)
+            {
+                [copy->_audioTracks addObject:[[obj copy] autorelease]];
+            }
+        }];
+        copy->_subtitlesTracks = [[NSMutableArray alloc] init];
+        [_subtitlesTracks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if (idx < _subtitlesTracks.count - 1)
+            {
+                [copy->_subtitlesTracks addObject:[[obj copy] autorelease]];
+            }
+        }];
+        copy->_chaptersEnabled = _chaptersEnabled;
+        copy->_chapterTitles = [[NSMutableArray alloc] initWithArray:_chapterTitles copyItems:YES];
+
+        copy->_audioDefaults = [_audioDefaults copy];
+        copy->_subtitlesDefaults = [_subtitlesDefaults copy];
+    }
+
+    return copy;
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder
@@ -648,6 +687,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
     encodeInt(_state);
     encodeInt(_titleIdx);
+    encodeInt(_pidId);
 
     encodeObject(_fileURL);
     encodeObject(_destURL);
@@ -678,6 +718,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
     decodeInt(_state);
     decodeInt(_titleIdx);
+    decodeInt(_pidId);
 
     decodeObject(_fileURL);
     decodeObject(_destURL);
@@ -692,6 +733,8 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     decodeObject(_picture);
     decodeObject(_filters);
 
+    _video.job = self;
+
     decodeObject(_audioTracks);
     decodeObject(_subtitlesTracks);
 
@@ -702,13 +745,6 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     decodeObject(_subtitlesDefaults);
 
     return self;
-}
-
-#pragma mark - NSCopying
-
-- (instancetype)copyWithZone:(NSZone *)zone
-{
-    return nil;
 }
 
 @end

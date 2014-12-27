@@ -8,6 +8,8 @@
 
 #include "hb.h"
 
+@class HBJob;
+
 // These constants specify the current state of HBCore.
 typedef NS_ENUM(NSUInteger, HBState) {
     HBStateIdle      = HB_STATE_IDLE,        ///< HB is doing nothing
@@ -109,6 +111,13 @@ extern NSString *HBCoreMuxingNotification;
  *  An array of HBTitles found by the latest scan.
  */
 @property (nonatomic, readonly) NSArray *titles;
+
+/**
+ *  Starts an asynchronous encoding session with the passed job.
+ *
+ *  @param job the job to encode.
+ */
+- (void)encodeJob:(HBJob *)job;
 
 /**
  * Starts the libhb encoding session.

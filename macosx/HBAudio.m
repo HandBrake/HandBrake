@@ -575,6 +575,31 @@ static NSMutableArray *masterBitRateArray = nil;
     return retval;
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBAudio *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_track = [_track copy];
+        copy->_codec = [_codec copy];
+        copy->_mixdown = [_mixdown copy];
+        copy->_sampleRate = [_sampleRate copy];
+        copy->_bitRate = [_bitRate copy];
+        copy->_drc = [_drc copy];
+        copy->_gain = [_gain copy];
+        copy->_videoContainerTag = [_videoContainerTag copy];
+
+        copy->_codecs = [_codecs copy];
+        copy->_mixdowns = [_mixdowns copy];
+        copy->_bitRates = [_bitRates copy];
+    }
+
+    return copy;
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder

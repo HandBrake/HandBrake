@@ -74,7 +74,15 @@ extern NSString *keySubTrackSrtCharCode;
 {
     if (!_name)
     {
-        _name = [@(self.hb_title->name) retain];
+        _name = @(self.hb_title->name);
+
+        // If the name is empty use file/directory name
+        if (_name.length == 0)
+        {
+            _name = [@(self.hb_title->path) lastPathComponent];
+        }
+
+        [_name retain];
     }
 
     return _name;
@@ -146,25 +154,16 @@ extern NSString *keySubTrackSrtCharCode;
     {
         NSMutableArray *tracks = [NSMutableArray array];
         hb_subtitle_t *subtitle;
-        hb_list_t *list = self.hb_title->list_audio;
+        hb_list_t *list = self.hb_title->list_subtitle;
         int count = hb_list_count(list);
-
-        NSMutableArray *forcedSourceNamesArray = [[NSMutableArray alloc] init];
-        //NSString *foreignAudioSearchTrackName = nil;
 
         for (int i = 0; i < count; i++)
         {
-            subtitle = (hb_subtitle_t *)hb_list_item(self.hb_title->list_subtitle, i);
+            subtitle = (hb_subtitle_t *) hb_list_item(self.hb_title->list_subtitle, i);
 
             /* Human-readable representation of subtitle->source */
             NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
             NSString *subSourceName = @(hb_subsource_name(subtitle->source));
-
-            /* if the subtitle track can be forced, add its source name to the array */
-            if (hb_subtitle_can_force(subtitle->source) && [forcedSourceNamesArray containsObject:subSourceName] == NO)
-            {
-                [forcedSourceNamesArray addObject:subSourceName];
-            }
 
             // Use the native language name if available
             iso639_lang_t *language = lang_for_code2(subtitle->iso639_2);
@@ -177,31 +176,6 @@ extern NSString *keySubTrackSrtCharCode;
                                               keySubTrackLanguage: nativeLanguage,
                                               keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }
-
-        /* now set the name of the Foreign Audio Search track */
-        if ([forcedSourceNamesArray count])
-        {
-            [forcedSourceNamesArray sortUsingComparator:^(id obj1, id obj2)
-             {
-                 return [((NSString *)obj1) compare:((NSString *)obj2)];
-             }];
-
-            NSString *tempList = @"";
-            for (NSString *tempString in forcedSourceNamesArray)
-            {
-                if ([tempList length])
-                {
-                    tempList = [tempList stringByAppendingString:@", "];
-                }
-                tempList = [tempList stringByAppendingString:tempString];
-            }
-            //foreignAudioSearchTrackName = [NSString stringWithFormat:@"Foreign Audio Search (Bitmap) (%@)", tempList];
-        }
-        else
-        {
-            //foreignAudioSearchTrackName = @"Foreign Audio Search (Bitmap)";
-        }
-        [forcedSourceNamesArray release];
 
         _subtitlesTracks = [tracks copy];
     }

@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
+#import "HBPresetCoding.h"
 
 typedef NS_ENUM(NSUInteger, HBSubtitleTrackSelectionBehavior) {
     HBSubtitleTrackSelectionBehaviorNone,
@@ -12,7 +13,7 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackSelectionBehavior) {
     HBSubtitleTrackSelectionBehaviorAll,
 };
 
-@interface HBSubtitlesDefaults : NSObject <NSCoding>
+@interface HBSubtitlesDefaults : NSObject <NSCoding, NSCopying, HBPresetCoding>
 
 @property (nonatomic, readwrite) HBSubtitleTrackSelectionBehavior trackSelectionBehavior;
 @property (nonatomic, readwrite, retain) NSMutableArray *trackSelectionLanguages;
@@ -20,8 +21,5 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackSelectionBehavior) {
 @property (nonatomic, readwrite) BOOL addForeignAudioSearch;
 @property (nonatomic, readwrite) BOOL addForeignAudioSubtitle;
 @property (nonatomic, readwrite) BOOL addCC;
-
-- (void)applySettingsFromPreset:(NSDictionary *)preset;
-- (void)prepareSubtitlesDefaultsForPreset:(NSMutableDictionary *)preset;
 
 @end

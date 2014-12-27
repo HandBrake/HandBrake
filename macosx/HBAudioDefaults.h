@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
+#import "HBPresetCoding.h"
 
 typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
     HBAudioTrackSelectionBehaviorNone,
@@ -16,7 +17,7 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
  *  HBAudioSettings
  *  Stores the audio defaults settings.
  */
-@interface HBAudioDefaults : NSObject <NSCoding>
+@interface HBAudioDefaults : NSObject <NSCoding, NSCopying, HBPresetCoding>
 
 @property (nonatomic, readwrite) HBAudioTrackSelectionBehavior trackSelectionBehavior;
 @property (nonatomic, readwrite, retain) NSMutableArray *trackSelectionLanguages;
@@ -33,9 +34,6 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 @property(nonatomic, readwrite) BOOL secondaryEncoderMode;
 
 @property(nonatomic, readonly) NSArray *audioEncoderFallbacks;
-
-- (void)applySettingsFromPreset:(NSDictionary *)preset;
-- (void)prepareAudioDefaultsForPreset:(NSMutableDictionary *)preset;
 
 - (void)validateEncoderFallbackForVideoContainer:(int)container;
 

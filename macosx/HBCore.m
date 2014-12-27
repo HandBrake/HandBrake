@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBCore.h"
-#import "HBTitle.h"
+#import "HBJob.h"
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
 
@@ -230,6 +230,68 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 }
 
 #pragma mark - Encodes
+
+- (void)encodeJob:(HBJob *)job
+{
+    hb_job_t *hb_job = job.hb_job;
+
+    [HBUtilities writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", (job.video.twoPass + 1)];
+    hb_job_set_file(hb_job, job.destURL.fileSystemRepresentation);
+
+    // If scanning we need to do some extra setup of the job.
+    if (hb_job->indepth_scan == 1)
+    {
+        char *encoder_preset_tmp  = hb_job->encoder_preset  != NULL ? strdup(hb_job->encoder_preset)  : NULL;
+        char *encoder_tune_tmp    = hb_job->encoder_tune    != NULL ? strdup(hb_job->encoder_tune)    : NULL;
+        char *encoder_options_tmp = hb_job->encoder_options != NULL ? strdup(hb_job->encoder_options) : NULL;
+        char *encoder_profile_tmp = hb_job->encoder_profile != NULL ? strdup(hb_job->encoder_profile) : NULL;
+        char *encoder_level_tmp   = hb_job->encoder_level   != NULL ? strdup(hb_job->encoder_level)   : NULL;
+        /*
+         * When subtitle scan is enabled do a fast pre-scan job
+         * which will determine which subtitles to enable, if any.
+         */
+        hb_job_set_encoder_preset (hb_job, NULL);
+        hb_job_set_encoder_tune   (hb_job, NULL);
+        hb_job_set_encoder_options(hb_job, NULL);
+        hb_job_set_encoder_profile(hb_job, NULL);
+        hb_job_set_encoder_level  (hb_job, NULL);
+        hb_job->pass = -1;
+        hb_add(self.hb_handle, hb_job);
+        /*
+         * reset the advanced settings
+         */
+        hb_job_set_encoder_preset (hb_job, encoder_preset_tmp);
+        hb_job_set_encoder_tune   (hb_job, encoder_tune_tmp);
+        hb_job_set_encoder_options(hb_job, encoder_options_tmp);
+        hb_job_set_encoder_profile(hb_job, encoder_profile_tmp);
+        hb_job_set_encoder_level  (hb_job, encoder_level_tmp);
+        free(encoder_preset_tmp);
+        free(encoder_tune_tmp);
+        free(encoder_options_tmp);
+        free(encoder_profile_tmp);
+        free(encoder_level_tmp);
+    }
+
+    if (job.video.twoPass)
+    {
+        hb_job->indepth_scan = 0;
+        hb_job->pass = 1;
+        hb_add(self.hb_handle, hb_job);
+        hb_job->pass = 2;
+        hb_add(self.hb_handle, hb_job);
+    }
+    else
+    {
+        hb_job->indepth_scan = 0;
+        hb_job->pass = 0;
+        hb_add(self.hb_handle, hb_job);
+    }
+
+    // Free the job
+    hb_job_close(&hb_job);
+
+    [self start];
+}
 
 - (void)start
 {

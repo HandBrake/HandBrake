@@ -7,7 +7,6 @@
 #import "Controller.h"
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
-#import "HBDVDDetector.h"
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
 #import "HBPreviewController.h"
@@ -18,9 +17,7 @@
 #import "HBAddPresetController.h"
 
 #import "HBPicture+UIAdditions.h"
-
-#import "HBAudioDefaults.h"
-#import "HBSubtitlesDefaults.h"
+#import "HBFilters+UIAdditions.h"
 
 #import "HBCore.h"
 #import "HBJob.h"
@@ -30,8 +27,13 @@
 
 @interface HBController () <HBPresetsViewControllerDelegate, HBPreviewControllerDelegate>
 
+@property (nonatomic, copy) NSString *browsedSourceDisplayName;
+
 // The current job.
 @property (nonatomic, retain) HBJob *job;
+
+// The job to be applied from the queue.
+@property (nonatomic, retain) HBJob *jobFromQueue;
 
 // The current selected preset.
 @property (nonatomic, retain) HBPreset *selectedPreset;
@@ -124,13 +126,13 @@
 
         [fPreviewController setCore:self.core];
 
-        [fQueueController setHandle:self.queueCore.hb_handle];
+        [fQueueController setCore:self.queueCore];
         [fQueueController setHBController:self];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatPopUpChanged:) name:HBContainerChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:nil];
     }
 
     return self;
@@ -296,11 +298,26 @@
 {
     if (self.core.state != HBStateScanning)
     {
-        [browsedSourceDisplayName release];
-        browsedSourceDisplayName = [filePath.lastPathComponent retain];
-
+        self.browsedSourceDisplayName = filePath.lastPathComponent;
         [self performScan:filePath scanTitleNum:0];
     }
+}
+
+- (void)setJob:(HBJob *)job
+{
+    // Set the jobs info to the view controllers
+    fPictureController.picture = job.picture;
+    fPictureController.filters = job.filters;
+    fPreviewController.job = job;
+
+    fVideoController.video = job.video;
+    fAudioController.job = job;
+    fSubtitlesViewController.job = job;
+    fChapterTitlesController.job = job;
+
+    // Retain the new job
+    [_job autorelease];
+    _job = [job retain];
 }
 
 #pragma mark -
@@ -468,7 +485,6 @@
 
     [self closeQueueFSEvent];
     [currentQueueEncodeNameString release];
-    [browsedSourceDisplayName release];
     [outputPanel release];
 	[fQueueController release];
     [fPreviewController release];
@@ -479,6 +495,7 @@
 
     self.core = nil;
     self.queueCore = nil;
+    self.browsedSourceDisplayName = nil;
     [HBCore closeGlobal];
 }
 
@@ -563,13 +580,6 @@
                                               keyEquivalent:@""];
         [menuItem setTag:container->format];
     }
-    // select the first container
-    [fDstFormatPopUp selectItemAtIndex:0];
-    [self formatPopUpChanged:nil];
-
-    [fDstFile2Field setStringValue:[NSString
-                                    stringWithFormat:@"%@/Desktop/Movie.mp4",
-                                    NSHomeDirectory()]];
 
     /* Bottom */
     [fStatusField setStringValue: @""];
@@ -711,7 +721,7 @@
         fScanIndicator.doubleValue = 0.0;
 
         [HBUtilities writeToActivityLog:"ScanDone state received from fHandle"];
-        [self showNewScan:nil];
+        [self showNewScan];
         [[fWindow toolbar] validateVisibleItems];
     }];
 }
@@ -794,8 +804,9 @@
         NSString *pass_desc;
         if (p.job_cur == 1 && p.job_count > 1)
         {
-            if (QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] &&
-                [[QueueFileArray[currentQueueEncodeIndex][@"SubtitleList"] firstObject][keySubTrackIndex] intValue] == -1)
+            HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
+            if (queueJob.subtitlesTracks.count &&
+                [[queueJob.subtitlesTracks firstObject][keySubTrackIndex] intValue] == -1)
             {
                 pass_desc = NSLocalizedString(@"(subtitle scan)", @"");
             }
@@ -940,7 +951,8 @@
         {
             NSString *pathOfFinishedEncode;
             // Get the output file name for the finished encode
-            pathOfFinishedEncode = [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"];
+            HBJob *finishedJob = QueueFileArray[currentQueueEncodeIndex];
+            pathOfFinishedEncode = finishedJob.destURL.path;
 
             // Both the Growl Alert and Sending to tagger can be done as encodes roll off the queue
             if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] ||
@@ -1057,7 +1069,7 @@
             if (action == @selector(Rip:))
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-                if (hb_count(self.core.hb_handle) > 0)
+                if (QueueFileArray.count > 0)
                     [toolbarItem setLabel: @"Start Queue"];
                 else
                     [toolbarItem setLabel: @"Start"];
@@ -1284,9 +1296,6 @@
     {
         if (result == NSOKButton)
         {
-            // Free display name allocated previously by this code
-            [browsedSourceDisplayName release];
-
             NSURL *scanURL = panel.URL;
             // we set the last searched source directory in the prefs here
             [[NSUserDefaults standardUserDefaults] setURL:scanURL.URLByDeletingLastPathComponent forKey:@"LastSourceDirectoryURL"];
@@ -1320,7 +1329,7 @@
                 // we set the source display name in the title selection dialogue
                 [fSrcDsplyNameTitleScan setStringValue:displayTitlescanSourceName];
                 // we set the attempted scans display name for main window to displayTitlescanSourceName
-                browsedSourceDisplayName = [displayTitlescanSourceName retain];
+                self.browsedSourceDisplayName = displayTitlescanSourceName;
                 // We show the actual sheet where the user specifies the title to be scanned
                 // as we are going to do a title specific scan
 
@@ -1340,7 +1349,7 @@
                     {
                         [HBUtilities writeToActivityLog:"trying to open eyetv package"];
                         // We're looking at an EyeTV package - try to open its enclosed .mpg media file
-                        browsedSourceDisplayName = [url.URLByDeletingPathExtension.lastPathComponent retain];
+                        self.browsedSourceDisplayName = url.URLByDeletingPathExtension.lastPathComponent;
                         NSString *mpgname;
                         NSUInteger n = [[[url path] stringByAppendingString: @"/"]
                                         completePathIntoString: &mpgname caseSensitive: YES
@@ -1363,14 +1372,14 @@
                     else if ([[url pathExtension] isEqualToString: @"dvdmedia"])
                     {
                         /* path IS a package - but dvdmedia packages can be treaded like normal directories */
-                        browsedSourceDisplayName = [[[url URLByDeletingPathExtension] lastPathComponent] retain];
+                        self.browsedSourceDisplayName = url.URLByDeletingPathExtension.lastPathComponent;
                         [HBUtilities writeToActivityLog:"trying to open dvdmedia package"];
                         [self performScan:[url path] scanTitleNum:0];
                     }
                     else
                     {
                         /* The package is not an eyetv package, try to open it anyway */
-                        browsedSourceDisplayName = [[url lastPathComponent] retain];
+                        self.browsedSourceDisplayName = url.lastPathComponent;
                         [HBUtilities writeToActivityLog:"not a known to package"];
                         [self performScan:[url path] scanTitleNum:0];
                     }
@@ -1382,16 +1391,15 @@
                     {
                         [HBUtilities writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
                         /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name*/
-                        browsedSourceDisplayName = [[[url URLByDeletingLastPathComponent] lastPathComponent] retain];
+                        self.browsedSourceDisplayName = url.URLByDeletingLastPathComponent.lastPathComponent;
                     }
                     else
                     {
                         [HBUtilities writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
                         /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
                         /* make sure we remove any path extension as this can also be an '.mpg' file */
-                        browsedSourceDisplayName = [[url lastPathComponent] retain];
+                        self.browsedSourceDisplayName = url.lastPathComponent;
                     }
-                    applyQueueToScan = NO;
                     [self performScan:[url path] scanTitleNum:0];
                 }
             }
@@ -1417,17 +1425,15 @@
     
     if(sender == fScanSrcTitleOpenButton)
     {
-        /* We setup the scan status in the main window to indicate a source title scan */
+        // We setup the scan status in the main window to indicate a source title scan
         [fSrcDVD2Field setStringValue: @"Opening a new source title…"];
         [fScanIndicator setHidden: NO];
         [fScanHorizontalLine setHidden: YES];
         [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
-        /* We use the performScan method to actually perform the specified scan passing the path and the title
-         * to be scanned
-         */
-        applyQueueToScan = NO;
+        // We use the performScan method to actually perform the specified scan passing the path and the title
+        // to be scanned
         [self performScan:[fScanSrcTitlePathField stringValue] scanTitleNum:[fScanSrcTitleNumField intValue]];
     }
 }
@@ -1436,23 +1442,13 @@
 - (void)performScan:(NSString *)scanPath scanTitleNum:(NSInteger)scanTitleNum
 {
     // Save the current settings
-    if (self.job) {
+    if (self.job)
+    {
         self.selectedPreset = [self createPresetFromCurrentSettings];
     }
 
-    // Notify anyone interested (audio/subtitles/chapters controller) that there's no title
-    fPictureController.picture = nil;
-    fPictureController.filters = nil;
-    fPreviewController.job = nil;
-
-    fAudioController.job = nil;
-    fSubtitlesViewController.job = nil;
-    fVideoController.video = nil;
-    fChapterTitlesController.job = nil;
-
     self.job = nil;
-
-    [self enableUI: NO];
+    [self enableUI:NO];
 
     NSError *outError = NULL;
     NSURL *fileURL = [NSURL fileURLWithPath:scanPath];
@@ -1510,16 +1506,16 @@
     }
 }
 
-- (IBAction) showNewScan:(id)sender
+- (void)showNewScan
 {
     if (!self.core.titles.count)
     {
         // We display a message if a valid source was not chosen
-        [fSrcDVD2Field setStringValue: @"No Valid Source Found"];
+        fSrcDVD2Field.stringValue = @"No Valid Source Found";
     }
     else
     {
-        if (applyQueueToScan == YES)
+        if (self.jobFromQueue)
         {
             // we are a rescan of an existing queue item and need to apply the queued settings to the scan
             [HBUtilities writeToActivityLog: "showNewScan: This is a queued item rescan"];
@@ -1534,39 +1530,11 @@
         for (HBTitle *title in self.core.titles)
         {
             // Set Source Name at top of window with the browsedSourceDisplayName grokked right before -performScan
-            if (!browsedSourceDisplayName)
+            if (!self.browsedSourceDisplayName)
             {
-                browsedSourceDisplayName = @"NoNameDetected";
+                self.browsedSourceDisplayName = @"NoNameDetected";
             }
-            [fSrcDVD2Field setStringValue:browsedSourceDisplayName];
-
-            // use the correct extension based on the container
-            int videoContainer = (int)[[fDstFormatPopUp selectedItem] tag];
-            const char *ext    = hb_container_get_default_extension(videoContainer);
-
-            // If its a queue rescan for edit, get the queue item output path
-            // if not, its a new source scan.
-            // Check to see if the last destination has been set,use if so, if not, use Desktop
-            if (applyQueueToScan == YES)
-            {
-                [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@", QueueFileArray[fqueueEditRescanItemNum][@"DestinationPath"]]];
-            }
-            else if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
-            {
-                [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                                 @"%@/%@.%s", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[browsedSourceDisplayName stringByDeletingPathExtension],ext]];
-            }
-            else
-            {
-                [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                                 @"%@/Desktop/%@.%s", NSHomeDirectory(),[browsedSourceDisplayName stringByDeletingPathExtension],ext]];
-            }
-
-            // set m4v extension if necessary - do not override user-specified .mp4 extension
-            if ((videoContainer & HB_MUX_MASK_MP4) && (applyQueueToScan != YES))
-            {
-                [self autoSetM4vExtension:sender];
-            }
+            fSrcDVD2Field.stringValue = self.browsedSourceDisplayName;
 
             [fSrcTitlePopUp addItemWithTitle:title.description];
 
@@ -1577,7 +1545,7 @@
             }
         }
 
-        // Select the first item is nothing i selected
+        // Select the first item is nothing is selected
         if (!fSrcTitlePopUp.selectedItem)
         {
             [fSrcTitlePopUp selectItemAtIndex:0];
@@ -1587,8 +1555,6 @@
         [self enableUI:YES];
         [self titlePopUpChanged:nil];
 
-        [self encodeStartStopPopUpChanged:nil];
-
         // Open preview window now if it was visible when HB was closed
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
             [self showPreviewWindow:nil];
@@ -1597,11 +1563,12 @@
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureSizeWindowIsOpen"])
             [self showPicturePanel:nil];
 
-        if (applyQueueToScan == YES)
+        if (self.jobFromQueue)
         {
-            // we are a rescan of an existing queue item and need to apply the queued settings to the scan
-            [HBUtilities writeToActivityLog: "showNewScan: calling applyQueueSettingsToMainWindow"];
-            [self applyQueueSettingsToMainWindow:nil];
+            [fPresetsView deselect];
+            [self pictureSettingsDidChange];
+
+            self.jobFromQueue = nil;
         }
     }
 }
@@ -1612,20 +1579,19 @@
 - (IBAction)browseFile:(id)sender
 {
     // Open a panel to let the user choose and update the text field
-    NSSavePanel * panel = [NSSavePanel savePanel];
+    NSSavePanel *panel = [NSSavePanel savePanel];
 
 	// We get the current file name and path from the destination field here
-    NSString *destinationDirectory = fDstFile2Field.stringValue.stringByDeletingLastPathComponent;
-    [panel setDirectoryURL:[NSURL fileURLWithPath:destinationDirectory]];
-    [panel setNameFieldStringValue:[[fDstFile2Field stringValue] lastPathComponent]];
+    [panel setDirectoryURL:self.job.destURL.URLByDeletingLastPathComponent];
+    [panel setNameFieldStringValue:self.job.destURL.lastPathComponent];
 
     [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
         if (result == NSFileHandlingPanelOKButton)
         {
-            fDstFile2Field.stringValue = panel.URL.path;
+            self.job.destURL = panel.URL;
 
             // Save this path to the prefs so that on next browse destination window it opens there
-            NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+            NSString *destinationDirectory = [panel.URL.path stringByDeletingLastPathComponent];
             [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
         }
     }];
@@ -1663,8 +1629,16 @@ static void queueFSEventStreamCallback(
                                 const FSEventStreamEventFlags eventFlags[],
                                 const FSEventStreamEventId eventIds[])
 {
-    HBController *hb = (HBController *)clientCallBackInfo;
-    [hb reloadQueue];
+    if (numEvents >= 1)
+    {
+        // Reload the queue only if one of the following events happened.
+        FSEventStreamEventFlags flags = eventFlags[0];
+        if (flags & (kFSEventStreamEventFlagItemCreated | kFSEventStreamEventFlagItemRemoved | kFSEventStreamEventFlagItemRenamed | kFSEventStreamEventFlagItemModified))
+        {
+            HBController *hb = (HBController *)clientCallBackInfo;
+            [hb reloadQueue];
+        }
+    }
 }
 
 - (void)initQueueFSEvent
@@ -1691,7 +1665,7 @@ static void queueFSEventStreamCallback(
                                  pathsToWatch,
                                  kFSEventStreamEventIdSinceNow,
                                  latency,
-                                 kFSEventStreamCreateFlagIgnoreSelf
+                                 kFSEventStreamCreateFlagIgnoreSelf | kFSEventStreamCreateFlagMarkSelf
                                  );
 
     CFRelease(pathsToWatch);
@@ -1710,35 +1684,42 @@ static void queueFSEventStreamCallback(
 
 - (void)loadQueueFile
 {
-	/* We declare the default NSFileManager into fileManager */
+	// We declare the default NSFileManager into fileManager
 	NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *appSupportPath = [HBUtilities appSupportPath];
 
-	/* We define the location of the user presets file */
-    QueueFile = [[appSupportPath stringByAppendingPathComponent:@"Queue/Queue.plist"] retain];
+	// We define the location of the user presets file
+    QueueFile = [[appSupportPath stringByAppendingPathComponent:@"Queue/Queue.hbqueue"] retain];
 
-    /* We check for the Queue.plist */
-	if( ![fileManager fileExistsAtPath:QueueFile] )
+    // We check for the Queue.plist
+	if (![fileManager fileExistsAtPath:QueueFile])
 	{
-        if( ![fileManager fileExistsAtPath:[appSupportPath stringByAppendingPathComponent:@"Queue"]] )
+        if (![fileManager fileExistsAtPath:[appSupportPath stringByAppendingPathComponent:@"Queue"]])
         {
             [fileManager createDirectoryAtPath:[appSupportPath stringByAppendingPathComponent:@"Queue"] withIntermediateDirectories:YES attributes:nil error:NULL];
         }
-
 		[fileManager createFileAtPath:QueueFile contents:nil attributes:nil];
 	}
 
-	QueueFileArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
-	/* lets check to see if there is anything in the queue file .plist */
-    if( QueueFileArray == nil )
+    @try
+    {
+        QueueFileArray = [[NSKeyedUnarchiver unarchiveObjectWithFile:QueueFile] retain];
+    }
+    @catch (NSException *exception)
+    {
+        [HBUtilities writeToActivityLog:"failed to read the queue to disk"];
+    }
+
+	// lets check to see if there is anything in the queue file .plist
+    if (QueueFileArray == nil)
 	{
-        /* if not, then lets initialize an empty array */
+        // if not, then lets initialize an empty array
 		QueueFileArray = [[NSMutableArray alloc] init];
     }
     else
     {
-        /* ONLY clear out encoded items if we are single instance */
-        if( hbInstanceNum == 1 )
+        // ONLY clear out encoded items if we are single instance
+        if (hbInstanceNum == 1)
         {
             [self clearQueueEncodedItems];
         }
@@ -1749,31 +1730,41 @@ static void queueFSEventStreamCallback(
 {
     [HBUtilities writeToActivityLog:"Queue reloaded"];
 
-    NSMutableArray * tempQueueArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
+    NSMutableArray *tempQueueArray = nil;;
+    @try
+    {
+        tempQueueArray = [NSKeyedUnarchiver unarchiveObjectWithFile:QueueFile];
+    }
+    @catch (NSException *exception)
+    {
+        tempQueueArray = nil;
+        [HBUtilities writeToActivityLog:"failed to read the queue to disk"];
+    }
+
     [QueueFileArray setArray:tempQueueArray];
-    [tempQueueArray release];
-    /* Send Fresh QueueFileArray to fQueueController to update queue window */
-    [fQueueController setQueueArray: QueueFileArray];
+    // Send Fresh QueueFileArray to fQueueController to update queue window
+    [fQueueController setQueueArray:QueueFileArray];
     [self getQueueStats];
 }
 
 - (void)addQueueFileItem
 {
-    [QueueFileArray addObject:[self createQueueFileItem]];
+    [QueueFileArray addObject:[[self.job copy] autorelease]];
     [self saveQueueFileItem];
-    
 }
 
-- (void) removeQueueFileItem:(NSUInteger) queueItemToRemove
+- (void)removeQueueFileItem:(NSUInteger)queueItemToRemove
 {
     [QueueFileArray removeObjectAtIndex:queueItemToRemove];
     [self saveQueueFileItem];
-
 }
 
 - (void)saveQueueFileItem
 {
-    [QueueFileArray writeToFile:QueueFile atomically:YES];
+    if (![NSKeyedArchiver archiveRootObject:QueueFileArray toFile:QueueFile])
+    {
+        [HBUtilities writeToActivityLog:"failed to write the queue to disk"];
+    }
     [fQueueController setQueueArray: QueueFileArray];
     [self getQueueStats];
 }
@@ -1783,39 +1774,30 @@ static void queueFSEventStreamCallback(
  */
 - (void)getQueueStats
 {
-    /* lets get the stats on the status of the queue array */
-
+    // lets get the stats on the status of the queue array
     fPendingCount = 0;
     fWorkingCount = 0;
 
-    /* We use a number system to set the encode status of the queue item
-     * in controller.mm
-     * 0 == already encoded
-     * 1 == is being encoded
-     * 2 == is yet to be encoded
-     * 3 == cancelled
-     */
-
 	int i = 0;
-	for (NSDictionary *thisQueueDict in QueueFileArray)
+	for (HBJob *job in QueueFileArray)
 	{
-		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 1) // being encoded
+		if (job.state == HBJobStateWorking) // being encoded
 		{
 			fWorkingCount++;
-            /* check to see if we are the instance doing this encoding */
-            if ([thisQueueDict objectForKey:@"EncodingPID"] && [[thisQueueDict objectForKey:@"EncodingPID"] intValue] == pidNum)
+            // check to see if we are the instance doing this encoding
+            if (job.pidId == pidNum)
             {
                 currentQueueEncodeIndex = i;
             }
 		}
-        if ([[thisQueueDict objectForKey:@"Status"] intValue] == 2) // pending		
+        if (job.state == HBJobStateReady) // pending
         {
 			fPendingCount++;
 		}
 		i++;
 	}
 
-    /* Set the queue status field in the main window */
+    // Set the queue status field in the main window
     NSString *string;
     if (fPendingCount == 0)
     {
@@ -1833,63 +1815,58 @@ static void queueFSEventStreamCallback(
     [fQueueStatus setStringValue:string];
 }
 
-/* Used to get the next pending queue item index and return it if found */
+/**
+ * Used to get the next pending queue item index and return it if found
+ */
 - (NSInteger)getNextPendingQueueIndex
 {
-    /* initialize nextPendingIndex to -1, this value tells incrementQueueItemDone that there are no pending items in the queue */
+    // initialize nextPendingIndex to -1, this value tells incrementQueueItemDone that there are no pending items in the queue
     NSInteger nextPendingIndex = -1;
 	BOOL nextPendingFound = NO;
-	for (id tempObject in QueueFileArray)
+	for (HBJob *job in QueueFileArray)
 	{
-		NSDictionary *thisQueueDict = tempObject;
-        if ([[thisQueueDict objectForKey:@"Status"] intValue] == 2 && nextPendingFound == NO) // pending		
+        if (job.state == HBJobStateReady && nextPendingFound == NO) // pending
         {
 			nextPendingFound = YES;
-            nextPendingIndex = [QueueFileArray indexOfObject: tempObject];
+            nextPendingIndex = [QueueFileArray indexOfObject:job];
             [HBUtilities writeToActivityLog: "getNextPendingQueueIndex next pending encode index is:%d", nextPendingIndex];
 		}
 	}
     return nextPendingIndex;
 }
 
-/* This method will set any item marked as encoding back to pending
+/**
+ * This method will set any item marked as encoding back to pending
  * currently used right after a queue reload
  */
 - (void) setQueueEncodingItemsAsPending
 {
-    NSMutableArray *tempArray;
-    tempArray = [NSMutableArray array];
-    /* we look here to see if the preset is we move on to the next one */
-    for (id tempObject in QueueFileArray)
+    for (HBJob *job in QueueFileArray)
     {
-        /* We want to keep any queue item that is pending or was previously being encoded */
-        if ([[tempObject objectForKey:@"Status"] intValue] == 1 || [[tempObject objectForKey:@"Status"] intValue] == 2)
+        // We want to keep any queue item that is pending or was previously being encoded
+        if (job.state == HBJobStateWorking || job.state == HBJobStateReady)
         {
-            /* If the queue item is marked as "encoding" (1)
-             * then change its status back to pending (2) which effectively
-             * puts it back into the queue to be encoded
-             */
-            if ([[tempObject objectForKey:@"Status"] intValue] == 1)
+            // If the queue item is marked as "working"
+            // then change its status back to ready which effectively
+            // puts it back into the queue to be encoded
+            if (job.state == HBJobStateWorking)
             {
-                [tempObject setObject:[NSNumber numberWithInt: 2] forKey:@"Status"];
+                job.state = HBJobStateReady;
             }
-            [tempArray addObject:tempObject];
         }
     }
-    
-    [QueueFileArray setArray:tempArray];
+
     [self saveQueueFileItem];
 }
 
-
-/* This method will clear the queue of any encodes that are not still pending
- * this includes both successfully completed encodes as well as cancelled encodes */
+/**
+ * This method will clear the queue of any encodes that are not still pending
+ * this includes both successfully completed encodes as well as cancelled encodes
+ */
 - (void) clearQueueEncodedItems
 {
-    NSMutableArray *tempArray;
-    tempArray = [NSMutableArray array];
-    /* we look here to see if the preset is we move on to the next one */
-    for (id tempObject in QueueFileArray)
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (HBJob *job in QueueFileArray)
     {
         /* If the queue item is either completed (0) or cancelled (3) from the
          * last session, then we put it in tempArray to be deleted from QueueFileArray.
@@ -1898,9 +1875,9 @@ static void queueFSEventStreamCallback(
          * from a previous session, we can conlude that HB was either shutdown, or crashed
          * during the encodes so we keep it and tell the user in the "Load Queue Alert"
          */
-        if ([[tempObject objectForKey:@"Status"] intValue] == 0 || [[tempObject objectForKey:@"Status"] intValue] == 3)
+        if (job.state == HBJobStateCompleted || job.state == HBJobStateCanceled)
         {
-            [tempArray addObject:tempObject];
+            [tempArray addObject:job];
         }
     }
     
@@ -1908,178 +1885,30 @@ static void queueFSEventStreamCallback(
     [self saveQueueFileItem];
 }
 
-/* This method will clear the queue of all encodes. effectively creating an empty queue */
+/**
+ * This method will clear the queue of all encodes. effectively creating an empty queue
+ */
 - (void) clearQueueAllItems
 {
-    NSMutableArray *tempArray;
-    tempArray = [NSMutableArray array];
-    /* we look here to see if the preset is we move on to the next one */
-    for (id tempObject in QueueFileArray)
+    NSMutableArray *tempArray = [NSMutableArray array];
+    // we look here to see if the preset is we move on to the next one
+    for (HBJob *job in QueueFileArray)
     {
-        [tempArray addObject:tempObject];
+        [tempArray addObject:job];
     }
     
     [QueueFileArray removeObjectsInArray:tempArray];
     [self saveQueueFileItem];
 }
 
-/* This method will duplicate prepareJob however into the
- * queue .plist instead of into the job structure so it can
- * be recalled later */
-- (NSDictionary *)createQueueFileItem
-{
-    NSMutableDictionary *queueFileJob = [[NSMutableDictionary alloc] init];
-
-    hb_title_t *title = self.job.title.hb_title;
-
-    /* We use a number system to set the encode status of the queue item
-     * 0 == already encoded
-     * 1 == is being encoded
-     * 2 == is yet to be encoded
-     * 3 == cancelled
-     */
-    [queueFileJob setObject:[NSNumber numberWithInt:2] forKey:@"Status"];
-    /* Source and Destination Information */
-    
-    [queueFileJob setObject:[NSString stringWithUTF8String: title->path] forKey:@"SourcePath"];
-    [queueFileJob setObject:[[fSrcDVD2Field stringValue] lastPathComponent] forKey:@"SourceName"];
-    [queueFileJob setObject:[NSNumber numberWithInt:title->index] forKey:@"TitleNumber"];
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
-    
-    /* Determine and set a variable to tell hb what start and stop times to use (chapters, seconds or frames) */
-    if( [fEncodeStartStopPopUp indexOfSelectedItem] == 0 )
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"fEncodeStartStop"];    
-    }
-    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 1)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:1] forKey:@"fEncodeStartStop"];   
-    }
-    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 2)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:2] forKey:@"fEncodeStartStop"];
-    }
-    /* Chapter encode info */
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"ChapterStart"];
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"ChapterEnd"];
-    /* Time (pts) encode info */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcTimeStartEncodingField intValue]] forKey:@"StartSeconds"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcTimeEndEncodingField intValue] - [fSrcTimeStartEncodingField intValue]] forKey:@"StopSeconds"];
-    /* Frame number encode info */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcFrameStartEncodingField intValue]] forKey:@"StartFrame"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]] forKey:@"StopFrame"];
-    
-    
-    /* The number of seek points equals the number of seconds announced in the title as that is our current granularity */
-    int title_duration_seconds = (title->hours * 3600) + (title->minutes * 60) + (title->seconds);
-    [queueFileJob setObject:[NSNumber numberWithInt:title_duration_seconds] forKey:@"SourceTotalSeconds"];
-    
-    [queueFileJob setObject:[fDstFile2Field stringValue] forKey:@"DestinationPath"];
-    
-    /* Lets get the preset info if there is any */
-    [queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
-
-    [queueFileJob setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
-    /* Chapter Markers*/
-    /* If we are encoding by chapters and we have only one chapter or a title without chapters, set chapter markers to off.
-       Leave them on if we're doing point to point encoding, as libhb supports chapters when doing p2p. */
-    if ([fEncodeStartStopPopUp indexOfSelectedItem] == 0 &&
-        [fSrcChapterStartPopUp indexOfSelectedItem] == [fSrcChapterEndPopUp indexOfSelectedItem])
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
-    }
-    else
-    {
-        [queueFileJob setObject:@(self.job.chaptersEnabled) forKey:@"ChapterMarkers"];
-    }
-	
-    /* We need to get the list of chapter names to put into an array and store 
-     * in our queue, so they can be reapplied in prepareJob when this queue
-     * item comes up if Chapter Markers is set to on.
-     */
-    [queueFileJob setObject:[[self.job.chapterTitles copy] autorelease] forKey:@"ChapterNames"];
-
-    /* Mux mp4 with http optimization */
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
-    /* Add iPod uuid atom */
-    [queueFileJob setObject:[NSNumber numberWithInteger:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
-    
-    /* Codecs */
-	/* Video encoder */
-    [self.job.video prepareVideoForQueueFileJob:queueFileJob];
-
-	/* Picture Sizing */
-    [self.job.picture preparePictureForQueueFileJob:queueFileJob];
-
-    /* Text summaries of various settings */
-    [queueFileJob setObject:[NSString stringWithString:[self pictureSettingsSummary]]
-                     forKey:@"PictureSettingsSummary"];
-    [queueFileJob setObject:self.job.filters.summary
-                     forKey:@"PictureFiltersSummary"];
-    [queueFileJob setObject:[NSString stringWithString:[self muxerOptionsSummary]]
-                     forKey:@"MuxerOptionsSummary"];
-
-    /* Picture Filters */
-    HBFilters *filters = self.job.filters;
-    queueFileJob[@"PictureDetelecine"] = @(filters.detelecine);
-    queueFileJob[@"PictureDetelecineCustom"] = filters.detelecineCustomString;
-
-    queueFileJob[@"PictureDecombDeinterlace"] = @(filters.useDecomb);
-    queueFileJob[@"PictureDecomb"] = @(filters.decomb);
-    queueFileJob[@"PictureDecombCustom"] = filters.decombCustomString;
-
-    queueFileJob[@"PictureDeinterlace"] = @(filters.deinterlace);
-    queueFileJob[@"PictureDeinterlaceCustom"] = filters.deinterlaceCustomString;
-
-    queueFileJob[@"PictureDenoise"] = filters.denoise;
-    queueFileJob[@"PictureDenoisePreset"] = filters.denoisePreset;
-    queueFileJob[@"PictureDenoiseTune"] = filters.denoiseTune;
-    queueFileJob[@"PictureDenoiseCustom"] = filters.denoiseCustomString;
-
-    queueFileJob[@"PictureDeblock"] = [NSString stringWithFormat:@"%ld",(long)filters.deblock];
-    queueFileJob[@"VideoGrayScale"] = [NSString stringWithFormat:@"%ld",(long)filters.grayscale];
-
-    /* Audio Defaults */
-    NSMutableDictionary *audioDefaults = [NSMutableDictionary dictionary];
-    [self.job.audioDefaults prepareAudioDefaultsForPreset:audioDefaults];
-    queueFileJob[@"AudioDefaults"] = audioDefaults;
-
-    /* Audio */
-    NSMutableArray *audioArray = [[NSMutableArray alloc] initWithArray:[fAudioController audioTracks] copyItems:YES];
-    [queueFileJob setObject:audioArray forKey:@"AudioList"];
-    [audioArray release];
-
-	/* Subtitles Defaults */
-    NSMutableDictionary *subtitlesDefaults = [NSMutableDictionary dictionary];
-    [self.job.subtitlesDefaults prepareSubtitlesDefaultsForPreset:subtitlesDefaults];
-    queueFileJob[@"SubtitlesDefaults"] = subtitlesDefaults;
-
-	/* Subtitles */
-    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesViewController subtitles] copyItems:YES];
-    [queueFileJob setObject:subtitlesArray forKey:@"SubtitleList"];
-    [subtitlesArray release];
-
-    /* Now we go ahead and set the "job->values in the plist for passing right to fQueueEncodeLibhb */
-    [queueFileJob setObject:[NSNumber numberWithInteger:[[fDstFormatPopUp selectedItem] tag]] forKey:@"JobFileFormatMux"];
-    
-    /* Codecs */
-    /* Framerate */
-    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.num] forKey:@"JobVrate"];
-    [queueFileJob setObject:[NSNumber numberWithInt:title->vrate.den] forKey:@"JobVrateBase"];
-
-    /* we need to auto relase the queueFileJob and return it */
-    [queueFileJob autorelease];
-    return queueFileJob;
-
-}
-
-/* this is actually called from the queue controller to modify the queue array and return it back to the queue controller */
+/**
+ * this is actually called from the queue controller to modify the queue array and return it back to the queue controller
+ */
 - (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex
 {
     NSUInteger index = [indexSet lastIndex];
     NSUInteger aboveInsertIndexCount = 0;
-    
-    
+
     NSUInteger removeIndex;
         
     if (index >= insertIndex)
@@ -2098,22 +1927,22 @@ static void queueFSEventStreamCallback(
     [QueueFileArray insertObject:object atIndex:insertIndex];
     [object release];
 
-   /* We save all of the Queue data here 
-    * and it also gets sent back to the queue controller*/
+    // We save all of the Queue data here
+    // and it also gets sent back to the queue controller
     [self saveQueueFileItem]; 
     
 }
 
-
 #pragma mark -
 #pragma mark Queue Job Processing
 
-- (void) incrementQueueItemDone:(NSInteger) queueItemDoneIndexNum
+- (void)incrementQueueItemDone:(NSInteger)queueItemDoneIndexNum
 {
-    /* Mark the encode just finished as done (status 0)*/
-    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:0] forKey:@"Status"];
-	
-    /* We save all of the Queue data here */
+    // Mark the encode just finished as done (status 0)
+    HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
+    queueJob.state = HBJobStateCompleted;
+
+    // We save all of the Queue data here
     [self saveQueueFileItem];
 
     /* Since we have now marked a queue item as done
@@ -2126,790 +1955,103 @@ static void queueFSEventStreamCallback(
     /* If we still have more pending items in our queue, lets go to the next one */
     if (newQueueItemIndex >= 0 && newQueueItemIndex < queueItems)
     {
-        /*Set our currentQueueEncodeIndex now to the newly found Pending encode as we own it */
+        // Set our currentQueueEncodeIndex now to the newly found Pending encode as we own it
         currentQueueEncodeIndex = newQueueItemIndex;
-        /* now we mark the queue item as Status = 1 ( being encoded ) so another instance can not come along and try to scan it while we are scanning */
-        [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
+        // now we mark the queue item as Status = 1 ( being encoded ) so another instance can not come along and try to scan it while we are scanning
+        queueJob = QueueFileArray[currentQueueEncodeIndex];
+        queueJob.state = HBJobStateWorking;
         [HBUtilities writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
         [self saveQueueFileItem];
-        /* now we can go ahead and scan the new pending queue item */
-        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
-
+        queueJob = QueueFileArray[currentQueueEncodeIndex];
+        // now we can go ahead and scan the new pending queue item
+        [self performNewQueueScan:queueJob.fileURL.path scanTitleNum:queueJob.titleIdx];
     }
     else
     {
         [HBUtilities writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
-        /* Done encoding, allow system sleep for the encode handle */
-        /*
-         * Since there are no more items to encode, go to queueCompletedAlerts
-         * for user specified alerts after queue completed
-         */
+        // Since there are no more items to encode, go to queueCompletedAlerts
+        // for user specified alerts after queue completed
         [self queueCompletedAlerts];
     }
 }
 
-/* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
+/**
+ * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
+ */
 - (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum
 {
-    /* Tell HB to output a new activity log file for this encode */
-    [outputPanel startEncodeLog:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"]];
-    
-    /* We now flag the queue item as being owned by this instance of HB using the PID */
-    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:pidNum] forKey:@"EncodingPID"];
-    /* Get the currentQueueEncodeNameString from the queue item to display in the status field */
-    currentQueueEncodeNameString = [[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"] lastPathComponent]retain];
-    /* We save all of the Queue data here */
+    HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
+    // Tell HB to output a new activity log file for this encode
+    [outputPanel startEncodeLog:[queueJob.destURL.path stringByDeletingLastPathComponent]];
+
+    // We now flag the queue item as being owned by this instance of HB using the PID
+    queueJob.pidId = pidNum;
+    // Get the currentQueueEncodeNameString from the queue item to display in the status field */
+    currentQueueEncodeNameString = [[queueJob.destURL.path lastPathComponent]retain];
+    // We save all of the Queue data here
     [self saveQueueFileItem];
 
-    /*
-     * Only scan 10 previews before an encode - additional previews are
-     * only useful for autocrop and static previews, which are already taken
-     * care of at this point
-     */
+    // Only scan 10 previews before an encode - additional previews are
+    // only useful for autocrop and static previews, which are already taken care of at this point
     NSURL *fileURL = [NSURL fileURLWithPath:scanPath];
     [self.queueCore scan:fileURL titleNum:scanTitleNum previewsNum:10 minTitleDuration:0];
 }
 
-/* This assumes that we have re-scanned and loaded up a new queue item to send to libhb as fQueueEncodeLibhb */
-- (void) processNewQueueEncode
+/**
+ * This assumes that we have re-scanned and loaded up a new queue item to send to libhb as fQueueEncodeLibhb 
+ */
+- (void)processNewQueueEncode
 {
-    hb_list_t  * list  = hb_get_titles( self.queueCore.hb_handle );
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
-    hb_job_t * job = hb_job_init(title);
-    
-    if( !hb_list_count( list ) )
-    {
-        [HBUtilities writeToActivityLog: "processNewQueueEncode WARNING nothing found in the title list"];
-    }
-    
-    NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-    [HBUtilities writeToActivityLog: "Preset: %s", [[queueToApply objectForKey:@"PresetName"] UTF8String]];
-    [HBUtilities writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
-    hb_job_set_file(job, [[queueToApply objectForKey:@"DestinationPath"] UTF8String]);
-    [self prepareJob:job];
-    
-    /*
-     * If scanning we need to do some extra setup of the job.
-     */
-    if (job->indepth_scan == 1)
-    {
-        char *encoder_preset_tmp  = job->encoder_preset  != NULL ? strdup(job->encoder_preset)  : NULL;
-        char *encoder_tune_tmp    = job->encoder_tune    != NULL ? strdup(job->encoder_tune)    : NULL;
-        char *encoder_options_tmp = job->encoder_options != NULL ? strdup(job->encoder_options) : NULL;
-        char *encoder_profile_tmp = job->encoder_profile != NULL ? strdup(job->encoder_profile) : NULL;
-        char *encoder_level_tmp   = job->encoder_level   != NULL ? strdup(job->encoder_level)   : NULL;
-        /*
-         * When subtitle scan is enabled do a fast pre-scan job
-         * which will determine which subtitles to enable, if any.
-         */
-        hb_job_set_encoder_preset (job, NULL);
-        hb_job_set_encoder_tune   (job, NULL);
-        hb_job_set_encoder_options(job, NULL);
-        hb_job_set_encoder_profile(job, NULL);
-        hb_job_set_encoder_level  (job, NULL);
-        job->pass = -1;
-        hb_add(self.queueCore.hb_handle, job);
-        /*
-         * reset the advanced settings
-         */
-        hb_job_set_encoder_preset (job, encoder_preset_tmp);
-        hb_job_set_encoder_tune   (job, encoder_tune_tmp);
-        hb_job_set_encoder_options(job, encoder_options_tmp);
-        hb_job_set_encoder_profile(job, encoder_profile_tmp);
-        hb_job_set_encoder_level  (job, encoder_level_tmp);
-        free(encoder_preset_tmp);
-        free(encoder_tune_tmp);
-        free(encoder_options_tmp);
-        free(encoder_profile_tmp);
-        free(encoder_level_tmp);
-    }
+    HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
 
-    
-    if ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1)
+    if (self.queueCore.titles.count)
     {
-        job->indepth_scan = 0;
-        job->pass = 1;
-        hb_add(self.queueCore.hb_handle, job);
-        job->pass = 2;
-        hb_add(self.queueCore.hb_handle, job);
-        
+        // Reset the title in the job.
+        queueJob.title = self.queueCore.titles[0];
+
+        // We should be all setup so let 'er rip
+        [self.queueCore encodeJob:queueJob];
+        fEncodeState = 1;
+
+        // Lets mark our new encode as 1 or "Encoding"
+        queueJob.state = HBJobStateWorking;
+        [self saveQueueFileItem];
     }
     else
     {
-        job->indepth_scan = 0;
-        job->pass = 0;
-        hb_add(self.queueCore.hb_handle, job);
+        [HBUtilities writeToActivityLog: "processNewQueueEncode WARNING nothing found in the title list"];
     }
-
-    NSString *destinationDirectory = [[queueToApply objectForKey:@"DestinationPath"] stringByDeletingLastPathComponent];
-	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
-	/* Lets mark our new encode as 1 or "Encoding" */
-    [queueToApply setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
-    [self saveQueueFileItem];
-    
-    /* libhb makes a copy of the job.  So we need to free any resource
-     * that were allocated in construction of the job. This empties
-     * the audio, subtitle, and filter lists */
-    hb_job_close(&job);
-    
-    /* We should be all setup so let 'er rip */   
-    [self doRip];
 }
 
 #pragma mark -
 #pragma mark Queue Item Editing
 
 /* Rescans the chosen queue item back into the main window */
-- (void)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (NSUInteger) scanTitleNum selectedQueueItem: (NSUInteger) selectedQueueItem
+- (void)rescanQueueItemToMainWindow:(NSUInteger)selectedQueueItem
 {
-    fqueueEditRescanItemNum = selectedQueueItem;
-    [HBUtilities writeToActivityLog: "rescanQueueItemToMainWindow: Re-scanning queue item at index:%d",fqueueEditRescanItemNum];
-    applyQueueToScan = YES;
-    /* Make sure we release the display name before reassigning it */
-    [browsedSourceDisplayName release];
-    /* Set the browsedSourceDisplayName for showNewScan */
-    browsedSourceDisplayName = [[[QueueFileArray objectAtIndex:fqueueEditRescanItemNum] objectForKey:@"SourceName"] retain];
-    [self performScan:scanPath scanTitleNum:scanTitleNum];
-}
+    [HBUtilities writeToActivityLog:"rescanQueueItemToMainWindow: Re-scanning queue item at index:%d", selectedQueueItem];
 
+    // Set the browsedSourceDisplayName for showNewScan
+    self.jobFromQueue = QueueFileArray[selectedQueueItem];
+    self.browsedSourceDisplayName = self.jobFromQueue.fileURL.lastPathComponent;
 
-/* We use this method after a queue item rescan for edit.
- * it largely mirrors -selectPreset in terms of structure.
- * Assumes that a queue item has been reloaded into the main window.
- */
-- (IBAction)applyQueueSettingsToMainWindow:(id)sender
-{
-    NSDictionary *queueToApply = [QueueFileArray objectAtIndex:fqueueEditRescanItemNum];
+    [self performScan:self.jobFromQueue.fileURL.path scanTitleNum:self.jobFromQueue.titleIdx];
 
-    if (queueToApply)
-    {
-        [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: queue item found"];
-    }
-    /* Set title number and chapters */
-    /* since the queue only scans a single title, its already been selected in showNewScan
-       so do not try to reset it here. However if we do decide to do full source scans on
-       a queue edit rescan, we would need it. So leaving in for now but commenting out. */
-    self.job.range.chapterStart = [[queueToApply objectForKey:@"ChapterStart"] intValue] - 1;
-    self.job.range.chapterStop = [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1;
-
-    /* File Format */
-    [fDstFormatPopUp selectItemWithTag:[queueToApply[@"JobFileFormatMux"] integerValue]];
-    [self formatPopUpChanged:nil];
-
-    /* Chapter Markers*/
-    self.job.chaptersEnabled = [[queueToApply objectForKey:@"ChapterMarkers"] boolValue];
-    [fChapterTitlesController addChaptersFromQueue:[queueToApply objectForKey:@"ChapterNames"]];
-
-    /* Mux mp4 with http optimization */
-    [fDstMp4HttpOptFileCheck setState:[[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue]];
-
-    /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
-    [fDstMp4iPodFileCheck setState:[[queueToApply objectForKey:@"Mp4iPodCompatible"] intValue]];
-
-    /* video encoder */
-    [self.job.video applyVideoSettingsFromQueue:queueToApply];
-
-    /* Audio Defaults */
-    [self.job.audioDefaults applySettingsFromPreset:queueToApply[@"AudioDefaults"]];
-
-    /* Audio */
-    /* Now lets add our new tracks to the audio list here */
-    [fAudioController addTracksFromQueue:[queueToApply objectForKey:@"AudioList"]];
-
-    /* Subtitles Defaults */
-    [self.job.subtitlesDefaults applySettingsFromPreset:queueToApply[@"SubtitlesDefaults"]];
-
-    /* Subtitles */
-    [fSubtitlesViewController addTracksFromQueue:[queueToApply objectForKey:@"SubtitleList"]];
-
-    /* Picture Settings */
-    [self.job.picture applyPictureSettingsFromQueue:queueToApply];
-
-    /* Filters */
-    HBFilters *filters = self.job.filters;
-
-    /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key. */
-    filters.useDecomb = YES;
-    filters.decomb = 0;
-    filters.deinterlace = 0;
-    if ([queueToApply[@"PictureDecombDeinterlace"] intValue] == 1)
-    {
-        /* we are using decomb */
-        /* Decomb */
-        if ([queueToApply[@"PictureDecomb"] intValue] > 0)
-        {
-            filters.decomb = [queueToApply[@"PictureDecomb"] intValue];
-
-            /* if we are using "Custom" in the decomb setting, also set the custom string*/
-            if ([queueToApply[@"PictureDecomb"] intValue] == 1)
-            {
-                filters.decombCustomString = queueToApply[@"PictureDecombCustom"];
-            }
-        }
-    }
-    else
-    {
-        /* We are using Deinterlace */
-        /* Deinterlace */
-        if ([queueToApply[@"PictureDeinterlace"] intValue] > 0)
-        {
-            filters.useDecomb = NO;
-            filters.deinterlace = [queueToApply[@"PictureDeinterlace"] intValue];
-            /* if we are using "Custom" in the deinterlace setting, also set the custom string*/
-            if ([queueToApply[@"PictureDeinterlace"] intValue] == 1)
-            {
-                filters.deinterlaceCustomString = queueToApply[@"PictureDeinterlaceCustom"];
-            }
-        }
-    }
-
-    /* Detelecine */
-    if ([queueToApply[@"PictureDetelecine"] intValue] > 0)
-    {
-        filters.detelecine = [queueToApply[@"PictureDetelecine"] intValue];
-        /* if we are using "Custom" in the detelecine setting, also set the custom string*/
-        if ([queueToApply[@"PictureDetelecine"] intValue] == 1)
-        {
-            filters.detelecineCustomString = queueToApply[@"PictureDetelecineCustom"];
-        }
-    }
-    else
-    {
-        filters.detelecine = 0;
-    }
-
-    /* Denoise */
-    filters.denoise             = queueToApply[@"PictureDenoise"];
-    filters.denoisePreset       = queueToApply[@"PictureDenoisePreset"];
-    filters.denoiseTune         = queueToApply[@"PictureDenoiseTune"];
-    filters.denoiseCustomString = queueToApply[@"PictureDenoiseCustom"];
-
-    /* Deblock */
-    if ([queueToApply[@"PictureDeblock"] intValue] == 1)
-    {
-        /* if its a one, then its the old on/off deblock, set on to 5*/
-        filters.deblock = 5;
-    }
-    else
-    {
-        /* use the settings intValue */
-        filters.deblock = [queueToApply[@"PictureDeblock"] intValue];
-    }
-
-    filters.grayscale = [queueToApply[@"VideoGrayScale"] boolValue];
-
-    // Updates the previews window and summary strings
-    [self pictureSettingsDidChange];
-
-    [fPresetSelectedDisplay setStringValue:queueToApply[@"PresetName"]];
-    [fPresetsView deselect];
-
-    /* Now that source is loaded and settings applied, delete the queue item from the queue */
-    [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d",fqueueEditRescanItemNum];
-    [self removeQueueFileItem:fqueueEditRescanItemNum];
+    // Now that source is loaded and settings applied, delete the queue item from the queue
+    [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d", selectedQueueItem];
+    [self removeQueueFileItem:selectedQueueItem];
 }
 
 #pragma mark -
 #pragma mark Job Handling
 
-- (void) prepareJob:(hb_job_t *)job
-{    
-    NSDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-
-    hb_list_t  * list  = hb_get_titles(self.queueCore.hb_handle);
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
-
-    hb_audio_config_t * audio;
-    hb_filter_object_t * filter;
-    /* Title Angle for dvdnav */
-    job->angle = [[queueToApply objectForKey:@"TitleAngle"] intValue];
-    
-    if([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 0)
-    {
-        /* Chapter selection */
-        [HBUtilities writeToActivityLog: "Start / Stop set to chapters"];
-        job->chapter_start = [[queueToApply objectForKey:@"ChapterStart"] intValue];
-        job->chapter_end   = [[queueToApply objectForKey:@"ChapterEnd"] intValue];
-    }
-    else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 1)
-    {
-        /* we are pts based start / stop */
-        [HBUtilities writeToActivityLog: "Start / Stop set to seconds…"];
-        
-        /* Point A to Point B. Time to time in seconds.*/
-        /* get the start seconds from the start seconds field */
-        int start_seconds = [[queueToApply objectForKey:@"StartSeconds"] intValue];
-        job->pts_to_start = start_seconds * 90000LL;
-        /* Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds */
-        int stop_seconds = [[queueToApply objectForKey:@"StopSeconds"] intValue];
-        job->pts_to_stop = stop_seconds * 90000LL;
-        
-    }
-    else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 2)
-    {
-        /* we are frame based start / stop */
-        [HBUtilities writeToActivityLog: "Start / Stop set to frames…"];
-        
-        /* Point A to Point B. Frame to frame */
-        /* get the start frame from the start frame field */
-        int start_frame = [[queueToApply objectForKey:@"StartFrame"] intValue];
-        job->frame_to_start = start_frame;
-        /* get the frame to stop on from the end frame field */
-        int stop_frame = [[queueToApply objectForKey:@"StopFrame"] intValue];
-        job->frame_to_stop = stop_frame;
-        
-    }
-
-	
-        
-    
-    /* Format (Muxer) and Video Encoder */
-    job->mux = [[queueToApply objectForKey:@"JobFileFormatMux"] intValue];
-    job->vcodec = [[queueToApply objectForKey:@"JobVideoEncoderVcodec"] intValue];
-
-    /* We set http optimized mp4 here */
-    if( [[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue] == 1 )
-    {
-        job->mp4_optimize = 1;
-    }
-    else
-    {
-        job->mp4_optimize = 0;
-    }
-
-	
-    /* We set the chapter marker extraction here based on the format being
-     mpeg4 or mkv and the checkbox being checked */
-    if ([[queueToApply objectForKey:@"ChapterMarkers"] intValue] == 1)
-    {
-        job->chapter_markers = 1;
-        
-        /* now lets get our saved chapter names out the array in the queue file
-         * and insert them back into the title chapter list. We have it here,
-         * because unless we are inserting chapter markers there is no need to
-         * spend the overhead of iterating through the chapter names array imo
-         * Also, note that if for some reason we don't apply chapter names, the
-         * chapters just come out 001, 002, etc. etc.
-         */
-         
-        NSArray *chapterNamesArray = [queueToApply objectForKey:@"ChapterNames"];
-        int i = 0;
-        for (id tempObject in chapterNamesArray)
-        {
-            hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( job->list_chapter, i );
-            if( chapter != NULL )
-            {
-                hb_chapter_set_title( chapter, [tempObject UTF8String] );
-            }
-            i++;
-        }
-    }
-    else
-    {
-        job->chapter_markers = 0;
-    }
-    
-    if (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265)
-    {
-        /* iPod 5G atom */
-        job->ipod_atom = ([[queueToApply objectForKey:@"Mp4iPodCompatible"]
-                           intValue] == 1);
-        
-        /* set fastfirstpass if 2-pass and Turbo are enabled */
-        if ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1)
-        {
-            job->fastfirstpass = ([[queueToApply objectForKey:@"VideoTurboTwoPass"]
-                                   intValue] == 1);
-        }
-        
-        /* advanced x264 options */
-        NSString   *tmpString;
-        // translate zero-length strings to NULL for libhb
-        const char *encoder_preset  = NULL;
-        const char *encoder_tune    = NULL;
-        const char *encoder_options = NULL;
-        const char *encoder_profile = NULL;
-        const char *encoder_level   = NULL;
-        if ([[queueToApply objectForKey:@"x264UseAdvancedOptions"] intValue])
-        {
-            // we are using the advanced panel
-            if ([(tmpString = [queueToApply objectForKey:@"x264Option"]) length])
-            {
-                encoder_options = [tmpString UTF8String];
-            }
-        }
-        else
-        {
-            // we are using the x264 preset system
-            if ([(tmpString = [queueToApply objectForKey:@"VideoTune"]) length])
-            {
-                encoder_tune = [tmpString UTF8String];
-            }
-            if ([(tmpString = [queueToApply objectForKey:@"VideoOptionExtra"]) length])
-            {
-                encoder_options = [tmpString UTF8String];
-            }
-            if ([(tmpString = [queueToApply objectForKey:@"VideoProfile"]) length])
-            {
-                encoder_profile = [tmpString UTF8String];
-            }
-            if ([(tmpString = [queueToApply objectForKey:@"VideoLevel"]) length])
-            {
-                encoder_level = [tmpString UTF8String];
-            }
-            encoder_preset = [[queueToApply objectForKey:@"VideoPreset"] UTF8String];
-        }
-        hb_job_set_encoder_preset (job, encoder_preset);
-        hb_job_set_encoder_tune   (job, encoder_tune);
-        hb_job_set_encoder_options(job, encoder_options);
-        hb_job_set_encoder_profile(job, encoder_profile);
-        hb_job_set_encoder_level  (job, encoder_level);
-    }
-    else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
-    {
-        hb_job_set_encoder_options(job,
-                                   [[queueToApply objectForKey:@"VideoOptionExtra"]
-                                    UTF8String]);
-    }
-
-    /* Picture Size Settings */
-    job->par.num = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
-    job->par.den = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
-
-    /* Video settings */
-    /* Framerate */
-    int fps_mode, fps_num, fps_den;
-    if ([[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0)
-    {
-        /* a specific framerate has been chosen */
-        fps_num = 27000000;
-        fps_den = (int)[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue];
-        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
-        {
-            // CFR
-            fps_mode = 1;
-        }
-        else
-        {
-            // PFR
-            fps_mode = 2;
-        }
-    }
-    else
-    {
-        /* same as source */
-        fps_num = [[queueToApply objectForKey:@"JobVrate"]     intValue];
-        fps_den = [[queueToApply objectForKey:@"JobVrateBase"] intValue];
-        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
-        {
-            // CFR
-            fps_mode = 1;
-        }
-        else
-        {
-            // VFR
-            fps_mode = 0;
-        }
-    }
-    
-    if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] != 2 )
-    {
-        job->vquality = -1.0;
-        job->vbitrate = [[queueToApply objectForKey:@"VideoAvgBitrate"] intValue];
-    }
-    if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] == 2 )
-    {
-        job->vquality = [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue];
-        job->vbitrate = 0;
-        
-    }
-
-    job->grayscale = [[queueToApply objectForKey:@"VideoGrayScale"] intValue];
-
-    // Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
-    BOOL one_burned = NO;
-    int i = 0;
-
-    NSArray *subtitles = [queueToApply objectForKey:@"SubtitleList"];
-    for (id subtitleDict in subtitles)
-    {
-        int subtitle = [subtitleDict[keySubTrackIndex] intValue];
-        int force = [subtitleDict[keySubTrackForced] intValue];
-        int burned = [subtitleDict[keySubTrackBurned] intValue];
-        int def = [subtitleDict[keySubTrackDefault] intValue];
-
-        // if i is 0, then we are in the first item of the subtitles which we need to
-        // check for the "Foreign Audio Search" which would be keySubTrackIndex of -1
-
-        // if we are on the first track and using "Foreign Audio Search"
-        if (i == 0 && subtitle == -1)
-        {
-            [HBUtilities writeToActivityLog: "Foreign Language Search: %d", 1];
-
-            job->indepth_scan = 1;
-
-            if (burned != 1)
-            {
-                job->select_subtitle_config.dest = PASSTHRUSUB;
-            }
-            else
-            {
-                job->select_subtitle_config.dest = RENDERSUB;
-            }
-
-            job->select_subtitle_config.force = force;
-            job->select_subtitle_config.default_track = def;
-        }
-        else
-        {
-            // if we are getting the subtitles from an external srt file
-            if ([subtitleDict[keySubTrackType] intValue] == SRTSUB)
-            {
-                hb_subtitle_config_t sub_config;
-
-                sub_config.offset = [subtitleDict[keySubTrackSrtOffset] intValue];
-
-                // we need to srncpy file name and codeset
-                strncpy(sub_config.src_filename, [subtitleDict[keySubTrackSrtFilePath] UTF8String], 255);
-                sub_config.src_filename[255] = 0;
-                strncpy(sub_config.src_codeset, [subtitleDict[keySubTrackSrtCharCode] UTF8String], 39);
-                sub_config.src_codeset[39] = 0;
-
-                if( !burned && hb_subtitle_can_pass( SRTSUB, job->mux ) )
-                {
-                    sub_config.dest = PASSTHRUSUB;
-                }
-                else if( hb_subtitle_can_burn( SRTSUB ) )
-                {
-                    // Only allow one subtitle to be burned into the video
-                    if( one_burned )
-                        continue;
-                    one_burned = TRUE;
-                    sub_config.dest = RENDERSUB;
-                }
-
-                sub_config.force = 0;
-                sub_config.default_track = def;
-                hb_srt_add( job, &sub_config, [subtitleDict[keySubTrackLanguageIsoCode] UTF8String]);
-                continue;
-            }
-
-            /* We are setting a source subtitle so access the source subtitle info */
-            hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item( title->list_subtitle, subtitle );
-
-            if( subt != NULL )
-            {
-                hb_subtitle_config_t sub_config = subt->config;
-
-                if( !burned && hb_subtitle_can_pass( subt->source, job->mux ) )
-                {
-                    sub_config.dest = PASSTHRUSUB;
-                }
-                else if( hb_subtitle_can_burn( subt->source ) )
-                {
-                    // Only allow one subtitle to be burned into the video
-                    if( one_burned )
-                        continue;
-                    one_burned = TRUE;
-                    sub_config.dest = RENDERSUB;
-                }
-
-                sub_config.force = force;
-                sub_config.default_track = def;
-                hb_subtitle_add( job, &sub_config, subtitle );
-            }
-        }
-        i++;
-    }
-    if( one_burned )
-    {
-        filter = hb_filter_init( HB_FILTER_RENDER_SUB );
-        hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d",
-                                  job->crop[0], job->crop[1],
-                                  job->crop[2], job->crop[3]] UTF8String] );
-    }
-
-    /* Auto Defaults */
-    NSDictionary *audioDefaults = queueToApply[@"AudioDefaults"];
-
-    job->acodec_copy_mask = 0;
-
-    if ([audioDefaults[@"AudioAllowAACPass"] boolValue])
-    {
-        job->acodec_copy_mask |= HB_ACODEC_FFAAC;
-    }
-    if ([audioDefaults[@"AudioAllowAC3Pass"] boolValue])
-    {
-        job->acodec_copy_mask |= HB_ACODEC_AC3;
-    }
-    if ([audioDefaults[@"AudioAllowDTSHDPass"] boolValue])
-    {
-        job->acodec_copy_mask |= HB_ACODEC_DCA_HD;
-    }
-    if ([audioDefaults[@"AudioAllowDTSPass"] boolValue])
-    {
-        job->acodec_copy_mask |= HB_ACODEC_DCA;
-    }
-    if ([audioDefaults[@"AudioAllowMP3Pass"] boolValue])
-    {
-        job->acodec_copy_mask |= HB_ACODEC_MP3;
-    }
-    job->acodec_fallback = hb_audio_encoder_get_from_name([audioDefaults[@"AudioEncoderFallback"] UTF8String]);
-
-    /* Audio tracks and mixdowns */
-    /* Now lets add our new tracks to the audio list here */
-    for (NSDictionary *audioDict in [queueToApply objectForKey:@"AudioList"])
-    {
-        audio           = (hb_audio_config_t *)calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [audioDict[@"Track"] intValue];
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track                     = audio->in.track;
-        audio->out.codec                     = [audioDict[@"JobEncoder"] intValue];
-        audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
-        audio->out.mixdown                   = [audioDict[@"JobMixdown"] intValue];
-        audio->out.normalize_mix_level       = 0;
-        audio->out.bitrate                   = [audioDict[@"JobBitrate"] intValue];
-        audio->out.samplerate                = [audioDict[@"JobSamplerate"] intValue];
-        audio->out.dynamic_range_compression = [audioDict[@"TrackDRCSlider"] doubleValue];
-        audio->out.gain                      = [audioDict[@"TrackGainSlider"] doubleValue];
-        audio->out.dither_method             = hb_audio_dither_get_default();
-
-        hb_audio_add(job, audio);
-        free(audio);
-    }
-
-    /* Now lets call the filters if applicable.
-     * The order of the filters is critical
-     */
-    /* Detelecine */
-    filter = hb_filter_init( HB_FILTER_DETELECINE );
-    if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 1)
-    {
-        /* use a custom detelecine string */
-        hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDetelecineCustom"] UTF8String] );
-    }
-    else if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 2)
-    {
-        /* Use libhb's default values */
-        hb_add_filter( job, filter, NULL );
-    }
-    
-    if ([[queueToApply objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
-    {
-        /* Decomb */
-        filter = hb_filter_init( HB_FILTER_DECOMB );
-        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
-        {
-            /* use a custom decomb string */
-            hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String] );
-        }
-        else if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
-        {
-            /* use libhb defaults */
-            hb_add_filter( job, filter, NULL );
-        }
-        else if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 3)
-        {
-            /* use old defaults (decomb fast) */
-            hb_add_filter( job, filter, "7:2:6:9:1:80" );
-        }
-        else if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 4)
-        {
-            /* decomb 3 with bobbing enabled */
-            hb_add_filter( job, filter, "455" );
-        }
-    }
-    else
-    {
-        /* Deinterlace */
-        filter = hb_filter_init( HB_FILTER_DEINTERLACE );
-        if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 1)
-        {
-            /* we add the custom string if present */
-            hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDeinterlaceCustom"] UTF8String] );            
-        }
-        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 2)
-        {
-            /* Run old deinterlacer fd by default */
-            hb_add_filter( job, filter, "0" );
-        }
-        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 3)
-        {
-            /* Yadif mode 0 (without spatial deinterlacing) */
-            hb_add_filter( job, filter, "1" );            
-        }
-        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 4)
-        {
-            /* Yadif (with spatial deinterlacing) */
-            hb_add_filter( job, filter, "3" );            
-        }
-        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 5)
-        {
-            /* Yadif (with spatial deinterlacing and bobbing) */
-            hb_add_filter( job, filter, "15" );            
-        }
-    }
-    /* Denoise */
-    if (![queueToApply[@"PictureDenoise"] isEqualToString:@"off"])
-    {
-        int filter_id = HB_FILTER_HQDN3D;
-        if ([queueToApply[@"PictureDenoise"] isEqualToString:@"nlmeans"])
-            filter_id = HB_FILTER_NLMEANS;
-
-        if ([queueToApply[@"PictureDenoisePreset"] isEqualToString:@"none"])
-        {
-            const char *filter_str;
-            filter_str = [queueToApply[@"PictureDenoiseCustom"] UTF8String];
-            filter = hb_filter_init(filter_id);
-            hb_add_filter(job, filter, filter_str);
-        }
-        else
-        {
-            const char *filter_str, *preset, *tune;
-            preset = [queueToApply[@"PictureDenoisePreset"] UTF8String];
-            tune = [queueToApply[@"PictureDenoiseTune"] UTF8String];
-            filter_str = hb_generate_filter_settings(filter_id, preset, tune);
-            filter = hb_filter_init(filter_id);
-            hb_add_filter(job, filter, filter_str);
-        }
-    }
-
-    /* Deblock  (uses pp7 default) */
-    /* NOTE: even though there is a valid deblock setting of 0 for the filter, for 
-     * the macgui's purposes a value of 0 actually means to not even use the filter
-     * current hb_filter_deblock.settings valid ranges are from 5 - 15 
-     */
-    filter = hb_filter_init( HB_FILTER_DEBLOCK );
-    if ([[queueToApply objectForKey:@"PictureDeblock"] intValue] != 0)
-    {
-        hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDeblock"] UTF8String] );
-    }
-
-    /* Add Crop/Scale filter */
-    filter = hb_filter_init(HB_FILTER_CROP_SCALE);
-    hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
-                                  [queueToApply[@"PictureWidth"] intValue], [queueToApply[@"PictureHeight"] intValue],
-                                  [queueToApply[@"PictureTopCrop"] intValue], [queueToApply[@"PictureBottomCrop"] intValue],
-                                  [queueToApply[@"PictureLeftCrop"] intValue], [queueToApply[@"PictureRightCrop"] intValue]] UTF8String] );
-
-    /* Add framerate shaping filter */
-    filter = hb_filter_init(HB_FILTER_VFR);
-    hb_add_filter(job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
-                                 fps_mode, fps_num, fps_den] UTF8String]);
-
-    [HBUtilities writeToActivityLog: "prepareJob exiting"];
-}
-
-
-
 /* addToQueue: puts up an alert before ultimately calling doAddToQueue
  */
-- (IBAction) addToQueue: (id) sender
+- (IBAction)addToQueue:(id)sender
 {
-	/* We get the destination directory from the destination field here */
-	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
-	/* We check for a valid destination here */
+	// We get the destination directory from the destination field here
+	NSString *destinationDirectory = self.job.destURL.path.stringByDeletingLastPathComponent;
+	// We check for a valid destination here
 	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
 	{
         NSAlert *alert = [[NSAlert alloc] init];
@@ -2926,29 +2068,28 @@ static void queueFSEventStreamCallback(
     BOOL fileExistsInQueue;
     fileExistsInQueue = NO;
     
-    /* We check for and existing file here */
-    if([[NSFileManager defaultManager] fileExistsAtPath: [fDstFile2Field stringValue]])
+    // We check for and existing file here
+    if([[NSFileManager defaultManager] fileExistsAtPath:self.job.destURL.path])
     {
         fileExists = YES;
     }
     
-    /* We now run through the queue and make sure we are not overwriting an exisiting queue item */
-	for (id tempObject in QueueFileArray)
+    // We now run through the queue and make sure we are not overwriting an exisiting queue item
+	for (HBJob *job in QueueFileArray)
 	{
-		NSDictionary *thisQueueDict = tempObject;
-		if ([[thisQueueDict objectForKey:@"DestinationPath"] isEqualToString: [fDstFile2Field stringValue]])
+		if ([job.destURL isEqualTo:self.job.destURL])
 		{
 			fileExistsInQueue = YES;	
 		}
 	}
 
-	if(fileExists == YES)
+	if (fileExists == YES)
     {
         NSAlert *alert = [NSAlert alertWithMessageText:@"File already exists."
                                          defaultButton:@"Cancel"
                                        alternateButton:@"Overwrite"
                                            otherButton:nil
-                             informativeTextWithFormat:@"Do you want to overwrite %@?", [fDstFile2Field stringValue]];
+                             informativeTextWithFormat:@"Do you want to overwrite %@?", self.job.destURL.path];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
@@ -2960,7 +2101,7 @@ static void queueFSEventStreamCallback(
                                          defaultButton:@"Cancel"
                                        alternateButton:@"Overwrite"
                                            otherButton:nil
-                             informativeTextWithFormat:@"Do you want to overwrite %@?", [fDstFile2Field stringValue]];
+                             informativeTextWithFormat:@"Do you want to overwrite %@?", self.job.destURL.path];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
@@ -2983,10 +2124,8 @@ static void queueFSEventStreamCallback(
 
 - (void) doAddToQueue
 {
-    [self addQueueFileItem ];
+    [self addQueueFileItem];
 }
-
-
 
 /* Rip: puts up an alert before ultimately calling doRip
 */
@@ -3000,23 +2139,23 @@ static void queueFSEventStreamCallback(
         return;
     }
     
-    /* We check to see if we need to warn the user that the computer will go to sleep
-                 or shut down when encoding is finished */
-                [self remindUserOfSleepOrShutdown];
+    // We check to see if we need to warn the user that the computer will go to sleep
+    // or shut down when encoding is finished
+    [self remindUserOfSleepOrShutdown];
     
     // If there are pending jobs in the queue, then this is a rip the queue
     if (fPendingCount > 0)
     {
         currentQueueEncodeIndex = [self getNextPendingQueueIndex];
-        /* here lets start the queue with the first pending item */
-        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
+        // here lets start the queue with the first pending item
+        HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
+        [self performNewQueueScan:queueJob.fileURL.path scanTitleNum:queueJob.titleIdx];
         
         return;
     }
     
     // Before adding jobs to the queue, check for a valid destination.
-    
-    NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+    NSString *destinationDirectory = self.job.destURL.path.stringByDeletingLastPathComponent;
     if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
     {
         NSAlert *alert = [[NSAlert alloc] init];
@@ -3027,14 +2166,14 @@ static void queueFSEventStreamCallback(
         return;
     }
     
-    /* We check for duplicate name here */
-    if( [[NSFileManager defaultManager] fileExistsAtPath:[fDstFile2Field stringValue]] )
+    // We check for duplicate name here
+    if( [[NSFileManager defaultManager] fileExistsAtPath:self.job.destURL.path] )
     {
         NSAlert *alert = [NSAlert alertWithMessageText:@"File already exists."
                                          defaultButton:@"Cancel"
                                        alternateButton:@"Overwrite"
                                            otherButton:nil
-                             informativeTextWithFormat:@"Do you want to overwrite %@?", [fDstFile2Field stringValue]];
+                             informativeTextWithFormat:@"Do you want to overwrite %@?", self.job.destURL.path];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         [alert beginSheetModalForWindow:fWindow modalDelegate:self didEndSelector:@selector( overWriteAlertDone:returnCode:contextInfo: ) contextInfo:NULL];
@@ -3049,10 +2188,10 @@ static void queueFSEventStreamCallback(
             [self doAddToQueue];
         }
         
-        /* go right to processing the new queue encode */
+        // go right to processing the new queue encode
         currentQueueEncodeIndex = [self getNextPendingQueueIndex];
-        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
-        
+        HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
+        [self performNewQueueScan:queueJob.fileURL.path scanTitleNum:queueJob.titleIdx];
     }
 }
 
@@ -3064,18 +2203,18 @@ static void queueFSEventStreamCallback(
 {
     if( returnCode == NSAlertAlternateReturn )
     {
-        /* if there are no jobs in the queue, then add this one to the queue and rip 
-        otherwise, just rip the queue */
-        if( fPendingCount == 0 )
+        // if there are no jobs in the queue, then add this one to the queue and rip
+        // otherwise, just rip the queue
+        if (fPendingCount == 0)
         {
             [self doAddToQueue];
         }
 
-        NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+        NSString *destinationDirectory = [self.job.destURL.path stringByDeletingLastPathComponent];
         [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
         currentQueueEncodeIndex = [self getNextPendingQueueIndex];
-        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
-
+        HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
+        [self performNewQueueScan:queueJob.fileURL.path scanTitleNum:queueJob.titleIdx];
     }
 }
 
@@ -3121,15 +2260,6 @@ static void queueFSEventStreamCallback(
     }
 
 }
-
-- (void) doRip
-{
-    /* Let libhb do the job */
-    [self.queueCore start];
-    /* set the fEncodeState State */
-    fEncodeState = 1;
-}
-
 
 //------------------------------------------------------------------------------------
 // Displays an alert asking user if the want to cancel encoding of current job.
@@ -3193,13 +2323,12 @@ static void queueFSEventStreamCallback(
 - (void) doCancelCurrentJob
 {
     // Stop the current job.
-
     [self.queueCore stop];
 
     fEncodeState = 2;   // don't alert at end of processing since this was a cancel
     
     // now that we've stopped the currently encoding job, lets mark it as cancelled
-    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
+    [QueueFileArray[currentQueueEncodeIndex] setState:HBJobStateCanceled];
     // and as always, save it in Queue.plist
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
@@ -3214,13 +2343,14 @@ static void queueFSEventStreamCallback(
     {
         /*Set our currentQueueEncodeIndex now to the newly found Pending encode as we own it */
         currentQueueEncodeIndex = newQueueItemIndex;
-        /* now we mark the queue item as Status = 1 ( being encoded ) so another instance can not come along and try to scan it while we are scanning */
-        [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
+        /* now we mark the queue item as worling so another instance can not come along and try to scan it while we are scanning */
+        [QueueFileArray[currentQueueEncodeIndex] setState:HBJobStateWorking];
         [HBUtilities writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
         [self saveQueueFileItem];
-        /* now we can go ahead and scan the new pending queue item */
-        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
 
+        HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
+        // now we can go ahead and scan the new pending queue item
+        [self performNewQueueScan:queueJob.fileURL.path scanTitleNum:queueJob.titleIdx];
     }
     else
     {
@@ -3235,7 +2365,7 @@ static void queueFSEventStreamCallback(
     fEncodeState = 2;   // don't alert at end of processing since this was a cancel
 
     // now that we've stopped the currently encoding job, lets mark it as cancelled
-    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
+    [QueueFileArray[currentQueueEncodeIndex] setState:HBJobStateCanceled];
     // and as always, save it in Queue.plist
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
@@ -3278,22 +2408,21 @@ static void queueFSEventStreamCallback(
 
 - (void) doAddAllTitlesToQueue
 {
-    
-    /* first get the currently selected index so we can choose it again after cycling through the available titles. */
+    // first get the currently selected index so we can choose it again after cycling through the available titles.
     NSInteger currentlySelectedTitle = [fSrcTitlePopUp indexOfSelectedItem];
     
     /* For each title in the fSrcTitlePopUp, select it */
-    for( int i = 0; i < [fSrcTitlePopUp numberOfItems]; i++ )
+    for (int i = 0; i < [fSrcTitlePopUp numberOfItems]; i++)
     {
         [fSrcTitlePopUp selectItemAtIndex:i];
-        /* Now call titlePopUpChanged to load it up */
+        // Now call titlePopUpChanged to load it up
         [self titlePopUpChanged:nil];
-        /* now add the title to the queue */
+        // now add the title to the queue
         [self addToQueue:nil];   
     }
-    /* Now that we are done, reselect the previously selected title.*/
+    // Now that we are done, reselect the previously selected title.
     [fSrcTitlePopUp selectItemAtIndex: currentlySelectedTitle];
-    /* Now call titlePopUpChanged to load it up */
+    // Now call titlePopUpChanged to load it up
     [self titlePopUpChanged:nil]; 
 }
 
@@ -3318,10 +2447,8 @@ static void queueFSEventStreamCallback(
                                                   videoCodec:self.job.video.encoder];
 
     // Swap the old one with the new one
-    [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@/%@.%@",
-                                     [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
-                                     fileName,
-                                     [[fDstFile2Field stringValue] pathExtension]]];
+    self.job.destURL = [[self.job.destURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:
+                        [NSString stringWithFormat:@"%@.%@", fileName, self.job.destURL.pathExtension]];
 }
 
 - (IBAction) titlePopUpChanged: (id) sender
@@ -3332,58 +2459,63 @@ static void queueFSEventStreamCallback(
         self.selectedPreset = [self createPresetFromCurrentSettings];
     }
 
-    HBTitle *hbtitle = self.core.titles[fSrcTitlePopUp.indexOfSelectedItem];
-    HBJob *job = [[[HBJob alloc] initWithTitle:hbtitle
-                                   andPreset:self.selectedPreset] autorelease];
+    HBTitle *title = self.core.titles[fSrcTitlePopUp.indexOfSelectedItem];
 
-    // Set the jobs info to the view controllers
-    fPictureController.picture = job.picture;
-    fPictureController.filters = job.filters;
-    fPreviewController.job = job;
+    // Check if we are reapplying a job from the queue, or creating a new one
+    if (self.jobFromQueue)
+    {
+        self.jobFromQueue.title = title;
+        self.job = self.jobFromQueue;
+    }
+    else
+    {
+        self.job = [[[HBJob alloc] initWithTitle:title andPreset:self.selectedPreset] autorelease];
 
-    fVideoController.video = job.video;
-    fAudioController.job = job;
-    fSubtitlesViewController.job = job;
-    fChapterTitlesController.job = job;
+        // use the correct extension based on the container
+        const char *ext = hb_container_get_default_extension(self.job.container);
 
-    // Set Auto Crop to on upon selecting a new title
-    job.picture.autocrop = YES;
+        // Check to see if the last destination has been set,use if so, if not, use Desktop
+        if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
+        {
+            NSURL *fileURL = [NSURL fileURLWithPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"]];
+            fileURL = [fileURL URLByAppendingPathComponent:self.browsedSourceDisplayName.stringByDeletingPathExtension];
+            fileURL = [fileURL URLByAppendingPathExtension:@(ext)];
+            self.job.destURL = fileURL;
+        }
+        else
+        {
+            self.job.destURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Desktop/%@.%s",
+                                                       NSHomeDirectory(),
+                                                       self.browsedSourceDisplayName.stringByDeletingPathExtension,
+                                                       ext]];
+        }
 
-    self.job = job;
-
-    hb_title_t *title = hbtitle.hb_title;
+        // set m4v extension if necessary - do not override user-specified .mp4 extension
+        if (self.job.container & HB_MUX_MASK_MP4)
+        {
+            [self autoSetM4vExtension:nil];
+        }
+    }
 
     // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
-    if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) && self.core.titles.count > 1)
+    if ((title.hb_title->type == HB_STREAM_TYPE || title.hb_title->type == HB_FF_STREAM_TYPE) && self.core.titles.count > 1)
     {
         // we set the default name according to the new title->name
-        [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                         @"%@/%@.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
-                                         [NSString stringWithUTF8String: title->name],
-                                         [[fDstFile2Field stringValue] pathExtension]]];
-        
+        self.job.destURL = [[self.job.destURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:
+                            [NSString stringWithFormat:@"%@.%@", title.name, self.job.destURL.pathExtension]];
+
         // Change the source to read out the parent folder also
-        [fSrcDVD2Field setStringValue:[NSString stringWithFormat:@"%@/%@", browsedSourceDisplayName,[NSString stringWithUTF8String: title->name]]];
+        fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@", self.browsedSourceDisplayName, title.name];
     }
-
-    [self chapterPopUpChanged:nil];
-
-    [fSrcAnglePopUp removeAllItems];
-
-    for (int i = 0; i < hbtitle.angles; i++)
-    {
-        [fSrcAnglePopUp addItemWithTitle:[NSString stringWithFormat: @"%d", i + 1]];
-    }
-    [fSrcAnglePopUp selectItemAtIndex: 0];
-
-    // If Auto Naming is on. We create an output filename of dvd name - title number
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
-	{
-        [self updateFileName];
-	}
 
     // apply the current preset
-    [self applyPreset:self.selectedPreset];
+    if (!self.jobFromQueue)
+    {
+        // Set Auto Crop to on upon selecting a new title
+        self.job.picture.autocrop = YES;
+
+        [self applyPreset:self.selectedPreset];
+    }
 }
 
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
@@ -3449,20 +2581,20 @@ static void queueFSEventStreamCallback(
 	}
 }
 
-- (IBAction) formatPopUpChanged: (id) sender
+- (void)formatChanged:(NSNotification *)notification
 {
-    NSString *string   = [fDstFile2Field stringValue];
-    int videoContainer = self.job.container;
-    const char *ext    = NULL;
-
-    // set the file extension
-    ext = hb_container_get_default_extension(videoContainer);
-    [fDstFile2Field setStringValue:[NSString stringWithFormat:@"%@.%s",
-                                    [string stringByDeletingPathExtension],
-                                    ext]];
-    if (videoContainer & HB_MUX_MASK_MP4)
+    if (self.job)
     {
-        [self autoSetM4vExtension:sender];
+        int videoContainer = self.job.container;
+
+        // set the file extension
+        const char *ext = hb_container_get_default_extension(videoContainer);
+        self.job.destURL = [[self.job.destURL URLByDeletingPathExtension] URLByAppendingPathExtension:@(ext)];
+
+        if (videoContainer & HB_MUX_MASK_MP4)
+        {
+            [self autoSetM4vExtension:notification];
+        }
     }
 }
 
@@ -3486,28 +2618,30 @@ static void queueFSEventStreamCallback(
         extension = @"m4v";
     }
     
-    if ([extension isEqualTo: [[fDstFile2Field stringValue] pathExtension]] )
+    if ([extension isEqualTo:self.job.destURL.pathExtension])
+    {
         return;
+    }
     else
-        [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%@",
-                                         [[fDstFile2Field stringValue] stringByDeletingPathExtension], extension]];
+    {
+        self.job.destURL = [[self.job.destURL URLByDeletingPathExtension] URLByAppendingPathExtension:extension];
+   }
 }
 
-/* Method to determine if we should change the UI
-To reflect whether or not a Preset is being used or if
-the user is using "Custom" settings by determining the sender*/
-- (IBAction) customSettingUsed: (id) sender
+/**
+ * Method to determine if we should change the UI
+ * To reflect whether or not a Preset is being used or if
+ * the user is using "Custom" settings by determining the sender
+ */
+- (void)customSettingUsed
 {
-	if ([sender stringValue])
-	{
-		/* Deselect the currently selected Preset if there is one*/
-        [fPresetsView deselect];
-		/* Change UI to show "Custom" settings are being used */
-		[fPresetSelectedDisplay setStringValue: @"Custom"];
-        self.customPreset = YES;
-	}
+    // Deselect the currently selected Preset if there is one*/
+    [fPresetsView deselect];
+    // Change UI to show "Custom" settings are being used */
+    fPresetSelectedDisplay.stringValue = NSLocalizedString(@"Custom", @"");
+    self.customPreset = YES;
 
-    /* If Auto Naming is on it might need to be update if it includes the quality token */
+    // If Auto Naming is on it might need to be update if it includes the quality token
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
 	{
         [self updateFileName];
@@ -3523,51 +2657,10 @@ the user is using "Custom" settings by determining the sender*/
 - (void)pictureSettingsDidChange 
 {
     // align picture settings and video filters in the UI using tabs
-    fVideoController.pictureSettings = [self pictureSettingsSummary];
+    fVideoController.pictureSettings = self.job.picture.summary;
     fVideoController.pictureFilters = self.job.filters.summary;
 
     [fPreviewController reloadPreviews];
-}
-
-#pragma mark -
-#pragma mark - Text Summaries
-
-- (NSString *)pictureSettingsSummary
-{
-    NSMutableString *summary = [NSMutableString stringWithString:@""];
-    if (self.job.picture)
-    {
-        HBPicture *pict = self.job.picture;
-        [summary appendString:pict.info];
-        if (pict.anamorphicMode != HB_ANAMORPHIC_STRICT)
-        {
-            // anamorphic is not Strict, show the modulus
-            [summary appendFormat:@", Modulus: %d", pict.modulus];
-        }
-        [summary appendFormat:@", Crop: %s %d/%d/%d/%d",
-         pict.autocrop ? "Auto" : "Custom",
-         pict.cropTop, pict.cropBottom,
-         pict.cropLeft, pict.cropRight];
-    }
-    return [NSString stringWithString:summary];
-}
-
-- (NSString *) muxerOptionsSummary
-{
-    NSMutableString *summary = [NSMutableString stringWithString:@""];
-    if ((self.job.container & HB_MUX_MASK_MP4)  && self.job.mp4HttpOptimize)
-    {
-        [summary appendString:@" - Web optimized"];
-    }
-    if ((self.job.container & HB_MUX_MASK_MP4)  && self.job.mp4iPodCompatible)
-    {
-        [summary appendString:@" - iPod 5G support"];
-    }
-    if ([summary hasPrefix:@" - "])
-    {
-        [summary deleteCharactersInRange:NSMakeRange(0, 3)];
-    }
-    return [NSString stringWithString:summary];
 }
 
 #pragma mark -
@@ -3685,6 +2778,12 @@ the user is using "Custom" settings by determining the sender*/
         
         // Subtitles
         [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
+
+        // If Auto Naming is on. We create an output filename of dvd name - title number
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+        {
+            [self updateFileName];
+        }
 
         [self pictureSettingsDidChange];
     }

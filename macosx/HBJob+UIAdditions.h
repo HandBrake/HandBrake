@@ -10,5 +10,9 @@
 @interface HBJob (UIAdditions)
 
 @property (nonatomic, readonly) BOOL mp4OptionsEnabled;
+@property (nonatomic, readonly) NSArray *angles;
 
+@end
+
+@interface HBURLTransformer : NSValueTransformer
 @end

@@ -13,7 +13,7 @@
  *  a KVO enabled class used in the Audio Defaults panels,
  *  automatically validates the values.
  */
-@interface HBAudioTrackPreset : NSObject <NSCoding>
+@interface HBAudioTrackPreset : NSObject <NSCoding, NSCopying>
 
 /**
  *  track properties.

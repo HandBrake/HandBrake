@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
+#import "HBPresetCoding.h"
 
 @class HBTitle;
 
@@ -13,15 +14,9 @@ extern NSString * const HBPictureChangedNotification;
 /**
  * HBPicture
  */
-@interface HBPicture : NSObject <NSCoding>
+@interface HBPicture : NSObject <NSCoding, NSCopying, HBPresetCoding>
 
 - (instancetype)initWithTitle:(HBTitle *)title;
-
-- (void)applyPictureSettingsFromQueue:(NSDictionary *)queueToApply;
-- (void)preparePictureForQueueFileJob:(NSMutableDictionary *)queueFileJob;
-
-- (void)preparePictureForPreset:(NSMutableDictionary *)preset;
-- (void)applySettingsFromPreset:(NSDictionary *)preset;
 
 @property (nonatomic, readwrite) int width;
 @property (nonatomic, readwrite) int height;

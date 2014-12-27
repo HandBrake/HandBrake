@@ -113,38 +113,22 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     {
         self.subtitleArray = job.subtitlesTracks;
         self.settings = job.subtitlesDefaults;
-        hb_title_t *title = job.title.hb_title;
+        self.subtitleSourceArray = [[job.title.subtitlesTracks mutableCopy] autorelease];
 
-        /* now populate the array with the source subtitle track info */
-        NSMutableArray *forcedSourceNamesArray = [[NSMutableArray alloc] init];
-        for (int i = 0; i < hb_list_count(title->list_subtitle); i++)
+        NSMutableArray *forcedSourceNamesArray = [NSMutableArray array];
+        for (NSDictionary *dict in self.subtitleSourceArray)
         {
-            hb_subtitle_t *subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, i);
-
-            /* Human-readable representation of subtitle->source */
-            NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
-            NSString *subSourceName = @(hb_subsource_name(subtitle->source));
-
-            /* if the subtitle track can be forced, add its source name to the array */
-            if (hb_subtitle_can_force(subtitle->source) && [forcedSourceNamesArray containsObject:subSourceName] == NO)
+            enum subsource source = [dict[keySubTrackType] intValue];
+            NSString *subSourceName = @(hb_subsource_name(source));
+            // if the subtitle track can be forced, add its source name to the array
+            if (hb_subtitle_can_force(source) && [forcedSourceNamesArray containsObject:subSourceName] == NO)
             {
                 [forcedSourceNamesArray addObject:subSourceName];
             }
-
-            // Use the native language name if available
-            iso639_lang_t *language = lang_for_code2(subtitle->iso639_2);
-            NSString *nativeLanguage = strlen(language->native_name) ? @(language->native_name) : @(language->eng_name);
-
-            /* create a dictionary of source subtitle information to store in our array */
-            [self.subtitleSourceArray addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, nativeLanguage, bitmapOrText, subSourceName],
-                                                  keySubTrackIndex: @(i),
-                                                  keySubTrackType: @(subtitle->source),
-                                                  keySubTrackLanguage: nativeLanguage,
-                                                  keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }
 
-        /* now set the name of the Foreign Audio Search track */
-        if ([forcedSourceNamesArray count])
+        // now set the name of the Foreign Audio Search track
+        if (forcedSourceNamesArray.count)
         {
             [forcedSourceNamesArray sortUsingComparator:^(id obj1, id obj2)
             {
@@ -154,7 +138,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
             NSString *tempList = @"";
             for (NSString *tempString in forcedSourceNamesArray)
             {
-                if ([tempList length])
+                if (tempList.length)
                 {
                     tempList = [tempList stringByAppendingString:@", "];
                 }
@@ -166,7 +150,23 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
         {
             self.foreignAudioSearchTrackName = @"Foreign Audio Search (Bitmap)";
         }
-        [forcedSourceNamesArray release];
+
+        // Note: we need to look for external subtitles so it can be added to the source array track.
+        // Remember the source container subs are already loaded with resetTitle which is already called
+        // so any external sub sources need to be added to our source subs here
+        for (NSDictionary *dict in self.subtitleArray)
+        {
+            /* We have an srt track */
+            if ([dict[keySubTrackType] intValue] == SRTSUB)
+            {
+                NSString *filePath = dict[keySubTrackSrtFilePath];
+                /* create a dictionary of source subtitle information to store in our array */
+                [self.subtitleSourceArray addObject:@{keySubTrackIndex: @(self.subtitleSourceArray.count + 1),
+                                                      keySubTrackName: [filePath lastPathComponent],
+                                                      keySubTrackType: @(SRTSUB),
+                                                      keySubTrackSrtFilePath: filePath}];
+            }
+        }
 
         // Append an empty track at the end
         // to display a "None" row in the table view
@@ -186,43 +186,8 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     [self.fTableView reloadData];
 }
 
-- (NSArray *)subtitles
-{
-    NSMutableArray *ret = [self.subtitleArray mutableCopy];
-    [ret removeLastObject];
-    return [ret autorelease];
-}
-
-- (void)addTracksFromQueue:(NSArray *)queueSubtitleArray
-{
-    /* Note: we need to look for external subtitles so it can be added to the source array track.
-     * Remember the source container subs are already loaded with resetTitle which is already called
-     * so any external sub sources need to be added to our source subs here
-     */
-    for (id tempObject in queueSubtitleArray)
-    {
-        /* We have an srt track */
-        if ([tempObject[keySubTrackType] intValue] == SRTSUB)
-        {
-            NSString *filePath = tempObject[keySubTrackSrtFilePath];
-            /* create a dictionary of source subtitle information to store in our array */
-            [self.subtitleSourceArray addObject:@{keySubTrackIndex: @(self.subtitleSourceArray.count + 1),
-                                                  keySubTrackName: [filePath lastPathComponent],
-                                                  keySubTrackType: @(SRTSUB),
-                                                  keySubTrackSrtFilePath: filePath}];
-        }
-    }
-
-    // Set the subtitleArray to the newSubtitleArray
-    [self.subtitleArray setArray:queueSubtitleArray];
-    [self.subtitleArray addObject:[self createSubtitleTrack]];
-    [self.fTableView reloadData];
-}
-
 - (void)applySettingsFromPreset:(NSDictionary *)preset
 {
-    [self.settings applySettingsFromPreset:preset];
-
     [self addTracksFromDefaults:self];
 }
 

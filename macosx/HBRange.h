@@ -14,7 +14,7 @@ typedef NS_ENUM(NSUInteger, HBRangeType) {
     HBRangeTypeSeconds,
 };
 
-@interface HBRange : NSObject <NSCoding>
+@interface HBRange : NSObject <NSCoding, NSCopying>
 
 - (instancetype)initWithTitle:(HBTitle *)title;
 

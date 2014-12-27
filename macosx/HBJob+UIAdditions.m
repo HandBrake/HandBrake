@@ -21,4 +21,42 @@
     }
 }
 
+- (NSArray *)angles
+{
+    NSMutableArray *angles = [NSMutableArray array];
+    for (int i = 0; i < self.title.angles; i++)
+    {
+        [angles addObject:[NSString stringWithFormat: @"%d", i + 1]];
+    }
+    return angles;
+}
+
 @end
+
+@implementation HBURLTransformer
+
++ (Class)transformedValueClass
+{
+    return [NSString class];
+}
+
+- (id)transformedValue:(id)value
+{
+    if (value)
+        return [value path];
+    else
+        return nil;
+}
+
++ (BOOL)allowsReverseTransformation
+{
+    return YES;
+}
+
+- (id)reverseTransformedValue:(id)value
+{
+    return [NSURL fileURLWithPath:value];
+}
+
+@end
+

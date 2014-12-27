@@ -33,11 +33,7 @@ extern NSString *HBMixdownChangedNotification;
 
 @property (nonatomic, readwrite, assign) HBJob *job;
 
-// Get the list of audio tracks
-@property (readonly, nonatomic, copy) NSArray *audioTracks;
-
 - (void) applySettingsFromPreset:(NSDictionary *)preset;
-- (void) addTracksFromQueue: (NSArray *) queueArray;
 
 - (BOOL) anyCodecMatches: (int) aCodecValue;
 - (void) settingTrackToNone: (HBAudio *) newNoneTrack;

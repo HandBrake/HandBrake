@@ -144,15 +144,12 @@
     int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
     int                          fWorkingCount;
     
-    NSInteger                      fqueueEditRescanItemNum; // queue array item to be reloaded into the main window
     pid_t                          pidNum; // The pid number for this instance
     NSString                     * currentQueueEncodeNameString;
     
     /* integer to set to determine the previous state
 		of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
-    BOOL                           applyQueueToScan;
-    NSString                      * browsedSourceDisplayName;
     
     /* Dock progress variables */
     double                          dockIconProgress;
@@ -164,7 +161,6 @@
 - (IBAction) showSourceTitleScanPanel: (id) sender;
 - (IBAction) closeSourceTitleScanPanel: (id) sender;  
 - (void) performScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
-- (IBAction) showNewScan: (id) sender;
 
 - (void)     enableUI:                                 (BOOL)     enable;
 
@@ -174,7 +170,6 @@
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
 
-- (IBAction) formatPopUpChanged: (id) sender;
 - (IBAction) autoSetM4vExtension: (id) sender;
 
 - (IBAction) browseFile: (id) sender;
@@ -183,10 +178,6 @@
 - (IBAction) showPreviewWindow: (id) sender;
 - (void)pictureSettingsDidChange;
 - (IBAction) openMainWindow: (id) sender;
-
-/* Text summaries of various settings */
-- (NSString*) pictureSettingsSummary;
-- (NSString*) muxerOptionsSummary;
 
 /* Add All titles to the queue */
 - (IBAction) addAllTitlesToQueue: (id) sender;
@@ -199,15 +190,13 @@
 - (void) closeQueueFSEvent;
 - (void) loadQueueFile;
 - (void) reloadQueue;
-- (NSDictionary *)createQueueFileItem;
 - (void)saveQueueFileItem;
 - (void) incrementQueueItemDone:(NSInteger) queueItemDoneIndexNum;
 - (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
 - (void) processNewQueueEncode;
 - (void) clearQueueEncodedItems;
 /* Queue Editing */
-- (IBAction)applyQueueSettingsToMainWindow:(id)sender;
-- (IBAction)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (NSUInteger) scanTitleNum selectedQueueItem: (NSUInteger) selectedQueueItem;
+- (IBAction)rescanQueueItemToMainWindow:(NSUInteger) selectedQueueItem;
 
 
 - (void) removeQueueFileItem:(NSUInteger) queueItemToRemove;
@@ -227,7 +216,6 @@
 - (IBAction) Rip: (id) sender;
 - (void)     overWriteAlertDone: (NSWindow *) sheet
                      returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (void)     doRip;
 
 - (IBAction) Cancel: (id) sender;
 - (void)     doCancelCurrentJob;
@@ -244,9 +232,7 @@
 - (IBAction) browseImportPresetFile: (id) sender;
 
 /* Manage User presets */    
-- (IBAction) customSettingUsed: (id) sender;
 - (IBAction) showAddPresetPanel: (id) sender;
-
 - (IBAction)selectDefaultPreset:(id)sender;
 - (IBAction)addFactoryPresets:(id)sender;
 

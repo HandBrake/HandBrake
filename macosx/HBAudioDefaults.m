@@ -70,7 +70,7 @@
     return nil;
 }
 
-- (void)applySettingsFromPreset:(NSDictionary *)preset
+- (void)applyPreset:(NSDictionary *)preset
 {
     // Track selection behavior
     if ([preset[@"AudioTrackSelectionBehavior"] isEqualToString:@"first"])
@@ -165,7 +165,7 @@
     }
 }
 
-- (void)prepareAudioDefaultsForPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(NSMutableDictionary *)preset
 {
     // Track selection behavior
     if (self.trackSelectionBehavior == HBAudioTrackSelectionBehaviorFirst)
@@ -239,6 +239,34 @@
     }
 
     self.container = container;
+}
+
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    HBAudioDefaults *copy = [[[self class] alloc] init];
+
+    if (copy)
+    {
+        copy->_trackSelectionBehavior = _trackSelectionBehavior;
+        [copy->_trackSelectionLanguages release];
+        copy->_trackSelectionLanguages = [_trackSelectionLanguages mutableCopy];
+
+        [copy->_tracksArray release];
+        copy->_tracksArray = [[NSMutableArray alloc] initWithArray:_tracksArray copyItems:YES];
+
+        copy->_allowAACPassthru = _allowAACPassthru;
+        copy->_allowAC3Passthru = _allowAC3Passthru;
+        copy->_allowDTSHDPassthru = _allowDTSHDPassthru;
+        copy->_allowDTSPassthru = _allowDTSPassthru;
+        copy->_allowMP3Passthru = _allowMP3Passthru;
+
+        copy->_encoderFallback = _encoderFallback;
+        copy->_secondaryEncoderMode = _secondaryEncoderMode;
+    }
+    
+    return copy;
 }
 
 #pragma mark - NSCoding

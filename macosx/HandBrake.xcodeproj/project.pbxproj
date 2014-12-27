@@ -401,6 +401,7 @@
 		A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBLanguagesSelection.h; sourceTree = "<group>"; };
 		A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBLanguagesSelection.m; sourceTree = "<group>"; };
 		A9935212196F38A70069C6B7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ChaptersTitles.xib; sourceTree = "<group>"; };
+		A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetCoding.h; sourceTree = "<group>"; };
 		A9A2A77F1A4737DD006C219C /* NSCodingMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSCodingMacro.h; sourceTree = "<group>"; };
 		A9AA44781970664A00D7DEFC /* HBUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBUtilities.h; sourceTree = "<group>"; };
 		A9AA44791970664A00D7DEFC /* HBUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBUtilities.m; sourceTree = "<group>"; };
@@ -911,6 +912,7 @@
 				273F209814ADBE670021BE6D /* HBDVDDetector.m */,
 				A9537BED1A48A7F900141102 /* UI Bindings Additions */,
 				A9A2A77F1A4737DD006C219C /* NSCodingMacro.h */,
+				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
 			);
 			name = Core;
 			sourceTree = "<group>";
