@@ -43,13 +43,6 @@
     [fChapterTable reloadData];
 }
 
-- (void)addChaptersFromQueue:(NSMutableArray *)newChaptersArray
-{
-    [self.chapterTitles removeAllObjects];
-    [self.chapterTitles addObjectsFromArray:newChaptersArray];
-    [fChapterTable reloadData];
-}
-
 - (IBAction)createChapterMarkersChanged:(id)sender
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:HBMixdownChangedNotification object:self];
