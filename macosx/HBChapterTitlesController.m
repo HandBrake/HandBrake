@@ -5,7 +5,6 @@
    It may be used under the terms of the GNU General Public License. */
    
 #import "HBChapterTitlesController.h"
-#import "Controller.h"
 #import "HBJob.h"
 
 @interface HBChapterTitlesController () <NSTableViewDataSource, NSTableViewDelegate>

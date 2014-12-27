@@ -7,16 +7,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString *keyAudioTrackIndex;
-extern NSString *keyAudioTrackName;
-extern NSString *keyAudioInputBitrate;
-extern NSString *keyAudioInputSampleRate;
-extern NSString *keyAudioInputCodec;
-extern NSString *keyAudioInputCodecParam;
-extern NSString *keyAudioInputChannelLayout;
-
-extern NSString *HBMixdownChangedNotification;
-
 @class HBJob;
 @class HBAudio;
 

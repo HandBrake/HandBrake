@@ -7,19 +7,18 @@
 #import <Cocoa/Cocoa.h>
 #import <Growl/Growl.h>
 
-#import "HBPictureController.h"
-#import "HBPreviewController.h"
+@class HBQueueController;
 
-#import "HBQueueController.h"
+@class HBVideoController;
+@class HBAudioController;
+@class HBSubtitlesController;
+@class HBAdvancedController;
+@class HBChapterTitlesController;
 
-#import "HBVideoController.h"
-#import "HBAudioController.h"
-#import "HBSubtitlesController.h"
-#import "HBAdvancedController.h"
-#import "HBChapterTitlesController.h"
+@class HBPictureController;
+@class HBPreviewController;
 
-#import "HBPreferencesController.h"
-
+@class HBPreferencesController;
 @class HBOutputPanelController;
 @class HBPresetsViewController;
 @class HBPresetsManager;

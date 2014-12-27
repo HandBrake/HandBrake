@@ -5,13 +5,24 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import "Controller.h"
+
+#import "HBQueueController.h"
+
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
-#import "HBPreviewController.h"
 #import "HBDockTile.h"
 #import "HBUtilities.h"
+
+#import "HBVideoController.h"
+#import "HBAudioController.h"
+#import "HBSubtitlesController.h"
+#import "HBAdvancedController.h"
+#import "HBChapterTitlesController.h"
+
+#import "HBPictureController.h"
+#import "HBPreviewController.h"
 
 #import "HBPresetsViewController.h"
 #import "HBAddPresetController.h"

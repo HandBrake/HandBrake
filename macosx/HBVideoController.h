@@ -6,9 +6,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBController;
 @class HBAdvancedController;
-
 @class HBVideo;
 
 /**

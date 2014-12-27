@@ -6,11 +6,9 @@
 
 #import "HBSubtitlesController.h"
 #import "HBSubtitlesDefaultsController.h"
-#import "HBSubtitlesDefaults.h"
 
 #import "HBJob.h"
 
-#import "Controller.h"
 #include "hb.h"
 #include "lang.h"
 
@@ -84,7 +82,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
                           @"ISO-8859-9E", @"ISO-8859-10", @"ISO-8859-11", @"ISO-8859-13", @"ISO-8859-14", @"ISO-8859-15", @"ISO-8859-16",
                           @"UTF-7", @"UTF-8", @"UTF-16", @"UTF-16LE", @"UTF-16BE", @"UTF-32", @"UTF-32LE", @"UTF-32BE"] retain];
 
-        // Register as observer for the HBController notifications.
+        // Register as observer for the HBJob notifications.
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(containerChanged:) name: HBContainerChangedNotification object: nil];
     }
 

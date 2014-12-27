@@ -13,6 +13,16 @@
 
 #import "NSCodingMacro.h"
 
+NSString *keyAudioTrackIndex = @"keyAudioTrackIndex";
+NSString *keyAudioTrackName = @"keyAudioTrackName";
+NSString *keyAudioInputBitrate = @"keyAudioInputBitrate";
+NSString *keyAudioInputSampleRate = @"keyAudioInputSampleRate";
+NSString *keyAudioInputCodec = @"keyAudioInputCodec";
+NSString *keyAudioInputCodecParam = @"keyAudioInputCodecParam";
+NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
+NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
+
+NSString *HBMixdownChangedNotification         = @"HBMixdownChangedNotification";
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
 NSString *keyContainerTag                      = @"keyContainerTag";
 

@@ -6,28 +6,13 @@
 //
 
 #import "HBAudioController.h"
-#import "Controller.h"
 #import "HBAudio.h"
-#import "HBAudioDefaults.h"
 #import "HBAudioDefaultsController.h"
-#import "HBAudioTrackPreset.h"
 
 #import "HBJob.h"
 
 #import "hb.h"
 #include "lang.h"
-
-NSString *keyAudioTrackIndex = @"keyAudioTrackIndex";
-NSString *keyAudioTrackName = @"keyAudioTrackName";
-NSString *keyAudioInputBitrate = @"keyAudioInputBitrate";
-NSString *keyAudioInputSampleRate = @"keyAudioInputSampleRate";
-NSString *keyAudioInputCodec = @"keyAudioInputCodec";
-NSString *keyAudioInputCodecParam = @"keyAudioInputCodecParam";
-NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
-NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
-
-NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
-
 
 @interface HBAudioController () {
     IBOutlet NSTableView         * fTableView;

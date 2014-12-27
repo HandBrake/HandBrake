@@ -191,7 +191,6 @@ typedef enum EncodeState : NSUInteger {
 /**
  * This function start the encode of a movie preview, the delegate will be
  * called with the updated the progress info and the fileURL.
- * The called must call HBController prepareJobForPreview before this.
  *
  * @param index picture index in title.
  * @param duration the duration in seconds of the preview movie.
