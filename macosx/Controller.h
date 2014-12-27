@@ -7,7 +7,7 @@
 #import <Cocoa/Cocoa.h>
 #import <Growl/Growl.h>
 
-#import "PictureController.h"
+#import "HBPictureController.h"
 #import "HBPreviewController.h"
 
 #import "HBQueueController.h"

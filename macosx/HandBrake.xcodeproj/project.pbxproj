@@ -33,7 +33,7 @@
 		273F20B614ADBE670021BE6D /* HBPresetsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A214ADBE670021BE6D /* HBPresetsManager.m */; };
 		273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A414ADBE670021BE6D /* HBPreviewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A614ADBE670021BE6D /* HBQueueController.mm */; };
-		273F20BA14ADBE670021BE6D /* PictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20AA14ADBE670021BE6D /* PictureController.m */; };
+		273F20BA14ADBE670021BE6D /* HBPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20AA14ADBE670021BE6D /* HBPictureController.m */; };
 		273F20BE14ADC09F0021BE6D /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 273F20BD14ADC09F0021BE6D /* main.mm */; };
 		273F20C314ADC4AE0021BE6D /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202914ADB8D60021BE6D /* libiconv.dylib */; };
 		273F20C414ADC4B60021BE6D /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202714ADB8BE0021BE6D /* libbz2.dylib */; };
@@ -288,8 +288,8 @@
 		273F20A314ADBE670021BE6D /* HBPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewController.h; sourceTree = "<group>"; };
 		273F20A414ADBE670021BE6D /* HBPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewController.m; sourceTree = "<group>"; };
 		273F20A614ADBE670021BE6D /* HBQueueController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = HBQueueController.mm; sourceTree = "<group>"; };
-		273F20A914ADBE670021BE6D /* PictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureController.h; sourceTree = "<group>"; };
-		273F20AA14ADBE670021BE6D /* PictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureController.m; sourceTree = "<group>"; };
+		273F20A914ADBE670021BE6D /* HBPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPictureController.h; sourceTree = "<group>"; };
+		273F20AA14ADBE670021BE6D /* HBPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPictureController.m; sourceTree = "<group>"; };
 		273F20BD14ADC09F0021BE6D /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		273F20BF14ADC1250021BE6D /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		273F20C014ADC1250021BE6D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -929,8 +929,8 @@
 				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
 				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
 				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
-				273F20A914ADBE670021BE6D /* PictureController.h */,
-				273F20AA14ADBE670021BE6D /* PictureController.m */,
+				273F20A914ADBE670021BE6D /* HBPictureController.h */,
+				273F20AA14ADBE670021BE6D /* HBPictureController.m */,
 				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
 				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
 				A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */,
@@ -1212,7 +1212,7 @@
 				A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */,
 				A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */,
 				273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */,
-				273F20BA14ADBE670021BE6D /* PictureController.m in Sources */,
+				273F20BA14ADBE670021BE6D /* HBPictureController.m in Sources */,
 				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
 				A9537BF91A48AC9000141102 /* HBFilters+UIAdditions.m in Sources */,
 				273F20BE14ADC09F0021BE6D /* main.mm in Sources */,
