@@ -163,6 +163,15 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
+                        <binding destination="-2" name="hidden2" keyPath="self.video.turboTwoPassSupported" previousBinding="jpH-IH-e0p" id="BFH-ET-uPq">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="iZE-er-OQN" id="Fbv-qd-JTg">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -172,17 +181,17 @@
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="hidden" keyPath="self.video.twoPass" previousBinding="Fbv-qd-JTg" id="jpH-IH-e0p">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="iZE-er-OQN">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.video.turboTwoPass" id="4A4-hg-qhy"/>
+                        <binding destination="-2" name="hidden" keyPath="self.video.twoPass" previousBinding="Fbv-qd-JTg" id="jpH-IH-e0p">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </button>
                 <popUpButton verticalHuggingPriority="750" id="xwK-Yu-a1e">
@@ -362,13 +371,13 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="pictureSettings" id="hem-VY-3fR"/>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="aVY-g8-jGq"/>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="Ph9-Gy-Sru">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="pictureSettings" id="hem-VY-3fR"/>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="aVY-g8-jGq"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="PW6-gP-Dyj">
@@ -380,13 +389,13 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="pictureFilters" id="Sr7-JI-M4y"/>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="FtS-pM-hKz"/>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="ckY-jh-UvA">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="pictureFilters" id="Sr7-JI-M4y"/>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="FtS-pM-hKz"/>
                     </connections>
                 </textField>
             </subviews>

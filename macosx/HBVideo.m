@@ -167,7 +167,8 @@
         retval = [NSSet setWithObjects:@"job.container", nil];
     }
 
-    if ([key isEqualToString:@"fastDecodeSupported"])
+    if ([key isEqualToString:@"fastDecodeSupported"] ||
+        [key isEqualToString:@"turboTwoPassSupported"])
     {
         retval = [NSSet setWithObjects:@"encoder", nil];
     }

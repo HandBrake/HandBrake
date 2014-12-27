@@ -21,6 +21,7 @@
 @property (nonatomic, readonly) NSArray *levels;
 
 @property (nonatomic, readonly) BOOL fastDecodeSupported;
+@property (nonatomic, readonly) BOOL turboTwoPassSupported;
 
 @property (nonatomic, readonly) NSString *unparseOptions;
 
