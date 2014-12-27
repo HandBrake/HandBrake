@@ -62,10 +62,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     self = [super initWithNibName:@"Video" bundle:nil];
     if (self)
     {
-        // Use a single HBVideo instance for now,
-        // will use the HBJob one in the future.
-        _video = [[HBVideo alloc] init];
-
         // Observe the advanced tab pref shown/hided state.
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
                                                                   forKeyPath:@"values.HBShowAdvancedTab"

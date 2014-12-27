@@ -45,9 +45,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 {
 	if (self = [super initWithWindowNibName:@"PictureSettings"])
 	{
-        _filters = [[HBFilters alloc] init];
-        _picture = [[HBPicture alloc] init];
-
         // NSWindowController likes to lazily load its window. However since
         // this controller tries to set all sorts of outlets before the window
         // is displayed, we need it to load immediately. The correct way to do
