@@ -5,7 +5,6 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-#import "HBViewValidation.h"
 
 @class HBController;
 @class HBAdvancedController;
@@ -15,7 +14,7 @@
 /**
  *  HBVideoController
  */
-@interface HBVideoController : NSViewController <HBViewValidation>
+@interface HBVideoController : NSViewController
 
 - (instancetype)initWithAdvancedController:(HBAdvancedController *)advancedController;
 
@@ -25,6 +24,6 @@
 @property (nonatomic, copy, readwrite) NSString *pictureSettings;
 @property (nonatomic, copy, readwrite) NSString *pictureFilters;
 
-@property (nonatomic, readwrite, retain) HBVideo *video;
+@property (nonatomic, readwrite, assign) HBVideo *video;
 
 @end

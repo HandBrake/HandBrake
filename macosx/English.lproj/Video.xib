@@ -48,12 +48,13 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.enabled" previousBinding="mjs-X8-KV8" id="Gpe-Tm-7wn">
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="mjs-X8-KV8" id="VTs-xH-tZg">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                 <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.video.avgBitrate" id="7eN-5J-5WV"/>
@@ -115,7 +116,11 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="mpI-26-Ajl"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="yN5-l3-JRJ">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="selectedValue" keyPath="self.video.frameRate" previousBinding="Heu-SS-Uwq" id="XC7-GV-Uae">
                             <dictionary key="options">
                                 <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
@@ -133,12 +138,13 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.enabled" previousBinding="7aV-7j-MzB" id="GSP-bg-aKw">
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="7aV-7j-MzB" id="c4g-dz-q05">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                 <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="7aV-7j-MzB">
@@ -157,12 +163,18 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.enabled" previousBinding="iZE-er-OQN" id="DQs-Z1-77T">
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="iZE-er-OQN" id="Fbv-qd-JTg">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                 <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="hidden" keyPath="self.video.twoPass" previousBinding="Fbv-qd-JTg" id="jpH-IH-e0p">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="iZE-er-OQN">
@@ -171,11 +183,6 @@
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.video.turboTwoPass" id="4A4-hg-qhy"/>
-                        <binding destination="-2" name="hidden" keyPath="self.video.twoPass" previousBinding="DQs-Z1-77T" id="sfq-sw-XJu">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                     </connections>
                 </button>
                 <popUpButton verticalHuggingPriority="750" id="xwK-Yu-a1e">
@@ -191,7 +198,11 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="kKW-qz-38E"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="Dhc-7W-mCB">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="selectedValue" keyPath="self.video.encoder" previousBinding="PbS-nr-Hjk" id="h1y-Vg-Gyg">
                             <dictionary key="options">
                                 <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
@@ -248,7 +259,11 @@
                         </column>
                     </cells>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="RaB-VA-rgV"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="Bhn-TM-mbV">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="selectedTag" keyPath="self.video.qualityType" id="Bpj-MC-Zf7"/>
                     </connections>
                 </matrix>
@@ -275,7 +290,11 @@
                         </column>
                     </cells>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="7Cn-NH-MAP"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="RUB-wC-Q0A">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="selectedIndex" keyPath="self.video.frameRateMode" id="tJr-26-Y2P"/>
                     </connections>
                 </matrix>
@@ -296,12 +315,13 @@
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
                     <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.enabled" previousBinding="wCA-ag-GHJ" id="EOE-Cw-D0K">
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="wCA-ag-GHJ" id="ywk-WQ-GNY">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                 <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.video.quality" previousBinding="nAO-gB-Jbd" id="C3d-pR-fJ2">
@@ -342,8 +362,12 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="Ph9-Gy-Sru">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="value" keyPath="pictureSettings" id="hem-VY-3fR"/>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="uv0-Gi-gXH"/>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="aVY-g8-jGq"/>
                     </connections>
                 </textField>
@@ -356,8 +380,12 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="ckY-jh-UvA">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="value" keyPath="pictureFilters" id="Sr7-JI-M4y"/>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="Joa-BW-Ekr"/>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="FtS-pM-hKz"/>
                     </connections>
                 </textField>
@@ -552,7 +580,11 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="eDg-nl-sf5"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="GDV-uX-eAs">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="value" keyPath="self.video.advancedOptions" id="sQg-ab-NdN"/>
                     </connections>
                 </button>

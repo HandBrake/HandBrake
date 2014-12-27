@@ -68,8 +68,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 @implementation HBSubtitlesController
 
-@synthesize enabled = _enabled;
-
 - (instancetype)init
 {
     self = [super initWithNibName:@"Subtitles" bundle:nil];
@@ -93,15 +91,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     return self;
 }
 
-- (void)setEnabled:(BOOL)enabled
-{
-    [self.trackPopUp setEnabled:enabled];
-    [self.configureDefaults setEnabled:enabled];
-    [self.reloadDefaults setEnabled:enabled];
-    [self.fTableView setEnabled:enabled];
-    _enabled = enabled;
-}
-
 - (void)setJob:(HBJob *)job
 {
     /* reset the subtitles arrays */
@@ -111,6 +100,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
     if (job)
     {
+        _job = job;
         self.subtitleArray = job.subtitlesTracks;
         self.settings = job.subtitlesDefaults;
         self.subtitleSourceArray = [[job.title.subtitlesTracks mutableCopy] autorelease];
@@ -172,6 +162,10 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
         // to display a "None" row in the table view
         [self.subtitleArray addObject:[self createSubtitleTrack]];
     }
+    else
+    {
+        _job = nil;
+    }
 
     [self.fTableView reloadData];    
 }
@@ -195,7 +189,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
 {
-    return self.enabled;
+    return (self.job != nil);
 }
 
 /**

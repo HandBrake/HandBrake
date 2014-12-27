@@ -58,7 +58,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 @synthesize masterTrackArray;
 @synthesize noneTrack;
 @synthesize videoContainerTag;
-@synthesize enabled = _enabled;
 
 - (instancetype)init
 {
@@ -97,18 +96,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self switchingTrackFromNone:nil];
 }
 
-- (void)setEnabled:(BOOL)enabled
-{
-    _enabled = enabled;
-    [fTableView setEnabled:enabled];
-    [self.trackPopup setEnabled:enabled];
-    [self.configureDefaults setEnabled:enabled];
-    [self.reloadDefaults setEnabled:enabled];
-}
-
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
 {
-    return self.enabled;
+    return (self.job != nil);
 }
 
 #pragma mark -
@@ -407,6 +397,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     
     if (job)
     {
+        _job = job;
         [audioArray release];
         audioArray = [job.audioTracks retain];
         self.settings = job.audioDefaults;
@@ -431,6 +422,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     }
     else
     {
+        _job = nil;
         [audioArray release];
         audioArray = nil;
         self.settings = nil;

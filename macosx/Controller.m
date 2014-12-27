@@ -25,7 +25,7 @@
 // DockTile update freqency in total percent increment
 #define dockTileUpdateFrequency                  0.1f
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBPreviewControllerDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBPreviewControllerDelegate, HBPictureControllerDelegate>
 
 @property (nonatomic, copy) NSString *browsedSourceDisplayName;
 
@@ -680,9 +680,6 @@
     }
 
     fPresetsView.enabled = b;
-    fVideoController.enabled = b;
-    fAudioController.enabled = b;
-    fSubtitlesViewController.enabled = b;
 }
 
 /**
@@ -949,10 +946,8 @@
         // to determine if we should check for encode done notifications.
         if (fEncodeState != 2)
         {
-            NSString *pathOfFinishedEncode;
             // Get the output file name for the finished encode
             HBJob *finishedJob = QueueFileArray[currentQueueEncodeIndex];
-            pathOfFinishedEncode = finishedJob.destURL.path;
 
             // Both the Growl Alert and Sending to tagger can be done as encodes roll off the queue
             if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] ||
@@ -963,11 +958,11 @@
                 {
                     NSBeep();
                 }
-                [self showGrowlDoneNotification:pathOfFinishedEncode];
+                [self showGrowlDoneNotification:finishedJob.destURL];
             }
 
             // Send to tagger
-            [self sendToMetaX:pathOfFinishedEncode];
+            [self sendToExternalApp:finishedJob.destURL];
 
             // since we have successfully completed an encode, we increment the queue counter
             [self incrementQueueItemDone:currentQueueEncodeIndex];
@@ -1173,50 +1168,46 @@
 
 #pragma mark -
 #pragma mark Encode Done Actions
-// register a test notification and make
-// it enabled by default
+
 #define SERVICE_NAME @"Encode Done"
+
+/**
+ *  Register a test notification and make
+ *  it enabled by default
+ */
 - (NSDictionary *)registrationDictionaryForGrowl 
 { 
-    NSDictionary *registrationDictionary = [NSDictionary dictionaryWithObjectsAndKeys: 
-    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_ALL, 
-    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_DEFAULT, 
-    nil]; 
-
-    return registrationDictionary; 
-} 
-
--(void)showGrowlDoneNotification:(NSString *) filePath
-{
-    /* This end of encode action is called as each encode rolls off of the queue */
-    /* Setup the Growl stuff */
-    NSString * finishedEncode = filePath;
-    /* strip off the path to just show the file name */
-    finishedEncode = [finishedEncode lastPathComponent];
-    NSString * growlMssg = [NSString stringWithFormat: @"your HandBrake encode %@ is done!",finishedEncode];
-    [GrowlApplicationBridge 
-     notifyWithTitle:@"Put down that cocktail…" 
-     description:growlMssg 
-     notificationName:SERVICE_NAME
-     iconData:nil 
-     priority:0 
-     isSticky:1 
-     clickContext:nil];
+    return @{GROWL_NOTIFICATIONS_ALL: @[SERVICE_NAME],
+             GROWL_NOTIFICATIONS_DEFAULT: @[SERVICE_NAME]};
 }
--(void)sendToMetaX:(NSString *) filePath
+
+- (void)showGrowlDoneNotification:(NSURL *)fileURL
 {
-    /* This end of encode action is called as each encode rolls off of the queue */
+    // This end of encode action is called as each encode rolls off of the queue
+    // Setup the Growl stuff
+    NSString *growlMssg = [NSString stringWithFormat:@"your HandBrake encode %@ is done!", fileURL.lastPathComponent];
+    [GrowlApplicationBridge notifyWithTitle:@"Put down that cocktail…"
+                                description:growlMssg
+                           notificationName:SERVICE_NAME
+                                   iconData:nil
+                                   priority:0
+                                   isSticky:1
+                               clickContext:nil];
+}
+
+- (void)sendToExternalApp:(NSURL *)fileURL
+{
+    // This end of encode action is called as each encode rolls off of the queue
     if([[NSUserDefaults standardUserDefaults] boolForKey: @"sendToMetaX"] == YES)
     {
-        NSString *sendToApp = [[NSUserDefaults standardUserDefaults] objectForKey: @"SendCompletedEncodeToApp"];
+        NSString *sendToApp = [[NSUserDefaults standardUserDefaults] objectForKey:@"SendCompletedEncodeToApp"];
         if (![sendToApp isEqualToString:@"None"])
         {
             [HBUtilities writeToActivityLog: "trying to send encode to: %s", [sendToApp UTF8String]];
-            NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@%@%@", @"tell application \"",sendToApp,@"\" to open (POSIX file \"", filePath, @"\")"]];
+            NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@%@%@", @"tell application \"",sendToApp,@"\" to open (POSIX file \"", fileURL.path, @"\")"]];
             [myScript executeAndReturnError: nil];
             [myScript release];
         }
-        
     }
 }
 

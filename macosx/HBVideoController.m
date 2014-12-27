@@ -45,8 +45,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 
 @implementation HBVideoController
 
-@synthesize enabled = _enabled;
-
 - (instancetype)initWithAdvancedController:(HBAdvancedController *)advancedController
 {
     self = [self init];
@@ -62,6 +60,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     self = [super initWithNibName:@"Video" bundle:nil];
     if (self)
     {
+        _labelColor = [[NSColor disabledControlTextColor] retain];
+
         // Observe the advanced tab pref shown/hided state.
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
                                                                   forKeyPath:@"values.HBShowAdvancedTab"
@@ -84,11 +84,11 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     return self;
 }
 
-- (void)setEnabled:(BOOL)flag
+- (void)setVideo:(HBVideo *)video
 {
-    _enabled = flag;
+    _video = video;
 
-    if (_enabled)
+    if (_video)
     {
         self.labelColor = [NSColor controlTextColor];
     }
@@ -97,7 +97,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         self.labelColor = [NSColor disabledControlTextColor];
     }
 
-    [self enableEncoderOptionsWidgets:flag];
+    [self enableEncoderOptionsWidgets:(video != nil)];
 }
 
 #pragma mark - KVO
@@ -151,7 +151,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
                 }
             }
             // enable/disable, populate and update the various widgets
-            [self enableEncoderOptionsWidgets:self.enabled];
+            [self enableEncoderOptionsWidgets:(self.video != nil)];
 
         } else if ([keyPath isEqualToString:@"values.HBShowAdvancedTab"])
         {

@@ -25,7 +25,7 @@
 @class HBPresetsManager;
 @class HBDockTile;
 
-@interface HBController : NSObject <NSApplicationDelegate, GrowlApplicationBridgeDelegate, HBPictureControllerDelegate, NSDrawerDelegate>
+@interface HBController : NSObject <NSApplicationDelegate, NSDrawerDelegate, GrowlApplicationBridgeDelegate>
 {
     IBOutlet NSWindow            * fWindow;
 
@@ -196,8 +196,7 @@
 - (void) processNewQueueEncode;
 - (void) clearQueueEncodedItems;
 /* Queue Editing */
-- (IBAction)rescanQueueItemToMainWindow:(NSUInteger) selectedQueueItem;
-
+- (void)rescanQueueItemToMainWindow:(NSUInteger) selectedQueueItem;
 
 - (void) removeQueueFileItem:(NSUInteger) queueItemToRemove;
 - (void) clearQueueAllItems;
@@ -235,11 +234,6 @@
 - (IBAction) showAddPresetPanel: (id) sender;
 - (IBAction)selectDefaultPreset:(id)sender;
 - (IBAction)addFactoryPresets:(id)sender;
-
--(void)sendToMetaX:(NSString *) filePath;
-// Growl methods
-- (NSDictionary *) registrationDictionaryForGrowl;
--(void)showGrowlDoneNotification:(NSString *) filePath;
 - (IBAction)showDebugOutputPanel:(id)sender;
 
 - (void) remindUserOfSleepOrShutdown;
