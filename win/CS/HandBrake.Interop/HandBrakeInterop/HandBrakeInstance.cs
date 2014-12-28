@@ -17,6 +17,7 @@ namespace HandBrake.Interop
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Timers;
@@ -264,12 +265,13 @@ namespace HandBrake.Interop
         /// <param name="job">The encode job to preview.</param>
         /// <param name="previewNumber">The index of the preview to get (0-based).</param>
         /// <returns>An image with the requested preview.</returns>
+        [HandleProcessCorruptedStateExceptions] 
         public BitmapImage GetPreview(EncodeJob job, int previewNumber)
         {
-
             Title title = this.Titles.FirstOrDefault(t => t.TitleNumber == job.Title);
             Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
 
+            // Creat the Expected Output Geometry details for libhb.
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
                 crop = new[] { job.EncodingProfile.Cropping.Top, job.EncodingProfile.Cropping.Bottom, job.EncodingProfile.Cropping.Left, job.EncodingProfile.Cropping.Right },
@@ -279,40 +281,56 @@ namespace HandBrake.Interop
                 maxHeight = job.EncodingProfile.MaxHeight,
                 mode = (int)(hb_anamorphic_mode_t)job.EncodingProfile.Anamorphic,
                 modulus = job.EncodingProfile.Modulus,
-                geometry = new hb_geometry_s { height = job.EncodingProfile.Height, width = job.EncodingProfile.Width, 
-                    par = job.EncodingProfile.Anamorphic != Anamorphic.Custom 
+                geometry = new hb_geometry_s
+                {
+                    height = job.EncodingProfile.Height,
+                    width = job.EncodingProfile.Width,
+                    par = job.EncodingProfile.Anamorphic != Anamorphic.Custom
                         ? new hb_rational_t { den = title.ParVal.Height, num = title.ParVal.Width }
-                        : new hb_rational_t { den = job.EncodingProfile.PixelAspectY, num = job.EncodingProfile.PixelAspectX } }
+                        : new hb_rational_t { den = job.EncodingProfile.PixelAspectY, num = job.EncodingProfile.PixelAspectX }
+                }
             };
 
             // Sanatise the input.
-           Json.Anamorphic.Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
-
-           int outputWidth = resultGeometry.Width;
-           int outputHeight = resultGeometry.Height;
-           int imageBufferSize = outputWidth * outputHeight * 4;
-           IntPtr nativeBuffer = Marshal.AllocHGlobal(imageBufferSize);
-
-
-            HBFunctions.hb_get_preview2(this.hbHandle, job.Title, previewNumber, ref uiGeometry, 0);
+            Json.Anamorphic.Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
+            int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
+            int height = resultGeometry.Height;
+            uiGeometry.geometry.height = resultGeometry.Height; // Prased the height now.
+            int outputWidth = width;
+            int outputHeight = height;
+           
+            // Fetch the image data from LibHb
+            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, job.Title, previewNumber, ref uiGeometry, 0);
+            hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStuct);
 
             // Copy the filled image buffer to a managed array.
+            int stride_width = image.plane[0].stride;
+            int stride_height = image.plane[0].height_stride;
+            int imageBufferSize = stride_width * stride_height;  // int imageBufferSize = outputWidth * outputHeight * 4;
+
             byte[] managedBuffer = new byte[imageBufferSize];
-            Marshal.Copy(nativeBuffer, managedBuffer, 0, imageBufferSize);
+            Marshal.Copy(image.plane[0].data, managedBuffer, 0, imageBufferSize);
 
             var bitmap = new Bitmap(outputWidth, outputHeight);
             BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, outputWidth, outputHeight), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
 
-            IntPtr ptr = bitmapData.Scan0;
-
-            for (int i = 0; i < job.EncodingProfile.Height; i++)
+            IntPtr ptr = bitmapData.Scan0; // Pointer to the first pixel.
+            for (int i = 0; i < image.height; i++)
             {
-                Marshal.Copy(managedBuffer, i * job.EncodingProfile.Width * 4, ptr, job.EncodingProfile.Width * 4);
-                ptr = IntPtr.Add(ptr, bitmapData.Stride);
+                try
+                {
+                    Marshal.Copy(managedBuffer, i * stride_width, ptr, stride_width);
+                    ptr = IntPtr.Add(ptr, outputWidth * 4);
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc); // In theory, this will allow a partial image display if this happens. TODO add better logging of this.
+                }
             }
 
             bitmap.UnlockBits(bitmapData);
 
+            // Create a Bitmap Image for display.
             using (var memoryStream = new MemoryStream())
             {
                 try
