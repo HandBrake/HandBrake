@@ -50,37 +50,39 @@
 
 - (NSString *)info
 {
-    if (!self.title)
-    {
-        return @"";
-    }
+    NSString *sizeInfo = @"";
 
-    NSString *sizeInfo;
-    hb_title_t *title = self.title.hb_title;
+    if (self.title)
+    {
+        hb_title_t *title = self.title.hb_title;
+        sizeInfo = [NSString stringWithFormat:
+                    @"Source: %dx%d, ",
+                    title->geometry.width, title->geometry.height];
+    }
 
     if (self.anamorphicMode == HB_ANAMORPHIC_STRICT) // Original PAR Implementation
     {
         sizeInfo = [NSString stringWithFormat:
-                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
-                    title->geometry.width, title->geometry.height, self.width, self.height, self.displayWidth, self.height];
+                    @"%@Output: %dx%d, Anamorphic: %dx%d Strict",
+                    sizeInfo, self.width, self.height, self.displayWidth, self.height];
     }
     else if (self.anamorphicMode == HB_ANAMORPHIC_LOOSE) // Loose Anamorphic
     {
         sizeInfo = [NSString stringWithFormat:
-                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
-                    title->geometry.width, title->geometry.height, self.width, self.height, self.displayWidth, self.height];
+                    @"%@Output: %dx%d, Anamorphic: %dx%d Loose",
+                    sizeInfo, self.width, self.height, self.displayWidth, self.height];
     }
     else if (self.anamorphicMode == HB_ANAMORPHIC_CUSTOM) // Custom Anamorphic
     {
         sizeInfo = [NSString stringWithFormat:
-                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",
-                    title->geometry.width, title->geometry.height, self.width, self.height, self.displayWidth, self.height];
+                    @"%@Output: %dx%d, Anamorphic: %dx%d Custom",
+                    sizeInfo, self.width, self.height, self.displayWidth, self.height];
     }
     else // No Anamorphic
     {
         sizeInfo = [NSString stringWithFormat:
-                    @"Source: %dx%d, Output: %dx%d",
-                    title->geometry.width, title->geometry.height, self.width, self.height];
+                    @"%@Output: %dx%d",
+                    sizeInfo, self.width, self.height];
     }
 
     return sizeInfo;

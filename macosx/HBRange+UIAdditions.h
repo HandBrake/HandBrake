@@ -10,5 +10,6 @@
 @interface HBRange (UIAdditions)
 
 @property (nonatomic, readonly) NSArray *chapters;
+@property (nonatomic, readonly) NSArray *types;
 
 @end

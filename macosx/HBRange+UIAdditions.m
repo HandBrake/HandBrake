@@ -18,4 +18,11 @@
     return chapters;
 }
 
+- (NSArray *)types
+{
+    return @[NSLocalizedString(@"Chapters", @""),
+             NSLocalizedString(@"Seconds", @""),
+             NSLocalizedString(@"Frames", @"")];
+}
+
 @end

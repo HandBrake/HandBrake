@@ -31,6 +31,26 @@
     return self;
 }
 
+- (void)setChapterStart:(int)chapterStart
+{
+    if (chapterStart > self.chapterStop)
+    {
+        self.chapterStop = chapterStart;
+    }
+
+    _chapterStart = chapterStart;
+}
+
+- (void)setChapterStop:(int)chapterStop
+{
+    if (chapterStop < self.chapterStart)
+    {
+        self.chapterStart = chapterStop;
+    }
+
+    _chapterStop = chapterStop;
+}
+
 - (NSString *)duration
 {
     if (self.type == HBRangeTypeChapters)

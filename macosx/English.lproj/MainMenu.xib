@@ -120,6 +120,7 @@
                         </popUpButtonCell>
                         <connections>
                             <action selector="encodeStartStopPopUpChanged:" target="240" id="5520"/>
+                            <binding destination="240" name="content" keyPath="self.job.range.types" id="nr8-sN-wpW"/>
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="5180">
@@ -213,7 +214,12 @@
                         </popUpButtonCell>
                         <accessibility description="Format"/>
                         <connections>
-                            <binding destination="240" name="selectedTag" keyPath="self.job.container" id="ful-Gq-2mt"/>
+                            <binding destination="240" name="selectedValue" keyPath="self.job.container" previousBinding="7Po-AA-KsM" id="brh-Ek-It1">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">HBContainerTransformer</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="240" name="content" keyPath="self.job.containers" id="7Po-AA-KsM"/>
                         </connections>
                     </popUpButton>
                     <button verticalHuggingPriority="750" id="1562">
@@ -252,8 +258,9 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="240" name="value" keyPath="self.job.destURL" id="f8U-7W-7gP">
+                            <binding destination="240" name="value" keyPath="self.job.destURL" id="Vmi-3b-LD5">
                                 <dictionary key="options">
+                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                     <string key="NSValueTransformerName">HBURLTransformer</string>
                                 </dictionary>
                             </binding>

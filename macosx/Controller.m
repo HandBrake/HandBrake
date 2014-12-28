@@ -547,12 +547,6 @@
 		[fPresetDrawer open:self];
 	}
 
-    /* Setup the start / stop popup */
-    [fEncodeStartStopPopUp removeAllItems];
-    [fEncodeStartStopPopUp addItemWithTitle: @"Chapters"];
-    [fEncodeStartStopPopUp addItemWithTitle: @"Seconds"];
-    [fEncodeStartStopPopUp addItemWithTitle: @"Frames"];
-
     // Align the start / stop widgets with the chapter popups
     NSPoint startPoint = [fSrcChapterStartPopUp frame].origin;
     startPoint.y += 2;
@@ -565,38 +559,12 @@
     
     [fSrcFrameStartEncodingField setFrameOrigin:startPoint];
     [fSrcFrameEndEncodingField setFrameOrigin:endPoint];
-    
-    /* Destination box*/
-    NSMenuItem *menuItem;
-    [fDstFormatPopUp removeAllItems];
-    for (const hb_container_t *container = hb_container_get_next(NULL);
-         container != NULL;
-         container  = hb_container_get_next(container))
-    {
-        NSString *title = nil;
-        if (container->format & HB_MUX_MASK_MP4)
-        {
-            title = @"MP4 File";
-        }
-        else if (container->format & HB_MUX_MASK_MKV)
-        {
-            title = @"MKV File";
-        }
-        else
-        {
-            title = [NSString stringWithUTF8String:container->name];
-        }
-        menuItem = [[fDstFormatPopUp menu] addItemWithTitle:title
-                                                     action:nil
-                                              keyEquivalent:@""];
-        [menuItem setTag:container->format];
-    }
 
-    /* Bottom */
-    [fStatusField setStringValue: @""];
+    // Bottom
+    [fStatusField setStringValue:@""];
 
-    /* Register HBController's Window as a receiver for files/folders drag & drop operations */
-    [fWindow registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+    // Register HBController's Window as a receiver for files/folders drag & drop operations
+    [fWindow registerForDraggedTypes:@[NSFilenamesPboardType]];
 
     // Set up the preset drawer
     fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
@@ -1582,10 +1550,8 @@
 {
     // Open a panel to let the user choose and update the text field
     NSSavePanel *panel = [NSSavePanel savePanel];
-
-	// We get the current file name and path from the destination field here
-    [panel setDirectoryURL:self.job.destURL.URLByDeletingLastPathComponent];
-    [panel setNameFieldStringValue:self.job.destURL.lastPathComponent];
+    panel.directoryURL = self.job.destURL.URLByDeletingLastPathComponent;
+    panel.nameFieldStringValue = self.job.destURL.lastPathComponent;
 
     [panel beginSheetModalForWindow:fWindow completionHandler:^(NSInteger result) {
         if (result == NSFileHandlingPanelOKButton)
@@ -2017,6 +1983,9 @@ static void queueFSEventStreamCallback(
 
         // Lets mark our new encode as 1 or "Encoding"
         queueJob.state = HBJobStateWorking;
+
+        // We are done using the title, remove it from the job
+        queueJob.title = nil;
         [self saveQueueFileItem];
     }
     else
@@ -2270,12 +2239,6 @@ static void queueFSEventStreamCallback(
 //------------------------------------------------------------------------------------
 - (IBAction)Cancel: (id)sender
 {
-    if (!fQueueController) return;
-    
-    /*
-     * No need to allow system sleep here as we'll either call Cancel:
-     * (which will take care of it) or resume right away
-     */
     [self.queueCore pause];
 
     // Which window to attach the sheet to?

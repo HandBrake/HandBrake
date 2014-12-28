@@ -52,9 +52,7 @@
     int                          fEncodingQueueItem;    // corresponds to the index of fJobGroups encoding item
     int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
     int                          fWorkingCount;
-    BOOL                         fJobGroupCountsNeedUpdating;
 
-    BOOL                         fCurrentJobPaneShown;  // NO when fCurrentJobPane has been shifted out of view (see showCurrentJobPane)
     NSMutableIndexSet            *fSavedExpandedItems;  // used by save/restoreOutlineViewState to preserve which items are expanded
     NSMutableIndexSet            *fSavedSelectedItems;  // used by save/restoreOutlineViewState to preserve which items are selected
 
@@ -241,9 +239,6 @@
     // Don't allow autoresizing of main column, else the "delete" column will get
     // pushed out of view.
     [fOutlineView setAutoresizesOutlineColumn: NO];
-
-    // Show/hide UI elements
-    fCurrentJobPaneShown = NO;     // it's shown in the nib
 }
 
 //------------------------------------------------------------------------------------

@@ -14,5 +14,8 @@
 
 @end
 
+@interface HBContainerTransformer : NSValueTransformer
+@end
+
 @interface HBURLTransformer : NSValueTransformer
 @end

@@ -7,6 +7,7 @@
 
 #import "HBAudio.h"
 #import "HBAudioController.h"
+#import "HBJob.h"
 #import "NSCodingMacro.h"
 #import "hb.h"
 
