@@ -8,6 +8,7 @@
 #include "values.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
+#include <gtk/gtk.h>
 
 enum
 {
@@ -274,11 +275,33 @@ start_element(
         {
             gchar *fname;
             const gchar *name;
+            const gchar *version;
+            char *end;
+            int major = 0, minor = 0, micro = 0;
 
             name = lookup_attr_value("file", attr_names, attr_values);
             fname = find_file(inc_list, name);
             name = lookup_attr_value("name", attr_names, attr_values);
-            if (fname && name)
+            version = lookup_attr_value("version", attr_names, attr_values);
+            if (version)
+            {
+                major = strtol(version, &end, 10);
+                if (end != version && *end != 0)
+                {
+                    version = end + 1;
+                    minor = strtol(version, &end, 10);
+                    if (end != version && *end != 0)
+                    {
+                        version = end + 1;
+                        micro = strtol(version, &end, 10);
+                        if (end != version && *end != 0)
+                        {
+                            version = end + 1;
+                        }
+                    }
+                }
+            }
+            if (fname && name && GTK_CHECK_VERSION(major, minor, micro))
             {
                 gval = read_string_from_file(fname);
                 if (pd->key) g_free(pd->key);
