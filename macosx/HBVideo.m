@@ -9,12 +9,16 @@
 #import "NSCodingMacro.h"
 #include "hb.h"
 
+NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
+
 @interface HBVideo ()
 
 @property (nonatomic, readwrite) double qualityMinValue;
 @property (nonatomic, readwrite) double qualityMaxValue;
 
 @property (nonatomic, readwrite) NSUInteger mediumPresetIndex;
+
+@property (nonatomic, readwrite, getter=areNotificationsEnabled) BOOL notificationsEnabled;
 
 @end
 
@@ -31,8 +35,20 @@
         _job = job;
 
         [self updateQualityBounds];
+
+        _notificationsEnabled = YES;
     }
     return self;
+}
+
+- (void)postChangedNotification
+{
+    if (self.areNotificationsEnabled)
+    {
+        [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:HBVideoChangedNotification
+                                                                                              object:self
+                                                                                            userInfo:nil]];
+    }
 }
 
 #pragma mark - Setters
@@ -70,6 +86,50 @@
     [self updateQualityBounds];
     [self validatePresetsSettings];
     [self validateAdvancedOptions];
+
+    [self postChangedNotification];
+}
+
+- (void)setQualityType:(int)qualityType
+{
+    _qualityType = qualityType;
+    [self postChangedNotification];
+}
+
+- (void)setAvgBitrate:(int)avgBitrate
+{
+    _avgBitrate = avgBitrate;
+    [self postChangedNotification];
+}
+
+- (void)setQuality:(double)quality
+{
+    _quality = quality;
+    [self postChangedNotification];
+}
+
+- (void)setFrameRate:(int)frameRate
+{
+    _frameRate = frameRate;
+    [self postChangedNotification];
+}
+
+- (void)setFrameRateMode:(int)frameRateMode
+{
+    _frameRateMode = frameRateMode;
+    [self postChangedNotification];
+}
+
+- (void)setTwoPass:(BOOL)twoPass
+{
+    _twoPass = twoPass;
+    [self postChangedNotification];
+}
+
+- (void)setTurboTwoPass:(BOOL)turboTwoPass
+{
+    _turboTwoPass = turboTwoPass;
+    [self postChangedNotification];
 }
 
 - (void)containerChanged
@@ -95,6 +155,13 @@
     }
 }
 
+- (void)setPreset:(NSString *)preset
+{
+    [_preset autorelease];
+    _preset = [preset copy];
+    [self postChangedNotification];
+}
+
 - (void)setTune:(NSString *)tune
 {
     [_tune autorelease];
@@ -107,6 +174,35 @@
     {
         _tune = @"";
     }
+
+    [self postChangedNotification];
+}
+
+- (void)setProfile:(NSString *)profile
+{
+    [_profile autorelease];
+    _profile = [profile copy];
+    [self postChangedNotification];
+}
+
+- (void)setLevel:(NSString *)level
+{
+    [_level autorelease];
+    _level = [level copy];
+    [self postChangedNotification];
+}
+
+- (void)setVideoOptionExtra:(NSString *)videoOptionExtra
+{
+    [_videoOptionExtra autorelease];
+    _videoOptionExtra = [videoOptionExtra copy];
+    [self postChangedNotification];
+}
+
+- (void)setFastDecode:(BOOL)fastDecode
+{
+    _fastDecode = fastDecode;
+    [self postChangedNotification];
 }
 
 - (void)validatePresetsSettings
@@ -385,6 +481,8 @@
 
 - (void)applyPreset:(NSDictionary *)preset
 {
+    self.notificationsEnabled = NO;
+
     // map legacy encoder names via libhb.
     const char *strValue = hb_video_encoder_sanitize_name([preset[@"VideoEncoder"] UTF8String]);
     self.encoder = hb_video_encoder_get_from_name(strValue);
@@ -521,6 +619,8 @@
 
     // Turbo 1st pass for 2 Pass Encoding.
     self.turboTwoPass = [preset[@"VideoTurboTwoPass"] intValue];
+
+    self.notificationsEnabled = YES;
 }
 
 - (void)writeToPreset:(NSMutableDictionary *)preset

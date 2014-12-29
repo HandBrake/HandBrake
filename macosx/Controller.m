@@ -144,6 +144,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:nil];
     }
 
     return self;
@@ -2578,6 +2579,8 @@ static void queueFSEventStreamCallback(
     fVideoController.pictureFilters = self.job.filters.summary;
 
     [fPreviewController reloadPreviews];
+
+    [self customSettingUsed];
 }
 
 #pragma mark -
@@ -2695,7 +2698,11 @@ static void queueFSEventStreamCallback(
             [self updateFileName];
         }
 
-        [self pictureSettingsDidChange];
+        // align picture settings and video filters in the UI using tabs
+        fVideoController.pictureSettings = self.job.picture.summary;
+        fVideoController.pictureFilters = self.job.filters.summary;
+
+        [fPreviewController reloadPreviews];
     }
 }
 

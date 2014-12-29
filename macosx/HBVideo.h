@@ -9,6 +9,8 @@
 
 @class HBJob;
 
+extern NSString * const HBVideoChangedNotification;
+
 /**
  *  HBVideo
  */
