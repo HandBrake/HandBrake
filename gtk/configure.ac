@@ -163,7 +163,7 @@ case $host in
     if test "x$use_libdl" = "xyes" ; then
 		HB_LIBS+=" -ldl -lpthreadGC2"
 	fi
-    HB_LIBS+=" -lpthreadGC2"
+    HB_LIBS+=" -lpthreadGC2 -lregex"
     ;;
   *)
     HB_LIBS+=" -ldl -lpthread"
