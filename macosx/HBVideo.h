@@ -45,5 +45,6 @@
 @property (nonatomic, readwrite) BOOL fastDecode;
 
 @property (nonatomic, readwrite, assign) HBJob *job;
+@property (nonatomic, readonly) NSString *completeTune;
 
 @end

@@ -252,7 +252,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         else
         {
             // we are using the x264 preset system
-            if ([(tmpString = self.video.tune) length])
+            if ([(tmpString = self.video.completeTune) length])
             {
                 encoder_tune = [tmpString UTF8String];
             }

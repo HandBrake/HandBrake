@@ -105,7 +105,7 @@
     const char *h264_level    = NULL;
 
     // prepare the tune, advanced options, profile and level
-    if ([tmpString  = [self completeTune] length])
+    if ([tmpString  = self.completeTune length])
     {
         x264_tune = [tmpString UTF8String];
     }
