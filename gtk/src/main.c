@@ -628,10 +628,11 @@ IoRedirect(signal_user_data_t *ud)
     g_io_channel_set_encoding(ud->activity_log, NULL, NULL);
     // redirect stderr to the writer end of the pipe
 #if defined(_WIN32)
-    // dup2 doesn't work on windows for some stupid reason
-    stderr->_file = pfd[1];
+    _dup2(pfd[1], STDERR_FILENO);
+    // Non-console windows apps do not have a stderr->_file assigned properly
+    stderr->_file = STDERR_FILENO;
 #else
-    dup2(pfd[1], /*stderr*/2);
+    dup2(pfd[1], STDERR_FILENO);
 #endif
     setvbuf(stderr, NULL, _IONBF, 0);
     channel = g_io_channel_unix_new(pfd[0]);
