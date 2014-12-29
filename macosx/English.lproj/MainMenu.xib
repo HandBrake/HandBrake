@@ -119,7 +119,7 @@
                             <menu key="menu" title="OtherViews" id="5515"/>
                         </popUpButtonCell>
                         <connections>
-                            <action selector="encodeStartStopPopUpChanged:" target="240" id="5520"/>
+                            <binding destination="240" name="selectedIndex" keyPath="self.job.range.type" previousBinding="nr8-sN-wpW" id="eJw-0h-DAa"/>
                             <binding destination="240" name="content" keyPath="self.job.range.types" id="nr8-sN-wpW"/>
                         </connections>
                     </popUpButton>
@@ -275,6 +275,11 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="240" name="hidden" keyPath="self.job.range.secondsSelected" id="VlL-Hz-ZR5">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="240" name="value" keyPath="self.job.range.secondsStart" id="yuS-GN-avp"/>
                         </connections>
                     </textField>
@@ -287,6 +292,11 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="240" name="hidden" keyPath="self.job.range.framesSelected" id="nnF-AN-v4Q">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="240" name="value" keyPath="self.job.range.frameStart" id="7yg-HW-q0R"/>
                         </connections>
                     </textField>
@@ -299,6 +309,11 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="240" name="hidden" keyPath="self.job.range.secondsSelected" id="Qmg-D1-0rm">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="240" name="value" keyPath="self.job.range.secondsStop" id="BUI-Zz-m1A"/>
                         </connections>
                     </textField>
@@ -311,6 +326,11 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="240" name="hidden" keyPath="self.job.range.framesSelected" id="P5u-F3-Qyx">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="240" name="value" keyPath="self.job.range.frameStop" id="8G6-K0-vyD"/>
                         </connections>
                     </textField>
@@ -423,7 +443,11 @@
                         </popUpButtonCell>
                         <accessibility description="Start Chapter"/>
                         <connections>
-                            <action selector="chapterPopUpChanged:" target="240" id="1615"/>
+                            <binding destination="240" name="hidden" keyPath="self.job.range.chaptersSelected" id="fix-9c-5P3">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStart" previousBinding="6kP-TS-bEc" id="U76-2W-TvD"/>
                             <binding destination="240" name="content" keyPath="self.job.range.chapters" id="6kP-TS-bEc"/>
                         </connections>
@@ -442,7 +466,11 @@
                         </popUpButtonCell>
                         <accessibility description="End Chapter"/>
                         <connections>
-                            <action selector="chapterPopUpChanged:" target="240" id="1616"/>
+                            <binding destination="240" name="hidden" keyPath="self.job.range.chaptersSelected" id="PxP-LY-ZXR">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStop" previousBinding="Yqp-Sg-lBf" id="4k2-Sm-RoJ"/>
                             <binding destination="240" name="content" keyPath="self.job.range.chapters" id="Yqp-Sg-lBf"/>
                         </connections>

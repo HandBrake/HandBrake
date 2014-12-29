@@ -12,4 +12,8 @@
 @property (nonatomic, readonly) NSArray *chapters;
 @property (nonatomic, readonly) NSArray *types;
 
+@property (nonatomic, readonly) BOOL chaptersSelected;
+@property (nonatomic, readonly) BOOL secondsSelected;
+@property (nonatomic, readonly) BOOL framesSelected;
+
 @end

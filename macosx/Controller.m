@@ -2483,60 +2483,12 @@ static void queueFSEventStreamCallback(
     }
 }
 
-- (IBAction) encodeStartStopPopUpChanged: (id) sender;
-{
-    // We are chapters
-    if ([fEncodeStartStopPopUp indexOfSelectedItem] == 0)
-    {
-        self.job.range.type = HBRangeTypeChapters;
-
-        [fSrcChapterStartPopUp  setHidden: NO];
-        [fSrcChapterEndPopUp  setHidden: NO];
-
-        [fSrcTimeStartEncodingField  setHidden: YES];
-        [fSrcTimeEndEncodingField  setHidden: YES];
-
-        [fSrcFrameStartEncodingField  setHidden: YES];
-        [fSrcFrameEndEncodingField  setHidden: YES];
-
-        [self chapterPopUpChanged:nil];
-    }
-    // We are time based (seconds)
-    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 1)
-    {
-        self.job.range.type = HBRangeTypeSeconds;
-
-        [fSrcChapterStartPopUp  setHidden: YES];
-        [fSrcChapterEndPopUp  setHidden: YES];
-
-        [fSrcTimeStartEncodingField  setHidden: NO];
-        [fSrcTimeEndEncodingField  setHidden: NO];
-
-        [fSrcFrameStartEncodingField  setHidden: YES];
-        [fSrcFrameEndEncodingField  setHidden: YES];
-    }
-    // We are frame based
-    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 2)
-    {
-        self.job.range.type = HBRangeTypeFrames;
-
-        [fSrcChapterStartPopUp  setHidden: YES];
-        [fSrcChapterEndPopUp  setHidden: YES];
-
-        [fSrcTimeStartEncodingField  setHidden: YES];
-        [fSrcTimeEndEncodingField  setHidden: YES];
-
-        [fSrcFrameStartEncodingField  setHidden: NO];
-        [fSrcFrameEndEncodingField  setHidden: NO];
-    }
-}
-
-- (IBAction) chapterPopUpChanged: (id) sender
+- (void)chapterPopUpChanged:(NSNotification *)notification
 {
     // We're changing the chapter range - we may need to flip the m4v/mp4 extension
     if ([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4)
     {
-        [self autoSetM4vExtension:sender];
+        [self autoSetM4vExtension:notification];
     }
 
     // If Auto Naming is on it might need to be update if it includes the chapters range
@@ -2719,29 +2671,22 @@ static void queueFSEventStreamCallback(
         self.selectedPreset = preset;
         self.customPreset = NO;
 
-        NSDictionary *chosenPreset = preset.content;
-
-        [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
-
-        if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
+        if (preset.isDefault)
         {
-            [fPresetSelectedDisplay setStringValue:[NSString stringWithFormat:@"%@ (Default)", [chosenPreset objectForKey:@"PresetName"]]];
+            fPresetSelectedDisplay.stringValue = [NSString stringWithFormat:@"%@ (Default)", preset.name];
         }
         else
         {
-            [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
+            fPresetSelectedDisplay.stringValue = preset.name;
         }
 
         // Apply the preset to the current job
         [self.job applyPreset:preset];
 
-        // check to see if we have only one chapter
-        [self chapterPopUpChanged:nil];
-
-        // Audio
+        // Have to apply the presets the audio and subtitles controllers too
+        // because they haven't been moved to HBJob yer.
+        NSDictionary *chosenPreset = preset.content;
         [fAudioController applySettingsFromPreset: chosenPreset];
-        
-        // Subtitles
         [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
 
         // If Auto Naming is on. We create an output filename of dvd name - title number

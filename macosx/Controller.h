@@ -163,9 +163,6 @@
 
 - (void)     enableUI:                                 (BOOL)     enable;
 
-- (IBAction) encodeStartStopPopUpChanged: (id) sender;
-
-
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
 

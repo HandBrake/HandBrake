@@ -25,4 +25,19 @@
              NSLocalizedString(@"Frames", @"")];
 }
 
+- (BOOL)chaptersSelected
+{
+    return self.type == HBRangeTypeChapters;
+}
+
+- (BOOL)secondsSelected
+{
+    return self.type == HBRangeTypeSeconds;
+}
+
+- (BOOL)framesSelected
+{
+    return self.type == HBRangeTypeFrames;
+}
+
 @end

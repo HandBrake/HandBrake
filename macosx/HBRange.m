@@ -94,6 +94,14 @@
                   @"secondsStart", @"secondsStop",nil];
     }
 
+    if ([key isEqualToString:@"chaptersSelected"] ||
+        [key isEqualToString:@"secondsSelected"] ||
+        [key isEqualToString:@"framesSelected"])
+    {
+        retval = [NSSet setWithObjects:@"type",nil];
+
+    }
+
     return retval;
 }
 
