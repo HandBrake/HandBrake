@@ -8125,58 +8125,36 @@ Setting this to 0 means there is no maximum height.</property>
     <property name="create_folders">False</property>
     <property name="local_only">False</property>
     <property name="transient_for">hb_window</property>
-    <property name="use-header-bar">0</property>
     <signal name="selection-changed" handler="chooser_file_selected_cb" swapped="no"/>
+    <child type="action">
+      <object class="GtkButton" id="source_cancel">
+        <property name="label" translatable="yes">_Cancel</property>
+        <property name="image">gtk-cancel</property>
+        <property name="use-underline">True</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">False</property>
+        <property name="has_default">False</property>
+        <property name="receives_default">False</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="source_ok">
+        <property name="label" translatable="yes">_Open</property>
+        <property name="image">gtk-ok</property>
+        <property name="use-underline">True</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">True</property>
+        <property name="has_default">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox9">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="source_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="source_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkBox" id="source_extra">
             <property name="orientation">vertical</property>
@@ -8272,8 +8250,8 @@ Setting this to 0 means there is no maximum height.</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-6">source_cancel</action-widget>
-      <action-widget response="-9">source_ok</action-widget>
+      <action-widget response="cancel">source_cancel</action-widget>
+      <action-widget response="no">source_ok</action-widget>
     </action-widgets>
   </object>
   <object class="GtkImage" id="gtk-cancel">

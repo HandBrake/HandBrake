@@ -95,7 +95,7 @@ widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	python2 $(srcdir)/makedeps.py
 
-resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui ghb-3.12.ui widget.deps widget_reverse.deps
+resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui ghb-3.14.ui widget.deps widget_reverse.deps
 	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.plist
 
 CREATE_RES.c = \

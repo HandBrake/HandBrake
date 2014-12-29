@@ -216,74 +216,111 @@ start_element(
     {
         case R_SECTION:
         {
-            const gchar *name;
+            const gchar *key;
 
-            name = lookup_attr_value("name", attr_names, attr_values);
-            if (name && strcmp(name, "icons") == 0)
+            key = lookup_attr_value("name", attr_names, attr_values);
+            if (key == NULL)
+            {
+                g_warning("section: missing a requried *name* attribute");
+                exit(EXIT_FAILURE);
+            }
+            if (strcmp(key, "icons") == 0)
             {
                 gval = ghb_dict_value_new();
                 if (pd->key) g_free(pd->key);
-                pd->key = g_strdup(name);
+                pd->key = g_strdup(key);
                 g_queue_push_head(pd->stack, gval);
             }
         } break;
         case R_ICON:
         {
             gchar *fname;
-            const gchar *name;
+            const gchar *name, *key;
 
             name = lookup_attr_value("file", attr_names, attr_values);
-            fname = find_file(inc_list, name);
-            name = lookup_attr_value("name", attr_names, attr_values);
-            if (fname && name)
+            if (name == NULL)
             {
-                gval = ghb_dict_value_new();
-                add_icon(gval, fname);
-
-                g_free(pd->key);
-                pd->key = g_strdup(name);
-                g_free(fname);
-            }
-            else
-            {
-                g_warning("%s:missing a requried attribute", name);
+                g_warning("icon: missing a requried *file* attribute");
                 exit(EXIT_FAILURE);
             }
+            fname = find_file(inc_list, name);
+            if (fname == NULL)
+            {
+                g_warning("icon: no such file %s", name);
+                exit(EXIT_FAILURE);
+            }
+            key = lookup_attr_value("name", attr_names, attr_values);
+            if (key == NULL)
+            {
+                g_warning("icon: missing a requried *name* attribute");
+                g_free(fname);
+                exit(EXIT_FAILURE);
+            }
+            gval = ghb_dict_value_new();
+            add_icon(gval, fname);
+
+            g_free(pd->key);
+            pd->key = g_strdup(key);
+            g_free(fname);
         } break;
         case R_PLIST:
         {
             gchar *fname;
-            const gchar *name;
+            const gchar *name, *key;
 
             name = lookup_attr_value("file", attr_names, attr_values);
-            fname = find_file(inc_list, name);
-            name = lookup_attr_value("name", attr_names, attr_values);
-            if (fname && name)
+            if (name == NULL)
             {
-                gval = ghb_plist_parse_file(fname);
-                if (pd->key) g_free(pd->key);
-                pd->key = g_strdup(name);
-                g_free(fname);
-            }
-            else
-            {
-                g_warning("%s:missing a requried attribute", name);
+                g_warning("plist: missing a requried *file* attribute");
                 exit(EXIT_FAILURE);
             }
+            fname = find_file(inc_list, name);
+            if (fname == NULL)
+            {
+                g_warning("plist: no such file %s", name);
+                exit(EXIT_FAILURE);
+            }
+            key = lookup_attr_value("name", attr_names, attr_values);
+            if (key == NULL)
+            {
+                g_warning("plist: missing a requried *name* attribute");
+                g_free(fname);
+                exit(EXIT_FAILURE);
+            }
+            gval = ghb_plist_parse_file(fname);
+            if (pd->key) g_free(pd->key);
+            pd->key = g_strdup(key);
+            g_free(fname);
         } break;
         case R_STRING:
         {
             gchar *fname;
-            const gchar *name;
+            const gchar *name, *key;
             const gchar *version;
             char *end;
             int major = 0, minor = 0, micro = 0;
 
             name = lookup_attr_value("file", attr_names, attr_values);
+            if (name == NULL)
+            {
+                g_warning("string: missing a requried *file* attribute");
+                exit(EXIT_FAILURE);
+            }
             fname = find_file(inc_list, name);
-            name = lookup_attr_value("name", attr_names, attr_values);
+            if (fname == NULL)
+            {
+                g_warning("string: no such file %s", name);
+                exit(EXIT_FAILURE);
+            }
+            key = lookup_attr_value("name", attr_names, attr_values);
+            if (key == NULL)
+            {
+                g_warning("string: missing a requried *name* attribute");
+                g_free(fname);
+                exit(EXIT_FAILURE);
+            }
             version = lookup_attr_value("version", attr_names, attr_values);
-            if (version)
+            if (version != NULL)
             {
                 major = strtol(version, &end, 10);
                 if (end != version && *end != 0)
@@ -301,18 +338,13 @@ start_element(
                     }
                 }
             }
-            if (fname && name && GTK_CHECK_VERSION(major, minor, micro))
+            if (GTK_CHECK_VERSION(major, minor, micro))
             {
                 gval = read_string_from_file(fname);
                 if (pd->key) g_free(pd->key);
-                pd->key = g_strdup(name);
-                g_free(fname);
+                pd->key = g_strdup(key);
             }
-            else
-            {
-                g_warning("%s:missing a requried attribute", name);
-                exit(EXIT_FAILURE);
-            }
+            g_free(fname);
         } break;
     }
     // Add the element to the current container

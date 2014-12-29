@@ -8124,6 +8124,7 @@ Setting this to 0 means there is no maximum height.</property>
     <property name="skip_pager_hint">True</property>
     <property name="create_folders">False</property>
     <property name="local_only">False</property>
+    <property name="transient_for">hb_window</property>
     <signal name="selection-changed" handler="chooser_file_selected_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox9">
