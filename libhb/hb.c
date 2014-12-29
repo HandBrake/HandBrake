@@ -409,11 +409,6 @@ hb_handle_t * hb_init( int verbose, int update_check )
         }
     }
 
-    /*
-     * Initialise buffer pool
-     */
-    hb_buffer_pool_init();
-
     h->title_set.list_title = hb_list_init();
     h->jobs       = hb_list_init();
 
@@ -1581,6 +1576,11 @@ int hb_global_init()
 #endif
     
     hb_common_global_init();
+
+    /*
+     * Initialise buffer pool
+     */
+    hb_buffer_pool_init();
 
     return result;
 }
