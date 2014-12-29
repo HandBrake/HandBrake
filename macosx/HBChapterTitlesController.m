@@ -204,7 +204,7 @@ a timer to avoid interfering with the chain of events that handles the edit. */
     NSSavePanel *panel = [NSSavePanel savePanel];
     [panel setAllowedFileTypes:@[@"csv"]];
     [panel setDirectoryURL:[NSURL fileURLWithPath:destinationDirectory]];
-    //[panel setNameFieldStringValue:[[[fDstFile2Field stringValue] lastPathComponent] stringByDeletingPathExtension]];
+    [panel setNameFieldStringValue:self.job.destURL.lastPathComponent.stringByDeletingPathExtension];
 
     [panel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
         NSString *chapterName;      /* pointer for string for later file-writing */
