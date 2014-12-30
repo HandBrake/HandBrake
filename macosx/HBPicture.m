@@ -16,6 +16,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 @interface HBPicture ()
 
 @property (nonatomic, readwrite, getter=isValidating) BOOL validating;
+@property (nonatomic, readwrite, getter=areNotificationsEnabled) BOOL notificationsEnabled;
 
 @property (nonatomic, readwrite) int keep;
 @property (nonatomic, readwrite) BOOL darUpdated;
@@ -49,15 +50,20 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         _height = title.hb_title->geometry.height;
 
         [self validateSettings];
+
+        _notificationsEnabled = YES;
     }
     return self;
 }
 
 - (void)postChangedNotification
 {
-    [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:HBPictureChangedNotification
-                                                                                          object:self
-                                                                                        userInfo:nil]];
+    if (self.areNotificationsEnabled)
+    {
+        [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:HBPictureChangedNotification
+                                                                                              object:self
+                                                                                            userInfo:nil]];
+    }
 }
 
 - (void)setWidth:(int)width
@@ -345,12 +351,17 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         retval = [NSSet setWithObjects:@"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
     }
 
-    if ([key isEqualToString:@"info"])
+    if ([key isEqualToString:@"info"] || [key isEqualToString:@"summary"])
     {
         retval = [NSSet setWithObjects:@"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
     }
 
     return retval;
+}
+
+- (void)setNilValueForKey:(NSString *)key
+{
+    [self setValue:@0 forKey:key];
 }
 
 #pragma mark - Picture Update Logic
@@ -437,6 +448,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         copy->_cropBottom = _cropBottom;
         copy->_cropLeft = _cropLeft;
         copy->_cropRight = _cropRight;
+
+        copy->_notificationsEnabled = _notificationsEnabled;
     }
 
     return copy;
@@ -486,6 +499,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     decodeInt(_cropBottom);
     decodeInt(_cropLeft);
     decodeInt(_cropRight);
+
+    _notificationsEnabled = YES;
     
     return self;
 }
@@ -510,6 +525,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 - (void)applyPreset:(NSDictionary *)preset
 {
     self.validating = YES;
+    self.notificationsEnabled = NO;
     hb_title_t *title = self.title.hb_title;
 
     /* Note: objectForKey:@"UsesPictureSettings" refers to picture size, which encompasses:
@@ -634,6 +650,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     self.displayWidth = display_width;
 
     self.validating = NO;
+    self.notificationsEnabled = YES;
 }
 
 @end

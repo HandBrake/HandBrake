@@ -107,10 +107,10 @@
     }
 }
 
-- (void) startEncodeLog:(NSString *) logPath
+- (void)startEncodeLog:(NSURL *)logURL
 {
     encodeLogOn = YES;
-    NSString *outputFileForEncode = logPath ;
+    NSString *outputFileForEncode = logURL.path ;
     /* Since the destination path matches the extension of the output file, replace the
      * output movie extension and replace it with ".txt"
      */

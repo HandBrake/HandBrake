@@ -292,12 +292,12 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="240" name="value" keyPath="self.job.range.frameStart" id="7yg-HW-q0R"/>
                             <binding destination="240" name="hidden" keyPath="self.job.range.framesSelected" id="nnF-AN-v4Q">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="240" name="value" keyPath="self.job.range.frameStart" id="7yg-HW-q0R"/>
                         </connections>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" id="5493">
@@ -326,12 +326,12 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="240" name="value" keyPath="self.job.range.frameStop" id="8G6-K0-vyD"/>
                             <binding destination="240" name="hidden" keyPath="self.job.range.framesSelected" id="P5u-F3-Qyx">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="240" name="value" keyPath="self.job.range.frameStop" id="8G6-K0-vyD"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="1627">
@@ -358,6 +358,9 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <binding destination="240" name="value" keyPath="self.job.presetName" id="R4b-YQ-IeI"/>
+                        </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="2006">
                         <rect key="frame" x="711" y="15" width="218" height="14"/>
@@ -443,13 +446,13 @@
                         </popUpButtonCell>
                         <accessibility description="Start Chapter"/>
                         <connections>
+                            <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStart" previousBinding="6kP-TS-bEc" id="U76-2W-TvD"/>
+                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="6kP-TS-bEc"/>
                             <binding destination="240" name="hidden" keyPath="self.job.range.chaptersSelected" id="fix-9c-5P3">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStart" previousBinding="6kP-TS-bEc" id="U76-2W-TvD"/>
-                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="6kP-TS-bEc"/>
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="1548">
@@ -466,13 +469,13 @@
                         </popUpButtonCell>
                         <accessibility description="End Chapter"/>
                         <connections>
+                            <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStop" previousBinding="Yqp-Sg-lBf" id="4k2-Sm-RoJ"/>
+                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="Yqp-Sg-lBf"/>
                             <binding destination="240" name="hidden" keyPath="self.job.range.chaptersSelected" id="PxP-LY-ZXR">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="240" name="selectedIndex" keyPath="self.job.range.chapterStop" previousBinding="Yqp-Sg-lBf" id="4k2-Sm-RoJ"/>
-                            <binding destination="240" name="content" keyPath="self.job.range.chapters" id="Yqp-Sg-lBf"/>
                         </connections>
                     </popUpButton>
                 </subviews>
@@ -1025,7 +1028,6 @@ DQ
                 <outlet property="fMainTabView" destination="1474" id="XMU-Vi-8QM"/>
                 <outlet property="fOpenSourceTitleMMenu" destination="2698" id="2700"/>
                 <outlet property="fPresetDrawer" destination="1841" id="1889"/>
-                <outlet property="fPresetSelectedDisplay" destination="1882" id="1883"/>
                 <outlet property="fQueueStatus" destination="2006" id="2007"/>
                 <outlet property="fRipIndicator" destination="1373" id="1374"/>
                 <outlet property="fScanHorizontalLine" destination="3205" id="6004"/>

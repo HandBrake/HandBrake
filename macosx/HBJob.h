@@ -60,6 +60,7 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
  *  Current state of the job.
  */
 @property (nonatomic, readwrite) HBJobState state;
+@property (nonatomic, readwrite, copy) NSString *presetName;
 
 @property (nonatomic, readwrite, assign) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
@@ -71,7 +72,6 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 
 // Libhb job
 @property (nonatomic, readonly) hb_job_t *hb_job;
-@property (nonatomic, readonly) NSAttributedString *jobDescription;
 
 // Job settings
 @property (nonatomic, readwrite) int container;

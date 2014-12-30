@@ -7,6 +7,7 @@
 #import "HBVideoController.h"
 #import "HBAdvancedController.h"
 #import "HBVideo+UIAdditions.h"
+#import "HBJob.h"
 
 #include "hb.h"
 
@@ -36,6 +37,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 }
 
 @property (nonatomic, retain, readwrite) HBAdvancedController *advancedController;
+@property (nonatomic, readwrite, assign) HBVideo *video;
 
 @property (nonatomic, readwrite) BOOL presetViewEnabled;
 
@@ -84,11 +86,12 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     return self;
 }
 
-- (void)setVideo:(HBVideo *)video
+- (void)setJob:(HBJob *)job
 {
-    _video = video;
+    _job = job;
+    self.video = job.video;
 
-    if (_video)
+    if (job)
     {
         self.labelColor = [NSColor controlTextColor];
     }
@@ -97,7 +100,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         self.labelColor = [NSColor disabledControlTextColor];
     }
 
-    [self enableEncoderOptionsWidgets:(video != nil)];
+    [self enableEncoderOptionsWidgets:(job != nil)];
 }
 
 #pragma mark - KVO

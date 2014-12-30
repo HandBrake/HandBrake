@@ -55,6 +55,7 @@
 
     NSMutableIndexSet            *fSavedExpandedItems;  // used by save/restoreOutlineViewState to preserve which items are expanded
     NSMutableIndexSet            *fSavedSelectedItems;  // used by save/restoreOutlineViewState to preserve which items are selected
+    NSMutableDictionary          *descriptions;
 
     NSTimer                      *fAnimationTimer;      // animates the icon of the current job in the queue outline view
     int                          fAnimationIndex;       // used to generate name of image used to animate the current job in the queue outline view
@@ -102,6 +103,7 @@
         [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"QueueWindowIsOpen": @"NO"}];
 
         fJobGroups = [[NSMutableArray arrayWithCapacity:0] retain];
+        descriptions = [[NSMutableDictionary alloc] init];
 
         [self initStyles];
     }
@@ -112,6 +114,7 @@
 - (void)setQueueArray:(NSMutableArray *)QueueFileArray
 {
     [fJobGroups setArray:QueueFileArray];
+    [descriptions removeAllObjects];
 
     [fOutlineView reloadData];
 
@@ -705,10 +708,16 @@
 {
     if ([[tableColumn identifier] isEqualToString:@"desc"])
     {
+        HBJob *job = item;
+
+        if ([descriptions objectForKey:@(job.hash)])
+        {
+            return [descriptions objectForKey:@(job.hash)];
+        }
+
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         /* Below should be put into a separate method but I am way too f'ing lazy right now */
         NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithString: @""];
-        HBJob *job = item;
 
         /* First line, we should strip the destination path and just show the file name and add the title num and chapters (if any) */
         NSString *summaryInfo;
@@ -770,10 +779,8 @@
         // End of Title Stuff
 
         // Second Line  (Preset Name)
-        // FIXME
-        //[finalString appendString: @"Preset: " withAttributes:detailBoldAttr];
-        //[finalString appendString:[NSString stringWithFormat:@"%@\n", item[@"PresetName"]] withAttributes:detailAttr];
-
+        [finalString appendString: @"Preset: " withAttributes:detailBoldAttr];
+        [finalString appendString:[NSString stringWithFormat:@"%@\n", job.presetName] withAttributes:detailAttr];
 
         // Third Line  (Format Summary)
         NSString *audioCodecSummary = @"";	//	This seems to be set by the last track we have available...
@@ -1056,6 +1063,8 @@
         }
 
         [pool release];
+
+        [descriptions setObject:finalString forKey:@(job.hash)];
 
         return [finalString autorelease];
     }

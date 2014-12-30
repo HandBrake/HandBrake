@@ -136,7 +136,6 @@
 
     IBOutlet NSMenu              * presetsMenu;
 	IBOutlet NSDrawer            * fPresetDrawer;
-    IBOutlet NSTextField         * fPresetSelectedDisplay;
     
     /* Queue variables */
     int                          hbInstanceNum; //stores the number of HandBrake instances currently running

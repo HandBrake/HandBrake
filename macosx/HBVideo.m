@@ -272,6 +272,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return retval;
 }
 
+- (void)setNilValueForKey:(NSString *)key
+{
+    [self setValue:@0 forKey:key];
+}
+
 #pragma mark -
 
 - (NSArray *)presets
@@ -371,6 +376,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         copy->_level = [_level copy];
         copy->_videoOptionExtra = [_videoOptionExtra copy];
         copy->_fastDecode = _fastDecode;
+
+        copy->_notificationsEnabled = _notificationsEnabled;
     }
 
     return copy;
@@ -436,6 +443,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     decodeObject(_videoOptionExtra);
 
     decodeBool(_fastDecode);
+
+    _notificationsEnabled = YES;
 
     return self;
 }

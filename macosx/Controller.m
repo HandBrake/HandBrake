@@ -141,10 +141,6 @@
         [fQueueController setHBController:self];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:nil];
     }
 
     return self;
@@ -322,10 +318,23 @@
     fPictureController.filters = job.filters;
     fPreviewController.job = job;
 
-    fVideoController.video = job.video;
+    fVideoController.job = job;
     fAudioController.job = job;
     fSubtitlesViewController.job = job;
     fChapterTitlesController.job = job;
+
+    if (job)
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:_job];
+        [[NSNotificationCenter defaultCenter] removeObserver:_job.picture];
+        [[NSNotificationCenter defaultCenter] removeObserver:_job.filters];
+        [[NSNotificationCenter defaultCenter] removeObserver:_job.video];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:job];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:job.video];
+    }
 
     // Retain the new job
     [_job autorelease];
@@ -1132,7 +1141,7 @@
         }
         if (action == @selector(selectPresetFromMenu:))
         {
-            if (!self.customPreset && [menuItem.representedObject isEqualTo:self.selectedPreset])
+            if ([menuItem.representedObject isEqualTo:self.selectedPreset])
             {
                 [menuItem setState:NSOnState];
             }
@@ -1537,7 +1546,6 @@
         if (self.jobFromQueue)
         {
             [fPresetsView deselect];
-            [self pictureSettingsDidChange];
 
             self.jobFromQueue = nil;
         }
@@ -1951,12 +1959,13 @@ static void queueFSEventStreamCallback(
 {
     HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
     // Tell HB to output a new activity log file for this encode
-    [outputPanel startEncodeLog:[queueJob.destURL.path stringByDeletingLastPathComponent]];
+    [outputPanel startEncodeLog:queueJob.destURL];
 
     // We now flag the queue item as being owned by this instance of HB using the PID
     queueJob.pidId = pidNum;
     // Get the currentQueueEncodeNameString from the queue item to display in the status field */
-    currentQueueEncodeNameString = [[queueJob.destURL.path lastPathComponent]retain];
+    [currentQueueEncodeNameString autorelease];
+    currentQueueEncodeNameString = [[queueJob.destURL.path lastPathComponent] retain];
     // We save all of the Queue data here
     [self saveQueueFileItem];
 
@@ -2477,9 +2486,6 @@ static void queueFSEventStreamCallback(
     // apply the current preset
     if (!self.jobFromQueue)
     {
-        // Set Auto Crop to on upon selecting a new title
-        self.job.picture.autocrop = YES;
-
         [self applyPreset:self.selectedPreset];
     }
 }
@@ -2553,11 +2559,10 @@ static void queueFSEventStreamCallback(
  */
 - (void)customSettingUsed
 {
-    // Deselect the currently selected Preset if there is one*/
+    // Deselect the currently selected Preset if there is one
     [fPresetsView deselect];
-    // Change UI to show "Custom" settings are being used */
-    fPresetSelectedDisplay.stringValue = NSLocalizedString(@"Custom", @"");
-    self.customPreset = YES;
+    // Change UI to show "Custom" settings are being used
+    self.job.presetName = NSLocalizedString(@"Custom", @"");
 
     // If Auto Naming is on it might need to be update if it includes the quality token
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
@@ -2574,12 +2579,7 @@ static void queueFSEventStreamCallback(
  */
 - (void)pictureSettingsDidChange 
 {
-    // align picture settings and video filters in the UI using tabs
-    fVideoController.pictureSettings = self.job.picture.summary;
-    fVideoController.pictureFilters = self.job.filters.summary;
-
     [fPreviewController reloadPreviews];
-
     [self customSettingUsed];
 }
 
@@ -2672,16 +2672,6 @@ static void queueFSEventStreamCallback(
     if (preset != nil && self.job)
     {
         self.selectedPreset = preset;
-        self.customPreset = NO;
-
-        if (preset.isDefault)
-        {
-            fPresetSelectedDisplay.stringValue = [NSString stringWithFormat:@"%@ (Default)", preset.name];
-        }
-        else
-        {
-            fPresetSelectedDisplay.stringValue = preset.name;
-        }
 
         // Apply the preset to the current job
         [self.job applyPreset:preset];
@@ -2697,10 +2687,6 @@ static void queueFSEventStreamCallback(
         {
             [self updateFileName];
         }
-
-        // align picture settings and video filters in the UI using tabs
-        fVideoController.pictureSettings = self.job.picture.summary;
-        fVideoController.pictureFilters = self.job.filters.summary;
 
         [fPreviewController reloadPreviews];
     }
@@ -2764,7 +2750,7 @@ static void queueFSEventStreamCallback(
     NSDictionary *currentPreset = self.selectedPreset.content;
 
     preset[@"PresetBuildNumber"] = [NSString stringWithFormat: @"%d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
-    preset[@"PresetName"] = fPresetSelectedDisplay.stringValue;
+    preset[@"PresetName"] = self.job.presetName;
     preset[@"Folder"] = @NO;
 
 	// Set whether or not this is a user preset or factory 0 is factory, 1 is user

@@ -64,6 +64,15 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
 - (void)applyPreset:(HBPreset *)preset
 {
+    if (preset.isDefault)
+    {
+        self.presetName = [NSString stringWithFormat:@"%@ (Default)", preset.name];
+    }
+    else
+    {
+        self.presetName = preset.name;
+    }
+
     NSDictionary *content = preset.content;
 
     self.container = hb_container_get_from_name(hb_container_sanitize_name([content[@"FileFormat"] UTF8String]));
@@ -648,6 +657,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     if (copy)
     {
         copy->_state = HBJobStateReady;
+        copy->_presetName = [_presetName copy];
         copy->_titleIdx = _titleIdx;
         copy->_pidId = _pidId;
 
@@ -663,6 +673,8 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         copy->_video = [_video copy];
         copy->_picture = [_picture copy];
         copy->_filters = [_filters copy];
+
+        copy->_video.job = copy;
 
         // Copy the tracks, but not the last one because it's empty.
         copy->_audioTracks = [[NSMutableArray alloc] init];
@@ -696,6 +708,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     [coder encodeInt:1 forKey:@"HBVideoVersion"];
 
     encodeInt(_state);
+    encodeObject(_presetName);
     encodeInt(_titleIdx);
     encodeInt(_pidId);
 
@@ -727,6 +740,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
     self = [super init];
 
     decodeInt(_state);
+    decodeObject(_presetName);
     decodeInt(_titleIdx);
     decodeInt(_pidId);
 

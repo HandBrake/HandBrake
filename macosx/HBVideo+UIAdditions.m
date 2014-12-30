@@ -69,7 +69,7 @@
 
 - (BOOL)fastDecodeSupported
 {
-    return (self.encoder == HB_VCODEC_X264);
+    return (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265);
 }
 
 - (BOOL)turboTwoPassSupported

@@ -7,7 +7,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class HBAdvancedController;
-@class HBVideo;
+@class HBJob;
 
 /**
  *  HBVideoController
@@ -16,12 +16,6 @@
 
 - (instancetype)initWithAdvancedController:(HBAdvancedController *)advancedController;
 
-/**
- *  Summaries of the pictures and filters settings
- */
-@property (nonatomic, copy, readwrite) NSString *pictureSettings;
-@property (nonatomic, copy, readwrite) NSString *pictureFilters;
-
-@property (nonatomic, readwrite, assign) HBVideo *video;
+@property (nonatomic, readwrite, assign) HBJob *job;
 
 @end

@@ -106,11 +106,6 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="zMs-ue-T1n" id="gD3-Yl-3au">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                </dictionary>
-                                                            </binding>
                                                             <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="gD3-Yl-3au" id="PSj-Fl-3Ni">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -118,6 +113,11 @@
                                                             </binding>
                                                             <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="zMs-ue-T1n"/>
                                                             <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="nMg-v2-Fvg"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="zMs-ue-T1n" id="gD3-Yl-3au">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="440">
@@ -129,17 +129,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="Wvz-jo-lwE" id="b7l-Ej-dxa">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                </dictionary>
-                                                            </binding>
                                                             <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="b7l-Ej-dxa" id="4ER-Vi-m2V">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="Wvz-jo-lwE"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="Wvz-jo-lwE" id="b7l-Ej-dxa">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="-2" name="value" keyPath="self.picture.parWidth" id="PXg-GA-vo6"/>
                                                         </connections>
                                                     </textField>
@@ -152,17 +152,17 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="Vjg-8L-veN" id="kG8-EC-OJR">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                </dictionary>
-                                                            </binding>
                                                             <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="kG8-EC-OJR" id="6PT-Pz-qs1">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="Vjg-8L-veN"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="Vjg-8L-veN" id="kG8-EC-OJR">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="HrI-5d-evg"/>
                                                         </connections>
                                                     </textField>
@@ -201,7 +201,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="44">
                                                         <rect key="frame" x="143" y="103" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="169">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="169">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -233,27 +233,27 @@
                                                         <rect key="frame" x="76" y="107" width="62" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="167">
-                                                            <numberFormatter key="formatter" formatterBehavior="custom10_4" localizesFormat="NO" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="le0-iC-NhW">
-                                                                <real key="minimum" value="64"/>
+                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="le0-iC-NhW">
+                                                                <real key="minimum" value="32"/>
                                                             </numberFormatter>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="-2" name="editable" keyPath="self.picture.widthEditable" id="YBx-pZ-bPA"/>
                                                             <binding destination="-2" name="value" keyPath="self.picture.width" id="Dr6-U5-h7T">
                                                                 <dictionary key="options">
                                                                     <integer key="NSNullPlaceholder" value="0"/>
                                                                     <bool key="NSValidatesImmediately" value="YES"/>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="-2" name="editable" keyPath="self.picture.widthEditable" id="YBx-pZ-bPA"/>
                                                         </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="46">
                                                         <rect key="frame" x="143" y="78" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="171">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="171">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -320,24 +320,21 @@
                                                         <rect key="frame" x="76" y="81" width="62" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="168">
-                                                            <numberFormatter key="formatter" formatterBehavior="custom10_4" localizesFormat="NO" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="9iU-HJ-b4u">
+                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="9iU-HJ-b4u">
                                                                 <real key="minimum" value="64"/>
-                                                                <metadata>
-                                                                    <real key="inspectorSampleValue" value="1.234"/>
-                                                                </metadata>
                                                             </numberFormatter>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="-2" name="editable" keyPath="self.picture.heightEditable" id="Je1-xf-WNB"/>
                                                             <binding destination="-2" name="value" keyPath="self.picture.height" id="T7h-fp-Qs6">
                                                                 <dictionary key="options">
                                                                     <integer key="NSNullPlaceholder" value="0"/>
                                                                     <bool key="NSValidatesImmediately" value="YES"/>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="-2" name="editable" keyPath="self.picture.heightEditable" id="Je1-xf-WNB"/>
                                                         </connections>
                                                     </textField>
                                                     <button id="45">
@@ -371,13 +368,13 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
-                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="9ff-Ns-69S"/>
                                                             <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="Vp0-sU-c5s">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="value" keyPath="self.picture.cropTop" previousBinding="9ff-Ns-69S" id="4Cj-4f-6FM"/>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="9ff-Ns-69S"/>
                                                         </connections>
                                                     </stepper>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="15">
@@ -387,13 +384,13 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
-                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="39d-dv-rDM"/>
                                                             <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="5QD-Dh-bzl">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="value" keyPath="self.picture.cropRight" previousBinding="39d-dv-rDM" id="OUg-17-HR9"/>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="39d-dv-rDM"/>
                                                         </connections>
                                                     </stepper>
                                                     <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="16">
@@ -477,13 +474,13 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
-                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="2Rh-om-NkW"/>
                                                             <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="WmV-2A-EDo">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="value" keyPath="self.picture.cropLeft" previousBinding="2Rh-om-NkW" id="hk3-CS-WKR"/>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="2Rh-om-NkW"/>
                                                         </connections>
                                                     </stepper>
                                                     <textField verticalHuggingPriority="750" id="9">
@@ -537,13 +534,13 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
-                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="jS8-Tg-h3O"/>
                                                             <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="soK-UE-pde">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="value" keyPath="self.picture.cropBottom" previousBinding="jS8-Tg-h3O" id="k6f-Bd-Crr"/>
+                                                            <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="jS8-Tg-h3O"/>
                                                         </connections>
                                                     </stepper>
                                                     <textField verticalHuggingPriority="750" id="382">

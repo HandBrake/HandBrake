@@ -105,6 +105,11 @@
     return retval;
 }
 
+- (void)setNilValueForKey:(NSString *)key
+{
+    [self setValue:@0 forKey:key];
+}
+
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone
