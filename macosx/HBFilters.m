@@ -199,6 +199,19 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
     [self postChangedNotification];
 }
 
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+{
+    NSSet *retval = nil;
+
+    if ([key isEqualToString:@"summary"])
+    {
+        retval = [NSSet setWithObjects:@"detelecine", @"detelecineCustomString", @"useDecomb", @"deinterlace", @"deinterlaceCustomString", @"decomb", @"decombCustomString", @"denoise", @"denoisePreset", @"denoiseTune", @"denoiseCustomString", @"deblock", @"grayscale", nil];
+    }
+
+    return retval;
+}
+
+
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone

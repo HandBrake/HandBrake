@@ -353,7 +353,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
     if ([key isEqualToString:@"info"] || [key isEqualToString:@"summary"])
     {
-        retval = [NSSet setWithObjects:@"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
+        retval = [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
     }
 
     return retval;
