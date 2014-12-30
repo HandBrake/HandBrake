@@ -11,14 +11,12 @@
 
 - (BOOL)mp4OptionsEnabled
 {
-    if (self.container & HB_MUX_MASK_MP4)
-    {
-        return YES;
-    }
-    else
-    {
-        return NO;
-    }
+    return ((self.container & HB_MUX_MASK_MP4) != 0);
+}
+
+- (BOOL)mp4iPodCompatibleEnabled
+{
+    return ((self.container & HB_MUX_MASK_MP4) != 0) && (self.video.encoder & HB_VCODEC_H264_MASK);
 }
 
 - (NSArray *)angles

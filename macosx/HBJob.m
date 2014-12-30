@@ -128,6 +128,11 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         retval = [NSSet setWithObjects:@"container", nil];
     }
 
+    if ([key isEqualToString:@"mp4iPodCompatibleEnabled"])
+    {
+        retval = [NSSet setWithObjects:@"container", @"video.encoder", nil];
+    }
+
     return retval;
 }
 
@@ -231,18 +236,21 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         job->chapter_markers = 0;
     }
 
-    if (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265)
+    if (job->vcodec == HB_VCODEC_X264)
     {
         // iPod 5G atom
         job->ipod_atom = self.mp4iPodCompatible;
+    }
 
+    if (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265)
+    {
         // set fastfirstpass if 2-pass and Turbo are enabled
         if (self.video.twoPass)
         {
             job->fastfirstpass = self.video.turboTwoPass;
         }
 
-        // advanced x264 options
+        // advanced x264/x265 options
         NSString   *tmpString;
         // translate zero-length strings to NULL for libhb
         const char *encoder_preset  = NULL;
@@ -260,7 +268,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         }
         else
         {
-            // we are using the x264 preset system
+            // we are using the x264/x265 preset system
             if ([(tmpString = self.video.completeTune) length])
             {
                 encoder_tune = [tmpString UTF8String];

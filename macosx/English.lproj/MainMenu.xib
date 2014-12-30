@@ -415,7 +415,7 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="240" name="hidden" keyPath="self.job.mp4OptionsEnabled" id="Vlg-uB-45p">
+                            <binding destination="240" name="hidden" keyPath="self.job.mp4iPodCompatibleEnabled" id="eGS-R2-zSV">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>

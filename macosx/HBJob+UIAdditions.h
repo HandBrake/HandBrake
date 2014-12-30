@@ -10,6 +10,8 @@
 @interface HBJob (UIAdditions)
 
 @property (nonatomic, readonly) BOOL mp4OptionsEnabled;
+@property (nonatomic, readonly) BOOL mp4iPodCompatibleEnabled;
+
 @property (nonatomic, readonly) NSArray *angles;
 
 @end
