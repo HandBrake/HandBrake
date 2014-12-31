@@ -236,7 +236,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         job->chapter_markers = 0;
     }
 
-    if (job->vcodec == HB_VCODEC_X264)
+    if (job->vcodec & HB_VCODEC_H264_MASK)
     {
         // iPod 5G atom
         job->ipod_atom = self.mp4iPodCompatible;
