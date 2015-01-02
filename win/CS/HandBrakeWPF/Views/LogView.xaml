@@ -13,6 +13,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <ToolBar Grid.Row="0"
@@ -20,7 +21,7 @@
                      ToolBarTray.IsLocked="True"
                      Loaded="ToolBarLoaded"
                      >
-                          
+
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/copy.png" />
@@ -36,23 +37,48 @@
 
             </ToolBar>
 
-            <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
-                <TabItem Header="Encode Log">
-                    <TextBox Grid.Row="1"
+
+            <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Margin="0,3,0,0">
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Text="Encode Log" Padding="4">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </TabItem.Header>
+
+                    <TextBox
                      AcceptsReturn="True"
                      IsReadOnly="True"
                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                      Text="{Binding EncodeLog, Mode=OneWay,  UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap" />
                 </TabItem>
-                
-                <TabItem Header="Scan Log">
-                    <TextBox Grid.Row="1"
-                     AcceptsReturn="True"
-                     IsReadOnly="True"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     Text="{Binding ScanLog, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap" />
+
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Text="Scan Log" Padding="4">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </TabItem.Header>
+                    <TextBox AcceptsReturn="True" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                             Text="{Binding ScanLog, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                             TextWrapping="Wrap" />
                 </TabItem>
 
             </TabControl>

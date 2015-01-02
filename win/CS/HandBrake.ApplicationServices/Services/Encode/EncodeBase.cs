@@ -92,10 +92,12 @@ namespace HandBrake.ApplicationServices.Services.Encode
         {
             get
             {
-                string noLog =
-                    "No log data available... Log data will show when you start an encode. \n\nOpen the log file directory to get previous log files.";
+                string noLog = "There is no log information to display." + Environment.NewLine + Environment.NewLine
+                 + "This window will only display logging information after you have started an encode." + Environment.NewLine
+                 + Environment.NewLine + "You can find previous log files in the log directory or by clicking the 'Open Log Directory' button above.";
+                
                 return string.IsNullOrEmpty(this.logBuffer.ToString())
-                           ? this.header + noLog
+                           ? noLog
                            : this.header + this.logBuffer.ToString();
             }
         }

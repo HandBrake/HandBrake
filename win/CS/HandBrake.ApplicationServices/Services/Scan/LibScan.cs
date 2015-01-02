@@ -152,8 +152,11 @@ namespace HandBrake.ApplicationServices.Services.Scan
         {
             get
             {
-                string noLog = "No log data available... Log data will show here after you scan a source. \n\nOpen the log file directory to get previous log files.";
-                return string.IsNullOrEmpty(this.logging.ToString()) ? this.header + noLog : this.header + this.logging.ToString();
+                string noLog = "There is no log information to display." + Environment.NewLine + Environment.NewLine
+                                + "This window will only display logging information after you have scanned a source." + Environment.NewLine
+                                + Environment.NewLine + "You can find previous log files in the log directory or by clicking the 'Open Log Directory' button above.";
+
+                return string.IsNullOrEmpty(this.logging.ToString()) ? noLog : this.header + this.logging.ToString();
             }
         }
 
@@ -282,7 +285,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
             {
                 Console.WriteLine(e);
             }
-           
+
             return bitmapImage;
         }
 

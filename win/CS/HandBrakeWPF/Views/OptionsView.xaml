@@ -332,7 +332,7 @@
 
                         <StackPanel Orientation="Vertical"  Margin="20,0,0,0">
                                    
-                            <CheckBox Content="Use LibHB for Encoding (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" Visibility="Collapsed" />
+                            <CheckBox Content="Use LibHB for Encoding (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}"  />
                             <CheckBox Content="Enable Process Isolation (Run Encodes via an intermediate service)" Margin="20,10,0,0" IsChecked="{Binding EnableProcessIsolation}" Visibility="Collapsed" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="Collapsed">
                                 <TextBlock Text="Server Port:" VerticalAlignment="Center" />
