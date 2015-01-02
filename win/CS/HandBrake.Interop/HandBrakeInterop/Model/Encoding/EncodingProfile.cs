@@ -44,11 +44,6 @@ namespace HandBrake.Interop.Model.Encoding
         public bool IncludeChapterMarkers { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether large file.
-        /// </summary>
-        public bool LargeFile { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether optimize.
         /// </summary>
         public bool Optimize { get; set; }
@@ -320,7 +315,6 @@ namespace HandBrake.Interop.Model.Encoding
                 ContainerName = this.ContainerName,
                 PreferredExtension = this.PreferredExtension,
                 IncludeChapterMarkers = this.IncludeChapterMarkers,
-                LargeFile = this.LargeFile,
                 Optimize = this.Optimize,
                 IPod5GSupport = this.IPod5GSupport,
 

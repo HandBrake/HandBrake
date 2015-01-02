@@ -445,28 +445,46 @@ namespace HandBrake.Interop
         /// <param name="jobToStart">
         /// The job to start.
         /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         /// <param name="scanPreviewCount">
         /// The scan Preview Count.
         /// </param>
-        public void StartEncode(EncodeJob jobToStart, int scanPreviewCount)
+        public void StartEncode(EncodeJob jobToStart, Title title, int scanPreviewCount)
         {
-            this.StartEncode(jobToStart, false, 0, 0, 0, scanPreviewCount);
+            this.StartEncode(jobToStart, title, false, 0, 0, 0, scanPreviewCount);
         }
 
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
-        /// <param name="job">The job to start.</param>
-        /// <param name="preview">The scan Preview Count.</param>
-        /// <param name="previewNumber">Preview Feature: Preview to encode</param>
-        /// <param name="previewSeconds">Number of seconds to encode for the preview</param>
-        /// <param name="overallSelectedLengthSeconds"></param>
-        /// <param name="scanPreviewCount">Number of previews</param>
-        public void StartEncode(EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount)
+        /// <param name="job">
+        /// The job to start.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="preview">
+        /// The scan Preview Count.
+        /// </param>
+        /// <param name="previewNumber">
+        /// Preview Feature: Preview to encode
+        /// </param>
+        /// <param name="previewSeconds">
+        /// Number of seconds to encode for the preview
+        /// </param>
+        /// <param name="overallSelectedLengthSeconds">
+        /// The overall Selected Length Seconds.
+        /// </param>
+        /// <param name="scanPreviewCount">
+        /// Number of previews
+        /// </param>
+        public void StartEncode(EncodeJob job, Title title, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount)
         {
             this.previewCount = scanPreviewCount;
 
-            JsonEncodeObject encodeObject = EncodeFactory.Create(job, lastScan);
+            JsonEncodeObject encodeObject = EncodeFactory.Create(job, title);
 
             JsonSerializerSettings settings = new JsonSerializerSettings
             {

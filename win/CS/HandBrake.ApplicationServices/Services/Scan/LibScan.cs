@@ -469,7 +469,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// <returns>
         /// The convert titles.
         /// </returns>
-        private static List<Title> ConvertTitles(IEnumerable<Interop.Model.Scan.Title> titles, int featureTitle)
+        internal static List<Title> ConvertTitles(IEnumerable<Interop.Model.Scan.Title> titles, int featureTitle)
         {
             List<Title> titleList = new List<Title>();
             foreach (Interop.Model.Scan.Title title in titles)

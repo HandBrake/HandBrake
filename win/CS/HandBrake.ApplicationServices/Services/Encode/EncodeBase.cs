@@ -304,7 +304,10 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// <param name="encodeQueueTask">
         /// The encode QueueTask.
         /// </param>
-        protected void SetupLogging(QueueTask encodeQueueTask)
+        /// <param name="isLibhb">
+        /// Indicates if this is libhb that is encoding or not.
+        /// </param>
+        protected void SetupLogging(QueueTask encodeQueueTask, bool isLibhb)
         {
             this.ShutdownFileWriter();
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
@@ -315,7 +318,12 @@ namespace HandBrake.ApplicationServices.Services.Encode
             {
                 string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task), encodeQueueTask.Configuration);
                 this.logBuffer = new StringBuilder();
-                this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
+
+                if (!isLibhb)
+                {
+                    this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
+                }
+
                 this.logBuffer.AppendLine();
 
                 // Clear the current Encode Logs)

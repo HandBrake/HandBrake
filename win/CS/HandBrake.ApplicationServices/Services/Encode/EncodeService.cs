@@ -99,7 +99,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 {
                     try
                     {
-                        this.SetupLogging(this.currentTask);
+                        this.SetupLogging(this.currentTask, false);
                     }
                     catch (Exception)
                     {

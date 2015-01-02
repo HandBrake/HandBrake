@@ -11,17 +11,17 @@ namespace HandBrake.ApplicationServices.Services.Encode
 {
     using System;
     using System.Diagnostics;
+    using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
     using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
-
-    using EncodeCompletedEventArgs = HandBrake.ApplicationServices.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrake.ApplicationServices.Services.Encode.EventArgs.EncodeProgressEventArgs;
 
     /// <summary>
     /// LibHB Implementation of IEncode
@@ -54,6 +54,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// The Current Task
         /// </summary>
         private QueueTask currentTask;
+
+        private Source scannedSource;
 
         #endregion
 
@@ -117,7 +119,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 {
                     try
                     {
-                        this.SetupLogging(job);
+                        this.SetupLogging(job, true);
                     }
                     catch (Exception)
                     {
@@ -135,12 +137,14 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
                 this.instance.ScanCompleted += delegate
                     {
+                        // Process into internal structures.
+                        this.scannedSource = new Source { Titles = LibScan.ConvertTitles(this.instance.Titles, this.instance.FeatureTitle) }; // TODO work around the bad Internal API.
                         this.ScanCompleted(job, this.instance);
                     };
             }
             catch (Exception exc)
             {
-                this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error has occured.", this.currentTask.Task.Destination));
+                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "An Error has occured.", this.currentTask.Task.Destination));
             }
         }
 
@@ -207,7 +211,16 @@ namespace HandBrake.ApplicationServices.Services.Encode
             EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
 
             // Start the Encode
-            instance.StartEncode(encodeJob, job.Configuration.PreviewScanCount);
+            Title title = this.scannedSource.Titles.FirstOrDefault(t => t.TitleNumber == job.Task.Title);
+            if (title == null)
+            {
+                throw new Exception("Unable to get title for encoding. Encode Failed.");
+            }
+
+            Interop.Model.Scan.Title scannedTitle = new Interop.Model.Scan.Title { Resolution = new Size(title.Resolution.Width, title.Resolution.Height), ParVal = new Size(title.ParVal.Width, title.ParVal.Height) };
+            
+            // TODO fix this tempory hack to pass in the required title information into the factory.
+            instance.StartEncode(encodeJob, scannedTitle, job.Configuration.PreviewScanCount);
 
             // Fire the Encode Started Event
             this.InvokeEncodeStarted(System.EventArgs.Empty);
@@ -237,6 +250,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
         }
 
         #region HandBrakeInstance Event Handlers.
+
         /// <summary>
         /// Log a message
         /// </summary>
@@ -286,16 +300,16 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// <param name="e">
         /// The Interop.EncodeProgressEventArgs.
         /// </param>
-        private void InstanceEncodeProgress(object sender, Interop.EventArgs.EncodeProgressEventArgs e)
+        private void InstanceEncodeProgress(object sender, EncodeProgressEventArgs e)
         {
-           EncodeProgressEventArgs args = new EncodeProgressEventArgs
+           EventArgs.EncodeProgressEventArgs args = new EventArgs.EncodeProgressEventArgs
             {
-                AverageFrameRate = e.AverageFrameRate,
-                CurrentFrameRate = e.CurrentFrameRate,
-                EstimatedTimeLeft = e.EstimatedTimeLeft,
-                PercentComplete = e.FractionComplete * 100,
-                Task = e.Pass,
-                ElapsedTime = DateTime.Now - this.startTime,
+                AverageFrameRate = e.AverageFrameRate, 
+                CurrentFrameRate = e.CurrentFrameRate, 
+                EstimatedTimeLeft = e.EstimatedTimeLeft, 
+                PercentComplete = e.FractionComplete * 100, 
+                Task = e.Pass, 
+                ElapsedTime = DateTime.Now - this.startTime, 
             };
 
             this.InvokeEncodeStatusChanged(args);
@@ -310,14 +324,14 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// <param name="e">
         /// The e.
         /// </param>
-        private void InstanceEncodeCompleted(object sender, Interop.EventArgs.EncodeCompletedEventArgs e)
+        private void InstanceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.IsEncoding = false;
 
             this.InvokeEncodeCompleted(
                 e.Error
-                    ? new EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Task.Destination)
-                    : new EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Task.Destination));
+                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Task.Destination)
+                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Task.Destination));
 
             this.ShutdownFileWriter();
         }

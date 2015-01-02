@@ -21,6 +21,9 @@ namespace HandBrake.Interop.Json.Factories
 
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// The anamorphic factory.
+    /// </summary>
     public class AnamorphicFactory
     {
         /// <summary>

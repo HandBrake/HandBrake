@@ -143,16 +143,22 @@ namespace HandBrake.Interop.Interfaces
         /// <param name="jobToStart">
         /// The job to start.
         /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         /// <param name="scanPreviewCount">
         /// The scan Preview Count.
         /// </param>
-        void StartEncode(EncodeJob jobToStart, int scanPreviewCount);
+        void StartEncode(EncodeJob jobToStart, Title title, int scanPreviewCount);
 
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
         /// <param name="job">
         /// The job to start.
+        /// </param>
+        /// <param name="title">
+        /// The title.
         /// </param>
         /// <param name="preview">
         /// True if this is a preview encode.
@@ -170,8 +176,7 @@ namespace HandBrake.Interop.Interfaces
         /// <param name="scanPreviewCount">
         /// The scan Preview Count.
         /// </param>
-        void StartEncode(
-            EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount);
+        void StartEncode(EncodeJob job, Title title, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount);
 
         /// <summary>
         /// Starts scanning the given path.
