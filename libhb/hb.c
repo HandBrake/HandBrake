@@ -909,6 +909,16 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     double storage_aspect = (double)cropped_width / cropped_height;
     int mod = geo->modulus ? EVEN(geo->modulus) : 2;
 
+    // Sanitize PAR
+    if (geo->geometry.par.num == 0 || geo->geometry.par.den == 0)
+    {
+        geo->geometry.par.num = geo->geometry.par.den = 1;
+    }
+    if (src_geo->par.num == 0 || src_geo->par.den == 0)
+    {
+        src_geo->par.num = src_geo->par.den = 1;
+    }
+
     // Use 64 bits to avoid overflow till the final hb_reduce() call
     hb_reduce(&in_par.num, &in_par.den,
               geo->geometry.par.num, geo->geometry.par.den);
@@ -1160,7 +1170,8 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     hb_limit_rational64(&dst_par_num, &dst_par_den,
                         dst_par_num, dst_par_den, 65535);
 
-    /* If the user is directling updating PAR, don't override his values */
+    // If the user is directling updating PAR, don't override his values.
+    // I.e. don't even reduce the values.
     hb_reduce(&out_par.num, &out_par.den, dst_par_num, dst_par_den);
     if (geo->mode == HB_ANAMORPHIC_CUSTOM && !keep_display_aspect &&
         out_par.num == in_par.num && out_par.den == in_par.den)

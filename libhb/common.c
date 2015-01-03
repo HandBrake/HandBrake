@@ -2980,32 +2980,16 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     /* Autocrop by default. Gnark gnark */
     memcpy( job->crop, title->crop, 4 * sizeof( int ) );
 
-    /* Preserve a source's pixel aspect, if it's available. */
-    if (title->geometry.par.num && title->geometry.par.den)
-    {
-        job->par = title->geometry.par;
-    }
-    else if (title->dar.num && title->dar.den)
-    {
-        hb_reduce(&job->par.num, &job->par.den,
-                  title->geometry.height * title->dar.num,
-                  title->geometry.width * title->dar.den);
-    }
-
-    job->width = title->geometry.width - title->crop[2] - title->crop[3];
-    job->height = title->geometry.height - title->crop[0] - title->crop[1];
 
     hb_geometry_t resultGeo, srcGeo;
     hb_geometry_settings_t uiGeo;
 
-    memset(&uiGeo, 0, sizeof(uiGeo));
-    srcGeo.width = title->geometry.width;
-    srcGeo.height = title->geometry.height;
-    srcGeo.par = title->geometry.par;
+    srcGeo = title->geometry;
 
-    uiGeo.geometry.width = job->width;
-    uiGeo.geometry.height = job->height;
-    uiGeo.geometry.par = job->par;
+    memset(&uiGeo, 0, sizeof(uiGeo));
+    memcpy(uiGeo.crop, title->crop, 4 * sizeof( int ));
+    uiGeo.geometry.width = srcGeo.width - uiGeo.crop[2] - uiGeo.crop[3];
+    uiGeo.geometry.height = srcGeo.height - uiGeo.crop[0] - uiGeo.crop[1];
     uiGeo.mode = HB_ANAMORPHIC_NONE;
     uiGeo.keep = HB_KEEP_DISPLAY_ASPECT;
 
