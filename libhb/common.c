@@ -2998,6 +2998,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     hb_geometry_t resultGeo, srcGeo;
     hb_geometry_settings_t uiGeo;
 
+    memset(&uiGeo, 0, sizeof(uiGeo));
     srcGeo.width = title->geometry.width;
     srcGeo.height = title->geometry.height;
     srcGeo.par = title->geometry.par;
@@ -3005,9 +3006,8 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     uiGeo.geometry.width = job->width;
     uiGeo.geometry.height = job->height;
     uiGeo.geometry.par = job->par;
-    uiGeo.mode = 0;
+    uiGeo.mode = HB_ANAMORPHIC_NONE;
     uiGeo.keep = HB_KEEP_DISPLAY_ASPECT;
-    uiGeo.itu_par = 0;
 
     hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
     job->width = resultGeo.width;
