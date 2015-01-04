@@ -217,7 +217,13 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 throw new Exception("Unable to get title for encoding. Encode Failed.");
             }
 
-            Interop.Model.Scan.Title scannedTitle = new Interop.Model.Scan.Title { Resolution = new Size(title.Resolution.Width, title.Resolution.Height), ParVal = new Size(title.ParVal.Width, title.ParVal.Height) };
+            Interop.Model.Scan.Title scannedTitle = new Interop.Model.Scan.Title
+                                                        {
+                                                            Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
+                                                            ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
+                                                            FramerateDenominator = title.FramerateDenominator,
+                                                            FramerateNumerator = title.FramerateNumerator,
+                                                        };
             
             // TODO fix this tempory hack to pass in the required title information into the factory.
             instance.StartEncode(encodeJob, scannedTitle, job.Configuration.PreviewScanCount);

@@ -9,15 +9,14 @@
 
 namespace HandBrake.Interop.Model
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	using HandBrake.Interop.Converters;
-	using HandBrake.Interop.HbLib;
-	using HandBrake.Interop.Helpers;
-	using HandBrake.Interop.Model.Encoding;
-	using HandBrake.Interop.Model.Scan;
+    using HandBrake.Interop.Converters;
+    using HandBrake.Interop.HbLib;
+    using HandBrake.Interop.Helpers;
+    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.Interop.Model.Scan;
 
     /// <summary>
 	/// The encoders.
@@ -193,8 +192,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the audio encoder with the specified short name.
 		/// </summary>
-		/// <param name="shortName">The name of the audio encoder.</param>
-		/// <returns>The requested audio encoder.</returns>
+		/// <param name="shortName">
+		/// The name of the audio encoder.
+		/// </param>
+		/// <returns>
+		/// The requested audio encoder.
+		/// </returns>
 		public static HBAudioEncoder GetAudioEncoder(string shortName)
 		{
 			return AudioEncoders.SingleOrDefault(e => e.ShortName == shortName);
@@ -203,8 +206,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the audio encoder with the specified codec ID.
 		/// </summary>
-		/// <param name="codecId">The ID of the audio encoder.</param>
-		/// <returns>The requested audio encoder.</returns>
+		/// <param name="codecId">
+		/// The ID of the audio encoder.
+		/// </param>
+		/// <returns>
+		/// The requested audio encoder.
+		/// </returns>
 		public static HBAudioEncoder GetAudioEncoder(int codecId)
 		{
 			return AudioEncoders.SingleOrDefault(e => e.Id == codecId);
@@ -213,8 +220,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the video encoder with the specified short name.
 		/// </summary>
-		/// <param name="shortName">The name of the video encoder.</param>
-		/// <returns>The requested video encoder.</returns>
+		/// <param name="shortName">
+		/// The name of the video encoder.
+		/// </param>
+		/// <returns>
+		/// The requested video encoder.
+		/// </returns>
 		public static HBVideoEncoder GetVideoEncoder(string shortName)
 		{
 			return VideoEncoders.SingleOrDefault(e => e.ShortName == shortName);
@@ -223,8 +234,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the mixdown with the specified short name.
 		/// </summary>
-		/// <param name="shortName">The name of the mixdown.</param>
-		/// <returns>The requested mixdown.</returns>
+		/// <param name="shortName">
+		/// The name of the mixdown.
+		/// </param>
+		/// <returns>
+		/// The requested mixdown.
+		/// </returns>
 		public static HBMixdown GetMixdown(string shortName)
 		{
 			return Mixdowns.SingleOrDefault(m => m.ShortName == shortName);
@@ -233,8 +248,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the container with the specified short name.
 		/// </summary>
-		/// <param name="shortName">The name of the container.</param>
-		/// <returns>The requested container.</returns>
+		/// <param name="shortName">
+		/// The name of the container.
+		/// </param>
+		/// <returns>
+		/// The requested container.
+		/// </returns>
 		public static HBContainer GetContainer(string shortName)
 		{
 			return Containers.SingleOrDefault(c => c.ShortName == shortName);
@@ -243,10 +262,18 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Determines if the given encoder is compatible with the given track.
 		/// </summary>
-		/// <param name="track">The audio track to examine.</param>
-		/// <param name="encoder">The encoder to examine.</param>
-		/// <returns>True if the given encoder is comatible with the given audio track.</returns>
-		/// <remarks>Only works with passthrough encoders.</remarks>
+		/// <param name="track">
+		/// The audio track to examine.
+		/// </param>
+		/// <param name="encoder">
+		/// The encoder to examine.
+		/// </param>
+		/// <returns>
+		/// True if the given encoder is comatible with the given audio track.
+		/// </returns>
+		/// <remarks>
+		/// Only works with passthrough encoders.
+		/// </remarks>
 		public static bool AudioEncoderIsCompatible(AudioTrack track, HBAudioEncoder encoder)
 		{
 			return (track.CodecId & encoder.Id) > 0;
@@ -255,9 +282,15 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Determines if the given mixdown supports the given channel layout.
 		/// </summary>
-		/// <param name="mixdown">The mixdown to evaluate.</param>
-		/// <param name="layout">The channel layout to evaluate.</param>
-		/// <returns>True if the mixdown supports the given channel layout.</returns>
+		/// <param name="mixdown">
+		/// The mixdown to evaluate.
+		/// </param>
+		/// <param name="layout">
+		/// The channel layout to evaluate.
+		/// </param>
+		/// <returns>
+		/// True if the mixdown supports the given channel layout.
+		/// </returns>
 		public static bool MixdownHasRemixSupport(HBMixdown mixdown, ulong layout)
 		{
 			return HBFunctions.hb_mixdown_has_remix_support(mixdown.Id, layout) > 0;
@@ -266,9 +299,15 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Determines if the given encoder supports the given mixdown.
 		/// </summary>
-		/// <param name="mixdown">The mixdown to evaluate.</param>
-		/// <param name="encoder">The encoder to evaluate.</param>
-		/// <returns>True if the encoder supports the mixdown.</returns>
+		/// <param name="mixdown">
+		/// The mixdown to evaluate.
+		/// </param>
+		/// <param name="encoder">
+		/// The encoder to evaluate.
+		/// </param>
+		/// <returns>
+		/// True if the encoder supports the mixdown.
+		/// </returns>
 		public static bool MixdownHasCodecSupport(HBMixdown mixdown, HBAudioEncoder encoder)
 		{
 			return HBFunctions.hb_mixdown_has_codec_support(mixdown.Id, (uint) encoder.Id) > 0;
@@ -277,9 +316,15 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Determines if DRC can be applied to the given track with the given encoder.
 		/// </summary>
-		/// <param name="track">The track to apply DRC to.</param>
-		/// <param name="encoder">The encoder to use for DRC.</param>
-		/// <returns>True if DRC can be applied to the track with the given encoder.</returns>
+		/// <param name="track">
+		/// The track to apply DRC to.
+		/// </param>
+		/// <param name="encoder">
+		/// The encoder to use for DRC.
+		/// </param>
+		/// <returns>
+		/// True if DRC can be applied to the track with the given encoder.
+		/// </returns>
 		public static bool CanApplyDrc(AudioTrack track, HBAudioEncoder encoder)
 		{
 			return HBFunctions.hb_audio_can_apply_drc(track.CodecId, track.CodecParam, encoder.Id) > 0;
@@ -288,8 +333,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Determines if the given input audio codec can be passed through.
 		/// </summary>
-		/// <param name="codecId">The input codec to consider.</param>
-		/// <returns>True if the codec can be passed through.</returns>
+		/// <param name="codecId">
+		/// The input codec to consider.
+		/// </param>
+		/// <returns>
+		/// True if the codec can be passed through.
+		/// </returns>
 		public static bool CanPassthroughAudio(int codecId)
 		{
 			return (codecId & NativeConstants.HB_ACODEC_PASS_MASK) > 0;
@@ -298,10 +347,18 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Sanitizes a mixdown given the output codec and input channel layout.
 		/// </summary>
-		/// <param name="mixdown">The desired mixdown.</param>
-		/// <param name="encoder">The output encoder to be used.</param>
-		/// <param name="layout">The input channel layout.</param>
-		/// <returns>A sanitized mixdown value.</returns>
+		/// <param name="mixdown">
+		/// The desired mixdown.
+		/// </param>
+		/// <param name="encoder">
+		/// The output encoder to be used.
+		/// </param>
+		/// <param name="layout">
+		/// The input channel layout.
+		/// </param>
+		/// <returns>
+		/// A sanitized mixdown value.
+		/// </returns>
 		public static HBMixdown SanitizeMixdown(HBMixdown mixdown, HBAudioEncoder encoder, ulong layout)
 		{
 			int sanitizedMixdown = HBFunctions.hb_mixdown_get_best((uint)encoder.Id, layout, mixdown.Id);
@@ -311,9 +368,15 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the default mixdown for the given audio encoder and channel layout.
 		/// </summary>
-		/// <param name="encoder">The output codec to be used.</param>
-		/// <param name="layout">The input channel layout.</param>
-		/// <returns>The default mixdown for the given codec and channel layout.</returns>
+		/// <param name="encoder">
+		/// The output codec to be used.
+		/// </param>
+		/// <param name="layout">
+		/// The input channel layout.
+		/// </param>
+		/// <returns>
+		/// The default mixdown for the given codec and channel layout.
+		/// </returns>
 		public static HBMixdown GetDefaultMixdown(HBAudioEncoder encoder, ulong layout)
 		{
 			int defaultMixdown = HBFunctions.hb_mixdown_get_default((uint)encoder.Id, layout);
@@ -323,10 +386,18 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the bitrate limits for the given audio codec, sample rate and mixdown.
 		/// </summary>
-		/// <param name="encoder">The audio encoder used.</param>
-		/// <param name="sampleRate">The sample rate used (Hz).</param>
-		/// <param name="mixdown">The mixdown used.</param>
-		/// <returns>Limits on the audio bitrate for the given settings.</returns>
+		/// <param name="encoder">
+		/// The audio encoder used.
+		/// </param>
+		/// <param name="sampleRate">
+		/// The sample rate used (Hz).
+		/// </param>
+		/// <param name="mixdown">
+		/// The mixdown used.
+		/// </param>
+		/// <returns>
+		/// Limits on the audio bitrate for the given settings.
+		/// </returns>
 		public static BitrateLimits GetBitrateLimits(HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
 		{
 			int low = 0;
@@ -340,8 +411,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the video quality limits for the given video codec.
 		/// </summary>
-		/// <param name="encoder">The video encoder to check.</param>
-		/// <returns>Limits on the video quality for the encoder.</returns>
+		/// <param name="encoder">
+		/// The video encoder to check.
+		/// </param>
+		/// <returns>
+		/// Limits on the video quality for the encoder.
+		/// </returns>
 		public static VideoQualityLimits GetVideoQualityLimits(HBVideoEncoder encoder)
 		{
 			float low = 0;
@@ -353,9 +428,9 @@ namespace HandBrake.Interop.Model
 
 			return new VideoQualityLimits
 				{
-					Low = low,
-					High = high,
-					Granularity = granularity,
+					Low = low, 
+					High = high, 
+					Granularity = granularity, 
 					Ascending = direction == 0
 				};
 		}
@@ -363,11 +438,21 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Sanitizes an audio bitrate given the output codec, sample rate and mixdown.
 		/// </summary>
-		/// <param name="audioBitrate">The desired audio bitrate.</param>
-		/// <param name="encoder">The output encoder to be used.</param>
-		/// <param name="sampleRate">The output sample rate to be used.</param>
-		/// <param name="mixdown">The mixdown to be used.</param>
-		/// <returns>A sanitized audio bitrate.</returns>
+		/// <param name="audioBitrate">
+		/// The desired audio bitrate.
+		/// </param>
+		/// <param name="encoder">
+		/// The output encoder to be used.
+		/// </param>
+		/// <param name="sampleRate">
+		/// The output sample rate to be used.
+		/// </param>
+		/// <param name="mixdown">
+		/// The mixdown to be used.
+		/// </param>
+		/// <returns>
+		/// A sanitized audio bitrate.
+		/// </returns>
 		public static int SanitizeAudioBitrate(int audioBitrate, HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
 		{
 			return HBFunctions.hb_audio_bitrate_get_best((uint)encoder.Id, audioBitrate, sampleRate, mixdown.Id);
@@ -376,10 +461,18 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets the default audio bitrate for the given parameters.
 		/// </summary>
-		/// <param name="encoder">The encoder to use.</param>
-		/// <param name="sampleRate">The sample rate to use.</param>
-		/// <param name="mixdown">The mixdown to use.</param>
-		/// <returns>The default bitrate for these parameters.</returns>
+		/// <param name="encoder">
+		/// The encoder to use.
+		/// </param>
+		/// <param name="sampleRate">
+		/// The sample rate to use.
+		/// </param>
+		/// <param name="mixdown">
+		/// The mixdown to use.
+		/// </param>
+		/// <returns>
+		/// The default bitrate for these parameters.
+		/// </returns>
 		public static int GetDefaultBitrate(HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
 		{
 			return HBFunctions.hb_audio_bitrate_get_default((uint) encoder.Id, sampleRate, mixdown.Id);
@@ -388,8 +481,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets limits on audio quality for a given encoder.
 		/// </summary>
-		/// <param name="encoderId">The audio encoder ID.</param>
-		/// <returns>Limits on the audio quality for the given encoder.</returns>
+		/// <param name="encoderId">
+		/// The audio encoder ID.
+		/// </param>
+		/// <returns>
+		/// Limits on the audio quality for the given encoder.
+		/// </returns>
 		internal static RangeLimits GetAudioQualityLimits(int encoderId)
 		{
 			float low = 0, high = 0, granularity = 0;
@@ -398,9 +495,9 @@ namespace HandBrake.Interop.Model
 
 			return new RangeLimits
 			{
-				Low = low,
-				High = high,
-				Granularity = granularity,
+				Low = low, 
+				High = high, 
+				Granularity = granularity, 
 				Ascending = direction == 0
 			};
 		}
@@ -408,8 +505,12 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// Gets limits on audio compression for a given encoder.
 		/// </summary>
-		/// <param name="encoderId">The audio encoder ID.</param>
-		/// <returns>Limits on the audio compression for the given encoder.</returns>
+		/// <param name="encoderId">
+		/// The audio encoder ID.
+		/// </param>
+		/// <returns>
+		/// Limits on the audio compression for the given encoder.
+		/// </returns>
 		internal static RangeLimits GetAudioCompressionLimits(int encoderId)
 		{
 			float low = 0, high = 0, granularity = 0;
@@ -418,9 +519,9 @@ namespace HandBrake.Interop.Model
 
 			return new RangeLimits
 			{
-				Low = low,
-				High = high,
-				Granularity = granularity,
+				Low = low, 
+				High = high, 
+				Granularity = granularity, 
 				Ascending = direction == 0
 			};
 		}

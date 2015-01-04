@@ -11,6 +11,7 @@ namespace HandBrake.Interop.Json.Factories
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
 
@@ -50,7 +51,7 @@ namespace HandBrake.Interop.Json.Factories
                     Audio = CreateAudio(job), 
                     Destination = CreateDestination(job), 
                     Filter = CreateFilter(job, title), 
-                    PAR = CreatePAR(job), 
+                    PAR = CreatePAR(job, title), 
                     MetaData = CreateMetaData(job), 
                     Source = CreateSource(job), 
                     Subtitle = CreateSubtitle(job), 
@@ -131,12 +132,16 @@ namespace HandBrake.Interop.Json.Factories
         /// <param name="job">
         /// The Job
         /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         /// <returns>
         /// The produced PAR object.
         /// </returns>
-        private static PAR CreatePAR(EncodeJob job)
+        private static PAR CreatePAR(EncodeJob job, Title title)
         {
-            return new PAR { Num = job.EncodingProfile.PixelAspectX, Den = job.EncodingProfile.PixelAspectY };
+            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH);
+            return new PAR { Num = resultGeometry.PAR.Num, Den = resultGeometry.PAR.Den };
         }
 
         /// <summary>
@@ -360,8 +365,28 @@ namespace HandBrake.Interop.Json.Factories
                 filter.FilterList.Add(filterItem);
             }
 
-            // VFR / CFR  TODO Setup the framerate shaper.
-            FilterList framerateShaper = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = string.Empty };
+            // VFR / CFR
+            int fm = job.EncodingProfile.ConstantFramerate ? 1 : job.EncodingProfile.PeakFramerate ? 2 : 0;
+            IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(job.EncodingProfile.Framerate.ToString(CultureInfo.InvariantCulture));
+            int vrate = HBFunctions.hb_video_framerate_get_from_name(frameratePrt);
+
+            int num;
+            int den;
+            if (vrate > 0)
+            {
+                num = 27000000;
+                den = vrate;
+            }
+            else
+            {
+                // cfr or pfr flag with no rate specified implies use the title rate.
+                num = title.FramerateNumerator;
+                den = title.FramerateDenominator;
+            }
+
+            string framerateString = string.Format("{0}:{1}:{2}", fm, num, den); // filter_cfr, filter_vrate.num, filter_vrate.den
+
+            FilterList framerateShaper = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
             filter.FilterList.Add(framerateShaper);
 
             // Deblock

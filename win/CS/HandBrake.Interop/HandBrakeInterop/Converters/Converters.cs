@@ -17,7 +17,6 @@ namespace HandBrake.Interop.Converters
     using HandBrake.Interop.Helpers;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Scan;
 
     /// <summary>
 	/// Converters for various encoding values.
@@ -68,15 +67,19 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts a native HB encoder structure to an Encoder model.
 		/// </summary>
-		/// <param name="encoder">The structure to convert.</param>
-		/// <returns>The converted model.</returns>
+		/// <param name="encoder">
+		/// The structure to convert.
+		/// </param>
+		/// <returns>
+		/// The converted model.
+		/// </returns>
 		public static HBVideoEncoder NativeToVideoEncoder(hb_encoder_s encoder)
 		{
 			return new HBVideoEncoder
 			{
-				Id = encoder.codec,
-				ShortName = encoder.short_name,
-				DisplayName = encoder.name,
+				Id = encoder.codec, 
+				ShortName = encoder.short_name, 
+				DisplayName = encoder.name, 
 				CompatibleContainers = encoder.muxers
 			};
 		}
@@ -84,19 +87,23 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts a native HB encoder structure to an Encoder model.
 		/// </summary>
-		/// <param name="encoder">The structure to convert.</param>
-		/// <returns>The converted model.</returns>
+		/// <param name="encoder">
+		/// The structure to convert.
+		/// </param>
+		/// <returns>
+		/// The converted model.
+		/// </returns>
 		public static HBAudioEncoder NativeToAudioEncoder(hb_encoder_s encoder)
 		{
 			var result = new HBAudioEncoder
 			                 {
-			                     Id = encoder.codec,
-			                     ShortName = encoder.short_name,
-			                     DisplayName = encoder.name,
-			                     CompatibleContainers = encoder.muxers,
-			                     QualityLimits = Encoders.GetAudioQualityLimits(encoder.codec),
-			                     DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec),
-			                     CompressionLimits = Encoders.GetAudioCompressionLimits(encoder.codec),
+			                     Id = encoder.codec, 
+			                     ShortName = encoder.short_name, 
+			                     DisplayName = encoder.name, 
+			                     CompatibleContainers = encoder.muxers, 
+			                     QualityLimits = Encoders.GetAudioQualityLimits(encoder.codec), 
+			                     DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec), 
+			                     CompressionLimits = Encoders.GetAudioCompressionLimits(encoder.codec), 
 			                     DefaultCompression =
 			                     HBFunctions.hb_audio_compression_get_default((uint)encoder.codec)
 			                 };
@@ -107,13 +114,17 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts a native HB rate structure to an HBRate object.
 		/// </summary>
-		/// <param name="rate">The structure to convert.</param>
-		/// <returns>The converted rate object.</returns>
+		/// <param name="rate">
+		/// The structure to convert.
+		/// </param>
+		/// <returns>
+		/// The converted rate object.
+		/// </returns>
 		public static HBRate NativeToRate(hb_rate_s rate)
 		{
 			return new HBRate
 				{
-					Name = rate.name,
+					Name = rate.name, 
 					Rate = rate.rate
 				};
 		}
@@ -121,14 +132,18 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts a native HB mixdown structure to a Mixdown model.
 		/// </summary>
-		/// <param name="mixdown">The structure to convert.</param>
-		/// <returns>The converted model.</returns>
+		/// <param name="mixdown">
+		/// The structure to convert.
+		/// </param>
+		/// <returns>
+		/// The converted model.
+		/// </returns>
 		public static HBMixdown NativeToMixdown(hb_mixdown_s mixdown)
 		{
 			return new HBMixdown
 				{
-					Id = mixdown.amixdown,
-					ShortName = mixdown.short_name,
+					Id = mixdown.amixdown, 
+					ShortName = mixdown.short_name, 
 					DisplayName = mixdown.name
 				};
 		}
@@ -136,15 +151,19 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts a native HB container structure into an HBContainer object.
 		/// </summary>
-		/// <param name="container">The structure to convert.</param>
-		/// <returns>The converted structure.</returns>
+		/// <param name="container">
+		/// The structure to convert.
+		/// </param>
+		/// <returns>
+		/// The converted structure.
+		/// </returns>
 		public static HBContainer NativeToContainer(hb_container_s container)
 		{
 			return new HBContainer
 				{
-					DisplayName = container.name,
-					ShortName = container.short_name,
-					DefaultExtension = container.default_extension,
+					DisplayName = container.name, 
+					ShortName = container.short_name, 
+					DefaultExtension = container.default_extension, 
 					Id = container.format
 				};
 		}
@@ -152,16 +171,20 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts a native language structure to a Language object.
 		/// </summary>
-		/// <param name="language">The structure to convert.</param>
-		/// <returns>The converted structure.</returns>
+		/// <param name="language">
+		/// The structure to convert.
+		/// </param>
+		/// <returns>
+		/// The converted structure.
+		/// </returns>
 		public static Language NativeToLanguage(iso639_lang_t language)
 		{
 			string englishName = InteropUtilities.ToStringFromUtf8Ptr(language.eng_name);
 			string nativeName = InteropUtilities.ToStringFromUtf8Ptr(language.native_name);
 			return new Language
 				{
-					Code = language.iso639_2,
-					EnglishName = englishName,
+					Code = language.iso639_2, 
+					EnglishName = englishName, 
 					NativeName = nativeName
 				};
 		}
@@ -169,8 +192,12 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts the PTS amount to a TimeSpan. There may be some accuracy loss here.
 		/// </summary>
-		/// <param name="pts">The PTS to convert.</param>
-		/// <returns>The timespan for it.</returns>
+		/// <param name="pts">
+		/// The PTS to convert.
+		/// </param>
+		/// <returns>
+		/// The timespan for it.
+		/// </returns>
 		public static TimeSpan PtsToTimeSpan(ulong pts)
 		{
 			return TimeSpan.FromTicks((long)((pts * 10000000) / 90000));
@@ -179,8 +206,12 @@ namespace HandBrake.Interop.Converters
 		/// <summary>
 		/// Converts the PTS amount to seconds.
 		/// </summary>
-		/// <param name="pts">The PTS to convert.</param>
-		/// <returns>The corresponding number of seconds.</returns>
+		/// <param name="pts">
+		/// The PTS to convert.
+		/// </param>
+		/// <returns>
+		/// The corresponding number of seconds.
+		/// </returns>
 		public static double PtsToSeconds(ulong pts)
 		{
 			return (double)pts / 90000;

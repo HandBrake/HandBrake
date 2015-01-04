@@ -100,6 +100,16 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
         public double Fps { get; set; }
 
         /// <summary>
+        /// Gets or sets the video frame rate numerator.
+        /// </summary>
+        public int FramerateNumerator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video frame rate denominator.
+        /// </summary>
+        public int FramerateDenominator { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this is a MainTitle.
         /// </summary>
         public bool MainTitle { get; set; }

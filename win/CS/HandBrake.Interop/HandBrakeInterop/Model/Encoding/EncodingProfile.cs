@@ -287,6 +287,11 @@ namespace HandBrake.Interop.Model.Encoding
         /// Gets or sets a value indicating whether constant framerate.
         /// </summary>
         public bool ConstantFramerate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether peak framerate.
+        /// </summary>
+        public bool PeakFramerate { get; set; }
         #endregion
 
         #region Audio

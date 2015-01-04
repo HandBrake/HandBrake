@@ -175,6 +175,7 @@ namespace HandBrake.ApplicationServices.Utilities
             // Video Settings
             profile.Framerate = work.Framerate.HasValue ? work.Framerate.Value : 0;
             profile.ConstantFramerate = work.FramerateMode == FramerateMode.CFR;
+            profile.PeakFramerate = work.FramerateMode == FramerateMode.PFR;
             profile.Quality = work.Quality.HasValue ? work.Quality.Value : 0;
             profile.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
             profile.VideoEncodeRateType = work.VideoEncodeRateType;

@@ -213,8 +213,10 @@ namespace HandBrake.Interop.HbLib
 		public static extern int hb_subtitle_can_pass(int source, int mux);
 
 
+        // int hb_video_framerate_get_from_name(const char *name)
+        [DllImport("hb.dll", EntryPoint = "hb_video_framerate_get_from_name", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_video_framerate_get_from_name(IntPtr name);
 
-//int              hb_video_framerate_get_from_name(const char *name);
 //const char*      hb_video_framerate_get_name(int framerate);
 //const char*      hb_video_framerate_sanitize_name(const char *name);
 

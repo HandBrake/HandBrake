@@ -486,7 +486,9 @@ namespace HandBrake.ApplicationServices.Services.Scan
                         Fps = title.Framerate,
                         SourceName = title.Path,
                         MainTitle = title.TitleNumber == featureTitle,
-                        Playlist = title.InputType == InputType.Bluray ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null
+                        Playlist = title.InputType == InputType.Bluray ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null,
+                        FramerateNumerator = title.FramerateNumerator,
+                        FramerateDenominator = title.FramerateDenominator
                     };
 
                 foreach (Interop.Model.Scan.Chapter chapter in title.Chapters)
