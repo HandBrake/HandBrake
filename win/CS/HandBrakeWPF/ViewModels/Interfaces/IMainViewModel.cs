@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     using System.Windows;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
 
     using HandBrakeWPF.Services.Presets.Model;
 

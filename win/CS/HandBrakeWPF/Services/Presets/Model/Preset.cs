@@ -12,8 +12,12 @@ namespace HandBrakeWPF.Services.Presets.Model
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.Audio;
-    using HandBrake.ApplicationServices.Model.Subtitle;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
+
+    using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Model.Subtitles;
+
+    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// A Preset for encoding with.

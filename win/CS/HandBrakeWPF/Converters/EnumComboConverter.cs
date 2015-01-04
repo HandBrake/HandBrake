@@ -20,6 +20,8 @@ namespace HandBrakeWPF.Converters
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
+    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
+
     /// <summary>
     /// Enum Combo Converter
     /// </summary>

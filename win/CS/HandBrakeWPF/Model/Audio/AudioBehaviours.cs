@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model.Audio
+namespace HandBrakeWPF.Model.Audio
 {
     using System.ComponentModel;
 

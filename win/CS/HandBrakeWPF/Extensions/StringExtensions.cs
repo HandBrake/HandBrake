@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Extensions
+namespace HandBrakeWPF.Extensions
 {
     using System.Text;
 

@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
@@ -23,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
     using Size = System.Drawing.Size;
 
     /// <summary>

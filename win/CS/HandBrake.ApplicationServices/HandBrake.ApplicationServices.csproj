@@ -106,16 +106,11 @@
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
-    <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
-    <Compile Include="Model\Audio\AudioBehaviours.cs" />
-    <Compile Include="Model\Encoding\DenoisePreset.cs" />
-    <Compile Include="Model\Encoding\DenoiseTune.cs" />
+    <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
+    <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
     <Compile Include="Model\HBConfiguration.cs" />
-    <Compile Include="Model\Subtitle\SubtitleBehaviourModes.cs" />
-    <Compile Include="Model\Subtitle\SubtitleBehaviours.cs" />
     <Compile Include="Model\VideoScaler.cs" />
     <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
@@ -132,18 +127,18 @@
     <Compile Include="Utilities\VersionHelper.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Model\DriveInformation.cs" />
-    <Compile Include="Model\Encoding\AllowedPassthru.cs" />
-    <Compile Include="Model\Encoding\AudioTrack.cs" />
-    <Compile Include="Model\Encoding\ChapterMarker.cs" />
-    <Compile Include="Model\Encoding\FramerateMode.cs" />
-    <Compile Include="Model\Encoding\PointToPointMode.cs" />
-    <Compile Include="Model\EncodeTask.cs" />
-    <Compile Include="Model\Encoding\OutputFormat.cs" />
-    <Compile Include="Model\Encoding\SubtitleTrack.cs" />
+    <Compile Include="Services\Encode\Model\Models\AllowedPassthru.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioTrack.cs" />
+    <Compile Include="Services\Encode\Model\Models\ChapterMarker.cs" />
+    <Compile Include="Services\Encode\Model\Models\FramerateMode.cs" />
+    <Compile Include="Services\Encode\Model\Models\PointToPointMode.cs" />
+    <Compile Include="Services\Encode\Model\EncodeTask.cs" />
+    <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
+    <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
     <Compile Include="Model\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\QueueItemStatus.cs" />
     <Compile Include="Model\QueueTask.cs" />
-    <Compile Include="Model\Encoding\SubtitleType.cs" />
+    <Compile Include="Services\Encode\Model\Models\SubtitleType.cs" />
     <Compile Include="Services\Scan\Model\Audio.cs" />
     <Compile Include="Services\Scan\Model\Chapter.cs" />
     <Compile Include="Services\Scan\Model\Source.cs" />
@@ -190,7 +185,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\Encode\Model\" />
+    <Folder Include="Services\Encode\Factories\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />

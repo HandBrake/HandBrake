@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model
+namespace HandBrake.ApplicationServices.Services.Encode.Model
 {
     using System;
     using System.Collections.ObjectModel;

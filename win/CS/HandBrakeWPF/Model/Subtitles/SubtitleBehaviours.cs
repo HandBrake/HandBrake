@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model.Subtitle
+namespace HandBrakeWPF.Model.Subtitles
 {
     using System.ComponentModel;
 

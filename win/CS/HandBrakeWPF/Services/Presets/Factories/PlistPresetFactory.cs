@@ -16,17 +16,20 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.Audio;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Model.Subtitle;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
     using HandBrake.Interop.Model.Encoding.x265;
 
+    using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
+
+    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// A Factory to translate a Plist object into a Preset.

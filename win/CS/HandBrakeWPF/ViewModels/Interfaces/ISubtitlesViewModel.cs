@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model.Subtitle;
+    using HandBrakeWPF.Model.Subtitles;
 
     /// <summary>
     /// The Subtiles View Model Interface

@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
 
     /// <summary>
     /// The Preview View Model Interface

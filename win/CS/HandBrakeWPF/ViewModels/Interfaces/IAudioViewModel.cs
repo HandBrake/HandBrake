@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model.Audio;
+    using HandBrakeWPF.Model.Audio;
 
     /// <summary>
     /// The Audio View Model Interface

@@ -160,6 +160,12 @@
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
+    <Compile Include="Model\Audio\AudioBehaviours.cs" />
+    <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
+    <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
+    <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
     <Compile Include="Services\Presets\Factories\PlistPresetFactory.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Services\Presets\Model\Preset.cs" />

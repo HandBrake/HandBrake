@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Interfaces
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Scan.EventArgs;
     using HandBrake.ApplicationServices.Services.Scan.Model;
 

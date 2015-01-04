@@ -1,20 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AudioBehaviourModes.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="SubtitleBehaviourModes.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The audio behaviours.
+//   The subtitle behaviours modes.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model.Audio
+namespace HandBrakeWPF.Model.Subtitles
 {
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// The audio behaviours.
+    /// The subtitle behaviours modes.
     /// </summary>
-    public enum AudioBehaviourModes
+    public enum SubtitleBehaviourModes
     {
         [Display(Name = "None")]
         None = 0,
