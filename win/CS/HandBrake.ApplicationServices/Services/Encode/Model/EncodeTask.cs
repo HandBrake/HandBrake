@@ -15,13 +15,13 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
     using HandBrake.Interop.Model.Encoding.x265;
 
-    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
+    using OutputFormat = HandBrake.ApplicationServices.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// An Encode Task

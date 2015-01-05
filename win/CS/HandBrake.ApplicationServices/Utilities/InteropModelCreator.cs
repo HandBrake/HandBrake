@@ -14,8 +14,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;

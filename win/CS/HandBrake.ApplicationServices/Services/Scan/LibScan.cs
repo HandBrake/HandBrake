@@ -31,7 +31,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
     using ScanProgressEventArgs = HandBrake.Interop.EventArgs.ScanProgressEventArgs;
     using Size = System.Drawing.Size;
     using Subtitle = HandBrake.ApplicationServices.Services.Scan.Model.Subtitle;
-    using SubtitleType = HandBrake.ApplicationServices.Model.Encoding.SubtitleType;
+    using SubtitleType = HandBrake.ApplicationServices.Services.Encode.Model.Models.SubtitleType;
     using Title = HandBrake.ApplicationServices.Services.Scan.Model.Title;
 
     /// <summary>

@@ -16,8 +16,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;

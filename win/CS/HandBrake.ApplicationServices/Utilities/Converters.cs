@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System;
     using System.Text.RegularExpressions;
 
-    using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
     using HandBrake.Interop.Model.Encoding.x265;

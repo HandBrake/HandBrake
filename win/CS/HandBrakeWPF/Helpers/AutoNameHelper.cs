@@ -16,8 +16,8 @@ namespace HandBrakeWPF.Helpers
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Extensions;

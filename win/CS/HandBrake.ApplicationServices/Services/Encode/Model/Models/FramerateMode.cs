@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model.Encoding
+namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
     /// <summary>
     /// The Mode of Video Encoding. CFR, VFR, PFR

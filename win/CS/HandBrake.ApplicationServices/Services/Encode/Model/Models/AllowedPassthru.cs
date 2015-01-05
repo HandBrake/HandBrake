@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model.Encoding
+namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
     using HandBrake.Interop.Model.Encoding;
 

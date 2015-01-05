@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
     using System;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>

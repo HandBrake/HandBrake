@@ -21,7 +21,7 @@ namespace HandBrakeWPF.Services.Presets
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Presets.Interfaces;
