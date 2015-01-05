@@ -14,7 +14,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Scan.Model;
@@ -240,6 +239,8 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.SelectedDeInterlace);
 
+                if (value != Deinterlace.Custom) this.CustomDeinterlace = string.Empty;
+
                 // Show / Hide the Custom Control
                 this.ShowDeinterlaceCustom = this.CurrentTask.Deinterlace == Deinterlace.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
@@ -270,6 +271,8 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.SelectedDecomb);
+
+                if (value != Decomb.Custom) this.CustomDecomb = string.Empty;
 
                 // Show / Hide the Custom Control
                 this.ShowDecombCustom = this.CurrentTask.Decomb == Decomb.Custom;
@@ -325,6 +328,7 @@ namespace HandBrakeWPF.ViewModels
 
                 // Show / Hide the Custom Control
                 this.ShowDetelecineCustom = this.CurrentTask.Detelecine == Detelecine.Custom;
+                if (value != Detelecine.Custom) this.CustomDetelecine = string.Empty;
                 this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
             }
         }
@@ -360,7 +364,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (!object.Equals(this.isDeinterlaceMode, value))
+                if (!Equals(this.isDeinterlaceMode, value))
                 {
                     this.isDeinterlaceMode = value;
                     this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
@@ -420,6 +424,7 @@ namespace HandBrakeWPF.ViewModels
 
                 // Show / Hide the Custom Control
                 this.ShowDenoiseCustom = this.CurrentTask.Denoise == Denoise.hqdn3d && this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
+                if (value != DenoisePreset.Custom) this.CustomDenoise = string.Empty;
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);

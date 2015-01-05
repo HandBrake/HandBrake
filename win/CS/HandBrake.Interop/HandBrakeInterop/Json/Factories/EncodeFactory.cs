@@ -420,7 +420,6 @@ namespace HandBrake.Interop.Json.Factories
             }
 
             // CropScale Filter
-            // TODO handle anamorphic.
             Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH);
             FilterList cropScale = new FilterList
             {

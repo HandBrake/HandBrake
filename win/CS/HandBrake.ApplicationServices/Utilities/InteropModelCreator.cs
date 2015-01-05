@@ -164,6 +164,8 @@ namespace HandBrake.ApplicationServices.Utilities
             profile.CustomDecomb = work.CustomDecomb;
             profile.CustomDeinterlace = work.CustomDeinterlace;
             profile.CustomDenoise = work.CustomDenoise;
+            profile.DenoisePreset = work.DenoisePreset.ToString().ToLower().Replace(" ", string.Empty);
+            profile.DenoiseTune = work.DenoiseTune.ToString().ToLower().Replace(" ", string.Empty);
             profile.CustomDetelecine = work.CustomDetelecine;
             if (work.Deblock > 4)
                 profile.Deblock = work.Deblock;
