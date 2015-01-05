@@ -901,6 +901,15 @@ static void do_job(hb_job_t *job)
         job->vrate = init.vrate;
         job->cfr = init.cfr;
     }
+    else
+    {
+        job->width = title->geometry.width;
+        job->height = title->geometry.height;
+        job->par = title->geometry.par;
+        memset(job->crop, 0, sizeof(int[4]));
+        job->vrate = title->vrate;
+        job->cfr = 0;
+    }
 
     /* While x264 is smart enough to reduce fractions on its own, libavcodec
      * needs some help with the math, so lose superfluous factors. */
