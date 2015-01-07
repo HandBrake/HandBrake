@@ -97,6 +97,15 @@
 
 - (id)reverseTransformedValue:(id)value
 {
+    if ([value isEqualToString:NSLocalizedString(@"MP4 File", @"")])
+    {
+        return @(HB_MUX_AV_MP4);
+    }
+    else if ([value isEqualToString:NSLocalizedString(@"MKV File", @"")])
+    {
+        return @(HB_MUX_AV_MKV);
+    }
+
     return @(hb_container_get_from_name([value UTF8String]));
 }
 
