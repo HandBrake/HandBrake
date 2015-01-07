@@ -298,16 +298,16 @@
 
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
 {
-    [self openFile:filenames.firstObject];
+    [self openFile:[NSURL fileURLWithPath:filenames.firstObject]];
     [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
-- (void)openFile:(NSString *)filePath
+- (void)openFile:(NSURL *)fileURL
 {
     if (self.core.state != HBStateScanning)
     {
-        self.browsedSourceDisplayName = filePath.lastPathComponent;
-        [self performScan:filePath scanTitleNum:0];
+        self.browsedSourceDisplayName = fileURL.lastPathComponent;
+        [self performScan:fileURL scanTitleNum:0];
     }
 }
 
@@ -407,12 +407,12 @@
 {
     NSPasteboard *pboard = [sender draggingPasteboard];
 
-    if ([[pboard types] containsObject:NSFilenamesPboardType])
+    if ([pboard.types containsObject:NSFilenamesPboardType])
     {
         NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
-        [self openFile:paths.firstObject];
+        [self openFile:[NSURL fileURLWithPath:paths.firstObject]];
     }
-    
+
     return YES;
 }
 
@@ -1246,7 +1246,9 @@
 #pragma mark -
 #pragma mark Get New Source
 
-/*Opens the source browse window, called from Open Source widgets */
+/**
+ * Opens the source browse window, called from Open Source widgets
+ */
 - (IBAction)browseSources:(id)sender
 {
     if (self.core.state == HBStateScanning)
@@ -1295,7 +1297,7 @@
                 [fScanSrcTitlePathField setStringValue:scanURL.path];
                 NSString *displayTitlescanSourceName;
 
-                if ([scanURL.lastPathComponent isEqualToString: @"VIDEO_TS"])
+                if ([scanURL.lastPathComponent isEqualToString:@"VIDEO_TS"])
                 {
                     // If VIDEO_TS Folder is chosen, choose its parent folder for the source display name
                     // we have to use the title->path value so we get the proper name of the volume if a physical dvd is the source
@@ -1323,65 +1325,64 @@
                 // We check to see if the chosen file at path is a package
                 if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:url.path])
                 {
-                    [HBUtilities writeToActivityLog: "trying to open a package at: %s", url.path.UTF8String];
+                    [HBUtilities writeToActivityLog:"trying to open a package at: %s", url.path.UTF8String];
                     // We check to see if this is an .eyetv package
-                    if ([url.pathExtension isEqualToString: @"eyetv"])
+                    if ([url.pathExtension isEqualToString:@"eyetv"])
                     {
                         [HBUtilities writeToActivityLog:"trying to open eyetv package"];
                         // We're looking at an EyeTV package - try to open its enclosed .mpg media file
                         self.browsedSourceDisplayName = url.URLByDeletingPathExtension.lastPathComponent;
                         NSString *mpgname;
-                        NSUInteger n = [[[url path] stringByAppendingString: @"/"]
+                        NSUInteger n = [[url.path stringByAppendingString: @"/"]
                                         completePathIntoString: &mpgname caseSensitive: YES
                                         matchesIntoArray: nil
-                                        filterTypes: [NSArray arrayWithObject: @"mpg"]];
+                                        filterTypes: @[@"mpg"]];
                         if (n > 0)
                         {
-                            /* Found an mpeg inside the eyetv package, make it our scan path
-                             and call performScan on the enclosed mpeg */
+                            // Found an mpeg inside the eyetv package, make it our scan path
                             [HBUtilities writeToActivityLog:"found mpeg in eyetv package"];
-                            [self performScan:mpgname scanTitleNum:0];
+                            url = [NSURL fileURLWithPath:mpgname];
                         }
                         else
                         {
-                            /* We did not find an mpeg file in our package, so we do not call performScan */
+                            // We did not find an mpeg file in our package, so we do not call performScan
                             [HBUtilities writeToActivityLog:"no valid mpeg in eyetv package"];
                         }
                     }
-                    /* We check to see if this is a .dvdmedia package */
-                    else if ([[url pathExtension] isEqualToString: @"dvdmedia"])
+                    // We check to see if this is a .dvdmedia package
+                    else if ([url.pathExtension isEqualToString:@"dvdmedia"])
                     {
-                        /* path IS a package - but dvdmedia packages can be treaded like normal directories */
+                        // path IS a package - but dvdmedia packages can be treaded like normal directories
                         self.browsedSourceDisplayName = url.URLByDeletingPathExtension.lastPathComponent;
                         [HBUtilities writeToActivityLog:"trying to open dvdmedia package"];
-                        [self performScan:[url path] scanTitleNum:0];
                     }
                     else
                     {
-                        /* The package is not an eyetv package, try to open it anyway */
+                        // The package is not an eyetv package, try to open it anyway
                         self.browsedSourceDisplayName = url.lastPathComponent;
                         [HBUtilities writeToActivityLog:"not a known to package"];
-                        [self performScan:[url path] scanTitleNum:0];
                     }
                 }
-                else // path is not a package, so we treat it as a dvd parent folder or VIDEO_TS folder
+                else
                 {
-                    /* path is not a package, so we call perform scan directly on our file */
-                    if ([[url lastPathComponent] isEqualToString: @"VIDEO_TS"])
+                    // path is not a package, so we call perform scan directly on our file
+                    if ([url.lastPathComponent isEqualToString:@"VIDEO_TS"])
                     {
                         [HBUtilities writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
-                        /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name*/
-                        self.browsedSourceDisplayName = url.URLByDeletingLastPathComponent.lastPathComponent;
+                        // If VIDEO_TS Folder is chosen, choose its parent folder for the source display name
+                        url = url.URLByDeletingLastPathComponent;
+                        self.browsedSourceDisplayName = url.lastPathComponent;
                     }
                     else
                     {
-                        [HBUtilities writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
-                        /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
-                        /* make sure we remove any path extension as this can also be an '.mpg' file */
+                        [HBUtilities writeToActivityLog:"trying to open a folder or file"];
+                        // if not the VIDEO_TS Folder, we can assume the chosen folder is the source name
+                        // make sure we remove any path extension
                         self.browsedSourceDisplayName = url.lastPathComponent;
                     }
-                    [self performScan:[url path] scanTitleNum:0];
                 }
+
+                [self performScan:url scanTitleNum:0];
             }
         }
     }];
@@ -1402,8 +1403,8 @@
 {
     [NSApp endSheet: fScanSrcTitlePanel];
     [fScanSrcTitlePanel orderOut: self];
-    
-    if(sender == fScanSrcTitleOpenButton)
+
+    if (sender == fScanSrcTitleOpenButton)
     {
         // We setup the scan status in the main window to indicate a source title scan
         [fSrcDVD2Field setStringValue: @"Opening a new source title…"];
@@ -1414,12 +1415,12 @@
 		
         // We use the performScan method to actually perform the specified scan passing the path and the title
         // to be scanned
-        [self performScan:[fScanSrcTitlePathField stringValue] scanTitleNum:[fScanSrcTitleNumField intValue]];
+        [self performScan:[NSURL fileURLWithPath:fScanSrcTitlePathField.stringValue] scanTitleNum:fScanSrcTitleNumField.intValue];
     }
 }
 
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
-- (void)performScan:(NSString *)scanPath scanTitleNum:(NSInteger)scanTitleNum
+- (void)performScan:(NSURL *)scanURL scanTitleNum:(NSInteger)scanTitleNum
 {
     // Save the current settings
     if (self.job)
@@ -1431,11 +1432,10 @@
     [self enableUI:NO];
 
     NSError *outError = NULL;
-    NSURL *fileURL = [NSURL fileURLWithPath:scanPath];
     BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppresslibdvdcss"];
 
     // Check if we can scan the source and if there is any warning.
-    BOOL canScan = [self.core canScan:fileURL error:&outError];
+    BOOL canScan = [self.core canScan:scanURL error:&outError];
 
     // Notify the user that we don't support removal of copy proteciton.
     if (canScan && [outError code] == 101 && !suppressWarning)
@@ -1480,7 +1480,7 @@
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
         int min_title_duration_seconds = [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
 
-        [self.core scan:fileURL
+        [self.core scan:scanURL
                titleNum:scanTitleNum
                 previewsNum:hb_num_previews minTitleDuration:min_title_duration_seconds];
     }
@@ -2016,7 +2016,7 @@ static void queueFSEventStreamCallback(
     self.jobFromQueue = QueueFileArray[selectedQueueItem];
     self.browsedSourceDisplayName = self.jobFromQueue.fileURL.lastPathComponent;
 
-    [self performScan:self.jobFromQueue.fileURL.path scanTitleNum:self.jobFromQueue.titleIdx];
+    [self performScan:self.jobFromQueue.fileURL scanTitleNum:self.jobFromQueue.titleIdx];
 
     // Now that source is loaded and settings applied, delete the queue item from the queue
     [HBUtilities writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d", selectedQueueItem];

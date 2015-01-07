@@ -236,7 +236,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     hb_job_t *hb_job = job.hb_job;
 
     [HBUtilities writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", (job.video.twoPass + 1)];
-    hb_job_set_file(hb_job, job.destURL.fileSystemRepresentation);
+    hb_job_set_file(hb_job, job.destURL.path.fileSystemRepresentation);
 
     // If scanning we need to do some extra setup of the job.
     if (hb_job->indepth_scan == 1)

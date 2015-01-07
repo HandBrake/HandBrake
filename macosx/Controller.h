@@ -158,9 +158,9 @@
 - (IBAction) browseSources: (id) sender;
 - (IBAction) showSourceTitleScanPanel: (id) sender;
 - (IBAction) closeSourceTitleScanPanel: (id) sender;  
-- (void) performScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
+- (void) performScan:(NSURL *)scanURL scanTitleNum:(NSInteger)scanTitleNum;
 
-- (void)     enableUI:                                 (BOOL)     enable;
+- (void)enableUI:(BOOL)enable;
 
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
