@@ -42,6 +42,12 @@
          */
         [self window];
 
+        // Use the inline search bar if available.
+        if ([textView respondsToSelector:@selector(setUsesFindBar:)])
+        {
+            [textView setUsesFindBar:YES];
+        }
+
         /* We initialize the outputTextStorage object for the activity window */
         outputTextStorage = [[NSTextStorage alloc] init];
 
