@@ -576,7 +576,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
             hb_add_filter(job, filter, "455");
         }
     }
-    else if (self.filters.deinterlace)
+    else if (!self.filters.useDecomb && self.filters.deinterlace)
     {
         // Deinterlace
         filter = hb_filter_init(HB_FILTER_DEINTERLACE);
