@@ -9,16 +9,15 @@
 
 static void hb_error_handler(const char *errmsg)
 {
-    @autoreleasepool
-    {
+    dispatch_async(dispatch_get_main_queue(), ^{
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Internal Error.", @"")];
         [alert setInformativeText:@(errmsg)];
         [alert runModal];
         [alert release];
+    });
 
-        fprintf(stderr, "GUI ERROR dialog: %s\n", errmsg );
-    }
+    fprintf(stderr, "GUI ERROR dialog: %s\n", errmsg );
 }
 
 int main(int argc, const char **argv)
