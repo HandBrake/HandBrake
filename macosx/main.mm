@@ -9,10 +9,14 @@
 
 static void hb_error_handler(const char *errmsg)
 {
+    NSString *error = @(errmsg);
     dispatch_async(dispatch_get_main_queue(), ^{
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Internal Error.", @"")];
-        [alert setInformativeText:@(errmsg)];
+        if (error)
+        {
+            [alert setInformativeText:error];
+        }
         [alert runModal];
         [alert release];
     });
