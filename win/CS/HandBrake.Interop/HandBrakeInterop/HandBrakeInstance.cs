@@ -616,7 +616,7 @@ namespace HandBrake.Interop
                 lastScan = scanObject;
 
                 foreach (Title title in ScanFactory.CreateTitleSet(scanObject))
-                {
+                { 
                     // Set the Main Title.
                     this.featureTitle = title.IsMainFeature ? title.TitleNumber : 0;
 

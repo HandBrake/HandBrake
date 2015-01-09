@@ -480,7 +480,6 @@ namespace HandBrake.ApplicationServices.Services.Scan
                         TitleNumber = title.TitleNumber,
                         Duration = title.Duration,
                         Resolution = new Size(title.Resolution.Width, title.Resolution.Height),
-                        AspectRatio = (decimal)title.AspectRatio,
                         AngleCount = title.AngleCount,
                         ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
                         AutoCropDimensions = title.AutoCropDimensions,

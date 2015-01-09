@@ -94,11 +94,6 @@ namespace HandBrake.Interop.Model.Scan
 		public Size Resolution { get; set; }
 
 		/// <summary>
-		/// Gets or sets the aspect ratio of this Title
-		/// </summary>
-		public decimal AspectRatio { get; set; }
-
-		/// <summary>
 		/// Gets or sets the number of angles on the title.
 		/// </summary>
 		public int AngleCount { get; set; }

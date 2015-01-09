@@ -786,10 +786,9 @@ namespace HandBrakeWPF.ViewModels
 
                 // Set Screen Controls
                 this.SourceInfo = string.Format(
-                    "{0}x{1}, Aspect Ratio: {2:0.00}, PAR: {3}/{4}",
+                    "{0}x{1}, PAR: {2}/{3}",
                     title.Resolution.Width,
                     title.Resolution.Height,
-                    title.AspectRatio,
                     title.ParVal.Width,
                     title.ParVal.Height);
 

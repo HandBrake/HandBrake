@@ -78,7 +78,6 @@ namespace HandBrake.Interop.Json.Factories
                     Left = title.Crop[2],
                     Right = title.Crop[3]
                 },
-                //AspectRatio = (double)title.Geometry.DAR.Width / title.Geometry.DAR.Height,
                 AngleCount = title.AngleCount,
                 VideoCodecName = title.VideoCodec,
                 Framerate = ((double)title.FrameRate.Num) / title.FrameRate.Den,
