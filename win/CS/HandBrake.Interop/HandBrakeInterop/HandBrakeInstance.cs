@@ -492,7 +492,7 @@ namespace HandBrake.Interop
             };
 
             string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
-            HBFunctions.hb_add_json(this.hbHandle, Marshal.StringToHGlobalAnsi(encode));
+            HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encode));
             HBFunctions.hb_start(this.hbHandle);
 
             this.encodePollTimer = new System.Timers.Timer();
@@ -605,12 +605,8 @@ namespace HandBrake.Interop
                 this.titles = new List<Title>();
 
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
-                // Convert UTF-8 encoded jsonMsg to string
-                int length = 0;
-                while (Marshal.ReadByte(jsonMsg, length) != 0) length++; // find 0 termination
-                byte[] buffer = new byte[length];
-                Marshal.Copy(jsonMsg, buffer, 0, buffer.Length);
-                string scanJson = Encoding.UTF8.GetString(buffer);
+
+                string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
 
                 JsonScanObject scanObject = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
                 lastScan = scanObject;
