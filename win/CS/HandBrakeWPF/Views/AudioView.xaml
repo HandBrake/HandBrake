@@ -8,12 +8,10 @@
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
-             xmlns:dropButton="clr-namespace:HandBrakeWPF.Controls.DropButton"
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
-             d:DesignHeight="170"
+             d:DesignHeight="400"
              d:DesignWidth="616"
              mc:Ignorable="d"
              x:Name="audioTab">
@@ -47,14 +45,21 @@
                    VerticalAlignment="Top"
                    Text="{Binding PanelTitle}" />
 
-        <Grid Grid.Row="0" Grid.Column="1" Margin="0,5,10,0">
+        <Button MinWidth="65" Grid.Row="0" Grid.Column="1"
+                Margin="0,5,10,0"
+                cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
+                Content="{Binding SwitchDisplayTitle}"
+                Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}}"
+                />
+
+        <!--<Grid Grid.Row="0" Grid.Column="1" Margin="0,5,10,0" Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}}">
             <Border cal:Message.Attach="[Event MouseDown] = [Action ShowAudioDefaults]">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="../Views/Images/Advanced.png" Width="20"   />
                     <TextBlock Text="{Binding SwitchDisplayTitle}" VerticalAlignment="Center" Margin="5,0,0,0" />
                 </StackPanel>
             </Border>
-        </Grid>
+        </Grid>-->
 
         <!-- Row 1 -->
 
@@ -77,8 +82,13 @@
 
                 <Button MinWidth="65"
                     Margin="0,0,10,0"
-                    cal:Message.Attach="[Event Click] = [Action Clear]"
+                    cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
                     Content="Clear" />
+                
+                <Button MinWidth="65"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
+                    Content="{Binding SwitchDisplayTitle}" />
 
 
             </StackPanel>
@@ -275,7 +285,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,10,10,10"
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0"
               Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
 
             <Grid Margin="5,0,0,0" >
@@ -300,7 +310,7 @@
                           SelectedItem="{Binding AudioBehaviours.SelectedBehaviour, Converter={StaticResource audioBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
             </Grid>
 
-            <TextBlock Text="Choose Languages:" Margin="5,15,0,5" />
+            <TextBlock Text="Choose Languages:" Margin="5,10,0,0" />
 
             <Grid Margin="20,5,0,0">
                 <Grid.ColumnDefinitions>
@@ -343,10 +353,14 @@
                 </StackPanel>
             </Grid>
 
-            <TextBlock Text="Automatic Passthru Behaviours:" FontWeight="Bold" Margin="0,20,0,5" />
+            <TextBlock Text="'Auto Passthru' Behaviour:" FontWeight="Bold" Margin="0,10,0,5" />
             <StackPanel Margin="10,5,0,0"
+                        Orientation="Vertical">
+                <TextBlock Margin="5,0,5,0" Text="When 'Auto Passthru' is selected as the audio codec." VerticalAlignment="Center" />
+                <TextBlock Margin="5,0,5,0" Text="Allow passthru of:" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Margin="15,5,0,0"
                         Orientation="Horizontal">
-                <TextBlock Margin="5,0,5,0" Text="Allow passthrough of:" VerticalAlignment="Center" />
                 <CheckBox Margin="0,0,5,0"
                           Content="MP3" VerticalAlignment="Center"    
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowMP3Pass}" />
@@ -363,7 +377,7 @@
                           Content="DTSHD" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSHDPass}" />
                 
-                <TextBlock Margin="15,0,5,0" Text="Fallback Encoder:" />
+                <TextBlock Margin="15,0,5,0" Text="Otherwise use fallback encoder:" />
 
                 <ComboBox VerticalAlignment="Center" Width="100" Height="22" Margin="10,0,5,0">
                     <ComboBox.SelectedItem>

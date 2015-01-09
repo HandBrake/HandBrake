@@ -200,7 +200,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowAudioDefaultsPanel ? "Switch to Tracks" : "Switch to Defaults";
+                return this.ShowAudioDefaultsPanel ? "Switch Back To Tracks" : "Configure Defaults";
             }
         }
 
