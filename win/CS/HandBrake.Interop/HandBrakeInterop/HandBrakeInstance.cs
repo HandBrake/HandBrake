@@ -605,17 +605,18 @@ namespace HandBrake.Interop
                 this.titles = new List<Title>();
 
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
-                string scanJson = Marshal.PtrToStringAnsi(jsonMsg);
+                // Convert UTF-8 encoded jsonMsg to string
+                int length = 0;
+                while (Marshal.ReadByte(jsonMsg, length) != 0) length++; // find 0 termination
+                byte[] buffer = new byte[length];
+                Marshal.Copy(jsonMsg, buffer, 0, buffer.Length);
+                string scanJson = Encoding.UTF8.GetString(buffer);
+
                 JsonScanObject scanObject = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
                 lastScan = scanObject;
 
                 foreach (Title title in ScanFactory.CreateTitleSet(scanObject))
                 {
-                    // Convert the Path to UTF-8.
-                    byte[] bytes = Encoding.Default.GetBytes(title.Path);
-                    string utf8Str = Encoding.UTF8.GetString(bytes);
-                    title.Path = utf8Str;
-
                     // Set the Main Title.
                     this.featureTitle = title.IsMainFeature ? title.TitleNumber : 0;
 
