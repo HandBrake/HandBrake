@@ -220,7 +220,7 @@
     [cell setTextColor:fontColor];
 }
 
-#pragma mark - Expanded node persitence methods
+#pragma mark - Expanded node persistence methods
 
 - (void)expandNodes:(NSArray *)childNodes
 {
