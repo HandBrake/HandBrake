@@ -229,7 +229,7 @@
     <Compile Include="EventArgs\MessageLoggedEventArgs.cs" />
     <Compile Include="Model\Cropping.cs" />
     <Compile Include="Model\EncodeJob.cs" />
-    <Compile Include="Model\Encoders.cs" />
+    <Compile Include="HandBrakeEncoderHelpers.cs" />
     <Compile Include="Model\Encoding\Anamorphic.cs" />
     <Compile Include="Model\Encoding\AudioEncodeRateType.cs" />
     <Compile Include="Model\Encoding\CroppingType.cs" />

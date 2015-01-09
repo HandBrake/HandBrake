@@ -216,7 +216,7 @@ namespace HandBrake.Interop.Json.Factories
         {
             Video video = new Video();
 
-            HBVideoEncoder videoEncoder = Encoders.VideoEncoders.FirstOrDefault(e => e.ShortName == job.EncodingProfile.VideoEncoder);
+            HBVideoEncoder videoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(e => e.ShortName == job.EncodingProfile.VideoEncoder);
             Validate.NotNull(videoEncoder, "Video encoder " + job.EncodingProfile.VideoEncoder + " not recognized.");
             if (videoEncoder != null)
             {
@@ -251,7 +251,7 @@ namespace HandBrake.Interop.Json.Factories
 
             if (!string.IsNullOrEmpty(job.EncodingProfile.AudioEncoderFallback))
             {
-                HBAudioEncoder audioEncoder = Encoders.GetAudioEncoder(job.EncodingProfile.AudioEncoderFallback);
+                HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(job.EncodingProfile.AudioEncoderFallback);
                 Validate.NotNull(audioEncoder, "Unrecognized fallback audio encoder: " + job.EncodingProfile.AudioEncoderFallback);
                 audio.FallbackEncoder = audioEncoder.Id;
             }
@@ -262,10 +262,10 @@ namespace HandBrake.Interop.Json.Factories
             int numTracks = 0;
             foreach (AudioEncoding item in job.EncodingProfile.AudioEncodings)
             {
-                HBAudioEncoder encoder = Encoders.GetAudioEncoder(item.Encoder);
+                HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(item.Encoder);
                 Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
 
-                HBMixdown mixdown = Encoders.GetMixdown(item.Mixdown);
+                HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(item.Mixdown);
                 Validate.NotNull(mixdown, "Unrecognized audio mixdown:" + item.Mixdown);
 
                 AudioList audioTrack = new AudioList

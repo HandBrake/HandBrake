@@ -36,7 +36,7 @@ namespace HandBrake.Interop.Converters
 			HandBrakeUtils.EnsureGlobalInit();
 
 			VideoRates = new Dictionary<double, int>();
-			foreach (var framerate in Encoders.VideoFramerates)
+            foreach (var framerate in HandBrakeEncoderHelpers.VideoFramerates)
 			{
 				VideoRates.Add(double.Parse(framerate.Name, CultureInfo.InvariantCulture), framerate.Rate);
 			}
@@ -100,10 +100,10 @@ namespace HandBrake.Interop.Converters
 			                     Id = encoder.codec, 
 			                     ShortName = encoder.short_name, 
 			                     DisplayName = encoder.name, 
-			                     CompatibleContainers = encoder.muxers, 
-			                     QualityLimits = Encoders.GetAudioQualityLimits(encoder.codec), 
+			                     CompatibleContainers = encoder.muxers,
+                                 QualityLimits = HandBrakeEncoderHelpers.GetAudioQualityLimits(encoder.codec), 
 			                     DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec), 
-			                     CompressionLimits = Encoders.GetAudioCompressionLimits(encoder.codec), 
+			                     CompressionLimits = HandBrakeEncoderHelpers.GetAudioCompressionLimits(encoder.codec), 
 			                     DefaultCompression =
 			                     HBFunctions.hb_audio_compression_get_default((uint)encoder.codec)
 			                 };

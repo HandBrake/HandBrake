@@ -14,8 +14,6 @@ namespace HandBrake.Interop.Model
     /// </summary>
     public class Size
     {
-        #region Constructors and Destructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Size"/> class.
         /// </summary>
@@ -31,10 +29,6 @@ namespace HandBrake.Interop.Model
             this.Height = height;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets the height.
         /// </summary>
@@ -44,7 +38,5 @@ namespace HandBrake.Interop.Model
         /// Gets or sets the width.
         /// </summary>
         public int Width { get; set; }
-
-        #endregion
     }
 }

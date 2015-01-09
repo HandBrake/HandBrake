@@ -393,7 +393,7 @@ namespace HandBrake.Interop
                 int samplesPerFrame = GetAudioSamplesPerFrame(encoding.Encoder);
                 int audioBitrate;
 
-                HBAudioEncoder audioEncoder = Encoders.GetAudioEncoder(encoding.Encoder);
+                HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(encoding.Encoder);
 
                 if (audioEncoder.IsPassthrough)
                 {
@@ -414,10 +414,10 @@ namespace HandBrake.Interop
                     }
                     else
                     {
-                        outputBitrate = Encoders.GetDefaultBitrate(
+                        outputBitrate = HandBrakeEncoderHelpers.GetDefaultBitrate(
                             audioEncoder, 
-                            encoding.SampleRateRaw == 0 ? track.SampleRate : encoding.SampleRateRaw, 
-                            Encoders.SanitizeMixdown(Encoders.GetMixdown(encoding.Mixdown), audioEncoder, track.ChannelLayout));
+                            encoding.SampleRateRaw == 0 ? track.SampleRate : encoding.SampleRateRaw,
+                            HandBrakeEncoderHelpers.SanitizeMixdown(HandBrakeEncoderHelpers.GetMixdown(encoding.Mixdown), audioEncoder, track.ChannelLayout));
                     }
 
                     // Output bitrate is in kbps.

@@ -14,8 +14,6 @@ namespace HandBrake.Interop.Model.Encoding
     /// </summary>
     public class HBContainer
     {
-        #region Public Properties
-
         /// <summary>
         /// Gets or sets the default extension.
         /// </summary>
@@ -35,7 +33,5 @@ namespace HandBrake.Interop.Model.Encoding
         /// Gets or sets the short name.
         /// </summary>
         public string ShortName { get; set; }
-
-        #endregion
     }
 }

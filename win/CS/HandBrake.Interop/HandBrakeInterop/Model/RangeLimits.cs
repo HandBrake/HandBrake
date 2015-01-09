@@ -14,8 +14,6 @@ namespace HandBrake.Interop.Model
     /// </summary>
     public class RangeLimits
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets a value indicating whether ascending.
         /// </summary>
@@ -35,7 +33,5 @@ namespace HandBrake.Interop.Model
         /// Gets or sets the low.
         /// </summary>
         public float Low { get; set; }
-
-        #endregion
     }
 }

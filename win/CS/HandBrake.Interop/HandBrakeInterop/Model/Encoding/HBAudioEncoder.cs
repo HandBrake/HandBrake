@@ -16,8 +16,6 @@ namespace HandBrake.Interop.Model.Encoding
     /// </summary>
     public class HBAudioEncoder
     {
-        #region Public Properties
-
         /// <summary>
         /// Gets or sets the compatible containers.
         /// </summary>
@@ -90,7 +88,5 @@ namespace HandBrake.Interop.Model.Encoding
                 return this.QualityLimits.High >= 0;
             }
         }
-
-        #endregion
     }
 }

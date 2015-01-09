@@ -16,8 +16,6 @@ namespace HandBrake.Interop.Model
     /// </summary>
     public class Subtitles
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the source subtitles.
         /// </summary>
@@ -27,7 +25,5 @@ namespace HandBrake.Interop.Model
         /// Gets or sets the srt subtitles.
         /// </summary>
         public List<SrtSubtitle> SrtSubtitles { get; set; }
-
-        #endregion
     }
 }

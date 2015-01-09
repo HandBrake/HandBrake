@@ -25,7 +25,7 @@ namespace HandBrake.Interop.Model
         public bool Default { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating the subtitle track should be burned in.
+		/// Gets or sets a value indicating whether the subtitle track should be burned in.
 		/// </summary>
 		public bool BurnedIn { get; set; }
 

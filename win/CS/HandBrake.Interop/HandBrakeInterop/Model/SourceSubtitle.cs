@@ -14,8 +14,6 @@ namespace HandBrake.Interop.Model
     /// </summary>
     public class SourceSubtitle
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets a value indicating whether the subtitle track should be burned in.
         /// </summary>
@@ -36,10 +34,6 @@ namespace HandBrake.Interop.Model
         /// </summary>
         public int TrackNumber { get; set; }
 
-        #endregion
-
-        #region Public Methods
-
         /// <summary>
         /// The clone.
         /// </summary>
@@ -56,7 +50,5 @@ namespace HandBrake.Interop.Model
                            BurnedIn = this.BurnedIn
                        };
         }
-
-        #endregion
     }
 }
