@@ -911,24 +911,14 @@ static void do_job(hb_job_t *job)
         job->cfr = 0;
     }
 
-    /* While x264 is smart enough to reduce fractions on its own, libavcodec
-     * needs some help with the math, so lose superfluous factors. */
-    hb_reduce(&job->par.num, &job->par.den,
-               job->par.num,  job->par.den);
-    if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
+    /*
+     * MPEG-4 Part 2 stores the PAR num/den as unsigned 8-bit fields,
+     * and libavcodec's encoder fails to initialize if we don't handle it.
+     */
+    if (job->vcodec == HB_VCODEC_FFMPEG_MPEG4)
     {
-        /* Just to make working with ffmpeg even more fun,
-         * lavc's MPEG-4 encoder can't handle PAR values >= 255,
-         * even though AVRational does. Adjusting downwards
-         * distorts the display aspect slightly, but such is life. */
-        while ((job->par.num & ~0xFF) ||
-               (job->par.den & ~0xFF))
-        {
-            job->par.num >>= 1;
-            job->par.den >>= 1;
-            hb_reduce(&job->par.num, &job->par.den,
-                       job->par.num,  job->par.den);
-        }
+        hb_limit_rational(&job->par.num, &job->par.den,
+                           job->par.num,  job->par.den, 255);
     }
 
 #ifdef USE_QSV
