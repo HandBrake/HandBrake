@@ -921,6 +921,13 @@ static void do_job(hb_job_t *job)
                            job->par.num,  job->par.den, 255);
     }
 
+    /*
+     * The frame rate may affect the bitstream's time base, lose superfluous
+     * factors for consistency (some encoders reduce fractions, some don't).
+     */
+    hb_reduce(&job->vrate.num, &job->vrate.den,
+               job->vrate.num,  job->vrate.den);
+
 #ifdef USE_QSV
     if (hb_qsv_decode_is_enabled(job))
     {
