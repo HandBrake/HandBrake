@@ -54,7 +54,8 @@
  */
 + (void)registerUserDefaults
 {
-    NSString *desktopDirectory =  [@"~/Desktop" stringByExpandingTildeInPath];
+    NSString *desktopDirectory = [NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES) firstObject];
+    NSURL *desktopURL = [NSURL fileURLWithPath:desktopDirectory isDirectory:YES];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         @"LaunchSourceBehavior":            @"Open Source",
@@ -62,8 +63,9 @@
         @"DefaultMpegExtension":            @"Auto",
         @"UseDvdNav":                       @"YES",
         @"HBDefaultPresetsDrawerShow":      @YES,
-        @"LastDestinationDirectory":        desktopDirectory,
-        @"LastSourceDirectory":             desktopDirectory,
+        // Archive the URL because they aren't supported in plist.
+        @"HBLastDestinationDirectory":      [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
+        @"HBLastSourceDirectory":           [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
         @"DefaultAutoNaming":               @NO,
         @"AlertWhenDone":                   @"Alert Window",
         @"AlertWhenDoneSound":              @"YES",
@@ -71,12 +73,14 @@
         @"EncodeLogLocation":               @"NO",
         @"MinTitleScanSeconds":             @"10",
         @"PreviewsNumber":                  @"10",
-        @"Drawer Size":                     @"",
-        @"x264CqSliderFractional":          @"0.25",
+        @"x264CqSliderFractional":          @"0.50",
         @"AlertBuiltInPresetUpdate":        @"YES",
         @"SendCompletedEncodeToApp":        @"MetaX",
         @"HBShowAdvancedTab":               @NO,
-        @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"]
+        @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
+        // Hash of the default folders, until there is a better way.
+        @"HBPreviewViewExpandedStatus":     @[@(4097268371718322522), @(3576901712372066251)],
+        @"HBDrawerSize":                    NSStringFromSize(NSMakeSize(184, 591))
         }];
 }
 

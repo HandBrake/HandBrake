@@ -122,11 +122,11 @@ a timer to avoid interfering with the chain of events that handles the edit. */
 - (IBAction) browseForChapterFile: (id) sender
 {
     /* We get the current file name and path from the destination field here */
-    NSString *sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"];
+    NSURL *sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
 
 	/* Open a panel to let the user choose the file */
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
-    [panel setDirectoryURL:[NSURL fileURLWithPath:sourceDirectory]];
+    [panel setDirectoryURL:sourceDirectory];
     [panel setAllowedFileTypes:@[@"csv"]];
 
     [panel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
@@ -198,12 +198,12 @@ a timer to avoid interfering with the chain of events that handles the edit. */
 
 - (IBAction) browseForChapterFileSave: (id) sender
 {
-    NSString *destinationDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"];
+    NSURL *destinationDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
 
     /* Open a panel to let the user save to a file */
     NSSavePanel *panel = [NSSavePanel savePanel];
     [panel setAllowedFileTypes:@[@"csv"]];
-    [panel setDirectoryURL:[NSURL fileURLWithPath:destinationDirectory]];
+    [panel setDirectoryURL:destinationDirectory];
     [panel setNameFieldStringValue:self.job.destURL.lastPathComponent.stringByDeletingPathExtension];
 
     [panel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {

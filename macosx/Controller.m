@@ -151,6 +151,13 @@
     // Checks for presets updates
     [self checkBuiltInsForUpdates];
 
+    // Show/Hide the Presets drawer upon launch based
+    // on user preference DefaultPresetsDrawerShow
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBDefaultPresetsDrawerShow"])
+    {
+        [fPresetDrawer open:self];
+    }
+
     /* Init QueueFile .plist */
     [self loadQueueFile];
     [self initQueueFSEvent];
@@ -549,13 +556,6 @@
     {
         [fPresetDrawer setContentSize: drawerSize];
     }
-
-	/* Show/Dont Show Presets drawer upon launch based
-     on user preference DefaultPresetsDrawerShow */
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBDefaultPresetsDrawerShow"])
-	{
-		[fPresetDrawer open:self];
-	}
 
     // Align the start / stop widgets with the chapter popups
     NSPoint startPoint = [fSrcChapterStartPopUp frame].origin;
@@ -1263,9 +1263,9 @@
     [panel setCanChooseDirectories:YES];
 
     NSURL *sourceDirectory;
-	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastSourceDirectoryURL"])
+	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastSourceDirectoryURL"])
 	{
-		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastSourceDirectoryURL"];
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastSourceDirectoryURL"];
 	}
 	else
 	{
@@ -1280,7 +1280,7 @@
         {
             NSURL *scanURL = panel.URL;
             // we set the last searched source directory in the prefs here
-            [[NSUserDefaults standardUserDefaults] setURL:scanURL.URLByDeletingLastPathComponent forKey:@"LastSourceDirectoryURL"];
+            [[NSUserDefaults standardUserDefaults] setURL:scanURL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
 
             // we order out sheet, which is the browse window as we need to open
             // the title selection sheet right away
@@ -1568,8 +1568,8 @@
             self.job.destURL = panel.URL;
 
             // Save this path to the prefs so that on next browse destination window it opens there
-            NSString *destinationDirectory = [panel.URL.path stringByDeletingLastPathComponent];
-            [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+            [[NSUserDefaults standardUserDefaults] setURL:panel.URL.URLByDeletingLastPathComponent
+                                                      forKey:@"HBLastDestinationDirectory"];
         }
     }];
 }
@@ -2191,8 +2191,8 @@ static void queueFSEventStreamCallback(
             [self doAddToQueue];
         }
 
-        NSString *destinationDirectory = [self.job.destURL.path stringByDeletingLastPathComponent];
-        [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+        [[NSUserDefaults standardUserDefaults] setURL:self.job.destURL.URLByDeletingLastPathComponent
+                                                  forKey:@"HBLastDestinationDirectory"];
         currentQueueEncodeIndex = [self getNextPendingQueueIndex];
         HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
         [self performNewQueueScan:queueJob.fileURL.path scanTitleNum:queueJob.titleIdx];
@@ -2446,24 +2446,20 @@ static void queueFSEventStreamCallback(
     {
         self.job = [[[HBJob alloc] initWithTitle:title andPreset:self.selectedPreset] autorelease];
 
+        // Check to see if the last destination has been set,use if so, if not, use Desktop
+        NSURL *destURL = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
+        if (!destURL || ![[NSFileManager defaultManager] fileExistsAtPath:destURL.path])
+        {
+            destURL = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES) firstObject]
+                                 isDirectory:YES];
+        }
+
+        destURL = [destURL URLByAppendingPathComponent:title.name];
         // use the correct extension based on the container
         const char *ext = hb_container_get_default_extension(self.job.container);
+        destURL = [destURL URLByAppendingPathExtension:@(ext)];
 
-        // Check to see if the last destination has been set,use if so, if not, use Desktop
-        if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
-        {
-            NSURL *fileURL = [NSURL fileURLWithPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"]];
-            fileURL = [fileURL URLByAppendingPathComponent:self.browsedSourceDisplayName.stringByDeletingPathExtension];
-            fileURL = [fileURL URLByAppendingPathExtension:@(ext)];
-            self.job.destURL = fileURL;
-        }
-        else
-        {
-            self.job.destURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Desktop/%@.%s",
-                                                       NSHomeDirectory(),
-                                                       self.browsedSourceDisplayName.stringByDeletingPathExtension,
-                                                       ext]];
-        }
+        self.job.destURL = destURL;
 
         // set m4v extension if necessary - do not override user-specified .mp4 extension
         if (self.job.container & HB_MUX_MASK_MP4)
@@ -2475,10 +2471,6 @@ static void queueFSEventStreamCallback(
     // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
     if ((title.hb_title->type == HB_STREAM_TYPE || title.hb_title->type == HB_FF_STREAM_TYPE) && self.core.titles.count > 1)
     {
-        // we set the default name according to the new title->name
-        self.job.destURL = [[self.job.destURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:
-                            [NSString stringWithFormat:@"%@.%@", title.name, self.job.destURL.pathExtension]];
-
         // Change the source to read out the parent folder also
         fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@", self.browsedSourceDisplayName, title.name];
     }
