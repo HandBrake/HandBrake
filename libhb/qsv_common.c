@@ -1425,8 +1425,8 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         // introduced in API 1.8
         param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_ON;
         param->codingOption2.BRefType        = MFX_B_REF_UNKNOWN; // controlled via gop.b_pyramid
-        param->codingOption2.AdaptiveI       = MFX_CODINGOPTION_ON;
-        param->codingOption2.AdaptiveB       = MFX_CODINGOPTION_ON;
+        param->codingOption2.AdaptiveI       = MFX_CODINGOPTION_OFF;
+        param->codingOption2.AdaptiveB       = MFX_CODINGOPTION_OFF;
         param->codingOption2.LookAheadDS     = MFX_LOOKAHEAD_DS_OFF;
         param->codingOption2.NumMbPerSlice   = 0;
 
