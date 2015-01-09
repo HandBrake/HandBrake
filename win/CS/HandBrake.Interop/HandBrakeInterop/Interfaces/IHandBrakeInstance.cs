@@ -54,11 +54,6 @@ namespace HandBrake.Interop.Interfaces
         int FeatureTitle { get; }
 
         /// <summary>
-        /// Gets the number of previews created during scan.
-        /// </summary>
-        int PreviewCount { get; }
-
-        /// <summary>
         /// Gets the list of titles on this instance.
         /// </summary>
         List<Title> Titles { get; }
@@ -72,38 +67,6 @@ namespace HandBrake.Interop.Interfaces
         /// </summary>
         /// <param name="verbosity">The code for the logging verbosity to use.</param>
         void Initialize(int verbosity);
-
-        /// <summary>
-        /// Calculates the video bitrate for the given job and target size.
-        /// </summary>
-        /// <param name="job">
-        /// The encode job.
-        /// </param>
-        /// <param name="sizeMB">
-        /// The target size in MB.
-        /// </param>
-        /// <param name="overallSelectedLengthSeconds">
-        /// The currently selected encode length. Used in preview
-        /// for calculating bitrate when the target size would be wrong.
-        /// </param>
-        /// <returns>
-        /// The video bitrate in kbps.
-        /// </returns>
-        int CalculateBitrate(EncodeJob job, int sizeMB, double overallSelectedLengthSeconds = 0);
-
-        /// <summary>
-        /// Gives estimated file size (in MB) of the given job and video bitrate.
-        /// </summary>
-        /// <param name="job">
-        /// The encode job.
-        /// </param>
-        /// <param name="videoBitrate">
-        /// The video bitrate to be used (kbps).
-        /// </param>
-        /// <returns>
-        /// The estimated file size (in MB) of the given job and video bitrate.
-        /// </returns>
-        double CalculateFileSize(EncodeJob job, int videoBitrate);
 
         /// <summary>
         /// Frees any resources associated with this object.

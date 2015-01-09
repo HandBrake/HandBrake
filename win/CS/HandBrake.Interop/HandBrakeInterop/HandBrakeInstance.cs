@@ -14,12 +14,10 @@ namespace HandBrake.Interop
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
-    using System.Text;
     using System.Timers;
     using System.Windows.Media.Imaging;
 
@@ -37,7 +35,7 @@ namespace HandBrake.Interop
 
     using Newtonsoft.Json;
 
-    using Size = HandBrake.Interop.Model.Size;
+    using Geometry = HandBrake.Interop.Json.Anamorphic.Geometry;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.
@@ -58,11 +56,6 @@ namespace HandBrake.Interop
         /// The native handle to the HandBrake instance.
         /// </summary>
         private IntPtr hbHandle;
-
-        /// <summary>
-        /// The number of previews created during scan.
-        /// </summary>
-        private int previewCount;
 
         /// <summary>
         /// The timer to poll for scan status.
@@ -88,11 +81,6 @@ namespace HandBrake.Interop
         /// A value indicating whether this object has been disposed or not.
         /// </summary>
         private bool disposed;
-
-        /// <summary>
-        /// The last scan.
-        /// </summary>
-        private JsonScanObject lastScan;
 
         /// <summary>
         /// Finalizes an instance of the HandBrakeInstance class.
@@ -134,17 +122,6 @@ namespace HandBrake.Interop
         }
 
         /// <summary>
-        /// Gets the number of previews created during scan.
-        /// </summary>
-        public int PreviewCount
-        {
-            get
-            {
-                return this.previewCount;
-            }
-        }
-
-        /// <summary>
         /// Gets the index of the default title.
         /// </summary>
         public int FeatureTitle
@@ -181,7 +158,9 @@ namespace HandBrake.Interop
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        /// <param name="verbosity">The code for the logging verbosity to use.</param>
+        /// <param name="verbosity">
+        /// The code for the logging verbosity to use.
+        /// </param>
         public void Initialize(int verbosity)
         {
             HandBrakeUtils.EnsureGlobalInit();
@@ -193,9 +172,15 @@ namespace HandBrake.Interop
         /// <summary>
         /// Starts scanning the given path.
         /// </summary>
-        /// <param name="path">The path to the video to scan.</param>
-        /// <param name="previewCount">The number of preview images to make.</param>
-        /// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
+        /// <param name="path">
+        /// The path to the video to scan.
+        /// </param>
+        /// <param name="previewCount">
+        /// The number of preview images to make.
+        /// </param>
+        /// <param name="minDuration">
+        /// The minimum duration of a title to show up on the scan.
+        /// </param>
         public void StartScan(string path, int previewCount, TimeSpan minDuration)
         {
             this.StartScan(path, previewCount, minDuration, 0);
@@ -204,8 +189,12 @@ namespace HandBrake.Interop
         /// <summary>
         /// Starts a scan for the given input path.
         /// </summary>
-        /// <param name="path">The path of the video to scan.</param>
-        /// <param name="previewCount">The number of preview images to generate for each title while scanning.</param>
+        /// <param name="path">
+        /// The path of the video to scan.
+        /// </param>
+        /// <param name="previewCount">
+        /// The number of preview images to generate for each title while scanning.
+        /// </param>
         public void StartScan(string path, int previewCount)
         {
             this.StartScan(path, previewCount, TimeSpan.FromSeconds(10), 0);
@@ -214,9 +203,15 @@ namespace HandBrake.Interop
         /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
-        /// <param name="path">The path of the video to scan.</param>
-        /// <param name="previewCount">The number of preview images to generate for each title while scanning.</param>
-        /// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
+        /// <param name="path">
+        /// The path of the video to scan.
+        /// </param>
+        /// <param name="previewCount">
+        /// The number of preview images to generate for each title while scanning.
+        /// </param>
+        /// <param name="titleIndex">
+        /// The title index to scan (1-based, 0 for all titles).
+        /// </param>
         public void StartScan(string path, int previewCount, int titleIndex)
         {
             this.StartScan(path, previewCount, TimeSpan.Zero, titleIndex);
@@ -225,14 +220,20 @@ namespace HandBrake.Interop
         /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
-        /// <param name="path">The path of the video to scan.</param>
-        /// <param name="previewCount">The number of previews to make on each title.</param>
-        /// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
-        /// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
+        /// <param name="path">
+        /// The path of the video to scan.
+        /// </param>
+        /// <param name="previewCount">
+        /// The number of previews to make on each title.
+        /// </param>
+        /// <param name="minDuration">
+        /// The minimum duration of a title to show up on the scan.
+        /// </param>
+        /// <param name="titleIndex">
+        /// The title index to scan (1-based, 0 for all titles).
+        /// </param>
         public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
         {
-            this.previewCount = previewCount;
-
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
             HBFunctions.hb_scan(this.hbHandle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
@@ -262,9 +263,15 @@ namespace HandBrake.Interop
         /// <remarks>
         /// Only incorporates sizing and aspect ratio into preview image.
         /// </remarks>
-        /// <param name="job">The encode job to preview.</param>
-        /// <param name="previewNumber">The index of the preview to get (0-based).</param>
-        /// <returns>An image with the requested preview.</returns>
+        /// <param name="job">
+        /// The encode job to preview.
+        /// </param>
+        /// <param name="previewNumber">
+        /// The index of the preview to get (0-based).
+        /// </param>
+        /// <returns>
+        /// An image with the requested preview.
+        /// </returns>
         [HandleProcessCorruptedStateExceptions] 
         public BitmapImage GetPreview(EncodeJob job, int previewNumber)
         {
@@ -274,17 +281,17 @@ namespace HandBrake.Interop
             // Creat the Expected Output Geometry details for libhb.
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
-                crop = new[] { job.EncodingProfile.Cropping.Top, job.EncodingProfile.Cropping.Bottom, job.EncodingProfile.Cropping.Left, job.EncodingProfile.Cropping.Right },
-                itu_par = 0,
+                crop = new[] { job.EncodingProfile.Cropping.Top, job.EncodingProfile.Cropping.Bottom, job.EncodingProfile.Cropping.Left, job.EncodingProfile.Cropping.Right }, 
+                itu_par = 0, 
                 keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (job.EncodingProfile.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
-                maxWidth = job.EncodingProfile.MaxWidth,
-                maxHeight = job.EncodingProfile.MaxHeight,
-                mode = (int)(hb_anamorphic_mode_t)job.EncodingProfile.Anamorphic,
-                modulus = job.EncodingProfile.Modulus,
+                maxWidth = job.EncodingProfile.MaxWidth, 
+                maxHeight = job.EncodingProfile.MaxHeight, 
+                mode = (int)(hb_anamorphic_mode_t)job.EncodingProfile.Anamorphic, 
+                modulus = job.EncodingProfile.Modulus, 
                 geometry = new hb_geometry_s
                 {
-                    height = job.EncodingProfile.Height,
-                    width = job.EncodingProfile.Width,
+                    height = job.EncodingProfile.Height, 
+                    width = job.EncodingProfile.Width, 
                     par = job.EncodingProfile.Anamorphic != Anamorphic.Custom
                         ? new hb_rational_t { den = title.ParVal.Height, num = title.ParVal.Width }
                         : new hb_rational_t { den = job.EncodingProfile.PixelAspectY, num = job.EncodingProfile.PixelAspectX }
@@ -292,7 +299,7 @@ namespace HandBrake.Interop
             };
 
             // Sanatise the input.
-            Json.Anamorphic.Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
+            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
             int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
             int height = resultGeometry.Height;
             uiGeometry.geometry.height = resultGeometry.Height; // Prased the height now.
@@ -353,91 +360,7 @@ namespace HandBrake.Interop
             }
         }
 
-        /// <summary>
-        /// Calculates the video bitrate for the given job and target size.
-        /// </summary>
-        /// <param name="job">The encode job.</param>
-        /// <param name="sizeMB">The target size in MB.</param>
-        /// <param name="overallSelectedLengthSeconds">The currently selected encode length. Used in preview
-        /// for calculating bitrate when the target size would be wrong.</param>
-        /// <returns>The video bitrate in kbps.</returns>
-        public int CalculateBitrate(EncodeJob job, int sizeMB, double overallSelectedLengthSeconds = 0)
-        {
-            long availableBytes = ((long)sizeMB) * 1024 * 1024;
 
-            EncodingProfile profile = job.EncodingProfile;
-            Title title = this.GetTitle(job.Title);
-
-            double lengthSeconds = overallSelectedLengthSeconds > 0 ? overallSelectedLengthSeconds : HandBrakeUtils.GetJobLengthSeconds(job, title);
-            lengthSeconds += 1.5;
-
-            double outputFramerate;
-            if (profile.Framerate == 0)
-            {
-                outputFramerate = title.Framerate;
-            }
-            else
-            {
-                // Not sure what to do for VFR here hb_calc_bitrate never handled it...
-                //   just use the peak for now.
-                outputFramerate = profile.Framerate;
-            }
-
-            long frames = (long)(lengthSeconds * outputFramerate);
-
-            availableBytes -= frames * HandBrakeUtils.ContainerOverheadPerFrame;
-
-            List<Tuple<AudioEncoding, int>> outputTrackList = this.GetOutputTracks(job, title);
-            availableBytes -= HandBrakeUtils.GetAudioSize(job, lengthSeconds, title, outputTrackList);
-
-            if (availableBytes < 0)
-            {
-                return 0;
-            }
-
-            // Video bitrate is in kilobits per second, or where 1 kbps is 1000 bits per second.
-            // So 1 kbps is 125 bytes per second.
-            return (int)(availableBytes / (125 * lengthSeconds));
-        }
-
-        /// <summary>
-        /// Gives estimated file size (in MB) of the given job and video bitrate.
-        /// </summary>
-        /// <param name="job">The encode job.</param>
-        /// <param name="videoBitrate">The video bitrate to be used (kbps).</param>
-        /// <returns>The estimated file size (in MB) of the given job and video bitrate.</returns>
-        public double CalculateFileSize(EncodeJob job, int videoBitrate)
-        {
-            long totalBytes = 0;
-
-            EncodingProfile profile = job.EncodingProfile;
-            Title title = this.GetTitle(job.Title);
-
-            double lengthSeconds = HandBrakeUtils.GetJobLengthSeconds(job, title);
-            lengthSeconds += 1.5;
-
-            double outputFramerate;
-            if (profile.Framerate == 0)
-            {
-                outputFramerate = title.Framerate;
-            }
-            else
-            {
-                // Not sure what to do for VFR here hb_calc_bitrate never handled it...
-                //   just use the peak for now.
-                outputFramerate = profile.Framerate;
-            }
-
-            long frames = (long)(lengthSeconds * outputFramerate);
-
-            totalBytes += (long)(lengthSeconds * videoBitrate * 125);
-            totalBytes += frames * HandBrakeUtils.ContainerOverheadPerFrame;
-
-            List<Tuple<AudioEncoding, int>> outputTrackList = this.GetOutputTracks(job, title);
-            totalBytes += HandBrakeUtils.GetAudioSize(job, lengthSeconds, title, outputTrackList);
-
-            return (double)totalBytes / 1024 / 1024;
-        }
 
         /// <summary>
         /// Starts an encode with the given job.
@@ -482,8 +405,6 @@ namespace HandBrake.Interop
         /// </param>
         public void StartEncode(EncodeJob job, Title title, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount)
         {
-            this.previewCount = scanPreviewCount;
-
             JsonEncodeObject encodeObject = EncodeFactory.Create(job, title);
 
             JsonSerializerSettings settings = new JsonSerializerSettings
@@ -495,7 +416,7 @@ namespace HandBrake.Interop
             HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encode));
             HBFunctions.hb_start(this.hbHandle);
 
-            this.encodePollTimer = new System.Timers.Timer();
+            this.encodePollTimer = new Timer();
             this.encodePollTimer.Interval = EncodePollIntervalMs;
 
             this.encodePollTimer.Elapsed += (o, e) =>
@@ -560,7 +481,9 @@ namespace HandBrake.Interop
         /// <summary>
         /// Frees any resources associated with this object.
         /// </summary>
-        /// <param name="disposing">True if managed objects as well as unmanaged should be disposed.</param>
+        /// <param name="disposing">
+        /// True if managed objects as well as unmanaged should be disposed.
+        /// </param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -592,10 +515,10 @@ namespace HandBrake.Interop
                 {
                     this.ScanProgress(this, new ScanProgressEventArgs
                     {
-                        Progress = state.Scanning.Progress,
-                        CurrentPreview = state.Scanning.Preview,
-                        Previews = state.Scanning.PreviewCount,
-                        CurrentTitle = state.Scanning.Title,
+                        Progress = state.Scanning.Progress, 
+                        CurrentPreview = state.Scanning.Preview, 
+                        Previews = state.Scanning.PreviewCount, 
+                        CurrentTitle = state.Scanning.Title, 
                         Titles = state.Scanning.TitleCount
                     });
                 }
@@ -609,7 +532,6 @@ namespace HandBrake.Interop
                 string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
 
                 JsonScanObject scanObject = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
-                lastScan = scanObject;
 
                 foreach (Title title in ScanFactory.CreateTitleSet(scanObject))
                 { 
@@ -646,10 +568,10 @@ namespace HandBrake.Interop
                 {
                     var progressEventArgs = new EncodeProgressEventArgs
                     {
-                        FractionComplete = state.Working.Progress,
-                        CurrentFrameRate = state.Working.Rate,
-                        AverageFrameRate = state.Working.RateAvg,
-                        EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
+                        FractionComplete = state.Working.Progress, 
+                        CurrentFrameRate = state.Working.Rate, 
+                        AverageFrameRate = state.Working.RateAvg, 
+                        EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds), 
                         Pass = 1, // TODO
                     };
 
@@ -670,56 +592,5 @@ namespace HandBrake.Interop
             }
         }
 
-        /// <summary>
-        /// Gets a list of encodings and target track indices (1-based).
-        /// </summary>
-        /// <param name="job">The encode job</param>
-        /// <param name="title">The title the job is meant to encode.</param>
-        /// <returns>A list of encodings and target track indices (1-based).</returns>
-        private List<Tuple<AudioEncoding, int>> GetOutputTracks(EncodeJob job, Title title)
-        {
-            var list = new List<Tuple<AudioEncoding, int>>();
-
-            foreach (AudioEncoding encoding in job.EncodingProfile.AudioEncodings)
-            {
-                if (encoding.InputNumber == 0)
-                {
-                    // Add this encoding for all chosen tracks
-                    foreach (int chosenTrack in job.ChosenAudioTracks)
-                    {
-                        // In normal cases we'll never have a chosen audio track that doesn't exist but when batch encoding
-                        // we just choose the first audio track without checking if it exists.
-                        if (chosenTrack <= title.AudioTracks.Count)
-                        {
-                            list.Add(new Tuple<AudioEncoding, int>(encoding, chosenTrack));
-                        }
-                    }
-                }
-                else if (encoding.InputNumber <= job.ChosenAudioTracks.Count)
-                {
-                    // Add this encoding for the specified track, if it exists
-                    int trackNumber = job.ChosenAudioTracks[encoding.InputNumber - 1];
-
-                    // In normal cases we'll never have a chosen audio track that doesn't exist but when batch encoding
-                    // we just choose the first audio track without checking if it exists.
-                    if (trackNumber <= title.AudioTracks.Count)
-                    {
-                        list.Add(new Tuple<AudioEncoding, int>(encoding, trackNumber));
-                    }
-                }
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// Gets the title, given the 1-based title number.
-        /// </summary>
-        /// <param name="titleNumber">The number of the title (1-based).</param>
-        /// <returns>The requested Title.</returns>
-        private Title GetTitle(int titleNumber)
-        {
-            return this.Titles.SingleOrDefault(title => title.TitleNumber == titleNumber);
-        }
     }
 }
