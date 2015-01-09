@@ -14,7 +14,7 @@
 #import "HBPicture.h"
 #import "HBFilters.h"
 
-#import "HBAudio.h"
+#import "HBAudioTrack.h"
 #import "HBAudioTrackPreset.h"
 
 #import "HBAudioDefaults.h"
@@ -25,19 +25,6 @@
 extern NSString *HBMixdownChangedNotification;
 extern NSString *HBContainerChangedNotification;
 extern NSString *keyContainerTag;
-
-
-/**
- *  Audio track dicts keys.
- */
-extern NSString *keyAudioTrackIndex;
-extern NSString *keyAudioTrackName;
-extern NSString *keyAudioInputBitrate;
-extern NSString *keyAudioInputSampleRate;
-extern NSString *keyAudioInputCodec;
-extern NSString *keyAudioInputCodecParam;
-extern NSString *keyAudioInputChannelLayout;
-extern NSString *keyAudioTrackLanguageIsoCode;
 
 typedef NS_ENUM(NSUInteger, HBJobState) {
     HBJobStateReady,

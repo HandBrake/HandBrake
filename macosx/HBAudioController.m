@@ -6,7 +6,7 @@
 //
 
 #import "HBAudioController.h"
-#import "HBAudio.h"
+#import "HBAudioTrack.h"
 #import "HBAudioDefaultsController.h"
 
 #import "HBJob.h"
@@ -116,7 +116,7 @@
     for (HBAudioTrackPreset *preset in templateAudioArray)
     {
         BOOL fallenBack = NO;
-        HBAudio *newAudio = [[HBAudio alloc] init];
+        HBAudioTrack *newAudio = [[HBAudioTrack alloc] init];
         [newAudio setController: self];
         [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
         [newAudio setVideoContainerTag: [self videoContainerTag]];
@@ -289,7 +289,7 @@
     NSUInteger audioArrayCount = [self countOfAudioArray];
     for (NSUInteger i = 0; i < audioArrayCount && !retval; i++)
     {
-        HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
+        HBAudioTrack *anAudio = [self objectInAudioArrayAtIndex: i];
         if ([anAudio enabled] && aCodecValue == [[anAudio codec][keyAudioCodec] intValue])
         {
             retval = YES;
@@ -301,7 +301,7 @@
 - (void) addNewAudioTrack
 
 {
-    HBAudio *newAudio = [[HBAudio alloc] init];
+    HBAudioTrack *newAudio = [[HBAudioTrack alloc] init];
     [newAudio setController: self];
     [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
     [newAudio setVideoContainerTag: [self videoContainerTag]];
@@ -314,7 +314,7 @@
 #pragma mark -
 #pragma mark Notification Handling
 
-- (void) settingTrackToNone: (HBAudio *) newNoneTrack
+- (void) settingTrackToNone: (HBAudioTrack *) newNoneTrack
 
 {
     // If this is not the last track in the array we need to remove it.  We then need to see if a new
@@ -329,7 +329,7 @@
     [self switchingTrackFromNone: nil]; // see if we need to add one to the list
 }
 
-- (void) switchingTrackFromNone: (HBAudio *) noLongerNoneTrack
+- (void) switchingTrackFromNone: (HBAudioTrack *) noLongerNoneTrack
 
 {
     NSUInteger count = [self countOfAudioArray];
@@ -338,7 +338,7 @@
     // If there is no last track that is None we add one.
     if (0 < count)
     {
-        HBAudio *lastAudio = [self objectInAudioArrayAtIndex: count - 1];
+        HBAudioTrack *lastAudio = [self objectInAudioArrayAtIndex: count - 1];
         if ([lastAudio enabled])
         {
             needToAdd = YES;
@@ -364,7 +364,7 @@
     [self setVideoContainerTag: notDict[keyContainerTag]];
 
     // Update each of the instances because this value influences possible settings.
-    for (HBAudio *audioObject in audioArray)
+    for (HBAudioTrack *audioObject in audioArray)
     {
         [audioObject setVideoContainerTag: [self videoContainerTag]];
     }
@@ -398,7 +398,7 @@
         self.masterTrackArray = newTrackArray;
 
         // Readd the controller reference to the audio tracks.
-        for (HBAudio *audioTrack in audioArray)
+        for (HBAudioTrack *audioTrack in audioArray)
         {
             audioTrack.controller = self;
         }
@@ -448,13 +448,13 @@
     return [audioArray count];
 }
 
-- (HBAudio *) objectInAudioArrayAtIndex: (NSUInteger) index
+- (HBAudioTrack *) objectInAudioArrayAtIndex: (NSUInteger) index
 
 {
     return audioArray[index];
 }
 
-- (void) insertObject: (HBAudio *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
+- (void) insertObject: (HBAudioTrack *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
 
 {
     [audioArray insertObject: audioObject atIndex: index];

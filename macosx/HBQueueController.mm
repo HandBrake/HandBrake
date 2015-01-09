@@ -789,7 +789,7 @@
 		NSMutableArray *audioDetails = [NSMutableArray arrayWithCapacity:job.audioTracks.count];
         BOOL autoPassthruPresent = NO;
 
-        for (HBAudio *audioTrack in job.audioTracks)
+        for (HBAudioTrack *audioTrack in job.audioTracks)
         {
             audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack.codec[keyAudioCodecName]];
             NSNumber *drc = audioTrack.drc;

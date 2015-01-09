@@ -7,20 +7,11 @@
 #import "HBJob.h"
 #import "HBPreset.h"
 
-#import "HBAudio.h"
+#import "HBAudioTrack.h"
 #import "HBAudioController.h"
 #import "HBSubtitlesController.h"
 
 #import "NSCodingMacro.h"
-
-NSString *keyAudioTrackIndex = @"keyAudioTrackIndex";
-NSString *keyAudioTrackName = @"keyAudioTrackName";
-NSString *keyAudioInputBitrate = @"keyAudioInputBitrate";
-NSString *keyAudioInputSampleRate = @"keyAudioInputSampleRate";
-NSString *keyAudioInputCodec = @"keyAudioInputCodec";
-NSString *keyAudioInputCodecParam = @"keyAudioInputCodecParam";
-NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
-NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
 
 NSString *HBMixdownChangedNotification         = @"HBMixdownChangedNotification";
 NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
@@ -482,7 +473,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
 
     // Audio tracks and mixdowns
     // Now lets add our new tracks to the audio list here
-    for (HBAudio *audioTrack in self.audioTracks)
+    for (HBAudioTrack *audioTrack in self.audioTracks)
     {
         if (audioTrack.enabled)
         {

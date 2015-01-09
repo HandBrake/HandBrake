@@ -1,13 +1,24 @@
-//
-//  HBAudio.h
-//  HandBrake
-//
-//  Created on 2010-08-30.
-//
+/*  HBAudioTrack.h $
 
-#import <Cocoa/Cocoa.h>
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
+
+#import <Foundation/Foundation.h>
 
 @class HBAudioController;
+
+/**
+ *  Audio track dicts keys.
+ */
+extern NSString *keyAudioTrackIndex;
+extern NSString *keyAudioTrackName;
+extern NSString *keyAudioInputBitrate;
+extern NSString *keyAudioInputSampleRate;
+extern NSString *keyAudioInputCodec;
+extern NSString *keyAudioInputCodecParam;
+extern NSString *keyAudioInputChannelLayout;
+extern NSString *keyAudioTrackLanguageIsoCode;
 
 extern NSString *keyAudioCodecName;
 extern NSString *keyAudioSampleRateName;
@@ -18,7 +29,7 @@ extern NSString *keyAudioMixdown;
 extern NSString *keyAudioSamplerate;
 extern NSString *keyAudioBitrate;
 
-@interface HBAudio : NSObject <NSCoding, NSCopying>
+@interface HBAudioTrack : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, retain) NSDictionary *track;
 @property (nonatomic, retain) NSDictionary *codec;

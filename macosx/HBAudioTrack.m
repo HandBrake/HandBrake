@@ -1,15 +1,23 @@
-//
-//  HBAudio.m
-//  HandBrake
-//
-//  Created on 2010-08-30.
-//
+/*  HBAudioTrack.m $
 
-#import "HBAudio.h"
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
+
+#import "HBAudioTrack.h"
 #import "HBAudioController.h"
 #import "HBJob.h"
 #import "NSCodingMacro.h"
 #import "hb.h"
+
+NSString *keyAudioTrackIndex = @"keyAudioTrackIndex";
+NSString *keyAudioTrackName = @"keyAudioTrackName";
+NSString *keyAudioInputBitrate = @"keyAudioInputBitrate";
+NSString *keyAudioInputSampleRate = @"keyAudioInputSampleRate";
+NSString *keyAudioInputCodec = @"keyAudioInputCodec";
+NSString *keyAudioInputCodecParam = @"keyAudioInputCodecParam";
+NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
+NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
 
 NSString *keyAudioCodecName = @"keyAudioCodecName";
 NSString *keyAudioSupportedMuxers = @"keyAudioSupportedMuxers";
@@ -61,7 +69,7 @@ static NSMutableArray *masterBitRateArray = nil;
 
 @end
 
-@implementation HBAudio
+@implementation HBAudioTrack
 
 #pragma mark -
 #pragma mark Object Setup
@@ -69,7 +77,7 @@ static NSMutableArray *masterBitRateArray = nil;
 + (void) initialize
 
 {
-    if ([HBAudio class] == self)
+    if ([HBAudioTrack class] == self)
     {
         masterCodecArray = [[NSMutableArray alloc] init]; // knowingly leaked
         for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
@@ -580,7 +588,7 @@ static NSMutableArray *masterBitRateArray = nil;
 
 - (instancetype)copyWithZone:(NSZone *)zone
 {
-    HBAudio *copy = [[[self class] alloc] init];
+    HBAudioTrack *copy = [[[self class] alloc] init];
 
     if (copy)
     {

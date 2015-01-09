@@ -8,7 +8,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class HBJob;
-@class HBAudio;
+@class HBAudioTrack;
 
 /**
  *  HBAudioController
@@ -25,16 +25,16 @@
 - (void) applySettingsFromPreset:(NSDictionary *)preset;
 
 - (BOOL) anyCodecMatches: (int) aCodecValue;
-- (void) settingTrackToNone: (HBAudio *) newNoneTrack;
-- (void) switchingTrackFromNone: (HBAudio *) noLongerNoneTrack;
+- (void) settingTrackToNone: (HBAudioTrack *) newNoneTrack;
+- (void) switchingTrackFromNone: (HBAudioTrack *) noLongerNoneTrack;
 
 @end
 
 @interface HBAudioController (KVC)
 
 - (NSUInteger) countOfAudioArray;
-- (HBAudio *) objectInAudioArrayAtIndex: (NSUInteger) index;
-- (void) insertObject: (HBAudio *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
+- (HBAudioTrack *) objectInAudioArrayAtIndex: (NSUInteger) index;
+- (void) insertObject: (HBAudioTrack *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
 - (void) removeObjectFromAudioArrayAtIndex: (NSUInteger) index;
 
 @end

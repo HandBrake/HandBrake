@@ -23,7 +23,7 @@
 		273F208B14ADBE3B0021BE6D /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 273F208814ADBE3B0021BE6D /* test.c */; };
 		273F20AC14ADBE670021BE6D /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F208F14ADBE670021BE6D /* Controller.m */; };
 		273F20AD14ADBE670021BE6D /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209014ADBE670021BE6D /* HBAdvancedController.m */; };
-		273F20AE14ADBE670021BE6D /* HBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209214ADBE670021BE6D /* HBAudio.m */; };
+		273F20AE14ADBE670021BE6D /* HBAudioTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209214ADBE670021BE6D /* HBAudioTrack.m */; };
 		273F20AF14ADBE670021BE6D /* HBAudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209414ADBE670021BE6D /* HBAudioController.m */; };
 		273F20B114ADBE670021BE6D /* HBDVDDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209814ADBE670021BE6D /* HBDVDDetector.m */; };
 		273F20B214ADBE670021BE6D /* HBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */; };
@@ -269,8 +269,8 @@
 		273F208E14ADBE670021BE6D /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
 		273F208F14ADBE670021BE6D /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Controller.m; sourceTree = "<group>"; };
 		273F209014ADBE670021BE6D /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
-		273F209114ADBE670021BE6D /* HBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudio.h; sourceTree = "<group>"; };
-		273F209214ADBE670021BE6D /* HBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudio.m; sourceTree = "<group>"; };
+		273F209114ADBE670021BE6D /* HBAudioTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTrack.h; sourceTree = "<group>"; };
+		273F209214ADBE670021BE6D /* HBAudioTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrack.m; sourceTree = "<group>"; };
 		273F209314ADBE670021BE6D /* HBAudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioController.h; sourceTree = "<group>"; };
 		273F209414ADBE670021BE6D /* HBAudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioController.m; sourceTree = "<group>"; };
 		273F209714ADBE670021BE6D /* HBDVDDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBDVDDetector.h; sourceTree = "<group>"; };
@@ -902,8 +902,8 @@
 				A932E272198834130047D13E /* HBAudioDefaults.m */,
 				A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */,
 				A9F4728C1976BAA70009EC65 /* HBSubtitlesDefaults.m */,
-				273F209114ADBE670021BE6D /* HBAudio.h */,
-				273F209214ADBE670021BE6D /* HBAudio.m */,
+				273F209114ADBE670021BE6D /* HBAudioTrack.h */,
+				273F209214ADBE670021BE6D /* HBAudioTrack.m */,
 				A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */,
 				A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */,
 				A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */,
@@ -1190,7 +1190,7 @@
 				A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */,
 				273F20AC14ADBE670021BE6D /* Controller.m in Sources */,
 				273F20AD14ADBE670021BE6D /* HBAdvancedController.m in Sources */,
-				273F20AE14ADBE670021BE6D /* HBAudio.m in Sources */,
+				273F20AE14ADBE670021BE6D /* HBAudioTrack.m in Sources */,
 				A9DEC87A1A23C89E00C79B48 /* HBPicture.m in Sources */,
 				273F20AF14ADBE670021BE6D /* HBAudioController.m in Sources */,
 				A9537BF31A48A99500141102 /* HBVideo+UIAdditions.m in Sources */,
