@@ -33,7 +33,7 @@ namespace HandBrake.Interop.Helpers
 			{
 			    return allLanguages
 			           ?? (allLanguages =
-			               InteropUtilities.ToListFromIterator<iso639_lang_t, Language>(HBFunctions.lang_get_next, Converters.NativeToLanguage));
+                           InteropUtilities.ToListFromIterator<iso639_lang_t, Language>(HBFunctions.lang_get_next, HandBrakeUnitConversionHelpers.NativeToLanguage));
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace HandBrake.Interop.Helpers
 		public static Language Get(string code)
 		{
 			iso639_lang_t language = InteropUtilities.ToStructureFromPtr<iso639_lang_t>(HBFunctions.lang_for_code2(code));
-			return Converters.NativeToLanguage(language);
+            return HandBrakeUnitConversionHelpers.NativeToLanguage(language);
 		}
 	}
 }
