@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (C) 2003-2014 The HandBrake Team
+        ///   Looks up a localized string similar to Copyright (C) 2003-2015 The HandBrake Team
         ///
         ///This program is free software; you can redistribute it and/or
         ///modify it under the terms of the GNU General Public License
