@@ -361,7 +361,14 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setNilValueForKey:(NSString *)key
 {
-    [self setValue:@0 forKey:key];
+    if ([key isEqualToString:@"width"] || [key isEqualToString:@"height"])
+    {
+        [self setValue:@64 forKey:key];
+    }
+    else
+    {
+        [self setValue:@0 forKey:key];
+    }
 }
 
 #pragma mark - Picture Update Logic

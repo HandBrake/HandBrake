@@ -204,7 +204,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="44">
                                                         <rect key="frame" x="143" y="103" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="169">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="169">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -236,9 +236,7 @@
                                                         <rect key="frame" x="76" y="107" width="62" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="167">
-                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="le0-iC-NhW">
-                                                                <real key="minimum" value="32"/>
-                                                            </numberFormatter>
+                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="le0-iC-NhW"/>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -256,7 +254,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="46">
                                                         <rect key="frame" x="143" y="78" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="171">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="171">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -323,9 +321,7 @@
                                                         <rect key="frame" x="76" y="81" width="62" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="168">
-                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="9iU-HJ-b4u">
-                                                                <real key="minimum" value="64"/>
-                                                            </numberFormatter>
+                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="9iU-HJ-b4u"/>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
