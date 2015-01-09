@@ -152,7 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ShortName.cs" />
-    <Compile Include="Converters\Converters.cs" />
+    <Compile Include="HandBrakeUnitConversionHelpers.cs" />
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="HandBrakeUtils.cs" />

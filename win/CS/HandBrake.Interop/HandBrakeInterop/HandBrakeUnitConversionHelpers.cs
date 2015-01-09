@@ -1,13 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Converters.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HandBrakeUnitConversionHelpers.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the Converters type.
+//   Defines the HandrakeUnitConversionHelpers type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Converters
+namespace HandBrake.Interop
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace HandBrake.Interop.Converters
     /// <summary>
 	/// Converters for various encoding values.
 	/// </summary>
-	public static class Converters
+    public static class HandBrakeUnitConversionHelpers
 	{
 		/// <summary>
 		/// Video Frame Rates
@@ -29,9 +29,9 @@ namespace HandBrake.Interop.Converters
 		private static readonly Dictionary<double, int> VideoRates;
 
 		/// <summary>
-		/// Initializes static members of the Converters class.
+        /// Initializes static members of the HandBrakeUnitConversionHelpers class.
 		/// </summary>
-		static Converters()
+        static HandBrakeUnitConversionHelpers()
 		{
 			HandBrakeUtils.EnsureGlobalInit();
 
