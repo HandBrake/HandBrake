@@ -100,6 +100,12 @@ namespace HandBrakeWPF.Commands
                 {
                     mainViewModel.ShowCliQuery();
                 }
+
+                if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) && gesture.Key == Key.G)
+                {
+                    GC.Collect();
+                    MessageBox.Show("DEBUG: Garbage Collection Completed");
+                }
             }
         }
 

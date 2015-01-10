@@ -277,8 +277,9 @@ namespace HandBrake.Interop.HbLib
 //const char*        hb_audio_dither_get_description(int method);
 //const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last);
 
-		[DllImport("hb.dll", EntryPoint = "hb_audio_can_apply_drc", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int hb_audio_can_apply_drc(uint codec, uint codec_param, int encoder);
+        // hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx, int audio_idx, int encoder)
+        [DllImport("hb.dll", EntryPoint = "hb_audio_can_apply_drc2", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_audio_can_apply_drc2(IntPtr handle, int title_index, int audio_index, int encoder);
 
 		[DllImport("hb.dll", EntryPoint = "hb_mixdown_is_supported", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_mixdown_is_supported(int mixdown, uint codec, ulong layout);

@@ -172,8 +172,7 @@ namespace HandBrake.Interop.Json.Factories
                 AudioTrack newAudio = new AudioTrack
                 {
                     TrackNumber = currentAudioTrack,
-                   // CodecParam = audio.config.input.codec_param,
-                   // CodecId = audio.config.input.codec,
+                    CodecId = Convert.ToUInt32(track.Codec),
                     Language = track.Language,
                     LanguageCode = track.LanguageCode,
                     Description = track.Description,

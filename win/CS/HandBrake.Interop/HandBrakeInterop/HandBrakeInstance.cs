@@ -111,6 +111,17 @@ namespace HandBrake.Interop
         public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
 
         /// <summary>
+        /// Gets the handle.
+        /// </summary>
+        internal IntPtr Handle
+        {
+            get
+            {
+                return this.Handle;
+            }
+        }
+
+        /// <summary>
         /// Gets the list of titles on this instance.
         /// </summary>
         public List<Title> Titles
@@ -360,8 +371,6 @@ namespace HandBrake.Interop
             }
         }
 
-
-
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
@@ -591,6 +600,5 @@ namespace HandBrake.Interop
                 }
             }
         }
-
     }
 }

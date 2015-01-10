@@ -9,6 +9,7 @@
 
 namespace HandBrake.Interop
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -59,7 +60,7 @@ namespace HandBrake.Interop
 		private static List<HBRate> audioSampleRates; 
 
 		/// <summary>
-        /// Initializes static members of the EncoderHelpers class.
+        /// Initializes static members of the HandBrakeEncoderHelpers class.
 		/// </summary>
         static HandBrakeEncoderHelpers()
 		{
@@ -322,12 +323,15 @@ namespace HandBrake.Interop
 		/// <param name="encoder">
 		/// The encoder to use for DRC.
 		/// </param>
+		/// <param name="title">
+		/// The title.
+		/// </param>
 		/// <returns>
 		/// True if DRC can be applied to the track with the given encoder.
 		/// </returns>
-		public static bool CanApplyDrc(AudioTrack track, HBAudioEncoder encoder)
+		public static bool CanApplyDrc(AudioTrack track, HBAudioEncoder encoder, int title)
 		{
-			return HBFunctions.hb_audio_can_apply_drc(track.CodecId, track.CodecParam, encoder.Id) > 0;
+		    return HBFunctions.hb_audio_can_apply_drc2(HandBrakeInstanceManager.LastScanHandle, title, track.TrackNumber, encoder.Id) > 0;
 		}
 
 		/// <summary>

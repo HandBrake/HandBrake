@@ -272,7 +272,7 @@ A value of 0 means lossless and will result in a file size that is larger than t
 unless the source was also lossless. 
 Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition.
 
-x265 is early on in it's development, so there are no recommended values yet. You'll have to experiment.
+x265 is a new encoder, so there are no recommended values yet. You'll have to experiment.
 
 FFMpeg's and Theora's scale is more linear. These encoders do not have a lossless mode.</value>
   </data>

@@ -43,5 +43,10 @@ namespace HandBrake.Interop.Json.Scan
         /// Gets or sets the sample rate.
         /// </summary>
         public int SampleRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the codec.
+        /// </summary>
+        public int Codec { get; set; }
     }
 }

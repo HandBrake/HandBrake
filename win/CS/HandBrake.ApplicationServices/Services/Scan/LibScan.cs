@@ -226,8 +226,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
             this.scanLog = new StreamWriter(this.dvdInfoPath);
 
             // Create a new HandBrake Instance.
-            this.instance = new HandBrakeInstance();
-            this.instance.Initialize(1);
+            this.instance = HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity);
             this.instance.ScanProgress += this.InstanceScanProgress;
             this.instance.ScanCompleted += this.InstanceScanCompleted;
 
