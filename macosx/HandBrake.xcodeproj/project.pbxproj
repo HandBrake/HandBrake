@@ -356,7 +356,6 @@
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
 		A918066F1A4807B000FC9BED /* HBRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBRange.h; sourceTree = "<group>"; };
 		A91806701A4807B000FC9BED /* HBRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBRange.m; sourceTree = "<group>"; };
-		A919C7AC199369180049E6A3 /* HBViewValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBViewValidation.h; sourceTree = "<group>"; };
 		A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JobSmall@2x.png"; sourceTree = "<group>"; };
 		A91C02501A165EA200DEA6F3 /* EncodeComplete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeComplete.png; sourceTree = "<group>"; };
 		A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeComplete@2x.png"; sourceTree = "<group>"; };
@@ -956,7 +955,6 @@
 				A9F472851976B7AA0009EC65 /* Subtitles Defaults */,
 				A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */,
 				A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */,
-				A919C7AC199369180049E6A3 /* HBViewValidation.h */,
 			);
 			name = "Main Window View Controllers";
 			sourceTree = "<group>";
@@ -1510,6 +1508,7 @@
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1533,6 +1532,7 @@
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -5,7 +5,6 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-#import "HBViewValidation.h"
 
 @class HBPresetsManager;
 @class HBPreset;
@@ -17,7 +16,7 @@
 
 @end
 
-@interface HBPresetsViewController : NSViewController <HBViewValidation>
+@interface HBPresetsViewController : NSViewController
 
 - (instancetype)initWithPresetManager:(HBPresetsManager *)presetManager;
 
@@ -30,5 +29,7 @@
 
 @property (nonatomic, readonly) HBPreset *selectedPreset;
 @property (nonatomic, readonly) NSUInteger indexOfSelectedItem;
+
+@property (nonatomic, readwrite, getter=isEnabled) BOOL enabled;
 
 @end
