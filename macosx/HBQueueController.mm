@@ -748,7 +748,7 @@
         {
             passesString = [passesString stringByAppendingString:@"1 Foreign Language Search Pass - "];
         }
-        if (job.video.twoPass == YES)
+        if (job.video.qualityType == 1 || job.video.twoPass == NO)
         {
             passesString = [passesString stringByAppendingString:@"1 Video Pass"];
         }
