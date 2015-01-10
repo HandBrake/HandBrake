@@ -107,6 +107,5 @@ namespace HandBrake.Interop.Json.Factories
                 };
             return geometry;
         }
-
     }
 }

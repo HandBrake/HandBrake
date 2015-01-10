@@ -452,6 +452,11 @@ namespace HandBrake.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_get_preview2", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_get_preview2(IntPtr hbHandle, int title_idx, int preview_idx,  ref hb_geometry_settings_s geo, int deinterlace);
 
+        // void hb_image_close(hb_image_t **_image);
+        [DllImport("hb.dll", EntryPoint = "hb_image_close", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_image_close(IntPtr image);
+
+
         /* JSON API */
 
         // char     * hb_get_title_set_json(hb_handle_t * h);

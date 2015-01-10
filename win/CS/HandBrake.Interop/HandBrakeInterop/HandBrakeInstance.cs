@@ -348,6 +348,12 @@ namespace HandBrake.Interop
 
             bitmap.UnlockBits(bitmapData);
 
+            // Close the image so we don't leak memory.
+            IntPtr nativeJobPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
+            Marshal.WriteIntPtr(nativeJobPtrPtr, resultingImageStuct);
+            HBFunctions.hb_image_close(nativeJobPtrPtr);
+            Marshal.FreeHGlobal(nativeJobPtrPtr);                
+
             // Create a Bitmap Image for display.
             using (var memoryStream = new MemoryStream())
             {
