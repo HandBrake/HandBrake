@@ -12,19 +12,6 @@
  * to stderr. User can easily copy the text to pasteboard from context menu.
  */
 @interface HBOutputPanelController : NSWindowController
-{
-    /// Textview that displays debug output.
-    IBOutlet NSTextView *textView;
-
-    /// Text storage for the debug output.
-    NSTextStorage *outputTextStorage;
-
-    /// Path to log text file.
-    NSString *outputLogFile;
-    /// Path to individual log text file.
-    NSString *outputLogFileForEncode;
-    BOOL encodeLogOn;
-}
 
 - (IBAction)showOutputPanel:(id)sender;
 - (IBAction)clearOutput:(id)sender;

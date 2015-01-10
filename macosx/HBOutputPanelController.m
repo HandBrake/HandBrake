@@ -23,6 +23,21 @@
 #define TextStorageLowerSizeLimit 120000
 
 @interface HBOutputPanelController () <HBOutputRedirectListening>
+{
+    /// Textview that displays debug output.
+    IBOutlet NSTextView *textView;
+
+    /// Text storage for the debug output.
+    NSTextStorage *outputTextStorage;
+
+    /// Path to log text file.
+    NSString *outputLogFile;
+    BOOL encodeLogOn;
+}
+
+/// Path to individual log text file.
+@property (nonatomic, copy) NSString *outputLogFileForEncode;
+
 @end
 
 @implementation HBOutputPanelController
@@ -135,8 +150,7 @@
     NSString *outputDateFileName = [NSString stringWithFormat:@"%@ %@.txt",[[outputFileForEncode lastPathComponent] stringByDeletingPathExtension],dateForLogTitle];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"EncodeLogLocation"]) // if we are putting it in the same directory with the movie
     {
-        
-        outputLogFileForEncode = [[NSString stringWithFormat:@"%@/%@",[outputFileForEncode stringByDeletingLastPathComponent],outputDateFileName] retain];
+        self.outputLogFileForEncode = [NSString stringWithFormat:@"%@/%@",[outputFileForEncode stringByDeletingLastPathComponent], outputDateFileName];
     }
     else // if we are putting it in the default ~/Libraries/Application Support/HandBrake/EncodeLogs logs directory
     {
@@ -148,14 +162,14 @@
                                             attributes:nil
                                             error:nil];
         }
-        outputLogFileForEncode = [[NSString stringWithFormat:@"%@/%@",encodeLogDirectory,outputDateFileName] retain];   
+        self.outputLogFileForEncode = [NSString stringWithFormat:@"%@/%@",encodeLogDirectory,outputDateFileName];
     }
-    [fileManager createFileAtPath:outputLogFileForEncode contents:nil attributes:nil];
+    [fileManager createFileAtPath:self.outputLogFileForEncode contents:nil attributes:nil];
     
     /* Similar to the regular activity log, we print a header containing the date and time of the encode as well as what directory it was encoded to */
     NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
     NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for %@: %@\n%@",outputFileForEncode, [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil],versionStringFull];
-    [startOutputLogString writeToFile:outputLogFileForEncode atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+    [startOutputLogString writeToFile:self.outputLogFileForEncode atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 
 
 }
@@ -189,9 +203,9 @@
     fprintf(f, "%s", [text UTF8String]);
     fclose(f);
     
-    if (encodeLogOn == YES && outputLogFileForEncode != nil)
+    if (encodeLogOn == YES && self.outputLogFileForEncode != nil)
     {
-    FILE *e = fopen([outputLogFileForEncode UTF8String], "a");
+    FILE *e = fopen([self.outputLogFileForEncode UTF8String], "a");
     fprintf(e, "%s", [text UTF8String]);
     fclose(e);
     }
