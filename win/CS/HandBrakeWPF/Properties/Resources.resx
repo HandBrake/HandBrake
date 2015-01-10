@@ -302,7 +302,7 @@ The above controls are only a subset of useful x264 parameters.
 This box allows you to add or modify additional or current parameters as desired. </value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2014 The HandBrake Team
+    <value>Copyright (C) 2003-2015 The HandBrake Team
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
