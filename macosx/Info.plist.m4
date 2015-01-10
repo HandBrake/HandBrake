@@ -26,6 +26,14 @@ dnl
  			<key>CFBundleTypeRole</key>
  			<string>Viewer</string>
  		</dict>
+ 		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.movie</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+		</dict>
  	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
