@@ -163,7 +163,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 - (void)scan:(NSURL *)url titleNum:(NSUInteger)titleNum previewsNum:(NSUInteger)previewsNum minTitleDuration:(NSUInteger)minTitleDuration;
 {
     // Start the timer to handle libhb state changes
-    [self startUpdateTimer];
+    [self startUpdateTimerWithInterval:0.2];
 
     NSString *path = url.path;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
@@ -296,7 +296,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 - (void)start
 {
     // Start the timer to handle libhb state changes
-    [self startUpdateTimer];
+    [self startUpdateTimerWithInterval:0.5];
 
     hb_system_sleep_prevent(_hb_handle);
     hb_start(_hb_handle);
@@ -345,13 +345,15 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 #pragma mark - State updates
 
 /**
- * Starts the timer used to polls libhb for state changes.
+ *  Starts the timer used to polls libhb for state changes.
+ *
+ *  @param seconds The number of seconds between firings of the timer.
  */
-- (void)startUpdateTimer
+- (void)startUpdateTimerWithInterval:(NSTimeInterval)seconds
 {
     if (!self.updateTimer)
     {
-        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:seconds
                                                             target:self
                                                           selector:@selector(stateUpdateTimer:)
                                                           userInfo:NULL
