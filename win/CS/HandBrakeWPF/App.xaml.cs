@@ -68,7 +68,7 @@ namespace HandBrakeWPF
 
             if (e.Args.Any(f => f.Equals("--enable-libhb")))
             {
-                AppArguments.EnableLibHB = true;
+                AppArguments.UseLibHb = true;
             }
 
             base.OnStartup(e);

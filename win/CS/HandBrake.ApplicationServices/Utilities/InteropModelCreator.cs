@@ -230,7 +230,8 @@ namespace HandBrake.ApplicationServices.Utilities
                                 Default = track.Default,
                                 FileName = track.SrtFileName,
                                 LanguageCode = track.SrtLang,
-                                Offset = track.SrtOffset
+                                Offset = track.SrtOffset,
+                                BurnedIn = track.Burned
                             });
                 }
                 else

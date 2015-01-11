@@ -109,7 +109,7 @@ namespace HandBrakeWPF
         /// <summary>
         /// Enable the use of LibHb instead of HandBrakeCLI
         /// </summary>
-        public const string EnableLibHb = "EnableLibHb";
+        public const string UseLibHb = "UseLibHb";
 
         /// <summary>
         /// Growl Encodes

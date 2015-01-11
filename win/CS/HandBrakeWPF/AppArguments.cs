@@ -22,6 +22,6 @@ namespace HandBrakeWPF
         /// <summary>
         /// Gets or sets a value indicating whether enable lib hb.
         /// </summary>
-        public static bool EnableLibHB { get; set; }
+        public static bool UseLibHb { get; set; }
     }
 }

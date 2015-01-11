@@ -49,7 +49,7 @@ namespace HandBrakeWPF.Services
         /// </param>
         public EncodeServiceWrapper(IUserSettingService userSettingService)
         {
-            var useLibHb = AppArguments.EnableLibHB ? AppArguments.EnableLibHB : userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
+            var useLibHb = AppArguments.UseLibHb ? AppArguments.UseLibHb : userSettingService.GetUserSetting<bool>(UserSettingConstants.UseLibHb);
             var useProcessIsolation =
                 userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
             var port = userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);
@@ -70,7 +70,6 @@ namespace HandBrakeWPF.Services
                 catch (Exception exc)
                 {
                     // Try to recover from errors.
-                    userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, false);
                     throw new GeneralApplicationException(
                         "Unable to initialise LibHB or Background worker service",
                         "Falling back to using HandBrakeCLI.exe. Setting has been reset",

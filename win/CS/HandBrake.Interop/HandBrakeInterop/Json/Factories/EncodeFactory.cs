@@ -170,24 +170,29 @@ namespace HandBrake.Interop.Json.Factories
 
             foreach (SourceSubtitle item in job.Subtitles.SourceSubtitles)
             {
-                SubtitleList track = new SubtitleList
-                    {
-                        Burn = item.BurnedIn, 
-                        Default = item.Default, 
-                        Force = item.Forced, 
-                        ID = item.TrackNumber, 
-                        Track = item.TrackNumber
-                    };
-
-                subtitle.SubtitleList.Add(track);
+                // Handle Foreign Audio Search
+                if (item.TrackNumber == 0)
+                {
+                    subtitle.Search.Enable = true;
+                    subtitle.Search.Burn = item.BurnedIn;
+                    subtitle.Search.Default = item.Default;
+                    subtitle.Search.Forced = item.Forced;
+                }
+                else
+                {
+                    SubtitleList track = new SubtitleList { Burn = item.BurnedIn, Default = item.Default, Force = item.Forced, ID = item.TrackNumber, Track = item.TrackNumber };
+                    subtitle.SubtitleList.Add(track);
+                }
             }
 
             foreach (SrtSubtitle item in job.Subtitles.SrtSubtitles)
             {
                 SubtitleList track = new SubtitleList
                     {
+                        Track = -1, // Indicates SRT
                         Default = item.Default, 
                         Offset = item.Offset, 
+                        Burn = item.BurnedIn,
                         SRT =
                             new SRT
                                 {
@@ -223,6 +228,8 @@ namespace HandBrake.Interop.Json.Factories
                 video.Codec = videoEncoder.Id;
             }
 
+            video.TwoPass = job.EncodingProfile.TwoPass;
+            video.Turbo = job.EncodingProfile.TurboFirstPass;
             video.Level = job.EncodingProfile.VideoLevel;
             video.Options = job.EncodingProfile.VideoOptions;
             video.Preset = job.EncodingProfile.VideoPreset;

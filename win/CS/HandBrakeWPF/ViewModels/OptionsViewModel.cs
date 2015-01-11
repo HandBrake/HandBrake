@@ -1567,7 +1567,7 @@ namespace HandBrakeWPF.ViewModels
             int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
             this.ServerPort = port;
             this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
-            this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
+            this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseLibHb);
         }
 
         /// <summary>
@@ -1630,7 +1630,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
             userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
             userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString(CultureInfo.InvariantCulture));
-            userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, this.EnableLibHb);
+            userSettingService.SetUserSetting(UserSettingConstants.UseLibHb, this.EnableLibHb);
         }
 
         /// <summary>

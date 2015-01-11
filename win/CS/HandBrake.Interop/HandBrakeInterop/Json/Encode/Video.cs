@@ -9,6 +9,8 @@
 
 namespace HandBrake.Interop.Json.Encode
 {
+    using System;
+
     /// <summary>
     /// The video.
     /// </summary>
@@ -30,9 +32,9 @@ namespace HandBrake.Interop.Json.Encode
         public int Bitrate { get; set; }
 
         /// <summary>
-        /// Gets or sets the number of passes
+        /// Gets or sets a value indicating whether two pass.
         /// </summary>
-        public int pass { get; set; }
+        public bool TwoPass { get; set; }
 
         /// <summary>
         /// Gets or sets Turbo First Pass. For x264/5
