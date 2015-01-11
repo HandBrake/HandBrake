@@ -183,6 +183,8 @@ namespace HandBrake.ApplicationServices.Utilities
             profile.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
             profile.VideoEncodeRateType = work.VideoEncodeRateType;
             profile.VideoEncoder = Converters.GetVideoEncoder(work.VideoEncoder);
+            profile.TwoPass = work.TwoPass;
+            profile.TurboFirstPass = work.TurboFirstPass;
 
             if (work.VideoEncoder == VideoEncoder.X264)
             {
