@@ -136,7 +136,7 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
              */
             y_out[left + xx] =
                 ( (uint16_t)y_out[left + xx] * ( 255 - alpha ) +
-                     (uint16_t)y_in[xx] * alpha ) >> 8;
+                     (uint16_t)y_in[xx] * alpha ) / 255;
         }
     }
 
@@ -164,12 +164,12 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
             // Blend averge U and alpha
             u_out[(left >> wshift) + xx] =
                 ( (uint16_t)u_out[(left >> wshift) + xx] * ( 255 - alpha ) +
-                  (uint16_t)u_in[xx] * alpha ) >> 8;
+                  (uint16_t)u_in[xx] * alpha ) / 255;
 
             // Blend V and alpha
             v_out[(left >> wshift) + xx] =
                 ( (uint16_t)v_out[(left >> wshift) + xx] * ( 255 - alpha ) +
-                  (uint16_t)v_in[xx] * alpha ) >> 8;
+                  (uint16_t)v_in[xx] * alpha ) / 255;
         }
     }
 }
