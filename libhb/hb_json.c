@@ -1005,7 +1005,7 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
                 return NULL;
             }
             // Embedded subtitle track
-            if (track >= 0)
+            if (track >= 0 && srtfile == NULL)
             {
                 hb_subtitle_t *subtitle;
                 subtitle = hb_list_item(job->title->list_subtitle, track);
