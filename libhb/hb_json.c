@@ -479,7 +479,7 @@ char* hb_job_to_json( const hb_job_t * job )
     else
     {
         json_object_set_new(video_dict, "Bitrate", json_integer(job->vbitrate));
-        json_object_set_new(video_dict, "Pass", json_integer(job->pass));
+        json_object_set_new(video_dict, "TwoPass", json_boolean(job->pass));
         json_object_set_new(video_dict, "Turbo",
                             json_boolean(job->fastfirstpass));
     }
@@ -715,8 +715,8 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level,
-    //        Options, Pass, Turbo, ColorMatrixCode}
-    "s:{s:i, s?f, s?i, s?s, s?s, s?s, s?s, s?s, s?i, s?b, s?i},"
+    //        Options, TwoPass, Turbo, ColorMatrixCode}
+    "s:{s:i, s?f, s?i, s?s, s?s, s?s, s?s, s?s, s?b, s?b, s?i},"
     // Audio {CopyMask, FallbackEncoder}
     "s?{s?i, s?i},"
     // Subtitle {Search {Enable, Forced, Default, Burn}}
@@ -758,7 +758,7 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
             "Profile",              unpack_s(&video_profile),
             "Level",                unpack_s(&video_level),
             "Options",              unpack_s(&video_options),
-            "Pass",                 unpack_i(&job->pass),
+            "TwoPass",              unpack_b(&job->pass),
             "Turbo",                unpack_b(&job->fastfirstpass),
             "ColorMatrixCode",      unpack_i(&job->color_matrix_code),
         "Audio",
@@ -842,11 +842,6 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
         hb_metadata_set_long_description(job->metadata, meta_long_desc);
     }
 
-    if (job->indepth_scan == 1)
-    {
-        job->pass = -1;
-        hb_job_set_encoder_options(job, NULL);
-    }
     // process chapter list
     json_t * chapter_list = NULL;
     result = json_unpack_ex(dict, &error, 0,
@@ -1092,7 +1087,27 @@ int hb_add_json( hb_handle_t * h, const char * json_job )
     if (job == NULL)
         return -1;
 
-    hb_add(h, job);
+    if (job->indepth_scan)
+    {
+        hb_deep_log(2, "Adding subtitle scan pass");
+        int pass = job->pass;
+        job->pass = -1;
+        hb_add(h, job);
+        job->pass = pass;
+        job->indepth_scan = 0;
+    }
+    if (job->pass)
+    {
+        hb_deep_log(2, "Adding two-pass encode");
+        job->pass = 1;
+        hb_add(h, job);
+        job->pass = 2;
+        hb_add(h, job);
+    }
+    else
+    {
+        hb_add(h, job);
+    }
     hb_job_close(&job);
 
     return 0;
