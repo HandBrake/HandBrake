@@ -29,14 +29,16 @@
 
     /// Text storage for the debug output.
     NSTextStorage *outputTextStorage;
-
-    /// Path to log text file.
-    NSString *outputLogFile;
-    BOOL encodeLogOn;
 }
+
+/// Path to log text file.
+@property (nonatomic, copy) NSString *outputLogFile;
 
 /// Path to individual log text file.
 @property (nonatomic, copy) NSString *outputLogFileForEncode;
+
+/// Whether we are writing an addition log file for the current encode or not.
+@property (nonatomic) BOOL encodeLogOn;
 
 @end
 
@@ -73,28 +75,27 @@
          * default with the users text editor instead of the .log default Console.app, should
          * create less confusion for less experienced users when we ask them to paste the log for support
          */
-        outputLogFile = [[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"HandBrake-activitylog.txt"] retain];
+        _outputLogFile = [[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"HandBrake-activitylog.txt"] retain];
 
         /* We check for an existing output log file here */
-        if( [fileManager fileExistsAtPath:outputLogFile] == 0 )
+        if ([fileManager fileExistsAtPath:_outputLogFile] == NO)
         {
             /* if not, then we create a new blank one */
-            [fileManager createFileAtPath:outputLogFile contents:nil attributes:nil];
+            [fileManager createFileAtPath:_outputLogFile contents:nil attributes:nil];
         }
         /* We overwrite the existing output log with the date for starters the output log to start fresh with the new session */
         /* Use the current date and time for the new output log header */
-        NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session (Cleared): %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
-        [startOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+        NSString *startOutputLogString = [self logHeaderForReason:@"Session (Cleared)"];
+        [startOutputLogString writeToFile:_outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 
         [[HBOutputRedirect stderrRedirect] addListener:self];
         [[HBOutputRedirect stdoutRedirect] addListener:self];
 
-        [self setWindowFrameAutosaveName:@"OutputPanelFrame"];
         [[textView layoutManager] replaceTextStorage:outputTextStorage];
         [[textView enclosingScrollView] setLineScroll:10];
         [[textView enclosingScrollView] setPageScroll:20];
         
-        encodeLogOn = NO;
+        _encodeLogOn = NO;
     }
     return self;
 }
@@ -128,9 +129,25 @@
     }
 }
 
+- (NSString *)logHeaderForReason:(NSString *)reason
+{
+    return [NSString stringWithFormat:@"HandBrake Activity Log for %@: %@\n%@",
+            reason,
+            [[NSDate date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil],
+            [self handBrakeVersion]];
+}
+
+- (NSString *)handBrakeVersion
+{
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    return [NSString stringWithFormat:@"Handbrake Version: %@ (%@)",
+            infoDictionary[@"CFBundleShortVersionString"],
+            infoDictionary[@"CFBundleVersion"]];
+}
+
 - (void)startEncodeLog:(NSURL *)logURL
 {
-    encodeLogOn = YES;
+    self.encodeLogOn = YES;
     NSString *outputFileForEncode = logURL.path ;
     /* Since the destination path matches the extension of the output file, replace the
      * output movie extension and replace it with ".txt"
@@ -167,20 +184,18 @@
     [fileManager createFileAtPath:self.outputLogFileForEncode contents:nil attributes:nil];
     
     /* Similar to the regular activity log, we print a header containing the date and time of the encode as well as what directory it was encoded to */
-    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
-    NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for %@: %@\n%@",outputFileForEncode, [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil],versionStringFull];
+    NSString *startOutputLogString = [self logHeaderForReason:outputFileForEncode];
     [startOutputLogString writeToFile:self.outputLogFileForEncode atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-
-
 }
 
 - (void) endEncodeLog
 {
-    encodeLogOn = NO;
+    self.encodeLogOn = NO;
 }
 
 /**
- * Displays text received from HBOutputRedirect in the text view.
+ * Displays text received from HBOutputRedirect in the text view
+ * and write it to the log files.
  */
 - (void)stderrRedirect:(NSString *)text
 {
@@ -191,42 +206,21 @@
     [attributedString release];
     
 	/* remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit */
-    if ([outputTextStorage length] > TextStorageUpperSizeLimit)
+    if (outputTextStorage.length > TextStorageUpperSizeLimit)
 		[outputTextStorage deleteCharactersInRange:NSMakeRange(0, [outputTextStorage length] - TextStorageLowerSizeLimit)];
-    
+
     [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
-    
-    /* We use a c function to write to the log file without reading it into memory 
-        * as it should be faster and easier on memory than using cocoa's writeToFile
-        * thanks ritsuka !!*/
-    FILE *f = fopen([outputLogFile UTF8String], "a");
-    fprintf(f, "%s", [text UTF8String]);
+
+    FILE *f = fopen(_outputLogFile.fileSystemRepresentation, "a");
+    fprintf(f, "%s", text.UTF8String);
     fclose(f);
-    
-    if (encodeLogOn == YES && self.outputLogFileForEncode != nil)
+
+    if (_encodeLogOn == YES && _outputLogFileForEncode != nil)
     {
-    FILE *e = fopen([self.outputLogFileForEncode UTF8String], "a");
-    fprintf(e, "%s", [text UTF8String]);
-    fclose(e);
+        FILE *e = fopen(_outputLogFileForEncode.fileSystemRepresentation, "a");
+        fprintf(e, "%s", text.UTF8String);
+        fclose(e);
     }
-    /* Below uses Objective-C to write to the file, though it is slow and uses
-        * more memory than the c function above. For now, leaving this in here
-        * just in case and commented out.
-    */
-    /* Put the new incoming string from libhb into an nsstring for appending to our log file */
-    //NSString *newOutputString = [[NSString alloc] initWithString:text];
-    /*get the current log file and put it into an NSString */
-    /* HACK ALERT: must be a way to do it without reading the whole log into memory 
-        Performance note: could batch write to the log, but want to get each line as it comes out of
-        libhb in case of a crash or freeze so we see exactly what the last thing was before crash*/
-    //NSString *currentOutputLogString = [[NSString alloc]initWithContentsOfFile:outputLogFile encoding:NSUTF8StringEncoding error:NULL];
-    
-    /* Append the new libhb output string to the existing log file string */
-    //currentOutputLogString = [currentOutputLogString stringByAppendingString:newOutputString];
-    /* Save the new modified log file string back to disk */
-    //[currentOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-    /* Release the new libhb output string */
-    //[newOutputString release];
 }
 - (void)stdoutRedirect:(NSString *)text { [self stderrRedirect:text]; }
 
@@ -237,11 +231,9 @@
 {
 	[outputTextStorage deleteCharactersInRange:NSMakeRange(0, [outputTextStorage length])];
     /* We want to rewrite the app version info to the top of the activity window so it is always present */
-    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
     time_t _now = time( NULL );
     struct tm * now  = localtime( &_now );
-    fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, [versionStringFull UTF8String]);
-
+    fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, [[self handBrakeVersion] UTF8String]);
 }
 
 /**
@@ -261,7 +253,7 @@
 - (IBAction)openActivityLogFile:(id)sender
 {
     /* Opens the activity window log file in the users default text editor */
-    NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", outputLogFile, @"\")"]];
+    NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", _outputLogFile, @"\")"]];
     [myScript executeAndReturnError: nil];
     [myScript release];
 }
@@ -289,14 +281,13 @@
 - (IBAction)clearActivityLogFile:(id)sender
 {
     /* We overwrite the existing output log with the new date and time header */
-        /* Use the current date and time for the new output log header */
-        NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session Starting: %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
-        [startOutputLogString writeToFile:outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
-        
-        /* We want to rewrite the app version info to the top of the activity window so it is always present */
-        NSString *versionStringFull = [[NSString stringWithFormat: @"macgui: Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
-        [versionStringFull writeToFile:outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
-        
+    /* Use the current date and time for the new output log header */
+    NSString *startOutputLogString = [self logHeaderForReason:@"Session Starting"];
+    [startOutputLogString writeToFile:_outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
+
+    /* We want to rewrite the app version info to the top of the activity window so it is always present */
+    NSString *versionStringFull = [self handBrakeVersion];
+    [versionStringFull writeToFile:_outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification
