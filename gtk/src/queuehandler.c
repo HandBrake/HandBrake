@@ -780,6 +780,9 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
     gint count, ii;
     gint title_id, titleindex;
     const hb_title_t *title;
+    GtkWindow *hb_window;
+
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
 
     title_id = ghb_settings_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -800,7 +803,8 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                         "Another queued job has specified the same destination.\n"
                         "Do you want to overwrite?"),
                         dest);
-            if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Overwrite")))
+            if (!ghb_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
+                                    message, _("Cancel"), _("Overwrite")))
             {
                 g_free(message);
                 return FALSE;
@@ -816,7 +820,8 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                     _("Destination: %s\n\n"
                     "This is not a valid directory."),
                     destdir);
-        ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+        ghb_message_dialog(hb_window, GTK_MESSAGE_ERROR,
+                           message, _("Cancel"), NULL);
         g_free(message);
         g_free(destdir);
         return FALSE;
@@ -829,7 +834,8 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                     _("Destination: %s\n\n"
                     "Can not read or write the directory."),
                     destdir);
-        ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+        ghb_message_dialog(hb_window, GTK_MESSAGE_ERROR,
+                           message, _("Cancel"), NULL);
         g_free(message);
         g_free(destdir);
         return FALSE;
@@ -859,7 +865,8 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                                 _("Destination filesystem is almost full: %uM free\n\n"
                                 "Encode may be incomplete if you proceed.\n"),
                                 (guint)(size / (1024L*1024L)));
-                    if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Proceed")))
+                    if (!ghb_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
+                                            message, _("Cancel"), _("Proceed")))
                     {
                         g_free(message);
                         g_free(destdir);
@@ -881,7 +888,8 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
                     "File already exists.\n"
                     "Do you want to overwrite?"),
                     dest);
-        if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("Cancel"), _("Overwrite")))
+        if (!ghb_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
+                                message, _("Cancel"), _("Overwrite")))
         {
             g_free(message);
             return FALSE;
@@ -890,22 +898,22 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
         g_unlink(dest);
     }
     // Validate audio settings
-    if (!ghb_validate_audio(settings))
+    if (!ghb_validate_audio(settings, hb_window))
     {
         return FALSE;
     }
     // Validate audio settings
-    if (!ghb_validate_subtitles(settings))
+    if (!ghb_validate_subtitles(settings, hb_window))
     {
         return FALSE;
     }
     // Validate video settings
-    if (!ghb_validate_video(settings))
+    if (!ghb_validate_video(settings, hb_window))
     {
         return FALSE;
     }
     // Validate filter settings
-    if (!ghb_validate_filters(settings))
+    if (!ghb_validate_filters(settings, hb_window))
     {
         return FALSE;
     }
@@ -1968,10 +1976,13 @@ find_pid:
 
     if (unfinished)
     {
+        GtkWindow *hb_window;
+        hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
         message = g_strdup_printf(
                     _("You have %d unfinished job(s) in a saved queue.\n\n"
                     "Would you like to reload them?"), unfinished);
-        if (ghb_message_dialog(GTK_MESSAGE_QUESTION, message, _("No"), _("Yes")))
+        if (ghb_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
+                               message, _("No"), _("Yes")))
         {
             GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
             gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);

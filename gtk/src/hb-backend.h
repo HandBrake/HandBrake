@@ -144,10 +144,10 @@ gint ghb_subtitle_track_source(GValue *settings, gint track);
 const gchar* ghb_subtitle_track_lang(GValue *settings, gint track);
 
 gboolean ghb_validate_vquality(GValue *settings);
-gboolean ghb_validate_audio(GValue *settings);
-gboolean ghb_validate_subtitles(GValue *settings);
-gboolean ghb_validate_video(GValue *settings);
-gboolean ghb_validate_filters(GValue *settings);
+gboolean ghb_validate_audio(GValue *settings, GtkWindow *parent);
+gboolean ghb_validate_subtitles(GValue *settings, GtkWindow *parent);
+gboolean ghb_validate_video(GValue *settings, GtkWindow *parent);
+gboolean ghb_validate_filters(GValue *settings, GtkWindow *parent);
 gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GValue *gval);

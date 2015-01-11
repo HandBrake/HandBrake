@@ -52,10 +52,11 @@ void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_udev_init(void);
 gboolean ghb_message_dialog(
-    GtkMessageType type, const gchar *message,
+    GtkWindow *parent, GtkMessageType type, const gchar *message,
     const gchar *no, const gchar *yes);
 void ghb_error_dialog(
-    GtkMessageType type, const gchar *message, const gchar *cancel);
+    GtkWindow *parent, GtkMessageType type,
+    const gchar *message, const gchar *cancel);
 void ghb_init_dep_map(void);
 void ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg);
 gboolean ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg);

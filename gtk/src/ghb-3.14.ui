@@ -338,6 +338,7 @@ conjunction with the "Forced" option.</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAboutDialog" id="hb_about">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">About HandBrake</property>
@@ -6504,6 +6505,7 @@ Resets all queue jobs to pending and ready to run again.</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="titla_add_multiple_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -6701,6 +6703,7 @@ Resets all queue jobs to pending and ready to run again.</property>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="prefs_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Preferences</property>
@@ -7429,6 +7432,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
     </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_new_folder_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
@@ -7591,6 +7595,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
     </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_save_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
@@ -8390,6 +8395,7 @@ Setting this to 0 means there is no maximum height.</property>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="subtitle_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
@@ -8780,6 +8786,7 @@ in your output.</property>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="audio_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
@@ -9307,6 +9314,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
     </action-widgets>
   </object>
   <object class="GtkDialog" id="update_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>

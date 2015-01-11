@@ -3163,12 +3163,15 @@ settings_save(signal_user_data_t *ud, const GValue *path)
     {
         if (ghb_presets_get_folder(presetsPlist, indices, len))
         {
+            GtkWindow *hb_window;
             gchar *message;
+            hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
             message = g_strdup_printf(
                       _("%s: Folder already exists.\n"
                         "You can not replace it with a preset."),
                         name);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+            ghb_message_dialog(hb_window, GTK_MESSAGE_ERROR,
+                               message, _("Cancel"), NULL);
             g_free(message);
             return;
         }
@@ -3253,12 +3256,15 @@ folder_save(signal_user_data_t *ud, const GValue *path)
     {
         if (!ghb_presets_get_folder(presetsPlist, indices, len))
         {
+            GtkWindow *hb_window;
             gchar *message;
+            hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
             message = g_strdup_printf(
                       _("%s: Preset already exists.\n"
                         "You can not replace it with a folder."),
                         name);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+            ghb_message_dialog(hb_window, GTK_MESSAGE_ERROR,
+                               message, _("Cancel"), NULL);
             g_free(message);
             g_free(indices);
             return;

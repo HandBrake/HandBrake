@@ -1551,11 +1551,13 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
     GtkEntry *entry;
     gchar *destname;
     gchar *basename;
+    GtkWindow *hb_window;
 
     g_debug("destination_browse_clicked_cb ()");
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     destname = ghb_settings_get_string(ud->settings, "destination");
-    dialog = gtk_file_chooser_dialog_new ("Choose Destination",
-                      NULL,
+    dialog = gtk_file_chooser_dialog_new("Choose Destination",
+                      hb_window,
                       GTK_FILE_CHOOSER_ACTION_SAVE,
                       GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                       GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
@@ -2531,6 +2533,7 @@ ghb_countdown_dialog(
     signal_user_data_t *ud,
     gint timeout)
 {
+    GtkWindow *hb_window;
     GtkWidget *dialog;
     GtkResponseType response;
     guint timeout_id;
@@ -2542,7 +2545,8 @@ ghb_countdown_dialog(
     cd.ud = ud;
 
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
                             type, GTK_BUTTONS_NONE,
                             _("%s\n\n%s in %d seconds ..."),
                             message, action, timeout);
@@ -2567,13 +2571,13 @@ ghb_countdown_dialog(
 }
 
 gboolean
-ghb_message_dialog(GtkMessageType type, const gchar *message, const gchar *no, const gchar *yes)
+ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, const gchar *no, const gchar *yes)
 {
     GtkWidget *dialog;
     GtkResponseType response;
 
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
                             type, GTK_BUTTONS_NONE,
                             "%s", message);
     gtk_dialog_add_buttons( GTK_DIALOG(dialog),
@@ -2589,12 +2593,12 @@ ghb_message_dialog(GtkMessageType type, const gchar *message, const gchar *no, c
 }
 
 void
-ghb_error_dialog(GtkMessageType type, const gchar *message, const gchar *cancel)
+ghb_error_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, const gchar *cancel)
 {
     GtkWidget *dialog;
 
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
                             type, GTK_BUTTONS_NONE,
                             "%s", message);
     gtk_dialog_add_buttons( GTK_DIALOG(dialog),
@@ -2606,12 +2610,14 @@ ghb_error_dialog(GtkMessageType type, const gchar *message, const gchar *cancel)
 void
 ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
 {
+    GtkWindow *hb_window;
     GtkWidget *dialog;
     GtkResponseType response;
 
     if (extra_msg == NULL) extra_msg = "";
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
                 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
                 _("%sYour movie will be lost if you don't continue encoding."),
                 extra_msg);
@@ -2646,12 +2652,14 @@ ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
 gboolean
 ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
 {
+    GtkWindow *hb_window;
     GtkWidget *dialog;
     GtkResponseType response;
 
     if (extra_msg == NULL) extra_msg = "";
     // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
                 GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
                 _("%sYour movie will be lost if you don't continue encoding."),
                 extra_msg);
@@ -4874,11 +4882,13 @@ tweak_setting_cb(
                 ghb_settings_set_string(ud->settings, tweak_name, tweak);
             else
             {
+                GtkWindow *hb_window;
                 gchar *message;
+                hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
                 message = g_strdup_printf(
                             _("Invalid Settings:\n%s"),
                             tweak);
-                ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+                ghb_message_dialog(hb_window, GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
                 g_free(message);
             }
         }

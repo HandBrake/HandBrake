@@ -3869,7 +3869,7 @@ ghb_validate_filter_string(const gchar *str, gint max_fields)
 }
 
 gboolean
-ghb_validate_filters(GValue *settings)
+ghb_validate_filters(GValue *settings, GtkWindow *parent)
 {
     gchar *str;
     gint index;
@@ -3886,7 +3886,8 @@ ghb_validate_filters(GValue *settings)
             message = g_strdup_printf(
                         _("Invalid Deinterlace Settings:\n\n%s\n"),
                         str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
+                               message, _("Cancel"), NULL);
             g_free(message);
             g_free(str);
             return FALSE;
@@ -3903,7 +3904,8 @@ ghb_validate_filters(GValue *settings)
             message = g_strdup_printf(
                         _("Invalid Detelecine Settings:\n\n%s\n"),
                         str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
+                               message, _("Cancel"), NULL);
             g_free(message);
             g_free(str);
             return FALSE;
@@ -3920,7 +3922,8 @@ ghb_validate_filters(GValue *settings)
             message = g_strdup_printf(
                         _("Invalid Decomb Settings:\n\n%s\n"),
                         str);
-            ghb_message_dialog(GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
+            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
+                               message, _("Cancel"), NULL);
             g_free(message);
             g_free(str);
             return FALSE;
@@ -3933,7 +3936,7 @@ ghb_validate_filters(GValue *settings)
 }
 
 gboolean
-ghb_validate_video(GValue *settings)
+ghb_validate_video(GValue *settings, GtkWindow *parent)
 {
     gint vcodec;
     gchar *message;
@@ -3951,7 +3954,8 @@ ghb_validate_video(GValue *settings)
                     _("Theora is not supported in the MP4 container.\n\n"
                     "You should choose a different video codec or container.\n"
                     "If you continue, FFMPEG will be chosen for you."));
-        if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
+        if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+                                message, _("Cancel"), _("Continue")))
         {
             g_free(message);
             return FALSE;
@@ -3965,7 +3969,7 @@ ghb_validate_video(GValue *settings)
 }
 
 gboolean
-ghb_validate_subtitles(GValue *settings)
+ghb_validate_subtitles(GValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
@@ -3999,7 +4003,8 @@ ghb_validate_subtitles(GValue *settings)
             _("Only one subtitle may be burned into the video.\n\n"
                 "You should change your subtitle selections.\n"
                 "If you continue, some subtitles will be lost."));
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+                                    message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4022,7 +4027,7 @@ ghb_validate_subtitles(GValue *settings)
                 _("Srt file does not exist or not a regular file.\n\n"
                     "You should choose a valid file.\n"
                     "If you continue, this subtitle will be ignored."));
-                if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message,
+                if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING, message,
                     _("Cancel"), _("Continue")))
                 {
                     g_free(message);
@@ -4037,7 +4042,7 @@ ghb_validate_subtitles(GValue *settings)
 }
 
 gboolean
-ghb_validate_audio(GValue *settings)
+ghb_validate_audio(GValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
@@ -4086,7 +4091,8 @@ ghb_validate_audio(GValue *settings)
                         _("The source does not support Pass-Thru.\n\n"
                         "You should choose a different audio codec.\n"
                         "If you continue, one will be chosen for you."));
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+                                    message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4126,7 +4132,8 @@ ghb_validate_audio(GValue *settings)
                         _("%s is not supported in the %s container.\n\n"
                         "You should choose a different audio codec.\n"
                         "If you continue, one will be chosen for you."), a_unsup, mux_s);
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+                                    message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
@@ -4150,7 +4157,8 @@ ghb_validate_audio(GValue *settings)
                         _("The source audio does not support %s mixdown.\n\n"
                         "You should choose a different mixdown.\n"
                         "If you continue, one will be chosen for you."), mix_unsup);
-            if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, _("Cancel"), _("Continue")))
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+                                    message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
                 return FALSE;
