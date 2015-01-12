@@ -1131,7 +1131,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 else
                 {
-                    this.H264Profile = x264Profile.None;
+                    this.H264Profile = x264Profile.Auto;
                     this.H264Level = "Auto";
                 }
 
@@ -1261,7 +1261,7 @@ namespace HandBrakeWPF.ViewModels
             this.canClear = false;
             this.X264PresetValue = 5;
             this.X264Tune = x264Tune.None;
-            this.H264Profile = x264Profile.None;
+            this.H264Profile = x264Profile.Auto;
             this.FastDecode = false;
             this.H264Level = "Auto";
             this.ExtraArguments = string.Empty;

@@ -37,7 +37,7 @@ namespace HandBrake.Interop.Json.Encode
         public bool TwoPass { get; set; }
 
         /// <summary>
-        /// Gets or sets Turbo First Pass. For x264/5
+        /// Gets or sets a value indicating whether Turbo First Pass. For x264/5
         /// </summary>
         public bool Turbo { get; set; }
 

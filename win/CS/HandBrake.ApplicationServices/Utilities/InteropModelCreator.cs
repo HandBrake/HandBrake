@@ -19,9 +19,11 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
+    using HandBrake.Interop.Model.Encoding.x265;
 
     /// <summary>
     /// A Utility Class to Convert a 
+    /// TODO remove this class and replace a new factory to convert the EncodeTask object. This will remove a layer of abstraction.
     /// </summary>
     public class InteropModelCreator
     {
@@ -200,17 +202,27 @@ namespace HandBrake.ApplicationServices.Utilities
                 {
                     profile.VideoTunes.Add("fastdecode");
                 }
+
+                profile.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty); // TODO change these away from strings.
+                profile.VideoLevel = work.H264Level;
             }
             else if (work.VideoEncoder == VideoEncoder.X265)
             {
+                
                 profile.VideoPreset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
-                profile.VideoProfile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
+
+                if (work.H265Profile != x265Profile.None)
+                {
+                    profile.VideoProfile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
+                }
+
                 profile.VideoTunes = new List<string>();
+                if (work.X265Tune != x265Tune.None)
+                {
+                    profile.VideoTunes.Add(work.X265Tune.ToString().ToLower().Replace(" ", string.Empty));
+                }
             }
-
-            profile.VideoLevel = work.H264Level;
-            profile.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty); // TODO change these away from strings.
-
+            
             // Chapter Markers
             profile.IncludeChapterMarkers = work.IncludeChapterMarkers;
             job.CustomChapterNames = work.ChapterNames.Select(item => item.ChapterName).ToList();

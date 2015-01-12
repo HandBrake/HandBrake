@@ -20,9 +20,16 @@ namespace HandBrake.Interop.Model.Encoding.x265
         None = 0,
 
         [Display(Name = "PSNR")]
-        Psnr,
+        psnr,
 
         [Display(Name = "SSIM")]
-        Ssim,
+        ssim,
+
+        [Display(Name = "Zero Latency")]
+        zerolatency,
+
+        [Display(Name = "Fast Decode")]
+        fastdecode,
+
     }
 }

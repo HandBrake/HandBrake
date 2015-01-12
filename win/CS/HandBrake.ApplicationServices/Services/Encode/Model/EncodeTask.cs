@@ -54,7 +54,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
             this.AllowedPassthruOptions = new AllowedPassthru();
             this.X264Preset = x264Preset.Medium;
             this.QsvPreset = QsvPreset.Quality;
-            this.H264Profile = x264Profile.None;
+            this.H264Profile = x264Profile.Auto;
             this.X264Tune = x264Tune.None;
             this.Modulus = 16;
 

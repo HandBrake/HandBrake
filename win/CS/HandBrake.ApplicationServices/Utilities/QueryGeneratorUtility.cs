@@ -1030,7 +1030,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     {
                         query += string.Format(" --encoder-level=\"{0}\" ", task.H264Level);
                     }
-                    if (task.H264Profile != x264Profile.None)
+                    if (task.H264Profile != x264Profile.Auto)
                     {
                         query += string.Format(
                             " --encoder-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));

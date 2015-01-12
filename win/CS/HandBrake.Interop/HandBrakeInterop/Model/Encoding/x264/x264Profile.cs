@@ -17,7 +17,7 @@ namespace HandBrake.Interop.Model.Encoding.x264
     public enum x264Profile
     {
         [Display(Name = "Auto")]
-        None = 0,
+        Auto = 0,
 
         [Display(Name = "Baseline")]
         Baseline,
