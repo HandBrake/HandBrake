@@ -242,46 +242,8 @@ typedef enum EncodeState : NSUInteger {
     self.core = [[[HBCore alloc] initWithLoggingLevel:loggingLevel] autorelease];
     self.core.name = @"PreviewCore";
 
-    /*
-     * If scanning we need to do some extra setup of the job.
-     */
-    if (job->indepth_scan == 1)
-    {
-        char *encoder_preset_tmp  = job->encoder_preset  != NULL ? strdup(job->encoder_preset)  : NULL;
-        char *encoder_tune_tmp    = job->encoder_tune    != NULL ? strdup(job->encoder_tune)    : NULL;
-        char *encoder_options_tmp = job->encoder_options != NULL ? strdup(job->encoder_options) : NULL;
-        char *encoder_profile_tmp = job->encoder_profile != NULL ? strdup(job->encoder_profile) : NULL;
-        char *encoder_level_tmp   = job->encoder_level   != NULL ? strdup(job->encoder_level)   : NULL;
-        /*
-         * When subtitle scan is enabled do a fast pre-scan job
-         * which will determine which subtitles to enable, if any.
-         */
-        hb_job_set_encoder_preset (job, NULL);
-        hb_job_set_encoder_tune   (job, NULL);
-        hb_job_set_encoder_options(job, NULL);
-        hb_job_set_encoder_profile(job, NULL);
-        hb_job_set_encoder_level  (job, NULL);
-        job->pass = -1;
-        hb_add(self.core.hb_handle, job);
-        /*
-         * reset the advanced settings
-         */
-        hb_job_set_encoder_preset (job, encoder_preset_tmp);
-        hb_job_set_encoder_tune   (job, encoder_tune_tmp);
-        hb_job_set_encoder_options(job, encoder_options_tmp);
-        hb_job_set_encoder_profile(job, encoder_profile_tmp);
-        hb_job_set_encoder_level  (job, encoder_level_tmp);
-        free(encoder_preset_tmp);
-        free(encoder_tune_tmp);
-        free(encoder_options_tmp);
-        free(encoder_profile_tmp);
-        free(encoder_level_tmp);
-    }
 
     /* Go ahead and perform the actual encoding preview scan */
-    job->indepth_scan = 0;
-    job->pass = 0;
-
     hb_add(self.core.hb_handle, job);
 
     /* we need to clean up the various lists after the job(s) have been set  */

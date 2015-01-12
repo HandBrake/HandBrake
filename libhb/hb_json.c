@@ -479,7 +479,7 @@ char* hb_job_to_json( const hb_job_t * job )
     else
     {
         json_object_set_new(video_dict, "Bitrate", json_integer(job->vbitrate));
-        json_object_set_new(video_dict, "TwoPass", json_boolean(job->pass));
+        json_object_set_new(video_dict, "TwoPass", json_boolean(job->twopass));
         json_object_set_new(video_dict, "Turbo",
                             json_boolean(job->fastfirstpass));
     }
@@ -705,6 +705,7 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
 
     result = json_unpack_ex(dict, &error, 0,
     "{"
+    // SequenceID
     "s:i,"
     // Destination {File, Mux, ChapterMarkers, Mp4Options {
     //                          Mp4Optimize, IpodAtom}
@@ -758,7 +759,7 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
             "Profile",              unpack_s(&video_profile),
             "Level",                unpack_s(&video_level),
             "Options",              unpack_s(&video_options),
-            "TwoPass",              unpack_b(&job->pass),
+            "TwoPass",              unpack_b(&job->twopass),
             "Turbo",                unpack_b(&job->fastfirstpass),
             "ColorMatrixCode",      unpack_i(&job->color_matrix_code),
         "Audio",
@@ -1087,27 +1088,7 @@ int hb_add_json( hb_handle_t * h, const char * json_job )
     if (job == NULL)
         return -1;
 
-    if (job->indepth_scan)
-    {
-        hb_deep_log(2, "Adding subtitle scan pass");
-        int pass = job->pass;
-        job->pass = -1;
-        hb_add(h, job);
-        job->pass = pass;
-        job->indepth_scan = 0;
-    }
-    if (job->pass)
-    {
-        hb_deep_log(2, "Adding two-pass encode");
-        job->pass = 1;
-        hb_add(h, job);
-        job->pass = 2;
-        hb_add(h, job);
-    }
-    else
-    {
-        hb_add(h, job);
-    }
+    hb_add(h, job);
     hb_job_close(&job);
 
     return 0;

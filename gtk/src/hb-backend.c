@@ -4178,7 +4178,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     hb_list_t  * list;
     const hb_title_t * title;
     hb_job_t   * job;
-    gint sub_id = 0;
     hb_filter_object_t * filter;
     gchar *filter_str;
     gchar *dest_str = NULL;
@@ -4705,72 +4704,11 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     }
     free(meta);
 
-    if (job->indepth_scan == 1)
-    {
-        // Subtitle scan. Look for subtitle matching audio language
-
-        /*
-         * When subtitle scan is enabled do a fast pre-scan job
-         * which will determine which subtitles to enable, if any.
-         */
-        job->pass = -1;
-        job->indepth_scan = 1;
-        hb_job_set_encoder_options(job, NULL);
-
-        /*
-         * Add the pre-scan job
-         */
-        job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-        hb_add( h, job );
-    }
-
-    if( ghb_settings_get_boolean(js, "VideoTwoPass") &&
-        !ghb_settings_get_boolean(js, "vquality_type_constant"))
-    {
-        /*
-         * If subtitle_scan is enabled then only turn it on
-         * for the second pass and then off again for the
-         * second.
-         */
-        job->pass = 1;
-        job->indepth_scan = 0;
-        ghb_set_video_encoder_opts(job, js);
-
-        /*
-         * If turbo options have been selected then set job->fastfirstpass
-         */
-        if(ghb_settings_get_boolean(js, "VideoTurboTwoPass") &&
-           (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265))
-        {
-            job->fastfirstpass = 1;
-        }
-        else
-        {
-            job->fastfirstpass = 0;
-        }
-
-        job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-        hb_add( h, job );
-
-        job->pass = 2;
-        /*
-         * On the second pass we turn off subtitle scan so that we
-         * can actually encode using any subtitles that were auto
-         * selected in the first pass (using the whacky select-subtitle
-         * attribute of the job).
-         */
-        job->indepth_scan = 0;
-        job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-        hb_add( h, job );
-    }
-    else
-    {
-        ghb_set_video_encoder_opts(job, js);
-        job->indepth_scan = 0;
-        job->pass = 0;
-        job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-        hb_add( h, job );
-    }
+    job->twopass = ghb_settings_get_boolean(js, "VideoTwoPass");
+    job->fastfirstpass = ghb_settings_get_boolean(js, "VideoTurboTwoPass");
+    job->sequence_id = unique_id;
+    ghb_set_video_encoder_opts(job, js);
+    hb_add(h, job);
 
     hb_job_close(&job);
 }

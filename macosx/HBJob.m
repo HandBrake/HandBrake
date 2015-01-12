@@ -233,6 +233,7 @@ NSString *keyContainerTag                      = @"keyContainerTag";
         job->ipod_atom = self.mp4iPodCompatible;
     }
 
+    job->twopass = self.video.twoPass;
     if (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265)
     {
         // set fastfirstpass if 2-pass and Turbo are enabled

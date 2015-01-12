@@ -1255,7 +1255,7 @@ hb_job_t * hb_current_job( hb_handle_t * h )
  * @param h Handle to hb_handle_t.
  * @param job Handle to hb_job_t.
  */
-void hb_add( hb_handle_t * h, hb_job_t * job )
+static void hb_add_internal( hb_handle_t * h, hb_job_t * job )
 {
     hb_job_t      * job_copy;
     hb_audio_t    * audio;
@@ -1345,6 +1345,40 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     hb_list_add( h->jobs, job_copy );
     h->job_count = hb_count(h);
     h->job_count_permanent++;
+}
+
+void hb_add( hb_handle_t * h, hb_job_t * job )
+{
+    int sub_id = 0;
+
+    if (job->vquality >= 0)
+    {
+        job->twopass = 0;
+    }
+    if (job->indepth_scan)
+    {
+        hb_deep_log(2, "Adding subtitle scan pass");
+        job->pass = -1;
+        job->sequence_id = (job->sequence_id & 0xFFFFFF) | (sub_id++ << 24);
+        hb_add_internal(h, job);
+        job->indepth_scan = 0;
+    }
+    if (job->twopass)
+    {
+        hb_deep_log(2, "Adding two-pass encode");
+        job->pass = 1;
+        job->sequence_id = (job->sequence_id & 0xFFFFFF) | (sub_id++ << 24);
+        hb_add_internal(h, job);
+        job->pass = 2;
+        job->sequence_id = (job->sequence_id & 0xFFFFFF) | (sub_id++ << 24);
+        hb_add_internal(h, job);
+    }
+    else
+    {
+        job->pass = 0;
+        job->sequence_id = (job->sequence_id & 0xFFFFFF) | (sub_id++ << 24);
+        hb_add_internal(h, job);
+    }
 }
 
 /**
@@ -1789,7 +1823,7 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
 
         // Set which job is being worked on
         if (h->current_job)
-            h->state.param.working.sequence_id = h->current_job->sequence_id;
+            h->state.param.working.sequence_id = h->current_job->sequence_id & 0xFFFFFF;
         else
             h->state.param.working.sequence_id = 0;
     }

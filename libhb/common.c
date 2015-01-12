@@ -3001,6 +3001,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
     job->vquality   = -1.0;
     job->vbitrate   = 1000;
+    job->twopass    = 0;
     job->pass       = 0;
     job->vrate      = title->vrate;
 

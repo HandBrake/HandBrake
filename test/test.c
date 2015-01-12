@@ -2810,74 +2810,11 @@ static int HandleEvents( hb_handle_t * h )
             /* OpenCL */
             job->use_opencl = use_opencl;
 
-            if( subtitle_scan )
-            {
-                /*
-                 * When subtitle scan is enabled do a fast pre-scan job
-                 * which will determine which subtitles to enable, if any.
-                 */
-                job->pass = -1;
-
-                hb_job_set_encoder_options(job, NULL);
-
-                job->indepth_scan = subtitle_scan;
-                fprintf( stderr, "Subtitle Scan Enabled - enabling "
-                         "subtitles if found for foreign language segments\n");
-
-                /*
-                 * Add the pre-scan job
-                 */
-                hb_add( h, job );
-            }
-
+            job->indepth_scan = subtitle_scan;
+            job->twopass = twoPass;
             hb_job_set_encoder_options(job, advanced_opts);
 
-            if( twoPass )
-            {
-                /*
-                 * If subtitle_scan is enabled then only turn it on
-                 * for the first pass and then off again for the
-                 * second.
-                 */
-                job->pass = 1;
-
-                job->indepth_scan = 0;
-
-                /* Turbo first pass */
-                if( turbo_opts_enabled )
-                {
-                    job->fastfirstpass = 1;
-                }
-                else
-                {
-                    job->fastfirstpass = 0;
-                }
-
-                hb_add( h, job );
-
-                job->pass = 2;
-                /*
-                 * On the second pass we turn off subtitle scan so that we
-                 * can actually encode using any subtitles that were auto
-                 * selected in the first pass (using the whacky select-subtitle
-                 * attribute of the job).
-                 */
-                job->indepth_scan = 0;
-
-                hb_add( h, job );
-            }
-            else
-            {
-                /*
-                 * Turn on subtitle scan if requested, note that this option
-                 * precludes encoding of any actual subtitles.
-                 */
-
-                job->indepth_scan = 0;
-                job->pass = 0;
-
-                hb_add( h, job );
-            }
+            hb_add( h, job );
             hb_job_close( &job );
             hb_start( h );
             break;

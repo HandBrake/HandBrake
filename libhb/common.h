@@ -494,7 +494,8 @@ struct hb_job_s
     int             vbitrate;
     hb_rational_t   vrate;
     int             cfr;
-    int             pass;
+    PRIVATE int     pass;
+    int             twopass;        // Enable 2-pass encode. Boolean
     int             fastfirstpass;
     char           *encoder_preset;
     char           *encoder_tune;
