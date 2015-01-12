@@ -121,39 +121,7 @@ void hb_opencl_library_close(hb_opencl_library_t **_opencl)
         {
             HB_OCL_DLCLOSE(opencl->library);
         }
-        opencl->library = NULL;
-
-#define HB_OCL_UNLOAD(func) { opencl->func = NULL; }
-        HB_OCL_UNLOAD(clBuildProgram);
-        HB_OCL_UNLOAD(clCreateBuffer);
-        HB_OCL_UNLOAD(clCreateCommandQueue);
-        HB_OCL_UNLOAD(clCreateContextFromType);
-        HB_OCL_UNLOAD(clCreateKernel);
-        HB_OCL_UNLOAD(clCreateProgramWithBinary);
-        HB_OCL_UNLOAD(clCreateProgramWithSource);
-        HB_OCL_UNLOAD(clEnqueueCopyBuffer);
-        HB_OCL_UNLOAD(clEnqueueMapBuffer);
-        HB_OCL_UNLOAD(clEnqueueNDRangeKernel);
-        HB_OCL_UNLOAD(clEnqueueReadBuffer);
-        HB_OCL_UNLOAD(clEnqueueUnmapMemObject);
-        HB_OCL_UNLOAD(clEnqueueWriteBuffer);
-        HB_OCL_UNLOAD(clFlush);
-        HB_OCL_UNLOAD(clGetCommandQueueInfo);
-        HB_OCL_UNLOAD(clGetContextInfo);
-        HB_OCL_UNLOAD(clGetDeviceIDs);
-        HB_OCL_UNLOAD(clGetDeviceInfo);
-        HB_OCL_UNLOAD(clGetPlatformIDs);
-        HB_OCL_UNLOAD(clGetPlatformInfo);
-        HB_OCL_UNLOAD(clGetProgramBuildInfo);
-        HB_OCL_UNLOAD(clGetProgramInfo);
-        HB_OCL_UNLOAD(clReleaseCommandQueue);
-        HB_OCL_UNLOAD(clReleaseContext);
-        HB_OCL_UNLOAD(clReleaseEvent);
-        HB_OCL_UNLOAD(clReleaseKernel);
-        HB_OCL_UNLOAD(clReleaseMemObject);
-        HB_OCL_UNLOAD(clReleaseProgram);
-        HB_OCL_UNLOAD(clSetKernelArg);
-        HB_OCL_UNLOAD(clWaitForEvents);
+        free(opencl);
     }
     *_opencl = NULL;
 }
@@ -283,9 +251,9 @@ static hb_list_t* hb_opencl_devices_list_get(hb_opencl_library_t *opencl,
         return NULL;
     }
 
-    cl_device_id *device_ids;
-    hb_opencl_device_t *device;
-    cl_platform_id *platform_ids;
+    cl_device_id *device_ids = NULL;
+    hb_opencl_device_t *device = NULL;
+    cl_platform_id *platform_ids = NULL;
     cl_uint i, j, num_platforms, num_devices;
 
     if (opencl->clGetPlatformIDs(0, NULL, &num_platforms) != CL_SUCCESS || !num_platforms)
@@ -326,11 +294,16 @@ static hb_list_t* hb_opencl_devices_list_get(hb_opencl_library_t *opencl,
             }
         }
     }
-    return list;
+
+    goto end;
 
 fail:
     hb_opencl_devices_list_close(&list);
-    return NULL;
+
+end:
+    free(platform_ids);
+    free(device_ids);
+    return list;
 }
 
 int hb_opencl_available()
@@ -418,5 +391,11 @@ void hb_opencl_info_print()
     }
 
 end:
-    hb_opencl_library_close(&opencl);
+    /*
+     * Close only the initialized part
+     */
+    if (opencl->library != NULL)
+    {
+        HB_OCL_DLCLOSE(opencl->library);
+    }
 }
