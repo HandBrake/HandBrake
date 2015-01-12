@@ -888,7 +888,7 @@
         else
         {
             // we have a specified, constant framerate
-            if (job.video.frameRate == 0)
+            if (job.video.frameRateMode == 0)
             {
                 videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Peak Frame Rate)", videoInfo, @(hb_video_framerate_get_name(job.video.frameRate))];
             }
