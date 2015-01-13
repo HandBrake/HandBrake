@@ -197,62 +197,58 @@ typedef enum EncodeState : NSUInteger {
  */
 - (BOOL) createMovieAsyncWithImageIndex: (NSUInteger) index andDuration: (NSUInteger) duration;
 {
-    /* return if an encoding if already started */
+    // return if an encoding if already started.
     if (self.core || index >= self.imagesCount)
-        return NO;
-
-    hb_job_t *job = self.job.hb_job;
-
-    /* Generate the file url and directories. */
-    if (job->mux & HB_MUX_MASK_MP4)
     {
-        /* we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly */
+        return NO;
+    }
+
+    // Generate the file url and directories.
+    if (self.job.container & HB_MUX_MASK_MP4)
+    {
+        // we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly.
         self.fileURL = [HBPreviewGenerator generateFileURLForType:@"m4v"];
     }
-    else if (job->mux & HB_MUX_MASK_MKV)
+    else if (self.job.container & HB_MUX_MASK_MKV)
     {
         self.fileURL = [HBPreviewGenerator generateFileURLForType:@"mkv"];
     }
 
-    /* return if we couldn't get the fileURL */
+    // return if we couldn't get the fileURL.
     if (!self.fileURL)
+    {
         return NO;
+    }
 
-    /* See if there is an existing preview file, if so, delete it */
+    // See if there is an existing preview file, if so, delete it.
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self.fileURL path]])
     {
         [[NSFileManager defaultManager] removeItemAtPath:[self.fileURL path] error:NULL];
     }
 
-    /* We now direct our preview encode to fileURL path */
+    hb_job_t *job = self.job.hb_job;
+
+    // We now direct our preview encode to fileURL path.
     hb_job_set_file(job, [[self.fileURL path] UTF8String]);
 
-    /* We use our advance pref to determine how many previews to scan */
     job->start_at_preview = (int)index + 1;
     job->seek_points = (int)self.imagesCount;
     job->pts_to_stop = duration * 90000LL;
+    // Note: unlike a full encode, we only send 1 pass regardless if the final encode calls for 2 passes.
+    // this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
+    job->twopass = 0;
 
-    /* lets go ahead and send it off to libhb
-     * Note: unlike a full encode, we only send 1 pass regardless if the final encode calls for 2 passes.
-     * this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
-     * However we also need to take into account the indepth scan for subtitles.
-     */
-
+    // Init the libhb core
     int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
     self.core = [[[HBCore alloc] initWithLoggingLevel:loggingLevel] autorelease];
     self.core.name = @"PreviewCore";
+    [self registerCoreNotifications];
 
-
-    /* Go ahead and perform the actual encoding preview scan */
+    // lets go ahead and send it off to libhb
     hb_add(self.core.hb_handle, job);
-
-    /* we need to clean up the various lists after the job(s) have been set  */
     hb_job_close(&job);
 
-    [self registerCoreNotifications];
-    self.cancelled = NO;
-
-    /* start the actual encode */
+    // start the actual encode
     [self.core start];
 
     return YES;
@@ -263,13 +259,10 @@ typedef enum EncodeState : NSUInteger {
  */
 - (void) cancel
 {
-    if (self.core)
+    if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
     {
-        if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
-        {
-            [self.core stop];
-            self.cancelled = YES;
-        }
+        [self.core stop];
+        self.cancelled = YES;
     }
 }
 
@@ -315,6 +308,8 @@ typedef enum EncodeState : NSUInteger {
             [self.delegate didCancelMovieCreation];
         }
 
+        self.cancelled = NO;
+
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }];
 }
@@ -324,7 +319,8 @@ typedef enum EncodeState : NSUInteger {
 - (void) dealloc
 {
     [self.core stop];
-    self.core = nil;
+    [_core release];
+    _core = nil;
 
     [_fileURL release];
     _fileURL = nil;

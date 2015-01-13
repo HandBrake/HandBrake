@@ -904,10 +904,11 @@ typedef enum ViewMode : NSUInteger {
         return;
 
     self.generator.delegate = self;
-    [self.generator createMovieAsyncWithImageIndex:self.pictureIndex
-                                       andDuration:[[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue]];
-
-    [self switchViewToMode:ViewModeEncoding];
+    if ([self.generator createMovieAsyncWithImageIndex:self.pictureIndex
+                                       andDuration:[[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue]])
+    {
+        [self switchViewToMode:ViewModeEncoding];
+    }
 }
 
 - (IBAction) toggleMoviePreviewPlayPause: (id) sender
