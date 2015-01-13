@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C94b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
             <connections>
-                <outlet property="configureDefaults" destination="QsM-28-Pya" id="AbY-A5-kzy"/>
                 <outlet property="fTableView" destination="0yM-wE-D2x" id="0vq-y5-Ubi"/>
-                <outlet property="reloadDefaults" destination="Vxx-gk-9kY" id="9fr-kb-QiD"/>
-                <outlet property="trackPopUp" destination="2Tb-KC-Ugi" id="kwx-uG-p4q"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -133,7 +130,7 @@
                                     </tableColumn>
                                 </tableColumns>
                                 <connections>
-                                    <binding destination="-2" name="enabled" keyPath="self.job" id="PJP-qc-FJe">
+                                    <binding destination="-2" name="enabled" keyPath="self.subtitles" id="pmZ-qP-DnG">
                                         <dictionary key="options">
                                             <string key="NSValueTransformerName">NSIsNotNil</string>
                                         </dictionary>
@@ -187,7 +184,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.job" id="FLd-lw-rWb">
+                        <binding destination="-2" name="enabled" keyPath="self.subtitles" id="khN-Sn-dnI">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
@@ -203,7 +200,7 @@
                     </buttonCell>
                     <connections>
                         <action selector="showSettingsSheet:" target="-2" id="OAA-S8-tfS"/>
-                        <binding destination="-2" name="enabled" keyPath="self.job" id="Nuv-KK-HdK">
+                        <binding destination="-2" name="enabled" keyPath="self.subtitles" id="dpe-kM-iMF">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
@@ -219,7 +216,7 @@
                     </buttonCell>
                     <connections>
                         <action selector="addTracksFromDefaults:" target="-2" id="GOz-FT-Atg"/>
-                        <binding destination="-2" name="enabled" keyPath="self.job" id="Mxg-ln-sW9">
+                        <binding destination="-2" name="enabled" keyPath="self.subtitles" id="CSa-3s-GD6">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
@@ -227,6 +224,7 @@
                     </connections>
                 </button>
             </subviews>
+            <point key="canvasLocation" x="231" y="438"/>
         </customView>
         <menu id="KgC-dn-Hq2">
             <items>

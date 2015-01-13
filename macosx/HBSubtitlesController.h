@@ -6,30 +6,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString *keySubTrackName;
-extern NSString *keySubTrackIndex;
-extern NSString *keySubTrackLanguage;
-extern NSString *keySubTrackLanguageIsoCode;
-extern NSString *keySubTrackType;
-
-extern NSString *keySubTrackForced;
-extern NSString *keySubTrackBurned;
-extern NSString *keySubTrackDefault;
-
-extern NSString *keySubTrackSrtOffset;
-extern NSString *keySubTrackSrtFilePath;
-extern NSString *keySubTrackSrtCharCode;
-
-@class HBJob;
+@class HBSubtitles;
 
 /**
  *  HBSubtitlesController
- *  Responds to HBContainerChangedNotification.
  */
 @interface HBSubtitlesController : NSViewController
 
-- (void)applySettingsFromPreset:(NSDictionary *)preset;
-
-@property (nonatomic, readwrite, assign) HBJob *job;
+@property (nonatomic, readwrite, assign) HBSubtitles *subtitles;
 
 @end

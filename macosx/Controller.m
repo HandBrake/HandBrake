@@ -326,8 +326,8 @@
     fPreviewController.job = job;
 
     fVideoController.job = job;
-    fAudioController.job = job;
-    fSubtitlesViewController.job = job;
+    fAudioController.audio = job.audio;
+    fSubtitlesViewController.subtitles = job.subtitles;
     fChapterTitlesController.job = job;
 
     if (job)
@@ -791,8 +791,8 @@
         if (p.job_cur == 1 && p.job_count > 1)
         {
             HBJob *queueJob = QueueFileArray[currentQueueEncodeIndex];
-            if (queueJob.subtitlesTracks.count &&
-                [[queueJob.subtitlesTracks firstObject][keySubTrackIndex] intValue] == -1)
+            if (queueJob.subtitles.tracks.count &&
+                [queueJob.subtitles.tracks.firstObject[keySubTrackIndex] intValue] == -1)
             {
                 pass_desc = NSLocalizedString(@"(subtitle scan)", @"");
             }
@@ -2521,7 +2521,7 @@ static void queueFSEventStreamCallback(
     
     NSString *extension = @"mp4";
     
-    BOOL anyCodecAC3 = [fAudioController anyCodecMatches: HB_ACODEC_AC3] || [fAudioController anyCodecMatches: HB_ACODEC_AC3_PASS];
+    BOOL anyCodecAC3 = [self.job.audio anyCodecMatches:HB_ACODEC_AC3] || [self.job.audio anyCodecMatches:HB_ACODEC_AC3_PASS];
     // Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter
     BOOL chapterMarkers = (self.job.chaptersEnabled) &&
                           (self.job.range.type != HBRangeTypeChapters ||
@@ -2667,12 +2667,6 @@ static void queueFSEventStreamCallback(
 
         // Apply the preset to the current job
         [self.job applyPreset:preset];
-
-        // Have to apply the presets the audio and subtitles controllers too
-        // because they haven't been moved to HBJob yer.
-        NSDictionary *chosenPreset = preset.content;
-        [fAudioController applySettingsFromPreset: chosenPreset];
-        [fSubtitlesViewController applySettingsFromPreset:chosenPreset];
 
         // If Auto Naming is on. We create an output filename of dvd name - title number
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])

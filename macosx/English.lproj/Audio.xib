@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C94b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioController">
             <connections>
-                <outlet property="configureDefaults" destination="vFP-nq-IQg" id="EFe-IR-Cyn"/>
-                <outlet property="fTableView" destination="LlC-ua-mth" id="NvM-yh-c0L"/>
-                <outlet property="reloadDefaults" destination="wcL-rL-aYS" id="R78-R5-U0p"/>
-                <outlet property="trackPopup" destination="jrP-M5-2Rq" id="Avl-Cd-Th2"/>
                 <outlet property="view" destination="LOv-5G-86T" id="qyT-Z6-lCU"/>
             </connections>
         </customObject>
@@ -21,7 +17,7 @@
                 <string>keyAudioTrackName</string>
             </declaredKeys>
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="masterTrackArray" id="vVy-cS-D4a"/>
+                <binding destination="-2" name="contentArray" keyPath="self.audio.masterTrackArray" id="nbW-pN-u9p"/>
             </connections>
         </arrayController>
         <arrayController preservesSelection="NO" avoidsEmptySelection="NO" id="rzb-Si-Kpf" userLabel="Audios">
@@ -51,7 +47,7 @@
                 <string>bitrateEnabled</string>
             </declaredKeys>
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="audioArray" id="Rfp-6S-XXq"/>
+                <binding destination="-2" name="contentArray" keyPath="self.audio.tracks" id="W0u-41-zX4"/>
             </connections>
         </arrayController>
         <view id="LOv-5G-86T">
@@ -273,7 +269,7 @@
                                     </tableColumn>
                                 </tableColumns>
                                 <connections>
-                                    <binding destination="-2" name="enabled" keyPath="self.job" id="FGZ-gP-H5Y">
+                                    <binding destination="-2" name="enabled" keyPath="self.audio" id="V0I-xd-Lo6">
                                         <dictionary key="options">
                                             <string key="NSValueTransformerName">NSIsNotNil</string>
                                         </dictionary>
@@ -306,7 +302,7 @@
                     </buttonCell>
                     <connections>
                         <action selector="showSettingsSheet:" target="-2" id="D9K-M3-zHd"/>
-                        <binding destination="-2" name="enabled" keyPath="self.job" id="VMC-Xv-X3R">
+                        <binding destination="-2" name="enabled" keyPath="self.audio" id="cWq-t8-vFR">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
@@ -322,7 +318,7 @@
                     </buttonCell>
                     <connections>
                         <action selector="reloadDefaults:" target="-2" id="k9I-I9-T2U"/>
-                        <binding destination="-2" name="enabled" keyPath="self.job" id="rta-fa-Ezd">
+                        <binding destination="-2" name="enabled" keyPath="self.audio" id="sJS-am-vnf">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
@@ -353,7 +349,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.job" id="FGP-3D-g2t">
+                        <binding destination="-2" name="enabled" keyPath="self.audio" id="vyM-YV-Yqi">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>

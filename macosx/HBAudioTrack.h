@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class HBAudioController;
+@class HBAudio;
 
 /**
  *  Audio track dicts keys.
@@ -39,7 +39,7 @@ extern NSString *keyAudioBitrate;
 @property (nonatomic, retain) NSNumber *drc;
 @property (nonatomic, retain) NSNumber *gain;
 @property (nonatomic, retain) NSNumber *videoContainerTag;
-@property (nonatomic, assign) HBAudioController *controller;
+@property (nonatomic, assign) HBAudio *controller;
 
 @property (nonatomic, retain) NSMutableArray *codecs;
 @property (nonatomic, retain) NSMutableArray *mixdowns;

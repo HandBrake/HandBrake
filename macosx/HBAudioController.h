@@ -1,40 +1,18 @@
-//
-//  HBAudioController.h
-//  HandBrake
-//
-//  Created on 2010-08-24.
-//
+/* HBAudioController.h
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
 
-@class HBJob;
-@class HBAudioTrack;
+@class HBAudio;
 
 /**
  *  HBAudioController
- *
- *  Responds to HBContainerChangedNotification.
  */
 @interface HBAudioController : NSViewController
 
-@property (nonatomic, readonly, retain) NSArray *masterTrackArray;
-@property (nonatomic, readonly) NSDictionary *noneTrack;
-
-@property (nonatomic, readwrite, assign) HBJob *job;
-
-- (void) applySettingsFromPreset:(NSDictionary *)preset;
-
-- (BOOL) anyCodecMatches: (int) aCodecValue;
-- (void) settingTrackToNone: (HBAudioTrack *) newNoneTrack;
-- (void) switchingTrackFromNone: (HBAudioTrack *) noLongerNoneTrack;
-
-@end
-
-@interface HBAudioController (KVC)
-
-- (NSUInteger) countOfAudioArray;
-- (HBAudioTrack *) objectInAudioArrayAtIndex: (NSUInteger) index;
-- (void) insertObject: (HBAudioTrack *) audioObject inAudioArrayAtIndex: (NSUInteger) index;
-- (void) removeObjectFromAudioArrayAtIndex: (NSUInteger) index;
+@property (nonatomic, readwrite, assign) HBAudio *audio;
 
 @end

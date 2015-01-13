@@ -11,6 +11,7 @@
 
 #import "HBCore.h"
 #import "HBJob.h"
+#import "HBJob+HBJobConversion.h"
 
 typedef enum EncodeState : NSUInteger {
     EncodeStateIdle,

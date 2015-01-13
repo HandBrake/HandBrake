@@ -512,7 +512,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     return self;
 }
 
-#pragma mark - Presets/Queue
+#pragma mark - Presets
 
 - (void)writeToPreset:(NSMutableDictionary *)preset
 {

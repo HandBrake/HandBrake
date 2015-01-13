@@ -14,19 +14,16 @@
 #import "HBPicture.h"
 #import "HBFilters.h"
 
-#import "HBAudioTrack.h"
-#import "HBAudioTrackPreset.h"
-
-#import "HBAudioDefaults.h"
-#import "HBSubtitlesDefaults.h"
-
-#include "hb.h"
+#import "HBAudio.h"
+#import "HBSubtitles.h"
 
 extern NSString *HBMixdownChangedNotification;
 extern NSString *HBContainerChangedNotification;
-extern NSString *keyContainerTag;
 
-typedef NS_ENUM(NSUInteger, HBJobState) {
+/**
+ *  A flag to indicate the job's state
+ */
+typedef NS_ENUM(NSUInteger, HBJobState){
     HBJobStateReady,
     HBJobStateWorking,
     HBJobStateCompleted,
@@ -47,18 +44,22 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
  *  Current state of the job.
  */
 @property (nonatomic, readwrite) HBJobState state;
+
 @property (nonatomic, readwrite, copy) NSString *presetName;
 
 @property (nonatomic, readwrite, assign) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
 @property (nonatomic, readwrite) int pidId;
 
-// Urls
+/**
+ *  The file URL of the source.
+ */
 @property (nonatomic, readonly) NSURL *fileURL;
-@property (nonatomic, readwrite, copy) NSURL *destURL;
 
-// Libhb job
-@property (nonatomic, readonly) hb_job_t *hb_job;
+/**
+ *  The file URL at which the new file will be created.
+ */
+@property (nonatomic, readwrite, copy) NSURL *destURL;
 
 // Job settings
 @property (nonatomic, readwrite) int container;
@@ -72,14 +73,10 @@ typedef NS_ENUM(NSUInteger, HBJobState) {
 @property (nonatomic, readonly) HBPicture *picture;
 @property (nonatomic, readonly) HBFilters *filters;
 
-@property (nonatomic, readonly) NSMutableArray *audioTracks;
-@property (nonatomic, readonly) NSMutableArray *subtitlesTracks;
+@property (nonatomic, readonly) HBAudio *audio;
+@property (nonatomic, readonly) HBSubtitles *subtitles;
 
 @property (nonatomic, readwrite) BOOL chaptersEnabled;
 @property (nonatomic, readonly) NSMutableArray *chapterTitles;
-
-// Defaults settings
-@property (nonatomic, readonly) HBAudioDefaults *audioDefaults;
-@property (nonatomic, readonly) HBSubtitlesDefaults *subtitlesDefaults;
 
 @end

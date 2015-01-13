@@ -112,6 +112,7 @@
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		46AB433515F98A2B009C0961 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
 		A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */; };
+		A91017B41A64440A00039BFB /* HBSubtitles.m in Sources */ = {isa = PBXBuildFile; fileRef = A91017B31A64440A00039BFB /* HBSubtitles.m */; };
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
 		A91806711A4807B000FC9BED /* HBRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A91806701A4807B000FC9BED /* HBRange.m */; };
 		A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */; };
@@ -136,6 +137,7 @@
 		A932E273198834130047D13E /* HBAudioDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E272198834130047D13E /* HBAudioDefaults.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
+		A93FD4751A62ABE800A6AC43 /* HBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = A93FD4741A62ABE800A6AC43 /* HBAudio.m */; };
 		A9523937199A6AAE00588AEF /* HBFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = A9523936199A6AAE00588AEF /* HBFilters.m */; };
 		A9537BF01A48A85C00141102 /* HBJob+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BEF1A48A85C00141102 /* HBJob+UIAdditions.m */; };
 		A9537BF31A48A99500141102 /* HBVideo+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BF21A48A99500141102 /* HBVideo+UIAdditions.m */; };
@@ -147,6 +149,7 @@
 		A967E4BA1A16768200DF1DFC /* EncodeCanceled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */; };
 		A971281F1A2C75180088C076 /* HBTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = A971281E1A2C75180088C076 /* HBTitle.m */; };
 		A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */; };
+		A990D9071A64562200139032 /* HBJob+HBJobConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A990D9061A64562200139032 /* HBJob+HBJobConversion.m */; };
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
 		A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AA44791970664A00D7DEFC /* HBUtilities.m */; };
 		A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */; };
@@ -352,6 +355,8 @@
 		46AB433415F98A2B009C0961 /* DockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockTextField.m; sourceTree = "<group>"; };
 		A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTrackPreset.h; sourceTree = "<group>"; };
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
+		A91017B21A64440A00039BFB /* HBSubtitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitles.h; sourceTree = "<group>"; };
+		A91017B31A64440A00039BFB /* HBSubtitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitles.m; sourceTree = "<group>"; };
 		A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBChapterTitlesController.h; sourceTree = "<group>"; };
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
 		A918066F1A4807B000FC9BED /* HBRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBRange.h; sourceTree = "<group>"; };
@@ -381,6 +386,8 @@
 		A93E0ED01972957000FD67FB /* HBVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBVideoController.h; sourceTree = "<group>"; };
 		A93E0ED11972957000FD67FB /* HBVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBVideoController.m; sourceTree = "<group>"; };
 		A93E0ED61972958C00FD67FB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Video.xib; sourceTree = "<group>"; };
+		A93FD4731A62ABE800A6AC43 /* HBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudio.h; sourceTree = "<group>"; };
+		A93FD4741A62ABE800A6AC43 /* HBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudio.m; sourceTree = "<group>"; };
 		A9523935199A6AAE00588AEF /* HBFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFilters.h; sourceTree = "<group>"; };
 		A9523936199A6AAE00588AEF /* HBFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFilters.m; sourceTree = "<group>"; };
 		A9537BEE1A48A85C00141102 /* HBJob+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+UIAdditions.h"; sourceTree = "<group>"; };
@@ -399,6 +406,8 @@
 		A971281E1A2C75180088C076 /* HBTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTitle.m; sourceTree = "<group>"; };
 		A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBLanguagesSelection.h; sourceTree = "<group>"; };
 		A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBLanguagesSelection.m; sourceTree = "<group>"; };
+		A990D9051A64562200139032 /* HBJob+HBJobConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+HBJobConversion.h"; sourceTree = "<group>"; };
+		A990D9061A64562200139032 /* HBJob+HBJobConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBJob+HBJobConversion.m"; sourceTree = "<group>"; };
 		A9935212196F38A70069C6B7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ChaptersTitles.xib; sourceTree = "<group>"; };
 		A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetCoding.h; sourceTree = "<group>"; };
 		A9A2A77F1A4737DD006C219C /* NSCodingMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSCodingMacro.h; sourceTree = "<group>"; };
@@ -841,6 +850,17 @@
 			name = "Products (external)";
 			sourceTree = "<group>";
 		};
+		A91017B51A64441700039BFB /* Subtitles */ = {
+			isa = PBXGroup;
+			children = (
+				A91017B21A64440A00039BFB /* HBSubtitles.h */,
+				A91017B31A64440A00039BFB /* HBSubtitles.m */,
+				A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */,
+				A9F4728C1976BAA70009EC65 /* HBSubtitlesDefaults.m */,
+			);
+			name = Subtitles;
+			sourceTree = "<group>";
+		};
 		A932E270198833960047D13E /* Audio Defaults */ = {
 			isa = PBXGroup;
 			children = (
@@ -889,6 +909,8 @@
 				A971281E1A2C75180088C076 /* HBTitle.m */,
 				A9DEC87D1A23DF6F00C79B48 /* HBJob.h */,
 				A9DEC87E1A23DF6F00C79B48 /* HBJob.m */,
+				A990D9051A64562200139032 /* HBJob+HBJobConversion.h */,
+				A990D9061A64562200139032 /* HBJob+HBJobConversion.m */,
 				A918066F1A4807B000FC9BED /* HBRange.h */,
 				A91806701A4807B000FC9BED /* HBRange.m */,
 				A9DEC8751A23C88D00C79B48 /* HBVideo.h */,
@@ -897,23 +919,32 @@
 				A9DEC8791A23C89E00C79B48 /* HBPicture.m */,
 				A9523935199A6AAE00588AEF /* HBFilters.h */,
 				A9523936199A6AAE00588AEF /* HBFilters.m */,
-				A932E271198834130047D13E /* HBAudioDefaults.h */,
-				A932E272198834130047D13E /* HBAudioDefaults.m */,
-				A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */,
-				A9F4728C1976BAA70009EC65 /* HBSubtitlesDefaults.m */,
-				273F209114ADBE670021BE6D /* HBAudioTrack.h */,
-				273F209214ADBE670021BE6D /* HBAudioTrack.m */,
-				A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */,
-				A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */,
+				A996B0F81A62C51C00B64179 /* Audio */,
+				A91017B51A64441700039BFB /* Subtitles */,
+				A9537BED1A48A7F900141102 /* UI Bindings Additions */,
 				A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */,
 				A9D1E41618262364002F6424 /* HBPreviewGenerator.m */,
 				273F209714ADBE670021BE6D /* HBDVDDetector.h */,
 				273F209814ADBE670021BE6D /* HBDVDDetector.m */,
-				A9537BED1A48A7F900141102 /* UI Bindings Additions */,
 				A9A2A77F1A4737DD006C219C /* NSCodingMacro.h */,
 				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		A996B0F81A62C51C00B64179 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				A93FD4731A62ABE800A6AC43 /* HBAudio.h */,
+				A93FD4741A62ABE800A6AC43 /* HBAudio.m */,
+				A932E271198834130047D13E /* HBAudioDefaults.h */,
+				A932E272198834130047D13E /* HBAudioDefaults.m */,
+				273F209114ADBE670021BE6D /* HBAudioTrack.h */,
+				273F209214ADBE670021BE6D /* HBAudioTrack.m */,
+				A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */,
+				A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */,
+			);
+			name = Audio;
 			sourceTree = "<group>";
 		};
 		A9B34D6F197683FE00871B7D /* Controllers */ = {
@@ -1197,6 +1228,7 @@
 				A9537BF61A48AB6300141102 /* HBPicture+UIAdditions.m in Sources */,
 				273F20B314ADBE670021BE6D /* HBOutputPanelController.m in Sources */,
 				273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */,
+				A93FD4751A62ABE800A6AC43 /* HBAudio.m in Sources */,
 				A971281F1A2C75180088C076 /* HBTitle.m in Sources */,
 				273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */,
 				A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */,
@@ -1207,9 +1239,11 @@
 				A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */,
 				273F20B614ADBE670021BE6D /* HBPresetsManager.m in Sources */,
 				273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */,
+				A990D9071A64562200139032 /* HBJob+HBJobConversion.m in Sources */,
 				A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */,
 				A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */,
 				273F20B814ADBE670021BE6D /* HBQueueController.mm in Sources */,
+				A91017B41A64440A00039BFB /* HBSubtitles.m in Sources */,
 				273F20BA14ADBE670021BE6D /* HBPictureController.m in Sources */,
 				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
 				A9537BF91A48AC9000141102 /* HBFilters+UIAdditions.m in Sources */,

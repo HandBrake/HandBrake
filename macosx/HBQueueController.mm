@@ -13,6 +13,8 @@
 #import "HBUtilities.h"
 
 #import "HBJob.h"
+#import "HBAudioDefaults.h"
+#import "HBAudioTrack.h"
 
 #import "HBPicture+UIAdditions.h"
 #import "HBFilters+UIAdditions.h"
@@ -744,7 +746,7 @@
         }
         NSString *passesString = @"";
         // check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan
-        if (job.subtitlesTracks.count && [job.subtitlesTracks[0][@"keySubTrackIndex"] intValue] == -1)
+        if (job.subtitles.tracks.count && [job.subtitles.tracks[0][@"keySubTrackIndex"] intValue] == -1)
         {
             passesString = [passesString stringByAppendingString:@"1 Foreign Language Search Pass - "];
         }
@@ -786,28 +788,31 @@
         NSString *audioCodecSummary = @"";	//	This seems to be set by the last track we have available...
         // Lets also get our audio track detail since we are going through the logic for use later
 
-		NSMutableArray *audioDetails = [NSMutableArray arrayWithCapacity:job.audioTracks.count];
+		NSMutableArray *audioDetails = [NSMutableArray array];
         BOOL autoPassthruPresent = NO;
 
-        for (HBAudioTrack *audioTrack in job.audioTracks)
+        for (HBAudioTrack *audioTrack in job.audio.tracks)
         {
-            audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack.codec[keyAudioCodecName]];
-            NSNumber *drc = audioTrack.drc;
-            NSNumber *gain = audioTrack.gain;
-            NSString *detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
-                            audioTrack.track[keyAudioTrackName],
-                            audioTrack.codec[keyAudioCodecName],
-                            audioTrack.mixdown[keyAudioMixdownName],
-                            audioTrack.sampleRate[keyAudioSampleRateName],
-                            audioTrack.bitRate[keyAudioBitrateName],
-                            (0.0 < [drc floatValue]) ? (NSObject *)drc : (NSObject *)@"Off",
-                            (0.0 != [gain floatValue]) ? (NSObject *)gain : (NSObject *)@"Off"
-                            ];
-            [audioDetails addObject: detailString];
-            // check if we have an Auto Passthru output track
-            if ([audioTrack.codec[keyAudioCodecName] isEqualToString: @"Auto Passthru"])
+            if (audioTrack.enabled)
             {
-                autoPassthruPresent = YES;
+                audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack.codec[keyAudioCodecName]];
+                NSNumber *drc = audioTrack.drc;
+                NSNumber *gain = audioTrack.gain;
+                NSString *detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
+                                          audioTrack.track[keyAudioTrackName],
+                                          audioTrack.codec[keyAudioCodecName],
+                                          audioTrack.mixdown[keyAudioMixdownName],
+                                          audioTrack.sampleRate[keyAudioSampleRateName],
+                                          audioTrack.bitRate[keyAudioBitrateName],
+                                          (0.0 < [drc floatValue]) ? (NSObject *)drc : (NSObject *)@"Off",
+                                          (0.0 != [gain floatValue]) ? (NSObject *)gain : (NSObject *)@"Off"
+                                          ];
+                [audioDetails addObject: detailString];
+                // check if we have an Auto Passthru output track
+                if ([audioTrack.codec[keyAudioCodecName] isEqualToString: @"Auto Passthru"])
+                {
+                    autoPassthruPresent = YES;
+                }
             }
         }
 
@@ -988,7 +993,7 @@
         if (autoPassthruPresent == YES)
         {
             NSString *autoPassthruFallback = @"", *autoPassthruCodecs = @"";
-            HBAudioDefaults *audioDefaults = job.audioDefaults;
+            HBAudioDefaults *audioDefaults = job.audio.defaults;
             autoPassthruFallback = [autoPassthruFallback stringByAppendingString:@(hb_audio_encoder_get_name(audioDefaults.encoderFallback))];
             if (audioDefaults.allowAACPassthru)
             {
@@ -1042,8 +1047,15 @@
         }
 
         // Ninth Line Subtitle Details
-        for (NSDictionary *track in job.subtitlesTracks)
+        int i = 0;
+        for (NSDictionary *track in job.subtitles.tracks)
         {
+            // Ignore the none track.
+            if (i == job.subtitles.tracks.count - 1)
+            {
+                continue;
+            }
+
             /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
             [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
             [finalString appendString: track[@"keySubTrackName"] withAttributes:detailAttr];
@@ -1060,6 +1072,7 @@
                 [finalString appendString: @" - Default" withAttributes:detailAttr];
             }
             [finalString appendString:@"\n" withAttributes:detailAttr];
+            i++;
         }
 
         [pool release];
