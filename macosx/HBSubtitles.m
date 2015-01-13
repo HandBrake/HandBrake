@@ -414,6 +414,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
         copy->_container = _container;
 
         copy->_masterTrackArray = [_masterTrackArray copy];
+        copy->_foreignAudioSearchTrackName = [_foreignAudioSearchTrackName copy];
 
         copy->_tracks = [[NSMutableArray alloc] init];
         [_tracks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -439,6 +440,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     encodeInt(_container);
 
     encodeObject(_masterTrackArray);
+    encodeObject(_foreignAudioSearchTrackName);
     encodeObject(_tracks);
 
     encodeObject(_defaults);
@@ -451,6 +453,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     decodeInt(_container);
 
     decodeObject(_masterTrackArray);
+    decodeObject(_foreignAudioSearchTrackName);
     decodeObject(_tracks);
 
     decodeObject(_defaults);
