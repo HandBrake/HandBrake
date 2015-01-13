@@ -334,7 +334,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     uint64_t       duration, longest;
     int            longest_pgcn, longest_pgn, longest_pgcn_end;
     const char   * name;
-    unsigned char  unused[1024];
     const char   * codec_name;
 
     hb_log( "scan: scanning title %d", t );
@@ -345,13 +344,8 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     {
         strncpy( title->name, name, sizeof( title->name ) );
     }
-
-    if (strlen(title->name) == 0)
+    else
     {
-        if( DVDUDFVolumeInfo( d->reader, title->name, sizeof( title->name ),
-                             unused, sizeof( unused ) ) )
-        {
-
         char * p_cur, * p_last = d->path;
         for( p_cur = d->path; *p_cur; p_cur++ )
         {
@@ -364,7 +358,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         char *dot_term = strrchr(title->name, '.');
         if (dot_term)
             *dot_term = '\0';
-        }
     }
 
     /* VTS which our title is in */
