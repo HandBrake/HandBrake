@@ -518,11 +518,11 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (tune)
             {
                 case "psnr":
-                    return x265Tune.Psnr;
+                    return x265Tune.psnr;
                 case "ssim":
-                    return x265Tune.Ssim;
+                    return x265Tune.ssim;
                 default:
-                    return x265Tune.Psnr;
+                    return x265Tune.psnr;
             }
         }
 
