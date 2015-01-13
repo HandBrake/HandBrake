@@ -80,6 +80,8 @@ namespace HandBrake.ApplicationServices.Utilities
                         InputNumber = track.Track.HasValue ? track.Track.Value : 0,
                         Mixdown = Converters.GetCliMixDown(track.MixDown),
                         SampleRateRaw = GetSampleRateRaw(track.SampleRate),
+                        EncodeRateType = AudioEncodeRateType.Bitrate,
+                        Name = track.TrackName
                     };
 
                 profile.AudioEncodings.Add(newTrack);

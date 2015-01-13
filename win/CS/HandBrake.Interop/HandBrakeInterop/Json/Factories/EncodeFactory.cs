@@ -114,7 +114,7 @@ namespace HandBrake.Interop.Json.Factories
                 ChapterList = new List<ChapterList>()
             };
 
-            if (!job.UseDefaultChapterNames)
+            if (job.UseDefaultChapterNames)
             {
                 foreach (string item in job.CustomChapterNames)
                 {
@@ -278,16 +278,29 @@ namespace HandBrake.Interop.Json.Factories
                 AudioList audioTrack = new AudioList
                     {
                         Track = numTracks++, 
-                        Bitrate = item.Bitrate, 
-                        CompressionLevel = item.Compression, 
                         DRC = item.Drc, 
                         Encoder = encoder.Id, 
                         Gain = item.Gain, 
                         Mixdown = mixdown.Id, 
                         NormalizeMixLevel = false, 
-                        Quality = item.Quality, 
-                        Samplerate = item.SampleRateRaw
+                        Samplerate = item.SampleRateRaw,
+                        Name = item.Name,
                     };
+
+                if (item.EncodeRateType == AudioEncodeRateType.Quality)
+                {
+                    audioTrack.Quality = item.Quality;
+                }
+
+                if (item.EncodeRateType == AudioEncodeRateType.Compression)
+                {
+                    audioTrack.CompressionLevel = item.Compression;
+                }
+
+                if (item.EncodeRateType == AudioEncodeRateType.Bitrate)
+                {
+                    audioTrack.Bitrate = item.Bitrate;
+                }
 
                 audio.AudioList.Add(audioTrack);
             }

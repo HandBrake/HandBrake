@@ -15,6 +15,7 @@ namespace HandBrake.Interop.Model.Encoding
     public enum AudioEncodeRateType
 	{
 		Bitrate,
-		Quality
+		Quality,
+        Compression
 	}
 }
