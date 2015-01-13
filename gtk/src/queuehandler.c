@@ -1972,9 +1972,11 @@ find_pid:
         }
     }
     if (!unfinished)
+    {
+        ghb_value_free(queue);
         goto find_pid;
-
-    if (unfinished)
+    }
+    else
     {
         GtkWindow *hb_window;
         hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
@@ -2015,10 +2017,6 @@ find_pid:
             ghb_value_free(queue);
         }
         g_free(message);
-    }
-    else
-    {
-        ghb_value_free(queue);
     }
     return FALSE;
 }
