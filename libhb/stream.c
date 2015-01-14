@@ -4949,16 +4949,30 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 
     av_log_set_level( AV_LOG_ERROR );
 
+    // Increase probe buffer size
+    // The default (5MB) is not big enough to successfully scan
+    // some files with large PNGs
+    AVDictionary * av_opts = NULL;
+    av_dict_set( &av_opts, "probesize", "15000000", 0 );
+
     // FFMpeg has issues with seeking.  After av_find_stream_info, the
     // streams are left in an indeterminate position.  So a seek is
     // necessary to force things back to the beginning of the stream.
     // But then the seek fails for some stream types.  So the safest thing
     // to do seems to be to open 2 AVFormatContext.  One for probing info
     // and the other for reading.
-    if ( avformat_open_input( &info_ic, stream->path, NULL, NULL ) < 0 )
+    if ( avformat_open_input( &info_ic, stream->path, NULL, &av_opts ) < 0 )
     {
         return 0;
     }
+    // libav populates av_opts with the things it didn't recognize.
+    AVDictionaryEntry *t = NULL;
+    while ((t = av_dict_get(av_opts, "", t, AV_DICT_IGNORE_SUFFIX)) != NULL)
+    {
+            hb_log("ffmpeg_open: unknown option '%s'", t->key);
+    }
+    av_dict_free( &av_opts );
+
     if ( avformat_find_stream_info( info_ic, NULL ) < 0 )
         goto fail;
 
