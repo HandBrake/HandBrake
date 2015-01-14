@@ -223,6 +223,12 @@ namespace HandBrake.ApplicationServices.Utilities
                     profile.VideoTunes.Add(work.X265Tune.ToString().ToLower().Replace(" ", string.Empty));
                 }
             }
+            else if (work.VideoEncoder == VideoEncoder.QuickSync)
+            {
+                profile.VideoPreset = work.QsvPreset.ToString().ToLower().Replace(" ", string.Empty);
+                profile.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty);
+                profile.VideoLevel = work.H264Level;
+            }
             
             // Chapter Markers
             profile.IncludeChapterMarkers = work.IncludeChapterMarkers;
