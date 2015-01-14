@@ -209,8 +209,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 profile.VideoLevel = work.H264Level;
             }
             else if (work.VideoEncoder == VideoEncoder.X265)
-            {
-                
+            {       
                 profile.VideoPreset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
 
                 if (work.H265Profile != x265Profile.None)
@@ -231,7 +230,7 @@ namespace HandBrake.ApplicationServices.Utilities
             job.UseDefaultChapterNames = work.IncludeChapterMarkers;
 
             // Advanced Settings
-            profile.VideoOptions = work.AdvancedEncoderOptions;
+            profile.VideoOptions = work.ShowAdvancedTab ? work.AdvancedEncoderOptions : work.ExtraAdvancedArguments;
 
             // Subtitles
             job.Subtitles = new Subtitles { SourceSubtitles = new List<SourceSubtitle>(), SrtSubtitles = new List<SrtSubtitle>() };
