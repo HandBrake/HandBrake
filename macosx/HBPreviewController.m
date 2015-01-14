@@ -904,8 +904,8 @@ typedef enum ViewMode : NSUInteger {
         return;
 
     self.generator.delegate = self;
-    if ([self.generator createMovieAsyncWithImageIndex:self.pictureIndex
-                                       andDuration:[[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue]])
+    if ([self.generator createMovieAsyncWithImageAtIndex:self.pictureIndex
+                                       duration:[[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue]])
     {
         [self switchViewToMode:ViewModeEncoding];
     }

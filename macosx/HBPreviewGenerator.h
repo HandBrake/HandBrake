@@ -30,7 +30,7 @@
 - (void) purgeImageCache;
 
 /* Video generator */
-- (BOOL) createMovieAsyncWithImageIndex: (NSUInteger) index andDuration: (NSUInteger) duration;
+- (BOOL) createMovieAsyncWithImageAtIndex: (NSUInteger) index duration: (NSUInteger) seconds;
 - (void) cancel;
 
 @end

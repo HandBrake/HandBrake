@@ -179,7 +179,7 @@ typedef enum EncodeState : NSUInteger {
     if (![[NSFileManager defaultManager] fileExistsAtPath:previewDirectory])
     {
         if (![[NSFileManager defaultManager] createDirectoryAtPath:previewDirectory
-                                  withIntermediateDirectories:NO
+                                  withIntermediateDirectories:YES
                                                    attributes:nil
                                                         error:nil])
             return nil;
@@ -196,7 +196,7 @@ typedef enum EncodeState : NSUInteger {
  * @param index picture index in title.
  * @param duration the duration in seconds of the preview movie.
  */
-- (BOOL) createMovieAsyncWithImageIndex: (NSUInteger) index andDuration: (NSUInteger) duration;
+- (BOOL) createMovieAsyncWithImageAtIndex: (NSUInteger) index duration: (NSUInteger) seconds;
 {
     // return if an encoding if already started.
     if (self.core || index >= self.imagesCount)
@@ -234,7 +234,7 @@ typedef enum EncodeState : NSUInteger {
 
     job->start_at_preview = (int)index + 1;
     job->seek_points = (int)self.imagesCount;
-    job->pts_to_stop = duration * 90000LL;
+    job->pts_to_stop = seconds * 90000LL;
     // Note: unlike a full encode, we only send 1 pass regardless if the final encode calls for 2 passes.
     // this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
     job->twopass = 0;

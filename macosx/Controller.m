@@ -62,9 +62,6 @@
 
 @end
 
-/*******************************
- * HBController implementation *
- *******************************/
 @implementation HBController
 
 - (instancetype)init
@@ -75,23 +72,13 @@
         // Register the defaults preferences
         [HBPreferencesController registerUserDefaults];
 
-        /* Check for and create the App Support Preview directory if necessary */
-        NSString *previewDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Previews"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:previewDirectory])
-        {
-            [[NSFileManager defaultManager] createDirectoryAtPath:previewDirectory
-                                      withIntermediateDirectories:YES
-                                                       attributes:nil
-                                                            error:NULL];
-        }
-
         // Inits the controllers
         outputPanel = [[HBOutputPanelController alloc] init];
         fPictureController = [[HBPictureController alloc] init];
         fPreviewController = [[HBPreviewController  alloc] initWithDelegate:self];
         fQueueController = [[HBQueueController alloc] init];
 
-        // we init the HBPresetsManager class
+        // we init the HBPresetsManager
         NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
         presetManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
         _selectedPreset = [presetManager.defaultPreset retain];
@@ -106,19 +93,16 @@
         dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
                                                   image:appIcon];
 
-        [dockTile updateDockIcon:-1.0 withETA:@""];
-
         // Lets report the HandBrake version number here to the activity log and text log file
-        NSString *versionStringFull = [[NSString stringWithFormat:@"Handbrake Version: %@",
-                                        [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]
-                                       stringByAppendingString:[NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
-        [HBUtilities writeToActivityLog: "%s", [versionStringFull UTF8String]];
+        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+        NSString *versionStringFull = [NSString stringWithFormat:@"Handbrake Version: %@  (%@)", infoDict[@"CFBundleShortVersionString"], infoDict[@"CFBundleVersion"]];
+        [HBUtilities writeToActivityLog: "%s", versionStringFull.UTF8String];
 
-        // Optional dvd nav UseDvdNav
+        // Optionally use dvd nav
         [HBCore setDVDNav:[[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]];
 
-        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
         // Init libhb
+        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
         _core = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
         _core.name = @"ScanCore";
 
@@ -965,113 +949,102 @@
 - (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
 {
     SEL action = toolbarItem.action;
-        
-    if (self.core)
+
+    if (self.core.state == HBStateScanning)
     {
-        if (self.core.state == HBStateScanning)
+        if (action == @selector(browseSources:))
         {
-            
-            if (action == @selector(browseSources:))
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-                [toolbarItem setLabel: @"Cancel Scan"];
-                [toolbarItem setPaletteLabel: @"Cancel Scanning"];
-                [toolbarItem setToolTip: @"Cancel Scanning Source"];
-                return YES;
-            }
-            
-            if (action == @selector(Rip:) || action == @selector(addToQueue:))
-                return NO;
-        }
-        else
-        {
-            if (action == @selector(browseSources:))
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"source"]];
-                [toolbarItem setLabel: @"Source"];
-                [toolbarItem setPaletteLabel: @"Source"];
-                [toolbarItem setToolTip: @"Choose Video Source"];
-                return YES;
-            }
+            [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
+            [toolbarItem setLabel: @"Cancel Scan"];
+            [toolbarItem setPaletteLabel: @"Cancel Scanning"];
+            [toolbarItem setToolTip: @"Cancel Scanning Source"];
+            return YES;
         }
 
-        HBState queueState = self.queueCore.state;
-
-        if (queueState == HBStateWorking || queueState == HBStateSearching || queueState == HBStateMuxing)
-        {
-            if (action == @selector(Rip:))
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-                [toolbarItem setLabel: @"Stop"];
-                [toolbarItem setPaletteLabel: @"Stop"];
-                [toolbarItem setToolTip: @"Stop Encoding"];
-                return YES;
-            }
-            if (action == @selector(Pause:))
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
-                [toolbarItem setLabel: @"Pause"];
-                [toolbarItem setPaletteLabel: @"Pause Encoding"];
-                [toolbarItem setToolTip: @"Pause Encoding"];
-                return YES;
-            }
-            if (self.job)
-            {
-                if (action == @selector(addToQueue:))
-                    return YES;
-                if (action == @selector(showPicturePanel:))
-                    return YES;
-                if (action == @selector(showPreviewWindow:))
-                    return YES;
-            }
-        }
-        else if (queueState == HBStatePaused)
-        {
-            if (action == @selector(Pause:))
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-                [toolbarItem setLabel: @"Resume"];
-                [toolbarItem setPaletteLabel: @"Resume Encoding"];
-                [toolbarItem setToolTip: @"Resume Encoding"];
-                return YES;
-            }
-            if (action == @selector(Rip:))
-                return YES;
-            if (action == @selector(addToQueue:))
-                return YES;
-            if (action == @selector(showPicturePanel:))
-                return YES;
-            if (action == @selector(showPreviewWindow:))
-                return YES;
-        }
-        else if (queueState == HBStateScanning)
-        {
+        if (action == @selector(Rip:) || action == @selector(addToQueue:))
             return NO;
-        }
-        else if (queueState == HBStateWorkDone || queueState == HBStateScanDone || self.job)
-        {
-            if (action == @selector(Rip:))
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-                if (QueueFileArray.count > 0)
-                    [toolbarItem setLabel: @"Start Queue"];
-                else
-                    [toolbarItem setLabel: @"Start"];
-                [toolbarItem setPaletteLabel: @"Start Encoding"];
-                [toolbarItem setToolTip: @"Start Encoding"];
-                return YES;
-            }
-            if (action == @selector(addToQueue:))
-                return YES;
-            if (action == @selector(showPicturePanel:))
-                return YES;
-            if (action == @selector(showPreviewWindow:))
-                return YES;
-        }
-
     }
-    /* If there are any pending queue items, make sure the start/stop button is active */
-    if (action == @selector(Rip:) && fPendingCount > 0)
+    else
+    {
+        if (action == @selector(browseSources:))
+        {
+            [toolbarItem setImage: [NSImage imageNamed: @"source"]];
+            [toolbarItem setLabel: @"Source"];
+            [toolbarItem setPaletteLabel: @"Source"];
+            [toolbarItem setToolTip: @"Choose Video Source"];
+            return YES;
+        }
+    }
+
+    HBState queueState = self.queueCore.state;
+
+    if (queueState == HBStateScanning || queueState == HBStateWorking || queueState == HBStateSearching || queueState == HBStateMuxing)
+    {
+        if (action == @selector(Rip:))
+        {
+            [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
+            [toolbarItem setLabel: @"Stop"];
+            [toolbarItem setPaletteLabel: @"Stop"];
+            [toolbarItem setToolTip: @"Stop Encoding"];
+            return YES;
+        }
+        if (action == @selector(Pause:))
+        {
+            [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
+            [toolbarItem setLabel: @"Pause"];
+            [toolbarItem setPaletteLabel: @"Pause Encoding"];
+            [toolbarItem setToolTip: @"Pause Encoding"];
+            return YES;
+        }
+    }
+    else if (queueState == HBStatePaused)
+    {
+        if (action == @selector(Pause:))
+        {
+            [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
+            [toolbarItem setLabel: @"Resume"];
+            [toolbarItem setPaletteLabel: @"Resume Encoding"];
+            [toolbarItem setToolTip: @"Resume Encoding"];
+            return YES;
+        }
+        if (action == @selector(Rip:))
+            return YES;
+    }
+    else
+    {
+        if (action == @selector(Rip:))
+        {
+            [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
+            if (fPendingCount > 0)
+                [toolbarItem setLabel: @"Start Queue"];
+            else
+                [toolbarItem setLabel: @"Start"];
+            [toolbarItem setPaletteLabel: @"Start Encoding"];
+            [toolbarItem setToolTip: @"Start Encoding"];
+        }
+    }
+
+    if (self.job)
+    {
+        if (action == @selector(showPicturePanel:))
+            return YES;
+        if (action == @selector(showPreviewWindow:))
+            return YES;
+        if (action == @selector(addToQueue:))
+            return YES;
+    }
+    else
+    {
+        if (action == @selector(showPicturePanel:))
+            return NO;
+        if (action == @selector(showPreviewWindow:))
+            return NO;
+        if (action == @selector(addToQueue:))
+            return NO;
+    }
+
+    // If there are any pending queue items, make sure the start/stop button is active.
+    if (action == @selector(Rip:) && (fPendingCount > 0 || self.job))
         return YES;
     if (action == @selector(showQueueWindow:))
         return YES;
@@ -1081,74 +1054,71 @@
         return YES;
     if (action == @selector(showDebugOutputPanel:))
         return YES;
-    
+
     return NO;
 }
 
 - (BOOL) validateMenuItem: (NSMenuItem *) menuItem
 {
     SEL action = [menuItem action];
+    HBState queueState = self.queueCore.state;
 
-    if (self.queueCore)
+    if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
+        return self.job && [fWindow attachedSheet] == nil;
+
+    if (action == @selector(selectDefaultPreset:))
+        return [fWindow attachedSheet] == nil;
+
+    if (action == @selector(Pause:))
     {
-        HBState queueState = self.queueCore.state;
-
-        if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
-            return self.job && [fWindow attachedSheet] == nil;
-        
-        if (action == @selector(selectDefaultPreset:))
+        if (queueState == HBStateWorking)
+        {
+            if(![[menuItem title] isEqualToString:@"Pause Encoding"])
+                [menuItem setTitle:@"Pause Encoding"];
+            return YES;
+        }
+        else if (queueState == HBStatePaused)
+        {
+            if(![[menuItem title] isEqualToString:@"Resume Encoding"])
+                [menuItem setTitle:@"Resume Encoding"];
+            return YES;
+        }
+        else
+            return NO;
+    }
+    if (action == @selector(Rip:))
+    {
+        if (queueState == HBStateWorking || queueState == HBStateMuxing || queueState == HBStatePaused)
+        {
+            if(![[menuItem title] isEqualToString:@"Stop Encoding"])
+                [menuItem setTitle:@"Stop Encoding"];
+            return YES;
+        }
+        else if (self.job)
+        {
+            if(![[menuItem title] isEqualToString:@"Start Encoding"])
+                [menuItem setTitle:@"Start Encoding"];
             return [fWindow attachedSheet] == nil;
-        if (action == @selector(Pause:))
-        {
-            if (queueState == HBStateWorking)
-            {
-                if(![[menuItem title] isEqualToString:@"Pause Encoding"])
-                    [menuItem setTitle:@"Pause Encoding"];
-                return YES;
-            }
-            else if (queueState == HBStatePaused)
-            {
-                if(![[menuItem title] isEqualToString:@"Resume Encoding"])
-                    [menuItem setTitle:@"Resume Encoding"];
-                return YES;
-            }
-            else
-                return NO;
         }
-        if (action == @selector(Rip:))
+        else
+            return NO;
+    }
+    if (action == @selector(browseSources:))
+    {
+        if (self.core.state == HBStateScanning)
+            return NO;
+        else
+            return [fWindow attachedSheet] == nil;
+    }
+    if (action == @selector(selectPresetFromMenu:))
+    {
+        if ([menuItem.representedObject isEqualTo:self.selectedPreset])
         {
-            if (queueState == HBStateWorking || queueState == HBStateMuxing || queueState == HBStatePaused)
-            {
-                if(![[menuItem title] isEqualToString:@"Stop Encoding"])
-                    [menuItem setTitle:@"Stop Encoding"];
-                return YES;
-            }
-            else if (self.job)
-            {
-                if(![[menuItem title] isEqualToString:@"Start Encoding"])
-                    [menuItem setTitle:@"Start Encoding"];
-                return [fWindow attachedSheet] == nil;
-            }
-            else
-                return NO;
+            menuItem.state = NSOnState;
         }
-        if (action == @selector(browseSources:))
+        else
         {
-            if (self.core.state == HBStateScanning)
-                return NO;
-            else
-                return [fWindow attachedSheet] == nil;
-        }
-        if (action == @selector(selectPresetFromMenu:))
-        {
-            if ([menuItem.representedObject isEqualTo:self.selectedPreset])
-            {
-                [menuItem setState:NSOnState];
-            }
-            else
-            {
-                [menuItem setState:NSOffState];
-            }
+            menuItem.state = NSOffState;
         }
     }
 
@@ -1164,8 +1134,8 @@
  *  Register a test notification and make
  *  it enabled by default
  */
-- (NSDictionary *)registrationDictionaryForGrowl 
-{ 
+- (NSDictionary *)registrationDictionaryForGrowl
+{
     return @{GROWL_NOTIFICATIONS_ALL: @[SERVICE_NAME],
              GROWL_NOTIFICATIONS_DEFAULT: @[SERVICE_NAME]};
 }
