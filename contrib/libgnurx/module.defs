@@ -22,6 +22,6 @@ define LIBGNURX.UNINSTALL
 endef
 
 ifeq (1,$(FEATURE.local_pkgconfig))
-    LIBGNURX.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBGNURX.BUILD.env     = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBGNURX.CONFIGURE.env += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBGNURX.BUILD.env     += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif

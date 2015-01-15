@@ -16,6 +16,6 @@ endif
 LIBBLURAY.CONFIGURE.extra += --disable-examples
 
 ifeq (1,$(FEATURE.local_pkgconfig))
-    LIBBLURAY.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBBLURAY.BUILD.env     = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBBLURAY.CONFIGURE.env += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBBLURAY.BUILD.env     += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif

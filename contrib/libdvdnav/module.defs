@@ -9,6 +9,6 @@ ifneq (max,$(LIBDVDNAV.GCC.g))
 endif
 
 ifeq (1,$(FEATURE.local_pkgconfig))
-    LIBDVDNAV.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBDVDNAV.BUILD.env     = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBDVDNAV.CONFIGURE.env += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBDVDNAV.BUILD.env     += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif
