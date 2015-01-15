@@ -10,18 +10,18 @@
 static void hb_error_handler(const char *errmsg)
 {
     NSString *error = @(errmsg);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Internal Error.", @"")];
-        if (error)
-        {
-            [alert setInformativeText:error];
-        }
-        [alert runModal];
-        [alert release];
-    });
 
-    fprintf(stderr, "GUI ERROR dialog: %s\n", errmsg );
+    if (error && [[NSUserDefaults standardUserDefaults] boolForKey:@"HBDebugAlert"])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:NSLocalizedString(@"Internal Error.", @"")];
+            [alert runModal];
+            [alert release];
+        });
+    }
+
+    fprintf(stderr, "error: %s\n", errmsg);
 }
 
 int main(int argc, const char **argv)
