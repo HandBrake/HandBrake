@@ -85,6 +85,23 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     return self;
 }
 
+- (void)dealloc
+{
+    [_tracks release];
+    _tracks = nil;
+
+    [_defaults release];
+    _defaults = nil;
+
+    [_masterTrackArray release];
+    _masterTrackArray = nil;
+
+    [_foreignAudioSearchTrackName release];
+    _foreignAudioSearchTrackName = nil;
+
+    [super dealloc];
+}
+
 - (void)addAllTracks
 {
     [self.tracks removeAllObjects];
@@ -115,9 +132,9 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 }
 
 // This gets called whenever the video container changes.
-- (void)setContainer:(int)container
+- (void)containerChanged:(int)container
 {
-    _container = container;
+    self.container = container;
 
     [self validatePassthru];
 }

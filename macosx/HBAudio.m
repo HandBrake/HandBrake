@@ -15,6 +15,12 @@
 
 #include "hb.h"
 
+@interface HBAudio ()
+
+@property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
+
+@end
+
 @implementation HBAudio
 
 - (instancetype)initWithTitle:(HBTitle *)title
@@ -39,6 +45,23 @@
         [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the lis
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_tracks release];
+    _tracks = nil;
+
+    [_defaults release];
+    _defaults = nil;
+
+    [_noneTrack release];
+    _noneTrack = nil;
+
+    [_masterTrackArray release];
+    _masterTrackArray = nil;
+
+    [super dealloc];
 }
 
 - (void)addAllTracks
@@ -312,9 +335,9 @@
 }
 
 // This gets called whenever the video container changes.
-- (void)setContainer:(int)container
+- (void)containerChanged:(int)container
 {
-    _container = container;
+    self.container = container;
 
     // Update each of the instances because this value influences possible settings.
     for (HBAudioTrack *audioObject in self.tracks)

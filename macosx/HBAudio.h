@@ -21,8 +21,6 @@
 
 @property (nonatomic, readwrite, retain) HBAudioDefaults *defaults;
 
-@property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
-
 - (void)addAllTracks;
 - (void)removeAll;
 - (void)reloadDefaults;
@@ -30,6 +28,12 @@
 - (BOOL)anyCodecMatches:(int)codec;
 - (void)settingTrackToNone:(HBAudioTrack *)newNoneTrack;
 - (void)switchingTrackFromNone:(HBAudioTrack *)noLongerNoneTrack;
+
+/**
+ *  For internal use
+ */
+
+- (void)containerChanged:(int)container;
 
 @end
 

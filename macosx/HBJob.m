@@ -92,7 +92,8 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
 {
     _container = container;
 
-    self.audio.container = container;
+    [self.audio containerChanged:container];
+    [self.subtitles containerChanged:container];
     [self.video containerChanged];
 
     /* post a notification for any interested observers to indicate that our video container has changed */

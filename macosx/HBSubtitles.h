@@ -48,9 +48,14 @@ extern NSString *keySubTrackLanguageIndex;
 @property (nonatomic, readonly) NSArray *languagesArray;
 @property (nonatomic, readonly) NSInteger languagesArrayDefIndex;
 
-@property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
-
 @property (nonatomic, readwrite, retain) HBSubtitlesDefaults *defaults;
+
+/**
+ *  For internal use
+ */
+
+- (void)containerChanged:(int)container;
+@property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
 
 @end
 
