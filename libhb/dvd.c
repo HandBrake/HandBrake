@@ -146,7 +146,7 @@ hb_dvd_t * hb_dvdread_init( char * path )
     /* Open main IFO */
     if( !( d->vmg = ifoOpen( d->reader, 0 ) ) )
     {
-        hb_error( "dvd: ifoOpen failed" );
+        hb_log( "dvd: not a dvd - trying as a stream/file instead" );
         goto fail;
     }
 
