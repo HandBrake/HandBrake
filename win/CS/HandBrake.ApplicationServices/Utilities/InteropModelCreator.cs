@@ -258,7 +258,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             {
                                 CharacterCode = track.SrtCharCode, 
                                 Default = track.Default, 
-                                FileName = track.SrtFileName, 
+                                FileName = track.SrtPath, 
                                 LanguageCode = track.SrtLang, 
                                 Offset = track.SrtOffset, 
                                 BurnedIn = track.Burned
