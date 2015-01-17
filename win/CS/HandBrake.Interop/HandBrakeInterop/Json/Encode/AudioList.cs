@@ -17,12 +17,12 @@ namespace HandBrake.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the bitrate.
         /// </summary>
-        public int Bitrate { get; set; }
+        public int? Bitrate { get; set; }
 
         /// <summary>
         /// Gets or sets the compression level.
         /// </summary>
-        public double CompressionLevel { get; set; }
+        public double? CompressionLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the drc.
@@ -52,7 +52,7 @@ namespace HandBrake.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the quality.
         /// </summary>
-        public double Quality { get; set; }
+        public double? Quality { get; set; }
 
         /// <summary>
         /// Gets or sets the samplerate.
