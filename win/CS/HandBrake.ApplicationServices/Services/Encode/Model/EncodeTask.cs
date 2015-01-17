@@ -555,7 +555,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
         /// <summary>
         /// Gets or sets PreviewEncodeStartAt.
         /// </summary>
-        public string PreviewEncodeStartAt { get; set; }
+        public int PreviewEncodeStartAt { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether advanced panel enabled.

@@ -96,17 +96,14 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 this.IsEncoding = true;
                 this.currentTask = encodeQueueTask;
 
-                if (encodeQueueTask.Configuration.IsLoggingEnabled)
+                try
                 {
-                    try
-                    {
-                        this.SetupLogging(this.currentTask, false);
-                    }
-                    catch (Exception)
-                    {
-                        this.IsEncoding = false;
-                        throw;
-                    }
+                    this.SetupLogging(this.currentTask, false);
+                }
+                catch (Exception)
+                {
+                    this.IsEncoding = false;
+                    throw;
                 }
 
                 // Make sure the path exists, attempt to create it if it doesn't
@@ -126,7 +123,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, query)
                 {
                     RedirectStandardOutput = true,
-                    RedirectStandardError = encodeQueueTask.Configuration.IsLoggingEnabled,
+                    RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
@@ -137,11 +134,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
                 this.startTime = DateTime.Now;
 
-                if (encodeQueueTask.Configuration.IsLoggingEnabled)
-                {
-                    this.HbProcess.ErrorDataReceived += this.HbProcErrorDataReceived;
-                    this.HbProcess.BeginErrorReadLine();
-                }
+                this.HbProcess.ErrorDataReceived += this.HbProcErrorDataReceived;
+                this.HbProcess.BeginErrorReadLine();
 
                 this.HbProcess.OutputDataReceived += this.HbProcess_OutputDataReceived;
                 this.HbProcess.BeginOutputReadLine();

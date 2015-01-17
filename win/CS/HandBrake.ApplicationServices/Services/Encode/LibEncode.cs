@@ -46,15 +46,13 @@ namespace HandBrake.ApplicationServices.Services.Encode
         private DateTime startTime;
 
         /// <summary>
-        /// A flag to indicate if logging is enabled or not.
-        /// </summary>
-        private bool loggingEnabled;
-
-        /// <summary>
         /// The Current Task
         /// </summary>
         private QueueTask currentTask;
 
+        /// <summary>
+        /// A local instance of the scanned source.
+        /// </summary>
         private Source scannedSource;
 
         #endregion
@@ -94,13 +92,11 @@ namespace HandBrake.ApplicationServices.Services.Encode
         {
             // Setup
             this.startTime = DateTime.Now;
-            this.loggingEnabled = job.Configuration.IsLoggingEnabled;
             this.currentTask = job;
 
             // Create a new HandBrake instance
             // Setup the HandBrake Instance
-            this.instance = new HandBrakeInstance();
-            this.instance.Initialize(1);
+            this.instance = HandBrakeInstanceManager.GetEncodeInstance(job.Configuration.Verbosity);
             this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
             this.instance.EncodeProgress += this.InstanceEncodeProgress;
             
@@ -115,17 +111,14 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 this.IsEncoding = true;
 
                 // Enable logging if required.
-                if (job.Configuration.IsLoggingEnabled)
+                try
                 {
-                    try
-                    {
-                        this.SetupLogging(job, true);
-                    }
-                    catch (Exception)
-                    {
-                        this.IsEncoding = false;
-                        throw;
-                    }
+                    this.SetupLogging(job, true);
+                }
+                catch (Exception)
+                {
+                    this.IsEncoding = false;
+                    throw;
                 }
 
                 // Verify the Destination Path Exists, and if not, create it.
@@ -133,14 +126,15 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
                 // We have to scan the source again but only the title so the HandBrake instance is initialised correctly. 
                 // Since the UI sends the crop params down, we don't have to do all the previews.
-                this.instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
 
                 this.instance.ScanCompleted += delegate
-                    {
-                        // Process into internal structures.
-                        this.scannedSource = new Source { Titles = LibScan.ConvertTitles(this.instance.Titles, this.instance.FeatureTitle) }; // TODO work around the bad Internal API.
-                        this.ScanCompleted(job, this.instance);
-                    };
+                {
+                    // Process into internal structures.
+                    this.scannedSource = new Source { Titles = LibScan.ConvertTitles(this.instance.Titles, this.instance.FeatureTitle) }; // TODO work around the bad Internal API.
+                    this.ScanCompleted(job, this.instance);
+                };
+
+                this.instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
             }
             catch (Exception exc)
             {
@@ -268,12 +262,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// </param>
         private void HandBrakeInstanceErrorLogged(object sender, MessageLoggedEventArgs e)
         {
-            if (this.loggingEnabled)
+            lock (LogLock)
             {
-                lock (LogLock)
-                {
-                    this.ProcessLogMessage(e.Message);
-                }
+                this.ProcessLogMessage(e.Message);
             }
         }
 
@@ -288,12 +279,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// </param>
         private void HandBrakeInstanceMessageLogged(object sender, MessageLoggedEventArgs e)
         {
-            if (this.loggingEnabled)
+            lock (LogLock)
             {
-                lock (LogLock)
-                {
-                    this.ProcessLogMessage(e.Message);
-                }
+                this.ProcessLogMessage(e.Message);
             }
         }
 

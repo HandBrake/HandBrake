@@ -338,10 +338,16 @@ namespace HandBrake.ApplicationServices.Services.Encode
                     File.Delete(logFile2);
                 }
 
-                this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-                this.fileWriter.WriteLine(this.header);
-                this.fileWriter.WriteLine(string.Format("CLI Query: {0}", query));
-                this.fileWriter.WriteLine();
+                lock (FileWriterLock)
+                {
+                    this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
+                    this.fileWriter.WriteLine(this.header);
+                    if (!isLibhb)
+                    {
+                        this.fileWriter.WriteLine(string.Format("CLI Query: {0}", query));
+                    }
+                    this.fileWriter.WriteLine();
+                }
             }
             catch (Exception)
             {

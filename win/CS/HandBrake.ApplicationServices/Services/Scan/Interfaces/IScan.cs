@@ -101,10 +101,13 @@ namespace HandBrake.ApplicationServices.Services.Scan.Interfaces
         /// <param name="preview">
         /// The preview.
         /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        BitmapImage GetPreview(EncodeTask task, int preview);
+        BitmapImage GetPreview(EncodeTask task, int preview, HBConfiguration configuration);
 
         /// <summary>
         /// Kill the scan

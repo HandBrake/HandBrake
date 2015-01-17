@@ -47,7 +47,7 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             string query = string.Empty;
-            query += SourceQuery(task, null, null, configuration.PreviewScanCount);
+            query += SourceQuery(task, null, -1, configuration.PreviewScanCount);
             query += DestinationQuery(task);
             query += GenerateTabbedComponentsQuery(task, true, configuration.Verbosity, configuration.IsDvdNavDisabled, configuration.DisableQuickSyncDecoding, configuration.EnableDxva, configuration.ScalingMode == VideoScaler.BicubicCl);
 
@@ -72,7 +72,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <returns>
         /// A Cli query suitable for generating a preview video.
         /// </returns>
-        public static string GeneratePreviewQuery(EncodeTask task, HBConfiguration configuration, int duration, string startAtPreview)
+        public static string GeneratePreviewQuery(EncodeTask task, HBConfiguration configuration, int duration, int startAtPreview)
         {
             string query = string.Empty;
             query += SourceQuery(task, duration, startAtPreview, configuration.PreviewScanCount);
@@ -164,7 +164,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <returns>
         /// A Cli Query as a string
         /// </returns>
-        private static string SourceQuery(EncodeTask task, int? duration, string preview, int previewScanCount)
+        private static string SourceQuery(EncodeTask task, int? duration, int preview, int previewScanCount)
         {
             string query = string.Empty;
 

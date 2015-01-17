@@ -389,6 +389,7 @@ namespace HandBrake.Interop
         /// <param name="scanPreviewCount">
         /// The scan Preview Count.
         /// </param>
+        [HandleProcessCorruptedStateExceptions] 
         public void StartEncode(EncodeJob jobToStart, Title title, int scanPreviewCount)
         {
             this.StartEncode(jobToStart, title, false, 0, 0, 0, scanPreviewCount);
@@ -418,13 +419,14 @@ namespace HandBrake.Interop
         /// <param name="scanPreviewCount">
         /// Number of previews
         /// </param>
+        [HandleProcessCorruptedStateExceptions] 
         public void StartEncode(EncodeJob job, Title title, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount)
         {
             JsonEncodeObject encodeObject = EncodeFactory.Create(job, title);
 
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
             };
 
             string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
@@ -444,6 +446,7 @@ namespace HandBrake.Interop
         /// <summary>
         /// Pauses the current encode.
         /// </summary>
+        [HandleProcessCorruptedStateExceptions] 
         public void PauseEncode()
         {
             HBFunctions.hb_pause(this.hbHandle);
@@ -452,6 +455,7 @@ namespace HandBrake.Interop
         /// <summary>
         /// Resumes a paused encode.
         /// </summary>
+        [HandleProcessCorruptedStateExceptions] 
         public void ResumeEncode()
         {
             HBFunctions.hb_resume(this.hbHandle);
@@ -460,6 +464,7 @@ namespace HandBrake.Interop
         /// <summary>
         /// Stops the current encode.
         /// </summary>
+        [HandleProcessCorruptedStateExceptions] 
         public void StopEncode()
         {
             HBFunctions.hb_stop(this.hbHandle);

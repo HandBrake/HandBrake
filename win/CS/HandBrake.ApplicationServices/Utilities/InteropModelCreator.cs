@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows.Media.Animation;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
@@ -39,12 +40,12 @@ namespace HandBrake.ApplicationServices.Utilities
         public static EncodeJob GetEncodeJob(QueueTask task)
         {
             // Sanity Checking
-            if (task == null || task.Task == null)
+            if (task == null || task.Task == null || task.Configuration == null)
             {
                 return null;
             }
 
-            return GetEncodeJob(task.Task);
+            return GetEncodeJob(task.Task, task.Configuration);
         }
 
         /// <summary>
@@ -53,10 +54,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="task">
         /// The task.
         /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
         /// <returns>
         /// An Interop.EncodeJob model.
         /// </returns>
-        public static EncodeJob GetEncodeJob(EncodeTask task)
+        public static EncodeJob GetEncodeJob(EncodeTask task, HBConfiguration configuration)
         {
             // The current Job Configuration
             EncodeTask work = task;
@@ -72,17 +76,17 @@ namespace HandBrake.ApplicationServices.Utilities
             foreach (AudioTrack track in work.AudioTracks)
             {
                 AudioEncoding newTrack = new AudioEncoding
-                    {
-                        Bitrate = track.Bitrate,
-                        Drc = track.DRC,
-                        Gain = track.Gain,
-                        Encoder = Converters.GetCliAudioEncoder(track.Encoder),
-                        InputNumber = track.Track.HasValue ? track.Track.Value : 0,
-                        Mixdown = Converters.GetCliMixDown(track.MixDown),
-                        SampleRateRaw = GetSampleRateRaw(track.SampleRate),
-                        EncodeRateType = AudioEncodeRateType.Bitrate,
-                        Name = track.TrackName
-                    };
+                                             {
+                                                 Bitrate = track.Bitrate, 
+                                                 Drc = track.DRC, 
+                                                 Gain = track.Gain, 
+                                                 Encoder = Converters.GetCliAudioEncoder(track.Encoder), 
+                                                 InputNumber = track.Track.HasValue ? track.Track.Value : 0, 
+                                                 Mixdown = Converters.GetCliMixDown(track.MixDown), 
+                                                 SampleRateRaw = GetSampleRateRaw(track.SampleRate), 
+                                                 EncodeRateType = AudioEncodeRateType.Bitrate, 
+                                                 Name = track.TrackName
+                                             };
 
                 profile.AudioEncodings.Add(newTrack);
                 if (track.Track != null)
@@ -95,6 +99,7 @@ namespace HandBrake.ApplicationServices.Utilities
             job.OutputPath = work.Destination;
             job.SourcePath = work.Source;
             job.Title = work.Title;
+
             // job.SourceType = work.Type;
             switch (work.PointToPointMode)
             {
@@ -106,6 +111,9 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
                 case PointToPointMode.Frames:
                     job.RangeType = VideoRangeType.Frames;
+                    break;
+                case PointToPointMode.Preview:
+                    job.RangeType = VideoRangeType.Preview;
                     break;
             }
 
@@ -123,6 +131,13 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 job.FramesEnd = work.EndPoint;
                 job.FramesStart = work.StartPoint;
+            }
+
+            if (work.PointToPointMode == PointToPointMode.Preview)
+            {
+                job.StartAtPreview = work.PreviewStartAt.HasValue ? work.PreviewStartAt.Value : 1;
+                job.SecondsEnd = work.PreviewDuration.HasValue ? work.PreviewEncodeDuration : 30;
+                job.SeekPoints = configuration.PreviewScanCount;
             }
 
             job.Angle = work.Angle;
@@ -143,17 +158,9 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Picture Settings
             profile.Anamorphic = work.Anamorphic;
-            profile.Cropping = new Cropping
-                {
-                    Top = work.Cropping.Top,
-                    Bottom = work.Cropping.Bottom,
-                    Left = work.Cropping.Left,
-                    Right = work.Cropping.Right
-                };
+            profile.Cropping = new Cropping { Top = work.Cropping.Top, Bottom = work.Cropping.Bottom, Left = work.Cropping.Left, Right = work.Cropping.Right };
             profile.CroppingType = CroppingType.Custom; // TODO deal with this better
-            profile.DisplayWidth = work.DisplayWidth.HasValue
-                           ? int.Parse(Math.Round(work.DisplayWidth.Value, 0).ToString())
-                           : 0;
+            profile.DisplayWidth = work.DisplayWidth.HasValue ? int.Parse(Math.Round(work.DisplayWidth.Value, 0).ToString()) : 0;
             profile.PixelAspectX = work.PixelAspectX;
             profile.PixelAspectY = work.PixelAspectY;
             profile.Height = work.Height.HasValue ? work.Height.Value : 0;
@@ -172,7 +179,9 @@ namespace HandBrake.ApplicationServices.Utilities
             profile.DenoiseTune = work.DenoiseTune.ToString().ToLower().Replace(" ", string.Empty);
             profile.CustomDetelecine = work.CustomDetelecine;
             if (work.Deblock > 4)
+            {
                 profile.Deblock = work.Deblock;
+            }
             profile.Decomb = work.Decomb;
             profile.Deinterlace = work.Deinterlace;
             profile.Denoise = work.Denoise;
@@ -209,7 +218,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 profile.VideoLevel = work.H264Level;
             }
             else if (work.VideoEncoder == VideoEncoder.X265)
-            {       
+            {
                 profile.VideoPreset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
 
                 if (work.H265Profile != x265Profile.None)
@@ -229,7 +238,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 profile.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty);
                 profile.VideoLevel = work.H264Level;
             }
-            
+
             // Chapter Markers
             profile.IncludeChapterMarkers = work.IncludeChapterMarkers;
             job.CustomChapterNames = work.ChapterNames.Select(item => item.ChapterName).ToList();
@@ -247,11 +256,11 @@ namespace HandBrake.ApplicationServices.Utilities
                     job.Subtitles.SrtSubtitles.Add(
                         new SrtSubtitle
                             {
-                                CharacterCode = track.SrtCharCode,
-                                Default = track.Default,
-                                FileName = track.SrtFileName,
-                                LanguageCode = track.SrtLang,
-                                Offset = track.SrtOffset,
+                                CharacterCode = track.SrtCharCode, 
+                                Default = track.Default, 
+                                FileName = track.SrtFileName, 
+                                LanguageCode = track.SrtLang, 
+                                Offset = track.SrtOffset, 
                                 BurnedIn = track.Burned
                             });
                 }
@@ -260,13 +269,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     if (track.SourceTrack != null)
                     {
                         job.Subtitles.SourceSubtitles.Add(
-                            new SourceSubtitle
-                                {
-                                    BurnedIn = track.Burned,
-                                    Default = track.Default,
-                                    Forced = track.Forced,
-                                    TrackNumber = track.SourceTrack.TrackNumber
-                                });
+                            new SourceSubtitle { BurnedIn = track.Burned, Default = track.Default, Forced = track.Forced, TrackNumber = track.SourceTrack.TrackNumber });
                     }
                 }
             }

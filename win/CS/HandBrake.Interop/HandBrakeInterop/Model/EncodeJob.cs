@@ -78,10 +78,21 @@ namespace HandBrake.Interop.Model
 		/// </summary>
 		public VideoRangeType RangeType { get; set; }
 
+	    /// <summary>
+	    /// Gets or sets the seek points.
+	    /// This is the number of preview points.
+	    /// </summary>
+	    public int SeekPoints { get; set; }
+
+	    /// <summary>
+	    /// Gets or sets the start at preview.
+	    /// </summary>
+	    public int StartAtPreview { get; set; }
+
 		/// <summary>
 		/// Gets or sets the seconds end.
 		/// </summary>
-		public double SecondsEnd { get; set; }
+		public int SecondsEnd { get; set; }
 
 		/// <summary>
 		/// Gets or sets the seconds start.

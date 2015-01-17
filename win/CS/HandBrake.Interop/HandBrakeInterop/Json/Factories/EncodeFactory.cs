@@ -14,6 +14,7 @@ namespace HandBrake.Interop.Json.Factories
     using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Windows.Media.Animation;
 
     using HandBrake.Interop.HbLib;
     using HandBrake.Interop.Helpers;
@@ -31,6 +32,12 @@ namespace HandBrake.Interop.Json.Factories
     /// </summary>
     internal class EncodeFactory
     {
+        /*
+         * TODO:
+         * 1. OpenCL and HWD Support 
+         * 2. Rotate Support
+         */
+
         /// <summary>
         /// The create.
         /// </summary>
@@ -72,19 +79,32 @@ namespace HandBrake.Interop.Json.Factories
         /// </returns>
         private static Source CreateSource(EncodeJob job)
         {
+            Range range = new Range();
+            switch (job.RangeType)
+            {
+                case VideoRangeType.Chapters:
+                    range.ChapterEnd = job.ChapterEnd;
+                    range.ChapterStart = job.ChapterStart;
+                    break;
+                case VideoRangeType.Seconds:
+                    range.PtsToStart = (int)(job.SecondsStart * 90000);
+                    range.PtsToStop = (int)((job.SecondsEnd - job.SecondsStart) * 90000); 
+                    break;
+                case VideoRangeType.Frames:
+                    range.FrameToStart = job.FramesStart;
+                    range.FrameToStop = job.FramesEnd; 
+                    break;
+                case VideoRangeType.Preview:
+                    range.StartAtPreview = job.StartAtPreview;
+                    range.SeekPoints = job.SeekPoints;
+                    range.PtsToStop = job.SecondsEnd * 90000; 
+                    break;
+            }
+
             Source source = new Source
             {
                 Title = job.Title, 
-                Range =
-                    new Range
-                        {
-                            ChapterEnd = job.ChapterEnd, 
-                            ChapterStart = job.ChapterStart, 
-                            FrameToStart = job.FramesStart, 
-                            FrameToStop = job.FramesEnd, 
-                            PtsToStart = (int)(job.SecondsStart * 90000), 
-                            PtsToStop = (int)((job.SecondsEnd - job.SecondsStart) * 90000), 
-                        }, 
+                Range = range,
                 Angle = job.Angle
             };
             return source;

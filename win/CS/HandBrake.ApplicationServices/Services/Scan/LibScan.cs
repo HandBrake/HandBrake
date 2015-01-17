@@ -264,17 +264,20 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// <param name="preview">
         /// The preview.
         /// </param>
+        /// <param name="configuraiton">
+        /// The configuraiton.
+        /// </param>
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        public BitmapImage GetPreview(EncodeTask job, int preview)
+        public BitmapImage GetPreview(EncodeTask job, int preview, HBConfiguration configuraiton)
         {
             if (this.instance == null)
             {
                 return null;
             }
 
-            EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
+            EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job, configuraiton);
 
             BitmapImage bitmapImage = null;
             try

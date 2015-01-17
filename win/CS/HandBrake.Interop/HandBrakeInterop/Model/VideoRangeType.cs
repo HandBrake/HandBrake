@@ -19,8 +19,8 @@ namespace HandBrake.Interop.Model
 		/// <summary>
 		/// The entire title.
 		/// </summary>
-		[Display(Name = "All")]
-		All,
+		[Display(Name = "Preview")]
+		Preview,
 
 		/// <summary>
 		/// A chapter range.

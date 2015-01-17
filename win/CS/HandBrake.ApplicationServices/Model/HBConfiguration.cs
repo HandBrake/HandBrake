@@ -15,11 +15,6 @@ namespace HandBrake.ApplicationServices.Model
     public class HBConfiguration
     {
         /// <summary>
-        /// Gets or sets a value indicating whether is logging enabled.
-        /// </summary>
-        public bool IsLoggingEnabled { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether is dvd nav disabled.
         /// </summary>
         public bool IsDvdNavDisabled { get; set; }

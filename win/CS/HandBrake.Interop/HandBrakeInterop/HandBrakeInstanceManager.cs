@@ -20,6 +20,7 @@ namespace HandBrake.Interop
     public static class HandBrakeInstanceManager
     {
         private static HandBrakeInstance scanInstance;
+        private static HandBrakeInstance encodeInstance;
 
         /// <summary>
         /// Gets the scanInstance.
@@ -46,6 +47,30 @@ namespace HandBrake.Interop
         }
 
         /// <summary>
+        /// The get encode instance.
+        /// </summary>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IHandBrakeInstance"/>.
+        /// </returns>
+        public static IHandBrakeInstance GetEncodeInstance(int verbosity)
+        {
+            if (encodeInstance != null)
+            {
+                encodeInstance.Dispose();
+                encodeInstance = null;
+            }
+
+            HandBrakeInstance newInstance = new HandBrakeInstance();
+            newInstance.Initialize(verbosity);
+            encodeInstance = newInstance;
+
+            return encodeInstance;
+        }
+
+        /// <summary>
         /// Gets the last scan scan instance.
         /// </summary>
         public static IHandBrakeInstance LastScanScanInstance
@@ -64,6 +89,28 @@ namespace HandBrake.Interop
             get
             {
                 return scanInstance.Handle;
+            }
+        }
+
+        /// <summary>
+        /// Gets the last encode scan instance.
+        /// </summary>
+        public static IHandBrakeInstance LastEncodeScanInstance
+        {
+            get
+            {
+                return encodeInstance;
+            }
+        }
+
+        /// <summary>
+        /// Gets the encode handle.
+        /// </summary>
+        internal static IntPtr LastEncodeHandle
+        {
+            get
+            {
+                return encodeInstance.Handle;
             }
         }
     }

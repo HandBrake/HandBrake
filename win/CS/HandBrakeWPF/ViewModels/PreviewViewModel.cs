@@ -302,9 +302,9 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup the encode task as a preview encode
             encodeTask.IsPreviewEncode = true;
-            encodeTask.PreviewEncodeStartAt = this.StartAt.ToString(CultureInfo.InvariantCulture);
+            encodeTask.PreviewEncodeStartAt = this.StartAt;
             encodeTask.PreviewEncodeDuration = this.Duration;
-            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(false));
+            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create());
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 

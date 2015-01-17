@@ -310,8 +310,8 @@ namespace HandBrake.Interop
         {
             switch (job.RangeType)
             {
-                case VideoRangeType.All:
-                    return title.Duration.TotalSeconds;
+                // case VideoRangeType.All:
+                //    return title.Duration.TotalSeconds;
                 case VideoRangeType.Chapters:
                     TimeSpan duration = TimeSpan.Zero;
                     for (int i = job.ChapterStart; i <= job.ChapterEnd; i++)

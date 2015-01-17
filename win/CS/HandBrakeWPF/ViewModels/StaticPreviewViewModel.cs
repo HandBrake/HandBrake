@@ -20,6 +20,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Factories;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -250,7 +251,7 @@ namespace HandBrakeWPF.ViewModels
             BitmapImage image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage);
+                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, HBConfigurationFactory.Create());
             }
             catch (Exception exc)
             {

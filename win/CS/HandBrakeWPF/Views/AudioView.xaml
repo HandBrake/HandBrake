@@ -82,7 +82,7 @@
 
                 <Button MinWidth="65"
                     Margin="0,0,10,0"
-                    cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
+                    cal:Message.Attach="[Event Click] = [Action Clear]"
                     Content="Clear" />
                 
                 <Button MinWidth="65"

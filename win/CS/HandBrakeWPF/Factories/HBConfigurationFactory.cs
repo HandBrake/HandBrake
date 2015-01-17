@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Factories
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Services.Interfaces;
 
@@ -29,42 +28,27 @@ namespace HandBrakeWPF.Factories
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="isLoggingEnabled">
-        /// The is logging enabled.
-        /// </param>
-        /// <returns>
-        /// The <see cref="HBConfiguration"/>.
-        /// </returns>
-        public static HBConfiguration Create(bool isLoggingEnabled)
-        {
-            HBConfiguration config = new HBConfiguration
-                                         {
-                                             IsDvdNavDisabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
-                                             IsLoggingEnabled = isLoggingEnabled,
-                                             DisableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding),
-                                             EnableDxva = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDxva),
-                                             ScalingMode = UserSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode),
-                                             PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount),
-                                             Verbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity),
-                                             MinScanDuration = UserSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration),
-                                             ProcessPriority = UserSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority),
-                                             SaveLogToCopyDirectory = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory),
-                                             SaveLogWithVideo = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo),
-                                             SaveLogCopyDirectory = UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory),
-                                         };
-
-            return config;
-        }
-
-        /// <summary>
-        /// The create.
-        /// </summary>
         /// <returns>
         /// The <see cref="HBConfiguration"/>.
         /// </returns>
         public static HBConfiguration Create()
         {
-            return Create(true);
+            HBConfiguration config = new HBConfiguration
+                                         {
+                                             IsDvdNavDisabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav), 
+                                             DisableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding), 
+                                             EnableDxva = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDxva), 
+                                             ScalingMode = UserSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode), 
+                                             PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount), 
+                                             Verbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity), 
+                                             MinScanDuration = UserSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration), 
+                                             ProcessPriority = UserSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority), 
+                                             SaveLogToCopyDirectory = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory), 
+                                             SaveLogWithVideo = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo), 
+                                             SaveLogCopyDirectory = UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), 
+                                         };
+
+            return config;
         }
     }
 }
