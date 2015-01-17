@@ -1037,6 +1037,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the static preview view model.
+        /// </summary>
+        public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
+
         #endregion
 
         #region Load and Shutdown Handling
@@ -1158,18 +1163,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenPreviewWindow()
         {
-            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(PreviewView));
-            IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
-
-            if (window != null)
+            if (!string.IsNullOrEmpty(this.CurrentTask.Source))
             {
-                viewModel.Task = this.CurrentTask;
-                window.Activate();
-            }
-            else
-            {
-                viewModel.Task = this.CurrentTask;
-                this.WindowManager.ShowWindow(viewModel);
+                this.StaticPreviewViewModel.IsOpen = true;
+                this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask);
+                this.WindowManager.ShowWindow(this.StaticPreviewViewModel);
             }
         }
 
@@ -1844,10 +1842,6 @@ namespace HandBrakeWPF.ViewModels
                     this.SubtitleViewModel.UpdateTask(this.CurrentTask);
                     this.ChaptersViewModel.UpdateTask(this.CurrentTask);
                     this.AdvancedViewModel.UpdateTask(this.CurrentTask);
-
-                    // Tell the Preivew Window
-                    IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
-                    viewModel.Task = this.CurrentTask;
 
                     // Cleanup
                     this.ShowStatusWindow = false;

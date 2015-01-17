@@ -10,17 +10,28 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
     using System.Runtime.ExceptionServices;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
+    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Encode.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Factories;
+    using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -30,7 +41,7 @@ namespace HandBrakeWPF.ViewModels
     {
         /*
          * TODO
-         * - Integrate Video Preview panel.
+         * - Window Size / Scale to screen etc.
          */
 
         #region Fields
@@ -39,6 +50,21 @@ namespace HandBrakeWPF.ViewModels
         ///     The scan service.
         /// </summary>
         private readonly IScan scanService;
+
+        /// <summary>
+        /// Backing field for the encode service.
+        /// </summary>
+        private readonly IEncodeServiceWrapper encodeService;
+
+        /// <summary>
+        /// The error service
+        /// </summary>
+        private readonly IErrorService errorService;
+
+        /// <summary>
+        /// The user Setting Service
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         ///     The height.
@@ -65,6 +91,26 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool previewNotAvailable;
 
+        /// <summary>
+        /// The percentage.
+        /// </summary>
+        private string percentage;
+
+        /// <summary>
+        /// The percentage value.
+        /// </summary>
+        private double percentageValue;
+
+        /// <summary>
+        /// The Backing field for IsEncoding
+        /// </summary>
+        private bool isEncoding;
+
+        /// <summary>
+        /// Backing field for use system default player
+        /// </summary>
+        private bool useSystemDefaultPlayer;
+
         #endregion
 
         #region Constructors and Destructors
@@ -75,12 +121,29 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="scanService">
         /// The scan service.
         /// </param>
-        public StaticPreviewViewModel(IScan scanService)
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService)
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
             this.Title = Properties.Resources.Preview;
             this.PreviewNotAvailable = true;
+
+            // Live Preview
+            this.userSettingService = userSettingService;
+            this.encodeService = new EncodeServiceWrapper(userSettingService); // Preview needs a seperate instance rather than the shared singleton. This could maybe do with being refactored at some point
+
+            this.Title = "Preview";
+            this.Percentage = "0.00%";
+            this.PercentageValue = 0;
+            this.StartAt = 1;
+            this.Duration = 30;
+            this.CanPlay = true;
+
+            UseSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
+            this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
         }
 
         #endregion
@@ -208,6 +271,128 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
+        #region LivePreviewProperties
+
+        /// <summary>
+        /// Gets AvailableDurations.
+        /// </summary>
+        public IEnumerable<int> AvailableDurations
+        {
+            get
+            {
+                return new List<int> { 5, 10, 30, 45, 60, 75, 90, 105, 120, 150, 180, 210, 240 };
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Duration.
+        /// </summary>
+        public int Duration { get; set; }
+
+        /// <summary>
+        /// Gets or sets Percentage.
+        /// </summary>
+        public string Percentage
+        {
+            get
+            {
+                return this.percentage;
+            }
+
+            set
+            {
+                this.percentage = value;
+                this.NotifyOfPropertyChange(() => this.Percentage);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets PercentageValue.
+        /// </summary>
+        public double PercentageValue
+        {
+            get
+            {
+                return this.percentageValue;
+            }
+
+            set
+            {
+                this.percentageValue = value;
+                this.NotifyOfPropertyChange(() => this.PercentageValue);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets StartAt.
+        /// </summary>
+        public int StartAt { get; set; }
+
+        /// <summary>
+        /// Gets StartPoints.
+        /// </summary>
+        public IEnumerable<int> StartPoints
+        {
+            get
+            {
+                List<int> startPoints = new List<int>();
+                for (int i = 1;
+                     i <= this.UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+                     i++)
+                {
+                    startPoints.Add(i);
+                }
+
+                return startPoints;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UseSystemDefaultPlayer.
+        /// </summary>
+        public bool UseSystemDefaultPlayer
+        {
+            get
+            {
+                return this.useSystemDefaultPlayer;
+            }
+            set
+            {
+                this.useSystemDefaultPlayer = value;
+                this.NotifyOfPropertyChange(() => UseSystemDefaultPlayer);
+                this.userSettingService.SetUserSetting(UserSettingConstants.DefaultPlayer, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsEncoding.
+        /// </summary>
+        public bool IsEncoding
+        {
+            get
+            {
+                return this.isEncoding;
+            }
+            set
+            {
+                this.isEncoding = value;
+                this.CanPlay = !value;
+                this.NotifyOfPropertyChange(() => this.CanPlay);
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Currently Playing / Encoding Filename.
+        /// </summary>
+        public string CurrentlyPlaying { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether can play.
+        /// </summary>
+        public bool CanPlay { get; set; }
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -275,6 +460,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void PreviewSizeChanged(SizeChangedEventArgs ea)
         {
+            // TODO implement window size scaling here.
             Rect workArea = SystemParameters.WorkArea;
             if (ea.NewSize.Width > workArea.Width)
             {
@@ -288,6 +474,208 @@ namespace HandBrakeWPF.ViewModels
                 this.Title = Properties.Resources.Preview_Scaled;
             }
         }
+        #endregion
+
+        #region Public Method - Live Preview 
+        
+        #region Public Methods
+
+        /// <summary>
+        /// Close this window.
+        /// </summary>
+        public void Close()
+        {
+            this.TryClose();
+        }
+
+        /// <summary>
+        /// Handle The Initialisation 
+        /// </summary>
+        public override void OnLoad()
+        {
+        }
+
+        /// <summary>
+        /// Encode and play a sample
+        /// </summary>
+        public void Play()
+        {
+            try
+            {
+                this.IsEncoding = true;
+                if (File.Exists(this.CurrentlyPlaying))
+                    File.Delete(this.CurrentlyPlaying);
+            }
+            catch (Exception)
+            {
+                this.IsEncoding = false;
+                this.errorService.ShowMessageBox("Unable to delete previous preview file. You may need to restart the application.",
+                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            if (this.Task == null || string.IsNullOrEmpty(Task.Source))
+            {
+                this.errorService.ShowMessageBox("You must first scan a source and setup your encode before creating a preview.",
+                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            EncodeTask encodeTask = new EncodeTask(this.Task)
+            {
+                PreviewDuration = this.Duration,
+                PreviewStartAt = this.StartAt,
+                PointToPointMode = PointToPointMode.Preview
+            };
+
+            // Filename handling.
+            if (string.IsNullOrEmpty(encodeTask.Destination))
+            {
+                string filename = Path.ChangeExtension(Path.GetTempFileName(), encodeTask.OutputFormat == OutputFormat.Mkv ? "m4v" : "mkv");
+                encodeTask.Destination = filename;
+                this.CurrentlyPlaying = filename;
+            }
+            else
+            {
+                string directory = Path.GetDirectoryName(encodeTask.Destination) ?? string.Empty;
+                string filename = Path.GetFileNameWithoutExtension(encodeTask.Destination);
+                string extension = Path.GetExtension(encodeTask.Destination);
+                string previewFilename = string.Format("{0}_preview{1}", filename, extension);
+                string previewFullPath = Path.Combine(directory, previewFilename);
+                encodeTask.Destination = previewFullPath;
+                this.CurrentlyPlaying = previewFullPath;
+            }
+
+            // Setup the encode task as a preview encode
+            encodeTask.IsPreviewEncode = true;
+            encodeTask.PreviewEncodeStartAt = this.StartAt;
+            encodeTask.PreviewEncodeDuration = this.Duration;
+            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create());
+            ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
+        }
+
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Play the Encoded file
+        /// </summary>
+        private void PlayFile()
+        {
+            // Launch VLC and Play video.
+            if (this.CurrentlyPlaying != string.Empty)
+            {
+                if (File.Exists(this.CurrentlyPlaying))
+                {
+                    string args = "\"" + this.CurrentlyPlaying + "\"";
+
+                    if (this.UseSystemDefaultPlayer)
+                    {
+                        Process.Start(args);
+                    }
+                    else
+                    {
+                        if (!File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
+                        {
+                            // Attempt to find VLC if it doesn't exist in the default set location.
+                            string vlcPath;
+
+                            if (8 == IntPtr.Size || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
+                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+                            else
+                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
+
+                            if (!string.IsNullOrEmpty(vlcPath))
+                            {
+                                vlcPath = Path.Combine(vlcPath, "VideoLAN\\VLC\\vlc.exe");
+                            }
+
+                            if (File.Exists(vlcPath))
+                            {
+                                UserSettingService.SetUserSetting(UserSettingConstants.VLCPath, vlcPath);
+                            }
+                            else
+                            {
+                                this.errorService.ShowMessageBox("Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\")",
+                                                                 Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                        }
+
+                        if (File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
+                        {
+                            ProcessStartInfo vlc = new ProcessStartInfo(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath), args);
+                            Process.Start(vlc);
+                        }
+                    }
+                }
+                else
+                {
+                    this.errorService.ShowMessageBox("Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.",
+                                 Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create the Preview.
+        /// </summary>
+        /// <param name="state">
+        /// The state.
+        /// </param>
+        private void CreatePreview(object state)
+        {
+            // Make sure we are not already encoding and if we are then display an error.
+            if (encodeService.IsEncoding)
+            {
+                this.errorService.ShowMessageBox("Handbrake is already encoding a video! Only one file can be encoded at any one time.",
+                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            this.encodeService.EncodeCompleted += this.encodeService_EncodeCompleted;
+            this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
+
+            this.encodeService.Start((QueueTask)state);
+            this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
+        }
+        #endregion
+
+        #region Event Handlers
+        /// <summary>
+        /// Handle Encode Progress Events
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EncodeProgressEventArgs.
+        /// </param>
+        private void encodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
+        {
+            this.Percentage = string.Format("{0} %", Math.Round(e.PercentComplete, 2).ToString(CultureInfo.InvariantCulture));
+            this.PercentageValue = e.PercentComplete;
+        }
+
+        /// <summary>
+        /// Handle the Encode Completed Event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EncodeCompletedEventArgs.
+        /// </param>
+        private void encodeService_EncodeCompleted(object sender, EncodeCompletedEventArgs e)
+        {
+            this.Percentage = "0.00%";
+            this.PercentageValue = 0;
+            this.IsEncoding = false;
+
+            this.encodeService.EncodeCompleted -= this.encodeService_EncodeCompleted;
+            this.encodeService.EncodeStatusChanged -= this.encodeService_EncodeStatusChanged;
+
+            this.PlayFile();
+        }
+        #endregion
         #endregion
     }
 }

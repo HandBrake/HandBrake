@@ -10,7 +10,7 @@
              WindowStartupLocation="CenterScreen"
              cal:Message.Attach="[Event SizeChanged] = [Action PreviewSizeChanged($eventArgs)]"       
              Title="{Binding Title}">
-    
+
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
     </Window.Resources>
@@ -21,12 +21,55 @@
         </StackPanel>
 
         <Image Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" />
-        <Slider Maximum="{Binding TotalPreviews}" Minimum="0" 
+
+
+        <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8"
+                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" MinWidth="400" Background="Black" Opacity="0.70">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+                <Slider Maximum="{Binding TotalPreviews}" Minimum="0" 
                 Value="{Binding SelectedPreviewImage}"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Center"
-                Margin="0,0,0,20" Width="150" 
-                Background="Transparent" 
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Background="Transparent" TickPlacement="TopLeft"
+                        Margin="0,0,0,5"
                 />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
+                    <Button Content="Live Preview" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" />
+                    <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="Duration:" />
+                    <ComboBox Width="60"
+                      ItemsSource="{Binding AvailableDurations}"
+                      SelectedItem="{Binding Duration}" />
+
+                    <CheckBox VerticalAlignment="Center" Content="Use system default player" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,0">
+
+                </StackPanel>
+
+                <Grid  Margin="0,10,10,0" Grid.Row="2" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="23*" />
+                        <ColumnDefinition Width="289*"/>
+                        <ColumnDefinition Width="Auto" MinWidth="50" />
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar MinHeight="5" Maximum="100" Minimum="0" Value="{Binding PercentageValue}" Grid.Column="0" Grid.ColumnSpan="2" />
+                    <TextBlock Margin="5,0,0,0" Text="{Binding Percentage}" Grid.Column="2" HorizontalAlignment="Right" Foreground="White" />
+                </Grid>
+
+
+
+
+            </Grid>
+
+        </Border>
+
     </Grid>
 </Window>

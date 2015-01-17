@@ -798,20 +798,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
-        /// <summary>
-        /// The preview image.
-        /// Experimental Feature => In-Progress
-        /// </summary>
-        public void PreviewImage()
-        {
-            if (!string.IsNullOrEmpty(this.Task.Source))
-            {
-                this.StaticPreviewViewModel.IsOpen = true;
-                this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task);
-                this.WindowManager.ShowWindow(this.StaticPreviewViewModel);
-            }
-        }
-
         #endregion
 
         #region Methods

@@ -509,10 +509,10 @@ Do you wish to proceed?</value>
     <value>The entered destination contained illegal characters. You must fix the path and filename before continuing.</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>*** EXPERIMENTAL *** Still Preview</value>
+    <value>Preview</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value> *** EXPERIMENTAL *** Still Preview (Scaled)</value>
+    <value>Preview (Scaled)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Output: {0}</value>

@@ -301,7 +301,6 @@
     <Compile Include="ViewModels\Interfaces\IAddPresetViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAudioViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQueueViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IPreviewViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IErrorViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILogViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAboutViewModel.cs" />
@@ -309,7 +308,6 @@
     <Compile Include="ViewModels\Interfaces\IOptionsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IViewModelBase.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
-    <Compile Include="ViewModels\PreviewViewModel.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -344,9 +342,6 @@
     </Compile>
     <Compile Include="Views\LogView.xaml.cs">
       <DependentUpon>LogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PreviewView.xaml.cs">
-      <DependentUpon>PreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QueueView.xaml.cs">
       <DependentUpon>QueueView.xaml</DependentUpon>
@@ -493,10 +488,6 @@
     <Page Include="Views\LogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PreviewView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\QueueView.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -80,7 +80,6 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<IShellViewModel>().ImplementedBy<ShellViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IQueueViewModel>().ImplementedBy<QueueViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IAddPresetViewModel>().ImplementedBy<AddPresetViewModel>().LifeStyle.Is(LifestyleType.Transient));
-            this.windsorContainer.Register(Component.For<IPreviewViewModel>().ImplementedBy<PreviewViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<ILogViewModel>().ImplementedBy<LogViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IAboutViewModel>().ImplementedBy<AboutViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IOptionsViewModel>().ImplementedBy<OptionsViewModel>().LifeStyle.Is(LifestyleType.Singleton));

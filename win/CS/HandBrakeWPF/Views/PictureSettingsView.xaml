@@ -168,9 +168,6 @@
 
                     <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,5"
                        Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
-
-                    <Button Content="Preview" Grid.Row="1" Margin="5,0,0,0"
-                            cal:Message.Attach="[Event Click] = [Action PreviewImage]" HorizontalAlignment="Left" />
                 </Grid>
                 
             </StackPanel>

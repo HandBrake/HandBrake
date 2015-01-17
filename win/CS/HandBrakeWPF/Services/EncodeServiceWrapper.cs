@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   We have multiple implementations of IEncode. This is a wrapper class for the GUI so that the 
+//   We have multiple implementations of IEncode. This is a wrapper class for the GUI so that the
 //   implementation used is controllable via user settings.
 //   Over time, this class will go away when the LibHB and process isolation code matures.
 // </summary>
@@ -19,7 +19,6 @@ namespace HandBrakeWPF.Services
     using HandBrake.ApplicationServices.Services.Encode;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Services.Interfaces;
 
@@ -71,8 +70,8 @@ namespace HandBrakeWPF.Services
                 {
                     // Try to recover from errors.
                     throw new GeneralApplicationException(
-                        "Unable to initialise LibHB or Background worker service",
-                        "Falling back to using HandBrakeCLI.exe. Setting has been reset",
+                        "Unable to initialise LibHB or Background worker service", 
+                        "Falling back to using HandBrakeCLI.exe. Setting has been reset", 
                         exc);
                 }
             }
