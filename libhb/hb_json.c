@@ -1051,7 +1051,7 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
                 sub_config.offset = offset;
                 sub_config.dest = burn ? RENDERSUB : PASSTHRUSUB;
                 strncpy(sub_config.src_codeset, srtcodeset, 39);
-                sub_config.src_filename[39] = 0;
+                sub_config.src_codeset[39] = 0;
                 hb_srt_add(job, &sub_config, srtlang);
             }
         }
