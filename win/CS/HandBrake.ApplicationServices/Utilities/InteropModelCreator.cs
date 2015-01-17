@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Windows.Media.Animation;
 
@@ -75,6 +76,7 @@ namespace HandBrake.ApplicationServices.Utilities
             job.ChosenAudioTracks = new List<int>();
             foreach (AudioTrack track in work.AudioTracks)
             {
+                
                 AudioEncoding newTrack = new AudioEncoding
                                              {
                                                  Bitrate = track.Bitrate, 
@@ -85,7 +87,8 @@ namespace HandBrake.ApplicationServices.Utilities
                                                  Mixdown = Converters.GetCliMixDown(track.MixDown), 
                                                  SampleRateRaw = GetSampleRateRaw(track.SampleRate), 
                                                  EncodeRateType = AudioEncodeRateType.Bitrate, 
-                                                 Name = track.TrackName
+                                                 Name = track.TrackName,
+                                                 IsPassthru = track.IsPassthru
                                              };
 
                 profile.AudioEncodings.Add(newTrack);

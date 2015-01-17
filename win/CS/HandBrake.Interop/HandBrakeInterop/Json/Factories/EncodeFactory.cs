@@ -307,19 +307,22 @@ namespace HandBrake.Interop.Json.Factories
                         Name = item.Name,
                     };
 
-                if (item.EncodeRateType == AudioEncodeRateType.Quality)
+                if (!item.IsPassthru)
                 {
-                    audioTrack.Quality = item.Quality;
-                }
+                    if (item.EncodeRateType == AudioEncodeRateType.Quality)
+                    {
+                        audioTrack.Quality = item.Quality;
+                    }
 
-                if (item.EncodeRateType == AudioEncodeRateType.Compression)
-                {
-                    audioTrack.CompressionLevel = item.Compression;
-                }
+                    if (item.EncodeRateType == AudioEncodeRateType.Compression)
+                    {
+                        audioTrack.CompressionLevel = item.Compression;
+                    }
 
-                if (item.EncodeRateType == AudioEncodeRateType.Bitrate)
-                {
-                    audioTrack.Bitrate = item.Bitrate;
+                    if (item.EncodeRateType == AudioEncodeRateType.Bitrate)
+                    {
+                        audioTrack.Bitrate = item.Bitrate;
+                    }
                 }
 
                 audio.AudioList.Add(audioTrack);

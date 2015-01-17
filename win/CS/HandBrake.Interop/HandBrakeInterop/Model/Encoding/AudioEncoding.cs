@@ -80,5 +80,10 @@ namespace HandBrake.Interop.Model.Encoding
 		/// Gets or sets Name.
 		/// </summary>
 		public string Name { get; set; }
+
+	    /// <summary>
+	    /// Gets or sets a value indicating whether is passthru.
+	    /// </summary>
+	    public bool IsPassthru { get; set; }
 	}
 }
