@@ -11,9 +11,7 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
-    using System.Windows.Media.Animation;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
@@ -25,7 +23,6 @@ namespace HandBrake.ApplicationServices.Utilities
 
     /// <summary>
     /// A Utility Class to Convert a 
-    /// TODO remove this class and replace a new factory to convert the EncodeTask object. This will remove a layer of abstraction.
     /// </summary>
     public class InteropModelCreator
     {
@@ -68,15 +65,12 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Which will be converted to this EncodeJob Model.
             EncodeJob job = new EncodeJob();
-            EncodingProfile profile = new EncodingProfile();
-            job.EncodingProfile = profile;
 
             // Audio Settings
-            profile.AudioEncodings = new List<AudioEncoding>();
+            job.AudioEncodings = new List<AudioEncoding>();
             job.ChosenAudioTracks = new List<int>();
             foreach (AudioTrack track in work.AudioTracks)
             {
-                
                 AudioEncoding newTrack = new AudioEncoding
                                              {
                                                  Bitrate = track.Bitrate, 
@@ -87,11 +81,11 @@ namespace HandBrake.ApplicationServices.Utilities
                                                  Mixdown = Converters.GetCliMixDown(track.MixDown), 
                                                  SampleRateRaw = GetSampleRateRaw(track.SampleRate), 
                                                  EncodeRateType = AudioEncodeRateType.Bitrate, 
-                                                 Name = track.TrackName,
+                                                 Name = track.TrackName, 
                                                  IsPassthru = track.IsPassthru
                                              };
 
-                profile.AudioEncodings.Add(newTrack);
+                job.AudioEncodings.Add(newTrack);
                 if (track.Track != null)
                 {
                     job.ChosenAudioTracks.Add(track.Track.Value);
@@ -144,111 +138,110 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             job.Angle = work.Angle;
-            job.EncodingProfile = profile;
 
             // Output Settings
-            profile.IPod5GSupport = work.IPod5GSupport;
-            profile.Optimize = work.OptimizeMP4;
+            job.IPod5GSupport = work.IPod5GSupport;
+            job.Optimize = work.OptimizeMP4;
             switch (work.OutputFormat)
             {
                 case OutputFormat.Mp4:
-                    profile.ContainerName = "av_mp4"; // TODO make part of enum.
+                    job.ContainerName = "av_mp4"; // TODO make part of enum.
                     break;
                 case OutputFormat.Mkv:
-                    profile.ContainerName = "av_mkv"; // TODO make part of enum.
+                    job.ContainerName = "av_mkv"; // TODO make part of enum.
                     break;
             }
 
             // Picture Settings
-            profile.Anamorphic = work.Anamorphic;
-            profile.Cropping = new Cropping { Top = work.Cropping.Top, Bottom = work.Cropping.Bottom, Left = work.Cropping.Left, Right = work.Cropping.Right };
-            profile.CroppingType = CroppingType.Custom; // TODO deal with this better
-            profile.DisplayWidth = work.DisplayWidth.HasValue ? int.Parse(Math.Round(work.DisplayWidth.Value, 0).ToString()) : 0;
-            profile.PixelAspectX = work.PixelAspectX;
-            profile.PixelAspectY = work.PixelAspectY;
-            profile.Height = work.Height.HasValue ? work.Height.Value : 0;
-            profile.KeepDisplayAspect = work.KeepDisplayAspect;
-            profile.MaxHeight = work.MaxHeight.HasValue ? work.MaxHeight.Value : 0;
-            profile.MaxWidth = work.MaxWidth.HasValue ? work.MaxWidth.Value : 0;
-            profile.Modulus = work.Modulus.HasValue ? work.Modulus.Value : 16;
-            profile.UseDisplayWidth = true;
-            profile.Width = work.Width.HasValue ? work.Width.Value : 0;
+            job.Anamorphic = work.Anamorphic;
+            job.Cropping = new Cropping { Top = work.Cropping.Top, Bottom = work.Cropping.Bottom, Left = work.Cropping.Left, Right = work.Cropping.Right };
+            job.CroppingType = CroppingType.Custom; // TODO deal with this better
+            job.DisplayWidth = work.DisplayWidth.HasValue ? int.Parse(Math.Round(work.DisplayWidth.Value, 0).ToString()) : 0;
+            job.PixelAspectX = work.PixelAspectX;
+            job.PixelAspectY = work.PixelAspectY;
+            job.Height = work.Height.HasValue ? work.Height.Value : 0;
+            job.KeepDisplayAspect = work.KeepDisplayAspect;
+            job.MaxHeight = work.MaxHeight.HasValue ? work.MaxHeight.Value : 0;
+            job.MaxWidth = work.MaxWidth.HasValue ? work.MaxWidth.Value : 0;
+            job.Modulus = work.Modulus.HasValue ? work.Modulus.Value : 16;
+            job.UseDisplayWidth = true;
+            job.Width = work.Width.HasValue ? work.Width.Value : 0;
 
             // Filter Settings
-            profile.CustomDecomb = work.CustomDecomb;
-            profile.CustomDeinterlace = work.CustomDeinterlace;
-            profile.CustomDenoise = work.CustomDenoise;
-            profile.DenoisePreset = work.DenoisePreset.ToString().ToLower().Replace(" ", string.Empty);
-            profile.DenoiseTune = work.DenoiseTune.ToString().ToLower().Replace(" ", string.Empty);
-            profile.CustomDetelecine = work.CustomDetelecine;
+            job.CustomDecomb = work.CustomDecomb;
+            job.CustomDeinterlace = work.CustomDeinterlace;
+            job.CustomDenoise = work.CustomDenoise;
+            job.DenoisePreset = work.DenoisePreset.ToString().ToLower().Replace(" ", string.Empty);
+            job.DenoiseTune = work.DenoiseTune.ToString().ToLower().Replace(" ", string.Empty);
+            job.CustomDetelecine = work.CustomDetelecine;
             if (work.Deblock > 4)
             {
-                profile.Deblock = work.Deblock;
+                job.Deblock = work.Deblock;
             }
-            profile.Decomb = work.Decomb;
-            profile.Deinterlace = work.Deinterlace;
-            profile.Denoise = work.Denoise;
-            profile.Detelecine = work.Detelecine;
-            profile.Grayscale = work.Grayscale;
+            job.Decomb = work.Decomb;
+            job.Deinterlace = work.Deinterlace;
+            job.Denoise = work.Denoise;
+            job.Detelecine = work.Detelecine;
+            job.Grayscale = work.Grayscale;
 
             // Video Settings
-            profile.Framerate = work.Framerate.HasValue ? work.Framerate.Value : 0;
-            profile.ConstantFramerate = work.FramerateMode == FramerateMode.CFR;
-            profile.PeakFramerate = work.FramerateMode == FramerateMode.PFR;
-            profile.Quality = work.Quality.HasValue ? work.Quality.Value : 0;
-            profile.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
-            profile.VideoEncodeRateType = work.VideoEncodeRateType;
-            profile.VideoEncoder = Converters.GetVideoEncoder(work.VideoEncoder);
-            profile.TwoPass = work.TwoPass;
-            profile.TurboFirstPass = work.TurboFirstPass;
+            job.Framerate = work.Framerate.HasValue ? work.Framerate.Value : 0;
+            job.ConstantFramerate = work.FramerateMode == FramerateMode.CFR;
+            job.PeakFramerate = work.FramerateMode == FramerateMode.PFR;
+            job.Quality = work.Quality.HasValue ? work.Quality.Value : 0;
+            job.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
+            job.VideoEncodeRateType = work.VideoEncodeRateType;
+            job.VideoEncoder = Converters.GetVideoEncoder(work.VideoEncoder);
+            job.TwoPass = work.TwoPass;
+            job.TurboFirstPass = work.TurboFirstPass;
 
             if (work.VideoEncoder == VideoEncoder.X264)
             {
-                profile.VideoPreset = work.X264Preset.ToString().ToLower().Replace(" ", string.Empty);
-                profile.VideoTunes = new List<string>();
+                job.VideoPreset = work.X264Preset.ToString().ToLower().Replace(" ", string.Empty);
+                job.VideoTunes = new List<string>();
 
                 if (work.X264Tune != x264Tune.None)
                 {
-                    profile.VideoTunes.Add(work.X264Tune.ToString().ToLower().Replace(" ", string.Empty));
+                    job.VideoTunes.Add(work.X264Tune.ToString().ToLower().Replace(" ", string.Empty));
                 }
 
                 if (work.FastDecode)
                 {
-                    profile.VideoTunes.Add("fastdecode");
+                    job.VideoTunes.Add("fastdecode");
                 }
 
-                profile.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty); // TODO change these away from strings.
-                profile.VideoLevel = work.H264Level;
+                job.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty); // TODO change these away from strings.
+                job.VideoLevel = work.H264Level;
             }
             else if (work.VideoEncoder == VideoEncoder.X265)
             {
-                profile.VideoPreset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
+                job.VideoPreset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
 
                 if (work.H265Profile != x265Profile.None)
                 {
-                    profile.VideoProfile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
+                    job.VideoProfile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
                 }
 
-                profile.VideoTunes = new List<string>();
+                job.VideoTunes = new List<string>();
                 if (work.X265Tune != x265Tune.None)
                 {
-                    profile.VideoTunes.Add(work.X265Tune.ToString().ToLower().Replace(" ", string.Empty));
+                    job.VideoTunes.Add(work.X265Tune.ToString().ToLower().Replace(" ", string.Empty));
                 }
             }
             else if (work.VideoEncoder == VideoEncoder.QuickSync)
             {
-                profile.VideoPreset = work.QsvPreset.ToString().ToLower().Replace(" ", string.Empty);
-                profile.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty);
-                profile.VideoLevel = work.H264Level;
+                job.VideoPreset = work.QsvPreset.ToString().ToLower().Replace(" ", string.Empty);
+                job.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty);
+                job.VideoLevel = work.H264Level;
             }
 
             // Chapter Markers
-            profile.IncludeChapterMarkers = work.IncludeChapterMarkers;
+            job.IncludeChapterMarkers = work.IncludeChapterMarkers;
             job.CustomChapterNames = work.ChapterNames.Select(item => item.ChapterName).ToList();
             job.UseDefaultChapterNames = work.IncludeChapterMarkers;
 
             // Advanced Settings
-            profile.VideoOptions = work.ShowAdvancedTab ? work.AdvancedEncoderOptions : work.ExtraAdvancedArguments;
+            job.VideoOptions = work.ShowAdvancedTab ? work.AdvancedEncoderOptions : work.ExtraAdvancedArguments;
 
             // Subtitles
             job.Subtitles = new Subtitles { SourceSubtitles = new List<SourceSubtitle>(), SrtSubtitles = new List<SrtSubtitle>() };

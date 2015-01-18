@@ -126,11 +126,11 @@ namespace HandBrake.Interop.Json.Factories
                 File = job.OutputPath, 
                 Mp4Options = new Mp4Options
                                  {
-                                     IpodAtom = job.EncodingProfile.IPod5GSupport, 
-                                     Mp4Optimize = job.EncodingProfile.Optimize
+                                     IpodAtom = job.IPod5GSupport, 
+                                     Mp4Optimize = job.Optimize
                                  }, 
-                ChapterMarkers = job.EncodingProfile.IncludeChapterMarkers, 
-                Mux = HBFunctions.hb_container_get_from_name(job.EncodingProfile.ContainerName), 
+                ChapterMarkers = job.IncludeChapterMarkers, 
+                Mux = HBFunctions.hb_container_get_from_name(job.ContainerName), 
                 ChapterList = new List<ChapterList>()
             };
 
@@ -241,23 +241,23 @@ namespace HandBrake.Interop.Json.Factories
         {
             Video video = new Video();
 
-            HBVideoEncoder videoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(e => e.ShortName == job.EncodingProfile.VideoEncoder);
-            Validate.NotNull(videoEncoder, "Video encoder " + job.EncodingProfile.VideoEncoder + " not recognized.");
+            HBVideoEncoder videoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(e => e.ShortName == job.VideoEncoder);
+            Validate.NotNull(videoEncoder, "Video encoder " + job.VideoEncoder + " not recognized.");
             if (videoEncoder != null)
             {
                 video.Codec = videoEncoder.Id;
             }
 
-            video.TwoPass = job.EncodingProfile.TwoPass;
-            video.Turbo = job.EncodingProfile.TurboFirstPass;
-            video.Level = job.EncodingProfile.VideoLevel;
-            video.Options = job.EncodingProfile.VideoOptions;
-            video.Preset = job.EncodingProfile.VideoPreset;
-            video.Profile = job.EncodingProfile.VideoProfile;
-            video.Quality = job.EncodingProfile.Quality;
-            if (job.EncodingProfile.VideoTunes != null && job.EncodingProfile.VideoTunes.Count > 0)
+            video.TwoPass = job.TwoPass;
+            video.Turbo = job.TurboFirstPass;
+            video.Level = job.VideoLevel;
+            video.Options = job.VideoOptions;
+            video.Preset = job.VideoPreset;
+            video.Profile = job.VideoProfile;
+            video.Quality = job.Quality;
+            if (job.VideoTunes != null && job.VideoTunes.Count > 0)
             {
-                video.Tune = string.Join(",", job.EncodingProfile.VideoTunes);
+                video.Tune = string.Join(",", job.VideoTunes);
             }
 
             return video;
@@ -276,10 +276,10 @@ namespace HandBrake.Interop.Json.Factories
         {
             Audio audio = new Audio();
 
-            if (!string.IsNullOrEmpty(job.EncodingProfile.AudioEncoderFallback))
+            if (!string.IsNullOrEmpty(job.AudioEncoderFallback))
             {
-                HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(job.EncodingProfile.AudioEncoderFallback);
-                Validate.NotNull(audioEncoder, "Unrecognized fallback audio encoder: " + job.EncodingProfile.AudioEncoderFallback);
+                HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(job.AudioEncoderFallback);
+                Validate.NotNull(audioEncoder, "Unrecognized fallback audio encoder: " + job.AudioEncoderFallback);
                 audio.FallbackEncoder = audioEncoder.Id;
             }
 
@@ -287,7 +287,7 @@ namespace HandBrake.Interop.Json.Factories
 
             audio.AudioList = new List<AudioList>();
             int numTracks = 0;
-            foreach (AudioEncoding item in job.EncodingProfile.AudioEncodings)
+            foreach (AudioEncoding item in job.AudioEncodings)
             {
                 HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(item.Encoder);
                 Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
@@ -348,31 +348,31 @@ namespace HandBrake.Interop.Json.Factories
             Filter filter = new Filter
                             {
                                 FilterList = new List<FilterList>(), 
-                                Grayscale = job.EncodingProfile.Grayscale
+                                Grayscale = job.Grayscale
                             };
 
             // Detelecine
-            if (job.EncodingProfile.Detelecine != Detelecine.Off)
+            if (job.Detelecine != Detelecine.Off)
             {
-                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = job.EncodingProfile.CustomDetelecine };
+                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = job.CustomDetelecine };
                 filter.FilterList.Add(filterItem);
             }
 
             // Decomb
-            if (job.EncodingProfile.Decomb != Decomb.Off)
+            if (job.Decomb != Decomb.Off)
             {
                 string options;
-                if (job.EncodingProfile.Decomb == Decomb.Fast)
+                if (job.Decomb == Decomb.Fast)
                 {
                     options = "7:2:6:9:1:80";
                 }
-                else if (job.EncodingProfile.Decomb == Decomb.Bob)
+                else if (job.Decomb == Decomb.Bob)
                 {
                     options = "455";
                 }
                 else
                 {
-                    options = job.EncodingProfile.CustomDecomb;
+                    options = job.CustomDecomb;
                 }
 
                 FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = options };
@@ -380,28 +380,28 @@ namespace HandBrake.Interop.Json.Factories
             }
 
             // Deinterlace
-            if (job.EncodingProfile.Deinterlace != Deinterlace.Off)
+            if (job.Deinterlace != Deinterlace.Off)
             {
                 string options;
-                if (job.EncodingProfile.Deinterlace == Deinterlace.Fast)
+                if (job.Deinterlace == Deinterlace.Fast)
                 {
                     options = "0";
                 }
-                else if (job.EncodingProfile.Deinterlace == Deinterlace.Slow)
+                else if (job.Deinterlace == Deinterlace.Slow)
                 {
                     options = "1";
                 }
-                else if (job.EncodingProfile.Deinterlace == Deinterlace.Slower)
+                else if (job.Deinterlace == Deinterlace.Slower)
                 {
                     options = "3";
                 }
-                else if (job.EncodingProfile.Deinterlace == Deinterlace.Bob)
+                else if (job.Deinterlace == Deinterlace.Bob)
                 {
                     options = "15";
                 }
                 else
                 {
-                    options = job.EncodingProfile.CustomDeinterlace;
+                    options = job.CustomDeinterlace;
                 }
 
                 FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = options };
@@ -409,8 +409,8 @@ namespace HandBrake.Interop.Json.Factories
             }
 
             // VFR / CFR
-            int fm = job.EncodingProfile.ConstantFramerate ? 1 : job.EncodingProfile.PeakFramerate ? 2 : 0;
-            IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(job.EncodingProfile.Framerate.ToString(CultureInfo.InvariantCulture));
+            int fm = job.ConstantFramerate ? 1 : job.PeakFramerate ? 2 : 0;
+            IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(job.Framerate.ToString(CultureInfo.InvariantCulture));
             int vrate = HBFunctions.hb_video_framerate_get_from_name(frameratePrt);
 
             int num;
@@ -433,28 +433,28 @@ namespace HandBrake.Interop.Json.Factories
             filter.FilterList.Add(framerateShaper);
 
             // Deblock
-            if (job.EncodingProfile.Deblock >= 5)
+            if (job.Deblock >= 5)
             {
-                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = job.EncodingProfile.Deblock.ToString() };
+                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = job.Deblock.ToString() };
                 filter.FilterList.Add(filterItem);
             }
 
             // Denoise
-            if (job.EncodingProfile.Denoise != Denoise.Off)
+            if (job.Denoise != Denoise.Off)
             {
-                hb_filter_ids id = job.EncodingProfile.Denoise == Denoise.hqdn3d
+                hb_filter_ids id = job.Denoise == Denoise.hqdn3d
                     ? hb_filter_ids.HB_FILTER_HQDN3D
                     : hb_filter_ids.HB_FILTER_NLMEANS;
 
                 string settings;
-                if (job.EncodingProfile.Denoise == Denoise.hqdn3d
-                    && !string.IsNullOrEmpty(job.EncodingProfile.CustomDenoise))
+                if (job.Denoise == Denoise.hqdn3d
+                    && !string.IsNullOrEmpty(job.CustomDenoise))
                 {
-                    settings = job.EncodingProfile.CustomDenoise;
+                    settings = job.CustomDenoise;
                 }
                 else
                 {
-                    IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings((int)id, job.EncodingProfile.DenoisePreset, job.EncodingProfile.DenoiseTune);
+                    IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings((int)id, job.DenoisePreset, job.DenoiseTune);
                     settings = Marshal.PtrToStringAnsi(settingsPtr);
                 }
 
@@ -472,10 +472,10 @@ namespace HandBrake.Interop.Json.Factories
                         "{0}:{1}:{2}:{3}:{4}:{5}", 
                         resultGeometry.Width, 
                         resultGeometry.Height, 
-                        job.EncodingProfile.Cropping.Top, 
-                        job.EncodingProfile.Cropping.Bottom, 
-                        job.EncodingProfile.Cropping.Left, 
-                        job.EncodingProfile.Cropping.Right)
+                        job.Cropping.Top, 
+                        job.Cropping.Bottom, 
+                        job.Cropping.Left, 
+                        job.Cropping.Right)
             };
             filter.FilterList.Add(cropScale);
 

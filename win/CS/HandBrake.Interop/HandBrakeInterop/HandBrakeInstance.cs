@@ -292,20 +292,20 @@ namespace HandBrake.Interop
             // Creat the Expected Output Geometry details for libhb.
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
-                crop = new[] { job.EncodingProfile.Cropping.Top, job.EncodingProfile.Cropping.Bottom, job.EncodingProfile.Cropping.Left, job.EncodingProfile.Cropping.Right }, 
+                crop = new[] { job.Cropping.Top, job.Cropping.Bottom, job.Cropping.Left, job.Cropping.Right }, 
                 itu_par = 0, 
-                keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (job.EncodingProfile.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
-                maxWidth = job.EncodingProfile.MaxWidth, 
-                maxHeight = job.EncodingProfile.MaxHeight, 
-                mode = (int)(hb_anamorphic_mode_t)job.EncodingProfile.Anamorphic, 
-                modulus = job.EncodingProfile.Modulus, 
+                keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (job.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
+                maxWidth = job.MaxWidth, 
+                maxHeight = job.MaxHeight, 
+                mode = (int)(hb_anamorphic_mode_t)job.Anamorphic, 
+                modulus = job.Modulus, 
                 geometry = new hb_geometry_s
                 {
-                    height = job.EncodingProfile.Height, 
-                    width = job.EncodingProfile.Width, 
-                    par = job.EncodingProfile.Anamorphic != Anamorphic.Custom
+                    height = job.Height, 
+                    width = job.Width, 
+                    par = job.Anamorphic != Anamorphic.Custom
                         ? new hb_rational_t { den = title.ParVal.Height, num = title.ParVal.Width }
-                        : new hb_rational_t { den = job.EncodingProfile.PixelAspectY, num = job.EncodingProfile.PixelAspectX }
+                        : new hb_rational_t { den = job.PixelAspectY, num = job.PixelAspectX }
                 }
             };
 

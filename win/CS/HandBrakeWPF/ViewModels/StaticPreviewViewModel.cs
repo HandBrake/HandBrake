@@ -138,7 +138,6 @@ namespace HandBrakeWPF.ViewModels
             this.Title = "Preview";
             this.Percentage = "0.00%";
             this.PercentageValue = 0;
-            this.StartAt = 1;
             this.Duration = 30;
             this.CanPlay = true;
 
@@ -322,11 +321,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.PercentageValue);
             }
         }
-
-        /// <summary>
-        /// Gets or sets StartAt.
-        /// </summary>
-        public int StartAt { get; set; }
 
         /// <summary>
         /// Gets StartPoints.
@@ -523,7 +517,7 @@ namespace HandBrakeWPF.ViewModels
             EncodeTask encodeTask = new EncodeTask(this.Task)
             {
                 PreviewDuration = this.Duration,
-                PreviewStartAt = this.StartAt,
+                PreviewStartAt = this.SelectedPreviewImage,
                 PointToPointMode = PointToPointMode.Preview
             };
 
@@ -547,7 +541,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup the encode task as a preview encode
             encodeTask.IsPreviewEncode = true;
-            encodeTask.PreviewEncodeStartAt = this.StartAt;
+            encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage;  // TODO 0 and 1 mean the same. Need to fix this as it knocks the video out of sync with the still preview.
             encodeTask.PreviewEncodeDuration = this.Duration;
             QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create());
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);

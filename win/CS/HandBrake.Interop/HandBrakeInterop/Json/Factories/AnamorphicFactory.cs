@@ -53,7 +53,7 @@ namespace HandBrake.Interop.Json.Factories
         /// </returns>
         public static Geometry CreateGeometry(EncodeJob job, Title title, KeepSetting keepWidthOrHeight) // Todo remove the need for these objects. Should use simpler objects.
         {
-            int settingMode = (int)keepWidthOrHeight + (job.EncodingProfile.KeepDisplayAspect ? 0x04 : 0);
+            int settingMode = (int)keepWidthOrHeight + (job.KeepDisplayAspect ? 0x04 : 0);
 
             // Sanatise the Geometry First.
             AnamorphicGeometry anamorphicGeometry = new AnamorphicGeometry
@@ -66,27 +66,27 @@ namespace HandBrake.Interop.Json.Factories
                                  },
                 DestSettings = new DestSettings
                                {
-                                    AnamorphicMode = (int)job.EncodingProfile.Anamorphic,
+                                    AnamorphicMode = (int)job.Anamorphic,
                                     Geometry = { 
-                                                Width = job.EncodingProfile.Width, Height = job.EncodingProfile.Height,
+                                                Width = job.Width, Height = job.Height,
                                                 PAR = new PAR
                                                       {
-                                                          Num = job.EncodingProfile.Anamorphic != Anamorphic.Custom ? title.ParVal.Width : job.EncodingProfile.PixelAspectX,
-                                                          Den = job.EncodingProfile.Anamorphic != Anamorphic.Custom ? title.ParVal.Height : job.EncodingProfile.PixelAspectY,
+                                                          Num = job.Anamorphic != Anamorphic.Custom ? title.ParVal.Width : job.PixelAspectX,
+                                                          Den = job.Anamorphic != Anamorphic.Custom ? title.ParVal.Height : job.PixelAspectY,
                                                       } 
                                                },
                                     Keep = settingMode,
-                                    Crop = new List<int> { job.EncodingProfile.Cropping.Top, job.EncodingProfile.Cropping.Bottom, job.EncodingProfile.Cropping.Left, job.EncodingProfile.Cropping.Right },
-                                    Modulus = job.EncodingProfile.Modulus,
-                                    MaxWidth = job.EncodingProfile.MaxWidth,
-                                    MaxHeight = job.EncodingProfile.MaxHeight,
+                                    Crop = new List<int> { job.Cropping.Top, job.Cropping.Bottom, job.Cropping.Left, job.Cropping.Right },
+                                    Modulus = job.Modulus,
+                                    MaxWidth = job.MaxWidth,
+                                    MaxHeight = job.MaxHeight,
                                     ItuPAR = false
                                }
             };
 
-            if (job.EncodingProfile.Anamorphic == Anamorphic.Custom)
+            if (job.Anamorphic == Anamorphic.Custom)
             {
-                anamorphicGeometry.DestSettings.Geometry.PAR = new PAR { Num = job.EncodingProfile.PixelAspectX, Den = job.EncodingProfile.PixelAspectY };
+                anamorphicGeometry.DestSettings.Geometry.PAR = new PAR { Num = job.PixelAspectX, Den = job.PixelAspectY };
             }
             else
             {

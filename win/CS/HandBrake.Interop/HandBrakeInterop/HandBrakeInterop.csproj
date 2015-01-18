@@ -241,7 +241,6 @@
     <Compile Include="Model\Encoding\Deinterlace.cs" />
     <Compile Include="Model\Encoding\Denoise.cs" />
     <Compile Include="Model\Encoding\Detelecine.cs" />
-    <Compile Include="Model\Encoding\EncodingProfile.cs" />
     <Compile Include="Model\Encoding\HBContainer.cs" />
     <Compile Include="Model\Encoding\HBMixdown.cs" />
     <Compile Include="Model\Encoding\HBRate.cs" />

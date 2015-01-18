@@ -456,7 +456,7 @@ namespace HandBrake.Interop
         {
             long availableBytes = ((long)sizeMB) * 1024 * 1024;
 
-            EncodingProfile profile = job.EncodingProfile;
+            EncodeJob profile = job;
 
             double lengthSeconds = overallSelectedLengthSeconds > 0 ? overallSelectedLengthSeconds : GetJobLengthSeconds(job, title);
             lengthSeconds += 1.5;
@@ -509,7 +509,7 @@ namespace HandBrake.Interop
         {
             long totalBytes = 0;
 
-            EncodingProfile profile = job.EncodingProfile;
+            EncodeJob profile = job;
 
             double lengthSeconds = GetJobLengthSeconds(job, title);
             lengthSeconds += 1.5;
@@ -579,7 +579,7 @@ namespace HandBrake.Interop
         {
             var list = new List<Tuple<AudioEncoding, int>>();
 
-            foreach (AudioEncoding encoding in job.EncodingProfile.AudioEncodings)
+            foreach (AudioEncoding encoding in job.AudioEncodings)
             {
                 if (encoding.InputNumber == 0)
                 {
