@@ -157,11 +157,6 @@ namespace HandBrake.Interop.Model
         public ScaleMethod ScaleMethod { get; set; }
 
         /// <summary>
-        /// Gets or sets the cropping type.
-        /// </summary>
-        public CroppingType CroppingType { get; set; }
-
-        /// <summary>
         /// Gets or sets the cropping.
         /// </summary>
         public Cropping Cropping { get; set; }
@@ -377,11 +372,6 @@ namespace HandBrake.Interop.Model
         public List<AudioEncoding> AudioEncodings { get; set; }
 
         /// <summary>
-        ///     Gets or sets the list of chosen audio tracks (1-based)
-        /// </summary>
-        public List<int> ChosenAudioTracks { get; set; }
-
-        /// <summary>
         /// Gets or sets the audio encoder fallback.
         /// </summary>
         public string AudioEncoderFallback { get; set; }
@@ -439,7 +429,6 @@ namespace HandBrake.Interop.Model
 								SecondsEnd = this.SecondsEnd, 
 								FramesStart = this.FramesStart, 
 								FramesEnd = this.FramesEnd, 
-								ChosenAudioTracks = new List<int>(this.ChosenAudioTracks), 
 								Subtitles = this.Subtitles, 
 								UseDefaultChapterNames = this.UseDefaultChapterNames, 
 								DxvaDecoding = this.DxvaDecoding, 
@@ -456,7 +445,6 @@ namespace HandBrake.Interop.Model
                                 MaxWidth = this.MaxWidth, 
                                 MaxHeight = this.MaxHeight, 
                                 ScaleMethod = this.ScaleMethod, 
-                                CroppingType = this.CroppingType, 
                                 Cropping = this.Cropping.Clone(), 
                                 Anamorphic = this.Anamorphic, 
                                 UseDisplayWidth = this.UseDisplayWidth, 

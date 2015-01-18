@@ -68,7 +68,6 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Audio Settings
             job.AudioEncodings = new List<AudioEncoding>();
-            job.ChosenAudioTracks = new List<int>();
             foreach (AudioTrack track in work.AudioTracks)
             {
                 AudioEncoding newTrack = new AudioEncoding
@@ -86,10 +85,6 @@ namespace HandBrake.ApplicationServices.Utilities
                                              };
 
                 job.AudioEncodings.Add(newTrack);
-                if (track.Track != null)
-                {
-                    job.ChosenAudioTracks.Add(track.Track.Value);
-                }
             }
 
             // Title Settings
@@ -155,7 +150,6 @@ namespace HandBrake.ApplicationServices.Utilities
             // Picture Settings
             job.Anamorphic = work.Anamorphic;
             job.Cropping = new Cropping { Top = work.Cropping.Top, Bottom = work.Cropping.Bottom, Left = work.Cropping.Left, Right = work.Cropping.Right };
-            job.CroppingType = CroppingType.Custom; // TODO deal with this better
             job.DisplayWidth = work.DisplayWidth.HasValue ? int.Parse(Math.Round(work.DisplayWidth.Value, 0).ToString()) : 0;
             job.PixelAspectX = work.PixelAspectX;
             job.PixelAspectY = work.PixelAspectY;

@@ -134,6 +134,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
                     this.ScanCompleted(job, this.instance);
                 };
 
+                HandBrakeUtils.SetDvdNav(!job.Configuration.IsDvdNavDisabled);
+
                 this.instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
             }
             catch (Exception exc)

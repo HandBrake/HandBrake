@@ -233,7 +233,6 @@
     <Compile Include="HandBrakeEncoderHelpers.cs" />
     <Compile Include="Model\Encoding\Anamorphic.cs" />
     <Compile Include="Model\Encoding\AudioEncodeRateType.cs" />
-    <Compile Include="Model\Encoding\CroppingType.cs" />
     <Compile Include="Model\Encoding\HBAudioEncoder.cs" />
     <Compile Include="Model\Encoding\AudioEncoder.cs" />
     <Compile Include="Model\Encoding\AudioEncoding.cs" />
