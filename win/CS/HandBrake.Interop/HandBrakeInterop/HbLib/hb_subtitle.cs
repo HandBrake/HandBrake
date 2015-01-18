@@ -7,13 +7,6 @@
 
 namespace HandBrake.Interop.HbLib
 {
-    public enum hb_subtitle_s_subtype
-	{
-		PICTURESUB,
-
-		TEXTSUB,
-	}
-
 	public enum hb_subtitle_s_subsource
 	{
 		VOBSUB,

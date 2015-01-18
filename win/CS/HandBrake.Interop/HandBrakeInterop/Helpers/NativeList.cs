@@ -19,7 +19,7 @@ namespace HandBrake.Interop.Helpers
     /// <summary>
 	/// Represents a HandBrake style native list.
 	/// </summary>
-	public class NativeList : IDisposable
+	internal class NativeList : IDisposable
 	{
 		/// <summary>
 		/// Initializes a new instance of the NativeList class.

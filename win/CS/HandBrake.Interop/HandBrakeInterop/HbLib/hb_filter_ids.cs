@@ -7,7 +7,7 @@
 
 namespace HandBrake.Interop.HbLib
 {
-	public enum hb_filter_ids
+    internal enum hb_filter_ids
 	{
 		HB_FILTER_QSV_PRE = 1, // for QSV - important to have before other filters 
 		// First, filters that may change the framerate (drop or dup frames)

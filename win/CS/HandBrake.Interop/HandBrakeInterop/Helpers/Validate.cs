@@ -14,7 +14,7 @@ namespace HandBrake.Interop.Helpers
     /// <summary>
     /// The validate.
     /// </summary>
-    public class Validate
+    internal class Validate
     {
         /// <summary>
         /// The not null.

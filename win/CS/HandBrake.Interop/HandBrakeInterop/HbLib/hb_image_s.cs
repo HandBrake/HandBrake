@@ -1,9 +1,21 @@
-﻿namespace HandBrake.Interop.HbLib
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="hb_image_s.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the hb_image_s type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.Interop.HbLib
 {
     using System;
     using System.Runtime.InteropServices;
 
-    public struct hb_image_s
+    /// <summary>
+    /// The hb_image_s.
+    /// </summary>
+    internal struct hb_image_s
     {
         public int format;
         public int width;
@@ -14,7 +26,10 @@
         public image_plane[] plane;
     }
 
-    public struct image_plane
+    /// <summary>
+    /// The image_plane.
+    /// </summary>
+    internal struct image_plane
     {
         public IntPtr data;
         public int width;

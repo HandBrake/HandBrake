@@ -10,7 +10,7 @@ namespace HandBrake.Interop.HbLib
 	using System.Runtime.InteropServices;
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct hb_encoder_s
+    public struct hb_encoder_s
 	{
 		[MarshalAs(UnmanagedType.LPStr)]
 		public string name;

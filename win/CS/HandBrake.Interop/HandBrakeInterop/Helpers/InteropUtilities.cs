@@ -20,7 +20,7 @@ namespace HandBrake.Interop.Helpers
     /// <summary>
 	/// Helper utilities for native interop.
 	/// </summary>
-	public static class InteropUtilities
+	internal static class InteropUtilities
 	{
 		/// <summary>
 		/// Reads the given native structure pointer.

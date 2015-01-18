@@ -9,12 +9,10 @@
 
 namespace HandBrake.Interop.Helpers
 {
-    using HandBrake.Interop.Model.Encoding;
-
     /// <summary>
     /// The utilities.
     /// </summary>
-    public static class Utilities
+    internal static class Utilities
 	{
         /// <summary>
         /// Get the Greatest Common Factor
