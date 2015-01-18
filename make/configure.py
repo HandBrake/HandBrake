@@ -1541,7 +1541,8 @@ int main ()
   return 0;
 }
 """
-        pthread = LDProbe( 'static pthread', '%s -static' % Tools.gcc.pathname, '-lpthreadGC2', pthread_test )
+        pthreadGC2 = LDProbe( 'static pthread', '%s -static' % Tools.gcc.pathname, '-lpthreadGC2', pthread_test )
+        pthread = LDProbe( 'static pthread', '%s -static' % Tools.gcc.pathname, '-lpthread', pthread_test )
         pthread.run()
 
         bz2_test = """
@@ -1733,6 +1734,8 @@ int main()
             doc.add( 'HAS.dlfcn', 1 )
         if not pthread.fail:
             doc.add( 'HAS.pthread', 1 )
+        if not pthreadGC2.fail:
+            doc.add( 'HAS.pthreadGC2', 1 )
         if not bz2.fail:
             doc.add( 'HAS.bz2', 1 )
         if not libz.fail:

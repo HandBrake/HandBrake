@@ -53,7 +53,10 @@ else ifeq ($(BUILD.system),darwin)
 else ifeq ($(BUILD.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(BUILD.system),mingw)
-    LIBHB.GCC.D += SYS_MINGW PTW32_STATIC_LIB
+    LIBHB.GCC.D += SYS_MINGW
+ifeq ($(HAS.pthreadGC2),1)
+    LIBHB.GCC.D += PTW32_STATIC_LIB
+endif
 	LIBHB.GCC.args.extra.dylib++ += -Wl,--enable-auto-import -static
 else ifeq ($(BUILD.system),solaris)
     LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64 _POSIX_C_SOURCE=200112L __EXTENSIONS__
@@ -140,7 +143,9 @@ else
 	LIBHB.GCC.l += fribidi
 endif
 
-ifneq ($(HAS.pthread),1)
+ifeq ($(HAS.pthread),1)
+    LIBHB.GCC.l += pthread
+else ifneq ($(HAS.pthreadGC2),1)
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
 else
     LIBHB.GCC.l += pthreadGC2
