@@ -5,19 +5,34 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import <Growl/Growl.h>
 
 @class HBController;
+@class HBOutputPanelController;
 @class HBCore;
+@class HBJob;
 
-@interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate>
+@interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate, GrowlApplicationBridgeDelegate>
 
-- (void)setPidNum: (int)myPidnum;
-- (void)setCore: (HBCore *)core;
-- (void)setHBController: (HBController *)controller;
+/// The HBCore used for encoding.
+@property (nonatomic, readonly) HBCore *core;
 
-- (void)setQueueArray: (NSMutableArray *)QueueFileArray;
-- (void)setQueueStatusString: (NSString *)statusString;
+@property (nonatomic, assign) HBController *controller;
+@property (nonatomic, assign) HBOutputPanelController *outputPanel;
 
-- (IBAction)showQueueWindow: (id)sender;
+@property (nonatomic, readonly) NSUInteger count;
+@property (nonatomic, readonly) NSUInteger pendingItemsCount;
+@property (nonatomic, readonly) NSUInteger workingItemsCount;
+
+- (void)addJob:(HBJob *)item;
+- (void)addJobsFromArray:(NSArray *)items;
+
+- (BOOL)jobExistAtURL:(NSURL *)url;
+
+- (void)removeAllJobs;
+- (void)setEncodingJobsAsPending;
+
+- (IBAction)rip:(id)sender;
+- (IBAction)cancel:(id)sender;
 
 @end

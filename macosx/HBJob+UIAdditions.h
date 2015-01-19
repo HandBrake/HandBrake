@@ -14,6 +14,8 @@
 
 @property (nonatomic, readonly) NSArray *angles;
 
+@property (nonatomic, readonly) NSAttributedString *attributedDescription;
+
 @end
 
 @interface HBContainerTransformer : NSValueTransformer

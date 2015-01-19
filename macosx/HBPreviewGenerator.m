@@ -27,8 +27,6 @@ typedef enum EncodeState : NSUInteger {
 @property (nonatomic, readonly) HBJob *job;
 
 @property (nonatomic) HBCore *core;
-@property (nonatomic, getter=isCancelled) BOOL cancelled;
-
 
 @property (nonatomic, retain) NSURL *fileURL;
 
@@ -243,14 +241,51 @@ typedef enum EncodeState : NSUInteger {
     int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
     self.core = [[[HBCore alloc] initWithLoggingLevel:loggingLevel] autorelease];
     self.core.name = @"PreviewCore";
-    [self registerCoreNotifications];
 
     // lets go ahead and send it off to libhb
     hb_add(self.core.hb_handle, job);
     hb_job_close(&job);
 
     // start the actual encode
-    [self.core start];
+    [self.core startProgressHandler:^(HBState state, hb_state_t hb_state) {
+        switch (state) {
+            case HBStateWorking:
+            {
+                NSMutableString *info = [NSMutableString stringWithFormat: @"Encoding preview:  %.2f %%", 100.0 * hb_state.param.working.progress];
+
+                if (hb_state.param.working.seconds > -1)
+                {
+                    [info appendFormat:@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
+                     hb_state.param.working.rate_cur, hb_state.param.working.rate_avg, hb_state.param.working.hours,
+                     hb_state.param.working.minutes, hb_state.param.working.seconds];
+                }
+
+                double progress = 100.0 * hb_state.param.working.progress;
+                
+                [self.delegate updateProgress:progress info:info];
+                break;
+            }
+            case HBStateMuxing:
+                [self.delegate updateProgress:100.0 info:@"Muxing Preview…"];
+                break;
+
+            default:
+                break;
+        }
+    }
+    completationHandler:^(BOOL success) {
+        self.core = nil;
+
+        // Encode done, call the delegate and close libhb handle
+        if (success)
+        {
+            [self.delegate didCreateMovieAtURL:self.fileURL];
+        }
+        else
+        {
+            [self.delegate didCancelMovieCreation];
+        }
+    }];
 
     return YES;
 }
@@ -262,64 +297,15 @@ typedef enum EncodeState : NSUInteger {
 {
     if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
     {
-        [self.core stop];
-        self.cancelled = YES;
+        [self.core cancelEncode];
     }
-}
-
-/**
- *  Registers for notifications from HBCore.
- */
-- (void) registerCoreNotifications
-{
-    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreWorkingNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
-        hb_state_t s = *(self.core.hb_state);
-
-        NSMutableString *info = [NSMutableString stringWithFormat: @"Encoding preview:  %.2f %%", 100.0 * s.param.working.progress];
-
-        if (s.param.working.seconds > -1)
-        {
-            [info appendFormat:@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-             s.param.working.rate_cur, s.param.working.rate_avg, s.param.working.hours,
-             s.param.working.minutes, s.param.working.seconds];
-        }
-
-        double progress = 100.0 * s.param.working.progress;
-
-        [self.delegate updateProgress:progress info:info];
-    }];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreMuxingNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
-        [self.delegate updateProgress:100.0 info:@"Muxing Preview…"];
-    }];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:HBCoreWorkDoneNotification object:self.core queue:mainQueue usingBlock:^(NSNotification *note) {
-        [self.core stop];
-        self.core = nil;
-
-        /* Encode done, call the delegate and close libhb handle */
-        if (!self.isCancelled)
-        {
-            [self.delegate didCreateMovieAtURL:self.fileURL];
-        }
-        else
-        {
-            [self.delegate didCancelMovieCreation];
-        }
-
-        self.cancelled = NO;
-
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    }];
 }
 
 #pragma mark -
 
 - (void) dealloc
 {
-    [self.core stop];
+    [self.core cancelEncode];
     [_core release];
     _core = nil;
 

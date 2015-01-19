@@ -44,6 +44,8 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
 
         _chapterTitles = [title.chapters mutableCopy];
 
+        _uuid = [[[NSUUID UUID] UUIDString] retain];
+
         [self applyPreset:preset];
     }
 
@@ -142,6 +144,8 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
 
     [_chapterTitles release];
 
+    [_uuid release];
+
     [super dealloc];
 }
 
@@ -156,7 +160,7 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
         copy->_state = HBJobStateReady;
         copy->_presetName = [_presetName copy];
         copy->_titleIdx = _titleIdx;
-        copy->_pidId = _pidId;
+        copy->_uuid = [[[NSUUID UUID] UUIDString] retain];
 
         copy->_fileURL = [_fileURL copy];
         copy->_destURL = [_destURL copy];
@@ -192,7 +196,7 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
     encodeInt(_state);
     encodeObject(_presetName);
     encodeInt(_titleIdx);
-    encodeInt(_pidId);
+    encodeObject(_uuid);
 
     encodeObject(_fileURL);
     encodeObject(_destURL);
@@ -221,7 +225,7 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
     decodeInt(_state);
     decodeObject(_presetName);
     decodeInt(_titleIdx);
-    decodeInt(_pidId);
+    decodeObject(_uuid);
 
     decodeObject(_fileURL);
     decodeObject(_destURL);

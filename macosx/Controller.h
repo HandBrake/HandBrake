@@ -5,7 +5,6 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-#import <Growl/Growl.h>
 
 @class HBQueueController;
 
@@ -24,9 +23,11 @@
 @class HBPresetsManager;
 @class HBDockTile;
 
-@interface HBController : NSObject <NSApplicationDelegate, NSDrawerDelegate, GrowlApplicationBridgeDelegate>
+@class HBJob;
+
+@interface HBController : NSObject <NSApplicationDelegate, NSDrawerDelegate>
 {
-    IBOutlet NSWindow            * fWindow;
+    IBOutlet NSWindow *fWindow;
 
     IBOutlet NSTabView *fMainTabView;
 
@@ -124,36 +125,15 @@
     IBOutlet NSProgressIndicator * fRipIndicator;
 	BOOL                           fRipIndicatorShown;
     
-    /* Queue File variables */
-    FSEventStreamRef               QueueStream;
-    NSString                     * QueueFile;
-	NSMutableArray               * QueueFileArray;
-    NSInteger                      currentQueueEncodeIndex; // Used to track the currently encoding queueu item
-    
 	/* User Preset variables here */
 	HBPresetsManager             * presetManager;
     HBPresetsViewController      * fPresetsView;
 
     IBOutlet NSMenu              * presetsMenu;
 	IBOutlet NSDrawer            * fPresetDrawer;
-    
-    /* Queue variables */
-    int                          hbInstanceNum; //stores the number of HandBrake instances currently running
-    int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
-    int                          fWorkingCount;
-    
-    pid_t                          pidNum; // The pid number for this instance
-    NSString                     * currentQueueEncodeNameString;
-    
-    /* integer to set to determine the previous state
-		of encode 0==idle, 1==encoding, 2==cancelled*/
-    int                            fEncodeState;
-    
-    /* Dock progress variables */
-    double                          dockIconProgress;
-
-    HBDockTile  *dockTile;
 }
+
+@property (nonatomic, readonly) NSWindow *window;
 
 - (IBAction) browseSources: (id) sender;
 - (IBAction) showSourceTitleScanPanel: (id) sender;
@@ -174,47 +154,22 @@
 - (void)pictureSettingsDidChange;
 - (IBAction) openMainWindow: (id) sender;
 
-/* Add All titles to the queue */
-- (IBAction) addAllTitlesToQueue: (id) sender;
-- (void) addAllTitlesToQueueAlertDone: (NSWindow *) sheet
-                           returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (void) doAddAllTitlesToQueue;
+// Queue
+- (IBAction)addToQueue:(id)sender;
+- (IBAction)addAllTitlesToQueue:(id)sender;
 
-/* Queue File Stuff */
-- (void) initQueueFSEvent;
-- (void) closeQueueFSEvent;
-- (void) loadQueueFile;
-- (void) reloadQueue;
-- (void)saveQueueFileItem;
-- (void) incrementQueueItemDone:(NSInteger) queueItemDoneIndexNum;
-- (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (NSInteger) scanTitleNum;
-- (void) processNewQueueEncode;
-- (void) clearQueueEncodedItems;
-/* Queue Editing */
-- (void)rescanQueueItemToMainWindow:(NSUInteger) selectedQueueItem;
+- (void)rescanJobToMainWindow:(HBJob *)queueItem;
+- (void)setQueueState:(NSString *)info;
+- (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden;
 
-- (void) removeQueueFileItem:(NSUInteger) queueItemToRemove;
-- (void) clearQueueAllItems;
-- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
-- (void)getQueueStats;
-- (void)setQueueEncodingItemsAsPending;
-- (IBAction) addToQueue: (id) sender;
-- (void) overwriteAddToQueueAlertDone: (NSWindow *) sheet
-                           returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (void)     doAddToQueue;
-
-- (IBAction) showQueueWindow:(id)sender;
+- (IBAction)showQueueWindow:(id)sender;
 
 - (IBAction)showPreferencesWindow:(id)sender;
 
-- (IBAction) Rip: (id) sender;
-- (void)     overWriteAlertDone: (NSWindow *) sheet
-                     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+- (IBAction)rip:(id)sender;
 
-- (IBAction) Cancel: (id) sender;
-- (void)     doCancelCurrentJob;
-- (void) doCancelCurrentJobAndStop;
-- (IBAction) Pause: (id) sender;
+- (IBAction)cancel:(id)sender;
+- (IBAction)pause:(id)sender;
 
 - (IBAction) openHomepage: (id) sender;
 - (IBAction) openForums:   (id) sender;
@@ -230,9 +185,5 @@
 - (IBAction)selectDefaultPreset:(id)sender;
 - (IBAction)addFactoryPresets:(id)sender;
 - (IBAction)showDebugOutputPanel:(id)sender;
-
-- (void) remindUserOfSleepOrShutdown;
-
-- (int) hbInstances;
 
 @end

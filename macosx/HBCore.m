@@ -12,29 +12,6 @@
 
 #include <dlfcn.h>
 
-// These constants specify various status notifications sent by HBCore
-
-/// Notification sent to update status while scanning. Matches HB_STATE_SCANNING constant in libhb.
-NSString *HBCoreScanningNotification = @"HBCoreScanningNotification";
-
-/// Notification sent after scanning is complete. Matches HB_STATE_SCANDONE constant in libhb.
-NSString *HBCoreScanDoneNotification = @"HBCoreScanDoneNotification";
-
-/// Notification sent to update status while searching. Matches HB_STATE_SEARCHING constant in libhb.
-NSString *HBCoreSearchingNotification = @"HBCoreSearchingNotification";
-
-/// Notification sent to update status while encoding. Matches HB_STATE_WORKING constant in libhb.
-NSString *HBCoreWorkingNotification = @"HBCoreWorkingNotification";
-
-/// Notification sent when encoding is paused. Matches HB_STATE_PAUSED constant in libhb.
-NSString *HBCorePausedNotification = @"HBCorePausedNotification";
-
-/// Notification sent after encoding is complete. Matches HB_STATE_WORKDONE constant in libhb.
-NSString *HBCoreWorkDoneNotification = @"HBCoreWorkDoneNotification";
-
-/// Notification sent to update status while muxing. Matches HB_STATE_MUXING constant in libhb.
-NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
-
 /**
  * Private methods of HBCore.
  */
@@ -48,6 +25,15 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 
 /// Current scanned titles.
 @property (nonatomic, readwrite, retain) NSArray *titles;
+
+/// Progress handler.
+@property (nonatomic, readwrite, copy) HBCoreProgressHandler progressHandler;
+
+/// Completation handler.
+@property (nonatomic, readwrite, copy) HBCoreCompletationHandler completationHandler;
+
+/// User cancelled.
+@property (nonatomic, readwrite, getter=isCancelled) BOOL cancelled;
 
 - (void)stateUpdateTimer:(NSTimer *)timer;
 
@@ -161,8 +147,12 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     return YES;
 }
 
-- (void)scan:(NSURL *)url titleNum:(NSUInteger)titleNum previewsNum:(NSUInteger)previewsNum minTitleDuration:(NSUInteger)minTitleDuration;
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)titleNum previews:(NSUInteger)previewsNum minDuration:(NSUInteger)minTitleDuration progressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler
 {
+    // Copy the progress/completation blocks
+    self.progressHandler = progressHandler;
+    self.completationHandler = completationHandler;
+
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.2];
 
@@ -207,7 +197,7 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 /**
  *  Creates an array of lightweight HBTitles instances.
  */
-- (void)scanDone
+- (BOOL)scanDone
 {
     hb_title_set_t *title_set = hb_get_title_set(_hb_handle);
     NSMutableArray *titles = [NSMutableArray array];
@@ -221,6 +211,8 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     self.titles = [[titles copy] autorelease];
 
     [HBUtilities writeToActivityLog:"%s scan done", self.name.UTF8String];
+
+    return self.titles.count;
 }
 
 - (void)cancelScan
@@ -232,23 +224,25 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 
 #pragma mark - Encodes
 
-- (void)encodeJob:(HBJob *)job
+- (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
 {
+    // Add the job to libhb
     hb_job_t *hb_job = job.hb_job;
-
-    [HBUtilities writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", (job.video.twoPass + 1)];
     hb_job_set_file(hb_job, job.destURL.path.fileSystemRepresentation);
-
     hb_add(self.hb_handle, hb_job);
 
     // Free the job
     hb_job_close(&hb_job);
 
-    [self start];
+    [self startProgressHandler:progressHandler completationHandler:completationHandler];
 }
 
-- (void)start
+- (void)startProgressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
 {
+    // Copy the progress/completation blocks
+    self.progressHandler = progressHandler;
+    self.completationHandler = completationHandler;
+
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.5];
 
@@ -263,20 +257,34 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     [HBUtilities writeToActivityLog:"%s work started", self.name.UTF8String];
 }
 
-- (void)workDone
+- (BOOL)workDone
 {
     // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
     // or someone calling hb_stop. In the latter case, hb_stop does not clear
     // out the remaining passes/jobs in the queue. We'll do that here.
     hb_job_t *job;
     while ((job = hb_job(_hb_handle, 0)))
+    {
         hb_rem(_hb_handle, job);
+    }
 
     [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
+
+    if (self.isCancelled)
+    {
+        self.cancelled = NO;
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
 }
 
-- (void)stop
+- (void)cancelEncode
 {
+    self.cancelled = YES;
+
     hb_stop(_hb_handle);
     hb_system_sleep_allow(_hb_handle);
 
@@ -334,19 +342,15 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     switch (stateValue)
     {
         case HB_STATE_WORKING:
-            return @selector(handleHBStateWorking);
         case HB_STATE_SCANNING:
-            return @selector(handleHBStateScanning);
         case HB_STATE_MUXING:
-            return @selector(handleHBStateMuxing);
         case HB_STATE_PAUSED:
-            return @selector(handleHBStatePaused);
         case HB_STATE_SEARCHING:
-            return @selector(handleHBStateSearching);
+            return @selector(handleProgress);
         case HB_STATE_SCANDONE:
-            return @selector(handleHBStateScanDone);
+            return @selector(handleScanCompletation);
         case HB_STATE_WORKDONE:
-            return @selector(handleHBStateWorkDone);
+            return @selector(handleWorkCompletation);
         default:
             NSAssert1(NO, @"[HBCore selectorForState:] unknown state %lu", stateValue);
             return NULL;
@@ -397,68 +401,51 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 #pragma mark - Notifications
 
 /**
- * Processes HBStateScanning state information. Current implementation just
- * sends HBCoreScanningNotification.
+ * Processes HBStateSearching state information. Current implementation just
+ * sends HBCoreSearchingNotification.
  */
-- (void)handleHBStateScanning
+- (void)handleProgress
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreScanningNotification object:self];    
+    if (self.progressHandler)
+    {
+        self.progressHandler(self.state, *(self.hb_state));
+    }
 }
 
 /**
  * Processes HBStateScanDone state information. Current implementation just
  * sends HBCoreScanDoneNotification.
  */
-- (void)handleHBStateScanDone
+- (void)handleScanCompletation
 {
-    [self scanDone];
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreScanDoneNotification object:self];    
-}
+    BOOL success = [self scanDone];
 
-/**
- * Processes HBStateWorking state information. Current implementation just
- * sends HBCoreWorkingNotification.
- */
-- (void)handleHBStateWorking
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreWorkingNotification object:self];    
-}
-
-/**
- * Processes HBStatePaused state information. Current implementation just
- * sends HBCorePausedNotification.
- */
-- (void)handleHBStatePaused
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCorePausedNotification object:self];    
+    if (self.completationHandler)
+    {
+        HBCoreCompletationHandler completationHandler = [self.completationHandler retain];
+        self.progressHandler = nil;
+        self.completationHandler = nil;
+        completationHandler(success);
+        [completationHandler release];
+    }
 }
 
 /**
  * Processes HBStateWorkDone state information. Current implementation just
  * sends HBCoreWorkDoneNotification.
  */
-- (void)handleHBStateWorkDone
+- (void)handleWorkCompletation
 {
-    [self workDone];
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreWorkDoneNotification object:self];    
-}
+    BOOL success = [self workDone];
 
-/**
- * Processes HBStateMuxing state information. Current implementation just
- * sends HBCoreMuxingNotification.
- */
-- (void)handleHBStateMuxing
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreMuxingNotification object:self];    
-}
-
-/**
- * Processes HBStateSearching state information. Current implementation just
- * sends HBCoreSearchingNotification.
- */
-- (void)handleHBStateSearching
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBCoreSearchingNotification object:self];
+    if (self.completationHandler)
+    {
+        HBCoreCompletationHandler completationHandler = [self.completationHandler retain];
+        self.progressHandler = nil;
+        self.completationHandler = nil;
+        completationHandler(success);
+        [completationHandler release];
+    }
 }
 
 @end

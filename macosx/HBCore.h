@@ -22,19 +22,12 @@ typedef NS_ENUM(NSUInteger, HBState) {
     HBStateSearching = HB_STATE_SEARCHING    ///< HB is searching
 };
 
-// These constants specify various status notifications sent by HBCore
-extern NSString *HBCoreScanningNotification;
-extern NSString *HBCoreScanDoneNotification;
-extern NSString *HBCoreSearchingNotification;
-extern NSString *HBCoreWorkingNotification;
-extern NSString *HBCorePausedNotification;
-extern NSString *HBCoreWorkDoneNotification;
-extern NSString *HBCoreMuxingNotification;
+typedef void (^HBCoreProgressHandler)(HBState state, hb_state_t hb_state);
+typedef void (^HBCoreCompletationHandler)(BOOL success);
 
 /**
  * HBCore is an Objective-C interface to the low-level HandBrake library.
- * HBCore monitors state changes of libhb and provides notifications via
- * NSNotificationCenter to any object who needs them. It can also be used
+ * HBCore monitors state changes of libhb. It can also be used
  * to implement properties that can be directly bound to elements of the gui.
  */
 @interface HBCore : NSObject
@@ -68,7 +61,7 @@ extern NSString *HBCoreMuxingNotification;
 @property (nonatomic, readonly) HBState state;
 
 /**
- * Pointer to a hb_state_s struct containing state information of libhb.
+ * Pointer to a hb_state_s struct containing the detailed state information of libhb.
  */
 @property (nonatomic, readonly) hb_state_t *hb_state;
 
@@ -78,12 +71,12 @@ extern NSString *HBCoreMuxingNotification;
 @property (nonatomic, readonly) hb_handle_t *hb_handle;
 
 /**
- *  The name of the core, used in for debugging purpose.
+ *  The name of the core, used for debugging purpose.
  */
 @property (nonatomic, copy) NSString *name;
 
 /**
- *  Determines whether the scan operation can scan a particural URL or whether an additional decription lib is needed..
+ *  Determines whether the scan operation can scan a particural URL or whether an additional decryption lib is needed.
  *
  *  @param url   the URL of the input file.
  *  @param error an error containing additional info.
@@ -100,7 +93,12 @@ extern NSString *HBCoreMuxingNotification;
  *  @param previewsNum      the number of previews image to generate.
  *  @param minTitleDuration the minimum duration of the wanted titles in seconds.
  */
-- (void)scan:(NSURL *)url titleNum:(NSUInteger)titleNum previewsNum:(NSUInteger)previewsNum minTitleDuration:(NSUInteger)minTitleDuration;
+- (void)scanURL:(NSURL *)url
+     titleIndex:(NSUInteger)titleNum
+       previews:(NSUInteger)previewsNum
+    minDuration:(NSUInteger)minTitleDuration
+progressHandler:(HBCoreProgressHandler)progressHandler
+completationHandler:(HBCoreCompletationHandler)completationHandler;
 
 /**
  *  Cancels the scan execution.
@@ -117,19 +115,20 @@ extern NSString *HBCoreMuxingNotification;
  *
  *  @param job the job to encode.
  */
-- (void)encodeJob:(HBJob *)job;
+- (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
+
+/**
+ * Stops encoding session and releases resources.
+ */
+- (void)cancelEncode;
 
 /**
  * Starts the libhb encoding session.
  *
  *	This method must be called after all jobs have been added.
+ *  deprecated, will be removed soon.
  */
-- (void)start;
-
-/**
- * Stops encoding session and releases resources.
- */
-- (void)stop;
+- (void)startProgressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
 
 /**
  *  Pauses the encoding session.

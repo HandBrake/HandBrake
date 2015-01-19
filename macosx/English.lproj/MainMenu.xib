@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C99d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -415,12 +415,12 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
+                            <binding destination="240" name="value" keyPath="self.job.mp4iPodCompatible" id="GWA-QG-Bfu"/>
                             <binding destination="240" name="hidden" keyPath="self.job.mp4iPodCompatibleEnabled" id="eGS-R2-zSV">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="240" name="value" keyPath="self.job.mp4iPodCompatible" id="GWA-QG-Bfu"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="5505">
@@ -491,12 +491,12 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="4CAB4280-DF01-4BDC-B23B-98BD6E6190F4" label="Start" paletteLabel="Start Encoding" toolTip="Start Encoding" tag="-1" image="encode" id="byg-kj-sEM">
                         <connections>
-                            <action selector="Rip:" target="240" id="0B6-IB-70f"/>
+                            <action selector="rip:" target="240" id="0Db-56-2aY"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="E4C5E251-DD8D-4288-AC80-AF8E654B7A32" label="Pause" paletteLabel="Pause Encoding" toolTip="Pause Encoding" tag="-1" image="pauseencode" id="wTQ-KF-5KW">
                         <connections>
-                            <action selector="Pause:" target="240" id="mIG-m6-Stn"/>
+                            <action selector="pause:" target="240" id="OjT-ck-YX1"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="69E83092-D0D1-48A5-BF46-99EFB3EC630A" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">
@@ -647,12 +647,12 @@
                             </menuItem>
                             <menuItem title="Start Encoding" keyEquivalent="s" id="2444">
                                 <connections>
-                                    <action selector="Rip:" target="240" id="2448"/>
+                                    <action selector="rip:" target="240" id="kGM-Ym-khx"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Pause Encoding" keyEquivalent="p" id="2494">
                                 <connections>
-                                    <action selector="Pause:" target="240" id="2496"/>
+                                    <action selector="pause:" target="240" id="RAM-7s-91U"/>
                                 </connections>
                             </menuItem>
                         </items>

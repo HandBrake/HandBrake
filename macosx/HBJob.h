@@ -49,7 +49,7 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 
 @property (nonatomic, readwrite, assign) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
-@property (nonatomic, readwrite) int pidId;
+@property (nonatomic, readonly) NSString *uuid;
 
 /**
  *  The file URL of the source.
