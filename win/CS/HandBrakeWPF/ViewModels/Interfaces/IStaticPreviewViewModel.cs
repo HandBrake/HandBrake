@@ -9,8 +9,8 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     /// <summary>
     /// The Static Preview View Model Interface
@@ -23,7 +23,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="task">
         /// The task.
         /// </param>
-        void UpdatePreviewFrame(EncodeTask task);
+        /// <param name="scannedSource">
+        /// The scanned Source.
+        /// </param>
+        void UpdatePreviewFrame(EncodeTask task, Source scannedSource);
 
         /// <summary>
         /// Gets or sets a value indicating whether is open.

@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.Interop.Model.Encoding;
@@ -71,6 +70,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The set source.
         /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
         /// <param name="selectedTitle">
         /// The selected title.
         /// </param>
@@ -80,7 +82,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="task">
         /// The task.
         /// </param>
-        public void SetSource(Title selectedTitle, Preset currentPreset, EncodeTask task)
+        public void SetSource(Source source, Title selectedTitle, Preset currentPreset, EncodeTask task)
         {
             this.Task = task;
             this.Preset = currentPreset;

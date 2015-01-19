@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Scan.Model;
 
@@ -23,6 +22,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Setup the window after a scan.
         /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
         /// <param name="selectedTitle">
         /// The selected title.
         /// </param>
@@ -32,7 +34,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="task">
         /// The task.
         /// </param>
-        void SetSource(Title selectedTitle, Preset currentPreset, EncodeTask task);
+        void SetSource(Source source, Title selectedTitle, Preset currentPreset, EncodeTask task);
 
         /// <summary>
         /// Set the selected preset

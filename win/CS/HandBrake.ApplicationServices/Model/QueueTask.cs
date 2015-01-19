@@ -47,11 +47,15 @@ namespace HandBrake.ApplicationServices.Model
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        public QueueTask(EncodeTask task, HBConfiguration configuration)
+        /// <param name="scannedSource">
+        /// The scanned Source.
+        /// </param>
+        public QueueTask(EncodeTask task, HBConfiguration configuration, Source scannedSource)
         {
             this.Task = task;
             this.Configuration = configuration;
             this.Status = QueueItemStatus.Waiting;
+            this.ScannedSource = scannedSource;
         }
 
         /// <summary>

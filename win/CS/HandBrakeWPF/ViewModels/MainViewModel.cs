@@ -1166,7 +1166,7 @@ namespace HandBrakeWPF.ViewModels
             if (!string.IsNullOrEmpty(this.CurrentTask.Source))
             {
                 this.StaticPreviewViewModel.IsOpen = true;
-                this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask);
+                this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask, this.ScannedSource);
                 this.WindowManager.ShowWindow(this.StaticPreviewViewModel);
             }
         }
@@ -1229,7 +1229,7 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create());
+            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource);
 
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
@@ -1813,6 +1813,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void QueueEditAction(bool successful)
         {
+            /* TODO Fix this. */
             Execute.OnUIThread(() =>
                 {
                     // Copy all the Scan data into the UI
@@ -1903,13 +1904,13 @@ namespace HandBrakeWPF.ViewModels
             // Setup the Tabs
             if (this.selectedTitle != null)
             {
-                this.PictureSettingsViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-                this.VideoViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-                this.FiltersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-                this.AudioViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-                this.SubtitleViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-                this.ChaptersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-                this.AdvancedViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.PictureSettingsViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.VideoViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.FiltersViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.AudioViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.SubtitleViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.ChaptersViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.AdvancedViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
             }
         }
 

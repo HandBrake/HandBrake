@@ -54,6 +54,8 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
         /// </summary>
         public int TitleNumber { get; set; }
 
+        public int RescanTitleNumber { get; set; }
+
         /// <summary>
         /// Gets or sets Playlist.
         /// </summary>

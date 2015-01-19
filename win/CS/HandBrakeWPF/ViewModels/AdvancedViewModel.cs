@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.Interop.Model.Encoding;
@@ -148,6 +147,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Setup this window for a new source
         /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
         /// <param name="title">
         /// The title.
         /// </param>
@@ -157,10 +159,10 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="task">
         /// The task.
         /// </param>
-        public void SetSource(Title title, Preset preset, EncodeTask task)
+        public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
-            this.EncoderOptionsViewModel.SetSource(title, preset, task);
-            this.X264ViewModel.SetSource(title, preset, task);
+            this.EncoderOptionsViewModel.SetSource(source, title, preset, task);
+            this.X264ViewModel.SetSource(source, title, preset, task);
         }
 
         #endregion

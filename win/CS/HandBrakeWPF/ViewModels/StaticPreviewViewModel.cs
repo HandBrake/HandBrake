@@ -26,6 +26,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
+    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Factories;
@@ -218,6 +219,11 @@ namespace HandBrakeWPF.ViewModels
         public EncodeTask Task { get; set; }
 
         /// <summary>
+        /// Gets or sets the scanned source.
+        /// </summary>
+        public Source ScannedSource { get; set; } 
+
+        /// <summary>
         ///     Gets the total previews.
         /// </summary>
         public int TotalPreviews
@@ -395,12 +401,16 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="task">
         /// The task.
         /// </param>
-        public void UpdatePreviewFrame(EncodeTask task)
+        /// <param name="scannedSource">
+        /// The scanned Source.
+        /// </param>
+        public void UpdatePreviewFrame(EncodeTask task, Source scannedSource)
         {
             this.Task = task;
             this.UpdatePreviewFrame();
             this.DisplayName = "Picture Preview";
             this.Title = Properties.Resources.Preview;
+            this.ScannedSource = scannedSource;
         }
 
         /// <summary>
@@ -543,7 +553,7 @@ namespace HandBrakeWPF.ViewModels
             encodeTask.IsPreviewEncode = true;
             encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage;  // TODO 0 and 1 mean the same. Need to fix this as it knocks the video out of sync with the still preview.
             encodeTask.PreviewEncodeDuration = this.Duration;
-            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create());
+            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(), this.ScannedSource);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 

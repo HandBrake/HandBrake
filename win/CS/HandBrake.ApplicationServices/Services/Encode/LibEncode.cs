@@ -137,7 +137,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 HandBrakeUtils.SetDvdNav(!job.Configuration.IsDvdNavDisabled);
 
                 ServiceLogMessage("Scanning title for encoding ... ");
-                this.instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
+
+                this.instance.StartScan(job.ScannedSource.ScanPath, job.Configuration.PreviewScanCount, job.Task.Title);
             }
             catch (Exception exc)
             {
@@ -224,9 +225,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
             Interop.Model.Scan.Title scannedTitle = new Interop.Model.Scan.Title
                                                         {
                                                             Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
-                                                            ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
-                                                            FramerateDenominator = title.FramerateDenominator,
-                                                            FramerateNumerator = title.FramerateNumerator,
+                                                            ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
+                                                            FramerateDenominator = title.FramerateDenominator, 
+                                                            FramerateNumerator = title.FramerateNumerator, 
                                                         };
             
             // TODO fix this tempory hack to pass in the required title information into the factory.

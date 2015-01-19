@@ -112,6 +112,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private Title currentTitle;
 
+        /// <summary>
+        /// The scanned source.
+        /// </summary>
+        private Source scannedSource;
+
         #endregion
 
         #region Constructors and Destructors
@@ -701,6 +706,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Setup this window for a new source
         /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
         /// <param name="title">
         /// The title.
         /// </param>
@@ -710,10 +718,12 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="task">
         /// The task.
         /// </param>
-        public void SetSource(Title title, Preset preset, EncodeTask task)
+        public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.currentTitle = title;
             this.Task = task;
+
+            this.scannedSource = source;
 
             if (title != null)
             {
@@ -956,7 +966,7 @@ namespace HandBrakeWPF.ViewModels
             // Step 5, Update the Preview
             if (delayedPreviewprocessor != null && this.Task != null && this.StaticPreviewViewModel != null && this.StaticPreviewViewModel.IsOpen)
             {
-                delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task), 800);
+                delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task, this.scannedSource), 800);
             }
         }
 

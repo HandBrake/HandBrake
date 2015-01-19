@@ -194,6 +194,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Setup this window for a new source
         /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
         /// <param name="title">
         /// The title.
         /// </param>
@@ -203,7 +206,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="task">
         /// The task.
         /// </param>
-        public void SetSource(Title title, Preset preset, EncodeTask task)
+        public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.Task = task;
             this.NotifyOfPropertyChange(() => this.Task);
