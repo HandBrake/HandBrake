@@ -226,6 +226,13 @@
 
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
 {
+    // Copy the progress/completation blocks
+    self.progressHandler = progressHandler;
+    self.completationHandler = completationHandler;
+
+    // Start the timer to handle libhb state changes
+    [self startUpdateTimerWithInterval:0.5];
+
     // Add the job to libhb
     hb_job_t *hb_job = job.hb_job;
     hb_job_set_file(hb_job, job.destURL.path.fileSystemRepresentation);
@@ -233,18 +240,6 @@
 
     // Free the job
     hb_job_close(&hb_job);
-
-    [self startProgressHandler:progressHandler completationHandler:completationHandler];
-}
-
-- (void)startProgressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
-{
-    // Copy the progress/completation blocks
-    self.progressHandler = progressHandler;
-    self.completationHandler = completationHandler;
-
-    // Start the timer to handle libhb state changes
-    [self startUpdateTimerWithInterval:0.5];
 
     hb_system_sleep_prevent(_hb_handle);
     hb_start(_hb_handle);
@@ -254,7 +249,7 @@
     // waiting for libhb to set it in a background thread.
     self.state = HBStateWorking;
 
-    [HBUtilities writeToActivityLog:"%s work started", self.name.UTF8String];
+    [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destURL.lastPathComponent.UTF8String];
 }
 
 - (BOOL)workDone

@@ -28,8 +28,6 @@ typedef enum EncodeState : NSUInteger {
 
 @property (nonatomic) HBCore *core;
 
-@property (nonatomic, retain) NSURL *fileURL;
-
 @end
 
 @implementation HBPreviewGenerator
@@ -202,52 +200,51 @@ typedef enum EncodeState : NSUInteger {
         return NO;
     }
 
+    NSURL *destURL = nil;
     // Generate the file url and directories.
     if (self.job.container & HB_MUX_MASK_MP4)
     {
         // we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly.
-        self.fileURL = [HBPreviewGenerator generateFileURLForType:@"m4v"];
+        destURL = [HBPreviewGenerator generateFileURLForType:@"m4v"];
     }
     else if (self.job.container & HB_MUX_MASK_MKV)
     {
-        self.fileURL = [HBPreviewGenerator generateFileURLForType:@"mkv"];
+        destURL = [HBPreviewGenerator generateFileURLForType:@"mkv"];
     }
 
     // return if we couldn't get the fileURL.
-    if (!self.fileURL)
+    if (!destURL)
     {
         return NO;
     }
 
     // See if there is an existing preview file, if so, delete it.
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[self.fileURL path]])
+    if (![[NSFileManager defaultManager] fileExistsAtPath:destURL.path])
     {
-        [[NSFileManager defaultManager] removeItemAtPath:[self.fileURL path] error:NULL];
+        [[NSFileManager defaultManager] removeItemAtPath:destURL.path error:NULL];
     }
 
-    hb_job_t *job = self.job.hb_job;
+    HBJob *job = [[self.job copy] autorelease];
+    job.title = self.job.title;
+    job.destURL = destURL;
 
-    // We now direct our preview encode to fileURL path.
-    hb_job_set_file(job, [[self.fileURL path] UTF8String]);
+    job.range.type = HBRangePreviewIndex;
+    job.range.previewIndex = (int)index + 1;;
+    job.range.previewsCount = (int)self.imagesCount;
+    job.range.ptsToStop = seconds * 90000LL;
 
-    job->start_at_preview = (int)index + 1;
-    job->seek_points = (int)self.imagesCount;
-    job->pts_to_stop = seconds * 90000LL;
     // Note: unlike a full encode, we only send 1 pass regardless if the final encode calls for 2 passes.
     // this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
-    job->twopass = 0;
+    job.video.twoPass = NO;
 
     // Init the libhb core
     int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
     self.core = [[[HBCore alloc] initWithLoggingLevel:loggingLevel] autorelease];
     self.core.name = @"PreviewCore";
 
-    // lets go ahead and send it off to libhb
-    hb_add(self.core.hb_handle, job);
-    hb_job_close(&job);
-
     // start the actual encode
-    [self.core startProgressHandler:^(HBState state, hb_state_t hb_state) {
+    [self.core encodeJob:job
+         progressHandler:^(HBState state, hb_state_t hb_state) {
         switch (state) {
             case HBStateWorking:
             {
@@ -279,7 +276,7 @@ typedef enum EncodeState : NSUInteger {
         // Encode done, call the delegate and close libhb handle
         if (success)
         {
-            [self.delegate didCreateMovieAtURL:self.fileURL];
+            [self.delegate didCreateMovieAtURL:destURL];
         }
         else
         {
@@ -309,8 +306,6 @@ typedef enum EncodeState : NSUInteger {
     [_core release];
     _core = nil;
 
-    [_fileURL release];
-    _fileURL = nil;
     [_picturePreviews release];
     _picturePreviews = nil;
 

@@ -123,14 +123,6 @@ completationHandler:(HBCoreCompletationHandler)completationHandler;
 - (void)cancelEncode;
 
 /**
- * Starts the libhb encoding session.
- *
- *	This method must be called after all jobs have been added.
- *  deprecated, will be removed soon.
- */
-- (void)startProgressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
-
-/**
  *  Pauses the encoding session.
  */
 - (void)pause;

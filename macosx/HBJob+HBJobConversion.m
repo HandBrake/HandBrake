@@ -54,6 +54,12 @@
         int stop_frame = self.range.frameStop;
         job->frame_to_stop = stop_frame;
     }
+    else if (self.range.type == HBRangePreviewIndex)
+    {
+        job->start_at_preview = self.range.previewIndex;
+        job->seek_points = self.range.previewsCount;
+        job->pts_to_stop = self.range.ptsToStop;
+    }
 
     // Format (Muxer) and Video Encoder
     job->mux = self.container;

@@ -12,6 +12,7 @@ typedef NS_ENUM(NSUInteger, HBRangeType) {
     HBRangeTypeChapters,
     HBRangeTypeFrames,
     HBRangeTypeSeconds,
+    HBRangePreviewIndex,
 };
 
 @interface HBRange : NSObject <NSCoding, NSCopying>
@@ -20,14 +21,22 @@ typedef NS_ENUM(NSUInteger, HBRangeType) {
 
 @property (nonatomic, readwrite) HBRangeType type;
 
+/// HBRangeTypeChapters
 @property (nonatomic, readwrite) int chapterStart;
 @property (nonatomic, readwrite) int chapterStop;
 
+/// HBRangeTypeFrames
 @property (nonatomic, readwrite) int frameStart;
 @property (nonatomic, readwrite) int frameStop;
 
+/// HBRangeTypeSeconds
 @property (nonatomic, readwrite) int secondsStart;
 @property (nonatomic, readwrite) int secondsStop;
+
+/// HBRangePreviewIndex
+@property (nonatomic, readwrite) int previewIndex;
+@property (nonatomic, readwrite) int previewsCount;
+@property (nonatomic, readwrite) int64_t ptsToStop;
 
 @property (nonatomic, readonly) NSString *duration;
 
