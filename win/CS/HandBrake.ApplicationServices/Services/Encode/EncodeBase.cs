@@ -362,6 +362,17 @@ namespace HandBrake.ApplicationServices.Services.Encode
         }
 
         /// <summary>
+        /// The service log message.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        protected void ServiceLogMessage(string message)
+        {
+            this.ProcessLogMessage(string.Format("# {0}", message));
+        }
+
+        /// <summary>
         /// Process an Incomming Log Message.
         /// </summary>
         /// <param name="message">

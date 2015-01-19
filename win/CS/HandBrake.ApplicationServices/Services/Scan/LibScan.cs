@@ -239,6 +239,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// </summary>
         public void Stop()
         {
+            ServiceLogMessage("Stopping Scan.");
             this.instance.StopScan();
 
             try
@@ -331,10 +332,12 @@ namespace HandBrake.ApplicationServices.Services.Scan
 
                 HandBrakeUtils.SetDvdNav(!configuraiton.IsDvdNavDisabled);
 
+                this.ServiceLogMessage("Starting Scan ...");
                 this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
             }
             catch (Exception exc)
             {
+                this.ServiceLogMessage("Scan Failed ..." + Environment.NewLine + exc);
                 this.Stop();
 
                 if (this.ScanCompleted != null)
@@ -356,6 +359,8 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// </param>
         private void InstanceScanCompleted(object sender, System.EventArgs e)
         {
+            this.ServiceLogMessage("Starting Completed ...");
+
             // Write the log file out before we start processing incase we crash.
             try
             {
@@ -427,15 +432,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// </param>
         private void HandBrakeInstanceErrorLogged(object sender, MessageLoggedEventArgs e)
         {
-            lock (LogLock)
-            {
-                if (this.scanLog != null)
-                {
-                    this.scanLog.WriteLine(e.Message);
-                }
-
-                this.logging.AppendLine(e.Message);
-            }
+            this.LogMessage(e.Message);
         }
 
         /// <summary>
@@ -449,15 +446,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// </param>
         private void HandBrakeInstanceMessageLogged(object sender, MessageLoggedEventArgs e)
         {
-            lock (LogLock)
-            {
-                if (this.scanLog != null)
-                {
-                    this.scanLog.WriteLine(e.Message);
-                }
-
-                this.logging.AppendLine(e.Message);
-            }
+            this.LogMessage(e.Message);
         }
 
         /// <summary>
@@ -543,6 +532,36 @@ namespace HandBrake.ApplicationServices.Services.Scan
             }
 
             return titleList;
+        }
+
+        /// <summary>
+        /// The log message.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        private void LogMessage(string message)
+        {
+            lock (LogLock)
+            {
+                if (this.scanLog != null)
+                {
+                    this.scanLog.WriteLine(message);
+                }
+
+                this.logging.AppendLine(message);
+            }
+        }
+
+        /// <summary>
+        /// The service log message.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        protected void ServiceLogMessage(string message)
+        {
+            this.LogMessage(string.Format("# {0}", message));
         }
         #endregion
     }

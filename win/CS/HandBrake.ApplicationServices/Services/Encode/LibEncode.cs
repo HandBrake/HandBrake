@@ -136,10 +136,12 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
                 HandBrakeUtils.SetDvdNav(!job.Configuration.IsDvdNavDisabled);
 
+                ServiceLogMessage("Scanning title for encoding ... ");
                 this.instance.StartScan(job.Task.Source, job.Configuration.PreviewScanCount, job.Task.Title);
             }
             catch (Exception exc)
             {
+                ServiceLogMessage("Scan Failed ... " + Environment.NewLine + exc);
                 this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "An Error has occured.", this.currentTask.Task.Destination));
             }
         }
@@ -152,6 +154,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
             if (this.instance != null)
             {
                 this.instance.PauseEncode();
+                ServiceLogMessage("Encode Paused");
                 this.IsPasued = true;
             }
         }
@@ -164,6 +167,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
             if (this.instance != null)
             {
                 this.instance.ResumeEncode();
+                ServiceLogMessage("Encode Resumed");
                 this.IsPasued = false;
             }
         }
@@ -177,6 +181,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
             {
                 this.IsEncoding = false;
                 this.instance.StopEncode();
+                ServiceLogMessage("Encode Stopped");
             }
             catch (Exception)
             {
@@ -203,6 +208,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// </param>
         private void ScanCompleted(QueueTask job, IHandBrakeInstance instance)
         {
+            ServiceLogMessage("Scan Completed. Setting up the job for encoding ...");
+
             // Get an EncodeJob object for the Interop Library
             EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
 
@@ -210,6 +217,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
             Title title = this.scannedSource.Titles.FirstOrDefault(t => t.TitleNumber == job.Task.Title);
             if (title == null)
             {
+                ServiceLogMessage("Title not found.");
                 throw new Exception("Unable to get title for encoding. Encode Failed.");
             }
 
@@ -222,7 +230,16 @@ namespace HandBrake.ApplicationServices.Services.Encode
                                                         };
             
             // TODO fix this tempory hack to pass in the required title information into the factory.
-            instance.StartEncode(encodeJob, scannedTitle, job.Configuration.PreviewScanCount);
+            try
+            {
+                ServiceLogMessage("Starting Encode ...");
+                instance.StartEncode(encodeJob, scannedTitle, job.Configuration.PreviewScanCount);
+            }
+            catch (Exception exc)
+            {
+                ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + exc);
+                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", job.Task.Source));
+            }
 
             // Fire the Encode Started Event
             this.InvokeEncodeStarted(System.EventArgs.Empty);
@@ -323,6 +340,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
         private void InstanceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.IsEncoding = false;
+            ServiceLogMessage("Encode Completed ...");
 
             this.InvokeEncodeCompleted(
                 e.Error
