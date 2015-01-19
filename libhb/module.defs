@@ -54,7 +54,7 @@ else ifeq ($(BUILD.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(BUILD.system),mingw)
     LIBHB.GCC.D += SYS_MINGW
-ifeq ($(HAS.pthreadGC2),1)
+ifneq ($(HAS.pthread),1)
     LIBHB.GCC.D += PTW32_STATIC_LIB
 endif
 	LIBHB.GCC.args.extra.dylib++ += -Wl,--enable-auto-import -static
