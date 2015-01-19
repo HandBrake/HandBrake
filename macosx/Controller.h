@@ -21,7 +21,6 @@
 @class HBOutputPanelController;
 @class HBPresetsViewController;
 @class HBPresetsManager;
-@class HBDockTile;
 
 @class HBJob;
 

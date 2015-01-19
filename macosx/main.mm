@@ -35,7 +35,7 @@ int main(int argc, const char **argv)
 
     // Tell sigaction to ignore the SIGINT signal
     // because we handle it already with gcd.
-    struct sigaction action = { 0 };
+    struct sigaction action = { {0}, 0, 0 };
     action.sa_handler = SIG_IGN;
     sigaction(SIGINT, &action, NULL);
 

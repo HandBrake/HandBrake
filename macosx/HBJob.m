@@ -145,6 +145,7 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
     [_chapterTitles release];
 
     [_uuid release];
+    [_presetName release];
 
     [super dealloc];
 }

@@ -7,17 +7,10 @@
 
 #import "HBPreviewGenerator.h"
 #import "HBUtilities.h"
-#import "Controller.h"
 
 #import "HBCore.h"
 #import "HBJob.h"
 #import "HBJob+HBJobConversion.h"
-
-typedef enum EncodeState : NSUInteger {
-    EncodeStateIdle,
-    EncodeStateWorking,
-    EncodeStateCancelled,
-} EncodeState;
 
 @interface HBPreviewGenerator ()
 
@@ -271,8 +264,6 @@ typedef enum EncodeState : NSUInteger {
         }
     }
     completationHandler:^(BOOL success) {
-        self.core = nil;
-
         // Encode done, call the delegate and close libhb handle
         if (success)
         {
@@ -282,6 +273,7 @@ typedef enum EncodeState : NSUInteger {
         {
             [self.delegate didCancelMovieCreation];
         }
+        self.core = nil;
     }];
 
     return YES;

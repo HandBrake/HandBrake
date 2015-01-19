@@ -35,17 +35,17 @@
 {
     QTTime time = [self currentTime];
     double timeInSeconds = (double)time.timeValue / time.timeScale;
-	UInt16 seconds = fmod(timeInSeconds, 60.0);
-	UInt16 minutes = fmod(timeInSeconds / 60.0, 60.0);
-	UInt16 hours = timeInSeconds / (60.0 * 60.0);
-	UInt16 milliseconds = (timeInSeconds - (int) timeInSeconds) * 1000;
+	UInt16 seconds = (UInt16)fmod(timeInSeconds, 60.0);
+	UInt16 minutes = (UInt16)fmod(timeInSeconds / 60.0, 60.0);
+	UInt16 hours = (UInt16)(timeInSeconds / (60.0 * 60.0));
+	UInt16 milliseconds = (UInt16)(timeInSeconds - (int) timeInSeconds) * 1000;
 	return [NSString stringWithFormat:@"%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds];
 }
 
 - (void) setCurrentTimeDouble: (double) value
 {
 	long timeScale = [[self attributeForKey:QTMovieTimeScaleAttribute] longValue];
-	[self setCurrentTime:QTMakeTime(value * timeScale, timeScale)];
+	[self setCurrentTime:QTMakeTime((long long)value * timeScale, timeScale)];
 }
 
 @end
@@ -370,8 +370,8 @@ typedef enum ViewMode : NSUInteger {
     NSRect frame = [[self window] frame];
 
     // Calculate border around content region of the frame
-    int borderX = frame.size.width - currentSize.width;
-    int borderY = frame.size.height - currentSize.height;
+    int borderX = (int)(frame.size.width - currentSize.width);
+    int borderY = (int)(frame.size.height - currentSize.height);
 
     // Make sure the frame is smaller than the screen
     NSSize maxSize = [[[self window] screen] visibleFrame].size;

@@ -190,13 +190,13 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         granularity = [[NSUserDefaults standardUserDefaults]
                        floatForKey:@"x264CqSliderFractional"];
     }
-    [fVidQualitySlider setNumberOfTickMarks:((maxValue - minValue) *
+    [fVidQualitySlider setNumberOfTickMarks:(int)((maxValue - minValue) *
                                              (1.0f / granularity)) + 1];
 
     // Replace the slider transformer with a new one,
     // configured with the new max/min/direction values.
     [fVidQualitySlider unbind:@"value"];
-    HBQualityTransformer *transformer = [[[HBQualityTransformer alloc] initWithReversedDirection:direction min:minValue max:maxValue] autorelease];
+    HBQualityTransformer *transformer = [[[HBQualityTransformer alloc] initWithReversedDirection:(direction != 0) min:minValue max:maxValue] autorelease];
     [fVidQualitySlider bind:@"value" toObject:self withKeyPath:@"self.video.quality" options:@{NSValueTransformerBindingOption: transformer}];
 }
 

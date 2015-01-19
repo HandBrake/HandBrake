@@ -22,7 +22,7 @@
 @property (nonatomic, readwrite) int bitRate;
 
 @property (nonatomic, readwrite) int gain;
-@property (nonatomic, readwrite) float drc;
+@property (nonatomic, readwrite) double drc;
 
 /**
  *  Arrays of possible options for the track properties.

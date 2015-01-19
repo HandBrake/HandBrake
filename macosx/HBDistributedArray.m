@@ -195,20 +195,20 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
  */
 - (void)reload
 {
-    NSMutableArray *temp = nil;;
+    NSMutableArray *jobsArray = nil;;
     @try
     {
-        temp = [NSKeyedUnarchiver unarchiveObjectWithFile:self.fileURL.path];
+        jobsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:self.fileURL.path];
     }
     @catch (NSException *exception)
     {
-        temp = nil;
+        jobsArray = nil;
     }
 
     // Swap the proxy objects representation with the new
     // one read from disk
     NSMutableArray *proxyArray = [NSMutableArray array];
-    for (id anObject in temp)
+    for (id anObject in jobsArray)
     {
         NSString *uuid = [anObject uuid];
 

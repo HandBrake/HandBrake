@@ -432,7 +432,7 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
             self.deblock = [preset[@"PictureDeblock"] intValue];
         }
 
-        self.grayscale = [preset[@"VideoGrayScale"] intValue];
+        self.grayscale = [preset[@"VideoGrayScale"] boolValue];
     }
 
     self.notificationsEnabled = YES;

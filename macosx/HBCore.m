@@ -212,7 +212,7 @@
 
     [HBUtilities writeToActivityLog:"%s scan done", self.name.UTF8String];
 
-    return self.titles.count;
+    return (self.titles.count > 0);
 }
 
 - (void)cancelScan

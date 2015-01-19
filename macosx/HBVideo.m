@@ -404,7 +404,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     encodeBool(_twoPass);
     encodeBool(_turboTwoPass);
 
-    encodeInt(_advancedOptions);
+    encodeBool(_advancedOptions);
     encodeObject(_preset);
     encodeObject(_tune);
     encodeObject(_profile);
@@ -434,7 +434,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     decodeBool(_twoPass);
     decodeBool(_turboTwoPass);
 
-    decodeInt(_advancedOptions);
+    decodeBool(_advancedOptions);
     decodeObject(_preset);
     decodeObject(_tune);
     decodeObject(_profile);
@@ -624,10 +624,10 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     self.frameRate = intValue;
 
     // 2 Pass Encoding.
-    self.twoPass = [preset[@"VideoTwoPass"] intValue];
+    self.twoPass = [preset[@"VideoTwoPass"] boolValue];
 
     // Turbo 1st pass for 2 Pass Encoding.
-    self.turboTwoPass = [preset[@"VideoTurboTwoPass"] intValue];
+    self.turboTwoPass = [preset[@"VideoTurboTwoPass"] boolValue];
 
     self.notificationsEnabled = YES;
 }

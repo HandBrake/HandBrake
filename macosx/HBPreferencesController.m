@@ -179,13 +179,12 @@
 /*Opens the app browse window*/
 - (IBAction) browseSendToApp: (id) sender
 {
-    NSOpenPanel * panel;
-	
-    panel = [NSOpenPanel openPanel];
-    [panel setAllowsMultipleSelection: NO];
-    [panel setCanChooseFiles: YES];
-    [panel setCanChooseDirectories: NO ];
-    NSString * sendToAppDirectory;
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setCanChooseFiles:YES];
+    [panel setCanChooseDirectories:NO];
+
+    NSString *sendToAppDirectory;
 	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"])
 	{
 		sendToAppDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"];
@@ -200,8 +199,8 @@
         if (result == NSOKButton)
         {
             NSURL *sendToAppURL = [panel URL];
-            NSURL *sendToAppDirectory = [sendToAppURL URLByDeletingLastPathComponent];
-            [[NSUserDefaults standardUserDefaults] setObject:[sendToAppDirectory path] forKey:@"LastSendToAppDirectory"];
+            NSURL *sendToAppDirectoryURL = [sendToAppURL URLByDeletingLastPathComponent];
+            [[NSUserDefaults standardUserDefaults] setObject:[sendToAppDirectoryURL path] forKey:@"LastSendToAppDirectory"];
 
             NSString *sendToAppName = [[sendToAppURL lastPathComponent] stringByDeletingPathExtension];
             /* we set the name of the app to send to in the display field */
