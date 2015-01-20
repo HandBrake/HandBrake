@@ -915,7 +915,7 @@
     // Rip or Cancel ?
     if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
     {
-        [self cancel:sender];
+        [self cancelRip:sender];
     }
     // If there are pending jobs in the queue, then this is a rip the queue
     else if (self.pendingItemsCount > 0)
@@ -938,7 +938,7 @@
  * Cancel: returns immediately after posting the alert. Later, when the user
  * acknowledges the alert, doCancelCurrentJob is called.
  */
-- (IBAction)cancel:(id)sender
+- (IBAction)cancelRip:(id)sender
 {
     [self.core pause];
 
@@ -992,7 +992,7 @@
     HBState s = self.core.state;
     if ((s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
     {
-        [self cancel:self];
+        [self cancelRip:self];
     }
     else if (self.pendingItemsCount > 0)
     {

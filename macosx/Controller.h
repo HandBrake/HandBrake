@@ -135,8 +135,6 @@
 - (IBAction)showPreferencesWindow:(id)sender;
 
 - (IBAction)rip:(id)sender;
-
-- (IBAction)cancel:(id)sender;
 - (IBAction)pause:(id)sender;
 
 - (IBAction) openHomepage: (id) sender;

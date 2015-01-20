@@ -33,6 +33,6 @@
 - (void)setEncodingJobsAsPending;
 
 - (IBAction)rip:(id)sender;
-- (IBAction)cancel:(id)sender;
+- (IBAction)cancelRip:(id)sender;
 
 @end

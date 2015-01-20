@@ -1251,7 +1251,8 @@
     // Rip or Cancel ?
     if (fQueueController.core.state == HBStateWorking || fQueueController.core.state == HBStatePaused)
 	{
-        [self cancel:sender];
+        // Displays an alert asking user if the want to cancel encoding of current job.
+        [fQueueController cancelRip:self];
         return;
     }
 
@@ -1306,16 +1307,6 @@
     {
         [self doRip];
     }
-}
-
-/**
- * Displays an alert asking user if the want to cancel encoding of current job.
- * Cancel: returns immediately after posting the alert. Later, when the user
- * acknowledges the alert, doCancelCurrentJob is called.
- */
-- (IBAction)cancel:(id)sender
-{
-    [fQueueController cancel:self];
 }
 
 - (IBAction)pause:(id)sender
