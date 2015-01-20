@@ -116,8 +116,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
                                    ? QueryGeneratorUtility.GeneratePreviewQuery(
                                        new EncodeTask(this.currentTask.Task),
                                        encodeQueueTask.Configuration,
-                                       this.currentTask.Task.PreviewEncodeDuration,
-                                       this.currentTask.Task.PreviewEncodeStartAt)
+                                       this.currentTask.Task.PreviewEncodeDuration.HasValue ? this.currentTask.Task.PreviewEncodeDuration.Value : 0,
+                                       this.currentTask.Task.PreviewEncodeStartAt.HasValue ? this.currentTask.Task.PreviewEncodeStartAt.Value : 0)
                                    : QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.currentTask.Task), encodeQueueTask.Configuration);
 
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, query)

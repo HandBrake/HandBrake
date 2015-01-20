@@ -526,8 +526,8 @@ namespace HandBrakeWPF.ViewModels
 
             EncodeTask encodeTask = new EncodeTask(this.Task)
             {
-                PreviewDuration = this.Duration,
-                PreviewStartAt = this.SelectedPreviewImage,
+                PreviewEncodeDuration = this.Duration,
+                PreviewEncodeStartAt = this.SelectedPreviewImage,
                 PointToPointMode = PointToPointMode.Preview
             };
 

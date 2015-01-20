@@ -146,9 +146,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
             this.FastDecode = task.FastDecode;
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
 
-            this.PreviewStartAt = task.PreviewStartAt;
-            this.PreviewDuration = task.PreviewDuration;
-
             this.ShowAdvancedTab = task.ShowAdvancedTab;
 
             this.X265Preset = task.X265Preset;
@@ -505,14 +502,19 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
         #region Preview
 
         /// <summary>
-        /// Gets or sets StartAt.
+        /// Gets or sets a value indicating whether IsPreviewEncode.
         /// </summary>
-        public int? PreviewStartAt { get; set; }
+        public bool IsPreviewEncode { get; set; }
 
         /// <summary>
-        /// Gets or sets Duration.
+        /// Gets or sets PreviewEncodeDuration.
         /// </summary>
-        public int? PreviewDuration { get; set; }
+        public int? PreviewEncodeDuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets PreviewEncodeStartAt.
+        /// </summary>
+        public int? PreviewEncodeStartAt { get; set; }
 
         #endregion
 
@@ -541,21 +543,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
                 return false;
             }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether IsPreviewEncode.
-        /// </summary>
-        public bool IsPreviewEncode { get; set; }
-
-        /// <summary>
-        /// Gets or sets PreviewEncodeDuration.
-        /// </summary>
-        public int PreviewEncodeDuration { get; set; }
-
-        /// <summary>
-        /// Gets or sets PreviewEncodeStartAt.
-        /// </summary>
-        public int PreviewEncodeStartAt { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether advanced panel enabled.
