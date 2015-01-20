@@ -319,6 +319,9 @@
                         <rect key="frame" x="581" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5492">
+                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Fdv-uE-tUA">
+                                <real key="minimum" value="0.0"/>
+                            </numberFormatter>
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -329,22 +332,35 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="240" name="value" keyPath="self.job.range.secondsStart" id="yuS-GN-avp"/>
+                            <binding destination="240" name="value" keyPath="self.job.range.secondsStart" id="oC5-nl-aJ3">
+                                <dictionary key="options">
+                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" id="5521">
                         <rect key="frame" x="638" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5522">
+                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Wpt-92-R1O">
+                                <real key="minimum" value="0.0"/>
+                            </numberFormatter>
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="240" name="value" keyPath="self.job.range.frameStart" id="7yg-HW-q0R"/>
                             <binding destination="240" name="hidden" keyPath="self.job.range.framesSelected" id="nnF-AN-v4Q">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="240" name="value" keyPath="self.job.range.frameStart" id="xEY-Wf-hxo">
+                                <dictionary key="options">
+                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                    <bool key="NSValidatesImmediately" value="YES"/>
                                 </dictionary>
                             </binding>
                         </connections>
@@ -353,6 +369,9 @@
                         <rect key="frame" x="696" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
+                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="tD5-HN-B7h">
+                                <real key="minimum" value="0.0"/>
+                            </numberFormatter>
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -363,22 +382,35 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="240" name="value" keyPath="self.job.range.secondsStop" id="BUI-Zz-m1A"/>
+                            <binding destination="240" name="value" keyPath="self.job.range.secondsStop" id="yhq-KM-3Fs">
+                                <dictionary key="options">
+                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" id="5523">
                         <rect key="frame" x="758" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
+                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WrK-kN-ZN0">
+                                <real key="minimum" value="0.0"/>
+                            </numberFormatter>
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="240" name="value" keyPath="self.job.range.frameStop" id="8G6-K0-vyD"/>
                             <binding destination="240" name="hidden" keyPath="self.job.range.framesSelected" id="P5u-F3-Qyx">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="240" name="value" keyPath="self.job.range.frameStop" id="JVa-Qr-2DQ">
+                                <dictionary key="options">
+                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                    <bool key="NSValidatesImmediately" value="YES"/>
                                 </dictionary>
                             </binding>
                         </connections>
