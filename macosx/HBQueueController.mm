@@ -43,6 +43,8 @@
 @property (nonatomic, readonly) HBDistributedArray *jobs;
 @property (nonatomic, retain)   HBJob *currentJob;
 
+@property (nonatomic, readwrite) BOOL stop;
+
 @property (nonatomic, readwrite) NSUInteger pendingItemsCount;
 @property (nonatomic, readwrite) NSUInteger workingItemsCount;
 
@@ -454,7 +456,11 @@
     self.currentJob = nil;
 
     // since we have successfully completed an encode, we go to the next
-    [self encodeNextQueueItem];
+    if (!self.stop)
+    {
+        [self encodeNextQueueItem];
+    }
+    self.stop = NO;
 
     [self.window.toolbar validateVisibleItems];
     [self reloadQueue];
@@ -650,29 +656,44 @@
 }
 
 /**
- * Cancels and deletes the current job and starts processing the next in queue.
+ * Cancels the current job
  */
 - (void)doCancelCurrentJob
 {
+    self.currentJob.state = HBJobStateCanceled;
+
+    if (self.core.state == HBStateScanning)
+    {
+        [self.core cancelScan];
+    }
+    else
+    {
+        [self.core cancelEncode];
+    }
+}
+
+/**
+ * Cancels the current job and starts processing the next in queue.
+ */
+- (void)cancelCurrentJobAndContinue
+{
     [self.jobs beginTransaction];
 
-    self.currentJob.state = HBJobStateCanceled;
-    [self.core cancelEncode];
+    [self doCancelCurrentJob];
 
     [self.jobs commit];
     [self reloadQueue];
 }
 
 /**
- * Cancels and deletes the current job and stops libhb from processing the remaining encodes.
+ * Cancels the current job and stops libhb from processing the remaining encodes.
  */
-- (void)doCancelCurrentJobAndStop
+- (void)cancelCurrentJobAndStop
 {
     [self.jobs beginTransaction];
 
-    self.currentJob.state = HBJobStateCanceled;
-
-    [self.core cancelEncode];
+    self.stop = YES;
+    [self doCancelCurrentJob];
 
     [self.jobs commit];
     [self reloadQueue];
@@ -835,13 +856,8 @@
 
     if (returnCode == NSAlertSecondButtonReturn)
     {
-        // We need to save the currently encoding item number first
         NSInteger index = [self.jobs indexOfObject:self.currentJob];
-        // Since we are encoding, we need to let fHBController Cancel this job
-        // upon which it will move to the next one if there is one
-        [self doCancelCurrentJob];
-        // Now, we can go ahead and remove the job we just cancelled since
-        // we have its item number from above
+        [self cancelCurrentJobAndContinue];
         [self removeQueueItemAtIndex:index];
     }
 }
@@ -976,11 +992,11 @@
 
     if (returnCode == NSAlertSecondButtonReturn)
     {
-        [self doCancelCurrentJobAndStop];  // <- this also stops libhb
+        [self cancelCurrentJobAndStop];
     }
     else if (returnCode == NSAlertThirdButtonReturn)
     {
-        [self doCancelCurrentJob];
+        [self cancelCurrentJobAndContinue];
     }
 }
 
