@@ -26,34 +26,33 @@
 
 @interface HBController : NSObject <NSApplicationDelegate, NSDrawerDelegate>
 {
-    IBOutlet NSWindow *fWindow;
-
+    IBOutlet NSWindow  *fWindow;
     IBOutlet NSTabView *fMainTabView;
 
-    /* Video view controller */
+    // Video view controller
     HBVideoController       * fVideoController;
     IBOutlet NSTabViewItem  * fVideoTab;
 
-    /* Subtitles view controller */
+    // Subtitles view controller
 	HBSubtitlesController   * fSubtitlesViewController;
     IBOutlet NSTabViewItem  * fSubtitlesTab;
 
-	/* Audio view controller */
+	// Audio view controller
 	HBAudioController       * fAudioController;
     IBOutlet NSTabViewItem  * fAudioTab;
 
-	/* Chapters view controller */
+	// Chapters view controller
 	HBChapterTitlesController    * fChapterTitlesController;
     IBOutlet NSTabViewItem       * fChaptersTitlesTab;
 
-    /* Advanced options tab */
+    // Advanced options tab
     HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSTabViewItem       * fAdvancedTab;
 
-    /* Main Menu Outlets */
+    // Main Menu Outlets
     NSMenuItem                   * fOpenSourceTitleMMenu;
     
-    /* Source Title Scan Outlets */
+    // Source Title Scan Outlets
     IBOutlet NSPanel              * fScanSrcTitlePanel;
     IBOutlet NSTextField          * fScanSrcTitlePathField;
     IBOutlet NSTextField          * fSrcDsplyNameTitleScan;
@@ -61,70 +60,42 @@
     IBOutlet NSButton             * fScanSrcTitleCancelButton;
     IBOutlet NSButton             * fScanSrcTitleOpenButton;
 
-    /* Picture Settings */
-    HBPictureController            * fPictureController;
+    // Picture Settings
+    HBPictureController           * fPictureController;
+    // Picture Preview
+    HBPreviewController           * fPreviewController;
+    HBPreferencesController       * fPreferencesController;
     
-    /* Picture Preview */
-    HBPreviewController            * fPreviewController;
-
-    HBPreferencesController      * fPreferencesController;
-    
-    /* Queue panel */
+    // Queue panel
     HBQueueController            * fQueueController;
-    IBOutlet NSTextField         * fQueueStatus;
-    
-    /* Output panel */
+
+    // Output panel
     HBOutputPanelController      * outputPanel;
 	
-    /* Source box */
+    // Source box
 	IBOutlet NSProgressIndicator * fScanIndicator;
 	IBOutlet NSBox               * fScanHorizontalLine;
     
     IBOutlet NSTextField         * fSrcDVD2Field;
-    IBOutlet NSTextField         * fSrcTitleField;
     IBOutlet NSPopUpButton       * fSrcTitlePopUp;
     
-    
-    /* lib dvd nav specific */
-    IBOutlet NSTextField         * fSrcAngleLabel;
-    IBOutlet NSPopUpButton       * fSrcAnglePopUp;
-    
-    /* Source start and end points */
-    IBOutlet NSPopUpButton       * fEncodeStartStopPopUp;
-    /* pts based start / stop */
+    // pts based start / stop
     IBOutlet NSTextField         * fSrcTimeStartEncodingField;
     IBOutlet NSTextField         * fSrcTimeEndEncodingField;
-    /* frame based based start / stop */
+    // frame based based start / stop
     IBOutlet NSTextField         * fSrcFrameStartEncodingField;
     IBOutlet NSTextField         * fSrcFrameEndEncodingField;
-    
-    IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
-    IBOutlet NSTextField         * fSrcChapterToField;
-    IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
-    
-    /* Source duration information */
-    IBOutlet NSTextField         * fSrcDuration1Field;
-    IBOutlet NSTextField         * fSrcDuration2Field;
-	
-    /* Destination box */
-    IBOutlet NSTextField         * fDstFormatField;
-	IBOutlet NSPopUpButton       * fDstFormatPopUp;
-	
-    IBOutlet NSTextField         * fDstFile1Field;
-    IBOutlet NSTextField         * fDstFile2Field;
-    IBOutlet NSButton            * fDstBrowseButton;
-    /* MP4 Options */
-    // Optimizes mp4's for http
-    IBOutlet NSButton            * fDstMp4HttpOptFileCheck;
-    // Creates iPod compatible mp4's (add ipod uuid atom)
-    IBOutlet NSButton            * fDstMp4iPodFileCheck;
 
-    /* Bottom */
+    IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
+    IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
+
+    // Bottom
     IBOutlet NSTextField         * fStatusField;
+    IBOutlet NSTextField         * fQueueStatus;
     IBOutlet NSProgressIndicator * fRipIndicator;
 	BOOL                           fRipIndicatorShown;
     
-	/* User Preset variables here */
+	// User Preset
 	HBPresetsManager             * presetManager;
     HBPresetsViewController      * fPresetsView;
 
@@ -138,8 +109,6 @@
 - (IBAction) showSourceTitleScanPanel: (id) sender;
 - (IBAction) closeSourceTitleScanPanel: (id) sender;  
 - (void) performScan:(NSURL *)scanURL scanTitleNum:(NSInteger)scanTitleNum;
-
-- (void)enableUI:(BOOL)enable;
 
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;

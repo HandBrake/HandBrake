@@ -12,7 +12,6 @@
 #import "HBPreferencesController.h"
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
-#import "HBDockTile.h"
 #import "HBUtilities.h"
 
 #import "HBVideoController.h"
@@ -46,6 +45,8 @@
 
 ///  The HBCore used for scanning.
 @property (nonatomic, retain) HBCore *core;
+
+@property (nonatomic, readwrite) NSColor *labelColor;
 
 @end
 
@@ -126,15 +127,11 @@
         NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:previewDirectory error:&error];
         for (NSString *file in files)
         {
-            if (![file isEqual:@"."] && ![file isEqual:@".."])
+            BOOL result = [[NSFileManager defaultManager] removeItemAtPath:[previewDirectory stringByAppendingPathComponent:file] error:&error];
+            if (result == NO && error)
             {
-                BOOL result = [[NSFileManager defaultManager] removeItemAtPath:[previewDirectory stringByAppendingPathComponent:file] error:&error];
-                if (result == NO && error)
-                { 
-                    //an error occurred
-                    [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s", file.UTF8String];
-                }
-            }    
+                [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s", file.UTF8String];
+            }
         }
     }
 
@@ -307,6 +304,8 @@
     // Retain the new job
     [_job autorelease];
     _job = [job retain];
+
+    [self enableUI:(job != nil)];
 }
 
 #pragma mark -
@@ -521,38 +520,18 @@
     }
 }
 
-- (void) enableUI: (BOOL) b
+- (void)enableUI:(BOOL)enabled
 {
-    NSControl * controls[] =
+    if (enabled)
     {
-        fSrcTitleField, fSrcTitlePopUp,
-        fSrcChapterStartPopUp, fSrcChapterToField,
-        fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
-        fDstFormatField, fDstFormatPopUp, fDstFile1Field, fDstFile2Field,
-        fDstBrowseButton, fSrcAngleLabel, fSrcAnglePopUp,
-        fDstMp4HttpOptFileCheck, fDstMp4iPodFileCheck,
-        fEncodeStartStopPopUp, fSrcTimeStartEncodingField,
-        fSrcTimeEndEncodingField, fSrcFrameStartEncodingField,
-        fSrcFrameEndEncodingField,
-        
-    };
-    for (unsigned i = 0; i < (sizeof(controls) / sizeof(NSControl*)); i++)
+        self.labelColor = [NSColor controlTextColor];
+    }
+    else
     {
-        if ([[controls[i] className] isEqualToString: @"NSTextField"])
-        {
-            NSTextField *tf = (NSTextField*)controls[i];
-            if (![tf isBezeled])
-            {
-                [tf setTextColor: (b ?
-                                   [NSColor controlTextColor] :
-                                   [NSColor disabledControlTextColor])];
-                continue;
-            }
-        }
-        [controls[i] setEnabled: b];
+        self.labelColor = [NSColor disabledControlTextColor];
     }
 
-    fPresetsView.enabled = b;
+    fPresetsView.enabled = enabled;
 }
 
 #pragma mark -
@@ -923,7 +902,6 @@
     }
 
     self.job = nil;
-    [self enableUI:NO];
 
     NSError *outError = NULL;
     BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppresslibdvdcss"];
@@ -1053,8 +1031,6 @@
         [fSrcTitlePopUp selectItemAtIndex:0];
     }
 
-    // Updates the main window ui
-    [self enableUI:YES];
     [self titlePopUpChanged:nil];
 
     // Open preview window now if it was visible when HB was closed
@@ -1479,7 +1455,7 @@
 - (void)chapterPopUpChanged:(NSNotification *)notification
 {
     // We're changing the chapter range - we may need to flip the m4v/mp4 extension
-    if ([[fDstFormatPopUp selectedItem] tag] & HB_MUX_MASK_MP4)
+    if (self.job.container & HB_MUX_MASK_MP4)
     {
         [self autoSetM4vExtension:notification];
     }
