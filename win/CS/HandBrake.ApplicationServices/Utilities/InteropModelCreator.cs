@@ -76,13 +76,13 @@ namespace HandBrake.ApplicationServices.Utilities
                                                  Drc = track.DRC, 
                                                  Gain = track.Gain, 
                                                  Encoder = Converters.GetCliAudioEncoder(track.Encoder), 
-                                                 InputNumber = track.Track.HasValue ? track.Track.Value : 0, 
+                                                 InputNumber = track.Track.HasValue ? track.Track.Value - 1 : 0, // It's 0 based index 
                                                  Mixdown = Converters.GetCliMixDown(track.MixDown), 
                                                  SampleRateRaw = GetSampleRateRaw(track.SampleRate), 
                                                  EncodeRateType = AudioEncodeRateType.Bitrate, 
                                                  Name = track.TrackName, 
-                                                 IsPassthru = track.IsPassthru
-                                             };
+                                                 IsPassthru = track.IsPassthru,
+                                              };
 
                 job.AudioEncodings.Add(newTrack);
             }

@@ -286,7 +286,6 @@ namespace HandBrake.Interop.Json.Factories
             audio.CopyMask = (int)NativeConstants.HB_ACODEC_ANY;
 
             audio.AudioList = new List<AudioList>();
-            int numTracks = 0;
             foreach (AudioEncoding item in job.AudioEncodings)
             {
                 HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(item.Encoder);
@@ -297,7 +296,7 @@ namespace HandBrake.Interop.Json.Factories
 
                 AudioList audioTrack = new AudioList
                     {
-                        Track = numTracks++, 
+                        Track = item.InputNumber, 
                         DRC = item.Drc, 
                         Encoder = encoder.Id, 
                         Gain = item.Gain, 
