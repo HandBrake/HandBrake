@@ -115,8 +115,8 @@ static NSDictionary            *shortHeightAttr;
         {
             // Start Stop is chapters
             startStopString = (self.range.chapterStart == self.range.chapterStop) ?
-            [NSString stringWithFormat:@"Chapter %d", self.range.chapterStart] :
-            [NSString stringWithFormat:@"Chapters %d through %d", self.range.chapterStart, self.range.chapterStop];
+            [NSString stringWithFormat:@"Chapter %d", self.range.chapterStart + 1] :
+            [NSString stringWithFormat:@"Chapters %d through %d", self.range.chapterStart + 1, self.range.chapterStop + 1];
         }
         else if (self.range.type == HBRangeTypeSeconds)
         {
@@ -338,7 +338,7 @@ static NSDictionary            *shortHeightAttr;
                     encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Level: %@", self.video.level]];
                 }
             }
-            [finalString appendString: @"Encoder Options: " withAttributes:detailBoldAttr];
+            [finalString appendString: @"Video Options: " withAttributes:detailBoldAttr];
             [finalString appendString: encoderPresetInfo withAttributes:detailAttr];
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
@@ -361,11 +361,11 @@ static NSDictionary            *shortHeightAttr;
 
 
         // Seventh Line Audio Details
-        int audioDetailCount = 0;
-        for (NSString *anAudioDetail in audioDetails) {
-            audioDetailCount++;
-            if (anAudioDetail.length) {
-                [finalString appendString: [NSString stringWithFormat: @"Audio Track %d ", audioDetailCount] withAttributes: detailBoldAttr];
+        for (NSString *anAudioDetail in audioDetails)
+        {
+            if (anAudioDetail.length)
+            {
+                [finalString appendString: [NSString stringWithFormat: @"Audio: "] withAttributes: detailBoldAttr];
                 [finalString appendString: anAudioDetail withAttributes: detailAttr];
                 [finalString appendString: @"\n" withAttributes: detailAttr];
             }

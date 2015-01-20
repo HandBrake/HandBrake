@@ -17,6 +17,9 @@
  */
 @interface HBCore ()
 
+/// Pointer to a hb_state_s struct containing the detailed state information of libhb.
+@property (nonatomic, readonly) hb_state_t *hb_state;
+
 /// Current state of HBCore.
 @property (nonatomic, readwrite) HBState state;
 

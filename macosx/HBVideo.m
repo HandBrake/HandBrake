@@ -195,7 +195,14 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 - (void)setVideoOptionExtra:(NSString *)videoOptionExtra
 {
     [_videoOptionExtra autorelease];
-    _videoOptionExtra = [videoOptionExtra copy];
+    if (videoOptionExtra != nil)
+    {
+        _videoOptionExtra = [videoOptionExtra copy];
+    }
+    else
+    {
+        _videoOptionExtra = @"";
+    }
     [self postChangedNotification];
 }
 

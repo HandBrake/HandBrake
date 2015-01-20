@@ -61,11 +61,6 @@ typedef void (^HBCoreCompletationHandler)(BOOL success);
 @property (nonatomic, readonly) HBState state;
 
 /**
- * Pointer to a hb_state_s struct containing the detailed state information of libhb.
- */
-@property (nonatomic, readonly) hb_state_t *hb_state;
-
-/**
  * Pointer to a libhb handle used by this HBCore instance.
  */
 @property (nonatomic, readonly) hb_handle_t *hb_handle;
