@@ -430,7 +430,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     {
         copy->_container = _container;
 
-        copy->_masterTrackArray = [_masterTrackArray copy];
+        copy->_masterTrackArray = [_masterTrackArray mutableCopy];
         copy->_foreignAudioSearchTrackName = [_foreignAudioSearchTrackName copy];
 
         copy->_tracks = [[NSMutableArray alloc] init];
