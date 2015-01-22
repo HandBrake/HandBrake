@@ -58,7 +58,7 @@ namespace HandBrakeWPF.ViewModels
         private bool useAdvancedTab;
         private bool displayTurboFirstPass;
         private int videoPresetMaxValue;
-        private int? videoPresetValue;
+        private int videoPresetValue;
         private bool displayNonQsvControls;
         private VideoTune videoTune;
         private bool fastDecode;
@@ -633,7 +633,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets the video preset value.
         /// </summary>
-        public int? VideoPresetValue
+        public int VideoPresetValue
         {
             get
             {
@@ -644,9 +644,9 @@ namespace HandBrakeWPF.ViewModels
                 this.videoPresetValue = value;
 
                 HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(this.SelectedVideoEncoder));
-                if (encoder != null && value.HasValue)
+                if (encoder != null)
                 {
-                    string preset = encoder.Presets[value.Value];
+                    string preset = encoder.Presets[value];
                     this.VideoPreset = new VideoPreset(preset, preset);
                 }
 
@@ -1226,15 +1226,11 @@ namespace HandBrakeWPF.ViewModels
             // Update the Quality Slider. Make sure the bounds are up to date with the users settings.
             this.SetQualitySliderBounds();
 
-            if (this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X265 || this.SelectedVideoEncoder == VideoEncoder.QuickSync)
-            {
-                this.DisplayOptimiseOptions = true;
-            }
-
-            this.DisplayNonQSVControls = this.SelectedVideoEncoder != VideoEncoder.QuickSync;
 
             // Update control display
             this.UseAdvancedTab = selectedEncoder != VideoEncoder.QuickSync && this.UseAdvancedTab;
+            this.DisplayOptimiseOptions = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X265 || this.SelectedVideoEncoder == VideoEncoder.QuickSync;
+            this.DisplayNonQSVControls = this.SelectedVideoEncoder != VideoEncoder.QuickSync;
             this.DisplayTurboFirstPass = selectedEncoder == VideoEncoder.X264;
             this.DisplayTuneControls = SelectedVideoEncoder == VideoEncoder.X264;
 

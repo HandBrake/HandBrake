@@ -94,7 +94,7 @@
                     <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="Tune: " Margin="5,0,5,0" />
                         <ComboBox ItemsSource="{Binding DenoiseTunes}" SelectedItem="{Binding SelectedDenoiseTune}" MinWidth="100"
-                          Visibility="{Binding ShowDenoiseTunes, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
+                          Visibility="{Binding ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}">

@@ -119,7 +119,7 @@
             </StackPanel>
 
             <!-- H264 settings -->
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Visibility="{Binding DisplayH264Options, Converter={StaticResource boolToVisConverter}}">
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Visibility="{Binding DisplayOptimiseOptions, Converter={StaticResource boolToVisConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
