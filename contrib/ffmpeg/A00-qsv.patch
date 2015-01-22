@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index 05acff5..e71aad5 100755
+index 5085333..7283fb1 100755
 --- a/configure
 +++ b/configure
-@@ -132,6 +132,7 @@ Component options:
+@@ -134,6 +134,7 @@ Component options:
  
  Hardware accelerators:
    --enable-dxva2           enable DXVA2 code
@@ -10,7 +10,7 @@ index 05acff5..e71aad5 100755
    --enable-vaapi           enable VAAPI code
    --enable-vda             enable VDA code
    --enable-vdpau           enable VDPAU code
-@@ -1139,6 +1140,7 @@ EXTERNAL_LIBRARY_LIST="
+@@ -1198,6 +1199,7 @@ FEATURE_LIST="
  
  HWACCEL_LIST="
      dxva2
@@ -18,7 +18,7 @@ index 05acff5..e71aad5 100755
      vaapi
      vda
      vdpau
-@@ -1800,6 +1802,7 @@ zmbv_encoder_deps="zlib"
+@@ -1939,6 +1941,7 @@ zmbv_encoder_deps="zlib"
  
  # hardware accelerators
  dxva2_deps="dxva2api_h"
@@ -26,7 +26,7 @@ index 05acff5..e71aad5 100755
  vaapi_deps="va_va_h"
  vda_deps="VideoDecodeAcceleration_VDADecoder_h pthreads"
  vda_extralibs="-framework CoreFoundation -framework VideoDecodeAcceleration -framework QuartzCore"
-@@ -1811,6 +1814,8 @@ h263_vdpau_hwaccel_deps="vdpau"
+@@ -1950,6 +1953,8 @@ h263_vdpau_hwaccel_deps="vdpau"
  h263_vdpau_hwaccel_select="h263_decoder"
  h264_dxva2_hwaccel_deps="dxva2"
  h264_dxva2_hwaccel_select="h264_decoder"
@@ -35,55 +35,55 @@ index 05acff5..e71aad5 100755
  h264_vaapi_hwaccel_deps="vaapi"
  h264_vaapi_hwaccel_select="h264_decoder"
  h264_vda_hwaccel_deps="vda"
-@@ -3861,6 +3866,7 @@ check_header dxva.h
- check_header dxva2api.h
+@@ -4115,6 +4120,7 @@ check_header dxva2api.h
  check_header io.h
+ check_header mach/mach_time.h
  check_header malloc.h
 +check_header msdk/mfxvideo.h
  check_header poll.h
  check_header sys/mman.h
  check_header sys/param.h
 diff --git a/libavcodec/Makefile b/libavcodec/Makefile
-index 9e4dd25..1fbee4a 100644
+index 419dcb6..5208d5b 100644
 --- a/libavcodec/Makefile
 +++ b/libavcodec/Makefile
-@@ -4,6 +4,7 @@ FFLIBS = avutil
- HEADERS = avcodec.h                                                     \
+@@ -4,6 +4,7 @@ HEADERS = avcodec.h                                                     \
            avfft.h                                                       \
+           dv_profile.h                                                  \
            dxva2.h                                                       \
 +          qsv.h                                                         \
            vaapi.h                                                       \
            vda.h                                                         \
            vdpau.h                                                       \
-@@ -60,6 +61,7 @@ OBJS-$(CONFIG_MPEGAUDIODSP)            += mpegaudiodsp.o                \
- OBJS-$(CONFIG_MPEGVIDEO)               += mpegvideo.o mpegvideo_motion.o
+@@ -75,6 +76,7 @@ OBJS-$(CONFIG_MPEGVIDEO)               += mpegvideo.o mpegvideodsp.o    \
  OBJS-$(CONFIG_MPEGVIDEOENC)            += mpegvideo_enc.o mpeg12data.o  \
-                                           motion_est.o ratecontrol.o
+                                           motion_est.o ratecontrol.o    \
+                                           mpegvideoencdsp.o
 +OBJS-$(CONFIG_QSV)                     += qsv.o
+ OBJS-$(CONFIG_PIXBLOCKDSP)             += pixblockdsp.o
+ OBJS-$(CONFIG_QPELDSP)                 += qpeldsp.o
  OBJS-$(CONFIG_RANGECODER)              += rangecoder.o
- RDFT-OBJS-$(CONFIG_HARDCODED_TABLES)   += sin_tables.o
- OBJS-$(CONFIG_RDFT)                    += rdft.o $(RDFT-OBJS-yes)
-@@ -199,6 +201,7 @@ OBJS-$(CONFIG_H264_DECODER)            += h264.o                               \
-                                           h264_loopfilter.o h264_direct.o      \
-                                           cabac.o h264_sei.o h264_ps.o         \
-                                           h264_refs.o h264_cavlc.o h264_cabac.o
+@@ -216,6 +218,7 @@ OBJS-$(CONFIG_H264_DECODER)            += h264.o h264_cabac.o h264_cavlc.o \
+                                           h264_direct.o h264_loopfilter.o  \
+                                           h264_mb.o h264_picture.o h264_ps.o \
+                                           h264_refs.o h264_sei.o h264_slice.o
 +OBJS-$(CONFIG_H264_QSV_DECODER)        += qsv_h264.o
  OBJS-$(CONFIG_HEVC_DECODER)            += hevc.o hevc_mvs.o hevc_ps.o hevc_sei.o \
                                            hevc_cabac.o hevc_refs.o hevcpred.o    \
-                                           hevcdsp.o hevc_filter.o cabac.o
-@@ -692,6 +695,7 @@ SKIPHEADERS                            += %_tablegen.h                  \
+                                           hevcdsp.o hevc_filter.o
+@@ -712,6 +715,7 @@ SKIPHEADERS                            += %_tablegen.h                  \
  SKIPHEADERS-$(CONFIG_DXVA2)            += dxva2.h dxva2_internal.h
  SKIPHEADERS-$(CONFIG_LIBSCHROEDINGER)  += libschroedinger.h
  SKIPHEADERS-$(CONFIG_MPEG_XVMC_DECODER) += xvmc.h
 +SKIPHEADERS-$(CONFIG_QSV)              += qsv.h
  SKIPHEADERS-$(CONFIG_VAAPI)            += vaapi_internal.h
- SKIPHEADERS-$(CONFIG_VDA)              += vda.h
+ SKIPHEADERS-$(CONFIG_VDA)              += vda.h vda_internal.h
  SKIPHEADERS-$(CONFIG_VDPAU)            += vdpau.h vdpau_internal.h
 diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
-index b6c27c0..287b912 100644
+index 0d46afe..b3a5dd0 100644
 --- a/libavcodec/allcodecs.c
 +++ b/libavcodec/allcodecs.c
-@@ -155,6 +155,7 @@ void avcodec_register_all(void)
+@@ -159,6 +159,7 @@ void avcodec_register_all(void)
      REGISTER_DECODER(H263I,             h263i);
      REGISTER_ENCODER(H263P,             h263p);
      REGISTER_DECODER(H264,              h264);
@@ -2304,14 +2304,14 @@ index 0000000..3cbdb3f
 +
 +#endif                          //AVCODEC_QSV_H264_H
 diff --git a/libavutil/pixfmt.h b/libavutil/pixfmt.h
-index 0d6e0a3..d2779b7 100644
+index 6af6596..70fe068 100644
 --- a/libavutil/pixfmt.h
 +++ b/libavutil/pixfmt.h
-@@ -190,6 +190,7 @@ enum AVPixelFormat {
+@@ -193,6 +193,7 @@ enum AVPixelFormat {
      AV_PIX_FMT_NV16,         ///< interleaved chroma YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
      AV_PIX_FMT_NV20LE,       ///< interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian
      AV_PIX_FMT_NV20BE,       ///< interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian
 +    AV_PIX_FMT_QSV_H264,     ///< H.264 HW decoding with QSV, data[2] contains qsv_atom information for MFX_IOPATTERN_OUT_OPAQUE_MEMORY, MFX_IOPATTERN_OUT_VIDEO_MEMORY
-     AV_PIX_FMT_NB,        ///< number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions
  
- #if FF_API_PIX_FMT
+     AV_PIX_FMT_RGBA64BE,     ///< packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian
+     AV_PIX_FMT_RGBA64LE,     ///< packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian
