@@ -9,8 +9,20 @@
 
 namespace HandBrakeWPF.Services.Presets.Model
 {
+    /// <summary>
+    /// The preset container.
+    /// </summary>
     public class PresetContainer
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PresetContainer"/> class.
+        /// </summary>
+        /// <param name="version">
+        /// The version.
+        /// </param>
+        /// <param name="presets">
+        /// The presets.
+        /// </param>
         public PresetContainer(int version, string presets)
         {
             Version = version;

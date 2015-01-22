@@ -18,7 +18,6 @@ namespace HandBrakeWPF.Services.Presets
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Windows;
-    using System.Windows.Forms;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Exceptions;
@@ -38,7 +37,7 @@ namespace HandBrakeWPF.Services.Presets
     {
         #region Private Variables
 
-        private static readonly int CurrentPresetVersion = 1;
+        private static readonly int CurrentPresetVersion = 2;
 
         /// <summary>
         /// XML Serializer
@@ -310,12 +309,12 @@ namespace HandBrakeWPF.Services.Presets
 
                             Preset newPreset = new Preset
                             {
-                                Category = category,
-                                Name = presetName[0].Replace("+", string.Empty).Trim(),
-                                Version = VersionHelper.GetVersion(),
+                                Category = category, 
+                                Name = presetName[0].Replace("+", string.Empty).Trim(), 
+                                Version = VersionHelper.GetVersion(), 
                                 Description = string.Empty, // Maybe one day we will populate this.
-                                IsBuildIn = true,
-                                UsePictureFilters = true,
+                                IsBuildIn = true, 
+                                UsePictureFilters = true, 
                                 Task = QueryParserUtility.Parse(presetName[2])
                             };
 
@@ -374,8 +373,12 @@ namespace HandBrakeWPF.Services.Presets
         /// <summary>
         /// Check if the preset "name" exists in either Presets or UserPresets lists.
         /// </summary>
-        /// <param name="name">Name of the preset</param>
-        /// <returns>True if found</returns>
+        /// <param name="name">
+        /// Name of the preset
+        /// </param>
+        /// <returns>
+        /// True if found
+        /// </returns>
         public bool CheckIfPresetExists(string name)
         {
             return name == string.Empty || this.presets.Any(item => item.Name == name);
@@ -453,6 +456,7 @@ namespace HandBrakeWPF.Services.Presets
                         foreach (Preset preset in list)
                         {
                             preset.IsBuildIn = true;
+
                             // Older versions did not have this flag so explicitly make sure it is set.
                             this.presets.Add(preset);
                         }
@@ -519,9 +523,9 @@ namespace HandBrakeWPF.Services.Presets
                         string fileName = RecoverFromCorruptedPresetFile(this.userPresetFile);
                         this.errorService.ShowMessageBox(
                             "HandBrake is unable to load your user presets because they are from an older version of HandBrake. Your old presets file has been renamed so that it doesn't get loaded on next launch."
-                            + Environment.NewLine + Environment.NewLine + "Archived File: " + fileName,
-                            "Unable to load user presets.",
-                            MessageBoxButton.OK,
+                            + Environment.NewLine + Environment.NewLine + "Archived File: " + fileName, 
+                            "Unable to load user presets.", 
+                            MessageBoxButton.OK, 
                             MessageBoxImage.Exclamation);
                         return;
                     }

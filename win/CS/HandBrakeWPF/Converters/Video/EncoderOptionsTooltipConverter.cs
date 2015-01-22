@@ -13,11 +13,8 @@ namespace HandBrakeWPF.Converters.Video
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding.x264;
 
     /// <summary>
     /// The x 264 queue tooltip converter.
@@ -41,13 +38,13 @@ namespace HandBrakeWPF.Converters.Video
                     return task.AdvancedEncoderOptions;
                 }
 
-                return string.Format("Preset: {0}{5}Tune: {1}{5}Profile: {2}{5}Level: {3}{5}Extra Arguments: {4}{5}", 
-                    EnumHelper<x264Preset>.GetDisplay(task.X264Preset),
-                    EnumHelper<x264Tune>.GetDisplay(task.X264Tune),
-                    task.H264Profile,
-                    task.H264Level, 
-                    string.IsNullOrEmpty(task.ExtraAdvancedArguments) ? "None" : task.ExtraAdvancedArguments,
-                    Environment.NewLine);
+                //return string.Format("Preset: {0}{5}Tune: {1}{5}Profile: {2}{5}Level: {3}{5}Extra Arguments: {4}{5}", 
+                //    EnumHelper<x264Preset>.GetDisplay(task.X264Preset),
+                //    EnumHelper<x264Tune>.GetDisplay(task.X264Tune),
+                //    task.H264Profile,
+                //    task.H264Level, 
+                //    string.IsNullOrEmpty(task.ExtraAdvancedArguments) ? "None" : task.ExtraAdvancedArguments,
+                //    Environment.NewLine);
             }
 
             return task != null ? task.AdvancedEncoderOptions.Trim() : string.Empty;

@@ -23,6 +23,7 @@ namespace HandBrake.Interop.Model.Encoding
 		X264 = 0,
 
         [Display(Name = "H.264 (Intel QSV)")]
+        [ShortName("qsv_h264")]
         QuickSync,
 
 		[Display(Name = "MPEG-4")]

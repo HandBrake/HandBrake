@@ -18,7 +18,6 @@ namespace HandBrakeWPF.Converters
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding.x264;
 
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
@@ -47,19 +46,12 @@ namespace HandBrakeWPF.Converters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             // Lists
-            if (value is IEnumerable<x264Preset>)
-            {
-                return EnumHelper<x264Preset>.GetEnumDisplayValues(typeof(x264Preset));
-            }
-            if (value is IEnumerable<x264Profile>)
-            {
-                return EnumHelper<x264Profile>.GetEnumDisplayValues(typeof(x264Profile));
-            }
-            if (value is IEnumerable<x264Tune>)
-            {
-                return EnumHelper<x264Tune>.GetEnumDisplayValues(typeof(x264Tune));
-            }
             if (value is IEnumerable<VideoEncoder>)
             {
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValues(typeof(VideoEncoder));
@@ -67,10 +59,6 @@ namespace HandBrakeWPF.Converters
             if (value is IEnumerable<Mixdown>)
             {
                 return EnumHelper<Mixdown>.GetEnumDisplayValues(typeof(Mixdown));
-            }
-            if (targetType == typeof(QsvPreset) || value.GetType() == typeof(QsvPreset))
-            {
-                return EnumHelper<QsvPreset>.GetDisplay((QsvPreset)value);
             }
             if (value is IEnumerable<PresetPictureSettingsMode>)
             {
@@ -102,18 +90,6 @@ namespace HandBrakeWPF.Converters
             }
 
             // Single Items
-            if (targetType == typeof(x264Preset) || value.GetType() == typeof(x264Preset))
-            {
-                return EnumHelper<x264Preset>.GetDisplay((x264Preset)value);
-            }
-            if (targetType == typeof(x264Profile) || value.GetType() == typeof(x264Profile))
-            {
-                return EnumHelper<x264Profile>.GetDisplay((x264Profile)value);
-            }
-            if (targetType == typeof(x264Tune) || value.GetType() == typeof(x264Tune))
-            {
-                return EnumHelper<x264Tune>.GetDisplay((x264Tune)value);
-            }
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetDisplay((VideoEncoder)value);
@@ -184,18 +160,6 @@ namespace HandBrakeWPF.Converters
         /// </exception>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (targetType == typeof(x264Preset) || value.GetType() == typeof(x264Preset))
-            {
-                return EnumHelper<x264Preset>.GetValue(value.ToString());
-            }
-            if (targetType == typeof(x264Profile) || value.GetType() == typeof(x264Profile))
-            {
-                return EnumHelper<x264Profile>.GetValue(value.ToString());
-            }
-            if (targetType == typeof(x264Tune) || value.GetType() == typeof(x264Tune))
-            {
-                return EnumHelper<x264Tune>.GetValue(value.ToString());
-            }
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetValue(value.ToString());
@@ -203,10 +167,6 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(Mixdown) || value.GetType() == typeof(Mixdown))
             {
                 return EnumHelper<Mixdown>.GetValue(value.ToString());
-            }
-            if (targetType == typeof(QsvPreset) || value.GetType() == typeof(QsvPreset))
-            {
-                return EnumHelper<QsvPreset>.GetValue(value.ToString());
             }
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {

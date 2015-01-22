@@ -11,7 +11,6 @@ namespace HandBrakeWPF.Services.Presets.Model
 {
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
 
     using HandBrakeWPF.Model.Audio;

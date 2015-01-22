@@ -18,6 +18,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
 
@@ -111,15 +112,11 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Advanced Tab
             Match advanced = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
-            Match x264Preset = Regex.Match(input, @"--x264-preset([=a-zA-Z0-9\s ]*)");
-            Match x264Tune = Regex.Match(input, @"--x264-tune([=,a-zA-Z0-9\s ]*)");
-            Match h264Profile = Regex.Match(input, @"--h264-profile([=a-zA-Z0-9\s ]*)");
-            Match x264Profile = Regex.Match(input, @"--x264-profile([=a-zA-Z0-9\s ]*)");
-            Match h264Level = Regex.Match(input, @"--h264-level([=a-zA-Z0-9.\s ]*)");
+            Match videoLevel = Regex.Match(input, @"--encoder-level([=a-zA-Z0-9.\s ]*)");
+            Match videoProfile = Regex.Match(input, @"--encoder-profile([=a-zA-Z0-9\s ]*)");
+            Match videoTune = Regex.Match(input, @"--encoder-tune([=,a-zA-Z0-9\s ]*)");
+            Match videoPreset = Regex.Match(input, @"--encoder-preset([=a-zA-Z0-9\s ]*)");
 
-            Match x265Profile = Regex.Match(input, @"--x265-profile([=a-zA-Z0-9\s ]*)");
-            Match x265Tune = Regex.Match(input, @"--x265-tune([=,a-zA-Z0-9\s ]*)");
-            Match x265Preset = Regex.Match(input, @"--x265-preset([=a-zA-Z0-9\s ]*)");
             #endregion
 
             #region Set Varibles
@@ -492,60 +489,39 @@ namespace HandBrake.ApplicationServices.Utilities
                 if (advanced.Success)
                     parsed.AdvancedEncoderOptions = advanced.ToString().Replace("-x ", string.Empty);
 
-                if (x264Preset.Success)
-                    parsed.X264Preset =
-                        Converters.Getx264PresetFromCli(x264Preset.ToString().Replace("--x264-preset", string.Empty).Replace("=", string.Empty).Trim());
-
-                if (h264Profile.Success)
-                    parsed.H264Profile =
-                        Converters.Getx264ProfileFromCli(h264Profile.ToString().Replace("--h264-profile", string.Empty).Replace("=", string.Empty).Trim());
-
-                if (x264Profile.Success)
-                    parsed.H264Profile =
-                       Converters.Getx264ProfileFromCli(x264Profile.ToString().Replace("--x264-profile", string.Empty).Replace("=", string.Empty).Trim());
-
-                if (h264Level.Success)
-                    parsed.H264Level =
-                        h264Level.ToString().Replace("--h264-level", string.Empty).Replace("=", string.Empty).Trim();
-
-                if (x264Tune.Success)
+                if (videoPreset.Success)
                 {
-                    string tuneOptions =
-                        x264Tune.ToString().Replace("--x264-tune", string.Empty).Replace("=", string.Empty).Trim();
-
-                    parsed.FastDecode = tuneOptions.Contains("fastdecode");
-
-                    // Remove these options. They are not in the dropdown.
-                    tuneOptions = tuneOptions.Replace("fastdecode", string.Empty).Replace(
-                        ",", string.Empty);
-
-                    parsed.X264Tune = Converters.Getx264TuneFromCli(tuneOptions);
+                    string preset = videoPreset.ToString().Replace("--encoder-preset", string.Empty).Replace("=", string.Empty).Trim();
+                    parsed.VideoPreset = new VideoPreset(preset, preset);
                 }
 
-                if (x265Preset.Success)
-                    parsed.X265Preset =
-                        Converters.Getx265PresetFromCli(x265Preset.ToString().Replace("--x265-preset", string.Empty).Replace("=", string.Empty).Trim());
-
-                if (h264Profile.Success)
-                    parsed.H265Profile =
-                        Converters.Getx265ProfileFromCli(h264Profile.ToString().Replace("--h265-profile", string.Empty).Replace("=", string.Empty).Trim());
-
-                if (x265Profile.Success)
-                    parsed.H265Profile =
-                       Converters.Getx265ProfileFromCli(x265Profile.ToString().Replace("--x265-profile", string.Empty).Replace("=", string.Empty).Trim());
-
-                if (x265Tune.Success)
+                if (videoProfile.Success)
                 {
-                    string tuneOptions =
-                        x265Tune.ToString().Replace("--x265-tune", string.Empty).Replace("=", string.Empty).Trim();
+                    string profile = videoProfile.ToString().Replace("--encoder-profile", string.Empty).Replace("=", string.Empty).Trim();
+                    parsed.VideoProfile = new VideoProfile(profile, profile);
+                }
 
-                    parsed.FastDecode = tuneOptions.Contains("fastdecode");
+                if (videoLevel.Success)
+                {
+                    string level = videoLevel.ToString().Replace("--encoder-level", string.Empty).Replace("=", string.Empty).Trim();
+                    parsed.VideoLevel = new VideoLevel(level, level);
+                }
+
+                if (videoTune.Success)
+                {
+                    string tuneOptions = videoTune.ToString().Replace("--encoder-tune", string.Empty).Replace("=", string.Empty).Trim();
+
+                    if (tuneOptions.Contains("fastdecode"))
+                    {
+                        parsed.VideoTunes.Add(new VideoTune("fastdecode", "fastdecode"));
+                    }                
 
                     // Remove these options. They are not in the dropdown.
-                    tuneOptions = tuneOptions.Replace("fastdecode", string.Empty).Replace(
-                        ",", string.Empty);
-
-                    parsed.X265Tune = Converters.Getx265TuneFromCli(tuneOptions);
+                    tuneOptions = tuneOptions.Replace("fastdecode", string.Empty).Replace(",", string.Empty);
+                    if (!string.IsNullOrEmpty(tuneOptions.Trim()))
+                    {
+                        parsed.VideoTunes.Add(new VideoTune(tuneOptions, tuneOptions));
+                    }
                 }
 
                 #endregion

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PlistUtility.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PlistFactory.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -9,10 +9,10 @@
 
 namespace HandBrakeWPF.Services.Presets.Factories
 {
+    using System.Linq;
     using System.Text;
     using System.Xml;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
@@ -23,7 +23,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     /// <summary>
     /// Plist Preset Converter
     /// </summary>
-    public class PlistUtility
+    public class PlistFactory
     {
         #region Export
 
@@ -199,21 +199,19 @@ namespace HandBrakeWPF.Services.Presets.Factories
             AddEncodeElement(xmlWriter, "VideoFramerateMode", "string", parsed.FramerateMode.ToString().ToLower());
             AddBooleanElement(xmlWriter, "VideoGrayScale", parsed.Grayscale);
             AddEncodeElement(xmlWriter, "VideoQualitySlider", "real", parsed.Quality.ToString());
-            AddEncodeElement(xmlWriter, "h264Level", "string", parsed.H264Level);
-            AddEncodeElement(xmlWriter, "x264OptionExtra", "string", parsed.AdvancedEncoderOptions);
-            AddEncodeElement(xmlWriter, "x264Preset", "string", parsed.X264Preset.ToString().ToLower());
-            AddEncodeElement(xmlWriter, "h264Profile", "string", parsed.H264Profile.ToString().ToLower());
-            string tune = parsed.X264Tune.ToString().ToLower();
-            if (parsed.FastDecode)
-            {
-                tune = tune == "none" ? "fastdecode" : tune + ",fastdecode";
-            }
-            AddEncodeElement(xmlWriter, "x264Tune", "string", tune);
+
+            if (parsed.VideoPreset != null)
+                AddEncodeElement(xmlWriter, "VideoPreset", "string", parsed.VideoPreset.ShortName);
+            if (parsed.VideoLevel != null)
+                AddEncodeElement(xmlWriter, "VideoLevel", "string", parsed.VideoLevel.ShortName);
+            if (parsed.VideoProfile != null)
+                AddEncodeElement(xmlWriter, "VideoProfile", "string", parsed.VideoProfile.ShortName);
+            if (parsed.VideoTunes != null)
+                AddEncodeElement(xmlWriter, "VideoTune", "string",  parsed.VideoTunes.Aggregate(string.Empty, (current, item) => string.IsNullOrEmpty(current) ? item.ShortName : "," + item.ShortName));
+
+            AddEncodeElement(xmlWriter, "VideoOptionExtra", "string", parsed.ExtraAdvancedArguments);
             AddEncodeElement(xmlWriter, "x264UseAdvancedOptions", "integer", parsed.ShowAdvancedTab ? "1" : "0");
 
-            AddEncodeElement(xmlWriter, "h265Profile", "string", parsed.H265Profile.ToString().ToLower());
-            AddEncodeElement(xmlWriter, "x265Preset", "string", parsed.X265Preset.ToString().ToLower());
-            AddEncodeElement(xmlWriter, "x265Tune", "string", parsed.X265Tune.ToString().ToLower());
 
             int videoQualityType = 0;
             if (parsed.VideoBitrate != null) videoQualityType = 1;

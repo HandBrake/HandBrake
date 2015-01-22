@@ -14,13 +14,12 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding.x264;
-    using HandBrake.Interop.Model.Encoding.x265;
 
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
@@ -942,34 +941,21 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             string query = string.Empty;
 
-            // X264 Only
-            if (task.VideoEncoder == VideoEncoder.X264)
+            if (task.VideoEncoder == VideoEncoder.X264 || task.VideoEncoder == VideoEncoder.X265 || task.VideoEncoder == VideoEncoder.QuickSync)
             {
                 if (!task.ShowAdvancedTab)
                 {
-                    if (task.X264Preset != x264Preset.Medium)
+                    query += string.Format(" --encoder-preset={0} ", task.VideoPreset.ShortName);
+
+                    string tuneQuery = task.VideoTunes.Aggregate(string.Empty, (current, tune) => string.IsNullOrEmpty(current) ? tune.ShortName : string.Format(",{0}", tune.ShortName));
+                    if (!string.IsNullOrEmpty(tuneQuery))
                     {
-                        query += string.Format(
-                            " --encoder-preset={0} ", task.X264Preset.ToString().ToLower().Replace(" ", string.Empty));
+                        query += string.Format(" --encoder-tune=\"{0}\" ", tuneQuery);
                     }
 
-                    if (task.X264Tune != x264Tune.None)
-                    {
-                        string tune = string.Empty;
+                    query += string.Format(" --encoder-profile={0} ", task.VideoProfile.ShortName);
 
-                        if (task.FastDecode)
-                        {
-                            tune = "fastdecode";
-                        }
-
-                        string tuneDropdown = task.X264Tune.ToString().ToLower().Replace(" ", string.Empty);
-                        if (task.X264Tune != x264Tune.None && !string.IsNullOrEmpty(tuneDropdown))
-                        {
-                            tune = string.IsNullOrEmpty(tune) ? tuneDropdown : string.Format(",{0}", tuneDropdown);
-                        }
-
-                        query += string.Format(" --encoder-tune=\"{0}\" ", tune);
-                    }
+                    query += string.Format(" --encoder-level=\"{0}\" ", task.VideoLevel.ShortName);
 
                     if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
                     {
@@ -977,65 +963,16 @@ namespace HandBrake.ApplicationServices.Utilities
                     }
                 }
             }
-
-            // X265 Only
-            if (task.VideoEncoder == VideoEncoder.X265)
+            else if (!task.ShowAdvancedTab && !string.IsNullOrEmpty(task.ExtraAdvancedArguments))
             {
-                if (!task.ShowAdvancedTab)
-                {
-                    if (task.X265Preset != x265Preset.Medium)
-                    {
-                        query += string.Format(
-                            " --encoder-preset={0} ", task.X265Preset.ToString().ToLower().Replace(" ", string.Empty));
-                    }
-
-                    if (task.X265Tune != x265Tune.None)
-                    {
-                        query += string.Format(
-                            " --encoder-tune=\"{0}\" ", task.X265Tune.ToString().ToLower().Replace(" ", string.Empty));
-                    }
-
-                    if (task.H265Profile != x265Profile.None)
-                    {
-                        query += string.Format(
-                            " --encoder-profile={0} ", task.H265Profile.ToString().ToLower().Replace(" ", string.Empty));
-                    }
-
-                    if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
-                    {
-                        query += string.Format(" -x {0}", task.ExtraAdvancedArguments);
-                    }
-                }
+                query += string.Format(" -x {0}", task.ExtraAdvancedArguments);
             }
 
-            // QSV Only
-            if (task.VideoEncoder == VideoEncoder.QuickSync)
-            {
-                query += string.Format(" --encoder-preset={0}", task.QsvPreset.ToString().ToLower());
-            }
 
             // options that apply to all encoders
-            if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))
+            if (task.ShowAdvancedTab && !string.IsNullOrEmpty(task.AdvancedEncoderOptions))
             {
                 query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
-            }
-
-            // Options that apply to both x264 and QuickSync
-            if (task.VideoEncoder == VideoEncoder.QuickSync || task.VideoEncoder == VideoEncoder.X264)
-            {
-                // when using x264 with the advanced panel, the H.264 profile/level widgets are disabled
-                if (!(task.VideoEncoder == VideoEncoder.X264 && task.ShowAdvancedTab))
-                {
-                    if (task.H264Level != "Auto")
-                    {
-                        query += string.Format(" --encoder-level=\"{0}\" ", task.H264Level);
-                    }
-                    if (task.H264Profile != x264Profile.Auto)
-                    {
-                        query += string.Format(
-                            " --encoder-profile={0} ", task.H264Profile.ToString().ToLower().Replace(" ", string.Empty));
-                    }
-                }
             }
 
             return query;

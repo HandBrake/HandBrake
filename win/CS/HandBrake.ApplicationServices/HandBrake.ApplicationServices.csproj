@@ -108,6 +108,10 @@
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
+    <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoTuneFactory.cs" />
     <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
     <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
     <Compile Include="Model\HBConfiguration.cs" />
@@ -115,6 +119,10 @@
     <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="Services\Encode\Interfaces\IEncodeServiceWrapper.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoLevel.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
     <Compile Include="Services\Interfaces\IServerService.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
@@ -184,9 +192,7 @@
       <Name>HandBrakeInterop</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Encode\Factories\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

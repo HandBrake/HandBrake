@@ -10,18 +10,15 @@
 namespace HandBrake.ApplicationServices.Services.Encode.Model
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding.x264;
-    using HandBrake.Interop.Model.Encoding.x265;
-
-    using OutputFormat = HandBrake.ApplicationServices.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// An Encode Task
@@ -35,11 +32,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
         /// </summary>
         private bool showAdvancedTab;
 
-        /// <summary>
-        /// The advanced encoder options.
-        /// </summary>
-        private string advancedEncoderOptions;
-
         #endregion
 
         /// <summary>
@@ -52,15 +44,9 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             this.AllowedPassthruOptions = new AllowedPassthru();
-            this.X264Preset = x264Preset.Medium;
-            this.QsvPreset = QsvPreset.Quality;
-            this.H264Profile = x264Profile.Auto;
-            this.X264Tune = x264Tune.None;
             this.Modulus = 16;
 
-            this.H265Profile = x265Profile.None;
-            this.X265Preset = x265Preset.VeryFast;
-            this.X265Tune = x265Tune.None;
+            this.VideoTunes = new List<VideoTune>();
         }
 
         /// <summary>
@@ -138,19 +124,14 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
             this.VideoEncoder = task.VideoEncoder;
             this.VideoEncodeRateType = task.VideoEncodeRateType;
             this.Width = task.Width;
-            this.X264Preset = task.X264Preset;
-            this.QsvPreset = task.QsvPreset;
-            this.H264Profile = task.H264Profile;
-            this.X264Tune = task.X264Tune;
-            this.H264Level = task.H264Level;
-            this.FastDecode = task.FastDecode;
+
+            this.VideoLevel = task.VideoLevel;
+            this.VideoProfile = task.VideoProfile;
+            this.VideoPreset = task.VideoPreset;
+            this.VideoTunes = task.VideoTunes;
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
 
             this.ShowAdvancedTab = task.ShowAdvancedTab;
-
-            this.X265Preset = task.X265Preset;
-            this.X265Tune = task.X265Tune;
-            this.H265Profile = task.H265Profile;
         }
 
         #region Source
@@ -435,67 +416,32 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
         /// <summary>
         /// Gets or sets AdvancedEncoderOptions.
         /// </summary>
-        public string AdvancedEncoderOptions
-        {
-            get
-            {
-                return this.advancedEncoderOptions;
-            }
-            set
-            {
-                this.advancedEncoderOptions = value;
-            }
-        }
+        public string AdvancedEncoderOptions { get; set; }
 
         /// <summary>
-        /// Gets or sets x264Preset.
+        /// Gets or sets the video profile.
         /// </summary>
-        public x264Preset X264Preset { get; set; }
+        public VideoProfile VideoProfile { get; set; }
 
         /// <summary>
-        /// Gets or sets the qsv preset.
+        /// Gets or sets the video level.
         /// </summary>
-        public QsvPreset QsvPreset { get; set; }
+        public VideoLevel VideoLevel { get; set; }
 
         /// <summary>
-        /// Gets or sets x264Profile.
+        /// Gets or sets the video preset.
         /// </summary>
-        public x264Profile H264Profile { get; set; }
+        public VideoPreset VideoPreset { get; set; }
 
         /// <summary>
-        /// Gets or sets the x 264 level.
+        /// Gets or sets the video tunes.
         /// </summary>
-        public string H264Level { get; set; }
-
-        /// <summary>
-        /// Gets or sets X264Tune.
-        /// </summary>
-        public x264Tune X264Tune { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether fast decode.
-        /// </summary>
-        public bool FastDecode { get; set; }
+        public List<VideoTune> VideoTunes { get; set; }
 
         /// <summary>
         /// Gets or sets Extra Advanced Arguments for the Video Tab.
         /// </summary>
         public string ExtraAdvancedArguments { get; set; }
-
-        /// <summary>
-        /// Gets or sets x265Preset.
-        /// </summary>
-        public x265Preset X265Preset { get; set; }
-
-        /// <summary>
-        /// Gets or sets x265Profile.
-        /// </summary>
-        public x265Profile H265Profile { get; set; }
-
-        /// <summary>
-        /// Gets or sets X265Tune.
-        /// </summary>
-        public x265Tune X265Tune { get; set; }
 
         #endregion
 
@@ -555,7 +501,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
             }
             set
             {
-                if (!object.Equals(value, this.showAdvancedTab))
+                if (!Equals(value, this.showAdvancedTab))
                 {
                     this.showAdvancedTab = value;
                     this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);

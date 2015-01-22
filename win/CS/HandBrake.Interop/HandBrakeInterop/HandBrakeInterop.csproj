@@ -217,9 +217,6 @@
     <Compile Include="Json\State\WorkDone.cs" />
     <Compile Include="Json\State\Working.cs" />
     <Compile Include="Model\Encoding\PictureRotation.cs" />
-    <Compile Include="Model\Encoding\x265\x265Preset.cs" />
-    <Compile Include="Model\Encoding\x265\x265Profile.cs" />
-    <Compile Include="Model\Encoding\x265\x265Tune.cs" />
     <Compile Include="Model\Language.cs" />
     <Compile Include="HandBrakeLanguagesHelper.cs" />
     <Compile Include="EventArgs\MessageLoggedEventArgs.cs" />
@@ -242,13 +239,9 @@
     <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\OutputExtension.cs" />
     <Compile Include="Model\Encoding\Container.cs" />
-    <Compile Include="Model\Encoding\QsvPreset.cs" />
     <Compile Include="Model\Encoding\ScaleMethod.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\Encoding\VideoEncodeRateType.cs" />
-    <Compile Include="Model\Encoding\x264\x264Preset.cs" />
-    <Compile Include="Model\Encoding\x264\x264Profile.cs" />
-    <Compile Include="Model\Encoding\x264\x264Tune.cs" />
     <Compile Include="Model\BitrateLimits.cs" />
     <Compile Include="Model\RangeLimits.cs" />
     <Compile Include="Model\Size.cs" />

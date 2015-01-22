@@ -18,8 +18,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding.x264;
-    using HandBrake.Interop.Model.Encoding.x265;
 
     /// <summary>
     /// A Utility Class to Convert a 
@@ -189,44 +187,20 @@ namespace HandBrake.ApplicationServices.Utilities
             job.TwoPass = work.TwoPass;
             job.TurboFirstPass = work.TurboFirstPass;
 
-            if (work.VideoEncoder == VideoEncoder.X264)
+            if (work.VideoEncoder == VideoEncoder.X264 || work.VideoEncoder == VideoEncoder.X265 || work.VideoEncoder == VideoEncoder.QuickSync)
             {
-                job.VideoPreset = work.X264Preset.ToString().ToLower().Replace(" ", string.Empty);
-                job.VideoTunes = new List<string>();
+                job.VideoPreset = work.VideoPreset.ShortName;
+                job.VideoProfile = work.VideoProfile.ShortName; 
+                job.VideoLevel = work.VideoLevel.ShortName;
 
-                if (work.X264Tune != x264Tune.None)
+                if (work.VideoEncoder != VideoEncoder.QuickSync)
                 {
-                    job.VideoTunes.Add(work.X264Tune.ToString().ToLower().Replace(" ", string.Empty));
-                }
-
-                if (work.FastDecode)
-                {
-                    job.VideoTunes.Add("fastdecode");
-                }
-
-                job.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty); // TODO change these away from strings.
-                job.VideoLevel = work.H264Level;
-            }
-            else if (work.VideoEncoder == VideoEncoder.X265)
-            {
-                job.VideoPreset = work.X265Preset.ToString().ToLower().Replace(" ", string.Empty);
-
-                if (work.H265Profile != x265Profile.None)
-                {
-                    job.VideoProfile = work.H265Profile.ToString().ToLower().Replace(" ", string.Empty);
-                }
-
-                job.VideoTunes = new List<string>();
-                if (work.X265Tune != x265Tune.None)
-                {
-                    job.VideoTunes.Add(work.X265Tune.ToString().ToLower().Replace(" ", string.Empty));
-                }
-            }
-            else if (work.VideoEncoder == VideoEncoder.QuickSync)
-            {
-                job.VideoPreset = work.QsvPreset.ToString().ToLower().Replace(" ", string.Empty);
-                job.VideoProfile = work.H264Profile.ToString().ToLower().Replace(" ", string.Empty);
-                job.VideoLevel = work.H264Level;
+                    job.VideoTunes = new List<string>();
+                    foreach (var item in work.VideoTunes)
+                    {
+                        job.VideoTunes.Add(item.ShortName);
+                    }
+                }     
             }
 
             // Chapter Markers

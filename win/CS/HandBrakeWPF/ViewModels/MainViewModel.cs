@@ -1746,7 +1746,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    PlistUtility.Export(
+                    PlistFactory.Export(
                         savefiledialog.FileName,
                         this.selectedPreset,
                         HandBrakeUtils.Build.ToString(CultureInfo.InvariantCulture));

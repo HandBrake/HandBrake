@@ -15,13 +15,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Globalization;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding.x264;
-    using HandBrake.Interop.Model.Encoding.x265;
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
@@ -249,38 +247,25 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 case "VideoTwoPass":
                     preset.Task.TwoPass = kvp.Value == 1;
                     break;
-                case "x264OptionExtra":
-                    preset.Task.AdvancedEncoderOptions = kvp.Value;
+
+                case "VideoOptionExtra":
+                    preset.Task.ExtraAdvancedArguments = kvp.Value;
                     break;
-                case "x264Preset":
-                    preset.Task.X264Preset = EnumHelper<x264Preset>.GetValue(kvp.Value, true);
+                case "VideoLevel":
+                    preset.Task.VideoLevel = new VideoLevel(kvp.Value, kvp.Value);
                     break;
-                case "h264Profile":
-                    preset.Task.H264Profile = EnumHelper<x264Profile>.GetValue(kvp.Value, true);
+                case "VideoProfile":
+                    preset.Task.VideoProfile = new VideoProfile(kvp.Value, kvp.Value);
                     break;
-                case "x264Tune":
-                    string value = kvp.Value;
-                    if (value.Contains("fastdecode"))
+                case "VideoPreset":
+                    preset.Task.VideoPreset = new VideoPreset(kvp.Value, kvp.Value);
+                    break;
+                case "VideoTune":
+                    string[] split = kvp.Value.ToString().Split(',');
+                    foreach (var item in split)
                     {
-                        preset.Task.FastDecode = true;
-                        value = value.Replace("fastdecode", string.Empty).Replace(",", string.Empty);
+                        preset.Task.VideoTunes.Add(new VideoTune(item, item));
                     }
-                    preset.Task.X264Tune = EnumHelper<x264Tune>.GetValue(value, true);
-                    break;
-                case "h264Level":
-                    preset.Task.H264Level = kvp.Value;
-                    break;
-                case "QsvPreset":
-                    preset.Task.QsvPreset = EnumHelper<QsvPreset>.GetValue(kvp.Value, true);
-                    break;
-                case "h265Profile":
-                    preset.Task.H265Profile = EnumHelper<x265Profile>.GetValue(kvp.Value, true);
-                    break;
-                case "x265Tune":
-                    preset.Task.X265Tune = EnumHelper<x265Tune>.GetValue(kvp.Value, true);
-                    break;
-                case "x265Preset":
-                    preset.Task.X265Preset = EnumHelper<x265Preset>.GetValue(kvp.Value, true);
                     break;
 
                 // Chapter Markers Tab
@@ -288,20 +273,12 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     preset.Task.IncludeChapterMarkers = kvp.Value == true;
                     break;
 
-                // Advanced x264 tab
+                // Advanced tab
                 case "x264Option":
-                    if (preset.Task.VideoEncoder == VideoEncoder.X264) // TODO Temp fix until a better solution is found.
-                    {
-                        preset.Task.AdvancedEncoderOptions = kvp.Value;
-                    }
+                case "lavcOption":
+                    preset.Task.AdvancedEncoderOptions = kvp.Value;
                     break;
 
-                case "lavcOption":
-                    if (preset.Task.VideoEncoder != VideoEncoder.X264) // TODO Temp fix until a better solution is found.
-                    {
-                        preset.Task.AdvancedEncoderOptions = kvp.Value;
-                    }
-                    break;
 
                 // Preset Information
                 case "PresetBuildNumber":
