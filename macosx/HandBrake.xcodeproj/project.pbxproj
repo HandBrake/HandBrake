@@ -127,6 +127,8 @@
 		A9204DC51A16C5AB007CA74C /* Delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9204DC21A16C5AB007CA74C /* Delete@2x.png */; };
 		A9204DC61A16C5AB007CA74C /* DeleteHighlightPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9204DC31A16C5AB007CA74C /* DeleteHighlightPressed@2x.png */; };
 		A9204DC71A16C5AB007CA74C /* DeletePressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9204DC41A16C5AB007CA74C /* DeletePressed@2x.png */; };
+		A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92268771A6E555500A8D5C5 /* HBAppDelegate.m */; };
+		A922687B1A6E569B00A8D5C5 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92268791A6E569B00A8D5C5 /* MainWindow.xib */; };
 		A9252C041A17343500B8B7F8 /* DeleteHighlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C031A17343500B8B7F8 /* DeleteHighlight@2x.png */; };
 		A9252C091A173D4800B8B7F8 /* Reveal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C051A173D4800B8B7F8 /* Reveal@2x.png */; };
 		A9252C0A1A173D4800B8B7F8 /* RevealHighlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9252C061A173D4800B8B7F8 /* RevealHighlight@2x.png */; };
@@ -375,6 +377,9 @@
 		A9204DC21A16C5AB007CA74C /* Delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Delete@2x.png"; sourceTree = "<group>"; };
 		A9204DC31A16C5AB007CA74C /* DeleteHighlightPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DeleteHighlightPressed@2x.png"; sourceTree = "<group>"; };
 		A9204DC41A16C5AB007CA74C /* DeletePressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DeletePressed@2x.png"; sourceTree = "<group>"; };
+		A92268761A6E555500A8D5C5 /* HBAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAppDelegate.h; sourceTree = "<group>"; };
+		A92268771A6E555500A8D5C5 /* HBAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAppDelegate.m; sourceTree = "<group>"; };
+		A922687A1A6E569B00A8D5C5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = MainWindow.xib; sourceTree = "<group>"; };
 		A9252C031A17343500B8B7F8 /* DeleteHighlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DeleteHighlight@2x.png"; sourceTree = "<group>"; };
 		A9252C051A173D4800B8B7F8 /* Reveal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Reveal@2x.png"; sourceTree = "<group>"; };
 		A9252C061A173D4800B8B7F8 /* RevealHighlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RevealHighlight@2x.png"; sourceTree = "<group>"; };
@@ -789,6 +794,7 @@
 			children = (
 				273F217C14ADDDA10021BE6D /* InfoPlist.strings */,
 				273F217E14ADDDA10021BE6D /* MainMenu.xib */,
+				A92268791A6E569B00A8D5C5 /* MainWindow.xib */,
 				A9CF25EF1990D62C0023F727 /* Presets.xib */,
 				A9E2FD291A21BC6F000E8D3F /* AddPreset.xib */,
 				A93E0ED51972958C00FD67FB /* Video.xib */,
@@ -958,6 +964,8 @@
 		A9B34D6F197683FE00871B7D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A92268761A6E555500A8D5C5 /* HBAppDelegate.h */,
+				A92268771A6E555500A8D5C5 /* HBAppDelegate.m */,
 				273F208E14ADBE670021BE6D /* Controller.h */,
 				273F208F14ADBE670021BE6D /* Controller.m */,
 				A9B34D701976841800871B7D /* Main Window View Controllers */,
@@ -1150,6 +1158,7 @@
 				273F218E14ADDDA10021BE6D /* PicturePreview.xib in Resources */,
 				273F218F14ADDDA10021BE6D /* PictureSettings.xib in Resources */,
 				273F219014ADDDA10021BE6D /* Preferences.xib in Resources */,
+				A922687B1A6E569B00A8D5C5 /* MainWindow.xib in Resources */,
 				273F219114ADDDA10021BE6D /* Queue.xib in Resources */,
 				3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */,
 				A9E1468016BC2AD800C307BC /* next-p.pdf in Resources */,
@@ -1223,6 +1232,7 @@
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A932E273198834130047D13E /* HBAudioDefaults.m in Sources */,
+				A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */,
 				A91806711A4807B000FC9BED /* HBRange.m in Sources */,
 				A9DEC8771A23C88D00C79B48 /* HBVideo.m in Sources */,
 				A9523937199A6AAE00588AEF /* HBFilters.m in Sources */,
@@ -1351,6 +1361,14 @@
 				273F218914ADDDA10021BE6D /* English */,
 			);
 			name = Queue.xib;
+			sourceTree = "<group>";
+		};
+		A92268791A6E569B00A8D5C5 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A922687A1A6E569B00A8D5C5 /* English */,
+			);
+			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
 		A932E26A1988334B0047D13E /* AudioDefaults.xib */ = {

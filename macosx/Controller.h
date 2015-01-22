@@ -18,15 +18,13 @@
 @class HBPreviewController;
 
 @class HBPreferencesController;
-@class HBOutputPanelController;
 @class HBPresetsViewController;
 @class HBPresetsManager;
 
 @class HBJob;
 
-@interface HBController : NSObject <NSApplicationDelegate, NSDrawerDelegate>
+@interface HBController : NSWindowController <NSDrawerDelegate>
 {
-    IBOutlet NSWindow  *fWindow;
     IBOutlet NSTabView *fMainTabView;
 
     // Video view controller
@@ -49,17 +47,6 @@
     HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSTabViewItem       * fAdvancedTab;
 
-    // Main Menu Outlets
-    NSMenuItem                   * fOpenSourceTitleMMenu;
-    
-    // Source Title Scan Outlets
-    IBOutlet NSPanel              * fScanSrcTitlePanel;
-    IBOutlet NSTextField          * fScanSrcTitlePathField;
-    IBOutlet NSTextField          * fSrcDsplyNameTitleScan;
-    IBOutlet NSTextField          * fScanSrcTitleNumField;
-    IBOutlet NSButton             * fScanSrcTitleCancelButton;
-    IBOutlet NSButton             * fScanSrcTitleOpenButton;
-
     // Picture Settings
     HBPictureController           * fPictureController;
     // Picture Preview
@@ -68,9 +55,6 @@
     
     // Queue panel
     HBQueueController            * fQueueController;
-
-    // Output panel
-    HBOutputPanelController      * outputPanel;
 	
     // Source box
 	IBOutlet NSProgressIndicator * fScanIndicator;
@@ -94,33 +78,23 @@
     IBOutlet NSTextField         * fQueueStatus;
     IBOutlet NSProgressIndicator * fRipIndicator;
 	BOOL                           fRipIndicatorShown;
-    
+
 	// User Preset
 	HBPresetsManager             * presetManager;
     HBPresetsViewController      * fPresetsView;
 
-    IBOutlet NSMenu              * presetsMenu;
 	IBOutlet NSDrawer            * fPresetDrawer;
 }
 
-@property (nonatomic, readonly) NSWindow *window;
+- (instancetype)initWithQueue:(HBQueueController *)queueController presetsManager:(HBPresetsManager *)manager;
 
-- (IBAction) browseSources: (id) sender;
-- (IBAction) showSourceTitleScanPanel: (id) sender;
-- (IBAction) closeSourceTitleScanPanel: (id) sender;  
-- (void) performScan:(NSURL *)scanURL scanTitleNum:(NSInteger)scanTitleNum;
+- (void)launchAction;
+- (void)openFile:(NSURL *)fileURL;
 
-- (IBAction) titlePopUpChanged: (id) sender;
-- (IBAction) chapterPopUpChanged: (id) sender;
+- (IBAction)browseSources:(id)sender;
 
-- (IBAction) autoSetM4vExtension: (id) sender;
-
-- (IBAction) browseFile: (id) sender;
-
-- (IBAction) showPicturePanel: (id) sender;
-- (IBAction) showPreviewWindow: (id) sender;
-- (void)pictureSettingsDidChange;
-- (IBAction) openMainWindow: (id) sender;
+- (IBAction)showPicturePanel:(id)sender;
+- (IBAction)showPreviewWindow:(id)sender;
 
 // Queue
 - (IBAction)addToQueue:(id)sender;
@@ -130,26 +104,18 @@
 - (void)setQueueState:(NSString *)info;
 - (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden;
 
-- (IBAction)showQueueWindow:(id)sender;
-
-- (IBAction)showPreferencesWindow:(id)sender;
-
 - (IBAction)rip:(id)sender;
 - (IBAction)pause:(id)sender;
 
-- (IBAction) openHomepage: (id) sender;
-- (IBAction) openForums:   (id) sender;
-- (IBAction) openUserGuide:   (id) sender;
+// Preset Methods
+// Export / Import Presets
+- (IBAction)browseExportPresetFile:(id)sender;
+- (IBAction)browseImportPresetFile:(id)sender;
 
-// Preset Methods Here
-/* Export / Import Presets */
-- (IBAction) browseExportPresetFile: (id) sender;
-- (IBAction) browseImportPresetFile: (id) sender;
+- (IBAction)selectPresetFromMenu:(id)sender;
 
-/* Manage User presets */    
-- (IBAction) showAddPresetPanel: (id) sender;
+// Manage User presets
+- (IBAction)showAddPresetPanel:(id)sender;
 - (IBAction)selectDefaultPreset:(id)sender;
-- (IBAction)addFactoryPresets:(id)sender;
-- (IBAction)showDebugOutputPanel:(id)sender;
 
 @end

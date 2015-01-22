@@ -9,6 +9,7 @@
 
 #import "HBCore.h"
 #import "Controller.h"
+#import "HBAppDelegate.h"
 #import "HBOutputPanelController.h"
 
 #import "HBQueueOutlineView.h"
@@ -135,6 +136,45 @@
 }
 
 #pragma mark Toolbar
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    SEL action = menuItem.action;
+
+    if (action == @selector(rip:))
+    {
+        if (self.core.state == HBStateIdle)
+        {
+            menuItem.title = NSLocalizedString(@"Start Encoding", nil);
+            menuItem.keyEquivalent = @"s";
+
+            return (self.pendingItemsCount > 0);
+        }
+        else if (self.core.state != HBStateIdle)
+        {
+            menuItem.title = NSLocalizedString(@"Stop Encoding", nil);
+            menuItem.keyEquivalent = @".";
+
+            return YES;
+        }
+    }
+
+    if (action == @selector(pause:))
+    {
+        if (self.core.state != HBStatePaused)
+        {
+            menuItem.title = NSLocalizedString(@"Pause Encoding", nil);
+        }
+        else
+        {
+            menuItem.title = NSLocalizedString(@"Resume Encoding", nil);
+        }
+
+        return (self.core.state == HBStateWorking || self.core.state == HBStatePaused);
+    }
+    
+    return YES;
+}
 
 - (BOOL)validateToolbarItem:(NSToolbarItem *)theItem
 {
@@ -898,7 +938,7 @@
         NSInteger response = [alert runModal];
         if (response == NSAlertSecondButtonReturn)
         {
-            [self.controller showPreferencesWindow:nil];
+            [self.delegate showPreferencesWindow:nil];
         }
         [alert release];
     }
@@ -917,7 +957,7 @@
         NSInteger response = [alert runModal];
         if (response == NSAlertSecondButtonReturn)
         {
-            [self.controller showPreferencesWindow:nil];
+            [self.delegate showPreferencesWindow:nil];
         }
         [alert release];
     }

@@ -5,24 +5,6 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-#include "hb.h"
-
-static void hb_error_handler(const char *errmsg)
-{
-    NSString *error = @(errmsg);
-
-    if (error && [[NSUserDefaults standardUserDefaults] boolForKey:@"HBDebugAlert"])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:NSLocalizedString(@"Internal Error.", @"")];
-            [alert runModal];
-            [alert release];
-        });
-    }
-
-    fprintf(stderr, "error: %s\n", errmsg);
-}
 
 int main(int argc, const char **argv)
 {
@@ -38,9 +20,6 @@ int main(int argc, const char **argv)
     struct sigaction action = { {0}, 0, 0 };
     action.sa_handler = SIG_IGN;
     sigaction(SIGINT, &action, NULL);
-
-    hb_global_init();
-    hb_register_error_handler(&hb_error_handler);
 
     return NSApplicationMain(argc, argv);
 }

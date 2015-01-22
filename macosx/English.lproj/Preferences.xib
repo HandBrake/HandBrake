@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C99d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPreferencesController">
@@ -49,7 +49,6 @@
                             <items>
                                 <menuItem title="Do Nothing" id="378"/>
                                 <menuItem title="Open Source" state="on" id="379"/>
-                                <menuItem title="Open Source (Title Specific)" id="377"/>
                             </items>
                         </menu>
                     </popUpButtonCell>
@@ -212,13 +211,13 @@
                 <popUpButton verticalHuggingPriority="750" id="491">
                     <rect key="frame" x="124" y="271" width="195" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" title="Alert Window" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="495" id="492">
+                    <popUpButtonCell key="cell" type="push" title="Do Nothing" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="494" id="492">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="493">
                             <items>
-                                <menuItem title="Do Nothing" id="494"/>
-                                <menuItem title="Alert Window" state="on" id="495"/>
+                                <menuItem title="Do Nothing" state="on" id="494"/>
+                                <menuItem title="Alert Window" id="495"/>
                                 <menuItem title="Growl Notification" id="499"/>
                                 <menuItem title="Alert Window And Growl" id="496"/>
                                 <menuItem title="Put Computer To Sleep" id="497"/>

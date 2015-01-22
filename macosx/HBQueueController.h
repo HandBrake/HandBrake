@@ -7,6 +7,7 @@
 #import <Cocoa/Cocoa.h>
 #import <Growl/Growl.h>
 
+@class HBAppDelegate;
 @class HBController;
 @class HBOutputPanelController;
 @class HBCore;
@@ -18,6 +19,7 @@
 @property (nonatomic, readonly) HBCore *core;
 
 @property (nonatomic, assign) HBController *controller;
+@property (nonatomic, assign) HBAppDelegate *delegate;
 @property (nonatomic, assign) HBOutputPanelController *outputPanel;
 
 @property (nonatomic, readonly) NSUInteger count;
@@ -34,5 +36,7 @@
 
 - (IBAction)rip:(id)sender;
 - (IBAction)cancelRip:(id)sender;
+
+- (IBAction)togglePauseResume:(id)sender;
 
 @end
