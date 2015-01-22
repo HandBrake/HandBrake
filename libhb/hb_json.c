@@ -254,8 +254,7 @@ static json_t* hb_title_to_dict( const hb_title_t * title )
         hb_audio_t *audio = hb_list_item(title->list_audio, ii);
 
         audio_dict = json_pack_ex(&error, 0,
-        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
-            "Track",            json_integer(audio->config.in.track),
+        "{s:o, s:o, s:o, s:o, s:o, s:o}",
             "Description",      json_string(audio->config.lang.description),
             "Language",         json_string(audio->config.lang.simple),
             "LanguageCode",     json_string(audio->config.lang.iso639_2),
@@ -280,8 +279,7 @@ static json_t* hb_title_to_dict( const hb_title_t * title )
         hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, ii);
 
         subtitle_dict = json_pack_ex(&error, 0,
-            "{s:o, s:o, s:o, s:o, s:o}",
-            "Track",        json_integer(subtitle->track),
+            "{s:o, s:o, s:o, s:o}",
             "Format",       json_integer(subtitle->format),
             "Source",       json_integer(subtitle->source),
             "Language",     json_string(subtitle->lang),
