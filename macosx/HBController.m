@@ -8,7 +8,6 @@
 
 #import "HBQueueController.h"
 
-#import "HBOutputPanelController.h"
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
 #import "HBUtilities.h"
@@ -127,6 +126,13 @@
     if (drawerSize.width)
     {
         [fPresetDrawer setContentSize: drawerSize];
+    }
+
+    // Show/Hide the Presets drawer upon launch based
+    // on user preference DefaultPresetsDrawerShow
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBDefaultPresetsDrawerShow"])
+    {
+        [fPresetDrawer open:self];
     }
 
     // Align the start / stop widgets with the chapter popups
