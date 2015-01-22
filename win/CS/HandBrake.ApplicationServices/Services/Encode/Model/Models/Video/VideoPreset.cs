@@ -17,6 +17,11 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models.Video
     public class VideoPreset
     {
         /// <summary>
+        /// A built-in version of the "None" object.
+        /// </summary>
+        public static VideoPreset None = new VideoPreset("None", "none");
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="VideoPreset"/> class.
         /// </summary>
         public VideoPreset()

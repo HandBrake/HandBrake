@@ -11,9 +11,11 @@ namespace HandBrakeWPF.Converters.Video
 {
     using System;
     using System.Globalization;
+    using System.Linq;
     using System.Windows.Data;
 
     using HandBrake.ApplicationServices.Services.Encode.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
     using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
@@ -27,7 +29,18 @@ namespace HandBrakeWPF.Converters.Video
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        /// <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        /// <param name="value">
+        /// The value produced by the binding source.
+        /// </param>
+        /// <param name="targetType">
+        /// The type of the binding target property.
+        /// </param>
+        /// <param name="parameter">
+        /// The converter parameter to use.
+        /// </param>
+        /// <param name="culture">
+        /// The culture to use in the converter.
+        /// </param>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             EncodeTask task = value as EncodeTask;
@@ -38,13 +51,15 @@ namespace HandBrakeWPF.Converters.Video
                     return task.AdvancedEncoderOptions;
                 }
 
-                //return string.Format("Preset: {0}{5}Tune: {1}{5}Profile: {2}{5}Level: {3}{5}Extra Arguments: {4}{5}", 
-                //    EnumHelper<x264Preset>.GetDisplay(task.X264Preset),
-                //    EnumHelper<x264Tune>.GetDisplay(task.X264Tune),
-                //    task.H264Profile,
-                //    task.H264Level, 
-                //    string.IsNullOrEmpty(task.ExtraAdvancedArguments) ? "None" : task.ExtraAdvancedArguments,
-                //    Environment.NewLine);
+                VideoTune tune = task.VideoTunes.FirstOrDefault();
+
+                return string.Format("Preset: {0}{5}Tune: {1}{5}Profile: {2}{5}Level: {3}{5}Extra Arguments: {4}{5}",
+                    task.VideoPreset != null ? task.VideoPreset.ShortName : VideoPreset.None.DisplayName,
+                    tune != null ? tune.ShortName : VideoTune.None.DisplayName,
+                    task.VideoProfile != null ? task.VideoProfile.ShortName : VideoProfile.Auto.DisplayName,
+                    task.VideoLevel != null ? task.VideoLevel.ShortName : VideoLevel.Auto.DisplayName, 
+                    string.IsNullOrEmpty(task.ExtraAdvancedArguments) ? "None" : task.ExtraAdvancedArguments, 
+                    Environment.NewLine);
             }
 
             return task != null ? task.AdvancedEncoderOptions.Trim() : string.Empty;
@@ -56,7 +71,18 @@ namespace HandBrakeWPF.Converters.Video
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        /// <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        /// <param name="value">
+        /// The value that is produced by the binding target.
+        /// </param>
+        /// <param name="targetType">
+        /// The type to convert to.
+        /// </param>
+        /// <param name="parameter">
+        /// The converter parameter to use.
+        /// </param>
+        /// <param name="culture">
+        /// The culture to use in the converter.
+        /// </param>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
