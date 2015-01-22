@@ -117,7 +117,7 @@ namespace HandBrakeWPF.ViewModels
                     this.UseAdvancedTab = false;
                 }
 
-                if (this.SelectedVideoEncoder == VideoEncoder.QuickSync)
+                if (this.SelectedVideoEncoder != VideoEncoder.X264)
                 {
                     return false;
                 }
