@@ -133,7 +133,7 @@ namespace HandBrake.Interop.Json.Factories
         {
             List<Subtitle> subtiles = new List<Subtitle>();
 
-            int currentSubtitleTrack = 1;
+            int currentSubtitleTrack = 0;
             foreach (SubtitleList subtitle in subtitles)
             {
                 Subtitle newSubtitle = new Subtitle
@@ -166,7 +166,7 @@ namespace HandBrake.Interop.Json.Factories
         {
             List<AudioTrack> tracks = new List<AudioTrack>();
 
-            int currentAudioTrack = 1;
+            int currentAudioTrack = 0;
             foreach (AudioList track in audioTracks)
             {
                 AudioTrack newAudio = new AudioTrack

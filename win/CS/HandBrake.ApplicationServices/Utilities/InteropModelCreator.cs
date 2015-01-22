@@ -74,7 +74,7 @@ namespace HandBrake.ApplicationServices.Utilities
                                                  Drc = track.DRC, 
                                                  Gain = track.Gain, 
                                                  Encoder = Converters.GetCliAudioEncoder(track.Encoder), 
-                                                 InputNumber = track.Track.HasValue ? track.Track.Value - 1 : 0, // It's 0 based index 
+                                                 InputNumber = track.Track.HasValue ? track.Track.Value : 0,
                                                  Mixdown = Converters.GetCliMixDown(track.MixDown), 
                                                  SampleRateRaw = GetSampleRateRaw(track.SampleRate), 
                                                  EncodeRateType = AudioEncodeRateType.Bitrate, 

@@ -200,7 +200,8 @@ namespace HandBrake.Interop.Json.Factories
                 }
                 else
                 {
-                    SubtitleList track = new SubtitleList { Burn = item.BurnedIn, Default = item.Default, Force = item.Forced, ID = item.TrackNumber, Track = item.TrackNumber };
+                    // Note, Subtitle tracks are a 0 based index. So Subtitle 1 == index 0
+                    SubtitleList track = new SubtitleList { Burn = item.BurnedIn, Default = item.Default, Force = item.Forced, ID = item.TrackNumber, Track = (item.TrackNumber) };
                     subtitle.SubtitleList.Add(track);
                 }
             }
