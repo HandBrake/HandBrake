@@ -347,31 +347,23 @@
             [toolbarItem setPaletteLabel: @"Start Encoding"];
             [toolbarItem setToolTip: @"Start Encoding"];
         }
-    }
 
-    if (self.job)
-    {
-        if (action == @selector(showPicturePanel:) ||
-            action == @selector(showPreviewWindow:) ||
-            action == @selector(addToQueue:))
+        if (action == @selector(rip:))
         {
-            return YES;
+            return (self.job != nil || fQueueController.pendingItemsCount > 0);
         }
-    }
-    else
-    {
-        if (action == @selector(showPicturePanel:) ||
-            action == @selector(showPreviewWindow:) ||
-            action == @selector(addToQueue:))
+
+        if (action == @selector(pause:))
         {
             return NO;
         }
     }
 
-    // If there are any pending queue items, make sure the start/stop button is active.
-    if (action == @selector(rip:) && (fQueueController.pendingItemsCount > 0 || self.job))
+    if (action == @selector(showPicturePanel:) ||
+        action == @selector(showPreviewWindow:) ||
+        action == @selector(addToQueue:))
     {
-        return YES;
+        return (self.job != nil);
     }
 
     return YES;
