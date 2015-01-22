@@ -8,7 +8,7 @@
 #import "HBQueueController.h"
 
 #import "HBCore.h"
-#import "Controller.h"
+#import "HBController.h"
 #import "HBAppDelegate.h"
 #import "HBOutputPanelController.h"
 

@@ -14,7 +14,7 @@
 #import "HBQueueController.h"
 #import "HBOutputPanelController.h"
 #import "HBCore.h"
-#import "Controller.h"
+#import "HBController.h"
 
 static void hb_error_handler(const char *errmsg)
 {
