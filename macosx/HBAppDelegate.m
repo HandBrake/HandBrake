@@ -419,13 +419,7 @@ static void hb_error_handler(const char *errmsg)
         _preferencesController = [[HBPreferencesController alloc] init];
     }
 
-    NSWindow *window = [_preferencesController window];
-    if (![window isVisible])
-    {
-        [window center];
-    }
-
-    [window makeKeyAndOrderFront:nil];
+    [self.preferencesController showWindow:self];
 }
 
 /**

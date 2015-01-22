@@ -90,12 +90,11 @@
  * Initializes the preferences controller by loading Preferences.nib file.
  *
  */
-- (id)init
+- (instancetype)init
 {
     if (self = [super initWithWindowNibName:@"Preferences"])
     {
         _languages = [[HBLanguagesSelection alloc] init];
-        NSAssert([self window], @"[HBPreferencesController init] window outlet is not connected in Preferences.nib");
     }
     return self;
 }
@@ -104,6 +103,16 @@
 {
     [_languages release];
     [super dealloc];
+}
+
+- (void)showWindow:(id)sender
+{
+    if (!self.window.isVisible)
+    {
+        [self.window center];
+    }
+
+    [super showWindow:sender];
 }
 
 /**
