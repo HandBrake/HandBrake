@@ -63,6 +63,7 @@ namespace HandBrakeWPF.ViewModels
         private VideoTune videoTune;
         private bool fastDecode;
         private bool displayTuneControls;
+        private bool displayLevelControl;
 
         #endregion
 
@@ -577,6 +578,26 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.displayTuneControls = value;
                 this.NotifyOfPropertyChange(() => this.DisplayTuneControls);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether display level control.
+        /// </summary>
+        public bool DisplayLevelControl
+        {
+            get
+            {
+                return this.displayLevelControl;
+            }
+            set
+            {
+                if (value.Equals(this.displayLevelControl))
+                {
+                    return;
+                }
+                this.displayLevelControl = value;
+                this.NotifyOfPropertyChange(() => this.DisplayLevelControl);
             }
         }
 
@@ -1232,7 +1253,8 @@ namespace HandBrakeWPF.ViewModels
             this.DisplayOptimiseOptions = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X265 || this.SelectedVideoEncoder == VideoEncoder.QuickSync;
             this.DisplayNonQSVControls = this.SelectedVideoEncoder != VideoEncoder.QuickSync;
             this.DisplayTurboFirstPass = selectedEncoder == VideoEncoder.X264;
-            this.DisplayTuneControls = SelectedVideoEncoder == VideoEncoder.X264;
+            this.DisplayTuneControls = SelectedVideoEncoder == VideoEncoder.X264 || SelectedVideoEncoder == VideoEncoder.X265;
+            this.DisplayLevelControl = SelectedVideoEncoder == VideoEncoder.X264;
 
             // Refresh Display
             this.NotifyOfPropertyChange(() => this.Rfqp);

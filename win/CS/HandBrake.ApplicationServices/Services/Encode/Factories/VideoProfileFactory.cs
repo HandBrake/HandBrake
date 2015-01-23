@@ -36,6 +36,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     return "High";
                 case "baseline":
                     return "Baseline";
+                case "main10":
+                    return "Main 10";
+                case "mainstillpicture":
+                    return "Main Still Picture";
             }
 
             return shortName;
