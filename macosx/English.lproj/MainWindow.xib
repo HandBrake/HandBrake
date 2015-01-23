@@ -120,14 +120,10 @@
                     <popUpButton verticalHuggingPriority="750" id="1541">
                         <rect key="frame" x="53" y="506" width="312" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1543" id="4908">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
-                            <menu key="menu" title="OtherViews" id="1542">
-                                <items>
-                                    <menuItem state="on" id="1543"/>
-                                </items>
-                            </menu>
+                            <menu key="menu" title="OtherViews" id="1542"/>
                         </popUpButtonCell>
                         <accessibility description="Title"/>
                         <connections>
