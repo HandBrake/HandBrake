@@ -1211,7 +1211,7 @@ namespace HandBrakeWPF.ViewModels
 
                     this.VideoPresetMaxValue = encoder.Presets.Count - 1;
                     int middlePreset = (int)Math.Round((decimal)(this.VideoPresetMaxValue / 2), 0);
-                    this.VideoPreset = new VideoPreset(encoder.Presets[middlePreset], encoder.Presets[middlePreset]);
+                    this.VideoPresetValue = middlePreset;
                 }
                 else
                 {
