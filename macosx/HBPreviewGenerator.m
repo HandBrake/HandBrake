@@ -263,7 +263,7 @@
                 break;
         }
     }
-    completationHandler:^(BOOL success) {
+    completionHandler:^(BOOL success) {
         // Encode done, call the delegate and close libhb handle
         if (success)
         {

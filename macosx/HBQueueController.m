@@ -532,7 +532,7 @@
            self.progressTextField.stringValue = status;
            [self.controller setQueueInfo:status progress:0 hidden:NO];
        }
-   completationHandler:^(BOOL success) {
+   completionHandler:^(BOOL success) {
        if (success)
        {
            [self doEncodeQueueItem];
@@ -673,7 +673,7 @@
              self.progressTextField.stringValue = string;
              [self.controller setQueueInfo:string progress:progress * 100.0 hidden:NO];
          }
-     completationHandler:^(BOOL success) {
+     completionHandler:^(BOOL success) {
          NSString *info = NSLocalizedString(@"Encode Finished.", @"");
 
          self.progressTextField.stringValue = info;

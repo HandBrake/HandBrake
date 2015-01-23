@@ -677,7 +677,7 @@
             fScanIndicator.doubleValue = 100.0 * p.progress;
         #undef p
         }
-    completationHandler:^(BOOL success)
+    completionHandler:^(BOOL success)
         {
             fScanHorizontalLine.hidden = NO;
             fScanIndicator.hidden = YES;

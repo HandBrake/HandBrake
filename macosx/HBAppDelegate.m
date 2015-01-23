@@ -16,23 +16,6 @@
 #import "HBCore.h"
 #import "HBController.h"
 
-static void hb_error_handler(const char *errmsg)
-{
-    NSString *error = @(errmsg);
-
-    if (error && [[NSUserDefaults standardUserDefaults] boolForKey:@"HBDebugAlert"])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:NSLocalizedString(@"Internal Error.", @"")];
-            [alert runModal];
-            [alert release];
-        });
-    }
-
-    fprintf(stderr, "error: %s\n", errmsg);
-}
-
 @interface HBAppDelegate ()
 
 @property (nonatomic, retain) HBPresetsManager *presetsManager;
@@ -54,14 +37,14 @@ static void hb_error_handler(const char *errmsg)
     self = [super init];
     if (self)
     {
-        hb_global_init();
-        hb_register_error_handler(&hb_error_handler);
-
-        // Optionally use dvd nav
-        [HBCore setDVDNav:[[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]];
-
-        // Register the defaults preferences
+        // Register the default preferences
         [HBPreferencesController registerUserDefaults];
+
+        [HBCore initGlobal];
+        [HBCore registerErrorHandler:^(NSString *error) {
+            fprintf(stderr, "error: %s\n", error.UTF8String);
+        }];
+        [HBCore setDVDNav:[[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]];
 
         _outputPanel = [[HBOutputPanelController alloc] init];
 

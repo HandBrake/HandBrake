@@ -4,8 +4,7 @@
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import <Cocoa/Cocoa.h>
-
+#import <Foundation/Foundation.h>
 #include "hb.h"
 
 @class HBJob;
@@ -23,7 +22,7 @@ typedef NS_ENUM(NSUInteger, HBState) {
 };
 
 typedef void (^HBCoreProgressHandler)(HBState state, hb_state_t hb_state);
-typedef void (^HBCoreCompletationHandler)(BOOL success);
+typedef void (^HBCoreCompletionHandler)(BOOL success);
 
 /**
  * HBCore is an Objective-C interface to the low-level HandBrake library.
@@ -41,17 +40,27 @@ typedef void (^HBCoreCompletationHandler)(BOOL success);
 + (void)setDVDNav:(BOOL)enabled;
 
 /**
+ *  Inits libhb globals.
+ */
++ (void)initGlobal;
+
+/**
  *  Performs the final cleanup for the process.
  */
 + (void)closeGlobal;
+
+/**
+ *  Registers a global error handler block.
+ *
+ *  @param handler a block called with the error message.
+ */
++ (void)registerErrorHandler:(void (^)(NSString *error))handler;
 
 /**
  * Opens low level HandBrake library. This should be called once before other
  * functions HBCore are used.
  *
  * @param loggingLevel         the desired libhb logging level.
- *
- * @return YES if libhb was opened, NO if there was an error.
  */
 - (instancetype)initWithLoggingLevel:(int)loggingLevel;
 
@@ -83,17 +92,14 @@ typedef void (^HBCoreCompletationHandler)(BOOL success);
 /**
  *  Starts the asynchronous execution of a scan.
  *
- *  @param url              the URL of the input file.
- *  @param titleNum         the number of the desired title. Use 0 to scan every title.
- *  @param previewsNum      the number of previews image to generate.
- *  @param minTitleDuration the minimum duration of the wanted titles in seconds.
+ *  @param url                 the URL of the input file.
+ *  @param index            the index of the desired title. Use 0 to scan every title.
+ *  @param previewsNum         the number of previews image to generate.
+ *  @param seconds             the minimum duration of the wanted titles in seconds.
+ *  @param progressHandler     a block called periodically with the progress information.
+ *  @param completionHandler   a block called with the scan result.
  */
-- (void)scanURL:(NSURL *)url
-     titleIndex:(NSUInteger)titleNum
-       previews:(NSUInteger)previewsNum
-    minDuration:(NSUInteger)minTitleDuration
-progressHandler:(HBCoreProgressHandler)progressHandler
-completationHandler:(HBCoreCompletationHandler)completationHandler;
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
 
 /**
  *  Cancels the scan execution.
@@ -108,9 +114,11 @@ completationHandler:(HBCoreCompletationHandler)completationHandler;
 /**
  *  Starts an asynchronous encoding session with the passed job.
  *
- *  @param job the job to encode.
+ *  @param job                 the job to encode
+ *  @param progressHandler     a block called periodically with the progress information.
+ *  @param completionHandler   a block called with the scan result
  */
-- (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completationHandler:(HBCoreCompletationHandler)completationHandler;
+- (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
 
 /**
  * Stops encoding session and releases resources.
