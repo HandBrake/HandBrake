@@ -10,8 +10,8 @@
 
 typedef NS_ENUM(NSUInteger, HBRangeType) {
     HBRangeTypeChapters,
-    HBRangeTypeFrames,
     HBRangeTypeSeconds,
+    HBRangeTypeFrames,
     HBRangePreviewIndex,
 };
 
