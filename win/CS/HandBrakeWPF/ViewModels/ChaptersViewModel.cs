@@ -17,7 +17,6 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Scan.Model;
@@ -28,7 +27,7 @@ namespace HandBrakeWPF.ViewModels
 
     using LumenWorks.Framework.IO.Csv;
 
-    using Ookii.Dialogs.Wpf;
+    using Microsoft.Win32;
 
     /// <summary>
     /// The Chapters View Model
@@ -98,7 +97,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Export()
         {
-            var saveFileDialog = new VistaSaveFileDialog
+            var saveFileDialog = new OpenFileDialog
                 {
                     Filter = "Csv File|*.csv",
                     DefaultExt = "csv",
@@ -152,7 +151,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            var dialog = new VistaOpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
+            var dialog = new OpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
             dialog.ShowDialog();
             string filename = dialog.FileName;
 

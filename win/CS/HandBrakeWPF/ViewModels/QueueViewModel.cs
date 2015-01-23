@@ -25,7 +25,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using Ookii.Dialogs.Wpf;
+    using Microsoft.Win32;
 
     /// <summary>
     /// The Preview View Model
@@ -315,7 +315,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Export()
         {
-            VistaSaveFileDialog dialog = new VistaSaveFileDialog
+            SaveFileDialog dialog = new SaveFileDialog
                 {
                     Filter = "HandBrake Queue Files (*.hbq)|*.hbq",
                     OverwritePrompt = true,
@@ -333,7 +333,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
             if (dialog.ShowDialog() == true)
             {
                 this.queueProcessor.RestoreQueue(dialog.FileName);

@@ -21,7 +21,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
@@ -34,7 +33,6 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Interfaces;
@@ -507,7 +505,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void FileScan()
         {
-            var dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            var dialog = new OpenFileDialog() { Filter = "All files (*.*)|*.*" };
             dialog.ShowDialog();
             this.StartScan(dialog.FileName, 0);
         }
