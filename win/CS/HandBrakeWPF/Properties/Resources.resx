@@ -544,4 +544,9 @@ Not both at the same time!</value>
     <value>The preset may be corrupted or from an older version of HandBrake which is not supported. 
 Presets from older versions must be re-created in the current version.</value>
   </data>
+  <data name="Advanced_NoOptionsPaneAvailable" xml:space="preserve">
+    <value>There is no options pane available for this encoder.
+
+Please use the 'Extra Options' box on the 'Video' tab to input any additional encoder parameters you may need.</value>
+  </data>
 </root>

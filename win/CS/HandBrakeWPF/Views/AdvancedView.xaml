@@ -4,6 +4,7 @@
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              x:Name="advancedView"
              mc:Ignorable="d"
              >
@@ -21,8 +22,9 @@
         <ContentControl x:Name="X264ViewModel"
                         Visibility="{Binding ShowX264Panel, Converter={StaticResource BooleanVisibilityConverter}}" />
 
-        <ContentControl x:Name="EncoderOptionsViewModel" 
-                        Visibility="{Binding ShowSimplePanel, Converter={StaticResource BooleanVisibilityConverter}}" />
+        <TextBlock Text="{x:Static Properties:Resources.Advanced_NoOptionsPaneAvailable}" Grid.Row="0"
+                       TextWrapping="Wrap" Width="480" Margin="0, 100, 0, 0" FontSize="12"
+                       Visibility="{Binding ShowX264Panel, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=true}" />
 
 
     </Grid>

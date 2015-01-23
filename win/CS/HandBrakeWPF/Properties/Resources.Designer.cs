@@ -237,6 +237,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no options pane available for this encoder.
+        ///
+        ///Please use the &apos;Extra Options&apos; box on the &apos;Video&apos; tab to input any additional encoder parameters you may need..
+        /// </summary>
+        public static string Advanced_NoOptionsPaneAvailable {
+            get {
+                return ResourceManager.GetString("Advanced_NoOptionsPaneAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The x264 Preset / Tune / Profile and Level options are currently in use on the Video Tab. 
         ///
         ///To enable this tab, check the &quot;Use Advanced Tab instead&quot; option on the Video Tab.
