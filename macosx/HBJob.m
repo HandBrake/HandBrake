@@ -27,7 +27,7 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
         NSParameterAssert(preset);
 
         _title = title;
-        _titleIdx = title.hb_title->index;
+        _titleIdx = title.index;
 
         _fileURL = [[NSURL fileURLWithPath:@(title.hb_title->path)] retain];
 

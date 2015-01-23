@@ -70,6 +70,7 @@ extern NSString *keySubTrackSrtCharCode;
 
     [super dealloc];
 }
+
 - (NSString *)name
 {
     if (!_name)
@@ -88,20 +89,30 @@ extern NSString *keySubTrackSrtCharCode;
     return _name;
 }
 
+- (BOOL)isStream
+{
+    return (self.hb_title->type == HB_STREAM_TYPE || self.hb_title->type == HB_FF_STREAM_TYPE);
+}
+
 - (NSString *)description
 {
     if (self.hb_title->type == HB_BD_TYPE)
     {
-        return [NSString stringWithFormat:@"%@ %d (%05d.MPLS) - %02dh%02dm%02ds",
+        return [NSString stringWithFormat:@"%@ %d (%05d.MPLS) - %@",
                  @(self.hb_title->name), self.hb_title->index, self.hb_title->playlist,
-                 self.hb_title->hours, self.hb_title->minutes, self.hb_title->seconds];
+                 self.timeCode];
     }
     else
     {
-        return [NSString stringWithFormat:@"%@ %d - %02dh%02dm%02ds",
+        return [NSString stringWithFormat:@"%@ %d - %@",
                  @(self.hb_title->name), self.hb_title->index,
-                 self.hb_title->hours, self.hb_title->minutes, self.hb_title->seconds];
+                 self.timeCode];
     }
+}
+
+- (int)index
+{
+    return self.hb_title->index;
 }
 
 - (int)angles
@@ -117,6 +128,12 @@ extern NSString *keySubTrackSrtCharCode;
 - (int)frames
 {
     return self.duration * (self.hb_title->vrate.num / self.hb_title->vrate.den);
+}
+
+- (NSString *)timeCode
+{
+    return [NSString stringWithFormat:@"%02dh%02dm%02ds",
+            self.hb_title->hours, self.hb_title->minutes, self.hb_title->seconds];
 }
 
 - (NSArray *)audioTracks

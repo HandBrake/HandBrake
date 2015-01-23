@@ -834,7 +834,7 @@
     }
 
     // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
-    if ((title.hb_title->type == HB_STREAM_TYPE || title.hb_title->type == HB_FF_STREAM_TYPE) && self.core.titles.count > 1)
+    if (title.isStream && self.core.titles.count > 1)
     {
         // Change the source to read out the parent folder also
         fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@", self.browsedSourceDisplayName, title.name];
