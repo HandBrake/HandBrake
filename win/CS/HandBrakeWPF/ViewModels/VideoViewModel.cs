@@ -793,7 +793,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.Format(Resources.Video_EncoderExtraArgs, this.GetActualx264Query()); // "You can provide additional arguments using the standard x264 format"; 
+                return this.SelectedVideoEncoder != VideoEncoder.X264 ? Resources.Video_EncoderExtraArgsTooltip : string.Format(Resources.Video_EncoderExtraArgs, this.GetActualx264Query());
             }
         }
 

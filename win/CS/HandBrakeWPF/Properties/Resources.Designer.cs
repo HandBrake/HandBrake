@@ -920,6 +920,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional advanced arguments that can be passed to the video encoder..
+        /// </summary>
+        public static string Video_EncoderExtraArgsTooltip {
+            get {
+                return ResourceManager.GetString("Video_EncoderExtraArgsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sets and ensures compliance with the specified H.264 Levels. This will override all other settings..
         /// </summary>
         public static string Video_EncoderLevel {

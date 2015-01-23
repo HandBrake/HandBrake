@@ -549,4 +549,7 @@ Presets from older versions must be re-created in the current version.</value>
 
 Please use the 'Extra Options' box on the 'Video' tab to input any additional encoder parameters you may need.</value>
   </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Additional advanced arguments that can be passed to the video encoder.</value>
+  </data>
 </root>
