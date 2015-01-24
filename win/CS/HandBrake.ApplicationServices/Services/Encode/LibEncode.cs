@@ -62,8 +62,6 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// </summary>
         public LibEncode()
         {
-            HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
-            HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
         }
 
         /// <summary>
@@ -96,6 +94,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
             // Create a new HandBrake instance
             // Setup the HandBrake Instance
+            HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
+            HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
             this.instance = HandBrakeInstanceManager.GetEncodeInstance(job.Configuration.Verbosity);
             this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
             this.instance.EncodeProgress += this.InstanceEncodeProgress;
@@ -347,6 +347,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 e.Error
                     ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Task.Destination)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Task.Destination));
+
+            HandBrakeUtils.MessageLogged -= this.HandBrakeInstanceMessageLogged;
+            HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
 
             this.ShutdownFileWriter();
         }

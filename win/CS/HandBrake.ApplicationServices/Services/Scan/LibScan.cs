@@ -101,18 +101,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         public LibScan()
         {
             this.logging = new StringBuilder();
-
             this.header = GeneralUtilities.CreateCliLogHeader();
-
-            try
-            {
-                HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
-                HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
-            }
-            catch (Exception)
-            {
-                // Do nothing. 
-            }
         }
 
         #region Events
@@ -226,6 +215,8 @@ namespace HandBrake.ApplicationServices.Services.Scan
             this.scanLog = new StreamWriter(this.dvdInfoPath);
 
             // Create a new HandBrake Instance.
+            HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
+            HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
             this.instance = HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity);
             this.instance.ScanProgress += this.InstanceScanProgress;
             this.instance.ScanCompleted += this.InstanceScanCompleted;
@@ -373,6 +364,9 @@ namespace HandBrake.ApplicationServices.Services.Scan
             {
                 // Do Nothing.
             }
+
+            HandBrakeUtils.MessageLogged -= this.HandBrakeInstanceMessageLogged;
+            HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
 
             // TODO -> Might be a better place to fix this.
             string path = this.currentSourceScanPath;
