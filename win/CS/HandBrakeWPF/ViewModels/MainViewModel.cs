@@ -1229,7 +1229,7 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource);
+            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource.ScanPath);
 
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {

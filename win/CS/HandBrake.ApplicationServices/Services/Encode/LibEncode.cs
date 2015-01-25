@@ -138,7 +138,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
                 ServiceLogMessage("Scanning title for encoding ... ");
 
-                this.instance.StartScan(job.ScannedSource.ScanPath, job.Configuration.PreviewScanCount, job.Task.Title);
+                this.instance.StartScan(job.ScannedSourcePath, job.Configuration.PreviewScanCount, job.Task.Title);
             }
             catch (Exception exc)
             {

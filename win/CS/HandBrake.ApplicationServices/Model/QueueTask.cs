@@ -47,21 +47,21 @@ namespace HandBrake.ApplicationServices.Model
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        /// <param name="scannedSource">
-        /// The scanned Source.
+        /// <param name="scannedSourcePath">
+        /// The scanned Source Path.
         /// </param>
-        public QueueTask(EncodeTask task, HBConfiguration configuration, Source scannedSource)
+        public QueueTask(EncodeTask task, HBConfiguration configuration, string scannedSourcePath)
         {
             this.Task = task;
             this.Configuration = configuration;
             this.Status = QueueItemStatus.Waiting;
-            this.ScannedSource = scannedSource;
+            this.ScannedSourcePath = scannedSourcePath;
         }
 
         /// <summary>
         /// Gets or sets ScannedSource.
         /// </summary>
-        public Source ScannedSource { get; set; } 
+        public string ScannedSourcePath { get; set; } 
 
         /// <summary>
         /// Gets or sets Status.
@@ -103,7 +103,7 @@ namespace HandBrake.ApplicationServices.Model
         /// </returns>
         protected bool Equals(QueueTask other)
         {
-            return Equals(this.ScannedSource, other.ScannedSource) && Equals(this.Task, other.Task) && this.status == other.status;
+            return Equals(this.ScannedSourcePath, other.ScannedSourcePath) && Equals(this.Task, other.Task) && this.status == other.status;
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace HandBrake.ApplicationServices.Model
         {
             unchecked
             {
-                int hashCode = (this.ScannedSource != null ? this.ScannedSource.GetHashCode() : 0);
+                int hashCode = (this.ScannedSourcePath != null ? this.ScannedSourcePath.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (this.Task != null ? this.Task.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (int)this.status;
                 return hashCode;
