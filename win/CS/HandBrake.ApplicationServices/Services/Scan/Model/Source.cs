@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
 
     /// <summary>
     /// An object representing a scanned DVD
@@ -39,6 +40,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
         /// Gets or sets Titles. A list of titles from the source
         /// </summary>
         [DataMember]
+        [XmlIgnore]
         public List<Title> Titles { get; set; }
 
         /// <summary>
