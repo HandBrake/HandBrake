@@ -157,6 +157,8 @@
 		A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */; };
 		A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */; };
 		A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9C0DB83197E7B0000DF55B3 /* SubtitlesDefaults.xib */; };
+		A9C183961A716B8F00C897C2 /* HBTitleSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */; };
+		A9C1839D1A716BCC00C897C2 /* HBTitleSelection.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9C1839B1A716BCC00C897C2 /* HBTitleSelection.xib */; };
 		A9C9F88919A733FE00DC8923 /* HBHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C9F88819A733FE00DC8923 /* HBHUDView.m */; };
 		A9CF25F11990D62C0023F727 /* Presets.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9CF25EF1990D62C0023F727 /* Presets.xib */; };
 		A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F31990D64E0023F727 /* HBPreset.m */; };
@@ -429,6 +431,9 @@
 		A9BC24C71A69293E007DC41A /* HBAttributedStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAttributedStringAdditions.h; sourceTree = "<group>"; };
 		A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAttributedStringAdditions.m; sourceTree = "<group>"; };
 		A9C0DB84197E7B0000DF55B3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = SubtitlesDefaults.xib; sourceTree = "<group>"; };
+		A9C183931A716B8F00C897C2 /* HBTitleSelectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTitleSelectionController.h; sourceTree = "<group>"; };
+		A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTitleSelectionController.m; sourceTree = "<group>"; };
+		A9C1839C1A716BCC00C897C2 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = HBTitleSelection.xib; sourceTree = "<group>"; };
 		A9C9F88719A733FE00DC8923 /* HBHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBHUDView.h; sourceTree = "<group>"; };
 		A9C9F88819A733FE00DC8923 /* HBHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBHUDView.m; sourceTree = "<group>"; };
 		A9CF25F01990D62C0023F727 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Presets.xib; sourceTree = "<group>"; };
@@ -795,6 +800,7 @@
 				273F217C14ADDDA10021BE6D /* InfoPlist.strings */,
 				273F217E14ADDDA10021BE6D /* MainMenu.xib */,
 				A92268791A6E569B00A8D5C5 /* MainWindow.xib */,
+				A9C1839B1A716BCC00C897C2 /* HBTitleSelection.xib */,
 				A9CF25EF1990D62C0023F727 /* Presets.xib */,
 				A9E2FD291A21BC6F000E8D3F /* AddPreset.xib */,
 				A93E0ED51972958C00FD67FB /* Video.xib */,
@@ -971,16 +977,18 @@
 				A9B34D701976841800871B7D /* Main Window View Controllers */,
 				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
 				A9906B2B1A710920001D82D5 /* HBQueueController.m */,
-				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
-				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
-				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
-				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
+				A9C183931A716B8F00C897C2 /* HBTitleSelectionController.h */,
+				A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */,
+				A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */,
+				A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */,
 				273F20A914ADBE670021BE6D /* HBPictureController.h */,
 				273F20AA14ADBE670021BE6D /* HBPictureController.m */,
 				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
 				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
-				A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */,
-				A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */,
+				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
+				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
+				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
+				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1142,6 +1150,7 @@
 				A9CF25F11990D62C0023F727 /* Presets.xib in Resources */,
 				273F216114ADCBF80021BE6D /* JobSmall.png in Resources */,
 				273F216714ADCBF80021BE6D /* Reveal.png in Resources */,
+				A9C1839D1A716BCC00C897C2 /* HBTitleSelection.xib in Resources */,
 				273F216814ADCBF80021BE6D /* RevealHighlight.png in Resources */,
 				A91C02521A165EA200DEA6F3 /* EncodeComplete.png in Resources */,
 				273F216914ADCBF80021BE6D /* RevealHighlightPressed.png in Resources */,
@@ -1272,6 +1281,7 @@
 				273F20BE14ADC09F0021BE6D /* main.mm in Sources */,
 				A9537BF01A48A85C00141102 /* HBJob+UIAdditions.m in Sources */,
 				A9EA43681A2210C400785E95 /* HBQueueOutlineView.m in Sources */,
+				A9C183961A716B8F00C897C2 /* HBTitleSelectionController.m in Sources */,
 				A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */,
 				A9C9F88919A733FE00DC8923 /* HBHUDView.m in Sources */,
 				A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */,
@@ -1401,6 +1411,14 @@
 				A9C0DB84197E7B0000DF55B3 /* English */,
 			);
 			name = SubtitlesDefaults.xib;
+			sourceTree = "<group>";
+		};
+		A9C1839B1A716BCC00C897C2 /* HBTitleSelection.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9C1839C1A716BCC00C897C2 /* English */,
+			);
+			name = HBTitleSelection.xib;
 			sourceTree = "<group>";
 		};
 		A9CF25EF1990D62C0023F727 /* Presets.xib */ = {

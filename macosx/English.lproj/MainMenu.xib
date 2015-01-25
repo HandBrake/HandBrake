@@ -97,9 +97,15 @@
                                     <action selector="addToQueue:" target="-1" id="9mH-2S-tBG"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Add All Titles To Queue…" keyEquivalent="B" id="5897">
+                            <menuItem title="Add Titles To Queue…" keyEquivalent="B" id="5897">
                                 <connections>
-                                    <action selector="addAllTitlesToQueue:" target="-1" id="EyT-yw-TMf"/>
+                                    <action selector="addTitlesToQueue:" target="-1" id="Ohu-Az-0ME"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Add All Titles To Queue" alternate="YES" keyEquivalent="B" id="oYh-V7-kbx">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="addAllTitlesToQueue:" target="-1" id="zTW-SV-C4n"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Kee-pg-bfk">

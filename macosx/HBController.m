@@ -7,6 +7,7 @@
 #import "HBController.h"
 
 #import "HBQueueController.h"
+#import "HBTitleSelectionController.h"
 
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
@@ -27,11 +28,13 @@
 #import "HBCore.h"
 #import "HBJob.h"
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBPreviewControllerDelegate, HBPictureControllerDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBPreviewControllerDelegate, HBPictureControllerDelegate, HBTitleSelectionDelegate>
 
 @property (assign) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
 @property (nonatomic, readwrite) NSInteger scanSpecificTitleIdx;
+
+@property (nonatomic, readwrite, retain) HBTitleSelectionController *titlesSelectionController;
 
 /**
  * The name of the source, it might differ from the source
@@ -373,7 +376,7 @@
 {
     SEL action = [menuItem action];
 
-    if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) ||
+    if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(addTitlesToQueue:) ||
         action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:) ||
         action == @selector(showPreviewWindow:))
     {
@@ -516,11 +519,21 @@
     {
          if (result == NSOKButton)
          {
-             NSURL *scanURL = panel.URL;
-             // we set the last searched source directory in the prefs here
-             [[NSUserDefaults standardUserDefaults] setURL:scanURL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
-
              NSURL *url = panel.URL;
+
+             // Check if we selected a folder or not
+             id outValue = nil;
+             [url getResourceValue:&outValue forKey:NSURLIsDirectoryKey error:NULL];
+
+             // we set the last searched source directory in the prefs here
+             if ([outValue boolValue])
+             {
+                 [[NSUserDefaults standardUserDefaults] setURL:url forKey:@"HBLastSourceDirectoryURL"];
+             }
+             else
+             {
+                 [[NSUserDefaults standardUserDefaults] setURL:url.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
+             }
 
              // We check to see if the chosen file at path is a package
              if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:url.path])
@@ -592,7 +605,9 @@
      }];
 }
 
-/* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
+/**
+ * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
+ */
 - (void)performScan:(NSURL *)scanURL scanTitleNum:(NSInteger)scanTitleNum
 {
     // Save the current settings
@@ -1145,56 +1160,93 @@
 
 - (IBAction)pause:(id)sender
 {
-    if (fQueueController.core.state == HBStatePaused)
-    {
-        [fQueueController.core resume];
-    }
-    else
-    {
-        [fQueueController.core pause];
-    }
+    [fQueueController togglePauseResume:sender];
 }
 
 #pragma mark -
 #pragma mark Batch Queue Titles Methods
 
-- (IBAction)addAllTitlesToQueue:(id)sender
+- (IBAction)addTitlesToQueue:(id)sender
 {
-    NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:NSLocalizedString(@"You are about to add ALL titles to the queue!", @"")];
-    [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Current preset will be applied to all %ld titles. Are you sure you want to do this?", @""), self.core.titles.count]];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
-    [alert addButtonWithTitle:NSLocalizedString(@"Yes, I want to add all titles to the queue", @"")];
-    [alert setAlertStyle:NSCriticalAlertStyle];
+    self.titlesSelectionController = [[[HBTitleSelectionController alloc] initWithTitles:self.core.titles delegate:self] autorelease];
 
-    [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(addAllTitlesToQueueAlertDone:returnCode:contextInfo:) contextInfo:NULL];
-    [alert release];
+    [NSApp beginSheet:self.titlesSelectionController.window
+       modalForWindow:self.window
+        modalDelegate:nil
+       didEndSelector:NULL
+          contextInfo:NULL];
 }
 
-- (void)addAllTitlesToQueueAlertDone:(NSAlert *)alert
-                          returnCode:(NSInteger)returnCode
-                         contextInfo:(void *)contextInfo
+- (void)didSelectIndexes:(NSIndexSet *)indexes
 {
-    if (returnCode == NSAlertSecondButtonReturn)
-    {
-        [self doAddAllTitlesToQueue];
-    }
+    [self.titlesSelectionController.window orderOut:nil];
+    [NSApp endSheet:self.titlesSelectionController.window];
+
+    [self doAddTitlesAtIndexesToQueue:indexes];
 }
 
-- (void)doAddAllTitlesToQueue
+- (void)doAddTitlesAtIndexesToQueue:(NSIndexSet *)indexes;
 {
     NSMutableArray *jobs = [[NSMutableArray alloc] init];
+    BOOL fileExists = NO;
 
     for (HBTitle *title in self.core.titles)
     {
-        HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.selectedPreset];
-        job.destURL = [self destURLForJob:job];
-        [jobs addObject:job];
-        [job release];
+        if ([indexes containsIndex:title.index])
+        {
+            HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.selectedPreset];
+            job.destURL = [self destURLForJob:job];
+            job.title = nil;
+            [jobs addObject:job];
+            [job release];
+
+            if ([[NSFileManager defaultManager] fileExistsAtPath:job.destURL.path] || [fQueueController jobExistAtURL:job.destURL])
+            {
+                fileExists = YES;
+            }
+        }
     }
 
-    [fQueueController addJobsFromArray:jobs];
-    [jobs release];
+    if (fileExists)
+    {
+        // File exist, warn user
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"File already exists.", nil)];
+        [alert setInformativeText:NSLocalizedString(@"One or more file already exists. Do you want to overwrite?", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", nil)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(overwriteAddTitlesToQueueAlertDone:returnCode:contextInfo:) contextInfo:jobs];
+        [alert release];
+    }
+    else
+    {
+        [fQueueController addJobsFromArray:jobs];
+        [jobs release];
+    }
+}
+
+- (void)overwriteAddTitlesToQueueAlertDone:(NSAlert *)alert
+                                returnCode:(NSInteger)returnCode
+                               contextInfo:(void *)contextInfo
+{
+    if (returnCode == NSAlertSecondButtonReturn)
+    {
+        NSArray *jobs = (NSArray *)contextInfo;
+        [fQueueController addJobsFromArray:jobs];
+        [jobs release];
+    }
+}
+
+- (IBAction)addAllTitlesToQueue:(id)sender
+{
+    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+    for (HBTitle *title in self.core.titles)
+    {
+        [indexes addIndex:title.index];
+    }
+    [self doAddTitlesAtIndexesToQueue:indexes];
 }
 
 #pragma mark - Picture
@@ -1374,7 +1426,7 @@
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
     {
         NSURL *importPresetsFile = [panel URL];
-        NSURL *importPresetsDirectory = nil;//[importPresetsFile URLByDeletingLastPathComponent];
+        NSURL *importPresetsDirectory = [importPresetsFile URLByDeletingLastPathComponent];
         [[NSUserDefaults standardUserDefaults] setURL:importPresetsDirectory forKey:@"LastPresetImportDirectoryURL"];
 
         // NOTE: here we need to do some sanity checking to verify we do not hose up our presets file
