@@ -40,11 +40,6 @@ namespace HandBrakeWPF.Services.Presets
         private static readonly int CurrentPresetVersion = 2;
 
         /// <summary>
-        /// XML Serializer
-        /// </summary>
-        private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Preset>));
-
-        /// <summary>
         /// User Preset Default Catgory Name
         /// </summary>
         public static string UserPresetCatgoryName = "User Presets";
@@ -62,7 +57,7 @@ namespace HandBrakeWPF.Services.Presets
         /// <summary>
         /// The Built In Presets File
         /// </summary>
-        private readonly string builtInPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml";
+        private readonly string builtInPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.json";
 
         /// <summary>
         /// A Collection of presets
@@ -309,12 +304,12 @@ namespace HandBrakeWPF.Services.Presets
 
                             Preset newPreset = new Preset
                             {
-                                Category = category, 
-                                Name = presetName[0].Replace("+", string.Empty).Trim(), 
-                                Version = VersionHelper.GetVersion(), 
+                                Category = category,
+                                Name = presetName[0].Replace("+", string.Empty).Trim(),
+                                Version = VersionHelper.GetVersion(),
                                 Description = string.Empty, // Maybe one day we will populate this.
-                                IsBuildIn = true, 
-                                UsePictureFilters = true, 
+                                IsBuildIn = true,
+                                UsePictureFilters = true,
                                 Task = QueryParserUtility.Parse(presetName[2])
                             };
 
@@ -420,7 +415,7 @@ namespace HandBrakeWPF.Services.Presets
                 string disabledFile = string.Format("{0}.{1}", file, GeneralUtilities.ProcessId);
                 if (File.Exists(file))
                 {
-                   File.Move(file, disabledFile);
+                    File.Move(file, disabledFile);
                     if (File.Exists(file))
                     {
                         File.Delete(file);
@@ -452,13 +447,20 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     using (StreamReader reader = new StreamReader(this.builtInPresetFile))
                     {
-                        List<Preset> list = (List<Preset>)Ser.Deserialize(reader);
-                        foreach (Preset preset in list)
+                        // New Preset Format.
+                        try
                         {
-                            preset.IsBuildIn = true;
+                            var presetList = JsonConvert.DeserializeObject<List<Preset>>(reader.ReadToEnd());
 
-                            // Older versions did not have this flag so explicitly make sure it is set.
-                            this.presets.Add(preset);
+                            foreach (Preset preset in presetList)
+                            {
+                                preset.IsBuildIn = true;  // Older versions did not have this flag so explicitly make sure it is set.
+                                this.presets.Add(preset);
+                            }
+                        }
+                        catch (Exception exc)
+                        {
+                            // Do Nothing.
                         }
                     }
                 }
@@ -471,7 +473,7 @@ namespace HandBrakeWPF.Services.Presets
 
             // Load in the users Presets from UserPresets.xml
             try
-            { 
+            {
                 // Handle Legacy Preset Format.
                 bool updatePresets = false;
                 if (File.Exists(this.legacyUserPresetFile))
@@ -480,13 +482,13 @@ namespace HandBrakeWPF.Services.Presets
                     {
                         try
                         {
+                            XmlSerializer Ser = new XmlSerializer(typeof(List<Preset>));
                             var oldPresets = (List<Preset>)Ser.Deserialize(reader);
                             foreach (Preset oldPreset in oldPresets)
                             {
                                 this.presets.Add(oldPreset);
                             }
                             updatePresets = true;
-                            
                         }
                         catch (Exception exc)
                         {
@@ -523,9 +525,9 @@ namespace HandBrakeWPF.Services.Presets
                         string fileName = RecoverFromCorruptedPresetFile(this.userPresetFile);
                         this.errorService.ShowMessageBox(
                             "HandBrake is unable to load your user presets because they are from an older version of HandBrake. Your old presets file has been renamed so that it doesn't get loaded on next launch."
-                            + Environment.NewLine + Environment.NewLine + "Archived File: " + fileName, 
-                            "Unable to load user presets.", 
-                            MessageBoxButton.OK, 
+                            + Environment.NewLine + Environment.NewLine + "Archived File: " + fileName,
+                            "Unable to load user presets.",
+                            MessageBoxButton.OK,
                             MessageBoxImage.Exclamation);
                         return;
                     }
@@ -533,15 +535,13 @@ namespace HandBrakeWPF.Services.Presets
                     // Load the current presets.
                     if (presetContainer != null && !string.IsNullOrEmpty(presetContainer.Presets))
                     {
-                        JsonSerializerSettings settings = new JsonSerializerSettings();
-                        settings.MissingMemberHandling = MissingMemberHandling.Ignore;
-
-                        List<Preset> list = JsonConvert.DeserializeObject<List<Preset>>(presetContainer.Presets);
+                        JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
+                        List<Preset> list = JsonConvert.DeserializeObject<List<Preset>>(presetContainer.Presets, settings);
                         foreach (Preset preset in list)
                         {
                             this.presets.Add(preset);
                         }
-                    }                 
+                    }
                 }
 
                 // We did a preset convertion, so save the updates.
@@ -564,24 +564,33 @@ namespace HandBrakeWPF.Services.Presets
         {
             try
             {
+                // Setup
                 string directory = Path.GetDirectoryName(this.userPresetFile);
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
 
+                // Built-in Presets
+                JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore, NullValueHandling = NullValueHandling.Ignore };
                 using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
                 {
-                    Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn).ToList());
+                    string presetsJson = JsonConvert.SerializeObject(this.presets.Where(p => p.IsBuildIn).ToList(), Formatting.Indented, settings);
+                     using (StreamWriter writer = new StreamWriter(strm))
+                    {
+                        writer.WriteLine(presetsJson);
+                    }
                 }
 
+                // User Presets
+                JsonSerializerSettings userPresetSettings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
                 using (FileStream strm = new FileStream(this.userPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     List<Preset> userPresets = this.presets.Where(p => p.IsBuildIn == false).ToList();
-                    string presetsJson = JsonConvert.SerializeObject(userPresets, Formatting.Indented);
+                    string presetsJson = JsonConvert.SerializeObject(userPresets, Formatting.Indented, userPresetSettings);
 
                     PresetContainer container = new PresetContainer(CurrentPresetVersion, presetsJson);
-                    string containerJson = JsonConvert.SerializeObject(container, Formatting.Indented);
+                    string containerJson = JsonConvert.SerializeObject(container, Formatting.Indented, userPresetSettings);
 
                     using (StreamWriter writer = new StreamWriter(strm))
                     {
