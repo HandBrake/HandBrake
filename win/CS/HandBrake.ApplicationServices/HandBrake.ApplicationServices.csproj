@@ -170,7 +170,6 @@
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />
     <Compile Include="Utilities\QueryGeneratorUtility.cs" />
-    <Compile Include="Utilities\QueryParserUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

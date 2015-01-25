@@ -281,58 +281,42 @@ namespace HandBrakeWPF.Services.Presets
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    StringBuilder contents = new StringBuilder();
-
-                    string category = String.Empty;
-
-                    while (!reader.EndOfStream)
+                    // New Preset Format.
+                    try
                     {
-                        string line = reader.ReadLine();
-                        contents.AppendLine(line);
+                        string json = reader.ReadToEnd();
+                        var presetList = JsonConvert.DeserializeObject<List<Preset>>(json);
 
-                        // Found the beginning of a preset block )
-                        if (line != null && line.Contains("<") && !line.Contains("<<"))
+                        foreach (Preset preset in presetList)
                         {
-                            category = line.Replace("<", string.Empty).Trim();
+                            preset.Version = VersionHelper.GetVersion();
+                            preset.UsePictureFilters = true; 
+                            preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
+
+                            if (preset.Name == "iPod")
+                            {
+                                preset.Task.KeepDisplayAspect = true;
+                            }
+
+                            preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
+
+                            if (preset.Name == "Normal")
+                            {
+                                preset.IsDefault = true;
+                            }
+
+                            this.presets.Add(preset);
                         }
 
-                        // Found a preset
-                        if (line != null && line.Contains("+"))
+                        // Verify we have presets.
+                        if (this.presets.Count == 0)
                         {
-                            Regex r = new Regex("(:  )"); // Split on hyphens. 
-                            string[] presetName = r.Split(line);
-
-                            Preset newPreset = new Preset
-                            {
-                                Category = category,
-                                Name = presetName[0].Replace("+", string.Empty).Trim(),
-                                Version = VersionHelper.GetVersion(),
-                                Description = string.Empty, // Maybe one day we will populate this.
-                                IsBuildIn = true,
-                                UsePictureFilters = true,
-                                Task = QueryParserUtility.Parse(presetName[2])
-                            };
-
-                            if (newPreset.Name == "iPod")
-                            {
-                                newPreset.Task.KeepDisplayAspect = true;
-                            }
-
-                            newPreset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
-
-                            if (newPreset.Name == "Normal")
-                            {
-                                newPreset.IsDefault = true;
-                            }
-
-                            this.presets.Add(newPreset);
+                            throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", new Exception(json));
                         }
                     }
-
-                    // Verify we have presets.
-                    if (this.presets.Count == 0)
+                    catch (Exception exc)
                     {
-                        throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", new Exception(contents.ToString()));
+                        // Do Nothing.
                     }
                 }
             }
@@ -571,8 +555,10 @@ namespace HandBrakeWPF.Services.Presets
                     Directory.CreateDirectory(directory);
                 }
 
+                JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
+
                 // Built-in Presets
-                JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore, NullValueHandling = NullValueHandling.Ignore };
+                
                 using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     string presetsJson = JsonConvert.SerializeObject(this.presets.Where(p => p.IsBuildIn).ToList(), Formatting.Indented, settings);
@@ -583,14 +569,13 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // User Presets
-                JsonSerializerSettings userPresetSettings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
                 using (FileStream strm = new FileStream(this.userPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     List<Preset> userPresets = this.presets.Where(p => p.IsBuildIn == false).ToList();
-                    string presetsJson = JsonConvert.SerializeObject(userPresets, Formatting.Indented, userPresetSettings);
+                    string presetsJson = JsonConvert.SerializeObject(userPresets, Formatting.Indented, settings);
 
                     PresetContainer container = new PresetContainer(CurrentPresetVersion, presetsJson);
-                    string containerJson = JsonConvert.SerializeObject(container, Formatting.Indented, userPresetSettings);
+                    string containerJson = JsonConvert.SerializeObject(container, Formatting.Indented, settings);
 
                     using (StreamWriter writer = new StreamWriter(strm))
                     {

@@ -12,7 +12,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using System;
     using System.Collections.Generic;
     using System.Management;
-    using System.Text.RegularExpressions;
     using System.Windows.Forms;
 
     using HandBrake.Interop.HbLib;
@@ -84,36 +83,6 @@ namespace HandBrake.ApplicationServices.Utilities
                     // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
                     return false;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether is hsw or newer.
-        /// </summary>
-        public static bool IsHswOrNewer
-        {
-            get
-            {
-                // TODO replace with a call to libhb
-                string cpu = GetCpuCount.ToString();
-                if (cpu.Contains("Intel"))
-                {
-                    Match match = Regex.Match(cpu, "([0-9]{4})");
-                    if (match.Success)
-                    {
-                        string cpuId = match.Groups[0].ToString();
-                        int cpuNumber;
-                        if (int.TryParse(cpuId, out cpuNumber))
-                        {
-                            if (cpuNumber > 4000)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-
-                return false;
             }
         }
 
