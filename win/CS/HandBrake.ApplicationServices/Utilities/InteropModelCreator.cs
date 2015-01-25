@@ -125,7 +125,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             if (work.PointToPointMode == PointToPointMode.Preview)
             {
-                job.StartAtPreview = work.PreviewEncodeStartAt.HasValue ? work.PreviewEncodeStartAt.Value : 1;
+                job.StartAtPreview = work.PreviewEncodeStartAt.HasValue ? work.PreviewEncodeStartAt.Value + 1 : 1;
                 job.SecondsEnd = work.PreviewEncodeDuration.HasValue ? work.PreviewEncodeDuration.Value : 30;
                 job.SeekPoints = configuration.PreviewScanCount;
             }
