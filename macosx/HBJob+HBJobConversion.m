@@ -317,9 +317,9 @@
     if (one_burned)
     {
         hb_filter_object_t *filter = hb_filter_init( HB_FILTER_RENDER_SUB );
-        hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d",
-                                      job->crop[0], job->crop[1],
-                                      job->crop[2], job->crop[3]] UTF8String] );
+        hb_add_filter(job, filter, [NSString stringWithFormat:@"%d:%d:%d:%d",
+                                      self.picture.cropTop, self.picture.cropBottom,
+                                      self.picture.cropLeft, self.picture.cropRight].UTF8String);
     }
 
     // Audio Defaults
