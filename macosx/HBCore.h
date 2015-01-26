@@ -8,6 +8,8 @@
 #include "hb.h"
 
 @class HBJob;
+@class HBPicture;
+@class HBTitle;
 
 // These constants specify the current state of HBCore.
 typedef NS_ENUM(NSUInteger, HBState) {
@@ -70,11 +72,6 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) HBState state;
 
 /**
- * Pointer to a libhb handle used by this HBCore instance.
- */
-@property (nonatomic, readonly) hb_handle_t *hb_handle;
-
-/**
  *  The name of the core, used for debugging purpose.
  */
 @property (nonatomic, copy) NSString *name;
@@ -90,7 +87,7 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 - (BOOL)canScan:(NSURL *)url error:(NSError **)error;
 
 /**
- *  Starts the asynchronous execution of a scan.
+ *  Initiates an asynchronous scan operation and returns immediately.
  *
  *  @param url                 the URL of the input file.
  *  @param index            the index of the desired title. Use 0 to scan every title.
@@ -103,6 +100,7 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 
 /**
  *  Cancels the scan execution.
+ *  Cancel can be invoked when the scan is running.
  */
 - (void)cancelScan;
 
@@ -112,7 +110,23 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) NSArray *titles;
 
 /**
- *  Starts an asynchronous encoding session with the passed job.
+ *  This function converts an image created by libhb (specified via index)
+ *  into an CGImage.
+ *
+ *  @param index       the index of the desired image.
+ *  @param title       Handle to hb_title_t of desired title
+ *  @param frame       a HBPicture instance that describe the image's frame.
+ *  @param deinterlace whether the preview image must be deinterlaced or not.
+ *
+ *  @return a CGImageRef of the wanted image, NULL if the index is out of bounds.
+ */
+- (CGImageRef)copyImageAtIndex:(NSUInteger)index
+                      forTitle:(HBTitle *)title
+                  pictureFrame:(HBPicture *)frame
+                   deinterlace:(BOOL)deinterlace;
+
+/**
+ *  Initiates an asynchronous encode operation and returns immediately.
  *
  *  @param job                 the job to encode
  *  @param progressHandler     a block called periodically with the progress information.
@@ -121,17 +135,20 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
 
 /**
- * Stops encoding session and releases resources.
+ *  Stops encode operation and releases resources.
+ *  Cancel can be invoked when the encode is running.
  */
 - (void)cancelEncode;
 
 /**
- *  Pauses the encoding session.
+ *  Pauses the encode operation.
+ *  Pause can be invoked when the encode is running.
  */
 - (void)pause;
 
 /**
  *  Resumes a paused encoding session.
+ *  Resume can be invoked when the encode is running.
  */
 - (void)resume;
 

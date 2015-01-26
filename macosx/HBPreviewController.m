@@ -676,8 +676,8 @@ typedef enum ViewMode : NSUInteger {
 {
     if (self.window.isVisible)
     {
-        NSImage *fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
-        [self.pictureLayer setContents:fPreviewImage];
+        CGImageRef fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
+        [self.pictureLayer setContents:(id)fPreviewImage];
     }
 
     HBPicture *pict = self.job.picture;

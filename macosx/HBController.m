@@ -791,7 +791,7 @@
 
     // Generate a new file name
     NSString *fileName = [HBUtilities automaticNameForSource:title.name
-                                                       title:title.hb_title->index
+                                                       title:title.index
                                                     chapters:NSMakeRange(self.job.range.chapterStart + 1, self.job.range.chapterStop + 1)
                                                      quality:self.job.video.qualityType ? self.job.video.quality : 0
                                                      bitrate:!self.job.video.qualityType ? self.job.video.avgBitrate : 0

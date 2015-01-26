@@ -4,7 +4,7 @@
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 @class HBCore;
 @class HBJob;
@@ -25,7 +25,7 @@
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job;
 
 /* Still image generator */
-- (NSImage *) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
+- (CGImageRef) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
 - (NSUInteger) imagesCount;
 - (void) purgeImageCache;
 
