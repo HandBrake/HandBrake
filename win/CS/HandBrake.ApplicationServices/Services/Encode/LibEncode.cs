@@ -343,15 +343,21 @@ namespace HandBrake.ApplicationServices.Services.Encode
             this.IsEncoding = false;
             ServiceLogMessage("Encode Completed ...");
 
+            // Stop Logging.
+            HandBrakeUtils.MessageLogged -= this.HandBrakeInstanceMessageLogged;
+            HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
+            
+            // Handling Log Data 
+            this.ProcessLogs(this.currentTask.Task.Destination, this.currentTask.Configuration);
+
+            // Cleanup
+            this.ShutdownFileWriter();
+
+            // Raise the Encode Completed EVent.
             this.InvokeEncodeCompleted(
                 e.Error
                     ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Task.Destination)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Task.Destination));
-
-            HandBrakeUtils.MessageLogged -= this.HandBrakeInstanceMessageLogged;
-            HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
-
-            this.ShutdownFileWriter();
         }
         #endregion
     }

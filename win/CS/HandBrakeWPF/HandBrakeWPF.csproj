@@ -160,6 +160,7 @@
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
+    <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />

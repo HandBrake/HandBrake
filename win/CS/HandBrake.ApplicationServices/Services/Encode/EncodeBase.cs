@@ -10,6 +10,8 @@
 namespace HandBrake.ApplicationServices.Services.Encode
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -344,7 +346,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                     this.fileWriter.WriteLine(this.header);
                     if (!isLibhb)
                     {
-                        this.fileWriter.WriteLine(string.Format("CLI Query: {0}", query));
+                        this.fileWriter.WriteLine("CLI Query: {0}", query);
                     }
                     this.fileWriter.WriteLine();
                 }
@@ -353,8 +355,12 @@ namespace HandBrake.ApplicationServices.Services.Encode
             {
                 if (this.fileWriter != null)
                 {
-                    this.fileWriter.Close();
-                    this.fileWriter.Dispose();
+                    lock (FileWriterLock)
+                    {
+                        this.fileWriter.Flush();
+                        this.fileWriter.Close();
+                        this.fileWriter.Dispose();
+                    }                
                 }
 
                 throw;
@@ -417,6 +423,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 {
                     if (this.fileWriter != null)
                     {
+                        this.fileWriter.Flush();
                         this.fileWriter.Close();
                         this.fileWriter.Dispose();
                     }
@@ -424,9 +431,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
                     this.fileWriter = null;
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                // This exception doesn't warrent user interaction, but it should be logged (TODO)
+                Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
             }
         }
 

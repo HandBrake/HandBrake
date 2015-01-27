@@ -29,6 +29,8 @@
         <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
+        <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
+        
 
 
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
@@ -248,8 +250,7 @@
                                 <TextBlock Text="{Binding Task.PictureSettingsDesc}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  />
                                 
                                 <TextBlock FontWeight="Bold" Text="Video:" Grid.Row="3" Grid.Column="0" />
-                                <TextBlock Text="{Binding Task.VideoEncoder, Converter={StaticResource enumComboConverter}}"
-                                           Grid.Row="3" Grid.Column="1" />
+                                <TextBlock Text="{Binding Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"  />
 
                                 <TextBlock FontWeight="Bold" Text="Audio: "  Grid.Row="4" Grid.Column="0"/>
                                 <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"

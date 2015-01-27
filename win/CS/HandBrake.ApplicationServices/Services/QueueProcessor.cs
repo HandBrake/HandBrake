@@ -488,11 +488,7 @@ namespace HandBrake.ApplicationServices.Services
             if (!e.Successful)
             {
                 this.LastProcessedJob.Status = QueueItemStatus.Error;
-                this.Pause();
             }
-
-            // Handling Log Data 
-            this.EncodeService.ProcessLogs(this.LastProcessedJob.Task.Destination, this.LastProcessedJob.Configuration);
 
             // Move onto the next job.
             if (this.IsProcessing)
