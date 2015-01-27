@@ -128,7 +128,7 @@ static char * h264_profile  = NULL;
 static char * h264_level    = NULL;
 static int    maxHeight     = 0;
 static int    maxWidth      = 0;
-static int    turbo_opts_enabled = 0;
+static int    fastfirstpass = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
 static int    cfr           = 0;
@@ -2812,6 +2812,7 @@ static int HandleEvents( hb_handle_t * h )
 
             job->indepth_scan = subtitle_scan;
             job->twopass = twoPass;
+            job->fastfirstpass = fastfirstpass;
             hb_job_set_encoder_options(job, advanced_opts);
 
             hb_add( h, job );
@@ -4135,7 +4136,7 @@ static int ParseOptions( int argc, char ** argv )
                                   "    ");
                 exit(0);
             case 'T':
-                turbo_opts_enabled = 1;
+                fastfirstpass = 1;
                 break;
             case 'Y':
                 maxHeight = atoi( optarg );
