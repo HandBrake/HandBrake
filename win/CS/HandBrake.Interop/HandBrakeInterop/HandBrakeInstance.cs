@@ -181,54 +181,6 @@ namespace HandBrake.Interop
         }
 
         /// <summary>
-        /// Starts scanning the given path.
-        /// </summary>
-        /// <param name="path">
-        /// The path to the video to scan.
-        /// </param>
-        /// <param name="previewCount">
-        /// The number of preview images to make.
-        /// </param>
-        /// <param name="minDuration">
-        /// The minimum duration of a title to show up on the scan.
-        /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration)
-        {
-            this.StartScan(path, previewCount, minDuration, 0);
-        }
-
-        /// <summary>
-        /// Starts a scan for the given input path.
-        /// </summary>
-        /// <param name="path">
-        /// The path of the video to scan.
-        /// </param>
-        /// <param name="previewCount">
-        /// The number of preview images to generate for each title while scanning.
-        /// </param>
-        public void StartScan(string path, int previewCount)
-        {
-            this.StartScan(path, previewCount, TimeSpan.FromSeconds(10), 0);
-        }
-
-        /// <summary>
-        /// Starts a scan of the given path.
-        /// </summary>
-        /// <param name="path">
-        /// The path of the video to scan.
-        /// </param>
-        /// <param name="previewCount">
-        /// The number of preview images to generate for each title while scanning.
-        /// </param>
-        /// <param name="titleIndex">
-        /// The title index to scan (1-based, 0 for all titles).
-        /// </param>
-        public void StartScan(string path, int previewCount, int titleIndex)
-        {
-            this.StartScan(path, previewCount, TimeSpan.Zero, titleIndex);
-        }
-
-        /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
         /// <param name="path">
@@ -380,47 +332,14 @@ namespace HandBrake.Interop
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
-        /// <param name="jobToStart">
-        /// The job to start.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="scanPreviewCount">
-        /// The scan Preview Count.
-        /// </param>
-        [HandleProcessCorruptedStateExceptions] 
-        public void StartEncode(EncodeJob jobToStart, Title title, int scanPreviewCount)
-        {
-            this.StartEncode(jobToStart, title, false, 0, 0, 0, scanPreviewCount);
-        }
-
-        /// <summary>
-        /// Starts an encode with the given job.
-        /// </summary>
         /// <param name="job">
         /// The job to start.
         /// </param>
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="preview">
-        /// The scan Preview Count.
-        /// </param>
-        /// <param name="previewNumber">
-        /// Preview Feature: Preview to encode
-        /// </param>
-        /// <param name="previewSeconds">
-        /// Number of seconds to encode for the preview
-        /// </param>
-        /// <param name="overallSelectedLengthSeconds">
-        /// The overall Selected Length Seconds.
-        /// </param>
-        /// <param name="scanPreviewCount">
-        /// Number of previews
-        /// </param>
-        [HandleProcessCorruptedStateExceptions] 
-        public void StartEncode(EncodeJob job, Title title, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount)
+        [HandleProcessCorruptedStateExceptions]
+        public void StartEncode(EncodeJob job, Title title)
         {
             JsonEncodeObject encodeObject = EncodeFactory.Create(job, title);
 

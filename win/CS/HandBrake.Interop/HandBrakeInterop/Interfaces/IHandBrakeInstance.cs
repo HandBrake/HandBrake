@@ -109,62 +109,7 @@ namespace HandBrake.Interop.Interfaces
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="scanPreviewCount">
-        /// The scan Preview Count.
-        /// </param>
-        void StartEncode(EncodeJob jobToStart, Title title, int scanPreviewCount);
-
-        /// <summary>
-        /// Starts an encode with the given job.
-        /// </summary>
-        /// <param name="job">
-        /// The job to start.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="preview">
-        /// True if this is a preview encode.
-        /// </param>
-        /// <param name="previewNumber">
-        /// The preview number to start the encode at (0-based).
-        /// </param>
-        /// <param name="previewSeconds">
-        /// The number of seconds in the preview.
-        /// </param>
-        /// <param name="overallSelectedLengthSeconds">
-        /// The currently selected encode length. Used in preview
-        /// for calculating bitrate when the target size would be wrong.
-        /// </param>
-        /// <param name="scanPreviewCount">
-        /// The scan Preview Count.
-        /// </param>
-        void StartEncode(EncodeJob job, Title title, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds, int scanPreviewCount);
-
-        /// <summary>
-        /// Starts scanning the given path.
-        /// </summary>
-        /// <param name="path">
-        /// The path to the video to scan.
-        /// </param>
-        /// <param name="previewCount">
-        /// The number of preview images to make.
-        /// </param>
-        void StartScan(string path, int previewCount);
-
-        /// <summary>
-        /// Starts a scan of the given path.
-        /// </summary>
-        /// <param name="path">
-        /// The path of the video to scan.
-        /// </param>
-        /// <param name="previewCount">
-        /// The number of previews to make on each title.
-        /// </param>
-        /// <param name="titleIndex">
-        /// The title index to scan (1-based, 0 for all titles).
-        /// </param>
-        void StartScan(string path, int previewCount, int titleIndex);
+        void StartEncode(EncodeJob jobToStart, Title title);
 
         /// <summary>
         /// Starts a scan of the given path.

@@ -54,7 +54,11 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
         /// </summary>
         public int TitleNumber { get; set; }
 
-        public int RescanTitleNumber { get; set; }
+        /// <summary>
+        /// Gets or sets the type.
+        /// HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE
+        /// </summary>
+        public int Type { get; set; }
 
         /// <summary>
         /// Gets or sets Playlist.
