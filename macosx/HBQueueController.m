@@ -155,7 +155,7 @@
             menuItem.title = NSLocalizedString(@"Stop Encoding", nil);
             menuItem.keyEquivalent = @".";
 
-            return YES;
+            return self.core.state != HBStateScanning;
         }
     }
 
@@ -183,12 +183,12 @@
 
     if (action == @selector(toggleStartCancel:))
     {
-        if ((s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
+        if ((s == HBStateScanning) || (s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
         {
             theItem.image = [NSImage imageNamed:@"stopencode"];
             theItem.label = NSLocalizedString(@"Stop", @"");
             theItem.toolTip = NSLocalizedString(@"Stop Encoding", @"");
-            return YES;
+            return s != HBStateScanning;
         }
         else
         {
@@ -449,6 +449,9 @@
         // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
         self.currentJob.state = HBJobStateWorking;
 
+        // Tell HB to output a new activity log file for this encode
+        [self.outputPanel startEncodeLog:self.currentJob.destURL];
+
         // now we can go ahead and scan the new pending queue item
         [self performScan:self.currentJob.fileURL titleIdx:self.currentJob.titleIdx];
     }
@@ -511,9 +514,6 @@
  */
 - (void)performScan:(NSURL *)scanURL titleIdx:(NSInteger)index
 {
-    // Tell HB to output a new activity log file for this encode
-    [self.outputPanel startEncodeLog:self.currentJob.destURL];
-
     // Only scan 10 previews before an encode - additional previews are
     // only useful for autocrop and static previews, which are already taken care of at this point
     [self.core scanURL:scanURL
@@ -565,11 +565,11 @@
          progressHandler:^(HBState state, hb_state_t hb_state) {
              NSMutableString *string = nil;
              CGFloat progress = 0;
+             #define p hb_state.param.working
              switch (state)
              {
                  case HBStateSearching:
                  {
-                     #define p hb_state.param.working
                      string = [NSMutableString stringWithFormat:
                                NSLocalizedString(@"Searching for start point… :  %.2f %%", @""),
                                100.0 * p.progress];
@@ -578,13 +578,11 @@
                      {
                          [string appendFormat:NSLocalizedString(@" (ETA %02dh%02dm%02ds)", @"" ), p.hours, p.minutes, p.seconds];
                      }
-                     #undef p
 
                      break;
                  }
                  case HBStateWorking:
                  {
-                     #define p hb_state.param.working
                      NSString *pass_desc = @"";
                      if (p.job_cur == 1 && p.job_count > 1)
                      {
@@ -647,7 +645,6 @@
 
                          self.dockIconProgress += dockTileUpdateFrequency;
                      }
-                    #undef p
 
                      break;
                  }
@@ -668,6 +665,7 @@
                  default:
                      break;
              }
+             #undef p
 
              // Update text field
              self.progressTextField.stringValue = string;

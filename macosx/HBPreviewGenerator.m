@@ -218,8 +218,6 @@
 - (void) dealloc
 {
     [self.core cancelEncode];
-    [_core release];
-    _core = nil;
 
     [_picturePreviews release];
     _picturePreviews = nil;

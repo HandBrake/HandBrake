@@ -314,7 +314,7 @@
             [toolbarItem setLabel: @"Stop"];
             [toolbarItem setPaletteLabel: @"Stop"];
             [toolbarItem setToolTip: @"Stop Encoding"];
-            return YES;
+            return (queueState != HBStateScanning);
         }
         if (action == @selector(pause:))
         {
