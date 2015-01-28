@@ -1201,11 +1201,14 @@
     NSMutableArray *jobs = [[NSMutableArray alloc] init];
     BOOL fileExists = NO;
 
+    // Get the preset from the loaded job.
+    HBPreset *preset = [self createPresetFromCurrentSettings];
+
     for (HBTitle *title in self.core.titles)
     {
         if ([indexes containsIndex:title.index])
         {
-            HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.selectedPreset];
+            HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
             job.destURL = [self destURLForJob:job];
             job.title = nil;
             [jobs addObject:job];
