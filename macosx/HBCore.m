@@ -398,12 +398,14 @@ static void hb_error_handler(const char *errmsg)
 {
     hb_pause(_hb_handle);
     hb_system_sleep_allow(_hb_handle);
+    self.state = HBStatePaused;
 }
 
 - (void)resume
 {
     hb_resume(_hb_handle);
     hb_system_sleep_prevent(_hb_handle);
+    self.state = HBStateWorking;
 }
 
 #pragma mark - State updates
