@@ -49,7 +49,15 @@ uint64_t hb_get_time_us();
 
 void     hb_snooze( int delay );
 int      hb_platform_init();
+
 #ifdef SYS_MINGW
+/*
+ * Some MinGW distributions #define strtok_r in pthread.h,
+ * but their so-called "implementation" isn't thread-safe.
+ */
+#ifdef strtok_r
+#undef strtok_r
+#endif
 char *strtok_r(char *s, const char *delim, char **save_ptr);
 #endif
 
