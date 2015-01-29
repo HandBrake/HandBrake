@@ -1,7 +1,7 @@
 /* nlmeans.c
 
    Copyright (c) 2013 Dirk Farin
-   Copyright (c) 2003-2014 HandBrake Team
+   Copyright (c) 2003-2015 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -44,7 +44,7 @@
  *  1026: Mean 5x5 plus edge boost
  *  1281: Mean 3x3 reduced by 25% plus edge boost
  *        etc...
- *  2049: Mean 3x3 passthru (NL-means off, prefilter is the output)
+ *  2049: Mean 3x3 passthru (NLMeans off, prefilter is the output)
  *        etc...
  *  3329: Mean 3x3 reduced by 25% plus edge boost, passthru
  *        etc...
@@ -53,6 +53,7 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "taskset.h"
+#include "nlmeans.h"
 
 #define NLMEANS_STRENGTH_LUMA_DEFAULT      8
 #define NLMEANS_STRENGTH_CHROMA_DEFAULT    8
@@ -129,6 +130,8 @@ struct hb_filter_private_s
     int    range[3];       // spatial search window width (must be odd)
     int    nframes[3];     // temporal search depth in frames
     int    prefilter[3];   // prefilter mode, can improve weight analysis
+
+    NLMeansFunctions functions;
 
     Frame      *frame;
     int         next_frame;
@@ -568,7 +571,50 @@ static void nlmeans_prefilter(BorderedPlane *src,
     hb_unlock(src->mutex);
 }
 
-static void nlmeans_plane(Frame *frame,
+static void build_integral_scalar(uint32_t *integral,
+                                  int       integral_stride,
+                            const uint8_t  *src,
+                            const uint8_t  *src_pre,
+                                  int       src_w,
+                            const uint8_t  *compare,
+                            const uint8_t  *compare_pre,
+                                  int       compare_w,
+                                  int       w,
+                                  int       h,
+                                  int       dx,
+                                  int       dy)
+{
+    memset(integral-1 - integral_stride, 0, (w+1) * sizeof(uint32_t));
+    for (int y = 0; y < h; y++)
+    {
+        const uint8_t *p1 = src_pre + y*src_w;
+        const uint8_t *p2 = compare_pre + (y+dy)*compare_w + dx;
+        uint32_t *out = integral + (y*integral_stride) - 1;
+
+        *out++ = 0;
+
+        for (int x = 0; x < w; x++)
+        {
+            int diff = *p1++ - *p2++;
+            *out = *(out-1) + diff * diff;
+            out++;
+        }
+
+        if (y > 0)
+        {
+            out = integral + y*integral_stride;
+
+            for (int x = 0; x < w; x++)
+            {
+                *out += *(out - integral_stride);
+                out++;
+            }
+        }
+    }
+}
+
+static void nlmeans_plane(NLMeansFunctions *functions,
+                          Frame *frame,
                           int prefilter,
                           int plane,
                           int nframes,
@@ -644,33 +690,18 @@ static void nlmeans_plane(Frame *frame,
                 }
 
                 // Build integral
-                memset(integral-1 - integral_stride, 0, (w+1) * sizeof(uint32_t));
-                for (int y = 0; y < h; y++)
-                {
-                    const uint8_t *p1 = src_pre + y*src_w;
-                    const uint8_t *p2 = compare_pre + (y+dy)*compare_w + dx;
-                    uint32_t *out = integral + (y*integral_stride) - 1;
-
-                    *out++ = 0;
-
-                    for (int x = 0; x < w; x++)
-                    {
-                        int diff = *p1++ - *p2++;
-                        *out = *(out-1) + diff * diff;
-                        out++;
-                    }
-
-                    if (y > 0)
-                    {
-                        out = integral + y*integral_stride;
-
-                        for (int x = 0; x < w; x++)
-                        {
-                            *out += *(out - integral_stride);
-                            out++;
-                        }
-                    }
-                }
+                functions->build_integral(integral,
+                                          integral_stride,
+                                          src,
+                                          src_pre,
+                                          src_w,
+                                          compare,
+                                          compare_pre,
+                                          compare_w,
+                                          w,
+                                          h,
+                                          dx,
+                                          dy);
 
                 // Average displacement
                 // TODO: Parallelize this
@@ -743,6 +774,13 @@ static int nlmeans_init(hb_filter_object_t *filter,
 {
     filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
     hb_filter_private_t *pv = filter->private_data;
+    NLMeansFunctions *functions = &pv->functions;
+
+    functions->build_integral = build_integral_scalar;
+    if (ARCH_X86 == 1)
+    {
+        nlmeans_init_x86(functions);
+    }
 
     // Mark parameters unset
     for (int c = 0; c < 3; c++)
@@ -815,7 +853,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
     if (taskset_init(&pv->taskset, pv->thread_count,
                      sizeof(nlmeans_thread_arg_t)) == 0)
     {
-        hb_error("nlmeans could not initialize taskset");
+        hb_error("NLMeans could not initialize taskset");
         goto fail;
     }
 
@@ -824,7 +862,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
         pv->thread_data[ii] = taskset_thread_args(&pv->taskset, ii);
         if (pv->thread_data[ii] == NULL)
         {
-            hb_error("nlmeans could not create thread args");
+            hb_error("NLMeans could not create thread args");
             goto fail;
         }
         pv->thread_data[ii]->pv = pv;
@@ -832,7 +870,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
         if (taskset_thread_spawn(&pv->taskset, ii, "nlmeans_filter",
                                  nlmeans_filter_thread, HB_NORMAL_PRIORITY) == 0)
         {
-            hb_error("nlmeans could not spawn thread");
+            hb_error("NLMeans could not spawn thread");
             goto fail;
         }
     }
@@ -894,7 +932,7 @@ static void nlmeans_filter_thread(void *thread_args_v)
     hb_filter_private_t *pv = thread_data->pv;
     int segment = thread_data->segment;
 
-    hb_log("NLMeans Denoise thread started for segment %d", segment);
+    hb_log("NLMeans thread started for segment %d", segment);
 
     while (1)
     {
@@ -909,6 +947,8 @@ static void nlmeans_filter_thread(void *thread_args_v)
         Frame *frame = &pv->frame[segment];
         hb_buffer_t *buf;
         buf = hb_frame_buffer_init(frame->fmt, frame->width, frame->height);
+
+        NLMeansFunctions *functions = &pv->functions;
 
         for (int c = 0; c < 3; c++)
         {
@@ -929,7 +969,8 @@ static void nlmeans_filter_thread(void *thread_args_v)
             }
 
             // Process current plane
-            nlmeans_plane(frame,
+            nlmeans_plane(functions,
+                          frame,
                           pv->prefilter[c],
                           c,
                           pv->nframes[c],
@@ -1039,6 +1080,8 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
         hb_buffer_t *buf;
         buf = hb_frame_buffer_init(frame->fmt, frame->width, frame->height);
 
+        NLMeansFunctions *functions = &pv->functions;
+
         for (int c = 0; c < 3; c++)
         {
             if (pv->strength[c] == 0)
@@ -1061,7 +1104,8 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
             if (pv->nframes[c] < nframes)
                 nframes = pv->nframes[c];
             // Process current plane
-            nlmeans_plane(frame,
+            nlmeans_plane(functions,
+                          frame,
                           pv->prefilter[c],
                           c,
                           nframes,
