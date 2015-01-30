@@ -134,8 +134,8 @@ namespace HandBrakeWPF.Services.Presets.Model
             }
 
             this.Task = task;
-            this.AudioTrackBehaviours = audioBehaviours;
-            this.SubtitleTrackBehaviours = subtitleBehaviours;
+            this.AudioTrackBehaviours = new AudioBehaviours(audioBehaviours);
+            this.SubtitleTrackBehaviours = new SubtitleBehaviours(subtitleBehaviours);
         }
 
         /// <summary>

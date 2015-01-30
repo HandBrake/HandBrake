@@ -29,7 +29,7 @@ namespace HandBrake.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the bitrate for the encode.
         /// </summary>
-        public int Bitrate { get; set; }
+        public int? Bitrate { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether two pass.
@@ -64,7 +64,7 @@ namespace HandBrake.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the quality.
         /// </summary>
-        public double Quality { get; set; }
+        public double? Quality { get; set; }
 
         /// <summary>
         /// Gets or sets the tune.
