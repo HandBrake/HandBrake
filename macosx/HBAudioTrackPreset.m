@@ -12,19 +12,42 @@
 
 static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
+@interface HBAudioTrackPreset ()
+
+@property (nonatomic, readwrite) int container;
+
+@end
+
 @implementation HBAudioTrackPreset
 
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         // defaults settings
         _encoder = HB_ACODEC_CA_AAC;
+        _container = HB_MUX_MKV;
         _sampleRate = 0;
         _bitRate = 160;
         _mixdown = HB_AMIXDOWN_DOLBYPLII;
     }
     return self;
+}
+
+- (instancetype)initWithContainer:(int)container
+{
+    self = [self init];
+    if (self)
+    {
+        _container = container;
+    }
+    return self;
+}
+
+- (void)containerChanged:(int)container
+{
+    // Do things here
 }
 
 #pragma mark - Setters override
@@ -230,6 +253,8 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
         copy->_gain = _gain;
         copy->_drc = _drc;
+
+        copy->_container = _container;
     }
 
     return copy;
@@ -248,6 +273,8 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
     encodeInt(_gain);
     encodeDouble(_drc);
+
+    encodeInt(_container);
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -261,6 +288,8 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
     decodeInt(_gain);
     decodeDouble(_drc);
+
+    decodeInt(_container);
 
     return self;
 }

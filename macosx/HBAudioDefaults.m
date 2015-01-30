@@ -38,6 +38,13 @@
     [super dealloc];
 }
 
+- (void)addTrack
+{
+    HBAudioTrackPreset *track = [[HBAudioTrackPreset alloc] initWithContainer:self.container];
+    [self insertObject:track inTracksArrayAtIndex:[self countOfTracksArray]];
+    [track release];
+}
+
 - (NSArray *)audioEncoderFallbacks
 {
     NSMutableArray *fallbacks = [[NSMutableArray alloc] init];
@@ -309,6 +316,28 @@
     decodeBool(_secondaryEncoderMode);
 
     return self;
+}
+
+#pragma mark KVC
+
+- (NSUInteger)countOfTracksArray
+{
+    return self.tracksArray.count;
+}
+
+- (HBAudioTrackPreset *)objectInTracksArrayAtIndex:(NSUInteger)index
+{
+    return self.tracksArray[index];
+}
+
+- (void)insertObject:(HBAudioTrackPreset *)track inTracksArrayAtIndex:(NSUInteger)index;
+{
+    [self.tracksArray insertObject:track atIndex:index];
+}
+
+- (void)removeObjectFromTracksArrayAtIndex:(NSUInteger)index
+{
+    [self.tracksArray removeObjectAtIndex:index];
 }
 
 @end

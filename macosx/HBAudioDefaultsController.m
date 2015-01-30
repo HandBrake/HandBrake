@@ -76,7 +76,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
     }
     else
     {
-        [self.tracksController add:sender];
+        [self.settings addTrack];
     }
 }
 

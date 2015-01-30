@@ -13,6 +13,9 @@
  */
 @interface HBAudioTrackPreset : NSObject <NSCoding, NSCopying>
 
+- (instancetype)initWithContainer:(int)container;
+- (void)containerChanged:(int)container;
+
 /**
  *  track properties.
  */

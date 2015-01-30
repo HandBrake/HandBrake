@@ -24,6 +24,11 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 
 @property (nonatomic, readwrite, retain) NSMutableArray *tracksArray;
 
+/**
+ *  Adds a new track preset.
+ */
+- (void)addTrack;
+
 @property(nonatomic, readwrite) BOOL allowAACPassthru;
 @property(nonatomic, readwrite) BOOL allowAC3Passthru;
 @property(nonatomic, readwrite) BOOL allowDTSHDPassthru;
