@@ -34,6 +34,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         _qualityMaxValue = 51.0f;
         _job = job;
 
+        _preset = @"medium";
+        _tune = @"";
+        _profile = @"auto";
+        _level = @"auto";
+
         [self updateQualityBounds];
 
         _notificationsEnabled = YES;
@@ -511,9 +516,9 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         {
             // preset does not use the x264 preset system, reset the widgets.
             self.preset = @"medium";
-            self.tune = nil;
-            self.profile = nil;
-            self.level = nil;
+            self.tune = @"";
+            self.profile = @"auto";
+            self.level = @"auto";
             self.fastDecode = NO;
 
             // x264UseAdvancedOptions is not set (legacy preset)
