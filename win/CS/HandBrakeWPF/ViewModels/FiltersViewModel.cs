@@ -301,7 +301,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedDenoise);
 
                 // Show / Hide the Custom Control
-                this.ShowDenoiseCustom = this.CurrentTask.Denoise == Denoise.hqdn3d && this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
+                this.ShowDenoiseCustom = this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
 
                 this.SelectedDenoisePreset = this.CurrentTask.Denoise == Denoise.hqdn3d ? DenoisePreset.Weak : DenoisePreset.Ultralight; // Default so we don't have an invalid preset.
