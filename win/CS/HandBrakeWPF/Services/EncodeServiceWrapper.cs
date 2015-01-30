@@ -48,7 +48,7 @@ namespace HandBrakeWPF.Services
         /// </param>
         public EncodeServiceWrapper(IUserSettingService userSettingService)
         {
-            var useLibHb = AppArguments.UseLibHb ? AppArguments.UseLibHb : userSettingService.GetUserSetting<bool>(UserSettingConstants.UseLibHb);
+            var useLibHb = true;
             var useProcessIsolation =
                 userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
             var port = userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);

@@ -107,11 +107,6 @@ namespace HandBrakeWPF
         public const string ServerPort = "ServerPort";
 
         /// <summary>
-        /// Enable the use of LibHb instead of HandBrakeCLI
-        /// </summary>
-        public const string UseLibHb = "UseLibHb";
-
-        /// <summary>
         /// Growl Encodes
         /// </summary>
         public const string GrowlEncode = "GrowlEncode";

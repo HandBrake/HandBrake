@@ -328,19 +328,11 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20" Visibility="Visible">
 
-                        <TextBlock Text="Encode Engine" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="Encode Engine" FontSize="14" Margin="0,0,0,10" Visibility="Collapsed"/>
 
                         <StackPanel Orientation="Vertical"  Margin="20,0,0,0">
-                                   
-                            <CheckBox Content="Use LibHB instead of HandBrakeCLI.exe for encoding." Margin="0,5,0,5" IsChecked="{Binding EnableLibHb}"  />
-                            <TextBlock Text="LibHB" FontWeight="Bold" />
-                            <TextBlock Text="Accessing LibHB directly, allows the app to pause and restart encodes. Process isolation is not currently supported, so a crash will prevent the rest of the queue from completing."
-                                       TextWrapping="Wrap" Margin="10,0,10,5"/>
-                            <TextBlock Text="HandBrakeCLI.exe" FontWeight="Bold" />
-                            <TextBlock Text="Using HandBrakeCLI.exe provides process isolation so a crash during an encode won't prevent the rest of the queue from completing. You won't however be able to pause encodes."
-                                       TextWrapping="Wrap" Margin="10,0,10,5"/>
-                            
-                            
+
+
                             <CheckBox Content="Enable Process Isolation (Run Encodes via an intermediate service)" Margin="20,10,0,0" IsChecked="{Binding EnableProcessIsolation}" Visibility="Collapsed" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="Collapsed">
                                 <TextBlock Text="Server Port:" VerticalAlignment="Center" />

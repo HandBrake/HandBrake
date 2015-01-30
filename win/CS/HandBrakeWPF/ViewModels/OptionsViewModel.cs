@@ -271,11 +271,6 @@ namespace HandBrakeWPF.ViewModels
         private int serverPort;
 
         /// <summary>
-        /// Backing field for EnableLibHb
-        /// </summary>
-        private bool enableLibHb;
-
-        /// <summary>
         /// The show advanced tab backing field.
         /// </summary>
         private bool showAdvancedTab;
@@ -1100,22 +1095,6 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether enable lib hb.
         /// </summary>
-        public bool EnableLibHb
-        {
-            get
-            {
-                return this.enableLibHb;
-            }
-            set
-            {
-                this.enableLibHb = value;
-                this.NotifyOfPropertyChange(() => this.EnableLibHb);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether enable lib hb.
-        /// </summary>
         public bool ShowAdvancedTab
         {
             get
@@ -1567,7 +1546,6 @@ namespace HandBrakeWPF.ViewModels
             int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
             this.ServerPort = port;
             this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
-            this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseLibHb);
         }
 
         /// <summary>
@@ -1630,7 +1608,6 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
             userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
             userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString(CultureInfo.InvariantCulture));
-            userSettingService.SetUserSetting(UserSettingConstants.UseLibHb, this.EnableLibHb);
         }
 
         /// <summary>
