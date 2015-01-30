@@ -86,7 +86,9 @@ FONTCONFIG.CONFIGURE.extra += \
     LIBXML2_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lxml2" \
     LIBXML2_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/libxml2" \
     --with-fcpath=/usr/X11/lib/X11/fontconfig \
-    --with-cache-dir=/usr/X11/var/cache/fontconfig
+    --with-cache-dir=~/Library/Caches/fontconfig \
+    --with-default-fonts=/Library/Fonts \
+    --with-add-fonts=/System/Library/Fonts,~/Library/Fonts
 else ifeq (linux,$(BUILD.system))
 FONTCONFIG.CONFIGURE.extra += \
     --with-fcpath=/etc/fonts \
