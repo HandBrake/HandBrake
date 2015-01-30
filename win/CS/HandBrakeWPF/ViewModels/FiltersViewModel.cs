@@ -423,7 +423,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
 
                 // Show / Hide the Custom Control
-                this.ShowDenoiseCustom = this.CurrentTask.Denoise == Denoise.hqdn3d && this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
+                this.ShowDenoiseCustom = this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
                 if (value != DenoisePreset.Custom) this.CustomDenoise = string.Empty;
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
@@ -471,7 +471,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.SelectedDenoise == Denoise.NLMeans;
+                return this.SelectedDenoise == Denoise.NLMeans && this.SelectedDenoisePreset != DenoisePreset.Custom;
             }
         }
 

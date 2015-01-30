@@ -446,8 +446,7 @@ namespace HandBrake.Interop.Json.Factories
                     : hb_filter_ids.HB_FILTER_NLMEANS;
 
                 string settings;
-                if (job.Denoise == Denoise.hqdn3d
-                    && !string.IsNullOrEmpty(job.CustomDenoise))
+                if (!string.IsNullOrEmpty(job.CustomDenoise))
                 {
                     settings = job.CustomDenoise;
                 }

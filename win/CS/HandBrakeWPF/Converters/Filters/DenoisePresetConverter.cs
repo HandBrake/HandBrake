@@ -54,7 +54,7 @@ namespace HandBrakeWPF.Converters.Filters
 
                 if (denoiseChoice == Denoise.NLMeans)
                 {
-                    return new List<DenoisePreset> { DenoisePreset.Ultralight, DenoisePreset.Light, DenoisePreset.Medium, DenoisePreset.Strong };
+                    return new List<DenoisePreset> { DenoisePreset.Ultralight, DenoisePreset.Light, DenoisePreset.Medium, DenoisePreset.Strong, DenoisePreset.Custom };
                 } 
             }
 
