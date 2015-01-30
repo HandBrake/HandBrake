@@ -679,30 +679,13 @@ static void do_job(hb_job_t *job)
         }
         if (one_burned)
         {
-            int found = 0;
-            // Check that the HB_FILTER_RENDER_SUB is in the filter chain.
-            // We can not add it automatically because it needs crop
-            // values which only the frontend knows.
-            if (job->list_filter != NULL)
-            {
-                int ii;
-                for (ii = 0; ii < hb_list_count(job->list_filter); ii++)
-                {
-                    hb_filter_object_t *filter;
-                    filter = hb_list_item(job->list_filter, ii);
-                    if (filter->id == HB_FILTER_RENDER_SUB)
-                    {
-                        found = 1;
-                        break;
-                    }
-                }
-            }
-            if (!found)
-            {
-                // If this happens, it is a programming error that
-                // needs to be fixed in the frontend
-                hb_error("Subtitle burned, but no rendering filter");
-            }
+            // Add subtitle rendering filter
+            // Note that if the filter is already in the filter chain, this
+            // has no effect. Note also that this means the front-end is
+            // not required to add the subtitle rendering filter since
+            // we will always try to do it here.
+            hb_filter_object_t *filter = hb_filter_init(HB_FILTER_RENDER_SUB);
+            hb_add_filter(job, filter, NULL);
         }
     }
 
@@ -900,6 +883,23 @@ static void do_job(hb_job_t *job)
         memcpy(job->crop, init.crop, sizeof(int[4]));
         job->vrate = init.vrate;
         job->cfr = init.cfr;
+
+        // Perform filter post_init which informs filters of final
+        // job configuration. e.g. rendersub filter needs to know the
+        // final crop dimensions.
+        for( i = 0; i < hb_list_count( job->list_filter ); )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            if (filter->post_init != NULL && filter->post_init(filter, job))
+            {
+                hb_log( "Failure to initialise filter '%s', disabling",
+                        filter->name );
+                hb_list_rem( job->list_filter, filter );
+                hb_filter_close( &filter );
+                continue;
+            }
+            i++;
+        }
     }
     else
     {
