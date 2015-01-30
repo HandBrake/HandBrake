@@ -423,6 +423,7 @@ static int avformatInit( hb_mux_object_t * m )
         else
         {
             track->st->codec->time_base = m->time_base;
+            track->st->time_base = m->time_base;
         }
 
         priv_data = NULL;
