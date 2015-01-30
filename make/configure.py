@@ -1763,12 +1763,11 @@ int main()
         select.doc_add( doc )
 
     doc.addBlank()
+    doc.add( 'GCC.archs', arch.mode.mode )
     if build.match( '*-*-darwin*' ):
-        doc.add( 'GCC.archs', arch.mode.mode )
         doc.add( 'GCC.sysroot', cfg.sysroot_dir )
         doc.add( 'GCC.minver', cfg.minver )
     else:
-        doc.add( 'GCC.archs', '' )
         doc.add( 'GCC.sysroot', '' )
         doc.add( 'GCC.minver', '' )
 

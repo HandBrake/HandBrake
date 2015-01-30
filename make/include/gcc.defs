@@ -46,7 +46,13 @@ GCC.args.dylib     = -dynamiclib
 GCC.args.ML        = -fmessage-length=0
 GCC.args.H         = -H
 GCC.args.W         = -W$(1)
-GCC.args.archs     = -arch $(1)
+ifeq (darwin,$(BUILD.system))
+    GCC.args.archs     = -arch $(1)
+else ifeq (linux-i686,$(BUILD.system)-$(BUILD.arch))
+    GCC.args.archs     = -msse2
+else
+    GCC.args.archs     =
+endif
 GCC.args.sysroot   = --sysroot=$(1)
 GCC.args.minver    = -mmacosx-version-min=$(1)
 GCC.args.vis       = -fvisibility=hidden
