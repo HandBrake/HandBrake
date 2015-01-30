@@ -408,28 +408,34 @@ namespace HandBrake.ApplicationServices.Utilities
                     case DenoisePreset.Strong:
                         query += " --nlmeans=\"strong\"";
                         break;
+                    case DenoisePreset.Custom:
+                        query += string.Format(" --denoise=\"{0}\"", task.CustomDenoise);
+                        break;
                     default:
                         query += string.Empty;
                         break;
                 }
 
-                switch (task.DenoiseTune)
+                if (task.DenoisePreset != DenoisePreset.Custom)
                 {
-                    case DenoiseTune.Animation:
-                        query += " --nlmeans-tune=\"animation\"";
-                        break;
-                    case DenoiseTune.Film:
-                        query += " --nlmeans-tune=\"film\"";
-                        break;
-                    case DenoiseTune.Grain:
-                        query += " --nlmeans-tune=\"grain\"";
-                        break;
-                    case DenoiseTune.HighMotion:
-                        query += " --nlmeans-tune=\"highmotion\"";
-                        break;
-                    default:
-                        query += string.Empty;
-                        break;
+                    switch (task.DenoiseTune)
+                    {
+                        case DenoiseTune.Animation:
+                            query += " --nlmeans-tune=\"animation\"";
+                            break;
+                        case DenoiseTune.Film:
+                            query += " --nlmeans-tune=\"film\"";
+                            break;
+                        case DenoiseTune.Grain:
+                            query += " --nlmeans-tune=\"grain\"";
+                            break;
+                        case DenoiseTune.HighMotion:
+                            query += " --nlmeans-tune=\"highmotion\"";
+                            break;
+                        default:
+                            query += string.Empty;
+                            break;
+                    }
                 }
             }
 
