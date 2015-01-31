@@ -42,11 +42,6 @@
     [fChapterTable reloadData];
 }
 
-- (IBAction)createChapterMarkersChanged:(id)sender
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBMixdownChangedNotification object:self];
-}
-
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
     return self.chapterTitles.count;

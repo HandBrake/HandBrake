@@ -83,8 +83,6 @@
 
         presetManager = manager;
         _selectedPreset = [presetManager.defaultPreset retain];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:nil];
     }
 
     return self;
@@ -472,11 +470,14 @@
         [[NSNotificationCenter defaultCenter] removeObserver:_job.picture];
         [[NSNotificationCenter defaultCenter] removeObserver:_job.filters];
         [[NSNotificationCenter defaultCenter] removeObserver:_job.video];
+        [[NSNotificationCenter defaultCenter] removeObserver:_job.audio];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:job];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:job.video];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:job.audio];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBChaptersChangedNotification object:job];
     }
 
     // Retain the new job

@@ -17,8 +17,8 @@
 #import "HBAudio.h"
 #import "HBSubtitles.h"
 
-extern NSString *HBMixdownChangedNotification;
 extern NSString *HBContainerChangedNotification;
+extern NSString *HBChaptersChangedNotification;
 
 /**
  *  A flag to indicate the job's state

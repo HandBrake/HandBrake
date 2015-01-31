@@ -14,8 +14,8 @@
 
 #include "hb.h"
 
-NSString *HBMixdownChangedNotification         = @"HBMixdownChangedNotification";
-NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
+NSString *HBContainerChangedNotification = @"HBContainerChangedNotification";
+NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 @implementation HBJob
 
@@ -98,11 +98,8 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
     [self.subtitles containerChanged:container];
     [self.video containerChanged];
 
-    /* post a notification for any interested observers to indicate that our video container has changed */
-    [[NSNotificationCenter defaultCenter] postNotification:
-     [NSNotification notificationWithName:HBContainerChangedNotification
-                                   object:self
-                                 userInfo:nil]];
+    // post a notification for any interested observers to indicate that our video container has changed
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBContainerChangedNotification object:self];
 }
 
 - (void)setTitle:(HBTitle *)title
@@ -110,6 +107,12 @@ NSString *HBContainerChangedNotification       = @"HBContainerChangedNotificatio
     _title = title;
     self.range.title = title;
     self.picture.title = title;
+}
+
+- (void)setChaptersEnabled:(BOOL)chaptersEnabled
+{
+    _chaptersEnabled = chaptersEnabled;
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBChaptersChangedNotification object:self];
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
