@@ -217,26 +217,21 @@
 
     // Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
     BOOL one_burned = NO;
-    int i = 0;
-
     for (NSDictionary *subtitleDict in self.subtitles.tracks)
     {
+        int subtitle = [subtitleDict[keySubTrackIndex] intValue];
+        BOOL force = [subtitleDict[keySubTrackForced] boolValue];
+        BOOL burned = [subtitleDict[keySubTrackBurned] boolValue];
+        BOOL def = [subtitleDict[keySubTrackDefault] boolValue];
+
         // Skip the "None" track.
-        if (i == self.subtitles.tracks.count - 1)
+        if (subtitle == -2)
         {
             continue;
         }
 
-        int subtitle = [subtitleDict[keySubTrackIndex] intValue];
-        int force = [subtitleDict[keySubTrackForced] intValue];
-        int burned = [subtitleDict[keySubTrackBurned] intValue];
-        int def = [subtitleDict[keySubTrackDefault] intValue];
-
-        // if i is 0, then we are in the first item of the subtitles which we need to
-        // check for the "Foreign Audio Search" which would be keySubTrackIndex of -1
-
-        // if we are on the first track and using "Foreign Audio Search"
-        if (i == 0 && subtitle == -1)
+        // we need to check for the "Foreign Audio Search" which would be keySubTrackIndex of -1
+        if (subtitle == -1)
         {
             job->indepth_scan = 1;
 
@@ -261,7 +256,7 @@
 
                 sub_config.offset = [subtitleDict[keySubTrackSrtOffset] intValue];
 
-                // we need to srncpy file name and codeset
+                // we need to strncpy file name and codeset
                 strncpy(sub_config.src_filename, [subtitleDict[keySubTrackSrtFilePath] UTF8String], 255);
                 sub_config.src_filename[255] = 0;
                 strncpy(sub_config.src_codeset, [subtitleDict[keySubTrackSrtCharCode] UTF8String], 39);
@@ -276,7 +271,7 @@
                     // Only allow one subtitle to be burned into the video
                     if (one_burned)
                         continue;
-                    one_burned = TRUE;
+                    one_burned = YES;
                     sub_config.dest = RENDERSUB;
                 }
 
@@ -302,7 +297,7 @@
                     // Only allow one subtitle to be burned into the video
                     if (one_burned)
                         continue;
-                    one_burned = TRUE;
+                    one_burned = YES;
                     sub_config.dest = RENDERSUB;
                 }
 
@@ -311,7 +306,6 @@
                 hb_subtitle_add(job, &sub_config, subtitle);
             }
         }
-        i++;
     }
 
     if (one_burned)

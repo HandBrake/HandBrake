@@ -157,7 +157,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 - (NSMutableDictionary *)createSubtitleTrack
 {
     NSMutableDictionary *newSubtitleTrack = [[NSMutableDictionary alloc] init];
-    newSubtitleTrack[keySubTrackIndex] = @0;
+    newSubtitleTrack[keySubTrackIndex] = @(-2);
     newSubtitleTrack[keySubTrackSelectionIndex] = @0;
     newSubtitleTrack[keySubTrackName] = @"None";
     newSubtitleTrack[keySubTrackForced] = @0;
