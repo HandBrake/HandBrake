@@ -4,7 +4,7 @@
 // </copyright>
 // <summary>
 //   Background Service Connector.
-//   HandBrake has the ability to connect to a service app that will control HandBrakeCLI or Libhb.
+//   HandBrake has the ability to connect to a service app that will control Libhb.
 //   This acts as process isolation.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
@@ -16,14 +16,13 @@ namespace HandBrake.ApplicationServices.Isolation
     using System.ServiceModel;
     using System.Threading;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// Background Service Connector.
-    /// HandBrake has the ability to connect to a service app that will control HandBrakeCLI or Libhb. 
+    /// HandBrake has the ability to connect to a service app that will control Libhb. 
     /// This acts as process isolation.
     /// </summary>
     public class BackgroundServiceConnector : IHbServiceCallback, IDisposable
@@ -83,9 +82,9 @@ namespace HandBrake.ApplicationServices.Isolation
                 ProcessStartInfo processStartInfo = new ProcessStartInfo(
                     "HandBrake.Server.exe", port)
                 {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
+                    UseShellExecute = false, 
+                    CreateNoWindow = true, 
+                    RedirectStandardOutput = true, 
                 };
 
                 backgroundProcess = new Process { StartInfo = processStartInfo };
@@ -101,8 +100,8 @@ namespace HandBrake.ApplicationServices.Isolation
                     try
                     {
                         pipeFactory = new DuplexChannelFactory<IServerService>(
-                            new InstanceContext(this),
-                            new NetTcpBinding(),
+                            new InstanceContext(this), 
+                            new NetTcpBinding(), 
                             new EndpointAddress(string.Format("net.tcp://127.0.0.1:{0}/IHbService", port)));
 
                         // Connect and Subscribe to the Server

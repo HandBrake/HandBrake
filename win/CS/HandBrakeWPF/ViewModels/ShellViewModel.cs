@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System.IO;
-    using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -44,11 +42,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool showOptions;
 
-        /// <summary>
-        /// The show instant.
-        /// </summary>
-        private bool showInstant;
-
         #endregion
 
         /// <summary>
@@ -60,19 +53,8 @@ namespace HandBrakeWPF.ViewModels
         public ShellViewModel(IErrorService errorService)
         {
             this.errorService = errorService;
-
-            if (!AppArguments.IsInstantHandBrake)
-            {
-                this.showMainWindow = true;
-                this.showOptions = false;
-                this.showInstant = false;
-            }
-            else
-            {
-                this.showMainWindow = false;
-                this.showOptions = false;
-                this.showInstant = true;
-            }
+            this.showMainWindow = true;
+            this.showOptions = false;
         }
 
         /// <summary>
@@ -87,25 +69,16 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.ShowMainWindow = true;
                 this.ShowOptions = false;
-                this.ShowInstant = false;
             }
             else if (window == ShellWindow.OptionsWindow)
             {
                 this.ShowOptions = true;
-                this.ShowMainWindow = false;
-                this.ShowInstant = false;
-            }
-            else if (window == ShellWindow.InstantMainWindow)
-            {
-                this.ShowInstant = true;
-                this.ShowOptions = false;
                 this.ShowMainWindow = false;
             }
             else
             {
                 this.ShowMainWindow = true;
                 this.ShowOptions = false;
-                this.ShowInstant = false;
             }
         }
 
@@ -120,11 +93,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets OptionsViewModel.
         /// </summary>
         public IOptionsViewModel OptionsViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the instant view model.
-        /// </summary>
-        public IInstantViewModel InstantViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowMainWindow.
@@ -159,29 +127,13 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether ShowInstant.
-        /// </summary>
-        public bool ShowInstant
-        {
-            get
-            {
-                return this.showInstant;
-            }
-            set
-            {
-                this.showInstant = value;
-                this.NotifyOfPropertyChange(() => this.ShowInstant);
-            }
-        }
-
-        /// <summary>
         /// Gets WindowTitle.
         /// </summary>
         public string WindowTitle
         {
             get
             {
-                return AppArguments.IsInstantHandBrake ? "Instant HandBrake" : "HandBrake";
+                return "HandBrake";
             }
         }
 

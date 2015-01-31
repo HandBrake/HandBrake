@@ -236,16 +236,11 @@
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\PrePostActionService.cs" />
     <Compile Include="ViewModels\AdvancedViewModel.cs" />
-    <Compile Include="ViewModels\InstantViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IInstantViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IX264ViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
     <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
     <Compile Include="Views\AdvancedView.xaml.cs">
       <DependentUpon>AdvancedView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\InstantView.xaml.cs">
-      <DependentUpon>InstantView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
@@ -421,10 +416,6 @@
     <Page Include="Views\AdvancedView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\InstantView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\QueueSelectionView.xaml">
       <Generator>MSBuild:Compile</Generator>

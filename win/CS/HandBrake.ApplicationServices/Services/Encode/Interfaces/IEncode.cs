@@ -42,12 +42,12 @@ namespace HandBrake.ApplicationServices.Services.Encode.Interfaces
     public interface IEncode
     {
         /// <summary>
-        /// Fires when a new CLI Job starts
+        /// Fires when a new Job starts
         /// </summary>
         event EventHandler EncodeStarted;
 
         /// <summary>
-        /// Fires when a CLI job finishes.
+        /// Fires when a job finishes.
         /// </summary>
         event EncodeCompletedStatus EncodeCompleted;
 
@@ -100,7 +100,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Interfaces
         void Resume();
 
         /// <summary>
-        /// Kill the CLI process
+        /// Kill the process
         /// </summary>
         void Stop();
 
@@ -114,10 +114,5 @@ namespace HandBrake.ApplicationServices.Services.Encode.Interfaces
         /// The configuration.
         /// </param>
         void ProcessLogs(string destination, HBConfiguration configuration);
-
-        /// <summary>
-        /// Shutdown the service.
-        /// </summary>
-        void Shutdown();
     }
 }

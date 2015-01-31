@@ -1064,10 +1064,7 @@ namespace HandBrakeWPF.ViewModels
                                     Resources.Notice, MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Queue Recovery
-            if (!AppArguments.IsInstantHandBrake)
-            {
-                QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
-            }
+            QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
 
             this.SelectedPreset = this.presetService.DefaultPreset;
 
@@ -1085,7 +1082,7 @@ namespace HandBrakeWPF.ViewModels
         public void Shutdown()
         {
             // Shutdown Service
-            this.encodeService.Shutdown();
+            this.encodeService.Stop();
 
             // Unsubscribe from Events.
             this.scanService.ScanStared -= this.ScanStared;
@@ -1452,18 +1449,6 @@ namespace HandBrakeWPF.ViewModels
         public void ExitApplication()
         {
             Application.Current.Shutdown();
-        }
-
-        /// <summary>
-        /// DEBUG: Show CLI Query for settings+6
-        /// </summary>
-        public void ShowCliQuery()
-        {
-            this.errorService.ShowMessageBox(
-                QueryGeneratorUtility.GenerateQuery(this.CurrentTask, HBConfigurationFactory.Create()),
-                "CLI Query",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
         }
 
         /// <summary>
@@ -2065,14 +2050,8 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
-                        string josPending = string.Empty;
-                        if (!AppArguments.IsInstantHandBrake)
-                        {
-                            josPending = Resources.Main_JobsPending_addon;
-                        }
-
                         this.ProgramStatusLabel =
-                            string.Format("{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}" + josPending,
+                            string.Format("{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}" + Resources.Main_JobsPending_addon,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,

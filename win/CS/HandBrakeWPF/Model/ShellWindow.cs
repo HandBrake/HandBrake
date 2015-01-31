@@ -16,6 +16,5 @@ namespace HandBrakeWPF.Model
     {
         MainWindow,
         OptionsWindow,
-        InstantMainWindow
     }
 }

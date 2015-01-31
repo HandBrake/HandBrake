@@ -10,7 +10,6 @@
 namespace HandBrake.ApplicationServices.Services.Encode
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -21,7 +20,6 @@ namespace HandBrake.ApplicationServices.Services.Encode
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
@@ -59,19 +57,19 @@ namespace HandBrake.ApplicationServices.Services.Encode
         public EncodeBase()
         {
             this.logBuffer = new StringBuilder();
-            this.header = GeneralUtilities.CreateCliLogHeader();
+            this.header = GeneralUtilities.CreateLogHeader();
             this.LogIndex = 0;
         }
 
         #region Events
 
         /// <summary>
-        /// Fires when a new CLI QueueTask starts
+        /// Fires when a new QueueTask starts
         /// </summary>
         public event EventHandler EncodeStarted;
 
         /// <summary>
-        /// Fires when a CLI QueueTask finishes.
+        /// Fires when a QueueTask finishes.
         /// </summary>
         public event EncodeCompletedStatus EncodeCompleted;
 
@@ -83,6 +81,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Gets or sets a value indicating whether IsEncoding.
         /// </summary>
@@ -236,7 +235,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
         }
 
         /// <summary>
-        /// Pase the CLI status output (from standard output)
+        /// Pase the status output (from standard output)
         /// </summary>
         /// <param name="encodeStatus">
         /// The encode Status.
@@ -252,7 +251,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
             try
             {
                 Match m = Regex.Match(
-                    encodeStatus,
+                    encodeStatus, 
                     @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
 
                 if (m.Success)
@@ -278,16 +277,16 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
                     EncodeProgressEventArgs eventArgs = new EncodeProgressEventArgs
                                                             {
-                                                                AverageFrameRate = avgFps,
-                                                                CurrentFrameRate = currentFps,
+                                                                AverageFrameRate = avgFps, 
+                                                                CurrentFrameRate = currentFps, 
                                                                 EstimatedTimeLeft =
                                                                     Converters.EncodeToTimespan(
-                                                                        remaining),
-                                                                PercentComplete = percent,
-                                                                Task = currentTask,
-                                                                TaskCount = totalTasks,
+                                                                        remaining), 
+                                                                PercentComplete = percent, 
+                                                                Task = currentTask, 
+                                                                TaskCount = totalTasks, 
                                                                 ElapsedTime =
-                                                                    DateTime.Now - startTime,
+                                                                    DateTime.Now - startTime, 
                                                             };
 
                     return eventArgs;
@@ -319,13 +318,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
 
             try
             {
-                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task), encodeQueueTask.Configuration);
                 this.logBuffer = new StringBuilder();
-
-                if (!isLibhb)
-                {
-                    this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
-                }
 
                 this.logBuffer.AppendLine();
 
@@ -344,10 +337,6 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 {
                     this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
                     this.fileWriter.WriteLine(this.header);
-                    if (!isLibhb)
-                    {
-                        this.fileWriter.WriteLine("CLI Query: {0}", query);
-                    }
                     this.fileWriter.WriteLine();
                 }
             }

@@ -94,11 +94,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void Shutdown();
 
         /// <summary>
-        /// The show cli query.
-        /// </summary>
-        void ShowCliQuery();
-
-        /// <summary>
         /// The files dropped on window.
         /// </summary>
         /// <param name="e">

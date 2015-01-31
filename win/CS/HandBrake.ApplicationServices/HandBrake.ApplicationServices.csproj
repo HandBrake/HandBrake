@@ -159,7 +159,6 @@
     </Compile>
     <Compile Include="ServicesWindsorInstaller.cs" />
     <Compile Include="Services\Encode\EncodeBase.cs" />
-    <Compile Include="Services\Encode\EncodeService.cs" />
     <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Scan\Interfaces\IScan.cs" />
@@ -169,7 +168,6 @@
     <Compile Include="Utilities\CharCodesUtilities.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />
-    <Compile Include="Utilities\QueryGeneratorUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

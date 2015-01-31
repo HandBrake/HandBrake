@@ -8,7 +8,7 @@
   Usage: 
     msbuild build.xml /p:Platform=x86 /t:Nightly
     msbuild build.xml /p:Platform=x86 /t:Release
-  Reuqires: HandBrakeCli.exe to be in the release folder.
+  Reuqires: libhb.dll to be in the release folder.
   
 -->
 <Project DefaultTargets="Nightly" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">

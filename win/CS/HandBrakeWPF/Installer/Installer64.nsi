@@ -132,7 +132,6 @@ Section "Handbrake" SEC01
   
   ; Install Files
   File "Handbrake.exe"
-  File "HandBrakeCLI.exe"
   CreateDirectory "$SMPROGRAMS\Handbrake"
   CreateShortCut "$SMPROGRAMS\Handbrake\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
   CreateShortCut "$DESKTOP\Handbrake.lnk" "$INSTDIR\Handbrake.exe"

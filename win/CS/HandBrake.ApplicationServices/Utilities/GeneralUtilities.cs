@@ -108,12 +108,12 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
-        /// Add the CLI Query to the Log File.
+        /// Generate the header for the log file.
         /// </summary>
         /// <returns>
-        /// The create cli log header.
+        /// The generatedlog header.
         /// </returns>
-        public static StringBuilder CreateCliLogHeader()
+        public static StringBuilder CreateLogHeader()
         {
             var logHeader = new StringBuilder();
 

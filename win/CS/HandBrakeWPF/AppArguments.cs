@@ -14,14 +14,5 @@ namespace HandBrakeWPF
     /// </summary>
     public class AppArguments
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether is instant hand brake.
-        /// </summary>
-        public static bool IsInstantHandBrake { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether enable lib hb.
-        /// </summary>
-        public static bool UseLibHb { get; set; }
     }
 }

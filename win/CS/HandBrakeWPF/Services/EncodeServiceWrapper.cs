@@ -48,38 +48,30 @@ namespace HandBrakeWPF.Services
         /// </param>
         public EncodeServiceWrapper(IUserSettingService userSettingService)
         {
-            var useLibHb = true;
             var useProcessIsolation =
                 userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
             var port = userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);
 
-            if (useLibHb)
+            try
             {
-                try
+                if (useProcessIsolation)
                 {
-                    if (useProcessIsolation)
-                    {
-                        this.encodeService = new IsolatedEncodeService(port);
-                    }
-                    else
-                    {
-                        this.encodeService = new LibEncode();
-                    }
+                    this.encodeService = new IsolatedEncodeService(port);
                 }
-                catch (Exception exc)
+                else
                 {
-                    // Try to recover from errors.
-                    throw new GeneralApplicationException(
-                        "Unable to initialise LibHB or Background worker service", 
-                        "Falling back to using HandBrakeCLI.exe. Setting has been reset", 
-                        exc);
+                    this.encodeService = new LibEncode();
                 }
             }
-            else
+            catch (Exception exc)
             {
-                this.encodeService = new EncodeService();
+                // Try to recover from errors.
+                throw new GeneralApplicationException(
+                    "Unable to initialise LibHB or Background worker service",
+                    "HandBrake will not be able to operate correctly.",
+                    exc);
             }
-
+  
             this.encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
             this.encodeService.EncodeStarted += this.EncodeServiceEncodeStarted;
             this.encodeService.EncodeStatusChanged += this.EncodeServiceEncodeStatusChanged;
@@ -188,7 +180,7 @@ namespace HandBrakeWPF.Services
         /// </summary>
         public void Shutdown()
         {
-            this.encodeService.Shutdown();
+            this.encodeService.Stop();
             this.encodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.encodeService.EncodeStarted -= this.EncodeServiceEncodeStarted;
             this.encodeService.EncodeStatusChanged -= this.EncodeServiceEncodeStatusChanged;

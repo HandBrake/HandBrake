@@ -39,13 +39,6 @@ namespace HandBrake.ApplicationServices.Services.Scan
     /// </summary>
     public class LibScan : IScan
     {
-        /*
-         * TODO
-         * 1. Expose the Previews code.
-         * 2. Cleanup old instances.
-         * 
-         */
-
         #region Private Variables
 
         /// <summary>
@@ -101,7 +94,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         public LibScan()
         {
             this.logging = new StringBuilder();
-            this.header = GeneralUtilities.CreateCliLogHeader();
+            this.header = GeneralUtilities.CreateLogHeader();
         }
 
         #region Events

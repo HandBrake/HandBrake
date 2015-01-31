@@ -86,7 +86,6 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<ICountdownAlertViewModel>().ImplementedBy<CountdownAlertViewModel>().LifeStyle.Is(LifestyleType.Singleton));
                  
             // Experimental Services and Windows.
-            this.windsorContainer.Register(Component.For<IInstantViewModel>().ImplementedBy<InstantViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IStaticPreviewViewModel>().ImplementedBy<StaticPreviewViewModel>().LifeStyle.Is(LifestyleType.Singleton));
                 
             // Tab Components

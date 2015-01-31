@@ -53,22 +53,11 @@ namespace HandBrakeWPF
                 return;
             }
 
-            if (e.Args.Any(f => f.Equals("--instant")))
-            {
-                AppArguments.IsInstantHandBrake = true;
-                MessageBox.Show("Instant HandBrake is just a prototype for toying with ideas. It may or may not work, or even be included in future builds.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-
             if (e.Args.Any(f => f.Equals("--reset")))
             {
                 HandBrakeApp.ResetToDefaults();
                 Application.Current.Shutdown();
                 return;
-            }
-
-            if (e.Args.Any(f => f.Equals("--enable-libhb")))
-            {
-                AppArguments.UseLibHb = true;
             }
 
             base.OnStartup(e);

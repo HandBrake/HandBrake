@@ -174,28 +174,23 @@ namespace HandBrake.ApplicationServices.Services.Encode
         }
 
         /// <summary>
-        /// Kill the CLI process
+        /// Kill the process
         /// </summary>
         public override void Stop()
         {
             try
             {
                 this.IsEncoding = false;
-                this.instance.StopEncode();
-                ServiceLogMessage("Encode Stopped");
+                if (instance != null)
+                {
+                    this.instance.StopEncode();
+                    ServiceLogMessage("Encode Stopped");
+                }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                // Do Nothing.
+                Debug.WriteLine(exc);
             }
-        }
-
-        /// <summary>
-        /// Shutdown the service.
-        /// </summary>
-        public void Shutdown()
-        {
-            // Nothing to do for this implementation.
         }
 
         /// <summary>

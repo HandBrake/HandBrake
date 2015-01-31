@@ -35,7 +35,5 @@
         <ContentControl x:Name="MainViewModel"  Visibility="{Binding ShowMainWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
         <ContentControl x:Name="OptionsViewModel"  Visibility="{Binding ShowOptions, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-        <views:InstantView DataContext="{Binding InstantViewModel}" 
-                               Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ShowInstant, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
     </Grid>
 </Window>

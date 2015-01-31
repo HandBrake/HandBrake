@@ -4,12 +4,14 @@
 // </copyright>
 // <summary>
 //   Interaction logic for ShellView.xaml
-// </summary> 
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Views
 {
     using System;
+    using System.ComponentModel;
+    using System.Drawing;
     using System.IO;
     using System.Windows;
     using System.Windows.Forms;
@@ -17,9 +19,6 @@ namespace HandBrakeWPF.Views
     using System.Windows.Resources;
 
     using Caliburn.Micro;
-
-    using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Services.Interfaces;
@@ -36,7 +35,7 @@ namespace HandBrakeWPF.Views
         /// <summary>
         /// The my notify icon.
         /// </summary>
-        private readonly System.Windows.Forms.NotifyIcon notifyIcon;
+        private readonly NotifyIcon notifyIcon;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellView"/> class.
@@ -50,14 +49,14 @@ namespace HandBrakeWPF.Views
 
             if (minimiseToTray)
             {
-                this.notifyIcon = new System.Windows.Forms.NotifyIcon();
+                this.notifyIcon = new NotifyIcon();
                 this.notifyIcon.ContextMenu = new ContextMenu(new[] { new MenuItem("Restore", NotifyIconClick) });
 
                 StreamResourceInfo streamResourceInfo = Application.GetResourceStream(new Uri("pack://application:,,,/handbrakepineapple.ico"));
                 if (streamResourceInfo != null)
                 {
                     Stream iconStream = streamResourceInfo.Stream;
-                    this.notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+                    this.notifyIcon.Icon = new Icon(iconStream);
                 }
                 this.notifyIcon.DoubleClick += this.NotifyIconClick;
                 this.StateChanged += this.ShellViewStateChanged;
@@ -70,7 +69,6 @@ namespace HandBrakeWPF.Views
             // Add to Queue (Ctrl+A)
             // Scan a File (Ctrl+F)
             // Scan a Folder (Ctrl+R)
-            // Show CLI Query (Ctrl+Shift+D)
 
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.S, ModifierKeys.Control)), new KeyGesture(Key.S, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.K, ModifierKeys.Control)), new KeyGesture(Key.K, ModifierKeys.Control)));
@@ -80,21 +78,12 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.F, ModifierKeys.Control)), new KeyGesture(Key.F, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.O, ModifierKeys.Control)), new KeyGesture(Key.O, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.R, ModifierKeys.Control)), new KeyGesture(Key.R, ModifierKeys.Control)));
-            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)), new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.G, ModifierKeys.Control | ModifierKeys.Shift)), new KeyGesture(Key.G, ModifierKeys.Control | ModifierKeys.Shift)));
 
             // Enable Windows 7 Taskbar progress indication.
             if (this.TaskbarItemInfo == null)
             {
                 this.TaskbarItemInfo = Win7.WindowsTaskbar;
-            }
-
-            // Window Sizing
-            if (AppArguments.IsInstantHandBrake)
-            {
-                this.SizeToContent = SizeToContent.WidthAndHeight;
-                this.MinHeight = 380;
-                this.MinWidth = 600;
             }
         }
 
@@ -129,6 +118,7 @@ namespace HandBrakeWPF.Views
                 {
                     this.ShowInTaskbar = false;
                     notifyIcon.Visible = true;
+
                     // notifyIcon.ShowBalloonTip(5000, "HandBrake", "Application Minimised", ToolTipIcon.Info);          
                 }
                 else if (this.WindowState == WindowState.Normal)
@@ -145,7 +135,7 @@ namespace HandBrakeWPF.Views
         /// <param name="e">
         /// The CancelEventArgs.
         /// </param>
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             IShellViewModel shellViewModel = this.DataContext as IShellViewModel;
 
