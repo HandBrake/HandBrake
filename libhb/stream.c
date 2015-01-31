@@ -5315,16 +5315,21 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
         default:
         {
             int len = name ? strlen( name ) : 0;
-            if( len >= 4 &&
-                ( !strcmp( name + len - 4, ".ttc" ) ||
-                  !strcmp( name + len - 4, ".TTC" ) ||
-                  !strcmp( name + len - 4, ".ttf" ) ||
-                  !strcmp( name + len - 4, ".TTF" ) ) )
+            if( len >= 4 )
             {
                 // Some attachments don't have the right mime type.
                 // So also trigger on file name extension.
-                type = FONT_TTF_ATTACH;
-                break;
+                if( !strcasecmp( name + len - 4, ".ttc" ) ||
+                    !strcasecmp( name + len - 4, ".ttf" ) )
+                {
+                    type = FONT_TTF_ATTACH;
+                    break;
+                }
+                else if( !strcasecmp( name + len - 4, ".otf" ) )
+                {
+                    type = FONT_OTF_ATTACH;
+                    break;
+                }
             }
             // Ignore unrecognized attachment type
             return;

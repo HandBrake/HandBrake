@@ -472,7 +472,8 @@ static int ssa_init( hb_filter_object_t * filter,
     {
         hb_attachment_t * attachment = hb_list_item( list_attachment, i );
 
-        if ( attachment->type == FONT_TTF_ATTACH )
+        if ( attachment->type == FONT_TTF_ATTACH ||
+             attachment->type == FONT_OTF_ATTACH )
         {
             ass_add_font(
                 pv->ssa,

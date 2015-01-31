@@ -855,7 +855,7 @@ struct hb_subtitle_s
  */
 struct hb_attachment_s
 {
-    enum attachtype { FONT_TTF_ATTACH, HB_ART_ATTACH } type;
+    enum attachtype { FONT_TTF_ATTACH, FONT_OTF_ATTACH, HB_ART_ATTACH } type;
     char *  name;
     char *  data;
     int     size;

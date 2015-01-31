@@ -780,7 +780,7 @@ static int avformatInit( hb_mux_object_t * m )
         {
             hb_attachment_t * attachment = hb_list_item( list_attachment, i );
 
-            if (attachment->type == FONT_TTF_ATTACH &&
+            if ((attachment->type == FONT_TTF_ATTACH || attachment->type == FONT_OTF_ATTACH) &&
                 attachment->size > 0)
             {
                 AVStream *st = avformat_new_stream(m->oc, NULL);
@@ -792,7 +792,15 @@ static int avformatInit( hb_mux_object_t * m )
                 avcodec_get_context_defaults3(st->codec, NULL);
 
                 st->codec->codec_type = AVMEDIA_TYPE_ATTACHMENT;
-                st->codec->codec_id = AV_CODEC_ID_TTF;
+                if (attachment->type == FONT_TTF_ATTACH)
+                {
+                    st->codec->codec_id = AV_CODEC_ID_TTF;
+                }
+                else if (attachment->type == FONT_OTF_ATTACH)
+                {
+                    st->codec->codec_id = MKBETAG( 0 ,'O','T','F');
+                    av_dict_set(&st->metadata, "mimetype", "application/vnd.ms-opentype", 0);
+                }
 
                 priv_size = attachment->size;
                 priv_data = av_malloc(priv_size);
