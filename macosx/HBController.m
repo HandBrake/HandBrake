@@ -864,10 +864,6 @@
     else
     {
         self.job = [[[HBJob alloc] initWithTitle:title andPreset:self.selectedPreset] autorelease];
-
-        // apply the current preset
-        [self applyPreset:self.selectedPreset];
-
         self.job.destURL = [self destURLForJob:self.job];
     }
 

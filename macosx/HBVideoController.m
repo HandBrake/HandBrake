@@ -273,15 +273,15 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)setupPresetsSlider
 {
+    // setup the preset slider
+    [fPresetsSlider setMaxValue:self.video.presets.count - 1];
+    [fPresetsSlider setNumberOfTickMarks:self.video.presets.count];
+
     // Bind the slider value to a custom value transformer,
     // done here because it can't be done in IB.
     [fPresetsSlider unbind:@"value"];
     HBPresetsTransformer *transformer = [[[HBPresetsTransformer alloc] initWithEncoder:self.video.encoder] autorelease];
     [fPresetsSlider bind:@"value" toObject:self withKeyPath:@"self.video.preset" options:@{NSValueTransformerBindingOption: transformer}];
-
-    // setup the preset slider
-    [fPresetsSlider setMaxValue:self.video.presets.count - 1];
-    [fPresetsSlider setNumberOfTickMarks:self.video.presets.count];
 }
 
 
