@@ -15,7 +15,12 @@
 
 #include "hb.h"
 
-@interface HBAudio ()
+NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
+
+@interface HBAudio () <HBAudioTrackDataSource>
+
+@property (nonatomic, readonly) NSDictionary *noneTrack;
+@property (nonatomic, readonly) NSArray *masterTrackArray;  // the master list of audio tracks from the title
 
 @property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
 
@@ -101,7 +106,7 @@
     {
         BOOL fallenBack = NO;
         HBAudioTrack *newAudio = [[HBAudioTrack alloc] init];
-        [newAudio setController: self];
+        [newAudio setDataSource:self];
         [self insertObject: newAudio inTracksAtIndex: [self countOfTracks]];
         [newAudio setVideoContainerTag:@(self.container)];
         [newAudio setTrackFromIndex: (int)trackIndex];
@@ -283,7 +288,7 @@
 - (void)addNewAudioTrack
 {
     HBAudioTrack *newAudio = [[HBAudioTrack alloc] init];
-    [newAudio setController: self];
+    [newAudio setDataSource:self];
     [self insertObject: newAudio inTracksAtIndex: [self countOfTracks]];
     [newAudio setVideoContainerTag:@(self.container)];
     [newAudio setTrack: self.noneTrack];
@@ -368,7 +373,7 @@
             if (idx < _tracks.count)
             {
                 HBAudioTrack *trackCopy = [obj copy];
-                trackCopy.controller = copy;
+                trackCopy.dataSource = copy;
                 [copy->_tracks addObject:[trackCopy autorelease]];
             }
         }];
@@ -406,7 +411,7 @@
 
     for (HBAudioTrack *track in _tracks)
     {
-        track.controller = self;
+        track.dataSource = self;
     }
 
     decodeObject(_defaults);

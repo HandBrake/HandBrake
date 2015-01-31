@@ -7,6 +7,7 @@
 #import <Foundation/Foundation.h>
 
 @class HBAudio;
+@protocol HBAudioTrackDataSource;
 
 /**
  *  Audio track dicts keys.
@@ -39,7 +40,7 @@ extern NSString *keyAudioBitrate;
 @property (nonatomic, retain) NSNumber *drc;
 @property (nonatomic, retain) NSNumber *gain;
 @property (nonatomic, retain) NSNumber *videoContainerTag;
-@property (nonatomic, assign) HBAudio *controller;
+@property (nonatomic, assign) id<HBAudioTrackDataSource> dataSource;
 
 @property (nonatomic, retain) NSMutableArray *codecs;
 @property (nonatomic, retain) NSMutableArray *mixdowns;
@@ -53,4 +54,12 @@ extern NSString *keyAudioBitrate;
 - (void) setSampleRateFromName: (NSString *) aValue;
 - (void) setBitRateFromName: (NSString *) aValue;
 
+@end
+
+@protocol HBAudioTrackDataSource <NSObject>
+- (NSDictionary *)noneTrack;
+- (NSArray *)masterTrackArray;
+
+- (void)settingTrackToNone:(HBAudioTrack *)newNoneTrack;
+- (void)switchingTrackFromNone:(HBAudioTrack *)noLongerNoneTrack;
 @end

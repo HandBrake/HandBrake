@@ -363,13 +363,13 @@ static NSMutableArray *masterBitRateArray = nil;
         {
             self.sampleRate = self.sampleRates[0]; // default to Auto
         }
-        if ([self.controller.noneTrack isEqual: oldValue])
+        if ([self.dataSource.noneTrack isEqual: oldValue])
         {
-            [self.controller switchingTrackFromNone: self];
+            [self.dataSource switchingTrackFromNone: self];
         }
-        if ([self.controller.noneTrack isEqual: self.track])
+        if ([self.dataSource.noneTrack isEqual: self.track])
         {
-            [self.controller settingTrackToNone: self];
+            [self.dataSource settingTrackToNone: self];
         }
     }
     [oldValue release];
@@ -388,7 +388,7 @@ static NSMutableArray *masterBitRateArray = nil;
     [_mixdown autorelease];
     _mixdown = [mixdown retain];
     [self updateBitRates: YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName: HBMixdownChangedNotification object: self];
+    [[NSNotificationCenter defaultCenter] postNotificationName: HBMixdownChangedNotification object: self.dataSource];
 }
 
 - (void)setSampleRate:(NSDictionary *)sampleRate
@@ -404,7 +404,7 @@ static NSMutableArray *masterBitRateArray = nil;
 - (void) setTrackFromIndex: (int) aValue
 
 {
-    self.track = [self.controller.masterTrackArray dictionaryWithObject: @(aValue)
+    self.track = [self.dataSource.masterTrackArray dictionaryWithObject: @(aValue)
                                                             matchingKey: keyAudioTrackIndex];
 }
 
@@ -485,7 +485,7 @@ static NSMutableArray *masterBitRateArray = nil;
 - (BOOL) enabled
 
 {
-    return (nil != self.track) ? (![self.track isEqual: self.controller.noneTrack]) : NO;
+    return (nil != self.track) ? (![self.track isEqual: self.dataSource.noneTrack]) : NO;
 }
 
 - (BOOL) mixdownEnabled
