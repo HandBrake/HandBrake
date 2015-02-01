@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBMFX,libmfx))
 $(eval $(call import.CONTRIB.defs,LIBMFX))
 
-LIBMFX.FETCH.url = http://download.handbrake.fr/contrib/libmfx-v2014.tar.bz2
+LIBMFX.FETCH.url = http://download.handbrake.fr/contrib/libmfx-v5.0.486.98113.tar.bz2
 
 LIBMFX.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
 
