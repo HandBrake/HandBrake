@@ -189,6 +189,127 @@ static const char* qsv_h264_level_xlat(int level)
     return NULL;
 }
 
+static void qsv_handle_breftype(hb_work_private_t *pv)
+{
+    /*
+     * If B-pyramid is not possible (not supported, incompatible profile, etc.)
+     * we don't need to adjust any settings, just sanitize it to off and return.
+     */
+    if (!(pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID))
+    {
+        /* B-pyramid support not implemented */
+        goto unsupported;
+    }
+    else if (pv->param.videoParam->mfx.GopPicSize &&
+             pv->param.videoParam->mfx.GopPicSize <= 3)
+    {
+        /* GOP size must be at least 4 for B-pyramid */
+        goto unsupported;
+    }
+    else if (pv->param.videoParam->mfx.GopRefDist &&
+             pv->param.videoParam->mfx.GopRefDist <= 2)
+    {
+        /* We need 2 consecutive B-frames for B-pyramid (GopRefDist >= 3) */
+        goto unsupported;
+    }
+    else if (pv->qsv_info->codec_id == MFX_CODEC_AVC)
+    {
+        switch (pv->param.videoParam->mfx.CodecProfile)
+        {
+            case MFX_PROFILE_AVC_BASELINE:
+            case MFX_PROFILE_AVC_CONSTRAINED_HIGH:
+            case MFX_PROFILE_AVC_CONSTRAINED_BASELINE:
+                goto unsupported; // B-frames not allowed by profile
+            default:
+                break;
+        }
+    }
+
+    /* Handle B-pyramid auto (on for CQP, off otherwise) */
+    if (pv->param.gop.b_pyramid < 0)
+    {
+        pv->param.gop.b_pyramid = pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP;
+    }
+
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_BREFTYPE)
+    {
+        /* B-pyramid can be controlled directly */
+        if (pv->param.gop.b_pyramid)
+        {
+            pv->param.codingOption2.BRefType = MFX_B_REF_PYRAMID;
+        }
+        else
+        {
+            pv->param.codingOption2.BRefType = MFX_B_REF_OFF;
+        }
+    }
+    else
+    {
+        /*
+         * We can't control B-pyramid directly, do it indirectly by
+         * adjusting GopRefDist, GopPicSize and NumRefFrame instead.
+         */
+        pv->param.codingOption2.BRefType = MFX_B_REF_UNKNOWN;
+
+        /*
+         * pyramid_ref_dist is the closest B-pyramid compatible
+         * value (multiple of 2, >= 4) to the requested GopRefDist.
+         */
+        int pyramid_ref_dist = 4;
+        while (pv->param.videoParam->mfx.GopRefDist > pyramid_ref_dist)
+        {
+            pyramid_ref_dist *= 2;
+        }
+
+        if (pv->param.gop.b_pyramid)
+        {
+            /* GopRefDist must be B-pyramid compatible */
+            pv->param.videoParam->mfx.GopRefDist = pyramid_ref_dist;
+
+            /*
+             * GopPicSize must be a multiple of GopRefDist.
+             *
+             * Note: GopPicSize == 0 should always result in a value
+             *       that doesn't cause Media SDK to disable B-pyramid.
+             */
+            if (pv->param.videoParam->mfx.GopPicSize)
+            {
+                pv->param.videoParam->mfx.GopPicSize = FFALIGN(pv->param.videoParam->mfx.GopPicSize,
+                                                               pv->param.videoParam->mfx.GopRefDist);
+            }
+
+            /*
+             * NumRefFrame must be greater than 3 and than half of GopRefDist.
+             * Otherwise, Media SDK may sometimes decide to disable B-pyramid
+             * (whereas sometimes it will simply sanitize NumRefFrame instead).
+             *
+             * Note: Media SDK handles the NumRefFrame == 0 case for us.
+             */
+            if (pv->param.videoParam->mfx.NumRefFrame)
+            {
+                pv->param.videoParam->mfx.NumRefFrame = FFMAX(pv->param.videoParam->mfx.NumRefFrame,
+                                                              pv->param.videoParam->mfx.GopRefDist / 2);
+                pv->param.videoParam->mfx.NumRefFrame = FFMAX(pv->param.videoParam->mfx.NumRefFrame, 3);
+            }
+        }
+        else if (pv->param.videoParam->mfx.GopRefDist == 0 ||
+                 pv->param.videoParam->mfx.GopRefDist == pyramid_ref_dist)
+        {
+            /*
+             * GopRefDist is either B-pyramid compatible or unknown (and thus
+             * potentially compatible), so adjust it to force-disable B-pyramid.
+             */
+            pv->param.videoParam->mfx.GopRefDist = pyramid_ref_dist - 1;
+        }
+    }
+
+    return;
+
+unsupported:
+    pv->param.gop.b_pyramid          = 0;
+    pv->param.codingOption2.BRefType = MFX_B_REF_OFF;
+}
+
 int qsv_enc_init(hb_work_private_t *pv)
 {
     av_qsv_context *qsv = pv->job->qsv.ctx;
@@ -735,20 +856,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    // set B-pyramid
-    if (pv->param.gop.b_pyramid < 0)
-    {
-        if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
-        {
-            pv->param.gop.b_pyramid = 1;
-        }
-        else
-        {
-            pv->param.gop.b_pyramid = 0;
-        }
-    }
-    pv->param.gop.b_pyramid = !!pv->param.gop.b_pyramid;
-
     // set the GOP structure
     if (pv->param.gop.gop_ref_dist < 0)
     {
@@ -798,94 +905,11 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                                                        pv->param.rc.lookahead ? 60 : 0);
     }
 
-    if ((pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID) &&
-        (pv->param.videoParam->mfx.CodecProfile != MFX_PROFILE_AVC_BASELINE         &&
-         pv->param.videoParam->mfx.CodecProfile != MFX_PROFILE_AVC_CONSTRAINED_HIGH &&
-         pv->param.videoParam->mfx.CodecProfile != MFX_PROFILE_AVC_CONSTRAINED_BASELINE))
-    {
-        int gop_ref_dist = 4;
-        /*
-         * B-pyramid is supported.
-         *
-         * Set gop_ref_dist to a power of two, >= 4 and <= GopRefDist to ensure
-         * Media SDK will not disable B-pyramid if we end up using it below.
-         */
-        while (pv->param.videoParam->mfx.GopRefDist >= gop_ref_dist * 2)
-        {
-            gop_ref_dist *= 2;
-        }
-        if ((pv->param.gop.b_pyramid) &&
-            (pv->param.videoParam->mfx.GopPicSize == 0 ||
-             pv->param.videoParam->mfx.GopPicSize > gop_ref_dist))
-        {
-            /*
-             * B-pyramid enabled and GopPicSize is long enough for gop_ref_dist.
-             *
-             * Use gop_ref_dist. GopPicSize must be a multiple of GopRefDist.
-             * NumRefFrame should be >= (GopRefDist / 2) and >= 3, otherwise
-             * Media SDK may sometimes decide to disable B-pyramid too (whereas
-             * sometimes it will just sanitize NumrefFrame instead).
-             *
-             * Notes: Media SDK handles the NumRefFrame == 0 case for us.
-             *        Also, GopPicSize == 0 should always result in a value that
-             *        does NOT cause Media SDK to disable B-pyramid, so it's OK.
-             */
-            pv->param.videoParam->mfx.GopRefDist = gop_ref_dist;
-            pv->param.videoParam->mfx.GopPicSize = (pv->param.videoParam->mfx.GopPicSize /
-                                                    pv->param.videoParam->mfx.GopRefDist *
-                                                    pv->param.videoParam->mfx.GopRefDist);
-            if (pv->param.videoParam->mfx.NumRefFrame)
-            {
-                pv->param.videoParam->mfx.NumRefFrame = FFMAX(pv->param.videoParam->mfx.NumRefFrame,
-                                                              pv->param.videoParam->mfx.GopRefDist / 2);
-                pv->param.videoParam->mfx.NumRefFrame = FFMAX(pv->param.videoParam->mfx.NumRefFrame, 3);
-            }
-        }
-        else
-        {
-            /*
-             * B-pyramid disabled or not possible (GopPicSize too short).
-             * Sanitize gop.b_pyramid to 0 (off/disabled).
-             */
-            pv->param.gop.b_pyramid = 0;
-            /* Then, adjust settings to actually disable it. */
-            if (pv->param.videoParam->mfx.GopRefDist == 0)
-            {
-                /*
-                 * GopRefDist == 0 means the value will be set by Media SDK.
-                 * Since we can't be sure what the actual value would be, we
-                 * have to make sure that GopRefDist is set explicitly.
-                 */
-                pv->param.videoParam->mfx.GopRefDist = gop_ref_dist - 1;
-            }
-            else if (pv->param.videoParam->mfx.GopRefDist == gop_ref_dist)
-            {
-                /* GopRefDist is compatible with Media SDK's B-pyramid. */
-                if (pv->param.videoParam->mfx.GopPicSize == 0)
-                {
-                    /*
-                     * GopPicSize is unknown and could be a multiple of
-                     * GopRefDist. Decrement the latter to disable B-pyramid.
-                     */
-                    pv->param.videoParam->mfx.GopRefDist--;
-                }
-                else if (pv->param.videoParam->mfx.GopPicSize %
-                         pv->param.videoParam->mfx.GopRefDist == 0)
-                {
-                    /*
-                     * GopPicSize is a multiple of GopRefDist.
-                     * Increment the former to disable B-pyramid.
-                     */
-                    pv->param.videoParam->mfx.GopPicSize++;
-                }
-            }
-        }
-    }
-    else
-    {
-        /* B-pyramid not supported. */
-        pv->param.gop.b_pyramid = 0;
-    }
+    /*
+     * We may need to adjust GopRefDist, GopPicSize and
+     * NumRefFrame to enable or disable B-pyramid, so do it last.
+     */
+    qsv_handle_breftype(pv);
 
     /*
      * init a dummy encode-only session to get the SPS/PPS
@@ -995,9 +1019,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         MFXClose(session);
     }
 
-    /* check whether B-frames are used */
-    int bframes = videoParam.mfx.GopRefDist > 1 && videoParam.mfx.GopPicSize > 2;
-    if (bframes)
+    /* B-frame related setup */
+    if (videoParam.mfx.GopRefDist > 1)
     {
         /* the muxer needs to know to the init_delay */
         switch (pv->qsv_info->codec_id)
@@ -1025,17 +1048,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
            videoParam.mfx.GopRefDist, videoParam.mfx.GopPicSize, videoParam.mfx.NumRefFrame);
     if (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
     {
-        hb_log("encqsvInit: BFrames %s BPyramid %s",
-               bframes                            ? "on" : "off",
-               bframes && pv->param.gop.b_pyramid ? "on" : "off");
+        hb_log("encqsvInit: BFramesMax %d BRefType %s",
+               videoParam.mfx.GopRefDist > 1 ?
+               videoParam.mfx.GopRefDist - 1 : 0,
+               pv->param.gop.b_pyramid ? "pyramid" : "off");
     }
     else
     {
-        hb_log("encqsvInit: BFrames %s", bframes ? "on" : "off");
+        hb_log("encqsvInit: BFramesMax %d",
+               videoParam.mfx.GopRefDist > 1 ?
+               videoParam.mfx.GopRefDist - 1 : 0);
     }
     if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_IB_ADAPT)
     {
-        if (bframes)
+        if (videoParam.mfx.GopRefDist > 1)
         {
             hb_log("encqsvInit: AdaptiveI %s AdaptiveB %s",
                    hb_qsv_codingoption_get_name(option2->AdaptiveI),
@@ -1433,6 +1459,9 @@ static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
         pv->bfrm_delay    = 1;
         pv->init_delay[0] = pv->init_pts[1] - pv->init_pts[0];
     }
+
+    /* This can come in handy */
+    hb_deep_log(2, "compute_init_delay: %"PRId64" (%d frames)", pv->init_delay[0], pv->bfrm_delay);
 
     /* The delay only needs to be set once. */
     pv->init_delay = NULL;
