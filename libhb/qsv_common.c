@@ -1651,10 +1651,12 @@ const char* hb_qsv_impl_get_name(int impl)
 
 void hb_qsv_force_workarounds()
 {
-    qsv_software_info_avc.capabilities  &= ~HB_QSV_CAP_MSDK_API_1_6;
-    qsv_hardware_info_avc.capabilities  &= ~HB_QSV_CAP_MSDK_API_1_6;
-    qsv_software_info_hevc.capabilities &= ~HB_QSV_CAP_MSDK_API_1_6;
-    qsv_hardware_info_hevc.capabilities &= ~HB_QSV_CAP_MSDK_API_1_6;
+#define FORCE_WORKAROUNDS ~(HB_QSV_CAP_OPTION2_BREFTYPE)
+    qsv_software_info_avc.capabilities  &= FORCE_WORKAROUNDS;
+    qsv_hardware_info_avc.capabilities  &= FORCE_WORKAROUNDS;
+    qsv_software_info_hevc.capabilities &= FORCE_WORKAROUNDS;
+    qsv_hardware_info_hevc.capabilities &= FORCE_WORKAROUNDS;
+#undef FORCE_WORKAROUNDS
 }
 
 #endif // USE_QSV
