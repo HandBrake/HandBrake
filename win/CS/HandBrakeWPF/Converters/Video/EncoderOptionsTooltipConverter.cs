@@ -44,7 +44,7 @@ namespace HandBrakeWPF.Converters.Video
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             EncodeTask task = value as EncodeTask;
-            if (task != null && task.VideoEncoder == VideoEncoder.X264)
+            if (task != null && (task.VideoEncoder == VideoEncoder.X264 || task.VideoEncoder == VideoEncoder.X265))
             {
                 if (task.ShowAdvancedTab)
                 {
@@ -62,7 +62,7 @@ namespace HandBrakeWPF.Converters.Video
                     Environment.NewLine);
             }
 
-            return task != null ? task.AdvancedEncoderOptions.Trim() : string.Empty;
+            return task != null ? task.AdvancedEncoderOptions : string.Empty;
         }
 
         /// <summary>
