@@ -476,8 +476,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:job];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:job.video];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBMixdownChangedNotification object:job.audio];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSetM4vExtension:) name:HBChaptersChangedNotification object:job];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBMixdownChangedNotification object:job.audio];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBChaptersChangedNotification object:job];
     }
 
     // Retain the new job
@@ -804,16 +804,19 @@
 {
     NSString *extension = @(hb_container_get_default_extension(job.container));
 
-    BOOL anyCodecAC3 = [job.audio anyCodecMatches:HB_ACODEC_AC3] || [job.audio anyCodecMatches:HB_ACODEC_AC3_PASS];
-    // Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter
-    BOOL chapterMarkers = (job.chaptersEnabled) &&
-    (job.range.type != HBRangeTypeChapters || job.range.chapterStart < job.range.chapterStop);
-
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@".m4v"] ||
-        ((YES == anyCodecAC3 || YES == chapterMarkers) &&
-         [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@"Auto"]))
+    if (job.container & HB_MUX_MASK_MP4)
     {
-        extension = @"m4v";
+        BOOL anyCodecAC3 = [job.audio anyCodecMatches:HB_ACODEC_AC3] || [job.audio anyCodecMatches:HB_ACODEC_AC3_PASS];
+        // Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter
+        BOOL chapterMarkers = (job.chaptersEnabled) &&
+        (job.range.type != HBRangeTypeChapters || job.range.chapterStart < job.range.chapterStop);
+
+        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@".m4v"] ||
+            ((YES == anyCodecAC3 || YES == chapterMarkers) &&
+            [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@"Auto"]))
+        {
+            extension = @"m4v";
+        }
     }
 
     return extension;
@@ -881,50 +884,36 @@
     // We're changing the chapter range - we may need to flip the m4v/mp4 extension
     if (self.job.container & HB_MUX_MASK_MP4)
     {
-        [self autoSetM4vExtension:notification];
+        [self updateFileExtension:notification];
     }
-
-    // If Auto Naming is on it might need to be update if it includes the chapters range
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+    else
     {
+        // If Auto Naming is on it might need to be update if it includes the chapters range
         [self updateFileName];
     }
 }
 
 - (void)formatChanged:(NSNotification *)notification
 {
-    if (self.job)
-    {
-        int videoContainer = self.job.container;
-
-        // set the file extension
-        const char *ext = hb_container_get_default_extension(videoContainer);
-        self.job.destURL = [[self.job.destURL URLByDeletingPathExtension] URLByAppendingPathExtension:@(ext)];
-
-        if (videoContainer & HB_MUX_MASK_MP4)
-        {
-            [self autoSetM4vExtension:notification];
-        }
-    }
+    [self updateFileExtension:notification];
+    [self customSettingUsed];
 }
 
 - (void)updateFileName
 {
-    // Generate a new file name
-    NSString *fileName = [self automaticNameForJob:self.job];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+    {
+        // Generate a new file name
+        NSString *fileName = [self automaticNameForJob:self.job];
 
-    // Swap the old one with the new one
-    self.job.destURL = [[self.job.destURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:
-                        [NSString stringWithFormat:@"%@.%@", fileName, self.job.destURL.pathExtension]];
+        // Swap the old one with the new one
+        self.job.destURL = [[self.job.destURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:
+                            [NSString stringWithFormat:@"%@.%@", fileName, self.job.destURL.pathExtension]];
+    }
 }
 
-- (void)autoSetM4vExtension:(NSNotification *)notification
+- (void)updateFileExtension:(NSNotification *)notification
 {
-    if (!(self.job.container & HB_MUX_MASK_MP4))
-    {
-        return;
-    }
-
     NSString *extension = [self automaticExtForJob:self.job];
     if (![extension isEqualTo:self.job.destURL.pathExtension])
     {
@@ -943,12 +932,7 @@
     [fPresetsView deselect];
     // Change UI to show "Custom" settings are being used
     self.job.presetName = NSLocalizedString(@"Custom", @"");
-
-    // If Auto Naming is on it might need to be update if it includes the quality token
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
-    {
-        [self updateFileName];
-    }
+    [self updateFileName];
 }
 
 #pragma mark - Queue progress
@@ -1316,11 +1300,8 @@
         // Apply the preset to the current job
         [self.job applyPreset:preset];
 
-        // If Auto Naming is on. We create an output filename of dvd name - title number
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
-        {
-            [self updateFileName];
-        }
+        // If Auto Naming is on, update the destination
+        [self updateFileName];
 
         [fPreviewController reloadPreviews];
     }
