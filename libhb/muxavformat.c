@@ -393,6 +393,8 @@ static int avformatInit( hb_mux_object_t * m )
         track->st->codec->time_base.num = vrate.den;
         track->st->codec->time_base.den = vrate.num;
     }
+    track->st->avg_frame_rate.num = vrate.num;
+    track->st->avg_frame_rate.den = vrate.den;
 
     /* add the audio tracks */
     for(ii = 0; ii < hb_list_count( job->list_audio ); ii++ )
