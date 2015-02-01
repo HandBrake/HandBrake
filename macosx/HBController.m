@@ -718,16 +718,6 @@
 
 - (void)showNewScan
 {
-    if (self.jobFromQueue)
-    {
-        // we are a rescan of an existing queue item and need to apply the queued settings to the scan
-        [HBUtilities writeToActivityLog: "showNewScan: This is a queued item rescan"];
-    }
-    else
-    {
-        [HBUtilities writeToActivityLog: "showNewScan: This is a new source item scan"];
-    }
-
     for (HBTitle *title in self.core.titles)
     {
         // Set Source Name at top of window with the browsedSourceDisplayName grokked right before -performScan
@@ -761,7 +751,6 @@
     if (self.jobFromQueue)
     {
         [fPresetsView deselect];
-
         self.jobFromQueue = nil;
     }
 }
