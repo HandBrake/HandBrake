@@ -1061,16 +1061,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_IB_ADAPT)
     {
-        if (videoParam.mfx.GopRefDist > 1)
+        if (option2->AdaptiveI != MFX_CODINGOPTION_OFF ||
+            option2->AdaptiveB != MFX_CODINGOPTION_OFF)
         {
-            hb_log("encqsvInit: AdaptiveI %s AdaptiveB %s",
-                   hb_qsv_codingoption_get_name(option2->AdaptiveI),
-                   hb_qsv_codingoption_get_name(option2->AdaptiveB));
-        }
-        else
-        {
-            hb_log("encqsvInit: AdaptiveI %s",
-                   hb_qsv_codingoption_get_name(option2->AdaptiveI));
+            if (videoParam.mfx.GopRefDist > 1)
+            {
+                hb_log("encqsvInit: AdaptiveI %s AdaptiveB %s",
+                       hb_qsv_codingoption_get_name(option2->AdaptiveI),
+                       hb_qsv_codingoption_get_name(option2->AdaptiveB));
+            }
+            else
+            {
+                hb_log("encqsvInit: AdaptiveI %s",
+                       hb_qsv_codingoption_get_name(option2->AdaptiveI));
+            }
         }
     }
     if (videoParam.mfx.RateControlMethod == MFX_RATECONTROL_CQP)
@@ -1121,8 +1125,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             case MFX_LOOKAHEAD_DS_UNKNOWN:
                 hb_log("encqsvInit: LookAheadDS unknown (auto)");
                 break;
-            case MFX_LOOKAHEAD_DS_OFF:
-                hb_log("encqsvInit: LookAheadDS off");
+            case MFX_LOOKAHEAD_DS_OFF: // default
                 break;
             case MFX_LOOKAHEAD_DS_2x:
                 hb_log("encqsvInit: LookAheadDS 2x");
@@ -1138,10 +1141,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     switch (videoParam.mfx.FrameInfo.PicStruct)
     {
-        // quiet, most people don't care
-        case MFX_PICSTRUCT_PROGRESSIVE:
+        case MFX_PICSTRUCT_PROGRESSIVE: // default
             break;
-        // interlaced encoding is intended for advanced users only, who do care
         case MFX_PICSTRUCT_FIELD_TFF:
             hb_log("encqsvInit: PicStruct top field first");
             break;
@@ -1153,18 +1154,22 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                      videoParam.mfx.FrameInfo.PicStruct);
             return -1;
     }
-    hb_log("encqsvInit: CAVLC %s",
-           hb_qsv_codingoption_get_name(option1->CAVLC));
-    if (pv->param.rc.lookahead           == 0 &&
-        videoParam.mfx.RateControlMethod != MFX_RATECONTROL_CQP)
+    if (option1->CAVLC != MFX_CODINGOPTION_OFF)
     {
-        // LA/CQP and ExtBRC/MBBRC are mutually exclusive
-        if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
+        hb_log("encqsvInit: CAVLC %s",
+               hb_qsv_codingoption_get_name(option1->CAVLC));
+    }
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
+    {
+        if (option2->ExtBRC != MFX_CODINGOPTION_OFF)
         {
             hb_log("encqsvInit: ExtBRC %s",
                    hb_qsv_codingoption_get_name(option2->ExtBRC));
         }
-        if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
+    }
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
+    {
+        if (option2->MBBRC != MFX_CODINGOPTION_ON)
         {
             hb_log("encqsvInit: MBBRC %s",
                    hb_qsv_codingoption_get_name(option2->MBBRC));
@@ -1174,8 +1179,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         switch (option2->Trellis)
         {
-            case MFX_TRELLIS_OFF:
-                hb_log("encqsvInit: Trellis off");
+            case MFX_TRELLIS_OFF: // default
                 break;
             case MFX_TRELLIS_UNKNOWN:
                 hb_log("encqsvInit: Trellis unknown (auto)");
