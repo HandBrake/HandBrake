@@ -471,6 +471,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:_job.filters];
         [[NSNotificationCenter defaultCenter] removeObserver:_job.video];
         [[NSNotificationCenter defaultCenter] removeObserver:_job.audio];
+        [[NSNotificationCenter defaultCenter] removeObserver:_job.range];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
@@ -478,6 +479,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:job.video];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBMixdownChangedNotification object:job.audio];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBChaptersChangedNotification object:job];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chapterPopUpChanged:) name:HBRangeChangedNotification object:job.range];
     }
 
     // Retain the new job
@@ -886,11 +888,9 @@
     {
         [self updateFileExtension:notification];
     }
-    else
-    {
-        // If Auto Naming is on it might need to be update if it includes the chapters range
-        [self updateFileName];
-    }
+
+    // If Auto Naming is on it might need to be update if it includes the chapters range
+    [self updateFileName];
 }
 
 - (void)formatChanged:(NSNotification *)notification

@@ -8,6 +8,8 @@
 
 @class HBTitle;
 
+extern NSString *HBRangeChangedNotification;
+
 typedef NS_ENUM(NSUInteger, HBRangeType) {
     HBRangeTypeChapters,
     HBRangeTypeSeconds,

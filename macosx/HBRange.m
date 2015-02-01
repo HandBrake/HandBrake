@@ -8,6 +8,8 @@
 #import "HBTitle.h"
 #import "NSCodingMacro.h"
 
+NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
+
 @implementation HBRange
 
 #pragma mark - NSCoding
@@ -31,6 +33,11 @@
     return self;
 }
 
+- (void)postChangedNotification
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBRangeChangedNotification object:self];
+}
+
 - (void)setChapterStart:(int)chapterStart
 {
     if (chapterStart > self.chapterStop)
@@ -39,6 +46,8 @@
     }
 
     _chapterStart = chapterStart;
+
+    [self postChangedNotification];
 }
 
 - (void)setChapterStop:(int)chapterStop
@@ -49,6 +58,8 @@
     }
 
     _chapterStop = chapterStop;
+
+    [self postChangedNotification];
 }
 
 - (NSString *)duration
