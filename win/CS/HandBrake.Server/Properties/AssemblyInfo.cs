@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HandBrake Team")]
 [assembly: AssemblyProduct("HandBrake.Server")]
-[assembly: AssemblyCopyright("Copyright © 2014 HandBrake Team")]
+[assembly: AssemblyCopyright("Copyright © 2015 HandBrake Team")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
