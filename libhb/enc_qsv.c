@@ -738,7 +738,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     else
     {
-        pv->param.rc.icq = !!pv->param.rc.icq;
+        pv->param.rc.icq = pv->param.rc.icq && job->vquality >= 0;
     }
 
     // sanitize lookahead
@@ -757,7 +757,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     else
     {
-        pv->param.rc.lookahead = !!pv->param.rc.lookahead;
+        pv->param.rc.lookahead = pv->param.rc.lookahead && (pv->param.rc.icq || job->vquality < 0);
     }
 
     // set VBV here (this will be overridden for CQP and ignored for LA)
