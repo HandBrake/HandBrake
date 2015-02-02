@@ -398,15 +398,15 @@
 
 - (void)removeItemsUsingBlock:(BOOL (^)(HBJob *item))predicate
 {
-    NSMutableArray *encodedJobs = [NSMutableArray array];
-    for (HBJob *job in self.jobs)
+    NSMutableArray *itemsToRemove = [NSMutableArray array];
+    for (HBJob *item in self.jobs)
     {
-        if (predicate(job))
+        if (predicate(item))
         {
-            [encodedJobs addObject:job];
+            [itemsToRemove addObject:item];
         }
     }
-    [self.jobs removeObjectsInArray:encodedJobs];
+    [self.jobs removeObjectsInArray:itemsToRemove];
 }
 
 /**
