@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C99d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
@@ -58,9 +58,6 @@
                                                 <font key="font" metaFont="cellTitle"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                <connections>
-                                                    <outlet property="menu" destination="2649" id="2653"/>
-                                                </connections>
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                         </tableColumn>
@@ -79,6 +76,7 @@
                                     <connections>
                                         <outlet property="dataSource" destination="-2" id="2602"/>
                                         <outlet property="delegate" destination="-2" id="2603"/>
+                                        <outlet property="menu" destination="2649" id="ZZa-hT-PUa"/>
                                     </connections>
                                 </outlineView>
                             </subviews>
@@ -137,7 +135,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="2579"/>
             </connections>
-            <point key="canvasLocation" x="383" y="524.5"/>
+            <point key="canvasLocation" x="666" y="695.5"/>
         </window>
         <menu id="2649" userLabel="ContextMenu">
             <items>
@@ -147,19 +145,34 @@
                         <action selector="editSelectedQueueItem:" target="-2" id="2654"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Delete" id="2652">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="removeSelectedQueueItem:" target="-2" id="2656"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Show" id="2655">
+                <menuItem title="Show in Finder" id="2655">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="revealSelectedQueueItem:" target="-2" id="2657"/>
                     </connections>
                 </menuItem>
+                <menuItem isSeparatorItem="YES" id="Au5-j1-AAd"/>
+                <menuItem title="Clear All" id="2652">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="clearAll:" target="-2" id="Q3d-9G-k0i"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Clear completed items" id="XdJ-Sl-pwu">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="clearCompleted:" target="-2" id="LMt-sj-JIh"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="Vww-Gx-tlr"/>
+                <menuItem title="Delete" id="Wfz-Kj-Vtx">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeSelectedQueueItem:" target="-2" id="i8t-gS-Bi3"/>
+                    </connections>
+                </menuItem>
             </items>
+            <point key="canvasLocation" x="192" y="450.5"/>
         </menu>
     </objects>
     <resources>

@@ -172,7 +172,14 @@
 
         return (self.core.state == HBStateWorking || self.core.state == HBStatePaused);
     }
-    
+
+    if (action == @selector(editSelectedQueueItem:) ||
+        action == @selector(removeSelectedQueueItem:) ||
+        action == @selector(revealSelectedQueueItem:))
+    {
+        return (self.outlineView.selectedRow != -1 || self.outlineView.clickedRow != -1);
+    }
+
     return YES;
 }
 
@@ -370,18 +377,10 @@
 - (void)clearEncodedJobs
 {
     [self.jobs beginTransaction];
-    NSMutableArray *encodedJobs = [NSMutableArray array];
-    for (HBJob *job in self.jobs)
-    {
-        if (job.state == HBJobStateCompleted || job.state == HBJobStateCanceled)
-        {
-            [encodedJobs addObject:job];
-        }
-    }
-
-    [self.jobs removeObjectsInArray:encodedJobs];
+    [self removeItemsUsingBlock:^BOOL(HBJob *item) {
+        return (item.state == HBJobStateCompleted || item.state == HBJobStateCanceled);
+    }];
     [self.jobs commit];
-
     [self reloadQueue];
 }
 
@@ -395,6 +394,19 @@
     [self.jobs commit];
 
     [self reloadQueue];
+}
+
+- (void)removeItemsUsingBlock:(BOOL (^)(HBJob *item))predicate
+{
+    NSMutableArray *encodedJobs = [NSMutableArray array];
+    for (HBJob *job in self.jobs)
+    {
+        if (predicate(job))
+        {
+            [encodedJobs addObject:job];
+        }
+    }
+    [self.jobs removeObjectsInArray:encodedJobs];
 }
 
 /**
@@ -1120,6 +1132,26 @@
         // Now that source is loaded and settings applied, delete the queue item from the queue
         [self removeQueueItemAtIndex:row];
     }
+}
+
+- (IBAction)clearAll:(id)sender
+{
+    [self.jobs beginTransaction];
+    [self removeItemsUsingBlock:^BOOL(HBJob *item) {
+        return (item.state != HBJobStateWorking);
+    }];
+    [self.jobs commit];
+    [self reloadQueue];
+}
+
+- (IBAction)clearCompleted:(id)sender
+{
+    [self.jobs beginTransaction];
+    [self removeItemsUsingBlock:^BOOL(HBJob *item) {
+        return (item.state == HBJobStateCompleted);
+    }];
+    [self.jobs commit];
+    [self reloadQueue];
 }
 
 #pragma mark -
