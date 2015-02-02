@@ -596,7 +596,20 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             vid_decoder->flush( vid_decoder );
         if (title->flags & HBTF_NO_IDR)
         {
-            frame_wait = 100;
+            if (!flush)
+            {
+                // If we are doing the first previews decode attempt,
+                // set this threshold high so that we get the best
+                // quality frames possible.
+                frame_wait = 100;
+            }
+            else
+            {
+                // If we failed to get enough valid frames in the first
+                // previews decode attempt, lower the threshold to improve
+                // our chances of getting something to work with.
+                frame_wait = 10;
+            }
         }
 
         hb_buffer_t * vid_buf = NULL;
