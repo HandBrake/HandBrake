@@ -45,8 +45,6 @@ struct hb_mux_object_s
 
     int                 ntracks;
     hb_mux_data_t    ** tracks;
-
-    int64_t             delay;
 };
 
 enum
@@ -128,7 +126,6 @@ static int avformatInit( hb_mux_object_t * m )
     char *lang;
 
 
-    m->delay = AV_NOPTS_VALUE;
     max_tracks = 1 + hb_list_count( job->list_audio ) +
                      hb_list_count( job->list_subtitle );
 
@@ -958,44 +955,12 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
     return 0;
 }
 
-// Video with b-frames and certain audio types require a lead-in delay.
-// Compute the max delay and offset all timestamps by this amount.
-//
-// For mp4, avformat will automatically put entries in the edts atom
-// to account for the offset of the first dts in each track.
-static void computeDelay(hb_mux_object_t *m)
-{
-    int ii;
-    hb_audio_t    * audio;
-
-    m->delay = m->job->config.h264.init_delay;
-    for(ii = 0; ii < hb_list_count( m->job->list_audio ); ii++ )
-    {
-        audio = hb_list_item( m->job->list_audio, ii );
-        if (audio->config.out.delay > m->delay)
-            m->delay = audio->config.out.delay;
-    }
-}
-
 static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *buf)
 {
     AVPacket pkt;
     int64_t dts, pts, duration = AV_NOPTS_VALUE;
     hb_job_t *job     = m->job;
     uint8_t sub_out[2048];
-
-    if (m->delay == AV_NOPTS_VALUE)
-    {
-        computeDelay(m);
-    }
-
-    if (buf != NULL)
-    {
-        if (buf->s.start != AV_NOPTS_VALUE)
-            buf->s.start += m->delay;
-        if (buf->s.renderOffset != AV_NOPTS_VALUE)
-            buf->s.renderOffset += m->delay;
-    }
 
     // We only compute dts duration for MP4 files
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
