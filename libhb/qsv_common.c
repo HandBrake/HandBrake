@@ -47,6 +47,7 @@ enum
     QSV_G1, // Sandy Bridge or equivalent
     QSV_G2, // Ivy Bridge or equivalent
     QSV_G3, // Haswell or equivalent
+    QSV_G4, // Broadwell or equivalent
 };
 static int qsv_hardware_generation(int cpu_platform)
 {
@@ -58,10 +59,13 @@ static int qsv_hardware_generation(int cpu_platform)
             return QSV_G1;
         case HB_CPU_PLATFORM_INTEL_IVB:
         case HB_CPU_PLATFORM_INTEL_SLM:
+        case HB_CPU_PLATFORM_INTEL_CHT:
             return QSV_G2;
         case HB_CPU_PLATFORM_INTEL_HSW:
-        default:
             return QSV_G3;
+        case HB_CPU_PLATFORM_INTEL_BDW:
+        default:
+            return QSV_G4;
     }
 }
 

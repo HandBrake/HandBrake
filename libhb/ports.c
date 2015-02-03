@@ -262,6 +262,10 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Silvermont";
         case HB_CPU_PLATFORM_INTEL_HSW:
             return "Intel microarchitecture Haswell";
+        case HB_CPU_PLATFORM_INTEL_BDW:
+            return "Intel microarchitecture Broadwell";
+        case HB_CPU_PLATFORM_INTEL_CHT:
+            return "Intel microarchitecture Airmont";
 
         default:
             return NULL;
@@ -327,12 +331,23 @@ static void init_cpu_info()
                     case 0x37:
                     case 0x4A:
                     case 0x4D:
+                    case 0x5A:
+                    case 0x5D:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_SLM;
                         break;
                     case 0x3C:
+                    case 0x3F:
                     case 0x45:
                     case 0x46:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_HSW;
+                        break;
+                    case 0x3D:
+                    case 0x4F:
+                    case 0x56:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_BDW;
+                        break;
+                    case 0x4C:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_CHT;
                         break;
                     default:
                         break;
