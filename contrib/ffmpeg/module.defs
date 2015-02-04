@@ -17,6 +17,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-gpl \
     --disable-doc \
     --disable-bsfs \
+    --enable-bsf=aac_adtstoasc \
     --disable-avconv \
     --disable-avplay \
     --disable-avprobe \
