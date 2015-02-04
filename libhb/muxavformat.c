@@ -47,6 +47,8 @@ struct hb_mux_object_s
 
     int                 ntracks;
     hb_mux_data_t    ** tracks;
+
+    int64_t             chapter_delay;
 };
 
 enum
@@ -194,6 +196,7 @@ static int avformatInit( hb_mux_object_t * m )
     job->mux_data = track;
 
     track->type = MUX_TYPE_VIDEO;
+    track->prev_chapter_tc = AV_NOPTS_VALUE;
     track->st = avformat_new_stream(m->oc, NULL);
     if (track->st == NULL)
     {
@@ -963,7 +966,11 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
 
     chap->id = nchap;
     chap->time_base = m->time_base;
-    chap->start = start;
+    // libav does not currently have a good way to deal with chapters and
+    // delayed stream timestamps.  It makes no corrections to the chapter 
+    // track.  A patch to libav would touch a lot of things, so for now,
+    // work around the issue here.
+    chap->start = start + m->chapter_delay;
     chap->end = end;
     av_dict_set(&chap->metadata, "title", title, 0);
 
@@ -977,6 +984,20 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     hb_job_t *job     = m->job;
     uint8_t sub_out[2048];
 
+    if (track->type == MUX_TYPE_VIDEO &&
+        track->prev_chapter_tc == AV_NOPTS_VALUE)
+    {
+        // Chapter timestamps are biased the same as video timestamps.
+        // This needs to be reflected in the initial chapter timestamp.
+        //
+        // TODO: Don't assume the first chapter is at 0.  Pass the first
+        // chapter through the pipeline instead of dropping it as we
+        // currently do.
+        m->chapter_delay = av_rescale_q(m->job->config.h264.init_delay,
+                                        (AVRational){1,90000},
+                                        track->st->time_base);
+        track->prev_chapter_tc = -m->chapter_delay;
+    }
     // We only compute dts duration for MP4 files
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
     {
