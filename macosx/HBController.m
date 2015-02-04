@@ -917,6 +917,8 @@
 
 - (void)updateFileName
 {
+    [self updateFileExtension:nil];
+
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
     {
         // Generate a new file name
