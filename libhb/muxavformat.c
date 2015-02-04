@@ -32,6 +32,8 @@ struct hb_mux_data_s
 
     int64_t  prev_chapter_tc;
     int16_t  current_chapter;
+
+    AVBitStreamFilterContext* bitstream_filter;
 };
 
 struct hb_mux_object_s
@@ -524,6 +526,15 @@ static int avformatInit( hb_mux_object_t * m )
                 memcpy(priv_data,
                        audio->priv.config.extradata.bytes,
                        audio->priv.config.extradata.length);
+
+                // AAC from pass-through source may be ADTS.
+                // Therefore inserting "aac_adtstoasc" bitstream filter is
+                // preferred.
+                // The filter does nothing for non-ADTS bitstream.
+                if (audio->config.out.codec == HB_ACODEC_AAC_PASS)
+                {
+                    track->bitstream_filter = av_bitstream_filter_init("aac_adtstoasc");
+                }
                 break;
             default:
                 hb_error("muxavformat: Unknown audio codec: %x",
@@ -1177,6 +1188,11 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
     track->duration = pts + pkt.duration;
 
+    if (track->bitstream_filter)
+    {
+        av_bitstream_filter_filter(track->bitstream_filter, track->st->codec, NULL, &pkt.data, &pkt.size, pkt.data, pkt.size, 0);
+    }
+
     pkt.stream_index = track->st->index;
     int ret = av_interleaved_write_frame(m->oc, &pkt);
     // Many avformat muxer functions do not check the error status
@@ -1215,6 +1231,11 @@ static int avformatEnd(hb_mux_object_t *m)
     for (ii = 0; ii < m->ntracks; ii++)
     {
         avformatMux(m, m->tracks[ii], NULL);
+
+        if (m->tracks[ii]->bitstream_filter)
+        {
+            av_bitstream_filter_close(m->tracks[ii]->bitstream_filter);
+        }
     }
 
     if (job->chapter_markers)

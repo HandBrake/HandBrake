@@ -606,6 +606,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 {
     hb_work_private_t *pv = w->private_data;
     int ret = 0;
+    hb_audio_t *audio = w->audio;
 
     memset( info, 0, sizeof(*info) );
 
@@ -630,7 +631,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     if (w->title && w->title->opaque_priv != NULL)
     {
         AVFormatContext *ic = (AVFormatContext*)w->title->opaque_priv;
-        avcodec_copy_context(context, ic->streams[w->audio->id]->codec);
+        avcodec_copy_context(context, ic->streams[audio->id]->codec);
         // libav's eac3 parser toggles the codec_id in the context as
         // it reads eac3 data between AV_CODEC_ID_AC3 and AV_CODEC_ID_EAC3.
         // It detects an AC3 sync pattern sometimes in ac3_sync() which
@@ -776,6 +777,33 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         else
                         {
                             info->mode = context->audio_service_type;
+                        }
+                    }
+                    else if (context->codec_id == AV_CODEC_ID_AAC &&
+                             context->extradata_size == 0)
+                    {
+                        // Parse ADTS AAC streams for AudioSpecificConfig.
+                        // This data is required in order to write
+                        // proper headers in MP4 and MKV files.
+                        AVBitStreamFilterContext* aac_adtstoasc;
+                        aac_adtstoasc = av_bitstream_filter_init("aac_adtstoasc");
+                        if (aac_adtstoasc)
+                        {
+                            int ret, size;
+                            uint8_t *data;
+                            ret = av_bitstream_filter_filter(aac_adtstoasc, context,
+                                    NULL, &data, &size, avp.data, avp.size, 0);
+                            if (ret >= 0 &&
+                                context->extradata_size > 0 &&
+                                audio->priv.config.extradata.length == 0)
+                            {
+                                int len;
+                                len = MIN(context->extradata_size, HB_CONFIG_MAX_SIZE);
+                                memcpy(audio->priv.config.extradata.bytes,
+                                       context->extradata, len);
+                                audio->priv.config.extradata.length = len;
+                            }
+                            av_bitstream_filter_close(aac_adtstoasc);
                         }
                     }
 
