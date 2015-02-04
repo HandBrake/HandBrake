@@ -501,11 +501,6 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_FDK_HAAC:
                 track->st->codec->codec_id = AV_CODEC_ID_AAC;
 
-                // TODO: fix AAC in TS parsing.  We need to fill
-                // extradata with AAC config. Some players will play
-                // an AAC stream that is missing extradata and some
-                // will not.
-                //
                 // libav mkv muxer expects there to be extradata for
                 // AAC and will crash if it is NULL.  So allocate extra
                 // byte so that av_malloc does not return NULL when length
