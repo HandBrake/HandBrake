@@ -658,6 +658,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
     self.validating = NO;
     self.notificationsEnabled = YES;
+
+    [self postChangedNotification];
 }
 
 @end

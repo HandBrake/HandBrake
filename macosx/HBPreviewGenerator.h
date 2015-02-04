@@ -11,6 +11,8 @@
 
 @protocol HBPreviewGeneratorDelegate <NSObject>
 
+- (void) reloadPreviews;
+
 - (void) didCreateMovieAtURL: (NSURL *) fileURL;
 - (void) didCancelMovieCreation;
 
@@ -28,6 +30,8 @@
 - (CGImageRef) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
 - (NSUInteger) imagesCount;
 - (void) purgeImageCache;
+
+- (NSString *)info;
 
 /* Video generator */
 - (BOOL) createMovieAsyncWithImageAtIndex: (NSUInteger) index duration: (NSUInteger) seconds;

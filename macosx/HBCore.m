@@ -283,7 +283,7 @@ static void hb_error_handler(const char *errmsg)
 
     hb_geometry_settings_t geo;
     memset(&geo, 0, sizeof(geo));
-    geo.geometry.width = frame.width;
+    geo.geometry.width = frame.displayWidth;
     geo.geometry.height = frame.height;
     // ignore the par.
     geo.geometry.par.num = 1;

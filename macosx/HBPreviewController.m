@@ -6,11 +6,7 @@
 
 #import "HBPreviewController.h"
 #import "HBPreviewGenerator.h"
-#import "HBUtilities.h"
 #import <QTKit/QTKit.h>
-
-#import "HBJob.h"
-#import "HBPicture+UIAdditions.h"
 
 @implementation QTMovieView (HBQTMovieViewExtensions)
 
@@ -109,7 +105,6 @@ typedef enum ViewMode : NSUInteger {
 
 @property (nonatomic, retain) NSTimer *hudTimer;
 
-@property (nonatomic, retain) HBPreviewGenerator *generator;
 @property (nonatomic) NSUInteger pictureIndex;
 
 @property (nonatomic, retain) QTMovie *movie;
@@ -233,22 +228,24 @@ typedef enum ViewMode : NSUInteger {
         self.backingScaleFactor = 1.0;
 }
 
-- (void) setJob:(HBJob *)job
+- (void)setGenerator:(HBPreviewGenerator *)generator
 {
-    _job = job;
-
-    self.generator.delegate = nil;
-    [self.generator cancel];
-    self.generator = nil;
-
-    if (job)
+    if (_generator)
     {
-        /* alloc and init a generator for the current title */
-        self.generator = [[[HBPreviewGenerator alloc] initWithCore:self.core job:self.job] autorelease];
+        _generator.delegate = nil;
+        [_generator cancel];
+        [_generator autorelease];
+    }
 
-        /* adjust the preview slider length */
-        [fPictureSlider setMaxValue: self.generator.imagesCount - 1.0];
-        [fPictureSlider setNumberOfTickMarks: self.generator.imagesCount];
+    _generator = [generator retain];
+
+    if (generator)
+    {
+        generator.delegate = self;
+
+        // adjust the preview slider length
+        [fPictureSlider setMaxValue: generator.imagesCount - 1.0];
+        [fPictureSlider setNumberOfTickMarks: generator.imagesCount];
 
         [self switchViewToMode:ViewModePicturePreview];
         [self displayPreview];
@@ -257,7 +254,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (void) reloadPreviews
 {
-    if (self.job)
+    if (self.generator)
     {
         // Purge the existing picture previews so they get recreated the next time
         // they are needed.
@@ -311,7 +308,7 @@ typedef enum ViewMode : NSUInteger {
         // Scale factor changed, update the preview window
         // to the new situation
         self.backingScaleFactor = newBackingScaleFactor;
-        if (self.job)
+        if (self.generator)
             [self reloadPreviews];
     }
 }
@@ -555,7 +552,7 @@ typedef enum ViewMode : NSUInteger {
     NSPoint mouseLoc = [theEvent locationInWindow];
 
     /* Test for mouse location to show/hide hud controls */
-    if (self.currentViewMode != ViewModeEncoding && self.job)
+    if (self.currentViewMode != ViewModeEncoding && self.generator)
     {
         /* Since we are not encoding, verify which control hud to show
          * or hide based on aMovie ( aMovie indicates we need movie controls )
@@ -674,18 +671,21 @@ typedef enum ViewMode : NSUInteger {
  */
 - (void) displayPreview
 {
+    CGImageRef fPreviewImage = NULL;
+
     if (self.window.isVisible)
     {
-        CGImageRef fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
+        fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
         [self.pictureLayer setContents:(id)fPreviewImage];
     }
-
-    HBPicture *pict = self.job.picture;
+    else
+    {
+        return;
+    }
 
     /* Set the picture size display fields below the Preview Picture*/
-    int display_width = pict.width * pict.parWidth / pict.parHeight;
-    NSSize imageScaledSize = NSMakeSize(display_width, pict.height);
-    NSSize displaySize = NSMakeSize(display_width, pict.height);
+    NSSize imageScaledSize = NSMakeSize(CGImageGetWidth(fPreviewImage), CGImageGetHeight(fPreviewImage));
+    NSSize displaySize = imageScaledSize;
 
     if (self.backingScaleFactor != 1.0)
     {
@@ -774,13 +774,13 @@ typedef enum ViewMode : NSUInteger {
 
     /* Set the info fields in the hud controller */
     [fInfoField setStringValue: [NSString stringWithFormat:
-                                 @"%@", self.job.picture.info]];
+                                 @"%@", self.generator.info]];
 
     [fscaleInfoField setStringValue: [NSString stringWithFormat:
                                       @"%@", scaleString]];
 
     /* Set the info field in the window title bar */
-    [[self window] setTitle:[NSString stringWithFormat: @"Preview - %@ %@", self.job.picture.info, scaleString]];
+    [[self window] setTitle:[NSString stringWithFormat: @"Preview - %@ %@", self.generator.info, scaleString]];
 }
 
 - (IBAction) previewDurationPopUpChanged: (id) sender
@@ -790,7 +790,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (IBAction) pictureSliderChanged: (id) sender
 {
-    if ((self.pictureIndex != [fPictureSlider intValue] || !sender) && self.job) {
+    if ((self.pictureIndex != [fPictureSlider intValue] || !sender) && self.generator) {
         self.pictureIndex = [fPictureSlider intValue];
         [self displayPreview];
     }
@@ -852,7 +852,6 @@ typedef enum ViewMode : NSUInteger {
 
 		if (!movie)
         {
-            [HBUtilities writeToActivityLog: "showMoviePreview: Unable to open movie"];
             [self switchViewToMode:ViewModePicturePreview];
 		}
         else
@@ -903,7 +902,6 @@ typedef enum ViewMode : NSUInteger {
     if (!self.generator)
         return;
 
-    self.generator.delegate = self;
     if ([self.generator createMovieAsyncWithImageAtIndex:self.pictureIndex
                                        duration:[[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue]])
     {

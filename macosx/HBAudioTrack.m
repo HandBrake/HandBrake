@@ -365,11 +365,11 @@ static NSMutableArray *masterBitRateArray = nil;
         }
         if ([self.dataSource.noneTrack isEqual: oldValue])
         {
-            [self.dataSource switchingTrackFromNone: self];
+            [self.delegate switchingTrackFromNone: self];
         }
         if ([self.dataSource.noneTrack isEqual: self.track])
         {
-            [self.dataSource settingTrackToNone: self];
+            [self.delegate settingTrackToNone: self];
         }
     }
     [oldValue release];
@@ -388,7 +388,7 @@ static NSMutableArray *masterBitRateArray = nil;
     [_mixdown autorelease];
     _mixdown = [mixdown retain];
     [self updateBitRates: YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName: HBMixdownChangedNotification object: self.dataSource];
+    [self.delegate mixdownChanged];
 }
 
 - (void)setSampleRate:(NSDictionary *)sampleRate

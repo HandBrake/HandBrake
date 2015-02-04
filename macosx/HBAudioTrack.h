@@ -8,6 +8,7 @@
 
 @class HBAudio;
 @protocol HBAudioTrackDataSource;
+@protocol HBAudioTrackDelegate;
 
 /**
  *  Audio track dicts keys.
@@ -41,6 +42,7 @@ extern NSString *keyAudioBitrate;
 @property (nonatomic, retain) NSNumber *gain;
 @property (nonatomic, retain) NSNumber *videoContainerTag;
 @property (nonatomic, assign) id<HBAudioTrackDataSource> dataSource;
+@property (nonatomic, assign) id<HBAudioTrackDelegate> delegate;
 
 @property (nonatomic, retain) NSMutableArray *codecs;
 @property (nonatomic, retain) NSMutableArray *mixdowns;
@@ -59,7 +61,10 @@ extern NSString *keyAudioBitrate;
 @protocol HBAudioTrackDataSource <NSObject>
 - (NSDictionary *)noneTrack;
 - (NSArray *)masterTrackArray;
+@end
 
+@protocol HBAudioTrackDelegate <NSObject>
 - (void)settingTrackToNone:(HBAudioTrack *)newNoneTrack;
 - (void)switchingTrackFromNone:(HBAudioTrack *)noLongerNoneTrack;
+- (void)mixdownChanged;
 @end

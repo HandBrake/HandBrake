@@ -11,7 +11,7 @@
 @class HBAudioTrack;
 @class HBAudioDefaults;
 
-extern NSString *HBMixdownChangedNotification;
+extern NSString *HBAudioChangedNotification;
 
 @interface HBAudio : NSObject <NSCoding, NSCopying, HBPresetCoding>
 

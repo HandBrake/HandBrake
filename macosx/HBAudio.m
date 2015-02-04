@@ -15,9 +15,9 @@
 
 #include "hb.h"
 
-NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
+NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
-@interface HBAudio () <HBAudioTrackDataSource>
+@interface HBAudio () <HBAudioTrackDataSource, HBAudioTrackDelegate>
 
 @property (nonatomic, readonly) NSDictionary *noneTrack;
 @property (nonatomic, readonly) NSArray *masterTrackArray;  // the master list of audio tracks from the title
@@ -47,7 +47,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         [sourceTracks addObjectsFromArray:title.audioTracks];
         _masterTrackArray = [sourceTracks copy];
 
-        [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the lis
+        [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
     }
     return self;
 }
@@ -107,6 +107,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         BOOL fallenBack = NO;
         HBAudioTrack *newAudio = [[HBAudioTrack alloc] init];
         [newAudio setDataSource:self];
+        [newAudio setDelegate:self];
         [self insertObject: newAudio inTracksAtIndex: [self countOfTracks]];
         [newAudio setVideoContainerTag:@(self.container)];
         [newAudio setTrackFromIndex: (int)trackIndex];
@@ -289,6 +290,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     HBAudioTrack *newAudio = [[HBAudioTrack alloc] init];
     [newAudio setDataSource:self];
+    [newAudio setDelegate:self];
     [self insertObject: newAudio inTracksAtIndex: [self countOfTracks]];
     [newAudio setVideoContainerTag:@(self.container)];
     [newAudio setTrack: self.noneTrack];
@@ -355,6 +357,11 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self.defaults validateEncoderFallbackForVideoContainer:container];
 }
 
+- (void)mixdownChanged
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName: HBAudioChangedNotification object: self];
+}
+
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone
@@ -374,6 +381,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             {
                 HBAudioTrack *trackCopy = [obj copy];
                 trackCopy.dataSource = copy;
+                trackCopy.delegate = copy;
                 [copy->_tracks addObject:[trackCopy autorelease]];
             }
         }];
@@ -412,6 +420,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     for (HBAudioTrack *track in _tracks)
     {
         track.dataSource = self;
+        track.delegate = self;
     }
 
     decodeObject(_defaults);

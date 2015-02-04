@@ -10,6 +10,7 @@
 
 #import "HBCore.h"
 #import "HBJob.h"
+#import "HBPicture+UIAdditions.h"
 
 @interface HBPreviewGenerator ()
 
@@ -33,6 +34,9 @@
         _job = job;
         _picturePreviews = [[NSMutableDictionary alloc] init];
         _imagesCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
     }
     return self;
 }
@@ -79,6 +83,16 @@
 - (void) purgeImageCache
 {
     [self.picturePreviews removeAllObjects];
+}
+
+- (void) imagesSettingsDidChange
+{
+    [self.delegate reloadPreviews];
+}
+
+- (NSString *)info
+{
+    return self.job.picture.info;
 }
 
 #pragma mark -
@@ -217,6 +231,8 @@
 
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [self.core cancelEncode];
 
     [_picturePreviews release];

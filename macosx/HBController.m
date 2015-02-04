@@ -21,6 +21,7 @@
 
 #import "HBPictureController.h"
 #import "HBPreviewController.h"
+#import "HBPreviewGenerator.h"
 
 #import "HBPresetsViewController.h"
 #import "HBAddPresetController.h"
@@ -75,8 +76,7 @@
         fPictureController = [[HBPictureController alloc] init];
         [fPictureController setDelegate:self];
 
-        fPreviewController = [[HBPreviewController  alloc] initWithDelegate:self];
-        [fPreviewController setCore:self.core];
+        fPreviewController = [[HBPreviewController alloc] initWithDelegate:self];
 
         fQueueController = queueController;
         fQueueController.controller = self;
@@ -452,12 +452,50 @@
     }
 }
 
+- (void)removeJobObservers
+{
+    if (self.job)
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBContainerChangedNotification object:_job];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBPictureChangedNotification object:_job.picture];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBVideoChangedNotification object:_job.video];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBAudioChangedNotification object:_job.audio];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBChaptersChangedNotification object:_job];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBRangeChangedNotification object:_job.range];
+    }
+}
+
+/**
+ *  Observe the job settings changes.
+ *  This is used to update the file name and extention
+ *  and the custom preset string.
+ */
+- (void)addJobObservers
+{
+    if (self.job)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:_job];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBPictureChangedNotification object:_job.picture];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBFiltersChangedNotification object:_job.filters];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:_job.video];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBAudioChangedNotification object:_job.audio];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBChaptersChangedNotification object:_job];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chapterPopUpChanged:) name:HBRangeChangedNotification object:_job.range];
+    }
+}
+
 - (void)setJob:(HBJob *)job
 {
+    [self removeJobObservers];
+
+    // Retain the new job
+    [_job autorelease];
+    _job = [job retain];
+
     // Set the jobs info to the view controllers
     fPictureController.picture = job.picture;
     fPictureController.filters = job.filters;
-    fPreviewController.job = job;
 
     fVideoController.job = job;
     fAudioController.audio = job.audio;
@@ -466,27 +504,16 @@
 
     if (job)
     {
-        [[NSNotificationCenter defaultCenter] removeObserver:_job];
-        [[NSNotificationCenter defaultCenter] removeObserver:_job.picture];
-        [[NSNotificationCenter defaultCenter] removeObserver:_job.filters];
-        [[NSNotificationCenter defaultCenter] removeObserver:_job.video];
-        [[NSNotificationCenter defaultCenter] removeObserver:_job.audio];
-        [[NSNotificationCenter defaultCenter] removeObserver:_job.range];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:job];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:job.video];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBMixdownChangedNotification object:job.audio];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBChaptersChangedNotification object:job];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chapterPopUpChanged:) name:HBRangeChangedNotification object:job.range];
+        fPreviewController.generator = [[[HBPreviewGenerator alloc] initWithCore:self.core job:job] autorelease];
+    }
+    else
+    {
+        fPreviewController.generator = nil;
     }
 
-    // Retain the new job
-    [_job autorelease];
-    _job = [job retain];
-
     [self enableUI:(job != nil)];
+
+    [self addJobObservers];
 }
 
 /**
@@ -1235,15 +1262,6 @@
 
 #pragma mark - Picture
 
-/**
- * Registers changes made in the Picture Settings Window.
- */
-- (void)pictureSettingsDidChange 
-{
-    [fPreviewController reloadPreviews];
-    [self customSettingUsed];
-}
-
 - (IBAction)toggleDrawer:(id)sender
 {
     if (fPresetDrawer.state == NSDrawerClosedState)
@@ -1286,13 +1304,17 @@
     {
         self.selectedPreset = preset;
 
+        // Remove the job observer so we don't update the file name
+        // too many times while the preset is being applied
+        [self removeJobObservers];
+
         // Apply the preset to the current job
         [self.job applyPreset:preset];
 
         // If Auto Naming is on, update the destination
         [self updateFileName];
 
-        [fPreviewController reloadPreviews];
+        [self addJobObservers];
     }
 }
 

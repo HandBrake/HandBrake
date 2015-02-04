@@ -6,8 +6,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBCore;
-@class HBJob;
+@class HBPreviewGenerator;
 
 @protocol HBPreviewControllerDelegate <NSObject>
 
@@ -19,13 +18,6 @@
 
 - (id)initWithDelegate:(id <HBPreviewControllerDelegate>)delegate;
 
-@property (nonatomic, assign) HBCore *core;
-@property (nonatomic, assign) HBJob *job;
-
-/**
- *  Reloads the preview images.
- *  Usually called after a picture setting changes.
- */
-- (void)reloadPreviews;
+@property (nonatomic, retain) HBPreviewGenerator *generator;
 
 @end
