@@ -29,21 +29,15 @@ static void build_integral_sse2(uint32_t *integral,
 {
     const __m128i zero = _mm_set1_epi8(0);
 
-    memset(integral-1 - integral_stride, 0, (w+1) * sizeof(uint32_t));
-
     for (int y = 0; y < h; y++)
     {
         __m128i prevadd = _mm_set1_epi32(0);
 
         const uint8_t *p1 = src_pre + y*src_w;
         const uint8_t *p2 = compare_pre + (y+dy)*compare_w + dx;
-        uint32_t *out = integral + (y*integral_stride) - 1;
+        uint32_t *out = integral + (y*integral_stride);
 
-        *out++ = 0;
-
-        const int pixels_step = 16;
-
-        for (int x = 0; x < w; x += pixels_step)
+        for (int x = 0; x < w; x += 16)
         {
             __m128i pa, pb;
             __m128i pla, plb;
@@ -116,16 +110,16 @@ static void build_integral_sse2(uint32_t *integral,
             _mm_store_si128((__m128i*)(out+12), hhdiff); // Store high diff high in memory
 
             // Increment
-            out += pixels_step;
-            p1  += pixels_step;
-            p2  += pixels_step;
+            out += 16;
+            p1  += 16;
+            p2  += 16;
         }
 
         if (y > 0)
         {
             out = integral + y*integral_stride;
 
-            for (int x = 0; x < w; x += pixels_step)
+            for (int x = 0; x < w; x += 16)
             {
                 *((__m128i*)out) = _mm_add_epi32(*(__m128i*)(out-integral_stride),
                                                  *(__m128i*)(out));
@@ -139,7 +133,7 @@ static void build_integral_sse2(uint32_t *integral,
                 *((__m128i*)(out+12)) = _mm_add_epi32(*(__m128i*)(out+12-integral_stride),
                                                       *(__m128i*)(out+12));
 
-                out += 4*4;
+                out += 16;
             }
         }
     }
