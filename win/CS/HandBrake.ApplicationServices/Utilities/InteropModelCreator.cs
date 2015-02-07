@@ -209,7 +209,8 @@ namespace HandBrake.ApplicationServices.Utilities
             job.UseDefaultChapterNames = work.IncludeChapterMarkers;
 
             // Advanced Settings
-            job.VideoOptions = work.ShowAdvancedTab ? work.AdvancedEncoderOptions : work.ExtraAdvancedArguments;
+            job.VideoOptions = work.ExtraAdvancedArguments;
+            job.AdvancedOptions = work.ShowAdvancedTab ? work.AdvancedEncoderOptions : string.Empty;
 
             // Subtitles
             job.Subtitles = new Subtitles { SourceSubtitles = new List<SourceSubtitle>(), SrtSubtitles = new List<SrtSubtitle>() };

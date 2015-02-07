@@ -248,11 +248,18 @@ namespace HandBrake.Interop.Json.Factories
                 video.Codec = videoEncoder.Id;
             }
 
+            if (!string.IsNullOrEmpty(job.AdvancedOptions))
+            {
+                video.Options = job.AdvancedOptions;
+            }
+            else
+            {
+                video.Level = job.VideoLevel;
+                video.Options = job.VideoOptions;
+                video.Preset = job.VideoPreset;
+                video.Profile = job.VideoProfile;
+            }
 
-            video.Level = job.VideoLevel;
-            video.Options = job.VideoOptions;
-            video.Preset = job.VideoPreset;
-            video.Profile = job.VideoProfile;
             if (job.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality) video.Quality = job.Quality;
             if (job.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
             {

@@ -294,6 +294,12 @@ namespace HandBrake.Interop.Model
         public string VideoOptions { get; set; }
 
         /// <summary>
+        /// Gets or sets the advanced options.
+        /// This overrides the VideoOptions, VideoPreset, VideoTunes and VideoLevel
+        /// </summary>
+        public string AdvancedOptions { get; set; }
+
+        /// <summary>
         /// Gets or sets the video encoder profile name.
         /// </summary>
         public string VideoProfile { get; set; }
