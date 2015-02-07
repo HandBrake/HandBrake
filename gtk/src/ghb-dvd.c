@@ -2,7 +2,7 @@
  *            ghb-dvd.c
  *
  *  Sat Apr 19 11:12:53 2008
- *  Copyright  2008-2013  John Stebbins
+ *  Copyright  2008-2015  John Stebbins
  *  <john at stebbins dot name>
  ****************************************************************************/
 
