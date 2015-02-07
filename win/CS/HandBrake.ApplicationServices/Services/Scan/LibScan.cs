@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Text;
     using System.Windows.Media.Imaging;
@@ -194,9 +195,9 @@ namespace HandBrake.ApplicationServices.Services.Scan
                     File.Delete(this.dvdInfoPath);
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                // Do nothing.
+                Debug.WriteLine(exc);
             }
 
             if (!Directory.Exists(Path.GetDirectoryName(this.dvdInfoPath)))
@@ -223,11 +224,12 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// </summary>
         public void Stop()
         {
-            ServiceLogMessage("Stopping Scan.");
-            this.instance.StopScan();
-
             try
             {
+                ServiceLogMessage("Stopping Scan.");
+                this.IsScanning = false;
+                this.instance.StopScan();
+
                 if (this.scanLog != null)
                 {
                     this.scanLog.Close();
@@ -307,17 +309,16 @@ namespace HandBrake.ApplicationServices.Services.Scan
                 this.currentSourceScanPath = source;
 
                 this.IsScanning = true;
-                if (this.ScanStared != null)
-                    this.ScanStared(this, System.EventArgs.Empty);
 
-                TimeSpan minDuration =
-                    TimeSpan.FromSeconds(
-                       configuraiton.MinScanDuration);
+                TimeSpan minDuration = TimeSpan.FromSeconds(configuraiton.MinScanDuration);
 
                 HandBrakeUtils.SetDvdNav(!configuraiton.IsDvdNavDisabled);
 
                 this.ServiceLogMessage("Starting Scan ...");
                 this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
+
+                if (this.ScanStared != null)
+                    this.ScanStared(this, System.EventArgs.Empty);
             }
             catch (Exception exc)
             {
@@ -343,7 +344,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// </param>
         private void InstanceScanCompleted(object sender, System.EventArgs e)
         {
-            this.ServiceLogMessage("Starting Completed ...");
+            this.ServiceLogMessage("Scan Finished ...");
 
             // Write the log file out before we start processing incase we crash.
             try
@@ -353,9 +354,9 @@ namespace HandBrake.ApplicationServices.Services.Scan
                     this.scanLog.Flush();
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                // Do Nothing.
+                Debug.WriteLine(exc);
             }
 
             HandBrakeUtils.MessageLogged -= this.HandBrakeInstanceMessageLogged;
@@ -369,7 +370,10 @@ namespace HandBrake.ApplicationServices.Services.Scan
             }
 
             // Process into internal structures.
-            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles, this.instance.FeatureTitle), ScanPath = path };
+            if (this.instance != null && this.instance.Titles != null)
+            {
+                this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles, this.instance.FeatureTitle), ScanPath = path };
+            }
 
             this.IsScanning = false;
 

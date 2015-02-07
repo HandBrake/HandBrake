@@ -228,9 +228,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
                         tempLogFile, Path.Combine(configuration.SaveLogCopyDirectory, encodeLogFile));
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                // This exception doesn't warrent user interaction, but it should be logged (TODO)
+                Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
             }
         }
 
@@ -375,7 +375,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// </param>
         protected void ProcessLogMessage(string message)
         {
-            if (!String.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(message))
             {
                 try
                 {
@@ -394,9 +394,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception exc)
                 {
-                    // Do Nothing.
+                    Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
                 }
             }
         }

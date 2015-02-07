@@ -207,7 +207,14 @@ namespace HandBrake.Interop
             // Lambda notation used to make sure we can view any JIT exceptions the method throws
             this.scanPollTimer.Elapsed += (o, e) =>
             {
-                this.PollScanProgress();
+                try
+                {
+                    this.PollScanProgress();
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc);
+                }
             };
             this.scanPollTimer.Start();
         }
@@ -215,6 +222,7 @@ namespace HandBrake.Interop
         /// <summary>
         /// Stops an ongoing scan.
         /// </summary>
+        [HandleProcessCorruptedStateExceptions] 
         public void StopScan()
         {
             HBFunctions.hb_scan_stop(this.hbHandle);
@@ -357,7 +365,14 @@ namespace HandBrake.Interop
 
             this.encodePollTimer.Elapsed += (o, e) =>
             {
-                this.PollEncodeProgress();
+                try
+                {
+                    this.PollEncodeProgress();
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc);
+                }
             };
             this.encodePollTimer.Start();
         }
@@ -442,13 +457,14 @@ namespace HandBrake.Interop
         /// <summary>
         /// Checks the status of the ongoing scan.
         /// </summary>
+        [HandleProcessCorruptedStateExceptions]
         private void PollScanProgress()
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
-            if (state.State == NativeConstants.HB_STATE_SCANNING)
+            if (state != null && state.State == NativeConstants.HB_STATE_SCANNING)
             {
                 if (this.ScanProgress != null)
                 {
@@ -462,7 +478,7 @@ namespace HandBrake.Interop
                     });
                 }
             }
-            else if (state.State == NativeConstants.HB_STATE_SCANDONE)
+            else if (state != null && state.State == NativeConstants.HB_STATE_SCANDONE)
             {
                 this.titles = new List<Title>();
 
@@ -495,13 +511,14 @@ namespace HandBrake.Interop
         /// <summary>
         /// Checks the status of the ongoing encode.
         /// </summary>
+        [HandleProcessCorruptedStateExceptions]
         private void PollEncodeProgress()
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
-            if (state.State == NativeConstants.HB_STATE_WORKING)
+            if (state != null && state.State == NativeConstants.HB_STATE_WORKING)
             {
                 if (this.EncodeProgress != null)
                 {
@@ -517,7 +534,7 @@ namespace HandBrake.Interop
                     this.EncodeProgress(this, progressEventArgs);
                 }
             }
-            else if (state.State == NativeConstants.HB_STATE_WORKDONE)
+            else if (state != null && state.State == NativeConstants.HB_STATE_WORKDONE)
             {
                 this.encodePollTimer.Stop();
 
