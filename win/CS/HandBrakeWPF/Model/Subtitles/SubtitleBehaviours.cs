@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Model.Subtitles
 {
     using System.ComponentModel;
+    using System.Linq;
 
     using Caliburn.Micro;
 
@@ -56,7 +57,7 @@ namespace HandBrakeWPF.Model.Subtitles
         public SubtitleBehaviours(SubtitleBehaviours behaviours)
         {
             this.SelectedBehaviour = behaviours.selectedBehaviour;
-            this.SelectedLangauges = new BindingList<string>(behaviours.SelectedLangauges);
+            this.SelectedLangauges = new BindingList<string>(behaviours.SelectedLangauges.ToList());
         }
 
         /// <summary>

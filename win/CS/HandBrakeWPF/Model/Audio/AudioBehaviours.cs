@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Model.Audio
 {
     using System.ComponentModel;
+    using System.Linq;
 
     using Caliburn.Micro;
 
@@ -46,7 +47,7 @@ namespace HandBrakeWPF.Model.Audio
         public AudioBehaviours(AudioBehaviours behaviours)
         {
             this.SelectedBehaviour = behaviours.SelectedBehaviour;
-            this.SelectedLangauges = new BindingList<string>(behaviours.selectedLangauges);
+            this.SelectedLangauges = new BindingList<string>(behaviours.selectedLangauges.ToList());
         }
 
         /// <summary>
