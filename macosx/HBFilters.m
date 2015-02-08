@@ -143,7 +143,15 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 - (void)setDenoise:(NSString *)denoise
 {
     [_denoise autorelease];
-    _denoise = [denoise copy];
+
+    if (denoise)
+    {
+        _denoise = [denoise copy];
+    }
+    else
+    {
+        _denoise = @"";
+    }
 
     [self postChangedNotification];
 }
@@ -151,7 +159,15 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 - (void)setDenoisePreset:(NSString *)denoisePreset
 {
     [_denoisePreset autorelease];
-    _denoisePreset = [denoisePreset copy];
+
+    if (denoisePreset)
+    {
+        _denoisePreset = [denoisePreset copy];
+    }
+    else
+    {
+        _denoisePreset = @"medium";
+    }
 
     [self postChangedNotification];
 }
@@ -160,7 +176,15 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 - (void)setDenoiseTune:(NSString *)denoiseTune
 {
     [_denoiseTune autorelease];
-    _denoiseTune = [denoiseTune copy];
+
+    if (denoiseTune)
+    {
+        _denoiseTune = [denoiseTune copy];
+    }
+    else
+    {
+        _denoiseTune = @"none";
+    }
 
     [self postChangedNotification];
 }
