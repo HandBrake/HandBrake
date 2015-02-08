@@ -379,6 +379,12 @@ namespace HandBrake.ApplicationServices.Utilities
                     case DenoisePreset.Weak:
                         query += " --denoise=\"weak\"";
                         break;
+                    case DenoisePreset.Light:
+                        query += " --nlmeans=\"light\"";
+                        break;
+                    case DenoisePreset.Ultralight:
+                        query += " --nlmeans=\"ultralight\"";
+                        break;
                     case DenoisePreset.Medium:
                         query += " --denoise=\"medium\"";
                         break;

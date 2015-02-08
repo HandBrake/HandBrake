@@ -49,7 +49,7 @@ namespace HandBrakeWPF.Converters.Filters
 
                 if (denoiseChoice == Denoise.hqdn3d)
                 {
-                    return new List<DenoisePreset> { DenoisePreset.Weak, DenoisePreset.Medium, DenoisePreset.Strong, DenoisePreset.Custom };
+                    return new List<DenoisePreset> { DenoisePreset.Ultralight, DenoisePreset.Light, DenoisePreset.Medium, DenoisePreset.Strong, DenoisePreset.Custom };
                 }
 
                 if (denoiseChoice == Denoise.NLMeans)
