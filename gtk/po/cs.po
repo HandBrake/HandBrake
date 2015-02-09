@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake-0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-10 21:39+0400\n"
-"PO-Revision-Date: 2014-10-15 19:09+0000\n"
+"POT-Creation-Date: 2014-11-03 13:01+0300\n"
+"PO-Revision-Date: 2014-11-28 20:59+0000\n"
 "Last-Translator: fri\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/handbrake/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -21,9 +21,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-
-msgid "Off"
-msgstr "Vypnuto"
 
 msgid "Quality: "
 msgstr "Jakost:"
@@ -65,12 +62,6 @@ msgstr "Přidat kodér zvuku.\nKaždá vybraná zdrojová stopa bude zakódován
 msgid "Set the audio codec to encode this track with."
 msgstr "Nastavit zvukový kodek, kterým se má tato stopa zakódovat."
 
-msgid "Bitrate"
-msgstr "Datový tok"
-
-msgid "Quality"
-msgstr "Jakost"
-
 msgid "Set the bitrate to encode this track with."
 msgstr "Nastavit datový tok, ve kterém se má tato stopa zakódovat."
 
@@ -90,10 +81,17 @@ msgid ""
 "Adjust the amplification or attenuation of the output audio track."
 msgstr "<b>Zesílení zvuku:</b>\nUpravit zesílení nebo zeslabení výstupní zvukové stopy."
 
-msgid ""
-"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
-"audio track."
-msgstr "<b>Zesílení zvuku:</b>\nUpravit zesílení nebo zeslabení výstupní zvukové stopy."
+msgid "0dB"
+msgstr "0 dB"
+
+msgid "%ddB"
+msgstr "%ddB"
+
+msgid "%.4gkHz"
+msgstr "%.4gkHz"
+
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4gkHz)</small>"
 
 msgid ""
 "<b>Dynamic Range Compression:</b>\n"
@@ -104,63 +102,29 @@ msgid ""
 "softer and soft sounds louder.\n"
 msgstr "<b>Komprese dynamického rozsahu:</b>\nUpravit dynamický rozsah výstupní zvukové stopy.\nU zdrojového zvuku, který má široký dynamický rozsah\n(velmi hlasité a velmi slabé sekvence), vám komprese\ndynamického rozsahu (DRC - Dynamic Range Compression)\n'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé\noblasti hlasitějšími.\n"
 
-msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
-"\n"
-"                                For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
-msgstr "<b>Komprese dynamického rozsahu:</b> Upravit dynamický rozsah výstupní zvukové stopy. \n\n                                U zdrojového zvuku, který má široký dynamický rozsah (velmi hlasité a velmi slabé sekvence), vám komprese dynamického rozsahu (DRC - Dynamic Range Compression) 'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé oblasti hlasitějšími."
-
-msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
-"\n"
-"                                    For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
-msgstr "<b>Komprese dynamického rozsahu:</b> Upravit dynamický rozsah výstupní zvukové stopy. \n\n                                U zdrojového zvuku, který má široký dynamický rozsah (velmi hlasité a velmi slabé sekvence), vám komprese dynamického rozsahu (DRC - Dynamic Range Compression) 'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé oblasti hlasitějšími."
-
 msgid "Remove this audio encoder"
 msgstr "Odstranit tento kodér zvuku"
-
-msgid "Failed to find widget"
-msgstr "Nepodařilo se najít doplněk"
-
-#, c-format
-msgid "Failed to find dependent widget %s"
-msgstr "Nepodařilo se najít závislý doplněk %s"
 
 msgid "Closing HandBrake will terminate encoding.\n"
 msgstr "Zavření programu HandBrake povede k ukončení kódování.\n"
 
-msgid "{source}"
-msgstr "{Zdroj}"
-
-msgid "{title}"
-msgstr "{Název}"
-
-msgid "{chapters}"
-msgstr "{Kapitoly}"
-
-msgid "{time}"
-msgstr "{Čas}"
-
-msgid "{date}"
-msgstr "{Datum}"
-
-msgid "{bitrate}"
-msgstr "{Datový tok}"
-
 msgid "No Title Found"
 msgstr "Nenalezen žádný název"
 
+msgid "none"
+msgstr "Žádný"
+
 msgid "Not Selected"
 msgstr "Nevybráno"
+
+msgid "zerolatency x264 tune selected, forcing constant framerate"
+msgstr "vybráno x264 s nulovou prodlevou, vynucuje se stálá rychlost snímkování"
 
 msgid "Scanning ..."
 msgstr "Prohledává se..."
 
 msgid "Stop Scan"
 msgstr "Zastavit prohledávání"
-
-msgid "Choose Destination"
-msgstr "Vybrat cíl"
 
 msgid "On"
 msgstr "Zapnuto"
@@ -176,6 +140,9 @@ msgstr "Vlastní"
 
 msgid "Unknown"
 msgstr "Neznámý"
+
+msgid "auto"
+msgstr "Automaticky"
 
 #, c-format
 msgid ""
@@ -205,10 +172,6 @@ msgstr "Vlastní"
 
 msgid "Modified "
 msgstr "Změněno "
-
-#, c-format
-msgid "%s%sPreset: %s"
-msgstr "%s%s Přednastavenít: %s"
 
 #, c-format
 msgid "Handbrake Version: %s (%d)\n"
@@ -277,17 +240,11 @@ msgstr "Kódování selhalo"
 msgid "Muxing: This may take a while..."
 msgstr "Muxing: Může to chvíli trvat..."
 
-msgid "Encode Complete"
-msgstr "Kódování dokončeno"
+msgid "Scan this DVD source"
+msgstr "Prohledat tento DVD zdroj"
 
-msgid "HandBrake"
-msgstr "HandBrake"
-
-msgid "Updating preview\n"
-msgstr "Obnovuje se náhled\n"
-
-msgid "Error while reading activity from pipe"
-msgstr "Chyba při čtení činnosti z kanálu"
+msgid "AutoScan"
+msgstr "Automatické prohledání"
 
 msgid "Suspend"
 msgstr "Odložit"
@@ -298,16 +255,6 @@ msgstr "Nepodařilo se odložit: %s"
 
 msgid "Suspend failed"
 msgstr "Nepodařilo se odložit"
-
-msgid "CanShutdown"
-msgstr "Vypnout"
-
-#, c-format
-msgid "CanShutdown failed: %s"
-msgstr "Nepodařilo se vypnout: %s"
-
-msgid "CanShutdown failed"
-msgstr "Nepodařilo se vypnout"
 
 msgid "Shutdown"
 msgstr "Vypnout"
@@ -321,26 +268,6 @@ msgstr "Nepodařilo se vypnout"
 
 msgid "Encoding"
 msgstr "Kódování"
-
-#, c-format
-msgid "Inhibit failed: %s"
-msgstr "Nepodařilo se zabránit: %s"
-
-msgid "Inhibit failed"
-msgstr "Nepodařilo se zabránit"
-
-msgid "UnInhibit"
-msgstr "Zrušit bránění"
-
-#, c-format
-msgid "UnInhibit failed: %s"
-msgstr "Nepodařilo se zrušit bránění: %s"
-
-msgid "UnInhibit failed"
-msgstr "Nepodařilo se zrušit bránění"
-
-msgid "Uninhibit"
-msgstr "Zrušit bránění"
 
 #, c-format
 msgid "press %d %d"
@@ -362,6 +289,9 @@ msgstr "%s: %.4g (Varování: bezztrátové"
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
 msgstr "HandBrake %s/%s je nyní dostupný (máte %s/%d)."
+
+msgid "Encode Complete"
+msgstr "Kódování dokončeno"
 
 msgid "Put down that cocktail, Your HandBrake queue is done!"
 msgstr "Dejte si koktejl. Vaše řada HandBrake je hotová!"
@@ -406,6 +336,12 @@ msgid ""
 "    <out resource plist>  Output resources plist file\n"
 msgstr "Použití: %s [-I <inc path>] <in resource list> <out resource plist>\nPřehled:\n    Vytvoří zdrojový plist ze zdrojového seznamu\nVolby:\n    I - zahrnout cestu pro hledání souborů\n    <in resource list>    Vstupní soubor se zdroji\n    <out resource plist>  Výstupní soubor se zdroji plist\n"
 
+msgid "language"
+msgstr "Jazyk"
+
+msgid "Language"
+msgstr "Jazyk"
+
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -421,23 +357,6 @@ msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr "Jak řetězec zalomit do více řádků, pokud vykreslovač buňky nemá dostatek místa pro zobrazení celého řetězce."
-
-#, c-format
-msgid "Failed to set text from markup due to error parsing markup: %s"
-msgstr "Text ze značení se nepodařilo nastavit kvůli chybě při zpracování značení: %s"
-
-#, c-format
-msgid "Don't know color `%s'"
-msgstr "Neví se, jaká je to barva `%s'"
-
-msgid "_Open"
-msgstr "_Otevřít"
-
-msgid "_Cancel"
-msgstr "_Zrušit"
-
-msgid "_Save"
-msgstr "_Uložit"
 
 msgid ""
 "Render the subtitle over the video.\n"
@@ -484,6 +403,9 @@ msgstr "Přidat (nebo odečíst) posun (v milisekundách)\nna začátek stopy ti
 
 msgid "<b>SRT Offset</b>"
 msgstr "<b>Posun SRT</b>"
+
+msgid "Off"
+msgstr "Vypnuto"
 
 msgid ""
 "The source subtitle track\n"
@@ -537,6 +459,9 @@ msgstr "_Ukončit"
 msgid "_About"
 msgstr "O _programu"
 
+msgid "HandBrake"
+msgstr "HandBrake"
+
 msgid "_File"
 msgstr "_Soubor"
 
@@ -554,9 +479,6 @@ msgstr "_Nastavení"
 
 msgid "_Queue"
 msgstr "Ř_ada"
-
-msgid "S_top Queue"
-msgstr "Z_astavit řadu"
 
 msgid "_Add"
 msgstr "_Přidat"
@@ -590,6 +512,9 @@ msgstr "Ukázat ř_adu"
 
 msgid "_Presets"
 msgstr "_Přednastavení"
+
+msgid "_Save"
+msgstr "_Uložit"
 
 msgid "_Delete"
 msgstr "_Smazat"
@@ -686,9 +611,6 @@ msgstr "Rozsah titulu k zakódování. Můžou to být kapitoly, sekundy nebo sn
 msgid "Set the first chapter to encode."
 msgstr "Nastavit první kapitolu k zakódování."
 
-msgid "through"
-msgstr "až"
-
 msgid "Set the last chapter to encode."
 msgstr "Nastavit poslední kapitolu k zakódování."
 
@@ -732,6 +654,12 @@ msgstr "Přizpůsobit uspořádání souboru MP4 pro postupné stahování.\nTo 
 
 msgid "Large file (>4GB)"
 msgstr "Velký soubor (>4GB)"
+
+msgid ""
+"Allow 64 bit MP4 file which can be over 4GB.\n"
+"\n"
+"<b>Caution:</b> This option may break device compatibility."
+msgstr "Povolit 64 bitový soubor MP4, který může mít víc než 4 GB.\n\n    <b>Výstraha:</b> Tato volba může vést k porušení kompatibility zařízení."
 
 msgid "<b>Presets List</b>"
 msgstr "<b>Seznam přednastavení</b>"
@@ -834,6 +762,17 @@ msgid ""
 "This will be the resolution that most closely matches the source resolution after cropping."
 msgstr "Je-li povoleno, vybrat nejlepší rozlišení pro ukládání.\nToto bude rozlišení, které nejvíce odpovídá rozlišení zdroje po ořezání."
 
+msgid ""
+"<b>Anamorphic Modes:</b>\n"
+"<small><tt>\n"
+"None   - Force pixel aspect ratio to 1:1.\n"
+"Loose  - Align dimensions to chosen 'Alignment' value\n"
+"     and pick pixel aspect ratio that preserves the\n"
+"     original display aspect ratio\n"
+"Strict - Keep original source dimensions and pixel\n"
+"     aspect ratio</tt></small>"
+msgstr "<b>Pokřivené režimy:</b>\n<small><tt>\nŽádný   - Vynutit poměr stran pixelu 1:1.\nLoose  - Zarovnat rozměry na zvolenou hodnotu zarovnání \n         a zvolit poměr stran pixelu, jenž zachovává\n         původní poměr stran zobrazení\nPřísný - Zachovat původní rozměry zdroje a poměr \n         stran pixelu</tt></small>"
+
 msgid "Alignment:"
 msgstr "Zarovnání:"
 
@@ -861,6 +800,9 @@ msgid ""
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr "Strana pixelu určuje tvar pixelů.\n\nPoměr 1:1 stanovuje čtvercový pixel. Jiné hodnoty stanovují obdélníkové tvary.\nPřehrávače změní velikost obrázku tak, aby dosáhly stanovené stránky."
+
+msgid ":"
+msgstr ":"
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
@@ -1001,6 +943,18 @@ msgstr "Výstupní rychlost snímkování.\n\nDoporučena je stejná, jakou má 
 
 msgid "Constant Framerate"
 msgstr "Stálá rychlost snímkování"
+
+msgid "Same as source"
+msgstr "Stejné jako zdroj"
+
+msgid "kbps"
+msgstr "kb/s"
+
+msgid "(variable)"
+msgstr "(proměnná)"
+
+msgid "(constant)"
+msgstr "(stálá)"
 
 msgid "Enables constant framerate output."
 msgstr "Povolí výstup se stálou rychlostí snímkování."
@@ -1186,32 +1140,20 @@ msgid ""
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje MP3.\nToto dovolí, aby byl vybrán průchod MP3 passthru, když je povolen automatický výběr průchodu."
 
-msgid "AAC"
-msgstr "AAC"
-
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje AAC.\nToto dovolí, aby byl vybrán průchod AAC, když je povolen automatický výběr průchodu."
-
-msgid "AC-3"
-msgstr "AC-3"
 
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje AC-3.\nToto dovolí, aby bylo vybráno AC-3 passthru, když je povolen automatický výběr passthru."
 
-msgid "DTS"
-msgstr "DTS"
-
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr "Toto povolit, pokud vaše zařízení pro přehrávání podporuje DTS.\nToto dovolí, aby bylo vybráno DTS passthru, když je povolen automatický výběr passthru."
-
-msgid "DTS-HD"
-msgstr "DTS-HD"
 
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
@@ -1229,6 +1171,9 @@ msgstr "Nastavit zvukový kodek, který se má použít při kódování, když 
 msgid "<b>Audio Encoder Settings:</b>"
 msgstr "<b>Nastavení kódování zvuku:</b>"
 
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr "Každá vybraná zdrojová stopa bude zakódována pomocí všech vybraných kodérů."
+
 msgid "Encoder"
 msgstr "Kodér"
 
@@ -1243,12 +1188,6 @@ msgstr "Vzorkovací kmitočet"
 
 msgid "Gain"
 msgstr "Zesílení"
-
-msgid "Gain:"
-msgstr "Zesílení:"
-
-msgid "DRC"
-msgstr "DRC"
 
 msgid "Audio Defaults"
 msgstr "Výchozí nastavení zvuku"
@@ -1408,6 +1347,17 @@ msgstr "Ovládá způsob odhadování pohybu.\n\nOdhad pohybu je to, jak kodér 
 msgid "<small>Subpel ME &amp; Mode:</small>"
 msgstr "<small>Subpixel ME &amp; režim:</small>"
 
+msgid ""
+"This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
+"\n"
+"Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n"
+"Mode decision is the method used to choose how to encode each block of the frame: a very important decision.\n"
+"SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n"
+"6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n"
+"11 disables all early terminations in analysis.\n"
+"10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
+msgstr "Toto nastavení ovládá jak způsob odhadování pohybu o subpixelové přesnosti, tak způsob rozhodování režimu.\n\n        Subpixelové odhadování pohybu se používá na zjemňování odhadování pohybu jdoucí za pouhou pixelovou přesnost při současném zlepšení komprese.\n\n        Rozhodování režimu je postup používaný pro výběr toho, jak zakódovat každý blok snímku: velice důležité rozhodnutí.\n\n        SAD je nejrychlejší způsob, následuje jej SATD, RD, RD zjemňování, a nejpomalejší je QPRD.\n\n        6 nebo vyšší se důrazně doporučuje: Psy-RD, velice výkonná psy optimalizace, která napomáhá uchování podrobností, vyžaduje RD.\n\n        11 zakazuje všechna brzká ukončení rozboru.\n\n        10 a 11, nejvýkonnější a nejpomalejší volby, vyžadují přizpůsobivou kvantizaci (aq-mode > 0) a mříž 2 (vždy)."
+
 msgid "<small>Motion Est. Range:</small>"
 msgstr "<small>Rozsah odhadování pohybu:</small>"
 
@@ -1433,6 +1383,16 @@ msgstr "H.264 umožňuje v B-snímcích dva odlišné režimy předpovídání, 
 
 msgid "<small>Adaptive B-Frames:</small>"
 msgstr "<small>Přizpůsobivé B-snímky:</small>"
+
+msgid ""
+"x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
+"\n"
+"Fast mode takes roughly the same amount of time no matter how many B-frames you specify.\n"
+"However, while fast, its decisions are often suboptimal.\n"
+"\n"
+"Optimal mode gets slower as the maximum number of B-Frames increases,\n"
+"but makes much more accurate decisions, especially when used with B-pyramid."
+msgstr "x264 má různé druhy algoritmů na rozhodnutí, kdy použít B-snímky, a kolik jich použít.\n\n        Rychlý režim zabere zhruba stejně tolik času bez ohledu na to, kolik B-snímků určíte.  Nicméně však, i když je rychlý, jeho rozhodnutí jsou často méně než vhodná.\n\n        Nejvhodnější režim zpomaluje, jak se zvyšuje největší počet B-snímků, ale dělá mnohem přesnější rozhodnutí, obzvláště když se použije s B-jehlanem."
 
 msgid "<small>Partitions:</small>"
 msgstr "<small>Úseky:</small>"
@@ -1494,6 +1454,20 @@ msgstr "Psychozraková mříž je pokusný algoritmus pro další zlepšení ost
 
 msgid "Deblocking: "
 msgstr "Odstranění bloků:"
+
+msgid ""
+"H.264 deblocking filter.\n"
+"\n"
+"h.264 has a built-in deblocking filter that smooths out blocking artifacts\n"
+"after decoding each frame.  This not only improves visual quality, but also\n"
+"helps compression significantly. The deblocking filter takes a lot of CPU power,\n"
+"so if you're looking to minimize CPU requirements for video playback, disable it.\n"
+"\n"
+"The deblocking filter has two adjustable parameters, \"strength\" (Alpha) and \"threshold\" (Beta).\n"
+"The former controls how strong (or weak) the deblocker is, while the latter controls how many\n"
+"(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
+"The default is 0 (normal strength) for both parameters."
+msgstr "Filtr na odstranění bloků H.264.\n\nH.264 má vestavěný filtr na odstranění bloků, který vyhlazuje blokující artefakty po dekódování každého snímku.  Toto nejen že zlepšuje pohledovou kvalitu, ale také podstatně pomáhá kompresi. Filtr na odstranění bloků si bere hodně z výkonu procesoru, takže pokud se staráte o požadavky procesoru na přehrávání obrazového záznamu, zakažte jej.\n\n        Filtr na odstranění bloků má dva nastavitelné parametry, \"sílu\" (Alpha) a \"práh\" (Beta). První ovládá to, jak silný (nebo slabý) rušitel bloků je, zatímco druhý ovládá to, na jak mnoho (nebo málo) okrajů se použije. Nižší hodnoty znamenají méně odstraněných bloků, vyšší hodnoty znamenají více odstraněných bloků. Výchozí je 0 (normální síla) pro oba parametry."
 
 msgid "No DCT Decimate"
 msgstr "Žádné ničení DCT"
@@ -1584,6 +1558,9 @@ msgid ""
 "Resets all queue jobs to pending and ready to run again."
 msgstr "Označit všechny záznamy v řadě jako čekající na vyřízení.\nNastaví znovu všechny zařazené úkoly jako čekající na vyřízení a připravené k opětovnému spuštění."
 
+msgid "OK"
+msgstr "OK"
+
 msgid "Select All"
 msgstr "Vybrat vše"
 
@@ -1598,6 +1575,9 @@ msgstr "Odznačit všechny názvy"
 
 msgid "Destination files OK.  No duplicates detected."
 msgstr "Cílové soubory jsou v pořádku. Nebylo zjištěno, že by byly některé soubory dvakrát."
+
+msgid "Select this title for adding to the queue.\n"
+msgstr "Vybrat tento název pro přidání do řady.\n"
 
 msgid "Preferences"
 msgstr "Nastavení"
@@ -1769,9 +1749,6 @@ msgstr "Vložený seznam titulků"
 msgid "Enable settings to select embedded subtitles"
 msgstr "Povolit nastavení pro vybrání vložených titulků"
 
-msgid "Language"
-msgstr "Jazyk"
-
 msgid "Character Code"
 msgstr "Kód znaku"
 
@@ -1841,14 +1818,31 @@ msgstr "Smíchání"
 msgid "Sample Rate"
 msgstr "Vzorkovací kmitočet"
 
-msgid "Sample Rate:"
-msgstr "Vzorkovací kmitočet:"
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
+msgstr "<b>Komprese dynamického rozsahu:</b>\nUpravit dynamický rozsah výstupní zvukové stopy.\n\nU zdrojového zvuku, který má široký dynamický rozsah\n(velmi hlasité a velmi slabé sekvence), vám komprese\ndynamického rozsahu (DRC - Dynamic Range Compression)\n'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé\noblasti hlasitějšími."
 
 msgid "Enable bitrate setting"
 msgstr "Povolit nastavení datového toku"
 
 msgid "Enable quality setting"
 msgstr "Povolit nastavení jakosti"
+
+msgid ""
+"<b>Quality:</b> For output codec's that support it, adjust the quality of "
+"the output."
+msgstr "<b>Kvalita:</b> Upravit jakost výstupu u výstupních kodeků, jež to podporují."
+
+msgid "00.0"
+msgstr "00.0"
+
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
+"audio track."
+msgstr "<b>Zesílení zvuku:</b>\nUpravit zesílení nebo zeslabení výstupní zvukové stopy."
 
 msgid "Skip This Version"
 msgstr "Přeskočit tuto verzi"
@@ -1864,9 +1858,6 @@ msgstr "HandBrake xxx je nyní dostupný (máte yyy)."
 
 msgid "<b>Release Notes</b>"
 msgstr "<b>Poznámky k vydání</b>"
-
-msgid "none"
-msgstr "Žádný"
 
 msgid "First Track Matching Selected Languages"
 msgstr "První stopa odpovídá vybraným jazykům"
@@ -1901,6 +1892,9 @@ msgstr "Vypnout počítač"
 msgid "Week"
 msgstr "Týden"
 
+msgid "Month"
+msgstr "Měsíc"
+
 msgid "Year"
 msgstr "Rok"
 
@@ -1919,29 +1913,17 @@ msgstr "Týdně"
 msgid "Monthly"
 msgstr "Měsíčně"
 
-msgid "Month"
-msgstr "Měsíc"
-
 msgid "Default"
 msgstr "Výchozí"
 
 msgid "Fast"
 msgstr "Rychlý"
 
-msgid "Bob"
-msgstr ""
-
 msgid "Slow"
 msgstr "Pomalý"
 
 msgid "Slower"
 msgstr "Pomalejší"
-
-msgid "NLMeans"
-msgstr "NLMeans"
-
-msgid "HQDN3D"
-msgstr "HQDN3D"
 
 msgid "Ultralight"
 msgstr "Ultralehký"
@@ -1950,9 +1932,6 @@ msgid "Light"
 msgstr "Lehký"
 
 msgid "Medium"
-msgstr "Střední"
-
-msgid "medium"
 msgstr "Střední"
 
 msgid "Strong"
@@ -2006,6 +1985,9 @@ msgstr "Vyčerpávající"
 msgid "Hadamard Exhaustive"
 msgstr "Vyčerpávající Hadamard"
 
+msgid "Most"
+msgstr "Nejvíce"
+
 msgid "Some"
 msgstr "Některý"
 
@@ -2018,12 +2000,6 @@ msgstr "Pouze zakódovat"
 msgid "Always"
 msgstr "Vždy"
 
-msgid "Same as source"
-msgstr "Stejné jako zdroj"
-
-msgid "Same as source:"
-msgstr "Stejné jako zdroj:"
-
 msgid "(NTSC Film)"
 msgstr "(Film NTSC)"
 
@@ -2033,7 +2009,18 @@ msgstr "(Film/Video PAL)"
 msgid "(NTSC Video)"
 msgstr "(Video NTSC)"
 
-#, c-format
+msgid "%d - %02dh%02dm%02ds - %s"
+msgstr "%d - %02dh%02dm%02ds - %s"
+
+msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
+msgstr "%d (%05d.MPLS) - %02dh%02dm%02ds"
+
+msgid "%d (%05d.MPLS) - Unknown Length"
+msgstr "%d (%05d.MPLS) - Neznámá délka"
+
+msgid "%d - %02dh%02dm%02ds"
+msgstr "%d - %02dh%02dm%02ds"
+
 msgid "%d - Unknown Length"
 msgstr "%d - Neznámá délka"
 
@@ -2133,10 +2120,6 @@ msgid ""
 "%s"
 msgstr "<b><big>Nelze vytvořit %s.</big></b>\n\nVnitřní chyba. Nepodařilo se zpracovat popis UI.\n%s"
 
-#, c-format
-msgid "Signal handler (%s) not found"
-msgstr "Obsluha signálu (%s) nenalezena"
-
 msgid "Index"
 msgstr "Rejstřík"
 
@@ -2145,12 +2128,6 @@ msgstr "Trvání"
 
 msgid "Title"
 msgstr "Název"
-
-msgid "Done\n"
-msgstr "Hotovo\n"
-
-msgid "DATA"
-msgstr "DATA"
 
 msgid "Job Information"
 msgstr "Informace o úkolu"
@@ -2210,17 +2187,11 @@ msgstr "Nelze přiřadit hodnotu: (%s)"
 msgid "Subtitles"
 msgstr "Titulky"
 
-#, c-format
-msgid "Superfluous tunes! %s"
-msgstr "Nadbytečný zvuk! %s"
-
-#, c-format
 msgid ""
 "%s: Folder already exists.\n"
 "You can not replace it with a preset."
 msgstr "%s: Složka již existuje.\nNemůžete ji nahradit přednastavením."
 
-#, c-format
 msgid ""
 "%s: Preset already exists.\n"
 "You can not replace it with a folder."
@@ -2238,21 +2209,20 @@ msgstr "Přednastavení (*.plist)"
 msgid "Export Preset"
 msgstr "Vyvést přednastavení"
 
-#, c-format
 msgid ""
 "Confirm deletion of %s:\n"
 "\n"
 "%s"
 msgstr "Potvrdit smazání %s:\n\n%s"
 
+msgid "folder"
+msgstr "Složka"
+
+msgid "preset"
+msgstr "Přednastavení"
+
 msgid "No selection???  Perhaps unselected."
 msgstr "Žádný výběr? Patrně není vybráno."
-
-msgid "Couldn't create native window for GstXOverlay. Disabling live preview."
-msgstr "Nepodařilo se vytvořit nativní okno pro GstXOverlay. Zakazuje se živý náhled."
-
-msgid "Couldn't initialize gstreamer. Disabling live preview."
-msgstr "Nepodařilo se spustit gstreamer. Zakazuje se živý náhled."
 
 #, c-format
 msgid "Gstreamer Error: %s"
@@ -2266,11 +2236,11 @@ msgid ""
 "%s"
 msgstr "Chybí přídavný modul GStreameru\nZvuk nebo obraz nemusí být přehrávány tak, jak je očekáváno\n\n%s"
 
-msgid "Ok"
-msgstr "OK"
-
 msgid "Done"
 msgstr "Hotovo"
+
+msgid "Windowed"
+msgstr "Okenní"
 
 msgid "Seconds"
 msgstr "Sekundy"
@@ -2395,6 +2365,12 @@ msgstr "Chyba"
 
 msgid "Bitrate:"
 msgstr "Datový tok:"
+
+msgid "Bitrate"
+msgstr "Datový tok"
+
+msgid "Quality"
+msgstr "Jakost"
 
 msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
 msgstr "<b>Turbo 1 průchod:</b> <small>Zapnuto</small>\n"
@@ -2526,11 +2502,17 @@ msgstr "Pokračovat"
 msgid "Resume Encoding"
 msgstr "Pokračovat v kódování"
 
+msgid "S_top Queue"
+msgstr "Z_astavit řadu"
+
 msgid "_Start Queue"
 msgstr "_Spustit řadu"
 
 msgid "_Resume Queue"
 msgstr "Po_kračovat v řadě"
+
+msgid "Resume Queue"
+msgstr "Pokračovat v řadě"
 
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
@@ -2555,21 +2537,6 @@ msgid "Usage: %s infile [outfile]\n"
 msgstr "Použití: %s infile [outfile]\n"
 
 #, c-format
-msgid "Attempt to set unknown widget type: %s\n"
-msgstr "Pokus o nastavení neznámého typu doplňku: %s\n"
-
-#, c-format
-msgid "No value found for %s\n"
-msgstr "Pro %s nebyla nalezena žádná hodnota.\n"
-
-msgid "Attempt to set unknown widget type"
-msgstr "Pokus o nastavení neznámého typu doplňku"
-
-#, c-format
-msgid "Failed to find widget for key: %s\n"
-msgstr "Nepodařilo se najít doplněk pro klíč: %s\n"
-
-#, c-format
 msgid "Offset: %dms"
 msgstr "Posun: %dms"
 
@@ -2578,6 +2545,9 @@ msgstr "Vypáleno do obrazu"
 
 msgid "Passthrough"
 msgstr "Průchod"
+
+msgid "through"
+msgstr "až"
 
 msgid "(Forced Subtitles Only)"
 msgstr "(Pouze vynucené titulky)"
@@ -2632,24 +2602,38 @@ msgid ""
 "\"\""
 msgstr "%s\n\nRozšířené volby:\n\"\""
 
-msgid "ERROR"
-msgstr "Chyba"
+msgid "Any"
+msgstr "Jakýkoli"
 
-msgid ""
-"<b>Anamorphic Modes:</b>\n"
-"<small><tt>\n"
-"None   - Force pixel aspect ratio to 1:1.\n"
-"Loose  - Align dimensions to chosen 'Alignment' value \n"
-"         and pick pixel aspect ratio that preserves the\n"
-"         original display aspect ratio\n"
-"Strict - Keep original source dimensions and pixel \n"
-"         aspect ratio</tt></small>"
-msgstr "<b>Pokřivené režimy:</b>\n<small><tt>\nŽádný   - Vynutit poměr stran pixelu 1:1.\nLoose  - Zarovnat rozměry na zvolenou hodnotu zarovnání \n         a zvolit poměr stran pixelu, jenž zachovává\n         původní poměr stran zobrazení\nPřísný - Zachovat původní rozměry zdroje a poměr \n         stran pixelu</tt></small>"
+msgid "0: SAD, no subpel"
+msgstr "0: SAD, žádný subpel"
 
-msgctxt "NAME OF TRANSLATORS"
+msgid "4: SATD, qpel on all"
+msgstr "4: SATD, qpel na vše"
+
+msgid "5: SATD, multi-qpel on all"
+msgstr "5: SATD, více-qpel  na vše"
+
+msgid "6: RD in I/P-frames"
+msgstr "6: RD v I/P-snímcích"
+
+msgid "7: RD in all frames"
+msgstr "7: RD ve všech snímcích"
+
+msgid "8: RD refine in I/P-frames"
+msgstr "8: RD vylepšit I/P-snímcích"
+
+msgid "9: RD refine in all frames"
+msgstr "9: RD vylepšit ve všech snímcích"
+
+msgid "10: QPRD in all frames"
+msgstr "10: QPRD ve všech snímcích"
+
+msgid "11: No early terminations in analysis"
+msgstr "11: Žádná brzká ukončení rozborů"
+
 msgid "Your names"
 msgstr "Pavel Fric"
 
-msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "fripohled.blogspot.com"

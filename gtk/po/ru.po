@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Dimitris Adamakis <gt.dimitris@gmail.com>, 2014
+# VictorR2007 <victorr2007@yandex.ru>, 2014
 # VictorR2007 <victorr2007@yandex.ru>, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake-0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-10 21:39+0400\n"
-"PO-Revision-Date: 2014-10-14 23:26+0000\n"
+"POT-Creation-Date: 2014-11-03 13:01+0300\n"
+"PO-Revision-Date: 2014-11-28 14:45+0000\n"
 "Last-Translator: VictorR2007 <victorr2007@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/handbrake/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -18,22 +20,19 @@ msgstr ""
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "Off"
-msgstr "Вкл"
-
 msgid "Quality: "
 msgstr "Качество: "
 
 #, c-format
 msgid "Bitrate: %dkbps"
-msgstr "Битрейт: %dkbps"
+msgstr "Битрейт: %dкбит/с"
 
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr "Битрейт: %.4gkbps"
+msgstr "Битрейт: %.4gкбит/с"
 
 msgid "<small>Passthrough</small>"
-msgstr "<small>Передача</small>"
+msgstr "<small>Транзитная передача</small>"
 
 #, c-format
 msgid ""
@@ -56,16 +55,10 @@ msgstr "Добавить"
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
-msgstr "Добавить аудио кодек.\nКаждая дорожка выбранного источника будет закодирована со всеми выбранными кодеками."
+msgstr "Добавить аудио кодировщик.\nКаждая дорожка выбранного источника будет закодирована со всеми выбранными кодировщиками."
 
 msgid "Set the audio codec to encode this track with."
 msgstr "Установить аудио кодек для кодирования этой дорожки."
-
-msgid "Bitrate"
-msgstr "Битрейт"
-
-msgid "Quality"
-msgstr "Качество"
 
 msgid "Set the bitrate to encode this track with."
 msgstr "Установить битрейт для кодирования этой дорожки."
@@ -76,7 +69,7 @@ msgid ""
 msgstr "<b>Качество звука:</b>\nДля выходного кодека, который поддерживают это, установить качество вывода."
 
 msgid "Set the mixdown of the output audio track."
-msgstr "Установить смешивание каналов выходной звуковой дорожки."
+msgstr "Установить микширование каналов выходной звуковой дорожки."
 
 msgid "Set the sample rate of the output audio track."
 msgstr "Установить частоту дискретизации дорожки вывода звука."
@@ -86,10 +79,17 @@ msgid ""
 "Adjust the amplification or attenuation of the output audio track."
 msgstr "<b>Усиление звука:</b> \nРегулирует усиление или ослабление звуковой дорожки вывода."
 
-msgid ""
-"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
-"audio track."
-msgstr "<b>Усиление звука:</b> Регулирует усиление или ослабление звуковой дорожки вывода."
+msgid "0dB"
+msgstr "0дБ"
+
+msgid "%ddB"
+msgstr "%dдБ"
+
+msgid "%.4gkHz"
+msgstr "%.4gкГц"
+
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4gкГц)</small>"
 
 msgid ""
 "<b>Dynamic Range Compression:</b>\n"
@@ -100,54 +100,23 @@ msgid ""
 "softer and soft sounds louder.\n"
 msgstr "<b>Динамическое сжатие диапазона:</b>\nУстанавливает динамический диапазон для звуковой дорожки вывода.\nДля источника звука, который имеет широкий динамический диапазон.\nОчень громкие и очень мягкие последовательности, DRC позволяет сжимать\nдиапазон, делая громкие разделы мягче и мягкие разделы громче.\n"
 
-msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
-"\n"
-"                                For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
-msgstr "<b>Динамическое сжатие диапазона:</b> Устанавливает динамический диапазон для звуковой дорожки вывода. \n\n                                Для источника звука, который имеет широкий динамический диапазон (очень громкие и очень мягкие последовательности), DRC позволяет «сжимать»  диапазон, делая громкие разделы мягче и мягкие разделы громче."
-
-msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
-"\n"
-"                                    For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
-msgstr "<b>Динамическое сжатие диапазона:</b> Устанавливает динамический диапазон для звуковой дорожки вывода. \n\n                                    Для источника звука, который имеет широкий динамический диапазон (очень громкие и очень мягкие последовательности), DRC позволяет  «сжимать» диапазон, делая громкие разделы мягче и мягкие разделы громче."
-
 msgid "Remove this audio encoder"
-msgstr "Удалить этот аудио кодек"
-
-msgid "Failed to find widget"
-msgstr "Не удалось найти виджет"
-
-#, c-format
-msgid "Failed to find dependent widget %s"
-msgstr "Failed to find dependent widget %s"
+msgstr "Удалить этот кодировщик звука"
 
 msgid "Closing HandBrake will terminate encoding.\n"
 msgstr "Закрытие HandBrake прекратит кодирование.\n"
 
-msgid "{source}"
-msgstr "{Источник}"
-
-msgid "{title}"
-msgstr "{Название}"
-
-msgid "{chapters}"
-msgstr "{Главы}"
-
-msgid "{time}"
-msgstr "{Время}"
-
-msgid "{date}"
-msgstr "{Дата}"
-
-msgid "{bitrate}"
-msgstr "{Битрейт}"
-
 msgid "No Title Found"
 msgstr "Название не найдено"
 
+msgid "none"
+msgstr "нет"
+
 msgid "Not Selected"
 msgstr "Не выбрано"
+
+msgid "zerolatency x264 tune selected, forcing constant framerate"
+msgstr "Выбраны настройки x264 без задержки, принудительная частота кадров"
 
 msgid "Scanning ..."
 msgstr "Сканирование…"
@@ -155,14 +124,11 @@ msgstr "Сканирование…"
 msgid "Stop Scan"
 msgstr "Остановить сканирование"
 
-msgid "Choose Destination"
-msgstr "Выберите назначение"
-
 msgid "On"
 msgstr "Вкл"
 
 msgid "Strict"
-msgstr "Строгий"
+msgstr "Строгое"
 
 msgid "Loose"
 msgstr "Произвольно"
@@ -173,6 +139,9 @@ msgstr "Другое"
 msgid "Unknown"
 msgstr "Неизвестно"
 
+msgid "auto"
+msgstr "авто"
+
 #, c-format
 msgid ""
 "%s\n"
@@ -182,7 +151,7 @@ msgstr "%s\n\n%s в %d секунды ..."
 
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr "%sВаш фильм будет потерян, если вы не продолжать кодировку."
+msgstr "%sВаш фильм будет потерян, если вы не продолжать кодирование."
 
 msgid "Cancel Current and Stop"
 msgstr "Отменить текущий и остановить"
@@ -203,16 +172,12 @@ msgid "Modified "
 msgstr "Изменён "
 
 #, c-format
-msgid "%s%sPreset: %s"
-msgstr "%s%sПредустановка: %s"
-
-#, c-format
 msgid "Handbrake Version: %s (%d)\n"
 msgstr "Версия Handbrake: %s (%d)\n"
 
 #, c-format
 msgid "%d encode(s) pending"
-msgstr "%d в ожидании кодирования"
+msgstr "В ожидании кодирования %d"
 
 #, c-format
 msgid "job %d of %d, "
@@ -228,15 +193,15 @@ msgstr "проход %d из %d, "
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
-msgstr "Кодирование: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr "Кодирование: %s%s%.2f %% (%.2f fps, средний %.2f fps, время до окончания %02d час %02d мин %02d сек)."
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
-msgstr "Кодирование: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr "Кодирование: %s%s%.2f %% (время до окончания %02d час %02d мин %02d сек)."
 
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
-msgstr "Кодирование: %s%s%.2f %%"
+msgstr "Кодирование: %s%s%.2f %%."
 
 msgid "Searching for start time, "
 msgstr "Поиск времени начала, "
@@ -273,17 +238,11 @@ msgstr "Ошибка кодирования."
 msgid "Muxing: This may take a while..."
 msgstr "Мультиплексирование: Это может занять некоторое время..."
 
-msgid "Encode Complete"
-msgstr "Кодирование завершено"
+msgid "Scan this DVD source"
+msgstr "Сканировать этот DVD"
 
-msgid "HandBrake"
-msgstr "HandBrake"
-
-msgid "Updating preview\n"
-msgstr "Обновление просмотра\n"
-
-msgid "Error while reading activity from pipe"
-msgstr "Ошибка при чтении активности с канала"
+msgid "AutoScan"
+msgstr "Автосканирование"
 
 msgid "Suspend"
 msgstr "Ждущий режим"
@@ -294,16 +253,6 @@ msgstr "Не удалось перейти в ждущий режим: %s"
 
 msgid "Suspend failed"
 msgstr "Не удалось перейти в ждущий режим"
-
-msgid "CanShutdown"
-msgstr ""
-
-#, c-format
-msgid "CanShutdown failed: %s"
-msgstr ""
-
-msgid "CanShutdown failed"
-msgstr ""
 
 msgid "Shutdown"
 msgstr "Выключить компьютер"
@@ -317,26 +266,6 @@ msgstr "Ошибка выключения компьютера"
 
 msgid "Encoding"
 msgstr "Кодирование"
-
-#, c-format
-msgid "Inhibit failed: %s"
-msgstr ""
-
-msgid "Inhibit failed"
-msgstr ""
-
-msgid "UnInhibit"
-msgstr "Отмена запрещения"
-
-#, c-format
-msgid "UnInhibit failed: %s"
-msgstr ""
-
-msgid "UnInhibit failed"
-msgstr ""
-
-msgid "Uninhibit"
-msgstr ""
 
 #, c-format
 msgid "press %d %d"
@@ -359,8 +288,11 @@ msgstr "%s: %.4g (Предупреждение: без потерь)"
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
 msgstr "Доступна новая версия HandBrake %s/%s (у вас версия %s/%d)."
 
+msgid "Encode Complete"
+msgstr "Кодирование завершено"
+
 msgid "Put down that cocktail, Your HandBrake queue is done!"
-msgstr "HandBrake завершил кодировать этот коктейль!"
+msgstr "HandBrake завершил кодировать этот фильм!"
 
 msgid "Your encode is complete."
 msgstr "Кодирование завершено."
@@ -372,7 +304,7 @@ msgid "Putting computer to sleep"
 msgstr "Переход в спящий режим"
 
 msgid "Quiting Handbrake"
-msgstr "Очередь Handbrake"
+msgstr "Очередь"
 
 msgid "Bottom"
 msgstr "Снизу"
@@ -382,7 +314,7 @@ msgid "open failed: %s\n"
 msgstr "не удалось открыть: %s\n"
 
 msgid "No key for dictionary item"
-msgstr "Нет ключа элемента словаря"
+msgstr "Нет ключа для элемента словаря"
 
 msgid "Invalid container type. This shouldn't happen"
 msgstr "Неправильный тип контейнера. Этого не должно быть"
@@ -402,38 +334,27 @@ msgid ""
 "    <out resource plist>  Output resources plist file\n"
 msgstr "Используется: %s [-I <inc path>] <in resource list> <out resource plist>\nСводка:\n    Создает плейлист ресурса из списка ресурсов\nOptions:\n    I - Включить путь для поиска файлов\n    <in resource list>    Входной файл ресурсов\n    <out resource plist>  Выходной плейлист файлов ресурсов\n"
 
+msgid "language"
+msgstr "Язык"
+
+msgid "Language"
+msgstr "Язык"
+
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
-msgstr "Язык, на котором написан текст, в виде ISO-кода.  Pango может использовать это значение как подсказку (hint) при отрисовке текста.  Если вы не понимаете, что это за параметр, то он вам, скорее всего, не нужен."
+msgstr "Язык, на котором написан текст, в виде ISO-кода.  Pango может использовать это как хинт при отрисовке текста.  Если вы не понимаете, что это за параметр, то он вам, скорее всего, не нужен."
 
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr "Желаемое место эллиптизации строки, если механизму отображения строки в ячейке, не хватает места для отображения всей строки."
+msgstr "Желаемое место эллиптизации строки, если механизму отображения строки в ячейке не хватает места для отображения всей  строки."
 
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr "Как разделить строку на несколько строк, если механизму отображения строки не хватает места для отображения всей строки"
-
-#, c-format
-msgid "Failed to set text from markup due to error parsing markup: %s"
-msgstr "Не удалось установить текст из разметки, за ошибки разбора разметки: %s"
-
-#, c-format
-msgid "Don't know color `%s'"
-msgstr "Не знаю цвет `%s'"
-
-msgid "_Open"
-msgstr "_Открыть"
-
-msgid "_Cancel"
-msgstr "_Отмена"
-
-msgid "_Save"
-msgstr "_Сохранить"
 
 msgid ""
 "Render the subtitle over the video.\n"
@@ -452,7 +373,7 @@ msgid ""
 "\n"
 "This is useful for creating a \"forced\" track\n"
 "in your output."
-msgstr "Устанавливает выходную дорожку субтитров по умолчанию.\n\nБольшинство проигрывателей будет автоматически отображать эту\nдорожку субтитров, при воспроизводится видео.\n\nЭто эффективно для создания \"принудительной\" дорожки\nв выводе."
+msgstr "Устанавливает по умолчанию дорожку субтитров вывода.\n\nБольшинство проигрывателей будет автоматически отображать эту\nдорожку субтитров при воспроизводится видео.\n\nЭто эффективно для создания \"принудительной\" дорожки\nв выводе."
 
 msgid "<b>Default</b>"
 msgstr "<b>По умолчанию</b>"
@@ -480,6 +401,9 @@ msgstr "Добавить (или вычесть) смещение (в милли
 
 msgid "<b>SRT Offset</b>"
 msgstr "<b>Смещение SRT</b>"
+
+msgid "Off"
+msgstr "Выкл"
 
 msgid ""
 "The source subtitle track\n"
@@ -533,6 +457,9 @@ msgstr "_Выход"
 msgid "_About"
 msgstr "_О программе"
 
+msgid "HandBrake"
+msgstr "HandBrake"
+
 msgid "_File"
 msgstr "_Файл"
 
@@ -550,9 +477,6 @@ msgstr "_Параметры"
 
 msgid "_Queue"
 msgstr "_Очередь"
-
-msgid "S_top Queue"
-msgstr "О_становить очередь"
 
 msgid "_Add"
 msgstr "_Добавить"
@@ -586,6 +510,9 @@ msgstr "Показать _очередь"
 
 msgid "_Presets"
 msgstr "_Предустановки"
+
+msgid "_Save"
+msgstr "_Сохранить"
 
 msgid "_Delete"
 msgstr "_Удалить"
@@ -647,7 +574,7 @@ msgid "Show Activity Window"
 msgstr "Показать окно процесса обработки"
 
 msgid "Activity"
-msgstr "Активность"
+msgstr "Процесс"
 
 msgid "<b>Source:</b>"
 msgstr "<b>Источник:</b>"
@@ -677,13 +604,10 @@ msgid "Apply current settings to all titles"
 msgstr "Применить текущие настройки ко всем названиям."
 
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
-msgstr "Диапазон заглавий для кодирования. Могут быть главы, секунды или кадры."
+msgstr "Диапазон заголовков для кодирования. Могут быть главы, секунды или кадры."
 
 msgid "Set the first chapter to encode."
 msgstr "Установить первую главу для кодирования."
-
-msgid "through"
-msgstr "по"
 
 msgid "Set the last chapter to encode."
 msgstr "Установить последнюю главу для кодирования."
@@ -724,10 +648,16 @@ msgstr "Оптимизация для интернет-трансляции"
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
-msgstr "Оптимизировать структуру файлов MP4 для последовательной загрузки.\nЭто позволяет проигрывателю начать воспроизведение до загрузки всего файла."
+msgstr "Оптимизирует структуру файлов mp4 для последовательной загрузки.\nЭто позволяет проигрывателю начать воспроизведение до загрузки всего файла."
 
 msgid "Large file (>4GB)"
 msgstr "Большой файл (>4GB)"
+
+msgid ""
+"Allow 64 bit MP4 file which can be over 4GB.\n"
+"\n"
+"<b>Caution:</b> This option may break device compatibility."
+msgstr "Разрешить 64 битный MP4 файл, который может быть более 4 ГБ.\n\n<b>Внимание:</b> Эта опция может сломать совместимость устройств."
 
 msgid "<b>Presets List</b>"
 msgstr "<b>Список предустановок</b>"
@@ -736,10 +666,10 @@ msgid "Source Codec:"
 msgstr "Кодек источника:"
 
 msgid "Dimensions:"
-msgstr "Размер:"
+msgstr "Размер изображения:"
 
 msgid "Aspect: "
-msgstr "Пропорции: "
+msgstr "Соотношение сторон: "
 
 msgid "Frame Rate:"
 msgstr "Частота кадров:"
@@ -754,7 +684,7 @@ msgid "Crop:"
 msgstr "Кадрирование:"
 
 msgid "Crop Dimensions:"
-msgstr "Размер:"
+msgstr "Размер после обрезки:"
 
 msgid "<b>Cropping</b>"
 msgstr "<b>Кадрирование</b>"
@@ -790,7 +720,7 @@ msgid "Right Crop"
 msgstr "Обрезка справа"
 
 msgid "Auto Crop"
-msgstr "Автокадрирование"
+msgstr "Автообрезка черных полос"
 
 msgid "Automatically crop black borders around edges of the video."
 msgstr "Автоматически обрезает черные полосы по краям видео."
@@ -812,7 +742,7 @@ msgstr "Ширина:"
 msgid ""
 "This is the width that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
-msgstr "Это ширина, в которой будет храниться видео.\nФактические размеры дисплей будут отличаться, если соотношение сторон пикселя не равно 1:1."
+msgstr "Это ширина, в которой будет храниться видео.\nФактические размеры дисплей будут отличаться, если соотношение сторон пиксела не равно 1:1."
 
 msgid "height:"
 msgstr "Высота:"
@@ -820,7 +750,7 @@ msgstr "Высота:"
 msgid ""
 "This is the height that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
-msgstr "Это высота, в которой будет храниться видео.\nФактические размеры дисплей будут отличаться, если соотношение сторон пикселя не равно 1:1."
+msgstr "Это высота, в которой будет храниться видео.\nФактические размеры дисплей будут отличаться, если соотношение сторон пиксела не равно 1:1."
 
 msgid "Optimal for source"
 msgstr "Оптимально для источника"
@@ -828,7 +758,18 @@ msgstr "Оптимально для источника"
 msgid ""
 "If enabled, select the 'optimal' storage resolution.\n"
 "This will be the resolution that most closely matches the source resolution after cropping."
-msgstr "Если включено, выберет \"оптимальное\" разрешение для сохранения.\nЭто будет разрешение, наиболее точно соответствующее исходному разрешению после обрезания."
+msgstr "Если включено, выберет оптимальное разрешение для сохранения.\nЭто будет разрешение, наиболее точно соответствующее исходному разрешению после обрезки."
+
+msgid ""
+"<b>Anamorphic Modes:</b>\n"
+"<small><tt>\n"
+"None   - Force pixel aspect ratio to 1:1.\n"
+"Loose  - Align dimensions to chosen 'Alignment' value\n"
+"     and pick pixel aspect ratio that preserves the\n"
+"     original display aspect ratio\n"
+"Strict - Keep original source dimensions and pixel\n"
+"     aspect ratio</tt></small>"
+msgstr "<b>Анаморфотные режимы:</b>\n<small><tt>\nНет  - Принудительное соотношение сторон 1:1.\nПроизвольно  - Выровнять размеры выбрав 'Выравнивание'  \n         чтобы значение и соотношение сторон  соответствовало \n         соотношению сторон оригинала\nСтрого - Держать исходные размеры и исходное \n         соотношение сторон</tt></small>"
 
 msgid "Alignment:"
 msgstr "Выравнивание:"
@@ -841,7 +782,7 @@ msgid ""
 msgstr "Выравнивание размеров сохранения в несколько раз этого значения.\n\nЭтот параметр необходим только для совместимости с некоторыми устройствами.\nСледует использовать 2, если вы не испытываете проблем с совместимостью."
 
 msgid "<b>Storage Geometry</b>"
-msgstr "<b>Геометрия хранения</b>"
+msgstr "<b>Геометрия сохранения</b>"
 
 msgid ""
 "This is the display width. It is the result of scaling the storage "
@@ -849,47 +790,50 @@ msgid ""
 msgstr "Это ширина дисплея. Это является результатом изменения размеров сохранения пропорций пикселей."
 
 msgid "Pixel Aspect:"
-msgstr "Формат пикселя:"
+msgstr "Пропорции в пикселах:"
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
-msgstr "Пропорция пикселей определяет форму пикселей.\n\nСоотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\nПроигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
+msgstr "Соотношение сторон пикселей определяет форму пикселей.\n\nСоотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\nПроигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
+
+msgid ":"
+msgstr ":"
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
-msgstr "Пропорция пикселей определяет форму пикселей.\nСоотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\nПроигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
+msgstr "Соотношение сторон пикселей определяет форму пикселей.\nСоотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\nПроигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
 
 msgid "Keep Aspect"
-msgstr "Сохранять пропорции"
+msgstr "Сохранять соотношение сторон"
 
 msgid ""
 "If enabled, the original display aspect of the source will be maintained."
-msgstr "Если включено, оригинальное отображение пропорций источника будет сохранено."
+msgstr "Если включено, оригинальное соотношение сторон источника будут сохранено."
 
 msgid "Display Aspect:"
 msgstr "Соотношение дисплея:"
 
 msgid "<b>Display Geometry</b>"
-msgstr "<b>Геометрия отображения</b>"
+msgstr "<b>Геометрия экрана</b>"
 
 msgid "Grayscale"
-msgstr "Градации серого"
+msgstr "Чёрно-белое"
 
 msgid "If enabled, filter colour components out of video."
-msgstr "Если включено, фильтр компонентов цвета вывода видео."
+msgstr "Если включено, фильтр вывода оттенков цвета в видео."
 
 msgid "Deblock:"
-msgstr "Уровень блочности:"
+msgstr "Подавление блоков:"
 
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
-msgstr "Фильтр деблокирования удаляет распространенный тип артефакта сжатия.\nЕсли источник \"блочность\", этот фильтр может помочь в ее очистке."
+msgstr "Фильтр для устранения \"блочности\" устраняет распространенный тип артефактов сжатия.\nЕсли в источнике существует \"блочность\", этот фильтр может помочь в ее очистке."
 
 msgid "Denoise Filter:"
 msgstr "Фильтр шумоподавления:"
@@ -898,7 +842,7 @@ msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
-msgstr "Фильтрация шумоподавления уменьшает или устраняет появление шума и зернистости.\nЗернистость фильма и другие виды высокочастотного шума сложно сжимать.\nИспользование этого фильтра на таких источниках может привести к уменьшению размеров файлов."
+msgstr "Фильтр шумоподавления уменьшает или устраняет появление шума и зернистости.\nЗернистость фильма и другие виды высокочастотного шума сложно сжимать.\nИспользование этого фильтра на таких источниках может привести к уменьшению размеров файлов."
 
 msgid "Denoise Preset:"
 msgstr "Предустановки шумоподавления:"
@@ -919,7 +863,7 @@ msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
 "Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
-msgstr "Этот фильтр удаляет артефакты 'гребенки', которые являются результатом телесина.\n\nТелесин, это процесс, который регулирует частоту кадров фильма 24fps в NTSC, в видео с частотй кадров 30fps."
+msgstr "Этот фильтр устраняет артефакты 'гребенки', которые являются результатом телесина.\n\nТелесин, это процесс, который регулирует частоту кадров фильма 24fps в NTSC, в видео с частотой кадров 30fps."
 
 msgid ""
 "Custom detelecine filter string format\n"
@@ -928,7 +872,7 @@ msgid ""
 msgstr "Пользовательский фильтр  детелесина\n\nJunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
 msgid "Decomb"
-msgstr "Убрать гребенку"
+msgstr "Устранение гребенки"
 
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
@@ -938,18 +882,18 @@ msgid ""
 "\n"
 "The classic deinterlace filter is applied to all frames.\n"
 "Frames that are not interlaced will suffer some quality degradation."
-msgstr "Выберите опции фильтра \"Убрать гребенку\" или \"Деинтерлейсинг\".\n\nФильтр удаления гребенки избирательно убирает чересстрочность кадров, которые могут оказаться чересстрочными.\nЭто позволит сохранить качество кадров, которые с нечересстрочной разверткой.\n\nКлассический фильтр деинтерлейсинга применяется ко всем кадрам.\nКадры, которые не чересстрочные, пострадают от некоторого ухудшение качества."
+msgstr "Выберите фильтр \"Устранение гребенки\" или \"Деинтерлейсинг\".\n\nФильтр устранения гребенки избирательно убирает чересстрочность в кадрах, которые могут оказаться чересстрочными.\nЭто позволит сохранить качество кадров  с нечересстрочной разверткой.\n\nКлассический фильтр деинтерлейсинга применяется ко всем кадрам.\nКадры, которые не чересстрочные, пострадают от некоторого ухудшение качества."
 
 msgid "Deinterlace"
 msgstr "Деинтерлейсинг"
 
 msgid "Decomb:"
-msgstr "Убрать гребенку:"
+msgstr "Устранение гребенки:"
 
 msgid ""
 "The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
 "This will preserve quality in frames that are not interlaced."
-msgstr "Фильтр удаления гребенки избирательно убирает чересстрочность кадров, которые могут оказаться чересстрочными.\nЭто позволит сохранить качество кадров, которые с нечересстрочной разверткой."
+msgstr "Фильтр устранения гребенки избирательно убирает чересстрочность кадров, которые могут оказаться чересстрочными.\nЭто позволит сохранить качество кадров, которые с нечересстрочной разверткой."
 
 msgid ""
 "Custom decomb filter string format\n"
@@ -957,7 +901,7 @@ msgid ""
 "Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
 "BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
 "ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
-msgstr "Пользовательский фильтр удаления гребенки\n\nMode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\nBlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\nErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+msgstr "Пользовательский фильтр устранения гребенки\n\nMode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\nBlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\nErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
 
 msgid "Deinterlace:"
 msgstr "Деинтерлейсинг:"
@@ -974,16 +918,16 @@ msgid ""
 msgstr "Пользовательский фильтр деинтерлейсинга\n\nYadifMode:YadifParity:McdintMode:McdeintQp"
 
 msgid "<b>Filters</b>"
-msgstr "<b>Фильтры:</b>"
+msgstr "<b>Фильтры</b>"
 
 msgid "Picture"
 msgstr "Изображение"
 
 msgid "Video Encoder:"
-msgstr "Видео кодеки:"
+msgstr "Кодировщик видео:"
 
 msgid "Available video encoders."
-msgstr "Доступные видео кодеки."
+msgstr "Доступные кодировщики видео."
 
 msgid "Framerate:"
 msgstr "Частота кадров:"
@@ -993,13 +937,25 @@ msgid ""
 "\n"
 "'Same as source' is recommended. If your source video has\n"
 "a variable framerate, 'Same as source' will preserve it."
-msgstr "Частота кадров на выходе.\n\n Рекомендуется 'Так же, как в источнике'. Если исходное видео имеет\nпеременную частоту кадров, выбор 'Так же, как в источнике' сохранит ее."
+msgstr "Частота кадров на выходе.\n\nРекомендуется 'Как в источнике'. Если исходное видео имеет\nпеременную частоту кадров, выбор 'Как в источнике' сохранит ее."
 
 msgid "Constant Framerate"
 msgstr "Постоянная частота кадров"
 
+msgid "Same as source"
+msgstr "Как в источнике"
+
+msgid "kbps"
+msgstr "кбит/с"
+
+msgid "(variable)"
+msgstr "(переменная)"
+
+msgid "(constant)"
+msgstr "(постоянная)"
+
 msgid "Enables constant framerate output."
-msgstr "Включает постоянную частоту кадров."
+msgstr "Включает постоянную частоту кадров вывода."
 
 msgid "Peak Framerate (VFR)"
 msgstr "Пик частоты кадров (VFR)"
@@ -1047,7 +1003,7 @@ msgid ""
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
 "But the average over a long duration will be the value set here.  If you need\n"
 "to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
-msgstr "Установите средний битрейт.\n\nКратковременный битрейт может быть намного выше или ниже, в любой момент времени.\nНо средний, на протяжении длительного срока будет на установленном здесь значении.\nЕсли нужно ограничить кратковременный битрейт, смотрите настройки x264 vbv-bufsize и vbv-maxrate."
+msgstr "Установите средний битрейт.\n\nКратковременный битрейт может быть гораздо выше или ниже в любой момент времени.\nНо средний, на протяжении длительного срока, будет на установленном здесь значении.\nЕсли нужно ограничить кратковременный битрейт, смотрите настройки x264 vbv-bufsize и vbv-maxrate."
 
 msgid "2-Pass Encoding"
 msgstr "Кодирование в 2 прохода"
@@ -1058,7 +1014,7 @@ msgid ""
 "The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
 "the video are collected.  Then in the second pass, those statistics are used\n"
 "to make bitrate allocation decisions."
-msgstr "Кодирование в 2 прохода.\n\nОпция 'Битрейт' является обязательным условием. В 1-ый проход собирается\nстатистика о видео.  Тогда на втором проходе, используются эти статистические\nданные в решении распределения битрейта."
+msgstr "Производит кодирование в 2 прохода.\n\nОпция 'Битрейт' является обязательным условием. В 1-ый проход собирается\nстатистика о видео.  Тогда на втором проходе используются эти статистические\nданные в решении распределения битрейта."
 
 msgid "Turbo First Pass"
 msgstr "Первый проход быстро"
@@ -1087,7 +1043,7 @@ msgid ""
 "Tunes, profiles, levels and advanced option string will be applied to this.\n"
 "You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
-msgstr "Регулирует настройки кодера, балансируя между эффективностью сжатия и скоростью кодирования.\n\nЭто определяют настройки кодера по умолчанию.\nРегулировка, профили, уровни и дополнительные параметры строки, будут применять это.\nКак правило, нужно установить этот параметр на самый медленный, Медленная настройка\nприведёт к улучшению качества или несколько меньшему размеру файла."
+msgstr "Регулирует настройки кодировщика, балансируя между эффективностью сжатия и скоростью кодирования.\n\nЭто определяют настройки кодировщика по умолчанию.\nРегулировка, профили, уровни и дополнительные параметры строки, будут применять это.\nКак правило, нужно установить этот параметр на самый медленный, Медленная настройка\nприведёт к улучшению качества или несколько меньшему размеру файла."
 
 msgid "Tune:"
 msgstr "Настройки:"
@@ -1098,7 +1054,7 @@ msgid ""
 "This can improve effeciency for particular source characteristics or set\n"
 "characteristics of the output file.  Changes will be applied after the\n"
 "preset but before all other parameters."
-msgstr "Настройки оптимизированных параметров для выполнения типовых сценариев.\n\nЭто может улучшить содержание для конкретных характеристик исходного или заданных\nхарактеристик выходного файла. Изменения вступят в силу по завершении установленных\nзаранее, но перед всеми другими параметрами."
+msgstr "Оптимизированные настройки параметров для выполнения типовых сценариев.\n\nЭто может улучшить эффективность для конкретных характеристик исходного или заданных\nхарактеристик выходного файла. Изменения будут применены после предустановки, но\nдо всех остальных параметров."
 
 msgid "Fast Decode"
 msgstr "Быстрое кодирование"
@@ -1107,7 +1063,7 @@ msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
 "Set this if your device is struggling to play the output (dropped frames)."
-msgstr "Уменьшает использование CPU при декодировании.\n\nУстановите ее, если ваше устройство  испытывает затруднения с воспроизведением на выходе (пропускает кадры)."
+msgstr "Уменьшает использование CPU при декодировании.\n\nУстановите ее, если ваше устройство  имеет затруднение с воспроизведением на выходе (пропускает кадры)."
 
 msgid "Zero Latency"
 msgstr "Нулевая задержка"
@@ -1119,7 +1075,7 @@ msgid ""
 "\n"
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
-msgstr "Минимизация задержки между входом в кодер и выходом декодера.\n\nЭто полезно для трансляции потокового вещания.\n\nПоскольку HandBrake не подходит  трансляции потокового вещания,\nэтот параметр не имеет здесь большого значения."
+msgstr "Минимизация задержки между входом в кодировщик и выходом декодера.\n\nЭто полезно для трансляции потокового вещания.\n\nПоскольку HandBrake не подходит  трансляции потокового вещания,\nэтот параметр не имеет здесь большого значения."
 
 msgid "Profile:"
 msgstr "Профиль:"
@@ -1164,15 +1120,15 @@ msgid "Selected Languages"
 msgstr "Выбранные языки"
 
 msgid "Use only first encoder for secondary audio"
-msgstr "Использовать только первый кодер для вторичного аудиосигнала"
+msgstr "Использовать только первый кодировщик для вторичного аудиосигнала"
 
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "All other secondary audio output tracks will be encoded with first encoder only."
-msgstr "Только основная звуковая дорожка будет закодирован полным списком кодеров.\nВсе другие, вторичные аудиодорожки будут закодированы только первым кодером."
+msgstr "Только основная звуковая дорожка будет закодирован полным списком кодировщиков.\nВсе другие, вторичные аудиодорожки, будут закодированы только первым кодировщиком."
 
 msgid "Auto Passthru:"
-msgstr "Автовыбор декодера:"
+msgstr "Автопроходные без перекодирования:"
 
 msgid "MP3"
 msgstr "MP3"
@@ -1182,32 +1138,20 @@ msgid ""
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr "Включите это, если ваше устройство воспроизведения поддерживает MP3.\nЭто позволяет при необходимости вызвать MP3, если включен автоматический выбор."
 
-msgid "AAC"
-msgstr "AAC"
-
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr "Включите это, если ваше устройство воспроизведения поддерживает AAC.\nЭто позволяет при необходимости вызвать AAC, если включен автоматический выбор."
-
-msgid "AC-3"
-msgstr "AC-3"
 
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr "Включите это, если ваше устройство воспроизведения поддерживает AC-3.\nЭто позволяет при необходимости вызвать AC-3, если включен автоматический выбор."
 
-msgid "DTS"
-msgstr "DTS"
-
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr "Включите это, если ваше устройство воспроизведения поддерживает DTS.\nЭто позволяет при необходимости вызвать DTS, если включен автоматический выбор."
-
-msgid "DTS-HD"
-msgstr "DTS-HD"
 
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
@@ -1215,36 +1159,33 @@ msgid ""
 msgstr "Включите это, если ваше устройство воспроизведения поддерживает DTS-HD.\nЭто позволяет при необходимости вызвать DTS-HD, если включен автоматический выбор."
 
 msgid "Passthru Fallback:"
-msgstr "Резервный декодер:"
+msgstr "Резервный без перекодирования:"
 
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
-msgstr "Установить аудио кодек для кодирования с тем, что бы использовать когда подходящий декодер не найден."
+msgstr "Установить кодировщика аудио для кодирования с тем, что бы использовать когда подходящий декодер не найден."
 
 msgid "<b>Audio Encoder Settings:</b>"
 msgstr "<b>Параметры кодирования звука:</b>"
 
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr "Каждая дорожка выбранного источника будет закодирована со всеми выбранными кодировщиками."
+
 msgid "Encoder"
-msgstr "Кодек"
+msgstr "Кодировщик"
 
 msgid "Bitrate/Quality"
 msgstr "Битрейт/Качество"
 
 msgid "Mixdown"
-msgstr "Смешивание каналов"
+msgstr "Микширование"
 
 msgid "Samplerate"
 msgstr "Частота дискретизации"
 
 msgid "Gain"
 msgstr "Усиление"
-
-msgid "Gain:"
-msgstr "Усиление:"
-
-msgid "DRC"
-msgstr "DRC"
 
 msgid "Audio Defaults"
 msgstr "Аудио по умолчанию"
@@ -1276,7 +1217,7 @@ msgstr "Добавить поиск иностранного языка в пр�
 msgid ""
 "Add \"Foreign Audio Search\" when the default audio track is your preferred language.\n"
 "This search pass finds short sequences of foreign audio and provides subtitles for them."
-msgstr "Добавить \"Поиск иностранного языка\", когда для звуковой дорожки у вас выбран предпочитаемый по умолчанию язык.\nЭтот проход поиска находит короткие последовательности иностранного звука и предоставляет для них субтитры."
+msgstr "Добавить \"Поиск иностранного языка\", когда для звуковой дорожки у вас выбран предпочитаемый язык по умолчанию.\nЭтот проход поиска находит короткие последовательности иностранного звука и предоставляет для них субтитры."
 
 msgid "Add subtitle track if default audio is foreign"
 msgstr "Добавить дорожку субтитров, если по умолчанию будет иностранный звук"
@@ -1319,10 +1260,10 @@ msgid ""
 "Note that many hardware devices have limitations on the number of supported reference\n"
 "frames, so if you're encoding for a handheld or standalone player, don't touch this unless\n"
 "you're absolutely sure you know what you're doing!"
-msgstr ""
+msgstr "Нормальные значения ~ 1-6.Чем больше вы добавите, тем лучше сжатие, но медленнее  кодирование.\nCel анимация, как правило, дает выгоду от дополнительных опорных кадров гораздо больше,  чем от содержимого фильма.\n\nСледует отметить, что многие аппаратные устройства имеют ограничения по количеству  поддерживаемых опорных\nкадров, так что если вы кодируете для карманного компьютера, не трогайте это, если\nне уверенны, что знаете, что вы делаете!"
 
 msgid "<small>Maximum B-Frames:</small>"
-msgstr "<small>Количество B-кадров:</small>"
+msgstr "<small>Максимум B-кадров:</small>"
 
 msgid ""
 "Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.\n"
@@ -1332,7 +1273,7 @@ msgid ""
 "values.\n"
 "\n"
 "Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)."
-msgstr ""
+msgstr "Нормальные значения ~ 2-5. Это определяет максимальное число последовательных B-кадров, которые может использовать кодировщик.\nБольшое количество обычно не помогает, если адаптивные B-кадры не установлены в \"Оптимально\".\n\nБазовый профиль, как это требуется для iPod и аналогичных устройств, требует чтобы для B-кадров было установлено на 0 (Выкл.)."
 
 msgid "<small>Pyramidal B-Frames:</small>"
 msgstr "<small>Пирамидальные B-кадры:</small>"
@@ -1342,7 +1283,7 @@ msgid ""
 "of B-frames, allowing B-frames to reference each other to improve compression.\n"
 "\n"
 "Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
-msgstr ""
+msgstr "Пирамидальные B-кадры улучшают сжатие, создавая пирамидальную структуру (отсюда\nназвание)\nВ-кадров, что позволяет B-кадрам ссылаться друг на друга, чтобы улучшить сжатие.\n\nТребования для Максимум B-кадров, больше 1; для адаптивных B-кадров рекомендуются \"Оптимально\" для выгоды полного сжатия."
 
 msgid "<small>Weighted P-Frames:</small>"
 msgstr "<small>Взвешенные P-кадры:</small>"
@@ -1356,10 +1297,10 @@ msgid ""
 "prediction to be disabled.  Note that some devices and players, even those that support\n"
 "Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is\n"
 "completely incompatible with it, for example."
-msgstr ""
+msgstr "Выполняет дополнительный анализ, чтобы принять решение о весовых параметрах для каждого кадра.\n\nЭто немного улучшает общее сжатие и значительно улучшает качество изображения.\n\nБазовый профиль, как это требуется для iPod и подобных устройств, требует чтобы  прогнозирование\nвзвешенных P-кадров было отключено. Обратите внимание, что у некоторых устройств и проигрывателей, даже тех, которые поддерживают\nосновной профиль, могут возникнуть проблемы с прогнозированием взвешенных P-кадров:  например Apple TV, является\nсовершенно несовместим с этим."
 
 msgid "8x8 Transform"
-msgstr "Умное преобразование 8x8 "
+msgstr "Преобразование 8x8 "
 
 msgid ""
 "The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.\n"
@@ -1367,10 +1308,10 @@ msgid ""
 "It improves compression by at least 5% at a very small speed cost and may\n"
 "provide an unusually high visual quality benefit compared to its compression\n"
 "gain.  However, it requires High Profile, which many devices may not support."
-msgstr ""
+msgstr "Умное использование преобразований 8x8 является наиболее полезной особенностью x264 с точки зрения сжатие-скорость.\n\nЭто улучшает сжатие по меньшей мере на 5% при очень малых издержках скорости и может\nобеспечить необычайно высокое качество изображения при получении выгоды в его\nсжатии. Тем не менее, она требует высокого профиля, которые многие устройства могут не поддерживать."
 
 msgid "CABAC Entropy Encoding"
-msgstr "Контекстно-адаптивное кодирование"
+msgstr "Энтропийное кодирование CABAC"
 
 msgid ""
 "After the encoder has done its work, it has a bunch of data that\n"
@@ -1380,13 +1321,13 @@ msgid ""
 "\n"
 "If you're looking to minimize CPU requirements for video playback, disable this option.\n"
 "Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled."
-msgstr "После того, как кодер сделал свое дело, он имеет много данных, которые\nдолжна быть сжаты без потерь, подобно ZIP или RAR.  H.264 обеспечивает\nдля этого два варианта: CAVLC и CABAC.  CABAC декодирует намного медленнее,\nно сжимает значительно лучше (10-30%), особенно по более низким битрейте.\n\nЕсли хотите минимизировать требования к процессору при воспроизведении видео, отключить эту опцию.\nБазовый профиль, требуемый для iPod и аналогичных устройств, требует чтобы CABAC быть отключен."
+msgstr "После того как кодировщик завершит работу, у него много данных, которые\nдолжна быть сжаты без потерь, подобно ZIP или RAR.  H.264 обеспечивает\nдля этого два варианта: CAVLC и CABAC.  CABAC декодирует намного медленнее,\nно сжимает значительно лучше (10-30%), особенно при более низком битрейте.\n\nЕсли хотите минимизировать требования к процессору при воспроизведении видео, отключите эту опцию.\nБазовый профиль, требуемый для iPod и аналогичных устройств, требует чтобы CABAC быть отключен."
 
 msgid "<small><b>Encoding Features</b></small>"
 msgstr "<small><b>Особенности кодирования</b></small>"
 
 msgid "<small>Motion Est. Method:</small>"
-msgstr "<small>Метод движения Est.:</small>"
+msgstr "<small>Метод оценки движения</small>"
 
 msgid ""
 "Controls the motion estimation method.\n"
@@ -1399,13 +1340,24 @@ msgid ""
 "Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.\n"
 "Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
 "Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
-msgstr ""
+msgstr "Управляет методом оценки движения.\n\nОценкой движения кодировщик определяет, как каждый блок пикселей переместился в кадре.\nПоиск метода движения улучшает сжатие за счет скорости.\n\nРомб: выполняет чрезвычайно быстрый и простой поиск с помощью ромбовидной формы.\nШестиугольник: работает несколько более эффективно, но поиск немного медленнее при использовании формы шестиугольника.\nНеравномерный мульти-шестиугольник: выполняет очень широкий поиск, используя различные модели более точного захвата сложного движения.\nПолный: выполняет \"немой\" поиск каждого пиксела в широкой области. Существенно медленнее, лишь с небольшим приростом сжатия.\nПолный Адамара: как  всесторонний, делает еще более точные решения. Соответственно, работает несколько медленнее, и только  для  небольшого улучшения."
 
 msgid "<small>Subpel ME &amp; Mode:</small>"
-msgstr "<small>Режим &amp; Subpel ME:</small>"
+msgstr "<small>Режим оценки субпикселов:</small>"
+
+msgid ""
+"This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
+"\n"
+"Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n"
+"Mode decision is the method used to choose how to encode each block of the frame: a very important decision.\n"
+"SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n"
+"6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n"
+"11 disables all early terminations in analysis.\n"
+"10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
+msgstr "Этот параметр управляет субпиксельной точностью оценки движения и режимами методов решений.\n\nСубпиксельная оценка движения используется для улучшения оценки движения с точностью до пикселя, улучшая сжатие.\nРежим выбора метода используется, чтобы выбирать, как кодировать каждый блок кадра:: очень важное решение.\nБыстрый CAD метод, последующий SATD, RD, RD повышенного качества, и медленный QPRD.\nНастоятельно рекомендуется 6 или выше: Psy-RD, это очень мощная пси оптимизация, которая помогает сохранить детали, требуется RD.\n11 отключает все ранее сделанные анализы.\n10 и 11, самые мощные и самые медленные параметры, требуют адаптивное квантование (AQ-режим> 0) и треллис (Всегда)."
 
 msgid "<small>Motion Est. Range:</small>"
-msgstr "<small>Диапазон движения Est.:</small>"
+msgstr "<small>Диапазон поиска движения:</small>"
 
 msgid ""
 "This is the distance x264 searches from its initial guess at the\n"
@@ -1414,10 +1366,10 @@ msgid ""
 "The default is fine for most content, but extremely high motion video,\n"
 "especially at HD resolutions, may benefit from higher ranges, albeit at\n"
 "a high speed cost."
-msgstr ""
+msgstr "Это расстояние поиска  x264 от предположительного начала блока\nдвижения, чтобы попытаться найти его фактическое движение.\n\nПо умолчанию подходит для большинства содержимого, но чрезвычайно высокое движение видео,\nособенно на разрешениях HD, можно извлечь выгоду из более высоких диапазонов, хотя\nбольшие издержки в скорости."
 
 msgid "<small>Adaptive Direct Mode:</small>"
-msgstr "<small>Прямой адаптивный режим:</small>"
+msgstr "<small>Режим адаптивного управления:</small>"
 
 msgid ""
 "H.264 allows for two different prediction modes, spatial and temporal, in B-frames.\n"
@@ -1425,13 +1377,23 @@ msgid ""
 "Spatial, the default, is almost always better, but temporal is sometimes useful too.\n"
 "x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),\n"
 "adaptively select which is better for each particular frame."
-msgstr ""
+msgstr "H.264 позволяет прогнозировать два различных режима, пространственные и временные B-кадры.\n\nПространственный по умолчанию, он почти всегда лучше, но временной иногда бывает тоже полезен.\nx264 может, ценой небольшого уменьшения скорости (и соответственно, небольшого коэффициента усиления сжатия),\nадаптивно выбирать, какой лучше для каждого конкретного кадра."
 
 msgid "<small>Adaptive B-Frames:</small>"
 msgstr "<small>Адаптивные B-кадры:</small>"
 
+msgid ""
+"x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
+"\n"
+"Fast mode takes roughly the same amount of time no matter how many B-frames you specify.\n"
+"However, while fast, its decisions are often suboptimal.\n"
+"\n"
+"Optimal mode gets slower as the maximum number of B-Frames increases,\n"
+"but makes much more accurate decisions, especially when used with B-pyramid."
+msgstr "x264 имеет множество алгоритмов, чтобы решить, когда и сколько  B-кадров следует использовать.\n\nБыстрый режим не занимает много времени, независимо от того, сколько B-кадров вы укажете.\nТем не менее, хоть и быстро, его решения часто недостаточны.\n\nОптимальный режим медленнее, а максимальное число B-кадров увеличенное,\nи он делает намного более точные решения, особенно при использовании B-пирамиды."
+
 msgid "<small>Partitions:</small>"
-msgstr "<small>Блоки:</small>"
+msgstr "<small>Разделение на макроблоки:</small>"
 
 msgid ""
 "Mode decision picks from a variety of options to make its decision:\n"
@@ -1439,10 +1401,10 @@ msgid ""
 "\n"
 "Fewer partitions to check means faster encoding, at the cost of worse\n"
 "decisions, since the best option might have been one that was turned off."
-msgstr ""
+msgstr "Режим выбирает решение из множества вариантов, чтобы сделать свое решение:\nэта опция выбирает, какие варианты использовать.\n\nМеньшее количество разделов для проверки означает более быстрое кодирование, за счет худшего\nрешения,  поскольку лучший вариант возможно был тот, который был выключен."
 
 msgid "<small>Trellis:</small>"
-msgstr "<small>Треллис:</small>"
+msgstr "<small>Треллис квантование:</small>"
 
 msgid ""
 "Trellis fine-tunes the rounding of transform coefficients to\n"
@@ -1452,7 +1414,7 @@ msgid ""
 "during analysis, which improves compression even more, albeit at great speed cost.\n"
 "\n"
 "Trellis costs more speed at higher bitrates and requires CABAC."
-msgstr ""
+msgstr "Треллис настраивает коэффициент округления преобразования, чтобы\nвыжать 3-5% большего сжатия, ценой некоторой скорости.\n\nИспользовать \"Всегда\" не только во время основного процесса кодирования, но и\nпри анализе, который улучшает сжатие, хотя и с большими издержками скорости.\n\nТреллис придает больше скорости с более высоким битрейтом и требует CABAC."
 
 msgid "<small><b>Analysis</b></small>"
 msgstr "<small><b>Анализ</b></small>"
@@ -1464,20 +1426,20 @@ msgid ""
 "Adaptive quantization controls how the encoder distributes bits across the frame.\n"
 "\n"
 "Higher values take more bits away from edges and complex areas to improve areas with finer detail."
-msgstr "Адаптивное квантование контролирует, как кодер распределяет биты по всем  кадрам.\n\nВысокие значения считают больше битов от краев и сложных областей для улучшения участков с четкими деталями."
+msgstr "Адаптивное квантование контролирует, как кодировщик распределяет биты по всем  кадрам.\n\nВысокие значения считают больше битов от краев и сложных областей для улучшения участков с четкими деталями."
 
 msgid "<small>Psychovisual Rate Distortion:</small>"
-msgstr "<small>Степень восприятия искажений:</small>"
+msgstr "<small>Психовизуальная скорость искажения:</small>"
 
 msgid ""
 "Psychovisual rate-distortion optimization takes advantage of the characteristics of human\n"
 "vision to dramatically improve apparent detail and sharpness.\n"
 "The effect can be made weaker or stronger by adjusting the strength.\n"
 "Being an RD algorithm, it requires mode decision to be at least \"6\"."
-msgstr "Психовизуальная оптимизация соотношению сигнал-шум использует преимущества характеристик человеческого зрения,\nчтобы значительно улучшить детали и резкость.\nЭффект можно ослабить или усилить, регулируя силу. Алгоритм RD\nтребует по меньшей мере установки режима \"6\"."
+msgstr "Психовизуальная скорость искажения использует преимущества характеристик человеческого зрения,\nчтобы значительно улучшить детали и резкость.\nЭффект можно ослабить или усилить, регулируя силу. Алгоритм скорости искажения\nтребует по меньшей мере установки режима \"6\"."
 
 msgid "<small>Psychovisual Trellis:</small>"
-msgstr "<small>Психовизуальный треллис:</small>"
+msgstr "<small>Психовизуальные треллисы:</small>"
 
 msgid ""
 "Psychovisual trellis is an experimental algorithm to further\n"
@@ -1486,10 +1448,24 @@ msgid ""
 "Recommended values are around 0.2, though higher values may help for very\n"
 "grainy video or lower bitrate encodes.  Not recommended for cel animation\n"
 "and other sharp-edged graphics."
-msgstr ""
+msgstr "Психовизуальные треллисы являются экспериментальным алгоритмом, способствующим\nулучшению резкости и сохранения деталей выше, чем это делает психовизуальная скорость искажения.\n\nРекомендуемые значения около 0,2. Более высокие значения могут помочь при очень\nзернистом видео или низким битрейте кодирования. Не рекомендуется для кель анимации кель\nи другой графики с острыми краями."
 
 msgid "Deblocking: "
-msgstr "Деблокирование: "
+msgstr "Подавление блочности: "
+
+msgid ""
+"H.264 deblocking filter.\n"
+"\n"
+"h.264 has a built-in deblocking filter that smooths out blocking artifacts\n"
+"after decoding each frame.  This not only improves visual quality, but also\n"
+"helps compression significantly. The deblocking filter takes a lot of CPU power,\n"
+"so if you're looking to minimize CPU requirements for video playback, disable it.\n"
+"\n"
+"The deblocking filter has two adjustable parameters, \"strength\" (Alpha) and \"threshold\" (Beta).\n"
+"The former controls how strong (or weak) the deblocker is, while the latter controls how many\n"
+"(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
+"The default is 0 (normal strength) for both parameters."
+msgstr "Фильтр устранения блочности H.264.\n\nh.264 имеет встроенный фильтр устранения блочности для сглаживания артефактов блочности\nпосле декодирования каждого кадра.  Это не только улучшает визуальное качество, но и\nзначительно помогает сжатию. Фильтр деблокирования занимает много ресурсов процессора.\nЕсли хотите минимизировать требования к процессору при воспроизведении видео, отключите эту опцию.\n\nФильтр деблокирования имеет два регулируемых параметра, \"сила\" (Alpha) и\n\"порог\" (бета-версия).\nПервый контролирует, насколько сильное (или слабое) деблокирование, в то время как последний определяет, сколько\n(или намного) она применяется. Более низкие значения означают меньше блочности, высокие значения означают больше блочности.\nПо умолчанию 0 (нормальная сила) для обоих параметров."
 
 msgid "No DCT Decimate"
 msgstr "Не опустошать DCT"
@@ -1502,7 +1478,7 @@ msgid ""
 "\n"
 "Don't touch this unless you're having banding issues or other such cases\n"
 "where you are having trouble keeping fine noise."
-msgstr "x264 обычно обнуляет почти пустые блоки данных для сохранения битов, которые\nбудут лучше использовать для других целей в видео. Тем не менее, иногда это\nможет иметь небольшое отрицательное воздействие на сохранение тонких мелких\nчастиц и размытие. Не касайтесь этого, если не имеете проблем с сохранением мелких\nшумов."
+msgstr "x264 обычно обнуляет почти пустые блоки данных для сохранения битов, которые\nлучше будет использовать для других целей в видео. Тем не менее, иногда это\nможет иметь некоторое отрицательное воздействие при сохранении тонких мелких\nчастиц и размытия.\nНе касайтесь этого, если не испытываете проблем от сохранения мелких шумов."
 
 msgid "<small><b>Psychovisual</b></small>"
 msgstr "<small><b>Восприятие</b></small>"
@@ -1517,7 +1493,7 @@ msgid ""
 "subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
 "deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
 "no-fast-pskip=0:no-dct-decimate=0:cabac=1"
-msgstr "Выбранные опции появятся здесь.\nВы можете их отредактировать и добавить в дополнительные опции.\n\nЗначение по умолчанию не будет показано. По умолчанию это:\nref=3:bframes=3:b-adapt=fast:direct=spatial:\nb-pyramid=normal:weightp=2:me=hex:merange=16:\nsubme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\ndeblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\nno-fast-pskip=0:no-dct-decimate=0:cabac=1"
+msgstr "Выбранные опции будут показаны здесь.\nВы можете их отредактировать и добавить в дополнительные опции.\n\nЗначение по умолчанию не будет показано. По умолчанию это:\nref=3:bframes=3:b-adapt=fast:direct=spatial:\nb-pyramid=normal:weightp=2:me=hex:merange=16:\nsubme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\ndeblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\nno-fast-pskip=0:no-dct-decimate=0:cabac=1"
 
 msgid "<small><b>Current x264 Advanced Option String</b></small>"
 msgstr "<small><b>Дополнительная строка текущей опции x264</b></small>"
@@ -1580,6 +1556,9 @@ msgid ""
 "Resets all queue jobs to pending and ready to run again."
 msgstr "Отметить все записи очереди, как в ожидании.\nСбросить ожидание все заданий очереди и продолжить выполнять задание снова."
 
+msgid "OK"
+msgstr "OK"
+
 msgid "Select All"
 msgstr "Выбрать все"
 
@@ -1593,7 +1572,10 @@ msgid "Unmark all titles"
 msgstr "Снять все названия"
 
 msgid "Destination files OK.  No duplicates detected."
-msgstr "Файлы назначения в ОК. Дубликаты не обнаружены."
+msgstr "С файлами назначения все хорошо. Дубликаты не обнаружены."
+
+msgid "Select this title for adding to the queue.\n"
+msgstr "Отметить все названия для добавления в очередь.\n"
 
 msgid "Preferences"
 msgstr "Параметры"
@@ -1613,13 +1595,13 @@ msgstr "Шаблон автонаименования"
 msgid ""
 "Available Options: {source} {title} {chapters} {date} {time} {quality} "
 "{bitrate}"
-msgstr "Доступные параметры: {источник} {название} {главы} {дата} {время} {качаство} {битрейт}"
+msgstr "Доступные параметры: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
 
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr "Использовать дружественное iPod/iTunes расширение файла (.m4v) для MP4"
 
 msgid "Number of previews"
-msgstr "Число миниатюр"
+msgstr "Количество миниатюр"
 
 msgid "Filter short titles (seconds)"
 msgstr "Фильтр коротких наименований (в секундах)"
@@ -1681,7 +1663,7 @@ msgid "Advanced"
 msgstr "Дополнительно"
 
 msgid "Folder Name:"
-msgstr "Имя папки:"
+msgstr "Название папки:"
 
 msgid "<b>Description</b>"
 msgstr "<b>Описание</b>"
@@ -1719,7 +1701,7 @@ msgid ""
 msgstr "Это максимальная высота, в которой будет сохраняться видео.\n\nВсякий раз, когда загружается новый источник, это значение будет применяться, если высота источника больше.\nЗначение 0 означает, что максимальной высоты нет."
 
 msgid "Select preview frames."
-msgstr "Выбор кадра для миниатюры."
+msgstr "Выбор кадра просмотра."
 
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
@@ -1733,16 +1715,16 @@ msgid "Set the duration of the live preview in seconds."
 msgstr "Установить продолжительность предварительного просмотра в секундах."
 
 msgid "Show Crop"
-msgstr "Показать кадрирование"
+msgstr "Показать границы обрезки"
 
 msgid "Show Cropped area of the preview"
 msgstr "Показать просмотр обрезанных областей"
 
 msgid "Fullscreen"
-msgstr "Полный экран"
+msgstr "Полноэкранный"
 
 msgid "View Fullscreen Preview"
-msgstr "Вид просмотра в полный экран"
+msgstr "Просмотр в полный экран"
 
 msgid "Title Number:"
 msgstr "Количество названий:"
@@ -1764,9 +1746,6 @@ msgstr "Список встроенных субтитров"
 
 msgid "Enable settings to select embedded subtitles"
 msgstr "Включить настройки выбранных встроенных субтитров"
-
-msgid "Language"
-msgstr "Язык"
 
 msgid "Character Code"
 msgstr "Кодировка"
@@ -1837,14 +1816,31 @@ msgstr "Микшер"
 msgid "Sample Rate"
 msgstr "Частота дискретизации"
 
-msgid "Sample Rate:"
-msgstr "Частота дискретизации:"
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
+msgstr "<b>Динамическое сжатие диапазона:</b>\nДля источника звука, который имеет широкий динамический диапазон. Очень громкие и очень мягкие последовательности, DRC позволяет сжимать диапазон, делая громкие разделы мягче и мягкие разделы громче."
 
 msgid "Enable bitrate setting"
 msgstr "Включить настройку битрейта"
 
 msgid "Enable quality setting"
 msgstr "Включить настройку качества"
+
+msgid ""
+"<b>Quality:</b> For output codec's that support it, adjust the quality of "
+"the output."
+msgstr "<b>Качество:</b> Для выходного кодека, который поддерживают это, установить качество вывода."
+
+msgid "00.0"
+msgstr "00.0"
+
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
+"audio track."
+msgstr "<b>Усиление звука:</b> Регулирует усиление или ослабление звуковой дорожки вывода."
 
 msgid "Skip This Version"
 msgstr "Пропустить эту версию"
@@ -1860,9 +1856,6 @@ msgstr "Доступна новая версия HandBrake xxx (у вас вер
 
 msgid "<b>Release Notes</b>"
 msgstr "<b>Заметки о релизе</b>"
-
-msgid "none"
-msgstr "нет"
 
 msgid "First Track Matching Selected Languages"
 msgstr "Первая дорожка соответствующая выбранным языкам"
@@ -1897,6 +1890,9 @@ msgstr "Выключить компьютер"
 msgid "Week"
 msgstr "Неделя"
 
+msgid "Month"
+msgstr "Месяц"
+
 msgid "Year"
 msgstr "Год"
 
@@ -1915,29 +1911,17 @@ msgstr "Еженедельно"
 msgid "Monthly"
 msgstr "Ежемесячно"
 
-msgid "Month"
-msgstr "Месяц"
-
 msgid "Default"
 msgstr "По умолчанию"
 
 msgid "Fast"
 msgstr "Быстро"
 
-msgid "Bob"
-msgstr ""
-
 msgid "Slow"
 msgstr "Медленно"
 
 msgid "Slower"
 msgstr "Медленно"
-
-msgid "NLMeans"
-msgstr ""
-
-msgid "HQDN3D"
-msgstr ""
 
 msgid "Ultralight"
 msgstr "Очень легкое"
@@ -1946,9 +1930,6 @@ msgid "Light"
 msgstr "Легкое"
 
 msgid "Medium"
-msgstr "Среднее"
-
-msgid "medium"
 msgstr "Среднее"
 
 msgid "Strong"
@@ -1979,13 +1960,13 @@ msgid "Optimal"
 msgstr "Оптимально"
 
 msgid "Normal"
-msgstr "Стандартный"
+msgstr "Обычные"
 
 msgid "Simple"
-msgstr "Простой"
+msgstr "Простые"
 
 msgid "Smart"
-msgstr "Интеллектуальный"
+msgstr "Интеллектуальные"
 
 msgid "Diamond"
 msgstr "Ромб"
@@ -1994,13 +1975,16 @@ msgid "Hexagon"
 msgstr "Шестиугольник"
 
 msgid "Uneven Multi-Hexagon"
-msgstr "Неравный мультишестиугольник"
+msgstr "Неравномерный мульти-шестиугольник"
 
 msgid "Exhaustive"
-msgstr "Исчерпывающий"
+msgstr "Полный"
 
 msgid "Hadamard Exhaustive"
-msgstr "Преобразовано-исчерпывающий"
+msgstr "Исчерпывающая Адамара"
+
+msgid "Most"
+msgstr "Большинство"
 
 msgid "Some"
 msgstr "Некоторые"
@@ -2014,12 +1998,6 @@ msgstr "Только кодирование"
 msgid "Always"
 msgstr "Всегда"
 
-msgid "Same as source"
-msgstr "Так же, как в источнике"
-
-msgid "Same as source:"
-msgstr "Так же, как в источнике:"
-
 msgid "(NTSC Film)"
 msgstr "(Фильм NTSC)"
 
@@ -2029,9 +2007,20 @@ msgstr "(Фильм/видео PAL)"
 msgid "(NTSC Video)"
 msgstr "(Видео NTSC)"
 
-#, c-format
+msgid "%d - %02dh%02dm%02ds - %s"
+msgstr "%d - %02d час %02d мин %02d сек - %s"
+
+msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
+msgstr "%d (%05d.MPLS) - %02d час %02d мин %02d сек"
+
+msgid "%d (%05d.MPLS) - Unknown Length"
+msgstr "%d (%05d.MPLS) - Продолжительность неизвестна"
+
+msgid "%d - %02dh%02dm%02ds"
+msgstr "%d - %02d час %02d мин %02d сек"
+
 msgid "%d - Unknown Length"
-msgstr "%d - Продолжительность неизвестна\t"
+msgstr "%d - Продолжительность неизвестна"
 
 msgid "No Titles"
 msgstr "Без названия"
@@ -2069,7 +2058,7 @@ msgid ""
 "Invalid Decomb Settings:\n"
 "\n"
 "%s\n"
-msgstr "Недопустимые настройки удаления гребенки:\n\n%s\n"
+msgstr "Недопустимые настройки устранения гребенки:\n\n%s\n"
 
 msgid ""
 "Theora is not supported in the MP4 container.\n"
@@ -2111,7 +2100,7 @@ msgid ""
 "\n"
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
-msgstr "%s  не поддерживается в контейнере %s.\n\nВам следует выбрать другой аудио кодек.\nЕсли продолжите, один будет выбран для вас."
+msgstr "%s  не поддерживается в контейнере %s.\n\nВам следует выбрать другой кодировщик звука.\nЕсли продолжите, один будет выбран для вас."
 
 #, c-format
 msgid ""
@@ -2119,7 +2108,7 @@ msgid ""
 "\n"
 "You should choose a different mixdown.\n"
 "If you continue, one will be chosen for you."
-msgstr "Аудио источника не поддерживает %s смешивания каналов.\n\nВы должны выбрать другое смешивание каналов.\nЕсли вы продолжите, одно из них будет выбрано для вас."
+msgstr "Аудио источника не поддерживает %s микширование.\n\nВы должны выбрать другое микширование.\nЕсли вы продолжите, одно из них будет выбрано для вас."
 
 #, c-format
 msgid ""
@@ -2129,10 +2118,6 @@ msgid ""
 "%s"
 msgstr "<b><big>Не удалось создать %s.</big></b>\n\nВнутренняя ошибка. Не удалось разобрать описание пользовательского интерфейса.\n%s"
 
-#, c-format
-msgid "Signal handler (%s) not found"
-msgstr "Обработчик сигнала (%s) не найден"
-
 msgid "Index"
 msgstr "Индекс"
 
@@ -2141,12 +2126,6 @@ msgstr "Продолжительность"
 
 msgid "Title"
 msgstr "Название"
-
-msgid "Done\n"
-msgstr "Готово\n"
-
-msgid "DATA"
-msgstr "Данные"
 
 msgid "Job Information"
 msgstr "Сведения о задании"
@@ -2193,7 +2172,7 @@ msgid "Failed to find parent folder when adding child."
 msgstr "Не удалось найти родительскую папку."
 
 msgid "Failed to find parent folder while adding child."
-msgstr "Не удалось найти родительскую папку при добавлении вложенной."
+msgstr "Не удалось найти родительскую папку."
 
 #, c-format
 msgid "Can't map language value: (%s)"
@@ -2206,17 +2185,11 @@ msgstr "Не удается отобразить значение: (%s)"
 msgid "Subtitles"
 msgstr "Субтитры"
 
-#, c-format
-msgid "Superfluous tunes! %s"
-msgstr "Ненужные мелодии! %s"
-
-#, c-format
 msgid ""
 "%s: Folder already exists.\n"
 "You can not replace it with a preset."
-msgstr "%s: Папка уже существует.\n Вы не можете изменить это с предустановки."
+msgstr "%s: Папка уже существует.\nВы не можете изменить эту папку."
 
-#, c-format
 msgid ""
 "%s: Preset already exists.\n"
 "You can not replace it with a folder."
@@ -2234,21 +2207,20 @@ msgstr "Предустановки (*.plist)"
 msgid "Export Preset"
 msgstr "Экспорт предустановки"
 
-#, c-format
 msgid ""
 "Confirm deletion of %s:\n"
 "\n"
 "%s"
-msgstr "Подтвердите удаление %s:\n\n%s"
+msgstr "Хотите удалить %s?\n\n%s"
+
+msgid "folder"
+msgstr "папку"
+
+msgid "preset"
+msgstr "предустановку"
 
 msgid "No selection???  Perhaps unselected."
 msgstr "Нет выбора ??? Возможно, не выбрано."
-
-msgid "Couldn't create native window for GstXOverlay. Disabling live preview."
-msgstr "Не удалось создать собственное окно для GstXOverlay. Отключение просмотра."
-
-msgid "Couldn't initialize gstreamer. Disabling live preview."
-msgstr "Не удалось инициализировать gstreamer. Отключение просмотра."
 
 #, c-format
 msgid "Gstreamer Error: %s"
@@ -2262,11 +2234,11 @@ msgid ""
 "%s"
 msgstr "Отсутствует плагин GStreamer\nАудио или видео не сможет проигрываться, как ожидалось\n\n%s"
 
-msgid "Ok"
-msgstr "Ok"
-
 msgid "Done"
 msgstr "Готово"
+
+msgid "Windowed"
+msgstr "Оконный"
 
 msgid "Seconds"
 msgstr "Секунды"
@@ -2278,12 +2250,12 @@ msgstr "Кадры"
 msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d, 2 Video Passes) -->"
 " %s</small>"
-msgstr "<big><b>%s</b></big> <small>(Название %d, %s %d через %d, 2 проход видео) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Название %d, %s %d транзитная %d, 2 проход видео) --> %s</small>"
 
 #, c-format
 msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d) --> %s</small>"
-msgstr "<big><b>%s</b></big> <small>(Название %d, %s %d через %d) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Название %d, %s %d транзитная %d) --> %s</small>"
 
 #, c-format
 msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
@@ -2295,7 +2267,7 @@ msgstr "<b>Предустановка:</b> <small>%s</small>\n"
 
 #, c-format
 msgid "<b>Format:</b> <small>%s Container</small>\n"
-msgstr "<b>Формат:</b> <small>%s Контейнер</small>\n"
+msgstr "<b>Формат:</b> <small>Контейнер %s</small>\n"
 
 msgid "<b>Container Options:</b><small>"
 msgstr "<b>Параметры контейнера:</b><small>"
@@ -2352,7 +2324,7 @@ msgstr "%sДетелесин"
 
 #, c-format
 msgid "%sDecomb"
-msgstr "%sУбрать гребенку"
+msgstr "%sУстранение гребенки"
 
 #, c-format
 msgid "%sDeinterlace"
@@ -2368,7 +2340,7 @@ msgstr "%sУровень блочности: %d"
 
 #, c-format
 msgid "%sGrayscale"
-msgstr "%sГрадации серого"
+msgstr "%sЧёрно-белое"
 
 #, c-format
 msgid "<b>Video:</b> <small>%s"
@@ -2391,6 +2363,12 @@ msgstr "Ошибка"
 
 msgid "Bitrate:"
 msgstr "Битрейт:"
+
+msgid "Bitrate"
+msgstr "Битрейт"
+
+msgid "Quality"
+msgstr "Качество"
 
 msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
 msgstr "<b>Turbo 1 проход:</b> <small>На</small>\n"
@@ -2431,7 +2409,7 @@ msgstr "%s --> Кодировщик: %s"
 
 #, c-format
 msgid "%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
-msgstr "%s --> Кодировщик: %s, Смешивание каналов: %s, Частота дискредитации: %s, %s"
+msgstr "%s --> Кодировщик: %s, Микширование: %s, Частота дискредитации: %s, %s"
 
 msgid "<b>Subtitle:</b> "
 msgstr "<b>Субтитры:</b>"
@@ -2522,11 +2500,17 @@ msgstr "Продолжить"
 msgid "Resume Encoding"
 msgstr "Продолжить кодирование"
 
+msgid "S_top Queue"
+msgstr "О_становить очередь"
+
 msgid "_Start Queue"
 msgstr "_Запустить очередь"
 
 msgid "_Resume Queue"
 msgstr "_Продолжить очередь"
+
+msgid "Resume Queue"
+msgstr "Продолжить очередь"
 
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
@@ -2551,21 +2535,6 @@ msgid "Usage: %s infile [outfile]\n"
 msgstr "Используется: %s infile [outfile]\n"
 
 #, c-format
-msgid "Attempt to set unknown widget type: %s\n"
-msgstr "Попытка установить неизвестный тип виджета: %s\n"
-
-#, c-format
-msgid "No value found for %s\n"
-msgstr "Не найдено значение для %s\n"
-
-msgid "Attempt to set unknown widget type"
-msgstr "Попытка установить неизвестный тип виджета"
-
-#, c-format
-msgid "Failed to find widget for key: %s\n"
-msgstr "Не удалось найти виджет для ключа: %s\n"
-
-#, c-format
 msgid "Offset: %dms"
 msgstr "Смещение: %dms"
 
@@ -2574,6 +2543,9 @@ msgstr "Сведения о записываемом видео"
 
 msgid "Passthrough"
 msgstr "Передача"
+
+msgid "through"
+msgstr "по"
 
 msgid "(Forced Subtitles Only)"
 msgstr "(Только принудительные субтитры)"
@@ -2628,24 +2600,38 @@ msgid ""
 "\"\""
 msgstr "%s\n\nРасширенные параметры:\n\"\""
 
-msgid "ERROR"
-msgstr "ОШИБКА"
+msgid "Any"
+msgstr "Любой"
 
-msgid ""
-"<b>Anamorphic Modes:</b>\n"
-"<small><tt>\n"
-"None   - Force pixel aspect ratio to 1:1.\n"
-"Loose  - Align dimensions to chosen 'Alignment' value \n"
-"         and pick pixel aspect ratio that preserves the\n"
-"         original display aspect ratio\n"
-"Strict - Keep original source dimensions and pixel \n"
-"         aspect ratio</tt></small>"
-msgstr "<b>Анаморфные режимы:</b>\n<small><tt>\nНет - Принудительное соотношение сторон 1:1.\nПроизвольно  - Выровнять размеры выбрав 'Выравнивание'  \n         чтобы значение и соотношение сторон  соответствовало \n         соотношению сторон оригинала\nСтрого - Держать исходные размеры и исходное \n         соотношение сторон</tt></small>"
+msgid "0: SAD, no subpel"
+msgstr "0: SAD, без субпиксельной"
 
-msgctxt "NAME OF TRANSLATORS"
+msgid "4: SATD, qpel on all"
+msgstr "4: SATD, qpel во всех"
+
+msgid "5: SATD, multi-qpel on all"
+msgstr "5: SATD, multi-qpel во всех"
+
+msgid "6: RD in I/P-frames"
+msgstr "6: RD в I/P-кадрах"
+
+msgid "7: RD in all frames"
+msgstr "7: RD во всех кадрах"
+
+msgid "8: RD refine in I/P-frames"
+msgstr "8: RD улучшать в I/P-кадрах"
+
+msgid "9: RD refine in all frames"
+msgstr "9: RD улучшать во всех кадрах"
+
+msgid "10: QPRD in all frames"
+msgstr "10: QPRD во всех кадрах"
+
+msgid "11: No early terminations in analysis"
+msgstr "11: Без ранние сделанных анализов"
+
 msgid "Your names"
 msgstr "Виктор Рыжих"
 
-msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "victorr2007@yandex.ru"
