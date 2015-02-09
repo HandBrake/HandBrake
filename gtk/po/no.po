@@ -3,35 +3,34 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexandru Grigoras <alexandru.grigoras86@gmail.com>, 2014
-# Giuseppe Pignataro <anubisteam01@gmail.com>, 2014
+# Alf Andreas Stray Rambo <alf.andreas.rambo@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake-0.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-03 13:01+0300\n"
-"PO-Revision-Date: 2014-11-28 14:44+0000\n"
-"Last-Translator: VictorR2007 <victorr2007@yandex.ru>\n"
-"Language-Team: Italian (Italy) (http://www.transifex.com/projects/p/handbrake/language/it_IT/)\n"
+"PO-Revision-Date: 2014-12-05 21:33+0000\n"
+"Last-Translator: Alf Andreas Stray Rambo <alf.andreas.rambo@gmail.com>\n"
+"Language-Team: Norwegian (http://www.transifex.com/projects/p/handbrake/language/no/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it_IT\n"
+"Language: no\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Quality: "
-msgstr "Qualità:"
+msgstr "Kvalitet:"
 
 #, c-format
 msgid "Bitrate: %dkbps"
-msgstr ""
+msgstr "Bithastighet: %dkbps"
 
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr ""
+msgstr "Bithastighet: %.4gkbps"
 
 msgid "<small>Passthrough</small>"
-msgstr ""
+msgstr "<small>Gjennomgang</small>"
 
 #, c-format
 msgid ""
@@ -49,29 +48,29 @@ msgid ""
 msgstr ""
 
 msgid "Add"
-msgstr ""
+msgstr "Legg til"
 
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
-msgstr ""
+msgstr "Legg til en lyd omkoder.\nHver valgte kilde spor vil bli kodet med alle valgte omkodere."
 
 msgid "Set the audio codec to encode this track with."
-msgstr ""
+msgstr "Sett en lyd kodek til å omkode dette sporet med."
 
 msgid "Set the bitrate to encode this track with."
-msgstr ""
+msgstr "Sett bithastigheten til å omkode dette sporet med."
 
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
-msgstr ""
+msgstr "<b>Lyd Kvalitet:</b>\nFor omkoderene som støtter det, juster kvaliteten på utdataen."
 
 msgid "Set the mixdown of the output audio track."
-msgstr ""
+msgstr "Sett nedmiksen til utdataens lyd spor."
 
 msgid "Set the sample rate of the output audio track."
-msgstr ""
+msgstr "Sett samplingsfrekvensen til utdataens lyd spor."
 
 msgid ""
 "<b>Audio Gain:</b>\n"
@@ -79,16 +78,16 @@ msgid ""
 msgstr ""
 
 msgid "0dB"
-msgstr ""
+msgstr "0dB"
 
 msgid "%ddB"
-msgstr ""
+msgstr "%ddB"
 
 msgid "%.4gkHz"
-msgstr ""
+msgstr "%.4gkHz"
 
 msgid "<small>%d - %s (%.4gkHz)</small>"
-msgstr ""
+msgstr "<small>%d - %s (%.4gkHz)</small>"
 
 msgid ""
 "<b>Dynamic Range Compression:</b>\n"
@@ -100,31 +99,31 @@ msgid ""
 msgstr ""
 
 msgid "Remove this audio encoder"
-msgstr ""
+msgstr "Fjern denne lyd omkoderen"
 
 msgid "Closing HandBrake will terminate encoding.\n"
-msgstr ""
+msgstr "Lukking av HandBrake vil avslutte omkodingen.\n"
 
 msgid "No Title Found"
-msgstr ""
+msgstr "Ingen Tittel Funnet"
 
 msgid "none"
-msgstr ""
+msgstr "Ingen"
 
 msgid "Not Selected"
-msgstr ""
+msgstr "Ikke Valgt"
 
 msgid "zerolatency x264 tune selected, forcing constant framerate"
 msgstr ""
 
 msgid "Scanning ..."
-msgstr ""
+msgstr "Skanning ..."
 
 msgid "Stop Scan"
-msgstr ""
+msgstr "Stopp Skanning"
 
 msgid "On"
-msgstr "On"
+msgstr "På"
 
 msgid "Strict"
 msgstr ""
@@ -133,54 +132,54 @@ msgid "Loose"
 msgstr ""
 
 msgid "Custom"
-msgstr "Personalizzato"
+msgstr ""
 
 msgid "Unknown"
-msgstr ""
+msgstr "Ukjent"
 
 msgid "auto"
-msgstr ""
+msgstr "Automatisk"
 
 #, c-format
 msgid ""
 "%s\n"
 "\n"
 "%s in %d seconds ..."
-msgstr ""
+msgstr "%s\n\n%s i %d sekunder ..."
 
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr ""
+msgstr "%sDin video vil bli mistet hvis du ikke fortsetter med omkodingen."
 
 msgid "Cancel Current and Stop"
-msgstr ""
+msgstr "Avbryt Nåværende og Stopp"
 
 msgid "Cancel Current, Start Next"
-msgstr ""
+msgstr "Avbryt Nåværende, Start Neste"
 
 msgid "Finish Current, then Stop"
-msgstr ""
+msgstr "Fullføre Nåværende, Så Stopp"
 
 msgid "Continue Encoding"
-msgstr ""
+msgstr "Fortsett Omkodingen"
 
 msgid "Custom "
 msgstr ""
 
 msgid "Modified "
-msgstr ""
+msgstr "Modifisert"
 
 #, c-format
 msgid "Handbrake Version: %s (%d)\n"
-msgstr ""
+msgstr "Handbrake Versjon: %s (%d)\n"
 
 #, c-format
 msgid "%d encode(s) pending"
-msgstr ""
+msgstr "%d omkoder(e) ventende"
 
 #, c-format
 msgid "job %d of %d, "
-msgstr ""
+msgstr "jobb %d av %d,"
 
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
@@ -192,79 +191,79 @@ msgstr ""
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
-msgstr ""
+msgstr "Omkoder: %s%s%.2f %% (%.2f fps, snitt %.2f fps, ETA %02dh%02dm%02ds)"
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
-msgstr ""
+msgstr "Omkoder: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
-msgstr ""
+msgstr "Omkoder: %s%s%.2f %%"
 
 msgid "Searching for start time, "
-msgstr ""
+msgstr "Søker etter start tid,"
 
 msgid "Scanning..."
-msgstr ""
+msgstr "Skanning..."
 
 #, c-format
 msgid "Scanning title %d of %d..."
-msgstr ""
+msgstr "Skanning tittel %d av %d..."
 
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
-msgstr ""
+msgstr "Skanning tittel %d av %d forhåndsvisning %d..."
 
 msgid "Source"
-msgstr ""
+msgstr "Kilde"
 
 msgid "Choose Video Source"
-msgstr "Seleziona sorgente video"
+msgstr "Velg Video Kilde"
 
 msgid "Paused"
-msgstr ""
+msgstr "Pauset"
 
 msgid "Encode Done!"
-msgstr ""
+msgstr "Omkoding Ferdig!"
 
 msgid "Encode Canceled."
-msgstr ""
+msgstr "Omkoding Kansellert."
 
 msgid "Encode Failed."
-msgstr ""
+msgstr "Omkoding Feilet."
 
 msgid "Muxing: This may take a while..."
-msgstr ""
+msgstr "Multipleksing: Dette kan ta litt tid..."
 
 msgid "Scan this DVD source"
-msgstr ""
+msgstr "Skann denne DVD kilden"
 
 msgid "AutoScan"
-msgstr ""
+msgstr "Automatisk Skanning"
 
 msgid "Suspend"
-msgstr ""
+msgstr "Suspendere"
 
 #, c-format
 msgid "Suspend failed: %s"
-msgstr ""
+msgstr "Suspendering feilet: %s"
 
 msgid "Suspend failed"
-msgstr ""
+msgstr "Suspendering feilet"
 
 msgid "Shutdown"
-msgstr ""
+msgstr "Slå av"
 
 #, c-format
 msgid "Shutdown failed: %s"
-msgstr ""
+msgstr "Avslåing feilet: %s"
 
 msgid "Shutdown failed"
-msgstr ""
+msgstr "Avslåing feilet"
 
 msgid "Encoding"
-msgstr ""
+msgstr "Omkoder"
 
 #, c-format
 msgid "press %d %d"
@@ -274,43 +273,43 @@ msgstr ""
 msgid ""
 "Invalid Settings:\n"
 "%s"
-msgstr ""
+msgstr "Ugyldig Innstillinger:\n%s"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
-msgstr ""
+msgstr "%s: %.4g (Advarsel: Lossless)"
 
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
-msgstr ""
+msgstr "HandBrake %s/%s er nå tilgjengelig (Du har %s/%d)."
 
 msgid "Encode Complete"
-msgstr ""
+msgstr "Omkoding Fullført"
 
 msgid "Put down that cocktail, Your HandBrake queue is done!"
-msgstr ""
+msgstr "Sett ned den drinken, Din Handbrake kø er ferdig!"
 
 msgid "Your encode is complete."
-msgstr ""
+msgstr "Din omkoding er fullført."
 
 msgid "Shutting down the computer"
-msgstr ""
+msgstr "Slår av datamaskinen"
 
 msgid "Putting computer to sleep"
-msgstr ""
+msgstr "Setter datamaskinen i dvale"
 
 msgid "Quiting Handbrake"
-msgstr ""
+msgstr "Avslutter Handbrake"
 
 msgid "Bottom"
-msgstr ""
+msgstr "Bunn"
 
 #, c-format
 msgid "open failed: %s\n"
-msgstr ""
+msgstr "åpning feilet: %s\n"
 
 msgid "No key for dictionary item"
 msgstr ""
@@ -334,10 +333,10 @@ msgid ""
 msgstr ""
 
 msgid "language"
-msgstr ""
+msgstr "språk"
 
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
@@ -362,7 +361,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Burned In</b>"
-msgstr ""
+msgstr "<b>Brennet inn</b>"
 
 msgid ""
 "Set the default output subtitle track.\n"
@@ -375,7 +374,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Default</b>"
-msgstr "<b>Default</b>"
+msgstr "<b>Standard</b>"
 
 msgid ""
 "Use only subtitles that have been flagged\n"
@@ -387,7 +386,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Forced Only</b>"
-msgstr "<b>Solo forzato</b>"
+msgstr "<b>Bare Tvunget</b>"
 
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
@@ -399,10 +398,10 @@ msgid ""
 msgstr ""
 
 msgid "<b>SRT Offset</b>"
-msgstr "<b>SRT Offset</b>"
+msgstr ""
 
 msgid "Off"
-msgstr "Off"
+msgstr "Av"
 
 msgid ""
 "The source subtitle track\n"
@@ -419,22 +418,22 @@ msgid ""
 msgstr ""
 
 msgid "<b>Track</b>"
-msgstr "<b>Traccia</b>"
+msgstr ""
 
 msgid "About HandBrake"
-msgstr "Info su HandBrake"
+msgstr "Om HandBrake"
 
 msgid ""
 "Copyright © 2008 - 2013 John Stebbins\n"
 "Copyright © 2004 - 2013, HandBrake Devs"
-msgstr ""
+msgstr "Kopibeskyttet © 2008 - 2013 John Stebbins\nKopibeskyttet © 2004 - 2013 HandBrake Devs"
 
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
-msgstr ""
+msgstr "HandBrake er en GPL-lisensiert, multiplatform, multitrådet video transkoder."
 
 msgid "http://handbrake.fr"
-msgstr ""
+msgstr "http://handbrake.fr"
 
 msgid ""
 "HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
@@ -442,192 +441,192 @@ msgid ""
 "HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
 "You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
-msgstr ""
+msgstr "HandBrake er gratis programvare; du kan redistribuere det og/eller modifisere det under vilkårene til GNU General Public License som er publisert av Free Software Foundation; enten versjon 2 av lisensen, eller (hvis du vil) en nyere versjon.\n\nHandBrake er distribuert i håp om at det skal være nyttig, men UTEN NOEN FORM FOR GARANTI; også uten implisitt garanti av SALGBARHET eller EGENHET FOR ET SPESIELT FORMÅL. Se GNU General Public License for flere detaljer.\n\nDu skal motta en kopi av GNU General Public License sammen med Glade; hvis ikke, skriv til Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
 msgid "_Minimize/Maximize"
-msgstr "_Minimizza/Massimizza"
+msgstr "_Minimere/Maximere"
 
 msgid "_Pause Queue"
-msgstr "_Pausa coda"
+msgstr "_Pause køen"
 
 msgid "_Quit"
-msgstr ""
+msgstr "_Avslutt"
 
 msgid "_About"
-msgstr ""
+msgstr "_Om"
 
 msgid "HandBrake"
-msgstr ""
+msgstr "HandBrake"
 
 msgid "_File"
-msgstr "_File"
+msgstr "_Fil"
 
 msgid "_Source"
-msgstr "_Sorgente"
+msgstr "_Kilde"
 
 msgid "Single _Title"
-msgstr "Titolo_Singlolo"
+msgstr "Enkel_Tittel"
 
 msgid "_Destination"
-msgstr "_Destinazione"
+msgstr "_Destinasjon"
 
 msgid "_Preferences"
-msgstr "_Preferenze"
+msgstr "_Alternativer"
 
 msgid "_Queue"
-msgstr "_Coda"
+msgstr "_Køen"
 
 msgid "_Add"
-msgstr ""
+msgstr "_Legg til"
 
 msgid "Add _Multiple"
-msgstr ""
+msgstr "Legg til _Flere"
 
 msgid "_Start"
-msgstr "_Inizia"
+msgstr "_Start"
 
 msgid "_Pause"
-msgstr "_Pausa"
+msgstr "_Pause"
 
 msgid "_View"
-msgstr "_Visualizza"
+msgstr "_Visning"
 
 msgid "HandBrake For _Dumbies"
-msgstr ""
+msgstr "HandBrake For _Idioter"
 
 msgid "_Show Presets"
-msgstr ""
+msgstr "_Vis Forhåndsinnstillinger"
 
 msgid "_Preview"
-msgstr ""
+msgstr "_Forhåndsvisning"
 
 msgid "_Activity Window"
-msgstr "Finestra _attività"
+msgstr "_Aktivitets Vindu"
 
 msgid "Show _Queue"
-msgstr "Mostra _coda"
+msgstr "Vis _Køen"
 
 msgid "_Presets"
-msgstr ""
+msgstr "_Forhåndsinnstillinger"
 
 msgid "_Save"
-msgstr "_Salva"
+msgstr "_Lagre"
 
 msgid "_Delete"
-msgstr ""
+msgstr "_Slett"
 
 msgid "_Make Default"
-msgstr "_Imposta come predefinito"
+msgstr "_Sett som Standard"
 
 msgid "_New Folder"
-msgstr ""
+msgstr "_Ny Mappe"
 
 msgid "_Export"
-msgstr "_Esporta"
+msgstr "_Exportere"
 
 msgid "_Import"
-msgstr "_Importa"
+msgstr "_Importere"
 
 msgid "_Update Built-in Presets"
-msgstr ""
+msgstr "_Oppdater Innebygde Forhåndsinnstillinger"
 
 msgid "_Help"
-msgstr "_Aiuto"
+msgstr "_Hjelp"
 
 msgid "_Guide"
-msgstr "_Guida"
+msgstr "_Veiledning"
 
 msgid "Start Encoding"
-msgstr "Inizia la codifica"
+msgstr "Start Omkoding"
 
 msgid "Start"
-msgstr "Inizia"
+msgstr "Start"
 
 msgid "Pause Encoding"
-msgstr "Pausa la codifica"
+msgstr "Pause Omkodingen"
 
 msgid "Pause"
-msgstr "Pausa"
+msgstr "Pause"
 
 msgid "Add to Queue"
-msgstr "Aggiungi alla coda"
+msgstr "Legg til Køen"
 
 msgid "Enqueue"
-msgstr ""
+msgstr "Legge i køen"
 
 msgid "Show Queue"
-msgstr "Mostra coda"
+msgstr "Vis Køen"
 
 msgid "Queue"
-msgstr "Coda"
+msgstr "Køen"
 
 msgid ""
 "Open Picture Settings and Preview window.\n"
 "Here you can adjust cropping, resolution, aspect ratio, and filters."
-msgstr ""
+msgstr "Åpne Bilde Instillinger og Forhåndsvis vindu.\nHer kan du justere beskjæring, oppløsning, størrelsesforholdet, og filtre."
 
 msgid "Preview"
-msgstr "Anteprima"
+msgstr "Forhåndsvisning"
 
 msgid "Show Activity Window"
-msgstr "Mostra finestra attività"
+msgstr "Vis Aktivt Vindu"
 
 msgid "Activity"
-msgstr "Attività"
+msgstr "Aktivitet"
 
 msgid "<b>Source:</b>"
-msgstr "<b>Sorgente:</b>"
+msgstr "<b>Kilde:</b>"
 
 msgid "None"
-msgstr "Vuoto"
+msgstr "Ingen"
 
 msgid "Title:"
-msgstr "Titolo:"
+msgstr "Tittel:"
 
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
 "This is often the feature title of a DVD."
-msgstr ""
+msgstr "Sett tittelen som skal omkodes.\nSom standard er den lengste tittelen valgt.\nDet er ofte funksjons tittelen på en DVD."
 
 msgid "Angle:"
-msgstr "Angolo:"
+msgstr "Vinkel:"
 
 msgid "For multi-angle DVD's, select the desired angle to encode."
-msgstr ""
+msgstr "For flere vinklet DVD'er, velg den ønskede vinkelen til omkoding."
 
 msgid "Reset All Titles"
-msgstr ""
+msgstr "Tilbakestill Alle Tittelene"
 
 msgid "Apply current settings to all titles"
-msgstr ""
+msgstr "Bruk nåværende innstillinger på alle tittelene"
 
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
-msgstr ""
+msgstr "Utvalg av titler til omkoding. Kan være Kapitler, sekunder, eller bilder."
 
 msgid "Set the first chapter to encode."
-msgstr "Imposta il primo capitolo da codificare."
+msgstr "Sett det første kapittelet til omkoding."
 
 msgid "Set the last chapter to encode."
-msgstr "Imposta l'ultimo capitolo da codificare."
+msgstr "Sett det siste kapittelet til omkoding."
 
 msgid "Duration:"
-msgstr "Durata:"
+msgstr "Varighet:"
 
 msgid "<b>Destination</b>"
-msgstr ""
+msgstr "<b>Destinasjon</b>"
 
 msgid "File:"
-msgstr "File:"
+msgstr "Fil:"
 
 msgid "Destination filename for your encode."
-msgstr ""
+msgstr "Destinasjons filnavn for din omkoding."
 
 msgid "Destination directory for your encode."
-msgstr ""
+msgstr "Destinasjons mappe for din omkoding."
 
 msgid "Destination Directory"
-msgstr "Cartella di destinazione"
+msgstr "Destinasjons mappe"
 
 msgid "Format:"
 msgstr "Format:"
@@ -636,93 +635,93 @@ msgid "Format to mux encoded tracks to."
 msgstr ""
 
 msgid "iPod 5G Support"
-msgstr "Supporto iPod 5G"
+msgstr "IPod 4G Støtte"
 
 msgid "Add iPod Atom needed by some older iPods."
-msgstr ""
+msgstr "Legg til iPod Atom som brukes av noen eldre versjoner av iPod."
 
 msgid "Web optimized"
-msgstr "Ottimizzato per il web"
+msgstr "Internett optimalisert"
 
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
-msgstr ""
+msgstr "Optimaliser oppsettet av MP4 filen for fremskrittsvennlig nedlasting.\nDette gjør det mulig å starte avspilling før hele filen er lastet ned."
 
 msgid "Large file (>4GB)"
-msgstr ""
+msgstr "Stor fil (>4GB)"
 
 msgid ""
 "Allow 64 bit MP4 file which can be over 4GB.\n"
 "\n"
 "<b>Caution:</b> This option may break device compatibility."
-msgstr ""
+msgstr "Tillat 64 bit MP4 filer som kan være over 4GB.\n\n<b>Advarsel:</b> Denne innstillingen kan ødelegge enhetens kompatibilitet."
 
 msgid "<b>Presets List</b>"
-msgstr ""
+msgstr "<b>Forhåndsinnstillings liste</b>"
 
 msgid "Source Codec:"
-msgstr "Sorgente codec:"
+msgstr "Kilde Kodek:"
 
 msgid "Dimensions:"
-msgstr "Dimensioni:"
+msgstr "Dimensjon:"
 
 msgid "Aspect: "
-msgstr "Aspetto:"
+msgstr "Aspekt:"
 
 msgid "Frame Rate:"
-msgstr "Frame Rate:"
+msgstr "Bildefrekvens:"
 
 msgid "<b>Source Picture Parameters</b>"
-msgstr ""
+msgstr "<b>Kilde Bilde Parametere</b>"
 
 msgid "Autocrop:"
-msgstr ""
+msgstr "Auto-beskjæring:"
 
 msgid "Crop:"
-msgstr ""
+msgstr "Beskjæring:"
 
 msgid "Crop Dimensions:"
-msgstr ""
+msgstr "Beskjær Dimensjonen:"
 
 msgid "<b>Cropping</b>"
-msgstr ""
+msgstr "<b>Beskjæring</b>"
 
 msgid "Scale Dimensions:"
-msgstr ""
+msgstr "Skalere Dimensjonen:"
 
 msgid "Optimal for Source:"
-msgstr ""
+msgstr "Optimal som Kilde:"
 
 msgid "Anamorphic:"
-msgstr "Anamorfico:"
+msgstr "Anamorfisk:"
 
 msgid "<b>Scaling</b>"
-msgstr ""
+msgstr "<b>Skalere</b>"
 
 msgid "Presentation Dimensions:"
 msgstr ""
 
 msgid "Summary"
-msgstr "Sommario"
+msgstr "Sammendrag"
 
 msgid "Left Crop"
-msgstr ""
+msgstr "Venstre Beskjæring"
 
 msgid "Top Crop"
-msgstr ""
+msgstr "Topp Beskjæring"
 
 msgid "Bottom Crop"
-msgstr ""
+msgstr "Bunn Beskjæring"
 
 msgid "Right Crop"
-msgstr ""
+msgstr "Høyre Beskjæring"
 
 msgid "Auto Crop"
-msgstr ""
+msgstr "Automatisk Beskjæring"
 
 msgid "Automatically crop black borders around edges of the video."
-msgstr ""
+msgstr "Automatisk beskjær svarte grenser rundt kanten på videoen."
 
 msgid "Loose Crop"
 msgstr ""
@@ -736,23 +735,23 @@ msgid ""
 msgstr ""
 
 msgid "width:"
-msgstr ""
+msgstr "Bredde:"
 
 msgid ""
 "This is the width that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
-msgstr ""
+msgstr "Dette er bredden videoen vil bli lagret på.\nDe faktiske visnings dimensjonene vil være forskjellig hvis piksel-formatet ikke er 1:1."
 
 msgid "height:"
-msgstr ""
+msgstr "Høyde:"
 
 msgid ""
 "This is the height that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
-msgstr ""
+msgstr "Dette er høyden videoen vil bli lagret på.\nDe faktiske visnings dimensjonene vil være forskjellig hvis piksel-formatet ikke er 1:1."
 
 msgid "Optimal for source"
-msgstr ""
+msgstr "Optimal for kilde"
 
 msgid ""
 "If enabled, select the 'optimal' storage resolution.\n"
@@ -771,7 +770,7 @@ msgid ""
 msgstr ""
 
 msgid "Alignment:"
-msgstr "Allineamento:"
+msgstr ""
 
 msgid ""
 "Align storage dimensions to multiples of this value.\n"
@@ -789,7 +788,7 @@ msgid ""
 msgstr ""
 
 msgid "Pixel Aspect:"
-msgstr "Aspetto pixel:"
+msgstr ""
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
@@ -799,7 +798,7 @@ msgid ""
 msgstr ""
 
 msgid ":"
-msgstr ""
+msgstr ":"
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
@@ -808,7 +807,7 @@ msgid ""
 msgstr ""
 
 msgid "Keep Aspect"
-msgstr "Mantieni aspetti"
+msgstr ""
 
 msgid ""
 "If enabled, the original display aspect of the source will be maintained."
@@ -821,7 +820,7 @@ msgid "<b>Display Geometry</b>"
 msgstr ""
 
 msgid "Grayscale"
-msgstr "Scala di grigio"
+msgstr "Gråskala"
 
 msgid "If enabled, filter colour components out of video."
 msgstr ""
@@ -917,47 +916,47 @@ msgid ""
 msgstr ""
 
 msgid "<b>Filters</b>"
-msgstr ""
+msgstr "<b> Filtre</b>"
 
 msgid "Picture"
-msgstr ""
+msgstr "Bilde"
 
 msgid "Video Encoder:"
-msgstr ""
+msgstr "Video Omkoder:"
 
 msgid "Available video encoders."
-msgstr ""
+msgstr "Tilgjengelig video omkodere."
 
 msgid "Framerate:"
-msgstr "Framerate:"
+msgstr "Bildefrekvens:"
 
 msgid ""
 "Output framerate.\n"
 "\n"
 "'Same as source' is recommended. If your source video has\n"
 "a variable framerate, 'Same as source' will preserve it."
-msgstr ""
+msgstr "Utdataens bildefrekvens.\n\n'Samme som kilde' er anbefalt. Hvis kilde videoen har\nen variabel bildefrekvens, 'Samme som kilde' vil bevare det."
 
 msgid "Constant Framerate"
-msgstr "Framerate costante"
+msgstr "Konstant Bildefrekvens"
 
 msgid "Same as source"
-msgstr ""
+msgstr "Samme som kilde"
 
 msgid "kbps"
-msgstr ""
+msgstr "Kbps"
 
 msgid "(variable)"
-msgstr ""
+msgstr "(variabel)"
 
 msgid "(constant)"
-msgstr ""
+msgstr "(konstant)"
 
 msgid "Enables constant framerate output."
-msgstr ""
+msgstr "Aktiverer konstant bildefrekvens utdata."
 
 msgid "Peak Framerate (VFR)"
-msgstr ""
+msgstr "Toppunkt Bildefrekvens (VFR)"
 
 msgid ""
 "Enables variable framerate output with a peak\n"
@@ -967,13 +966,13 @@ msgid ""
 msgstr ""
 
 msgid "Variable Framerate"
-msgstr "Framerate variabile"
+msgstr "Variabel Bildefrekvens"
 
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
 "VFR is not compatible with some players."
-msgstr ""
+msgstr "Aktiverer variabel bildefrekvens utdata.\n\nVFR er ikke kompatibel med noen avspillere."
 
 msgid ""
 "Set the desired quality factor.\n"
@@ -991,10 +990,10 @@ msgid ""
 msgstr ""
 
 msgid "Constant Quality:"
-msgstr ""
+msgstr "Konstant Kvalitet:"
 
 msgid "Bitrate (kbps):    "
-msgstr "Bitrate (kbps):    "
+msgstr "Bithastighet (kbps)"
 
 msgid ""
 "Set the average bitrate.\n"
@@ -1024,16 +1023,16 @@ msgid ""
 msgstr ""
 
 msgid "Use Advanced Options"
-msgstr "Usa opzioni avanzate"
+msgstr "Bruk Avanserte Innstillinger"
 
 msgid ""
 "Use advanced options Tab for x264 settings.\n"
 "\n"
 "Use at your own risk!"
-msgstr ""
+msgstr "Bruk avanserte alternativer fanen for x264 innstillinger.\n\nBruk på ditt eget risiko!"
 
 msgid "Preset:"
-msgstr ""
+msgstr "Forhåndsinnstilt:"
 
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
@@ -1056,13 +1055,13 @@ msgid ""
 msgstr ""
 
 msgid "Fast Decode"
-msgstr ""
+msgstr "Rask Dekoding"
 
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
 "Set this if your device is struggling to play the output (dropped frames)."
-msgstr ""
+msgstr "Reduser dekoders CPU bruk.\n\nSett denne hvis din enhet sliter med avspilling av utdataen (mistede bilder)."
 
 msgid "Zero Latency"
 msgstr ""
@@ -1077,7 +1076,7 @@ msgid ""
 msgstr ""
 
 msgid "Profile:"
-msgstr ""
+msgstr "Profil:"
 
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
@@ -1086,7 +1085,7 @@ msgid ""
 msgstr ""
 
 msgid "Level:"
-msgstr ""
+msgstr "Nivå:"
 
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
@@ -1095,7 +1094,7 @@ msgid ""
 msgstr ""
 
 msgid "More Settings:"
-msgstr ""
+msgstr "Flere Innstillinger:"
 
 msgid ""
 "Additional encoder settings.\n"
@@ -1110,16 +1109,16 @@ msgid "Selection Behavior:"
 msgstr ""
 
 msgid "Remove"
-msgstr ""
+msgstr "Fjern"
 
 msgid "Available Languages"
-msgstr ""
+msgstr "Tilgjengelige Språk"
 
 msgid "Selected Languages"
-msgstr ""
+msgstr "Valgt Språk"
 
 msgid "Use only first encoder for secondary audio"
-msgstr ""
+msgstr "Bruk bare første omkoder for sekundær lyd"
 
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
@@ -1130,7 +1129,7 @@ msgid "Auto Passthru:"
 msgstr ""
 
 msgid "MP3"
-msgstr ""
+msgstr "MP3"
 
 msgid ""
 "Enable this if your playback device supports MP3.\n"
@@ -1166,49 +1165,49 @@ msgid ""
 msgstr ""
 
 msgid "<b>Audio Encoder Settings:</b>"
-msgstr ""
+msgstr "<b> Lyd Omkoder Innstillinger:</b>"
 
 msgid "Each selected source track will be encoded with all selected encoders"
-msgstr ""
+msgstr "Hver valgt kilde spor vil bli omkodet med alle valgte omkodere"
 
 msgid "Encoder"
-msgstr ""
+msgstr "Omkoder"
 
 msgid "Bitrate/Quality"
-msgstr ""
+msgstr "Bithastighet/Kvalitet"
 
 msgid "Mixdown"
 msgstr ""
 
 msgid "Samplerate"
-msgstr ""
+msgstr "Samplingsfrekvens"
 
 msgid "Gain"
 msgstr ""
 
 msgid "Audio Defaults"
-msgstr ""
+msgstr "Lyd Standard"
 
 msgid "Add new audio settings to the list"
-msgstr ""
+msgstr "Legg til nye lyd innstillinger til listen"
 
 msgid "Add All"
-msgstr ""
+msgstr "Legg til alle"
 
 msgid "Add all audio tracks to the list"
-msgstr ""
+msgstr "Legg til alle lyd spor til listen"
 
 msgid "Reload Defaults"
-msgstr ""
+msgstr "Last inn på nytt standard"
 
 msgid "Reload all audio settings from defaults"
-msgstr ""
+msgstr "Last inn på nytt alle lyd innstillinger fra standard"
 
 msgid "Audio List"
-msgstr ""
+msgstr "Lyd liste"
 
 msgid "Preferred Language: None"
-msgstr ""
+msgstr "Foretrukket Språk: Ingen "
 
 msgid "Add Foreign Audio Search Pass"
 msgstr ""
@@ -1416,7 +1415,7 @@ msgid ""
 msgstr ""
 
 msgid "<small><b>Analysis</b></small>"
-msgstr "<small><b>Analisi</b></small>"
+msgstr ""
 
 msgid "<small>Adaptive Quantization Strength:</small>"
 msgstr ""
@@ -1498,49 +1497,49 @@ msgid "<small><b>Current x264 Advanced Option String</b></small>"
 msgstr ""
 
 msgid "Advanced Video"
-msgstr ""
+msgstr "Avansert Video"
 
 msgid "Chapter Markers"
-msgstr ""
+msgstr "Kapittel Merker"
 
 msgid "Add chapter markers to output file."
-msgstr ""
+msgstr "Legg til kapittel merker til utdata filen"
 
 msgid "Chapters"
-msgstr "Capitoli"
+msgstr "Kapitler "
 
 msgid "Actors:"
-msgstr "Attori:"
+msgstr "Skuespillere:"
 
 msgid "Director:"
-msgstr "Regista:"
+msgstr "Regissør:"
 
 msgid "Release Date:"
-msgstr "Data di rilascio:"
+msgstr "Utgivelsedato:"
 
 msgid "Comment:"
-msgstr "Commento:"
+msgstr "Kommentar:"
 
 msgid "Genre:"
-msgstr "Genere:"
+msgstr "Sjanger:"
 
 msgid "Description:"
-msgstr "Descrizione:"
+msgstr "Beskrivelse:"
 
 msgid "Plot:"
-msgstr ""
+msgstr "Handling:"
 
 msgid "Tags"
-msgstr "Tag"
+msgstr "Merkelapp"
 
 msgid "Settings"
-msgstr ""
+msgstr "Innstillinger"
 
 msgid "Edit"
-msgstr "Modifica"
+msgstr "Redigere"
 
 msgid "Reload"
-msgstr ""
+msgstr "Last inn på nytt"
 
 msgid ""
 "Mark selected queue entry as pending.\n"
@@ -1548,7 +1547,7 @@ msgid ""
 msgstr ""
 
 msgid "Reload All"
-msgstr ""
+msgstr "Last inn på nytt alle"
 
 msgid ""
 "Mark all queue entries as pending.\n"
@@ -1556,22 +1555,22 @@ msgid ""
 msgstr ""
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "Select All"
-msgstr ""
+msgstr "Velg Alle"
 
 msgid "Mark all titles for adding to the queue"
-msgstr ""
+msgstr "Merk alle titlene for å legge dem til køen"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Fjern Alle"
 
 msgid "Unmark all titles"
-msgstr ""
+msgstr "Avmerk alle titlene"
 
 msgid "Destination files OK.  No duplicates detected."
-msgstr ""
+msgstr "Destinasjons fil OK. Ingen duplikat oppdaget."
 
 msgid "Select this title for adding to the queue.\n"
 msgstr ""
@@ -1580,13 +1579,13 @@ msgid "Preferences"
 msgstr ""
 
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "Automatisk se etter oppdateringer"
 
 msgid "When all encodes are complete"
-msgstr ""
+msgstr "Når alle omkoderene er ferdig"
 
 msgid "Use automatic naming (uses modified source name)"
-msgstr ""
+msgstr "Bruk automatisk navn givning (bruker modifiserte kilde navn)"
 
 msgid "Auto-Name Template"
 msgstr ""
@@ -1597,10 +1596,10 @@ msgid ""
 msgstr ""
 
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
-msgstr ""
+msgstr "Bruk iPod/iTunes vennelig (.m4v) fil utvidelse for MP4"
 
 msgid "Number of previews"
-msgstr "Numero di anteprime"
+msgstr "Antall av forhåndsvisninger"
 
 msgid "Filter short titles (seconds)"
 msgstr ""
@@ -1609,7 +1608,7 @@ msgid "Show system tray icon"
 msgstr ""
 
 msgid "General"
-msgstr "Generale"
+msgstr ""
 
 msgid "Constant Quality fractional granularity"
 msgstr ""
@@ -1656,16 +1655,16 @@ msgid "Allow Tweaks"
 msgstr ""
 
 msgid "Allow HandBrake For Dummies"
-msgstr ""
+msgstr "Tillat HandBrake for Idioter"
 
 msgid "Advanced"
-msgstr "Avanzato"
+msgstr "Avansert"
 
 msgid "Folder Name:"
-msgstr "Nome cartella:"
+msgstr "Mappe Navn:"
 
 msgid "<b>Description</b>"
-msgstr ""
+msgstr "<b>Beskrivelse</b>"
 
 msgid "Preset Name:"
 msgstr ""
@@ -1674,7 +1673,7 @@ msgid "<b>Custom Picture Dimensions</b>"
 msgstr ""
 
 msgid "Maximum Width:"
-msgstr ""
+msgstr "Maksimum Bredde:"
 
 msgid "Enable maximum width limit."
 msgstr ""
@@ -1687,7 +1686,7 @@ msgid ""
 msgstr ""
 
 msgid "Maximum Height:"
-msgstr ""
+msgstr "Maksimum Høyde:"
 
 msgid "Enable maximum height limit."
 msgstr ""
@@ -1708,7 +1707,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Duration:</b>"
-msgstr "<b>Durata:</b>"
+msgstr ""
 
 msgid "Set the duration of the live preview in seconds."
 msgstr ""
@@ -1720,7 +1719,7 @@ msgid "Show Cropped area of the preview"
 msgstr ""
 
 msgid "Fullscreen"
-msgstr "Tutto schermo"
+msgstr "Fullskjerm"
 
 msgid "View Fullscreen Preview"
 msgstr ""
@@ -1732,10 +1731,10 @@ msgid "Detected DVD devices:"
 msgstr ""
 
 msgid "Setting:"
-msgstr "Impostazioni:"
+msgstr ""
 
 msgid "Import SRT"
-msgstr "Importa SRT"
+msgstr ""
 
 msgid "Enable settings to import an SRT subtitle file"
 msgstr ""
@@ -1766,16 +1765,16 @@ msgid ""
 msgstr ""
 
 msgid "Select the SRT file to import."
-msgstr "Seleziona il file SRT da importare"
+msgstr ""
 
 msgid "Srt File"
-msgstr "File srt"
+msgstr ""
 
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr ""
 
 msgid "Track"
-msgstr "Traccia"
+msgstr ""
 
 msgid "List of subtitle tracks available from your source."
 msgstr ""
@@ -1784,7 +1783,7 @@ msgid "Forced Subtitles Only"
 msgstr ""
 
 msgid "Burn into video"
-msgstr ""
+msgstr "Brenn inn i videoen"
 
 msgid ""
 "Render the subtitle over the video.\n"
@@ -1792,16 +1791,16 @@ msgid ""
 msgstr ""
 
 msgid "Set Default Track"
-msgstr ""
+msgstr "Sett Standard Spor"
 
 msgid "Source Track"
-msgstr ""
+msgstr "Kilde Spor"
 
 msgid "List of audio tracks available from your source."
-msgstr ""
+msgstr "Liste av lyd spor tilgjengelig fra din kilde"
 
 msgid "Track Name:"
-msgstr "Nome traccia:"
+msgstr "Spor Navn:"
 
 msgid ""
 "Set the audio track name.\n"
@@ -1810,7 +1809,7 @@ msgid ""
 msgstr ""
 
 msgid "Mix"
-msgstr "Mix"
+msgstr ""
 
 msgid "Sample Rate"
 msgstr ""
@@ -1842,16 +1841,16 @@ msgid ""
 msgstr ""
 
 msgid "Skip This Version"
-msgstr "Salta questa versione"
+msgstr ""
 
 msgid "Remind Me Later"
-msgstr "Ricorda dopo"
+msgstr "Minn meg på seinere"
 
 msgid "<b>A new version of HandBrake is available!</b>"
-msgstr "<b>Una nuova versione di HandBrake è disponibile!</b>"
+msgstr "<b> En ny versjon av HandBrake er tilgjengelig!</b>"
 
 msgid "HandBrake xxx is now available (you have yyy)."
-msgstr ""
+msgstr "HandBrake xxx er nå tilgjengelig (du har yyy)"
 
 msgid "<b>Release Notes</b>"
 msgstr ""
@@ -1863,10 +1862,10 @@ msgid "All Tracks Matching Selected Languages"
 msgstr ""
 
 msgid "Chapters:"
-msgstr "Capitoli:"
+msgstr ""
 
 msgid "Seconds:"
-msgstr "Secondi:"
+msgstr ""
 
 msgid "Frames:"
 msgstr ""
@@ -1875,10 +1874,10 @@ msgid "Do Nothing"
 msgstr ""
 
 msgid "Show Notification"
-msgstr "Mostra notifica"
+msgstr ""
 
 msgid "Quit Handbrake"
-msgstr "Chiudi Handbrake"
+msgstr "Avslutt HandBrake"
 
 msgid "Put Computer To Sleep"
 msgstr ""
@@ -1887,40 +1886,40 @@ msgid "Shutdown Computer"
 msgstr ""
 
 msgid "Week"
-msgstr "Settimana"
+msgstr ""
 
 msgid "Month"
 msgstr ""
 
 msgid "Year"
-msgstr "Anno"
+msgstr ""
 
 msgid "Immortal"
-msgstr "Immortale"
+msgstr ""
 
 msgid "Never"
-msgstr "Mai"
+msgstr ""
 
 msgid "Daily"
-msgstr "Giornalmente"
+msgstr ""
 
 msgid "Weekly"
-msgstr "Settimanalmente"
+msgstr ""
 
 msgid "Monthly"
-msgstr "Mensilmente"
+msgstr ""
 
 msgid "Default"
 msgstr ""
 
 msgid "Fast"
-msgstr "Veloce"
+msgstr ""
 
 msgid "Slow"
 msgstr ""
 
 msgid "Slower"
-msgstr "Lento"
+msgstr ""
 
 msgid "Ultralight"
 msgstr ""
@@ -1929,10 +1928,10 @@ msgid "Light"
 msgstr ""
 
 msgid "Medium"
-msgstr "Medio"
+msgstr ""
 
 msgid "Strong"
-msgstr "Forte"
+msgstr ""
 
 msgid "Film"
 msgstr ""
@@ -1947,31 +1946,31 @@ msgid "Animation"
 msgstr ""
 
 msgid "Spatial"
-msgstr "Spaziale"
+msgstr ""
 
 msgid "Temporal"
-msgstr "Temporale"
+msgstr ""
 
 msgid "Automatic"
-msgstr "Automatico"
+msgstr ""
 
 msgid "Optimal"
-msgstr "Ottimale"
+msgstr ""
 
 msgid "Normal"
-msgstr "Normale"
+msgstr ""
 
 msgid "Simple"
-msgstr "Semplice"
+msgstr ""
 
 msgid "Smart"
-msgstr "Intelligente"
+msgstr ""
 
 msgid "Diamond"
-msgstr "Diamante"
+msgstr ""
 
 msgid "Hexagon"
-msgstr "Esagono"
+msgstr ""
 
 msgid "Uneven Multi-Hexagon"
 msgstr ""
@@ -1989,13 +1988,13 @@ msgid "Some"
 msgstr ""
 
 msgid "All"
-msgstr "Tutti"
+msgstr ""
 
 msgid "Encode only"
 msgstr ""
 
 msgid "Always"
-msgstr "Sempre"
+msgstr ""
 
 msgid "(NTSC Film)"
 msgstr ""
@@ -2022,10 +2021,10 @@ msgid "%d - Unknown Length"
 msgstr ""
 
 msgid "No Titles"
-msgstr "Nessun Titolo"
+msgstr ""
 
 msgid "No Audio"
-msgstr "Nessun audio"
+msgstr ""
 
 msgid "Foreign Audio Search"
 msgstr ""
@@ -2118,13 +2117,13 @@ msgid ""
 msgstr ""
 
 msgid "Index"
-msgstr "Indice"
+msgstr ""
 
 msgid "Duration"
-msgstr "Durata"
+msgstr ""
 
 msgid "Title"
-msgstr "Titolo"
+msgstr ""
 
 msgid "Job Information"
 msgstr ""
@@ -2358,7 +2357,7 @@ msgid ", Framerate: %s (constant frame rate)"
 msgstr ""
 
 msgid "Error"
-msgstr "Errore"
+msgstr ""
 
 msgid "Bitrate:"
 msgstr ""
@@ -2418,7 +2417,7 @@ msgid "<b>Subtitle Tracks: %d</b>\n"
 msgstr ""
 
 msgid " (Force)"
-msgstr "(Forza)"
+msgstr ""
 
 msgid " (Burn)"
 msgstr ""
@@ -2439,7 +2438,7 @@ msgid ""
 msgstr ""
 
 msgid "Overwrite"
-msgstr "Sovrascrivi"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -2491,22 +2490,22 @@ msgid "Stop"
 msgstr ""
 
 msgid "Stop Encoding"
-msgstr "Ferma la codifica"
+msgstr ""
 
 msgid "Resume"
 msgstr ""
 
 msgid "Resume Encoding"
-msgstr "Riprendi la codifica"
+msgstr ""
 
 msgid "S_top Queue"
 msgstr ""
 
 msgid "_Start Queue"
-msgstr "_Avvia coda"
+msgstr ""
 
 msgid "_Resume Queue"
-msgstr "_Riprendi coda"
+msgstr ""
 
 msgid "Resume Queue"
 msgstr ""

@@ -3,35 +3,34 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexandru Grigoras <alexandru.grigoras86@gmail.com>, 2014
-# Giuseppe Pignataro <anubisteam01@gmail.com>, 2014
+# Changkyoon Kim <ocnblu@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake-0.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-03 13:01+0300\n"
-"PO-Revision-Date: 2014-11-28 14:44+0000\n"
-"Last-Translator: VictorR2007 <victorr2007@yandex.ru>\n"
-"Language-Team: Italian (Italy) (http://www.transifex.com/projects/p/handbrake/language/it_IT/)\n"
+"PO-Revision-Date: 2014-12-16 04:57+0000\n"
+"Last-Translator: Changkyoon Kim <ocnblu@gmail.com>\n"
+"Language-Team: Korean (http://www.transifex.com/projects/p/handbrake/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it_IT\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Quality: "
-msgstr "Qualità:"
+msgstr "품질:"
 
 #, c-format
 msgid "Bitrate: %dkbps"
-msgstr ""
+msgstr "비트레이트: %dkpbs"
 
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr ""
+msgstr "비트레이트: %.4gkbps"
 
 msgid "<small>Passthrough</small>"
-msgstr ""
+msgstr "<small>패스쓰루</small>"
 
 #, c-format
 msgid ""
@@ -39,56 +38,56 @@ msgid ""
 "Gain: %s\n"
 "DRC: %s\n"
 "Track Name: %s"
-msgstr ""
+msgstr "%s\n게인: %s\nDRC: %s\n트랙명: %s"
 
 #, c-format
 msgid ""
 "%s\n"
 "Gain: %s\n"
 "DRC: %s"
-msgstr ""
+msgstr "%s\n게인: %s\nDRC: %s"
 
 msgid "Add"
-msgstr ""
+msgstr "추가"
 
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
-msgstr ""
+msgstr "오디오 인코더 추가하기.\n선택된 각 원본 트랙은 선택된 모든 인코더로 인코딩됩니다."
 
 msgid "Set the audio codec to encode this track with."
-msgstr ""
+msgstr "이 트랙을 인코딩할 오디오 코덱 설정"
 
 msgid "Set the bitrate to encode this track with."
-msgstr ""
+msgstr "이 트랙을 인코딩할 비트레이트 설정"
 
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
-msgstr ""
+msgstr "<b>오디오 품질:</b>\n지원되는 인코더라면 출력 품질을 조정합니다."
 
 msgid "Set the mixdown of the output audio track."
-msgstr ""
+msgstr "오디오 트랙 출력의 믹스다운 설정"
 
 msgid "Set the sample rate of the output audio track."
-msgstr ""
+msgstr "오디오 트랙 출력의 샘플레이트 설정"
 
 msgid ""
 "<b>Audio Gain:</b>\n"
 "Adjust the amplification or attenuation of the output audio track."
-msgstr ""
+msgstr "<b>오디오 게인:</b>\n출력된 오디오 트랙의 증폭 또는 감쇄를 조정합니다."
 
 msgid "0dB"
-msgstr ""
+msgstr "0dB"
 
 msgid "%ddB"
-msgstr ""
+msgstr "%ddB"
 
 msgid "%.4gkHz"
-msgstr ""
+msgstr "%.4gkHz"
 
 msgid "<small>%d - %s (%.4gkHz)</small>"
-msgstr ""
+msgstr "<small>%d - %s (%.4gkHz)</small>"
 
 msgid ""
 "<b>Dynamic Range Compression:</b>\n"
@@ -97,174 +96,174 @@ msgid ""
 "very loud and very soft sequences, DRC allows you\n"
 "to 'compress' the range by making loud sounds\n"
 "softer and soft sounds louder.\n"
-msgstr ""
+msgstr "<b>다이나믹 레인지 압축:</b>\n오디오 트랙 출력의 다이나믹 레인지를 조정합니다.\n넓은 다이나믹 레인지를 가진 원본 오디오\n(매우 크고 부드러운 시퀀스)에 대해서 다이나믹\n레인지 압축은 큰 소리를 부드럽게 만들고 부드러운\n소리를 크게 만들어서 레인지를 '압축'합니다.\n"
 
 msgid "Remove this audio encoder"
-msgstr ""
+msgstr "오디오 인코더 제거"
 
 msgid "Closing HandBrake will terminate encoding.\n"
-msgstr ""
+msgstr "HandBrake를 종료하면 인코딩이 중지됩니다.\n"
 
 msgid "No Title Found"
-msgstr ""
+msgstr "발견된 타이틀 없음"
 
 msgid "none"
-msgstr ""
+msgstr "없음"
 
 msgid "Not Selected"
-msgstr ""
+msgstr "선택되지 않음"
 
 msgid "zerolatency x264 tune selected, forcing constant framerate"
-msgstr ""
+msgstr "zerolatency x264 tune이 선택되어, 고정 프레임레이트 사용됨"
 
 msgid "Scanning ..."
-msgstr ""
+msgstr "검색 중 ..."
 
 msgid "Stop Scan"
-msgstr ""
+msgstr "검색 중지"
 
 msgid "On"
-msgstr "On"
+msgstr "켜기"
 
 msgid "Strict"
-msgstr ""
+msgstr "엄격하게"
 
 msgid "Loose"
-msgstr ""
+msgstr "느슨하게"
 
 msgid "Custom"
-msgstr "Personalizzato"
+msgstr "사용자화"
 
 msgid "Unknown"
-msgstr ""
+msgstr "알 수 없음"
 
 msgid "auto"
-msgstr ""
+msgstr "자동"
 
 #, c-format
 msgid ""
 "%s\n"
 "\n"
 "%s in %d seconds ..."
-msgstr ""
+msgstr "%s\n\n%s (%d 초) ..."
 
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr ""
+msgstr "인코딩을 계속하지 않으면 %s영화가 사라집니다."
 
 msgid "Cancel Current and Stop"
-msgstr ""
+msgstr "현재 작업 취소 및 전체 중지"
 
 msgid "Cancel Current, Start Next"
-msgstr ""
+msgstr "현재 작업 취소 및 다음 작업 시작"
 
 msgid "Finish Current, then Stop"
-msgstr ""
+msgstr "현재 작업 마친 후 전체 중지"
 
 msgid "Continue Encoding"
-msgstr ""
+msgstr "인코딩 계속하기"
 
 msgid "Custom "
-msgstr ""
+msgstr "사용자화"
 
 msgid "Modified "
-msgstr ""
+msgstr "수정됨"
 
 #, c-format
 msgid "Handbrake Version: %s (%d)\n"
-msgstr ""
+msgstr "Handbrake 버전: %s (%d)\n"
 
 #, c-format
 msgid "%d encode(s) pending"
-msgstr ""
+msgstr "%d 인코딩 대기 중"
 
 #, c-format
 msgid "job %d of %d, "
-msgstr ""
+msgstr "작업 %d / %d,"
 
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
-msgstr ""
+msgstr "단계 %d / %d (자막 검색),"
 
 #, c-format
 msgid "pass %d of %d, "
-msgstr ""
+msgstr "단계 %d / %d,"
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
-msgstr ""
+msgstr "인코딩: %s%s%.2f %% (%.2f fps, 평균 %.2f fps, ETA %02dh%02dm%02ds)"
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
-msgstr ""
+msgstr "인코딩: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
-msgstr ""
+msgstr "인코딩: %s%s%.2f %%"
 
 msgid "Searching for start time, "
-msgstr ""
+msgstr "시작 시간 찾는 중,"
 
 msgid "Scanning..."
-msgstr ""
+msgstr "검색 중..."
 
 #, c-format
 msgid "Scanning title %d of %d..."
-msgstr ""
+msgstr "타이틀 %d / %d 검색 중..."
 
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
-msgstr ""
+msgstr "타이틀 %d / %d 검색 중, 미리보기 %d..."
 
 msgid "Source"
-msgstr ""
+msgstr "원본"
 
 msgid "Choose Video Source"
-msgstr "Seleziona sorgente video"
+msgstr "비디오 원본 선택"
 
 msgid "Paused"
-msgstr ""
+msgstr "정지됨"
 
 msgid "Encode Done!"
-msgstr ""
+msgstr "인코딩 완료!"
 
 msgid "Encode Canceled."
-msgstr ""
+msgstr "인코딩 취소됨."
 
 msgid "Encode Failed."
-msgstr ""
+msgstr "인코딩 실패함."
 
 msgid "Muxing: This may take a while..."
-msgstr ""
+msgstr "먹싱: 시간이 걸립니다..."
 
 msgid "Scan this DVD source"
-msgstr ""
+msgstr "이 DVD 원본 검색"
 
 msgid "AutoScan"
-msgstr ""
+msgstr "자동 검색"
 
 msgid "Suspend"
-msgstr ""
+msgstr "대기"
 
 #, c-format
 msgid "Suspend failed: %s"
-msgstr ""
+msgstr "대기 실패: %s"
 
 msgid "Suspend failed"
-msgstr ""
+msgstr "대기 실패"
 
 msgid "Shutdown"
-msgstr ""
+msgstr "종료"
 
 #, c-format
 msgid "Shutdown failed: %s"
-msgstr ""
+msgstr "종료 실패: %s"
 
 msgid "Shutdown failed"
-msgstr ""
+msgstr "종료 실패"
 
 msgid "Encoding"
-msgstr ""
+msgstr "인코딩"
 
 #, c-format
 msgid "press %d %d"
@@ -274,53 +273,53 @@ msgstr ""
 msgid ""
 "Invalid Settings:\n"
 "%s"
-msgstr ""
+msgstr "잘못된 설정:\n%s"
 
 msgid "Cancel"
-msgstr ""
+msgstr "취소"
 
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
-msgstr ""
+msgstr "%s: %.4g (주의: 무손실)"
 
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
-msgstr ""
+msgstr "HandBrake %s/%s 버전이 사용 가능합니다. (현재 버전 %s/%d)"
 
 msgid "Encode Complete"
-msgstr ""
+msgstr "인코딩 완료됨"
 
 msgid "Put down that cocktail, Your HandBrake queue is done!"
-msgstr ""
+msgstr "칵테일을 내려놓으세요, HandBrake 큐에 있는 작업이 완료됐습니다!"
 
 msgid "Your encode is complete."
-msgstr ""
+msgstr "인코딩이 완료됐습니다."
 
 msgid "Shutting down the computer"
-msgstr ""
+msgstr "컴퓨터 종료 중"
 
 msgid "Putting computer to sleep"
-msgstr ""
+msgstr "컴퓨터 잠가지 진입 중"
 
 msgid "Quiting Handbrake"
-msgstr ""
+msgstr "Handbrake 종료 중"
 
 msgid "Bottom"
-msgstr ""
+msgstr "하단"
 
 #, c-format
 msgid "open failed: %s\n"
-msgstr ""
+msgstr "불러오기 실패: %s\n"
 
 msgid "No key for dictionary item"
-msgstr ""
+msgstr "사전의 항목에 대한 키 없음"
 
 msgid "Invalid container type. This shouldn't happen"
-msgstr ""
+msgstr "잘못된 컨테이너 유형. 발생하면 안되는 상황입니다"
 
 #, c-format
 msgid "%s:missing a requried attribute"
-msgstr ""
+msgstr "%s:필수 속성이 누락됨"
 
 #, c-format
 msgid ""
@@ -331,38 +330,38 @@ msgid ""
 "    I - Include path to search for files\n"
 "    <in resource list>    Input resources file\n"
 "    <out resource plist>  Output resources plist file\n"
-msgstr ""
+msgstr "사용법: %s [-I <inc path>] <in resource list> <out resource plist>\n요약:\n자원 목록으로부터 자원 plist 생성\n옵션:\nI - 파일을 검색할 경로\n<in resource list> 입력 자원 파일 이름\n<out resource plist> 출력 자원 plist 파일 이름\n"
 
 msgid "language"
-msgstr ""
+msgstr "언어"
 
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
-msgstr ""
+msgstr "ISO 코드 형태의 언어. Pango는 텍스트를 렌더링할 때 이 설정을 사용합니다. 이 파라미터를 이해하지 못한다면, 아마 필요 없는 설정일 것입니다."
 
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr ""
+msgstr "화면에 전체 문자열을 표시할 공간이 충분하지 않은 경우, 문자열을 생략할 선호 위치"
 
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr ""
+msgstr "화면에 전체 문자열을 표시할 공간이 충분하지 않은 경우, 문자열을 여러 줄로 나누는 방법"
 
 msgid ""
 "Render the subtitle over the video.\n"
 "\n"
 "The subtitle will be part of the video and can not be disabled."
-msgstr ""
+msgstr "비디오에 자막을 입힙니다.\n\n자막은 비디오의 일부가 되고, 비활성화할 수 없습니다."
 
 msgid "<b>Burned In</b>"
-msgstr ""
+msgstr "<b>영상에 추가</b>"
 
 msgid ""
 "Set the default output subtitle track.\n"
@@ -372,10 +371,10 @@ msgid ""
 "\n"
 "This is useful for creating a \"forced\" track\n"
 "in your output."
-msgstr ""
+msgstr "기본 출력 자막 트랙 설정\n\n대부분의 재생기는 비디오를 재생할 때\n이 자막 트랙을 자동적으로 표시합니다.\n\n이 설정은 출력에서 \"강제 표시\" 트랙으로 만들 때\n유용합니다."
 
 msgid "<b>Default</b>"
-msgstr "<b>Default</b>"
+msgstr "<b>기본</b>"
 
 msgid ""
 "Use only subtitles that have been flagged\n"
@@ -384,10 +383,10 @@ msgid ""
 "\"Forced\" subtitles are usually used to show\n"
 "subtitles during scenes where someone is speaking\n"
 "a foreign language."
-msgstr ""
+msgstr "원본 자막 트랙에서 강제 표시로 지정된\n자막만 사용\n\n보통 \"강제 표시\" 자막은 누군가 외국어로\n얘기하는 장면에서 자막을 보여줄 때\n사용됩니다."
 
 msgid "<b>Forced Only</b>"
-msgstr "<b>Solo forzato</b>"
+msgstr "<b>강제 표시만</b>"
 
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
@@ -396,13 +395,13 @@ msgid ""
 "Often, the start of an external SRT file\n"
 "does not coincide with the start of the video.\n"
 "This setting allows you to synchronize the files."
-msgstr ""
+msgstr "SRT 자막 트랙의 시작 시간에 대한\n오프셋 (밀리초 단위) 추가 (또는 빼기)\n\n종종 외부 SRT  파일의 시작 시간은\n비디오의 시작 시간과 일치하지 않기도 합니다.\n이 설정은 파일의 동기화를 제공합니다."
 
 msgid "<b>SRT Offset</b>"
-msgstr "<b>SRT Offset</b>"
+msgstr "<b>SRT 오프셋</b>"
 
 msgid "Off"
-msgstr "Off"
+msgstr "끄기"
 
 msgid ""
 "The source subtitle track\n"
@@ -416,25 +415,25 @@ msgid ""
 "subtitles that may correspond to a foreign\n"
 "language scene.  This option is best used in\n"
 "conjunction with the \"Forced\" option."
-msgstr ""
+msgstr "원본 자막 트랙\n\n원본 파일에 포함된 어떤 자막이라도\n선택할 수 있습니다.\n\n추가로, \"외국어 오디오 검색\"이라는 특별한\n트랙 옵션이 있습니다. 이 옵션은 외국어가\n사용된 장면에서 표시할 자막을 찾아서\n인코딩하는 단계를 추가합니다. 이 옵션은\n\"강제 표시\" 옵션과 함께 사용할 때 가장\n유용합니다."
 
 msgid "<b>Track</b>"
-msgstr "<b>Traccia</b>"
+msgstr "<b>트랙</b>"
 
 msgid "About HandBrake"
-msgstr "Info su HandBrake"
+msgstr "HandBrake 정보"
 
 msgid ""
 "Copyright © 2008 - 2013 John Stebbins\n"
 "Copyright © 2004 - 2013, HandBrake Devs"
-msgstr ""
+msgstr "Copyright © 2008 - 2013 John Stebbins\nCopyright © 2004 - 2013, HandBrake Devs"
 
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
-msgstr ""
+msgstr "HandBrake는 GPL 라이센스를 따르며, 다중플랫폼, 다중쓰레드 기반의 비디오 변환기입니다."
 
 msgid "http://handbrake.fr"
-msgstr ""
+msgstr "http://handbrake.fr"
 
 msgid ""
 "HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
@@ -442,290 +441,290 @@ msgid ""
 "HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
 "You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
-msgstr ""
+msgstr "HandBrake는 자유 소프트웨어입니다; 자유 소프트웨어 재단에서 공표한 GNU 일반 공중 사용 허가서(라이센스 버전 2 또는 그 이후)에 따라 재배포하거나 수정할 수 있습니다.\n\nHandBrake는 유용하길 희망하면서 배포되지만, 어떠한 보증도 하지 않습니다; 특정 목적을 위한 상업성 또는 적합성에 대한 묵시적인 보증도 하지 않습니다. 자세한 사항은 GNU 일반 공중 사용 허가서를 참고하세요.\n\nGlade와 함께 GNU 일반 공중 사용 허가서의 사본이 포함되어 있습니다; 그렇지 않다면, 자유 소프트웨어 재단으로 연락하세요, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
 msgid "_Minimize/Maximize"
-msgstr "_Minimizza/Massimizza"
+msgstr "최소화/최대화(_M)"
 
 msgid "_Pause Queue"
-msgstr "_Pausa coda"
+msgstr "큐 정지(_P)"
 
 msgid "_Quit"
-msgstr ""
+msgstr "종료(_Q)"
 
 msgid "_About"
-msgstr ""
+msgstr "정보(_A)"
 
 msgid "HandBrake"
-msgstr ""
+msgstr "HandBrake"
 
 msgid "_File"
-msgstr "_File"
+msgstr "파일(_F)"
 
 msgid "_Source"
-msgstr "_Sorgente"
+msgstr "원본(_S)"
 
 msgid "Single _Title"
-msgstr "Titolo_Singlolo"
+msgstr "단일 타이틀(_T)"
 
 msgid "_Destination"
-msgstr "_Destinazione"
+msgstr "대상(_D)"
 
 msgid "_Preferences"
-msgstr "_Preferenze"
+msgstr "설정(_P)"
 
 msgid "_Queue"
-msgstr "_Coda"
+msgstr "큐(_Q)"
 
 msgid "_Add"
-msgstr ""
+msgstr "추가(_A)"
 
 msgid "Add _Multiple"
-msgstr ""
+msgstr "다중 추가(_M)"
 
 msgid "_Start"
-msgstr "_Inizia"
+msgstr "시작(_S)"
 
 msgid "_Pause"
-msgstr "_Pausa"
+msgstr "정지(_P)"
 
 msgid "_View"
-msgstr "_Visualizza"
+msgstr "보기(_V)"
 
 msgid "HandBrake For _Dumbies"
-msgstr ""
+msgstr "더미에 대한 HandBrake(_D)"
 
 msgid "_Show Presets"
-msgstr ""
+msgstr "사전설정 보기(_S)"
 
 msgid "_Preview"
-msgstr ""
+msgstr "미리보기(_P)"
 
 msgid "_Activity Window"
-msgstr "Finestra _attività"
+msgstr "작업 창(_A)"
 
 msgid "Show _Queue"
-msgstr "Mostra _coda"
+msgstr "큐 보기(_Q)"
 
 msgid "_Presets"
-msgstr ""
+msgstr "사전설정(_P)"
 
 msgid "_Save"
-msgstr "_Salva"
+msgstr "저장(_S)"
 
 msgid "_Delete"
-msgstr ""
+msgstr "삭제(_D)"
 
 msgid "_Make Default"
-msgstr "_Imposta come predefinito"
+msgstr "기본으로 지정(_M)"
 
 msgid "_New Folder"
-msgstr ""
+msgstr "새 폴더(_N)"
 
 msgid "_Export"
-msgstr "_Esporta"
+msgstr "내보내기(_E)"
 
 msgid "_Import"
-msgstr "_Importa"
+msgstr "가져오기(_I)"
 
 msgid "_Update Built-in Presets"
-msgstr ""
+msgstr "내장된 사전설정 갱신(_U)"
 
 msgid "_Help"
-msgstr "_Aiuto"
+msgstr "도움말(_H)"
 
 msgid "_Guide"
-msgstr "_Guida"
+msgstr "가이드(_G)"
 
 msgid "Start Encoding"
-msgstr "Inizia la codifica"
+msgstr "인코딩 시작"
 
 msgid "Start"
-msgstr "Inizia"
+msgstr "시작"
 
 msgid "Pause Encoding"
-msgstr "Pausa la codifica"
+msgstr "인코딩 정지"
 
 msgid "Pause"
-msgstr "Pausa"
+msgstr "정지"
 
 msgid "Add to Queue"
-msgstr "Aggiungi alla coda"
+msgstr "큐에 추가하기"
 
 msgid "Enqueue"
-msgstr ""
+msgstr "큐에 삽입"
 
 msgid "Show Queue"
-msgstr "Mostra coda"
+msgstr "큐 보기"
 
 msgid "Queue"
-msgstr "Coda"
+msgstr "큐"
 
 msgid ""
 "Open Picture Settings and Preview window.\n"
 "Here you can adjust cropping, resolution, aspect ratio, and filters."
-msgstr ""
+msgstr "영상 설정 및 미리보기 창 열기.\n잘라내기, 해상도, 종횡비, 필터 등을 조정할 수 있습니다."
 
 msgid "Preview"
-msgstr "Anteprima"
+msgstr "미리보기"
 
 msgid "Show Activity Window"
-msgstr "Mostra finestra attività"
+msgstr "작업 창 보기"
 
 msgid "Activity"
-msgstr "Attività"
+msgstr "작업"
 
 msgid "<b>Source:</b>"
-msgstr "<b>Sorgente:</b>"
+msgstr "<b>원본:</b>"
 
 msgid "None"
-msgstr "Vuoto"
+msgstr "없음"
 
 msgid "Title:"
-msgstr "Titolo:"
+msgstr "타이틀:"
 
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
 "This is often the feature title of a DVD."
-msgstr ""
+msgstr "인코딩할 타이틀 지정.\n기본적으로 가장 킨 타이틀이 선택됩니다.\n이는 보통 DVD의 주요 타이틀입니다."
 
 msgid "Angle:"
-msgstr "Angolo:"
+msgstr "앵글:"
 
 msgid "For multi-angle DVD's, select the desired angle to encode."
-msgstr ""
+msgstr "멀티 앵글 DVD의 경우, 인코딩할 앵글을 선택합니다."
 
 msgid "Reset All Titles"
-msgstr ""
+msgstr "모든 타이틀 초기화"
 
 msgid "Apply current settings to all titles"
-msgstr ""
+msgstr "모든 타이틀에 현재 설정 적용"
 
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
-msgstr ""
+msgstr "인코딩할 타이틀의 범위. 챕터, 초, 프레임 등"
 
 msgid "Set the first chapter to encode."
-msgstr "Imposta il primo capitolo da codificare."
+msgstr "인코딩할 첫 챕터 설정"
 
 msgid "Set the last chapter to encode."
-msgstr "Imposta l'ultimo capitolo da codificare."
+msgstr "인코딩할 마지막 챕터 설정"
 
 msgid "Duration:"
-msgstr "Durata:"
+msgstr "재생시간:"
 
 msgid "<b>Destination</b>"
-msgstr ""
+msgstr "<b>대상</b>"
 
 msgid "File:"
-msgstr "File:"
+msgstr "파일:"
 
 msgid "Destination filename for your encode."
-msgstr ""
+msgstr "인코딩에 대한 대상 파일 이름"
 
 msgid "Destination directory for your encode."
-msgstr ""
+msgstr "인코딩에 대한 대상 디렉토리"
 
 msgid "Destination Directory"
-msgstr "Cartella di destinazione"
+msgstr "대상 디렉토리"
 
 msgid "Format:"
-msgstr "Format:"
+msgstr "형식:"
 
 msgid "Format to mux encoded tracks to."
-msgstr ""
+msgstr "인코딩된 트랙에 합쳐질 형식"
 
 msgid "iPod 5G Support"
-msgstr "Supporto iPod 5G"
+msgstr "iPod 5G 지원"
 
 msgid "Add iPod Atom needed by some older iPods."
-msgstr ""
+msgstr "일부 구형 iPods에 필요한 iPod Atom 추가"
 
 msgid "Web optimized"
-msgstr "Ottimizzato per il web"
+msgstr "웹에 최적화"
 
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
-msgstr ""
+msgstr "증분 다운로드 동안 MP4 파일의 레이아웃 최적화.\n이 설정은 전체 파일을 다운로드하는 동안 재생기가 재생을 시작할 수 있게 합니다."
 
 msgid "Large file (>4GB)"
-msgstr ""
+msgstr "큰 파일 (>4GB)"
 
 msgid ""
 "Allow 64 bit MP4 file which can be over 4GB.\n"
 "\n"
 "<b>Caution:</b> This option may break device compatibility."
-msgstr ""
+msgstr "4GB를 넘는 64 비트 MP4 파일 허용.\n\n<b>주의:</b> 이 옵션은 장치 호환성을 저해할 수도 있습니다."
 
 msgid "<b>Presets List</b>"
-msgstr ""
+msgstr "<b>사전설정 목록</b>"
 
 msgid "Source Codec:"
-msgstr "Sorgente codec:"
+msgstr "원본 코덱:"
 
 msgid "Dimensions:"
-msgstr "Dimensioni:"
+msgstr ""
 
 msgid "Aspect: "
-msgstr "Aspetto:"
+msgstr "비율:"
 
 msgid "Frame Rate:"
-msgstr "Frame Rate:"
+msgstr "프레임레이트:"
 
 msgid "<b>Source Picture Parameters</b>"
-msgstr ""
+msgstr "<b>원본 영상 파라미터</b>"
 
 msgid "Autocrop:"
-msgstr ""
+msgstr "자동 잘라내기:"
 
 msgid "Crop:"
-msgstr ""
+msgstr "잘라내기:"
 
 msgid "Crop Dimensions:"
 msgstr ""
 
 msgid "<b>Cropping</b>"
-msgstr ""
+msgstr "<b>잘라내기</b>"
 
 msgid "Scale Dimensions:"
 msgstr ""
 
 msgid "Optimal for Source:"
-msgstr ""
+msgstr "원본에 최적화:"
 
 msgid "Anamorphic:"
-msgstr "Anamorfico:"
+msgstr "아나모픽:"
 
 msgid "<b>Scaling</b>"
-msgstr ""
+msgstr "<b>크기 조절</b>"
 
 msgid "Presentation Dimensions:"
 msgstr ""
 
 msgid "Summary"
-msgstr "Sommario"
+msgstr "요약"
 
 msgid "Left Crop"
-msgstr ""
+msgstr "좌측 잘라내기"
 
 msgid "Top Crop"
-msgstr ""
+msgstr "상단 잘라내기"
 
 msgid "Bottom Crop"
-msgstr ""
+msgstr "하단 잘라내기"
 
 msgid "Right Crop"
-msgstr ""
+msgstr "우측 잘라내기"
 
 msgid "Auto Crop"
-msgstr ""
+msgstr "자동 잘라내기"
 
 msgid "Automatically crop black borders around edges of the video."
-msgstr ""
+msgstr "비디오 외곽의 검은 배경을 자동으로 잘라냅니다."
 
 msgid "Loose Crop"
-msgstr ""
+msgstr "느슨하게 잘라내기"
 
 msgid ""
 "When picture settings require that the image\n"
@@ -733,26 +732,26 @@ msgid ""
 "of pixels, this setting will crop a few extra pixels\n"
 "instead of doing exact cropping and then scaling to\n"
 "the required multiple."
-msgstr ""
+msgstr "영상 설정에서 픽셀 개수의 배수 크기로 근사화된\n영상 크기가 필요할 때, 이 설정은 추가적인\n잘라내기와 요구된 배수로 크기를 조절하는 것\n대신에 일부 추가 픽셀을 잘라냅니다."
 
 msgid "width:"
-msgstr ""
+msgstr "폭:"
 
 msgid ""
 "This is the width that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
-msgstr ""
+msgstr "이 값은 비디오가 저장될 폭의 길이입니다.\n픽셀 종횡비가 1:1이 아니라면 실제 화면 크기는 달라질 수 있습니다."
 
 msgid "height:"
-msgstr ""
+msgstr "높이:"
 
 msgid ""
 "This is the height that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
-msgstr ""
+msgstr "이 값은 비디오가 저장될 높이의 길이입니다.\n픽셀 종횡비가 1:1이 아니라면 실제 화면 크기는 달라질 수 있습니다."
 
 msgid "Optimal for source"
-msgstr ""
+msgstr "원본에 최적화"
 
 msgid ""
 "If enabled, select the 'optimal' storage resolution.\n"
@@ -768,10 +767,10 @@ msgid ""
 "     original display aspect ratio\n"
 "Strict - Keep original source dimensions and pixel\n"
 "     aspect ratio</tt></small>"
-msgstr ""
+msgstr "<b>아나모픽 모드:</b>\n<small><tt>\n안함 - 픽셀 종횡비를 1:1로 고정합니다.\n느슨하게 - 선택된 \"정렬\" 값으로 크기를\n정렬하고 원본의 화면 종횡비를 보존하기\n위해 픽셀 종횡비를 정합니다\n엄격하게 - 원본의 크기와 픽셀 종횡비를\n유지합니다</tt></small>"
 
 msgid "Alignment:"
-msgstr "Allineamento:"
+msgstr "정렬:"
 
 msgid ""
 "Align storage dimensions to multiples of this value.\n"
@@ -789,74 +788,74 @@ msgid ""
 msgstr ""
 
 msgid "Pixel Aspect:"
-msgstr "Aspetto pixel:"
+msgstr "픽셀 종횡비:"
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
-msgstr ""
+msgstr "픽셀 종횡비는 픽셀의 모양을 결정합니다.\n\n1:1 비율은 정사각 픽셀로 결정됩니다. 다른 값은 사각형 모양을 결정합니다.\n재생기는 지정된 비율에 따라서 이미지의 크기를 조절합니다."
 
 msgid ":"
-msgstr ""
+msgstr ":"
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
-msgstr ""
+msgstr "픽셀 종횡비는 픽셀의 모양을 결정합니다.\n1:1 비율은 정사각 픽셀로 결정됩니다. 다른 값은 사각형 모양을 결정합니다.\n재생기는 지정된 비율에 따라서 이미지의 크기를 조절합니다."
 
 msgid "Keep Aspect"
-msgstr "Mantieni aspetti"
+msgstr "비율 유지"
 
 msgid ""
 "If enabled, the original display aspect of the source will be maintained."
-msgstr ""
+msgstr "활성화하면, 원본의 화면 종횡비가 유지됩니다."
 
 msgid "Display Aspect:"
-msgstr ""
+msgstr "화면 비율:"
 
 msgid "<b>Display Geometry</b>"
 msgstr ""
 
 msgid "Grayscale"
-msgstr "Scala di grigio"
+msgstr "회색조"
 
 msgid "If enabled, filter colour components out of video."
 msgstr ""
 
 msgid "Deblock:"
-msgstr ""
+msgstr "Deblock:"
 
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
-msgstr ""
+msgstr "Deblock 필터는 압축 과정에서 생긴 영향을 제거합니다.\n원본 영상에 블럭이 많다면, 이 필터가 도움이 됩니다."
 
 msgid "Denoise Filter:"
-msgstr ""
+msgstr "노이즈 제거 필터:"
 
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
-msgstr ""
+msgstr "노이즈 제거 필터는 노이즈와 그레인을 줄이거나 제거합니다.\n필름 그레인과 다른 종류의 고주파 노이즈는 압축을 어렵게 만듭니다.\n그런 원본에 이 필터를 사용하면 파일을 더 작게 만들 수 있습니다."
 
 msgid "Denoise Preset:"
-msgstr ""
+msgstr "노이즈 제거 사전설정:"
 
 msgid "Denoise Tune:"
-msgstr ""
+msgstr "노이즈 제거 조정:"
 
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
 "SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
-msgstr ""
+msgstr "사용자 노이즈 제거 필터 문자열 형식\n\nSpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
 msgid "Detelecine:"
-msgstr ""
+msgstr "Detelecine:"
 
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
@@ -868,10 +867,10 @@ msgid ""
 "Custom detelecine filter string format\n"
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
-msgstr ""
+msgstr "사용자 detelecine 필터 문자열 형식\n\nJunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
 msgid "Decomb"
-msgstr ""
+msgstr "Decomb"
 
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
@@ -881,18 +880,18 @@ msgid ""
 "\n"
 "The classic deinterlace filter is applied to all frames.\n"
 "Frames that are not interlaced will suffer some quality degradation."
-msgstr ""
+msgstr "Decomb 또는 디인터레이스 필터 옵션 선택.\n\nDecomb 필터는 인터레이스로 나타나는 프레임을 선택적으로 디인터레이스합니다.\n이 설정은 인터레이스되지 않는 프레임의 품질을 보존합니다.\n\n전통적인 디인터레이스 필터는 모든 프레임에 적용됩니다.\n인터레이스되지 않는 프레임은 일부 품질 저하가 나타날 수 있습니다."
 
 msgid "Deinterlace"
-msgstr ""
+msgstr "디인터레이스"
 
 msgid "Decomb:"
-msgstr ""
+msgstr "Decomb:"
 
 msgid ""
 "The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
 "This will preserve quality in frames that are not interlaced."
-msgstr ""
+msgstr "Decomb 필터는 인터레이스로 나타나는 프레임을 선택적으로 디인터레이스합니다.\n이 설정은 인터레이스되지 않는 프레임의 품질을 보존합니다."
 
 msgid ""
 "Custom decomb filter string format\n"
@@ -900,80 +899,80 @@ msgid ""
 "Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
 "BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
 "ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
-msgstr ""
+msgstr "사용자 decomb 필터 문자열 형식\n\nMode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\nBlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\nErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
 
 msgid "Deinterlace:"
-msgstr ""
+msgstr "디인터레이스:"
 
 msgid ""
 "The classic deinterlace filter is applied to all frames.\n"
 "Frames that are not interlaced will suffer some quality degradation."
-msgstr ""
+msgstr "전통적인 디인터레이스 필터는 모든 프레임에 적용됩니다.\n인터레이스되지 않는 프레임은 일부 품질 저하가 나타날 수 있습니다."
 
 msgid ""
 "Custom deinterlace filter string format\n"
 "\n"
 "YadifMode:YadifParity:McdintMode:McdeintQp"
-msgstr ""
+msgstr "사용자 디인터레이스 필터 문자열 형식\n\nYadifMode:YadifParity:McdintMode:McdeintQp"
 
 msgid "<b>Filters</b>"
-msgstr ""
+msgstr "<b>필터</b>"
 
 msgid "Picture"
-msgstr ""
+msgstr "영상"
 
 msgid "Video Encoder:"
-msgstr ""
+msgstr "비디오 인코더:"
 
 msgid "Available video encoders."
-msgstr ""
+msgstr "사용 가능한 비디오 인코더."
 
 msgid "Framerate:"
-msgstr "Framerate:"
+msgstr "프레임레이트:"
 
 msgid ""
 "Output framerate.\n"
 "\n"
 "'Same as source' is recommended. If your source video has\n"
 "a variable framerate, 'Same as source' will preserve it."
-msgstr ""
+msgstr "출력 프레임레이트.\n\n'원본과 동일'이 권장됩니다. 원본 비디오가 가변\n프레임레이트라면, '원본과 동일'은 그 설정을 보존합니다."
 
 msgid "Constant Framerate"
-msgstr "Framerate costante"
+msgstr "고정 프레임레이트"
 
 msgid "Same as source"
-msgstr ""
+msgstr "원본과 동일하게"
 
 msgid "kbps"
-msgstr ""
+msgstr "kbps"
 
 msgid "(variable)"
-msgstr ""
+msgstr "(가변)"
 
 msgid "(constant)"
-msgstr ""
+msgstr "(고정)"
 
 msgid "Enables constant framerate output."
-msgstr ""
+msgstr "고정 프레임레이트 출력 활성화"
 
 msgid "Peak Framerate (VFR)"
-msgstr ""
+msgstr "피크 프레임레이트 (VFR)"
 
 msgid ""
 "Enables variable framerate output with a peak\n"
 "rate determined by the framerate setting.\n"
 "\n"
 "VFR is not compatible with some players."
-msgstr ""
+msgstr "프레임레이트 설정에 의해 결정된 최고 레이트를\n가진 가변 프레임레이트 출력 활성화.\n\n가변 프레임레이트는 일부 재생기와 호환되지 않을 수 있습니다."
 
 msgid "Variable Framerate"
-msgstr "Framerate variabile"
+msgstr "가변 프레임레이트"
 
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
 "VFR is not compatible with some players."
-msgstr ""
+msgstr "가변 프레임레이트 출력 활성화.\n\nVFR은 일부 재생기와 호환되지 않습니다."
 
 msgid ""
 "Set the desired quality factor.\n"
@@ -988,13 +987,13 @@ msgid ""
 "\n"
 "FFMpeg's and Theora's scale is more linear.\n"
 "These encoders do not have a lossless mode."
-msgstr ""
+msgstr "원하는 품질 지정.\n인코더는 지정된 품질을 목표로 동작합니다.\n각 비디오 인코더에 사용되는 스케일은 다릅니다.\n\nx264의 스케일은 로그형태로 동작하며 작은 값일수록 높은 품질을\n의미합니다. 작은 값은 점점 더 큰 파일을 만들어 냅니다. 0 값은\n무손실을 의미하고, 원본 역시 무손실이라고해도 원본보다 더 큰\n파일이 만들어질 수도 있습니다.\n\nFFMpeg과 Theora의 스케일은 좀더 선형적입니다.\n이런 인코더들은 무손실 모드를 지원하지 않습니다."
 
 msgid "Constant Quality:"
-msgstr ""
+msgstr "고정 품질:"
 
 msgid "Bitrate (kbps):    "
-msgstr "Bitrate (kbps):    "
+msgstr "비트레이트 (kbps):"
 
 msgid ""
 "Set the average bitrate.\n"
@@ -1002,10 +1001,10 @@ msgid ""
 "The instantaneous bitrate can be much higher or lower at any point in time.\n"
 "But the average over a long duration will be the value set here.  If you need\n"
 "to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
-msgstr ""
+msgstr "평균 비트레이트 설정.\n\n특정 시간에서 순간 비트레이트는 높거나 낮을 수도 있습니다.\n그러나 긴 시간 동안의 평균치는 이 값에 수렴합니다. 순간 비트레이트를\n제한하려면 x264의 vbv-bufsize와 vbv-maxrate 설정을 살펴보세요."
 
 msgid "2-Pass Encoding"
-msgstr ""
+msgstr "2단계 인코딩"
 
 msgid ""
 "Perform 2 Pass Encoding.\n"
@@ -1013,27 +1012,27 @@ msgid ""
 "The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
 "the video are collected.  Then in the second pass, those statistics are used\n"
 "to make bitrate allocation decisions."
-msgstr ""
+msgstr "2단계 인코딩 수행.\n\n'비트레이트' 옵션은 필요조건입니다. 1단계 동안, 비디오에 대한 통계치가\n수집됩니다. 두번째 단계에서, 그 통계치는 비트레이트 할당을 결정하는데\n사용됩니다."
 
 msgid "Turbo First Pass"
-msgstr ""
+msgstr "1단계 가속"
 
 msgid ""
 "During the 1st pass of a 2 pass encode, use settings that speed things "
 "along."
-msgstr ""
+msgstr "2단계 인코딩 중 1단계에서 속도를 높이려면 설정을 사용하세요."
 
 msgid "Use Advanced Options"
-msgstr "Usa opzioni avanzate"
+msgstr "고급 옵션 사용"
 
 msgid ""
 "Use advanced options Tab for x264 settings.\n"
 "\n"
 "Use at your own risk!"
-msgstr ""
+msgstr "x264 설정에 고급 옵션 탭 사용.\n\n위험 부담을 갖고 사용하세요!"
 
 msgid "Preset:"
-msgstr ""
+msgstr "사전설정:"
 
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
@@ -1042,10 +1041,10 @@ msgid ""
 "Tunes, profiles, levels and advanced option string will be applied to this.\n"
 "You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
-msgstr ""
+msgstr "압축 효율과 인코딩 속도 사이의  인코더 설정 사용.\n\n이 설정은 기본 인코더 설정을 만듭니다.\n조정, 프로필, 수준, 고급 옵션 문자열이 이 설정에 적용됩니다.\n낮은 속도의 설정은 더 좋은 품질 또는 더 작은 파일을 만들기 때문에\n참을 수 있는 정도의 속도를 지정하는데 이 옵션을 사용합니다."
 
 msgid "Tune:"
-msgstr ""
+msgstr "조정:"
 
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
@@ -1053,16 +1052,16 @@ msgid ""
 "This can improve effeciency for particular source characteristics or set\n"
 "characteristics of the output file.  Changes will be applied after the\n"
 "preset but before all other parameters."
-msgstr ""
+msgstr "일반적인 상황에 대한 최적화 조정 설정.\n\n이 설정은 세세한 원본 특성에 대한 효율을 증가시키거나 출력 파일의\n특성을 지정할 수 있습니다. 사전 설정 적용 후 다른 모든 파라미터\n적용 직전에 변경 사항이 적용됩니다."
 
 msgid "Fast Decode"
-msgstr ""
+msgstr "고속 디코딩"
 
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
 "Set this if your device is struggling to play the output (dropped frames)."
-msgstr ""
+msgstr "디코더의 CPU 사용율 감소.\n\n(끊김 등으로) 출력물 재생이 어려우면 이 설정을 사용하세요."
 
 msgid "Zero Latency"
 msgstr ""
@@ -1077,180 +1076,180 @@ msgid ""
 msgstr ""
 
 msgid "Profile:"
-msgstr ""
+msgstr "프로필:"
 
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
 "Overrides all other settings."
-msgstr ""
+msgstr "지정된 프로필과의 호환성 지정 및 보장.\n\n다른 모든 설정을 덮어씁니다."
 
 msgid "Level:"
-msgstr ""
+msgstr "수준:"
 
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
 "Overrides all other settings."
-msgstr ""
+msgstr "지정된 수준과의 호환성 지정 및 보장.\n\n다른 모든 설정을 덮어씁니다."
 
 msgid "More Settings:"
-msgstr ""
+msgstr "상세 설정:"
 
 msgid ""
 "Additional encoder settings.\n"
 "\n"
 "Colon separated list of encoder options."
-msgstr ""
+msgstr "추가적인 인코더 설정.\n\n콜론으로 분리된 인코더 옵션 목록."
 
 msgid "Video"
-msgstr "Video"
+msgstr "비디오"
 
 msgid "Selection Behavior:"
-msgstr ""
+msgstr "선택 동작:"
 
 msgid "Remove"
-msgstr ""
+msgstr "제거"
 
 msgid "Available Languages"
-msgstr ""
+msgstr "사용 가능한 언어"
 
 msgid "Selected Languages"
-msgstr ""
+msgstr "선택된 언어"
 
 msgid "Use only first encoder for secondary audio"
-msgstr ""
+msgstr "부 오디오에 대해서 첫 인코더만 사용"
 
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "All other secondary audio output tracks will be encoded with first encoder only."
-msgstr ""
+msgstr "주 오디오 트랙만 목록의 모든 인코더로 인코딩됩니다.\n다른 모든 부 오디오 출력 트랙은 첫 인코더로만 인코딩됩니다."
 
 msgid "Auto Passthru:"
-msgstr ""
+msgstr "자동 패스쓰루:"
 
 msgid "MP3"
-msgstr ""
+msgstr "MP3"
 
 msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
+msgstr "재생 장치가 MP3를 지원하면 활성화하세요.\n이 옵션은 자동 패스쓰루 선택이 활성화될 때, MP3 패스쓰루 선택을 허용합니다."
 
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
+msgstr "재생 장치가 AAC를 지원하면 활성화하세요.\n이 옵션은 자동 패스쓰루 선택이 활성화될 때, AAC 패스쓰루 선택을 허용합니다."
 
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
+msgstr "재생 장치가 AC-3를 지원하면 활성화하세요.\n이 옵션은 자동 패스쓰루 선택이 활성화될 때, AC-3 패스쓰루 선택을 허용합니다."
 
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
+msgstr "재생 장치가 DTS를 지원하면 활성화하세요.\n이 옵션은 자동 패스쓰루 선택이 활성화될 때, DTS 패스쓰루 선택을 허용합니다."
 
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
+msgstr "재생 장치가 DTS-HD를 지원하면 활성화하세요.\n이 옵션은 자동 패스쓰루 선택이 활성화될 때, DTS-HD 패스쓰루 선택을 허용합니다."
 
 msgid "Passthru Fallback:"
-msgstr ""
+msgstr "패스쓰루 대체:"
 
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
-msgstr ""
+msgstr "오디오 패스쓰루에 적합한 트랙이 없는 경우 인코딩할 오디오 코덱을 설정합니다."
 
 msgid "<b>Audio Encoder Settings:</b>"
-msgstr ""
+msgstr "<b>오디오 인코딩 설정:</b>"
 
 msgid "Each selected source track will be encoded with all selected encoders"
-msgstr ""
+msgstr "선택된 각각의 원본 트랙은 선택된 모든 인코더로 인코딩됩니다."
 
 msgid "Encoder"
-msgstr ""
+msgstr "인코더"
 
 msgid "Bitrate/Quality"
-msgstr ""
+msgstr "비프레이트/품질"
 
 msgid "Mixdown"
-msgstr ""
+msgstr "믹스다운"
 
 msgid "Samplerate"
-msgstr ""
+msgstr "샘플레이트"
 
 msgid "Gain"
-msgstr ""
+msgstr "게인"
 
 msgid "Audio Defaults"
-msgstr ""
+msgstr "오디오 기본 설정"
 
 msgid "Add new audio settings to the list"
-msgstr ""
+msgstr "새로운 오디오 설정을 목록에 추가"
 
 msgid "Add All"
-msgstr ""
+msgstr "모두 추가"
 
 msgid "Add all audio tracks to the list"
-msgstr ""
+msgstr "모든 오디오 트랙을 목록에 추가"
 
 msgid "Reload Defaults"
-msgstr ""
+msgstr "기본 설정 다시 불러오기"
 
 msgid "Reload all audio settings from defaults"
-msgstr ""
+msgstr "기본 설정에서 모든 오디오 설정 다시 불러오기"
 
 msgid "Audio List"
-msgstr ""
+msgstr "오디오 목록"
 
 msgid "Preferred Language: None"
-msgstr ""
+msgstr "선호하는 언어: 없음"
 
 msgid "Add Foreign Audio Search Pass"
-msgstr ""
+msgstr "외국어 오디오 검색 단계 추가"
 
 msgid ""
 "Add \"Foreign Audio Search\" when the default audio track is your preferred language.\n"
 "This search pass finds short sequences of foreign audio and provides subtitles for them."
-msgstr ""
+msgstr "기본 오디오 트랙이 선호하는 언어라면 \"외국어 오디오 검색\"를 추가하세요.\n이 검색 단계는 외국어 오디오의 일부를 찾고 그 자막을 제공합니다."
 
 msgid "Add subtitle track if default audio is foreign"
-msgstr ""
+msgstr "기본 오디오가 외국어인 경우 자막 트랙 추가"
 
 msgid ""
 "When the default audio track is not your preferred language, add a subtitle "
 "track."
-msgstr ""
+msgstr "기본 오디오 트랙이 선호하는 언어가 아니라면, 자막 트랙을 추가하세요."
 
 msgid "Add Closed Captions when available"
-msgstr ""
+msgstr "표시 여부 선택이 가능한 캡션이 존재하는 경우 추가"
 
 msgid ""
 "Closed captions are text subtitles that can be added to any container as a "
 "soft subtitle track (not burned)"
-msgstr ""
+msgstr "표시 여부 선택이 가능한 캡션은 어떤 컨테이너에도 자막 트랙으로 추가될 수 있는 텍스트 자막입니다. (영상에 추가되지는 않음)"
 
 msgid "Subtitle Defaults"
-msgstr ""
+msgstr "자막 기본 설정"
 
 msgid "Add new subtitle settings to the list"
-msgstr ""
+msgstr "새로운 자막 설정을 목록에 추가"
 
 msgid "Add all subtitle tracks to the list"
-msgstr ""
+msgstr "모든 자막 트랙을 목록에 추가"
 
 msgid "Reload all subtitle settings from defaults"
-msgstr ""
+msgstr "기본 설정에서 모든 자막 설정 다시 불러오기"
 
 msgid "Subtitle List"
-msgstr ""
+msgstr "자막 목록"
 
 msgid "<small>Reference Frames:</small>"
-msgstr ""
+msgstr "<small>참조 프레임:</small>"
 
 msgid ""
 "Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.\n"
@@ -1299,7 +1298,7 @@ msgid ""
 msgstr ""
 
 msgid "8x8 Transform"
-msgstr ""
+msgstr "8x8 변환"
 
 msgid ""
 "The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.\n"
@@ -1310,7 +1309,7 @@ msgid ""
 msgstr ""
 
 msgid "CABAC Entropy Encoding"
-msgstr ""
+msgstr "CABAC 엔트로피 인코딩"
 
 msgid ""
 "After the encoder has done its work, it has a bunch of data that\n"
@@ -1323,10 +1322,10 @@ msgid ""
 msgstr ""
 
 msgid "<small><b>Encoding Features</b></small>"
-msgstr ""
+msgstr "<small><b>인코딩 항목</b></small>"
 
 msgid "<small>Motion Est. Method:</small>"
-msgstr ""
+msgstr "<small>움직임 추정 방법:</small>"
 
 msgid ""
 "Controls the motion estimation method.\n"
@@ -1339,7 +1338,7 @@ msgid ""
 "Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.\n"
 "Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
 "Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
-msgstr ""
+msgstr "움직임 추정 방법 제어.\n\n움직임 추정은 프레임에서 각 픽셀 블럭이 어떻게 움직일지를 인코더가 추정하는 것입니다.\n더 좋은 움직임 검색 방법은 속도를 희생해서 압축율을 향상시킵니다.\n\nDiamond: 다이아몬드 패턴을 사용해  매우 빠르고 간단한 검색 수행.\nHexagon: 육각 패턴을 이용해 다소 느리지만 효율적인 검색 수행.\nUneven Multi-Hex: 복잡한 움직임을 좀 더 정확하게 포착하기 위해, 다양한 패턴을 이용해 광범위한 검색 수행.\nExhaustive: 넓은 영역에서 모든 픽셀에 대해 \"무식한\" 검색 수행. 압축률도 낮고 매우 느림.\nTransformed Exhaustive: Exhaustive와 유사하지만 더 정확함. 압축률은 낮고 다소 느림."
 
 msgid "<small>Subpel ME &amp; Mode:</small>"
 msgstr ""
@@ -1356,7 +1355,7 @@ msgid ""
 msgstr ""
 
 msgid "<small>Motion Est. Range:</small>"
-msgstr ""
+msgstr "<small>움직임 추정 범위:</small>"
 
 msgid ""
 "This is the distance x264 searches from its initial guess at the\n"
@@ -1416,7 +1415,7 @@ msgid ""
 msgstr ""
 
 msgid "<small><b>Analysis</b></small>"
-msgstr "<small><b>Analisi</b></small>"
+msgstr "<small><b>분석</b></small>"
 
 msgid "<small>Adaptive Quantization Strength:</small>"
 msgstr ""
@@ -1438,7 +1437,7 @@ msgid ""
 msgstr ""
 
 msgid "<small>Psychovisual Trellis:</small>"
-msgstr ""
+msgstr "<small>Psychovisual 격자:</small>"
 
 msgid ""
 "Psychovisual trellis is an experimental algorithm to further\n"
@@ -1450,7 +1449,7 @@ msgid ""
 msgstr ""
 
 msgid "Deblocking: "
-msgstr ""
+msgstr "Deblocking:"
 
 msgid ""
 "H.264 deblocking filter.\n"
@@ -1480,7 +1479,7 @@ msgid ""
 msgstr ""
 
 msgid "<small><b>Psychovisual</b></small>"
-msgstr ""
+msgstr "<small><b>Psychovisual</b></small>"
 
 msgid ""
 "Your selected options will appear here.\n"
@@ -1492,270 +1491,270 @@ msgid ""
 "subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
 "deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
 "no-fast-pskip=0:no-dct-decimate=0:cabac=1"
-msgstr ""
+msgstr "선택된 옵션이 여기에 표시됩니다.\n이 옵션들을 편집하거나 다른 옵션을 추가할 수 있습니다.\n\n기본 값은 나타나지 않습니다. 기본 값은 다음과 같습니다:\nref=3:bframes=3:b-adapt=fast:direct=spatial:\nb-pyramid=normal:weightp=2:me=hex:merange=16:\nsubme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\ndeblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\nno-fast-pskip=0:no-dct-decimate=0:cabac=1"
 
 msgid "<small><b>Current x264 Advanced Option String</b></small>"
-msgstr ""
+msgstr "<small><b>현재의 x264 고급 옵션 문자열</b></small>"
 
 msgid "Advanced Video"
-msgstr ""
+msgstr "고급 비디오"
 
 msgid "Chapter Markers"
-msgstr ""
+msgstr "챕터 마커"
 
 msgid "Add chapter markers to output file."
-msgstr ""
+msgstr "출력 파일에 챕터 마커 추가"
 
 msgid "Chapters"
-msgstr "Capitoli"
+msgstr "챕터"
 
 msgid "Actors:"
-msgstr "Attori:"
+msgstr "배우:"
 
 msgid "Director:"
-msgstr "Regista:"
+msgstr "감독:"
 
 msgid "Release Date:"
-msgstr "Data di rilascio:"
+msgstr "배포일:"
 
 msgid "Comment:"
-msgstr "Commento:"
+msgstr "주석:"
 
 msgid "Genre:"
-msgstr "Genere:"
+msgstr "장르:"
 
 msgid "Description:"
-msgstr "Descrizione:"
+msgstr "설명:"
 
 msgid "Plot:"
-msgstr ""
+msgstr "플롯:"
 
 msgid "Tags"
-msgstr "Tag"
+msgstr "태그"
 
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 msgid "Edit"
-msgstr "Modifica"
+msgstr "편집"
 
 msgid "Reload"
-msgstr ""
+msgstr "다시 불러오기"
 
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
-msgstr ""
+msgstr "선택된 큐의 작업을 보류로 표시.\n큐 작업을 보류로 초기화하고 재 시작을 대기."
 
 msgid "Reload All"
-msgstr ""
+msgstr "모두 다시 불러오기"
 
 msgid ""
 "Mark all queue entries as pending.\n"
 "Resets all queue jobs to pending and ready to run again."
-msgstr ""
+msgstr "모든  큐의 작업을 보류로 표시.\n모든 큐 작업을 보류로 초기화하고 재 시작을 대기."
 
 msgid "OK"
-msgstr ""
+msgstr "승인"
 
 msgid "Select All"
-msgstr ""
+msgstr "전체 선택"
 
 msgid "Mark all titles for adding to the queue"
-msgstr ""
+msgstr "모든 타이틀을 추에 추가하기로 표시"
 
 msgid "Clear All"
-msgstr ""
+msgstr "모두 지우기"
 
 msgid "Unmark all titles"
-msgstr ""
+msgstr "모든 타이틀에서 마커 제거"
 
 msgid "Destination files OK.  No duplicates detected."
-msgstr ""
+msgstr "대상 파일 승인. 중복 발견되지 않음."
 
 msgid "Select this title for adding to the queue.\n"
-msgstr ""
+msgstr "이 타이틀을 큐에 추가하기 위해 선택.\n"
 
 msgid "Preferences"
-msgstr ""
+msgstr "설정"
 
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "자동으로 업데이트 확인"
 
 msgid "When all encodes are complete"
-msgstr ""
+msgstr "모든 인코딩이 완료됐을 때"
 
 msgid "Use automatic naming (uses modified source name)"
-msgstr ""
+msgstr "자동 이름 (수정된 원본 이름) 사용"
 
 msgid "Auto-Name Template"
-msgstr ""
+msgstr "자동 이름 부여 템플릿"
 
 msgid ""
 "Available Options: {source} {title} {chapters} {date} {time} {quality} "
 "{bitrate}"
-msgstr ""
+msgstr "가능한 옵션: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
 
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
-msgstr ""
+msgstr "MP4에 대해 iPod/iTunes 친화적인 확장자 (.m4v) 사용"
 
 msgid "Number of previews"
-msgstr "Numero di anteprime"
+msgstr "미리보기 수"
 
 msgid "Filter short titles (seconds)"
-msgstr ""
+msgstr "짧은 타이틀 필터링 (초)"
 
 msgid "Show system tray icon"
-msgstr ""
+msgstr "시스템 트레이 아이콘 보기"
 
 msgid "General"
-msgstr "Generale"
+msgstr "일반"
 
 msgid "Constant Quality fractional granularity"
-msgstr ""
+msgstr "분수 형태의 고정 품질 단위"
 
 msgid "Use dvdnav (instead of libdvdread)"
-msgstr ""
+msgstr "(libdvdread 대신) dvdnav 사용"
 
 msgid "Put individual encode logs in same location as movie"
-msgstr ""
+msgstr "개별 인코딩 로그를 영화와 동일한 위치에 놓기"
 
 msgid "Activity Log Verbosity Level"
-msgstr ""
+msgstr "작업 로그 상세 수준"
 
 msgid "Activity Log Longevity"
-msgstr ""
+msgstr "작업 로그 길이"
 
 msgid "Scale down High Definition previews"
-msgstr ""
+msgstr "HD 미리보기 축소"
 
 msgid "Automatically Scan DVD when loaded"
-msgstr ""
+msgstr "DVD가 삽입되면 자동으로 검색"
 
 msgid "Scans the DVD whenever a new disc is loaded"
-msgstr ""
+msgstr "새로운 디스크가 삽입되면 DVD 검색"
 
 msgid "Hide Advanced Video Options Tab"
-msgstr ""
+msgstr "고급 비디오 출력 탭 숨기기"
 
 msgid ""
 "Use advanced video options at your own risk.\n"
 "We recommend that you use the controls available\n"
 "on the Video tab instead."
-msgstr ""
+msgstr "위험 부다을 갖고 고급 비디오 옵션 사용.\n비디오 탭에 위치한 제어 명령을 사용하시는 편이\n더 좋습니다."
 
 msgid "Delete completed jobs from queue"
-msgstr ""
+msgstr "큐에서 완료된 작업 삭제"
 
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "Check this if you want the queue to clean itself up by deleting completed jobs."
-msgstr ""
+msgstr "기본적으로 완료된 작업은 큐에 남아있고 완료된 것으로 표시됩니다.\n완료된 작업을 큐에서 지우려면 이 것을 선택하세요."
 
 msgid "Allow Tweaks"
-msgstr ""
+msgstr "설정 변경 허용"
 
 msgid "Allow HandBrake For Dummies"
 msgstr ""
 
 msgid "Advanced"
-msgstr "Avanzato"
+msgstr "고급"
 
 msgid "Folder Name:"
-msgstr "Nome cartella:"
+msgstr "폴더 이름:"
 
 msgid "<b>Description</b>"
-msgstr ""
+msgstr "<b>설명</b>"
 
 msgid "Preset Name:"
-msgstr ""
+msgstr "사전설정 이름:"
 
 msgid "<b>Custom Picture Dimensions</b>"
 msgstr ""
 
 msgid "Maximum Width:"
-msgstr ""
+msgstr "최대 폭:"
 
 msgid "Enable maximum width limit."
-msgstr ""
+msgstr "최대 폭 제한을 활성화합니다."
 
 msgid ""
 "This is the maximum width that the video will be stored at.\n"
 "\n"
 "Whenever a new source is loaded, this value will be applied if the source width is greater.\n"
 "Setting this to 0 means there is no maximum width."
-msgstr ""
+msgstr "이 값은 저장될 비디오의 최대 폭입니다.\n\n새로운 원본이 적재됐을 때, 원본의 폭이 이 값보다 크면 이 값이 적용됩니다.\n0은 최대 폭을 지정하지 않는다는 의미입니다."
 
 msgid "Maximum Height:"
-msgstr ""
+msgstr "최대 높이:"
 
 msgid "Enable maximum height limit."
-msgstr ""
+msgstr "최대 높이 제한 활성화."
 
 msgid ""
 "This is the maximum height that the video will be stored at.\n"
 "\n"
 "Whenever a new source is loaded, this value will be applied if the source height is greater.\n"
 "Setting this to 0 means there is no maximum height."
-msgstr ""
+msgstr "이 값은 저장될 비디오의 최대 높이입니다.\n\n새로운 원본이 적재됐을 때, 원본의 높이가 이 값보다 크면 이 값이 적용됩니다.\n0은 최대 높이를 지정하지 않는다는 의미입니다."
 
 msgid "Select preview frames."
-msgstr ""
+msgstr "미리보기 프레임 선택"
 
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
-msgstr ""
+msgstr "현재 미리보기 위치부터 시작하는 짧은 비디오를 인코딩하고 재생"
 
 msgid "<b>Duration:</b>"
-msgstr "<b>Durata:</b>"
+msgstr "<b>재생시간:</b>"
 
 msgid "Set the duration of the live preview in seconds."
-msgstr ""
+msgstr "실시간 미리보기의 재생시간을 초단위로 설정."
 
 msgid "Show Crop"
-msgstr ""
+msgstr "잘라내기 보기"
 
 msgid "Show Cropped area of the preview"
-msgstr ""
+msgstr "미리보기에서 잘라낸 영역 보기"
 
 msgid "Fullscreen"
-msgstr "Tutto schermo"
+msgstr "전체화면"
 
 msgid "View Fullscreen Preview"
-msgstr ""
+msgstr "전체 화면 미리보기"
 
 msgid "Title Number:"
-msgstr ""
+msgstr "타이틀 번호:"
 
 msgid "Detected DVD devices:"
-msgstr ""
+msgstr "발견된 DVD 장치:"
 
 msgid "Setting:"
-msgstr "Impostazioni:"
+msgstr "설정:"
 
 msgid "Import SRT"
-msgstr "Importa SRT"
+msgstr "SRT 가져오기"
 
 msgid "Enable settings to import an SRT subtitle file"
-msgstr ""
+msgstr "SRT 자막 파일 가져오기 활성화"
 
 msgid "Embedded Subtitle List"
-msgstr ""
+msgstr "내장된 자막 목록"
 
 msgid "Enable settings to select embedded subtitles"
-msgstr ""
+msgstr "내장 자막 선택 설정 활성화"
 
 msgid "Character Code"
-msgstr ""
+msgstr "문자 인코딩"
 
 msgid "Offset (ms)"
-msgstr ""
+msgstr "오프셋 (ms)"
 
 msgid ""
 "Set the language of this subtitle.\n"
 "This value will be used by players in subtitle menus."
-msgstr ""
+msgstr "이 자막의 언어 설정.\n이 값은 자막 메뉴에서 재생기가 사용합니다."
 
 msgid ""
 "Set the character code used by the SRT file you are importing.\n"
@@ -1763,335 +1762,335 @@ msgid ""
 "SRTs come in all flavours of character sets.\n"
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
-msgstr ""
+msgstr "가져올 SRT 파일의 문자 인코딩 설정.\n\nSRT는 문자들의 집합 형태로 들어옵니다.\n이 문자 집합을 UTF-8로 변환합니다.\n이 변환을 수행하기 위해서 원본 문자 인코딩 방식이 필요합니다."
 
 msgid "Select the SRT file to import."
-msgstr "Seleziona il file SRT da importare"
+msgstr "가져올 SRT 파일 선택"
 
 msgid "Srt File"
-msgstr "File srt"
+msgstr "Srt 파일"
 
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
-msgstr ""
+msgstr "비디오와 SRT 타임스탬프 사이에 밀리초 단위로 오프셋을 조정합니다"
 
 msgid "Track"
-msgstr "Traccia"
+msgstr "트랙"
 
 msgid "List of subtitle tracks available from your source."
-msgstr ""
+msgstr "원본에서 사용 가능한 자막 목록"
 
 msgid "Forced Subtitles Only"
-msgstr ""
+msgstr "강제 표시 자막만"
 
 msgid "Burn into video"
-msgstr ""
+msgstr "영상에 추가"
 
 msgid ""
 "Render the subtitle over the video.\n"
 "The subtitle will be part of the video and can not be disabled."
-msgstr ""
+msgstr "비디오에 자막을 입힙니다.\n자막은 비디오의 일부가 되고, 비활성화할 수 없습니다."
 
 msgid "Set Default Track"
-msgstr ""
+msgstr "기본 트랙 지정"
 
 msgid "Source Track"
-msgstr ""
+msgstr "원본 트랙"
 
 msgid "List of audio tracks available from your source."
-msgstr ""
+msgstr "원본에서 사용가능한 오디오 트랙의 목록"
 
 msgid "Track Name:"
-msgstr "Nome traccia:"
+msgstr "트랙 이름:"
 
 msgid ""
 "Set the audio track name.\n"
 "\n"
 "Players may use this in the audio selection list."
-msgstr ""
+msgstr "오디오 트랙 이름 설정.\n\n재생기에서 오디오 선택 목록에 이 이름을 사용합니다."
 
 msgid "Mix"
-msgstr "Mix"
+msgstr "믹스"
 
 msgid "Sample Rate"
-msgstr ""
+msgstr "샘플레이트"
 
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
 "For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
 "DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
-msgstr ""
+msgstr "<b>다이나믹 레인지 압축:</b> 오디오 트랙 출력의 다이나믹 레인지를 조정합니다.\n넓은 다이나믹 레인지를 가진 원본 오디오 (매우 크고 부드러운 시퀀스)에 대해서\n다이나믹 레인지 압축은 큰 소리를 부드럽게 만들고 부드러운 소리를 크게 만들어서 레인지를 '압축'합니다."
 
 msgid "Enable bitrate setting"
-msgstr ""
+msgstr "비트레이트 설정 활성화"
 
 msgid "Enable quality setting"
-msgstr ""
+msgstr "품질 설정 활성화"
 
 msgid ""
 "<b>Quality:</b> For output codec's that support it, adjust the quality of "
 "the output."
-msgstr ""
+msgstr "<b>품질:</b> 출력 코덱이 지원하는 경우, 출력물의 품질을 조정."
 
 msgid "00.0"
-msgstr ""
+msgstr "00.0"
 
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
-msgstr ""
+msgstr "<b>오디오 게인:</b> 출력된 오디오 트랙의 증폭 또는 감쇄를 조정합니다."
 
 msgid "Skip This Version"
-msgstr "Salta questa versione"
+msgstr "이 버전 무시"
 
 msgid "Remind Me Later"
-msgstr "Ricorda dopo"
+msgstr "나중에 알려주기"
 
 msgid "<b>A new version of HandBrake is available!</b>"
-msgstr "<b>Una nuova versione di HandBrake è disponibile!</b>"
+msgstr "<b> 새 버전의 HandBrake가 있습니다!</b>"
 
 msgid "HandBrake xxx is now available (you have yyy)."
-msgstr ""
+msgstr "HandBrake xxx 버전이 있습니다. (현재 버전은 yyy 입니다)"
 
 msgid "<b>Release Notes</b>"
-msgstr ""
+msgstr "<b>배포 기록</b>"
 
 msgid "First Track Matching Selected Languages"
-msgstr ""
+msgstr "선택된 언어에 부합하는 첫 트랙"
 
 msgid "All Tracks Matching Selected Languages"
-msgstr ""
+msgstr "선택된 언어에 부합하는 모든 트랙"
 
 msgid "Chapters:"
-msgstr "Capitoli:"
+msgstr "챕터:"
 
 msgid "Seconds:"
-msgstr "Secondi:"
+msgstr "초:"
 
 msgid "Frames:"
-msgstr ""
+msgstr "프레임:"
 
 msgid "Do Nothing"
-msgstr ""
+msgstr "아무 것도 하지 않음"
 
 msgid "Show Notification"
-msgstr "Mostra notifica"
+msgstr "알림 보기"
 
 msgid "Quit Handbrake"
-msgstr "Chiudi Handbrake"
+msgstr "Handbrake 종료"
 
 msgid "Put Computer To Sleep"
-msgstr ""
+msgstr "잠자기 모르도 전환"
 
 msgid "Shutdown Computer"
-msgstr ""
+msgstr "컴퓨터 종료"
 
 msgid "Week"
-msgstr "Settimana"
+msgstr "주"
 
 msgid "Month"
-msgstr ""
+msgstr "월"
 
 msgid "Year"
-msgstr "Anno"
+msgstr "연도"
 
 msgid "Immortal"
-msgstr "Immortale"
+msgstr ""
 
 msgid "Never"
-msgstr "Mai"
+msgstr "하지 않음"
 
 msgid "Daily"
-msgstr "Giornalmente"
+msgstr "매일"
 
 msgid "Weekly"
-msgstr "Settimanalmente"
+msgstr "매주"
 
 msgid "Monthly"
-msgstr "Mensilmente"
+msgstr "매달"
 
 msgid "Default"
-msgstr ""
+msgstr "기본"
 
 msgid "Fast"
-msgstr "Veloce"
+msgstr "빠름"
 
 msgid "Slow"
-msgstr ""
+msgstr "느림"
 
 msgid "Slower"
-msgstr "Lento"
+msgstr "약간 느림"
 
 msgid "Ultralight"
-msgstr ""
+msgstr "매우 가벼움"
 
 msgid "Light"
-msgstr ""
+msgstr "가벼움"
 
 msgid "Medium"
-msgstr "Medio"
+msgstr "보통"
 
 msgid "Strong"
-msgstr "Forte"
+msgstr "강인함"
 
 msgid "Film"
-msgstr ""
+msgstr "필름"
 
 msgid "Grain"
-msgstr ""
+msgstr "게인"
 
 msgid "High Motion"
-msgstr ""
+msgstr "많은 움직임"
 
 msgid "Animation"
-msgstr ""
+msgstr "애니메이션"
 
 msgid "Spatial"
-msgstr "Spaziale"
+msgstr "공간"
 
 msgid "Temporal"
-msgstr "Temporale"
+msgstr "임시"
 
 msgid "Automatic"
-msgstr "Automatico"
+msgstr "자동"
 
 msgid "Optimal"
-msgstr "Ottimale"
+msgstr "최적"
 
 msgid "Normal"
-msgstr "Normale"
+msgstr "보통"
 
 msgid "Simple"
-msgstr "Semplice"
+msgstr "단순"
 
 msgid "Smart"
-msgstr "Intelligente"
+msgstr ""
 
 msgid "Diamond"
-msgstr "Diamante"
+msgstr "Diamond"
 
 msgid "Hexagon"
-msgstr "Esagono"
+msgstr "Hexagon"
 
 msgid "Uneven Multi-Hexagon"
-msgstr ""
+msgstr "Uneven Multi-Hexagon"
 
 msgid "Exhaustive"
-msgstr ""
+msgstr "Exhaustive"
 
 msgid "Hadamard Exhaustive"
-msgstr ""
+msgstr "Hadamard Exhaustive"
 
 msgid "Most"
-msgstr ""
+msgstr "대부분"
 
 msgid "Some"
-msgstr ""
+msgstr "일부"
 
 msgid "All"
-msgstr "Tutti"
+msgstr "모두"
 
 msgid "Encode only"
-msgstr ""
+msgstr "인코딩만"
 
 msgid "Always"
-msgstr "Sempre"
+msgstr "항상"
 
 msgid "(NTSC Film)"
-msgstr ""
+msgstr "(NTSC 필름)"
 
 msgid "(PAL Film/Video)"
-msgstr ""
+msgstr "(PAL 필름/비디오)"
 
 msgid "(NTSC Video)"
-msgstr ""
+msgstr "(NTSC 비디오)"
 
 msgid "%d - %02dh%02dm%02ds - %s"
-msgstr ""
+msgstr "%d - %02d시%02d분%02d초 - %s"
 
 msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
-msgstr ""
+msgstr "%d (%05d.MPLS) - %02d시%02d분%02d초"
 
 msgid "%d (%05d.MPLS) - Unknown Length"
-msgstr ""
+msgstr "%d (%05d.MPLS) - 알 수 없는 길이"
 
 msgid "%d - %02dh%02dm%02ds"
-msgstr ""
+msgstr "%d - %02d시%02d분%02d초"
 
 msgid "%d - Unknown Length"
-msgstr ""
+msgstr "%d - 알 수 없는 길이"
 
 msgid "No Titles"
-msgstr "Nessun Titolo"
+msgstr "타이틀 없음"
 
 msgid "No Audio"
-msgstr "Nessun audio"
+msgstr "오디오 없음"
 
 msgid "Foreign Audio Search"
-msgstr ""
+msgstr "외국어 오디오 검색"
 
 #, c-format
 msgid "Chapter %2d"
-msgstr ""
+msgstr "챕터 %2d"
 
 #, c-format
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #, c-format
 msgid ""
 "Invalid Deinterlace Settings:\n"
 "\n"
 "%s\n"
-msgstr ""
+msgstr "잘못된 디인터레이스 설정:\n\n%s\n"
 
 #, c-format
 msgid ""
 "Invalid Detelecine Settings:\n"
 "\n"
 "%s\n"
-msgstr ""
+msgstr "잘못된 Detelecine 설정:\n\n%s\n"
 
 #, c-format
 msgid ""
 "Invalid Decomb Settings:\n"
 "\n"
 "%s\n"
-msgstr ""
+msgstr "잘못된 Decomb 설정:\n\n%s\n"
 
 msgid ""
 "Theora is not supported in the MP4 container.\n"
 "\n"
 "You should choose a different video codec or container.\n"
 "If you continue, FFMPEG will be chosen for you."
-msgstr ""
+msgstr "Theora는 MP4 컨테이너에서 지원하지 않습니다.\n\n다른 비디오 코덱이나 컨테이너를 선택하세요.\n계속하면, FFMPEG이 선택됩니다."
 
 msgid "Continue"
-msgstr ""
+msgstr "계속"
 
 msgid "No title found.\n"
-msgstr ""
+msgstr "발견된 타이틀 없음.\n"
 
 msgid ""
 "Only one subtitle may be burned into the video.\n"
 "\n"
 "You should change your subtitle selections.\n"
 "If you continue, some subtitles will be lost."
-msgstr ""
+msgstr "단 하나의 자막만 영상에 추가됩니다.\n\n자막 선택을 변경해야 합니다.\n계속하면, 일부 자막은 무시됩니다."
 
 msgid ""
 "Srt file does not exist or not a regular file.\n"
 "\n"
 "You should choose a valid file.\n"
 "If you continue, this subtitle will be ignored."
-msgstr ""
+msgstr "Srt 파일이 존재하지 않거나 올바른 파일이 아닙니다.\n\n유효한 파일을 선택하세요.\n계속하면, 이 자막은 무시됩니다."
 
 msgid ""
 "The source does not support Pass-Thru.\n"
 "\n"
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
-msgstr ""
+msgstr "원본이 패스쓰루를 지원하지 않습니다.\n\n다른 오디오 코덱을 선택해야 합니다.\n계속하면, 임의의 코덱이 선택됩니다."
 
 #, c-format
 msgid ""
@@ -2099,7 +2098,7 @@ msgid ""
 "\n"
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
-msgstr ""
+msgstr "%s는 %s 컨테이너에서 지원하지 않습니다.\n\n다른 오디오 코덱을 선택하세요.\n계속하면, 임의의 코덱이 선택됩니다."
 
 #, c-format
 msgid ""
@@ -2107,7 +2106,7 @@ msgid ""
 "\n"
 "You should choose a different mixdown.\n"
 "If you continue, one will be chosen for you."
-msgstr ""
+msgstr "원본 오디오는 %s 믹스다운을 지원하지 않습니다.\n\n다른 믹스다운을 선택하세요.\n계속하면, 임의의 믹스다운이 선택됩니다."
 
 #, c-format
 msgid ""
@@ -2115,57 +2114,57 @@ msgid ""
 "\n"
 "Internal error. Could not parse UI description.\n"
 "%s"
-msgstr ""
+msgstr "<b><big>%s 생성할 수 없음.</big></b>\n\n내부 에러. UI 설명을 분석할 수 없음.\n%s"
 
 msgid "Index"
-msgstr "Indice"
+msgstr "색인"
 
 msgid "Duration"
-msgstr "Durata"
+msgstr "재생시간"
 
 msgid "Title"
-msgstr "Titolo"
+msgstr "타이틀:"
 
 msgid "Job Information"
-msgstr ""
+msgstr "작업 정보"
 
 msgid "Track Information"
-msgstr ""
+msgstr "트랙 정보"
 
 msgid "Preset Name"
-msgstr ""
+msgstr "사전설정 이름"
 
 msgid "The device or file to encode"
-msgstr ""
+msgstr "인코딩할 장치 또는 파일"
 
 msgid "The preset values to use for encoding"
-msgstr ""
+msgstr "인코딩에 사용할 사전설정 값"
 
 msgid "Spam a lot"
 msgstr ""
 
 msgid "- Transcode media formats"
-msgstr ""
+msgstr "- 변환 미디어 형식"
 
 msgid "Globals"
-msgstr ""
+msgstr "전역"
 
 msgid "Presets"
-msgstr ""
+msgstr "사전설정"
 
 msgid "Folder"
-msgstr ""
+msgstr "폴더"
 
 #, c-format
 msgid "%s path: (%s)"
-msgstr ""
+msgstr "%s 경로: (%s)"
 
 #, c-format
 msgid "%s indices: len %d"
-msgstr ""
+msgstr "%s 색인: 길이 %d"
 
 msgid "Type"
-msgstr ""
+msgstr "유형"
 
 msgid "Failed to find parent folder when adding child."
 msgstr ""
@@ -2175,55 +2174,55 @@ msgstr ""
 
 #, c-format
 msgid "Can't map language value: (%s)"
-msgstr ""
+msgstr "업어 값을 대응할 수 없음: (%s)"
 
 #, c-format
 msgid "Can't map value: (%s)"
-msgstr ""
+msgstr "값을 대응할 수 없음: (%s)"
 
 msgid "Subtitles"
-msgstr ""
+msgstr "자막"
 
 msgid ""
 "%s: Folder already exists.\n"
 "You can not replace it with a preset."
-msgstr ""
+msgstr "%s: 폴더가 이미 존재합니다.\n사전설정으로 대치할 수 없습니다."
 
 msgid ""
 "%s: Preset already exists.\n"
 "You can not replace it with a folder."
-msgstr ""
+msgstr "%s: 사전설정이 이미 존재합니다.\n폴더로 대치할 수 없습니다."
 
 msgid "Import Preset"
-msgstr ""
+msgstr "사전설정 가져오기"
 
 msgid "All (*)"
-msgstr ""
+msgstr "모두 (*)"
 
 msgid "Presets (*.plist)"
-msgstr ""
+msgstr "사전설정 (*.plist)"
 
 msgid "Export Preset"
-msgstr ""
+msgstr "사전설정 내보내기"
 
 msgid ""
 "Confirm deletion of %s:\n"
 "\n"
 "%s"
-msgstr ""
+msgstr "%s 삭제 승인:\n\n%s"
 
 msgid "folder"
-msgstr ""
+msgstr "폴더"
 
 msgid "preset"
-msgstr ""
+msgstr "사전설정"
 
 msgid "No selection???  Perhaps unselected."
-msgstr ""
+msgstr "선택한 것 없음??? 아마도 선택되지 않음."
 
 #, c-format
 msgid "Gstreamer Error: %s"
-msgstr ""
+msgstr "Gstreamer 에러: %s"
 
 #, c-format
 msgid ""
@@ -2231,204 +2230,204 @@ msgid ""
 "Audio or Video may not play as expected\n"
 "\n"
 "%s"
-msgstr ""
+msgstr "GStreamer 플러그인 누락\n오디오나 비디오가 제대로 재생되지 않을 수 있습니다\n\n%s"
 
 msgid "Done"
-msgstr ""
+msgstr "완료"
 
 msgid "Windowed"
 msgstr ""
 
 msgid "Seconds"
-msgstr ""
+msgstr "초"
 
 msgid "Frames"
-msgstr ""
+msgstr "프레임"
 
 #, c-format
 msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d, 2 Video Passes) -->"
 " %s</small>"
-msgstr ""
+msgstr "<big><b>%s</b></big> <small>(타이틀 %d, %s %d ~ %d, 2 비디오 수행) --> %s</small>"
 
 #, c-format
 msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d) --> %s</small>"
-msgstr ""
+msgstr "<big><b>%s</b></big> <small>(타이틀 %d, %s %d ~ %d) --> %s</small>"
 
 #, c-format
 msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
-msgstr ""
+msgstr "<b>수정된 사전설정의 기반:</b> <small>%s</small>\n"
 
 #, c-format
 msgid "<b>Preset:</b> <small>%s</small>\n"
-msgstr ""
+msgstr "<b>사전설정:</b> <small>%s</small>\n"
 
 #, c-format
 msgid "<b>Format:</b> <small>%s Container</small>\n"
-msgstr ""
+msgstr "<b>형식:</b> <small>%s 컨테이너</small>\n"
 
 msgid "<b>Container Options:</b><small>"
-msgstr ""
+msgstr "<b>컨테이너 옵션:</b><small>"
 
 #, c-format
 msgid "%sChapter Markers"
-msgstr ""
+msgstr "%s챕터 마커"
 
 #, c-format
 msgid "%siPod 5G Support"
-msgstr ""
+msgstr "%siPod 5G 지원"
 
 #, c-format
 msgid "%sWeb Optimized"
-msgstr ""
+msgstr "%s웹에 최적화"
 
 #, c-format
 msgid "%sLarge File Size (>4GB)"
-msgstr ""
+msgstr "%s큰 파일 크기 (>4GB)"
 
 #, c-format
 msgid "<b>Destination:</b> <small>%s</small>\n"
-msgstr ""
+msgstr "<b>대상:</b> <small>%s</small>\n"
 
 msgid "(Aspect Preserved)"
-msgstr ""
+msgstr "(비율 보존)"
 
 msgid "(Aspect Lost)"
-msgstr ""
+msgstr "(비율 손실)"
 
 msgid "(Anamorphic)"
-msgstr ""
+msgstr "(아나모픽)"
 
 msgid "(Custom Anamorphic)"
-msgstr ""
+msgstr "(사용자 아나모픽)"
 
 msgid "<b>Picture:</b> <small>"
-msgstr ""
+msgstr "<b>영상:</b> <small>"
 
 #, c-format
 msgid "Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"
-msgstr ""
+msgstr "원본: %d x %d, 출력%d x %d %s, 잘라내기 %d:%d:%d:%d"
 
 #, c-format
 msgid ", Display %d x %d"
-msgstr ""
+msgstr ", 화면 %d x %d"
 
 msgid "<b>Filters:</b><small>"
-msgstr ""
+msgstr "<b>필터:</b><small>"
 
 #, c-format
 msgid "%sDetelecine"
-msgstr ""
+msgstr "%sDetelecine"
 
 #, c-format
 msgid "%sDecomb"
-msgstr ""
+msgstr "%sDecomb"
 
 #, c-format
 msgid "%sDeinterlace"
-msgstr ""
+msgstr "%s디인터레이스"
 
 #, c-format
 msgid "%sDenoise Filter %s:"
-msgstr ""
+msgstr "%s노이즈 제거 필터 %s:"
 
 #, c-format
 msgid "%sDeblock: %d"
-msgstr ""
+msgstr "%sDeblock: %d"
 
 #, c-format
 msgid "%sGrayscale"
-msgstr ""
+msgstr "%s회색조"
 
 #, c-format
 msgid "<b>Video:</b> <small>%s"
-msgstr ""
+msgstr "<b>비디오:</b> <small>%s"
 
 #, c-format
 msgid ", Framerate: %s %s"
-msgstr ""
+msgstr ", 프레임레이트: %s %s"
 
 #, c-format
 msgid ", Framerate: Peak %s (may be lower)"
-msgstr ""
+msgstr ", 프레임레이트: 피크 %s (낮을 수도 있음)"
 
 #, c-format
 msgid ", Framerate: %s (constant frame rate)"
-msgstr ""
+msgstr ", 프레임레이트: %s (고정 프레임레이트)"
 
 msgid "Error"
-msgstr "Errore"
+msgstr "에러"
 
 msgid "Bitrate:"
-msgstr ""
+msgstr "비트레이트:"
 
 msgid "Bitrate"
-msgstr ""
+msgstr "비트레이트"
 
 msgid "Quality"
-msgstr ""
+msgstr "품질"
 
 msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
-msgstr ""
+msgstr "<b>1 단계 가속:</b> <small>켜기</small>\n"
 
 #, c-format
 msgid "<b>Video Options:</b> <small>Preset: %s</small>"
-msgstr ""
+msgstr "<b>비디오 출력:</b> <small>사전설정: %s</small>"
 
 msgid "<small> - Tune: "
-msgstr ""
+msgstr "<small> - 조정:"
 
 #, c-format
 msgid "<small> - Profile: %s</small>"
-msgstr ""
+msgstr "<small> - 프로필: %s</small>"
 
 #, c-format
 msgid "<small> - Level: %s</small>"
-msgstr ""
+msgstr "<small> - 수준: %s</small>"
 
 #, c-format
 msgid "<b>Advanced Options:</b> <small>%s</small>\n"
-msgstr ""
+msgstr "<b>고급 옵션:</b> <small>%s</small>\n"
 
 msgid "<b>Audio:</b> <small>"
-msgstr ""
+msgstr "<b>오디오:</b> <small>"
 
 #, c-format
 msgid "<b>Audio Tracks: %d</b><small>"
-msgstr ""
+msgstr "<b>오디오 트랙: %d</b><small>"
 
 #, c-format
 msgid "Bitrate: %d"
-msgstr ""
+msgstr "비트레이트: %d"
 
 #, c-format
 msgid "%s --> Encoder: %s"
-msgstr ""
+msgstr "%s --> 인코더: %s"
 
 #, c-format
 msgid "%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
-msgstr ""
+msgstr "%s --> 인코더: %s, 믹스다운: %s, 샘플레이트: %s, %s"
 
 msgid "<b>Subtitle:</b> "
-msgstr ""
+msgstr "<b>자막:</b>"
 
 #, c-format
 msgid "<b>Subtitle Tracks: %d</b>\n"
-msgstr ""
+msgstr "<b>자막 트랙: %d</b>\n"
 
 msgid " (Force)"
-msgstr "(Forza)"
+msgstr "(강제 표시)"
 
 msgid " (Burn)"
-msgstr ""
+msgstr "(굽기)"
 
 msgid " (Default)"
-msgstr ""
+msgstr "(기본)"
 
 #, c-format
 msgid "<small> %s (%s), %s, Offset (ms) %d%s</small>\n"
-msgstr ""
+msgstr "<small> %s (%s), %s, 오프셋 (ms) %d%s</small>\n"
 
 #, c-format
 msgid ""
@@ -2436,34 +2435,34 @@ msgid ""
 "\n"
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
-msgstr ""
+msgstr "대상: %s\n\n큐의 다른 작업이 동일한 대상을 지정하고 있습니다.\n덮어쓰시겠습니까?"
 
 msgid "Overwrite"
-msgstr "Sovrascrivi"
+msgstr "덮어쓰기"
 
 #, c-format
 msgid ""
 "Destination: %s\n"
 "\n"
 "This is not a valid directory."
-msgstr ""
+msgstr "대상: %s\n\n유효한 디렉토리가 아닙니다."
 
 #, c-format
 msgid ""
 "Destination: %s\n"
 "\n"
 "Can not read or write the directory."
-msgstr ""
+msgstr "대상: %s\n\n읽거나 쓸 수 없는 디렉토리입니다."
 
 #, c-format
 msgid ""
 "Destination filesystem is almost full: %uM free\n"
 "\n"
 "Encode may be incomplete if you proceed.\n"
-msgstr ""
+msgstr "파일시스템의 저장 공간이 거의 다 찼습니다: %uM 비었음\n\n계속하면 인코딩이 완료되지 않을 수 있습니다.\n"
 
 msgid "Proceed"
-msgstr ""
+msgstr "진행"
 
 #, c-format
 msgid ""
@@ -2471,117 +2470,117 @@ msgid ""
 "\n"
 "File already exists.\n"
 "Do you want to overwrite?"
-msgstr ""
+msgstr "대상: %s\n\n파일이 이미 존재합니다.\n덮어쓰시겠습니까?"
 
 msgid ""
 "<span foreground='red' weight='bold'>Duplicate destination files detected.\n"
 "Duplicates will not be added to the queue.</span>"
-msgstr ""
+msgstr "<span foreground='red' weight='bold'>중복된 대상 파일이 반경되었습니다.\n중복된 파일은 큐에 추가되지 않습니다.</span>"
 
 msgid "No Title"
-msgstr ""
+msgstr "타이틀 없음"
 
 msgid ""
 "There is another title with the same destination file name.\n"
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
-msgstr ""
+msgstr "같은 대상 파일 이름을 가진 다른 타이틀이 있습니다.\n출력 파일을 변경하기 전에는 이 타이틀이 큐에\n추가되지 않습니다.\n"
 
 msgid "Stop"
-msgstr ""
+msgstr "중지"
 
 msgid "Stop Encoding"
-msgstr "Ferma la codifica"
+msgstr "인코딩 중지"
 
 msgid "Resume"
-msgstr ""
+msgstr "다시 시작"
 
 msgid "Resume Encoding"
-msgstr "Riprendi la codifica"
+msgstr "인코딩 다시 시작"
 
 msgid "S_top Queue"
-msgstr ""
+msgstr "큐 정지(_T)"
 
 msgid "_Start Queue"
-msgstr "_Avvia coda"
+msgstr "큐 시작(_S)"
 
 msgid "_Resume Queue"
-msgstr "_Riprendi coda"
+msgstr "큐 다시 시작(_R)"
 
 msgid "Resume Queue"
-msgstr ""
+msgstr "큐 다시 시작"
 
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
-msgstr ""
+msgstr "인코딩 중입니다. 무엇을 하시겠습니까?\n\n"
 
 #, c-format
 msgid ""
 "You have %d unfinished job(s) in a saved queue.\n"
 "\n"
 "Would you like to reload them?"
-msgstr ""
+msgstr "저장된 큐에 종료되지 않은 %d 개의 작업이 있습니다.\n\n다시 부르겠습니까?"
 
 msgid "No"
-msgstr ""
+msgstr "아니오"
 
 msgid "Yes"
-msgstr ""
+msgstr "네"
 
 #, c-format
 msgid "Usage: %s infile [outfile]\n"
-msgstr ""
+msgstr "사용법: %s 입력파일 [출력파일]\n"
 
 #, c-format
 msgid "Offset: %dms"
-msgstr ""
+msgstr "오프셋: %dms"
 
 msgid "Burned Into Video"
-msgstr ""
+msgstr "영상에 추가"
 
 msgid "Passthrough"
-msgstr ""
+msgstr "패스쓰루"
 
 msgid "through"
-msgstr ""
+msgstr "~"
 
 msgid "(Forced Subtitles Only)"
-msgstr ""
+msgstr "(강제 표시 자막만)"
 
 msgid "(Default)"
-msgstr ""
+msgstr "(기본)"
 
 msgid "Error!"
-msgstr ""
+msgstr "에러!"
 
 #, c-format
 msgid "Preferred Language: %s"
-msgstr ""
+msgstr "선호하는 언어: %s"
 
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr ""
+msgstr "%s 자막 트랙을 기본 오디오 트랙이 %s 아닌 경우 추가"
 
 #, c-format
 msgid "Type %s"
-msgstr ""
+msgstr "유형 %s"
 
 #, c-format
 msgid "Type %s value %s"
-msgstr ""
+msgstr "유형 %s 값 %s"
 
 #, c-format
 msgid "Type %s value %d"
-msgstr ""
+msgstr "유형 %s 값 %d"
 
 #, c-format
 msgid "Type %s value %<PRId64>"
-msgstr ""
+msgstr "유형 %s 값  %<PRId64>"
 
 #, c-format
 msgid "Type %s value %f"
-msgstr ""
+msgstr "유형 %s 값 %f"
 
 #, c-format
 msgid ""
@@ -2589,7 +2588,7 @@ msgid ""
 "\n"
 "Expanded Options:\n"
 "\"%s\""
-msgstr ""
+msgstr "%s\n\n확장 옵션:\n\"%s\""
 
 #, c-format
 msgid ""
@@ -2597,40 +2596,40 @@ msgid ""
 "\n"
 "Expanded Options:\n"
 "\"\""
-msgstr ""
+msgstr "%s\n\n확장 옵션:\n\"\""
 
 msgid "Any"
-msgstr ""
+msgstr "아무거나"
 
 msgid "0: SAD, no subpel"
-msgstr ""
+msgstr "0: SAD, 부화소 없음"
 
 msgid "4: SATD, qpel on all"
-msgstr ""
+msgstr "4: SATD, 1/4 화소 적용"
 
 msgid "5: SATD, multi-qpel on all"
-msgstr ""
+msgstr "5: SATD, 복수의 1/4 화소 적용"
 
 msgid "6: RD in I/P-frames"
-msgstr ""
+msgstr "6: I/P-프레임의 RD"
 
 msgid "7: RD in all frames"
-msgstr ""
+msgstr "7: 모든 프레임의 RD"
 
 msgid "8: RD refine in I/P-frames"
-msgstr ""
+msgstr "8: I/P-프레임의 RD 수정"
 
 msgid "9: RD refine in all frames"
-msgstr ""
+msgstr "9: 모든 프레임의 RD 수정"
 
 msgid "10: QPRD in all frames"
-msgstr ""
+msgstr "10: 모든 프레임의 QPRD"
 
 msgid "11: No early terminations in analysis"
-msgstr ""
+msgstr "11: 분석 중 조기 종료하지 않음"
 
 msgid "Your names"
-msgstr ""
+msgstr "이름"
 
 msgid "Your emails"
-msgstr ""
+msgstr "이메일"

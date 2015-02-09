@@ -3,24 +3,23 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexandru Grigoras <alexandru.grigoras86@gmail.com>, 2014
-# Giuseppe Pignataro <anubisteam01@gmail.com>, 2014
+# Gabriel Luiz Bastos de Oliveira <gabriel.bastos.oliveira@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake-0.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-03 13:01+0300\n"
-"PO-Revision-Date: 2014-11-28 14:44+0000\n"
-"Last-Translator: VictorR2007 <victorr2007@yandex.ru>\n"
-"Language-Team: Italian (Italy) (http://www.transifex.com/projects/p/handbrake/language/it_IT/)\n"
+"PO-Revision-Date: 2014-12-15 11:17+0000\n"
+"Last-Translator: Gabriel Luiz Bastos de Oliveira <gabriel.bastos.oliveira@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/handbrake/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it_IT\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Quality: "
-msgstr "Qualità:"
+msgstr "Qualidade:"
 
 #, c-format
 msgid "Bitrate: %dkbps"
@@ -39,28 +38,28 @@ msgid ""
 "Gain: %s\n"
 "DRC: %s\n"
 "Track Name: %s"
-msgstr ""
+msgstr "%s\nGanho: %s\nDRC: %s\nNome da Faixa: %s"
 
 #, c-format
 msgid ""
 "%s\n"
 "Gain: %s\n"
 "DRC: %s"
-msgstr ""
+msgstr "%s\nGanho: %s\nDRC: %s"
 
 msgid "Add"
-msgstr ""
+msgstr "Adicionar"
 
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
-msgstr ""
+msgstr "Adicionar um encoder de áudio.\nCada faixa selecionada será codificada com todos os encoders selecionados."
 
 msgid "Set the audio codec to encode this track with."
-msgstr ""
+msgstr "Selecione o codec de áudio para codificar essa faixa."
 
 msgid "Set the bitrate to encode this track with."
-msgstr ""
+msgstr "Selecione o bitrate para codificar essa faixa."
 
 msgid ""
 "<b>Audio Quality:</b>\n"
@@ -109,70 +108,70 @@ msgid "No Title Found"
 msgstr ""
 
 msgid "none"
-msgstr ""
+msgstr "nenhum"
 
 msgid "Not Selected"
-msgstr ""
+msgstr "Não Selecionado"
 
 msgid "zerolatency x264 tune selected, forcing constant framerate"
 msgstr ""
 
 msgid "Scanning ..."
-msgstr ""
+msgstr "Escaneando ..."
 
 msgid "Stop Scan"
 msgstr ""
 
 msgid "On"
-msgstr "On"
+msgstr "Ligado"
 
 msgid "Strict"
-msgstr ""
+msgstr "Estrito"
 
 msgid "Loose"
 msgstr ""
 
 msgid "Custom"
-msgstr "Personalizzato"
+msgstr "Customizado"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 msgid "auto"
-msgstr ""
+msgstr "automático"
 
 #, c-format
 msgid ""
 "%s\n"
 "\n"
 "%s in %d seconds ..."
-msgstr ""
+msgstr "%s\n\n%s em %d segundos ..."
 
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr ""
+msgstr "%sSeu vídeo será perdido se não continuar a codificação."
 
 msgid "Cancel Current and Stop"
-msgstr ""
+msgstr "Cancelar Atual e Parar"
 
 msgid "Cancel Current, Start Next"
-msgstr ""
+msgstr "Cancelar Atual, Começar o Próximo"
 
 msgid "Finish Current, then Stop"
-msgstr ""
+msgstr "Terminar o Atual, em seguida Parar."
 
 msgid "Continue Encoding"
-msgstr ""
+msgstr "Continuar Codificação"
 
 msgid "Custom "
 msgstr ""
 
 msgid "Modified "
-msgstr ""
+msgstr "Modificado"
 
 #, c-format
 msgid "Handbrake Version: %s (%d)\n"
-msgstr ""
+msgstr "Versão do Handbrake: %s (%d)\n"
 
 #, c-format
 msgid "%d encode(s) pending"
@@ -180,7 +179,7 @@ msgstr ""
 
 #, c-format
 msgid "job %d of %d, "
-msgstr ""
+msgstr "trabalho %d de %d,"
 
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
@@ -206,7 +205,7 @@ msgid "Searching for start time, "
 msgstr ""
 
 msgid "Scanning..."
-msgstr ""
+msgstr "Escaneando..."
 
 #, c-format
 msgid "Scanning title %d of %d..."
@@ -217,34 +216,34 @@ msgid "Scanning title %d of %d preview %d..."
 msgstr ""
 
 msgid "Source"
-msgstr ""
+msgstr "Fonte"
 
 msgid "Choose Video Source"
-msgstr "Seleziona sorgente video"
+msgstr "Escolher Fonte de Vídeo"
 
 msgid "Paused"
-msgstr ""
+msgstr "Pausado"
 
 msgid "Encode Done!"
-msgstr ""
+msgstr "Codificação Terminada!"
 
 msgid "Encode Canceled."
-msgstr ""
+msgstr "Codificação Cancelada."
 
 msgid "Encode Failed."
-msgstr ""
+msgstr "Falha na Codificação."
 
 msgid "Muxing: This may take a while..."
 msgstr ""
 
 msgid "Scan this DVD source"
-msgstr ""
+msgstr "Escanear essa fonte de DVD."
 
 msgid "AutoScan"
 msgstr ""
 
 msgid "Suspend"
-msgstr ""
+msgstr "Suspender"
 
 #, c-format
 msgid "Suspend failed: %s"
@@ -254,63 +253,63 @@ msgid "Suspend failed"
 msgstr ""
 
 msgid "Shutdown"
-msgstr ""
+msgstr "Desligar"
 
 #, c-format
 msgid "Shutdown failed: %s"
-msgstr ""
+msgstr "Falha ao desligar: %s"
 
 msgid "Shutdown failed"
-msgstr ""
+msgstr "Falha ao desligar"
 
 msgid "Encoding"
-msgstr ""
+msgstr "Codificando"
 
 #, c-format
 msgid "press %d %d"
-msgstr ""
+msgstr "pressione %d %d"
 
 #, c-format
 msgid ""
 "Invalid Settings:\n"
 "%s"
-msgstr ""
+msgstr "Configurações inválidas:\n%s"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
-msgstr ""
+msgstr "%s: %.4g (Aviso: sem perda)"
 
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
-msgstr ""
+msgstr "HandBrake %s/%s está disponível (você tem %s/%d)."
 
 msgid "Encode Complete"
-msgstr ""
+msgstr "Codificação Completa"
 
 msgid "Put down that cocktail, Your HandBrake queue is done!"
 msgstr ""
 
 msgid "Your encode is complete."
-msgstr ""
+msgstr "Sua codificação está completa."
 
 msgid "Shutting down the computer"
-msgstr ""
+msgstr "Desligando o computador"
 
 msgid "Putting computer to sleep"
-msgstr ""
+msgstr "Colocando o computador em suspensão"
 
 msgid "Quiting Handbrake"
-msgstr ""
+msgstr "Saindo Handbrake"
 
 msgid "Bottom"
 msgstr ""
 
 #, c-format
 msgid "open failed: %s\n"
-msgstr ""
+msgstr "falha ao abrir: %s\n"
 
 msgid "No key for dictionary item"
 msgstr ""
@@ -334,10 +333,10 @@ msgid ""
 msgstr ""
 
 msgid "language"
-msgstr ""
+msgstr "linguagem"
 
 msgid "Language"
-msgstr ""
+msgstr "Linguagem"
 
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
@@ -375,7 +374,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Default</b>"
-msgstr "<b>Default</b>"
+msgstr "<b>Padrão</b>"
 
 msgid ""
 "Use only subtitles that have been flagged\n"
@@ -387,7 +386,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Forced Only</b>"
-msgstr "<b>Solo forzato</b>"
+msgstr "<b>Somente Forçado</b>"
 
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
@@ -399,10 +398,10 @@ msgid ""
 msgstr ""
 
 msgid "<b>SRT Offset</b>"
-msgstr "<b>SRT Offset</b>"
+msgstr ""
 
 msgid "Off"
-msgstr "Off"
+msgstr ""
 
 msgid ""
 "The source subtitle track\n"
@@ -419,22 +418,22 @@ msgid ""
 msgstr ""
 
 msgid "<b>Track</b>"
-msgstr "<b>Traccia</b>"
+msgstr "<b>Faixa</b>"
 
 msgid "About HandBrake"
-msgstr "Info su HandBrake"
+msgstr "Sobre HandBrake"
 
 msgid ""
 "Copyright © 2008 - 2013 John Stebbins\n"
 "Copyright © 2004 - 2013, HandBrake Devs"
-msgstr ""
+msgstr "Copyright © 2008-2013 John Stebbins\nCopyright © 2004 - 2013, HandBrake Devs"
 
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
 
 msgid "http://handbrake.fr"
-msgstr ""
+msgstr "http://handbrake.fr"
 
 msgid ""
 "HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
@@ -445,52 +444,52 @@ msgid ""
 msgstr ""
 
 msgid "_Minimize/Maximize"
-msgstr "_Minimizza/Massimizza"
+msgstr "_Minimizar/Maximizar"
 
 msgid "_Pause Queue"
-msgstr "_Pausa coda"
+msgstr "_Pausar Fila"
 
 msgid "_Quit"
-msgstr ""
+msgstr "_Sair"
 
 msgid "_About"
-msgstr ""
+msgstr "S_obre"
 
 msgid "HandBrake"
-msgstr ""
+msgstr "HandBrake"
 
 msgid "_File"
-msgstr "_File"
+msgstr "_Arquivo"
 
 msgid "_Source"
-msgstr "_Sorgente"
+msgstr "_Fonte"
 
 msgid "Single _Title"
-msgstr "Titolo_Singlolo"
+msgstr "Título _Único"
 
 msgid "_Destination"
-msgstr "_Destinazione"
+msgstr "_Destino"
 
 msgid "_Preferences"
-msgstr "_Preferenze"
+msgstr "_Preferências"
 
 msgid "_Queue"
-msgstr "_Coda"
+msgstr "F_ila"
 
 msgid "_Add"
-msgstr ""
+msgstr "_Adicionar"
 
 msgid "Add _Multiple"
 msgstr ""
 
 msgid "_Start"
-msgstr "_Inizia"
+msgstr ""
 
 msgid "_Pause"
-msgstr "_Pausa"
+msgstr ""
 
 msgid "_View"
-msgstr "_Visualizza"
+msgstr ""
 
 msgid "HandBrake For _Dumbies"
 msgstr ""
@@ -502,64 +501,64 @@ msgid "_Preview"
 msgstr ""
 
 msgid "_Activity Window"
-msgstr "Finestra _attività"
+msgstr ""
 
 msgid "Show _Queue"
-msgstr "Mostra _coda"
+msgstr ""
 
 msgid "_Presets"
 msgstr ""
 
 msgid "_Save"
-msgstr "_Salva"
+msgstr ""
 
 msgid "_Delete"
 msgstr ""
 
 msgid "_Make Default"
-msgstr "_Imposta come predefinito"
+msgstr ""
 
 msgid "_New Folder"
 msgstr ""
 
 msgid "_Export"
-msgstr "_Esporta"
+msgstr ""
 
 msgid "_Import"
-msgstr "_Importa"
+msgstr ""
 
 msgid "_Update Built-in Presets"
 msgstr ""
 
 msgid "_Help"
-msgstr "_Aiuto"
+msgstr ""
 
 msgid "_Guide"
-msgstr "_Guida"
+msgstr ""
 
 msgid "Start Encoding"
-msgstr "Inizia la codifica"
+msgstr ""
 
 msgid "Start"
-msgstr "Inizia"
+msgstr ""
 
 msgid "Pause Encoding"
-msgstr "Pausa la codifica"
+msgstr ""
 
 msgid "Pause"
-msgstr "Pausa"
+msgstr ""
 
 msgid "Add to Queue"
-msgstr "Aggiungi alla coda"
+msgstr ""
 
 msgid "Enqueue"
 msgstr ""
 
 msgid "Show Queue"
-msgstr "Mostra coda"
+msgstr ""
 
 msgid "Queue"
-msgstr "Coda"
+msgstr ""
 
 msgid ""
 "Open Picture Settings and Preview window.\n"
@@ -567,22 +566,22 @@ msgid ""
 msgstr ""
 
 msgid "Preview"
-msgstr "Anteprima"
+msgstr ""
 
 msgid "Show Activity Window"
-msgstr "Mostra finestra attività"
+msgstr ""
 
 msgid "Activity"
-msgstr "Attività"
+msgstr ""
 
 msgid "<b>Source:</b>"
-msgstr "<b>Sorgente:</b>"
+msgstr ""
 
 msgid "None"
-msgstr "Vuoto"
+msgstr ""
 
 msgid "Title:"
-msgstr "Titolo:"
+msgstr ""
 
 msgid ""
 "Set the title to encode.\n"
@@ -591,7 +590,7 @@ msgid ""
 msgstr ""
 
 msgid "Angle:"
-msgstr "Angolo:"
+msgstr ""
 
 msgid "For multi-angle DVD's, select the desired angle to encode."
 msgstr ""
@@ -606,19 +605,19 @@ msgid "Range of title to encode. Can be chapters, seconds, or frames."
 msgstr ""
 
 msgid "Set the first chapter to encode."
-msgstr "Imposta il primo capitolo da codificare."
+msgstr ""
 
 msgid "Set the last chapter to encode."
-msgstr "Imposta l'ultimo capitolo da codificare."
+msgstr ""
 
 msgid "Duration:"
-msgstr "Durata:"
+msgstr ""
 
 msgid "<b>Destination</b>"
 msgstr ""
 
 msgid "File:"
-msgstr "File:"
+msgstr ""
 
 msgid "Destination filename for your encode."
 msgstr ""
@@ -627,22 +626,22 @@ msgid "Destination directory for your encode."
 msgstr ""
 
 msgid "Destination Directory"
-msgstr "Cartella di destinazione"
+msgstr ""
 
 msgid "Format:"
-msgstr "Format:"
+msgstr ""
 
 msgid "Format to mux encoded tracks to."
 msgstr ""
 
 msgid "iPod 5G Support"
-msgstr "Supporto iPod 5G"
+msgstr ""
 
 msgid "Add iPod Atom needed by some older iPods."
 msgstr ""
 
 msgid "Web optimized"
-msgstr "Ottimizzato per il web"
+msgstr ""
 
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
@@ -662,16 +661,16 @@ msgid "<b>Presets List</b>"
 msgstr ""
 
 msgid "Source Codec:"
-msgstr "Sorgente codec:"
+msgstr ""
 
 msgid "Dimensions:"
-msgstr "Dimensioni:"
+msgstr ""
 
 msgid "Aspect: "
-msgstr "Aspetto:"
+msgstr ""
 
 msgid "Frame Rate:"
-msgstr "Frame Rate:"
+msgstr ""
 
 msgid "<b>Source Picture Parameters</b>"
 msgstr ""
@@ -695,7 +694,7 @@ msgid "Optimal for Source:"
 msgstr ""
 
 msgid "Anamorphic:"
-msgstr "Anamorfico:"
+msgstr ""
 
 msgid "<b>Scaling</b>"
 msgstr ""
@@ -704,7 +703,7 @@ msgid "Presentation Dimensions:"
 msgstr ""
 
 msgid "Summary"
-msgstr "Sommario"
+msgstr ""
 
 msgid "Left Crop"
 msgstr ""
@@ -771,7 +770,7 @@ msgid ""
 msgstr ""
 
 msgid "Alignment:"
-msgstr "Allineamento:"
+msgstr ""
 
 msgid ""
 "Align storage dimensions to multiples of this value.\n"
@@ -789,7 +788,7 @@ msgid ""
 msgstr ""
 
 msgid "Pixel Aspect:"
-msgstr "Aspetto pixel:"
+msgstr ""
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
@@ -808,7 +807,7 @@ msgid ""
 msgstr ""
 
 msgid "Keep Aspect"
-msgstr "Mantieni aspetti"
+msgstr ""
 
 msgid ""
 "If enabled, the original display aspect of the source will be maintained."
@@ -821,7 +820,7 @@ msgid "<b>Display Geometry</b>"
 msgstr ""
 
 msgid "Grayscale"
-msgstr "Scala di grigio"
+msgstr ""
 
 msgid "If enabled, filter colour components out of video."
 msgstr ""
@@ -929,7 +928,7 @@ msgid "Available video encoders."
 msgstr ""
 
 msgid "Framerate:"
-msgstr "Framerate:"
+msgstr ""
 
 msgid ""
 "Output framerate.\n"
@@ -939,7 +938,7 @@ msgid ""
 msgstr ""
 
 msgid "Constant Framerate"
-msgstr "Framerate costante"
+msgstr ""
 
 msgid "Same as source"
 msgstr ""
@@ -967,7 +966,7 @@ msgid ""
 msgstr ""
 
 msgid "Variable Framerate"
-msgstr "Framerate variabile"
+msgstr ""
 
 msgid ""
 "Enables variable framerate output.\n"
@@ -994,7 +993,7 @@ msgid "Constant Quality:"
 msgstr ""
 
 msgid "Bitrate (kbps):    "
-msgstr "Bitrate (kbps):    "
+msgstr ""
 
 msgid ""
 "Set the average bitrate.\n"
@@ -1024,7 +1023,7 @@ msgid ""
 msgstr ""
 
 msgid "Use Advanced Options"
-msgstr "Usa opzioni avanzate"
+msgstr ""
 
 msgid ""
 "Use advanced options Tab for x264 settings.\n"
@@ -1104,7 +1103,7 @@ msgid ""
 msgstr ""
 
 msgid "Video"
-msgstr "Video"
+msgstr ""
 
 msgid "Selection Behavior:"
 msgstr ""
@@ -1416,7 +1415,7 @@ msgid ""
 msgstr ""
 
 msgid "<small><b>Analysis</b></small>"
-msgstr "<small><b>Analisi</b></small>"
+msgstr ""
 
 msgid "<small>Adaptive Quantization Strength:</small>"
 msgstr ""
@@ -1507,37 +1506,37 @@ msgid "Add chapter markers to output file."
 msgstr ""
 
 msgid "Chapters"
-msgstr "Capitoli"
+msgstr ""
 
 msgid "Actors:"
-msgstr "Attori:"
+msgstr ""
 
 msgid "Director:"
-msgstr "Regista:"
+msgstr ""
 
 msgid "Release Date:"
-msgstr "Data di rilascio:"
+msgstr ""
 
 msgid "Comment:"
-msgstr "Commento:"
+msgstr ""
 
 msgid "Genre:"
-msgstr "Genere:"
+msgstr ""
 
 msgid "Description:"
-msgstr "Descrizione:"
+msgstr ""
 
 msgid "Plot:"
 msgstr ""
 
 msgid "Tags"
-msgstr "Tag"
+msgstr ""
 
 msgid "Settings"
 msgstr ""
 
 msgid "Edit"
-msgstr "Modifica"
+msgstr ""
 
 msgid "Reload"
 msgstr ""
@@ -1600,7 +1599,7 @@ msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr ""
 
 msgid "Number of previews"
-msgstr "Numero di anteprime"
+msgstr ""
 
 msgid "Filter short titles (seconds)"
 msgstr ""
@@ -1609,7 +1608,7 @@ msgid "Show system tray icon"
 msgstr ""
 
 msgid "General"
-msgstr "Generale"
+msgstr ""
 
 msgid "Constant Quality fractional granularity"
 msgstr ""
@@ -1659,10 +1658,10 @@ msgid "Allow HandBrake For Dummies"
 msgstr ""
 
 msgid "Advanced"
-msgstr "Avanzato"
+msgstr ""
 
 msgid "Folder Name:"
-msgstr "Nome cartella:"
+msgstr ""
 
 msgid "<b>Description</b>"
 msgstr ""
@@ -1708,7 +1707,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Duration:</b>"
-msgstr "<b>Durata:</b>"
+msgstr ""
 
 msgid "Set the duration of the live preview in seconds."
 msgstr ""
@@ -1720,7 +1719,7 @@ msgid "Show Cropped area of the preview"
 msgstr ""
 
 msgid "Fullscreen"
-msgstr "Tutto schermo"
+msgstr ""
 
 msgid "View Fullscreen Preview"
 msgstr ""
@@ -1732,10 +1731,10 @@ msgid "Detected DVD devices:"
 msgstr ""
 
 msgid "Setting:"
-msgstr "Impostazioni:"
+msgstr ""
 
 msgid "Import SRT"
-msgstr "Importa SRT"
+msgstr ""
 
 msgid "Enable settings to import an SRT subtitle file"
 msgstr ""
@@ -1766,16 +1765,16 @@ msgid ""
 msgstr ""
 
 msgid "Select the SRT file to import."
-msgstr "Seleziona il file SRT da importare"
+msgstr ""
 
 msgid "Srt File"
-msgstr "File srt"
+msgstr ""
 
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr ""
 
 msgid "Track"
-msgstr "Traccia"
+msgstr ""
 
 msgid "List of subtitle tracks available from your source."
 msgstr ""
@@ -1801,7 +1800,7 @@ msgid "List of audio tracks available from your source."
 msgstr ""
 
 msgid "Track Name:"
-msgstr "Nome traccia:"
+msgstr ""
 
 msgid ""
 "Set the audio track name.\n"
@@ -1810,7 +1809,7 @@ msgid ""
 msgstr ""
 
 msgid "Mix"
-msgstr "Mix"
+msgstr ""
 
 msgid "Sample Rate"
 msgstr ""
@@ -1842,13 +1841,13 @@ msgid ""
 msgstr ""
 
 msgid "Skip This Version"
-msgstr "Salta questa versione"
+msgstr ""
 
 msgid "Remind Me Later"
-msgstr "Ricorda dopo"
+msgstr ""
 
 msgid "<b>A new version of HandBrake is available!</b>"
-msgstr "<b>Una nuova versione di HandBrake è disponibile!</b>"
+msgstr ""
 
 msgid "HandBrake xxx is now available (you have yyy)."
 msgstr ""
@@ -1863,10 +1862,10 @@ msgid "All Tracks Matching Selected Languages"
 msgstr ""
 
 msgid "Chapters:"
-msgstr "Capitoli:"
+msgstr ""
 
 msgid "Seconds:"
-msgstr "Secondi:"
+msgstr ""
 
 msgid "Frames:"
 msgstr ""
@@ -1875,10 +1874,10 @@ msgid "Do Nothing"
 msgstr ""
 
 msgid "Show Notification"
-msgstr "Mostra notifica"
+msgstr ""
 
 msgid "Quit Handbrake"
-msgstr "Chiudi Handbrake"
+msgstr ""
 
 msgid "Put Computer To Sleep"
 msgstr ""
@@ -1887,40 +1886,40 @@ msgid "Shutdown Computer"
 msgstr ""
 
 msgid "Week"
-msgstr "Settimana"
+msgstr ""
 
 msgid "Month"
 msgstr ""
 
 msgid "Year"
-msgstr "Anno"
+msgstr ""
 
 msgid "Immortal"
-msgstr "Immortale"
+msgstr ""
 
 msgid "Never"
-msgstr "Mai"
+msgstr ""
 
 msgid "Daily"
-msgstr "Giornalmente"
+msgstr ""
 
 msgid "Weekly"
-msgstr "Settimanalmente"
+msgstr ""
 
 msgid "Monthly"
-msgstr "Mensilmente"
+msgstr ""
 
 msgid "Default"
 msgstr ""
 
 msgid "Fast"
-msgstr "Veloce"
+msgstr ""
 
 msgid "Slow"
 msgstr ""
 
 msgid "Slower"
-msgstr "Lento"
+msgstr ""
 
 msgid "Ultralight"
 msgstr ""
@@ -1929,10 +1928,10 @@ msgid "Light"
 msgstr ""
 
 msgid "Medium"
-msgstr "Medio"
+msgstr ""
 
 msgid "Strong"
-msgstr "Forte"
+msgstr ""
 
 msgid "Film"
 msgstr ""
@@ -1947,31 +1946,31 @@ msgid "Animation"
 msgstr ""
 
 msgid "Spatial"
-msgstr "Spaziale"
+msgstr ""
 
 msgid "Temporal"
-msgstr "Temporale"
+msgstr ""
 
 msgid "Automatic"
-msgstr "Automatico"
+msgstr ""
 
 msgid "Optimal"
-msgstr "Ottimale"
+msgstr ""
 
 msgid "Normal"
-msgstr "Normale"
+msgstr ""
 
 msgid "Simple"
-msgstr "Semplice"
+msgstr ""
 
 msgid "Smart"
-msgstr "Intelligente"
+msgstr ""
 
 msgid "Diamond"
-msgstr "Diamante"
+msgstr ""
 
 msgid "Hexagon"
-msgstr "Esagono"
+msgstr ""
 
 msgid "Uneven Multi-Hexagon"
 msgstr ""
@@ -1989,13 +1988,13 @@ msgid "Some"
 msgstr ""
 
 msgid "All"
-msgstr "Tutti"
+msgstr ""
 
 msgid "Encode only"
 msgstr ""
 
 msgid "Always"
-msgstr "Sempre"
+msgstr ""
 
 msgid "(NTSC Film)"
 msgstr ""
@@ -2022,10 +2021,10 @@ msgid "%d - Unknown Length"
 msgstr ""
 
 msgid "No Titles"
-msgstr "Nessun Titolo"
+msgstr ""
 
 msgid "No Audio"
-msgstr "Nessun audio"
+msgstr ""
 
 msgid "Foreign Audio Search"
 msgstr ""
@@ -2118,13 +2117,13 @@ msgid ""
 msgstr ""
 
 msgid "Index"
-msgstr "Indice"
+msgstr ""
 
 msgid "Duration"
-msgstr "Durata"
+msgstr ""
 
 msgid "Title"
-msgstr "Titolo"
+msgstr ""
 
 msgid "Job Information"
 msgstr ""
@@ -2358,7 +2357,7 @@ msgid ", Framerate: %s (constant frame rate)"
 msgstr ""
 
 msgid "Error"
-msgstr "Errore"
+msgstr ""
 
 msgid "Bitrate:"
 msgstr ""
@@ -2418,7 +2417,7 @@ msgid "<b>Subtitle Tracks: %d</b>\n"
 msgstr ""
 
 msgid " (Force)"
-msgstr "(Forza)"
+msgstr ""
 
 msgid " (Burn)"
 msgstr ""
@@ -2439,7 +2438,7 @@ msgid ""
 msgstr ""
 
 msgid "Overwrite"
-msgstr "Sovrascrivi"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -2491,22 +2490,22 @@ msgid "Stop"
 msgstr ""
 
 msgid "Stop Encoding"
-msgstr "Ferma la codifica"
+msgstr ""
 
 msgid "Resume"
 msgstr ""
 
 msgid "Resume Encoding"
-msgstr "Riprendi la codifica"
+msgstr ""
 
 msgid "S_top Queue"
 msgstr ""
 
 msgid "_Start Queue"
-msgstr "_Avvia coda"
+msgstr ""
 
 msgid "_Resume Queue"
-msgstr "_Riprendi coda"
+msgstr ""
 
 msgid "Resume Queue"
 msgstr ""

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HandBrake-0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-10 21:39+0400\n"
-"PO-Revision-Date: 2014-10-14 23:26+0000\n"
+"POT-Creation-Date: 2014-11-03 13:01+0300\n"
+"PO-Revision-Date: 2014-11-28 14:44+0000\n"
 "Last-Translator: VictorR2007 <victorr2007@yandex.ru>\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/handbrake/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -17,9 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgid "Off"
-msgstr "Fra"
 
 msgid "Quality: "
 msgstr ""
@@ -61,12 +58,6 @@ msgstr ""
 msgid "Set the audio codec to encode this track with."
 msgstr ""
 
-msgid "Bitrate"
-msgstr ""
-
-msgid "Quality"
-msgstr ""
-
 msgid "Set the bitrate to encode this track with."
 msgstr ""
 
@@ -86,9 +77,16 @@ msgid ""
 "Adjust the amplification or attenuation of the output audio track."
 msgstr ""
 
-msgid ""
-"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
-"audio track."
+msgid "0dB"
+msgstr ""
+
+msgid "%ddB"
+msgstr ""
+
+msgid "%.4gkHz"
+msgstr ""
+
+msgid "<small>%d - %s (%.4gkHz)</small>"
 msgstr ""
 
 msgid ""
@@ -100,62 +98,28 @@ msgid ""
 "softer and soft sounds louder.\n"
 msgstr ""
 
-msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
-"\n"
-"                                For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
-msgstr ""
-
-msgid ""
-"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track. \n"
-"\n"
-"                                    For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder."
-msgstr ""
-
 msgid "Remove this audio encoder"
-msgstr ""
-
-msgid "Failed to find widget"
-msgstr ""
-
-#, c-format
-msgid "Failed to find dependent widget %s"
 msgstr ""
 
 msgid "Closing HandBrake will terminate encoding.\n"
 msgstr ""
 
-msgid "{source}"
-msgstr ""
-
-msgid "{title}"
-msgstr ""
-
-msgid "{chapters}"
-msgstr ""
-
-msgid "{time}"
-msgstr ""
-
-msgid "{date}"
-msgstr ""
-
-msgid "{bitrate}"
-msgstr ""
-
 msgid "No Title Found"
 msgstr ""
 
+msgid "none"
+msgstr ""
+
 msgid "Not Selected"
+msgstr ""
+
+msgid "zerolatency x264 tune selected, forcing constant framerate"
 msgstr ""
 
 msgid "Scanning ..."
 msgstr ""
 
 msgid "Stop Scan"
-msgstr ""
-
-msgid "Choose Destination"
 msgstr ""
 
 msgid "On"
@@ -171,6 +135,9 @@ msgid "Custom"
 msgstr ""
 
 msgid "Unknown"
+msgstr ""
+
+msgid "auto"
 msgstr ""
 
 #, c-format
@@ -200,10 +167,6 @@ msgid "Custom "
 msgstr ""
 
 msgid "Modified "
-msgstr ""
-
-#, c-format
-msgid "%s%sPreset: %s"
 msgstr ""
 
 #, c-format
@@ -273,16 +236,10 @@ msgstr ""
 msgid "Muxing: This may take a while..."
 msgstr ""
 
-msgid "Encode Complete"
+msgid "Scan this DVD source"
 msgstr ""
 
-msgid "HandBrake"
-msgstr ""
-
-msgid "Updating preview\n"
-msgstr ""
-
-msgid "Error while reading activity from pipe"
+msgid "AutoScan"
 msgstr ""
 
 msgid "Suspend"
@@ -293,16 +250,6 @@ msgid "Suspend failed: %s"
 msgstr ""
 
 msgid "Suspend failed"
-msgstr ""
-
-msgid "CanShutdown"
-msgstr ""
-
-#, c-format
-msgid "CanShutdown failed: %s"
-msgstr ""
-
-msgid "CanShutdown failed"
 msgstr ""
 
 msgid "Shutdown"
@@ -316,26 +263,6 @@ msgid "Shutdown failed"
 msgstr ""
 
 msgid "Encoding"
-msgstr ""
-
-#, c-format
-msgid "Inhibit failed: %s"
-msgstr ""
-
-msgid "Inhibit failed"
-msgstr ""
-
-msgid "UnInhibit"
-msgstr ""
-
-#, c-format
-msgid "UnInhibit failed: %s"
-msgstr ""
-
-msgid "UnInhibit failed"
-msgstr ""
-
-msgid "Uninhibit"
 msgstr ""
 
 #, c-format
@@ -357,6 +284,9 @@ msgstr ""
 
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
+msgstr ""
+
+msgid "Encode Complete"
 msgstr ""
 
 msgid "Put down that cocktail, Your HandBrake queue is done!"
@@ -402,6 +332,12 @@ msgid ""
 "    <out resource plist>  Output resources plist file\n"
 msgstr ""
 
+msgid "language"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -416,23 +352,6 @@ msgstr ""
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
-msgstr ""
-
-#, c-format
-msgid "Failed to set text from markup due to error parsing markup: %s"
-msgstr ""
-
-#, c-format
-msgid "Don't know color `%s'"
-msgstr ""
-
-msgid "_Open"
-msgstr ""
-
-msgid "_Cancel"
-msgstr ""
-
-msgid "_Save"
 msgstr ""
 
 msgid ""
@@ -480,6 +399,9 @@ msgstr ""
 
 msgid "<b>SRT Offset</b>"
 msgstr "<b>SRT-forskydning</b>"
+
+msgid "Off"
+msgstr "Fra"
 
 msgid ""
 "The source subtitle track\n"
@@ -533,6 +455,9 @@ msgstr ""
 msgid "_About"
 msgstr ""
 
+msgid "HandBrake"
+msgstr ""
+
 msgid "_File"
 msgstr "_Fil"
 
@@ -550,9 +475,6 @@ msgstr ""
 
 msgid "_Queue"
 msgstr "_Kø"
-
-msgid "S_top Queue"
-msgstr "S_top kø"
 
 msgid "_Add"
 msgstr ""
@@ -585,6 +507,9 @@ msgid "Show _Queue"
 msgstr "Vis _kø"
 
 msgid "_Presets"
+msgstr ""
+
+msgid "_Save"
 msgstr ""
 
 msgid "_Delete"
@@ -682,9 +607,6 @@ msgstr "Område af titlen der skal konverteres. Kan være kapitler, sekunder, el
 msgid "Set the first chapter to encode."
 msgstr "Vælg det første kapitel der skal konverteres."
 
-msgid "through"
-msgstr "til og med"
-
 msgid "Set the last chapter to encode."
 msgstr "Vælg det sidste kapitel der skal konverteres."
 
@@ -728,6 +650,12 @@ msgstr ""
 
 msgid "Large file (>4GB)"
 msgstr "Stor fil (>4GB)"
+
+msgid ""
+"Allow 64 bit MP4 file which can be over 4GB.\n"
+"\n"
+"<b>Caution:</b> This option may break device compatibility."
+msgstr ""
 
 msgid "<b>Presets List</b>"
 msgstr ""
@@ -830,6 +758,17 @@ msgid ""
 "This will be the resolution that most closely matches the source resolution after cropping."
 msgstr ""
 
+msgid ""
+"<b>Anamorphic Modes:</b>\n"
+"<small><tt>\n"
+"None   - Force pixel aspect ratio to 1:1.\n"
+"Loose  - Align dimensions to chosen 'Alignment' value\n"
+"     and pick pixel aspect ratio that preserves the\n"
+"     original display aspect ratio\n"
+"Strict - Keep original source dimensions and pixel\n"
+"     aspect ratio</tt></small>"
+msgstr ""
+
 msgid "Alignment:"
 msgstr ""
 
@@ -856,6 +795,9 @@ msgid ""
 "\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+
+msgid ":"
 msgstr ""
 
 msgid ""
@@ -997,6 +939,18 @@ msgstr ""
 
 msgid "Constant Framerate"
 msgstr "Konstant framerate"
+
+msgid "Same as source"
+msgstr ""
+
+msgid "kbps"
+msgstr ""
+
+msgid "(variable)"
+msgstr ""
+
+msgid "(constant)"
+msgstr ""
 
 msgid "Enables constant framerate output."
 msgstr ""
@@ -1182,15 +1136,9 @@ msgid ""
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-msgid "AAC"
-msgstr ""
-
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
-
-msgid "AC-3"
 msgstr ""
 
 msgid ""
@@ -1198,15 +1146,9 @@ msgid ""
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
 
-msgid "DTS"
-msgstr ""
-
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
-msgstr ""
-
-msgid "DTS-HD"
 msgstr ""
 
 msgid ""
@@ -1225,6 +1167,9 @@ msgstr ""
 msgid "<b>Audio Encoder Settings:</b>"
 msgstr ""
 
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr ""
+
 msgid "Encoder"
 msgstr ""
 
@@ -1238,12 +1183,6 @@ msgid "Samplerate"
 msgstr ""
 
 msgid "Gain"
-msgstr ""
-
-msgid "Gain:"
-msgstr ""
-
-msgid "DRC"
 msgstr ""
 
 msgid "Audio Defaults"
@@ -1404,6 +1343,17 @@ msgstr ""
 msgid "<small>Subpel ME &amp; Mode:</small>"
 msgstr ""
 
+msgid ""
+"This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
+"\n"
+"Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n"
+"Mode decision is the method used to choose how to encode each block of the frame: a very important decision.\n"
+"SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n"
+"6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n"
+"11 disables all early terminations in analysis.\n"
+"10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
+msgstr ""
+
 msgid "<small>Motion Est. Range:</small>"
 msgstr ""
 
@@ -1428,6 +1378,16 @@ msgid ""
 msgstr ""
 
 msgid "<small>Adaptive B-Frames:</small>"
+msgstr ""
+
+msgid ""
+"x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
+"\n"
+"Fast mode takes roughly the same amount of time no matter how many B-frames you specify.\n"
+"However, while fast, its decisions are often suboptimal.\n"
+"\n"
+"Optimal mode gets slower as the maximum number of B-Frames increases,\n"
+"but makes much more accurate decisions, especially when used with B-pyramid."
 msgstr ""
 
 msgid "<small>Partitions:</small>"
@@ -1489,6 +1449,20 @@ msgid ""
 msgstr ""
 
 msgid "Deblocking: "
+msgstr ""
+
+msgid ""
+"H.264 deblocking filter.\n"
+"\n"
+"h.264 has a built-in deblocking filter that smooths out blocking artifacts\n"
+"after decoding each frame.  This not only improves visual quality, but also\n"
+"helps compression significantly. The deblocking filter takes a lot of CPU power,\n"
+"so if you're looking to minimize CPU requirements for video playback, disable it.\n"
+"\n"
+"The deblocking filter has two adjustable parameters, \"strength\" (Alpha) and \"threshold\" (Beta).\n"
+"The former controls how strong (or weak) the deblocker is, while the latter controls how many\n"
+"(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
+"The default is 0 (normal strength) for both parameters."
 msgstr ""
 
 msgid "No DCT Decimate"
@@ -1580,6 +1554,9 @@ msgid ""
 "Resets all queue jobs to pending and ready to run again."
 msgstr ""
 
+msgid "OK"
+msgstr ""
+
 msgid "Select All"
 msgstr ""
 
@@ -1593,6 +1570,9 @@ msgid "Unmark all titles"
 msgstr ""
 
 msgid "Destination files OK.  No duplicates detected."
+msgstr ""
+
+msgid "Select this title for adding to the queue.\n"
 msgstr ""
 
 msgid "Preferences"
@@ -1765,9 +1745,6 @@ msgstr ""
 msgid "Enable settings to select embedded subtitles"
 msgstr ""
 
-msgid "Language"
-msgstr ""
-
 msgid "Character Code"
 msgstr ""
 
@@ -1837,13 +1814,30 @@ msgstr ""
 msgid "Sample Rate"
 msgstr ""
 
-msgid "Sample Rate:"
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
 
 msgid "Enable bitrate setting"
 msgstr ""
 
 msgid "Enable quality setting"
+msgstr ""
+
+msgid ""
+"<b>Quality:</b> For output codec's that support it, adjust the quality of "
+"the output."
+msgstr ""
+
+msgid "00.0"
+msgstr ""
+
+msgid ""
+"<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
+"audio track."
 msgstr ""
 
 msgid "Skip This Version"
@@ -1859,9 +1853,6 @@ msgid "HandBrake xxx is now available (you have yyy)."
 msgstr ""
 
 msgid "<b>Release Notes</b>"
-msgstr ""
-
-msgid "none"
 msgstr ""
 
 msgid "First Track Matching Selected Languages"
@@ -1897,6 +1888,9 @@ msgstr ""
 msgid "Week"
 msgstr ""
 
+msgid "Month"
+msgstr ""
+
 msgid "Year"
 msgstr ""
 
@@ -1915,28 +1909,16 @@ msgstr ""
 msgid "Monthly"
 msgstr ""
 
-msgid "Month"
-msgstr ""
-
 msgid "Default"
 msgstr ""
 
 msgid "Fast"
 msgstr ""
 
-msgid "Bob"
-msgstr ""
-
 msgid "Slow"
 msgstr ""
 
 msgid "Slower"
-msgstr ""
-
-msgid "NLMeans"
-msgstr ""
-
-msgid "HQDN3D"
 msgstr ""
 
 msgid "Ultralight"
@@ -1946,9 +1928,6 @@ msgid "Light"
 msgstr ""
 
 msgid "Medium"
-msgstr ""
-
-msgid "medium"
 msgstr ""
 
 msgid "Strong"
@@ -2002,6 +1981,9 @@ msgstr ""
 msgid "Hadamard Exhaustive"
 msgstr ""
 
+msgid "Most"
+msgstr ""
+
 msgid "Some"
 msgstr ""
 
@@ -2014,12 +1996,6 @@ msgstr ""
 msgid "Always"
 msgstr ""
 
-msgid "Same as source"
-msgstr ""
-
-msgid "Same as source:"
-msgstr ""
-
 msgid "(NTSC Film)"
 msgstr ""
 
@@ -2029,7 +2005,18 @@ msgstr ""
 msgid "(NTSC Video)"
 msgstr ""
 
-#, c-format
+msgid "%d - %02dh%02dm%02ds - %s"
+msgstr ""
+
+msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
+msgstr ""
+
+msgid "%d (%05d.MPLS) - Unknown Length"
+msgstr ""
+
+msgid "%d - %02dh%02dm%02ds"
+msgstr ""
+
 msgid "%d - Unknown Length"
 msgstr ""
 
@@ -2129,10 +2116,6 @@ msgid ""
 "%s"
 msgstr ""
 
-#, c-format
-msgid "Signal handler (%s) not found"
-msgstr ""
-
 msgid "Index"
 msgstr ""
 
@@ -2140,12 +2123,6 @@ msgid "Duration"
 msgstr ""
 
 msgid "Title"
-msgstr ""
-
-msgid "Done\n"
-msgstr ""
-
-msgid "DATA"
 msgstr ""
 
 msgid "Job Information"
@@ -2206,17 +2183,11 @@ msgstr ""
 msgid "Subtitles"
 msgstr ""
 
-#, c-format
-msgid "Superfluous tunes! %s"
-msgstr ""
-
-#, c-format
 msgid ""
 "%s: Folder already exists.\n"
 "You can not replace it with a preset."
 msgstr ""
 
-#, c-format
 msgid ""
 "%s: Preset already exists.\n"
 "You can not replace it with a folder."
@@ -2234,20 +2205,19 @@ msgstr ""
 msgid "Export Preset"
 msgstr ""
 
-#, c-format
 msgid ""
 "Confirm deletion of %s:\n"
 "\n"
 "%s"
 msgstr ""
 
+msgid "folder"
+msgstr ""
+
+msgid "preset"
+msgstr ""
+
 msgid "No selection???  Perhaps unselected."
-msgstr ""
-
-msgid "Couldn't create native window for GstXOverlay. Disabling live preview."
-msgstr ""
-
-msgid "Couldn't initialize gstreamer. Disabling live preview."
 msgstr ""
 
 #, c-format
@@ -2262,10 +2232,10 @@ msgid ""
 "%s"
 msgstr ""
 
-msgid "Ok"
+msgid "Done"
 msgstr ""
 
-msgid "Done"
+msgid "Windowed"
 msgstr ""
 
 msgid "Seconds"
@@ -2390,6 +2360,12 @@ msgid "Error"
 msgstr ""
 
 msgid "Bitrate:"
+msgstr ""
+
+msgid "Bitrate"
+msgstr ""
+
+msgid "Quality"
 msgstr ""
 
 msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
@@ -2522,11 +2498,17 @@ msgstr ""
 msgid "Resume Encoding"
 msgstr "Genoptag konvertering"
 
+msgid "S_top Queue"
+msgstr "S_top kø"
+
 msgid "_Start Queue"
 msgstr "_Start kø"
 
 msgid "_Resume Queue"
 msgstr "_Genoptag kø"
+
+msgid "Resume Queue"
+msgstr ""
 
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
@@ -2551,21 +2533,6 @@ msgid "Usage: %s infile [outfile]\n"
 msgstr ""
 
 #, c-format
-msgid "Attempt to set unknown widget type: %s\n"
-msgstr ""
-
-#, c-format
-msgid "No value found for %s\n"
-msgstr ""
-
-msgid "Attempt to set unknown widget type"
-msgstr ""
-
-#, c-format
-msgid "Failed to find widget for key: %s\n"
-msgstr ""
-
-#, c-format
 msgid "Offset: %dms"
 msgstr ""
 
@@ -2573,6 +2540,9 @@ msgid "Burned Into Video"
 msgstr ""
 
 msgid "Passthrough"
+msgstr ""
+
+msgid "through"
 msgstr ""
 
 msgid "(Forced Subtitles Only)"
@@ -2628,24 +2598,38 @@ msgid ""
 "\"\""
 msgstr ""
 
-msgid "ERROR"
+msgid "Any"
 msgstr ""
 
-msgid ""
-"<b>Anamorphic Modes:</b>\n"
-"<small><tt>\n"
-"None   - Force pixel aspect ratio to 1:1.\n"
-"Loose  - Align dimensions to chosen 'Alignment' value \n"
-"         and pick pixel aspect ratio that preserves the\n"
-"         original display aspect ratio\n"
-"Strict - Keep original source dimensions and pixel \n"
-"         aspect ratio</tt></small>"
+msgid "0: SAD, no subpel"
 msgstr ""
 
-msgctxt "NAME OF TRANSLATORS"
+msgid "4: SATD, qpel on all"
+msgstr ""
+
+msgid "5: SATD, multi-qpel on all"
+msgstr ""
+
+msgid "6: RD in I/P-frames"
+msgstr ""
+
+msgid "7: RD in all frames"
+msgstr ""
+
+msgid "8: RD refine in I/P-frames"
+msgstr ""
+
+msgid "9: RD refine in all frames"
+msgstr ""
+
+msgid "10: QPRD in all frames"
+msgstr ""
+
+msgid "11: No early terminations in analysis"
+msgstr ""
+
 msgid "Your names"
 msgstr ""
 
-msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
