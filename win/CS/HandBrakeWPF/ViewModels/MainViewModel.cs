@@ -2065,7 +2065,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         this.ProgramStatusLabel =
-                            string.Format("{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}" + Resources.Main_JobsPending_addon,
+                            string.Format("{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\\:mm\\:ss}" + Resources.Main_JobsPending_addon,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,
