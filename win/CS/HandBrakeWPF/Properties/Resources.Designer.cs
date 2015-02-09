@@ -430,7 +430,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ,  Pending Jobs {5}.
+        ///   Looks up a localized string similar to    Pending Jobs {5}.
         /// </summary>
         public static string Main_JobsPending_addon {
             get {

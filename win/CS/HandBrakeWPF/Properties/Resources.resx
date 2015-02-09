@@ -396,7 +396,7 @@ In order to use the QuickSync encoder, you must:
     <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>,  Pending Jobs {5}</value>
+    <value>   Pending Jobs {5}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>New Default Preset Set: {0}</value>
