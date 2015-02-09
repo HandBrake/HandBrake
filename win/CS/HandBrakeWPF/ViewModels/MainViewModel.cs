@@ -1220,6 +1220,13 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+            if (this.Destination == this.ScannedSource.ScanPath)
+            {
+                this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Destination = null;
+                return false;
+            }
+
             if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
             {
                 this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -1524,6 +1531,13 @@ namespace HandBrakeWPF.ViewModels
             bool? result = saveFileDialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
+                if (saveFileDialog.FileName == this.ScannedSource.ScanPath)
+                {
+                    this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.Destination = null;
+                    return;
+                }
+
                 this.Destination = saveFileDialog.FileName;
 
                 // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
