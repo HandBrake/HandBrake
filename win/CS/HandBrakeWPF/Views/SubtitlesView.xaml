@@ -11,8 +11,8 @@
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
-             d:DesignHeight="153"
-             d:DesignWidth="319"
+             d:DesignHeight="350"
+             d:DesignWidth="500"
              mc:Ignorable="d"
              x:Name="subTab">
     <UserControl.Resources>
@@ -39,14 +39,12 @@
                    VerticalAlignment="Top"
                    Text="{Binding PanelTitle}" />
 
-        <Grid Grid.Row="0" Grid.Column="1" Margin="0,5,10,0">
-            <Border cal:Message.Attach="[Event MouseDown] = [Action ShowSubtitleDefaultsPanel]">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="../Views/Images/Advanced.png" Width="20"   />
-                    <TextBlock Text="{Binding SwitchDisplayTitle}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                </StackPanel>
-            </Border> 
-        </Grid>
+        <Button MinWidth="65" Grid.Row="0" Grid.Column="1"
+                Margin="0,5,10,0"
+                cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]"
+                Content="{Binding SwitchDisplayTitle}"
+                Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}}"
+                />
 
         <!-- Row 1 -->
         <StackPanel Grid.Row="1" Margin="10,5,10,0" Orientation="Horizontal"
@@ -68,6 +66,11 @@
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Clear]"
                     Content="Clear" />
+
+            <Button MinWidth="65"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]"
+                    Content="{Binding SwitchDisplayTitle}" />
         </StackPanel>
 
 

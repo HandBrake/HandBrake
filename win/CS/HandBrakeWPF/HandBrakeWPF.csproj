@@ -255,9 +255,6 @@
     <Compile Include="Views\StaticPreviewView.xaml.cs">
       <DependentUpon>StaticPreviewView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TitleSpecificView.xaml.cs">
-      <DependentUpon>TitleSpecificView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\AdvancedVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -426,10 +423,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StaticPreviewView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TitleSpecificView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

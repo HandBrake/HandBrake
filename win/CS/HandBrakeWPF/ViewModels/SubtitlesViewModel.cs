@@ -157,7 +157,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowDefaultsPanel ? "Switch to Tracks" : "Switch to Defaults";
+                return this.ShowDefaultsPanel ? "Switch Back To Tracks" : "Configure Defaults";
             }
         }
 

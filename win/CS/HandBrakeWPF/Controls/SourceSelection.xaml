@@ -46,7 +46,7 @@
                 <StackPanel Orientation="Horizontal" MinWidth="100">
                     <Image Source="../Views/Images/folder32.png" Width="32" />
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Folder" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="Folder (Batch Scan)" VerticalAlignment="Center" Margin="5,0,0,0" />
                         <TextBlock Text="Open a folder with one or more files." VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>                   
                 </StackPanel>

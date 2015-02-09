@@ -11,7 +11,7 @@
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
-             d:DesignHeight="400"
+             d:DesignHeight="350"
              d:DesignWidth="616"
              mc:Ignorable="d"
              x:Name="audioTab">
@@ -51,15 +51,6 @@
                 Content="{Binding SwitchDisplayTitle}"
                 Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}}"
                 />
-
-        <!--<Grid Grid.Row="0" Grid.Column="1" Margin="0,5,10,0" Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}}">
-            <Border cal:Message.Attach="[Event MouseDown] = [Action ShowAudioDefaults]">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="../Views/Images/Advanced.png" Width="20"   />
-                    <TextBlock Text="{Binding SwitchDisplayTitle}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                </StackPanel>
-            </Border>
-        </Grid>-->
 
         <!-- Row 1 -->
 

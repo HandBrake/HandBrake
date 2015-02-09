@@ -7,8 +7,8 @@
         xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="{Binding Title}"
-        Width="450"
-        MaxHeight="450"
+        Width="550"
+        Height="450"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -37,8 +37,8 @@
 
         <!--  Header  -->
         <StackPanel Grid.Row="0"
-                    Height="36"
-                    Margin="0,0,0,10"
+                    Height="42"
+                    Margin="0,0,0,0"
                     Background="White"
                     Orientation="Horizontal">
             <Image Width="32"
@@ -54,11 +54,13 @@
 
         <!-- Text -->
         <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,10,10,0">
-            <TextBlock Text="Select multiple titles to add: " />
+            <TextBlock Text="Select titles: " />
         </StackPanel>
 
         <!-- Selection -->
         <ListBox Grid.Row="2"
+                 MinHeight="250"
+                 MaxHeight="500"
                  Margin="10,10,10,10"
                  VerticalAlignment="Stretch"
                  Background="LightGray"
@@ -84,7 +86,7 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch" MinHeight="28">
+                    <Grid HorizontalAlignment="Stretch" MinHeight="32" Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />

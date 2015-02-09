@@ -11,7 +11,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"
-                    Height="30"
+                    Height="40"
                     Margin="0,0,0,10"
                     Orientation="Horizontal">
             <Image Width="24"
@@ -27,7 +27,7 @@
         <TextBlock Text="{Binding NoticeMessage}" Grid.Row="1" Margin="40,0,10,0"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,10,5" HorizontalAlignment="Right">
-            <Button Content="Proceed"  HorizontalAlignment="Right" 
+            <Button Content="Proceed"  HorizontalAlignment="Right"
                 cal:Message.Attach="[Event Click] = [Action Proceed]" Padding="8,2" Margin="0,10,10,5"/>
 
             <Button Content="Cancel Action"  HorizontalAlignment="Right" Margin="0,10,10,5"
