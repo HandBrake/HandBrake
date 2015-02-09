@@ -682,6 +682,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot overwrite the source file you want to convert.
+        ///Please choose a different filename..
+        /// </summary>
+        public static string Main_SourceDestinationMatchError {
+            get {
+                return ResourceManager.GetString("Main_SourceDestinationMatchError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must turn on automatic file naming AND set a default path in preferences before you can add to the queue..
         /// </summary>
         public static string Main_TurnOnAutoFileNaming {
