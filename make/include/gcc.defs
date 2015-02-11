@@ -47,11 +47,7 @@ GCC.args.ML        = -fmessage-length=0
 GCC.args.H         = -H
 GCC.args.W         = -W$(1)
 ifeq (darwin,$(BUILD.system))
-    GCC.args.archs     = -arch $(1)
-else ifeq (linux-i686,$(BUILD.system)-$(BUILD.arch))
-    GCC.args.archs     = -msse2
-else
-    GCC.args.archs     =
+    GCC.args.archs = -arch $(1)
 endif
 GCC.args.sysroot   = --sysroot=$(1)
 GCC.args.minver    = -mmacosx-version-min=$(1)
@@ -75,7 +71,11 @@ GCC.args.L         = -L$(1)
 GCC.args.l         = -l$(1)
 GCC.args.end       = -Wl,--end-group
 
-GCC.args.extra         = $(CFLAGS) $(CPPFLAGS)
+ifeq ($(BUILD.machine),$(filter $(BUILD.machine),i686 x86_64))
+    GCC.args.extra = $(CFLAGS) $(CPPFLAGS) -mfpmath=sse -msse2
+else
+    GCC.args.extra = $(CFLAGS) $(CPPFLAGS)
+endif
 GCC.args.extra.h_o     =
 GCC.args.extra.c_o     =
 GCC.args.extra.dylib   = $(LDFLAGS)
@@ -199,7 +199,7 @@ define import.GCC
     $(1).GCC.EXE = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE.args),$$(1),$$(2))
 
     # FUNCTION: C++ link dynamic-lib
-    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *arch *sysroot *minvers ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *archs *sysroot *minvers ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.DYLIB++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB++.args),$$(1),$$(2))
 
     # FUNCTION: C++ link executable

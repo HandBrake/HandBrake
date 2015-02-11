@@ -1,13 +1,13 @@
 diff -Naur lame.orig/configure lame/configure
---- lame.orig/configure	2008-06-29 17:40:05.000000000 -0400
-+++ lame/configure	2008-10-14 05:01:29.000000000 -0400
+--- lame.orig/configure	2015-02-08 17:37:18.000000000 -0500
++++ lame/configure	2015-02-08 17:38:32.000000000 -0500
 @@ -21031,7 +21031,14 @@
  
  
  
 -
 +case $host_cpu in
-+powerpc*)
++powerpc*|i686*)
 +    check_xmmintrin=
 +    ;;
 +*)
