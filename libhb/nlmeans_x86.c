@@ -18,26 +18,27 @@ static void build_integral_sse2(uint32_t *integral,
                                 int       integral_stride,
                           const uint8_t  *src,
                           const uint8_t  *src_pre,
-                                int       src_w,
                           const uint8_t  *compare,
                           const uint8_t  *compare_pre,
-                                int       compare_w,
                                 int       w,
-                                int       h,
+                                int       border,
+                                int       dst_w,
+                                int       dst_h,
                                 int       dx,
                                 int       dy)
 {
     const __m128i zero = _mm_set1_epi8(0);
+    const int bw = w + 2 * border;
 
-    for (int y = 0; y < h; y++)
+    for (int y = 0; y < dst_h; y++)
     {
         __m128i prevadd = _mm_set1_epi32(0);
 
-        const uint8_t *p1 = src_pre + y*src_w;
-        const uint8_t *p2 = compare_pre + (y+dy)*compare_w + dx;
+        const uint8_t *p1 = src_pre + y*bw;
+        const uint8_t *p2 = compare_pre + (y+dy)*bw + dx;
         uint32_t *out = integral + (y*integral_stride);
 
-        for (int x = 0; x < w; x += 16)
+        for (int x = 0; x < dst_w; x += 16)
         {
             __m128i pa, pb;
             __m128i pla, plb;
@@ -119,7 +120,7 @@ static void build_integral_sse2(uint32_t *integral,
         {
             out = integral + y*integral_stride;
 
-            for (int x = 0; x < w; x += 16)
+            for (int x = 0; x < dst_w; x += 16)
             {
                 *((__m128i*)out) = _mm_add_epi32(*(__m128i*)(out-integral_stride),
                                                  *(__m128i*)(out));

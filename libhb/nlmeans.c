@@ -492,8 +492,8 @@ static void nlmeans_prefilter(BorderedPlane *src,
     {
 
         // Source image
-        uint8_t *mem   = src->mem;
-        uint8_t *image = src->image;
+        const uint8_t *mem   = src->mem;
+        const uint8_t *image = src->image;
         const int border     = src->border;
         const int w          = src->w;
         const int h          = src->h;
@@ -582,33 +582,36 @@ static void build_integral_scalar(uint32_t *integral,
                                   int       integral_stride,
                             const uint8_t  *src,
                             const uint8_t  *src_pre,
-                                  int       src_w,
                             const uint8_t  *compare,
                             const uint8_t  *compare_pre,
-                                  int       compare_w,
                                   int       w,
-                                  int       h,
+                                  int       border,
+                                  int       dst_w,
+                                  int       dst_h,
                                   int       dx,
                                   int       dy)
 {
-    for (int y = 0; y < h; y++)
+    const int bw = w + 2 * border;
+    for (int y = 0; y < dst_h; y++)
     {
-        const uint8_t *p1 = src_pre + y*src_w;
-        const uint8_t *p2 = compare_pre + (y+dy)*compare_w + dx;
+        const uint8_t *p1 = src_pre + y*bw;
+        const uint8_t *p2 = compare_pre + (y+dy)*bw + dx;
         uint32_t *out = integral + (y*integral_stride);
 
-        for (int x = 0; x < w; x++)
+        for (int x = 0; x < dst_w; x++)
         {
-            int diff = *p1++ - *p2++;
+            int diff = *p1 - *p2;
             *out = *(out-1) + diff * diff;
             out++;
+            p1++;
+            p2++;
         }
 
         if (y > 0)
         {
             out = integral + y*integral_stride;
 
-            for (int x = 0; x < w; x++)
+            for (int x = 0; x < dst_w; x++)
             {
                 *out += *(out - integral_stride);
                 out++;
@@ -623,9 +626,9 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                           int plane,
                           int nframes,
                           uint8_t *dst,
-                          int w,
-                          int s,
-                          int h,
+                          int dst_w,
+                          int dst_s,
+                          int dst_h,
                           double h_param,
                           double origin_tune,
                           int n,
@@ -638,18 +641,19 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     const int r_half = (r-1) /2;
 
     // Source image
-    uint8_t *src     = frame[0].plane[plane].image;
-    uint8_t *src_pre = frame[0].plane[plane].image_pre;
+    const uint8_t *src     = frame[0].plane[plane].image;
+    const uint8_t *src_pre = frame[0].plane[plane].image_pre;
+    const int w      = frame[0].plane[plane].w;
     const int border = frame[0].plane[plane].border;
-    const int src_w  = frame[0].plane[plane].w + 2 * border;
+    const int bw     = w + 2 * border;
 
     // Allocate temporary pixel sums
-    struct PixelSum *tmp_data = calloc(w * h, sizeof(struct PixelSum));
+    struct PixelSum *tmp_data = calloc(dst_w * dst_h, sizeof(struct PixelSum));
 
     // Allocate integral image
-    const int integral_stride = w + 2 * 16;
-    uint32_t *integral_mem = calloc(integral_stride * (h+1), sizeof(uint32_t));
-    uint32_t *integral     = integral_mem + integral_stride + 16;
+    const int integral_stride    = dst_w + 2 * 16;
+    uint32_t* const integral_mem = calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
+    uint32_t* const integral     = integral_mem + integral_stride + 16;
 
     // Iterate through available frames
     for (int f = 0; f < nframes; f++)
@@ -657,10 +661,8 @@ static void nlmeans_plane(NLMeansFunctions *functions,
         nlmeans_prefilter(&frame[f].plane[plane], prefilter);
 
         // Compare image
-        uint8_t *compare     = frame[f].plane[plane].image;
-        uint8_t *compare_pre = frame[f].plane[plane].image_pre;
-        const int border     = frame[f].plane[plane].border;
-        const int compare_w  = frame[f].plane[plane].w + 2 * border;
+        const uint8_t *compare     = frame[f].plane[plane].image;
+        const uint8_t *compare_pre = frame[f].plane[plane].image_pre;
 
         // Iterate through all displacements
         for (int dy = -r_half; dy <= r_half; dy++)
@@ -672,12 +674,12 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                 if (dx == 0 && dy == 0 && f == 0)
                 {
                     // TODO: Parallelize this
-                    for (int y = n_half; y < h-n + n_half; y++)
+                    for (int y = n_half; y < dst_h-n + n_half; y++)
                     {
-                        for (int x = n_half; x < w-n + n_half; x++)
+                        for (int x = n_half; x < dst_w-n + n_half; x++)
                         {
-                            tmp_data[y*w + x].weight_sum += origin_tune;
-                            tmp_data[y*w + x].pixel_sum  += origin_tune * src[y*src_w + x];
+                            tmp_data[y*dst_w + x].weight_sum += origin_tune;
+                            tmp_data[y*dst_w + x].pixel_sum  += origin_tune * src[y*bw + x];
                         }
                     }
                     continue;
@@ -688,23 +690,23 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                                           integral_stride,
                                           src,
                                           src_pre,
-                                          src_w,
                                           compare,
                                           compare_pre,
-                                          compare_w,
                                           w,
-                                          h,
+                                          border,
+                                          dst_w,
+                                          dst_h,
                                           dx,
                                           dy);
 
                 // Average displacement
                 // TODO: Parallelize this
-                for (int y = 0; y <= h-n; y++)
+                for (int y = 0; y <= dst_h-n; y++)
                 {
                     const uint32_t *integral_ptr1 = integral + (y  -1)*integral_stride - 1;
                     const uint32_t *integral_ptr2 = integral + (y+n-1)*integral_stride - 1;
 
-                    for (int x = 0; x <= w-n; x++)
+                    for (int x = 0; x <= dst_w-n; x++)
                     {
                         const int xc = x + n_half;
                         const int yc = y + n_half;
@@ -720,8 +722,8 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                             //float weight = exp(-diff*weightFact);
                             const float weight = exptable[diffidx];
 
-                            tmp_data[yc*w + xc].weight_sum += weight;
-                            tmp_data[yc*w + xc].pixel_sum  += weight * compare[(yc+dy)*compare_w + xc + dx];
+                            tmp_data[yc*dst_w + xc].weight_sum += weight;
+                            tmp_data[yc*dst_w + xc].pixel_sum  += weight * compare[(yc+dy)*bw + xc + dx];
                         }
 
                         integral_ptr1++;
@@ -733,28 +735,28 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     }
 
     // Copy edges
-    for (int y = 0; y < h; y++)
+    for (int y = 0; y < dst_h; y++)
     {
         for (int x = 0; x < n_half; x++)
         {
-            *(dst + y * s + x)           = *(src + y * src_w - x - 1);
-            *(dst + y * s - x + (w - 1)) = *(src + y * src_w + x + w);
+            *(dst + y * dst_s + x)               = *(src + y * bw - x - 1);
+            *(dst + y * dst_s - x + (dst_w - 1)) = *(src + y * bw + x + dst_w);
         }
     }
     for (int y = 0; y < n_half; y++)
     {
-        memcpy(dst +       y*s, src - (y+1)*src_w, w);
-        memcpy(dst + (h-y-1)*s, src + (y+h)*src_w, w);
+        memcpy(dst +           y*dst_s, src -     (y+1)*bw, dst_w);
+        memcpy(dst + (dst_h-y-1)*dst_s, src + (y+dst_h)*bw, dst_w);
     }
 
     // Copy main image
     uint8_t result;
-    for (int y = n_half; y < h-n_half; y++)
+    for (int y = n_half; y < dst_h-n_half; y++)
     {
-        for (int x = n_half; x < w-n_half; x++)
+        for (int x = n_half; x < dst_w-n_half; x++)
         {
-            result = (uint8_t)(tmp_data[y*w + x].pixel_sum / tmp_data[y*w + x].weight_sum);
-            *(dst + y*s + x) = result ? result : *(src + y*src_w + x);
+            result = (uint8_t)(tmp_data[y*dst_w + x].pixel_sum / tmp_data[y*dst_w + x].weight_sum);
+            *(dst + y*dst_s + x) = result ? result : *(src + y*bw + x);
         }
     }
 

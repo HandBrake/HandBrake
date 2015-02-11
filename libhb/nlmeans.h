@@ -14,12 +14,12 @@ typedef struct
                            int       integral_stride,
                      const uint8_t  *src,
                      const uint8_t  *src_pre,
-                           int       src_w,
                      const uint8_t  *compare,
                      const uint8_t  *compare_pre,
-                           int       compare_w,
                            int       w,
-                           int       h,
+                           int       border,
+                           int       dst_w,
+                           int       dst_h,
                            int       dx,
                            int       dy);
 } NLMeansFunctions;
