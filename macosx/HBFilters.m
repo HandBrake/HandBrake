@@ -222,9 +222,33 @@ static NSDictionary *_nlmeansTunesDict;
         else
         {
             // New format, read the values directly
-            self.denoise = preset[@"PictureDenoiseFilter"];
-            self.denoisePreset = preset[@"PictureDenoisePreset"];
-            self.denoiseTune = preset[@"PictureDenoiseTune"];
+            if ([[_denoiseTypesDict allValues] containsObject:preset[@"PictureDenoiseFilter"]])
+            {
+                self.denoise = preset[@"PictureDenoiseFilter"];
+            }
+            else
+            {
+                self.denoise = [[_denoiseTypesDict allValues] firstObject];
+            }
+
+            if ([[_denoisePresetsDict allValues] containsObject:preset[@"PictureDenoisePreset"]])
+            {
+                self.denoisePreset = preset[@"PictureDenoisePreset"];
+            }
+            else
+            {
+                self.denoisePreset = [[_denoisePresetsDict allValues] firstObject];
+            }
+
+            if ([[_nlmeansTunesDict allValues] containsObject:preset[@"PictureDenoiseTune"]])
+            {
+                self.denoiseTune = preset[@"PictureDenoiseTune"];
+            }
+            else
+            {
+                self.denoiseTune = [[_nlmeansTunesDict allKeys] firstObject];
+            }
+
             self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
         }
 
