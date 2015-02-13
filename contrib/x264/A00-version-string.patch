@@ -6,7 +6,7 @@ index 2e4a98d..2065222 100644
  
  #include "x264_config.h"
  
--#define X264_BUILD 142
+-#define X264_BUILD 144
 +/*
 + * Define the full version explicitly so that it survives a git --archive.
 + *
@@ -16,8 +16,8 @@ index 2e4a98d..2065222 100644
 +#ifdef  X264_VERSION
 +#undef  X264_VERSION
 +#endif
-+#define X264_BUILD       142
-+#define X264_VERSION " r2479 dd79a61"
++#define X264_BUILD       144
++#define X264_VERSION " r2525 40bb568"
  
  /* Application developers planning to link against a shared library version of
   * libx264 from a Microsoft Visual Studio or similar development environment
