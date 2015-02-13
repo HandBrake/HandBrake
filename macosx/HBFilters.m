@@ -437,16 +437,33 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
         else
         {
             // New format, read the values directly
-            self.denoise = preset[@"PictureDenoiseFilter"];
-            if (![[_HandBrake_denoisePresetsDict allValues] containsObject:self.denoisePreset])
+            if ([[_HandBrake_denoiseTypesDict allValues] containsObject:preset[@"PictureDenoiseFilter"]])
             {
-                self.denoisePreset = @"light";
+                self.denoise = preset[@"PictureDenoiseFilter"];
             }
             else
             {
+                self.denoise = [[_HandBrake_denoiseTypesDict allValues] firstObject];
+            }
+
+            if ([[_HandBrake_denoisePresetsDict allValues] containsObject:preset[@"PictureDenoisePreset"]])
+            {
                 self.denoisePreset = preset[@"PictureDenoisePreset"];
             }
-            self.denoiseTune = preset[@"PictureDenoiseTune"];
+            else
+            {
+                self.denoisePreset = [[_HandBrake_denoisePresetsDict allValues] firstObject];
+            }
+
+            if ([[_HandBrake_nlmeansTunesDict allValues] containsObject:preset[@"PictureDenoiseTune"]])
+            {
+                self.denoiseTune = preset[@"PictureDenoiseTune"];
+            }
+            else
+            {
+                self.denoiseTune = [[_HandBrake_nlmeansTunesDict allKeys] firstObject];
+            }
+
             self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
         }
 
