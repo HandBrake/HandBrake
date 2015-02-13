@@ -1,15 +1,15 @@
-diff -r d2db9c1ab44b source/common/param.cpp
---- a/source/common/param.cpp	Fri Oct 31 13:52:08 2014 -0500
-+++ b/source/common/param.cpp	Mon Nov 03 10:28:18 2014 -0800
-@@ -1059,6 +1059,7 @@
+diff -r 32d72a0285e0 source/common/param.cpp
+--- a/source/common/param.cpp	Tue Feb 10 21:38:22 2015 -0600
++++ b/source/common/param.cpp	Thu Feb 12 09:12:01 2015 -0700
+@@ -1151,6 +1151,7 @@
  
  int x265_set_globals(x265_param *param)
  {
 +#if 0
      static int once /* = 0 */;
  
-     if (ATOMIC_CAS32(&once, 0, 1) == 1)
-@@ -1070,6 +1071,7 @@
+     if (ATOMIC_INC(&once) > 1)
+@@ -1162,6 +1163,7 @@
          }
      }
      else
