@@ -172,7 +172,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
     [self postChangedNotification];
 }
 
-
 - (void)setDenoiseTune:(NSString *)denoiseTune
 {
     [_denoiseTune autorelease];
@@ -439,7 +438,14 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
         {
             // New format, read the values directly
             self.denoise = preset[@"PictureDenoiseFilter"];
-            self.denoisePreset = preset[@"PictureDenoisePreset"];
+            if (![[_HandBrake_denoisePresetsDict allValues] containsObject:self.denoisePreset])
+            {
+                self.denoisePreset = @"light";
+            }
+            else
+            {
+                self.denoisePreset = preset[@"PictureDenoisePreset"];
+            }
             self.denoiseTune = preset[@"PictureDenoiseTune"];
             self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
         }
