@@ -74,6 +74,12 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                 av_dict_set(&av_opts, "dsur_mode", "on", 0);
             break;
 
+        case HB_ACODEC_FFEAC3:
+            codec_id = AV_CODEC_ID_EAC3;
+            if (matrix_encoding != AV_MATRIX_ENCODING_NONE)
+                av_dict_set(&av_opts, "dsur_mode", "on", 0);
+            break;
+
         case HB_ACODEC_FDK_AAC:
         case HB_ACODEC_FDK_HAAC:
             codec_name          = "libfdk_aac";

@@ -1121,6 +1121,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     hb_fifo_close( &audio->priv.scan_cache );
 
     audio->config.in.samplerate = info.rate.num;
+    audio->config.in.sample_bit_depth = info.sample_bit_depth;
     audio->config.in.samples_per_frame = info.samples_per_frame;
     audio->config.in.bitrate = info.bitrate;
     audio->config.in.matrix_encoding = info.matrix_encoding;
@@ -1189,6 +1190,15 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
         {
             switch (audio->config.in.codec)
             {
+                case HB_ACODEC_AC3:
+                    codec_name = "AC3";
+                    break;
+                case HB_ACODEC_FFEAC3:
+                    codec_name = "E-AC3";
+                    break;
+                case HB_ACODEC_FFTRUEHD:
+                    codec_name = "TrueHD";
+                    break;
                 case HB_ACODEC_DCA:
                     codec_name = "DTS";
                     break;
@@ -1197,6 +1207,9 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
                     break;
                 case HB_ACODEC_FFAAC:
                     codec_name = "AAC";
+                    break;
+                case HB_ACODEC_FFFLAC:
+                    codec_name = "FLAC";
                     break;
                 case HB_ACODEC_MP3:
                     codec_name = "MP3";

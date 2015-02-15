@@ -381,6 +381,7 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->matrix_encoding = AV_MATRIX_ENCODING_NONE;
     info->channel_layout = hdr2layout[nchannels - 1];
     info->channel_map = &hb_libav_chan_map;
+    info->sample_bit_depth = sample_size;
     info->samples_per_frame = ( duration * rate ) / 90000;
 
     return 1;

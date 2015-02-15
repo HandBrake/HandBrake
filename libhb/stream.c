@@ -81,7 +81,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x85, U, 0,                0,                      "ATSC Program ID"),
     // 0x86 can be BD DTS-HD/DTS. Set to 'unknown' till we know more.
     st(0x86, U, HB_ACODEC_DCA_HD, AV_CODEC_ID_DTS,        "DTS-HD MA"),
-    st(0x87, A, HB_ACODEC_FFMPEG, AV_CODEC_ID_EAC3,       "E-AC3"),
+    st(0x87, A, HB_ACODEC_FFEAC3, AV_CODEC_ID_EAC3,       "E-AC3"),
 
     st(0x8a, A, HB_ACODEC_DCA,    AV_CODEC_ID_DTS,        "DTS"),
 
@@ -3847,7 +3847,7 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
                     // HD-DVD TrueHD
                     int idx = update_ps_streams( stream, pes_info.stream_id,
                                             pes_info.bd_substream_id, 0, A );
-                    stream->pes.list[idx].codec = HB_ACODEC_FFMPEG;
+                    stream->pes.list[idx].codec       = HB_ACODEC_FFTRUEHD;
                     stream->pes.list[idx].codec_param = AV_CODEC_ID_TRUEHD;
                     continue;
                 }
@@ -4151,7 +4151,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
 
             update_ts_streams( stream, pid, HB_SUBSTREAM_BD_TRUEHD,
                                stype, A, &pes_idx );
-            stream->pes.list[pes_idx].codec = HB_ACODEC_FFMPEG;
+            stream->pes.list[pes_idx].codec       = HB_ACODEC_FFTRUEHD;
             stream->pes.list[pes_idx].codec_param = AV_CODEC_ID_TRUEHD;
             continue;
         }
@@ -4162,7 +4162,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             // which conflicts with SDDS
             // To distinguish, Bluray streams have a reg_desc of HDMV
             update_ts_streams( stream, pid, 0, stype, A, &pes_idx );
-            stream->pes.list[pes_idx].codec = HB_ACODEC_FFMPEG;
+            stream->pes.list[pes_idx].codec       = HB_ACODEC_FFEAC3;
             stream->pes.list[pes_idx].codec_param = AV_CODEC_ID_EAC3;
             continue;
         }
@@ -5058,6 +5058,14 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
             audio->config.in.codec       = HB_ACODEC_AC3;
             break;
 
+        case AV_CODEC_ID_EAC3:
+            audio->config.in.codec = HB_ACODEC_FFEAC3;
+            break;
+
+        case AV_CODEC_ID_TRUEHD:
+            audio->config.in.codec = HB_ACODEC_FFTRUEHD;
+            break;
+
         case AV_CODEC_ID_DTS:
         {
             switch (codec->profile)
@@ -5076,6 +5084,14 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
                 default:
                     break;
             }
+        } break;
+
+        case AV_CODEC_ID_FLAC:
+        {
+            int len = MIN(codec->extradata_size, HB_CONFIG_MAX_SIZE);
+            memcpy(audio->priv.config.extradata.bytes, codec->extradata, len);
+            audio->priv.config.extradata.length = len;
+            audio->config.in.codec              = HB_ACODEC_FFFLAC;
         } break;
 
         case AV_CODEC_ID_MP3:

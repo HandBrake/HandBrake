@@ -333,16 +333,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         {
             switch (w->audio->config.out.mixdown)
             {
-                case HB_AMIXDOWN_MONO:
-                    if (w->codec_param == AV_CODEC_ID_TRUEHD)
-                    {
-                        // libavcodec can't decode TrueHD Mono (bug #356)
-                        // work around it by requesting Stereo and downmixing
-                        pv->context->request_channel_layout = AV_CH_LAYOUT_STEREO;
-                        break;
-                    }
-                    pv->context->request_channel_layout = AV_CH_LAYOUT_MONO;
-                    break;
                 // request 5.1 before downmixing to dpl1/dpl2
                 case HB_AMIXDOWN_DOLBY:
                 case HB_AMIXDOWN_DOLBYPLII:
@@ -355,6 +345,14 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
                     break;
             }
         }
+    }
+
+    // libavcodec can't decode TrueHD Mono (bug #356)
+    // work around it by requesting Stereo and downmixing
+    if (w->codec_param                     == AV_CODEC_ID_TRUEHD &&
+        w->audio->config.in.channel_layout == AV_CH_LAYOUT_MONO)
+    {
+        pv->context->request_channel_layout = AV_CH_LAYOUT_STEREO;
     }
 
     // Set decoder opts...
@@ -711,7 +709,6 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 }
                 if (dec_len > 0 && got_frame)
                 {
-                    info->rate.den = 1;
                     // libavcoded doesn't consistently set frame->sample_rate
                     if (frame->sample_rate != 0)
                     {
@@ -722,7 +719,9 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         info->rate.num = context->sample_rate;
                         hb_log("decavcodecaBSInfo: warning: invalid frame sample_rate! Using context sample_rate.");
                     }
-                    info->samples_per_frame  = frame->nb_samples;
+                    info->rate.den          = 1;
+                    info->samples_per_frame = frame->nb_samples;
+                    info->sample_bit_depth  = context->bits_per_raw_sample;
 
                     int bps = av_get_bits_per_sample(context->codec_id);
                     int channels = av_get_channel_layout_nb_channels(frame->channel_layout);

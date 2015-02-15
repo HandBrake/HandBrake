@@ -425,7 +425,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
                 add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_AC3,
                           HB_ACODEC_AC3, AV_CODEC_ID_AC3);
                 add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_TRUEHD,
-                          HB_ACODEC_FFMPEG, AV_CODEC_ID_TRUEHD);
+                          HB_ACODEC_FFTRUEHD, AV_CODEC_ID_TRUEHD);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTS:
@@ -441,7 +441,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
                 add_audio(ii, title->list_audio, bdaudio, 0,
-                          HB_ACODEC_FFMPEG, AV_CODEC_ID_EAC3);
+                          HB_ACODEC_FFEAC3, AV_CODEC_ID_EAC3);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_LPCM:

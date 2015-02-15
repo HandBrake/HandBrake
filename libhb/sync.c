@@ -1260,13 +1260,15 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         w->fifo_out = w->audio->priv.fifo_sync;
     }
 
-    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS ||
-        w->audio->config.out.codec == HB_ACODEC_AAC_PASS )
+    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS  ||
+        w->audio->config.out.codec == HB_ACODEC_AAC_PASS  ||
+        w->audio->config.out.codec == HB_ACODEC_EAC3_PASS ||
+        w->audio->config.out.codec == HB_ACODEC_FLAC_PASS )
     {
-        /* Have a silent AC-3/AAC frame ready in case we have to fill a
-           gap */
-        AVCodec        * codec;
-        AVCodecContext * c;
+        /* Have a silent frame ready in case we have to fill a gap */
+        AVDictionary   *av_opts = NULL;
+        AVCodec        *codec;
+        AVCodecContext *c;
 
         switch ( w->audio->config.out.codec )
         {
@@ -1274,9 +1276,17 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             {
                 codec = avcodec_find_encoder( AV_CODEC_ID_AC3 );
             } break;
+            case HB_ACODEC_EAC3_PASS:
+            {
+                codec = avcodec_find_encoder( AV_CODEC_ID_EAC3 );
+            } break;
             case HB_ACODEC_AAC_PASS:
             {
                 codec = avcodec_find_encoder_by_name("aac");
+            } break;
+            case HB_ACODEC_FLAC_PASS:
+            {
+                codec = avcodec_find_encoder( AV_CODEC_ID_FLAC );
             } break;
             default:
             {
@@ -1290,7 +1300,71 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         c->sample_rate = w->audio->config.in.samplerate;
         c->channels    =
             av_get_channel_layout_nb_channels(w->audio->config.in.channel_layout);
-        hb_ff_set_sample_fmt(c, codec, AV_SAMPLE_FMT_FLT);
+
+        /*
+         * lossless codecs may encode differently depending on the bit depth, so
+         * we need to set it correctly if we want the bitstream to be as close
+         * as possible to what we're passing through
+         */
+        if (w->audio->config.out.codec == HB_ACODEC_FLAC_PASS)
+        {
+            if (w->audio->config.in.sample_bit_depth <= 16)
+            {
+                hb_ff_set_sample_fmt(c, codec, AV_SAMPLE_FMT_S16);
+            }
+            else
+            {
+                hb_ff_set_sample_fmt(c, codec, AV_SAMPLE_FMT_S32);
+            }
+            c->bits_per_raw_sample = w->audio->config.in.sample_bit_depth;
+        }
+        else
+        {
+            hb_ff_set_sample_fmt(c, codec, AV_SAMPLE_FMT_FLTP);
+        }
+
+        /*
+         * the default frame size selected by the encoder may not match
+         * that of the input stream, but the FLAC encoder will honor whatever
+         * frame size we set as long as it's a valid FLAC block size.
+         *
+         * for AC-3, the frame size is the same for all streams.
+         *
+         * for E-AC-3, using the same bitrate and sample rate as the input
+         * should result in the frame size being the same as the source's.
+         */
+        if (w->audio->config.out.codec == HB_ACODEC_FLAC_PASS)
+        {
+            c->frame_size = w->audio->config.in.samples_per_frame;
+        }
+
+        /*
+         * we want the output to be as close as possible to what we're passing
+         * through, and we do have access to the source's matrix encoding mode.
+         */
+        if (w->audio->config.out.codec == HB_ACODEC_AC3_PASS ||
+            w->audio->config.out.codec == HB_ACODEC_EAC3_PASS)
+        {
+            switch (w->audio->config.in.matrix_encoding)
+            {
+                case AV_MATRIX_ENCODING_DOLBY:
+                case AV_MATRIX_ENCODING_DPLII:
+                    av_dict_set(&av_opts, "dsur_mode",       "on",     0);
+                    break;
+                case AV_MATRIX_ENCODING_DPLIIX:
+                case AV_MATRIX_ENCODING_DOLBYEX:
+                    av_dict_set(&av_opts, "dsurex_mode",     "on",     0);
+                    break;
+                case AV_MATRIX_ENCODING_DPLIIZ:
+                    av_dict_set(&av_opts, "dsurex_mode",     "dpliiz", 0);
+                    break;
+                case AV_MATRIX_ENCODING_DOLBYHEADPHONE:
+                    av_dict_set(&av_opts, "dheadphone_mode", "on",     0);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         if (w->audio->config.in.channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
         {
@@ -1301,7 +1375,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             c->channel_layout = w->audio->config.in.channel_layout;
         }
 
-        if (hb_avcodec_open(c, codec, NULL, 0) < 0)
+        if (hb_avcodec_open(c, codec, &av_opts, 0) < 0)
         {
             hb_log("sync: track %d, hb_avcodec_open() failed, dropping video to sync",
                      w->audio->config.out.track);
@@ -1358,6 +1432,12 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             free( zeros );
             hb_avcodec_close( c );
         }
+        AVDictionaryEntry *opt = NULL;
+        while ((opt = av_dict_get(av_opts, "", opt, AV_DICT_IGNORE_SUFFIX)) != NULL)
+        {
+            hb_log("InitAudio: unknown option '%s'", opt->key);
+        }
+        av_dict_free( &av_opts );
         av_free( c );
     }
     else
