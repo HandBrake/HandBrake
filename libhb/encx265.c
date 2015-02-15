@@ -10,6 +10,7 @@
 
 #include "hb.h"
 #include "hb_dict.h"
+#include "h265_common.h"
 #include "x265.h"
 
 int  encx265Init (hb_work_object_t*, hb_job_t*);
