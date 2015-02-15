@@ -337,6 +337,12 @@
         <false />
         <key>SubtitleAddForeignAudioSubtitle</key>
         <false />
+        <key>SubtitleBurnBehavior</key>
+        <string>none</string>
+        <key>SubtitleBurnDVDSub</key>
+        <false />
+        <key>SubtitleBurnBDSub</key>
+        <false />
         <key>VideoTurboTwoPass</key>
         <false />
         <key>UsesPictureFilters</key>

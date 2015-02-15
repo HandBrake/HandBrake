@@ -164,13 +164,34 @@ ghb_subtitle_exclusive_burn_settings(GValue *settings, gint index)
     gint ii, count;
 
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
+    subsettings = ghb_array_get_nth(subtitle_list, index);
+    if (subsettings != NULL)
+    {
+        int track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+        if (track == -1)
+        {
+            // Allow 2 tracks to be marked burned when one is
+            // foreign audio search.  Extra burned track will be
+            // sanitized away if foreign audio search actually finds
+            // something.
+            return;
+        }
+    }
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
         if (ii != index)
         {
             subsettings = ghb_array_get_nth(subtitle_list, ii);
-            ghb_settings_set_boolean(subsettings, "SubtitleBurned", FALSE);
+            int track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+            if (track != -1)
+            {
+                // Allow 2 tracks to be marked burned when one is
+                // foreign audio search.  Extra burned track will be
+                // sanitized away if foreign audio search actually finds
+                // something.
+                ghb_settings_set_boolean(subsettings, "SubtitleBurned", FALSE);
+            }
         }
     }
 }
@@ -349,6 +370,7 @@ static GValue*  subtitle_add_track(
     int mux,
     gboolean default_track,
     gboolean srt,
+    gboolean burn,
     gboolean *burned)
 {
     int source = 0;
@@ -363,7 +385,9 @@ static GValue*  subtitle_add_track(
         source = SRTSUB;
     }
 
-    if (*burned && !hb_subtitle_can_pass(source, mux))
+    burn |= !hb_subtitle_can_pass(source, mux);
+
+    if (*burned && burn)
     {
         // Can only burn one.  Skip others that must be burned.
         return NULL;
@@ -392,10 +416,17 @@ static GValue*  subtitle_add_track(
 
     subtitle_set_track_description(settings, subsettings);
 
-    if (!hb_subtitle_can_pass(source, mux))
+    if (burn)
     {
         ghb_settings_set_boolean(subsettings, "SubtitleBurned", TRUE);
-        *burned = TRUE;
+        if (track != -1)
+        {
+            // Allow 2 tracks to be marked burned when one is
+            // foreign audio search.  Extra burned track will be
+            // sanitized away if foreign audio search actually finds
+            // something.
+            *burned = TRUE;
+        }
     }
     else
     {
@@ -450,6 +481,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
     gboolean *used;
     const gchar *audio_lang, *pref_lang = NULL;
     gboolean foreign_audio_search, foreign_audio_subs;
+    gboolean burn_foreign, burn_first, burn_dvd, burn_bd;
     gboolean one_burned = FALSE;
 
     const GValue *lang_list;
@@ -506,6 +538,13 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
 
     used = g_malloc0(sub_count * sizeof(gboolean));
 
+    int burn_behavior;
+    burn_behavior = ghb_settings_combo_int(settings, "SubtitleBurnBehavior");
+    burn_foreign = burn_behavior == 1 || burn_behavior == 3;
+    burn_first   = burn_behavior == 2 || burn_behavior == 3;
+    burn_dvd = ghb_settings_get_boolean(settings, "SubtitleBurnDVDSub");
+    burn_bd = ghb_settings_get_boolean(settings, "SubtitleBurnBDSub");
+
     if (foreign_audio_subs &&
         (audio_lang == NULL || strncmp(audio_lang, pref_lang, 4)))
     {
@@ -515,9 +554,16 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         track = ghb_find_subtitle_track(title, pref_lang, 0);
         if (track > 0)
         {
+            gboolean burn;
+            hb_subtitle_t *subtitle;
+            subtitle = hb_list_item(title->list_subtitle, track);
+            burn = (subtitle->source == VOBSUB && burn_dvd) ||
+                   (subtitle->source == PGSSUB && burn_bd)  ||
+                    burn_foreign || burn_first;
             used[track] = TRUE;
             subtitle_add_track(ud, settings, title, track, mux->format,
-                               TRUE, FALSE, &one_burned);
+                               !burn, FALSE, burn, &one_burned);
+            burn_first &= !burn;
         }
     }
 
@@ -525,8 +571,10 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         (audio_lang != NULL && !strncmp(audio_lang, pref_lang, 4)))
     {
         // Add search for foreign audio segments
+        gboolean burn = burn_foreign || burn_first;
         subtitle_add_track(ud, settings, title, -1, mux->format,
-                           TRUE, FALSE, &one_burned);
+                           !burn, FALSE, burn, &one_burned);
+        burn_first &= !burn;
     }
 
     if (behavior != 0)
@@ -543,9 +591,16 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
             {
                 if (!used[track])
                 {
+                    gboolean burn;
+                    hb_subtitle_t *subtitle;
+                    subtitle = hb_list_item(title->list_subtitle, track);
+                    burn = (subtitle->source == VOBSUB && burn_dvd) ||
+                           (subtitle->source == PGSSUB && burn_bd)  ||
+                            burn_first;
                     used[track] = TRUE;
                     subtitle_add_track(ud, settings, title, track, mux->format,
-                                       FALSE, FALSE, &one_burned);
+                                       FALSE, FALSE, burn, &one_burned);
+                    burn_first &= !burn;
                 }
                 next_track = track + 1;
                 if (behavior == 2)
@@ -573,7 +628,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         {
             used[track] = TRUE;
             subtitle_add_track(ud, settings, title, track, mux->format,
-                               FALSE, FALSE, &one_burned);
+                               FALSE, FALSE, burn_first, &one_burned);
         }
     }
     g_free(used);
@@ -1136,12 +1191,12 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
          subsettings == NULL && track < count; track++)
     {
         subsettings = subtitle_add_track(ud, ud->settings, title, track,
-                                mux->format, FALSE, FALSE, &one_burned);
+                                mux->format, FALSE, FALSE, FALSE, &one_burned);
     }
     if (subsettings == NULL)
     {
         subsettings = subtitle_add_track(ud, ud->settings, title, 0,
-                                mux->format, FALSE, TRUE, &one_burned);
+                                mux->format, FALSE, TRUE, FALSE, &one_burned);
     }
     ghb_add_subtitle_to_ui(ud, subsettings);
 
@@ -1198,7 +1253,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     for (track = 0; track < count; track++)
     {
         subtitle_add_track(ud, ud->settings, title, track, mux->format,
-                           FALSE, FALSE, &one_burned);
+                           FALSE, FALSE, FALSE, &one_burned);
     }
     subtitle_refresh_list_ui(ud);
     ghb_live_reset(ud);

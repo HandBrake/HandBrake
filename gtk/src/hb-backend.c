@@ -65,6 +65,19 @@ combo_opts_t subtitle_track_sel_opts =
     d_subtitle_track_sel_opts
 };
 
+static options_map_t d_subtitle_burn_opts[] =
+{
+    {N_("None"),                                     "none",          0, "0"},
+    {N_("Foreign Audio Subtitle Track"),             "foreign",       1, "1"},
+    {N_("First Selected Track"),                     "first",         2, "2"},
+    {N_("Foreign Audio, then First Selected Track"), "foreign_first", 3, "3"},
+};
+combo_opts_t subtitle_burn_opts =
+{
+    sizeof(d_subtitle_burn_opts)/sizeof(options_map_t),
+    d_subtitle_burn_opts
+};
+
 static options_map_t d_audio_track_sel_opts[] =
 {
     {N_("None"),                                    "none",       0, "0"},
@@ -380,6 +393,7 @@ typedef struct
 combo_name_map_t combo_name_map[] =
 {
     {"SubtitleTrackSelectionBehavior", &subtitle_track_sel_opts},
+    {"SubtitleBurnBehavior", &subtitle_burn_opts},
     {"AudioTrackSelectionBehavior", &audio_track_sel_opts},
     {"PtoPType", &point_to_point_opts},
     {"WhenComplete", &when_complete_opts},
@@ -2569,6 +2583,7 @@ ghb_update_ui_combo_box(
         subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
         small_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
         small_opts_set(ud->builder, "SubtitleTrackSelectionBehavior", &subtitle_track_sel_opts);
+        small_opts_set(ud->builder, "SubtitleBurnBehavior", &subtitle_burn_opts);
         small_opts_set(ud->builder, "AudioTrackSelectionBehavior", &audio_track_sel_opts);
         small_opts_set(ud->builder, "PtoPType", &point_to_point_opts);
         small_opts_set(ud->builder, "WhenComplete", &when_complete_opts);
