@@ -652,7 +652,7 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     struct PixelSum *tmp_data = calloc(dst_w * dst_h, sizeof(struct PixelSum));
 
     // Allocate integral image
-    const int integral_stride    = dst_w + 2 * 16;
+    const int integral_stride    = ((dst_w + 15) / 16 * 16) + 2 * 16;
     uint32_t* const integral_mem = calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
     uint32_t* const integral     = integral_mem + integral_stride + 16;
 
