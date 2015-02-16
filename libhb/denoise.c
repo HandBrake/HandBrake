@@ -220,10 +220,14 @@ static int hb_denoise_init( hb_filter_object_t * filter,
     filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
     hb_filter_private_t * pv = filter->private_data;
 
-    double spatial_luma,  spatial_chroma_b,  spatial_chroma_r;
-    double temporal_luma, temporal_chroma_b, temporal_chroma_r;
+    double spatial_luma      = 0.0f,
+           spatial_chroma_b  = 0.0f,
+           spatial_chroma_r  = 0.0f,
+           temporal_luma     = 0.0f,
+           temporal_chroma_b = 0.0f,
+           temporal_chroma_r = 0.0f;
 
-    if( filter->settings )
+    if (filter->settings != NULL)
     {
         switch( sscanf( filter->settings, "%lf:%lf:%lf:%lf:%lf:%lf",
                         &spatial_luma, &spatial_chroma_b, &spatial_chroma_r,
