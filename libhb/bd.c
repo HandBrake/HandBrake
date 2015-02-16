@@ -501,7 +501,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         // If it is beyond the end of the title, drop it.
         if (ti->chapters[ii].start > ti->duration)
         {
-            hb_log("bd: chapter %d invalid start %ld, dropping", ii+1,
+            hb_log("bd: chapter %d invalid start %"PRIu64", dropping", ii+1,
                    ti->chapters[ii].start);
             continue;
         }
