@@ -271,7 +271,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* Apply profile and level settings last. */
-    if (x265_param_apply_profile(param, job->encoder_profile) < 0)
+    if (job->encoder_profile                                       != NULL &&
+        strcasecmp(job->encoder_profile, hb_h265_profile_names[0]) != 0    &&
+        x265_param_apply_profile(param, job->encoder_profile)       < 0)
     {
         goto fail;
     }
