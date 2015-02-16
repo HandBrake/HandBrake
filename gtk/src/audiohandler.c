@@ -177,30 +177,23 @@ int ghb_select_fallback(GValue *settings, int acodec)
 {
     gint fallback = 0;
 
-    switch ( acodec )
+    if (acodec & HB_ACODEC_PASS_FLAG)
     {
-        case HB_ACODEC_MP3_PASS:
-            return HB_ACODEC_LAME;
-
-        case HB_ACODEC_AAC_PASS:
-            return HB_ACODEC_FFAAC;
-
-        case HB_ACODEC_AC3_PASS:
-            return HB_ACODEC_AC3;
-
-        default:
+        fallback = hb_audio_encoder_get_fallback_for_passthru(acodec);
+        if (fallback != 0)
         {
-            const char *mux_id;
-            const hb_container_t *mux;
-
-            mux_id = ghb_settings_get_const_string(settings, "FileFormat");
-            mux = ghb_lookup_container_by_name(mux_id);
-
-            fallback = ghb_settings_audio_encoder_codec(settings,
-                                                        "AudioEncoderFallback");
-            return hb_autopassthru_get_encoder(acodec, 0, fallback, mux->format);
+            return fallback;
         }
     }
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
+
+    fallback = ghb_settings_audio_encoder_codec(settings,
+                                                "AudioEncoderFallback");
+    return hb_autopassthru_get_encoder(acodec, 0, fallback, mux->format);
 }
 
 void
