@@ -166,9 +166,9 @@ hb_filter_object_t hb_filter_nlmeans =
 };
 
 static void nlmeans_border(uint8_t *src,
-                           int w,
-                           int h,
-                           int border)
+                           const int w,
+                           const int h,
+                           const int border)
 {
     const int bw = w + 2 * border;
     uint8_t *image = src + border + bw * border;
@@ -190,11 +190,11 @@ static void nlmeans_border(uint8_t *src,
 
 }
 
-static void nlmeans_deborder(BorderedPlane *src,
+static void nlmeans_deborder(const BorderedPlane *src,
                              uint8_t *dst,
-                             int w,
-                             int s,
-                             int h)
+                             const int w,
+                             const int s,
+                             const int h)
 {
     const int bw = src->w + 2 * src->border;
     uint8_t *image = src->mem + src->border + bw * src->border;
@@ -213,12 +213,12 @@ static void nlmeans_deborder(BorderedPlane *src,
 
 }
 
-static void nlmeans_alloc(uint8_t *src,
-                          int src_w,
-                          int src_s,
-                          int src_h,
+static void nlmeans_alloc(const uint8_t *src,
+                          const int src_w,
+                          const int src_s,
+                          const int src_h,
                           BorderedPlane *dst,
-                          int border)
+                          const int border)
 {
     const int bw = src_w + 2 * border;
     const int bh = src_h + 2 * border;
@@ -244,12 +244,12 @@ static void nlmeans_alloc(uint8_t *src,
 
 }
 
-static void nlmeans_filter_mean(uint8_t *src,
-                                uint8_t *dst,
-                                int w,
-                                int h,
-                                int border,
-                                int size)
+static void nlmeans_filter_mean(const uint8_t *src,
+                                      uint8_t *dst,
+                                const int w,
+                                const int h,
+                                const int border,
+                                const int size)
 {
 
     // Mean filter
@@ -276,7 +276,8 @@ static void nlmeans_filter_mean(uint8_t *src,
 
 }
 
-static uint8_t nlmeans_filter_median_opt(uint8_t *pixels, int size)
+static uint8_t nlmeans_filter_median_opt(uint8_t  *pixels,
+                                         const int size)
 {
 
     // Optimized sorting networks
@@ -340,12 +341,12 @@ static uint8_t nlmeans_filter_median_opt(uint8_t *pixels, int size)
 
 }
 
-static void nlmeans_filter_median(uint8_t *src,
-                                  uint8_t *dst,
-                                  int w,
-                                  int h,
-                                  int border,
-                                  int size)
+static void nlmeans_filter_median(const uint8_t *src,
+                                        uint8_t *dst,
+                                  const int w,
+                                  const int h,
+                                  const int border,
+                                  const int size)
 {
     // Median filter
     const int bw = w + 2 * border;
@@ -372,11 +373,11 @@ static void nlmeans_filter_median(uint8_t *src,
 
 }
 
-static void nlmeans_filter_edgeboost(uint8_t *src,
-                                     uint8_t *dst,
-                                     int w,
-                                     int h,
-                                     int border)
+static void nlmeans_filter_edgeboost(const uint8_t *src,
+                                           uint8_t *dst,
+                                     const int w,
+                                     const int h,
+                                     const int border)
 {
     const int bw = w + 2 * border;
     const int bh = h + 2 * border;
@@ -476,7 +477,7 @@ static void nlmeans_filter_edgeboost(uint8_t *src,
 }
 
 static void nlmeans_prefilter(BorderedPlane *src,
-                              int filter_type)
+                              const int filter_type)
 {
     hb_lock(src->mutex);
     if (src->prefiltered)
@@ -1011,7 +1012,7 @@ static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
     for (int c = 0; c < 3; c++)
     {
         // Extend copy of plane with extra border and place in buffer
-        int border = ((pv->range[c] + 2) / 2 + 15) / 16 * 16;
+        const int border = ((pv->range[c] + 2) / 2 + 15) / 16 * 16;
         nlmeans_alloc(buf->plane[c].data,
                       buf->plane[c].width,
                       buf->plane[c].stride,
