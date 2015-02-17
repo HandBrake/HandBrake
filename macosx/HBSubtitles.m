@@ -306,9 +306,63 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
         }
     }
 
+    // Set the burn key for the appropriate track.
+    if (self.defaults.burnInBehavior != HBSubtitleTrackBurnInBehaviorNone && self.tracks.count)
+    {
+        if (self.defaults.burnInBehavior == HBSubtitleTrackBurnInBehaviorFirst)
+        {
+            if ([self.tracks.firstObject[keySubTrackIndex] integerValue] != -1)
+            {
+                self.tracks.firstObject[keySubTrackBurned] = @YES;
+            }
+            else if (self.tracks.count > 1)
+            {
+                self.tracks[1][keySubTrackBurned] = @YES;
+            }
+        }
+        else if (self.defaults.burnInBehavior == HBSubtitleTrackBurnInBehaviorForeignAudio)
+        {
+            if ([self.tracks.firstObject[keySubTrackIndex] integerValue] == -1)
+            {
+                self.tracks.firstObject[keySubTrackBurned] = @YES;
+            }
+        }
+        else if (self.defaults.burnInBehavior == HBSubtitleTrackBurnInBehaviorForeignAudioThenFirst)
+        {
+            self.tracks.firstObject[keySubTrackBurned] = @YES;
+        }
+    }
+
+    // Burn-in the first dvd or bluray track and remove the others.
+    if (self.defaults.burnInDVDSubtitles || self.defaults.burnInBluraySubtitles)
+    {
+        // Ugly settings for ugly players
+        BOOL bitmapSubtitlesFound = NO;
+
+        NSMutableArray *tracksToDelete = [[NSMutableArray alloc] init];
+        for (NSMutableDictionary *track in self.tracks)
+        {
+            if ([track[keySubTrackIndex] integerValue] != -1)
+            {
+                if ((([track[keySubTrackType] intValue] == VOBSUB && self.defaults.burnInDVDSubtitles) ||
+                     ([track[keySubTrackType] intValue] == PGSSUB && self.defaults.burnInBluraySubtitles)) &&
+                    !bitmapSubtitlesFound)
+                {
+                    track[keySubTrackBurned] = @YES;
+                    bitmapSubtitlesFound = YES;
+                }
+                else if ([track[keySubTrackType] intValue] == VOBSUB || [track[keySubTrackType] intValue] == PGSSUB)
+                {
+                    [tracksToDelete addObject:track];
+                }
+            }
+        }
+        [self.tracks removeObjectsInArray:tracksToDelete];
+        [tracksToDelete release];
+    }
+
     // Add an empty track
     [self insertObject:[self createSubtitleTrack] inTracksAtIndex:[self countOfTracks]];
-
     [self validatePassthru];
 }
 
@@ -318,7 +372,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
  */
 - (void)validatePassthru
 {
-    int subtitleTrackType;
     BOOL convertToBurnInUsed = NO;
     NSMutableArray *tracksToDelete = [[NSMutableArray alloc] init];
 
@@ -330,7 +383,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
             continue;
         }
 
-        subtitleTrackType = [track[keySubTrackType] intValue];
+        int subtitleTrackType = [track[keySubTrackType] intValue];
         if (!hb_subtitle_can_pass(subtitleTrackType, self.container))
         {
             if (convertToBurnInUsed == NO)
@@ -356,7 +409,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
                 continue;
             }
 
-            subtitleTrackType = [track[keySubTrackType] intValue];
+            int subtitleTrackType = [track[keySubTrackType] intValue];
             if (hb_subtitle_can_pass(subtitleTrackType, self.container))
             {
                 track[keySubTrackBurned] = @0;

@@ -37,6 +37,28 @@
     self.addCC = [preset[@"SubtitleAddCC"] boolValue];
     self.addForeignAudioSearch = [preset[@"SubtitleAddForeignAudioSearch"] boolValue];
     self.addForeignAudioSubtitle = [preset[@"SubtitleAddForeignAudioSubtitle"] boolValue];
+
+    NSString *burnInBehavior = preset[@"SubtitleBurnBehavior"];
+
+    if ([burnInBehavior isEqualToString:@"foreign"])
+    {
+        self.burnInBehavior = HBSubtitleTrackBurnInBehaviorForeignAudio;
+    }
+    else if ([burnInBehavior isEqualToString:@"fist"])
+    {
+        self.burnInBehavior = HBSubtitleTrackBurnInBehaviorFirst;
+    }
+    else if ([burnInBehavior isEqualToString:@"foreign_first"])
+    {
+        self.burnInBehavior = HBSubtitleTrackBurnInBehaviorForeignAudioThenFirst;
+    }
+    else
+    {
+        self.burnInBehavior = HBSubtitleTrackBurnInBehaviorNone;
+    }
+
+    self.burnInDVDSubtitles = [preset[@"SubtitleBurnDVDSub"] boolValue];
+    self.burnInBluraySubtitles = [preset[@"SubtitleBurnBDSub"] boolValue];
 }
 
 - (void)writeToPreset:(NSMutableDictionary *)preset
@@ -58,6 +80,26 @@
     preset[@"SubtitleAddCC"] = @(self.addCC);
     preset[@"SubtitleAddForeignAudioSearch"] = @(self.addForeignAudioSearch);
     preset[@"SubtitleAddForeignAudioSubtitle"] = @(self.addForeignAudioSubtitle);
+
+    if (self.burnInBehavior == HBSubtitleTrackBurnInBehaviorForeignAudio)
+    {
+        preset[@"SubtitleBurnBehavior"] = @"foreign";
+    }
+    else if (self.burnInBehavior == HBSubtitleTrackBurnInBehaviorFirst)
+    {
+        preset[@"SubtitleBurnBehavior"] = @"fist";
+    }
+    else if (self.burnInBehavior == HBSubtitleTrackBurnInBehaviorForeignAudioThenFirst)
+    {
+        preset[@"SubtitleBurnBehavior"] = @"foreign_first";
+    }
+    else
+    {
+        preset[@"SubtitleBurnBehavior"] = @"none";
+    }
+
+    preset[@"SubtitleBurnDVDSub"] = @(self.burnInDVDSubtitles);
+    preset[@"SubtitleBurnBDSub"] = @(self.burnInBluraySubtitles);
 }
 
 #pragma mark - NSCopying
@@ -75,8 +117,12 @@
         copy->_addForeignAudioSearch = _addForeignAudioSearch;
         copy->_addForeignAudioSubtitle = _addForeignAudioSubtitle;
         copy->_addCC = _addCC;
+
+        copy->_burnInBehavior = _burnInBehavior;
+        copy->_burnInDVDSubtitles = _burnInDVDSubtitles;
+        copy->_burnInBluraySubtitles = _burnInBluraySubtitles;
     }
-    
+
     return copy;
 }
 
@@ -84,7 +130,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBAudioDefaultsVersion"];
+    [coder encodeInt:1 forKey:@"HBSubtitlesDefaultsVersion"];
 
     encodeInteger(_trackSelectionBehavior);
     encodeObject(_trackSelectionLanguages);
@@ -92,6 +138,10 @@
     encodeBool(_addForeignAudioSearch);
     encodeBool(_addForeignAudioSubtitle);
     encodeBool(_addCC);
+
+    encodeInteger(_burnInBehavior);
+    encodeBool(_burnInDVDSubtitles);
+    encodeBool(_burnInBluraySubtitles);
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -104,6 +154,10 @@
     decodeBool(_addForeignAudioSearch);
     decodeBool(_addForeignAudioSubtitle);
     decodeBool(_addCC);
+
+    decodeInteger(_burnInBehavior);
+    decodeBool(_burnInDVDSubtitles);
+    decodeBool(_burnInBluraySubtitles);
 
     return self;
 }
