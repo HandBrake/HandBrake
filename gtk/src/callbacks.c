@@ -1621,7 +1621,7 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
 static void
 update_acodec(signal_user_data_t *ud)
 {
-    ghb_adjust_audio_rate_combos(ud);
+    ghb_santiize_audio_tracks(ud);
     ghb_grey_combo_options (ud);
 }
 
