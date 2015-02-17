@@ -1558,11 +1558,11 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
             hb_log("hb_sample_pts: no PTS in video packet near %"PRIu64, fpos);
             return pp;
         }
-        pp.pts = ( ( (uint64_t)pes[9] >> 1 ) & 7 << 30 ) |
-                 ( (uint64_t)pes[10] << 22 ) |
-                 ( ( (uint64_t)pes[11] >> 1 ) << 15 ) |
-                 ( (uint64_t)pes[12] << 7 ) |
-                 ( (uint64_t)pes[13] >> 1 );
+        pp.pts = ((((uint64_t)pes[ 9] >> 1 ) & 7) << 30) |
+                 (  (uint64_t)pes[10] << 22)             |
+                 ( ((uint64_t)pes[11] >> 1 )      << 15) |
+                 (  (uint64_t)pes[12] << 7 )             |
+                 (  (uint64_t)pes[13] >> 1 );
 
         if ( ts_isIframe( stream, buf, adapt_len ) )
         {
