@@ -44,7 +44,7 @@
     {
         self.burnInBehavior = HBSubtitleTrackBurnInBehaviorForeignAudio;
     }
-    else if ([burnInBehavior isEqualToString:@"fist"])
+    else if ([burnInBehavior isEqualToString:@"first"])
     {
         self.burnInBehavior = HBSubtitleTrackBurnInBehaviorFirst;
     }
@@ -87,7 +87,7 @@
     }
     else if (self.burnInBehavior == HBSubtitleTrackBurnInBehaviorFirst)
     {
-        preset[@"SubtitleBurnBehavior"] = @"fist";
+        preset[@"SubtitleBurnBehavior"] = @"first";
     }
     else if (self.burnInBehavior == HBSubtitleTrackBurnInBehaviorForeignAudioThenFirst)
     {
