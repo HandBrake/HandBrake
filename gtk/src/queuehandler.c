@@ -23,6 +23,9 @@
 #include "presets.h"
 #include "audiohandler.h"
 #include "ghb-dvd.h"
+#include "plist.h"
+
+void ghb_queue_buttons_grey(signal_user_data_t *ud);
 
 G_MODULE_EXPORT void
 queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
@@ -733,10 +736,136 @@ ghb_update_all_status(signal_user_data_t *ud, int status)
     }
 }
 
+static void
+save_queue_file(signal_user_data_t *ud)
+{
+    int ii, count;
+    GValue *queue = ghb_value_dup(ud->queue);
+
+    count = ghb_array_len(queue);
+    for (ii = 0; ii < count; ii++)
+    {
+        GValue *settings = ghb_array_get_nth(ud->queue, ii);
+        if (settings == NULL)
+            continue;
+        ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+    }
+
+    GtkWidget *dialog;
+    GtkWindow *hb_window;
+
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = gtk_file_chooser_dialog_new("Queue Destination",
+                      hb_window,
+                      GTK_FILE_CHOOSER_ACTION_SAVE,
+                      GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                      GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                      NULL);
+    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "queue.xml");
+    if (gtk_dialog_run(GTK_DIALOG (dialog)) != GTK_RESPONSE_ACCEPT)
+    {
+        ghb_value_free(queue);
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
+    gtk_widget_destroy(dialog);
+
+    FILE *file = g_fopen(filename, "w");
+    if (file != NULL)
+    {
+        ghb_plist_write(file, queue);
+        fclose(file);
+    }
+    g_free (filename);
+    ghb_value_free(queue);
+}
+
+static void
+open_queue_file(signal_user_data_t *ud)
+{
+    GtkWidget *dialog;
+    GtkWindow *hb_window;
+
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = gtk_file_chooser_dialog_new("Queue Destination",
+                      hb_window,
+                      GTK_FILE_CHOOSER_ACTION_OPEN,
+                      GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                      GHB_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                      NULL);
+
+    // Add filters
+    GtkFileFilter *filter;
+    GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "QueueFilterAll"));
+    gtk_file_filter_set_name(filter, _("All"));
+    gtk_file_filter_add_pattern(filter, "*");
+    gtk_file_chooser_add_filter(chooser, filter);
+    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "QueueFilterXML"));
+    gtk_file_filter_set_name(filter, "XML");
+    gtk_file_filter_add_pattern(filter, "*.xml");
+    gtk_file_filter_add_pattern(filter, "*.XML");
+    gtk_file_filter_add_pattern(filter, "*.plist");
+    gtk_file_filter_add_pattern(filter, "*.PLIST");
+    gtk_file_chooser_add_filter(chooser, filter);
+
+    if (gtk_dialog_run(GTK_DIALOG (dialog)) != GTK_RESPONSE_ACCEPT)
+    {
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    GValue *queue;
+    char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
+    gtk_widget_destroy(dialog);
+
+    if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+    {
+        queue = ghb_plist_parse_file(filename);
+        if (queue != NULL)
+        {
+            int ii, count;
+            count = ghb_array_len(queue);
+            for (ii = 0; ii < count; ii++)
+            {
+                GValue *settings = ghb_array_get_nth(queue, ii);
+                ghb_array_remove(queue, ii);
+                ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+                ghb_settings_set_int(settings, "job_unique_id", 0);
+
+                if (ud->queue == NULL)
+                    ud->queue = ghb_array_value_new(32);
+                ghb_array_append(ud->queue, settings);
+                add_to_queue_list(ud, settings, NULL);
+            }
+            ghb_queue_buttons_grey(ud);
+            ghb_save_queue(ud->queue);
+            ghb_value_free(queue);
+        }
+    }
+    g_free (filename);
+}
+
+G_MODULE_EXPORT void
+queue_save_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    save_queue_file(ud);
+}
+
+G_MODULE_EXPORT void
+queue_open_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    open_queue_file(ud);
+}
+
 G_MODULE_EXPORT void
 queue_reload_all_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_update_all_status(ud, GHB_QUEUE_PENDING);
+    ghb_save_queue(ud->queue);
+    ghb_update_pending(ud);
 }
 
 G_MODULE_EXPORT void
@@ -946,6 +1075,7 @@ queue_add(signal_user_data_t *ud, GValue *settings, gint batch)
     add_to_queue_list(ud, settings, NULL);
     ghb_save_queue(ud->queue);
     ghb_update_pending(ud);
+    ghb_queue_buttons_grey(ud);
 
     return TRUE;
 }
@@ -1803,6 +1933,8 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 
     paused = queue_state & GHB_STATE_PAUSED;
 
+    widget = GHB_WIDGET(ud->builder, "queue_save");
+    gtk_widget_set_sensitive(widget, !!queue_count);
     widget = GHB_WIDGET(ud->builder, "queue_add");
     gtk_widget_set_sensitive(widget, show_start);
     widget = GHB_WIDGET(ud->builder, "queue_add_menu");

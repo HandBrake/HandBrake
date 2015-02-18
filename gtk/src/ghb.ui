@@ -6497,6 +6497,41 @@ Resets all queue jobs to pending and ready to run again.</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkToolButton" id="queue_save">
+                        <property name="visible">True</property>
+                        <property name="sensitive">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="is_important">True</property>
+                        <property name="label" translatable="yes">Save Queue</property>
+                        <property name="icon_name">document-save-as</property>
+                        <property name="tooltip_text" translatable="yes">Save the current queue of encode jobs to a file.
+This file may be reloaded at a later time to edit your jobs and re-encode.</property>
+                        <signal name="clicked" handler="queue_save_clicked_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="queue_open">
+                        <property name="visible">True</property>
+                        <property name="sensitive">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="is_important">True</property>
+                        <property name="label" translatable="yes">Load Queue File</property>
+                        <property name="icon_name">document-open</property>
+                        <property name="tooltip_text" translatable="yes">Load a previously saved queue file.</property>
+                        <signal name="clicked" handler="queue_open_clicked_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
