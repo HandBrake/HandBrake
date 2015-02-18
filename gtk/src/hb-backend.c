@@ -4000,7 +4000,7 @@ ghb_validate_subtitles(GValue *settings, GtkWindow *parent)
     }
 
     const GValue *slist, *subtitle;
-    gint count, ii, source;
+    gint count, ii, source, track;
     gboolean burned, one_burned = FALSE;
 
     slist = ghb_settings_get_value(settings, "subtitle_list");
@@ -4008,8 +4008,10 @@ ghb_validate_subtitles(GValue *settings, GtkWindow *parent)
     for (ii = 0; ii < count; ii++)
     {
         subtitle = ghb_array_get_nth(slist, ii);
+        track = ghb_settings_get_int(subtitle, "SubtitleTrack");
         source = ghb_settings_get_int(subtitle, "SubtitleSource");
-        burned = ghb_settings_get_boolean(subtitle, "SubtitleBurned");
+        burned = track != -1 &&
+                 ghb_settings_get_boolean(subtitle, "SubtitleBurned");
         if (burned && one_burned)
         {
             // MP4 can only handle burned vobsubs.  make sure there isn't
