@@ -114,7 +114,7 @@
 /**
  * Loads output panel from OutputPanel.nib and shows it.
  */
-- (IBAction)showOutputPanel:(id)sender
+- (IBAction)showWindow:(id)sender
 {
     if ([[self window] isVisible])
     {
@@ -122,10 +122,10 @@
     }
     else
     {
-    [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
-    [self showWindow:sender];
+        [textView scrollToEndOfDocument:self];
+        [super showWindow:sender];
 
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OutputPanelIsOpen"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OutputPanelIsOpen"];
     }
 }
 
@@ -209,7 +209,10 @@
     if (outputTextStorage.length > TextStorageUpperSizeLimit)
 		[outputTextStorage deleteCharactersInRange:NSMakeRange(0, [outputTextStorage length] - TextStorageLowerSizeLimit)];
 
-    [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
+    if (self.window.isVisible)
+    {
+        [textView scrollToEndOfDocument:self];
+    }
 
     FILE *f = fopen(_outputLogFile.fileSystemRepresentation, "a");
     fprintf(f, "%s", text.UTF8String);

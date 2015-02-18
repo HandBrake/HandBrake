@@ -418,7 +418,7 @@
  */
 - (IBAction)showOutputPanel:(id)sender
 {
-    [self.outputPanel showOutputPanel:sender];
+    [self.outputPanel showWindow:sender];
 }
 
 - (IBAction)showPicturePanel:(id)sender

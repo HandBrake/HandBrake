@@ -13,7 +13,6 @@
  */
 @interface HBOutputPanelController : NSWindowController
 
-- (IBAction)showOutputPanel:(id)sender;
 - (IBAction)clearOutput:(id)sender;
 - (IBAction)copyAllOutputToPasteboard:(id)sender;
 - (IBAction)openActivityLogFile:(id)sender;
