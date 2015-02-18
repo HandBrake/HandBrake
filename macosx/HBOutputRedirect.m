@@ -16,6 +16,24 @@ static HBOutputRedirect *g_stderrRedirect = nil;
 static int stdoutwrite(void *inFD, const char *buffer, int size);
 static int stderrwrite(void *inFD, const char *buffer, int size);
 
+@interface HBOutputRedirect ()
+{
+    /// Set that contains all registered listeners for this output.
+    NSMutableSet *listeners;
+
+    /// Selector that is called on listeners to forward the output.
+    SEL forwardingSelector;
+
+    /// Output stream (@c stdout or @c stderr) redirected by this object.
+    FILE *stream;
+
+    /// Pointer to old write function for the stream.
+    int	(*oldWriteFunc)(void *, const char *, int);
+}
+
+@end
+
+
 @interface HBOutputRedirect (Private)
 - (id)initWithStream:(FILE *)aStream selector:(SEL)aSelector;
 - (void)startRedirect;
@@ -28,25 +46,24 @@ static int stderrwrite(void *inFD, const char *buffer, int size);
  */
 int	stdoutwrite(void *inFD, const char *buffer, int size)
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
-	[g_stdoutRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
-	[data release];
-	[pool release];
-	return size;
+    @autoreleasepool
+    {
+        NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
+        [g_stdoutRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
+        [data release];
+    }
+    return size;
 }
 
-/**
- * Function that replaces stderr->_write and forwards stderr to g_stderrRedirect.
- */
 int	stderrwrite(void *inFD, const char *buffer, int size)
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
-	[g_stderrRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
-	[data release];
-	[pool release];
-	return size;
+    @autoreleasepool
+    {
+        NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
+        [g_stderrRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
+        [data release];
+    }
+    return size;
 }
 
 @implementation HBOutputRedirect
