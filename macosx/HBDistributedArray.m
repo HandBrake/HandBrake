@@ -195,7 +195,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
  */
 - (void)reload
 {
-    NSMutableArray *jobsArray = nil;;
+    NSMutableArray *jobsArray = nil;
     @try
     {
         jobsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:self.fileURL.path];

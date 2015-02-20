@@ -9,6 +9,16 @@
 extern NSString *HBDistributedArrayChanged;
 
 /**
+ *  Objects in HBDistributedArray
+ *  must implement this protocol.
+ */
+@protocol HBUniqueObject <NSObject>
+
+@property (nonatomic, readonly) NSString *uuid;
+
+@end
+
+/**
  *  HBDistributedArray
  *  a mutable array that share its content between processes.
  *  post a HBDistributedArrayChanged when the content is changed
