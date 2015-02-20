@@ -490,8 +490,8 @@
     if (self.currentJob.state != HBJobStateCanceled)
     {
         // Both the Growl Alert and Sending to tagger can be done as encodes roll off the queue
-        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 2 ||
-            [[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 3)
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] ||
+            [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
         {
             // If Play System Alert has been selected in Preferences
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AlertWhenDoneSound"] == YES)
@@ -802,8 +802,8 @@
     }
 
     // If Alert Window or Window and Growl has been selected
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 1 ||
-        [[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 3)
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] ||
+        [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
     {
         // On Screen Notification
         NSAlert *alert = [[NSAlert alloc] init];
@@ -815,7 +815,7 @@
     }
 
     // If sleep has been selected
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 4)
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
     {
         // Sleep
         NSDictionary *errorDict;
@@ -825,7 +825,7 @@
         [scriptObject release];
     }
     // If Shutdown has been selected
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 5)
+    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"] )
     {
         // Shut Down
         NSDictionary *errorDict;
@@ -933,7 +933,7 @@
 
 - (void)remindUserOfSleepOrShutdown
 {
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 4)
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString:@"Put Computer To Sleep"])
     {
         // Warn that computer will sleep after encoding
         NSBeep();
@@ -952,7 +952,7 @@
         }
         [alert release];
     }
-    else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == 5)
+    else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString:@"Shut Down Computer"])
     {
         // Warn that computer will shut down after encoding
         NSBeep();
