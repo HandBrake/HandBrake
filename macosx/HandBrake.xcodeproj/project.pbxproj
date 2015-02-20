@@ -114,6 +114,8 @@
 		A91017B41A64440A00039BFB /* HBSubtitles.m in Sources */ = {isa = PBXBuildFile; fileRef = A91017B31A64440A00039BFB /* HBSubtitles.m */; };
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
 		A91806711A4807B000FC9BED /* HBRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A91806701A4807B000FC9BED /* HBRange.m */; };
+		A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */; };
+		A91AFD0F1A949472009BECED /* HBJobOutputFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AFD0E1A949472009BECED /* HBJobOutputFileWriter.m */; };
 		A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */; };
 		A91C02521A165EA200DEA6F3 /* EncodeComplete.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02501A165EA200DEA6F3 /* EncodeComplete.png */; };
 		A91C02531A165EA200DEA6F3 /* EncodeComplete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */; };
@@ -366,6 +368,10 @@
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
 		A918066F1A4807B000FC9BED /* HBRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBRange.h; sourceTree = "<group>"; };
 		A91806701A4807B000FC9BED /* HBRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBRange.m; sourceTree = "<group>"; };
+		A91AFD0A1A948827009BECED /* HBOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBOutputFileWriter.h; sourceTree = "<group>"; };
+		A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputFileWriter.m; sourceTree = "<group>"; };
+		A91AFD0D1A949472009BECED /* HBJobOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBJobOutputFileWriter.h; sourceTree = "<group>"; };
+		A91AFD0E1A949472009BECED /* HBJobOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobOutputFileWriter.m; sourceTree = "<group>"; };
 		A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JobSmall@2x.png"; sourceTree = "<group>"; };
 		A91C02501A165EA200DEA6F3 /* EncodeComplete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeComplete.png; sourceTree = "<group>"; };
 		A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeComplete@2x.png"; sourceTree = "<group>"; };
@@ -692,8 +698,7 @@
 				A952392E199A647F00588AEF /* Presets */,
 				A9AA44781970664A00D7DEFC /* HBUtilities.h */,
 				A9AA44791970664A00D7DEFC /* HBUtilities.m */,
-				273F209D14ADBE670021BE6D /* HBOutputRedirect.h */,
-				273F209E14ADBE670021BE6D /* HBOutputRedirect.m */,
+				A98F00771A972007001C2298 /* Output Redirect */,
 				A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */,
 				A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */,
 				A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */,
@@ -948,6 +953,19 @@
 				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		A98F00771A972007001C2298 /* Output Redirect */ = {
+			isa = PBXGroup;
+			children = (
+				273F209D14ADBE670021BE6D /* HBOutputRedirect.h */,
+				273F209E14ADBE670021BE6D /* HBOutputRedirect.m */,
+				A91AFD0A1A948827009BECED /* HBOutputFileWriter.h */,
+				A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */,
+				A91AFD0D1A949472009BECED /* HBJobOutputFileWriter.h */,
+				A91AFD0E1A949472009BECED /* HBJobOutputFileWriter.m */,
+			);
+			name = "Output Redirect";
 			sourceTree = "<group>";
 		};
 		A996B0F81A62C51C00B64179 /* Audio */ = {
@@ -1264,6 +1282,7 @@
 				A9E66D701A67A2A8007B641D /* HBDistributedArray.m in Sources */,
 				A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */,
 				A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */,
+				A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */,
 				A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */,
 				A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */,
 				A9DEC8741A23C87500C79B48 /* HBCore.m in Sources */,
@@ -1285,6 +1304,7 @@
 				A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */,
 				A9C9F88919A733FE00DC8923 /* HBHUDView.m in Sources */,
 				A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */,
+				A91AFD0F1A949472009BECED /* HBJobOutputFileWriter.m in Sources */,
 				46AB433515F98A2B009C0961 /* DockTextField.m in Sources */,
 				A9DEC87F1A23DF6F00C79B48 /* HBJob.m in Sources */,
 				A9E2FD271A21BC4A000E8D3F /* HBAddPresetController.m in Sources */,
