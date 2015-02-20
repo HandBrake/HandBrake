@@ -54,7 +54,7 @@
         [HBUtilities writeToActivityLog: "%s", versionStringFull.UTF8String];
 
         // we init the HBPresetsManager
-        NSURL *presetsURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"UserPresets.plist"]];
+        NSURL *presetsURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"UserPresets.plist"];
         _presetsManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
 
         _queueController = [[HBQueueController alloc] init];
@@ -198,6 +198,11 @@
     // Open queue window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
         [self showQueueWindow:nil];
+
+    // Remove encodes logs older than a month
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        [self cleanEncodeLogs];
+    });
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)app
@@ -283,6 +288,39 @@
     }
 
     return YES;
+}
+
+#pragma mark - Clean ups
+
+/**
+ *  Clears the EncodeLogs folder, removes the logs
+ *  older than a month.
+ */
+- (void)cleanEncodeLogs
+{
+    NSURL *directoryUrl = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs"];
+
+    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:directoryUrl
+                                                      includingPropertiesForKeys:nil
+                                                                         options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
+                                                                                 NSDirectoryEnumerationSkipsHiddenFiles |
+                                                                                 NSDirectoryEnumerationSkipsPackageDescendants
+                                                                           error:NULL];
+
+    NSDate *limit = [NSDate dateWithTimeIntervalSinceNow: -(60 * 60 * 24 * 30)];
+    NSFileManager *manager = [[NSFileManager alloc] init];
+
+    for (NSURL *fileURL in contents)
+    {
+        NSDate *creationDate = nil;
+        [fileURL getResourceValue:&creationDate forKey:NSURLCreationDateKey error:NULL];
+        if ([creationDate isLessThan:limit])
+        {
+            [manager removeItemAtURL:fileURL error:NULL];
+        }
+    }
+
+    [manager release];
 }
 
 #pragma mark - Menu actions

@@ -30,6 +30,20 @@
     return appSupportPath;
 }
 
++ (NSURL *)appSupportURL
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *appSupportURL = [[[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask]
+                             firstObject] URLByAppendingPathComponent:@"HandBrake"];
+
+    if (![fileManager fileExistsAtPath:appSupportURL.path])
+    {
+        [fileManager createDirectoryAtPath:appSupportURL.path withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+
+    return appSupportURL;
+}
+
 + (void)writeToActivityLog:(const char *)format, ...
 {
     va_list args;
