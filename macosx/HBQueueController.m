@@ -10,7 +10,6 @@
 #import "HBCore.h"
 #import "HBController.h"
 #import "HBAppDelegate.h"
-#import "HBOutputPanelController.h"
 
 #import "HBQueueOutlineView.h"
 #import "HBUtilities.h"
@@ -21,6 +20,9 @@
 #import "HBDistributedArray.h"
 
 #import "HBDockTile.h"
+
+#import "HBOutputRedirect.h"
+#import "HBJobOutputFileWriter.h"
 
 // Pasteboard type for or drag operations
 #define DragDropSimplePboardType    @"HBQueueCustomOutlineViewPboardType"
@@ -43,6 +45,7 @@
 
 @property (nonatomic, readonly) HBDistributedArray *jobs;
 @property (nonatomic, retain)   HBJob *currentJob;
+@property (nonatomic, retain)   HBJobOutputFileWriter *currentLog;
 
 @property (nonatomic, readwrite) BOOL stop;
 
@@ -59,13 +62,6 @@
 {
     if (self = [super initWithWindowNibName:@"Queue"])
     {
-        // NSWindowController likes to lazily load its window nib. Since this
-        // controller tries to touch the outlets before accessing the window, we
-        // need to force it to load immadiately by invoking its accessor.
-        //
-        // If/when we switch to using bindings, this can probably go away.
-        [self window];
-
         _descriptions = [[NSMutableDictionary alloc] init];
 
         // Workaround to avoid a bug in Snow Leopard
@@ -462,7 +458,9 @@
         self.currentJob.state = HBJobStateWorking;
 
         // Tell HB to output a new activity log file for this encode
-        [self.outputPanel startEncodeLog:self.currentJob.destURL];
+        self.currentLog = [[[HBJobOutputFileWriter alloc] initWithJob:self.currentJob] autorelease];
+        [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
+        [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
 
         // now we can go ahead and scan the new pending queue item
         [self performScan:self.currentJob.fileURL titleIdx:self.currentJob.titleIdx];
@@ -483,7 +481,9 @@
 {
     // Since we are done with this encode, tell output to stop writing to the
     // individual encode log.
-    [self.outputPanel endEncodeLog];
+    [[HBOutputRedirect stderrRedirect] removeListener:self.currentLog];
+    [[HBOutputRedirect stdoutRedirect] removeListener:self.currentLog];
+    self.currentLog = nil;
 
     // Check to see if the encode state has not been cancelled
     // to determine if we should check for encode done notifications.

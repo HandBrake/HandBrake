@@ -20,7 +20,6 @@
 
 @property (nonatomic, assign) HBController *controller;
 @property (nonatomic, assign) HBAppDelegate *delegate;
-@property (nonatomic, assign) HBOutputPanelController *outputPanel;
 
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) NSUInteger pendingItemsCount;

@@ -9,6 +9,14 @@
 
 @implementation HBUtilities
 
++ (NSString *)handBrakeVersion
+{
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    return [NSString stringWithFormat:@"Handbrake Version: %@ (%@)",
+            infoDictionary[@"CFBundleShortVersionString"],
+            infoDictionary[@"CFBundleVersion"]];
+}
+
 + (NSString *)appSupportPath
 {
     NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,

@@ -58,7 +58,6 @@
         _presetsManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
 
         _queueController = [[HBQueueController alloc] init];
-        _queueController.outputPanel = _outputPanel;
         _queueController.delegate = self;
         _mainController = [[HBController alloc] initWithQueue:_queueController presetsManager:_presetsManager];
 

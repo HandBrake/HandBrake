@@ -9,6 +9,11 @@
 @interface HBUtilities : NSObject
 
 /**
+ *  Returns a formatted string that contains the application version.
+ */
++ (NSString *)handBrakeVersion;
+
+/**
  *  Returns the path of the current <user>/Library/Application Support/HandBrake folder.
  */
 + (NSString *)appSupportPath;

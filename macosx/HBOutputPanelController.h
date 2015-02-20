@@ -18,7 +18,5 @@
 - (IBAction)openActivityLogFile:(id)sender;
 - (IBAction)openEncodeLogDirectory:(id)sender;
 - (IBAction)clearActivityLogFile:(id)sender;
-- (void)startEncodeLog:(NSURL *)logURL;
-- (void)endEncodeLog;
 
 @end
