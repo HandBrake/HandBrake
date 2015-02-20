@@ -228,7 +228,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                             <binding destination="-2" name="value" keyPath="self.settings.burnInBluraySubtitles" id="bZK-Kf-z6W"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" id="MlS-tB-pEv">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="MlS-tB-pEv">
                         <rect key="frame" x="159" y="46" width="250" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Only one of the above subtitle burn options will be applied, starting with the top." id="N4s-K9-RwM">
