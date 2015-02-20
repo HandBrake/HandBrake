@@ -78,16 +78,6 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
         _fileURL = [fileURL copy];
         _array = [[NSMutableArray alloc] init];
 
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        if (![fileManager fileExistsAtPath:_fileURL.path])
-        {
-            if (![fileManager fileExistsAtPath:_fileURL.URLByDeletingLastPathComponent.path])
-            {
-                [fileManager createDirectoryAtPath:_fileURL.URLByDeletingLastPathComponent.path withIntermediateDirectories:YES attributes:nil error:NULL];
-            }
-            [fileManager createFileAtPath:_fileURL.path contents:nil attributes:nil];
-        }
-
         NSArray *runningInstances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]];
         const char *name = [NSString stringWithFormat:@"/%@.hblock", _fileURL.lastPathComponent].UTF8String;
 
@@ -109,10 +99,13 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
         [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:HBDistributedArraWrittenToDisk object:nil];
 
-        // Load the array from disk
-        [self lock];
-        [self reload];
-        [self unlock];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:_fileURL.path])
+        {
+            // Load the array from disk
+            [self lock];
+            [self reload];
+            [self unlock];
+        }
     }
 
     return self;
