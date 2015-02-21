@@ -37,15 +37,8 @@
     else
     {
         // if we are putting it in the default ~/Libraries/Application Support/HandBrake/EncodeLogs logs directory
-        NSString *encodeLogDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"EncodeLogs"];
-        if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
-        {
-            [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory
-                                      withIntermediateDirectories:NO
-                                                       attributes:nil
-                                                            error:nil];
-        }
-        outputURL = [[NSURL fileURLWithPath:encodeLogDirectory] URLByAppendingPathComponent:outputDateFileName];
+        NSURL *encodeLogDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs"];
+        outputURL = [encodeLogDirectory URLByAppendingPathComponent:outputDateFileName];
     }
 
     self = [super initWithFileURL:outputURL];

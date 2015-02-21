@@ -17,6 +17,12 @@
     self = [super init];
     if (self)
     {
+
+        [[NSFileManager defaultManager] createDirectoryAtPath:url.URLByDeletingLastPathComponent.path
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:NULL];
+
         _url = [url copy];
         f = fopen(url.fileSystemRepresentation, "w");
         f = freopen(NULL, "a", f);

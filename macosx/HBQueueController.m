@@ -234,7 +234,7 @@
 
 - (void)loadQueueFile
 {
-    NSURL *queueURL = [NSURL fileURLWithPath:[[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Queue.hbqueue"]];
+    NSURL *queueURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"Queue.hbqueue"];
     _jobs = [[HBDistributedArray alloc] initWithURL:queueURL];
 
     [self reloadQueue];

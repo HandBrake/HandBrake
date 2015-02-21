@@ -89,26 +89,6 @@
     // Get the number of HandBrake instances currently running
     NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]].count;
 
-    // If we are a single instance it is safe to clean up the previews if there are any
-    // left over. This is a bit of a kludge but will prevent a build up of old instance
-    // live preview cruft. No danger of removing an active preview directory since they
-    // are created later in HBPreviewController if they don't exist at the moment a live
-    // preview encode is initiated.
-    if (instances == 1)
-    {
-        NSString *previewDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"Previews"];
-        NSError *error = nil;
-        NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:previewDirectory error:&error];
-        for (NSString *file in files)
-        {
-            BOOL result = [[NSFileManager defaultManager] removeItemAtPath:[previewDirectory stringByAppendingPathComponent:file] error:&error];
-            if (result == NO && error)
-            {
-                [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s", file.UTF8String];
-            }
-        }
-    }
-
     [self showMainWindow:self];
 
     // Now we re-check the queue array to see if there are
@@ -199,9 +179,22 @@
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
         [self showQueueWindow:nil];
 
-    // Remove encodes logs older than a month
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        [self cleanEncodeLogs];
+        // Remove encodes logs older than a month
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBClearOldLogs"])
+        {
+            [self cleanEncodeLogs];
+        }
+
+        // If we are a single instance it is safe to clean up the previews if there are any
+        // left over. This is a bit of a kludge but will prevent a build up of old instance
+        // live preview cruft. No danger of removing an active preview directory since they
+        // are created later in HBPreviewController if they don't exist at the moment a live
+        // preview encode is initiated.
+        if (instances == 1)
+        {
+            [self cleanPreviews];
+        }
     });
 }
 
@@ -300,27 +293,55 @@
 {
     NSURL *directoryUrl = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs"];
 
-    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:directoryUrl
-                                                      includingPropertiesForKeys:nil
-                                                                         options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                                                                                 NSDirectoryEnumerationSkipsHiddenFiles |
-                                                                                 NSDirectoryEnumerationSkipsPackageDescendants
-                                                                           error:NULL];
-
-    NSDate *limit = [NSDate dateWithTimeIntervalSinceNow: -(60 * 60 * 24 * 30)];
-    NSFileManager *manager = [[NSFileManager alloc] init];
-
-    for (NSURL *fileURL in contents)
+    if (directoryUrl)
     {
-        NSDate *creationDate = nil;
-        [fileURL getResourceValue:&creationDate forKey:NSURLCreationDateKey error:NULL];
-        if ([creationDate isLessThan:limit])
-        {
-            [manager removeItemAtURL:fileURL error:NULL];
-        }
-    }
+        NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:directoryUrl
+                                                          includingPropertiesForKeys:nil
+                                                                             options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
+                                                                                     NSDirectoryEnumerationSkipsHiddenFiles |
+                                                                                     NSDirectoryEnumerationSkipsPackageDescendants
+                                                                               error:NULL];
 
-    [manager release];
+        NSDate *limit = [NSDate dateWithTimeIntervalSinceNow: -(60 * 60 * 24 * 30)];
+        NSFileManager *manager = [[NSFileManager alloc] init];
+
+        for (NSURL *fileURL in contents)
+        {
+            NSDate *creationDate = nil;
+            [fileURL getResourceValue:&creationDate forKey:NSURLCreationDateKey error:NULL];
+            if ([creationDate isLessThan:limit])
+            {
+                [manager removeItemAtURL:fileURL error:NULL];
+            }
+        }
+        [manager release];
+    }
+}
+
+- (void)cleanPreviews
+{
+    NSURL *previewDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"Previews"];
+
+    if (previewDirectory)
+    {
+        NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:previewDirectory
+                                                          includingPropertiesForKeys:nil
+                                                                             options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
+                                                                                     NSDirectoryEnumerationSkipsPackageDescendants
+                                                                               error:NULL];
+
+        NSFileManager *manager = [[NSFileManager alloc] init];
+        for (NSURL *url in contents)
+        {
+            NSError *error = nil;
+            BOOL result = [manager removeItemAtURL:url error:&error];
+            if (result == NO && error)
+            {
+                [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s", url.lastPathComponent.UTF8String];
+            }
+        }
+        [manager release];
+    }
 }
 
 #pragma mark - Menu actions

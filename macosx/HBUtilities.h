@@ -14,11 +14,6 @@
 + (NSString *)handBrakeVersion;
 
 /**
- *  Returns the path of the current <user>/Library/Application Support/HandBrake folder.
- */
-+ (NSString *)appSupportPath;
-
-/**
  *  Returns the url of the current <user>/Library/Application Support/HandBrake folder.
  */
 + (NSURL *)appSupportURL;

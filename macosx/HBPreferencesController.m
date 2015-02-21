@@ -70,6 +70,7 @@
         @"AlertWhenDone":                   @"Alert Window",
         @"AlertWhenDoneSound":              @"YES",
         @"LoggingLevel":                    @"1",
+        @"HBClearOldLogs":                  @YES,
         @"EncodeLogLocation":               @"NO",
         @"MinTitleScanSeconds":             @"10",
         @"PreviewsNumber":                  @"10",

@@ -49,17 +49,9 @@
         (void)[self window];
 
         // Additionally, redirect the output to a file on the disk.
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *outputLogFile = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"HandBrake-activitylog.txt"];
+        NSURL *outputLogFile = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"HandBrake-activitylog.txt"];
 
-        // We check for an existing output log file here
-        if ([fileManager fileExistsAtPath:outputLogFile] == NO)
-        {
-            // if not, then we create a new blank one
-            [fileManager createFileAtPath:outputLogFile contents:nil attributes:nil];
-        }
-
-        _outputFile = [[HBOutputFileWriter alloc] initWithFileURL:[NSURL fileURLWithPath:outputLogFile]];
+        _outputFile = [[HBOutputFileWriter alloc] initWithFileURL:outputLogFile];
         [[HBOutputRedirect stderrRedirect] addListener:_outputFile];
         [[HBOutputRedirect stdoutRedirect] addListener:_outputFile];
 
@@ -166,9 +158,7 @@
 - (IBAction)openActivityLogFile:(id)sender
 {
     /* Opens the activity window log file in the users default text editor */
-    NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource:[NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", self.outputFile.url.path, @"\")"]];
-    [myScript executeAndReturnError: nil];
-    [myScript release];
+    [[NSWorkspace sharedWorkspace] openURL:self.outputFile.url];
 }
 
 /**
@@ -177,18 +167,15 @@
 - (IBAction)openEncodeLogDirectory:(id)sender
 {
     /* Opens the activity window log file in the users default text editor */
-    NSString *encodeLogDirectory = [[HBUtilities appSupportPath] stringByAppendingPathComponent:@"EncodeLogs"];
-    if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
+    NSURL *encodeLogDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs"];
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory.path] )
     {
-        [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory
+        [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory.path
                                             withIntermediateDirectories:NO
                                             attributes:nil
                                             error:nil];
     }
-    
-    NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", encodeLogDirectory, @"\")"]];
-    [myScript executeAndReturnError: nil];
-    [myScript release];
+    [[NSWorkspace sharedWorkspace] openURL:encodeLogDirectory];
 }
 
 - (IBAction)clearActivityLogFile:(id)sender

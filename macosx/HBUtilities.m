@@ -17,19 +17,6 @@
             infoDictionary[@"CFBundleVersion"]];
 }
 
-+ (NSString *)appSupportPath
-{
-    NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,
-                                                                     NSUserDomainMask,
-                                                                     YES) firstObject] stringByAppendingPathComponent:@"HandBrake"];
-
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:appSupportPath])
-        [fileManager createDirectoryAtPath:appSupportPath withIntermediateDirectories:YES attributes:nil error:NULL];
-
-    return appSupportPath;
-}
-
 + (NSURL *)appSupportURL
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
