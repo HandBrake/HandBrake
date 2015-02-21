@@ -204,29 +204,29 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// </param>
         private void ScanCompleted(QueueTask job, IHandBrakeInstance instance)
         {
-            ServiceLogMessage("Scan Completed. Setting up the job for encoding ...");
-
-            // Get an EncodeJob object for the Interop Library
-            EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
-
-            // Start the Encode
-            Title title = this.scannedSource.Titles.FirstOrDefault(t => t.TitleNumber == job.Task.Title);
-            if (title == null)
-            {
-                ServiceLogMessage("Title not found.");
-                throw new Exception("Unable to get title for encoding. Encode Failed.");
-            }
-
-            Interop.Model.Scan.Title scannedTitle = new Interop.Model.Scan.Title
-                                                        {
-                                                            Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
-                                                            ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
-                                                            FramerateDenominator = title.FramerateDenominator, 
-                                                            FramerateNumerator = title.FramerateNumerator, 
-                                                        };
-            
             try
             {
+                ServiceLogMessage("Scan Completed. Setting up the job for encoding ...");
+
+                // Get an EncodeJob object for the Interop Library
+                EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
+
+                // Start the Encode
+                Title title = this.scannedSource.Titles.FirstOrDefault(t => t.TitleNumber == job.Task.Title);
+                if (title == null)
+                {
+                    ServiceLogMessage("Title not found.");
+                    throw new Exception("Unable to get title for encoding. Encode Failed.");
+                }
+
+                Interop.Model.Scan.Title scannedTitle = new Interop.Model.Scan.Title
+                                                            {
+                                                                Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
+                                                                ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
+                                                                FramerateDenominator = title.FramerateDenominator, 
+                                                                FramerateNumerator = title.FramerateNumerator, 
+                                                            };
+
                 ServiceLogMessage("Starting Encode ...");
                 instance.StartEncode(encodeJob, scannedTitle);
 
