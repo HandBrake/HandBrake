@@ -1382,7 +1382,7 @@
     // We do not let the user drop a pending job before or *above*
     // already finished or currently encoding jobs.
     NSInteger encodingIndex = [self.jobs indexOfObject:self.currentJob];
-    if (index <= encodingIndex)
+    if (encodingIndex != NSNotFound && index <= encodingIndex)
     {
         return NSDragOperationNone;
         index = MAX (index, encodingIndex);
