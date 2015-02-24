@@ -776,7 +776,8 @@ static int avformatInit( hb_mux_object_t * m )
 
         if ( ii == subtitle_default )
         {
-            track->st->disposition |= AV_DISPOSITION_DEFAULT;
+            track->st->disposition |= AV_DISPOSITION_DEFAULT |
+                                      AV_DISPOSITION_FORCED;
         }
 
         lang = lookup_lang_code(job->mux, subtitle->iso639_2 );
