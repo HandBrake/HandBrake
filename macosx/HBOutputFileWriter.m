@@ -24,7 +24,7 @@
                                                         error:NULL];
 
         _url = [url copy];
-        f = fopen(url.fileSystemRepresentation, "w");
+        f = fopen(url.path.fileSystemRepresentation, "w");
         f = freopen(NULL, "a", f);
 
         [self writeHeaderForReason:@"Session"];
