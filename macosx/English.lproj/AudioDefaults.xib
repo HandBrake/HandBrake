@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F14" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <deployment identifier="macosx"/>
+        <development version="5100" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioDefaultsController">
@@ -15,7 +16,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -69,6 +70,7 @@
                             </menu>
                         </popUpButtonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="fPg-3n-1TN" id="nyV-Vs-N4Z"/>
                             <binding destination="-2" name="selectedIndex" keyPath="self.settings.trackSelectionBehavior" id="sKn-Mr-Hce"/>
                             <outlet property="nextKeyView" destination="Of7-71-Ci6" id="jgQ-nK-YLu"/>
                         </connections>
@@ -94,10 +96,10 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" id="Of7-71-Ci6">
-                                    <rect key="frame" x="0.0" y="0.0" width="244" height="133"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="236" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="checkBox" width="20" minWidth="20" maxWidth="20" id="G44-XP-6xE">
@@ -148,6 +150,7 @@
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
+                        <accessibility description="Audio Track Languages"/>
                         <connections>
                             <outlet property="nextKeyView" destination="QAt-5X-NBT" id="u00-fZ-W1s"/>
                         </connections>
@@ -159,6 +162,7 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <accessibility description="Show all audio languages"/>
                         <connections>
                             <action selector="edit:" target="-2" id="13y-nD-hEj"/>
                             <outlet property="nextKeyView" destination="vUx-OV-W5T" id="fma-A5-pRA"/>
@@ -188,6 +192,7 @@ DQ
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="Fj1-2v-43m"/>
                             <binding destination="-2" name="value" keyPath="self.settings.allowMP3Passthru" id="rVF-G7-BYA"/>
                             <outlet property="nextKeyView" destination="fzd-MO-xaB" id="1fb-a1-B25"/>
                         </connections>
@@ -201,6 +206,7 @@ DQ
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="4LE-EX-uwv"/>
                             <binding destination="-2" name="value" keyPath="self.settings.allowAACPassthru" id="nsQ-cP-JyI"/>
                             <outlet property="nextKeyView" destination="fgl-Ev-ELt" id="Exn-Wt-M4D"/>
                         </connections>
@@ -214,6 +220,7 @@ DQ
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="939-Ac-M99"/>
                             <binding destination="-2" name="value" keyPath="self.settings.allowAC3Passthru" id="Aig-Ok-RyG"/>
                             <outlet property="nextKeyView" destination="E93-Md-aWa" id="Yv5-Xs-mbs"/>
                         </connections>
@@ -227,6 +234,7 @@ DQ
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="fDC-wm-Xdh"/>
                             <binding destination="-2" name="value" keyPath="self.settings.allowDTSPassthru" id="IWX-ek-0Bd"/>
                             <outlet property="nextKeyView" destination="IxI-o9-jMs" id="sBB-lF-vtE"/>
                         </connections>
@@ -240,6 +248,7 @@ DQ
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="S8M-P1-c2B"/>
                             <binding destination="-2" name="value" keyPath="self.settings.allowDTSHDPassthru" id="w77-9v-vIh"/>
                             <outlet property="nextKeyView" destination="LdN-Cx-ZJY" id="rAA-cB-Ma5"/>
                         </connections>
@@ -266,6 +275,7 @@ DQ
                             </menu>
                         </popUpButtonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="Tth-IR-7cU" id="eOb-bG-eUP"/>
                             <binding destination="-2" name="content" keyPath="self.settings.audioEncoderFallbacks" id="cP2-Bo-45S"/>
                             <binding destination="-2" name="selectedValue" keyPath="self.settings.encoderFallback" previousBinding="cP2-Bo-45S" id="njJ-qO-UAy">
                                 <dictionary key="options">
@@ -292,10 +302,10 @@ DQ
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="X9E-z1-8Hv" id="r4m-GO-aN3">
-                                    <rect key="frame" x="0.0" y="0.0" width="771" height="126"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="771" height="27"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="codec" width="275" minWidth="10" maxWidth="3.4028229999999999e+38" id="LuF-er-YPm">
@@ -505,6 +515,7 @@ DQ
                             <rect key="frame" x="0.0" y="0.0" width="771" height="17"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
+                        <accessibility description="Audio Track Presets"/>
                         <connections>
                             <outlet property="nextKeyView" destination="N4q-sT-WgW" id="6gC-Nj-s8x"/>
                         </connections>
@@ -524,10 +535,10 @@ DQ
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="momentary" id="otA-K4-TxM">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
-                                <segment image="NSAddTemplate" width="24">
+                                <segment toolTip="Add Preset Track" image="NSAddTemplate" width="24">
                                     <nil key="label"/>
                                 </segment>
-                                <segment image="NSRemoveTemplate" width="23" tag="1">
+                                <segment toolTip="Remove Selected Preset Track" image="NSRemoveTemplate" width="23" tag="1">
                                     <nil key="label"/>
                                 </segment>
                             </segments>
@@ -542,6 +553,7 @@ DQ
             <connections>
                 <outlet property="initialFirstResponder" destination="oiD-QI-wly" id="Vxi-xi-P0d"/>
             </connections>
+            <point key="canvasLocation" x="-484.5" y="517"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Languages Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>
@@ -568,7 +580,7 @@ DQ
         </arrayController>
     </objects>
     <resources>
-        <image name="NSAddTemplate" width="8" height="8"/>
-        <image name="NSRemoveTemplate" width="8" height="8"/>
+        <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>

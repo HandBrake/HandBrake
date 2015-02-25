@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
@@ -51,6 +51,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="6tI-Qz-3bJ" id="kcJ-ei-joL"/>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="mjs-X8-KV8" id="VTs-xH-tZg">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -127,6 +128,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="bAn-iZ-ieF" id="Tje-aM-83p"/>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="yN5-l3-JRJ">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -218,6 +220,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="rOd-nt-22T" id="d3c-sR-Kgt"/>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="Dhc-7W-mCB">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -335,6 +338,7 @@
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="au3-pU-KX6" id="tqT-R9-Pvn"/>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="wCA-ag-GHJ" id="ywk-WQ-GNY">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -382,13 +386,13 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="self.job.picture.summary" id="D4c-Mx-33o"/>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="aVY-g8-jGq"/>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="Ph9-Gy-Sru">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.job.picture.summary" id="D4c-Mx-33o"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="PW6-gP-Dyj">
@@ -400,13 +404,13 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="self.job.filters.summary" id="tHU-9i-NhZ"/>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="FtS-pM-hKz"/>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="ckY-jh-UvA">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.job.filters.summary" id="tHU-9i-NhZ"/>
                     </connections>
                 </textField>
             </subviews>
@@ -425,6 +429,7 @@ This estabilishes your default encoder settings. Tunes, profiles, levels and adv
 You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</string>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="5" tickMarkPosition="above" numberOfTickMarks="2" allowsTickMarkValuesOnly="YES" sliderType="linear" id="suZ-F3-AGy"/>
                     <connections>
+                        <accessibilityConnection property="title" destination="0sa-ep-yfr" id="1L4-1l-EVG"/>
                         <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="exe-6L-bUd"/>
                     </connections>
                 </slider>
@@ -488,6 +493,7 @@ This can improve efficiency for particular source characteristics or set charact
                         <menu key="menu" title="OtherViews" id="c4N-uO-iVC"/>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="gzq-SL-YVY" id="W8X-Zk-cQD"/>
                         <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="jwX-If-Tz7"/>
                         <binding destination="-2" name="selectedValue" keyPath="self.video.tune" previousBinding="ziN-5r-CNJ" id="gu5-Qw-6oi">
                             <dictionary key="options">
@@ -508,6 +514,7 @@ Overrides all other settings.</string>
                         <menu key="menu" title="OtherViews" id="7CG-ga-88H"/>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="dY9-5D-mXX" id="gPk-3N-uSS"/>
                         <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="daB-50-blQ"/>
                         <binding destination="-2" name="selectedValue" keyPath="self.video.profile" previousBinding="Njf-bs-Nub" id="ioS-p7-9Ri">
                             <dictionary key="options">
@@ -526,6 +533,7 @@ Overrides all other settings.</string>
                         <menu key="menu" title="OtherViews" id="pPu-oR-2R8"/>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="BY1-IG-JvI" id="1gh-Gw-TgJ"/>
                         <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="gyc-y2-3XD"/>
                         <binding destination="-2" name="selectedValue" keyPath="self.video.level" previousBinding="MXA-St-eVu" id="v8q-ly-ZVP">
                             <dictionary key="options">

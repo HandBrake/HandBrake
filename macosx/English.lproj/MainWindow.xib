@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C106a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -34,7 +34,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBMainWindow" animationBehavior="default" id="21" userLabel="MainWindow">
+        <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBMainWindow" animationBehavior="default" id="21" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" unifiedTitleAndToolbar="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="946" height="568"/>
@@ -143,6 +143,7 @@
                             <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="5515"/>
                         </popUpButtonCell>
+                        <accessibility description="Range Selection"/>
                         <connections>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="OMf-GZ-Uvf">
                                 <dictionary key="options">
@@ -228,12 +229,13 @@
                     <textField verticalHuggingPriority="750" id="1554">
                         <rect key="frame" x="829" y="511" width="99" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="00:00:00" id="4915">
+                        <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="00:00:00" id="4915">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="0.76630436999999996" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                         </textFieldCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="1553" id="N3l-Fy-ezT"/>
                             <binding destination="-2" name="hidden" keyPath="self.job" id="42H-WA-xrv">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSIsNil</string>
@@ -263,8 +265,8 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
-                        <accessibility description="Format"/>
                         <connections>
+                            <accessibilityConnection property="title" destination="1556" id="IXx-KY-Mo3"/>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="GHf-iI-Xg0">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -285,6 +287,7 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <accessibility description="Browse Destination"/>
                         <connections>
                             <action selector="browseDestination:" target="-2" id="FqS-ZD-MaJ"/>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="uGd-Ul-eBq">
@@ -318,6 +321,7 @@
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <accessibility description="File Destination"/>
                         <connections>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="JXO-Eg-p84">
                                 <dictionary key="options">
@@ -654,7 +658,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="538" y="-161"/>
+            <point key="canvasLocation" x="782" y="-190"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>

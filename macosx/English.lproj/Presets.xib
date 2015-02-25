@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <deployment identifier="macosx"/>
+        <development version="5100" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPresetsViewController">
@@ -12,7 +14,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
             <rect key="frame" x="0.0" y="0.0" width="230" height="325"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -25,10 +27,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" indentationPerLevel="16" outlineTableColumn="jhC-ge-H1w" id="00W-tb-wgY">
-                                <rect key="frame" x="0.0" y="0.0" width="222" height="283"/>
+                                <rect key="frame" x="0.0" y="0.0" width="222" height="16"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
                                     <tableColumn identifier="name" width="219" minWidth="16" maxWidth="1000" id="jhC-ge-H1w">
@@ -78,6 +80,7 @@
                         <rect key="frame" x="-15" y="17" width="16" height="0.0"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
+                    <accessibility description="Presets"/>
                 </scrollView>
                 <popUpButton verticalHuggingPriority="750" id="Ybq-Zt-sta">
                     <rect key="frame" x="58" y="3" width="35" height="23"/>
@@ -107,26 +110,29 @@
                             </items>
                         </menu>
                     </popUpButtonCell>
+                    <accessibility description="Additional Options"/>
                 </popUpButton>
-                <button verticalHuggingPriority="750" id="kfi-wq-mgV">
+                <button toolTip="Create a new preset based on the current settings." verticalHuggingPriority="750" id="kfi-wq-mgV">
                     <rect key="frame" x="3" y="3" width="24" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="3" id="OJ3-1k-3DY">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="systemBold"/>
                     </buttonCell>
+                    <accessibility description="New Preset"/>
                     <connections>
                         <action selector="addNewPreset:" target="-2" id="TYV-vH-8hk"/>
                         <binding destination="-2" name="enabled" keyPath="self.enabled" id="lmV-Y3-JoF"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" id="b3V-8w-euU">
+                <button toolTip="Delete the current selection" verticalHuggingPriority="750" id="b3V-8w-euU">
                     <rect key="frame" x="26" y="3" width="24" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="left" borderStyle="border" inset="3" id="Kb1-6u-550">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="systemBold"/>
                     </buttonCell>
+                    <accessibility description="Delete"/>
                     <connections>
                         <action selector="deletePreset:" target="-2" id="b6N-h7-25y"/>
                         <binding destination="ohT-Pp-wBT" name="enabled" keyPath="canRemove" id="WNd-yX-UEH"/>
@@ -148,7 +154,7 @@
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSAddTemplate" width="8" height="8"/>
-        <image name="NSRemoveTemplate" width="8" height="8"/>
+        <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>

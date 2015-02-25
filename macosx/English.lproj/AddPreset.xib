@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C68k" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAddPresetController">
@@ -66,6 +66,9 @@ Gw
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="Wy7-cF-tGv" id="qbt-Xs-S0o"/>
+                        </connections>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="z6B-ig-ouq">
                         <rect key="frame" x="128" y="180" width="193" height="22"/>
@@ -76,6 +79,7 @@ Gw
                             <menu key="menu" title="OtherViews" id="qsA-gt-zdK"/>
                         </popUpButtonCell>
                         <connections>
+                            <accessibilityConnection property="title" destination="PBQ-YN-YLi" id="GoC-jh-FDv"/>
                             <action selector="addPresetPicDropdownChanged:" target="-2" id="tfe-c5-8JF"/>
                         </connections>
                     </popUpButton>
@@ -114,6 +118,9 @@ Gw
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="zDq-QP-LAu" id="meT-EW-QiO"/>
+                        </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="PBQ-YN-YLi">
                         <rect key="frame" x="18" y="185" width="108" height="14"/>
@@ -131,6 +138,9 @@ Gw
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="sep-4m-XLj" id="lOX-h4-Duc"/>
+                        </connections>
                     </button>
                     <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="uCB-5u-Rt4">
                         <rect key="frame" x="113" y="210" width="205" height="5"/>
@@ -199,7 +209,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="-2" id="YgD-Uk-vtp"/>
             </connections>
-            <point key="canvasLocation" x="570" y="406.5"/>
+            <point key="canvasLocation" x="245" y="299.5"/>
         </window>
     </objects>
 </document>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7515.2" systemVersion="14D72i" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7515.2"/>
+        <development version="5100" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesDefaultsController">
@@ -66,8 +67,8 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
-                        <accessibility description="Track Selection Behavior:"/>
                         <connections>
+                            <accessibilityConnection property="title" destination="fPg-3n-1TN" id="m48-cl-1qI"/>
                             <binding destination="-2" name="selectedIndex" keyPath="self.settings.trackSelectionBehavior" id="sKn-Mr-Hce"/>
                         </connections>
                     </popUpButton>
@@ -163,6 +164,7 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <accessibility description="Show all subtitles languages"/>
                         <connections>
                             <action selector="edit:" target="-2" id="13y-nD-hEj"/>
                         </connections>
@@ -186,8 +188,8 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                                 </items>
                             </menu>
                         </popUpButtonCell>
-                        <accessibility description="Burn-In Behavior:"/>
                         <connections>
+                            <accessibilityConnection property="title" destination="qAf-lQ-GN4" id="U1u-IC-lHZ"/>
                             <binding destination="-2" name="selectedIndex" keyPath="self.settings.burnInBehavior" id="VvM-Ka-msm"/>
                         </connections>
                     </popUpButton>
