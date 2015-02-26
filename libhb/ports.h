@@ -11,9 +11,7 @@
 #define HB_PORTS_H
 
 #if ARCH_X86_64 || ARCH_X86_32
-#define ARCH_X86 1
-#else
-#define ARCH_X86 0
+#define ARCH_X86
 #endif
 
 #if defined(_WIN32)

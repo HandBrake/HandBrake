@@ -8,9 +8,12 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include "hb.h"     // needed for ARCH_X86
+
+#if defined(ARCH_X86)
+
 #include <emmintrin.h>
 
-#include "hb.h"
 #include "libavutil/cpu.h"
 #include "nlmeans.h"
 
@@ -148,3 +151,5 @@ void nlmeans_init_x86(NLMeansFunctions *functions)
         hb_log("NLMeans using SSE2 optimizations");
     }
 }
+
+#endif // ARCH_X86
