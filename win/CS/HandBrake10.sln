@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.ApplicationServices", "HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj", "{087A2BA8-BAC2-4577-A46F-07FF9D420016}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeWPF", "HandBrakeWPF\HandBrakeWPF.csproj", "{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeInterop", "HandBrake.Interop\HandBrakeInterop\HandBrakeInterop.csproj", "{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.Interop", "HandBrake.Interop\HandBrakeInterop\HandBrake.Interop.csproj", "{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CB7BC74-449C-4E95-98AB-E1E4387E514B}"
 	ProjectSection(SolutionItems) = preProject
