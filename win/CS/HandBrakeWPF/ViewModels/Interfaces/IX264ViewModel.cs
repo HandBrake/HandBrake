@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     /// <summary>
     /// The Advanced View Model Interface

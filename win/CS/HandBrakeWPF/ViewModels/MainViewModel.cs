@@ -31,7 +31,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.Interop;
+    using HandBrake.ApplicationServices.Interop;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Factories;

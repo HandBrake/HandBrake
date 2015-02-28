@@ -22,14 +22,14 @@ namespace HandBrake.ApplicationServices.Services.Scan
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.Interop;
-    using HandBrake.Interop.EventArgs;
-    using HandBrake.Interop.Interfaces;
-    using HandBrake.Interop.Model;
-    using HandBrake.Interop.Model.Scan;
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.EventArgs;
+    using HandBrake.ApplicationServices.Interop.Interfaces;
+    using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     using Chapter = HandBrake.ApplicationServices.Services.Scan.Model.Chapter;
-    using ScanProgressEventArgs = HandBrake.Interop.EventArgs.ScanProgressEventArgs;
+    using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
     using Size = System.Drawing.Size;
     using Subtitle = HandBrake.ApplicationServices.Services.Scan.Model.Subtitle;
     using SubtitleType = HandBrake.ApplicationServices.Services.Encode.Model.Models.SubtitleType;

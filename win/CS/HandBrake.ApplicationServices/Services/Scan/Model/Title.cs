@@ -13,7 +13,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
     using System.Collections.Generic;
     using System.Linq;
 
-    using HandBrake.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Model;
 
     using Size = System.Drawing.Size;
 

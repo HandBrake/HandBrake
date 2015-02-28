@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using Newtonsoft.Json;
 

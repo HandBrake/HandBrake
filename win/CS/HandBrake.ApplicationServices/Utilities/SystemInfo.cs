@@ -14,7 +14,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Management;
     using System.Windows.Forms;
 
-    using HandBrake.Interop.HbLib;
+    using HandBrake.ApplicationServices.Interop.HbLib;
 
     using Microsoft.Win32;
 

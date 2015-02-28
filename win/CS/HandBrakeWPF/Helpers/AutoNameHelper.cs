@@ -18,7 +18,7 @@ namespace HandBrakeWPF.Helpers
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Services.Interfaces;

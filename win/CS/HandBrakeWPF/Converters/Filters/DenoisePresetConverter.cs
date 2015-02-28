@@ -16,7 +16,7 @@ namespace HandBrakeWPF.Converters.Filters
     using System.Windows.Data;
 
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     /// <summary>
     /// The denoise preset converter.

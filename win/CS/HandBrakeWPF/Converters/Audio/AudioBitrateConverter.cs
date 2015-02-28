@@ -16,7 +16,7 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Linq;
 
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     /// <summary>
     /// A Converter to provide the available audio bitrate options.

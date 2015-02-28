@@ -13,7 +13,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     /// <summary>
     /// A class to convert various things to native C# objects

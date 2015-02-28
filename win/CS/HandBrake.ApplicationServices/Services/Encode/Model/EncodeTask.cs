@@ -17,8 +17,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
 
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
-    using HandBrake.Interop.Model;
-    using HandBrake.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     /// <summary>
     /// An Encode Task

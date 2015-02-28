@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Services
     using System.Threading;
 
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.Interop;
+    using HandBrake.ApplicationServices.Interop;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;

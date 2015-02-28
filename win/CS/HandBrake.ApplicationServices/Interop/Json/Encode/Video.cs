@@ -1,0 +1,74 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Video.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   The video.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.ApplicationServices.Interop.Json.Encode
+{
+    using System;
+
+    /// <summary>
+    /// The video.
+    /// </summary>
+    public class Video
+    {
+        /// <summary>
+        /// Gets or sets the codec.
+        /// </summary>
+        public int Codec { get; set; }
+
+        /// <summary>
+        /// Gets or sets the level.
+        /// </summary>
+        public string Level { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bitrate for the encode.
+        /// </summary>
+        public int? Bitrate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether two pass.
+        /// </summary>
+        public bool TwoPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Turbo First Pass. For x264/5
+        /// </summary>
+        public bool Turbo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Colour Matrix Code
+        /// </summary>
+        public int ColorMatrixCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the options.
+        /// </summary>
+        public string Options { get; set; }
+
+        /// <summary>
+        /// Gets or sets the preset.
+        /// </summary>
+        public string Preset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the profile.
+        /// </summary>
+        public string Profile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quality.
+        /// </summary>
+        public double? Quality { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tune.
+        /// </summary>
+        public string Tune { get; set; }
+    }
+}

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.ApplicationServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeWPF", "HandBrakeWPF\HandBrakeWPF.csproj", "{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.Interop", "HandBrake.Interop\HandBrakeInterop\HandBrake.Interop.csproj", "{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CB7BC74-449C-4E95-98AB-E1E4387E514B}"
 	ProjectSection(SolutionItems) = preProject
 		build.xml = build.xml
@@ -72,27 +70,6 @@ Global
 		{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}.Release|x64.Build.0 = Release|x64
 		{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}.Release|x86.ActiveCfg = Release|x86
 		{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}.Release|x86.Build.0 = Release|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x64.ActiveCfg = Debug|x64
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x64.Build.0 = Debug|x64
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x86.ActiveCfg = Debug|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x86.Build.0 = Debug|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug32|Any CPU.ActiveCfg = Debug32|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug32|Mixed Platforms.ActiveCfg = Debug32|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug32|Mixed Platforms.Build.0 = Debug32|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug32|x64.ActiveCfg = Debug32|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug32|x64.Build.0 = Debug32|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug32|x86.ActiveCfg = Debug32|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug32|x86.Build.0 = Debug32|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|Any CPU.ActiveCfg = Release|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|Mixed Platforms.Build.0 = Release|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x64.ActiveCfg = Release|x64
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x64.Build.0 = Release|x64
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.ActiveCfg = Release|x86
-		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
