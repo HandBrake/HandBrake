@@ -9,20 +9,20 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The anamorphic.
     /// </summary>
     public enum Anamorphic
-	{
-		[Display(Name = "None")]
-		None = 0,
-		[Display(Name = "Strict")]
-		Strict = 1,
-		[Display(Name = "Loose")]
-		Loose = 2,
-		[Display(Name = "Custom")]
-		Custom = 3
-	}
+    {
+        [Display(Name = "None")]
+        None = 0,
+        [Display(Name = "Strict")]
+        Strict = 1,
+        [Display(Name = "Loose")]
+        Loose = 2,
+        [Display(Name = "Custom")]
+        Custom = 3
+    }
 }

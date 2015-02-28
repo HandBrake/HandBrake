@@ -7,22 +7,22 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-	using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices;
 
-	[StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct hb_encoder_s
-	{
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string name;
+    {
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string name;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string short_name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string short_name;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string long_name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string long_name;
 
-		public int codec;
+        public int codec;
 
-		public int muxers;
-	}
+        public int muxers;
+    }
 }

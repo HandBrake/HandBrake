@@ -9,12 +9,12 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 
-	using HandBrake.ApplicationServices.Interop.HbLib;
-	using HandBrake.ApplicationServices.Interop.Helpers;
+    using HandBrake.ApplicationServices.Interop.HbLib;
+    using HandBrake.ApplicationServices.Interop.Helpers;
 
-	/// <summary>
+    /// <summary>
     /// The hb video encoder.
     /// </summary>
     public class HBVideoEncoder
@@ -39,48 +39,48 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         /// </summary>
         public string ShortName { get; set; }
 
-		/// <summary>
-		/// Gets the list of presets this encoder supports. (null if the encoder doesn't support presets)
-		/// </summary>
-		public List<string> Presets
-		{
-			get
-			{
-				return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_presets(this.Id));
-			}
-		}
+        /// <summary>
+        /// Gets the list of presets this encoder supports. (null if the encoder doesn't support presets)
+        /// </summary>
+        public List<string> Presets
+        {
+            get
+            {
+                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_presets(this.Id));
+            }
+        }
 
-		/// <summary>
-		/// Gets the list of tunes this encoder supports. (null if the encoder doesn't support tunes)
-		/// </summary>
-		public List<string> Tunes
-		{
-			get
-			{
-				return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_tunes(this.Id));
-			}
-		}
+        /// <summary>
+        /// Gets the list of tunes this encoder supports. (null if the encoder doesn't support tunes)
+        /// </summary>
+        public List<string> Tunes
+        {
+            get
+            {
+                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_tunes(this.Id));
+            }
+        }
 
-		/// <summary>
-		/// Gets the list of profiles this encoder supports. (null if the encoder doesn't support profiles)
-		/// </summary>
-		public List<string> Profiles
-		{
-			get
-			{
-				return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_profiles(this.Id));
-			}
-		}
+        /// <summary>
+        /// Gets the list of profiles this encoder supports. (null if the encoder doesn't support profiles)
+        /// </summary>
+        public List<string> Profiles
+        {
+            get
+            {
+                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_profiles(this.Id));
+            }
+        }
 
-		/// <summary>
-		/// Gets the list of levels this encoder supports. (null if the encoder doesn't support levels)
-		/// </summary>
-		public List<string> Levels
-		{
-			get
-			{
-				return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_levels(this.Id));
-			}
-		} 
+        /// <summary>
+        /// Gets the list of levels this encoder supports. (null if the encoder doesn't support levels)
+        /// </summary>
+        public List<string> Levels
+        {
+            get
+            {
+                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_levels(this.Id));
+            }
+        } 
     }
 }

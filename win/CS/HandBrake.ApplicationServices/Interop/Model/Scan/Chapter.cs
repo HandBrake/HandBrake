@@ -13,32 +13,32 @@ namespace HandBrake.ApplicationServices.Interop.Model.Scan
     using System.Globalization;
 
     /// <summary>
-	/// An object representing a Chapter aosciated with a Title, in a DVD
-	/// </summary>
-	public class Chapter
-	{
+    /// An object representing a Chapter aosciated with a Title, in a DVD
+    /// </summary>
+    public class Chapter
+    {
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
 
-		/// <summary>
-		/// Gets or sets the number of this Chapter, in regards to its parent Title
-		/// </summary>
-		public int ChapterNumber { get; set; }
+        /// <summary>
+        /// Gets or sets the number of this Chapter, in regards to its parent Title
+        /// </summary>
+        public int ChapterNumber { get; set; }
 
-		/// <summary>
-		/// Gets or sets the duration of this chapter.
-		/// </summary>
-		public TimeSpan Duration { get; set; }
+        /// <summary>
+        /// Gets or sets the duration of this chapter.
+        /// </summary>
+        public TimeSpan Duration { get; set; }
 
-		/// <summary>
-		/// Override of the ToString method to make this object easier to use in the UI
-		/// </summary>
-		/// <returns>A string formatted as: {chapter #}</returns>
-		public override string ToString()
-		{
-			return this.ChapterNumber.ToString(CultureInfo.InvariantCulture);
-		}
-	}
+        /// <summary>
+        /// Override of the ToString method to make this object easier to use in the UI
+        /// </summary>
+        /// <returns>A string formatted as: {chapter #}</returns>
+        public override string ToString()
+        {
+            return this.ChapterNumber.ToString(CultureInfo.InvariantCulture);
+        }
+    }
 }

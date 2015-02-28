@@ -9,19 +9,19 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	/// <summary>
-	/// Represents a rate in HandBrake: audio sample rate or video framerate.
-	/// </summary>
-	public class HBRate
-	{
-		/// <summary>
-		/// Gets or sets the name to use for this rate.
-		/// </summary>
-		public string Name { get; set; }
+    /// <summary>
+    /// Represents a rate in HandBrake: audio sample rate or video framerate.
+    /// </summary>
+    public class HBRate
+    {
+        /// <summary>
+        /// Gets or sets the name to use for this rate.
+        /// </summary>
+        public string Name { get; set; }
 
-		/// <summary>
-		/// Gets or sets the raw rate.
-		/// </summary>
-		public int Rate { get; set; }
-	}
+        /// <summary>
+        /// Gets or sets the raw rate.
+        /// </summary>
+        public int Rate { get; set; }
+    }
 }

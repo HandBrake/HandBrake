@@ -9,19 +9,19 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model
 {
-	/// <summary>
-	/// Represents bitrate limits as a range.
-	/// </summary>
-	public class BitrateLimits
-	{
-		/// <summary>
-		/// The inclusive lower limit for the bitrate.
-		/// </summary>
-		public int Low { get; set; }
+    /// <summary>
+    /// Represents bitrate limits as a range.
+    /// </summary>
+    public class BitrateLimits
+    {
+        /// <summary>
+        /// The inclusive lower limit for the bitrate.
+        /// </summary>
+        public int Low { get; set; }
 
-		/// <summary>
-		/// The inclusive upper limit for the bitrate.
-		/// </summary>
-		public int High { get; set; }
-	}
+        /// <summary>
+        /// The inclusive upper limit for the bitrate.
+        /// </summary>
+        public int High { get; set; }
+    }
 }

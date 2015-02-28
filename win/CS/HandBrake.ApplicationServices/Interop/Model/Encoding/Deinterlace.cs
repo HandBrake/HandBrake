@@ -13,12 +13,12 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// The deinterlace.
     /// </summary>
     public enum Deinterlace
-	{
-		Off = 0,
-		Fast = 2,
-		Slow = 3,
-		Slower = 4,
-		Bob = 5,
-		Custom = 1
-	}
+    {
+        Off = 0,
+        Fast = 2,
+        Slow = 3,
+        Slower = 4,
+        Bob = 5,
+        Custom = 1
+    }
 }

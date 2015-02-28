@@ -12,13 +12,13 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
     using System;
 
     /// <summary>
-	/// The Message Logged Event Args
-	/// </summary>
-	public class MessageLoggedEventArgs : EventArgs
-	{
-		/// <summary>
-		/// Gets or sets Message.
-		/// </summary>
-		public string Message { get; set; }
-	}
+    /// The Message Logged Event Args
+    /// </summary>
+    public class MessageLoggedEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Gets or sets Message.
+        /// </summary>
+        public string Message { get; set; }
+    }
 }

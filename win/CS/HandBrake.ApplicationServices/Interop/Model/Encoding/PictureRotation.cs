@@ -9,14 +9,14 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	/// <summary>
-	/// Possible picture rotations.
-	/// </summary>
-	public enum PictureRotation
-	{
-		None = 0,
-		Clockwise90,
-		Clockwise180,
-		Clockwise270
-	}
+    /// <summary>
+    /// Possible picture rotations.
+    /// </summary>
+    public enum PictureRotation
+    {
+        None = 0,
+        Clockwise90,
+        Clockwise180,
+        Clockwise270
+    }
 }

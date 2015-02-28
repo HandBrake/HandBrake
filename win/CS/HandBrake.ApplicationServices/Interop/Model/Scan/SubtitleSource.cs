@@ -13,14 +13,14 @@ namespace HandBrake.ApplicationServices.Interop.Model.Scan
     /// The subtitle source.
     /// </summary>
     public enum SubtitleSource
-	{
-		VobSub,
-		SRT,
-		CC608,
-		CC708,
-		UTF8,
-		TX3G,
-		SSA,
-		PGS
-	}
+    {
+        VobSub,
+        SRT,
+        CC608,
+        CC708,
+        UTF8,
+        TX3G,
+        SSA,
+        PGS
+    }
 }

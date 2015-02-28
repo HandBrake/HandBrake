@@ -7,23 +7,23 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-	using System;
-	using System.Runtime.InteropServices;
+    using System;
+    using System.Runtime.InteropServices;
 
-	[StructLayout(LayoutKind.Sequential)]
-	public struct iso639_lang_t
-	{
-		public IntPtr eng_name;
+    [StructLayout(LayoutKind.Sequential)]
+    public struct iso639_lang_t
+    {
+        public IntPtr eng_name;
 
-		public IntPtr native_name;
+        public IntPtr native_name;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string iso639_1;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string iso639_1;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string iso639_2;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string iso639_2;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string iso639_2b;
-	}
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string iso639_2b;
+    }
 }

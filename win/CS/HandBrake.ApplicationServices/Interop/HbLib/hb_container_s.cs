@@ -7,23 +7,23 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-	using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices;
 
-	[StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct hb_container_s
-	{
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string name;
+    {
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string name;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string short_name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string short_name;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string long_name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string long_name;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string default_extension;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string default_extension;
 
-		public int format;
-	}
+        public int format;
+    }
 }

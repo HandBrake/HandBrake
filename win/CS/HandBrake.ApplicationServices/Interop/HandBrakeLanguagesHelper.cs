@@ -16,37 +16,37 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Model;
 
     /// <summary>
-	/// Contains utilities for converting language codes.
-	/// </summary>
-	public static class Languages
-	{
-		/// <summary>
-		/// The list of all languages.
-		/// </summary>
-		private static IList<Language> allLanguages; 
+    /// Contains utilities for converting language codes.
+    /// </summary>
+    public static class Languages
+    {
+        /// <summary>
+        /// The list of all languages.
+        /// </summary>
+        private static IList<Language> allLanguages; 
 
-		/// <summary>
-		/// Gets a list of all languages.
-		/// </summary>
-		public static IList<Language> AllLanguages
-		{
-			get
-			{
-			    return allLanguages
-			           ?? (allLanguages =
+        /// <summary>
+        /// Gets a list of all languages.
+        /// </summary>
+        public static IList<Language> AllLanguages
+        {
+            get
+            {
+                return allLanguages
+                       ?? (allLanguages =
                            InteropUtilities.ToListFromIterator<iso639_lang_t, Language>(HBFunctions.lang_get_next, HandBrakeUnitConversionHelpers.NativeToLanguage));
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Gets the language object for the given code.
-		/// </summary>
-		/// <param name="code">The ISO-639-2 code for the language.</param>
-		/// <returns>Object that describes the language.</returns>
-		public static Language Get(string code)
-		{
-			iso639_lang_t language = InteropUtilities.ToStructureFromPtr<iso639_lang_t>(HBFunctions.lang_for_code2(code));
+        /// <summary>
+        /// Gets the language object for the given code.
+        /// </summary>
+        /// <param name="code">The ISO-639-2 code for the language.</param>
+        /// <returns>Object that describes the language.</returns>
+        public static Language Get(string code)
+        {
+            iso639_lang_t language = InteropUtilities.ToStructureFromPtr<iso639_lang_t>(HBFunctions.lang_for_code2(code));
             return HandBrakeUnitConversionHelpers.NativeToLanguage(language);
-		}
-	}
+        }
+    }
 }

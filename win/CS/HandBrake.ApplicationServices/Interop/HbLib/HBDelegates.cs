@@ -10,8 +10,8 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-	using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices;
 
-	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	public delegate void LoggingCallback(string message);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void LoggingCallback(string message);
 }

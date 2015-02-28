@@ -9,20 +9,20 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
+    using System;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The container.
     /// </summary>
     [Flags]
-	public enum Container
-	{
-		None = 0x0,
+    public enum Container
+    {
+        None = 0x0,
 
-		[Display(Name = "MP4")]
-		MP4,
-		[Display(Name = "MKV")]
-		MKV
-	}
+        [Display(Name = "MP4")]
+        MP4,
+        [Display(Name = "MKV")]
+        MKV
+    }
 }

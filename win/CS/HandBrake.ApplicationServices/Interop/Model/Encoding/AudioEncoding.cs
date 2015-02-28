@@ -9,81 +9,81 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	using System;
+    using System;
 
-	/// <summary>
-	/// The Audio Encoding Model
-	/// </summary>
-	public class AudioEncoding
-	{
-		/// <summary>
-		/// Initializes a new instance of the AudioEncoding class.
-		/// </summary>
-		public AudioEncoding()
-		{
-			// Initialize to -1 to differentiate a compression of 0 from uninitialized.
-			this.Compression = -1;
-		}
+    /// <summary>
+    /// The Audio Encoding Model
+    /// </summary>
+    public class AudioEncoding
+    {
+        /// <summary>
+        /// Initializes a new instance of the AudioEncoding class.
+        /// </summary>
+        public AudioEncoding()
+        {
+            // Initialize to -1 to differentiate a compression of 0 from uninitialized.
+            this.Compression = -1;
+        }
 
-		/// <summary>
-		/// Gets or sets the chosen track to apply the encoding to.
-		/// </summary>
-		/// <remarks>1-based index. 0 means apply to all tracks.</remarks>
-		public int InputNumber { get; set; }
+        /// <summary>
+        /// Gets or sets the chosen track to apply the encoding to.
+        /// </summary>
+        /// <remarks>1-based index. 0 means apply to all tracks.</remarks>
+        public int InputNumber { get; set; }
 
-		/// <summary>
-		/// Gets or sets the encoder to use.
-		/// </summary>
-		public string Encoder { get; set; }
+        /// <summary>
+        /// Gets or sets the encoder to use.
+        /// </summary>
+        public string Encoder { get; set; }
 
-		/// <summary>
-		/// Gets or sets the encode rate type (bitrate or quality).
-		/// </summary>
-		public AudioEncodeRateType EncodeRateType { get; set; }
+        /// <summary>
+        /// Gets or sets the encode rate type (bitrate or quality).
+        /// </summary>
+        public AudioEncodeRateType EncodeRateType { get; set; }
 
-		/// <summary>
-		/// Gets or sets the bitrate (in kbps) of this track.
-		/// </summary>
-		public int Bitrate { get; set; }
+        /// <summary>
+        /// Gets or sets the bitrate (in kbps) of this track.
+        /// </summary>
+        public int Bitrate { get; set; }
 
-		/// <summary>
-		/// Gets or sets the target audio quality for this track.
-		/// </summary>
-		public float Quality { get; set; }
+        /// <summary>
+        /// Gets or sets the target audio quality for this track.
+        /// </summary>
+        public float Quality { get; set; }
 
-		/// <summary>
-		/// Gets or sets the target audio compression for this track.
-		/// </summary>
-		public float Compression { get; set; }
+        /// <summary>
+        /// Gets or sets the target audio compression for this track.
+        /// </summary>
+        public float Compression { get; set; }
 
-		/// <summary>
-		/// Gets or sets the mixdown.
-		/// </summary>
-		public string Mixdown { get; set; }
+        /// <summary>
+        /// Gets or sets the mixdown.
+        /// </summary>
+        public string Mixdown { get; set; }
 
-		/// <summary>
-		/// Gets or sets the sample rate in Hz.
-		/// </summary>
-		public int SampleRateRaw { get; set; }
+        /// <summary>
+        /// Gets or sets the sample rate in Hz.
+        /// </summary>
+        public int SampleRateRaw { get; set; }
 
-		/// <summary>
-		/// Gets or sets Gain.
-		/// </summary>
-		public int Gain { get; set; }
+        /// <summary>
+        /// Gets or sets Gain.
+        /// </summary>
+        public int Gain { get; set; }
 
-		/// <summary>
-		/// Gets or sets Drc.
-		/// </summary>
-		public double Drc { get; set; }
+        /// <summary>
+        /// Gets or sets Drc.
+        /// </summary>
+        public double Drc { get; set; }
 
-		/// <summary>
-		/// Gets or sets Name.
-		/// </summary>
-		public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets Name.
+        /// </summary>
+        public string Name { get; set; }
 
-	    /// <summary>
-	    /// Gets or sets a value indicating whether is passthru.
-	    /// </summary>
-	    public bool IsPassthru { get; set; }
-	}
+        /// <summary>
+        /// Gets or sets a value indicating whether is passthru.
+        /// </summary>
+        public bool IsPassthru { get; set; }
+    }
 }

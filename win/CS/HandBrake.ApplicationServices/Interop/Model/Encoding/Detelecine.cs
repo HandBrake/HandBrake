@@ -13,9 +13,9 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// The detelecine.
     /// </summary>
     public enum Detelecine
-	{
-		Off = 0,
-		Default = 2,
-		Custom = 1
-	}
+    {
+        Off = 0,
+        Default = 2,
+        Custom = 1
+    }
 }

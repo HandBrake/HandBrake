@@ -8,23 +8,23 @@
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
     internal enum hb_filter_ids
-	{
-		HB_FILTER_QSV_PRE = 1, // for QSV - important to have before other filters 
-		// First, filters that may change the framerate (drop or dup frames)
-		HB_FILTER_DETELECINE,
-		HB_FILTER_DECOMB,
-		HB_FILTER_DEINTERLACE,
-		HB_FILTER_VFR,
-		// Filters that must operate on the original source image are next
-		HB_FILTER_DEBLOCK,
-		HB_FILTER_HQDN3D,
-		HB_FILTER_NLMEANS,
-		HB_FILTER_RENDER_SUB,
-		HB_FILTER_CROP_SCALE,
-		// Finally filters that don't care what order they are in,
-		// except that they must be after the above filters
-		HB_FILTER_ROTATE,
-		HB_FILTER_QSV_POST, // for QSV - important to have as a last one 
-		HB_FILTER_QSV,  // default MSDK VPP filter 
-	}
+    {
+        HB_FILTER_QSV_PRE = 1, // for QSV - important to have before other filters 
+        // First, filters that may change the framerate (drop or dup frames)
+        HB_FILTER_DETELECINE,
+        HB_FILTER_DECOMB,
+        HB_FILTER_DEINTERLACE,
+        HB_FILTER_VFR,
+        // Filters that must operate on the original source image are next
+        HB_FILTER_DEBLOCK,
+        HB_FILTER_HQDN3D,
+        HB_FILTER_NLMEANS,
+        HB_FILTER_RENDER_SUB,
+        HB_FILTER_CROP_SCALE,
+        // Finally filters that don't care what order they are in,
+        // except that they must be after the above filters
+        HB_FILTER_ROTATE,
+        HB_FILTER_QSV_POST, // for QSV - important to have as a last one 
+        HB_FILTER_QSV,  // default MSDK VPP filter 
+    }
 }

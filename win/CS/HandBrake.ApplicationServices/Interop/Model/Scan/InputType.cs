@@ -15,17 +15,17 @@ namespace HandBrake.ApplicationServices.Interop.Model.Scan
     /// The input type.
     /// </summary>
     public enum InputType
-	{
-		[Display(Name = "File")]
-		Stream,
+    {
+        [Display(Name = "File")]
+        Stream,
 
-		[Display(Name = "DVD")]
-		Dvd,
+        [Display(Name = "DVD")]
+        Dvd,
 
-		[Display(Name = "Blu-ray")]
-		Bluray,
+        [Display(Name = "Blu-ray")]
+        Bluray,
 
         [Display(Name = "File")]
         FFStream
-	}
+    }
 }

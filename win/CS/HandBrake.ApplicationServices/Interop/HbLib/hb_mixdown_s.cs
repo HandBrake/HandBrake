@@ -7,19 +7,19 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-	using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices;
 
-	[StructLayout(LayoutKind.Sequential)]
-	public struct hb_mixdown_s
-	{
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string name;
+    [StructLayout(LayoutKind.Sequential)]
+    public struct hb_mixdown_s
+    {
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string name;
 
-		/// char*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string short_name;
+        /// char*
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string short_name;
 
-		/// int
-		public int amixdown;
-	}
+        /// int
+        public int amixdown;
+    }
 }

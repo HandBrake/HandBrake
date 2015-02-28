@@ -9,24 +9,24 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 
-	/// <summary>
-	/// The Audio Mixdown Enumeration
-	/// </summary>
-	public enum Mixdown
-	{
-		[Display(Name = "Dolby Pro Logic II")]
-		DolbyProLogicII = 0,
+    /// <summary>
+    /// The Audio Mixdown Enumeration
+    /// </summary>
+    public enum Mixdown
+    {
+        [Display(Name = "Dolby Pro Logic II")]
+        DolbyProLogicII = 0,
 
         [Display(Name = "None")]
         None,
 
-		[Display(Name = "Automatic")]
-		Auto,
+        [Display(Name = "Automatic")]
+        Auto,
 
-		[Display(Name = "Mono")]
-		Mono,
+        [Display(Name = "Mono")]
+        Mono,
 
         [Display(Name = "Mono (Left Only)")]
         LeftOnly,
@@ -34,14 +34,14 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [Display(Name = "Mono (Right Only)")]
         RightOnly,
 
-		[Display(Name = "Stereo")]
-		Stereo,
+        [Display(Name = "Stereo")]
+        Stereo,
 
-		[Display(Name = "Dolby Surround")]
-		DolbySurround,
+        [Display(Name = "Dolby Surround")]
+        DolbySurround,
 
-		[Display(Name = "5.1 Channels")]
-		FivePoint1Channels,
+        [Display(Name = "5.1 Channels")]
+        FivePoint1Channels,
 
         [Display(Name = "6.1 Channels")]
         SixPoint1Channels,
@@ -51,5 +51,5 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 
         [Display(Name = "7.1 (5F/2R/LFE)")]
         Five_2_LFE,
-	}
+    }
 }

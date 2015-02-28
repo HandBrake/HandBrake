@@ -13,7 +13,7 @@ namespace HandBrake.ApplicationServices.Interop.Helpers
     /// The utilities.
     /// </summary>
     internal static class Utilities
-	{
+    {
         /// <summary>
         /// Get the Greatest Common Factor
         /// </summary>
@@ -27,23 +27,23 @@ namespace HandBrake.ApplicationServices.Interop.Helpers
         /// The greatest common factor
         /// </returns>
         public static int GreatestCommonFactor(int a, int b)
-		{
-			if (a == 0)
-			{
-				return b;
-			}
+        {
+            if (a == 0)
+            {
+                return b;
+            }
 
-			if (b == 0)
-			{
-				return a;
-			}
+            if (b == 0)
+            {
+                return a;
+            }
 
-			if (a > b)
-			{
-				return GreatestCommonFactor(a % b, b);
-			}
+            if (a > b)
+            {
+                return GreatestCommonFactor(a % b, b);
+            }
             
             return GreatestCommonFactor(a, b % a);
-		}
-	}
+        }
+    }
 }

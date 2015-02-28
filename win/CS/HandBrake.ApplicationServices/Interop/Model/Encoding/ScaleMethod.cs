@@ -9,19 +9,19 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	/// <summary>
-	/// Enumeration of rescaling algorithms.
-	/// </summary>
-	public enum ScaleMethod
-	{
-		/// <summary>
-		/// Standard software scaling. Highest quality.
-		/// </summary>
-		Lanczos = 0,
+    /// <summary>
+    /// Enumeration of rescaling algorithms.
+    /// </summary>
+    public enum ScaleMethod
+    {
+        /// <summary>
+        /// Standard software scaling. Highest quality.
+        /// </summary>
+        Lanczos = 0,
 
-		/// <summary>
-		/// OpenCL-assisted bicubic scaling.
-		/// </summary>
-		Bicubic = 1
-	}
+        /// <summary>
+        /// OpenCL-assisted bicubic scaling.
+        /// </summary>
+        Bicubic = 1
+    }
 }

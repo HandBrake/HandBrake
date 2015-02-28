@@ -7,22 +7,22 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-	public enum hb_subtitle_s_subsource
-	{
-		VOBSUB,
+    public enum hb_subtitle_s_subsource
+    {
+        VOBSUB,
 
-		SRTSUB,
+        SRTSUB,
 
-		CC608SUB,
+        CC608SUB,
 
-		CC708SUB,
+        CC708SUB,
 
-		UTF8SUB,
+        UTF8SUB,
 
-		TX3GSUB,
+        TX3GSUB,
 
-		SSASUB,
+        SSASUB,
 
-		PGSSUB
-	}
+        PGSSUB
+    }
 }

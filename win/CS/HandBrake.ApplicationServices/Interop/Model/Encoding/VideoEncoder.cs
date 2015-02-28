@@ -9,34 +9,34 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 
-	using HandBrake.ApplicationServices.Interop.Attributes;
+    using HandBrake.ApplicationServices.Interop.Attributes;
 
     /// <summary>
     /// The video encoder.
     /// </summary>
     public enum VideoEncoder
-	{
-		[Display(Name = "H.264 (x264)")]
+    {
+        [Display(Name = "H.264 (x264)")]
         [ShortName("x264")]
-		X264 = 0,
+        X264 = 0,
 
         [Display(Name = "H.264 (Intel QSV)")]
         [ShortName("qsv_h264")]
         QuickSync,
 
-		[Display(Name = "MPEG-4")]
+        [Display(Name = "MPEG-4")]
         [ShortName("mpeg4")]
-		FFMpeg,
+        FFMpeg,
 
-		[Display(Name = "MPEG-2")]
+        [Display(Name = "MPEG-2")]
         [ShortName("mpeg2")]
-		FFMpeg2,
+        FFMpeg2,
 
-		[Display(Name = "Theora")]
+        [Display(Name = "Theora")]
         [ShortName("theora")]
-		Theora,
+        Theora,
 
         [Display(Name = "H.265 (x265)")]
         [ShortName("x265")]
@@ -45,5 +45,5 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [Display(Name = "VP8")]
         [ShortName("vp8")]
         VP8
-	}
+    }
 }

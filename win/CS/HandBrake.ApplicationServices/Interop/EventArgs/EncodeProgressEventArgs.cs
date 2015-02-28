@@ -15,30 +15,30 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
     /// Encode Progress Event Args
     /// </summary>
     public class EncodeProgressEventArgs : EventArgs
-	{
-	    /// <summary>
-	    /// Gets or sets FractionComplete.
-	    /// </summary>
+    {
+        /// <summary>
+        /// Gets or sets FractionComplete.
+        /// </summary>
         public double FractionComplete { get; set; }
 
-	    /// <summary>
-	    /// Gets or sets CurrentFrameRate.
-	    /// </summary>
+        /// <summary>
+        /// Gets or sets CurrentFrameRate.
+        /// </summary>
         public double CurrentFrameRate { get; set; }
 
-	    /// <summary>
-	    /// Gets or sets AverageFrameRate.
-	    /// </summary>
+        /// <summary>
+        /// Gets or sets AverageFrameRate.
+        /// </summary>
         public double AverageFrameRate { get; set; }
 
-	    /// <summary>
-	    /// Gets or sets EstimatedTimeLeft.
-	    /// </summary>
-	    public TimeSpan EstimatedTimeLeft { get; set; }
+        /// <summary>
+        /// Gets or sets EstimatedTimeLeft.
+        /// </summary>
+        public TimeSpan EstimatedTimeLeft { get; set; }
 
-		/// <summary>
-		/// Gets or sets the current encoding pass. (-1: subtitle scan, 1: first pass, 2: second pass)
-		/// </summary>
-		public int Pass { get; set; }
-	}
+        /// <summary>
+        /// Gets or sets the current encoding pass. (-1: subtitle scan, 1: first pass, 2: second pass)
+        /// </summary>
+        public int Pass { get; set; }
+    }
 }

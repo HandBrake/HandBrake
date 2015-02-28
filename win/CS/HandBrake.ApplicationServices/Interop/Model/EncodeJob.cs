@@ -14,17 +14,17 @@ namespace HandBrake.ApplicationServices.Interop.Model
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     /// <summary>
-	/// The encode job.
-	/// </summary>
-	public class EncodeJob
-	{
-	    /// <summary>
-	    /// Initializes a new instance of the <see cref="EncodeJob"/> class.
-	    /// </summary>
-	    public EncodeJob()
-	    {
+    /// The encode job.
+    /// </summary>
+    public class EncodeJob
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EncodeJob"/> class.
+        /// </summary>
+        public EncodeJob()
+        {
             this.Cropping = new Cropping();
-	    }
+        }
 
         #region Source
 
@@ -415,30 +415,30 @@ namespace HandBrake.ApplicationServices.Interop.Model
         #region Public Methods
 
         /// <summary>
-		/// The clone.
-		/// </summary>
-		/// <returns>
-		/// The <see cref="EncodeJob"/>.
-		/// </returns>
-		public EncodeJob Clone()
-		{
-			var clone = new EncodeJob
-							{
-								SourceType = this.SourceType, 
-								SourcePath = this.SourcePath, 
-								Title = this.Title, 
-								Angle = this.Angle, 
-								RangeType = this.RangeType, 
-								ChapterStart = this.ChapterStart, 
-								ChapterEnd = this.ChapterEnd, 
-								SecondsStart = this.SecondsStart, 
-								SecondsEnd = this.SecondsEnd, 
-								FramesStart = this.FramesStart, 
-								FramesEnd = this.FramesEnd, 
-								Subtitles = this.Subtitles, 
-								UseDefaultChapterNames = this.UseDefaultChapterNames, 
-								DxvaDecoding = this.DxvaDecoding, 
-								OutputPath = this.OutputPath, 
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="EncodeJob"/>.
+        /// </returns>
+        public EncodeJob Clone()
+        {
+            var clone = new EncodeJob
+                            {
+                                SourceType = this.SourceType, 
+                                SourcePath = this.SourcePath, 
+                                Title = this.Title, 
+                                Angle = this.Angle, 
+                                RangeType = this.RangeType, 
+                                ChapterStart = this.ChapterStart, 
+                                ChapterEnd = this.ChapterEnd, 
+                                SecondsStart = this.SecondsStart, 
+                                SecondsEnd = this.SecondsEnd, 
+                                FramesStart = this.FramesStart, 
+                                FramesEnd = this.FramesEnd, 
+                                Subtitles = this.Subtitles, 
+                                UseDefaultChapterNames = this.UseDefaultChapterNames, 
+                                DxvaDecoding = this.DxvaDecoding, 
+                                OutputPath = this.OutputPath, 
 
                                 ContainerName = this.ContainerName, 
                                 PreferredExtension = this.PreferredExtension, 
@@ -495,11 +495,11 @@ namespace HandBrake.ApplicationServices.Interop.Model
 
                                 AudioEncodings = new List<AudioEncoding>(this.AudioEncodings), 
                                 AudioEncoderFallback = this.AudioEncoderFallback
-							};
+                            };
 
-			return clone;
-		}
+            return clone;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

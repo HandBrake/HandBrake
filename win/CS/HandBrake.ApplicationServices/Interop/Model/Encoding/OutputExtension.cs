@@ -13,8 +13,8 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// The output extension.
     /// </summary>
     public enum OutputExtension
-	{
-		Mp4,
-		M4v
-	}
+    {
+        Mp4,
+        M4v
+    }
 }

@@ -15,10 +15,10 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
     /// Encode Completed Event Args
     /// </summary>
     public class EncodeCompletedEventArgs : EventArgs
-	{
-	    /// <summary>
-	    /// Gets or sets a value indicating whether an error occurred during the encode.
-	    /// </summary>
-	    public bool Error { get; set; }
-	}
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether an error occurred during the encode.
+        /// </summary>
+        public bool Error { get; set; }
+    }
 }

@@ -13,7 +13,7 @@ namespace HandBrake.ApplicationServices.Interop.Model
     /// The Cropping Model
     /// </summary>
     public class Cropping
-	{
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="Cropping"/> class. 
         /// </summary>
@@ -86,14 +86,14 @@ namespace HandBrake.ApplicationServices.Interop.Model
         /// A Cloned copy
         /// </returns>
         public Cropping Clone()
-		{
-			return new Cropping
-			{
-				Top = this.Top,
-				Bottom = this.Bottom,
-				Left = this.Left,
-				Right = this.Right
-			};
-		}
-	}
+        {
+            return new Cropping
+            {
+                Top = this.Top,
+                Bottom = this.Bottom,
+                Left = this.Left,
+                Right = this.Right
+            };
+        }
+    }
 }

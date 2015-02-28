@@ -13,9 +13,9 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// The denoise.
     /// </summary>
     public enum Denoise
-	{
-		Off = 0,
+    {
+        Off = 0,
         hqdn3d = 1,
-		NLMeans = 2,
-	}
+        NLMeans = 2,
+    }
 }

@@ -24,10 +24,10 @@ namespace HandBrake.ApplicationServices.Interop.Model
         /// </summary>
         public bool Default { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether the subtitle track should be burned in.
-		/// </summary>
-		public bool BurnedIn { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether the subtitle track should be burned in.
+        /// </summary>
+        public bool BurnedIn { get; set; }
 
         /// <summary>
         /// Gets or sets the file name.
@@ -55,7 +55,7 @@ namespace HandBrake.ApplicationServices.Interop.Model
             return new SrtSubtitle
                        {
                            Default = this.Default,
-						   BurnedIn = this.BurnedIn,
+                           BurnedIn = this.BurnedIn,
                            FileName = this.FileName, 
                            LanguageCode = this.LanguageCode, 
                            CharacterCode = this.CharacterCode, 

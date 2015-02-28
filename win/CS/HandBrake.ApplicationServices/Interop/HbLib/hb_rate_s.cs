@@ -7,16 +7,16 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-	using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices;
 
-	[StructLayout(LayoutKind.Sequential)]
-	public struct hb_rate_s
-	{
-		/// char*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string name;
+    [StructLayout(LayoutKind.Sequential)]
+    public struct hb_rate_s
+    {
+        /// char*
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string name;
 
-		/// int
-		public int rate;
-	}
+        /// int
+        public int rate;
+    }
 }

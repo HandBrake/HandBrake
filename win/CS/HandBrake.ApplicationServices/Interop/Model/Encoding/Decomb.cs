@@ -13,11 +13,11 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// The decomb.
     /// </summary>
     public enum Decomb
-	{
-		Off = 0,
-		Default = 2,
-		Fast = 3,
-		Bob = 4,
-		Custom = 1
-	}
+    {
+        Off = 0,
+        Default = 2,
+        Fast = 3,
+        Bob = 4,
+        Custom = 1
+    }
 }
