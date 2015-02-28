@@ -1212,13 +1212,29 @@
             job.title = nil;
             [jobs addObject:job];
             [job release];
-
-            if ([[NSFileManager defaultManager] fileExistsAtPath:job.destURL.path] || [fQueueController jobExistAtURL:job.destURL])
-            {
-                fileExists = YES;
-            }
         }
     }
+
+    NSMutableSet *destinations = [[NSMutableSet alloc] init];
+    for (HBJob *job in jobs)
+    {
+        if ([destinations containsObject:job.destURL])
+        {
+            fileExists = YES;
+            break;
+        }
+        else
+        {
+            [destinations addObject:job.destURL];
+        }
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:job.destURL.path] || [fQueueController jobExistAtURL:job.destURL])
+        {
+            fileExists = YES;
+            break;
+        }
+    }
+    [destinations release];
 
     if (fileExists)
     {
