@@ -8,8 +8,8 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "HandBrake"
-!define PRODUCT_VERSION "0.10.0"
-!define PRODUCT_VERSION_NUMBER "0.10.0"
+!define PRODUCT_VERSION "1.0.0"
+!define PRODUCT_VERSION_NUMBER "1.0.0"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Handbrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -137,7 +137,6 @@ Section "Handbrake" SEC01
   CreateShortCut "$DESKTOP\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
   File "*.dll"
   File "*.config"
-  File "*.xml"
   File "*.pdb"
 
   ; Copy the standard doc set into the doc folder
