@@ -100,10 +100,6 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\libraries\caliburn\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="EagleBoost.Wpf.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libraries\EagleBoost.Wpf.Presentation.dll</HintPath>
-    </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop">
       <HintPath>..\libraries\WPFDragDrop\GongSolutions.Wpf.DragDrop.dll</HintPath>
     </Reference>
