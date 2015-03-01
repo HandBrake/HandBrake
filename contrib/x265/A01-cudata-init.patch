@@ -1,0 +1,12 @@
+diff -r 018e8bbaa854 source/common/cudata.cpp
+--- a/source/common/cudata.cpp	Fri Feb 27 11:46:09 2015 +0530
++++ b/source/common/cudata.cpp	Sun Mar 01 09:24:49 2015 -0800
+@@ -161,7 +161,7 @@
+     m_vChromaShift  = CHROMA_V_SHIFT(csp);
+     m_numPartitions = NUM_4x4_PARTITIONS >> (depth * 2);
+ 
+-    if (!s_partSet[0])
++    //if (!s_partSet[0])
+     {
+         s_numPartInCUSize = 1 << g_unitSizeDepth;
+         switch (g_maxLog2CUSize)
