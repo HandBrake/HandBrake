@@ -11,6 +11,10 @@ X265.CONFIGURE.static      =
 X265.CONFIGURE.shared      = -DENABLE_SHARED=OFF
 X265.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=OFF
 
+ifneq (none,$(X265.GCC.g))
+    X265.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+endif
+
 ifeq (1,$(BUILD.cross))
     ifeq (mingw,$(BUILD.system))
         X265.CONFIGURE.extra += -DWIN32=ON -DWINXP_SUPPORT=ON
