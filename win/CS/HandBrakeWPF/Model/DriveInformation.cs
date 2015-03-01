@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model
+namespace HandBrakeWPF.Model
 {
     /// <summary>
     /// Information about a DVD drive

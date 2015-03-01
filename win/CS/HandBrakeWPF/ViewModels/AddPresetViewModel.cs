@@ -12,10 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Windows;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
@@ -23,7 +20,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
-    using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;

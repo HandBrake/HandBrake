@@ -13,8 +13,6 @@ namespace HandBrakeWPF.Helpers
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services.Interfaces;
-
     using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>

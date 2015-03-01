@@ -146,6 +146,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
     <Compile Include="Model\Audio\AudioBehaviours.cs" />
+    <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />
+    <Compile Include="Utilities\DriveUtilities.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
     <Compile Include="Services\Presets\Factories\PlistFactory.cs" />
     <Compile Include="Utilities\PList.cs" />

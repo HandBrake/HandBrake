@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Commands
     using System;
     using System.Windows.Input;
 
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.EventArgs;
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
 

@@ -26,7 +26,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.EventArgs;
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Model;
@@ -499,7 +498,7 @@ namespace HandBrakeWPF.ViewModels
                 // Check if we have a Folder, if so, check if it's a DVD / Bluray drive and get the label.
                 if (ScannedSource.ScanPath.EndsWith("\\"))
                 {
-                    foreach (DriveInformation item in GeneralUtilities.GetDrives())
+                    foreach (DriveInformation item in DriveUtilities.GetDrives())
                     {
                         if (item.RootDirectory.Contains(this.ScannedSource.ScanPath.Replace("\\\\", "\\")))
                         {
@@ -1000,7 +999,7 @@ namespace HandBrakeWPF.ViewModels
                 if (this.showSourceSelection)
                 {
                     this.Drives.Clear();
-                    foreach (SourceMenuItem menuItem in from item in GeneralUtilities.GetDrives()
+                    foreach (SourceMenuItem menuItem in from item in DriveUtilities.GetDrives()
                                                         let driveInformation = item
                                                         select new SourceMenuItem
                                                         {

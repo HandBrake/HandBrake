@@ -17,8 +17,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Text;
     using System.Windows.Forms;
 
-    using HandBrake.ApplicationServices.Model;
-
     /// <summary>
     /// A Set of Static Utilites
     /// </summary>
@@ -141,37 +139,6 @@ namespace HandBrake.ApplicationServices.Utilities
             logHeader.AppendLine("-------------------------------------------");
 
             return logHeader;
-        }
-
-        /// <summary>
-        /// Get a list of available DVD drives which are ready and contain DVD content.
-        /// </summary>
-        /// <returns>A List of Drives with their details</returns>
-        public static List<DriveInformation> GetDrives()
-        {
-            var drives = new List<DriveInformation>();
-            DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
-            int id = 0;
-            foreach (DriveInfo curDrive in theCollectionOfDrives)
-            {
-                if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady)
-                {
-                    if (Directory.Exists(curDrive.RootDirectory + "VIDEO_TS") ||
-                        Directory.Exists(curDrive.RootDirectory + "BDMV"))
-                    {
-                        drives.Add(
-                            new DriveInformation
-                                {
-                                    Id = id,
-                                    VolumeLabel = curDrive.VolumeLabel,
-                                    RootDirectory = curDrive.RootDirectory.ToString()
-                                });
-                        id++;
-                    }
-                }
-            }
-
-            return drives;
         }
 
         /// <summary>
