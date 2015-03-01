@@ -15,6 +15,8 @@ namespace HandBrakeWPF.Services
 
     using HandBrakeWPF.Services.Interfaces;
 
+    using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
+
     /// <summary>
     /// The Notification Service (Growl Connector)
     /// </summary>

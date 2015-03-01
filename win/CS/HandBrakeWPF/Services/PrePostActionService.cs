@@ -9,20 +9,18 @@
 
 namespace HandBrakeWPF.Services
 {
+    using System;
     using System.Diagnostics;
     using System.Windows.Forms;
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
-
-    using Application = System.Windows.Application;
 
     /// <summary>
     /// The when done service.
@@ -76,7 +74,7 @@ namespace HandBrakeWPF.Services
         /// <param name="e">
         /// The e.
         /// </param>
-        private void EncodeService_EncodeStarted(object sender, System.EventArgs e)
+        private void EncodeService_EncodeStarted(object sender, EventArgs e)
         {
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
             {
@@ -134,7 +132,7 @@ namespace HandBrakeWPF.Services
 
             // Give the user the ability to cancel the shutdown. Default 60 second timer.
             ICountdownAlertViewModel titleSpecificView = IoC.Get<ICountdownAlertViewModel>();
-            Caliburn.Micro.Execute.OnUIThread(
+            Execute.OnUIThread(
                 () =>
                     {
                         titleSpecificView.SetAction(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction));
@@ -153,16 +151,16 @@ namespace HandBrakeWPF.Services
                         Win32.ExitWindowsEx(0, 0);
                         break;
                     case "Suspend":
-                        System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
+                        Application.SetSuspendState(PowerState.Suspend, true, true);
                         break;
                     case "Hibernate":
-                        System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, true);
+                        Application.SetSuspendState(PowerState.Hibernate, true, true);
                         break;
                     case "Lock System":
                         Win32.LockWorkStation();
                         break;
                     case "Quit HandBrake":
-                        Execute.OnUIThread(() => Application.Current.Shutdown());
+                        Execute.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
                 }
             }
@@ -180,8 +178,8 @@ namespace HandBrakeWPF.Services
                 !string.IsNullOrEmpty(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)))
             {
                 string args = string.Format(
-                    "{0} \"{1}\"",
-                    this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs),
+                    "{0} \"{1}\"", 
+                    this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs), 
                     file);
                 var vlc =
                     new ProcessStartInfo(

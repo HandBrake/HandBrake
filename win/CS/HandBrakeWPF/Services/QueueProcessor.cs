@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services
+namespace HandBrakeWPF.Services
 {
     using System;
     using System.Collections.Generic;
@@ -18,13 +18,15 @@ namespace HandBrake.ApplicationServices.Services
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
+
+    using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
+    using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
+    using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
 
     /// <summary>
     /// The HandBrake Queue
@@ -444,7 +446,7 @@ namespace HandBrake.ApplicationServices.Services
                 throw new Exception("Already Processing the Queue");
             }
 
-            clearCompleted = isClearCompleted;
+            this.clearCompleted = isClearCompleted;
 
             this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
@@ -480,7 +482,7 @@ namespace HandBrake.ApplicationServices.Services
             this.LastProcessedJob.Status = QueueItemStatus.Completed;
 
             // Clear the completed item of the queue if the setting is set.
-            if (clearCompleted)
+            if (this.clearCompleted)
             {
                 this.ClearCompleted();
             }

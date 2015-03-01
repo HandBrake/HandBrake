@@ -140,12 +140,16 @@
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
+    <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
+    <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
     <Compile Include="Model\Audio\AudioBehaviours.cs" />
     <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
+    <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Presets\Factories\PlistPresetFactory.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Services\Presets\Model\Preset.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
     <Compile Include="Services\Presets\Model\PresetContainer.cs" />
     <Compile Include="Services\Presets\PresetService.cs" />
+    <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />

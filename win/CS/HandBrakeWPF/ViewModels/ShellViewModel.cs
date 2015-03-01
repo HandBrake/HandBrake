@@ -20,6 +20,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
+
     /// <summary>
     /// The Shell View Model
     /// </summary>

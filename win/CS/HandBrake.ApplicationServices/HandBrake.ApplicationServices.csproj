@@ -88,10 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\EnumToDescConverter.cs" />
-    <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
-    <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
-    <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
     <Compile Include="Interop\Attributes\ShortName.cs" />
     <Compile Include="Interop\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Interop\EventArgs\EncodeProgressEventArgs.cs" />
@@ -216,10 +213,8 @@
     <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
-    <Compile Include="Services\Interfaces\IServerService.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
-    <Compile Include="Services\ServerService.cs" />
     <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\InteropModelCreator.cs" />
@@ -249,14 +244,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServicesWindsorInstaller.cs" />
     <Compile Include="Services\Encode\EncodeBase.cs" />
     <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
-    <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Scan\Interfaces\IScan.cs" />
     <Compile Include="Services\Encode\LibEncode.cs" />
     <Compile Include="Services\Scan\LibScan.cs" />
-    <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Utilities\CharCodesUtilities.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />

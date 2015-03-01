@@ -16,10 +16,11 @@ namespace HandBrakeWPF.Services
     using System.Reflection;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
 
     using HandBrakeWPF.Services.Interfaces;
+
+    using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
 
     /// <summary>
     /// The User Setting Serivce

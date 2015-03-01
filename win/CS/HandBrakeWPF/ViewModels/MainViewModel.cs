@@ -34,6 +34,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Interop;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
@@ -51,6 +52,8 @@ namespace HandBrakeWPF.ViewModels
     using Microsoft.Win32;
 
     using Ookii.Dialogs.Wpf;
+
+    using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -2104,7 +2107,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        void QueueProcessorJobProcessingStarted(object sender, HandBrake.ApplicationServices.EventArgs.QueueProgressEventArgs e)
+        void QueueProcessorJobProcessingStarted(object sender, QueueProgressEventArgs e)
         {
             Execute.OnUIThread(
                () =>
@@ -2194,7 +2197,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void UserSettingServiceSettingChanged(object sender, HandBrake.ApplicationServices.EventArgs.SettingChangedEventArgs e)
+        private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)
         {
             if (e.Key == UserSettingConstants.ShowAdvancedTab)
             {

@@ -17,7 +17,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
@@ -33,6 +32,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Clipboard = System.Windows.Clipboard;
+    using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
 
     /// <summary>
     /// The Video View Model

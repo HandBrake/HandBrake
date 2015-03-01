@@ -56,8 +56,8 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<IEventAggregator>().ImplementedBy<EventAggregator>());
 
             // Initialise the ApplicationServices IWindsorInstaller
-            this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<ServicesWindsorInstaller>());
-            this.windsorContainer.Install(windsorContainer.ResolveAll<IWindsorInstaller>());
+            // this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<ServicesWindsorInstaller>());
+            // this.windsorContainer.Install(windsorContainer.ResolveAll<IWindsorInstaller>());
 
             // Services
             this.windsorContainer.Register(Component.For<IUpdateService>().ImplementedBy<UpdateService>().LifeStyle.Is(LifestyleType.Singleton));
@@ -67,6 +67,7 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<IPrePostActionService>().ImplementedBy<PrePostActionService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IUserSettingService>().ImplementedBy<UserSettingService>());
             this.windsorContainer.Register(Component.For<IPresetService>().ImplementedBy<PresetService>());
+            this.windsorContainer.Register(Component.For<IQueueProcessor>().ImplementedBy<QueueProcessor>());
 
             // Commands
             this.windsorContainer.Register(Component.For<IAdvancedEncoderOptionsCommand>().ImplementedBy<AdvancedEncoderOptionsCommand>().LifeStyle.Is(LifestyleType.Singleton));

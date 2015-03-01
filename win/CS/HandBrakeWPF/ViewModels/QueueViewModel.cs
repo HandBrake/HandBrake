@@ -15,12 +15,11 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -245,7 +244,7 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
             this.IsEncoding = false;
 
-            MessageBox.Show("The Queue has been paused. The currently running job will run to completion and no further jobs will start.", "Queue",
+            MessageBox.Show("The Queue has been paused. The currently running job will run to completion and no further jobs will start.", "Queue", 
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -261,9 +260,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 MessageBoxResult result =
                     this.errorService.ShowMessageBox(
-                        "This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?",
-                        Resources.Warning,
-                        MessageBoxButton.YesNo,
+                        "This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?", 
+                        Resources.Warning, 
+                        MessageBoxButton.YesNo, 
                         MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
@@ -317,9 +316,9 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog dialog = new SaveFileDialog
                 {
-                    Filter = "HandBrake Queue Files (*.hbq)|*.hbq",
-                    OverwritePrompt = true,
-                    DefaultExt = ".hbq",
+                    Filter = "HandBrake Queue Files (*.hbq)|*.hbq", 
+                    OverwritePrompt = true, 
+                    DefaultExt = ".hbq", 
                     AddExtension = true
                 };
             if (dialog.ShowDialog() == true)
@@ -349,9 +348,9 @@ namespace HandBrakeWPF.ViewModels
         public void EditJob(QueueTask task)
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                "Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window.",
-                "Modify Job?",
-                MessageBoxButton.YesNo,
+                "Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window.", 
+                "Modify Job?", 
+                MessageBoxButton.YesNo, 
                 MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes)
@@ -420,17 +419,17 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void EncodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
-            Caliburn.Micro.Execute.OnUIThread(() =>
+            Execute.OnUIThread(() =>
             {
                 this.JobStatus =
                     string.Format(
-                        "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
-                        e.Task,
-                        e.TaskCount,
-                        e.PercentComplete,
-                        e.CurrentFrameRate,
-                        e.AverageFrameRate,
-                        e.EstimatedTimeLeft,
+                        "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}", 
+                        e.Task, 
+                        e.TaskCount, 
+                        e.PercentComplete, 
+                        e.CurrentFrameRate, 
+                        e.AverageFrameRate, 
+                        e.EstimatedTimeLeft, 
                         e.ElapsedTime);
             });
         }
