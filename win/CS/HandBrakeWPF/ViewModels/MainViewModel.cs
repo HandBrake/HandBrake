@@ -97,7 +97,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The Encode Service
         /// </summary>
-        private readonly IEncodeServiceWrapper encodeService;
+        private readonly IEncode encodeService;
 
         /// <summary>
         /// Windows 7 API Pack wrapper
@@ -229,7 +229,7 @@ namespace HandBrakeWPF.ViewModels
         /// The when Done Service.
         /// *** Leave in Constructor. *** 
         /// </param>
-        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
+        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, INotificationService notificationService,
             IPrePostActionService whenDoneService)
         {

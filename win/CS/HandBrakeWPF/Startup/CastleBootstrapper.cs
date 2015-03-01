@@ -62,7 +62,7 @@ namespace HandBrakeWPF.Startup
             // Services
             this.windsorContainer.Register(Component.For<IUpdateService>().ImplementedBy<UpdateService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IScan>().ImplementedBy<LibScan>().LifeStyle.Is(LifestyleType.Singleton));
-            this.windsorContainer.Register(Component.For<IEncodeServiceWrapper>().ImplementedBy<EncodeServiceWrapper>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IEncode>().ImplementedBy<EncodeServiceWrapper>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<INotificationService>().ImplementedBy<NotificationService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IPrePostActionService>().ImplementedBy<PrePostActionService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IUserSettingService>().ImplementedBy<UserSettingService>());

@@ -66,7 +66,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <exception cref="ArgumentNullException">
         /// Services are not setup
         /// </exception>
-        public QueueProcessor(IEncodeServiceWrapper encodeService)
+        public QueueProcessor(IEncode encodeService)
         {
             this.EncodeService = encodeService;
 
@@ -143,7 +143,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets the IEncodeService instance.
         /// </summary>
-        public IEncodeServiceWrapper EncodeService { get; private set; }
+        public IEncode EncodeService { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether IsProcessing.

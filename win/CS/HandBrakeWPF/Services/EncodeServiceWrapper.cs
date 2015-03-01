@@ -14,20 +14,17 @@ namespace HandBrakeWPF.Services
     using System;
 
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Isolation;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-
-    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// We have multiple implementations of Iencode. This is a wrapper class for the GUI so that the 
     /// implementation used is controllable via user settings.
     /// Over time, this class will go away when the LibHB and process isolation code matures.
     /// </summary>
-    public class EncodeServiceWrapper : IEncodeServiceWrapper
+    public class EncodeServiceWrapper : IEncode
     {
         #region Constants and Fields
 
@@ -43,32 +40,18 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodeServiceWrapper"/> class.
         /// </summary>
-        /// <param name="userSettingService">
-        /// The user setting service.
-        /// </param>
-        public EncodeServiceWrapper(IUserSettingService userSettingService)
+        public EncodeServiceWrapper()
         {
-            var useProcessIsolation =
-                userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
-            var port = userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);
-
             try
             {
-                if (useProcessIsolation)
-                {
-                    this.encodeService = new IsolatedEncodeService(port);
-                }
-                else
-                {
-                    this.encodeService = new LibEncode();
-                }
+                this.encodeService = new LibEncode();
             }
             catch (Exception exc)
             {
                 // Try to recover from errors.
                 throw new GeneralApplicationException(
-                    "Unable to initialise LibHB or Background worker service",
-                    "HandBrake will not be able to operate correctly.",
+                    "Unable to initialise LibHB or Background worker service", 
+                    "HandBrake will not be able to operate correctly.", 
                     exc);
             }
   

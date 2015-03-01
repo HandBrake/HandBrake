@@ -201,8 +201,6 @@
     <Compile Include="Interop\Model\Subtitles.cs" />
     <Compile Include="Interop\Model\VideoQualityLimits.cs" />
     <Compile Include="Interop\Model\VideoRangeType.cs" />
-    <Compile Include="Isolation\BackgroundServiceConnector.cs" />
-    <Compile Include="Isolation\IsolatedEncodeService.cs" />
     <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
@@ -213,7 +211,6 @@
     <Compile Include="Model\VideoScaler.cs" />
     <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
-    <Compile Include="Services\Encode\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoLevel.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />

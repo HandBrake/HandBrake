@@ -97,16 +97,6 @@ namespace HandBrakeWPF
         public const string VLCPath = "VLC_Path";
 
         /// <summary>
-        /// The enable process isolation.
-        /// </summary>
-        public const string EnableProcessIsolation = "EnableProcessIsolation";
-
-        /// <summary>
-        /// The server port.
-        /// </summary>
-        public const string ServerPort = "ServerPort";
-
-        /// <summary>
         /// Growl Encodes
         /// </summary>
         public const string GrowlEncode = "GrowlEncode";

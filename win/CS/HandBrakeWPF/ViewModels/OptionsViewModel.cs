@@ -261,16 +261,6 @@ namespace HandBrakeWPF.ViewModels
         private UpdateCheckInformation updateInfo;
 
         /// <summary>
-        /// The enable process isolation.
-        /// </summary>
-        private bool enableProcessIsolation;
-
-        /// <summary>
-        /// The server port.
-        /// </summary>
-        private int serverPort;
-
-        /// <summary>
         /// The show advanced tab backing field.
         /// </summary>
         private bool showAdvancedTab;
@@ -1061,38 +1051,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether ClearQueueOnEncodeCompleted.
-        /// </summary>
-        public bool EnableProcessIsolation
-        {
-            get
-            {
-                return this.enableProcessIsolation;
-            }
-            set
-            {
-                this.enableProcessIsolation = value;
-                this.NotifyOfPropertyChange(() => this.EnableProcessIsolation);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the server port.
-        /// </summary>
-        public int ServerPort
-        {
-            get
-            {
-                return this.serverPort;
-            }
-            set
-            {
-                this.serverPort = value;
-                this.NotifyOfPropertyChange(() => this.ServerPort);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether enable lib hb.
         /// </summary>
         public bool ShowAdvancedTab
@@ -1541,11 +1499,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);  
-
-            int port;
-            int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
-            this.ServerPort = port;
-            this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
         }
 
         /// <summary>
@@ -1606,8 +1559,6 @@ namespace HandBrakeWPF.ViewModels
             }
 
             userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
-            userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
-            userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

@@ -55,7 +55,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets the IEncodeService instance.
         /// </summary>
-        IEncodeServiceWrapper EncodeService { get; }
+        IEncode EncodeService { get; }
 
         /// <summary>
         /// Gets a value indicating whether IsProcessing.

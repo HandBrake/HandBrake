@@ -37,7 +37,7 @@ namespace HandBrakeWPF.Services
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public NotificationService(IEncodeServiceWrapper encodeService, IQueueProcessor queueProcessor, IUserSettingService userSettingService)
+        public NotificationService(IEncode encodeService, IQueueProcessor queueProcessor, IUserSettingService userSettingService)
         {
             this.userSettingService = userSettingService;
            // encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
