@@ -1,0 +1,42 @@
+Subject: prores: Extend the padding check to 16bit
+From: Luca Barbato <lu_zero@gentoo.org>
+To: libav-devel@libav.org
+
+And use a self-explanatory macro instead of a simple number.
+
+CC: libav-stable@libav.org
+
+---
+libavcodec/proresdec.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/proresdec.c b/libavcodec/proresdec.c
+index 4039f11..b2c2b28 100644
+--- a/libavcodec/proresdec.c
++++ b/libavcodec/proresdec.c
+@@ -365,6 +365,7 @@ static inline void decode_dc_coeffs(GetBitContext *gb, int16_t *out,
+     }
+ }
+ 
++#define MAX_PADDING 16
+ 
+ /**
+  * Decode AC coefficients for all blocks in a slice.
+@@ -389,7 +390,7 @@ static inline int decode_ac_coeffs(GetBitContext *gb, int16_t *out,
+         lev_cb_index = ff_prores_lev_to_cb_index[FFMIN(level, 9)];
+ 
+         bits_left = get_bits_left(gb);
+-        if (bits_left <= 0 || (bits_left <= 8 && !show_bits(gb, bits_left)))
++        if (bits_left <= 0 || (bits_left <= MAX_PADDING && !show_bits(gb, bits_left)))
+             return 0;
+ 
+         run = decode_vlc_codeword(gb, ff_prores_ac_codebook[run_cb_index]);
+@@ -397,7 +398,7 @@ static inline int decode_ac_coeffs(GetBitContext *gb, int16_t *out,
+             return AVERROR_INVALIDDATA;
+ 
+         bits_left = get_bits_left(gb);
+-        if (bits_left <= 0 || (bits_left <= 8 && !show_bits(gb, bits_left)))
++        if (bits_left <= 0 || (bits_left <= MAX_PADDING && !show_bits(gb, bits_left)))
+             return AVERROR_INVALIDDATA;
+ 
+         level = decode_vlc_codeword(gb, ff_prores_ac_codebook[lev_cb_index]) + 1;
