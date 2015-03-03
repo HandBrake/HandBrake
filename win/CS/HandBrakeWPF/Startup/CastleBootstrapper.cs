@@ -21,6 +21,7 @@ namespace HandBrakeWPF.Startup
     using Castle.Windsor;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services.Encode;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan;
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
@@ -62,7 +63,7 @@ namespace HandBrakeWPF.Startup
             // Services
             this.windsorContainer.Register(Component.For<IUpdateService>().ImplementedBy<UpdateService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IScan>().ImplementedBy<LibScan>().LifeStyle.Is(LifestyleType.Singleton));
-            this.windsorContainer.Register(Component.For<IEncode>().ImplementedBy<EncodeServiceWrapper>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IEncode>().ImplementedBy<LibEncode>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<INotificationService>().ImplementedBy<NotificationService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IPrePostActionService>().ImplementedBy<PrePostActionService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IUserSettingService>().ImplementedBy<UserSettingService>());

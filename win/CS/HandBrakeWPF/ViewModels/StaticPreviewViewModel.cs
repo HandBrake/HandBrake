@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
@@ -133,7 +134,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Live Preview
             this.userSettingService = userSettingService;
-            this.encodeService = new EncodeServiceWrapper(); // Preview needs a seperate instance rather than the shared singleton. This could maybe do with being refactored at some point
+            this.encodeService = new LibEncode(); // Preview needs a seperate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.Title = "Preview";
             this.Percentage = "0.00%";

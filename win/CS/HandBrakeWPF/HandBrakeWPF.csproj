@@ -209,7 +209,6 @@
     <Compile Include="Helpers\PictureSize.cs" />
     <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Model\SelectionTitle.cs" />
-    <Compile Include="Services\EncodeServiceWrapper.cs" />
     <Compile Include="Model\ShellWindow.cs" />
     <Compile Include="Model\SourceMenuItem.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
