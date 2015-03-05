@@ -26,11 +26,11 @@ namespace HandBrake.ApplicationServices.Services.Scan
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     using Chapter = HandBrake.ApplicationServices.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
-    using Size = System.Drawing.Size;
     using Subtitle = HandBrake.ApplicationServices.Services.Scan.Model.Subtitle;
     using SubtitleType = HandBrake.ApplicationServices.Services.Encode.Model.Models.SubtitleType;
     using Title = HandBrake.ApplicationServices.Services.Scan.Model.Title;
@@ -264,12 +264,10 @@ namespace HandBrake.ApplicationServices.Services.Scan
                 return null;
             }
 
-            EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job, configuraiton);
-
             BitmapImage bitmapImage = null;
             try
             {
-                bitmapImage = this.instance.GetPreview(encodeJob, preview);
+                bitmapImage = this.instance.GetPreview((PreviewSettings)job, preview);
             }
             catch (AccessViolationException e)
             {

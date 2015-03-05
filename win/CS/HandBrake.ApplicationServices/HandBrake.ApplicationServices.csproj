@@ -89,7 +89,7 @@
   <ItemGroup>
     <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
-    <Compile Include="Interop\Attributes\ShortName.cs" />
+    <Compile Include="Attributes\ShortName.cs" />
     <Compile Include="Interop\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Interop\EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="Interop\EventArgs\MessageLoggedEventArgs.cs" />
@@ -142,7 +142,7 @@
     <Compile Include="Interop\Json\Encode\SubtitleList.cs" />
     <Compile Include="Interop\Json\Encode\Video.cs" />
     <Compile Include="Interop\Json\Factories\AnamorphicFactory.cs" />
-    <Compile Include="Interop\Json\Factories\EncodeFactory.cs" />
+    <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
     <Compile Include="Interop\Json\Factories\ScanFactory.cs" />
     <Compile Include="Interop\Json\Scan\AudioList.cs" />
     <Compile Include="Interop\Json\Scan\ChapterList.cs" />
@@ -162,11 +162,8 @@
     <Compile Include="Interop\Json\State\Working.cs" />
     <Compile Include="Interop\Model\BitrateLimits.cs" />
     <Compile Include="Interop\Model\Cropping.cs" />
-    <Compile Include="Interop\Model\EncodeJob.cs" />
     <Compile Include="Interop\Model\Encoding\Anamorphic.cs" />
     <Compile Include="Interop\Model\Encoding\AudioEncoder.cs" />
-    <Compile Include="Interop\Model\Encoding\AudioEncodeRateType.cs" />
-    <Compile Include="Interop\Model\Encoding\AudioEncoding.cs" />
     <Compile Include="Interop\Model\Encoding\Container.cs" />
     <Compile Include="Interop\Model\Encoding\Decomb.cs" />
     <Compile Include="Interop\Model\Encoding\Deinterlace.cs" />
@@ -178,12 +175,12 @@
     <Compile Include="Interop\Model\Encoding\HBRate.cs" />
     <Compile Include="Interop\Model\Encoding\HBVideoEncoder.cs" />
     <Compile Include="Interop\Model\Encoding\Mixdown.cs" />
-    <Compile Include="Interop\Model\Encoding\OutputExtension.cs" />
     <Compile Include="Interop\Model\Encoding\PictureRotation.cs" />
     <Compile Include="Interop\Model\Encoding\ScaleMethod.cs" />
     <Compile Include="Interop\Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Interop\Model\Encoding\VideoEncodeRateType.cs" />
     <Compile Include="Interop\Model\Language.cs" />
+    <Compile Include="Interop\Model\Preview\PreviewSettings.cs" />
     <Compile Include="Interop\Model\RangeLimits.cs" />
     <Compile Include="Interop\Model\Scan\AudioTrack.cs" />
     <Compile Include="Interop\Model\Scan\Chapter.cs" />
@@ -192,12 +189,10 @@
     <Compile Include="Interop\Model\Scan\SubtitleSource.cs" />
     <Compile Include="Interop\Model\Scan\Title.cs" />
     <Compile Include="Interop\Model\Size.cs" />
+    <Compile Include="Interop\Model\SourceVideoInfo.cs" />
     <Compile Include="Interop\Model\SourceSubtitle.cs" />
     <Compile Include="Interop\Model\SourceType.cs" />
-    <Compile Include="Interop\Model\SrtSubtitle.cs" />
-    <Compile Include="Interop\Model\Subtitles.cs" />
     <Compile Include="Interop\Model\VideoQualityLimits.cs" />
-    <Compile Include="Interop\Model\VideoRangeType.cs" />
     <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
@@ -216,7 +211,6 @@
     <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
-    <Compile Include="Utilities\InteropModelCreator.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\VersionHelper.cs" />
     <Compile Include="Utilities\Win32.cs" />

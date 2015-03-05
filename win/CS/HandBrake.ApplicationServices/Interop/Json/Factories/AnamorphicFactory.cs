@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Factories
     using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Interop.Model.Scan;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
 
     using Newtonsoft.Json;
 
@@ -51,7 +51,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Factories
         /// <returns>
         /// The <see cref="Scan.Geometry"/>.
         /// </returns>
-        public static Geometry CreateGeometry(EncodeJob job, Title title, KeepSetting keepWidthOrHeight) // Todo remove the need for these objects. Should use simpler objects.
+        public static Geometry CreateGeometry(EncodeTask job, SourceVideoInfo title, KeepSetting keepWidthOrHeight) // Todo remove the need for these objects. Should use simpler objects.
         {
             int settingMode = (int)keepWidthOrHeight + (job.KeepDisplayAspect ? 0x04 : 0);
 
@@ -68,7 +68,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Factories
                                {
                                     AnamorphicMode = (int)job.Anamorphic,
                                     Geometry = { 
-                                                Width = job.Width, Height = job.Height,
+                                                Width = job.Width ?? 0, Height = job.Height ?? 0,
                                                 PAR = new PAR
                                                       {
                                                           Num = job.Anamorphic != Anamorphic.Custom ? title.ParVal.Width : job.PixelAspectX,
@@ -77,9 +77,9 @@ namespace HandBrake.ApplicationServices.Interop.Json.Factories
                                                },
                                     Keep = settingMode,
                                     Crop = new List<int> { job.Cropping.Top, job.Cropping.Bottom, job.Cropping.Left, job.Cropping.Right },
-                                    Modulus = job.Modulus,
-                                    MaxWidth = job.MaxWidth,
-                                    MaxHeight = job.MaxHeight,
+                                    Modulus = job.Modulus ?? 16,
+                                    MaxWidth = job.MaxWidth ?? 0,
+                                    MaxHeight = job.MaxHeight ?? 0,
                                     ItuPAR = false
                                }
             };

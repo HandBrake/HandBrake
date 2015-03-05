@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Interop
     /// The HandBrake Instance manager.
     /// Only supports scanning right now.
     /// </summary>
-    public static class HandBrakeInstanceManager
+    internal static class HandBrakeInstanceManager
     {
         private static HandBrakeInstance scanInstance;
         private static HandBrakeInstance encodeInstance;

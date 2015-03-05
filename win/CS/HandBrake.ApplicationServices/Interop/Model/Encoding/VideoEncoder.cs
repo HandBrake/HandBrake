@@ -11,7 +11,7 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
     using System.ComponentModel.DataAnnotations;
 
-    using HandBrake.ApplicationServices.Interop.Attributes;
+    using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
     /// The video encoder.

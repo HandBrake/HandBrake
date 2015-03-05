@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
     using System;
     using System.Diagnostics;
     using System.Linq;
+    using System.ServiceModel.Channels;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
@@ -21,7 +22,9 @@ namespace HandBrake.ApplicationServices.Services.Encode
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Interfaces;
+    using HandBrake.ApplicationServices.Interop.Json.Factories;
     using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Services.Encode.Factories;
 
     /// <summary>
     /// LibHB Implementation of IEncode
@@ -208,9 +211,6 @@ namespace HandBrake.ApplicationServices.Services.Encode
             {
                 ServiceLogMessage("Scan Completed. Setting up the job for encoding ...");
 
-                // Get an EncodeJob object for the Interop Library
-                EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
-
                 // Start the Encode
                 Title title = this.scannedSource.Titles.FirstOrDefault(t => t.TitleNumber == job.Task.Title);
                 if (title == null)
@@ -228,7 +228,10 @@ namespace HandBrake.ApplicationServices.Services.Encode
                                                             };
 
                 ServiceLogMessage("Starting Encode ...");
-                instance.StartEncode(encodeJob, scannedTitle);
+
+                // Get an EncodeJob object for the Interop Library
+                SourceVideoInfo videoInfo = new SourceVideoInfo(title.FramerateNumerator, title.FramerateDenominator, title.Resolution, title.ParVal);
+                instance.StartEncode(EncodeFactory.Create(job.Task, videoInfo, job.Configuration), scannedTitle);
 
                 // Fire the Encode Started Event
                 this.InvokeEncodeStarted(System.EventArgs.Empty);

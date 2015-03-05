@@ -9,6 +9,8 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model
 {
+    using System.Windows.Forms;
+
     /// <summary>
     /// The size.
     /// </summary>
@@ -38,5 +40,23 @@ namespace HandBrake.ApplicationServices.Interop.Model
         /// Gets or sets the width.
         /// </summary>
         public int Width { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether is empty.
+        /// </summary>
+        public bool IsEmpty 
+        {
+            get
+            {
+                if (this.Width <= 0 && this.Height <= 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

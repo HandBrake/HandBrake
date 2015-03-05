@@ -13,7 +13,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Globalization;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Interop.Model;
@@ -25,7 +24,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
-    using Size = System.Drawing.Size;
 
     /// <summary>
     /// The Picture Settings View Model
@@ -126,6 +124,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public PictureSettingsViewModel()
         {
+            this.sourceResolution = new Size(0, 0);
             this.Task = new EncodeTask();
             this.Init();
         }
@@ -947,7 +946,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Step 3, Set the display width label to indicate the output.
             double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
-            this.DisplaySize = this.sourceResolution.IsEmpty
+            this.DisplaySize = this.sourceResolution == null || this.sourceResolution.IsEmpty
                            ? string.Empty
                            : string.Format("Storage: {0}x{1}, Display: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
 

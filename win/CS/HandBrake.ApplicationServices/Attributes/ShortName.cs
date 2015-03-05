@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Interop.Attributes
+namespace HandBrake.ApplicationServices.Attributes
 {
     using System;
 

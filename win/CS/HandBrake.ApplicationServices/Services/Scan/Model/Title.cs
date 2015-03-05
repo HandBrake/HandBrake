@@ -15,8 +15,6 @@ namespace HandBrake.ApplicationServices.Services.Scan.Model
 
     using HandBrake.ApplicationServices.Interop.Model;
 
-    using Size = System.Drawing.Size;
-
     /// <summary>
     /// An object that represents a single Title of a DVD
     /// </summary>

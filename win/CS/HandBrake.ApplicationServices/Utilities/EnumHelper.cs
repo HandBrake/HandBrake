@@ -18,7 +18,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Linq;
     using System.Reflection;
 
-    using HandBrake.ApplicationServices.Interop.Attributes;
+    using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
     /// Enum Helpers

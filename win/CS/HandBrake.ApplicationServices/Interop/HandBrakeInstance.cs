@@ -31,6 +31,7 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Json.State;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     using Newtonsoft.Json;
@@ -40,7 +41,7 @@ namespace HandBrake.ApplicationServices.Interop
     /// <summary>
     /// A wrapper for a HandBrake instance.
     /// </summary>
-    public class HandBrakeInstance : IHandBrakeInstance, IDisposable
+    internal class HandBrakeInstance : IHandBrakeInstance, IDisposable
     {
         /// <summary>
         /// The number of MS between status polls when scanning.
@@ -243,8 +244,8 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        [HandleProcessCorruptedStateExceptions] 
-        public BitmapImage GetPreview(EncodeJob job, int previewNumber)
+        [HandleProcessCorruptedStateExceptions]
+        public BitmapImage GetPreview(PreviewSettings job, int previewNumber)
         {
             Title title = this.Titles.FirstOrDefault(t => t.TitleNumber == job.Title);
             Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
@@ -255,14 +256,14 @@ namespace HandBrake.ApplicationServices.Interop
                 crop = new[] { job.Cropping.Top, job.Cropping.Bottom, job.Cropping.Left, job.Cropping.Right }, 
                 itu_par = 0, 
                 keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (job.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
-                maxWidth = job.MaxWidth, 
-                maxHeight = job.MaxHeight, 
+                maxWidth = job.MaxWidth ?? 0, 
+                maxHeight = job.MaxHeight ?? 0, 
                 mode = (int)(hb_anamorphic_mode_t)job.Anamorphic, 
-                modulus = job.Modulus, 
+                modulus = job.Modulus ?? 16, 
                 geometry = new hb_geometry_s
                 {
-                    height = job.Height, 
-                    width = job.Width, 
+                    height = job.Height ?? 0, 
+                    width = job.Width ?? 0, 
                     par = job.Anamorphic != Anamorphic.Custom
                         ? new hb_rational_t { den = title.ParVal.Height, num = title.ParVal.Width }
                         : new hb_rational_t { den = job.PixelAspectY, num = job.PixelAspectX }
@@ -270,7 +271,7 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             // Sanatise the input.
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
+            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, new SourceVideoInfo(title.FramerateNumerator, title.FramerateDenominator, title.Resolution, title.ParVal), AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
             int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
             int height = resultGeometry.Height;
             uiGeometry.geometry.height = resultGeometry.Height; // Prased the height now.
@@ -340,17 +341,15 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
-        /// <param name="job">
-        /// The job to start.
+        /// <param name="encodeObject">
+        /// The encode Object.
         /// </param>
         /// <param name="title">
         /// The title.
         /// </param>
         [HandleProcessCorruptedStateExceptions]
-        public void StartEncode(EncodeJob job, Title title)
+        public void StartEncode(JsonEncodeObject encodeObject, Title title)
         {
-            JsonEncodeObject encodeObject = EncodeFactory.Create(job, title);
-
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,

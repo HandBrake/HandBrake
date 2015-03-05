@@ -14,13 +14,15 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
+    using HandBrake.ApplicationServices.Interop.Json.Encode;
     using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     /// <summary>
     /// The Interface for HandBrakeInstance
     /// </summary>
-    public interface IHandBrakeInstance
+    internal interface IHandBrakeInstance
     {
         #region Events
 
@@ -88,7 +90,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        BitmapImage GetPreview(EncodeJob job, int previewNumber);
+        BitmapImage GetPreview(PreviewSettings job, int previewNumber);
 
         /// <summary>
         /// Pauses the current encode.
@@ -109,7 +111,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <param name="title">
         /// The title.
         /// </param>
-        void StartEncode(EncodeJob jobToStart, Title title);
+        void StartEncode(JsonEncodeObject jobToStart, Title title);
 
         /// <summary>
         /// Starts a scan of the given path.
