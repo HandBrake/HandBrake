@@ -625,7 +625,7 @@ libx264 authors:
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="destination">
+                      <object class="GtkMenuItem" id="destination_menu_item">
                         <property name="label" translatable="yes">_Destination</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -4537,7 +4537,7 @@ This permits DTS-HD passthru to be selected when automatic passthru selection is
                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <child>
-                                  <object class="GtkTreeView" id="audio_list">
+                                  <object class="GtkTreeView" id="audio_list_view">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -5032,7 +5032,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <child>
-                                  <object class="GtkTreeView" id="subtitle_list">
+                                  <object class="GtkTreeView" id="subtitle_list_view">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>

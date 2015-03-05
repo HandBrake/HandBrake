@@ -740,7 +740,7 @@ audio_get_selected_settings(signal_user_data_t *ud, int *index)
     GValue *asettings = NULL;
     const GValue *audio_list;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection (tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
@@ -924,7 +924,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
     const GValue *audio_list;
 
     g_debug("ghb_audio_list_refresh_selected ()");
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection (tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
@@ -954,7 +954,7 @@ audio_refresh_list_ui(signal_user_data_t *ud)
     GtkTreeModel *tm;
     GtkTreeIter ti;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     tm = gtk_tree_view_get_model(tv);
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
@@ -1312,7 +1312,7 @@ ghb_clear_audio_list_ui(GtkBuilder *builder)
     GtkTreeSelection *tsel;
 
     g_debug("clear_audio_list_ui ()");
-    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "audio_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "audio_list_view"));
     ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
     // Clear tree selection so that updates are not triggered
     // that cause a recursive attempt to clear the tree selection (crasher)
@@ -1332,7 +1332,7 @@ ghb_add_audio_to_ui(signal_user_data_t *ud, const GValue *asettings)
     if (asettings == NULL)
         return;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection (tv);
     tm = gtk_tree_view_get_model(tv);
 
@@ -1513,7 +1513,7 @@ audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
     GtkTreeSelection *ts;
     GtkTreeIter ti;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
     tp = gtk_tree_path_new_from_string (path);
@@ -1562,7 +1562,7 @@ audio_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
     gint *indices;
     GValue *audio_list;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
     tp = gtk_tree_path_new_from_string (path);

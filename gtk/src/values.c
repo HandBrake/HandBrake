@@ -323,14 +323,7 @@ ghb_string_value(const gchar *str)
     static GValue gval = {0,};
     if (!G_IS_VALUE(&gval))
         g_value_init(&gval, G_TYPE_STRING);
-    if (str == NULL)
-    {
-        g_value_set_string(&gval, "");
-    }
-    else
-    {
-        g_value_set_string(&gval, str);
-    }
+    g_value_set_string(&gval, str);
     return &gval;
 }
 
@@ -377,7 +370,6 @@ ghb_boolean_value(gboolean bval)
 GValue*
 ghb_string_value_new(const gchar *str)
 {
-    if (str == NULL) str = "";
     GValue *gval = ghb_value_new(G_TYPE_STRING);
     g_value_set_string(gval, str);
     return gval;
@@ -739,9 +731,13 @@ xform_string_int(const GValue *sval, GValue *ival)
     gchar *end;
 
     const gchar *str = g_value_get_string(sval);
-    gint val = g_strtod(str, &end);
-    if (*end)
-        val = (guint)(~0)>>1;
+    gint val = 0;
+    if (str != NULL)
+    {
+        val = g_strtod(str, &end);
+        if (*end)
+            val = (guint)(~0)>>1;
+    }
     g_value_set_int(ival, val);
 }
 
@@ -750,9 +746,13 @@ xform_string_int64(const GValue *sval, GValue *ival)
 {
     gchar *end;
     const gchar *str = g_value_get_string(sval);
-    gint64 val = g_strtod(str, &end);
-    if (*end)
-        val = (guint64)(~0L)>>1;
+    gint64 val = 0;
+    if (str != NULL)
+    {
+        val = g_strtod(str, &end);
+        if (*end)
+            val = (guint64)(~0L)>>1;
+    }
     g_value_set_int64(ival, val);
 }
 
@@ -760,7 +760,9 @@ static void
 xform_string_double(const GValue *sval, GValue *dval)
 {
     const gchar *str = g_value_get_string(sval);
-    double val = g_strtod(str, NULL);
+    double val = 0.0;
+    if (str != NULL)
+        val = g_strtod(str, NULL);
     g_value_set_double(dval, val);
 }
 

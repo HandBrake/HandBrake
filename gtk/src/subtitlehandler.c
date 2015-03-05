@@ -126,7 +126,7 @@ subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GValue *settings)
     GtkTreeModel *tm;
     GtkTreeIter   ti;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     tm = gtk_tree_view_get_model(tv);
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
@@ -675,7 +675,7 @@ ghb_selected_subtitle_row(signal_user_data_t *ud)
     gint row = -1;
 
     g_debug("ghb_selected_subtitle_row ()");
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &iter))
     {
@@ -702,7 +702,7 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
     const GValue *subtitle_list;
 
     g_debug("get_selected_settings ()");
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &iter))
     {
@@ -939,7 +939,7 @@ ghb_subtitle_list_refresh_selected(signal_user_data_t *ud)
     const GValue *subtitle_list;
 
     g_debug("subtitle_list_refresh_selected()");
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     if (gtk_tree_selection_get_selected(ts, &tm, &ti))
     {
@@ -1058,7 +1058,7 @@ ghb_clear_subtitle_list_ui(GtkBuilder *builder)
     GtkTreeStore *ts;
     GtkTreeSelection *tsel;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "subtitle_list_view"));
     ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
     // Clear tree selection so that updates are not triggered
     // that cause a recursive attempt to clear the tree selection (crasher)
@@ -1075,7 +1075,7 @@ add_to_subtitle_list_ui(signal_user_data_t *ud, GValue *subsettings)
     GtkTreeModel *tm;
     GtkTreeSelection *ts;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
 
@@ -1598,7 +1598,7 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
     GtkTreeSelection *ts;
     GtkTreeIter ti;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
     tp = gtk_tree_path_new_from_string (path);
@@ -1647,7 +1647,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
     gint *indices;
     GValue *subtitle_list;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
     tp = gtk_tree_path_new_from_string (path);

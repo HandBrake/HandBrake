@@ -224,7 +224,6 @@ ghb_widget_value(GtkWidget *widget)
 
     type = G_OBJECT_TYPE(widget);
     name = ghb_get_setting_key(widget);
-    g_debug("ghb_widget_value widget (%s)\n", name);
     if (type == GTK_TYPE_ENTRY)
     {
         const gchar *str = gtk_entry_get_text(GTK_ENTRY(widget));
@@ -232,7 +231,6 @@ ghb_widget_value(GtkWidget *widget)
     }
     else if (type == GTK_TYPE_RADIO_BUTTON)
     {
-        g_debug("\tradio_button");
         gboolean bval;
         bval = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
         if (bval)
@@ -247,35 +245,30 @@ ghb_widget_value(GtkWidget *widget)
     }
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
-        g_debug("\tcheck_button");
         gboolean bval;
         bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
         value = ghb_boolean_value_new(bval);
     }
     else if (type == GTK_TYPE_TOGGLE_TOOL_BUTTON)
     {
-        g_debug("\ttoggle_tool_button");
         gboolean bval;
         bval = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
         value = ghb_boolean_value_new(bval);
     }
     else if (type == GTK_TYPE_TOGGLE_BUTTON)
     {
-        g_debug("\ttoggle_button");
         gboolean bval;
         bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
         value = ghb_boolean_value_new(bval);
     }
     else if (type == GTK_TYPE_CHECK_MENU_ITEM)
     {
-        g_debug("\tcheck_menu_item");
         gboolean bval;
         bval = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
         value = ghb_boolean_value_new(bval);
     }
     else if (type == GTK_TYPE_COMBO_BOX)
     {
-        g_debug("\tcombo_box");
         GtkTreeModel *store;
         GtkTreeIter iter;
         gchar *shortOpt;
@@ -360,7 +353,7 @@ ghb_widget_value(GtkWidget *widget)
     }
     else
     {
-        g_debug("Attempt to set unknown widget type: %s\n", name);
+        g_warning("Attempt to set unknown widget type: %s\n", name);
         g_free(value);
         value = NULL;
     }
@@ -453,49 +446,46 @@ void
 ghb_update_widget(GtkWidget *widget, const GValue *value)
 {
     GType type;
-    gchar *str;
+    gchar *str, *tmp;
     gint ival;
     gdouble dval;
 
-    g_debug("ghb_update_widget");
+    char *name = ghb_get_setting_key(widget);
     type = G_VALUE_TYPE(value);
     if (type == ghb_array_get_type() || type == ghb_dict_get_type())
         return;
     if (value == NULL) return;
-    str = ghb_value_string(value);
+    str = tmp = ghb_value_string(value);
     ival = ghb_value_int(value);
     dval = ghb_value_double(value);
     type = G_OBJECT_TYPE(widget);
 
+    if (str == NULL)
+        str = "";
+
     if (type == GTK_TYPE_ENTRY)
     {
-        g_debug("entry");
         gtk_entry_set_text((GtkEntry*)widget, str);
     }
     else if (type == GTK_TYPE_RADIO_BUTTON)
     {
-        g_debug("radio button");
         if (ival)
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!ival);
     }
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
-        g_debug("check button");
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
     }
     else if (type == GTK_TYPE_TOGGLE_TOOL_BUTTON)
     {
-        g_debug("toggle button");
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), ival);
     }
     else if (type == GTK_TYPE_TOGGLE_BUTTON)
     {
-        g_debug("toggle button");
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
     }
     else if (type == GTK_TYPE_CHECK_MENU_ITEM)
     {
-        g_debug("check menu item");
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ival);
     }
     else if (type == GTK_TYPE_COMBO_BOX)
@@ -506,7 +496,6 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
         gdouble ivalue;
         gboolean foundit = FALSE;
 
-        g_debug("combo (%s)", str);
         store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
         if (gtk_tree_model_get_iter_first (store, &iter))
         {
@@ -560,22 +549,18 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
     }
     else if (type == GTK_TYPE_SPIN_BUTTON)
     {
-        g_debug("spin (%s)", str);
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), dval);
     }
     else if (type == GTK_TYPE_SCALE)
     {
-        g_debug("hscale");
         gtk_range_set_value(GTK_RANGE(widget), dval);
     }
     else if (type == GTK_TYPE_SCALE_BUTTON)
     {
-        g_debug("scale_button");
         gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), dval);
     }
     else if (type == GTK_TYPE_TEXT_VIEW)
     {
-        g_debug("textview (%s)", str);
         GtkTextBuffer *buffer = gtk_text_view_get_buffer(
                                                 GTK_TEXT_VIEW(widget));
         gtk_text_buffer_set_text (buffer, str, -1);
@@ -627,9 +612,9 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
     }
     else
     {
-        g_debug("Attempt to set unknown widget type");
+        g_warning("Attempt to set unknown widget type %s", name);
     }
-    g_free(str);
+    g_free(tmp);
 }
 
 int

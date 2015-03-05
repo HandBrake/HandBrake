@@ -327,7 +327,7 @@ bind_audio_tree_model(signal_user_data_t *ud)
     GtkTreeSelection *selection;
 
     g_debug("bind_audio_tree_model()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_STRING,
                                       G_TYPE_STRING, G_TYPE_STRING,
@@ -392,7 +392,7 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     GtkTreeSelection *selection;
 
     g_debug("bind_subtitle_tree_model()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_STRING,
                                       G_TYPE_STRING, G_TYPE_STRING,
