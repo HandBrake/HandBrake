@@ -450,7 +450,7 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
     gint ival;
     gdouble dval;
 
-    char *name = ghb_get_setting_key(widget);
+    const char *name = ghb_get_setting_key(widget);
     type = G_VALUE_TYPE(value);
     if (type == ghb_array_get_type() || type == ghb_dict_get_type())
         return;
