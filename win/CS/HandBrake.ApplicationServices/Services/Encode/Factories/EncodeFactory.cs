@@ -15,11 +15,11 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using System.Runtime.InteropServices;
 
     using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.Factories;
     using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Helpers;
     using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
-    using HandBrake.ApplicationServices.Interop.Json.Factories;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Model;

@@ -16,5 +16,6 @@ namespace HandBrake.ApplicationServices.Interop.Model.Preview
     /// </summary>
     public class PreviewSettings : EncodeTask
     {
+         // TODO flesh this out into a proper model.
     }
 }

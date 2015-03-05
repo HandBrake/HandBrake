@@ -9,8 +9,6 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model
 {
-    using System.Windows.Forms;
-
     /// <summary>
     /// The size.
     /// </summary>

@@ -22,7 +22,6 @@ namespace HandBrake.ApplicationServices.Services.Encode
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Interfaces;
-    using HandBrake.ApplicationServices.Interop.Json.Factories;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Services.Encode.Factories;
 

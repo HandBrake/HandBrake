@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Interop.Json.Factories
+namespace HandBrake.ApplicationServices.Interop.Factories
 {
     using System;
     using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Factories
         /// Keep Width or Height. (Not Display Aspect)
         /// </param>
         /// <returns>
-        /// The <see cref="Scan.Geometry"/>.
+        /// The <see cref="HandBrake.ApplicationServices.Interop.Json.Scan.Geometry"/>.
         /// </returns>
         public static Geometry CreateGeometry(EncodeTask job, SourceVideoInfo title, KeepSetting keepWidthOrHeight) // Todo remove the need for these objects. Should use simpler objects.
         {

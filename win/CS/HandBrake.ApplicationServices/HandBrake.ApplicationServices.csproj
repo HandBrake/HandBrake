@@ -141,9 +141,9 @@
     <Compile Include="Interop\Json\Encode\Subtitle.cs" />
     <Compile Include="Interop\Json\Encode\SubtitleList.cs" />
     <Compile Include="Interop\Json\Encode\Video.cs" />
-    <Compile Include="Interop\Json\Factories\AnamorphicFactory.cs" />
+    <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
     <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
-    <Compile Include="Interop\Json\Factories\ScanFactory.cs" />
+    <Compile Include="Interop\Factories\ScanFactory.cs" />
     <Compile Include="Interop\Json\Scan\AudioList.cs" />
     <Compile Include="Interop\Json\Scan\ChapterList.cs" />
     <Compile Include="Interop\Json\Scan\Color.cs" />
@@ -190,8 +190,6 @@
     <Compile Include="Interop\Model\Scan\Title.cs" />
     <Compile Include="Interop\Model\Size.cs" />
     <Compile Include="Interop\Model\SourceVideoInfo.cs" />
-    <Compile Include="Interop\Model\SourceSubtitle.cs" />
-    <Compile Include="Interop\Model\SourceType.cs" />
     <Compile Include="Interop\Model\VideoQualityLimits.cs" />
     <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />

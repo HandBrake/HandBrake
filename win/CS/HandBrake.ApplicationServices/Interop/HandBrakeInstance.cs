@@ -22,11 +22,11 @@ namespace HandBrake.ApplicationServices.Interop
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
+    using HandBrake.ApplicationServices.Interop.Factories;
     using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Helpers;
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
-    using HandBrake.ApplicationServices.Interop.Json.Factories;
     using HandBrake.ApplicationServices.Interop.Json.Scan;
     using HandBrake.ApplicationServices.Interop.Json.State;
     using HandBrake.ApplicationServices.Interop.Model;

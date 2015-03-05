@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Interop.Json.Factories
+namespace HandBrake.ApplicationServices.Interop.Factories
 {
     using System;
     using System.Collections.Generic;
