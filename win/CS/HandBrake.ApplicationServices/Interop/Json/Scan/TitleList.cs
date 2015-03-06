@@ -93,7 +93,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
 
         /// <summary>
         /// Gets or sets the type.
-        ///  HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE
+        ///  HB_DVD_TYPE = 0, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE
         /// </summary>
         public int Type { get; set; }
 

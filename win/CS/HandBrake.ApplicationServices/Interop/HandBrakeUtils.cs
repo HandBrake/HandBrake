@@ -16,9 +16,6 @@ namespace HandBrake.ApplicationServices.Interop
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Model;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     /// <summary>
     /// HandBrake Interop Utilities

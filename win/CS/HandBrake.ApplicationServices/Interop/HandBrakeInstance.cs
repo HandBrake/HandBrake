@@ -32,11 +32,11 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
-    using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     using Newtonsoft.Json;
 
     using Geometry = HandBrake.ApplicationServices.Interop.Json.Anamorphic.Geometry;
+    using Size = HandBrake.ApplicationServices.Interop.Model.Size;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.
@@ -71,7 +71,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// The list of titles on this instance.
         /// </summary>
-        private List<Title> titles;
+        private JsonScanObject titles;
 
         /// <summary>
         /// The index of the default title.
@@ -125,7 +125,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Gets the list of titles on this instance.
         /// </summary>
-        public List<Title> Titles
+        public JsonScanObject Titles
         {
             get
             {
@@ -247,7 +247,7 @@ namespace HandBrake.ApplicationServices.Interop
         [HandleProcessCorruptedStateExceptions]
         public BitmapImage GetPreview(PreviewSettings job, int previewNumber)
         {
-            Title title = this.Titles.FirstOrDefault(t => t.TitleNumber == job.Title);
+            TitleList title = this.Titles.TitleList.FirstOrDefault(t => t.Index == job.Title);
             Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
 
             // Creat the Expected Output Geometry details for libhb.
@@ -265,13 +265,13 @@ namespace HandBrake.ApplicationServices.Interop
                     height = job.Height ?? 0, 
                     width = job.Width ?? 0, 
                     par = job.Anamorphic != Anamorphic.Custom
-                        ? new hb_rational_t { den = title.ParVal.Height, num = title.ParVal.Width }
+                        ? new hb_rational_t { den = title.Geometry.PAR.Den, num = title.Geometry.PAR.Num }
                         : new hb_rational_t { den = job.PixelAspectY, num = job.PixelAspectX }
                 }
             };
 
             // Sanatise the input.
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, new SourceVideoInfo(title.FramerateNumerator, title.FramerateDenominator, title.Resolution, title.ParVal), AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
+            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, new SourceVideoInfo(null, null, new Size(title.Geometry.Width, title.Geometry.Height), new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)), AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
             int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
             int height = resultGeometry.Height;
             uiGeometry.geometry.height = resultGeometry.Height; // Prased the height now.
@@ -344,11 +344,8 @@ namespace HandBrake.ApplicationServices.Interop
         /// <param name="encodeObject">
         /// The encode Object.
         /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
         [HandleProcessCorruptedStateExceptions]
-        public void StartEncode(JsonEncodeObject encodeObject, Title title)
+        public void StartEncode(JsonEncodeObject encodeObject)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
@@ -479,21 +476,10 @@ namespace HandBrake.ApplicationServices.Interop
             }
             else if (state != null && state.State == NativeConstants.HB_STATE_SCANDONE)
             {
-                this.titles = new List<Title>();
-
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
-
                 string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
-
-                JsonScanObject scanObject = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
-
-                foreach (Title title in ScanFactory.CreateTitleSet(scanObject))
-                { 
-                    // Set the Main Title.
-                    this.featureTitle = title.IsMainFeature ? title.TitleNumber : 0;
-
-                    this.titles.Add(title);
-                }
+                this.titles = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
+                this.featureTitle = this.titles.MainFeature;
 
                 this.scanPollTimer.Stop();
 

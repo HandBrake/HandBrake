@@ -10,14 +10,12 @@
 namespace HandBrake.ApplicationServices.Interop.Interfaces
 {
     using System;
-    using System.Collections.Generic;
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
-    using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Json.Scan;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
-    using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     /// <summary>
     /// The Interface for HandBrakeInstance
@@ -58,7 +56,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <summary>
         /// Gets the list of titles on this instance.
         /// </summary>
-        List<Title> Titles { get; }
+        JsonScanObject Titles { get; }
 
         #endregion
 
@@ -67,7 +65,9 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        /// <param name="verbosity">The code for the logging verbosity to use.</param>
+        /// <param name="verbosity">
+        /// The code for the logging verbosity to use.
+        /// </param>
         void Initialize(int verbosity);
 
         /// <summary>
@@ -108,10 +108,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <param name="jobToStart">
         /// The job to start.
         /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        void StartEncode(JsonEncodeObject jobToStart, Title title);
+        void StartEncode(JsonEncodeObject jobToStart);
 
         /// <summary>
         /// Starts a scan of the given path.

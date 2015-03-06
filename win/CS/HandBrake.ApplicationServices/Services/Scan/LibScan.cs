@@ -24,10 +24,11 @@ namespace HandBrake.ApplicationServices.Services.Scan
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.EventArgs;
+    using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Interfaces;
+    using HandBrake.ApplicationServices.Interop.Json.Scan;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
-    using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     using Chapter = HandBrake.ApplicationServices.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
@@ -371,7 +372,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
             // Process into internal structures.
             if (this.instance != null && this.instance.Titles != null)
             {
-                this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles, this.instance.FeatureTitle), ScanPath = path };
+                this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
             }
 
             this.IsScanning = false;
@@ -451,71 +452,87 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// <returns>
         /// The convert titles.
         /// </returns>
-        internal static List<Title> ConvertTitles(IEnumerable<Interop.Model.Scan.Title> titles, int featureTitle)
+        internal static List<Title> ConvertTitles(JsonScanObject titles)
         {
             List<Title> titleList = new List<Title>();
-            foreach (Interop.Model.Scan.Title title in titles)
+            foreach (TitleList title in titles.TitleList)
             {
                 Title converted = new Title
                     {
-                        TitleNumber = title.TitleNumber,
-                        Duration = title.Duration,
-                        Resolution = new Size(title.Resolution.Width, title.Resolution.Height),
+                        TitleNumber = title.Index,
+                        Duration = new TimeSpan(0, title.Duration.Hours, title.Duration.Minutes, title.Duration.Seconds),
+                        Resolution = new Size(title.Geometry.Width, title.Geometry.Height),
                         AngleCount = title.AngleCount,
-                        ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
-                        AutoCropDimensions = title.AutoCropDimensions,
-                        Fps = title.Framerate,
+                        ParVal = new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den),
+                        AutoCropDimensions = new Cropping
+                        {
+                            Top = title.Crop[0],
+                            Bottom = title.Crop[1],
+                            Left = title.Crop[2],
+                            Right = title.Crop[3]
+                        },
+                        Fps = ((double)title.FrameRate.Num) / title.FrameRate.Den,
                         SourceName = title.Path,
-                        MainTitle = title.TitleNumber == featureTitle,
-                        Playlist = title.InputType == InputType.Bluray ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null,
-                        FramerateNumerator = title.FramerateNumerator,
-                        FramerateDenominator = title.FramerateDenominator
+                        MainTitle = titles.MainFeature == title.Index,
+                        Playlist = title.Type == 1 ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null,
+                        FramerateNumerator = title.FrameRate.Num,
+                        FramerateDenominator = title.FrameRate.Den
                     };
 
-                foreach (Interop.Model.Scan.Chapter chapter in title.Chapters)
+                int currentTrack = 1;
+                foreach (ChapterList chapter in title.ChapterList)
                 {
                     string chapterName = !string.IsNullOrEmpty(chapter.Name) ? chapter.Name : string.Empty;
-                    converted.Chapters.Add(new Chapter(chapter.ChapterNumber, chapterName, chapter.Duration));
+                    converted.Chapters.Add(new Chapter(currentTrack, chapterName, new TimeSpan(chapter.Duration.Hours, chapter.Duration.Minutes, chapter.Duration.Seconds)));
+                    currentTrack++;
                 }
 
-                foreach (AudioTrack track in title.AudioTracks)
+                int currentAudioTrack = 1;
+                foreach (AudioList track in title.AudioList)
                 {
-                    converted.AudioTracks.Add(new Audio(track.TrackNumber, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.Bitrate));
+                    converted.AudioTracks.Add(new Audio(currentAudioTrack, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.BitRate));
+                    currentAudioTrack++;
                 }
 
-                foreach (Interop.Model.Scan.Subtitle track in title.Subtitles)
+                int currentSubtitleTrack = 1;
+                foreach (SubtitleList track in title.SubtitleList)
                 {
                     SubtitleType convertedType = new SubtitleType();
 
-                    switch (track.SubtitleSource)
+                    switch (track.Source)
                     {
-                        case SubtitleSource.VobSub:
+                        case 0:
                             convertedType = SubtitleType.VobSub;
                             break;
-                        case SubtitleSource.UTF8:
+                        case 4:
                             convertedType = SubtitleType.UTF8Sub;
                             break;
-                        case SubtitleSource.TX3G:
+                        case 5:
                             convertedType = SubtitleType.TX3G;
                             break;
-                        case SubtitleSource.SSA:
+                        case 6:
                             convertedType = SubtitleType.SSA;
                             break;
-                        case SubtitleSource.SRT:
+                        case 1:
                             convertedType = SubtitleType.SRT;
                             break;
-                        case SubtitleSource.CC608:
+                        case 2:
                             convertedType = SubtitleType.CC;
                             break;
-                        case SubtitleSource.CC708:
+                        case 3:
                             convertedType = SubtitleType.CC;
                             break;
-                        case SubtitleSource.PGS:
+                        case 7:
                             convertedType = SubtitleType.PGS;
                             break;
                     }
 
-                    converted.Subtitles.Add(new Subtitle(track.SubtitleSourceInt, track.TrackNumber, track.Language, track.LanguageCode, convertedType, track.CanBurn, track.CanSetForcedOnly));
+
+                    bool canBurn = HBFunctions.hb_subtitle_can_burn(track.Source) > 0;
+                    bool canSetForcedOnly = HBFunctions.hb_subtitle_can_force(track.Source) > 0;
+
+                    converted.Subtitles.Add(new Subtitle(track.Source, currentSubtitleTrack, track.Language, track.LanguageCode, convertedType, canBurn, canSetForcedOnly));
+                    currentSubtitleTrack++;
                 }
 
                 titleList.Add(converted);

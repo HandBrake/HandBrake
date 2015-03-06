@@ -471,8 +471,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             else
             {
                 // cfr or pfr flag with no rate specified implies use the title rate.
-                num = title.FramerateNumerator;
-                den = title.FramerateDenominator;
+                num = title.FramerateNumerator ?? 0;
+                den = title.FramerateDenominator ?? 0;
             }
 
             string framerateString = string.Format("{0}:{1}:{2}", fm, num, den); // filter_cfr, filter_vrate.num, filter_vrate.den

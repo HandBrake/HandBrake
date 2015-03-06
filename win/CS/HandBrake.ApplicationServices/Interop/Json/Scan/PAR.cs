@@ -15,12 +15,12 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     internal class PAR
     {
         /// <summary>
-        /// Gets or sets the height.
+        /// Gets or sets the width.
         /// </summary>
         public int Num { get; set; }
 
         /// <summary>
-        /// Gets or sets the width.
+        /// Gets or sets the height.
         /// </summary>
         public int Den { get; set; }
     }

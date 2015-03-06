@@ -132,7 +132,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 this.instance.ScanCompleted += delegate
                 {
                     // Process into internal structures.
-                    this.scannedSource = new Source { Titles = LibScan.ConvertTitles(this.instance.Titles, this.instance.FeatureTitle) }; // TODO work around the bad Internal API.
+                    this.scannedSource = new Source { Titles = LibScan.ConvertTitles(this.instance.Titles) }; // TODO work around the bad Internal API.
                     this.ScanCompleted(job, this.instance);
                 };
 
@@ -218,19 +218,11 @@ namespace HandBrake.ApplicationServices.Services.Encode
                     throw new Exception("Unable to get title for encoding. Encode Failed.");
                 }
 
-                Interop.Model.Scan.Title scannedTitle = new Interop.Model.Scan.Title
-                                                            {
-                                                                Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
-                                                                ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
-                                                                FramerateDenominator = title.FramerateDenominator, 
-                                                                FramerateNumerator = title.FramerateNumerator, 
-                                                            };
-
                 ServiceLogMessage("Starting Encode ...");
 
                 // Get an EncodeJob object for the Interop Library
                 SourceVideoInfo videoInfo = new SourceVideoInfo(title.FramerateNumerator, title.FramerateDenominator, title.Resolution, title.ParVal);
-                instance.StartEncode(EncodeFactory.Create(job.Task, videoInfo, job.Configuration), scannedTitle);
+                instance.StartEncode(EncodeFactory.Create(job.Task, videoInfo, job.Configuration));
 
                 // Fire the Encode Started Event
                 this.InvokeEncodeStarted(System.EventArgs.Empty);

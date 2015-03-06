@@ -29,7 +29,7 @@ namespace HandBrake.ApplicationServices.Interop.Model
         /// <param name="parVal">
         /// The par val.
         /// </param>
-        public SourceVideoInfo(int framerateNumerator, int framerateDenominator, Size resolution, Size parVal)
+        public SourceVideoInfo(int? framerateNumerator, int? framerateDenominator, Size resolution, Size parVal)
         {
             this.FramerateNumerator = framerateNumerator;
             this.FramerateDenominator = framerateDenominator;
@@ -40,12 +40,12 @@ namespace HandBrake.ApplicationServices.Interop.Model
         /// <summary>
         /// Gets the framerate numerator.
         /// </summary>
-        public int FramerateNumerator { get; private set; }
+        public int? FramerateNumerator { get; private set; }
 
         /// <summary>
         /// Gets the framerate denominator.
         /// </summary>
-        public int FramerateDenominator { get; private set; }
+        public int? FramerateDenominator { get; private set; }
 
         /// <summary>
         /// Gets or sets the resolution (width/height) of this Title

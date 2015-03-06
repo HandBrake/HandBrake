@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Encoders.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HandBrakeEncoderHelpers.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -17,7 +17,6 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Helpers;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Interop.Model.Scan;
 
     /// <summary>
     /// The encoders.
@@ -263,8 +262,8 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Determines if the given encoder is compatible with the given track.
         /// </summary>
-        /// <param name="track">
-        /// The audio track to examine.
+        /// <param name="codecId">
+        /// The codec Id.
         /// </param>
         /// <param name="encoder">
         /// The encoder to examine.
@@ -275,9 +274,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <remarks>
         /// Only works with passthrough encoders.
         /// </remarks>
-        public static bool AudioEncoderIsCompatible(AudioTrack track, HBAudioEncoder encoder)
+        public static bool AudioEncoderIsCompatible(int codecId, HBAudioEncoder encoder)
         {
-            return (track.CodecId & encoder.Id) > 0;
+            return (codecId & encoder.Id) > 0;
         }
 
         /// <summary>
@@ -317,8 +316,8 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Determines if DRC can be applied to the given track with the given encoder.
         /// </summary>
-        /// <param name="track">
-        /// The track to apply DRC to.
+        /// <param name="trackNumber">
+        /// The track Number.
         /// </param>
         /// <param name="encoder">
         /// The encoder to use for DRC.
@@ -329,9 +328,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// True if DRC can be applied to the track with the given encoder.
         /// </returns>
-        public static bool CanApplyDrc(AudioTrack track, HBAudioEncoder encoder, int title)
+        public static bool CanApplyDrc(int trackNumber, HBAudioEncoder encoder, int title)
         {
-            return HBFunctions.hb_audio_can_apply_drc2(HandBrakeInstanceManager.LastScanHandle, title, track.TrackNumber, encoder.Id) > 0;
+            return HBFunctions.hb_audio_can_apply_drc2(HandBrakeInstanceManager.LastScanHandle, title, trackNumber, encoder.Id) > 0;
         }
 
         /// <summary>
