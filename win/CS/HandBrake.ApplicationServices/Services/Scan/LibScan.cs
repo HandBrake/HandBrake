@@ -267,7 +267,8 @@ namespace HandBrake.ApplicationServices.Services.Scan
             BitmapImage bitmapImage = null;
             try
             {
-                bitmapImage = this.instance.GetPreview((PreviewSettings)job, preview);
+                PreviewSettings settings = new PreviewSettings(job);
+                bitmapImage = this.instance.GetPreview(settings, preview);
             }
             catch (AccessViolationException e)
             {

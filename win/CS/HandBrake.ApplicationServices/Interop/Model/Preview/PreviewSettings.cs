@@ -16,6 +16,17 @@ namespace HandBrake.ApplicationServices.Interop.Model.Preview
     /// </summary>
     public class PreviewSettings : EncodeTask
     {
-         // TODO flesh this out into a proper model.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PreviewSettings"/> class.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public PreviewSettings(EncodeTask task)
+            : base(task)
+        {
+        }
+
+        // TODO flesh this out into a proper model.
     }
 }
