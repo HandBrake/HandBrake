@@ -25,7 +25,7 @@ static const gchar resource_str[] =
 #include "resource_data.h"
 ;
 
-static GValue *resources;
+static GhbValue *resources;
 
 void
 ghb_resource_init()
@@ -33,10 +33,10 @@ ghb_resource_init()
     resources = ghb_plist_parse(resource_str, sizeof(resource_str)-1);
 }
 
-GValue*
+GhbValue*
 ghb_resource_get(const gchar *name)
 {
-    GValue *result;
+    GhbValue *result;
     result = ghb_dict_lookup(resources, name);
     return result;
 }

@@ -18,60 +18,67 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include "jansson.h"
 
-typedef struct
-{
-    guchar *data;
-    gsize size;
-} ghb_rawdata_t;
+#define GHB_DICT    JSON_OBJECT
+#define GHB_ARRAY   JSON_ARRAY
+#define GHB_STRING  JSON_STRING
+#define GHB_INT     JSON_INTEGER
+#define GHB_DOUBLE  JSON_REAL
+#define GHB_NULL    JSON_NULL
+#define GHB_BOOL    0xff
 
-GType ghb_rawdata_get_type(void);
+typedef json_t GhbValue;
+typedef int    GhbType;
+typedef void*  GhbDictIter;
 
-GType ghb_array_get_type(void);
-GType ghb_dict_get_type(void);
-GValue* ghb_array_get_nth(const GValue *array, gint ii);
-void ghb_array_insert(GValue *gval, guint ii, GValue *val);
-void ghb_array_replace(GValue *gval, guint ii, GValue *val);
-void ghb_array_append(GValue *gval, GValue *val);
-void ghb_array_remove(GValue *gval, guint ii);
-gint ghb_array_len(const GValue *gval);
-void ghb_array_copy(GValue *arr1, GValue *arr2, gint count);
+GhbType ghb_value_type(const GhbValue *val);
+GhbType ghb_array_get_type(void);
+GhbType ghb_dict_get_type(void);
+GhbValue* ghb_array_get_nth(const GhbValue *array, gint ii);
+void ghb_array_insert(GhbValue *gval, guint ii, GhbValue *val);
+void ghb_array_replace(GhbValue *gval, guint ii, GhbValue *val);
+void ghb_array_append(GhbValue *gval, GhbValue *val);
+void ghb_array_remove(GhbValue *gval, guint ii);
+gint ghb_array_len(const GhbValue *gval);
+void ghb_array_copy(GhbValue *arr1, GhbValue *arr2, gint count);
 
-void ghb_value_free(GValue *gval);
-GValue* ghb_value_new(GType gtype);
-GValue* ghb_value_dup(const GValue *val);
-gint ghb_value_int(const GValue *val);
-gint64 ghb_value_int64(const GValue *val);
-gdouble ghb_value_double(const GValue *val);
-gchar* ghb_value_string(const GValue *val);
-gboolean ghb_value_boolean(const GValue *val);
+GhbValue* ghb_value_xform(const GhbValue *val, GhbType type);
+void ghb_value_free(GhbValue *gval);
+GhbValue* ghb_value_new(GhbType type);
+GhbValue* ghb_value_dup(const GhbValue *val);
+gint ghb_value_int(const GhbValue *val);
+gint64 ghb_value_int64(const GhbValue *val);
+gdouble ghb_value_double(const GhbValue *val);
+gchar* ghb_value_string(const GhbValue *val);
+const gchar* ghb_value_const_string(const GhbValue *val);
+gboolean ghb_value_boolean(const GhbValue *val);
 
-GValue* ghb_string_value(const gchar *str);
-GValue* ghb_int64_value(gint64 ival);
-GValue* ghb_int_value(gint ival);
-GValue* ghb_double_value(gdouble dval);
-GValue* ghb_boolean_value(gboolean bval);
+GhbValue* ghb_string_value(const gchar *str);
+void ghb_string_value_set(GhbValue *gval, const gchar *str);
+GhbValue* ghb_int64_value(gint64 ival);
+GhbValue* ghb_int_value(gint ival);
+GhbValue* ghb_double_value(gdouble dval);
+GhbValue* ghb_boolean_value(gboolean bval);
 
-gint ghb_value_cmp(const GValue *vala, const GValue *valb);
-GValue* ghb_string_value_new(const gchar *str);
-GValue* ghb_int64_value_new(gint64 ival);
-GValue* ghb_int_value_new(gint ival);
-GValue* ghb_double_value_new(gdouble dval);
-GValue* ghb_boolean_value_new(gboolean bval);
-GValue* ghb_dict_value_new(void);
-GValue* ghb_array_value_new(guint size);
-void ghb_array_value_reset(GValue *gval, guint size);
+gint ghb_value_cmp(const GhbValue *vala, const GhbValue *valb);
+GhbValue* ghb_string_value_new(const gchar *str);
+GhbValue* ghb_int64_value_new(gint64 ival);
+GhbValue* ghb_int_value_new(gint ival);
+GhbValue* ghb_double_value_new(gdouble dval);
+GhbValue* ghb_boolean_value_new(gboolean bval);
+GhbValue* ghb_dict_value_new(void);
+GhbValue* ghb_array_value_new();
+void ghb_array_value_reset(GhbValue *array);
 
-GValue* ghb_date_value_new(GDate *date);
-GValue* ghb_rawdata_value_new(ghb_rawdata_t *data);
+void ghb_dict_insert(GhbValue *gval, const gchar *key, GhbValue *val);
+void ghb_dict_iter_init(GhbValue *gval, GhbDictIter *iter);
+int  ghb_dict_iter_next(GhbValue *dict, GhbDictIter *iter,
+                        const char **key, GhbValue **val);
+GhbValue* ghb_dict_lookup(const GhbValue *gval, const gchar *key);
+gboolean ghb_dict_remove(GhbValue *gval, const gchar *key);
 
-void ghb_dict_insert(GValue *gval, gchar *key, GValue *val);
-void ghb_dict_iter_init(GHashTableIter *iter, GValue *gval);
-GValue* ghb_dict_lookup(const GValue *gval, const gchar *key);
-gboolean ghb_dict_remove(GValue *gval, const gchar *key);
-void ghb_register_transforms(void);
-
-void debug_show_value(GValue *gval);
-void debug_show_type(GType tp);
+void debug_show_value(GhbValue *gval);
+void debug_show_type(GhbType tp);
 
 #endif // _GHB_VALUES_H_

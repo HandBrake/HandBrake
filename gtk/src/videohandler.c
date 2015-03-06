@@ -21,7 +21,7 @@
 #include "preview.h"
 #include "hb-backend.h"
 
-int ghb_get_video_encoder(GValue *settings)
+int ghb_get_video_encoder(GhbValue *settings)
 {
     const char *encoder;
     encoder = ghb_settings_get_const_string(settings, "VideoEncoder");

@@ -17,6 +17,7 @@
 #if !defined(_HBBACKEND_H_)
 #define _HBBACKEND_H_
 
+#include "values.h"
 #include "settings.h"
 #include "hb.h"
 #include "lang.h"
@@ -87,13 +88,13 @@ float ghb_vquality_default(signal_user_data_t *ud);
 void ghb_combo_init(signal_user_data_t *ud);
 void ghb_backend_init(gint debug);
 void ghb_backend_close(void);
-void ghb_add_job(GValue *js, gint unique_id);
+void ghb_add_job(GhbValue *js, gint unique_id);
 void ghb_remove_job(gint unique_id);
 void ghb_start_queue(void);
 void ghb_stop_queue(void);
 void ghb_pause_queue(void);
 
-void ghb_add_live_job(GValue *js, gint unique_id);
+void ghb_add_live_job(GhbValue *js, gint unique_id);
 void ghb_start_live_encode();
 void ghb_stop_live_encode();
 
@@ -111,15 +112,15 @@ void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 hb_list_t * ghb_get_title_list();
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
-void ghb_set_scale_settings(GValue *settings, gint mode);
+void ghb_set_scale_settings(GhbValue *settings, gint mode);
 void ghb_picture_settings_deps(signal_user_data_t *ud);
-GValue* ghb_get_chapters(const hb_title_t *title);
+GhbValue* ghb_get_chapters(const hb_title_t *title);
 gint64 ghb_get_chapter_duration(const hb_title_t *title, gint chap);
 gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
 void ghb_part_duration(
     const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
 gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
-gboolean ghb_ac3_in_audio_list(const GValue *audio_list);
+gboolean ghb_ac3_in_audio_list(const GhbValue *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);
 gboolean ghb_audio_can_passthru(gint acodec);
 gint ghb_get_default_acodec(void);
@@ -135,25 +136,25 @@ void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
 gint ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start);
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_longest_title(void);
-gchar* ghb_build_advanced_opts_string(GValue *settings);
+gchar* ghb_build_advanced_opts_string(GhbValue *settings);
 GdkPixbuf* ghb_get_preview_image(
     const hb_title_t *title, gint index, signal_user_data_t *ud,
     gint *out_width, gint *out_height);
 gchar* ghb_dvd_volname(const gchar *device);
-gint ghb_subtitle_track_source(GValue *settings, gint track);
-const gchar* ghb_subtitle_track_lang(GValue *settings, gint track);
+gint ghb_subtitle_track_source(GhbValue *settings, gint track);
+const gchar* ghb_subtitle_track_lang(GhbValue *settings, gint track);
 
-gboolean ghb_validate_vquality(GValue *settings);
-gboolean ghb_validate_audio(GValue *settings, GtkWindow *parent);
-gboolean ghb_validate_subtitles(GValue *settings, GtkWindow *parent);
-gboolean ghb_validate_video(GValue *settings, GtkWindow *parent);
-gboolean ghb_validate_filters(GValue *settings, GtkWindow *parent);
+gboolean ghb_validate_vquality(GhbValue *settings);
+gboolean ghb_validate_audio(GhbValue *settings, GtkWindow *parent);
+gboolean ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent);
+gboolean ghb_validate_video(GhbValue *settings, GtkWindow *parent);
+gboolean ghb_validate_filters(GhbValue *settings, GtkWindow *parent);
 gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
-gint ghb_lookup_combo_int(const gchar *name, const GValue *gval);
-gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
-const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
-const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
+gint ghb_lookup_combo_int(const gchar *name, const GhbValue *gval);
+gdouble ghb_lookup_combo_double(const gchar *name, const GhbValue *gval);
+const gchar* ghb_lookup_combo_option(const gchar *name, const GhbValue *gval);
+const gchar* ghb_lookup_combo_string(const gchar *name, const GhbValue *gval);
 gchar* ghb_get_tmp_dir();
 gint ghb_find_closest_audio_samplerate(gint rate);
 
@@ -167,7 +168,7 @@ void ghb_mix_opts_set(GtkComboBox *combo);
 void ghb_mix_opts_filter(GtkComboBox *combo, gint acodec);
 void ghb_audio_samplerate_opts_set(GtkComboBox *combo);
 
-int ghb_lookup_audio_lang(const GValue *glang);
+int ghb_lookup_audio_lang(const GhbValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
 void ghb_update_display_aspect_label(signal_user_data_t *ud);
 gchar* ghb_create_title_label(const hb_title_t *title);
@@ -177,36 +178,36 @@ const hb_title_t* ghb_lookup_title(int title_id, int *index);
 const hb_container_t* ghb_lookup_container_by_name(const gchar *name);
 const hb_encoder_t* ghb_lookup_audio_encoder(const char *name);
 int ghb_lookup_audio_encoder_codec(const char *name);
-int ghb_settings_audio_encoder_codec(const GValue *settings, const char *name);
+int ghb_settings_audio_encoder_codec(const GhbValue *settings, const char *name);
 const hb_encoder_t* ghb_settings_audio_encoder(
-    const GValue *settings, const char *name);
+    const GhbValue *settings, const char *name);
 const hb_encoder_t* ghb_lookup_video_encoder(const char *name);
 int ghb_lookup_video_encoder_codec(const char *name);
-int ghb_settings_video_encoder_codec(const GValue *settings, const char *name);
+int ghb_settings_video_encoder_codec(const GhbValue *settings, const char *name);
 const hb_encoder_t* ghb_settings_video_encoder(
-    const GValue *settings, const char *name);
+    const GhbValue *settings, const char *name);
 const hb_mixdown_t* ghb_lookup_mixdown(const char *name);
 int ghb_lookup_mixdown_mix(const char *name);
-int ghb_settings_mixdown_mix(const GValue *settings, const char *name);
+int ghb_settings_mixdown_mix(const GhbValue *settings, const char *name);
 const hb_mixdown_t* ghb_settings_mixdown(
-    const GValue *settings, const char *name);
+    const GhbValue *settings, const char *name);
 const hb_rate_t* ghb_lookup_video_framerate(const char *name);
 int ghb_lookup_video_framerate_rate(const char *name);
-int ghb_settings_video_framerate_rate(const GValue *settings, const char *name);
+int ghb_settings_video_framerate_rate(const GhbValue *settings, const char *name);
 const hb_rate_t* ghb_settings_video_framerate(
-    const GValue *settings, const char *name);
+    const GhbValue *settings, const char *name);
 const hb_rate_t* ghb_lookup_audio_samplerate(const char *name);
 int ghb_lookup_audio_samplerate_rate(const char *name);
 int ghb_settings_audio_samplerate_rate(
-    const GValue *settings, const char *name);
+    const GhbValue *settings, const char *name);
 const hb_rate_t* ghb_settings_audio_samplerate(
-    const GValue *settings, const char *name);
+    const GhbValue *settings, const char *name);
 const char* ghb_audio_samplerate_get_short_name(int rate);
 const hb_rate_t* ghb_lookup_audio_bitrate(const char *name);
 int ghb_lookup_audio_bitrate_rate(const char *name);
-int ghb_settings_audio_bitrate_rate(const GValue *settings, const char *name);
+int ghb_settings_audio_bitrate_rate(const GhbValue *settings, const char *name);
 const hb_rate_t* ghb_settings_audio_bitrate(
-    const GValue *settings, const char *name);
+    const GhbValue *settings, const char *name);
 const char* ghb_audio_bitrate_get_short_name(int rate);
 hb_audio_config_t* ghb_get_audio_info(const hb_title_t *title, gint track);
 hb_subtitle_t* ghb_get_subtitle_info(const hb_title_t *title, gint track);

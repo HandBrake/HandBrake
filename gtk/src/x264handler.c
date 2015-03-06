@@ -708,9 +708,9 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
                     val = get_psy_val(ud);
                 else
                 {
-                    GValue *gval;
+                    GhbValue *gval;
                     gval = ghb_widget_value(widget);
-                    if (G_VALUE_TYPE(gval) == G_TYPE_BOOLEAN)
+                    if (ghb_value_type(gval) == GHB_BOOL)
                     {
                         if (ghb_value_boolean(gval))
                             val = g_strdup("1");
@@ -755,9 +755,9 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
                 val = get_psy_val(ud);
             else
             {
-                GValue *gval;
+                GhbValue *gval;
                 gval = ghb_widget_value(widget);
-                if (G_VALUE_TYPE(gval) == G_TYPE_BOOLEAN)
+                if (ghb_value_type(gval) == GHB_BOOL)
                 {
                     if (ghb_value_boolean(gval))
                         val = g_strdup("1");

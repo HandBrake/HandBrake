@@ -40,7 +40,7 @@ typedef struct
 {
     gchar *key;
     gchar *value;
-    GValue *plist;
+    GhbValue *plist;
     GQueue *stack;
     GQueue *tag_stack;
     gboolean closed_top;
@@ -91,12 +91,12 @@ lookup_attr_value(
     return NULL;
 }
 
-static GValue*
+static GhbValue*
 read_string_from_file(const gchar *fname)
 {
     gchar *buffer;
     size_t size;
-    GValue *gval;
+    GhbValue *gval;
     FILE *fd;
 
     fd = g_fopen(fname, "r");
@@ -108,13 +108,13 @@ read_string_from_file(const gchar *fname)
     buffer = g_malloc(size+1);
     size = fread(buffer, 1, size, fd);
     buffer[size] = 0;
-    gval = ghb_value_new(G_TYPE_STRING);
-    g_value_take_string(gval, buffer);
+    gval = ghb_string_value_new(buffer);
+    g_free(buffer);
     fclose(fd);
     return gval;
 }
 
-static void add_icon(GValue *dict, const char *fname)
+static void add_icon(GhbValue *dict, const char *fname)
 {
     FILE *f;
 
@@ -132,30 +132,36 @@ static void add_icon(GValue *dict, const char *fname)
         return;
     }
 
-    ghb_rawdata_t *rd;
-    rd = g_malloc(sizeof(ghb_rawdata_t));
+    char* base64;
+    guint8 *data;
+    gsize data_size;
+
     fseek(f, 0, SEEK_END);
-    rd->size = ftell(f);
+    data_size = ftell(f);
     fseek(f, 0, SEEK_SET);
 
-    rd->data = g_malloc(rd->size);
-    fread(rd->data, 1, rd->size, f);
+    data = g_malloc(data_size);
+    fread(data, 1, data_size, f);
+    base64 = g_base64_encode(data, data_size);
     
-    GValue *data = ghb_rawdata_value_new(rd);
-    ghb_dict_insert(dict, g_strdup("svg"), ghb_boolean_value_new(svg));
-    ghb_dict_insert(dict, g_strdup("data"), data);
+    GhbValue *icon = ghb_string_value_new(base64);
+    ghb_dict_insert(dict, "svg", ghb_boolean_value_new(svg));
+    ghb_dict_insert(dict, "data", icon);
+
+    g_free(base64);
+    g_free(data);
 }
 
-static void insert_value(GValue *container, const char *key, GValue *element)
+static void insert_value(GhbValue *container, const char *key, GhbValue *element)
 {
-    GType gtype;
+    GhbType gtype;
 
-    gtype = G_VALUE_TYPE(container);
-    if (gtype == ghb_array_get_type())
+    gtype = ghb_value_type(container);
+    if (gtype == GHB_ARRAY)
     {
         ghb_array_append(container, element);
     }
-    else if (gtype == ghb_dict_get_type())
+    else if (gtype == GHB_DICT)
     {
         if (key == NULL)
         {
@@ -164,7 +170,7 @@ static void insert_value(GValue *container, const char *key, GValue *element)
         }
         else
         {
-            ghb_dict_insert(container, g_strdup(key), element);
+            ghb_dict_insert(container, key, element);
         }
     }
     else
@@ -209,9 +215,8 @@ start_element(
         return;
     }
     g_queue_push_head(pd->tag_stack, id.pid);
-    GType gtype = 0;
-    GValue *gval = NULL;
-    GValue *current = g_queue_peek_head(pd->stack);
+    GhbValue *gval = NULL;
+    GhbValue *current = g_queue_peek_head(pd->stack);
     switch (id.id)
     {
         case R_SECTION:
@@ -397,9 +402,8 @@ end_element(
     if (start_id.id != id)
         g_warning("start tag != end tag: (%s %d) %d", name, id, id);
 
-    GValue *gval = NULL;
-    GValue *current = g_queue_peek_head(pd->stack);
-    GType gtype = 0;
+    GhbValue *gval = NULL;
+    GhbValue *current = g_queue_peek_head(pd->stack);
     switch (id)
     {
         case R_SECTION:
@@ -462,7 +466,7 @@ destroy_notify(gpointer data)
     //g_debug("destroy parser");
 }
 
-GValue*
+GhbValue*
 ghb_resource_parse(const gchar *buf, gssize len)
 {
     GMarkupParseContext *ctx;
@@ -493,12 +497,12 @@ ghb_resource_parse(const gchar *buf, gssize len)
     return pd.plist;
 }
 
-GValue*
+GhbValue*
 ghb_resource_parse_file(FILE *fd)
 {
     gchar *buffer;
     size_t size;
-    GValue *gval;
+    GhbValue *gval;
 
     if (fd == NULL)
         return NULL;
@@ -535,7 +539,7 @@ gint
 main(gint argc, gchar *argv[])
 {
     FILE *file;
-    GValue *gval;
+    GhbValue *gval;
     int opt;
     const gchar *src, *dst;
 

@@ -42,30 +42,27 @@ enum
     PRESETS_CUSTOM
 };
 
-static GValue *presetsPlistFile = NULL;
-static GValue *presetsPlist = NULL;
-static GValue *prefsPlist = NULL;
+static GhbValue *presetsPlistFile = NULL;
+static GhbValue *presetsPlist = NULL;
+static GhbValue *prefsPlist = NULL;
 static gboolean prefs_modified = FALSE;
 
-static const GValue* preset_dict_get_value(GValue *dict, const gchar *key);
-static void store_plist(GValue *plist, const gchar *name);
+static const GhbValue* preset_dict_get_value(GhbValue *dict, const gchar *key);
+static void store_plist(GhbValue *plist, const gchar *name);
 static void store_presets(void);
 static void store_prefs(void);
 
 static void
-dict_clean(GValue *dict, GValue *template)
+dict_clean(GhbValue *dict, GhbValue *template)
 {
-    GValue *tmp = ghb_value_dup(dict);
-    GHashTableIter iter;
-    gchar *key;
-    GValue *value;
-    GValue *template_val;
+    GhbValue *tmp = ghb_value_dup(dict);
+    GhbDictIter iter;
+    const gchar *key;
+    GhbValue *value;
+    GhbValue *template_val;
 
-    ghb_dict_iter_init(&iter, tmp);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
+    ghb_dict_iter_init(tmp, &iter);
+    while (ghb_dict_iter_next(tmp, &iter, &key, &value))
     {
         template_val = ghb_dict_lookup(template, key);
         if (template_val == NULL)
@@ -114,11 +111,11 @@ ghb_tree_path_new_from_indices(gint *indices, gint len)
     }
 }
 
-GValue*
+GhbValue*
 ghb_parse_preset_path(const gchar *path)
 {
     gchar **split;
-    GValue *preset;
+    GhbValue *preset;
     gint ii;
 
     preset = ghb_array_value_new(MAX_NESTED_PRESET);
@@ -131,19 +128,19 @@ ghb_parse_preset_path(const gchar *path)
     return preset;
 }
 
-static GValue*
-preset_path_from_indices(GValue *presets, gint *indices, gint len)
+static GhbValue*
+preset_path_from_indices(GhbValue *presets, gint *indices, gint len)
 {
     gint ii;
-    GValue *path;
+    GhbValue *path;
 
     g_debug("preset_path_from_indices");
     path = ghb_array_value_new(MAX_NESTED_PRESET);
     for (ii = 0; ii < len; ii++)
     {
-        GValue *dict;
+        GhbValue *dict;
         gint count, folder;
-        const GValue *name;
+        const GhbValue *name;
 
         count = ghb_array_len(presets);
         if (indices[ii] >= count) break;
@@ -160,11 +157,11 @@ preset_path_from_indices(GValue *presets, gint *indices, gint len)
 }
 
 gchar*
-ghb_preset_path_string(const GValue *path)
+ghb_preset_path_string(const GhbValue *path)
 {
     gint count, ii;
     GString *gstr;
-    GValue *val;
+    GhbValue *val;
     gchar *str;
 
     gstr = g_string_new("");
@@ -186,12 +183,12 @@ ghb_preset_path_string(const GValue *path)
 }
 
 void
-dump_preset_path(const gchar *msg, const GValue *path)
+dump_preset_path(const gchar *msg, const GhbValue *path)
 {
     gchar *str;
 
     if (path)
-        debug_show_type (G_VALUE_TYPE(path));
+        debug_show_type (ghb_value_type(path));
     str = ghb_preset_path_string(path);
     g_message("%s path: (%s)", msg, str);
     g_free(str);
@@ -212,10 +209,10 @@ dump_preset_indices(const gchar *msg, gint *indices, gint len)
 
 #if 0
 static gint
-preset_path_cmp(const GValue *path1, const GValue *path2)
+preset_path_cmp(const GhbValue *path1, const GhbValue *path2)
 {
     gint count, ii;
-    GValue *val;
+    GhbValue *val;
     gchar *str1, *str2;
     gint result;
 
@@ -239,11 +236,11 @@ preset_path_cmp(const GValue *path1, const GValue *path2)
 }
 #endif
 
-static GValue*
-presets_get_dict(GValue *presets, gint *indices, gint len)
+static GhbValue*
+presets_get_dict(GhbValue *presets, gint *indices, gint len)
 {
     gint ii, count, folder;
-    GValue *dict = NULL;
+    GhbValue *dict = NULL;
 
     g_debug("presets_get_dict ()");
     for (ii = 0; ii < len; ii++)
@@ -264,11 +261,11 @@ presets_get_dict(GValue *presets, gint *indices, gint len)
     return dict;
 }
 
-static GValue*
-presets_get_folder(GValue *presets, gint *indices, gint len)
+static GhbValue*
+presets_get_folder(GhbValue *presets, gint *indices, gint len)
 {
     gint ii, count, folder;
-    GValue *dict;
+    GhbValue *dict;
 
     g_debug("presets_get_folder ()");
     for (ii = 0; ii < len; ii++)
@@ -286,46 +283,46 @@ presets_get_folder(GValue *presets, gint *indices, gint len)
     return presets;
 }
 
-static GValue*
-plist_get_dict(GValue *presets, const gchar *name)
+static GhbValue*
+plist_get_dict(GhbValue *presets, const gchar *name)
 {
     if (presets == NULL || name == NULL) return NULL;
     return ghb_dict_lookup(presets, name);
 }
 
 static const gchar*
-preset_get_name(GValue *dict)
+preset_get_name(GhbValue *dict)
 {
-    return g_value_get_string(preset_dict_get_value(dict, "PresetName"));
+    return ghb_value_const_string(preset_dict_get_value(dict, "PresetName"));
 }
 
 static gboolean
-preset_folder_is_open(GValue *dict)
+preset_folder_is_open(GhbValue *dict)
 {
-    const GValue *gval;
+    const GhbValue *gval;
 
     gval = preset_dict_get_value(dict, "FolderOpen");
     if (gval != NULL)
-        return g_value_get_boolean(gval);
+        return ghb_value_boolean(gval);
     return FALSE;
 }
 
 gboolean
-ghb_preset_folder(GValue *dict)
+ghb_preset_folder(GhbValue *dict)
 {
     return ghb_value_int(preset_dict_get_value(dict, "Folder"));
 }
 
 gint
-ghb_preset_type(GValue *dict)
+ghb_preset_type(GhbValue *dict)
 {
     return ghb_value_int(preset_dict_get_value(dict, "Type"));
 }
 
 static void
-presets_remove_nth(GValue *presets, gint pos)
+presets_remove_nth(GhbValue *presets, gint pos)
 {
-    GValue *dict;
+    GhbValue *dict;
     gint count;
 
     if (presets == NULL || pos < 0) return;
@@ -338,11 +335,11 @@ presets_remove_nth(GValue *presets, gint pos)
 
 gboolean
 ghb_presets_remove(
-    GValue *presets,
+    GhbValue *presets,
     gint *indices,
     gint len)
 {
-    GValue *folder = NULL;
+    GhbValue *folder = NULL;
 
     folder = presets_get_folder(presets, indices, len-1);
     if (folder)
@@ -357,12 +354,12 @@ ghb_presets_remove(
 
 static void
 ghb_presets_replace(
-    GValue *presets,
-    GValue *dict,
+    GhbValue *presets,
+    GhbValue *dict,
     gint *indices,
     gint len)
 {
-    GValue *folder = NULL;
+    GhbValue *folder = NULL;
 
     folder = presets_get_folder(presets, indices, len-1);
     if (folder)
@@ -375,12 +372,12 @@ ghb_presets_replace(
 
 static void
 ghb_presets_insert(
-    GValue *presets,
-    GValue *dict,
+    GhbValue *presets,
+    GhbValue *dict,
     gint *indices,
     gint len)
 {
-    GValue *folder = NULL;
+    GhbValue *folder = NULL;
 
     folder = presets_get_folder(presets, indices, len-1);
     if (folder)
@@ -392,9 +389,9 @@ ghb_presets_insert(
 }
 
 static gint
-presets_find_element(GValue *presets, const gchar *name)
+presets_find_element(GhbValue *presets, const gchar *name)
 {
-    GValue *dict;
+    GhbValue *dict;
     gint count, ii;
 
     g_debug("presets_find_element () (%s)", name);
@@ -414,9 +411,9 @@ presets_find_element(GValue *presets, const gchar *name)
 }
 
 static gint
-single_find_pos(GValue *presets, const gchar *name, gint type)
+single_find_pos(GhbValue *presets, const gchar *name, gint type)
 {
-    GValue *dict;
+    GhbValue *dict;
     gint count, ii, ptype, last;
 
     if (presets == NULL || name == NULL) return -1;
@@ -438,15 +435,15 @@ single_find_pos(GValue *presets, const gchar *name, gint type)
 }
 
 static gint*
-presets_find_pos(const GValue *path, gint type, gint *len)
+presets_find_pos(const GhbValue *path, gint type, gint *len)
 {
-    GValue *nested;
-    GValue *val;
+    GhbValue *nested;
+    GhbValue *val;
     gint count, ii;
     gboolean folder;
     gint *indices = NULL;
     const gchar *name;
-    GValue *dict;
+    GhbValue *dict;
 
     g_debug("presets_find_pos () ");
     nested = presetsPlist;
@@ -455,7 +452,7 @@ presets_find_pos(const GValue *path, gint type, gint *len)
     for (ii = 0; ii < count-1; ii++)
     {
         val = ghb_array_get_nth(path, ii);
-        name = g_value_get_string(val);
+        name = ghb_value_const_string(val);
         indices[ii] = presets_find_element(nested, name);
         if (indices[ii] == -1) {
             g_free(indices);
@@ -472,7 +469,7 @@ presets_find_pos(const GValue *path, gint type, gint *len)
     {
         const gchar *name;
 
-        name = g_value_get_string(ghb_array_get_nth(path, count-1));
+        name = ghb_value_const_string(ghb_array_get_nth(path, count-1));
         indices[ii] = single_find_pos(nested, name, type);
         ii++;
     }
@@ -481,7 +478,7 @@ presets_find_pos(const GValue *path, gint type, gint *len)
 }
 
 static gint
-preset_tree_depth(GValue *dict)
+preset_tree_depth(GhbValue *dict)
 {
     gboolean folder;
 
@@ -490,7 +487,7 @@ preset_tree_depth(GValue *dict)
     {
         gint depth = 0;
         gint count, ii;
-        GValue *presets;
+        GhbValue *presets;
 
         presets = ghb_dict_lookup(dict, "ChildrenArray");
         count = ghb_array_len(presets);
@@ -511,30 +508,30 @@ preset_tree_depth(GValue *dict)
 }
 
 static gboolean
-preset_is_default(GValue *dict)
+preset_is_default(GhbValue *dict)
 {
-    const GValue *val;
+    const GhbValue *val;
 
     val = preset_dict_get_value(dict, "Default");
     return ghb_value_boolean(val);
 }
 
 static void
-presets_clear_default(GValue *presets)
+presets_clear_default(GhbValue *presets)
 {
     gint count, ii;
 
     count = ghb_array_len(presets);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *dict;
+        GhbValue *dict;
         gboolean folder;
 
         dict = ghb_array_get_nth(presets, ii);
         folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
         if (folder)
         {
-            GValue *nested;
+            GhbValue *nested;
 
             nested = ghb_dict_lookup(dict, "ChildrenArray");
             presets_clear_default(nested);
@@ -543,22 +540,21 @@ presets_clear_default(GValue *presets)
         {
             if (preset_is_default(dict))
             {
-                ghb_dict_insert(dict, g_strdup("Default"),
-                                ghb_boolean_value_new(FALSE));
+                ghb_dict_insert(dict, "Default", ghb_boolean_value_new(FALSE));
             }
         }
     }
 }
 
 static void
-presets_customize(GValue *presets)
+presets_customize(GhbValue *presets)
 {
     gint count, ii;
 
     count = ghb_array_len(presets);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *dict;
+        GhbValue *dict;
         gboolean folder;
         gint ptype;
 
@@ -567,13 +563,12 @@ presets_customize(GValue *presets)
         ptype = ghb_value_int(preset_dict_get_value(dict, "Type"));
         if (ptype != PRESETS_CUSTOM)
         {
-            ghb_dict_insert(dict, g_strdup("Type"),
-                        ghb_int64_value_new(PRESETS_CUSTOM));
+            ghb_dict_insert(dict, "Type", ghb_int64_value_new(PRESETS_CUSTOM));
         }
         folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
         if (folder)
         {
-            GValue *nested;
+            GhbValue *nested;
 
             nested = ghb_dict_lookup(dict, "ChildrenArray");
             presets_customize(nested);
@@ -582,7 +577,7 @@ presets_customize(GValue *presets)
 }
 
 static gint*
-presets_find_default2(GValue *presets, gint *len)
+presets_find_default2(GhbValue *presets, gint *len)
 {
     gint count, ii;
     gint *indices;
@@ -590,14 +585,14 @@ presets_find_default2(GValue *presets, gint *len)
     count = ghb_array_len(presets);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *dict;
+        GhbValue *dict;
         gboolean folder;
 
         dict = ghb_array_get_nth(presets, ii);
         folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
         if (folder)
         {
-            GValue *nested;
+            GhbValue *nested;
             gint pos = *len;
 
             nested = ghb_dict_lookup(dict, "ChildrenArray");
@@ -626,7 +621,7 @@ presets_find_default2(GValue *presets, gint *len)
 }
 
 static gint*
-presets_find_default(GValue *presets, gint *len)
+presets_find_default(GhbValue *presets, gint *len)
 {
     *len = 0;
     return presets_find_default2(presets, len);
@@ -634,16 +629,16 @@ presets_find_default(GValue *presets, gint *len)
 
 gint*
 ghb_preset_indices_from_path(
-    GValue *presets,
-    const GValue *path,
+    GhbValue *presets,
+    const GhbValue *path,
     gint *len)
 {
-    GValue *nested;
-    GValue *val;
+    GhbValue *nested;
+    GhbValue *val;
     gint count, ii;
     gint *indices = NULL;
     const gchar *name;
-    GValue *dict;
+    GhbValue *dict;
     gboolean folder;
 
     g_debug("ghb_preset_indices_from_path () ");
@@ -655,7 +650,7 @@ ghb_preset_indices_from_path(
     for (ii = 0; ii < count; ii++)
     {
         val = ghb_array_get_nth(path, ii);
-        name = g_value_get_string(val);
+        name = ghb_value_const_string(val);
         indices[ii] = presets_find_element(nested, name);
         if (indices[ii] == -1)
         {
@@ -680,11 +675,11 @@ ghb_preset_indices_from_path(
 
 static gint
 ghb_presets_get_type(
-    GValue *presets,
+    GhbValue *presets,
     gint *indices,
     gint len)
 {
-    GValue *dict;
+    GhbValue *dict;
     gint type = 0;
 
     dict = presets_get_dict(presets, indices, len);
@@ -701,11 +696,11 @@ ghb_presets_get_type(
 
 static gboolean
 ghb_presets_get_folder(
-    GValue *presets,
+    GhbValue *presets,
     gint *indices,
     gint len)
 {
-    GValue *dict;
+    GhbValue *dict;
     gboolean folder = FALSE;
 
     dict = presets_get_dict(presets, indices, len);
@@ -723,14 +718,14 @@ ghb_presets_get_folder(
 void
 presets_set_default(gint *indices, gint len)
 {
-    GValue *dict;
+    GhbValue *dict;
 
     g_debug("presets_set_default ()");
     presets_clear_default(presetsPlist);
     dict = presets_get_dict(presetsPlist, indices, len);
     if (dict)
     {
-        ghb_dict_insert(dict, g_strdup("Default"), ghb_boolean_value_new(TRUE));
+        ghb_dict_insert(dict, "Default", ghb_boolean_value_new(TRUE));
     }
     store_presets();
 }
@@ -738,14 +733,13 @@ presets_set_default(gint *indices, gint len)
 static void
 presets_set_folder_open(gboolean open, gint *indices, gint len)
 {
-    GValue *dict;
+    GhbValue *dict;
 
     g_debug("presets_set_folder_open ()");
     dict = presets_get_dict(presetsPlist, indices, len);
     if (dict)
     {
-        ghb_dict_insert(dict, g_strdup("FolderOpen"),
-                        ghb_boolean_value_new(open));
+        ghb_dict_insert(dict, "FolderOpen", ghb_boolean_value_new(open));
     }
 }
 
@@ -759,48 +753,48 @@ key_cmp(gconstpointer a, gconstpointer b)
     return strcmp(stra, strb);
 }
 
-static const GValue*
-preset_dict_get_value(GValue *dict, const gchar *key)
+static const GhbValue*
+preset_dict_get_value(GhbValue *dict, const gchar *key)
 {
     return ghb_dict_lookup(dict, key);
 }
 
-static const char * dict_get_string(GValue *dict, const char *key)
+static const char * dict_get_string(GhbValue *dict, const char *key)
 {
-    GValue *gval = ghb_dict_lookup(dict, key);
+    GhbValue *gval = ghb_dict_lookup(dict, key);
 
     if (gval == NULL)
         return NULL;
-    return g_value_get_string(gval);
+    return ghb_value_const_string(gval);
 }
 
-static gboolean dict_get_boolean(GValue *dict, const char *key)
+static gboolean dict_get_boolean(GhbValue *dict, const char *key)
 {
-    GValue *gval = ghb_dict_lookup(dict, key);
+    GhbValue *gval = ghb_dict_lookup(dict, key);
 
     if (gval == NULL)
         return FALSE;
-    return g_value_get_boolean(gval);
+    return ghb_value_boolean(gval);
 }
 
 const gchar*
-ghb_presets_get_description(GValue *pdict)
+ghb_presets_get_description(GhbValue *pdict)
 {
     return dict_get_string(pdict, "PresetDescription");
 }
 
 
 static void init_settings_from_dict(
-    GValue *dest, GValue *template, GValue *dict, gboolean filter);
+    GhbValue *dest, GhbValue *template, GhbValue *dict, gboolean filter);
 
 static void
 init_settings_from_array(
-    GValue *dest,
-    GValue *template,
-    GValue *array,
+    GhbValue *dest,
+    GhbValue *template,
+    GhbValue *array,
     gboolean filter)
 {
-    GValue *gval, *val, *new_val;
+    GhbValue *gval, *val, *new_val;
     gint count, ii;
 
     if (ghb_array_len(template) == 0)
@@ -824,10 +818,10 @@ init_settings_from_array(
     for (ii = 0; ii < count; ii++)
     {
         val = ghb_array_get_nth(array, ii);
-        if (G_VALUE_TYPE(gval) == ghb_dict_get_type())
+        if (ghb_value_type(gval) == GHB_DICT)
         {
-            GValue *new_dict;
-            if (val != NULL && G_VALUE_TYPE(val) == ghb_dict_get_type())
+            GhbValue *new_dict;
+            if (val != NULL && ghb_value_type(val) == GHB_DICT)
             {
                 new_dict = ghb_dict_value_new();
                 init_settings_from_dict(new_dict, gval, val, filter);
@@ -838,10 +832,10 @@ init_settings_from_array(
             }
             new_val = new_dict;
         }
-        else if (G_VALUE_TYPE(gval) == ghb_array_get_type())
+        else if (ghb_value_type(gval) == GHB_ARRAY)
         {
-            GValue *new_array;
-            if (val != NULL && G_VALUE_TYPE(val) == ghb_array_get_type())
+            GhbValue *new_array;
+            if (val != NULL && ghb_value_type(val) == GHB_ARRAY)
             {
                 new_array = ghb_array_value_new(8);
                 init_settings_from_array(new_array, gval, val, filter);
@@ -865,28 +859,27 @@ init_settings_from_array(
 
 static void
 init_settings_from_dict(
-    GValue *dest,
-    GValue *template,
-    GValue *dict,
+    GhbValue *dest,
+    GhbValue *template,
+    GhbValue *dict,
     gboolean filter)
 {
-    GHashTableIter iter;
-    gchar *key;
-    GValue *gval, *val, *new_val;
+    GhbDictIter iter;
+    const gchar *key;
+    GhbValue *gval, *val, *new_val;
 
-    ghb_dict_iter_init(&iter, template);
+    ghb_dict_iter_init(template, &iter);
     // middle (void*) cast prevents gcc warning "defreferencing type-punned
     // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
+    while (ghb_dict_iter_next(template, &iter, &key, &gval))
     {
         val = NULL;
         if (dict)
             val = ghb_dict_lookup(dict, key);
-        if (G_VALUE_TYPE(gval) == ghb_dict_get_type())
+        if (ghb_value_type(gval) == GHB_DICT)
         {
-            GValue *new_dict;
-            if (val != NULL && G_VALUE_TYPE(val) == ghb_dict_get_type())
+            GhbValue *new_dict;
+            if (val != NULL && ghb_value_type(val) == GHB_DICT)
             {
                 new_dict = ghb_dict_value_new();
                 init_settings_from_dict(new_dict, gval, val, filter);
@@ -897,10 +890,10 @@ init_settings_from_dict(
             }
             new_val = new_dict;
         }
-        else if (G_VALUE_TYPE(gval) == ghb_array_get_type())
+        else if (ghb_value_type(gval) == GHB_ARRAY)
         {
-            GValue *new_array;
-            if (val != NULL && G_VALUE_TYPE(val) == ghb_array_get_type())
+            GhbValue *new_array;
+            if (val != NULL && ghb_value_type(val) == GHB_ARRAY)
             {
                 new_array = ghb_array_value_new(8);
                 init_settings_from_array(new_array, gval, val, filter);
@@ -927,11 +920,10 @@ init_settings_from_dict(
 
     // If not filtering the source, copy source elements that
     // were not in the template.
-    ghb_dict_iter_init(&iter, dict);
+    ghb_dict_iter_init(dict, &iter);
     // middle (void*) cast prevents gcc warning "defreferencing type-punned
     // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
+    while (ghb_dict_iter_next(dict, &iter, &key, &gval))
     {
         val = ghb_dict_lookup(template, key);
         if (val == NULL)
@@ -942,14 +934,14 @@ init_settings_from_dict(
 }
 
 void
-ghb_preset_to_settings(GValue *settings, GValue *preset)
+ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
 {
     // Initialize the ui from presets file.
-    GValue *internal;
+    GhbValue *internal;
 
     // Get key list from internal default presets.  This way we do not
     // load any unknown keys.
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     if (internalPlist == NULL) return;
     internal = plist_get_dict(internalPlist, "Presets");
     if (preset == NULL)
@@ -958,34 +950,57 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
     init_settings_from_dict(settings, preset, NULL, TRUE);
 }
 
-void
-ghb_settings_to_ui(signal_user_data_t *ud, GValue *dict)
+// Initialization order of some widgets matter because the value of
+// these widgets are used to establich limits on the values that
+// other widgets are allowed to take.
+//
+// So make sure these get initialized first.
+static const char *widget_priority_list[] = 
 {
-    GHashTableIter iter;
-    gchar *key;
-    GValue *gval;
-    GValue *tmp = ghb_value_dup(dict);
+    "preview_count",
+    "PtoPType",
+    "VideoEncoder",
+    "VideoQualityGranularity",
+    "AudioEncoder",
+    NULL
+};
+
+void
+ghb_settings_to_ui(signal_user_data_t *ud, GhbValue *dict)
+{
+    GhbDictIter iter;
+    const gchar *key;
+    GhbValue *gval;
+    int ii;
+    GhbValue *tmp = ghb_value_dup(dict);
 
     if (dict == NULL)
         return;
 
-    ghb_dict_iter_init(&iter, tmp);
+    for (ii = 0; widget_priority_list[ii] != NULL; ii++)
+    {
+        key = widget_priority_list[ii];
+        gval = ghb_settings_get_value(tmp, key);
+        if (gval != NULL)
+            ghb_ui_settings_update(ud, dict, key, gval);
+    }
+
+    ghb_dict_iter_init(tmp, &iter);
     // middle (void*) cast prevents gcc warning "defreferencing type-punned
     // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
+    while (ghb_dict_iter_next(tmp, &iter, &key, &gval))
     {
         ghb_ui_settings_update(ud, dict, key, gval);
     }
     ghb_value_free(tmp);
 }
 
-static GValue *current_preset = NULL;
+static GhbValue *current_preset = NULL;
 
 gboolean
 ghb_preset_is_custom()
 {
-    const GValue *val;
+    const GhbValue *val;
 
     if (current_preset == NULL) return FALSE;
     val = preset_dict_get_value(current_preset, "Type");
@@ -998,7 +1013,7 @@ ghb_set_preset_settings_from_indices(
     gint *indices,
     gint len)
 {
-    GValue *dict = NULL;
+    GhbValue *dict = NULL;
     gint fallback[2] = {0, -1};
 
     if (indices)
@@ -1016,7 +1031,7 @@ ghb_set_preset_settings_from_indices(
     }
     else
     {
-        GValue *path;
+        GhbValue *path;
         gboolean folder;
 
         current_preset = dict;
@@ -1031,7 +1046,7 @@ ghb_set_preset_settings_from_indices(
     }
 }
 
-static const GValue*
+static const GhbValue*
 curr_preset_get_value(const gchar *key)
 {
     if (current_preset == NULL) return NULL;
@@ -1043,7 +1058,7 @@ ghb_update_from_preset(
     signal_user_data_t *ud,
     const gchar *key)
 {
-    const GValue *gval;
+    const GhbValue *gval;
 
     g_debug("ghb_update_from_preset() %s", key);
     gval = curr_preset_get_value(key);
@@ -1086,7 +1101,7 @@ ghb_select_preset2(
 }
 
 void
-ghb_select_preset(GtkBuilder *builder, const GValue *path)
+ghb_select_preset(GtkBuilder *builder, const GhbValue *path)
 {
     gint *indices, len;
 
@@ -1155,7 +1170,7 @@ ghb_get_user_config_dir(gchar *subdir)
 }
 
 static void
-store_plist(GValue *plist, const gchar *name)
+store_plist(GhbValue *plist, const gchar *name)
 {
     gchar *config, *path;
     FILE *file;
@@ -1169,11 +1184,11 @@ store_plist(GValue *plist, const gchar *name)
     fclose(file);
 }
 
-static GValue*
+static GhbValue*
 load_plist(const gchar *name)
 {
     gchar *config, *path;
-    GValue *plist = NULL;
+    GhbValue *plist = NULL;
 
     config = ghb_get_user_config_dir(NULL);
     path = g_strdup_printf ("%s/%s", config, name);
@@ -1331,29 +1346,26 @@ remove_plist(const gchar *name)
 }
 
 void
-ghb_prefs_save(GValue *settings)
+ghb_prefs_save(GhbValue *settings)
 {
-    GValue *dict;
-    GValue *pref_dict;
-    GHashTableIter iter;
-    gchar *key;
-    const GValue *value;
+    GhbValue *dict;
+    GhbValue *pref_dict;
+    GhbDictIter iter;
+    const gchar *key;
+    const GhbValue *value;
 
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     dict = plist_get_dict(internalPlist, "Preferences");
     if (dict == NULL) return;
     pref_dict = plist_get_dict(prefsPlist, "Preferences");
     if (pref_dict == NULL) return;
-    ghb_dict_iter_init(&iter, dict);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
+    ghb_dict_iter_init(dict, &iter);
+    while (ghb_dict_iter_next(dict, &iter, &key, NULL))
     {
         value = ghb_settings_get_value(settings, key);
         if (value != NULL)
         {
-            ghb_dict_insert(pref_dict, g_strdup(key), ghb_value_dup(value));
+            ghb_dict_insert(pref_dict, key, ghb_value_dup(value));
         }
     }
     store_prefs();
@@ -1361,20 +1373,20 @@ ghb_prefs_save(GValue *settings)
 }
 
 void
-ghb_pref_save(GValue *settings, const gchar *key)
+ghb_pref_save(GhbValue *settings, const gchar *key)
 {
-    const GValue *value, *value2;
+    const GhbValue *value, *value2;
 
     value = ghb_settings_get_value(settings, key);
     if (value != NULL)
     {
-        GValue *dict;
+        GhbValue *dict;
         dict = plist_get_dict(prefsPlist, "Preferences");
         if (dict == NULL) return;
         value2 = ghb_dict_lookup(dict, key);
         if (ghb_value_cmp(value, value2) != 0)
         {
-            ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
+            ghb_dict_insert(dict, key, ghb_value_dup(value));
             store_prefs();
             prefs_modified = FALSE;
         }
@@ -1382,20 +1394,20 @@ ghb_pref_save(GValue *settings, const gchar *key)
 }
 
 void
-ghb_pref_set(GValue *settings, const gchar *key)
+ghb_pref_set(GhbValue *settings, const gchar *key)
 {
-    const GValue *value, *value2;
+    const GhbValue *value, *value2;
 
     value = ghb_settings_get_value(settings, key);
     if (value != NULL)
     {
-        GValue *dict;
+        GhbValue *dict;
         dict = plist_get_dict(prefsPlist, "Preferences");
         if (dict == NULL) return;
         value2 = ghb_dict_lookup(dict, key);
         if (ghb_value_cmp(value, value2) != 0)
         {
-            ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
+            ghb_dict_insert(dict, key, ghb_value_dup(value));
             prefs_modified = TRUE;
         }
     }
@@ -1412,26 +1424,25 @@ ghb_prefs_store(void)
 }
 
 void
-ghb_settings_init(GValue *settings, const char *name)
+ghb_settings_init(GhbValue *settings, const char *name)
 {
-    GValue *internal;
-    GHashTableIter iter;
-    gchar *key;
-    GValue *gval;
+    GhbValue *internal;
+    GhbDictIter iter;
+    const gchar *key;
+    GhbValue *gval;
 
     g_debug("ghb_settings_init");
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     // Setting a ui widget will cause the corresponding setting
     // to be set, but it also triggers a callback that can
     // have the side effect of using other settings values
     // that have not yet been set.  So set *all* settings first
     // then update the ui.
     internal = plist_get_dict(internalPlist, name);
-    ghb_dict_iter_init(&iter, internal);
+    ghb_dict_iter_init(internal, &iter);
     // middle (void*) cast prevents gcc warning "defreferencing type-punned
     // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
+    while (ghb_dict_iter_next(internal, &iter, &key, &gval))
     {
         ghb_settings_set_value(settings, key, gval);
     }
@@ -1477,13 +1488,13 @@ FindFirstCDROM(void)
 void
 ghb_prefs_load(signal_user_data_t *ud)
 {
-    GValue *dict, *internal;
-    GHashTableIter iter;
-    gchar *key;
-    GValue *gval;
+    GhbValue *dict, *internal;
+    GhbDictIter iter;
+    const gchar *key;
+    GhbValue *gval;
 
     g_debug("ghb_prefs_load");
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     prefsPlist = load_plist("preferences");
     if (prefsPlist == NULL)
         prefsPlist = ghb_dict_value_new();
@@ -1492,16 +1503,15 @@ ghb_prefs_load(signal_user_data_t *ud)
     if (dict == NULL && internal)
     {
         dict = ghb_dict_value_new();
-        ghb_dict_insert(prefsPlist, g_strdup("Preferences"), dict);
+        ghb_dict_insert(prefsPlist, "Preferences", dict);
 
         // Get defaults from internal defaults
-        ghb_dict_iter_init(&iter, internal);
+        ghb_dict_iter_init(internal, &iter);
         // middle (void*) cast prevents gcc warning "defreferencing type-punned
         // pointer will break strict-aliasing rules"
-        while (g_hash_table_iter_next(
-                &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
+        while (ghb_dict_iter_next(internal, &iter, &key, &gval))
         {
-            ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
+            ghb_dict_insert(dict, key, ghb_value_dup(gval));
         }
 
         const gchar *dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
@@ -1509,19 +1519,16 @@ ghb_prefs_load(signal_user_data_t *ud)
         {
             dir = ".";
         }
-        ghb_dict_insert(dict,
-            g_strdup("ExportDirectory"), ghb_value_dup(ghb_string_value(dir)));
+        ghb_dict_insert(dict, "ExportDirectory", ghb_string_value_new(dir));
 
         dir = g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS);
         if (dir == NULL)
         {
             dir = ".";
         }
-        ghb_dict_insert(dict,
-            g_strdup("destination_dir"), ghb_value_dup(ghb_string_value(dir)));
+        ghb_dict_insert(dict, "destination_dir", ghb_string_value_new(dir));
 
-        ghb_dict_insert(dict,
-            g_strdup("SrtDir"), ghb_value_dup(ghb_string_value(dir)));
+        ghb_dict_insert(dict, "SrtDir", ghb_string_value_new(dir));
 #if defined(_WIN32)
         gchar *source;
 
@@ -1530,8 +1537,7 @@ ghb_prefs_load(signal_user_data_t *ud)
         {
             source = g_strdup("C:" G_DIR_SEPARATOR_S);
         }
-        ghb_dict_insert(dict, g_strdup("default_source"),
-                        ghb_value_dup(ghb_string_value(source)));
+        ghb_dict_insert(dict, "default_source", ghb_string_value_new(source));
         g_free(source);
 #endif
         store_prefs();
@@ -1539,17 +1545,17 @@ ghb_prefs_load(signal_user_data_t *ud)
 }
 
 void
-ghb_prefs_to_settings(GValue *settings)
+ghb_prefs_to_settings(GhbValue *settings)
 {
     // Initialize the ui from presets file.
-    GValue *internal, *dict;
+    GhbValue *internal, *dict;
 
     if (prefsPlist == NULL)
         return;
 
     // Get key list from internal default presets.  This way we do not
     // load any unknown keys.
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     if (internalPlist == NULL) return;
     internal = plist_get_dict(internalPlist, "Preferences");
     dict = plist_get_dict(prefsPlist, "Preferences");
@@ -1600,9 +1606,9 @@ ghb_presets_list_init(
     const gchar *description;
     gboolean def;
     gint count, ii;
-    GValue *dict;
+    GhbValue *dict;
     gint *more_indices;
-    GValue *presets = NULL;
+    GhbValue *presets = NULL;
 
     g_debug("ghb_presets_list_init ()");
     more_indices = g_malloc((len+1)*sizeof(gint));
@@ -1705,7 +1711,7 @@ presets_list_update_item(
     const gchar *description;
     gint type;
     gboolean def, folder;
-    GValue *dict;
+    GhbValue *dict;
     const gchar *color;
 
     g_debug("presets_list_update_item ()");
@@ -1751,9 +1757,9 @@ presets_list_insert(
     gint type;
     gboolean def, folder;
     gint count;
-    GValue *presets;
+    GhbValue *presets;
     GtkTreePath *parent_path;
-    GValue *dict;
+    GhbValue *dict;
     const gchar *color;
 
     g_debug("presets_list_insert ()");
@@ -1834,7 +1840,7 @@ remove_std_presets(signal_user_data_t *ud)
     count = ghb_array_len(presetsPlist);
     for (ii = count-1; ii >= 0; ii--)
     {
-        GValue *dict;
+        GhbValue *dict;
         gint ptype;
 
         dict = ghb_array_get_nth(presetsPlist, ii);
@@ -1850,7 +1856,7 @@ remove_std_presets(signal_user_data_t *ud)
 }
 
 void
-ghb_save_queue(GValue *queue)
+ghb_save_queue(GhbValue *queue)
 {
     pid_t pid;
     char *path;
@@ -1861,10 +1867,10 @@ ghb_save_queue(GValue *queue)
     g_free(path);
 }
 
-GValue*
+GhbValue*
 ghb_load_queue()
 {
-    GValue *queue;
+    GhbValue *queue;
     pid_t pid;
     char *path;
 
@@ -1875,10 +1881,10 @@ ghb_load_queue()
     return queue;
 }
 
-GValue*
+GhbValue*
 ghb_load_old_queue(int pid)
 {
-    GValue *queue;
+    GhbValue *queue;
     char *path;
 
     path = g_strdup_printf ("queue.%d", pid);
@@ -1958,10 +1964,10 @@ value_map_t decomb_xlat[] =
 #if 0
 extern iso639_lang_t ghb_language_table[];
 
-static GValue*
-export_lang_xlat2(GValue *lin_val)
+static GhbValue*
+export_lang_xlat2(GhbValue *lin_val)
 {
-    GValue *gval;
+    GhbValue *gval;
 
     if (lin_val == NULL) return NULL;
     gint ii;
@@ -1989,10 +1995,10 @@ export_lang_xlat2(GValue *lin_val)
     return NULL;
 }
 
-static GValue*
-import_lang_xlat2(GValue *mac_val)
+static GhbValue*
+import_lang_xlat2(GhbValue *mac_val)
 {
-    GValue *gval;
+    GhbValue *gval;
 
     if (mac_val == NULL) return NULL;
     gint ii;
@@ -2015,15 +2021,15 @@ import_lang_xlat2(GValue *mac_val)
 }
 #endif
 
-static GValue*
-export_value_xlat2(value_map_t *value_map, GValue *lin_val, GType mac_type)
+static GhbValue*
+export_value_xlat2(value_map_t *value_map, GhbValue *lin_val, GhbType mac_type)
 {
-    GValue *gval;
+    GhbValue *gval;
 
     if (lin_val == NULL) return NULL;
     gint ii;
     gchar *str;
-    GValue *sval;
+    GhbValue *sval;
 
     str = ghb_value_string(lin_val);
     for (ii = 0; value_map[ii].mac_val; ii++)
@@ -2032,11 +2038,10 @@ export_value_xlat2(value_map_t *value_map, GValue *lin_val, GType mac_type)
         {
             sval = ghb_string_value_new(value_map[ii].mac_val);
             g_free(str);
-            gval = ghb_value_new(mac_type);
-            if (!g_value_transform(sval, gval))
+            gval = ghb_value_xform(sval, mac_type);
+            if (gval == NULL)
             {
                 g_warning("can't transform");
-                ghb_value_free(gval);
                 ghb_value_free(sval);
                 return NULL;
             }
@@ -2049,10 +2054,10 @@ export_value_xlat2(value_map_t *value_map, GValue *lin_val, GType mac_type)
     return NULL;
 }
 
-static GValue*
-export_value_video_framerate(GValue *lin_val)
+static GhbValue*
+export_value_video_framerate(GhbValue *lin_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *fr;
 
@@ -2065,10 +2070,10 @@ export_value_video_framerate(GValue *lin_val)
     return sval;
 }
 
-static GValue*
-export_value_audio_samplerate(GValue *lin_val)
+static GhbValue*
+export_value_audio_samplerate(GhbValue *lin_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *sr;
 
@@ -2081,10 +2086,10 @@ export_value_audio_samplerate(GValue *lin_val)
     return sval;
 }
 
-static GValue*
-export_value_mixdown(GValue *lin_val)
+static GhbValue*
+export_value_mixdown(GhbValue *lin_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *mix;
 
@@ -2097,10 +2102,10 @@ export_value_mixdown(GValue *lin_val)
     return sval;
 }
 
-static GValue*
-export_value_video_encoder(GValue *lin_val)
+static GhbValue*
+export_value_video_encoder(GhbValue *lin_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *enc;
 
@@ -2113,10 +2118,10 @@ export_value_video_encoder(GValue *lin_val)
     return sval;
 }
 
-static GValue*
-export_value_audio_encoder(GValue *lin_val)
+static GhbValue*
+export_value_audio_encoder(GhbValue *lin_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *enc;
 
@@ -2129,10 +2134,10 @@ export_value_audio_encoder(GValue *lin_val)
     return sval;
 }
 
-static GValue*
-export_value_container(GValue *lin_val)
+static GhbValue*
+export_value_container(GhbValue *lin_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *mux;
 
@@ -2147,58 +2152,58 @@ export_value_container(GValue *lin_val)
 
 // Translate values for compatibility with other platforms
 static void
-export_value_xlat(GValue *dict)
+export_value_xlat(GhbValue *dict)
 {
-    GValue *lin_val, *gval;
+    GhbValue *lin_val, *gval;
     const gchar *key;
 
     key = "VideoEncoder";
     lin_val = ghb_dict_lookup(dict, key);
     gval = export_value_video_encoder(lin_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "FileFormat";
     lin_val = ghb_dict_lookup(dict, key);
     gval = export_value_container(lin_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "VideoFramerate";
     lin_val = ghb_dict_lookup(dict, key);
     gval = export_value_video_framerate(lin_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "PictureDetelecine";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(detel_xlat, lin_val, G_TYPE_INT);
+    gval = export_value_xlat2(detel_xlat, lin_val, GHB_INT);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "PictureDecomb";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(decomb_xlat, lin_val, G_TYPE_INT);
+    gval = export_value_xlat2(decomb_xlat, lin_val, GHB_INT);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "PictureDeinterlace";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(deint_xlat, lin_val, G_TYPE_INT);
+    gval = export_value_xlat2(deint_xlat, lin_val, GHB_INT);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
 #if 0
     key = "PictureDenoisePreset";
     lin_val = ghb_dict_lookup(dict, key);
-    gval = export_value_xlat2(denoise_xlat, lin_val, G_TYPE_INT);
+    gval = export_value_xlat2(denoise_xlat, lin_val, GHB_INT);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
 #endif
 
     gint count, ii;
-    GValue *alist;
-    GValue *adict;
+    GhbValue *alist;
+    GhbValue *adict;
 
     key = "AudioEncoderFallback";
     lin_val = ghb_dict_lookup(dict, key);
     gval = export_value_audio_encoder(lin_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
 
     alist = ghb_dict_lookup(dict, "AudioList");
     count = ghb_array_len(alist);
@@ -2209,29 +2214,29 @@ export_value_xlat(GValue *dict)
         lin_val = ghb_dict_lookup(adict, key);
         gval = export_value_audio_encoder(lin_val);
         if (gval)
-            ghb_dict_insert(adict, g_strdup(key), gval);
+            ghb_dict_insert(adict, key, gval);
         key = "AudioSamplerate";
         lin_val = ghb_dict_lookup(adict, key);
         gval = export_value_audio_samplerate(lin_val);
         if (gval)
-            ghb_dict_insert(adict, g_strdup(key), gval);
+            ghb_dict_insert(adict, key, gval);
         key = "AudioMixdown";
         lin_val = ghb_dict_lookup(adict, key);
         gval = export_value_mixdown(lin_val);
         if (gval)
-            ghb_dict_insert(adict, g_strdup(key), gval);
+            ghb_dict_insert(adict, key, gval);
     }
 }
 
 
-static GValue*
+static GhbValue*
 import_value_xlat2(
-    GValue *defaults,
+    GhbValue *defaults,
     value_map_t *value_map,
     const gchar *key,
-    GValue *mac_val)
+    GhbValue *mac_val)
 {
-    GValue *gval, *def_val;
+    GhbValue *gval, *def_val;
 
     if (mac_val == NULL) return NULL;
     def_val = ghb_dict_lookup(defaults, key);
@@ -2239,7 +2244,7 @@ import_value_xlat2(
     {
         gint ii;
         gchar *str;
-        GValue *sval;
+        GhbValue *sval;
 
         str = ghb_value_string(mac_val);
         for (ii = 0; value_map[ii].mac_val; ii++)
@@ -2249,11 +2254,10 @@ import_value_xlat2(
             {
                 sval = ghb_string_value_new(value_map[ii].lin_val);
                 g_free(str);
-                gval = ghb_value_new(G_VALUE_TYPE(def_val));
-                if (!g_value_transform(sval, gval))
+                gval = ghb_value_xform(sval, ghb_value_type(def_val));
+                if (gval == NULL)
                 {
                     g_warning("can't transform");
-                    ghb_value_free(gval);
                     ghb_value_free(sval);
                     return NULL;
                 }
@@ -2268,7 +2272,7 @@ import_value_xlat2(
     {
         gint ii;
         gchar *str;
-        GValue *sval;
+        GhbValue *sval;
 
         str = ghb_value_string(mac_val);
         for (ii = 0; value_map[ii].mac_val; ii++)
@@ -2278,11 +2282,10 @@ import_value_xlat2(
             {
                 sval = ghb_string_value_new(value_map[ii].lin_val);
                 g_free(str);
-                gval = ghb_value_new(G_VALUE_TYPE(mac_val));
-                if (!g_value_transform(sval, gval))
+                gval = ghb_value_xform(sval, ghb_value_type(mac_val));
+                if (gval == NULL)
                 {
                     g_warning("can't transform");
-                    ghb_value_free(gval);
                     ghb_value_free(sval);
                     return NULL;
                 }
@@ -2295,10 +2298,10 @@ import_value_xlat2(
     return NULL;
 }
 
-static GValue*
-import_value_video_framerate(GValue *mac_val)
+static GhbValue*
+import_value_video_framerate(GhbValue *mac_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *fr;
 
@@ -2312,10 +2315,10 @@ import_value_video_framerate(GValue *mac_val)
     return sval;
 }
 
-static GValue*
-import_value_audio_samplerate(GValue *mac_val)
+static GhbValue*
+import_value_audio_samplerate(GhbValue *mac_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *sr;
 
@@ -2329,10 +2332,10 @@ import_value_audio_samplerate(GValue *mac_val)
     return sval;
 }
 
-static GValue*
-import_value_mixdown(GValue *mac_val)
+static GhbValue*
+import_value_mixdown(GhbValue *mac_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *mix;
 
@@ -2346,10 +2349,10 @@ import_value_mixdown(GValue *mac_val)
     return sval;
 }
 
-static GValue*
-import_value_video_encoder(GValue *mac_val)
+static GhbValue*
+import_value_video_encoder(GhbValue *mac_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *enc;
 
@@ -2363,10 +2366,10 @@ import_value_video_encoder(GValue *mac_val)
     return sval;
 }
 
-static GValue*
-import_value_audio_encoder(GValue *mac_val)
+static GhbValue*
+import_value_audio_encoder(GhbValue *mac_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *enc;
 
@@ -2380,10 +2383,10 @@ import_value_audio_encoder(GValue *mac_val)
     return sval;
 }
 
-static GValue*
-import_value_container(GValue *mac_val)
+static GhbValue*
+import_value_container(GhbValue *mac_val)
 {
-    GValue *sval = NULL;
+    GhbValue *sval = NULL;
     gchar *str;
     const gchar *mux;
 
@@ -2398,63 +2401,63 @@ import_value_container(GValue *mac_val)
 }
 
 static void
-import_value_xlat(GValue *dict)
+import_value_xlat(GhbValue *dict)
 {
-    GValue *defaults, *mac_val, *gval;
+    GhbValue *defaults, *mac_val, *gval;
     const gchar *key;
 
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     defaults = plist_get_dict(internalPlist, "Presets");
     key = "VideoEncoder";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_video_encoder(mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "FileFormat";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_container(mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "VideoFramerate";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_video_framerate(mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "PictureDetelecine";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_xlat2(defaults, detel_xlat, key, mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "PictureDecomb";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_xlat2(defaults, decomb_xlat, key, mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "PictureDeinterlace";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_xlat2(defaults, deint_xlat, key, mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
     key = "PictureDenoisePreset";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_xlat2(defaults, denoise_xlat, key, mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
 
     ghb_dict_remove(dict, "Subtitles");
     ghb_dict_remove(dict, "SubtitlesForced");
 
     gint count, ii;
-    GValue *alist;
-    GValue *adict;
-    GValue *adefaults;
-    GValue *adeflist;
+    GhbValue *alist;
+    GhbValue *adict;
+    GhbValue *adefaults;
+    GhbValue *adeflist;
 
     key = "AudioEncoderFallback";
     mac_val = ghb_dict_lookup(dict, key);
     gval = import_value_audio_encoder(mac_val);
     if (gval)
-        ghb_dict_insert(dict, g_strdup(key), gval);
+        ghb_dict_insert(dict, key, gval);
 
     adeflist = ghb_dict_lookup(defaults, "AudioList");
     if (adeflist)
@@ -2471,21 +2474,21 @@ import_value_xlat(GValue *dict)
             if (gval == NULL)
                 gval = ghb_value_dup(ghb_dict_lookup(adefaults, key));
             if (gval)
-                ghb_dict_insert(adict, g_strdup(key), gval);
+                ghb_dict_insert(adict, key, gval);
             key = "AudioSamplerate";
             mac_val = ghb_dict_lookup(adict, key);
             gval = import_value_audio_samplerate(mac_val);
             if (gval == NULL)
                 gval = ghb_value_dup(ghb_dict_lookup(adefaults, key));
             if (gval)
-                ghb_dict_insert(adict, g_strdup(key), gval);
+                ghb_dict_insert(adict, key, gval);
             key = "AudioMixdown";
             mac_val = ghb_dict_lookup(adict, key);
             gval = import_value_mixdown(mac_val);
             if (gval == NULL)
                 gval = ghb_value_dup(ghb_dict_lookup(adefaults, key));
             if (gval)
-                ghb_dict_insert(adict, g_strdup(key), gval);
+                ghb_dict_insert(adict, key, gval);
 
             mac_val = ghb_dict_lookup(adict, "AudioTrackDRCSlider");
             if (mac_val != NULL)
@@ -2494,7 +2497,7 @@ import_value_xlat(GValue *dict)
                 drc = ghb_value_double(mac_val);
                 if (drc < 1.0)
                 {
-                    ghb_dict_insert(adict, g_strdup("AudioTrackDRCSlider"),
+                    ghb_dict_insert(adict, "AudioTrackDRCSlider",
                                     ghb_double_value_new(0.0));
                 }
             }
@@ -2502,10 +2505,10 @@ import_value_xlat(GValue *dict)
     }
 }
 
-static GValue*
-import_xlat_preset(GValue *user_preset)
+static GhbValue*
+import_xlat_preset(GhbValue *user_preset)
 {
-    GValue *dict, *internal;
+    GhbValue *dict, *internal;
 
     g_debug("import_xlat_preset ()");
 
@@ -2513,27 +2516,27 @@ import_xlat_preset(GValue *user_preset)
 
     // First, initialize the preset with defaults.
     // Then import user presets over top of defaults
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     internal = plist_get_dict(internalPlist, "Presets");
     init_settings_from_dict(dict, internal, user_preset, FALSE);
 
     // Initialize the AudioLanguageList from preferences PreferredLanguage
     // and translate old AudioDUB preference option if found
-    GValue *list = ghb_dict_lookup(dict, "AudioLanguageList");
+    GhbValue *list = ghb_dict_lookup(dict, "AudioLanguageList");
     if (list == NULL)
     {
         list = ghb_array_value_new(8);
-        ghb_dict_insert(dict, g_strdup("AudioLanguageList"), list);
+        ghb_dict_insert(dict, "AudioLanguageList", list);
     }
     if (ghb_array_len(list) == 0)
     {
-        GValue *prefs = plist_get_dict(prefsPlist, "Preferences");
-        GValue *gdub = ghb_dict_lookup(prefs, "AudioDUB");
-        GValue *glang = ghb_dict_lookup(prefs, "PreferredLanguage");
+        GhbValue *prefs = plist_get_dict(prefsPlist, "Preferences");
+        GhbValue *gdub = ghb_dict_lookup(prefs, "AudioDUB");
+        GhbValue *glang = ghb_dict_lookup(prefs, "PreferredLanguage");
         const char *lang = NULL;
         if (glang != NULL)
         {
-            lang = g_value_get_string(glang);
+            lang = ghb_value_const_string(glang);
         }
         if (gdub != NULL && !ghb_value_boolean(gdub))
         {
@@ -2554,12 +2557,12 @@ import_xlat_preset(GValue *user_preset)
     if (list == NULL)
     {
         list = ghb_array_value_new(8);
-        ghb_dict_insert(dict, g_strdup("SubtitleLanguageList"), list);
+        ghb_dict_insert(dict, "SubtitleLanguageList", list);
     }
     if (ghb_array_len(list) == 0)
     {
-        GValue *prefs = plist_get_dict(prefsPlist, "Preferences");
-        GValue *val = ghb_dict_lookup(prefs, "PreferredLanguage");
+        GhbValue *prefs = plist_get_dict(prefsPlist, "Preferences");
+        GhbValue *val = ghb_dict_lookup(prefs, "PreferredLanguage");
         if (val != NULL)
         {
             ghb_array_append(list, ghb_value_dup(val));
@@ -2568,20 +2571,20 @@ import_xlat_preset(GValue *user_preset)
             if (val != NULL && !ghb_value_boolean(val))
             {
                 ghb_dict_insert(dict,
-                                g_strdup("SubtitleAddForeignAudioSubtitle"),
+                                "SubtitleAddForeignAudioSubtitle",
                                 ghb_boolean_value_new(TRUE));
             }
         }
     }
 
-    GValue *addCC = ghb_dict_lookup(dict, "SubtitleAddCC");
+    GhbValue *addCC = ghb_dict_lookup(dict, "SubtitleAddCC");
     if (addCC == NULL)
     {
-        GValue *prefs = plist_get_dict(prefsPlist, "Preferences");
-        GValue *val = ghb_dict_lookup(prefs, "AddCC");
+        GhbValue *prefs = plist_get_dict(prefsPlist, "Preferences");
+        GhbValue *val = ghb_dict_lookup(prefs, "AddCC");
         if (val != NULL)
         {
-            ghb_dict_insert(dict, g_strdup("SubtitleAddCC"),
+            ghb_dict_insert(dict, "SubtitleAddCC",
                             ghb_value_dup(val));
         }
     }
@@ -2689,6 +2692,7 @@ import_xlat_preset(GValue *user_preset)
         if (!strcasecmp(videoPreset, videoPresets[ii]))
         {
             ghb_settings_set_int(dict, "VideoPresetSlider", ii);
+            break;
         }
     }
     if (videoPreset != NULL)
@@ -2758,10 +2762,10 @@ import_xlat_preset(GValue *user_preset)
 }
 
 static void
-import_xlat_presets(GValue *presets)
+import_xlat_presets(GhbValue *presets)
 {
     gint count, ii;
-    GValue *dict;
+    GhbValue *dict;
     gboolean folder;
 
     g_debug("import_xlat_presets ()");
@@ -2773,14 +2777,14 @@ import_xlat_presets(GValue *presets)
         folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
         if (folder)
         {
-            GValue *nested;
+            GhbValue *nested;
 
             nested = ghb_dict_lookup(dict, "ChildrenArray");
             import_xlat_presets(nested);
         }
         else
         {
-            GValue *import_dict = import_xlat_preset(dict);
+            GhbValue *import_dict = import_xlat_preset(dict);
             ghb_array_replace(presets, ii, import_dict);
         }
     }
@@ -2788,7 +2792,7 @@ import_xlat_presets(GValue *presets)
 
 // Translate internal values to preset key, value pairs
 static void
-export_xlat_preset(GValue *dict)
+export_xlat_preset(GhbValue *dict)
 {
     gboolean autoscale, br, constant;
 
@@ -2801,50 +2805,46 @@ export_xlat_preset(GValue *dict)
 
     if (autoscale)
     {
-        ghb_dict_insert(dict, g_strdup("UsesPictureSettings"),
-                        ghb_int_value_new(2));
+        ghb_dict_insert(dict, "UsesPictureSettings", ghb_int_value_new(2));
     }
     else
     {
-        ghb_dict_insert(dict, g_strdup("UsesPictureSettings"),
-                        ghb_int_value_new(1));
+        ghb_dict_insert(dict, "UsesPictureSettings", ghb_int_value_new(1));
     }
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
     if (br)
     {
-        ghb_dict_insert(dict, g_strdup("VideoQualityType"),
-                        ghb_int_value_new(1));
+        ghb_dict_insert(dict, "VideoQualityType", ghb_int_value_new(1));
     }
     else if (constant)
     {
-        ghb_dict_insert(dict, g_strdup("VideoQualityType"),
-                        ghb_int_value_new(2));
+        ghb_dict_insert(dict, "VideoQualityType", ghb_int_value_new(2));
     }
 
     if (ghb_value_boolean(preset_dict_get_value(dict, "VideoFramerateCFR")))
     {
-        ghb_dict_insert(dict, g_strdup("VideoFramerateMode"),
+        ghb_dict_insert(dict, "VideoFramerateMode",
                         ghb_string_value_new("cfr"));
     }
     else if (ghb_value_boolean(preset_dict_get_value(dict, "VideoFrameratePFR")))
     {
-        ghb_dict_insert(dict, g_strdup("VideoFramerateMode"),
+        ghb_dict_insert(dict, "VideoFramerateMode",
                         ghb_string_value_new("pfr"));
     }
     else
     {
-        ghb_dict_insert(dict, g_strdup("VideoFramerateMode"),
+        ghb_dict_insert(dict, "VideoFramerateMode",
                         ghb_string_value_new("vfr"));
     }
 
     if (ghb_value_int(preset_dict_get_value(dict, "PictureDeblock")) < 5)
     {
-        ghb_dict_insert(dict, g_strdup("PictureDeblock"), ghb_int_value_new(0));
+        ghb_dict_insert(dict, "PictureDeblock", ghb_int_value_new(0));
     }
 
-    GValue *alist, *adict;
+    GhbValue *alist, *adict;
     gint count, ii;
 
     alist = ghb_dict_lookup(dict, "AudioList");
@@ -2858,7 +2858,7 @@ export_xlat_preset(GValue *dict)
                 preset_dict_get_value(adict, "AudioTrackDRCSlider"));
         if (drc < 1.0)
         {
-            ghb_dict_insert(adict, g_strdup("AudioTrackDRCSlider"),
+            ghb_dict_insert(adict, "AudioTrackDRCSlider",
                             ghb_double_value_new(0.0));
         }
     }
@@ -2887,15 +2887,14 @@ export_xlat_preset(GValue *dict)
             g_string_append_printf(str, ",%s", "zerolatency");
         }
         tunes = g_string_free(str, FALSE);
-        ghb_dict_insert(dict, g_strdup("VideoTune"),
-                        ghb_string_value_new(tunes));
+        ghb_dict_insert(dict, "VideoTune", ghb_string_value_new(tunes));
 
         g_free(tunes);
     }
 
     // Remove everything from dist that isn't in "Presets"
-    GValue *internal;
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internal;
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     internal = plist_get_dict(internalPlist, "Presets");
     dict_clean(dict, internal);
 
@@ -2903,10 +2902,10 @@ export_xlat_preset(GValue *dict)
 }
 
 static void
-export_xlat_presets(GValue *presets)
+export_xlat_presets(GhbValue *presets)
 {
     gint count, ii;
-    GValue *dict;
+    GhbValue *dict;
     gboolean folder;
 
     if (presets == NULL) return;
@@ -2917,7 +2916,7 @@ export_xlat_presets(GValue *presets)
         folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
         if (folder)
         {
-            GValue *nested;
+            GhbValue *nested;
 
             nested = ghb_dict_lookup(dict, "ChildrenArray");
             export_xlat_presets(nested);
@@ -2942,7 +2941,7 @@ delayed_store_prefs(gpointer data)
 static void
 store_presets()
 {
-    GValue *export;
+    GhbValue *export;
 
     export = ghb_value_dup(presetsPlist);
     export_xlat_presets(export);
@@ -2969,7 +2968,7 @@ store_prefs(void)
 void
 ghb_presets_reload(signal_user_data_t *ud)
 {
-    GValue *std_presets;
+    GhbValue *std_presets;
     gint count, ii;
     int *indices, len;
 
@@ -2988,13 +2987,13 @@ ghb_presets_reload(signal_user_data_t *ud)
     count = ghb_array_len(std_presets);
     for (ii = count-1; ii >= 0; ii--)
     {
-        GValue *std_dict;
-        GValue *copy_dict;
+        GhbValue *std_dict;
+        GhbValue *copy_dict;
         gint indices = 0;
 
         std_dict = ghb_array_get_nth(std_presets, ii);
         copy_dict = ghb_value_dup(std_dict);
-        ghb_dict_insert(copy_dict, g_strdup("PresetBuildNumber"),
+        ghb_dict_insert(copy_dict, "PresetBuildNumber",
                         ghb_int64_value_new(hb_get_build(NULL)));
         ghb_presets_insert(presetsPlist, copy_dict, &indices, 1);
         presets_list_insert(ud, &indices, 1);
@@ -3005,15 +3004,15 @@ ghb_presets_reload(signal_user_data_t *ud)
 }
 
 static gboolean
-check_old_presets(GValue *presetsArray)
+check_old_presets(GhbValue *presetsArray)
 {
     gint count, ii;
 
     count = ghb_array_len(presetsArray);
     for (ii = count-1; ii >= 0; ii--)
     {
-        GValue *dict;
-        GValue *type;
+        GhbValue *dict;
+        GhbValue *type;
 
         dict = ghb_array_get_nth(presetsArray, ii);
         type = ghb_dict_lookup(dict, "Type");
@@ -3024,9 +3023,9 @@ check_old_presets(GValue *presetsArray)
 }
 
 static void
-replace_standard_presets(GValue *presetsArray)
+replace_standard_presets(GhbValue *presetsArray)
 {
-    GValue *std_presets, *tmp;
+    GhbValue *std_presets, *tmp;
     int *indices, len;
     gint count, ii;
 
@@ -3034,7 +3033,7 @@ replace_standard_presets(GValue *presetsArray)
     count = ghb_array_len(presetsArray);
     for (ii = count-1; ii >= 0; ii--)
     {
-        GValue *dict;
+        GhbValue *dict;
         gint ptype;
 
         dict = ghb_array_get_nth(presetsArray, ii);
@@ -3064,13 +3063,13 @@ replace_standard_presets(GValue *presetsArray)
     count = ghb_array_len(std_presets);
     for (ii = count-1; ii >= 0; ii--)
     {
-        GValue *std_dict;
-        GValue *copy_dict;
+        GhbValue *std_dict;
+        GhbValue *copy_dict;
         gint indices = 0;
 
         std_dict = ghb_array_get_nth(std_presets, ii);
         copy_dict = ghb_value_dup(std_dict);
-        ghb_dict_insert(copy_dict, g_strdup("PresetBuildNumber"),
+        ghb_dict_insert(copy_dict, "PresetBuildNumber",
                         ghb_int64_value_new(hb_get_build(NULL)));
         ghb_presets_insert(presetsArray, copy_dict, &indices, 1);
     }
@@ -3078,15 +3077,15 @@ replace_standard_presets(GValue *presetsArray)
 }
 
 static int
-update_standard_presets(signal_user_data_t *ud, GValue *presetsArray)
+update_standard_presets(signal_user_data_t *ud, GhbValue *presetsArray)
 {
     gint count, ii;
 
     count = ghb_array_len(presetsArray);
     for (ii = count-1; ii >= 0; ii--)
     {
-        GValue *dict;
-        const GValue *gval;
+        GhbValue *dict;
+        const GhbValue *gval;
         gint64 build;
         gint type;
 
@@ -3128,7 +3127,7 @@ ghb_presets_load(signal_user_data_t *ud)
     gboolean store = FALSE;
     presetsPlistFile = load_plist("presets");
     if ((presetsPlistFile == NULL) ||
-        (G_VALUE_TYPE(presetsPlistFile) == ghb_dict_get_type()) ||
+        (ghb_value_type(presetsPlistFile) == GHB_DICT) ||
         (check_old_presets(presetsPlistFile)))
     {
         presetsPlistFile = ghb_resource_get("standard-presets");
@@ -3146,18 +3145,18 @@ ghb_presets_load(signal_user_data_t *ud)
 }
 
 static void
-settings_save(signal_user_data_t *ud, const GValue *path)
+settings_save(signal_user_data_t *ud, const GhbValue *path)
 {
-    GValue *dict;
+    GhbValue *dict;
     gint *indices, len, count;
     const gchar *name;
     gboolean replace = FALSE;
 
     g_debug("settings_save");
-    GValue *internalPlist = ghb_resource_get("internal-defaults");
+    GhbValue *internalPlist = ghb_resource_get("internal-defaults");
     if (internalPlist == NULL) return;
     count = ghb_array_len(path);
-    name = g_value_get_string(ghb_array_get_nth(path, count-1));
+    name = ghb_value_const_string(ghb_array_get_nth(path, count-1));
     indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
     if (indices)
     {
@@ -3197,7 +3196,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
     ghb_settings_set_int64(dict, "Type", PRESETS_CUSTOM);
     ghb_settings_set_int64(dict, "PresetBuildNumber", hb_get_build(NULL));
 
-    ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(name));
+    ghb_dict_insert(dict, "PresetName", ghb_string_value_new(name));
     if (replace)
     {
         gint *def_indices, def_len;
@@ -3205,16 +3204,14 @@ settings_save(signal_user_data_t *ud, const GValue *path)
         if (def_indices != NULL &&
             preset_path_cmp(indices, len, def_indices, def_len) != 0)
         {
-            ghb_dict_insert(dict, g_strdup("Default"),
-                            ghb_boolean_value_new(FALSE));
+            ghb_dict_insert(dict, "Default", ghb_boolean_value_new(FALSE));
         }
         presets_list_update_item(ud, indices, len, FALSE);
         g_free(def_indices);
     }
     else
     {
-        ghb_dict_insert(dict, g_strdup("Default"),
-                        ghb_boolean_value_new(FALSE));
+        ghb_dict_insert(dict, "Default", ghb_boolean_value_new(FALSE));
         presets_list_insert(ud, indices, len);
     }
     if (!ghb_settings_get_boolean(ud->settings, "PictureWidthEnable"))
@@ -3225,7 +3222,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
     {
         ghb_dict_remove(dict, "PictureHeight");
     }
-    ghb_dict_insert(dict, g_strdup("autoscale"),
+    ghb_dict_insert(dict, "autoscale",
         ghb_boolean_value_new(
             !ghb_settings_get_boolean(ud->settings, "PictureWidthEnable") &&
             !ghb_settings_get_boolean(ud->settings, "PictureHeightEnable")
@@ -3243,14 +3240,14 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 }
 
 static void
-folder_save(signal_user_data_t *ud, const GValue *path)
+folder_save(signal_user_data_t *ud, const GhbValue *path)
 {
-    GValue *dict, *folder;
+    GhbValue *dict, *folder;
     gint *indices, len, count;
     const gchar *name;
 
     count = ghb_array_len(path);
-    name = g_value_get_string(ghb_array_get_nth(path, count-1));
+    name = ghb_value_const_string(ghb_array_get_nth(path, count-1));
     indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
     if (indices)
     {
@@ -3271,7 +3268,7 @@ folder_save(signal_user_data_t *ud, const GValue *path)
         }
         // Already exists, update its description
         dict = presets_get_dict(presetsPlist, indices, len);
-        ghb_dict_insert(dict, g_strdup("PresetDescription"),
+        ghb_dict_insert(dict, "PresetDescription",
             ghb_value_dup(preset_dict_get_value(
                 ud->settings, "PresetDescription")));
         presets_list_update_item(ud, indices, len, FALSE);
@@ -3293,15 +3290,14 @@ folder_save(signal_user_data_t *ud, const GValue *path)
             return;
         }
     }
-    ghb_dict_insert(dict, g_strdup("PresetDescription"),
+    ghb_dict_insert(dict, "PresetDescription",
         ghb_value_dup(preset_dict_get_value(
             ud->settings, "PresetDescription")));
-    ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(name));
+    ghb_dict_insert(dict, "PresetName", ghb_string_value_new(name));
     folder = ghb_array_value_new(8);
-    ghb_dict_insert(dict, g_strdup("ChildrenArray"), folder);
-    ghb_dict_insert(dict, g_strdup("Type"),
-                            ghb_int64_value_new(PRESETS_CUSTOM));
-    ghb_dict_insert(dict, g_strdup("Folder"), ghb_boolean_value_new(TRUE));
+    ghb_dict_insert(dict, "ChildrenArray", folder);
+    ghb_dict_insert(dict, "Type", ghb_int64_value_new(PRESETS_CUSTOM));
+    ghb_dict_insert(dict, "Folder", ghb_boolean_value_new(TRUE));
 
     presets_list_insert(ud, indices, len);
     g_free(indices);
@@ -3371,8 +3367,8 @@ static void
 update_subtitle_presets(signal_user_data_t *ud)
 {
     g_debug("update_subtitle_presets");
-    const GValue *subtitle_list, *subtitle;
-    GValue *slist, *dict;
+    const GhbValue *subtitle_list, *subtitle;
+    GhbValue *slist, *dict;
     gint count, ii, source;
 
     subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
@@ -3430,7 +3426,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        GValue *dict, *array;
+        GhbValue *dict, *array;
         gchar  *dir;
         gint count, ii;
 
@@ -3452,7 +3448,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         count = ghb_array_len(array);
         for (ii = 0; ii < count; ii++)
         {
-            GValue *path, *name;
+            GhbValue *path, *name;
             gint *indices, len;
             gint index = 1;
 
@@ -3478,7 +3474,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 index++;
                 indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
             }
-            ghb_dict_insert(dict, g_strdup("PresetName"), ghb_value_dup(name));
+            ghb_dict_insert(dict, "PresetName", ghb_value_dup(name));
             indices = presets_find_pos(path, PRESETS_CUSTOM, &len);
             ghb_presets_insert(presetsPlist, ghb_value_dup(dict), indices, len);
             presets_list_insert(ud, indices, len);
@@ -3501,7 +3497,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_widget_destroy(dialog);
 }
 
-GValue*
+GhbValue*
 get_selected_path(signal_user_data_t *ud)
 {
     GtkTreeView *treeview;
@@ -3515,7 +3511,7 @@ get_selected_path(signal_user_data_t *ud)
     {
         GtkTreePath *treepath;
         gint *indices, len;
-        GValue *path;
+        GhbValue *path;
 
         treepath = gtk_tree_model_get_path(store, &iter);
         indices = gtk_tree_path_get_indices(treepath);
@@ -3532,7 +3528,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     GtkWidget *dialog;
     GtkResponseType response;
-    GValue *preset;
+    GhbValue *preset;
     const gchar *name = "";
     gint count, *indices, len;
     const gchar *exportDir;
@@ -3550,7 +3546,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         return;
     }
 
-    name = g_value_get_string(ghb_array_get_nth(preset, count-1));
+    name = ghb_value_const_string(ghb_array_get_nth(preset, count-1));
 
     dialog = gtk_file_chooser_dialog_new(_("Export Preset"), NULL,
                 GTK_FILE_CHOOSER_ACTION_SAVE,
@@ -3579,7 +3575,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        GValue *export, *dict, *array;
+        GhbValue *export, *dict, *array;
         FILE *file;
         gchar  *dir;
 
@@ -3625,7 +3621,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     GtkEntry *entry;
     GtkTextView *desc;
     GtkResponseType response;
-    GValue *preset, *dict;
+    GhbValue *preset, *dict;
     const gchar *name = "";
     const gchar *description = "";
     gint count, *indices, len;
@@ -3634,7 +3630,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     preset = get_selected_path(ud);
     count = ghb_array_len(preset);
     if (count > 0)
-        name = g_value_get_string(ghb_array_get_nth(preset, count-1));
+        name = ghb_value_const_string(ghb_array_get_nth(preset, count-1));
     else
         count = 1;
 
@@ -3642,7 +3638,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     dict = presets_get_dict(presetsPlist, indices, len);
     if (dict != NULL)
     {
-        description = g_value_get_string(
+        description = ghb_value_const_string(
                             ghb_dict_lookup(dict, "PresetDescription"));
         ghb_ui_update(ud, "FolderDescription", ghb_string_value(description));
     }
@@ -3657,7 +3653,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     {
         // save the preset
         const gchar *name = gtk_entry_get_text(entry);
-        GValue *dest;
+        GhbValue *dest;
 
         if (count > MAX_NESTED_PRESET-1)
             count = MAX_NESTED_PRESET-1;
@@ -3674,7 +3670,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
             }
         }
         ghb_array_append(dest, ghb_string_value_new(name));
-        GValue *val = ghb_widget_value(GTK_WIDGET(desc));
+        GhbValue *val = ghb_widget_value(GTK_WIDGET(desc));
         ghb_settings_set_value(ud->settings, "PresetDescription", val);
         folder_save(ud, dest);
         ghb_value_free(dest);
@@ -3690,7 +3686,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     GtkEntry *entry;
     GtkTextView *desc;
     GtkResponseType response;
-    GValue *preset;
+    GhbValue *preset;
     const gchar *name = "";
     gint count, *indices, len;
 
@@ -3701,7 +3697,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     count = ghb_array_len(preset);
     if (count > 0)
-        name = g_value_get_string(ghb_array_get_nth(preset, count-1));
+        name = ghb_value_const_string(ghb_array_get_nth(preset, count-1));
     else
         count = 1;
 
@@ -3730,7 +3726,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     {
         // save the preset
         const gchar *name = gtk_entry_get_text(entry);
-        GValue *dest;
+        GhbValue *dest;
 
         dest = ghb_array_value_new(MAX_NESTED_PRESET);
         indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
@@ -3765,7 +3761,7 @@ preset_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    GValue *preset;
+    GhbValue *preset;
 
     g_debug("presets_restore_clicked_cb ()");
     // Reload only the standard presets
@@ -3866,7 +3862,7 @@ presets_drag_motion_cb(
     GtkTreeSelection *select;
     gint src_ptype, dst_ptype;
     gboolean src_folder, dst_folder;
-    GValue *preset;
+    GhbValue *preset;
     gint tree_depth, ii;
     GtkWidget *widget;
 
@@ -3991,7 +3987,7 @@ presets_drag_cb(
         GtkTreeModel *srcmodel;
         GtkTreeSelection *select;
         GtkTreePath *srcpath = NULL;
-        GValue *preset;
+        GhbValue *preset;
         gint tree_depth, ii;
 
         srcwidget = GTK_TREE_VIEW(gtk_drag_get_source_widget(dc));
@@ -4104,7 +4100,7 @@ presets_row_expanded_cb(
 {
     gint *indices, len;
     gboolean expanded, folder;
-    GValue *dict;
+    GhbValue *dict;
 
     expanded = gtk_tree_view_row_expanded(treeview, path);
     indices = gtk_tree_path_get_indices(path);
@@ -4130,7 +4126,7 @@ presets_row_expanded_cb(
     // Collapsing parent folder collapses all children
     if (!expanded)
     {
-        GValue *presets = NULL;
+        GhbValue *presets = NULL;
         gint *more_indices, count, ii;
 
         more_indices = g_malloc((len+1)*sizeof(gint));
@@ -4153,14 +4149,14 @@ presets_row_expanded_cb(
     store_presets();
 }
 
-GValue*
+GhbValue*
 ghb_get_current_preset(signal_user_data_t *ud)
 {
     GtkTreeView *tv;
     GtkTreeModel *tm;
     GtkTreeSelection *ts;
     GtkTreeIter ti;
-    GValue *preset = NULL;
+    GhbValue *preset = NULL;
 
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     ts = gtk_tree_view_get_selection(tv);
@@ -4178,14 +4174,14 @@ ghb_get_current_preset(signal_user_data_t *ud)
     return preset;
 }
 
-GValue*
+GhbValue*
 ghb_get_current_preset_path(signal_user_data_t *ud)
 {
     GtkTreeView *tv;
     GtkTreeModel *tm;
     GtkTreeSelection *ts;
     GtkTreeIter ti;
-    GValue *path = NULL;
+    GhbValue *path = NULL;
 
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     ts = gtk_tree_view_get_selection(tv);
@@ -4279,7 +4275,7 @@ presets_frame_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, sig
 G_MODULE_EXPORT void
 presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    GValue *preset;
+    GhbValue *preset;
     gint *indices, len;
 
     g_debug("presets_default_clicked_cb ()");
@@ -4310,8 +4306,8 @@ preset_edited_cb(
     GtkTreeView *treeview;
     GtkTreeIter iter;
     gint *indices, len, count;
-    GValue *dict;
-    GValue *preset, *dest;
+    GhbValue *dict;
+    GhbValue *preset, *dest;
 
     g_debug("preset_edited_cb ()");
     g_debug("path (%s)", path);
@@ -4341,7 +4337,7 @@ preset_edited_cb(
     gtk_tree_store_set(store, &iter, 0, text, -1);
 
     dict = presets_get_dict(presetsPlist, indices, len);
-    ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(text));
+    ghb_dict_insert(dict, "PresetName", ghb_string_value_new(text));
     store_presets();
     gtk_tree_path_free (treepath);
     ghb_value_free(preset);

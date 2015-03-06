@@ -23,17 +23,17 @@
 #include "audiohandler.h"
 #include "subtitlehandler.h"
 
-static void subtitle_add_to_settings(GValue *settings, GValue *subsettings);
-static void ghb_add_subtitle_to_ui(signal_user_data_t *ud, GValue *subsettings);
-static void add_to_subtitle_list_ui(signal_user_data_t *ud, GValue *settings);
-static void ghb_clear_subtitle_list_settings(GValue *settings);
+static void subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings);
+static void ghb_add_subtitle_to_ui(signal_user_data_t *ud, GhbValue *subsettings);
+static void add_to_subtitle_list_ui(signal_user_data_t *ud, GhbValue *settings);
+static void ghb_clear_subtitle_list_settings(GhbValue *settings);
 static void ghb_clear_subtitle_list_ui(GtkBuilder *builder);
 
 static void
 subtitle_refresh_list_row_ui(
     GtkTreeModel *tm,
     GtkTreeIter *ti,
-    GValue *subsettings)
+    GhbValue *subsettings)
 {
     GtkTreeIter cti;
     gboolean forced, burned, def;
@@ -117,10 +117,10 @@ subtitle_refresh_list_row_ui(
 }
 
 static void
-subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GValue *settings)
+subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GhbValue *settings)
 {
-    GValue *subtitle_list;
-    GValue *subsettings;
+    GhbValue *subtitle_list;
+    GhbValue *subsettings;
     gint ii, count, tm_count;
     GtkTreeView  *tv;
     GtkTreeModel *tm;
@@ -157,10 +157,10 @@ subtitle_refresh_list_ui(signal_user_data_t *ud)
 }
 
 void
-ghb_subtitle_exclusive_burn_settings(GValue *settings, gint index)
+ghb_subtitle_exclusive_burn_settings(GhbValue *settings, gint index)
 {
-    GValue *subtitle_list;
-    GValue *subsettings;
+    GhbValue *subtitle_list;
+    GhbValue *subsettings;
     gint ii, count;
 
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
@@ -204,10 +204,10 @@ ghb_subtitle_exclusive_burn(signal_user_data_t *ud, gint index)
 }
 
 void
-ghb_subtitle_exclusive_default_settings(GValue *settings, gint index)
+ghb_subtitle_exclusive_default_settings(GhbValue *settings, gint index)
 {
-    GValue *subtitle_list;
-    GValue *subtitle;
+    GhbValue *subtitle_list;
+    GhbValue *subtitle;
     gint ii, count;
 
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
@@ -230,7 +230,7 @@ ghb_subtitle_exclusive_default(signal_user_data_t *ud, gint index)
 }
 
 static void
-ghb_add_subtitle_to_ui(signal_user_data_t *ud, GValue *subsettings)
+ghb_add_subtitle_to_ui(signal_user_data_t *ud, GhbValue *subsettings)
 {
     if (subsettings == NULL)
         return;
@@ -241,10 +241,10 @@ ghb_add_subtitle_to_ui(signal_user_data_t *ud, GValue *subsettings)
 }
 
 static void
-subtitle_add_to_settings(GValue *settings, GValue *subsettings)
+subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings)
 {
     // Add the current subtitle settings to the list.
-    GValue *subtitle_list;
+    GhbValue *subtitle_list;
     gint count;
     gboolean burned, forced, def;
     gint source;
@@ -295,7 +295,7 @@ subtitle_add_to_settings(GValue *settings, GValue *subsettings)
 }
 
 static void
-subtitle_set_track_description(GValue *settings, GValue *subsettings)
+subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
 {
     char *desc = NULL;
 
@@ -362,9 +362,9 @@ subtitle_set_track_description(GValue *settings, GValue *subsettings)
     g_free(desc);
 }
 
-static GValue*  subtitle_add_track(
+static GhbValue*  subtitle_add_track(
     signal_user_data_t *ud,
-    GValue *settings,
+    GhbValue *settings,
     const hb_title_t *title,
     int track,
     int mux,
@@ -393,7 +393,7 @@ static GValue*  subtitle_add_track(
         return NULL;
     }
 
-    GValue *subsettings = ghb_dict_value_new();
+    GhbValue *subsettings = ghb_dict_value_new();
     ghb_settings_set_int(subsettings, "SubtitleTrack", track);
     ghb_settings_set_int(subsettings, "SubtitleSource", source);
 
@@ -475,7 +475,7 @@ ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
 }
 
 void
-ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, GValue *settings)
+ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, GhbValue *settings)
 {
     gint track;
     gboolean *used;
@@ -484,7 +484,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
     gboolean burn_foreign, burn_first, burn_dvd, burn_bd;
     gboolean one_burned = FALSE;
 
-    const GValue *lang_list;
+    const GhbValue *lang_list;
     gint lang_count, sub_count, ii;
     int behavior;
 
@@ -526,8 +526,8 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
     lang_count = ghb_array_len(lang_list);
     if (lang_count > 0)
     {
-        GValue *glang = ghb_array_get_nth(lang_list, 0);
-        pref_lang = g_value_get_string(glang);
+        GhbValue *glang = ghb_array_get_nth(lang_list, 0);
+        pref_lang = ghb_value_const_string(glang);
     }
 
     if (pref_lang == NULL || !strncmp(pref_lang, "und", 4))
@@ -582,8 +582,8 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         // Find "best" subtitle based on subtitle preferences
         for (ii = 0; ii < lang_count; ii++)
         {
-            GValue *glang = ghb_array_get_nth(lang_list, ii);
-            const gchar *lang = g_value_get_string(glang);
+            GhbValue *glang = ghb_array_get_nth(lang_list, ii);
+            const gchar *lang = ghb_value_const_string(glang);
 
             int next_track = 0;
             track = ghb_find_subtitle_track(title, lang, next_track);
@@ -688,7 +688,7 @@ ghb_selected_subtitle_row(signal_user_data_t *ud)
     return row;
 }
 
-static GValue*
+static GhbValue*
 subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
 {
     GtkTreeView *tv;
@@ -698,8 +698,8 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
     GtkTreeIter iter;
     gint *indices;
     gint row;
-    GValue *subsettings = NULL;
-    const GValue *subtitle_list;
+    GhbValue *subsettings = NULL;
+    const GhbValue *subtitle_list;
 
     g_debug("get_selected_settings ()");
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
@@ -725,7 +725,7 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
 }
 
 static void
-subtitle_update_dialog_widgets(signal_user_data_t *ud, GValue *subsettings)
+subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
 {
     GtkWidget *widget;
 
@@ -810,10 +810,10 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GValue *subsettings)
     }
 }
 
-static GValue*
+static GhbValue*
 subtitle_update_setting(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
 
     ghb_widget_to_setting(ud->settings, widget);
     subsettings = subtitle_get_selected_settings(ud, NULL);
@@ -829,7 +829,7 @@ subtitle_update_setting(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
 
     g_debug("subtitle_track_changed_cb()");
     ghb_widget_to_setting(ud->settings, widget);
@@ -858,7 +858,7 @@ subtitle_forced_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 subtitle_burned_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
     int index;
 
     ghb_widget_to_setting(ud->settings, widget);
@@ -879,7 +879,7 @@ subtitle_burned_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 subtitle_default_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
     int index;
 
     ghb_widget_to_setting(ud->settings, widget);
@@ -900,7 +900,7 @@ subtitle_default_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
 
     ghb_widget_to_setting(ud->settings, widget);
     subsettings = subtitle_get_selected_settings(ud, NULL);
@@ -935,8 +935,8 @@ ghb_subtitle_list_refresh_selected(signal_user_data_t *ud)
     GtkTreeIter ti;
     gint *indices;
     gint row;
-    GValue *subsettings = NULL;
-    const GValue *subtitle_list;
+    GhbValue *subsettings = NULL;
+    const GhbValue *subtitle_list;
 
     g_debug("subtitle_list_refresh_selected()");
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
@@ -968,7 +968,7 @@ ghb_subtitle_list_refresh_all(signal_user_data_t *ud)
 G_MODULE_EXPORT void
 srt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
 
     g_debug("srt_changed_cb()");
     ghb_check_dependency(ud, widget, NULL);
@@ -986,7 +986,7 @@ srt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
 
     g_debug("srt_file_changed_cb()");
     ghb_check_dependency(ud, widget, NULL);
@@ -1021,7 +1021,7 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 srt_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *subsettings;
+    GhbValue *subsettings;
 
     g_debug("srt_lang_changed_cb()");
     ghb_check_dependency(ud, widget, NULL);
@@ -1037,18 +1037,18 @@ srt_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 static void
-ghb_clear_subtitle_list_settings(GValue *settings)
+ghb_clear_subtitle_list_settings(GhbValue *settings)
 {
-    GValue *subtitle_list;
+    GhbValue *subtitle_list;
 
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
     if (subtitle_list == NULL)
     {
-        subtitle_list = ghb_array_value_new(8);
+        subtitle_list = ghb_array_value_new();
         ghb_settings_set_value(settings, "subtitle_list", subtitle_list);
     }
     else
-        ghb_array_value_reset(subtitle_list, 8);
+        ghb_array_value_reset(subtitle_list);
 }
 
 static void
@@ -1068,7 +1068,7 @@ ghb_clear_subtitle_list_ui(GtkBuilder *builder)
 }
 
 static void
-add_to_subtitle_list_ui(signal_user_data_t *ud, GValue *subsettings)
+add_to_subtitle_list_ui(signal_user_data_t *ud, GhbValue *subsettings)
 {
     GtkTreeView *tv;
     GtkTreeIter ti;
@@ -1090,7 +1090,7 @@ subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
 {
     GtkTreeModel *tm;
     GtkTreeIter iter;
-    GValue *subsettings = NULL;
+    GhbValue *subsettings = NULL;
     int row;
 
     g_debug("subtitle_list_selection_changed_cb()");
@@ -1114,7 +1114,7 @@ subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
 
         GtkTreePath *tp;
         gint *indices;
-        GValue *subtitle_list;
+        GhbValue *subtitle_list;
 
         tp = gtk_tree_model_get_path(tm, &iter);
         indices = gtk_tree_path_get_indices(tp);
@@ -1135,9 +1135,9 @@ subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
     }
 }
 
-static gboolean subtitle_is_one_burned(GValue *settings)
+static gboolean subtitle_is_one_burned(GhbValue *settings)
 {
-    GValue *subtitle_list, *subsettings;
+    GhbValue *subtitle_list, *subsettings;
     int count, ii;
 
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
@@ -1160,7 +1160,7 @@ G_MODULE_EXPORT void
 subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     // Add the current subtitle settings to the list.
-    GValue *subsettings, *backup;
+    GhbValue *subsettings, *backup;
     gboolean one_burned;
     gint track;
 
@@ -1273,8 +1273,8 @@ subtitle_reset_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 void
 ghb_subtitle_prune(signal_user_data_t *ud)
 {
-    GValue *subtitle_list;
-    GValue *subsettings;
+    GhbValue *subtitle_list;
+    GhbValue *subsettings;
     gint ii;
     gboolean one_burned = FALSE;
 
@@ -1299,7 +1299,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
         burned = burned || !hb_subtitle_can_pass(source, mux->format);
         if (burned && one_burned)
         {
-            GValue *gsub = ghb_array_get_nth(subtitle_list, ii);
+            GhbValue *gsub = ghb_array_get_nth(subtitle_list, ii);
             ghb_array_remove(subtitle_list, ii);
             ghb_value_free(gsub);
             continue;
@@ -1316,10 +1316,10 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 }
 
 void
-ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings)
+ghb_reset_subtitles(signal_user_data_t *ud, GhbValue *settings)
 {
-    GValue *slist;
-    GValue *subtitle;
+    GhbValue *slist;
+    GhbValue *subtitle;
     gint count, ii;
     gint title_id, titleindex;
     const hb_title_t *title;
@@ -1392,18 +1392,18 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
 }
 
 void
-ghb_subtitle_set_pref_lang(GValue *settings)
+ghb_subtitle_set_pref_lang(GhbValue *settings)
 {
-    GValue *lang_list;
+    GhbValue *lang_list;
     gboolean set = FALSE;
     lang_list = ghb_settings_get_value(settings, "SubtitleLanguageList");
     if (ghb_array_len(lang_list) > 0)
     {
-        GValue *glang = ghb_array_get_nth(lang_list, 0);
+        GhbValue *glang = ghb_array_get_nth(lang_list, 0);
         if (glang != NULL)
         {
             ghb_settings_set_string(settings, "PreferredLanguage",
-                                    g_value_get_string(glang));
+                                    ghb_value_const_string(glang));
             set = TRUE;
         }
     }
@@ -1426,7 +1426,7 @@ subtitle_add_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         int idx;
         const iso639_lang_t *lang;
-        GValue *glang, *lang_list;
+        GhbValue *glang, *lang_list;
 
         // Remove from UI available language list box
         label = gtk_bin_get_child(GTK_BIN(row));
@@ -1464,7 +1464,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (row != NULL)
     {
         gint index;
-        GValue *lang_list;
+        GhbValue *lang_list;
 
         index = gtk_list_box_row_get_index(row);
 
@@ -1479,7 +1479,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 
         // Remove from preset language list
         lang_list = ghb_settings_get_value(ud->settings, "SubtitleLanguageList");
-        GValue *glang = ghb_array_get_nth(lang_list, index);
+        GhbValue *glang = ghb_array_get_nth(lang_list, index);
         ghb_array_remove(lang_list, index);
         ghb_value_free(glang);
 
@@ -1488,7 +1488,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         if (ghb_array_len(lang_list) > 0)
         {
             const iso639_lang_t *lang;
-            GValue *entry = ghb_array_get_nth(lang_list, 0);
+            GhbValue *entry = ghb_array_get_nth(lang_list, 0);
             lang = ghb_iso639_lookup_by_int(ghb_lookup_audio_lang(entry));
             subtitle_update_pref_lang(ud, lang);
         }
@@ -1521,7 +1521,7 @@ static void subtitle_def_selected_lang_list_clear(signal_user_data_t *ud)
 
 static void subtitle_def_lang_list_init(signal_user_data_t *ud)
 {
-    GValue *lang_list;
+    GhbValue *lang_list;
 
     // Clear selected languages.
     subtitle_def_selected_lang_list_clear(ud);
@@ -1537,7 +1537,7 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
     count = ghb_array_len(lang_list);
     for (ii = 0; ii < count; )
     {
-        GValue *lang_val = ghb_array_get_nth(lang_list, ii);
+        GhbValue *lang_val = ghb_array_get_nth(lang_list, ii);
         int idx = ghb_lookup_audio_lang(lang_val);
         if (ii == 0)
         {
@@ -1564,7 +1564,7 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
         {
             // Error in list.  Probably duplicate languages.  Remove
             // this item from the list.
-            GValue *glang = ghb_array_get_nth(lang_list, ii);
+            GhbValue *glang = ghb_array_get_nth(lang_list, ii);
             ghb_array_remove(lang_list, ii);
             ghb_value_free(glang);
             count--;
@@ -1605,7 +1605,7 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
     if (gtk_tree_path_get_depth(tp) > 1) return;
     if (gtk_tree_model_get_iter(tm, &ti, tp))
     {
-        GValue *subsettings, *backup;
+        GhbValue *subsettings, *backup;
 
         gtk_tree_selection_select_iter(ts, &ti);
 
@@ -1645,7 +1645,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
     GtkTreeIter ti, nextIter;
     gint row;
     gint *indices;
-    GValue *subtitle_list;
+    GhbValue *subtitle_list;
 
     tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list_view"));
     ts = gtk_tree_view_get_selection(tv);
@@ -1683,7 +1683,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
         // treeview.  Removing from the treeview sometimes provokes an
         // immediate selection change, so the list needs to be up to date
         // when this happens.
-        GValue *old = ghb_array_get_nth(subtitle_list, row);
+        GhbValue *old = ghb_array_get_nth(subtitle_list, row);
         ghb_array_remove(subtitle_list, row);
         ghb_value_free(old);
 

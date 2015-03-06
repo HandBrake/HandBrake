@@ -25,9 +25,10 @@
 #if !defined(_VIDEOHANDLER_H_)
 #define _VIDEOHANDLER_H_
 
+#include "values.h"
 #include "settings.h"
 
-int ghb_get_video_encoder(GValue *settings);
+int ghb_get_video_encoder(GhbValue *settings);
 void ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud);
 
 #endif // _VIDEOHANDLER_H_

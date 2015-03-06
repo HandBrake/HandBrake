@@ -89,7 +89,7 @@ GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
     guint res = 0;
-    GValue *gval;
+    GhbValue *gval;
     GError *error = NULL;
     const gchar *ghb_ui;
 
@@ -101,7 +101,7 @@ create_builder_or_die(const gchar * name)
     g_debug("create_builder_or_die()\n");
     GtkBuilder *xml = gtk_builder_new();
     gval = ghb_resource_get("ghb-ui");
-    ghb_ui = g_value_get_string(gval);
+    ghb_ui = ghb_value_const_string(gval);
     if (xml != NULL)
         res = gtk_builder_add_from_string(xml, ghb_ui, -1, &error);
     if (!xml || !res)
@@ -782,7 +782,7 @@ int
 main(int argc, char *argv[])
 {
     signal_user_data_t *ud;
-    GValue *preset;
+    GhbValue *preset;
     GError *error = NULL;
     GOptionContext *context;
 
@@ -833,7 +833,6 @@ main(int argc, char *argv[])
 #if !defined(_WIN32)
     notify_init("HandBrake");
 #endif
-    ghb_register_transforms();
     ghb_resource_init();
     ghb_load_icons();
 
@@ -1033,7 +1032,7 @@ main(int argc, char *argv[])
     }
     else
     {
-        GValue *gval = ghb_settings_get_value(ud->prefs, "default_source");
+        GhbValue *gval = ghb_settings_get_value(ud->prefs, "default_source");
         ghb_settings_set_value(ud->globals, "scan_source", gval);
     }
     // Reload and check status of the last saved queue

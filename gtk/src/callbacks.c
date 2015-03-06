@@ -78,7 +78,7 @@
 #include "x264handler.h"
 
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
-static void update_chapter_list_settings(GValue *settings);
+static void update_chapter_list_settings(GhbValue *settings);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
 void ghb_notify_done(signal_user_data_t *ud);
@@ -96,8 +96,8 @@ static gboolean appcast_busy = FALSE;
 // you will have to look further to combo box options
 // maps in hb-backend.c
 
-GValue *dep_map;
-GValue *rev_map;
+GhbValue *dep_map;
+GhbValue *rev_map;
 
 void
 ghb_init_dep_map()
@@ -114,7 +114,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
     gint ii;
     gint count;
     gboolean result = TRUE;
-    GValue *array, *data;
+    GhbValue *array, *data;
     gchar *widget_name;
 
     g_debug("dep_check () %s", name);
@@ -207,7 +207,7 @@ ghb_check_dependency(
 {
     GObject *dep_object;
     const gchar *name;
-    GValue *array, *data;
+    GhbValue *array, *data;
     gint count, ii;
     gchar *dep_name;
     GType type;
@@ -222,7 +222,7 @@ ghb_check_dependency(
     else
         name = alt_name;
 
-    g_debug("ghb_check_dependency () %s", name);
+    g_debug("ghb_check_dependency() %s", name);
 
     if (dep_map == NULL) return;
     array = ghb_dict_lookup(dep_map, name);
@@ -264,18 +264,15 @@ ghb_check_dependency(
 void
 ghb_check_all_depencencies(signal_user_data_t *ud)
 {
-    GHashTableIter iter;
-    gchar *dep_name;
-    GValue *value;
+    GhbDictIter iter;
+    const gchar *dep_name;
+    GhbValue *value;
     GObject *dep_object;
 
     g_debug("ghb_check_all_depencencies ()");
     if (rev_map == NULL) return;
-    ghb_dict_iter_init(&iter, rev_map);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&dep_name, (gpointer*)(void*)&value))
+    ghb_dict_iter_init(rev_map, &iter);
+    while (ghb_dict_iter_next(rev_map, &iter, &dep_name, &value))
     {
         gboolean sensitive;
         gboolean hide;
@@ -542,7 +539,7 @@ ghb_cache_volnames(signal_user_data_t *ud)
 }
 
 static const gchar*
-get_extension(signal_user_data_t *ud, GValue *settings)
+get_extension(signal_user_data_t *ud, GhbValue *settings)
 {
     const char *mux_id;
     const hb_container_t *mux;
@@ -573,7 +570,7 @@ check_name_template(signal_user_data_t *ud, const char *str)
 }
 
 static void
-set_destination_settings(signal_user_data_t *ud, GValue *settings)
+set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
 {
     const gchar *extension;
     gchar *filename;
@@ -1047,7 +1044,7 @@ ghb_scale_configure(
 }
 
 void
-ghb_set_widget_ranges(signal_user_data_t *ud, GValue *settings)
+ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
 {
     int title_id, titleindex;
     const hb_title_t * title;
@@ -1138,17 +1135,14 @@ check_chapter_markers(signal_user_data_t *ud)
 
 #if 0
 void
-show_settings(GValue *settings)
+show_settings(GhbValue *settings)
 {
-    GHashTableIter iter;
-    gchar *key;
-    GValue *gval;
+    GhbDictIter iter;
+    const gchar *key;
+    GhbValue *gval;
 
-    ghb_dict_iter_init(&iter, settings);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
-    // pointer will break strict-aliasing rules"
-    while (g_hash_table_iter_next(
-            &iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
+    ghb_dict_iter_init(settings, &iter);
+    while (ghb_dict_iter_next(settings, &iter, &key, &gval))
     {
         char *str = ghb_value_string(gval);
         printf("show key %s val %s\n", key, str);
@@ -1160,7 +1154,7 @@ show_settings(GValue *settings)
 void
 ghb_load_settings(signal_user_data_t * ud)
 {
-    GValue *preset;
+    GhbValue *preset;
     gboolean preset_modified;
     static gboolean busy = FALSE;
 
@@ -1256,7 +1250,7 @@ ghb_idle_scan(signal_user_data_t *ud)
     return FALSE;
 }
 
-extern GValue *ghb_queue_edit_settings;
+extern GhbValue *ghb_queue_edit_settings;
 static gchar *last_scan_file = NULL;
 
 void
@@ -1800,7 +1794,7 @@ ghb_update_title_info(signal_user_data_t *ud)
 }
 
 void
-set_title_settings(signal_user_data_t *ud, GValue *settings)
+set_title_settings(signal_user_data_t *ud, GhbValue *settings)
 {
     int title_id, titleindex;
     const hb_title_t * title;
@@ -1914,8 +1908,8 @@ static void
 load_all_titles(signal_user_data_t *ud, int titleindex)
 {
     gint ii, count;
-    GValue *preset, *preset_path = NULL;
-    GValue *settings_array;
+    GhbValue *preset, *preset_path = NULL;
+    GhbValue *settings_array;
     const hb_title_t *title;
 
     hb_list_t *list = ghb_get_title_list();
@@ -1938,7 +1932,7 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     for (ii = 0; ii < count; ii++)
     {
         int index;
-        GValue *settings = ghb_settings_new();
+        GhbValue *settings = ghb_settings_new();
 
         title = hb_list_item(list, ii);
         index = (title != NULL) ? title->index : -1;
@@ -2683,9 +2677,9 @@ ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
 }
 
 static gint
-find_queue_job(GValue *queue, gint unique_id, GValue **job)
+find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
 {
-    GValue *js;
+    GhbValue *js;
     gint ii, count;
     gint job_unique_id;
 
@@ -2709,12 +2703,12 @@ find_queue_job(GValue *queue, gint unique_id, GValue **job)
 }
 
 static void
-submit_job(signal_user_data_t *ud, GValue *settings)
+submit_job(signal_user_data_t *ud, GhbValue *settings)
 {
     static gint unique_id = 1;
     gchar *type, *modified, *preset;
-    const GValue *path;
-    GValue *js;
+    const GhbValue *path;
+    GhbValue *js;
     gboolean preset_modified;
 
     g_debug("submit_job");
@@ -2796,7 +2790,7 @@ prune_logs(signal_user_data_t *ud)
 }
 
 static void
-queue_scan(signal_user_data_t *ud, GValue *js)
+queue_scan(signal_user_data_t *ud, GhbValue *js)
 {
     gchar *path;
     gint title_id;
@@ -2851,10 +2845,10 @@ queue_scan(signal_user_data_t *ud, GValue *js)
 }
 
 static gint
-queue_pending_count(GValue *queue)
+queue_pending_count(GhbValue *queue)
 {
     gint nn, ii, count;
-    GValue *js;
+    GhbValue *js;
     gint status;
 
     nn = 0;
@@ -2886,11 +2880,11 @@ ghb_update_pending(signal_user_data_t *ud)
     g_free(str);
 }
 
-GValue*
+GhbValue*
 ghb_start_next_job(signal_user_data_t *ud)
 {
     gint count, ii;
-    GValue *js;
+    GhbValue *js;
     gint status;
     GtkWidget *progress;
 
@@ -2941,7 +2935,7 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gchar *task_str, *job_str, *status_str;
     gint qcount;
     gint index;
-    GValue *js;
+    GhbValue *js;
     gboolean subtitle_scan = FALSE;
 
     qcount = ghb_array_len(ud->queue);
@@ -3015,7 +3009,7 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gchar *task_str, *job_str, *status_str;
     gint qcount;
     gint index;
-    GValue *js;
+    GhbValue *js;
 
     qcount = ghb_array_len(ud->queue);
     index = find_queue_job(ud->queue, status->unique_id, &js);
@@ -3056,7 +3050,7 @@ ghb_backend_events(signal_user_data_t *ud)
     gchar *status_str;
     GtkProgressBar *progress;
     GtkLabel       *work_status;
-    GValue *js;
+    GhbValue *js;
     gint index;
     GtkTreeView *treeview;
     GtkTreeModel *store;
@@ -3681,7 +3675,7 @@ static void
 chapter_refresh_list_row_ui(
     GtkTreeModel *tm,
     GtkTreeIter *ti,
-    GValue *chapter_list,
+    GhbValue *chapter_list,
     const hb_title_t *title,
     int index)
 {
@@ -3724,7 +3718,7 @@ ghb_clear_chapter_list_ui(GtkBuilder *builder)
 static void
 chapter_refresh_list_ui(signal_user_data_t *ud)
 {
-    GValue *chapter_list;
+    GhbValue *chapter_list;
     gint ii, count, tm_count;
     GtkTreeView  *tv;
     GtkTreeModel *tm;
@@ -3763,9 +3757,9 @@ ghb_chapter_list_refresh_all(signal_user_data_t *ud)
 }
 
 static void
-update_chapter_list_settings(GValue *settings)
+update_chapter_list_settings(GhbValue *settings)
 {
-    GValue *chapters;
+    GhbValue *chapters;
     gint title_id, titleindex;
     const hb_title_t *title;
 
@@ -3819,12 +3813,12 @@ chapter_edited_cb(
         -1);
     gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 0, &index, -1);
 
-    const GValue *chapters;
-    GValue *chapter;
+    const GhbValue *chapters;
+    GhbValue *chapter;
 
     chapters = ghb_settings_get_value(ud->settings, "chapter_list");
     chapter = ghb_array_get_nth(chapters, index-1);
-    g_value_set_string(chapter, text);
+    ghb_string_value_set(chapter, text);
     if ((chapter_edit_key == GDK_KEY_Return || chapter_edit_key == GDK_KEY_Down) &&
         gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter))
     {
@@ -4001,7 +3995,7 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     gboolean hbfd = ghb_settings_get_boolean(ud->prefs, "hbfd_feature");
     if (hbfd)
     {
-        const GValue *val;
+        const GhbValue *val;
         val = ghb_settings_get_value(ud->prefs, "hbfd");
         ghb_ui_settings_update(ud, ud->prefs, "hbfd", val);
     }

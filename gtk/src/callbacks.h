@@ -31,6 +31,7 @@
 
 #include <gtk/gtk.h>
 #include "hb.h"
+#include "values.h"
 #include "settings.h"
 
 #if GLIB_CHECK_VERSION(2, 32, 0)
@@ -60,7 +61,7 @@ void ghb_error_dialog(
 void ghb_init_dep_map(void);
 void ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg);
 gboolean ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg);
-GValue* ghb_start_next_job(signal_user_data_t *ud);
+GhbValue* ghb_start_next_job(signal_user_data_t *ud);
 void ghb_check_dependency(
     signal_user_data_t *ud, GtkWidget *widget, const gchar *alt_name);
 void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,

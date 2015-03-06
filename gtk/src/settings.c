@@ -21,7 +21,7 @@
 #include "hb-backend.h"
 #include "values.h"
 
-void dump_settings(GValue *settings);
+void dump_settings(GhbValue *settings);
 void ghb_pref_audio_init(signal_user_data_t *ud);
 
 GObject*
@@ -31,7 +31,7 @@ debug_get_object(GtkBuilder* b, const gchar *n)
     return gtk_builder_get_object(b, n);
 }
 
-GValue*
+GhbValue*
 ghb_settings_new()
 {
     return ghb_dict_value_new();
@@ -39,147 +39,147 @@ ghb_settings_new()
 
 void
 ghb_settings_set_value(
-    GValue *settings,
+    GhbValue *settings,
     const gchar *key,
-    const GValue *value)
+    const GhbValue *value)
 {
     if (key == NULL || value == NULL)
         return;
-    ghb_dict_insert(settings, g_strdup(key), ghb_value_dup(value));
+    ghb_dict_insert(settings, key, ghb_value_dup(value));
 }
 
 void
-ghb_settings_take_value(GValue *settings, const gchar *key, GValue *value)
+ghb_settings_take_value(GhbValue *settings, const gchar *key, GhbValue *value)
 {
-    ghb_dict_insert(settings, g_strdup(key), value);
+    ghb_dict_insert(settings, key, value);
 }
 
 void
 ghb_settings_set_string(
-    GValue *settings,
+    GhbValue *settings,
     const gchar *key,
     const gchar *sval)
 {
-    GValue *value;
+    GhbValue *value;
     value = ghb_string_value_new(sval);
-    ghb_dict_insert(settings, g_strdup(key), value);
+    ghb_dict_insert(settings, key, value);
 }
 
 void
-ghb_settings_set_double(GValue *settings, const gchar *key, gdouble dval)
+ghb_settings_set_double(GhbValue *settings, const gchar *key, gdouble dval)
 {
-    GValue *value;
+    GhbValue *value;
     value = ghb_double_value_new(dval);
-    ghb_dict_insert(settings, g_strdup(key), value);
+    ghb_dict_insert(settings, key, value);
 }
 
 void
-ghb_settings_set_int64(GValue *settings, const gchar *key, gint64 ival)
+ghb_settings_set_int64(GhbValue *settings, const gchar *key, gint64 ival)
 {
-    GValue *value;
+    GhbValue *value;
     value = ghb_int64_value_new(ival);
-    ghb_dict_insert(settings, g_strdup(key), value);
+    ghb_dict_insert(settings, key, value);
 }
 
 void
-ghb_settings_set_int(GValue *settings, const gchar *key, gint ival)
+ghb_settings_set_int(GhbValue *settings, const gchar *key, gint ival)
 {
-    GValue *value;
+    GhbValue *value;
     value = ghb_int64_value_new((gint64)ival);
-    ghb_dict_insert(settings, g_strdup(key), value);
+    ghb_dict_insert(settings, key, value);
 }
 
 void
-ghb_settings_set_boolean(GValue *settings, const gchar *key, gboolean bval)
+ghb_settings_set_boolean(GhbValue *settings, const gchar *key, gboolean bval)
 {
-    GValue *value;
+    GhbValue *value;
     value = ghb_boolean_value_new(bval);
-    ghb_dict_insert(settings, g_strdup(key), value);
+    ghb_dict_insert(settings, key, value);
 }
 
-GValue*
-ghb_settings_get_value(const GValue *settings, const gchar *key)
+GhbValue*
+ghb_settings_get_value(const GhbValue *settings, const gchar *key)
 {
-    GValue *value;
+    GhbValue *value;
     value = ghb_dict_lookup(settings, key);
     if (value == NULL)
-        g_warning("returning null (%s)", key);
+        g_debug("returning null (%s)", key);
     return value;
 }
 
 gboolean
-ghb_settings_get_boolean(const GValue *settings, const gchar *key)
+ghb_settings_get_boolean(const GhbValue *settings, const gchar *key)
 {
-    const GValue* value;
+    const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return FALSE;
     return ghb_value_boolean(value);
 }
 
 gint64
-ghb_settings_get_int64(const GValue *settings, const gchar *key)
+ghb_settings_get_int64(const GhbValue *settings, const gchar *key)
 {
-    const GValue* value;
+    const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return 0;
     return ghb_value_int64(value);
 }
 
 gint
-ghb_settings_get_int(const GValue *settings, const gchar *key)
+ghb_settings_get_int(const GhbValue *settings, const gchar *key)
 {
-    const GValue* value;
+    const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return 0;
     return ghb_value_int(value);
 }
 
 gdouble
-ghb_settings_get_double(const GValue *settings, const gchar *key)
+ghb_settings_get_double(const GhbValue *settings, const gchar *key)
 {
-    const GValue* value;
+    const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return 0;
     return ghb_value_double(value);
 }
 
 const gchar*
-ghb_settings_get_const_string(const GValue *settings, const gchar *key)
+ghb_settings_get_const_string(const GhbValue *settings, const gchar *key)
 {
-    const GValue* value;
+    const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
-    return g_value_get_string(value);
+    return ghb_value_const_string(value);
 }
 
 gchar*
-ghb_settings_get_string(const GValue *settings, const gchar *key)
+ghb_settings_get_string(const GhbValue *settings, const gchar *key)
 {
-    const GValue* value;
+    const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return g_strdup("");
     return ghb_value_string(value);
 }
 
 gint
-ghb_settings_combo_int(const GValue *settings, const gchar *key)
+ghb_settings_combo_int(const GhbValue *settings, const gchar *key)
 {
     return ghb_lookup_combo_int(key, ghb_settings_get_value(settings, key));
 }
 
 gdouble
-ghb_settings_combo_double(const GValue *settings, const gchar *key)
+ghb_settings_combo_double(const GhbValue *settings, const gchar *key)
 {
     return ghb_lookup_combo_double(key, ghb_settings_get_value(settings, key));
 }
 
 const gchar*
-ghb_settings_combo_option(const GValue *settings, const gchar *key)
+ghb_settings_combo_option(const GhbValue *settings, const gchar *key)
 {
     return ghb_lookup_combo_option(key, ghb_settings_get_value(settings, key));
 }
 
 const gchar*
-ghb_settings_combo_string(const GValue *settings, const gchar *key)
+ghb_settings_combo_string(const GhbValue *settings, const gchar *key)
 {
     return ghb_lookup_combo_string(key, ghb_settings_get_value(settings, key));
 }
@@ -209,10 +209,10 @@ ghb_get_setting_key(GtkWidget *widget)
     return name;
 }
 
-GValue*
+GhbValue*
 ghb_widget_value(GtkWidget *widget)
 {
-    GValue *value = NULL;
+    GhbValue *value = NULL;
     const gchar *name;
     GType type;
 
@@ -363,7 +363,7 @@ ghb_widget_value(GtkWidget *widget)
 gchar*
 ghb_widget_string(GtkWidget *widget)
 {
-    GValue *value;
+    GhbValue *value;
     gchar *sval;
 
     value = ghb_widget_value(widget);
@@ -375,7 +375,7 @@ ghb_widget_string(GtkWidget *widget)
 gdouble
 ghb_widget_double(GtkWidget *widget)
 {
-    GValue *value;
+    GhbValue *value;
     gdouble dval;
 
     value = ghb_widget_value(widget);
@@ -387,7 +387,7 @@ ghb_widget_double(GtkWidget *widget)
 gint64
 ghb_widget_int64(GtkWidget *widget)
 {
-    GValue *value;
+    GhbValue *value;
     gint64 ival;
 
     value = ghb_widget_value(widget);
@@ -399,7 +399,7 @@ ghb_widget_int64(GtkWidget *widget)
 gint
 ghb_widget_int(GtkWidget *widget)
 {
-    GValue *value;
+    GhbValue *value;
     gint ival;
 
     value = ghb_widget_value(widget);
@@ -411,7 +411,7 @@ ghb_widget_int(GtkWidget *widget)
 gint
 ghb_widget_boolean(GtkWidget *widget)
 {
-    GValue *value;
+    GhbValue *value;
     gboolean bval;
 
     value = ghb_widget_value(widget);
@@ -421,10 +421,10 @@ ghb_widget_boolean(GtkWidget *widget)
 }
 
 void
-ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
+ghb_widget_to_setting(GhbValue *settings, GtkWidget *widget)
 {
     const gchar *key = NULL;
-    GValue *value;
+    GhbValue *value;
 
     if (widget == NULL) return;
     g_debug("ghb_widget_to_setting");
@@ -443,16 +443,16 @@ ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
 }
 
 void
-ghb_update_widget(GtkWidget *widget, const GValue *value)
+ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 {
-    GType type;
+    GhbType type;
     gchar *str, *tmp;
     gint ival;
     gdouble dval;
 
     const char *name = ghb_get_setting_key(widget);
-    type = G_VALUE_TYPE(value);
-    if (type == ghb_array_get_type() || type == ghb_dict_get_type())
+    type = ghb_value_type(value);
+    if (type == GHB_ARRAY || type == GHB_DICT)
         return;
     if (value == NULL) return;
     str = tmp = ghb_value_string(value);
@@ -618,10 +618,10 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
 }
 
 int
-ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const GValue *settings)
+ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const GhbValue *settings)
 {
     GObject *object;
-    GValue * value;
+    GhbValue * value;
 
     g_debug("ghb_ui_update_from_settings() %s", name);
     if (name == NULL)
@@ -643,7 +643,7 @@ ghb_ui_update_from_settings(signal_user_data_t *ud, const gchar *name, const GVa
 }
 
 int
-ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GValue *value)
+ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GhbValue *value)
 {
     GObject *object;
 
@@ -666,9 +666,9 @@ ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GValue *value)
 int
 ghb_ui_settings_update(
     signal_user_data_t *ud,
-    GValue *settings,
+    GhbValue *settings,
     const gchar *name,
-    const GValue *value)
+    const GhbValue *value)
 {
     GObject *object;
 

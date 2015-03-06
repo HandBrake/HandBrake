@@ -761,14 +761,14 @@ ghb_vquality_range(
 }
 
 gint
-find_combo_entry(combo_opts_t *opts, const GValue *gval)
+find_combo_entry(combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
 
     if (opts == NULL)
         return 0;
 
-    if (G_VALUE_TYPE(gval) == G_TYPE_STRING)
+    if (ghb_value_type(gval) == GHB_STRING)
     {
         gchar *str;
         str = ghb_value_string(gval);
@@ -782,7 +782,7 @@ find_combo_entry(combo_opts_t *opts, const GValue *gval)
         g_free(str);
         return ii;
     }
-    else if (G_VALUE_TYPE(gval) == G_TYPE_DOUBLE)
+    else if (ghb_value_type(gval) == GHB_DOUBLE)
     {
         gdouble val;
         val = ghb_value_double(gval);
@@ -795,9 +795,8 @@ find_combo_entry(combo_opts_t *opts, const GValue *gval)
         }
         return ii;
     }
-    else if (G_VALUE_TYPE(gval) == G_TYPE_INT ||
-             G_VALUE_TYPE(gval) == G_TYPE_BOOLEAN ||
-             G_VALUE_TYPE(gval) == G_TYPE_INT64)
+    else if (ghb_value_type(gval) == GHB_INT ||
+             ghb_value_type(gval) == GHB_BOOL)
     {
         gint64 val;
         val = ghb_value_int64(gval);
@@ -814,7 +813,7 @@ find_combo_entry(combo_opts_t *opts, const GValue *gval)
 }
 
 static const gchar*
-lookup_generic_string(combo_opts_t *opts, const GValue *gval)
+lookup_generic_string(combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
     const gchar *result = "";
@@ -828,7 +827,7 @@ lookup_generic_string(combo_opts_t *opts, const GValue *gval)
 }
 
 static gint
-lookup_generic_int(combo_opts_t *opts, const GValue *gval)
+lookup_generic_int(combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
     gint result = -1;
@@ -845,7 +844,7 @@ lookup_generic_int(combo_opts_t *opts, const GValue *gval)
 }
 
 static gdouble
-lookup_generic_double(combo_opts_t *opts, const GValue *gval)
+lookup_generic_double(combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
     gdouble result = -1;
@@ -859,7 +858,7 @@ lookup_generic_double(combo_opts_t *opts, const GValue *gval)
 }
 
 static const gchar*
-lookup_generic_option(combo_opts_t *opts, const GValue *gval)
+lookup_generic_option(combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
     const gchar *result = "";
@@ -897,7 +896,7 @@ const iso639_lang_t* ghb_iso639_lookup_by_int(int idx)
 }
 
 int
-ghb_lookup_audio_lang(const GValue *glang)
+ghb_lookup_audio_lang(const GhbValue *glang)
 {
     gint ii;
     gchar *str;
@@ -941,7 +940,7 @@ ghb_lookup_audio_lang(const GValue *glang)
 }
 
 static int
-lookup_audio_lang_int(const GValue *glang)
+lookup_audio_lang_int(const GhbValue *glang)
 {
     gint ii = ghb_lookup_audio_lang(glang);
     if (ii >= 0)
@@ -950,7 +949,7 @@ lookup_audio_lang_int(const GValue *glang)
 }
 
 static const gchar*
-lookup_audio_lang_option(const GValue *glang)
+lookup_audio_lang_option(const GhbValue *glang)
 {
     gint ii = ghb_lookup_audio_lang(glang);
     if (ii >= 0)
@@ -988,7 +987,7 @@ ghb_hb_cleanup(gboolean partial)
 }
 
 gint
-ghb_subtitle_track_source(GValue *settings, gint track)
+ghb_subtitle_track_source(GhbValue *settings, gint track)
 {
     gint title_id, titleindex;
     const hb_title_t *title;
@@ -1011,7 +1010,7 @@ ghb_subtitle_track_source(GValue *settings, gint track)
 }
 
 const gchar*
-ghb_subtitle_track_lang(GValue *settings, gint track)
+ghb_subtitle_track_lang(GhbValue *settings, gint track)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
@@ -1340,14 +1339,14 @@ ghb_lookup_audio_samplerate_rate(const char *name)
 }
 
 int
-ghb_settings_audio_samplerate_rate(const GValue *settings, const char *name)
+ghb_settings_audio_samplerate_rate(const GhbValue *settings, const char *name)
 {
     const char *rate_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_audio_samplerate_rate(rate_id);
 }
 
 const hb_rate_t*
-ghb_settings_audio_samplerate(const GValue *settings, const char *name)
+ghb_settings_audio_samplerate(const GhbValue *settings, const char *name)
 {
     const char *rate_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_audio_samplerate(rate_id);
@@ -1435,14 +1434,14 @@ ghb_lookup_video_framerate_rate(const char *name)
 }
 
 int
-ghb_settings_video_framerate_rate(const GValue *settings, const char *name)
+ghb_settings_video_framerate_rate(const GhbValue *settings, const char *name)
 {
     const char *rate_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_video_framerate_rate(rate_id);
 }
 
 const hb_rate_t*
-ghb_settings_video_framerate(const GValue *settings, const char *name)
+ghb_settings_video_framerate(const GhbValue *settings, const char *name)
 {
     const char *rate_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_video_framerate(rate_id);
@@ -1506,14 +1505,14 @@ ghb_lookup_video_encoder_codec(const char *name)
 }
 
 int
-ghb_settings_video_encoder_codec(const GValue *settings, const char *name)
+ghb_settings_video_encoder_codec(const GhbValue *settings, const char *name)
 {
     const char *encoder_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_video_encoder_codec(encoder_id);
 }
 
 const hb_encoder_t*
-ghb_settings_video_encoder(const GValue *settings, const char *name)
+ghb_settings_video_encoder(const GhbValue *settings, const char *name)
 {
     const char *encoder_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_video_encoder(encoder_id);
@@ -1580,14 +1579,14 @@ ghb_lookup_audio_encoder_codec(const char *name)
 }
 
 int
-ghb_settings_audio_encoder_codec(const GValue *settings, const char *name)
+ghb_settings_audio_encoder_codec(const GhbValue *settings, const char *name)
 {
     const char *encoder_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_audio_encoder_codec(encoder_id);
 }
 
 const hb_encoder_t*
-ghb_settings_audio_encoder(const GValue *settings, const char *name)
+ghb_settings_audio_encoder(const GhbValue *settings, const char *name)
 {
     const char *encoder_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_audio_encoder(encoder_id);
@@ -1705,14 +1704,14 @@ ghb_lookup_mixdown_mix(const char *name)
 }
 
 int
-ghb_settings_mixdown_mix(const GValue *settings, const char *name)
+ghb_settings_mixdown_mix(const GhbValue *settings, const char *name)
 {
     const char *mixdown_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_mixdown_mix(mixdown_id);
 }
 
 const hb_mixdown_t*
-ghb_settings_mixdown(const GValue *settings, const char *name)
+ghb_settings_mixdown(const GhbValue *settings, const char *name)
 {
     const char *mixdown_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_mixdown(mixdown_id);
@@ -2036,7 +2035,7 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name)
 
     // Check if encoder has been set yet.
     // If not, bail
-    GValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
+    GhbValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
     if (value == NULL) return;
 
     int encoder = ghb_get_video_encoder(ud->settings);
@@ -2085,7 +2084,7 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name)
 
     // Check if encoder has been set yet.
     // If not, bail
-    GValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
+    GhbValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
     if (value == NULL) return;
 
     int encoder = ghb_get_video_encoder(ud->settings);
@@ -2122,7 +2121,7 @@ video_level_opts_set(signal_user_data_t *ud, const gchar *name)
 
     // Check if encoder has been set yet.
     // If not, bail
-    GValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
+    GhbValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
     if (value == NULL) return;
 
     int encoder = ghb_get_video_encoder(ud->settings);
@@ -2454,7 +2453,7 @@ find_combo_table(const gchar *name)
 }
 
 gint
-ghb_lookup_combo_int(const gchar *name, const GValue *gval)
+ghb_lookup_combo_int(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return 0;
@@ -2469,7 +2468,7 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
 }
 
 gdouble
-ghb_lookup_combo_double(const gchar *name, const GValue *gval)
+ghb_lookup_combo_double(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return 0;
@@ -2484,7 +2483,7 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
 }
 
 const gchar*
-ghb_lookup_combo_option(const gchar *name, const GValue *gval)
+ghb_lookup_combo_option(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return NULL;
@@ -2499,7 +2498,7 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
 }
 
 const gchar*
-ghb_lookup_combo_string(const gchar *name, const GValue *gval)
+ghb_lookup_combo_string(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return NULL;
@@ -2684,7 +2683,7 @@ init_ui_combo_boxes(GtkBuilder *builder)
 // Construct the advanced options string
 // The result is allocated, so someone must free it at some point.
 gchar*
-ghb_build_advanced_opts_string(GValue *settings)
+ghb_build_advanced_opts_string(GhbValue *settings)
 {
     gint vcodec;
     vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
@@ -2698,7 +2697,7 @@ ghb_build_advanced_opts_string(GValue *settings)
     }
 }
 
-void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
+void ghb_set_video_encoder_opts(hb_job_t *job, GhbValue *js)
 {
     gint vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
 
@@ -2844,12 +2843,12 @@ ghb_get_chapter_start(const hb_title_t *title, gint chap)
     return start;
 }
 
-GValue*
+GhbValue*
 ghb_get_chapters(const hb_title_t *title)
 {
     hb_chapter_t * chapter;
     gint count, ii;
-    GValue *chapters = NULL;
+    GhbValue *chapters = NULL;
 
     chapters = ghb_array_value_new(0);
 
@@ -2875,14 +2874,14 @@ ghb_get_chapters(const hb_title_t *title)
 }
 
 gboolean
-ghb_ac3_in_audio_list(const GValue *audio_list)
+ghb_ac3_in_audio_list(const GhbValue *audio_list)
 {
     gint count, ii;
 
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *asettings;
+        GhbValue *asettings;
         gint acodec;
 
         asettings = ghb_array_get_nth(audio_list, ii);
@@ -3115,14 +3114,14 @@ ghb_lookup_audio_bitrate_rate(const char *name)
 }
 
 int
-ghb_settings_audio_bitrate_rate(const GValue *settings, const char *name)
+ghb_settings_audio_bitrate_rate(const GhbValue *settings, const char *name)
 {
     const char *rate_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_audio_bitrate_rate(rate_id);
 }
 
 const hb_rate_t*
-ghb_settings_audio_bitrate(const GValue *settings, const char *name)
+ghb_settings_audio_bitrate(const GhbValue *settings, const char *name)
 {
     const char *rate_id = ghb_settings_get_const_string(settings, name);
     return ghb_lookup_audio_bitrate(rate_id);
@@ -3517,7 +3516,7 @@ ghb_limit_rational( gint *num, gint *den, gint limit )
 }
 
 void
-ghb_set_scale_settings(GValue *settings, gint mode)
+ghb_set_scale_settings(GhbValue *settings, gint mode)
 {
     gboolean keep_aspect;
     gint pic_par;
@@ -3884,7 +3883,7 @@ ghb_validate_filter_string(const gchar *str, gint max_fields)
 }
 
 gboolean
-ghb_validate_filters(GValue *settings, GtkWindow *parent)
+ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
 {
     gchar *str;
     gint index;
@@ -3951,7 +3950,7 @@ ghb_validate_filters(GValue *settings, GtkWindow *parent)
 }
 
 gboolean
-ghb_validate_video(GValue *settings, GtkWindow *parent)
+ghb_validate_video(GhbValue *settings, GtkWindow *parent)
 {
     gint vcodec;
     gchar *message;
@@ -3984,7 +3983,7 @@ ghb_validate_video(GValue *settings, GtkWindow *parent)
 }
 
 gboolean
-ghb_validate_subtitles(GValue *settings, GtkWindow *parent)
+ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
@@ -3999,7 +3998,7 @@ ghb_validate_subtitles(GValue *settings, GtkWindow *parent)
         return FALSE;
     }
 
-    const GValue *slist, *subtitle;
+    const GhbValue *slist, *subtitle;
     gint count, ii, source, track;
     gboolean burned, one_burned = FALSE;
 
@@ -4059,7 +4058,7 @@ ghb_validate_subtitles(GValue *settings, GtkWindow *parent)
 }
 
 gboolean
-ghb_validate_audio(GValue *settings, GtkWindow *parent)
+ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
 {
     gint title_id, titleindex;
     const hb_title_t * title;
@@ -4080,14 +4079,14 @@ ghb_validate_audio(GValue *settings, GtkWindow *parent)
     mux_id = ghb_settings_get_const_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    const GValue *audio_list;
+    const GhbValue *audio_list;
     gint count, ii;
 
     audio_list = ghb_settings_get_value(settings, "audio_list");
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *asettings;
+        GhbValue *asettings;
         hb_audio_config_t *aconfig;
         int track, codec;
 
@@ -4190,7 +4189,7 @@ ghb_validate_audio(GValue *settings, GtkWindow *parent)
 }
 
 static void
-add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
+add_job(hb_handle_t *h, GhbValue *js, gint unique_id, int titleindex)
 {
     hb_list_t  * list;
     const hb_title_t * title;
@@ -4198,7 +4197,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     hb_filter_object_t * filter;
     gchar *filter_str;
     gchar *dest_str = NULL;
-    GValue *prefs;
+    GhbValue *prefs;
 
     g_debug("add_job()\n");
     if (h == NULL) return;
@@ -4285,8 +4284,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
             job->chapter_markers = 0;
         if ( job->chapter_markers )
         {
-            GValue *chapters;
-            GValue *chapter;
+            GhbValue *chapters;
+            GhbValue *chapter;
             gint chap;
             gint count;
 
@@ -4466,7 +4465,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     hb_add_filter( job, filter, filter_str );
     g_free(filter_str);
 
-    const GValue *audio_list;
+    const GhbValue *audio_list;
     gint count, ii;
     gint tcount = 0;
 
@@ -4474,7 +4473,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *asettings;
+        GhbValue *asettings;
         hb_audio_config_t audio;
         hb_audio_config_t *aconfig;
         gint acodec, fallback;
@@ -4559,7 +4558,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     hb_job_set_file( job, dest_str);
     g_free(dest_str);
 
-    const GValue *subtitle_list;
+    const GhbValue *subtitle_list;
     gint subtitle;
     gboolean force, burned, def, one_burned = FALSE;
 
@@ -4568,7 +4567,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *ssettings;
+        GhbValue *ssettings;
         gint source;
 
         ssettings = ghb_array_get_nth(subtitle_list, ii);
@@ -4731,7 +4730,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, int titleindex)
 }
 
 void
-ghb_add_job(GValue *js, gint unique_id)
+ghb_add_job(GhbValue *js, gint unique_id)
 {
     // Since I'm doing a scan of the single title I want just prior
     // to adding the job, there is only the one title to choose from.
@@ -4739,7 +4738,7 @@ ghb_add_job(GValue *js, gint unique_id)
 }
 
 void
-ghb_add_live_job(GValue *js, gint unique_id)
+ghb_add_live_job(GhbValue *js, gint unique_id)
 {
     int title_id, titleindex;
     const hb_title_t *title;

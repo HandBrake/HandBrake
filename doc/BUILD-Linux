@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn6419 (2014093001) on Linux
+Guide to Building HandBrake svn6963 (2015030501) on Linux
 *********************************************************
 
 1 Introduction
@@ -82,6 +82,7 @@ Ubuntu 14.04 packages:
    * libass-dev (cli/gui)
    * libmp3lame-dev (cli/gui)
    * libx264-dev (cli/gui)
+   * libjansson-dev (cli/gui)
    * intltool (gui)
    * libglib2.0-dev (gui)
    * libdbus-glib-1-dev (gui)
@@ -132,6 +133,7 @@ Additional Fedora packages:
    * libass-devel (cli/gui)
    * lame-devel (cli/gui)
    * x264-devel (cli/gui)
+   * jansson-devel (cli/gui)
    * dbus-glib-devel (gui)
    * libgudev1-devel (gui)
    * webkitgtk3-devel (gui)
@@ -511,6 +513,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    6419
-     date:   2014-09-21 09:44:45 -0700
+     rev:    6963
+     date:   2015-03-03 12:59:35 -0700
      type:   developer

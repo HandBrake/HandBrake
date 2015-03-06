@@ -67,7 +67,7 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 }
 
 static void
-add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
+add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter)
 {
     GtkTreeView *treeview;
     GtkTreeIter iter;
@@ -171,7 +171,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     gchar *preset;
     gboolean markers;
     gboolean preset_modified;
-    const GValue *path;
+    const GhbValue *path;
 
     const char *mux_id;
     const hb_container_t *mux;
@@ -546,7 +546,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     //      Source description, Encoder, Mix, Samplerate, Bitrate
     //      ...
     gint count, ii;
-    const GValue *audio_list;
+    const GhbValue *audio_list;
 
     audio_list = ghb_settings_get_value(settings, "audio_list");
     count = ghb_array_len(audio_list);
@@ -561,7 +561,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     for (ii = 0; ii < count; ii++)
     {
         gchar *quality = NULL, *track;
-        GValue *asettings;
+        GhbValue *asettings;
         const hb_encoder_t *audio_encoder;
 
         asettings = ghb_array_get_nth(audio_list, ii);
@@ -607,7 +607,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     // Subtitle Tracks: count
     //      Subtitle description(Subtitle options)
     //      ...
-    const GValue *sub_list;
+    const GhbValue *sub_list;
 
     sub_list = ghb_settings_get_value(settings, "subtitle_list");
     count = ghb_array_len(sub_list);
@@ -621,7 +621,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
     }
     for (ii = 0; ii < count; ii++)
     {
-        GValue *settings;
+        GhbValue *settings;
         gchar *track;
         gboolean force, burn, def;
         gint source;
@@ -700,7 +700,7 @@ ghb_update_status(signal_user_data_t *ud, int status, int index)
         return;
     }
 
-    GValue *settings;
+    GhbValue *settings;
     settings = ghb_array_get_nth(ud->queue, index);
     if (settings == NULL) // should never happen
         return;
@@ -740,12 +740,12 @@ static void
 save_queue_file(signal_user_data_t *ud)
 {
     int ii, count;
-    GValue *queue = ghb_value_dup(ud->queue);
+    GhbValue *queue = ghb_value_dup(ud->queue);
 
     count = ghb_array_len(queue);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *settings = ghb_array_get_nth(ud->queue, ii);
+        GhbValue *settings = ghb_array_get_nth(ud->queue, ii);
         if (settings == NULL)
             continue;
         ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
@@ -817,7 +817,7 @@ open_queue_file(signal_user_data_t *ud)
         return;
     }
 
-    GValue *queue;
+    GhbValue *queue;
     char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy(dialog);
 
@@ -830,7 +830,7 @@ open_queue_file(signal_user_data_t *ud)
             count = ghb_array_len(queue);
             for (ii = 0; ii < count; ii++)
             {
-                GValue *settings = ghb_array_get_nth(queue, ii);
+                GhbValue *settings = ghb_array_get_nth(queue, ii);
                 ghb_array_remove(queue, ii);
                 ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
                 ghb_settings_set_int(settings, "job_unique_id", 0);
@@ -900,7 +900,7 @@ queue_reload_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 static gboolean
-validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
+validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
     // Check to see if the dest file exists or is
     // already in the queue
@@ -920,7 +920,7 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
     count = ghb_array_len(ud->queue);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *js;
+        GhbValue *js;
         const gchar *filename;
 
         js = ghb_array_get_nth(ud->queue, ii);
@@ -1050,7 +1050,7 @@ validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
 }
 
 static gboolean
-queue_add(signal_user_data_t *ud, GValue *settings, gint batch)
+queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
     // Add settings to the queue
     g_debug("queue_add ()");
@@ -1084,7 +1084,7 @@ G_MODULE_EXPORT void
 queue_add_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("queue_add_clicked_cb ()");
-    GValue *settings = ghb_value_dup(ud->settings);
+    GhbValue *settings = ghb_value_dup(ud->settings);
     if (!queue_add(ud, settings, 0))
         ghb_value_free(settings);
     // Validation of settings may have changed audio list
@@ -1092,15 +1092,15 @@ queue_add_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 static gboolean
-title_multiple_can_select(GValue *settings_array, int index)
+title_multiple_can_select(GhbValue *settings_array, int index)
 {
     gint count, ii;
-    GValue *settings, *gdest;
+    GhbValue *settings, *gdest;
     const char *dest;
 
     settings = ghb_array_get_nth(settings_array, index);
     gdest = ghb_settings_get_value(settings, "destination");
-    dest = g_value_get_string(gdest);
+    dest = ghb_value_const_string(gdest);
     if (dest == NULL)
         return FALSE;
 
@@ -1112,7 +1112,7 @@ title_multiple_can_select(GValue *settings_array, int index)
 
         settings = ghb_array_get_nth(settings_array, ii);
         gdest = ghb_settings_get_value(settings, "destination");
-        tmp = g_value_get_string(gdest);
+        tmp = ghb_value_const_string(gdest);
         if (tmp != NULL && !strncmp(dest, tmp, PATH_MAX))
             return FALSE;
     }
@@ -1244,7 +1244,7 @@ static void
 title_add_multiple_check_conflicts(signal_user_data_t *ud)
 {
     gint count, ii;
-    GValue *settings;
+    GhbValue *settings;
     GtkWidget *row;
     GtkListBox *list;
     GtkToggleButton *selected;
@@ -1274,7 +1274,7 @@ G_MODULE_EXPORT void
 title_add_multiple_select_all_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint count, ii;
-    GValue *settings;
+    GhbValue *settings;
     GtkWidget *row;
     GtkListBox *list;
     GtkToggleButton *selected;
@@ -1314,7 +1314,7 @@ G_MODULE_EXPORT void
 title_add_multiple_clear_all_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint count, ii;
-    GValue *settings;
+    GhbValue *settings;
     GtkWidget *row;
     GtkListBox *list;
     GtkToggleButton *selected;
@@ -1355,7 +1355,7 @@ add_multiple_titles(signal_user_data_t *ud)
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *settings;
+        GhbValue *settings;
 
         settings = ghb_value_dup(ghb_array_get_nth(ud->settings_array, ii));
         if (ghb_settings_get_boolean(settings, "title_selected"))
@@ -1378,7 +1378,7 @@ title_get_row(GtkWidget *widget)
 G_MODULE_EXPORT void
 title_selected_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *settings;
+    GhbValue *settings;
     gboolean selected;
     GtkToggleButton *select_all;
     GtkToggleButton *clear_all;
@@ -1411,7 +1411,7 @@ title_selected_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *settings;
+    GhbValue *settings;
     gchar *dest_file, *dest_dir, *dest;
     GtkListBoxRow * row = title_get_row(widget);
     if (row == NULL)
@@ -1445,7 +1445,7 @@ title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GValue *settings;
+    GhbValue *settings;
     gchar *dest_file, *dest_dir, *dest;
     GtkListBoxRow * row = title_get_row(widget);
     if (row == NULL)
@@ -1555,7 +1555,7 @@ queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     count = ghb_array_len(ud->settings_array);
     for (ii = 0; ii < count; ii++)
     {
-        GValue *settings;
+        GhbValue *settings;
         GtkLabel *label;
         GtkEntry *entry;
         GtkFileChooser *chooser;
@@ -1650,7 +1650,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
     gint row;
     gint *indices;
     gint unique_id;
-    GValue *settings;
+    GhbValue *settings;
     gint status;
 
     g_debug("queue_remove_clicked_cb ()");
@@ -1684,7 +1684,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         // Remove the selected item
         gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
         // Remove the corresponding item from the queue list
-        GValue *old = ghb_array_get_nth(ud->queue, row);
+        GhbValue *old = ghb_array_get_nth(ud->queue, row);
         ghb_array_remove(ud->queue, row);
         ghb_value_free(old);
         ghb_save_queue(ud->queue);
@@ -1697,9 +1697,9 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 }
 
 static gint
-find_last_finished(GValue *queue)
+find_last_finished(GhbValue *queue)
 {
-    GValue *js;
+    GhbValue *js;
     gint ii, count;
     gint status;
 
@@ -1733,7 +1733,7 @@ queue_drag_motion_cb(
     GtkTreePath *path = NULL;
     GtkTreeViewDropPosition pos;
     gint *indices, row, status, finished;
-    GValue *js;
+    GhbValue *js;
     GtkTreeIter iter;
     GtkTreeView *srctv;
     GtkTreeModel *model;
@@ -1818,7 +1818,7 @@ queue_drag_cb(
     GtkTreeViewDropPosition pos;
     GtkTreeIter dstiter, srciter;
     gint *indices, row;
-    GValue *js;
+    GhbValue *js;
 
     GtkTreeModel *dstmodel = gtk_tree_view_get_model(dstwidget);
 
@@ -2019,7 +2019,7 @@ queue_list_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, GtkCel
 G_MODULE_EXPORT void
 queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    GValue *js;
+    GhbValue *js;
     gboolean running = FALSE;
     gint count, ii;
     gint status;
@@ -2050,7 +2050,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     {
         // The queue has no running or pending jobs.
         // Add current settings to the queue, then run.
-        GValue *settings = ghb_value_dup(ud->settings);
+        GhbValue *settings = ghb_value_dup(ud->settings);
         if (!queue_add(ud, settings, 0))
         {
             ghb_value_free(settings);
@@ -2075,12 +2075,12 @@ queue_pause_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 gboolean
 ghb_reload_queue(signal_user_data_t *ud)
 {
-    GValue *queue;
+    GhbValue *queue;
     gint unfinished = 0;
     gint count, ii;
     gint pid;
     gint status;
-    GValue *settings;
+    GhbValue *settings;
     gchar *message;
 
     g_debug("ghb_reload_queue");
@@ -2128,7 +2128,7 @@ find_pid:
                 status = ghb_settings_get_int(settings, "job_status");
                 if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
                 {
-                    GValue *old = ghb_array_get_nth(queue, ii);
+                    GhbValue *old = ghb_array_get_nth(queue, ii);
                     ghb_value_free(old);
                     ghb_array_remove(queue, ii);
                 }
@@ -2174,7 +2174,7 @@ ghb_queue_remove_row(signal_user_data_t *ud, int row)
     }
     g_free(path);
 
-    GValue *old = ghb_array_get_nth(ud->queue, row);
+    GhbValue *old = ghb_array_get_nth(ud->queue, row);
     ghb_value_free(old);
     ghb_array_remove(ud->queue, row);
     ghb_save_queue(ud->queue);
@@ -2193,7 +2193,7 @@ queue_key_press_cb(
     gint row;
     gint *indices;
     gint unique_id;
-    GValue *settings;
+    GhbValue *settings;
     gint status;
 
     g_debug("queue_key_press_cb ()");
@@ -2232,7 +2232,7 @@ queue_key_press_cb(
         // Remove the selected item
         gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
         // Remove the corresponding item from the queue list
-        GValue *old = ghb_array_get_nth(ud->queue, row);
+        GhbValue *old = ghb_array_get_nth(ud->queue, row);
         ghb_value_free(old);
         ghb_array_remove(ud->queue, row);
         ghb_save_queue(ud->queue);
@@ -2241,7 +2241,7 @@ queue_key_press_cb(
     return FALSE;
 }
 
-GValue *ghb_queue_edit_settings = NULL;
+GhbValue *ghb_queue_edit_settings = NULL;
 
 G_MODULE_EXPORT void
 queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)

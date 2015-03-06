@@ -758,7 +758,7 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     }
     else
     {
-        GValue *js;
+        GhbValue *js;
 
         ud->preview->encode_frame = frame;
         js = ghb_value_dup(ud->settings);
