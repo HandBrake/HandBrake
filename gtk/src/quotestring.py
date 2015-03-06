@@ -50,11 +50,10 @@ def main():
         outfile = sys.stdout
 
     ss = infile.read()
-    ss = re.sub("\"", "\\\"", ss)
+    ss = re.sub(r'\\', r'\\\\', ss)
+    ss = re.sub(r'"', r'\\"', ss)
     pattern = re.compile("$", re.M)
-    # the replacement string below seems a bit strange, but it seems to be
-    # the only way to get the litteral chars '\' 'n' inserted into the string
-    ss = re.sub(pattern, "\\\\n\"", ss)
+    ss = re.sub(pattern, r'\\n"', ss)
     pattern = re.compile("^", re.M)
     ss = re.sub(pattern, "\"", ss)
     outfile.write(ss)

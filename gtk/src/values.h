@@ -32,6 +32,8 @@ typedef json_t GhbValue;
 typedef int    GhbType;
 typedef void*  GhbDictIter;
 
+void ghb_value_incref(GhbValue *gval);
+void ghb_value_decref(GhbValue *gval);
 GhbType ghb_value_type(const GhbValue *val);
 GhbType ghb_array_get_type(void);
 GhbType ghb_dict_get_type(void);
@@ -80,5 +82,10 @@ gboolean ghb_dict_remove(GhbValue *gval, const gchar *key);
 
 void debug_show_value(GhbValue *gval);
 void debug_show_type(GhbType tp);
+
+void ghb_json_write(FILE *file, GhbValue *gval);
+void ghb_json_write_file(const char *path, GhbValue *gval);
+GhbValue* ghb_json_parse(const char *json, size_t size);
+GhbValue* ghb_json_parse_file(const char *path);
 
 #endif // _GHB_VALUES_H_

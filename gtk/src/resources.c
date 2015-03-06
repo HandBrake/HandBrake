@@ -17,7 +17,6 @@
 #include <string.h>
 #include "ghbcompat.h"
 #include "settings.h"
-#include "plist.h"
 #include "resources.h"
 #include "values.h"
 
@@ -30,7 +29,7 @@ static GhbValue *resources;
 void
 ghb_resource_init()
 {
-    resources = ghb_plist_parse(resource_str, sizeof(resource_str)-1);
+    resources = ghb_json_parse(resource_str, sizeof(resource_str)-1);
 }
 
 GhbValue*

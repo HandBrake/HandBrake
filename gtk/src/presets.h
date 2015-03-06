@@ -53,5 +53,7 @@ GhbValue* ghb_get_current_preset_path(signal_user_data_t *ud);
 void ghb_preset_to_settings(GhbValue *settings, GhbValue *preset);
 void ghb_prefs_to_settings(GhbValue *settings);
 void dump_preset_path(const gchar *msg, const GhbValue *path);
+GhbValue* ghb_read_settings_file(const gchar *path);
+void ghb_write_settings_file(const gchar *path, GhbValue *dict);
 
 #endif // _GHB_PRESETS_H_

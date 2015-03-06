@@ -17,6 +17,7 @@ enum
     R_SECTION,
     R_ICON,
     R_PLIST,
+    R_JSON,
     R_STRING,
 };
 
@@ -32,6 +33,7 @@ static tag_map_t tag_map[] =
     {"section", R_SECTION},
     {"icon", R_ICON},
     {"plist", R_PLIST},
+    {"json", R_JSON},
     {"string", R_STRING},
 };
 #define TAG_MAP_SZ  (sizeof(tag_map)/sizeof(tag_map_t))
@@ -40,7 +42,7 @@ typedef struct
 {
     gchar *key;
     gchar *value;
-    GhbValue *plist;
+    GhbValue *dict;
     GQueue *stack;
     GQueue *tag_stack;
     gboolean closed_top;
@@ -297,6 +299,35 @@ start_element(
             pd->key = g_strdup(key);
             g_free(fname);
         } break;
+        case R_JSON:
+        {
+            gchar *fname;
+            const gchar *name, *key;
+
+            name = lookup_attr_value("file", attr_names, attr_values);
+            if (name == NULL)
+            {
+                g_warning("json: missing a requried *file* attribute");
+                exit(EXIT_FAILURE);
+            }
+            fname = find_file(inc_list, name);
+            if (fname == NULL)
+            {
+                g_warning("json: no such file %s", name);
+                exit(EXIT_FAILURE);
+            }
+            key = lookup_attr_value("name", attr_names, attr_values);
+            if (key == NULL)
+            {
+                g_warning("json: missing a requried *name* attribute");
+                g_free(fname);
+                exit(EXIT_FAILURE);
+            }
+            gval = ghb_json_parse_file(fname);
+            if (pd->key) g_free(pd->key);
+            pd->key = g_strdup(key);
+            g_free(fname);
+        } break;
         case R_STRING:
         {
             gchar *fname;
@@ -357,7 +388,7 @@ start_element(
     { // There's an element to add
         if (current == NULL)
         {
-            pd->plist = gval;
+            pd->dict = gval;
             return;
         }
         insert_value(current, pd->key, gval);
@@ -417,7 +448,7 @@ end_element(
         // or dict, add the current element
         if (current == NULL)
         {
-            pd->plist = gval;
+            pd->dict = gval;
             pd->closed_top = TRUE;
             return;
         }
@@ -478,8 +509,8 @@ ghb_resource_parse(const gchar *buf, gssize len)
     pd.tag_stack = g_queue_new();
     pd.key = NULL;
     pd.value = NULL;
-    pd.plist = ghb_dict_value_new();
-    g_queue_push_head(pd.stack, pd.plist);
+    pd.dict = ghb_dict_value_new();
+    g_queue_push_head(pd.stack, pd.dict);
     pd.closed_top = FALSE;
 
     parser.start_element = start_element;
@@ -494,7 +525,7 @@ ghb_resource_parse(const gchar *buf, gssize len)
     g_markup_parse_context_free(ctx);
     g_queue_free(pd.stack);
     g_queue_free(pd.tag_stack);
-    return pd.plist;
+    return pd.dict;
 }
 
 GhbValue*
@@ -521,13 +552,13 @@ static void
 usage(char *cmd)
 {
     fprintf(stderr,
-"Usage: %s [-I <inc path>] <in resource list> <out resource plist>\n"
+"Usage: %s [-I <inc path>] <in resource list> <out resource dict>\n"
 "Summary:\n"
-"    Creates a resource plist from a resource list\n"
+"    Creates a resource dict from a resource list\n"
 "Options:\n"
 "    I - Include path to search for files\n"
 "    <in resource list>    Input resources file\n"
-"    <out resource plist>  Output resources plist file\n"
+"    <out resource dict>   Output resources dict file\n"
 , cmd);
 
     exit(EXIT_FAILURE);
@@ -576,7 +607,7 @@ main(gint argc, gchar *argv[])
     }
 
     gval = ghb_resource_parse_file(file);
-    ghb_plist_write_file(dst, gval);
+    ghb_json_write_file(dst, gval);
     fclose(file);
     return 0;
 }

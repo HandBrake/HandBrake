@@ -772,12 +772,7 @@ save_queue_file(signal_user_data_t *ud)
     char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy(dialog);
 
-    FILE *file = g_fopen(filename, "w");
-    if (file != NULL)
-    {
-        ghb_plist_write(file, queue);
-        fclose(file);
-    }
+    ghb_write_settings_file(filename, queue);
     g_free (filename);
     ghb_value_free(queue);
 }
@@ -821,29 +816,27 @@ open_queue_file(signal_user_data_t *ud)
     char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy(dialog);
 
-    if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+    queue = ghb_read_settings_file(filename);
+    if (queue != NULL)
     {
-        queue = ghb_plist_parse_file(filename);
-        if (queue != NULL)
+        int ii, count;
+        count = ghb_array_len(queue);
+        for (ii = 0; ii < count; ii++)
         {
-            int ii, count;
-            count = ghb_array_len(queue);
-            for (ii = 0; ii < count; ii++)
-            {
-                GhbValue *settings = ghb_array_get_nth(queue, ii);
-                ghb_array_remove(queue, ii);
-                ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
-                ghb_settings_set_int(settings, "job_unique_id", 0);
+            GhbValue *settings = ghb_array_get_nth(queue, ii);
+            ghb_value_incref(settings);
+            ghb_array_remove(queue, ii);
+            ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+            ghb_settings_set_int(settings, "job_unique_id", 0);
 
-                if (ud->queue == NULL)
-                    ud->queue = ghb_array_value_new(32);
-                ghb_array_append(ud->queue, settings);
-                add_to_queue_list(ud, settings, NULL);
-            }
-            ghb_queue_buttons_grey(ud);
-            ghb_save_queue(ud->queue);
-            ghb_value_free(queue);
+            if (ud->queue == NULL)
+                ud->queue = ghb_array_value_new(32);
+            ghb_array_append(ud->queue, settings);
+            add_to_queue_list(ud, settings, NULL);
         }
+        ghb_queue_buttons_grey(ud);
+        ghb_save_queue(ud->queue);
+        ghb_value_free(queue);
     }
     g_free (filename);
 }
@@ -1684,9 +1677,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         // Remove the selected item
         gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
         // Remove the corresponding item from the queue list
-        GhbValue *old = ghb_array_get_nth(ud->queue, row);
         ghb_array_remove(ud->queue, row);
-        ghb_value_free(old);
         ghb_save_queue(ud->queue);
     }
     else
@@ -1893,6 +1884,7 @@ queue_drag_cb(
             indices = gtk_tree_path_get_indices(dstpath);
             row = indices[0];
             gtk_tree_path_free(dstpath);
+            ghb_value_incref(js);
             ghb_array_insert(ud->queue, row, js);
 
             srcpath = gtk_tree_model_get_path (srcmodel, &srciter);
@@ -2128,8 +2120,6 @@ find_pid:
                 status = ghb_settings_get_int(settings, "job_status");
                 if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
                 {
-                    GhbValue *old = ghb_array_get_nth(queue, ii);
-                    ghb_value_free(old);
                     ghb_array_remove(queue, ii);
                 }
             }
@@ -2174,8 +2164,6 @@ ghb_queue_remove_row(signal_user_data_t *ud, int row)
     }
     g_free(path);
 
-    GhbValue *old = ghb_array_get_nth(ud->queue, row);
-    ghb_value_free(old);
     ghb_array_remove(ud->queue, row);
     ghb_save_queue(ud->queue);
 }
@@ -2232,8 +2220,6 @@ queue_key_press_cb(
         // Remove the selected item
         gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
         // Remove the corresponding item from the queue list
-        GhbValue *old = ghb_array_get_nth(ud->queue, row);
-        ghb_value_free(old);
         ghb_array_remove(ud->queue, row);
         ghb_save_queue(ud->queue);
         return TRUE;
@@ -2280,6 +2266,7 @@ queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
             // Remove the selected item
             gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
             // Remove the corresponding item from the queue list
+            ghb_value_incref(ghb_queue_edit_settings);
             ghb_array_remove(ud->queue, row);
         }
         else

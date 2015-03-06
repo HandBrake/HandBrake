@@ -506,13 +506,12 @@ ghb_plist_write_file(const gchar *filename, GhbValue *gval)
 {
     FILE *file;
 
-    file = fopen(filename, "w");
+    file = g_fopen(filename, "w");
     if (file == NULL)
         return;
 
-    fprintf(file, "%s", preamble);
-    gval_write(file, gval);
-    fprintf(file, "%s", postfix);
+    ghb_plist_write(file, gval);
+    fclose(file);
 }
 
 

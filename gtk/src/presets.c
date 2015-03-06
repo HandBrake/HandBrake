@@ -48,7 +48,6 @@ static GhbValue *prefsPlist = NULL;
 static gboolean prefs_modified = FALSE;
 
 static const GhbValue* preset_dict_get_value(GhbValue *dict, const gchar *key);
-static void store_plist(GhbValue *plist, const gchar *name);
 static void store_presets(void);
 static void store_prefs(void);
 
@@ -322,15 +321,12 @@ ghb_preset_type(GhbValue *dict)
 static void
 presets_remove_nth(GhbValue *presets, gint pos)
 {
-    GhbValue *dict;
     gint count;
 
     if (presets == NULL || pos < 0) return;
     count = ghb_array_len(presets);
     if (pos >= count) return;
-    dict = ghb_array_get_nth(presets, pos);
     ghb_array_remove(presets, pos);
-    ghb_value_free(dict);
 }
 
 gboolean
@@ -1170,35 +1166,66 @@ ghb_get_user_config_dir(gchar *subdir)
 }
 
 static void
-store_plist(GhbValue *plist, const gchar *name)
+write_config_file(const gchar *name, GhbValue *dict)
 {
     gchar *config, *path;
-    FILE *file;
 
     config = ghb_get_user_config_dir(NULL);
     path = g_strdup_printf ("%s/%s", config, name);
-    file = g_fopen(path, "w");
     g_free(config);
+    ghb_json_write_file(path, dict);
     g_free(path);
-    ghb_plist_write(file, plist);
-    fclose(file);
+}
+
+void
+ghb_write_settings_file(const gchar *path, GhbValue *dict)
+{
+    ghb_json_write_file(path, dict);
+}
+
+static void
+store_plist(const gchar *name, GhbValue *plist)
+{
+    gchar *config, *path;
+
+    config = ghb_get_user_config_dir(NULL);
+    path = g_strdup_printf ("%s/%s", config, name);
+    g_free(config);
+    ghb_plist_write_file(path, plist);
+    g_free(path);
 }
 
 static GhbValue*
-load_plist(const gchar *name)
+read_config_file(const gchar *name)
 {
     gchar *config, *path;
-    GhbValue *plist = NULL;
+    GhbValue *gval = NULL;
 
     config = ghb_get_user_config_dir(NULL);
     path = g_strdup_printf ("%s/%s", config, name);
+    g_free(config);
     if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
     {
-        plist = ghb_plist_parse_file(path);
+        gval = ghb_json_parse_file(path);
+        if (gval == NULL)
+            gval = ghb_plist_parse_file(path);
     }
-    g_free(config);
     g_free(path);
-    return plist;
+    return gval;
+}
+
+GhbValue*
+ghb_read_settings_file(const gchar *path)
+{
+    GhbValue *gval = NULL;
+
+    if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
+    {
+        gval = ghb_json_parse_file(path);
+        if (gval == NULL)
+            gval = ghb_plist_parse_file(path);
+    }
+    return gval;
 }
 
 gboolean
@@ -1331,7 +1358,7 @@ ghb_find_pid_file()
 }
 
 static void
-remove_plist(const gchar *name)
+remove_config_file(const gchar *name)
 {
     gchar *config, *path;
 
@@ -1495,7 +1522,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 
     g_debug("ghb_prefs_load");
     GhbValue *internalPlist = ghb_resource_get("internal-defaults");
-    prefsPlist = load_plist("preferences");
+    prefsPlist = read_config_file("preferences");
     if (prefsPlist == NULL)
         prefsPlist = ghb_dict_value_new();
     dict = plist_get_dict(prefsPlist, "Preferences");
@@ -1859,12 +1886,12 @@ void
 ghb_save_queue(GhbValue *queue)
 {
     pid_t pid;
-    char *path;
+    char *name;
 
     pid = getpid();
-    path = g_strdup_printf ("queue.%d", pid);
-    store_plist(queue, path);
-    g_free(path);
+    name = g_strdup_printf ("queue.%d", pid);
+    write_config_file(name, queue);
+    g_free(name);
 }
 
 GhbValue*
@@ -1872,12 +1899,12 @@ ghb_load_queue()
 {
     GhbValue *queue;
     pid_t pid;
-    char *path;
+    char *name;
 
     pid = getpid();
-    path = g_strdup_printf ("queue.%d", pid);
-    queue = load_plist(path);
-    g_free(path);
+    name = g_strdup_printf ("queue.%d", pid);
+    queue = read_config_file(name);
+    g_free(name);
     return queue;
 }
 
@@ -1885,34 +1912,34 @@ GhbValue*
 ghb_load_old_queue(int pid)
 {
     GhbValue *queue;
-    char *path;
+    char *name;
 
-    path = g_strdup_printf ("queue.%d", pid);
-    queue = load_plist(path);
-    g_free(path);
+    name = g_strdup_printf ("queue.%d", pid);
+    queue = read_config_file(name);
+    g_free(name);
     return queue;
 }
 
 void
 ghb_remove_old_queue_file(int pid)
 {
-    char *path;
+    char *name;
 
-    path = g_strdup_printf ("queue.%d", pid);
-    remove_plist(path);
-    g_free(path);
+    name = g_strdup_printf ("queue.%d", pid);
+    remove_config_file(name);
+    g_free(name);
 }
 
 void
 ghb_remove_queue_file()
 {
     pid_t pid;
-    char *path;
+    char *name;
 
     pid = getpid();
-    path = g_strdup_printf ("queue.%d", pid);
-    remove_plist(path);
-    g_free(path);
+    name = g_strdup_printf ("queue.%d", pid);
+    remove_config_file(name);
+    g_free(name);
 }
 
 typedef struct
@@ -2933,7 +2960,7 @@ static guint prefs_timeout_id = 0;
 static gboolean
 delayed_store_prefs(gpointer data)
 {
-    store_plist(prefsPlist, "preferences");
+    write_config_file("preferences", prefsPlist);
     prefs_timeout_id = 0;
     return FALSE;
 }
@@ -2945,7 +2972,7 @@ store_presets()
 
     export = ghb_value_dup(presetsPlist);
     export_xlat_presets(export);
-    store_plist(export, "presets");
+    store_plist("presets", export);
     ghb_value_free(export);
 }
 
@@ -3125,7 +3152,7 @@ void
 ghb_presets_load(signal_user_data_t *ud)
 {
     gboolean store = FALSE;
-    presetsPlistFile = load_plist("presets");
+    presetsPlistFile = read_config_file("presets");
     if ((presetsPlistFile == NULL) ||
         (ghb_value_type(presetsPlistFile) == GHB_DICT) ||
         (check_old_presets(presetsPlistFile)))
@@ -3439,7 +3466,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
             g_free(filename);
             return;
         }
-        array = ghb_plist_parse_file(filename);
+        array = ghb_read_settings_file(filename);
 
         import_xlat_presets(array);
         presets_clear_default(array);
@@ -3576,7 +3603,6 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     if (response == GTK_RESPONSE_ACCEPT)
     {
         GhbValue *export, *dict, *array;
-        FILE *file;
         gchar  *dir;
 
         filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
@@ -3591,12 +3617,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         presets_customize(array);
         export_xlat_presets(array);
 
-        file = g_fopen(filename, "w");
-        if (file != NULL)
-        {
-            ghb_plist_write(file, array);
-            fclose(file);
-        }
+        store_plist(filename, array);
         ghb_value_free(array);
 
         exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");

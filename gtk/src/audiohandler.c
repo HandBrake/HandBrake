@@ -1598,8 +1598,6 @@ audio_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         // treeview.  Removing from the treeview sometimes provokes an
         // immediate selection change, so the list needs to be up to date
         // when this happens.
-        GhbValue *old = ghb_array_get_nth(audio_list, row);
-        ghb_value_free(old);
         ghb_array_remove(audio_list, row);
 
         // Remove the selected item
@@ -2110,9 +2108,7 @@ audio_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 
         // Remove from preset language list
         alang_list = ghb_settings_get_value(ud->settings, "AudioLanguageList");
-        GhbValue *glang = ghb_array_get_nth(alang_list, index);
         ghb_array_remove(alang_list, index);
-        ghb_value_free(glang);
         ghb_clear_presets_selection(ud);
     }
 }
@@ -2337,9 +2333,7 @@ audio_def_setting_remove_cb(GtkWidget *widget, signal_user_data_t *ud)
         return;
     }
     gtk_widget_destroy(GTK_WIDGET(row));
-    GhbValue *asettings = ghb_array_get_nth(alist, index);
     ghb_array_remove(alist, index);
-    ghb_value_free(asettings);
     ghb_clear_presets_selection(ud);
 }
 
@@ -2443,9 +2437,7 @@ audio_def_lang_list_init(signal_user_data_t *ud)
         {
             // Error in list.  Probably duplicate languages.  Remove
             // this item from the list.
-            GhbValue *glang = ghb_array_get_nth(lang_list, ii);
             ghb_array_remove(lang_list, ii);
-            ghb_value_free(glang);
             count--;
         }
     }

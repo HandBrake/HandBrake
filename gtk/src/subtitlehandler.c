@@ -1299,9 +1299,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
         burned = burned || !hb_subtitle_can_pass(source, mux->format);
         if (burned && one_burned)
         {
-            GhbValue *gsub = ghb_array_get_nth(subtitle_list, ii);
             ghb_array_remove(subtitle_list, ii);
-            ghb_value_free(gsub);
             continue;
         }
         one_burned = one_burned || burned;
@@ -1479,9 +1477,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 
         // Remove from preset language list
         lang_list = ghb_settings_get_value(ud->settings, "SubtitleLanguageList");
-        GhbValue *glang = ghb_array_get_nth(lang_list, index);
         ghb_array_remove(lang_list, index);
-        ghb_value_free(glang);
 
         ghb_clear_presets_selection(ud);
 
@@ -1564,9 +1560,7 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
         {
             // Error in list.  Probably duplicate languages.  Remove
             // this item from the list.
-            GhbValue *glang = ghb_array_get_nth(lang_list, ii);
             ghb_array_remove(lang_list, ii);
-            ghb_value_free(glang);
             count--;
         }
     }
@@ -1683,9 +1677,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
         // treeview.  Removing from the treeview sometimes provokes an
         // immediate selection change, so the list needs to be up to date
         // when this happens.
-        GhbValue *old = ghb_array_get_nth(subtitle_list, row);
         ghb_array_remove(subtitle_list, row);
-        ghb_value_free(old);
 
         // Remove the selected item
         gtk_tree_store_remove(GTK_TREE_STORE(tm), &ti);

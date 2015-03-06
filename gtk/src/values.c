@@ -13,6 +13,7 @@
  */
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <glib-object.h>
 #include <stdio.h>
 #include <string.h>
@@ -59,6 +60,20 @@ ghb_value_new(GhbType type)
             break;
     }
     return val;
+}
+
+void
+ghb_value_incref(GhbValue *gval)
+{
+    if (gval == NULL) return;
+    json_incref(gval);
+}
+
+void
+ghb_value_decref(GhbValue *gval)
+{
+    if (gval == NULL) return;
+    json_decref(gval);
 }
 
 void
@@ -535,3 +550,34 @@ ghb_array_len(const GhbValue *array)
 {
     return json_array_size(array);
 }
+
+void
+ghb_json_write(FILE *file, GhbValue *gval)
+{
+    char * json = json_dumps(gval, JSON_INDENT(4)|JSON_PRESERVE_ORDER);
+    fprintf(file, "%s", json);
+    free(json);
+}
+
+void
+ghb_json_write_file(const char *path, GhbValue *gval)
+{
+    FILE *file = g_fopen(path, "w");
+    if (file == NULL)
+        return;
+    ghb_json_write(file, gval);
+    fclose(file);
+}
+
+GhbValue*
+ghb_json_parse(const char *json, size_t size)
+{
+    return json_loadb(json, size, JSON_REJECT_DUPLICATES, NULL);
+}
+
+GhbValue*
+ghb_json_parse_file(const char *path)
+{
+    return json_load_file(path, JSON_REJECT_DUPLICATES, NULL);
+}
+
