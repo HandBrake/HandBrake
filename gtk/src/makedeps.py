@@ -1,8 +1,8 @@
 #! /usr/bin/python
 
 import collections
-import plistlib
 import sys
+import json
 
 DepEntry = collections.namedtuple('DepEntry', 'widget dep enable die hide')
 dep_map = (
@@ -110,7 +110,7 @@ def main():
             if jj.widget == ii.widget:
                 deps.append(jj.dep)
         top[ii.widget] = deps
-    plistlib.writePlist(top, depsfile)
+    json.dump(top, depsfile, indent=4)
 
     top = dict()
     for ii in dep_map:
@@ -126,7 +126,7 @@ def main():
                 rec.append(jj.hide)
                 deps.append(rec)
         top[ii.dep] = deps
-    plistlib.writePlist(top, revfile)
+    json.dump(top, revfile, indent=4)
 
 main()
 

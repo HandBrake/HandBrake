@@ -13,10 +13,10 @@
         <icon name="hb-complete" file="hb-complete.svg" />
         <icon name="hb-edit" file="hb-edit.svg" />
     </section>
-    <plist name="internal-defaults" file="internal_defaults.xml" />
-    <plist name="standard-presets" file="standard_presets.xml" />
-    <plist name="widget-deps" file="widget.deps" />
-    <plist name="widget-reverse-deps" file="widget_reverse.deps" />
+    <json name="internal-defaults" file="internal_defaults.json" />
+    <json name="standard-presets" file="standard_presets.json" />
+    <json name="widget-deps" file="widget.deps" />
+    <json name="widget-reverse-deps" file="widget_reverse.deps" />
     <string version="3.10" name="ghb-ui" file="ghb.ui" />
     <string version="3.12" name="ghb-ui" file="ghb-3.12.ui" />
     <string version="3.14" name="ghb-ui" file="ghb-3.14.ui" />
