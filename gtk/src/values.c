@@ -31,37 +31,6 @@ ghb_value_type(const GhbValue *val)
     return type;
 }
 
-GhbValue*
-ghb_value_new(GhbType type)
-{
-    GhbValue *val = NULL;
-    switch (type)
-    {
-        case GHB_DICT:
-            val = json_object();
-            break;
-        case GHB_ARRAY:
-            val = json_array();
-            break;
-        case GHB_STRING:
-            val = json_string("");
-            break;
-        case GHB_INT:
-            val = json_integer(0);
-            break;
-        case GHB_DOUBLE:
-            val = json_real(0.0);
-            break;
-        case GHB_BOOL:
-            val = json_false();
-            break;
-        default:
-            g_warning("Unrecognized GHB value type %d", type);
-            break;
-    }
-    return val;
-}
-
 void
 ghb_value_incref(GhbValue *gval)
 {

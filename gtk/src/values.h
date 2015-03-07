@@ -47,7 +47,6 @@ void ghb_array_copy(GhbValue *arr1, GhbValue *arr2, gint count);
 
 GhbValue* ghb_value_xform(const GhbValue *val, GhbType type);
 void ghb_value_free(GhbValue *gval);
-GhbValue* ghb_value_new(GhbType type);
 GhbValue* ghb_value_dup(const GhbValue *val);
 gint ghb_value_int(const GhbValue *val);
 gint64 ghb_value_int64(const GhbValue *val);
