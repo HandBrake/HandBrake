@@ -57,16 +57,43 @@ dict_clean(GhbValue *dict, GhbValue *template)
     GhbValue *tmp = ghb_value_dup(dict);
     GhbDictIter iter;
     const gchar *key;
-    GhbValue *value;
+    GhbValue *val;
     GhbValue *template_val;
 
     ghb_dict_iter_init(tmp, &iter);
-    while (ghb_dict_iter_next(tmp, &iter, &key, &value))
+    while (ghb_dict_iter_next(tmp, &iter, &key, &val))
     {
         template_val = ghb_dict_lookup(template, key);
         if (template_val == NULL)
         {
             ghb_dict_remove(dict, key);
+        }
+        if (ghb_value_type(val) == GHB_DICT &&
+            ghb_value_type(template_val) == GHB_DICT)
+        {
+            val = ghb_dict_lookup(dict, key);
+            dict_clean(val, template_val);
+        }
+        if (ghb_value_type(val) == GHB_ARRAY &&
+            ghb_value_type(template_val) == GHB_ARRAY &&
+            ghb_array_len(template_val) > 0)
+        {
+            template_val = ghb_array_get_nth(template_val, 0);
+            if (ghb_value_type(template_val) == GHB_DICT)
+            {
+                val = ghb_dict_lookup(dict, key);
+                int count = ghb_array_len(val);
+                int ii;
+                for (ii = 0; ii < count; ii++)
+                {
+                    GhbValue *array_val;
+                    array_val = ghb_array_get_nth(val, ii);
+                    if (ghb_value_type(array_val) == GHB_DICT)
+                    {
+                        dict_clean(array_val, template_val);
+                    }
+                }
+            }
         }
     }
     ghb_value_free(tmp);
