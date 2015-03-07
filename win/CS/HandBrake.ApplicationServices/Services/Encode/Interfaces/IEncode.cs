@@ -72,11 +72,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Interfaces
         int LogIndex { get; }
 
         /// <summary>
-        /// Gets a value indicating whether can pause.
-        /// </summary>
-        bool CanPause { get; }
-
-        /// <summary>
         /// Gets a value indicating whether is pasued.
         /// </summary>
         bool IsPasued { get; }

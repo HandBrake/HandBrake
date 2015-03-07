@@ -271,7 +271,7 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             // Sanatise the input.
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, new SourceVideoInfo(null, null, new Size(title.Geometry.Width, title.Geometry.Height), new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)), AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
+            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, new SourceVideoInfo(new Size(title.Geometry.Width, title.Geometry.Height), new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)), AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
             int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
             int height = resultGeometry.Height;
             uiGeometry.geometry.height = resultGeometry.Height; // Prased the height now.

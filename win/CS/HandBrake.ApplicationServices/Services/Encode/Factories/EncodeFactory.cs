@@ -15,12 +15,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using System.Runtime.InteropServices;
 
     using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Factories;
     using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Helpers;
     using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
-    using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
@@ -47,24 +45,21 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// <param name="job">
         /// The encode job.
         /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
         /// <param name="configuration">
         /// The configuration.
         /// </param>
         /// <returns>
         /// The <see cref="JsonEncodeObject"/>.
         /// </returns>
-        internal static JsonEncodeObject Create(EncodeTask job, SourceVideoInfo title, HBConfiguration configuration)
+        internal static JsonEncodeObject Create(EncodeTask job, HBConfiguration configuration) 
         {
             JsonEncodeObject encode = new JsonEncodeObject
                 {
                     SequenceID = 0, 
                     Audio = CreateAudio(job), 
                     Destination = CreateDestination(job), 
-                    Filter = CreateFilter(job, title), 
-                    PAR = CreatePAR(job, title), 
+                    Filter = CreateFilter(job), 
+                    PAR = CreatePAR(job), 
                     MetaData = CreateMetaData(job),
                     Source = CreateSource(job, configuration), 
                     Subtitle = CreateSubtitle(job), 
@@ -114,7 +109,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             {
                 Title = job.Title, 
                 Range = range,
-                Angle = job.Angle
+                Angle = job.Angle,
+                Path = job.Source,
             };
             return source;
         }
@@ -161,16 +157,12 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// <param name="job">
         /// The Job
         /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
         /// <returns>
         /// The produced PAR object.
         /// </returns>
-        private static PAR CreatePAR(EncodeTask job, SourceVideoInfo title)
+        private static PAR CreatePAR(EncodeTask job)
         {
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH);
-            return new PAR { Num = resultGeometry.PAR.Num, Den = resultGeometry.PAR.Den };
+            return new PAR { Num = job.PixelAspectX, Den = job.PixelAspectY };
         }
 
         /// <summary>
@@ -385,13 +377,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// <param name="job">
         /// The job.
         /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
         /// <returns>
         /// The <see cref="Filter"/>.
         /// </returns>
-        private static Filter CreateFilter(EncodeTask job, SourceVideoInfo title)
+        private static Filter CreateFilter(EncodeTask job)
         {
             Filter filter = new Filter
                             {
@@ -461,21 +450,15 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(job.Framerate.ToString()); // TODO check culture
             int vrate = HBFunctions.hb_video_framerate_get_from_name(frameratePrt);
 
-            int num;
-            int den;
+            int? num = null;
+            int? den = null;
             if (vrate > 0)
             {
                 num = 27000000;
                 den = vrate;
             }
-            else
-            {
-                // cfr or pfr flag with no rate specified implies use the title rate.
-                num = title.FramerateNumerator ?? 0;
-                den = title.FramerateDenominator ?? 0;
-            }
 
-            string framerateString = string.Format("{0}:{1}:{2}", fm, num, den); // filter_cfr, filter_vrate.num, filter_vrate.den
+            string framerateString = num.HasValue ? string.Format("{0}:{1}:{2}", fm, num, den) : string.Format("{0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
 
             FilterList framerateShaper = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
             filter.FilterList.Add(framerateShaper);
@@ -510,15 +493,14 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             }
 
             // CropScale Filter
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, title, AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH);
             FilterList cropScale = new FilterList
             {
                 ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE, 
                 Settings =
                     string.Format(
                         "{0}:{1}:{2}:{3}:{4}:{5}", 
-                        resultGeometry.Width, 
-                        resultGeometry.Height, 
+                        job.Width, 
+                        job.Height, 
                         job.Cropping.Top, 
                         job.Cropping.Bottom, 
                         job.Cropping.Left, 

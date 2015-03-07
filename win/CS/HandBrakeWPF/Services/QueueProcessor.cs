@@ -451,7 +451,7 @@ namespace HandBrakeWPF.Services
             this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
 
-            if (this.EncodeService.CanPause && this.EncodeService.IsEncoding)
+            if (this.EncodeService.IsEncoding)
             {
                 this.EncodeService.Resume();
             }

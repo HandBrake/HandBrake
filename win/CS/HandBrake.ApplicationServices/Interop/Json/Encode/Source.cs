@@ -28,5 +28,10 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// Gets or sets the title.
         /// </summary>
         public int Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path.
+        /// </summary>
+        public string Path { get; set; }
     }
 }

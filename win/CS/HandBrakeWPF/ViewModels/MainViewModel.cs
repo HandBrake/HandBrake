@@ -605,7 +605,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.isEncoding = value;
-                this.CanPause = value && this.encodeService.CanPause;
+                this.CanPause = value;
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
             }
         }
@@ -1435,12 +1435,8 @@ namespace HandBrakeWPF.ViewModels
         public void PauseEncode()
         {
             this.queueProcessor.Pause();
-
-            if (this.encodeService.CanPause)
-            {
-                this.encodeService.Pause();
-                this.IsEncoding = false;
-            }
+            this.encodeService.Pause();
+            this.IsEncoding = false;
         }
 
         /// <summary>

@@ -923,26 +923,10 @@ namespace HandBrakeWPF.ViewModels
 
             // Step 2, For the changed field, call hb_set_anamorphic_size and process the results.
             PictureSize.AnamorphicResult result = PictureSize.hb_set_anamorphic_size2(this.GetPictureSettings(), this.GetPictureTitleInfo(), setting);
-
-            switch (this.SelectedAnamorphicMode)
-            {
-                case Anamorphic.None:
-                    this.Task.Width = result.OutputWidth;
-                    this.Task.Height = result.OutputHeight;
-                    break;
-                case Anamorphic.Strict:
-                    this.Task.Width = 0;
-                    this.Task.Height = 0;
-                    break;
-                case Anamorphic.Loose:
-                    this.Task.Width = result.OutputWidth;
-                    this.Task.Height = 0;
-                    break;
-                case Anamorphic.Custom:
-                    this.Task.Width = result.OutputWidth;
-                    this.Task.Height = result.OutputHeight;
-                    break;
-            }
+            this.Task.Width = result.OutputWidth;
+            this.Task.Height = result.OutputHeight;
+            this.Task.PixelAspectX = (int)Math.Round(result.OutputParWidth, 0);
+            this.Task.PixelAspectY = (int)Math.Round(result.OutputParHeight, 0);
 
             // Step 3, Set the display width label to indicate the output.
             double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
