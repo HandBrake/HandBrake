@@ -1039,7 +1039,6 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
 
     // 'Barebones Title'
     title->type = HB_STREAM_TYPE;
-    title->index = 1;
 
     // Copy part of the stream path to the title name
     char *sep = hb_strr_dir_sep(stream->path);
@@ -5428,7 +5427,6 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 
     // 'Barebones Title'
     title->type = HB_FF_STREAM_TYPE;
-    title->index = 1;
 
     // Copy part of the stream path to the title name
     char *sep = hb_strr_dir_sep(stream->path);

@@ -352,7 +352,7 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
 
     hb_rational_t vrate;
-    if( job->pass == 2 )
+    if( job->pass_id == HB_PASS_ENCODE_2ND )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
         vrate = interjob->vrate;

@@ -751,6 +751,7 @@ static void UpdateState( hb_work_private_t  * r, int64_t start)
         r->st_first = now;
     }
 
+    hb_get_state2(r->job->h, &state);
 #define p state.param.working
     if ( !r->job->indepth_scan )
     {

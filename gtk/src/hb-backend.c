@@ -38,6 +38,7 @@
 #include "preview.h"
 #include "values.h"
 #include "lang.h"
+#include "jansson.h"
 
 typedef struct
 {
@@ -965,6 +966,7 @@ lookup_audio_lang_option(const GhbValue *glang)
 // Handle for libhb.  Gets set by ghb_backend_init()
 static hb_handle_t * h_scan = NULL;
 static hb_handle_t * h_queue = NULL;
+static hb_handle_t * h_live = NULL;
 
 extern void hb_get_temporary_directory(char path[512]);
 
@@ -2697,10 +2699,9 @@ ghb_build_advanced_opts_string(GhbValue *settings)
     }
 }
 
-void ghb_set_video_encoder_opts(hb_job_t *job, GhbValue *js)
+void ghb_set_video_encoder_opts(json_t *dict, GhbValue *js)
 {
     gint vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
-
     switch (vcodec)
     {
         case HB_VCODEC_X265:
@@ -2709,18 +2710,19 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GhbValue *js)
             if (vcodec == HB_VCODEC_X264 &&
                 ghb_settings_get_boolean(js, "x264UseAdvancedOptions"))
             {
-                char *opts = ghb_settings_get_string(js, "x264Option");
-                hb_job_set_encoder_options(job, opts);
-                g_free(opts);
+                const char *opts;
+                opts = ghb_settings_get_const_string(js, "x264Option");
+                json_object_set_new(dict, "Options", json_string(opts));
             }
             else
             {
+                const char *preset, *tune, *profile, *level, *opts;
                 GString *str = g_string_new("");
-                char *preset = ghb_settings_get_string(js, "VideoPreset");
-                char *tune = ghb_settings_get_string(js, "VideoTune");
-                char *profile = ghb_settings_get_string(js, "VideoProfile");
-                char *level = ghb_settings_get_string(js, "VideoLevel");
-                char *opts = ghb_settings_get_string(js, "VideoOptionExtra");
+                preset = ghb_settings_get_const_string(js, "VideoPreset");
+                tune = ghb_settings_get_const_string(js, "VideoTune");
+                profile = ghb_settings_get_const_string(js, "VideoProfile");
+                level = ghb_settings_get_const_string(js, "VideoLevel");
+                opts = ghb_settings_get_const_string(js, "VideoOptionExtra");
                 char *tunes;
 
                 g_string_append_printf(str, "%s", tune);
@@ -2737,24 +2739,17 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GhbValue *js)
                 }
                 tunes = g_string_free(str, FALSE);
 
-                hb_job_set_encoder_preset(job, preset);
-
+                if (preset != NULL)
+                    json_object_set_new(dict, "Preset", json_string(preset));
                 if (tunes != NULL && strcasecmp(tune, "none"))
-                    hb_job_set_encoder_tune(job, tunes);
-
+                    json_object_set_new(dict, "Tune", json_string(tunes));
                 if (profile != NULL && strcasecmp(profile, "auto"))
-                    hb_job_set_encoder_profile(job, profile);
-
+                    json_object_set_new(dict, "Profile", json_string(profile));
                 if (level != NULL && strcasecmp(level, "auto"))
-                    hb_job_set_encoder_level(job, level);
+                    json_object_set_new(dict, "Level", json_string(level));
+                if (opts != NULL)
+                    json_object_set_new(dict, "Options", json_string(opts));
 
-                hb_job_set_encoder_options(job, opts);
-
-                g_free(preset);
-                g_free(tune);
-                g_free(profile);
-                g_free(level);
-                g_free(opts);
                 g_free(tunes);
             }
         } break;
@@ -2763,12 +2758,12 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GhbValue *js)
         case HB_VCODEC_FFMPEG_MPEG4:
         case HB_VCODEC_FFMPEG_VP8:
         {
-            gchar *opts = ghb_settings_get_string(js, "VideoOptionExtra");
+            const char *opts;
+            opts = ghb_settings_get_const_string(js, "VideoOptionExtra");
             if (opts != NULL && opts[0])
             {
-                hb_job_set_encoder_options(job, opts);
+                json_object_set_new(dict, "Options", json_string(opts));
             }
-            g_free(opts);
         } break;
 
         case HB_VCODEC_THEORA:
@@ -3144,11 +3139,13 @@ ghb_backend_init(gint debug)
     /* Init libhb */
     h_scan = hb_init( debug, 0 );
     h_queue = hb_init( debug, 0 );
+    h_live = hb_init( debug, 0 );
 }
 
 void
 ghb_backend_close()
 {
+    hb_close(&h_live);
     hb_close(&h_queue);
     hb_close(&h_scan);
     hb_global_close();
@@ -3200,6 +3197,12 @@ ghb_clear_scan_state(gint state)
 }
 
 void
+ghb_clear_live_state(gint state)
+{
+    hb_status.live.state &= ~state;
+}
+
+void
 ghb_clear_queue_state(gint state)
 {
     hb_status.queue.state &= ~state;
@@ -3223,184 +3226,114 @@ ghb_get_status(ghb_status_t *status)
     memcpy(status, &hb_status, sizeof(ghb_status_t));
 }
 
-void
-ghb_track_status()
+static void
+update_status(hb_state_t *state, ghb_instance_status_t *status)
 {
-    hb_state_t s_scan;
-    hb_state_t s_queue;
-
-    if (h_scan == NULL) return;
-    hb_get_state( h_scan, &s_scan );
-    switch( s_scan.state )
+    switch( state->state )
     {
-#define p s_scan.param.scanning
+#define p state->param.scanning
         case HB_STATE_SCANNING:
         {
-            hb_status.scan.state |= GHB_STATE_SCANNING;
-            hb_status.scan.title_count = p.title_count;
-            hb_status.scan.title_cur = p.title_cur;
-            hb_status.scan.preview_count = p.preview_count;
-            hb_status.scan.preview_cur = p.preview_cur;
-            hb_status.scan.progress = p.progress;
+            status->state |= GHB_STATE_SCANNING;
+            status->title_count = p.title_count;
+            status->title_cur = p.title_cur;
+            status->preview_count = p.preview_count;
+            status->preview_cur = p.preview_cur;
+            status->progress = p.progress;
         } break;
 #undef p
 
         case HB_STATE_SCANDONE:
         {
-            hb_status.scan.state &= ~GHB_STATE_SCANNING;
-            hb_status.scan.state |= GHB_STATE_SCANDONE;
+            status->state &= ~GHB_STATE_SCANNING;
+            status->state |= GHB_STATE_SCANDONE;
         } break;
 
-#define p s_scan.param.working
+#define p state->param.working
         case HB_STATE_WORKING:
-            hb_status.scan.state |= GHB_STATE_WORKING;
-            hb_status.scan.state &= ~GHB_STATE_PAUSED;
-            hb_status.scan.job_cur = p.job_cur;
-            hb_status.scan.job_count = p.job_count;
-            hb_status.scan.progress = p.progress;
-            hb_status.scan.rate_cur = p.rate_cur;
-            hb_status.scan.rate_avg = p.rate_avg;
-            hb_status.scan.hours = p.hours;
-            hb_status.scan.minutes = p.minutes;
-            hb_status.scan.seconds = p.seconds;
-            hb_status.scan.unique_id = p.sequence_id & 0xFFFFFF;
-            break;
-#undef p
-
-        case HB_STATE_PAUSED:
-            hb_status.scan.state |= GHB_STATE_PAUSED;
-            break;
-
-        case HB_STATE_MUXING:
-        {
-            hb_status.scan.state |= GHB_STATE_MUXING;
-        } break;
-
-#define p s_scan.param.workdone
-        case HB_STATE_WORKDONE:
-        {
-            hb_job_t *job;
-
-            hb_status.scan.state |= GHB_STATE_WORKDONE;
-            hb_status.scan.state &= ~GHB_STATE_MUXING;
-            hb_status.scan.state &= ~GHB_STATE_PAUSED;
-            hb_status.scan.state &= ~GHB_STATE_WORKING;
-            switch (p.error)
+            if (status->state & GHB_STATE_SCANNING)
             {
-            case HB_ERROR_NONE:
-                hb_status.scan.error = GHB_ERROR_NONE;
-                break;
-            case HB_ERROR_CANCELED:
-                hb_status.scan.error = GHB_ERROR_CANCELED;
-                break;
-            default:
-                hb_status.scan.error = GHB_ERROR_FAIL;
-                break;
+                status->state &= ~GHB_STATE_SCANNING;
+                status->state |= GHB_STATE_SCANDONE;
             }
-            // Delete all remaining jobs of this encode.
-            // An encode can be composed of multiple associated jobs.
-            // When a job is stopped, libhb removes it from the job list,
-            // but does not remove other jobs that may be associated with it.
-            // Associated jobs are taged in the sequence id.
-            while ((job = hb_job(h_scan, 0)) != NULL)
-                hb_rem( h_scan, job );
-        } break;
-#undef p
-    }
-    hb_get_state( h_queue, &s_queue );
-    switch( s_queue.state )
-    {
-#define p s_queue.param.scanning
-        case HB_STATE_SCANNING:
-        {
-            hb_status.queue.state |= GHB_STATE_SCANNING;
-            hb_status.queue.title_count = p.title_count;
-            hb_status.queue.title_cur = p.title_cur;
-            hb_status.queue.preview_count = p.preview_count;
-            hb_status.queue.preview_cur = p.preview_cur;
-            hb_status.queue.progress = p.progress;
-        } break;
-#undef p
-
-        case HB_STATE_SCANDONE:
-        {
-            hb_status.queue.state &= ~GHB_STATE_SCANNING;
-            hb_status.queue.state |= GHB_STATE_SCANDONE;
-        } break;
-
-#define p s_queue.param.working
-        case HB_STATE_WORKING:
-            hb_status.queue.state |= GHB_STATE_WORKING;
-            hb_status.queue.state &= ~GHB_STATE_PAUSED;
-            hb_status.queue.state &= ~GHB_STATE_SEARCHING;
-            hb_status.queue.job_cur = p.job_cur;
-            hb_status.queue.job_count = p.job_count;
-            hb_status.queue.progress = p.progress;
-            hb_status.queue.rate_cur = p.rate_cur;
-            hb_status.queue.rate_avg = p.rate_avg;
-            hb_status.queue.hours = p.hours;
-            hb_status.queue.minutes = p.minutes;
-            hb_status.queue.seconds = p.seconds;
-            hb_status.queue.unique_id = p.sequence_id & 0xFFFFFF;
+            status->state |= GHB_STATE_WORKING;
+            status->state &= ~GHB_STATE_PAUSED;
+            status->state &= ~GHB_STATE_SEARCHING;
+            status->pass = p.pass;
+            status->pass_count = p.pass_count;
+            status->pass_id = p.pass_id;
+            status->progress = p.progress;
+            status->rate_cur = p.rate_cur;
+            status->rate_avg = p.rate_avg;
+            status->hours = p.hours;
+            status->minutes = p.minutes;
+            status->seconds = p.seconds;
+            status->unique_id = p.sequence_id & 0xFFFFFF;
             break;
 
         case HB_STATE_SEARCHING:
-            hb_status.queue.state |= GHB_STATE_SEARCHING;
-            hb_status.queue.state &= ~GHB_STATE_WORKING;
-            hb_status.queue.state &= ~GHB_STATE_PAUSED;
-            hb_status.queue.job_cur = p.job_cur;
-            hb_status.queue.job_count = p.job_count;
-            hb_status.queue.progress = p.progress;
-            hb_status.queue.rate_cur = p.rate_cur;
-            hb_status.queue.rate_avg = p.rate_avg;
-            hb_status.queue.hours = p.hours;
-            hb_status.queue.minutes = p.minutes;
-            hb_status.queue.seconds = p.seconds;
-            hb_status.queue.unique_id = p.sequence_id & 0xFFFFFF;
+            status->state |= GHB_STATE_SEARCHING;
+            status->state &= ~GHB_STATE_WORKING;
+            status->state &= ~GHB_STATE_PAUSED;
+            status->pass = p.pass;
+            status->pass_count = p.pass_count;
+            status->pass_id = p.pass_id;
+            status->progress = p.progress;
+            status->rate_cur = p.rate_cur;
+            status->rate_avg = p.rate_avg;
+            status->hours = p.hours;
+            status->minutes = p.minutes;
+            status->seconds = p.seconds;
+            status->unique_id = p.sequence_id & 0xFFFFFF;
             break;
 #undef p
 
         case HB_STATE_PAUSED:
-            hb_status.queue.state |= GHB_STATE_PAUSED;
+            status->state |= GHB_STATE_PAUSED;
             break;
 
         case HB_STATE_MUXING:
         {
-            hb_status.queue.state |= GHB_STATE_MUXING;
+            status->state |= GHB_STATE_MUXING;
         } break;
 
-#define p s_queue.param.workdone
+#define p state->param.workdone
         case HB_STATE_WORKDONE:
         {
-            hb_job_t *job;
-
-            hb_status.queue.state |= GHB_STATE_WORKDONE;
-            hb_status.queue.state &= ~GHB_STATE_MUXING;
-            hb_status.queue.state &= ~GHB_STATE_PAUSED;
-            hb_status.queue.state &= ~GHB_STATE_WORKING;
-            hb_status.queue.state &= ~GHB_STATE_SEARCHING;
+            status->state |= GHB_STATE_WORKDONE;
+            status->state &= ~GHB_STATE_MUXING;
+            status->state &= ~GHB_STATE_PAUSED;
+            status->state &= ~GHB_STATE_WORKING;
+            status->state &= ~GHB_STATE_SEARCHING;
             switch (p.error)
             {
             case HB_ERROR_NONE:
-                hb_status.queue.error = GHB_ERROR_NONE;
+                status->error = GHB_ERROR_NONE;
                 break;
             case HB_ERROR_CANCELED:
-                hb_status.queue.error = GHB_ERROR_CANCELED;
+                status->error = GHB_ERROR_CANCELED;
                 break;
             default:
-                hb_status.queue.error = GHB_ERROR_FAIL;
+                status->error = GHB_ERROR_FAIL;
                 break;
             }
-            // Delete all remaining jobs of this encode.
-            // An encode can be composed of multiple associated jobs.
-            // When a job is stopped, libhb removes it from the job list,
-            // but does not remove other jobs that may be associated with it.
-            // Associated jobs are taged in the sequence id.
-            while ((job = hb_job(h_queue, 0)) != NULL)
-                hb_rem( h_queue, job );
         } break;
 #undef p
     }
+}
+
+void
+ghb_track_status()
+{
+    hb_state_t state;
+
+    if (h_scan == NULL) return;
+    hb_get_state( h_scan, &state );
+    update_status(&state, &hb_status.scan);
+    hb_get_state( h_queue, &state );
+    update_status(&state, &hb_status.queue);
+    hb_get_state( h_live, &state );
+    update_status(&state, &hb_status.live);
 }
 
 hb_audio_config_t*
@@ -4189,135 +4122,313 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
 }
 
 static void
-add_job(hb_handle_t *h, GhbValue *js, gint unique_id, int titleindex)
+add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
 {
-    hb_list_t  * list;
-    const hb_title_t * title;
-    hb_job_t   * job;
-    hb_filter_object_t * filter;
-    gchar *filter_str;
-    gchar *dest_str = NULL;
-    GhbValue *prefs;
+    json_t * dict;
+    json_error_t error;
+    int ii, count;
 
-    g_debug("add_job()\n");
-    if (h == NULL) return;
-    list = hb_get_titles( h );
-    if( !hb_list_count( list ) )
-    {
-        /* No valid title, stop right there */
-        return;
-    }
+    // Assumes that the UI has reduced geometry settings to only the
+    // necessary PAR value
 
-    title = hb_list_item( list, titleindex );
-    if (title == NULL) return;
-
-    /* Set job settings */
-    job = hb_job_init( (hb_title_t*)title );
-    if (job == NULL) return;
-
-    prefs = ghb_settings_get_value(js, "Preferences");
-    job->angle = ghb_settings_get_int(js, "angle");
-    job->start_at_preview = ghb_settings_get_int(js, "start_frame") + 1;
-    if (job->start_at_preview)
-    {
-        job->seek_points = ghb_settings_get_int(prefs, "preview_count");
-        job->pts_to_stop = ghb_settings_get_int(prefs, "live_duration") * 90000LL;
-    }
-
-    const char *mux_id;
+    const char *mux_name;
     const hb_container_t *mux;
+    int mux_id;
 
-    mux_id = ghb_settings_get_const_string(js, "FileFormat");
-    mux = ghb_lookup_container_by_name(mux_id);
+    mux_name = ghb_settings_get_const_string(js, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_name);
 
-    job->mux = mux->format;
-    if (job->mux & HB_MUX_MASK_MP4)
+    mux_id = mux->format;
+
+    int p_to_p = -1, seek_points, chapter_markers = 0;
+    int64_t range_start, range_stop;
+    range_start = ghb_settings_get_int(js, "start_frame") + 1;
+    if (range_start)
     {
-        job->mp4_optimize = ghb_settings_get_boolean(js, "Mp4HttpOptimize");
+        GhbValue *prefs = ghb_settings_get_value(js, "Preferences");
+        seek_points = ghb_settings_get_int(prefs, "preview_count");
+        range_stop = ghb_settings_get_int(prefs, "live_duration") * 90000LL;
     }
     else
     {
-        job->mp4_optimize = FALSE;
-    }
-    if (!job->start_at_preview)
-    {
-        gint num_chapters = hb_list_count(title->list_chapter);
-        double duration = title->duration / 90000;
-        job->chapter_markers = FALSE;
-        job->chapter_start = 1;
-        job->chapter_end = num_chapters;
-
-        if (ghb_settings_combo_int(js, "PtoPType") == 0)
+        chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
+        p_to_p = ghb_settings_combo_int(js, "PtoPType");
+        switch (p_to_p)
         {
-            gint start, end;
-            start = ghb_settings_get_int(js, "start_point");
-            end = ghb_settings_get_int(js, "end_point");
-            job->chapter_start = MIN( num_chapters, start );
-            job->chapter_end   = MAX( job->chapter_start, end );
-
-        }
-        if (ghb_settings_combo_int(js, "PtoPType") == 1)
-        {
-            double start, end;
-            start = ghb_settings_get_double(js, "start_point");
-            end = ghb_settings_get_double(js, "end_point");
-            job->pts_to_start = (int64_t)(MIN(duration, start) * 90000);
-            job->pts_to_stop = (int64_t)(MAX(start, end) * 90000) -
-                                        job->pts_to_start;
-        }
-        if (ghb_settings_combo_int(js, "PtoPType") == 2)
-        {
-            gint start, end;
-            start = ghb_settings_get_int(js, "start_point");
-            end = ghb_settings_get_int(js, "end_point");
-            gint64 max_frames;
-            max_frames = (gint64)duration * title->vrate.num / title->vrate.den;
-            job->frame_to_start = (int64_t)MIN(max_frames-1, start-1);
-            job->frame_to_stop = (int64_t)MAX(start, end-1) -
-                                 job->frame_to_start;
-        }
-        if (job->chapter_start != job->chapter_end)
-        {
-            job->chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
-        }
-        if (job->chapter_start == job->chapter_end)
-            job->chapter_markers = 0;
-        if ( job->chapter_markers )
-        {
-            GhbValue *chapters;
-            GhbValue *chapter;
-            gint chap;
-            gint count;
-
-            chapters = ghb_settings_get_value(js, "chapter_list");
-            count = ghb_array_len(chapters);
-            for(chap = 0; chap < count; chap++)
+            default:
+            case 0: // Chapter range
             {
-                hb_chapter_t * chapter_s;
-                gchar *name;
-
-                name = NULL;
-                chapter = ghb_array_get_nth(chapters, chap);
-                name = ghb_value_string(chapter);
-                if (name == NULL)
-                {
-                    name = g_strdup_printf (_("Chapter %2d"), chap+1);
-                }
-                chapter_s = hb_list_item( job->list_chapter, chap);
-                hb_chapter_set_title(chapter_s, name);
-                g_free(name);
-            }
+                range_start = ghb_settings_get_int(js, "start_point");
+                range_stop  = ghb_settings_get_int(js, "end_point");
+                if (range_start == range_stop)
+                    chapter_markers = 0;
+            } break;
+            case 1: // PTS range
+            {
+                double start, end;
+                start = ghb_settings_get_double(js, "start_point");
+                end   = ghb_settings_get_double(js, "end_point");
+                range_start = (int64_t)start * 90000;
+                range_stop  = (int64_t)end   * 90000 - range_start;
+            } break;
+            case 2: // Frame range
+            {
+                range_start = ghb_settings_get_int(js, "start_point") - 1;
+                range_stop  = ghb_settings_get_int(js, "end_point")   - 1 -
+                              range_start;
+            } break;
         }
     }
 
-    gboolean decomb_deint = ghb_settings_get_boolean(js, "PictureDecombDeinterlace");
-    gint decomb = ghb_settings_combo_int(js, "PictureDecomb");
-    gint deint = ghb_settings_combo_int(js, "PictureDeinterlace");
-    job->grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
+    const char *path = ghb_settings_get_const_string(js, "source");
+    int title_id = ghb_settings_get_int(js, "title");
 
-    job->par.num = ghb_settings_get_int(js, "PicturePARWidth");
-    job->par.den = ghb_settings_get_int(js, "PicturePARHeight");
+    int angle = ghb_settings_get_int(js, "angle");
 
+    hb_rational_t par;
+    par.num = ghb_settings_get_int(js, "PicturePARWidth");
+    par.den = ghb_settings_get_int(js, "PicturePARHeight");
+
+    int vcodec, acodec_copy_mask, acodec_fallback, grayscale;
+    vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
+    acodec_copy_mask = ghb_get_copy_mask(js);
+    acodec_fallback = ghb_settings_audio_encoder_codec(js, "AudioEncoderFallback");
+    grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
+
+    dict = json_pack_ex(&error, 0,
+    "{"
+    // SequenceID
+    "s:o,"
+    // Destination {Mux, ChapterMarkers, ChapterList}
+    "s:{s:o, s:o, s[]},"
+    // Source {Path, Title, Angle}
+    "s:{s:o, s:o, s:o,},"
+    // PAR {Num, Den}
+    "s:{s:o, s:o},"
+    // Video {Codec}
+    "s:{s:o},"
+    // Audio {CopyMask, FallbackEncoder, AudioList []}
+    "s:{s:o, s:o, s:[]},"
+    // Subtitles {Search {}, SubtitleList []}
+    "s:{s:{}, s:[]},"
+    // MetaData
+    "s:{},"
+    // Filters {Grayscale, FilterList []}
+    "s:{s:o, s:[]}"
+    "}",
+        "SequenceID",           json_integer(unique_id),
+        "Destination",
+            "Mux",              json_integer(mux_id),
+            "ChapterMarkers",   json_boolean(chapter_markers),
+            "ChapterList",
+        "Source",
+            "Path",             json_string(path),
+            "Title",            json_integer(title_id),
+            "Angle",            json_integer(angle),
+        "PAR",
+            "Num",              json_integer(par.num),
+            "Den",              json_integer(par.den),
+        "Video",
+            "Codec",            json_integer(vcodec),
+        "Audio",
+            "CopyMask",         json_integer(acodec_copy_mask),
+            "FallbackEncoder",  json_integer(acodec_fallback),
+            "AudioList",
+        "Subtitle",
+            "Search",
+            "SubtitleList",
+        "MetaData",
+        "Filter",
+            "Grayscale",        json_boolean(grayscale),
+            "FilterList"
+    );
+    if (dict == NULL)
+    {
+        printf("json pack job failure: %s\n", error.text);
+        return;
+    }
+    const char *dest = ghb_settings_get_const_string(js, "destination");
+    json_t *dest_dict = json_object_get(dict, "Destination");
+    if (dest != NULL)
+    {
+        json_object_set_new(dest_dict, "File", json_string(dest));
+    }
+    if (mux_id & HB_MUX_MASK_MP4)
+    {
+        int mp4_optimize, ipod_atom = 0;
+        mp4_optimize = ghb_settings_get_boolean(js, "Mp4HttpOptimize");
+        if (vcodec == HB_VCODEC_X264)
+        {
+            ipod_atom = ghb_settings_get_boolean(js, "Mp4iPodCompatible");
+        }
+        json_t *mp4_dict;
+        mp4_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+            "Mp4Optimize",      json_boolean(mp4_optimize),
+            "IpodAtom",         json_boolean(ipod_atom));
+        if (mp4_dict == NULL)
+        {
+            printf("json pack mp4 failure: %s\n", error.text);
+            return;
+        }
+        json_object_set_new(dest_dict, "Mp4Options", mp4_dict);
+    }
+    json_t *source_dict = json_object_get(dict, "Source");
+    json_t *range_dict;
+    switch (p_to_p)
+    {
+        case -1: // Live preview range
+        {
+            range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
+                "StartAtPreview",   json_integer(range_start),
+                "PtsToStop",        json_integer(range_stop),
+                "SeekPoints",       json_integer(seek_points));
+            if (range_dict == NULL)
+            {
+                printf("json pack live range failure: %s\n", error.text);
+                return;
+            }
+        } break;
+        default:
+        case 0: // Chapter range
+        {
+            range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                "ChapterStart", json_integer(range_start),
+                "ChapterEnd",   json_integer(range_stop));
+            if (range_dict == NULL)
+            {
+                printf("json pack chapter range failure: %s\n", error.text);
+                return;
+            }
+        } break;
+        case 1: // PTS range
+        {
+            range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                "PtsToStart",   json_integer(range_start),
+                "PtsToStop",    json_integer(range_stop));
+            if (range_dict == NULL)
+            {
+                printf("json pack pts range failure: %s\n", error.text);
+                return;
+            }
+        } break;
+        case 2: // Frame range
+        {
+            range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                "FrameToStart", json_integer(range_start),
+                "FrameToStop",  json_integer(range_stop));
+            if (range_dict == NULL)
+            {
+                printf("json pack frame range failure: %s\n", error.text);
+                return;
+            }
+        } break;
+    }
+    json_object_set_new(source_dict, "Range", range_dict);
+
+    json_t *video_dict = json_object_get(dict, "Video");
+    if (ghb_settings_get_boolean(js, "vquality_type_constant"))
+    {
+        double vquality = ghb_settings_get_double(js, "VideoQualitySlider");
+        json_object_set_new(video_dict, "Quality", json_real(vquality));
+    }
+    else if (ghb_settings_get_boolean(js, "vquality_type_bitrate"))
+    {
+        int vbitrate, twopass, fastfirstpass;
+        vbitrate = ghb_settings_get_int(js, "VideoAvgBitrate");
+        twopass = ghb_settings_get_boolean(js, "VideoTwoPass");
+        fastfirstpass = ghb_settings_get_boolean(js, "VideoTurboTwoPass");
+        json_object_set_new(video_dict, "Bitrate", json_integer(vbitrate));
+        json_object_set_new(video_dict, "TwoPass", json_boolean(twopass));
+        json_object_set_new(video_dict, "Turbo", json_boolean(fastfirstpass));
+    }
+    ghb_set_video_encoder_opts(video_dict, js);
+
+    json_t *meta_dict = json_object_get(dict, "MetaData");
+    const char * meta;
+
+    meta = ghb_settings_get_const_string(js, "MetaName");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "Name", json_string(meta));
+    }
+    meta = ghb_settings_get_const_string(js, "MetaArtist");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "Artist", json_string(meta));
+    }
+    meta = ghb_settings_get_const_string(js, "MetaAlbumArtist");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "AlbumArtist", json_string(meta));
+    }
+    meta = ghb_settings_get_const_string(js, "MetaReleaseDate");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "ReleaseDate", json_string(meta));
+    }
+    meta = ghb_settings_get_const_string(js, "MetaComment");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "Comment", json_string(meta));
+    }
+    meta = ghb_settings_get_const_string(js, "MetaGenre");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "Genre", json_string(meta));
+    }
+    meta = ghb_settings_get_const_string(js, "MetaDescription");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "Description", json_string(meta));
+    }
+    meta = ghb_settings_get_const_string(js, "MetaLongDescription");
+    if (meta && *meta)
+    {
+        json_object_set_new(meta_dict, "LongDescription", json_string(meta));
+    }
+
+    // process chapter list
+    if (chapter_markers)
+    {
+        json_t *chapter_list = json_object_get(dest_dict, "ChapterList");
+        GhbValue *chapters;
+        GhbValue *chapter;
+        gint chap;
+        gint count;
+
+        chapters = ghb_settings_get_value(js, "chapter_list");
+        count = ghb_array_len(chapters);
+        for(chap = 0; chap < count; chap++)
+        {
+            json_t *chapter_dict;
+            gchar *name;
+
+            name = NULL;
+            chapter = ghb_array_get_nth(chapters, chap);
+            name = ghb_value_string(chapter);
+            if (name == NULL)
+            {
+                name = g_strdup_printf (_("Chapter %2d"), chap+1);
+            }
+            chapter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                    "Name", json_string(name));
+            if (chapter_dict == NULL)
+            {
+                printf("json pack chapter failure: %s\n", error.text);
+                return;
+            }
+            json_array_append_new(chapter_list, chapter_dict);
+            g_free(name);
+        }
+    }
+
+    // Create filter list
+    json_t *filters_dict = json_object_get(dict, "Filter");
+    json_t *filter_list = json_object_get(filters_dict, "FilterList");
+    json_t *filter_dict;
+    char *filter_str;
+
+    // Crop scale filter
     int width, height, crop[4];
     width = ghb_settings_get_int(js, "scale_width");
     height = ghb_settings_get_int(js, "scale_height");
@@ -4329,54 +4440,108 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id, int titleindex)
 
     filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d",
                             width, height, crop[0], crop[1], crop[2], crop[3]);
-    filter = hb_filter_init(HB_FILTER_CROP_SCALE);
-    hb_add_filter( job, filter, filter_str );
+    filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                            "ID",       json_integer(HB_FILTER_CROP_SCALE),
+                            "Settings", json_string(filter_str));
+    if (filter_dict == NULL)
+    {
+        printf("json pack scale filter failure: %s\n", error.text);
+        return;
+    }
+    json_array_append_new(filter_list, filter_dict);
     g_free(filter_str);
 
-    /* Add selected filters */
+    // detelecine filter
     gint detel = ghb_settings_combo_int(js, "PictureDetelecine");
-    if ( detel )
+    if (detel)
     {
-        filter_str = NULL;
+        const char *filter_str = NULL;
         if (detel != 1)
         {
             if (detel_opts.map[detel].svalue != NULL)
-                filter_str = g_strdup(detel_opts.map[detel].svalue);
+                filter_str = detel_opts.map[detel].svalue;
         }
         else
-            filter_str = ghb_settings_get_string(js, "PictureDetelecineCustom");
-        filter = hb_filter_init(HB_FILTER_DETELECINE);
-        hb_add_filter( job, filter, filter_str );
-        g_free(filter_str);
+        {
+            filter_str = ghb_settings_get_const_string(js, "PictureDetelecineCustom");
+        }
+        filter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                "ID", json_integer(HB_FILTER_DETELECINE));
+        if (filter_dict == NULL)
+        {
+            printf("json pack detelecine filter failure: %s\n", error.text);
+            return;
+        }
+        if (filter_str != NULL)
+        {
+            json_object_set_new(filter_dict, "Settings",
+                                json_string(filter_str));
+        }
+        json_array_append_new(filter_list, filter_dict);
     }
-    if ( decomb_deint && decomb )
+
+    // Decomb filter
+    gboolean decomb_deint;
+    gint decomb, deint;
+    decomb_deint = ghb_settings_get_boolean(js, "PictureDecombDeinterlace");
+    decomb = ghb_settings_combo_int(js, "PictureDecomb");
+    deint = ghb_settings_combo_int(js, "PictureDeinterlace");
+    if (decomb_deint && decomb)
     {
-        filter_str = NULL;
+        const char *filter_str = NULL;
         if (decomb != 1)
         {
             if (decomb_opts.map[decomb].svalue != NULL)
-                filter_str = g_strdup(decomb_opts.map[decomb].svalue);
+                filter_str = decomb_opts.map[decomb].svalue;
         }
         else
-            filter_str = ghb_settings_get_string(js, "PictureDecombCustom");
-        filter = hb_filter_init(HB_FILTER_DECOMB);
-        hb_add_filter( job, filter, filter_str );
-        g_free(filter_str);
+        {
+            filter_str = ghb_settings_get_const_string(js, "PictureDecombCustom");
+        }
+        filter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                "ID", json_integer(HB_FILTER_DECOMB));
+        if (filter_dict == NULL)
+        {
+            printf("json pack decomb filter failure: %s\n", error.text);
+            return;
+        }
+        if (filter_str != NULL)
+        {
+            json_object_set_new(filter_dict, "Settings",
+                                json_string(filter_str));
+        }
+        json_array_append_new(filter_list, filter_dict);
     }
+
+    // Deinterlace filter
     if ( !decomb_deint && deint )
     {
-        filter_str = NULL;
+        const char *filter_str = NULL;
         if (deint != 1)
         {
             if (deint_opts.map[deint].svalue != NULL)
-                filter_str = g_strdup(deint_opts.map[deint].svalue);
+                filter_str = deint_opts.map[deint].svalue;
         }
         else
-            filter_str = ghb_settings_get_string(js, "PictureDeinterlaceCustom");
-        filter = hb_filter_init(HB_FILTER_DEINTERLACE);
-        hb_add_filter( job, filter, filter_str );
-        g_free(filter_str);
+        {
+            filter_str = ghb_settings_get_const_string(js, "PictureDeinterlaceCustom");
+        }
+        filter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                "ID", json_integer(HB_FILTER_DEINTERLACE));
+        if (filter_dict == NULL)
+        {
+            printf("json pack deinterlace filter failure: %s\n", error.text);
+            return;
+        }
+        if (filter_str != NULL)
+        {
+            json_object_set_new(filter_dict, "Settings",
+                                json_string(filter_str));
+        }
+        json_array_append_new(filter_list, filter_dict);
     }
+
+    // Denoise filter
     if (strcmp(ghb_settings_get_const_string(js, "PictureDenoiseFilter"), "off"))
     {
         int filter_id = HB_FILTER_HQDN3D;
@@ -4387,8 +4552,15 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id, int titleindex)
         {
             const char *filter_str;
             filter_str = ghb_settings_get_const_string(js, "PictureDenoiseCustom");
-            filter = hb_filter_init(filter_id);
-            hb_add_filter( job, filter, filter_str );
+            filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                                "ID",       json_integer(filter_id),
+                                "Settings", json_string(filter_str));
+            if (filter_dict == NULL)
+            {
+                printf("json pack denoise filter failure: %s\n", error.text);
+                return;
+            }
+            json_array_append_new(filter_list, filter_dict);
         }
         else
         {
@@ -4396,45 +4568,37 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id, int titleindex)
             preset = ghb_settings_get_const_string(js, "PictureDenoisePreset");
             tune = ghb_settings_get_const_string(js, "PictureDenoiseTune");
             filter_str = hb_generate_filter_settings(filter_id, preset, tune);
-            filter = hb_filter_init(filter_id);
-            hb_add_filter( job, filter, filter_str );
+            filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                                "ID",       json_integer(filter_id),
+                                "Settings", json_string(filter_str));
+            if (filter_dict == NULL)
+            {
+                printf("json pack denoise filter failure: %s\n", error.text);
+                return;
+            }
+            json_array_append_new(filter_list, filter_dict);
             g_free(filter_str);
         }
     }
+
+    // Deblock filter
     gint deblock = ghb_settings_get_int(js, "PictureDeblock");
     if( deblock >= 5 )
     {
-        filter_str = NULL;
         filter_str = g_strdup_printf("%d", deblock);
-        filter = hb_filter_init(HB_FILTER_DEBLOCK);
-        hb_add_filter( job, filter, filter_str );
+        filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                            "ID",       json_integer(HB_FILTER_DEBLOCK),
+                            "Settings", json_string(filter_str));
+        if (filter_dict == NULL)
+        {
+            printf("json pack deblock filter failure: %s\n", error.text);
+            return;
+        }
+        json_array_append_new(filter_list, filter_dict);
         g_free(filter_str);
     }
 
-    job->vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
-    if ((job->mux & HB_MUX_MASK_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
-    {
-        // mp4/theora combination is not supported.
-        job->vcodec = HB_VCODEC_FFMPEG_MPEG4;
-    }
-    if ((job->vcodec == HB_VCODEC_X264) && (job->mux & HB_MUX_MASK_MP4))
-    {
-        job->ipod_atom = ghb_settings_get_boolean(js, "Mp4iPodCompatible");
-    }
-    if (ghb_settings_get_boolean(js, "vquality_type_constant"))
-    {
-        gdouble vquality;
-        vquality = ghb_settings_get_double(js, "VideoQualitySlider");
-        job->vquality =  vquality;
-        job->vbitrate = 0;
-    }
-    else if (ghb_settings_get_boolean(js, "vquality_type_bitrate"))
-    {
-        job->vquality = -1.0;
-        job->vbitrate = ghb_settings_get_int(js, "VideoAvgBitrate");
-    }
-
-    gint vrate_num;
+    // VFR filter
     gint vrate_den = ghb_settings_video_framerate_rate(js, "VideoFramerate");
     gint cfr;
     if (ghb_settings_get_boolean(js, "VideoFrameratePFR"))
@@ -4451,122 +4615,110 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id, int titleindex)
         ghb_log("zerolatency x264 tune selected, forcing constant framerate");
     }
 
-    if( vrate_den == 0 )
+    if (vrate_den == 0)
     {
-        vrate_num = title->vrate.num;
-        vrate_den = title->vrate.den;
+        filter_str = g_strdup_printf("%d", cfr);
     }
     else
     {
-        vrate_num = 27000000;
+        filter_str = g_strdup_printf("%d:%d:%d", cfr, 27000000, vrate_den);
     }
-    filter_str = g_strdup_printf("%d:%d:%d", cfr, vrate_num, vrate_den);
-    filter = hb_filter_init(HB_FILTER_VFR);
-    hb_add_filter( job, filter, filter_str );
+    filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
+                        "ID",       json_integer(HB_FILTER_VFR),
+                        "Settings", json_string(filter_str));
+    if (filter_dict == NULL)
+    {
+        printf("json pack vfr filter failure: %s\n", error.text);
+        return;
+    }
+    json_array_append_new(filter_list, filter_dict);
     g_free(filter_str);
 
+    // Create audio list
+    json_t *audios_dict = json_object_get(dict, "Audio");
+    json_t *json_audio_list = json_object_get(audios_dict, "AudioList");
     const GhbValue *audio_list;
-    gint count, ii;
-    gint tcount = 0;
 
     audio_list = ghb_settings_get_value(js, "audio_list");
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
     {
+        json_t *audio_dict;
         GhbValue *asettings;
-        hb_audio_config_t audio;
-        hb_audio_config_t *aconfig;
-        gint acodec, fallback;
+        int track, acodec, mixdown, samplerate;
+        const char *aname;
+        double gain, drc, quality;
 
-        hb_audio_config_init(&audio);
         asettings = ghb_array_get_nth(audio_list, ii);
-        audio.in.track = ghb_settings_get_int(asettings, "AudioTrack");
-        audio.out.track = tcount;
-
-        char * aname = ghb_settings_get_string(asettings, "AudioTrackName");
-        if (aname && *aname)
-        {
-            // This leaks, but there is no easy way to clean up
-            // presently
-            audio.out.name = aname;
-        }
-        else
-        {
-            g_free(aname);
-        }
-
-        aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
-                                    title->list_audio, audio.in.track );
-
+        track = ghb_settings_get_int(asettings, "AudioTrack");
+        aname = ghb_settings_get_const_string(asettings, "AudioTrackName");
         acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
-
-        fallback = ghb_settings_audio_encoder_codec(js, "AudioEncoderFallback");
-        gint copy_mask = ghb_get_copy_mask(js);
-        audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec, fallback, copy_mask);
-
-        audio.out.gain =
-            ghb_settings_get_double(asettings, "AudioTrackGainSlider");
-
-        audio.out.dynamic_range_compression =
-            ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
-        if (audio.out.dynamic_range_compression < 1.0)
-            audio.out.dynamic_range_compression = 0.0;
+        audio_dict = json_pack_ex(&error, 0,
+            "{s:o, s:o}",
+            "Track",                json_integer(track),
+            "Encoder",              json_integer(acodec));
+        if (audio_dict == NULL)
+        {
+            printf("json pack audio failure: %s\n", error.text);
+            return;
+        }
+        if (aname != NULL && aname[0] != 0)
+        {
+            json_object_set_new(audio_dict, "Name", json_string(aname));
+        }
 
         // It would be better if this were done in libhb for us, but its not yet.
-        if (ghb_audio_is_passthru(audio.out.codec))
+        if (!ghb_audio_is_passthru(acodec))
         {
-            audio.out.mixdown = 0;
-        }
-        else
-        {
-            audio.out.mixdown = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
-            // Make sure the mixdown is valid and pick a new one if not.
-            audio.out.mixdown = ghb_get_best_mix(aconfig, audio.out.codec,
-                                                    audio.out.mixdown);
-            gint srate;
-            srate = ghb_settings_audio_samplerate_rate(
+            gain = ghb_settings_get_double(asettings, "AudioTrackGainSlider");
+            if (gain > 0)
+                json_object_set_new(audio_dict, "Gain", json_real(gain));
+            drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+            if (drc < 1.0)
+                drc = 0.0;
+            if (drc > 0)
+                json_object_set_new(audio_dict, "DRC", json_real(drc));
+
+            mixdown = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
+            json_object_set_new(audio_dict, "Mixdown", json_integer(mixdown));
+
+            samplerate = ghb_settings_audio_samplerate_rate(
                                             asettings, "AudioSamplerate");
-            if (srate == 0) // 0 is same as source
-                audio.out.samplerate = aconfig->in.samplerate;
-            else
-                audio.out.samplerate = srate;
-            double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
-            if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
-                quality != HB_INVALID_AUDIO_QUALITY)
+            json_object_set_new(audio_dict, "Samplerate",
+                                json_integer(samplerate));
+            gboolean qe;
+            qe = ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable");
+            quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
+            if (qe && quality != HB_INVALID_AUDIO_QUALITY)
             {
-                audio.out.quality = quality;
-                audio.out.bitrate = -1;
+                json_object_set_new(audio_dict, "Quality", json_real(quality));
             }
             else
             {
-                audio.out.quality = HB_INVALID_AUDIO_QUALITY;
-                audio.out.bitrate =
+                int bitrate =
                     ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
-
-                audio.out.bitrate = hb_audio_bitrate_get_best(
-                    audio.out.codec, audio.out.bitrate,
-                    audio.out.samplerate, audio.out.mixdown);
+                bitrate = hb_audio_bitrate_get_best(
+                                        acodec, bitrate, samplerate, mixdown);
+                json_object_set_new(audio_dict, "Bitrate",
+                                    json_integer(bitrate));
             }
         }
 
-        // Add it to the jobs audio list
-        hb_audio_add( job, &audio );
-        tcount++;
+        json_array_append_new(json_audio_list, audio_dict);
     }
 
-    dest_str = ghb_settings_get_string(js, "destination");
-    hb_job_set_file( job, dest_str);
-    g_free(dest_str);
-
+    // Create subtitle list
+    json_t *subtitles_dict = json_object_get(dict, "Subtitle");
+    json_t *json_subtitle_list = json_object_get(subtitles_dict, "SubtitleList");
     const GhbValue *subtitle_list;
-    gint subtitle;
-    gboolean force, burned, def, one_burned = FALSE;
 
-    ghb_settings_set_boolean(js, "subtitle_scan", FALSE);
     subtitle_list = ghb_settings_get_value(js, "subtitle_list");
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
+        json_t *subtitle_dict;
+        gint track;
+        gboolean force, burned, def, one_burned = FALSE;
         GhbValue *ssettings;
         gint source;
 
@@ -4579,174 +4731,104 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id, int titleindex)
 
         if (source == SRTSUB)
         {
-            hb_subtitle_config_t sub_config;
-            gchar *filename, *lang, *code;
-
-            filename = ghb_settings_get_string(ssettings, "SrtFile");
+            const gchar *filename, *lang, *code;
+            int offset;
+            filename = ghb_settings_get_const_string(ssettings, "SrtFile");
             if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
             {
                 continue;
             }
-            sub_config.offset = ghb_settings_get_int(ssettings, "SrtOffset");
-            lang = ghb_settings_get_string(ssettings, "SrtLanguage");
-            code = ghb_settings_get_string(ssettings, "SrtCodeset");
-            strncpy(sub_config.src_filename, filename, 255);
-            sub_config.src_filename[255] = 0;
-            strncpy(sub_config.src_codeset, code, 39);
-            sub_config.src_codeset[39] = 0;
-            sub_config.force = 0;
-            sub_config.default_track = def;
+            offset = ghb_settings_get_int(ssettings, "SrtOffset");
+            lang = ghb_settings_get_const_string(ssettings, "SrtLanguage");
+            code = ghb_settings_get_const_string(ssettings, "SrtCodeset");
             if (burned && !one_burned && hb_subtitle_can_burn(SRTSUB))
             {
                 // Only allow one subtitle to be burned into the video
-                sub_config.dest = RENDERSUB;
                 one_burned = TRUE;
             }
             else
             {
-                sub_config.dest = PASSTHRUSUB;
+                burned = FALSE;
             }
-
-            hb_srt_add( job, &sub_config, lang);
-
-            g_free(filename);
-            g_free(lang);
-            g_free(code);
-            continue;
+            subtitle_dict = json_pack_ex(&error, 0,
+                "{s:o, s:o, s:o, s:{s:o, s:o, s:o}}",
+                "Default",  json_boolean(def),
+                "Burn",     json_boolean(burned),
+                "Offset",   json_integer(offset),
+                "SRT",
+                    "Filename", json_string(filename),
+                    "Language", json_string(lang),
+                    "Codeset",  json_string(code));
+            if (subtitle_dict == NULL)
+            {
+                printf("json pack srt failure: %s\n", error.text);
+                return;
+            }
+            json_array_append_new(json_subtitle_list, subtitle_dict);
         }
 
-        subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
-        if (subtitle == -1)
+        track = ghb_settings_get_int(ssettings, "SubtitleTrack");
+        if (track == -1)
         {
+            json_t *search = json_object_get(subtitles_dict, "Search");
             if (burned && !one_burned)
             {
                 // Only allow one subtitle to be burned into the video
-                job->select_subtitle_config.dest = RENDERSUB;
                 one_burned = TRUE;
             }
             else
             {
-                job->select_subtitle_config.dest = PASSTHRUSUB;
+                burned = FALSE;
             }
-            job->select_subtitle_config.force = force;
-            job->select_subtitle_config.default_track = def;
-            job->indepth_scan = 1;
-            ghb_settings_set_boolean(js, "subtitle_scan", TRUE);
+            json_object_set_new(search, "Enable", json_boolean(TRUE));
+            json_object_set_new(search, "Forced", json_boolean(force));
+            json_object_set_new(search, "Default", json_boolean(def));
+            json_object_set_new(search, "Burn", json_boolean(burned));
         }
-        else if (subtitle >= 0)
+        else if (track >= 0)
         {
-            hb_subtitle_t * subt;
-            hb_subtitle_config_t sub_config;
-
-            subt = hb_list_item(title->list_subtitle, subtitle);
-            if (subt != NULL)
+            if (burned && !one_burned && hb_subtitle_can_burn(source))
             {
-                sub_config = subt->config;
-                if (burned && !one_burned && hb_subtitle_can_burn(subt->source))
-                {
-                    // Only allow one subtitle to be burned into the video
-                    sub_config.dest = RENDERSUB;
-                    one_burned = TRUE;
-                }
-                else
-                {
-                    sub_config.dest = PASSTHRUSUB;
-                }
-                sub_config.force = force;
-                sub_config.default_track = def;
-                hb_subtitle_add( job, &sub_config, subtitle );
+                // Only allow one subtitle to be burned into the video
+                one_burned = TRUE;
             }
+            else
+            {
+                burned = FALSE;
+            }
+
+            subtitle_dict = json_pack_ex(&error, 0,
+            "{s:o, s:o, s:o, s:o}",
+                "Track",    json_integer(track),
+                "Default",  json_boolean(def),
+                "Force",    json_boolean(force),
+                "Burn",     json_boolean(burned));
+            if (subtitle_dict == NULL)
+            {
+                printf("json pack subtitle failure: %s\n", error.text);
+                return;
+            }
+            json_array_append_new(json_subtitle_list, subtitle_dict);
         }
     }
-    if (one_burned)
-    {
-        // Add filter that renders vobsubs
-        filter = hb_filter_init(HB_FILTER_RENDER_SUB);
-        filter_str = g_strdup_printf("%d:%d:%d:%d",
-                                crop[0], crop[1], crop[2], crop[3]);
-        hb_add_filter( job, filter, filter_str );
-        g_free(filter_str);
-    }
 
+    char *json_job = json_dumps(dict, JSON_INDENT(4));
+    json_decref(dict);
 
-    char * meta;
-
-    meta = ghb_settings_get_string(js, "MetaName");
-    if (meta && *meta)
-    {
-        hb_metadata_set_name(job->metadata, meta);
-    }
-    free(meta);
-    meta = ghb_settings_get_string(js, "MetaArtist");
-    if (meta && *meta)
-    {
-        hb_metadata_set_artist(job->metadata, meta);
-    }
-    free(meta);
-    meta = ghb_settings_get_string(js, "MetaAlbumArtist");
-    if (meta && *meta)
-    {
-        hb_metadata_set_album_artist(job->metadata, meta);
-    }
-    free(meta);
-    meta = ghb_settings_get_string(js, "MetaReleaseDate");
-    if (meta && *meta)
-    {
-        hb_metadata_set_release_date(job->metadata, meta);
-    }
-    free(meta);
-    meta = ghb_settings_get_string(js, "MetaComment");
-    if (meta && *meta)
-    {
-        hb_metadata_set_comment(job->metadata, meta);
-    }
-    free(meta);
-    meta = ghb_settings_get_string(js, "MetaGenre");
-    if (meta && *meta)
-    {
-        hb_metadata_set_genre(job->metadata, meta);
-    }
-    free(meta);
-    meta = ghb_settings_get_string(js, "MetaDescription");
-    if (meta && *meta)
-    {
-        hb_metadata_set_description(job->metadata, meta);
-    }
-    free(meta);
-    meta = ghb_settings_get_string(js, "MetaLongDescription");
-    if (meta && *meta)
-    {
-        hb_metadata_set_long_description(job->metadata, meta);
-    }
-    free(meta);
-
-    job->twopass = ghb_settings_get_boolean(js, "VideoTwoPass");
-    job->fastfirstpass = ghb_settings_get_boolean(js, "VideoTurboTwoPass");
-    job->sequence_id = unique_id;
-    ghb_set_video_encoder_opts(job, js);
-    hb_add(h, job);
-
-    hb_job_close(&job);
+    hb_add_json(h, json_job);
+    free(json_job);
 }
 
 void
 ghb_add_job(GhbValue *js, gint unique_id)
 {
-    // Since I'm doing a scan of the single title I want just prior
-    // to adding the job, there is only the one title to choose from.
-    add_job(h_queue, js, unique_id, 0);
+    add_job(h_queue, js, unique_id);
 }
 
 void
 ghb_add_live_job(GhbValue *js, gint unique_id)
 {
-    int title_id, titleindex;
-    const hb_title_t *title;
-
-    title_id = ghb_settings_get_int(js, "title");
-    title = ghb_lookup_title(title_id, &titleindex);
-    (void)title; // Silence "unused variable" warning
-    add_job(h_scan, js, unique_id, titleindex);
+    add_job(h_live, js, unique_id);
 }
 
 void
@@ -4781,13 +4863,13 @@ ghb_stop_queue()
 void
 ghb_start_live_encode()
 {
-    hb_start( h_scan );
+    hb_start( h_live );
 }
 
 void
 ghb_stop_live_encode()
 {
-    hb_stop( h_scan );
+    hb_stop( h_live );
 }
 
 void

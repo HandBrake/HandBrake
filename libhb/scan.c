@@ -74,7 +74,19 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->preview_count  = preview_count;
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
-    
+
+    // Initialize scan state
+    hb_state_t state;
+#define p state.param.scanning
+    state.state   = HB_STATE_SCANNING;
+    p.title_cur   = 1;
+    p.title_count = 1;
+    p.preview_cur = 0;
+    p.preview_count = 1;
+    p.progress = 0.0;
+#undef p
+    hb_set_state(handle, &state);
+
     return hb_thread_init( "scan", ScanFunc, data, HB_NORMAL_PRIORITY );
 }
 
@@ -169,7 +181,14 @@ static void ScanFunc( void * _data )
     }
     else
     {
-        data->title_index = 1;
+        // Title index 0 is not a valid title number and means scan all titles.
+        // So set title index to 1 in this scenario.
+        //
+        // Otherwise, set title index in new title to the index that was
+        // requested.  This preserves the original index created in batch
+        // mode.
+        if (data->title_index == 0)
+            data->title_index = 1;
         hb_title_t * title = hb_title_init( data->path, data->title_index );
         if ( (data->stream = hb_stream_open( data->path, title, 1 ) ) != NULL )
         {

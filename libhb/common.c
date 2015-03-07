@@ -2582,7 +2582,7 @@ void hb_list_rem( hb_list_t * l, void * p )
  *********************************************************************/
 void * hb_list_item( const hb_list_t * l, int i )
 {
-    if( i < 0 || i >= l->items_count )
+    if( l == NULL || i < 0 || i >= l->items_count )
     {
         return NULL;
     }
@@ -2711,6 +2711,9 @@ void hb_list_empty( hb_list_t ** _l )
 void hb_list_close( hb_list_t ** _l )
 {
     hb_list_t * l = *_l;
+
+    if (l == NULL)
+        return;
 
     free( l->items );
     free( l );
@@ -3048,7 +3051,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->vquality   = -1.0;
     job->vbitrate   = 1000;
     job->twopass    = 0;
-    job->pass       = 0;
+    job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 
     job->mux = HB_MUX_MP4;
@@ -3078,6 +3081,8 @@ static void job_clean( hb_job_t * job )
         hb_filter_object_t *filter;
         hb_attachment_t *attachment;
 
+        free((void*)job->json);
+        job->json = NULL;
         free(job->encoder_preset);
         job->encoder_preset = NULL;
         free(job->encoder_tune);

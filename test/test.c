@@ -2824,7 +2824,7 @@ static int HandleEvents( hb_handle_t * h )
 #define p s.param.working
         case HB_STATE_SEARCHING:
             fprintf( stdout, "\rEncoding: task %d of %d, Searching for start time, %.2f %%",
-                     p.job_cur, p.job_count, 100.0 * p.progress );
+                     p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
             {
                 fprintf( stdout, " (ETA %02dh%02dm%02ds)", 
@@ -2835,7 +2835,7 @@ static int HandleEvents( hb_handle_t * h )
 
         case HB_STATE_WORKING:
             fprintf( stdout, "\rEncoding: task %d of %d, %.2f %%",
-                     p.job_cur, p.job_count, 100.0 * p.progress );
+                     p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
             {
                 fprintf( stdout, " (%.2f fps, avg %.2f fps, ETA "

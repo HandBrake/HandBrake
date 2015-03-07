@@ -446,6 +446,8 @@ typedef enum
  *****************************************************************************/
 struct hb_job_s
 {
+    PRIVATE const char  * json;   // JSON encoded job string
+
     /* ID assigned by UI so it can groups job passes together */
     int             sequence_id;
 
@@ -494,7 +496,7 @@ struct hb_job_s
     int             vbitrate;
     hb_rational_t   vrate;
     int             cfr;
-    PRIVATE int     pass;
+    PRIVATE int     pass_id;
     int             twopass;        // Enable 2-pass encode. Boolean
     int             fastfirstpass;
     char           *encoder_preset;
@@ -605,7 +607,6 @@ struct hb_job_s
 #ifdef __LIBHB__
     /* Internal data */
     hb_handle_t   * h;
-    hb_lock_t     * pause;
     volatile hb_error_code * done_error;
     volatile int  * die;
     volatile int    done;
@@ -993,9 +994,14 @@ struct hb_state_s
         struct
         {
             /* HB_STATE_WORKING */
+#define HB_PASS_SUBTITLE    -1
+#define HB_PASS_ENCODE      0
+#define HB_PASS_ENCODE_1ST  1   // Some code depends on these values being
+#define HB_PASS_ENCODE_2ND  2   // 1 and 2.  Do not change.
+            int   pass_id;
+            int   pass;
+            int   pass_count;
             float progress;
-            int   job_cur;
-            int   job_count;
             float rate_cur;
             float rate_avg;
             int   hours;

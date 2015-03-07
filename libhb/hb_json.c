@@ -42,12 +42,13 @@ static json_t* hb_state_to_dict( hb_state_t * state)
     case HB_STATE_PAUSED:
     case HB_STATE_SEARCHING:
         dict = json_pack_ex(&error, 0,
-            "{s:o, s{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}}",
+            "{s:o, s{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}}",
             "State", json_integer(state->state),
             "Working",
                 "Progress",     json_real(state->param.working.progress),
-                "Job",          json_integer(state->param.working.job_cur),
-                "JobCount",     json_integer(state->param.working.job_count),
+                "PassID",       json_integer(state->param.working.pass_id),
+                "Pass",         json_integer(state->param.working.pass),
+                "PassCount",    json_integer(state->param.working.pass_count),
                 "Rate",         json_real(state->param.working.rate_cur),
                 "RateAvg",      json_real(state->param.working.rate_avg),
                 "Hours",        json_integer(state->param.working.hours),
@@ -216,6 +217,11 @@ static json_t* hb_title_to_dict( const hb_title_t * title )
     {
         json_object_set_new(meta_dict, "LongDescription",
                             json_string(title->metadata->long_description));
+    }
+    if (title->metadata->release_date != NULL)
+    {
+        json_object_set_new(meta_dict, "ReleaseDate",
+                            json_string(title->metadata->release_date));
     }
 
     // process chapter list
@@ -554,6 +560,11 @@ char* hb_job_to_json( const hb_job_t * job )
         json_object_set_new(meta_dict, "LongDescription",
                             json_string(job->metadata->long_description));
     }
+    if (job->metadata->release_date != NULL)
+    {
+        json_object_set_new(meta_dict, "ReleaseDate",
+                            json_string(job->metadata->release_date));
+    }
 
     // process chapter list
     json_t *chapter_list = json_object_get(dest_dict, "ChapterList");
@@ -641,8 +652,7 @@ char* hb_job_to_json( const hb_job_t * job )
         else
         {
             subtitle_dict = json_pack_ex(&error, 0,
-            "{s:o, s:o, s:o, s:o, s:o, s:o}",
-                "ID",       json_integer(subtitle->id),
+            "{s:o, s:o, s:o, s:o, s:o}",
                 "Track",    json_integer(subtitle->track),
                 "Default",  json_boolean(subtitle->config.default_track),
                 "Force",    json_boolean(subtitle->config.force),
@@ -666,6 +676,40 @@ static json_int_t*  unpack_I(json_int_t *i) { return i; }
 static int *        unpack_b(int *b)        { return b; }
 static char**       unpack_s(char **s)      { return s; }
 static json_t**     unpack_o(json_t** o)    { return o; }
+
+void hb_json_job_scan( hb_handle_t * h, const char * json_job )
+{
+    json_t * dict;
+    int result;
+    json_error_t error;
+
+    dict = json_loads(json_job, 0, NULL);
+
+    int title_index;
+    char *path = NULL;
+
+    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i}}",
+                            "Source",
+                                "Path",  unpack_s(&path),
+                                "Title", unpack_i(&title_index));
+    if (result < 0)
+    {
+        hb_error("json unpack failure, failed to find title: %s", error.text);
+        return;
+    }
+
+    hb_scan(h, path, title_index, 10, 0, 0);
+
+    // Wait for scan to complete
+    hb_state_t state;
+    do
+    {
+        hb_snooze(50);
+        hb_get_state2(h, &state);
+    } while (state.state == HB_STATE_SCANNING);
+
+    json_decref(dict);
+}
 
 /**
  * Convert a json string representation of a job to an hb_job_t
@@ -1084,12 +1128,10 @@ char* hb_job_init_json(hb_handle_t *h, int title_index)
  */
 int hb_add_json( hb_handle_t * h, const char * json_job )
 {
-    hb_job_t *job = hb_json_to_job(h, json_job);
-    if (job == NULL)
-        return -1;
+    hb_job_t job;
 
-    hb_add(h, job);
-    hb_job_close(&job);
+    job.json = json_job;
+    hb_add(h, &job);
 
     return 0;
 }

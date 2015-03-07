@@ -41,8 +41,9 @@ typedef struct
 
     // WORKING
     gint unique_id;
-    gint job_cur;
-    gint job_count;
+    gint pass_id;
+    gint pass;
+    gint pass_count;
     gdouble progress;
     gdouble rate_cur;
     gdouble rate_avg;
@@ -56,6 +57,7 @@ typedef struct
 {
     ghb_instance_status_t scan;
     ghb_instance_status_t queue;
+    ghb_instance_status_t live;
 } ghb_status_t;
 
 #define MOD_ROUND(v,m) ((m==1)?v:(m * ((v + (m>>1)) / m)))
@@ -100,6 +102,7 @@ void ghb_stop_live_encode();
 
 void ghb_clear_scan_state(gint state);
 void ghb_clear_queue_state(gint state);
+void ghb_clear_live_state(gint state);
 
 void ghb_set_state(gint state);
 gint ghb_get_scan_state();

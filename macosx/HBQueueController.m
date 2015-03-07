@@ -596,7 +596,7 @@
                  case HBStateWorking:
                  {
                      NSString *pass_desc = @"";
-                     if (p.job_cur == 1 && p.job_count > 1)
+                     if (p.pass_id == HB_PASS_SUBTITLE && p.pass_count > 1)
                      {
                          if ([self.currentJob.subtitles.tracks.firstObject[keySubTrackIndex] intValue] == -1)
                          {
@@ -609,14 +609,14 @@
                          string = [NSMutableString stringWithFormat:
                                    NSLocalizedString(@"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @""),
                                    self.currentJob.destURL.lastPathComponent,
-                                   p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+                                   p.pass, pass_desc, p.pass_count, 100.0 * p.progress];
                      }
                      else
                      {
                          string = [NSMutableString stringWithFormat:
                                    NSLocalizedString(@"Encoding: %@ \nPass %d of %d, %.2f %%", @""),
                                    self.currentJob.destURL.lastPathComponent,
-                                   p.job_cur, p.job_count, 100.0 * p.progress];
+                                   p.pass, p.pass_count, 100.0 * p.progress];
                      }
 
                      if (p.seconds > -1)
@@ -635,7 +635,7 @@
                          }
                      }
 
-                     progress = (p.progress + p.job_cur - 1) / p.job_count;
+                     progress = (p.progress + p.pass - 1) / p.pass_count;
 
                      // Update dock icon
                      if (self.dockIconProgress < 100.0 * progress)

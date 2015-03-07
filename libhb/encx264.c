@@ -123,7 +123,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* Some HandBrake-specific defaults; users can override them
      * using the encoder_options string. */
-    if( job->pass == 2 && job->cfr != 1 )
+    if( job->pass_id == HB_PASS_ENCODE_2ND && job->cfr != 1 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
         param.i_fps_num = interjob->vrate.num;
@@ -268,19 +268,20 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.rc.i_rc_method = X264_RC_ABR;
         param.rc.i_bitrate = job->vbitrate;
         hb_log( "encx264: encoding at average bitrate %d", param.rc.i_bitrate );
-        if( job->pass > 0 && job->pass < 3 )
+        if( job->pass_id == HB_PASS_ENCODE_1ST ||
+            job->pass_id == HB_PASS_ENCODE_2ND )
         {
             memset( pv->filename, 0, 1024 );
             hb_get_tempory_filename( job->h, pv->filename, "x264.log" );
         }
-        switch( job->pass )
+        switch( job->pass_id )
         {
-            case 1:
+            case HB_PASS_ENCODE_1ST:
                 param.rc.b_stat_read  = 0;
                 param.rc.b_stat_write = 1;
                 param.rc.psz_stat_out = pv->filename;
                 break;
-            case 2:
+            case HB_PASS_ENCODE_2ND:
                 param.rc.b_stat_read  = 1;
                 param.rc.b_stat_write = 0;
                 param.rc.psz_stat_in  = pv->filename;
@@ -310,7 +311,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
 
     /* Turbo first pass */
-    if( job->pass == 1 && job->fastfirstpass == 1 )
+    if( job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 )
     {
         x264_param_apply_fastfirstpass( &param );
     }
@@ -341,7 +342,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
     free( x264_opts_unparsed );
 
-    hb_deep_log( 2, "encx264: opening libx264 (pass %d)", job->pass );
+    hb_deep_log( 2, "encx264: opening libx264 (pass %d)", job->pass_id );
     pv->x264 = x264_encoder_open( &param );
     if ( pv->x264 == NULL )
     {

@@ -234,18 +234,19 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         param->rc.rateControlMode = X265_RC_ABR;
         param->rc.bitrate         = job->vbitrate;
-        if (job->pass > 0 && job->pass < 3)
+        if (job->pass_id == HB_PASS_ENCODE_1ST ||
+            job->pass_id == HB_PASS_ENCODE_2ND)
         {
             char stats_file[1024] = "";
             char pass[2];
-            snprintf(pass, sizeof(pass), "%d", job->pass);
+            snprintf(pass, sizeof(pass), "%d", job->pass_id);
             hb_get_tempory_filename(job->h, stats_file, "x265.log");
             if (param_parse(param, "stats", stats_file) ||
                 param_parse(param, "pass", pass))
             {
                 goto fail;
             }
-            if (job->pass == 1 && job->fastfirstpass == 0 &&
+            if (job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 0 &&
                 param_parse(param, "slow-firstpass", "1"))
             {
                 goto fail;

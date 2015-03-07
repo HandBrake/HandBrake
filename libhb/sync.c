@@ -155,7 +155,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     pv->common->pts_offset   = INT64_MIN;
     sync->first_frame = 1;
 
-    if( job->pass == 2 )
+    if( job->pass_id == HB_PASS_ENCODE_2ND )
     {
         /* We already have an accurate frame count from pass 1 */
         hb_interjob_t * interjob = hb_interjob_get( job->h );
@@ -263,7 +263,7 @@ void syncVideoClose( hb_work_object_t * w )
             pv->common->count_frames, sync->count_frames_max );
 
     /* save data for second pass */
-    if( job->pass == 1 )
+    if( job->pass_id == HB_PASS_ENCODE_1ST )
     {
         /* Preserve frame count for better accuracy in pass 2 */
         hb_interjob_t * interjob = hb_interjob_get( job->h );
@@ -1638,6 +1638,7 @@ static void UpdateState( hb_work_object_t * w )
     hb_sync_video_t   * sync = &pv->type.video;
     hb_state_t state;
 
+    hb_get_state2( pv->job->h, &state );
     if( !pv->common->count_frames )
     {
         sync->st_first = hb_get_date();

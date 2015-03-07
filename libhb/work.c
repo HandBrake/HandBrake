@@ -58,18 +58,21 @@ hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, hb_error_code 
     return hb_thread_init( "work", work_func, work, HB_LOW_PRIORITY );
 }
 
-static void InitWorkState( hb_handle_t * h )
+static void InitWorkState(hb_handle_t *h, int pass_id, int pass, int pass_count)
 {
     hb_state_t state;
 
-    state.state = HB_STATE_WORKING;
+    state.state  = HB_STATE_WORKING;
 #define p state.param.working
-    p.progress  = 0.0;
-    p.rate_cur  = 0.0;
-    p.rate_avg  = 0.0;
-    p.hours     = -1;
-    p.minutes   = -1;
-    p.seconds   = -1; 
+    p.pass_id    = pass_id;
+    p.pass       = pass;
+    p.pass_count = pass_count;
+    p.progress   = 0.0;
+    p.rate_cur   = 0.0;
+    p.rate_avg   = 0.0;
+    p.hours      = -1;
+    p.minutes    = -1;
+    p.seconds    = -1; 
 #undef p
 
     hb_set_state( h, &state );
@@ -90,12 +93,45 @@ static void work_func( void * _work )
     while( !*work->die && ( job = hb_list_item( work->jobs, 0 ) ) )
     {
         hb_list_rem( work->jobs, job );
-        job->die = work->die;
-        job->done_error = work->error;
-        *(work->current_job) = job;
-        InitWorkState( job->h );
-        do_job( job );
-        *(work->current_job) = NULL;
+        hb_list_t * passes = hb_list_init();
+
+        // JSON jobs get special treatment.  We want to perform the title
+        // scan for the JSON job automatically.  This requires that we delay
+        // filling the job struct till we have performed the title scan
+        // because the default values for the job come from the title.
+        if (job->json != NULL)
+        {
+            // Perform title scan for json job
+            hb_json_job_scan(job->h, job->json);
+
+            // Expand json string to full job struct
+            hb_job_t *new_job = hb_json_to_job(job->h, job->json);
+            new_job->h = job->h;
+            hb_job_close(&job);
+            job = new_job;
+        }
+        hb_job_setup_passes(job->h, job, passes);
+        hb_job_close(&job);
+
+        int pass_count, pass;
+        pass_count = hb_list_count(passes);
+        for (pass = 0; pass < pass_count && !*work->die; pass++)
+        {
+            job = hb_list_item(passes, pass);
+            job->die = work->die;
+            job->done_error = work->error;
+            *(work->current_job) = job;
+            InitWorkState(job->h, job->pass_id, pass + 1, pass_count);
+            do_job( job );
+            *(work->current_job) = NULL;
+        }
+        // Clean up any incomplete jobs
+        for (; pass < pass_count; pass++)
+        {
+            job = hb_list_item(passes, pass);
+            hb_job_close(&job);
+        }
+        hb_list_close(&passes);
     }
 
     free( work );
@@ -346,8 +382,8 @@ void hb_display_job_info(hb_job_t *job)
         }
         else
         {
-            hb_log( "     + bitrate: %d kbps, pass: %d", job->vbitrate, job->pass );
-            if(job->pass == 1 && job->fastfirstpass == 1 &&
+            hb_log( "     + bitrate: %d kbps, pass: %d", job->vbitrate, job->pass_id );
+            if(job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 &&
                (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265))
             {
                 hb_log( "     + fast first pass" );
@@ -538,7 +574,7 @@ static void do_job(hb_job_t *job)
     title = job->title;
     interjob = hb_interjob_get( job->h );
 
-    if( job->pass == 2 )
+    if( job->pass_id == HB_PASS_ENCODE_2ND )
     {
         correct_framerate( job );
     }
@@ -606,7 +642,8 @@ static void do_job(hb_job_t *job)
          * first burned subtitle (explicitly or after sanitizing) - which should
          * ensure that it doesn't get dropped. */
         interjob->select_subtitle->out_track = 1;
-        if (job->pass == 0 || job->pass == 2)
+        if (job->pass_id == HB_PASS_ENCODE ||
+            job->pass_id == HB_PASS_ENCODE_2ND)
         {
             // final pass, interjob->select_subtitle is no longer needed
             hb_list_insert(job->list_subtitle, 0, interjob->select_subtitle);
@@ -1463,8 +1500,8 @@ static void do_job(hb_job_t *job)
 
     hb_handle_t * h = job->h;
     hb_state_t state;
-    hb_get_state( h, &state );
-    
+    hb_get_state2( h, &state );
+
     hb_log("work: average encoding speed for job is %f fps", state.param.working.rate_avg);
 
     job->done = 1;

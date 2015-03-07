@@ -2703,6 +2703,54 @@ find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
 }
 
 static void
+start_new_log(signal_user_data_t *ud, GhbValue *js)
+{
+    time_t  _now;
+    struct tm *now;
+    gchar *log_path, *pos, *destname, *basename, *dest_dir;
+
+    _now = time(NULL);
+    now = localtime(&_now);
+    destname = ghb_settings_get_string(js, "destination");
+    basename = g_path_get_basename(destname);
+    if (ghb_settings_get_boolean(ud->prefs, "EncodeLogLocation"))
+    {
+        dest_dir = g_path_get_dirname (destname);
+    }
+    else
+    {
+        dest_dir = ghb_get_user_config_dir("EncodeLogs");
+    }
+    g_free(destname);
+    pos = g_strrstr( basename, "." );
+    if (pos != NULL)
+    {
+        *pos = 0;
+    }
+    log_path = g_strdup_printf("%s/%s %d-%02d-%02d %02d-%02d-%02d.log",
+        dest_dir,
+        basename,
+        now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,
+        now->tm_hour, now->tm_min, now->tm_sec);
+    g_free(basename);
+    g_free(dest_dir);
+    if (ud->job_activity_log)
+        g_io_channel_unref(ud->job_activity_log);
+    ud->job_activity_log = g_io_channel_new_file (log_path, "w", NULL);
+    if (ud->job_activity_log)
+    {
+        gchar *ver_str;
+
+        ver_str = g_strdup_printf("Handbrake Version: %s (%d)\n",
+                                    hb_get_version(NULL), hb_get_build(NULL));
+        g_io_channel_write_chars (ud->job_activity_log, ver_str,
+                                    -1, NULL, NULL);
+        g_free(ver_str);
+    }
+    g_free(log_path);
+}
+
+static void
 submit_job(signal_user_data_t *ud, GhbValue *settings)
 {
     static gint unique_id = 1;
@@ -2723,7 +2771,8 @@ submit_job(signal_user_data_t *ud, GhbValue *settings)
 
     ghb_settings_set_int(settings, "job_unique_id", unique_id);
     ghb_settings_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
-    ghb_add_job (settings, unique_id);
+    start_new_log(ud, settings);
+    ghb_add_job(settings, unique_id);
     ghb_start_queue();
 
     // Start queue activity spinner
@@ -2789,61 +2838,6 @@ prune_logs(signal_user_data_t *ud)
     ghb_preview_cleanup(ud);
 }
 
-static void
-queue_scan(signal_user_data_t *ud, GhbValue *js)
-{
-    gchar *path;
-    gint title_id;
-    time_t  _now;
-    struct tm *now;
-    gchar *log_path, *pos, *destname, *basename, *dest_dir;
-
-    _now = time(NULL);
-    now = localtime(&_now);
-    destname = ghb_settings_get_string(js, "destination");
-    basename = g_path_get_basename(destname);
-    if (ghb_settings_get_boolean(ud->prefs, "EncodeLogLocation"))
-    {
-        dest_dir = g_path_get_dirname (destname);
-    }
-    else
-    {
-        dest_dir = ghb_get_user_config_dir("EncodeLogs");
-    }
-    g_free(destname);
-    pos = g_strrstr( basename, "." );
-    if (pos != NULL)
-    {
-        *pos = 0;
-    }
-    log_path = g_strdup_printf("%s/%s %d-%02d-%02d %02d-%02d-%02d.log",
-        dest_dir,
-        basename,
-        now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,
-        now->tm_hour, now->tm_min, now->tm_sec);
-    g_free(basename);
-    g_free(dest_dir);
-    if (ud->job_activity_log)
-        g_io_channel_unref(ud->job_activity_log);
-    ud->job_activity_log = g_io_channel_new_file (log_path, "w", NULL);
-    if (ud->job_activity_log)
-    {
-        gchar *ver_str;
-
-        ver_str = g_strdup_printf("Handbrake Version: %s (%d)\n",
-                                    hb_get_version(NULL), hb_get_build(NULL));
-        g_io_channel_write_chars (ud->job_activity_log, ver_str,
-                                    -1, NULL, NULL);
-        g_free(ver_str);
-    }
-    g_free(log_path);
-
-    path = ghb_settings_get_string( js, "source");
-    title_id = ghb_settings_get_int(js, "title");
-    ghb_backend_queue_scan(path, title_id);
-    g_free(path);
-}
-
 static gint
 queue_pending_count(GhbValue *queue)
 {
@@ -2901,7 +2895,7 @@ ghb_start_next_job(signal_user_data_t *ud)
         if (status == GHB_QUEUE_PENDING)
         {
             ghb_inhibit_gsm(ud);
-            queue_scan(ud, js);
+            submit_job(ud, js);
             ghb_update_pending(ud);
 
             // Start queue activity spinner
@@ -2936,14 +2930,9 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gint qcount;
     gint index;
     GhbValue *js;
-    gboolean subtitle_scan = FALSE;
 
     qcount = ghb_array_len(ud->queue);
     index = find_queue_job(ud->queue, status->unique_id, &js);
-    if (js != NULL)
-    {
-        subtitle_scan = ghb_settings_get_boolean(js, "subtitle_scan");
-    }
     if (qcount > 1)
     {
         job_str = g_strdup_printf(_("job %d of %d, "), index+1, qcount);
@@ -2952,17 +2941,17 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     {
         job_str = g_strdup("");
     }
-    if (status->job_count > 1)
+    if (status->pass_count > 1)
     {
-        if (status->job_cur == 1 && subtitle_scan)
+        if (status->pass_id == HB_PASS_SUBTITLE)
         {
             task_str = g_strdup_printf(_("pass %d (subtitle scan) of %d, "),
-                status->job_cur, status->job_count);
+                status->pass, status->pass_count);
         }
         else
         {
             task_str = g_strdup_printf(_("pass %d of %d, "),
-                status->job_cur, status->job_count);
+                status->pass, status->pass_count);
         }
     }
     else
@@ -3215,9 +3204,6 @@ ghb_backend_events(signal_user_data_t *ud)
     else if (status.queue.state & GHB_STATE_SCANDONE)
     {
         ghb_clear_queue_state(GHB_STATE_SCANDONE);
-        usleep(2000000);
-        submit_job(ud, ud->current_job);
-        ghb_update_pending(ud);
     }
     else if (status.queue.state & GHB_STATE_PAUSED)
     {
@@ -3311,19 +3297,19 @@ ghb_backend_events(signal_user_data_t *ud)
         gtk_label_set_text (work_status, _("Muxing: This may take a while..."));
     }
 
-    if (status.scan.state & GHB_STATE_WORKING)
+    if (status.live.state & GHB_STATE_WORKING)
     {
         GtkProgressBar *live_progress;
         live_progress = GTK_PROGRESS_BAR(
             GHB_WIDGET(ud->builder, "live_encode_progress"));
-        status_str = working_status_string(ud, &status.scan);
+        status_str = working_status_string(ud, &status.live);
         gtk_progress_bar_set_text (live_progress, status_str);
-        gtk_progress_bar_set_fraction (live_progress, status.scan.progress);
+        gtk_progress_bar_set_fraction (live_progress, status.live.progress);
         g_free(status_str);
     }
-    if (status.scan.state & GHB_STATE_WORKDONE)
+    if (status.live.state & GHB_STATE_WORKDONE)
     {
-        switch( status.scan.error )
+        switch( status.live.error )
         {
             case GHB_ERROR_NONE:
             {
@@ -3334,7 +3320,7 @@ ghb_backend_events(signal_user_data_t *ud)
                 ghb_live_encode_done(ud, FALSE);
             } break;
         }
-        ghb_clear_scan_state(GHB_STATE_WORKDONE);
+        ghb_clear_live_state(GHB_STATE_WORKDONE);
     }
 }
 

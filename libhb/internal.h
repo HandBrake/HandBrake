@@ -40,6 +40,7 @@ void         hb_title_close( hb_title_t ** );
  **********************************************************************/
 int  hb_get_pid( hb_handle_t * );
 void hb_set_state( hb_handle_t *, hb_state_t * );
+void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
 
 /***********************************************************************
  * fifo.c
