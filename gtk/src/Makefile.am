@@ -88,15 +88,15 @@ ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhandbrake.a
 
 resources.o: resource_data.h
 
-resource_data.h: resources.plist
-	python2 $(srcdir)/quotestring.py resources.plist resource_data.h
+resource_data.h: resources.json
+	python2 $(srcdir)/quotestring.py resources.json resource_data.h
 
 widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	python2 $(srcdir)/makedeps.py
 
-resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui ghb-3.14.ui widget.deps widget_reverse.deps
-	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.plist
+resources.json: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui ghb-3.14.ui widget.deps widget_reverse.deps
+	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.json
 
 CREATE_RES.c = \
 	create_resources.c \
