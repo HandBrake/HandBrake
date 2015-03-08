@@ -595,26 +595,19 @@
                  }
                  case HBStateWorking:
                  {
-                     NSString *pass_desc = @"";
-                     if (p.pass_id == HB_PASS_SUBTITLE && p.pass_count > 1)
-                     {
-                         if ([self.currentJob.subtitles.tracks.firstObject[keySubTrackIndex] intValue] == -1)
-                         {
-                             pass_desc = NSLocalizedString(@"(subtitle scan)", @"");
-                         }
-                     }
-
-                     if (pass_desc.length)
+                     if (p.pass_id == HB_PASS_SUBTITLE)
                      {
                          string = [NSMutableString stringWithFormat:
-                                   NSLocalizedString(@"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @""),
+                                   NSLocalizedString(@"Encoding: %@ \nPass %d %@ of %d, %.2f %%", nil),
                                    self.currentJob.destURL.lastPathComponent,
-                                   p.pass, pass_desc, p.pass_count, 100.0 * p.progress];
+                                   p.pass,
+                                   NSLocalizedString(@"(subtitle scan)", nil),
+                                   p.pass_count, 100.0 * p.progress];
                      }
                      else
                      {
                          string = [NSMutableString stringWithFormat:
-                                   NSLocalizedString(@"Encoding: %@ \nPass %d of %d, %.2f %%", @""),
+                                   NSLocalizedString(@"Encoding: %@ \nPass %d of %d, %.2f %%", nil),
                                    self.currentJob.destURL.lastPathComponent,
                                    p.pass, p.pass_count, 100.0 * p.progress];
                      }
