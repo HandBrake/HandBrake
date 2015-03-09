@@ -274,7 +274,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
 
             if (job.VideoTunes != null && job.VideoTunes.Count > 0)
             {
-                video.Tune = string.Join(",", job.VideoTunes);
+                foreach (var item in job.VideoTunes)
+                {
+                    video.Tune += string.IsNullOrEmpty(video.Tune) ? item.ShortName : "," + item.ShortName;
+                }
             }
 
             return video;
