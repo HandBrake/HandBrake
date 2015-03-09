@@ -200,18 +200,27 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
     /* iterate through x264_opts and have libx264 parse the options for us */
     int ret;
-    hb_dict_entry_t * entry = NULL;
-    while( ( entry = hb_dict_next( x264_opts, entry ) ) )
+    hb_dict_iter_t iter;
+    for (iter  = hb_dict_iter_init(x264_opts);
+         iter != HB_DICT_ITER_DONE;
+         iter  = hb_dict_iter_next(x264_opts, iter))
     {
+        const char *key = hb_dict_iter_key(iter);
+        hb_value_t *value = hb_dict_iter_value(iter);
+        char *str = hb_value_get_string_xform(value);
+
         /* Here's where the strings are passed to libx264 for parsing. */
-        ret = x264_param_parse( &param, entry->key, entry->value );
+        ret = x264_param_parse(&param, key, str);
+
         /* Let x264 sanity check the options for us */
-        if( ret == X264_PARAM_BAD_NAME )
-            hb_log( "x264 options: Unknown suboption %s", entry->key );
-        if( ret == X264_PARAM_BAD_VALUE )
-            hb_log( "x264 options: Bad argument %s=%s", entry->key, entry->value ? entry->value : "(null)" );
+        if (ret == X264_PARAM_BAD_NAME)
+            hb_log( "x264 options: Unknown suboption %s", key );
+        if (ret == X264_PARAM_BAD_VALUE)
+            hb_log( "x264 options: Bad argument %s=%s", key,
+                    str ? str : "(null)" );
+        free(str);
     }
-    hb_dict_free( &x264_opts );
+    hb_dict_free(&x264_opts);
 
     /* Reload colorimetry settings in case custom values were set
      * in the encoder_options string */
@@ -1046,15 +1055,21 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     return ret;
 }
 
+static hb_value_t * value_pair(hb_value_t * v1, hb_value_t * v2)
+{
+    hb_value_t *array = hb_value_array_init();
+    hb_value_array_append(array, v1);
+    hb_value_array_append(array, v2);
+    return array;
+}
+
 char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
                              const char *x264_encopts, const char *h264_profile,
                              const char *h264_level, int width, int height)
 {
     int i;
-    char buf[32];
     char *unparsed_opts;
     hb_dict_t *x264_opts;
-    hb_dict_entry_t *entry;
     x264_param_t defaults, param;
 
     /*
@@ -1077,7 +1092,6 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     /*
      * place additional x264 options in a dictionary
      */
-    entry     = NULL;
     x264_opts = hb_encopts_to_dict(x264_encopts, HB_VCODEC_X264);
 
     /*
@@ -1087,22 +1101,30 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
      *
      * clear them from x264_opts so as to not apply then during unparse.
      */
-    hb_dict_unset(&x264_opts, "qp");
-    hb_dict_unset(&x264_opts, "qp_constant");
-    hb_dict_unset(&x264_opts, "crf");
-    hb_dict_unset(&x264_opts, "bitrate");
-    hb_dict_unset(&x264_opts, "fps");
-    hb_dict_unset(&x264_opts, "force-cfr");
-    hb_dict_unset(&x264_opts, "sar");
-    hb_dict_unset(&x264_opts, "annexb");
+    hb_dict_remove(x264_opts, "qp");
+    hb_dict_remove(x264_opts, "qp_constant");
+    hb_dict_remove(x264_opts, "crf");
+    hb_dict_remove(x264_opts, "bitrate");
+    hb_dict_remove(x264_opts, "fps");
+    hb_dict_remove(x264_opts, "force-cfr");
+    hb_dict_remove(x264_opts, "sar");
+    hb_dict_remove(x264_opts, "annexb");
 
     /*
      * apply the additional x264 options
      */
-    while ((entry = hb_dict_next(x264_opts, entry)) != NULL)
+    hb_dict_iter_t iter;
+    for (iter  = hb_dict_iter_init(x264_opts);
+         iter != HB_DICT_ITER_DONE;
+         iter  = hb_dict_iter_next(x264_opts, iter))
     {
+        const char *key = hb_dict_iter_key(iter);
+        hb_value_t *value = hb_dict_iter_value(iter);
+        char *str = hb_value_get_string_xform(value);
+
         // let's not pollute GUI logs with x264_param_parse return codes
-        x264_param_parse(&param, entry->key, entry->value);
+        x264_param_parse(&param, key, str);
+        free(str);
     }
 
     /*
@@ -1146,19 +1168,19 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
      * also, don't bother with forms that aren't allowed by the x264 CLI, such
      * as "no-bframes" - there are too many.
      */
-    hb_dict_unset(&x264_opts, "no-sliced-threads");
-    hb_dict_unset(&x264_opts, "no-scenecut");
-    hb_dict_unset(&x264_opts, "no-b-adapt");
-    hb_dict_unset(&x264_opts, "no-weightb");
-    hb_dict_unset(&x264_opts, "no-cabac");
-    hb_dict_unset(&x264_opts, "interlaced"); // we unparse to tff/bff
-    hb_dict_unset(&x264_opts, "no-interlaced");
-    hb_dict_unset(&x264_opts, "no-8x8dct");
-    hb_dict_unset(&x264_opts, "no-mixed-refs");
-    hb_dict_unset(&x264_opts, "no-fast-pskip");
-    hb_dict_unset(&x264_opts, "no-dct-decimate");
-    hb_dict_unset(&x264_opts, "no-psy");
-    hb_dict_unset(&x264_opts, "no-mbtree");
+    hb_dict_remove(x264_opts, "no-sliced-threads");
+    hb_dict_remove(x264_opts, "no-scenecut");
+    hb_dict_remove(x264_opts, "no-b-adapt");
+    hb_dict_remove(x264_opts, "no-weightb");
+    hb_dict_remove(x264_opts, "no-cabac");
+    hb_dict_remove(x264_opts, "interlaced"); // we unparse to tff/bff
+    hb_dict_remove(x264_opts, "no-interlaced");
+    hb_dict_remove(x264_opts, "no-8x8dct");
+    hb_dict_remove(x264_opts, "no-mixed-refs");
+    hb_dict_remove(x264_opts, "no-fast-pskip");
+    hb_dict_remove(x264_opts, "no-dct-decimate");
+    hb_dict_remove(x264_opts, "no-psy");
+    hb_dict_remove(x264_opts, "no-mbtree");
 
     /*
      * compare defaults to param and unparse to the x264_opts dictionary
@@ -1166,75 +1188,74 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     if (!param.b_sliced_threads != !defaults.b_sliced_threads)
     {
         // can be modified by: tune zerolatency
-        sprintf(buf, "%d", !!param.b_sliced_threads);
-        hb_dict_set(&x264_opts, "sliced-threads", buf);
+        hb_dict_set(x264_opts, "sliced-threads",
+                    hb_value_bool(!!param.b_sliced_threads));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "sliced-threads");
+        hb_dict_remove(x264_opts, "sliced-threads");
     }
     if (param.i_sync_lookahead != defaults.i_sync_lookahead)
     {
         // can be modified by: tune zerolatency
-        sprintf(buf, "%d", param.i_sync_lookahead);
-        hb_dict_set(&x264_opts, "sync-lookahead", buf);
+        hb_dict_set(x264_opts, "sync-lookahead",
+                    hb_value_int(param.i_sync_lookahead));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "sync-lookahead");
+        hb_dict_remove(x264_opts, "sync-lookahead");
     }
     if (param.i_level_idc != defaults.i_level_idc)
     {
         // can be modified by: level
         for (i = 0; hb_h264_level_values[i]; i++)
             if (param.i_level_idc == hb_h264_level_values[i])
-                hb_dict_set(&x264_opts, "level", hb_h264_level_names[i]);
+                hb_dict_set(x264_opts, "level",
+                            hb_value_string(hb_h264_level_names[i]));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "level");
+        hb_dict_remove(x264_opts, "level");
     }
     if (param.i_frame_reference != defaults.i_frame_reference)
     {
         // can be modified by: presets, tunes, level
-        sprintf(buf, "%d", param.i_frame_reference);
-        hb_dict_set(&x264_opts, "ref", buf);
+        hb_dict_set(x264_opts, "ref", hb_value_int(param.i_frame_reference));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "ref");
+        hb_dict_remove(x264_opts, "ref");
     }
     if (param.i_scenecut_threshold != defaults.i_scenecut_threshold)
     {
         // can be modified by: preset ultrafast
-        sprintf(buf, "%d", param.i_scenecut_threshold);
-        hb_dict_set(&x264_opts, "scenecut", buf);
+        hb_dict_set(x264_opts, "scenecut",
+                    hb_value_int(param.i_scenecut_threshold));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "scenecut");
+        hb_dict_remove(x264_opts, "scenecut");
     }
     if (param.i_bframe != defaults.i_bframe)
     {
         // can be modified by: presets, tunes, profile, level
-        sprintf(buf, "%d", param.i_bframe);
-        hb_dict_set(&x264_opts, "bframes", buf);
+        hb_dict_set(x264_opts, "bframes", hb_value_int(param.i_bframe));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "bframes");
+        hb_dict_remove(x264_opts, "bframes");
     }
     if (param.i_bframe > 0)
     {
         if (param.i_bframe_adaptive != defaults.i_bframe_adaptive)
         {
             // can be modified by: presets
-            sprintf(buf, "%d", param.i_bframe_adaptive);
-            hb_dict_set(&x264_opts, "b-adapt", buf);
+            hb_dict_set(x264_opts, "b-adapt",
+                        hb_value_int(param.i_bframe_adaptive));
         }
         else
         {
-            hb_dict_unset(&x264_opts, "b-adapt");
+            hb_dict_remove(x264_opts, "b-adapt");
         }
         if (param.i_bframe > 1 &&
             param.i_bframe_pyramid != defaults.i_bframe_pyramid)
@@ -1246,12 +1267,12 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
                 param.i_bframe_pyramid = X264_B_PYRAMID_NORMAL;
             for (i = 0; x264_b_pyramid_names[i] != NULL; i++)
                 if (param.i_bframe_pyramid == i)
-                    hb_dict_set(&x264_opts, "b-pyramid",
-                                x264_b_pyramid_names[i]);
+                    hb_dict_set(x264_opts, "b-pyramid",
+                                hb_value_string(x264_b_pyramid_names[i]));
         }
         else
         {
-            hb_dict_unset(&x264_opts, "b-pyramid");
+            hb_dict_remove(x264_opts, "b-pyramid");
         }
         if (param.analyse.i_direct_mv_pred != defaults.analyse.i_direct_mv_pred)
         {
@@ -1262,109 +1283,108 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
                 param.analyse.i_direct_mv_pred = X264_DIRECT_PRED_AUTO;
             for (i = 0; x264_direct_pred_names[i] != NULL; i++)
                 if (param.analyse.i_direct_mv_pred == i)
-                    hb_dict_set(&x264_opts, "direct",
-                                x264_direct_pred_names[i]);
+                    hb_dict_set(x264_opts, "direct",
+                                hb_value_string(x264_direct_pred_names[i]));
         }
         else
         {
-            hb_dict_unset(&x264_opts, "direct");
+            hb_dict_remove(x264_opts, "direct");
         }
         if (!param.analyse.b_weighted_bipred !=
             !defaults.analyse.b_weighted_bipred)
         {
             // can be modified by: preset ultrafast, tune fastdecode
-            sprintf(buf, "%d", !!param.analyse.b_weighted_bipred);
-            hb_dict_set(&x264_opts, "weightb", buf);
+            hb_dict_set(x264_opts, "weightb",
+                        hb_value_bool(!!param.analyse.b_weighted_bipred));
         }
         else
         {
-            hb_dict_unset(&x264_opts, "weightb");
+            hb_dict_remove(x264_opts, "weightb");
         }
     }
     else
     {
         // no bframes, these options have no effect
-        hb_dict_unset(&x264_opts, "b-adapt");
-        hb_dict_unset(&x264_opts, "b-pyramid");
-        hb_dict_unset(&x264_opts, "direct");
-        hb_dict_unset(&x264_opts, "weightb");
-        hb_dict_unset(&x264_opts, "b-bias");
-        hb_dict_unset(&x264_opts, "open-gop");
+        hb_dict_remove(x264_opts, "b-adapt");
+        hb_dict_remove(x264_opts, "b-pyramid");
+        hb_dict_remove(x264_opts, "direct");
+        hb_dict_remove(x264_opts, "weightb");
+        hb_dict_remove(x264_opts, "b-bias");
+        hb_dict_remove(x264_opts, "open-gop");
     }
     if (!param.b_deblocking_filter != !defaults.b_deblocking_filter)
     {
         // can be modified by: preset ultrafast, tune fastdecode
-        sprintf(buf, "%d", !param.b_deblocking_filter);
-        hb_dict_set(&x264_opts, "no-deblock", buf);
+        hb_dict_set(x264_opts, "no-deblock",
+                    hb_value_bool(!param.b_deblocking_filter));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "no-deblock");
+        hb_dict_remove(x264_opts, "no-deblock");
     }
     if (param.b_deblocking_filter &&
         (param.i_deblocking_filter_alphac0 != defaults.i_deblocking_filter_alphac0 ||
          param.i_deblocking_filter_beta    != defaults.i_deblocking_filter_beta))
     {
         // can be modified by: tunes
-        sprintf(buf, "%d,%d", param.i_deblocking_filter_alphac0,
-                param.i_deblocking_filter_beta);
-        hb_dict_set(&x264_opts, "deblock", buf);
+        hb_dict_set(x264_opts, "deblock",
+                    value_pair(hb_value_int(param.i_deblocking_filter_alphac0),
+                               hb_value_int(param.i_deblocking_filter_beta)));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "deblock");
+        hb_dict_remove(x264_opts, "deblock");
     }
     if (!param.b_cabac != !defaults.b_cabac)
     {
         // can be modified by: preset ultrafast, tune fastdecode, profile
-        sprintf(buf, "%d", !!param.b_cabac);
-        hb_dict_set(&x264_opts, "cabac", buf);
+        hb_dict_set(x264_opts, "cabac", hb_value_bool(!!param.b_cabac));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "cabac");
+        hb_dict_remove(x264_opts, "cabac");
     }
     if (param.b_interlaced != defaults.b_interlaced)
     {
         if (param.b_tff)
         {
-            hb_dict_set(&x264_opts, "tff", "1");
-            hb_dict_unset(&x264_opts, "bff");
+            hb_dict_set(x264_opts, "tff", hb_value_bool(1));
+            hb_dict_remove(x264_opts, "bff");
         }
         else
         {
-            hb_dict_set(&x264_opts, "bff", "1");
-            hb_dict_unset(&x264_opts, "tff");
+            hb_dict_set(x264_opts, "bff", hb_value_bool(1));
+            hb_dict_remove(x264_opts, "tff");
         }
-        hb_dict_unset(&x264_opts, "fake-interlaced");
+        hb_dict_remove(x264_opts, "fake-interlaced");
     }
     else if (param.b_fake_interlaced != defaults.b_fake_interlaced)
     {
-        hb_dict_set(&x264_opts, "fake-interlaced", "1");
-        hb_dict_unset(&x264_opts, "tff");
-        hb_dict_unset(&x264_opts, "bff");
+        hb_dict_set(x264_opts, "fake-interlaced", hb_value_bool(1));
+        hb_dict_remove(x264_opts, "tff");
+        hb_dict_remove(x264_opts, "bff");
     }
     else
     {
-        hb_dict_unset(&x264_opts, "tff");
-        hb_dict_unset(&x264_opts, "bff");
-        hb_dict_unset(&x264_opts, "fake-interlaced");
+        hb_dict_remove(x264_opts, "tff");
+        hb_dict_remove(x264_opts, "bff");
+        hb_dict_remove(x264_opts, "fake-interlaced");
     }
     if (param.i_cqm_preset == defaults.i_cqm_preset &&
         param.psz_cqm_file == defaults.psz_cqm_file)
     {
         // can be reset to default by: profile
-        hb_dict_unset(&x264_opts, "cqm");
-        hb_dict_unset(&x264_opts, "cqm4");
-        hb_dict_unset(&x264_opts, "cqm8");
-        hb_dict_unset(&x264_opts, "cqm4i");
-        hb_dict_unset(&x264_opts, "cqm4p");
-        hb_dict_unset(&x264_opts, "cqm8i");
-        hb_dict_unset(&x264_opts, "cqm8p");
-        hb_dict_unset(&x264_opts, "cqm4iy");
-        hb_dict_unset(&x264_opts, "cqm4ic");
-        hb_dict_unset(&x264_opts, "cqm4py");
-        hb_dict_unset(&x264_opts, "cqm4pc");
+        hb_dict_remove(x264_opts, "cqm");
+        hb_dict_remove(x264_opts, "cqm4");
+        hb_dict_remove(x264_opts, "cqm8");
+        hb_dict_remove(x264_opts, "cqm4i");
+        hb_dict_remove(x264_opts, "cqm4p");
+        hb_dict_remove(x264_opts, "cqm8i");
+        hb_dict_remove(x264_opts, "cqm8p");
+        hb_dict_remove(x264_opts, "cqm4iy");
+        hb_dict_remove(x264_opts, "cqm4ic");
+        hb_dict_remove(x264_opts, "cqm4py");
+        hb_dict_remove(x264_opts, "cqm4pc");
     }
     /*
      * Note: param.analyse.intra can only be modified directly or by using
@@ -1375,7 +1395,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
         // can be modified by: presets, tune touhou
         if (!param.analyse.inter)
         {
-            hb_dict_set(&x264_opts, "analyse", "none");
+            hb_dict_set(x264_opts, "analyse", hb_value_string("none"));
         }
         else if ((param.analyse.inter & X264_ANALYSE_I4x4)      &&
                  (param.analyse.inter & X264_ANALYSE_I8x8)      &&
@@ -1383,65 +1403,57 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
                  (param.analyse.inter & X264_ANALYSE_PSUB8x8)   &&
                  (param.analyse.inter & X264_ANALYSE_BSUB16x16))
         {
-            hb_dict_set(&x264_opts, "analyse", "all");
+            hb_dict_set(x264_opts, "analyse", hb_value_string("all"));
         }
         else
         {
-            sprintf(buf, "%s", "");
+            hb_value_t *array = hb_value_array_init();
             if (param.analyse.inter & X264_ANALYSE_I4x4)
             {
-                strcat(buf, "i4x4");
+                hb_value_array_append(array, hb_value_string("i4x4"));
             }
             if (param.analyse.inter & X264_ANALYSE_I8x8)
             {
-                if (*buf)
-                    strcat(buf, ",");
-                strcat(buf, "i8x8");
+                hb_value_array_append(array, hb_value_string("i8x8"));
             }
             if (param.analyse.inter & X264_ANALYSE_PSUB16x16)
             {
-                if (*buf)
-                    strcat(buf, ",");
-                strcat(buf, "p8x8");
+                hb_value_array_append(array, hb_value_string("p8x8"));
             }
             if (param.analyse.inter & X264_ANALYSE_PSUB8x8)
             {
-                if (*buf)
-                    strcat(buf, ",");
-                strcat(buf, "p4x4");
+                hb_value_array_append(array, hb_value_string("p4x4"));
             }
             if (param.analyse.inter & X264_ANALYSE_BSUB16x16)
             {
-                if (*buf)
-                    strcat(buf, ",");
-                strcat(buf, "b8x8");
+                hb_value_array_append(array, hb_value_string("b8x8"));
             }
-            hb_dict_set(&x264_opts, "analyse", buf);
+            hb_dict_set(x264_opts, "analyse", array);
         }
     }
     else
     {
-        hb_dict_unset(&x264_opts, "analyse");
+        hb_dict_remove(x264_opts, "analyse");
     }
     if (!param.analyse.b_transform_8x8 != !defaults.analyse.b_transform_8x8)
     {
         // can be modified by: preset ultrafast, profile
-        sprintf(buf, "%d", !!param.analyse.b_transform_8x8);
-        hb_dict_set(&x264_opts, "8x8dct", buf);
+        hb_dict_set(x264_opts, "8x8dct",
+                    hb_value_bool(!!param.analyse.b_transform_8x8));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "8x8dct");
+        hb_dict_remove(x264_opts, "8x8dct");
     }
     if (param.analyse.i_weighted_pred != defaults.analyse.i_weighted_pred)
     {
         // can be modified by: presets, tune fastdecode, profile
-        sprintf(buf, "%d", param.analyse.i_weighted_pred);
-        hb_dict_set(&x264_opts, "weightp", buf);
+        hb_dict_set(x264_opts, "weightp",
+                    hb_value_int(param.analyse.i_weighted_pred));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "weightp");
+        hb_dict_remove(x264_opts, "weightp");
     }
     if (param.analyse.i_me_method != defaults.analyse.i_me_method)
     {
@@ -1452,31 +1464,32 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
             param.analyse.i_me_method = X264_ME_TESA;
         for (i = 0; x264_motion_est_names[i] != NULL; i++)
             if (param.analyse.i_me_method == i)
-                hb_dict_set(&x264_opts, "me", x264_motion_est_names[i]);
+                hb_dict_set(x264_opts, "me",
+                            hb_value_string(x264_motion_est_names[i]));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "me");
+        hb_dict_remove(x264_opts, "me");
     }
     if (param.analyse.i_me_range != defaults.analyse.i_me_range)
     {
         // can be modified by: presets
-        sprintf(buf, "%d", param.analyse.i_me_range);
-        hb_dict_set(&x264_opts, "merange", buf);
+        hb_dict_set(x264_opts, "merange",
+                    hb_value_int(param.analyse.i_me_range));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "merange");
+        hb_dict_remove(x264_opts, "merange");
     }
     if (param.analyse.i_mv_range != defaults.analyse.i_mv_range)
     {
         // can be modified by: level
-        sprintf(buf, "%d", param.analyse.i_mv_range);
-        hb_dict_set(&x264_opts, "mvrange", buf);
+        hb_dict_set(x264_opts, "mvrange",
+                    hb_value_int(param.analyse.i_mv_range));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "mvrange");
+        hb_dict_remove(x264_opts, "mvrange");
     }
     if (param.analyse.i_subpel_refine > 9 && (param.rc.i_aq_mode == 0 ||
                                               param.analyse.i_trellis < 2))
@@ -1487,76 +1500,75 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     if (param.analyse.i_subpel_refine != defaults.analyse.i_subpel_refine)
     {
         // can be modified by: presets
-        sprintf(buf, "%d", param.analyse.i_subpel_refine);
-        hb_dict_set(&x264_opts, "subme", buf);
+        hb_dict_set(x264_opts, "subme",
+                    hb_value_int(param.analyse.i_subpel_refine));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "subme");
+        hb_dict_remove(x264_opts, "subme");
     }
     if (!param.analyse.b_mixed_references !=
         !defaults.analyse.b_mixed_references)
     {
         // can be modified by: presets
-        sprintf(buf, "%d", !!param.analyse.b_mixed_references);
-        hb_dict_set(&x264_opts, "mixed-refs", buf);
+        hb_dict_set(x264_opts, "mixed-refs",
+                    hb_value_bool(!!param.analyse.b_mixed_references));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "mixed-refs");
+        hb_dict_remove(x264_opts, "mixed-refs");
     }
     if (param.analyse.i_trellis != defaults.analyse.i_trellis)
     {
         // can be modified by: presets
-        sprintf(buf, "%d", param.analyse.i_trellis);
-        hb_dict_set(&x264_opts, "trellis", buf);
+        hb_dict_set(x264_opts, "trellis",
+                    hb_value_int(param.analyse.i_trellis));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "trellis");
+        hb_dict_remove(x264_opts, "trellis");
     }
     if (!param.analyse.b_fast_pskip != !defaults.analyse.b_fast_pskip)
     {
         // can be modified by: preset placebo
-        sprintf(buf, "%d", !!param.analyse.b_fast_pskip);
-        hb_dict_set(&x264_opts, "fast-pskip", buf);
+        hb_dict_set(x264_opts, "fast-pskip",
+                    hb_value_bool(!!param.analyse.b_fast_pskip));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "fast-pskip");
+        hb_dict_remove(x264_opts, "fast-pskip");
     }
     if (!param.analyse.b_dct_decimate != !defaults.analyse.b_dct_decimate)
     {
         // can be modified by: tune grain
-        sprintf(buf, "%d", !!param.analyse.b_dct_decimate);
-        hb_dict_set(&x264_opts, "dct-decimate", buf);
+        hb_dict_set(x264_opts, "dct-decimate",
+                    hb_value_bool(!!param.analyse.b_dct_decimate));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "dct-decimate");
+        hb_dict_remove(x264_opts, "dct-decimate");
     }
     if (!param.analyse.b_psy != !defaults.analyse.b_psy)
     {
         // can be modified by: tunes
-        sprintf(buf, "%d", !!param.analyse.b_psy);
-        hb_dict_set(&x264_opts, "psy", buf);
+        hb_dict_set(x264_opts, "psy", hb_value_bool(!!param.analyse.b_psy));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "psy");
+        hb_dict_remove(x264_opts, "psy");
     }
     if (param.analyse.b_psy &&
         (param.analyse.f_psy_rd      != defaults.analyse.f_psy_rd ||
          param.analyse.f_psy_trellis != defaults.analyse.f_psy_trellis))
     {
         // can be modified by: tunes
-        sprintf(buf, "%.2f,%.2f", param.analyse.f_psy_rd,
-                param.analyse.f_psy_trellis);
-        hb_dict_set(&x264_opts, "psy-rd", buf);
+        hb_dict_set(x264_opts, "psy-rd",
+                    value_pair(hb_value_double(param.analyse.f_psy_rd),
+                               hb_value_double(param.analyse.f_psy_trellis)));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "psy-rd");
+        hb_dict_remove(x264_opts, "psy-rd");
     }
     /*
      * Note: while deadzone is incompatible with trellis, it still has a slight
@@ -1565,126 +1577,122 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     if (param.analyse.i_luma_deadzone[0] != defaults.analyse.i_luma_deadzone[0])
     {
         // can be modified by: tune grain
-        sprintf(buf, "%d", param.analyse.i_luma_deadzone[0]);
-        hb_dict_set(&x264_opts, "deadzone-inter", buf);
+        hb_dict_set(x264_opts, "deadzone-inter",
+                    hb_value_int(param.analyse.i_luma_deadzone[0]));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "deadzone-inter");
+        hb_dict_remove(x264_opts, "deadzone-inter");
     }
     if (param.analyse.i_luma_deadzone[1] != defaults.analyse.i_luma_deadzone[1])
     {
         // can be modified by: tune grain
-        sprintf(buf, "%d", param.analyse.i_luma_deadzone[1]);
-        hb_dict_set(&x264_opts, "deadzone-intra", buf);
+        hb_dict_set(x264_opts, "deadzone-intra",
+                    hb_value_int(param.analyse.i_luma_deadzone[1]));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "deadzone-intra");
+        hb_dict_remove(x264_opts, "deadzone-intra");
     }
     if (param.rc.i_vbv_buffer_size != defaults.rc.i_vbv_buffer_size)
     {
         // can be modified by: level
-        sprintf(buf, "%d", param.rc.i_vbv_buffer_size);
-        hb_dict_set(&x264_opts, "vbv-bufsize", buf);
+        hb_dict_set(x264_opts, "vbv-bufsize",
+                    hb_value_int(param.rc.i_vbv_buffer_size));
         if (param.rc.i_vbv_max_bitrate != defaults.rc.i_vbv_max_bitrate)
         {
             // can be modified by: level
-            sprintf(buf, "%d", param.rc.i_vbv_max_bitrate);
-            hb_dict_set(&x264_opts, "vbv-maxrate", buf);
+            hb_dict_set(x264_opts, "vbv-maxrate",
+                        hb_value_int(param.rc.i_vbv_max_bitrate));
         }
         else
         {
-            hb_dict_unset(&x264_opts, "vbv-maxrate");
+            hb_dict_remove(x264_opts, "vbv-maxrate");
         }
     }
     else
     {
-        hb_dict_unset(&x264_opts, "vbv-bufsize");
-        hb_dict_unset(&x264_opts, "vbv-maxrate");
+        hb_dict_remove(x264_opts, "vbv-bufsize");
+        hb_dict_remove(x264_opts, "vbv-maxrate");
     }
     if (param.rc.f_ip_factor != defaults.rc.f_ip_factor)
     {
         // can be modified by: tune grain
-        sprintf(buf, "%.2f", param.rc.f_ip_factor);
-        hb_dict_set(&x264_opts, "ipratio", buf);
+        hb_dict_set(x264_opts, "ipratio",
+                    hb_value_double(param.rc.f_ip_factor));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "ipratio");
+        hb_dict_remove(x264_opts, "ipratio");
     }
     if (param.i_bframe > 0 && !param.rc.b_mb_tree &&
         param.rc.f_pb_factor != defaults.rc.f_pb_factor)
     {
         // can be modified by: tune grain
-        sprintf(buf, "%.2f", param.rc.f_pb_factor);
-        hb_dict_set(&x264_opts, "pbratio", buf);
+        hb_dict_set(x264_opts, "pbratio",
+                    hb_value_double(param.rc.f_pb_factor));
     }
     else
     {
         // pbratio requires bframes and is incomaptible with mbtree
-        hb_dict_unset(&x264_opts, "pbratio");
+        hb_dict_remove(x264_opts, "pbratio");
     }
     if (param.rc.f_qcompress != defaults.rc.f_qcompress)
     {
         // can be modified by: tune grain
-        sprintf(buf, "%.2f", param.rc.f_qcompress);
-        hb_dict_set(&x264_opts, "qcomp", buf);
+        hb_dict_set(x264_opts, "qcomp", hb_value_double(param.rc.f_qcompress));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "qcomp");
+        hb_dict_remove(x264_opts, "qcomp");
     }
     if (param.rc.i_aq_mode != defaults.rc.i_aq_mode)
     {
         // can be modified by: preset ultrafast, tune psnr
-        sprintf(buf, "%d", param.rc.i_aq_mode);
-        hb_dict_set(&x264_opts, "aq-mode", buf);
+        hb_dict_set(x264_opts, "aq-mode", hb_value_int(param.rc.i_aq_mode));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "aq-mode");
+        hb_dict_remove(x264_opts, "aq-mode");
     }
     if (param.rc.i_aq_mode > 0 &&
         param.rc.f_aq_strength != defaults.rc.f_aq_strength)
     {
         // can be modified by: tunes
-        sprintf(buf, "%.2f", param.rc.f_aq_strength);
-        hb_dict_set(&x264_opts, "aq-strength", buf);
+        hb_dict_set(x264_opts, "aq-strength",
+                    hb_value_double(param.rc.f_aq_strength));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "aq-strength");
+        hb_dict_remove(x264_opts, "aq-strength");
     }
     if (!param.rc.b_mb_tree != !defaults.rc.b_mb_tree)
     {
         // can be modified by: presets, tune zerolatency
-        sprintf(buf, "%d", !!param.rc.b_mb_tree);
-        hb_dict_set(&x264_opts, "mbtree", buf);
+        hb_dict_set(x264_opts, "mbtree", hb_value_bool(!!param.rc.b_mb_tree));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "mbtree");
+        hb_dict_remove(x264_opts, "mbtree");
     }
     if (param.rc.i_lookahead != defaults.rc.i_lookahead)
     {
         // can be modified by: presets, tune zerolatency
-        sprintf(buf, "%d", param.rc.i_lookahead);
-        hb_dict_set(&x264_opts, "rc-lookahead", buf);
+        hb_dict_set(x264_opts, "rc-lookahead",
+                    hb_value_int(param.rc.i_lookahead));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "rc-lookahead");
+        hb_dict_remove(x264_opts, "rc-lookahead");
     }
     if (!param.b_vfr_input != !defaults.b_vfr_input)
     {
         // can be modified by: tune zerolatency
-        sprintf(buf, "%d", !param.b_vfr_input);
-        hb_dict_set(&x264_opts, "force-cfr", buf);
+        hb_dict_set(x264_opts, "force-cfr", hb_value_bool(!param.b_vfr_input));
     }
     else
     {
-        hb_dict_unset(&x264_opts, "force-cfr");
+        hb_dict_remove(x264_opts, "force-cfr");
     }
 
     /* convert the x264_opts dictionary to an encopts string */

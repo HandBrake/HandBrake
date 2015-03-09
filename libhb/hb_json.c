@@ -8,6 +8,7 @@
  */
 
 #include <jansson.h>
+#include "hb.h"
 #include "hb_json.h"
 #include "libavutil/base64.h"
 

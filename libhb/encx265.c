@@ -184,16 +184,26 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* iterate through x265_opts and parse the options */
-    hb_dict_entry_t *entry = NULL;
-    hb_dict_t *x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
-    while ((entry = hb_dict_next(x265_opts, entry)) != NULL)
+    hb_dict_t *x265_opts;
+    x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
+
+    hb_dict_iter_t iter;
+    for (iter  = hb_dict_iter_init(x265_opts);
+         iter != HB_DICT_ITER_DONE;
+         iter  = hb_dict_iter_next(x265_opts, iter))
     {
+        const char *key = hb_dict_iter_key(iter);
+        hb_value_t *value = hb_dict_iter_value(iter);
+        char *str = hb_value_get_string_xform(value);
+
         // here's where the strings are passed to libx265 for parsing
-        if (param_parse(param, entry->key, entry->value))
+        if (param_parse(param, key, str))
         {
+            free(str);
             hb_dict_free(&x265_opts);
             goto fail;
         }
+        free(str);
     }
     hb_dict_free(&x265_opts);
 

@@ -170,11 +170,18 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     /* iterate through lavc_opts and have avutil parse the options for us */
     AVDictionary * av_opts = NULL;
-    hb_dict_entry_t * entry = NULL;
-    while( ( entry = hb_dict_next( lavc_opts, entry ) ) )
+    hb_dict_iter_t iter;
+    for (iter  = hb_dict_iter_init(lavc_opts);
+         iter != HB_DICT_ITER_DONE;
+         iter  = hb_dict_iter_next(lavc_opts, iter))
     {
+        const char *key = hb_dict_iter_key(iter);
+        hb_value_t *value = hb_dict_iter_value(iter);
+        char *str = hb_value_get_string_xform(value);
+
         /* Here's where the strings are passed to avutil for parsing. */
-        av_dict_set( &av_opts, entry->key, entry->value, 0 );
+        av_dict_set( &av_opts, key, str, 0 );
+        free(str);
     }
     hb_dict_free( &lavc_opts );
 

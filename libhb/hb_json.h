@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include "hb.h"
+#include "common.h"
 
 char       * hb_get_title_set_json(hb_handle_t * h);
 char       * hb_title_to_json(const hb_title_t * title);
