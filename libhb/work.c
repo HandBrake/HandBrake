@@ -106,6 +106,13 @@ static void work_func( void * _work )
 
             // Expand json string to full job struct
             hb_job_t *new_job = hb_json_to_job(job->h, job->json);
+            if (new_job == NULL)
+            {
+                hb_job_close(&job);
+                hb_list_close(&passes);
+                *work->die = 1;
+                break;
+            }
             new_job->h = job->h;
             hb_job_close(&job);
             job = new_job;

@@ -766,7 +766,7 @@ hb_job_t* hb_json_to_job( hb_handle_t * h, const char * json_job )
     // Audio {CopyMask, FallbackEncoder}
     "s?{s?i, s?i},"
     // Subtitle {Search {Enable, Forced, Default, Burn}}
-    "s?{s?{s:b, s?b, s?b, s?b}},"
+    "s?{s?{s?b, s?b, s?b, s?b}},"
     // MetaData {Name, Artist, Composer, AlbumArtist, ReleaseDate,
     //           Comment, Genre, Description, LongDescription}
     "s?{s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s},"
