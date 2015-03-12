@@ -270,7 +270,7 @@ x264's scale is logarithmic and lower values correspond to higher quality.
 So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
 A value of 0 means lossless and will result in a file size that is larger than the original source, 
 unless the source was also lossless. 
-Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition.
+Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
 
 x265 is a new encoder, so there are no recommended values yet. You'll have to experiment.
 

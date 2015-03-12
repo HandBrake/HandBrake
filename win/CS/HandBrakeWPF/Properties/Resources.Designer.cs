@@ -1040,7 +1040,7 @@ namespace HandBrakeWPF.Properties {
         ///So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
         ///A value of 0 means lossless and will result in a file size that is larger than the original source, 
         ///unless the source was also lossless. 
-        ///Suggested values are: 18 to 20 for Standard Definiti [rest of string was truncated]&quot;;.
+        ///Suggested values are: 18 to 20 for standard definiti [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Video_QualitySlider {
             get {
