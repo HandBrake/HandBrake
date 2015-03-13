@@ -580,9 +580,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         options_list = hb_encopts_to_dict(job->encoder_options, job->vcodec);
 
         hb_dict_iter_t iter;
-        for (iter  = hb_dict_iter_init(x264_opts);
+        for (iter  = hb_dict_iter_init(options_list);
              iter != HB_DICT_ITER_DONE;
-             iter  = hb_dict_iter_next(x264_opts, iter))
+             iter  = hb_dict_iter_next(options_list, iter))
         {
             const char *key = hb_dict_iter_key(iter);
             hb_value_t *value = hb_dict_iter_value(iter);
