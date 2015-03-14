@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
     /// <summary>
     /// The anamorphic result.
     /// </summary>
-    internal class AnamorphicResult
+    public class AnamorphicResult
     {
         /// <summary>
         ///     Gets or sets the height.

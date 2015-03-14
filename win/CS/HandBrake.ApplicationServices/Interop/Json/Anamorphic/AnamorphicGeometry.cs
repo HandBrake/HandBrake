@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
     /// <summary>
     /// The geometry.
     /// </summary>
-    internal class AnamorphicGeometry
+    public class AnamorphicGeometry
     {
         /// <summary>
         /// Gets or sets the dest geometry.

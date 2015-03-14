@@ -12,8 +12,11 @@ namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
     /// <summary>
     /// The source geometry.
     /// </summary>
-    internal class SourceGeometry
+    public class SourceGeometry
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SourceGeometry"/> class.
+        /// </summary>
         public SourceGeometry()
         {
             this.PAR = new PAR();

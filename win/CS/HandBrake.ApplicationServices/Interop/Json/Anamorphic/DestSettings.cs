@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DestGeometry.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="DestSettings.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -14,8 +14,11 @@ namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
     /// <summary>
     /// The dest geometry.
     /// </summary>
-    internal class DestSettings
+    public class DestSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DestSettings"/> class.
+        /// </summary>
         public DestSettings()
         {
             this.Geometry = new Geometry();
